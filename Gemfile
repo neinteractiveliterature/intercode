@@ -26,3 +26,6 @@ gem 'devise'
 
 gem 'thin'
 gem 'pry-rails', :groups => [:development, :test]
+
+# Fixture replacement for test suite
+gem 'factory_girl_rails', :groups => [:development, :test]

@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120604143822) do
+ActiveRecord::Schema.define(:version => 20120604201100) do
+
+  create_table "cons", :force => true do |t|
+    t.string   "signups_allowed",     :default => "not_yet", :null => false
+    t.string   "show_schedule",       :default => "no",      :null => false
+    t.text     "news"
+    t.text     "con_com_meetings"
+    t.boolean  "accepting_bids"
+    t.boolean  "precon_bids_allowed"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+  end
+
+  add_index "cons", ["updated_by_id"], :name => "index_cons_on_updated_by_id"
 
   create_table "events", :force => true do |t|
     t.string   "title"
@@ -30,8 +44,10 @@ ActiveRecord::Schema.define(:version => 20120604143822) do
     t.integer  "updated_by_id"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+    t.integer  "con_id"
   end
 
+  add_index "events", ["con_id"], :name => "index_events_on_con_id"
   add_index "events", ["updated_by_id"], :name => "index_events_on_updated_by_id"
 
   create_table "runs", :force => true do |t|
@@ -80,5 +96,15 @@ ActiveRecord::Schema.define(:version => 20120604143822) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "virtual_hosts", :force => true do |t|
+    t.integer  "con_id",     :null => false
+    t.string   "domain",     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "virtual_hosts", ["con_id"], :name => "index_virtual_hosts_on_con_id"
+  add_index "virtual_hosts", ["domain"], :name => "index_virtual_hosts_on_domain", :unique => true
 
 end
