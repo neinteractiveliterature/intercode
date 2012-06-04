@@ -19,6 +19,9 @@ Intercode::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
+  
+  # Default URL options to make Devise happy
+  config.action_mailer.default_url_options = { :host => 'interactiveliterature.org' }
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
