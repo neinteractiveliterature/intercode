@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20120604143822) do
     t.string   "evening_phone"
     t.string   "best_call_time"
     t.string   "preferred_contact"
+    t.boolean  "site_admin"
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
     t.string   "reset_password_token"

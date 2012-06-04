@@ -19,6 +19,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :best_call_time
       t.string :preferred_contact
       
+      ## Permissions
+      t.boolean :site_admin
+      
       ## Database authenticatable
       t.string :email,              :null => false, :default => ""
       t.string :encrypted_password, :null => false, :default => ""
