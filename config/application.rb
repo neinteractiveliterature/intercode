@@ -58,5 +58,8 @@ module Intercode
     
     # Don't access the DB or load models when precompiling assets (for Heroku)
     config.assets.initialize_on_precompile = false
+    
+    # Additional assets to precompile (that aren't automatically included in application.css/js/etc)
+    config.assets.precompile += %w( ie_less_than_8.css )
   end
 end
