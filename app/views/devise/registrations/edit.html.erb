@@ -1,0 +1,18 @@
+<h2>Update Your User Information</h2>
+
+<p>Your contact information will be made available to convention staff, and the GMs of the games
+	you sign up for.  Supplying the contact information is optional.  If you have concerns
+	about sharing this information, please do not enter it.  But if you do not provide it, GMs
+	may not be able to send you game-related materials.</p>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+  <%= devise_error_messages! %>
+	
+  <%= render :partial => "form", :locals => { :resource => resource, :f => f } %>
+<% end %>
+
+<h3>Cancel my account</h3>
+
+<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete %>.</p>
+
+<%= link_to "Back", :back %>

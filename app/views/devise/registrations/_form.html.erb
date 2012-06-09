@@ -1,0 +1,118 @@
+  <table>
+    <tr>
+      <th><%= f.label :first_name %></th>
+      <td><%= f.text_field :first_name %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :last_name %></th>
+      <td><%= f.text_field :last_name %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :email %></th>
+      <td><%= f.email_field :email %></td>
+    </tr>
+
+    <tr>
+      <th><%= f.label :password %></th>
+      <td><%= f.password_field :password, :autocomplete => "off" %>
+        <% unless resource.new_record? -%>
+          <i>(leave blank if you don't want to change it)</i>
+        <% end -%>
+      </td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :password_confirmation, "Confirm password" %></th>
+      <td><%= f.password_field :password_confirmation %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :nickname %></th>
+      <td><%= f.text_field :nickname %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :gender %></th>
+      <td><%= f.radio_button :gender, "male" %> <%= f.label :gender, "Male", :value => "male"%>
+        <span style="width: 3em;"></span>
+        <%= f.radio_button :gender, "female" %> <%= f.label :gender, "Female", :value => "female" %>
+      </td>
+	
+    <tr>
+      <th><%= f.label :birth_date %></th>
+      <td><%= f.date_select :birth_date, :order => [:month, :day, :year], :include_blank => true,
+              :start_year => Time.now.year - 100, :end_year => Time.now.year %><br/>
+        <b>Note:</b> Specifying your birth date is optional.  But if you choose not to, you may
+        not be able to sign up for age-restricted games.</td>
+    </tr>
+    
+    <tr class="divider">
+      <td></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :address1, "Address" %></th>
+      <td><%= f.text_field :address1 %><br/>
+        <%= f.text_field :address2 %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :city %></th>
+      <td><%= f.text_field :city %></td>
+    </tr>
+
+    <tr>
+      <th><%= f.label :state, "State / Province" %></th>
+      <td><%= f.text_field :state %></td>
+    </tr>
+
+    <tr>
+      <th><%= f.label :zipcode %></th>
+      <td><%= f.text_field :zipcode %></td>
+    </tr>
+
+    <tr>
+      <th><%= f.label :country %></th>
+      <td><%= f.text_field :country %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :day_phone, "Daytime phone" %></th>
+      <td><%= f.text_field :day_phone %></td>
+    </tr>
+
+    <tr>
+      <th><%= f.label :evening_phone, "Evening phone" %></th>
+      <td><%= f.text_field :evening_phone %></td>
+    </tr>
+
+    <tr>
+      <th><%= f.label :best_call_time, "Best time to call" %></th>
+      <td><%= f.text_field :best_call_time %></td>
+    </tr>
+    
+    <tr>
+      <th><%= f.label :preferred_contact, "Preferred contact" %></th>
+      <td><%= f.select :preferred_contact,
+         [["Email", :email], ["Daytime phone", :day_phone], ["Evening phone", :evening_phone]],
+         :include_blank => true %></td>
+    </tr>
+    
+
+        
+    <% unless resource.new_record? -%>
+      <tr>
+        <th><%= f.label :current_password %></th>
+        <td><%= f.password_field :current_password %>  <i>(we need your current password to verify your identity)</i></td>
+        </th>
+      </tr>
+    <% end -%>
+    
+    <tr>
+      <td colspan="2" style="text-align: center;">
+        <%= f.submit resource.new_record? ? "Register" : "Update" %>
+      </td>
+    </tr>
+  </table>
