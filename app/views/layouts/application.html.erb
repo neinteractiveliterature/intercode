@@ -3,15 +3,31 @@
 <head>
   <title>Intercode</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
+  <!--[if IE lt 8]>
+	  <%= stylesheet_link_tag "ie_less_than_8" %>
+  <![endif]-->
+  
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+<%= page_banner%>
 
-<%= yield %>
+<div class="navbar">
+  <ul class="menu accountControl priv">
+    <li class="login">
+      <%= link_to "Login", new_user_session_path %>
+    </li>
+  </ul>
+</div>
+
+<div class="content">
+	<p class="notice"><%= notice %></p>
+	<p class="alert"><%= alert %></p>
+
+	<%= yield %>
+</div>
 
 </body>
 </html>
