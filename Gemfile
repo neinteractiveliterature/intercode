@@ -23,6 +23,7 @@ end
 
 gem 'jquery-rails'
 gem 'devise'
+gem 'cancan'
 
 gem 'thin'
 gem 'pry-rails', :groups => [:development, :test]
