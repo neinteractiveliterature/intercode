@@ -16,9 +16,15 @@
 
 <div class="navbar">
   <ul class="menu accountControl priv">
-    <li class="login">
-      <%= link_to "Login", new_user_session_path %>
-    </li>
+    <% if user_signed_in? -%>
+      <li class="login">
+        <%= link_to "Login", new_user_session_path %>
+      </li>
+    <% else -%>
+      <li class="logout">
+        <%= link_to "Log Out", destroy_user_session_path %>
+      </li>
+    <% end -%>
   </ul>
 </div>
 
