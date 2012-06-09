@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120604201100) do
+ActiveRecord::Schema.define(:version => 20120609181638) do
 
   create_table "cons", :force => true do |t|
     t.string   "signups_allowed",     :default => "not_yet", :null => false
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(:version => 20120604201100) do
     t.integer  "updated_by_id"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
   end
 
   add_index "cons", ["updated_by_id"], :name => "index_cons_on_updated_by_id"

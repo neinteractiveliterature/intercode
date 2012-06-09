@@ -5,4 +5,12 @@ class Con < ActiveRecord::Base
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
   
   has_many :virtual_hosts
+  
+  def started?
+    starts_at <= Time.now
+  end
+  
+  def ended?
+    ends_at <= Time.now
+  end
 end
