@@ -18,7 +18,7 @@
   <ul class="menu accountControl priv">
     <% if user_signed_in? -%>
       <li class="logout">
-        <%= link_to "Log Out", destroy_user_session_path %>
+        <%= link_to "Log Out", destroy_user_session_path, :method => "delete" %>
       </li>
     <% else -%>
       <li class="login">
