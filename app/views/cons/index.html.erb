@@ -1,0 +1,15 @@
+<% if @upcoming_cons.present? -%>
+	<h1>Upcoming conventions</h1>
+
+	<%= render :collection => @upcoming_cons, :partial => "con" %>
+<% end -%>
+
+<% if @past_cons.present? -%>
+	<h1>Past conventions</h1>
+  
+  <%= render :collection => @past_cons, :partial => "con" %>
+<% end -%>
+
+<% if can? :create, Con -%>
+  <%= link_to "Add a new convention", new_con_path %>
+<% end -%>
