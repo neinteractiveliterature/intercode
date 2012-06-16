@@ -1,3 +1,5 @@
+require 'carrierwave/orm/activerecord'
+
 class Con < ActiveRecord::Base
   belongs_to :updated_by, :class_name => "User"
   
@@ -9,6 +11,8 @@ class Con < ActiveRecord::Base
   belongs_to :root_page, :class_name => "Page"
   
   before_create :create_default_root_page
+  
+  mount_uploader :banner_image, BannerImageUploader
   
   def started?
     starts_at <= Time.now

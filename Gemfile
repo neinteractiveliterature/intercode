@@ -30,6 +30,9 @@ gem 'cancan'
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
 gem 'cadmus'
 
+# File uploading
+gem 'carrierwave'
+
 gem 'thin'
 gem 'pry-rails', :groups => [:development, :test]
 
