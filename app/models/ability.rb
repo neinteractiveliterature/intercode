@@ -7,6 +7,7 @@ class Ability
     
     # All users, anonymous or otherwise, should be allowed to view Cons.
     can :read, Con
+    can :read, Page
     
     # Anonymous user permissions end here.
     return unless user

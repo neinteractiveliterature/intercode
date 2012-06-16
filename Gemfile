@@ -22,8 +22,13 @@ group :assets do
 end
 
 gem 'jquery-rails'
+
+# Devise for authentication, cancan for authorization
 gem 'devise'
 gem 'cancan'
+
+# Lightweight open-source CMS (written by Nat for Gively Inc.)
+gem 'cadmus'
 
 gem 'thin'
 gem 'pry-rails', :groups => [:development, :test]

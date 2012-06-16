@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120609181638) do
+ActiveRecord::Schema.define(:version => 20120616165745) do
 
   create_table "cons", :force => true do |t|
     t.string   "signups_allowed",     :default => "not_yet", :null => false
@@ -25,6 +25,9 @@ ActiveRecord::Schema.define(:version => 20120609181638) do
     t.datetime "updated_at",                                 :null => false
     t.datetime "starts_at"
     t.datetime "ends_at"
+    t.integer  "root_page_id"
+    t.string   "name"
+    t.string   "banner_image"
   end
 
   add_index "cons", ["updated_by_id"], :name => "index_cons_on_updated_by_id"
@@ -51,6 +54,18 @@ ActiveRecord::Schema.define(:version => 20120609181638) do
 
   add_index "events", ["con_id"], :name => "index_events_on_con_id"
   add_index "events", ["updated_by_id"], :name => "index_events_on_updated_by_id"
+
+  create_table "pages", :force => true do |t|
+    t.text     "name"
+    t.string   "slug"
+    t.text     "content"
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "pages", ["parent_type", "parent_id", "slug"], :name => "index_pages_on_parent_type_and_parent_id_and_slug", :unique => true
 
   create_table "runs", :force => true do |t|
     t.integer  "event_id"

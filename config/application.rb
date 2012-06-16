@@ -14,6 +14,12 @@ module Intercode
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    
+    # Intercode global hosts.  These will return the global view of the site; i.e. no
+    # convention is selected.  If no global host is matched, Intercode will try to use
+    # a virtual host.  If neither is available, the request is redirected to the first
+    # global host.
+    config.intercode_global_hosts = %w(localhost)
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
