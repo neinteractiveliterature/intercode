@@ -5,7 +5,7 @@ module BaseControllers
     
     protected
     def virtual_host
-      @virtual_host ||= VirtualHost.find_by_domain(request.domain)
+      @virtual_host ||= VirtualHost.find_by_domain(request.host)
     end
   
     def con
@@ -14,7 +14,7 @@ module BaseControllers
     
     def ensure_virtual_host
       unless @virtual_host
-        puts "Request domain #{request.domain} doesn't match any virtual hosts!  Redirecting."
+        puts "Request domain #{request.host} doesn't match any virtual hosts!  Redirecting."
         redirect_to root_url(:host => Intercode::Application.config.intercode_global_hosts.first)
       end
     end
