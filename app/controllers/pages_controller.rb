@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   include Cadmus::PagesController
   authorize_resource :page, :except => [:root]
+  before_filter :redirect_if_root_page, :only => [:show]
   
   # Show the root page.  Used at the root of a con domain.
   def root
@@ -26,5 +27,11 @@ class PagesController < ApplicationController
   
   def page_parent
     con
+  end
+  
+  def redirect_if_root_page
+    if @page == con.root_page
+      redirect_to root_url
+    end
   end
 end
