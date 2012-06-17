@@ -13,7 +13,7 @@ module BaseControllers
     end
     
     def ensure_virtual_host
-      unless @virtual_host
+      unless virtual_host
         logger.warn "Request domain #{request.host} doesn't match any virtual hosts!  Redirecting."
         redirect_to root_url(:host => Intercode::Application.config.intercode_global_hosts.first)
       end
