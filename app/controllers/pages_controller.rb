@@ -1,4 +1,4 @@
-class PagesController < ApplicationController
+class PagesController < BaseControllers::VirtualHost
   include Cadmus::PagesController
   authorize_resource :page, :except => [:root]
   before_filter :redirect_if_root_page, :only => [:show]
