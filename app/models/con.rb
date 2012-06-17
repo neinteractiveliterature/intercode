@@ -16,11 +16,11 @@ class Con < ActiveRecord::Base
   mount_uploader :banner_image, BannerImageUploader
   
   def started?
-    starts_at <= Time.now
+    starts_at && starts_at <= Time.now
   end
   
   def ended?
-    ends_at <= Time.now
+    ends_at && ends_at <= Time.now
   end
   
   def create_default_root_page
