@@ -66,6 +66,6 @@ module Intercode
     config.assets.initialize_on_precompile = false
     
     # Additional assets to precompile (that aren't automatically included in application.css/js/etc)
-    config.assets.precompile += %w( ie_less_than_8.css )
+    config.assets.precompile += %w( ie_less_than_8.css cadmus.previewablehtml.js )
   end
 end
