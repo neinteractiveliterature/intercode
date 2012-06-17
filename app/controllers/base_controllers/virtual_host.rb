@@ -5,7 +5,7 @@ module BaseControllers
     
     protected
     def virtual_host
-      @virtual_host ||= VirtualHost.find_by_domain(request.host)
+      @virtual_host ||= ::VirtualHost.find_by_domain(request.host)
     end
   
     def con
