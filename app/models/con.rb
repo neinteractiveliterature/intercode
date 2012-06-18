@@ -6,7 +6,6 @@ class Con < ActiveRecord::Base
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
   
-  has_many :virtual_hosts
   has_many :pages, :as => :parent
   belongs_to :root_page, :class_name => "Page"
   
