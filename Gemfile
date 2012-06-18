@@ -19,6 +19,9 @@ group :assets do
   # gem 'therubyracer'
 
   gem 'uglifier', '>= 1.0.3'
+  
+  # Upload assets to Amazon S3 during compilation phase
+  gem 'asset_sync'
 end
 
 gem 'jquery-rails'
