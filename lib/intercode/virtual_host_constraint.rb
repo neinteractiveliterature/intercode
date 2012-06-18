@@ -5,7 +5,7 @@ module Intercode
     end
 
     def matches?(request)
-      @global_hosts.include?(request.domain)
+      @global_hosts.include?(request.host)
     end
   end
   

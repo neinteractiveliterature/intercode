@@ -1,0 +1,17 @@
+<h1>
+	<% if @page_parent && @page_parent.respond_to?(:name) -%>
+		<%= @page_parent.name %>
+	<% else -%>
+		Pages
+	<% end -%>
+</h1>
+
+<ul class="cadmus_page_list">
+<% @pages.each do |page| %>
+  <li><%= link_to page.name, { :action => 'show', :page_glob => page.slug } %></li>
+<% end %>
+</ul>
+
+<br />
+
+<%= link_to 'New Page', :action => 'new' %>

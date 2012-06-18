@@ -11,15 +11,16 @@ class Con < ActiveRecord::Base
   belongs_to :root_page, :class_name => "Page"
   
   before_create :create_default_root_page
+  after_create :fix_root_page_parent
   
   mount_uploader :banner_image, BannerImageUploader
   
   def started?
-    starts_at <= Time.now
+    starts_at && starts_at <= Time.now
   end
   
   def ended?
-    ends_at <= Time.now
+    ends_at && ends_at <= Time.now
   end
   
   def create_default_root_page
@@ -32,6 +33,11 @@ class Con < ActiveRecord::Base
     <p>Welcome to #{con_name}.  Content goes here.</p>
     EOF
     
-    create_root_page(:content => content, :parent => self, :name => "Home page")
+    self.create_root_page(:content => content, :name => "Home page")
+  end
+  
+  def fix_root_page_parent
+    root_page.parent = self
+    root_page.save!
   end
 end
