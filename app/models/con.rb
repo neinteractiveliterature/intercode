@@ -14,6 +14,8 @@ class Con < ActiveRecord::Base
   
   mount_uploader :banner_image, BannerImageUploader
   
+  liquid_methods :name
+  
   def started?
     starts_at && starts_at <= Time.now
   end

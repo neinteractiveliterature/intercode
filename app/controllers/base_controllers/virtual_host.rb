@@ -13,5 +13,9 @@ module BaseControllers
         redirect_to root_url(:host => Intercode::Application.config.intercode_global_hosts.first)
       end
     end
+
+    def liquid_assigns
+      super.merge("con" => con)
+    end
   end
 end

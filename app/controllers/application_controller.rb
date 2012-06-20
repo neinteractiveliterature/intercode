@@ -12,4 +12,17 @@ class ApplicationController < ActionController::Base
       redirect_to new_user_session_url, :alert => "Please log in to view this page."
     end
   end
+  
+  protected
+  def liquid_assigns
+    { "user" => current_user }
+  end
+  
+  def liquid_registers
+    { "controller" => self }
+  end
+  
+  def liquid_filters
+    [ UserFilters ]
+  end
 end

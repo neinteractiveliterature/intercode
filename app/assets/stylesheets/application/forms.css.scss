@@ -1,0 +1,25 @@
+form.login {
+	label {
+		display: inline-block;
+		width: 150px;
+		text-align: right;
+		font-style: italic;
+	}
+	
+	a {
+		font-size: 90%;
+		font-style: italic;
+	}
+	
+	input {
+		
+		&[type=text], &[type=email] {
+			width: 350px;
+		}
+		
+		&[type=password] {
+			width: 150px;
+		}
+
+	}
+}
