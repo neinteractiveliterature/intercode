@@ -5,6 +5,11 @@ class ApplicationController < ActionController::Base
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    if user_signed_in?
+      redirect_to root_url, :alert => exception.message
+    else
+      session[:user_return_to] = request.url
+      redirect_to new_user_session_url, :alert => "Please log in to view this page."
+    end
   end
 end
