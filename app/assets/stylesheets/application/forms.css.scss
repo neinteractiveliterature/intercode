@@ -1,9 +1,13 @@
 form.login {
+  max-width: 500px;
+  width: 100%;
+  
 	label {
 		display: inline-block;
-		width: 150px;
+    width: 30%;
 		text-align: right;
 		font-style: italic;
+    margin-right: 2%;
 	}
 	
 	a {
@@ -12,13 +16,14 @@ form.login {
 	}
 	
 	input {
+    margin: 1px 0;
 		
 		&[type=text], &[type=email] {
-			width: 350px;
+      width: 65%;
 		}
 		
 		&[type=password] {
-			width: 150px;
+			width: 30%;
 		}
 
 	}
