@@ -21,8 +21,4 @@ class ApplicationController < ActionController::Base
   def liquid_registers
     { "controller" => self }
   end
-  
-  def liquid_filters
-    [ UserFilters ]
-  end
 end

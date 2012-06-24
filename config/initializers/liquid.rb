@@ -1,0 +1,1 @@
+require 'intercode/liquid/tags'
