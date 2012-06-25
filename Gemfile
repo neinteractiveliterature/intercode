@@ -37,7 +37,7 @@ gem 'cadmus'
 # File uploading
 gem 'carrierwave'
 
-gem 'puma'
+gem 'thin'
 gem 'pry-rails', :groups => [:development, :test]
 
 # Fixture replacement for test suite
