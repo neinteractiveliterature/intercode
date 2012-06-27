@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '1.9.2'
 gem 'rails', '3.2.6'
 
 # Bundle edge Rails instead:
@@ -37,7 +36,7 @@ gem 'cadmus'
 # File uploading
 gem 'carrierwave'
 
-gem 'puma'
+gem 'thin'
 gem 'pry-rails', :groups => [:development, :test]
 
 # Fixture replacement for test suite
