@@ -46,8 +46,8 @@ gem 'cadmus'
 # File uploading
 gem 'carrierwave'
 
-# Currency support
-gem 'money'
+gem 'thin'
+gem 'pry-rails', :groups => [:development, :test]
 
 group :development, :test do
   gem 'pry-rails'
