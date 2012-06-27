@@ -46,7 +46,7 @@ gem 'cadmus'
 # File uploading
 gem 'carrierwave'
 
-gem 'thin'
+gem 'puma'
 gem 'pry-rails', :groups => [:development, :test]
 
 group :development, :test do
