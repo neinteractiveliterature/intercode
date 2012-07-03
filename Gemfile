@@ -1,14 +1,23 @@
 source 'https://rubygems.org'
 
-ruby '1.9.2'
+#ruby '1.9.2'
 gem 'rails', '3.2.6'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3', :groups => [:development, :test]
-gem 'pg', :group => :production
+platform :ruby do
+  gem 'sqlite3', :groups => [:development, :test]
+  gem 'pg', :group => :production
+  gem 'puma'
+end
 
+platform :jruby do
+  gem 'jruby-openssl'
+  gem 'activerecord-jdbcsqlite3-adapter', :groups => [:development, :test]
+  gem 'activerecord-jdbcpostgresql-adapter', :group => :production
+  gem 'mizuno'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -37,8 +46,10 @@ gem 'cadmus'
 # File uploading
 gem 'carrierwave'
 
-gem 'puma'
 gem 'pry-rails', :groups => [:development, :test]
 
 # Fixture replacement for test suite
-gem 'factory_girl_rails', :groups => [:development, :test]
+group :development, :test do
+  gem 'factory_girl', '~> 2.6'
+  gem 'factory_girl_rails'
+end
