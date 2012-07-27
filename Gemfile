@@ -46,7 +46,13 @@ gem 'cadmus'
 # File uploading
 gem 'carrierwave'
 
-gem 'pry-rails', :groups => [:development, :test]
+# Currency support
+gem 'money'
+
+group :development, :test do
+  gem 'pry-rails'
+  gem 'pry-remote'
+end
 
 # Fixture replacement for test suite
 group :development, :test do

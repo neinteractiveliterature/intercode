@@ -11,6 +11,9 @@ class Con < ActiveRecord::Base
   
   before_create :create_default_root_page
   after_create :fix_root_page_parent
+
+  has_many :user_con_profiles
+  has_many :users, :through => :user_con_profiles
   
   mount_uploader :banner_image, BannerImageUploader
   
