@@ -1,4 +1,4 @@
-require 'app/models/user_con_profile'
+require File.expand_path('app/models/user_con_profile', Rails.root)
 
 class CreateUserConProfiles < ActiveRecord::Migration
   def change
