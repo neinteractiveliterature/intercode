@@ -1,3 +1,5 @@
+require 'app/models/user_con_profile'
+
 class CreateUserConProfiles < ActiveRecord::Migration
   def change
     create_table :user_con_profiles do |t|
