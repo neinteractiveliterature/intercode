@@ -3,6 +3,9 @@ class VirtualHostsAreBad < ActiveRecord::Migration
     belongs_to :con
   end
   
+  class Con < ActiveRecord::Base
+  end
+  
   def up
     add_column :cons, :domain, :string
     
