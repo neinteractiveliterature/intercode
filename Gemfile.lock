@@ -111,8 +111,6 @@ GEM
       choice (>= 0.1.0)
       ffi (>= 1.0.0)
       rack (>= 1.0.0)
-    money (5.1.0)
-      i18n (~> 0.6.0)
     multi_json (1.5.0)
     net-scp (1.0.6)
       net-ssh (>= 2.6.5)
@@ -207,7 +205,6 @@ DEPENDENCIES
   jquery-rails
   jruby-openssl
   mizuno
-  money
   pg
   pry-rails
   pry-remote
