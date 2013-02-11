@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require File.expand_path('../../lib/intercode/virtual_host_constraint', __FILE__)
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -15,11 +16,7 @@ module Intercode
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     
-    # Intercode global hosts.  These will return the global view of the site; i.e. no
-    # convention is selected.  If no global host is matched, Intercode will try to use
-    # a virtual host.  If neither is available, the request is redirected to the first
-    # global host.
-    config.intercode_global_hosts = %w(localhost)
+    config.middleware.use Intercode::FindVirtualHost
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/app/liquid_filters)

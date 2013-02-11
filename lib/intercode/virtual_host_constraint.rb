@@ -1,17 +1,22 @@
 module Intercode
-  class GlobalHostConstraint
-    def initialize
-      @global_hosts = Set.new(Intercode::Application.config.intercode_global_hosts)
-    end
-
+  class VirtualHostConstraint
     def matches?(request)
-      @global_hosts.include?(request.host)
+      env["intercode.con"]
     end
   end
   
-  class VirtualHostConstraint < GlobalHostConstraint
-    def matches?(request)
-      !super
+  class FindVirtualHost
+    def initialize(app)
+      @app = app
+    end
+    
+    def call(env)
+      request = Rack::Request.new(env)
+      unless request.path =~ %r{\A#{Rails.application.config.assets.prefix}/}
+        env["intercode.con"] ||= Con.find_by_domain(request.host)
+      end
+      
+      @app.call env
     end
   end
 end
