@@ -14,69 +14,69 @@
 ActiveRecord::Schema.define(:version => 20120727205929) do
 
   create_table "cons", :force => true do |t|
-    t.string    "signups_allowed",     :default => "not_yet", :null => false
-    t.string    "show_schedule",       :default => "no",      :null => false
-    t.text      "news"
-    t.text      "con_com_meetings"
-    t.boolean   "accepting_bids"
-    t.boolean   "precon_bids_allowed"
-    t.integer   "updated_by_id"
-    t.timestamp "created_at",                                 :null => false
-    t.timestamp "updated_at",                                 :null => false
-    t.timestamp "starts_at"
-    t.timestamp "ends_at"
-    t.integer   "root_page_id"
-    t.string    "name"
-    t.string    "banner_image"
-    t.string    "domain",                                     :null => false
+    t.string   "signups_allowed",     :default => "not_yet", :null => false
+    t.string   "show_schedule",       :default => "no",      :null => false
+    t.text     "news"
+    t.text     "con_com_meetings"
+    t.boolean  "accepting_bids"
+    t.boolean  "precon_bids_allowed"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.integer  "root_page_id"
+    t.string   "name"
+    t.string   "banner_image"
+    t.string   "domain",                                     :null => false
   end
 
   add_index "cons", ["domain"], :name => "index_cons_on_domain", :unique => true
   add_index "cons", ["updated_by_id"], :name => "index_cons_on_updated_by_id"
 
   create_table "events", :force => true do |t|
-    t.string    "title"
-    t.string    "author"
-    t.string    "email"
-    t.string    "organization"
-    t.text      "url"
-    t.boolean   "notify_on_changes"
-    t.text      "player_constraints"
-    t.integer   "length_seconds"
-    t.boolean   "can_play_concurrently"
-    t.text      "special_event_flags"
-    t.string    "con_mail_destination"
-    t.text      "description"
-    t.text      "short_blurb"
-    t.integer   "updated_by_id"
-    t.timestamp "created_at",            :null => false
-    t.timestamp "updated_at",            :null => false
-    t.integer   "con_id"
+    t.string   "title"
+    t.string   "author"
+    t.string   "email"
+    t.string   "organization"
+    t.text     "url"
+    t.boolean  "notify_on_changes"
+    t.text     "player_constraints"
+    t.integer  "length_seconds"
+    t.boolean  "can_play_concurrently"
+    t.text     "special_event_flags"
+    t.string   "con_mail_destination"
+    t.text     "description"
+    t.text     "short_blurb"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+    t.integer  "con_id"
   end
 
   add_index "events", ["con_id"], :name => "index_events_on_con_id"
   add_index "events", ["updated_by_id"], :name => "index_events_on_updated_by_id"
 
   create_table "pages", :force => true do |t|
-    t.text      "name"
-    t.string    "slug"
-    t.text      "content"
-    t.integer   "parent_id"
-    t.string    "parent_type"
-    t.timestamp "created_at",  :null => false
-    t.timestamp "updated_at",  :null => false
+    t.text     "name"
+    t.string   "slug"
+    t.text     "content"
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "pages", ["parent_type", "parent_id", "slug"], :name => "index_pages_on_parent_type_and_parent_id_and_slug", :unique => true
 
   create_table "runs", :force => true do |t|
-    t.integer   "event_id"
-    t.timestamp "starts_at"
-    t.string    "title_suffix"
-    t.text      "schedule_note"
-    t.integer   "updated_by_id"
-    t.timestamp "created_at",    :null => false
-    t.timestamp "updated_at",    :null => false
+    t.integer  "event_id"
+    t.datetime "starts_at"
+    t.string   "title_suffix"
+    t.text     "schedule_note"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "runs", ["event_id"], :name => "index_runs_on_event_id"
@@ -111,34 +111,34 @@ ActiveRecord::Schema.define(:version => 20120727205929) do
   add_index "user_con_profiles", ["registration_status"], :name => "index_user_con_profiles_on_registration_status"
 
   create_table "users", :force => true do |t|
-    t.string    "first_name",                             :null => false
-    t.string    "last_name",                              :null => false
-    t.string    "nickname"
-    t.date      "birth_date"
-    t.string    "gender"
-    t.string    "address1"
-    t.string    "address2"
-    t.string    "city"
-    t.string    "state"
-    t.string    "zipcode"
-    t.string    "country"
-    t.string    "day_phone"
-    t.string    "evening_phone"
-    t.string    "best_call_time"
-    t.string    "preferred_contact"
-    t.boolean   "site_admin"
-    t.string    "email",                  :default => "", :null => false
-    t.string    "encrypted_password",     :default => "", :null => false
-    t.string    "reset_password_token"
-    t.timestamp "reset_password_sent_at"
-    t.timestamp "remember_created_at"
-    t.integer   "sign_in_count",          :default => 0
-    t.timestamp "current_sign_in_at"
-    t.timestamp "last_sign_in_at"
-    t.string    "current_sign_in_ip"
-    t.string    "last_sign_in_ip"
-    t.timestamp "created_at",                             :null => false
-    t.timestamp "updated_at",                             :null => false
+    t.string   "first_name",                             :null => false
+    t.string   "last_name",                              :null => false
+    t.string   "nickname"
+    t.date     "birth_date"
+    t.string   "gender"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zipcode"
+    t.string   "country"
+    t.string   "day_phone"
+    t.string   "evening_phone"
+    t.string   "best_call_time"
+    t.string   "preferred_contact"
+    t.boolean  "site_admin"
+    t.string   "email",                  :default => "", :null => false
+    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

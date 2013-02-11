@@ -8,15 +8,17 @@ class VirtualHostsAreBad < ActiveRecord::Migration
     
     Con.reset_column_information
     
-    VirtualHost.includes(:con).find_each do |vhost|
-      con = vhost.con
-      con.domain = vhost.domain
-      con.save!
+    if table_exists? :virtual_hosts
+      VirtualHost.includes(:con).find_each do |vhost|
+        con = vhost.con
+        con.domain = vhost.domain
+        con.save!
+      end
     end
     
     change_column :cons, :domain, :string, :null => false
     add_index :cons, :domain, :unique => true
-    drop_table :virtual_hosts
+    drop_table :virtual_hosts if table_exists?(:virtual_hosts)
   end
 
   def down
