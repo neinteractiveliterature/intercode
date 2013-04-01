@@ -1,7 +1,7 @@
 module Intercode
   class VirtualHostConstraint
     def matches?(request)
-      env["intercode.con"]
+      request.env["intercode.con"]
     end
   end
   
