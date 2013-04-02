@@ -1,6 +1,6 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
-#ruby '1.9.2'
+ruby '2.0.0'
 gem 'rails', '3.2.12'
 
 # Bundle edge Rails instead:
