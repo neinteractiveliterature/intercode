@@ -11,9 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120727205929) do
+ActiveRecord::Schema.define(:version => 20131023143926) do
 
-  create_table "cons", :force => true do |t|
+  create_table "conventions", :force => true do |t|
     t.string   "signups_allowed",     :default => "not_yet", :null => false
     t.string   "show_schedule",       :default => "no",      :null => false
     t.text     "news"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 20120727205929) do
     t.string   "domain",                                     :null => false
   end
 
-  add_index "cons", ["domain"], :name => "index_cons_on_domain", :unique => true
-  add_index "cons", ["updated_by_id"], :name => "index_cons_on_updated_by_id"
+  add_index "conventions", ["domain"], :name => "index_cons_on_domain", :unique => true
+  add_index "conventions", ["updated_by_id"], :name => "index_cons_on_updated_by_id"
 
   create_table "events", :force => true do |t|
     t.string   "title"
@@ -51,10 +51,10 @@ ActiveRecord::Schema.define(:version => 20120727205929) do
     t.integer  "updated_by_id"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
-    t.integer  "con_id"
+    t.integer  "convention_id"
   end
 
-  add_index "events", ["con_id"], :name => "index_events_on_con_id"
+  add_index "events", ["convention_id"], :name => "index_events_on_con_id"
   add_index "events", ["updated_by_id"], :name => "index_events_on_updated_by_id"
 
   create_table "pages", :force => true do |t|
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(:version => 20120727205929) do
 
   create_table "user_con_profiles", :force => true do |t|
     t.integer  "user_id",                                       :null => false
-    t.integer  "con_id",                                        :null => false
+    t.integer  "convention_id",                                 :null => false
     t.string   "registration_status",     :default => "unpaid", :null => false
     t.integer  "comp_event_id"
     t.integer  "payment_amount_cents"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20120727205929) do
     t.datetime "updated_at",                                    :null => false
   end
 
-  add_index "user_con_profiles", ["con_id", "user_id"], :name => "index_user_con_profiles_on_con_id_and_user_id", :unique => true
+  add_index "user_con_profiles", ["convention_id", "user_id"], :name => "index_user_con_profiles_on_con_id_and_user_id", :unique => true
   add_index "user_con_profiles", ["registration_status"], :name => "index_user_con_profiles_on_registration_status"
 
   create_table "users", :force => true do |t|

@@ -1,6 +1,6 @@
 require 'carrierwave/orm/activerecord'
 
-class Con < ActiveRecord::Base
+class Convention < ActiveRecord::Base
   belongs_to :updated_by, :class_name => "User"
   
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }

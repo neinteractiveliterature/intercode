@@ -7,7 +7,7 @@ class UserConProfile < ActiveRecord::Base
   VENDOR_REGISTRATION_STATUSES = Set.new(%w(vendor))
   validates :registration_status, :inclusion => { :in => PAID_REGISTRATION_STATUSES + UNPAID_REGISTRATION_STATUSES + VENDOR_REGISTRATION_STATUSES }
 
-  belongs_to :con
+  belongs_to :convention
   belongs_to :user
   belongs_to :comp_event, :class_name => "Event"  
 

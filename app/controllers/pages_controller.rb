@@ -18,19 +18,19 @@ class PagesController < BaseControllers::VirtualHost
   end
   
   def page_parent_class
-    con && Con
+    convention && Convention
   end
   
   def page_parent_name
-    con && "con"
+    convention && "convention"
   end
   
   def page_parent
-    con
+    convention
   end
   
   def redirect_if_root_page
-    if @page == con.root_page
+    if @page == convention.root_page
       redirect_to root_url
     end
   end

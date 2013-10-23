@@ -1,12 +1,12 @@
 module BaseControllers
   class VirtualHost < ApplicationController
     protected
-    def con
-      @con ||= env["intercode.con"]
+    def convention
+      @convention ||= env["intercode.convention"]
     end
 
     def liquid_assigns
-      super.merge("con" => con)
+      super.merge("convention" => convention)
     end
   end
 end
