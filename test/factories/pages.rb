@@ -5,7 +5,6 @@ FactoryGirl.define do
     name "MyText"
     slug "MyString"
     content "MyText"
-    parent_id 1
-    parent_type "MyString"
+    association :parent, factory: :convention
   end
 end

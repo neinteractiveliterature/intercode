@@ -1,7 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :con do
+  factory :convention do
     signups_allowed "MyString"
     show_schedule "MyString"
     news "MyText"

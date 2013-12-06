@@ -2,5 +2,7 @@
 
 FactoryGirl.define do
   factory :user_con_profile do
+    user
+    convention
   end
 end
