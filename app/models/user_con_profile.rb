@@ -11,9 +11,9 @@ class UserConProfile < ActiveRecord::Base
   belongs_to :user
   belongs_to :comp_event, :class_name => "Event"  
 
-  scope :paid, where(:registration_status => PAID_REGISTRATION_STATUSES)
-  scope :unpaid, where(:registration_status => UNPAID_REGISTRATION_STATUSES)
-  scope :vendor, where(:registration_status => VENDOR_REGISTRATION_STATUSES)
+  scope :paid, -> { where(:registration_status => PAID_REGISTRATION_STATUSES) }
+  scope :unpaid, -> { where(:registration_status => UNPAID_REGISTRATION_STATUSES) }
+  scope :vendor, -> { where(:registration_status => VENDOR_REGISTRATION_STATUSES) }
 
   def paid?
     PAID_REGISTRATION_STATUSES.include? registration_status

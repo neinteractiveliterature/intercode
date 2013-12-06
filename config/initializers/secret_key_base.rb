@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Intercode::Application.config.secret_token = 'fde98ae86aa442a2751bac36f057087133ec2387e3d6e98031a50ef0ce8aba1904d8227c4cd8270d07bf225cde0f97ab95fbf8b07c02ad2ca3b2bdb504a9c075'
+Intercode::Application.config.secret_key_base = ENV['SECRET_KEY_BASE'] || '90fae5fde97108d9cf691ec45b0d166622b97386435cf7b590f998d64fa11e29d0271991154eb7ed76499b59109365dec1561f63483e4a612c1a91ff331e8e30'

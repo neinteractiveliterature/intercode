@@ -1,10 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.0.0'
-gem 'rails', '3.2.12'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '4.0.2'
 
 platform :ruby do
   gem 'sqlite3', :groups => [:development, :test]
@@ -19,20 +16,14 @@ platform :jruby do
   gem 'mizuno'
 end
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+gem 'sass-rails'
+gem 'coffee-rails'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer'
-
-  gem 'uglifier', '>= 1.0.3'
+gem 'uglifier', '>= 1.0.3'
   
-  # Upload assets to Amazon S3 during compilation phase
-  gem 'asset_sync'
-end
+# Upload assets to Amazon S3 during compilation phase
+gem 'asset_sync'
+gem 'unf'
 
 gem 'jquery-rails'
 
@@ -41,7 +32,7 @@ gem 'devise'
 gem 'authority'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem 'cadmus'
+gem 'cadmus', '>= 0.5.0'
 
 # File uploading
 gem 'carrierwave'

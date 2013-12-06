@@ -8,7 +8,7 @@ Intercode::Application.routes.draw do
     cadmus_pages
     
     # http://con.domain/ will go to the root page of the con
-    root :to => 'pages#root'
+    root :to => 'pages#root', :as => 'con_root'
   end
 
   # the following routes apply only when we're not in a virtual host

@@ -8,7 +8,7 @@ class ConventionAuthorizer < ApplicationAuthorizer
   end
   
   def staff_or_site_admin?(user)
-    user.site_admin? || user_con_profile.staff?
+    user.site_admin? || user_con_profile(user).try(:staff?)
   end
   
   def user_con_profile(user)

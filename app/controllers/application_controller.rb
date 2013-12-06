@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   after_filter :ensure_authorization_performed, :if => :auditing_security?, :unless => :devise_controller?
+  before_filter :configure_permitted_parameters, if: :devise_controller?
 
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.
@@ -33,6 +34,15 @@ class ApplicationController < ActionController::Base
       current_user
     else
       User.new
+    end
+  end
+  
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) do |user|
+      user.permit(:email, :password, :password_confirmation, :remember_me,
+        :first_name, :last_name, :nickname, :birth_date, :gender, :address1,
+        :address2, :city, :state, :zipcode, :country, :day_phone, :evening_phone,
+        :best_call_time, :preferred_contact)
     end
   end
 end
