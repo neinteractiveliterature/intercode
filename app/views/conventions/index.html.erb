@@ -10,6 +10,6 @@
   <%= render :collection => @past_cons, :partial => "convention" %>
 <% end -%>
 
-<% if can? :create, Convention -%>
+<% if current_user.try(:can_create?, Convention) -%>
   <%= link_to "Add a new convention", new_convention_path %>
 <% end -%>

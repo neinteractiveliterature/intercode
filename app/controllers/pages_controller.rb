@@ -1,18 +1,25 @@
 class PagesController < BaseControllers::VirtualHost
   include Cadmus::PagesController
-  authorize_resource :page, :except => [:root]
+  before_filter :find_root_page, :only => [:root]
+  authorize_actions_for :page, :actions => { :root => :read }
   before_filter :redirect_if_root_page, :only => [:show]
   
   # Show the root page.  Used at the root of a con domain.
   def root
-    @page = page_parent.root_page
-    raise ActiveRecord::RecordNotFound unless @page
-    
-    authorize! :read, @page
     show
   end
 
   protected
+  # Authority needs this to find the page for authorization purposes
+  def page
+    @page
+  end
+  
+  def find_root_page
+    @page = page_parent.root_page
+    raise ActiveRecord::RecordNotFound unless @page
+  end
+  
   def page_class
     Page
   end

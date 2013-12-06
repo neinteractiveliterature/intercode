@@ -39,6 +39,9 @@ GEM
     asset_sync (0.5.4)
       activemodel
       fog
+    authority (2.9.0)
+      activesupport (>= 3.0.0)
+      rake (>= 0.8.7)
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
     bouncy-castle-java (1.5.0146.1)
@@ -46,7 +49,6 @@ GEM
     cadmus (0.4.3)
       liquid
       rails (>= 3.0.0)
-    cancan (1.6.9)
     carrierwave (0.8.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -197,8 +199,8 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
   activerecord-jdbcsqlite3-adapter
   asset_sync
+  authority
   cadmus
-  cancan
   carrierwave
   coffee-rails (~> 3.2.1)
   devise
