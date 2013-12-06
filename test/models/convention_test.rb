@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ConsControllerTest < ActionController::TestCase
+class ConventionTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
