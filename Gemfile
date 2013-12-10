@@ -39,6 +39,7 @@ gem 'carrierwave'
 
 gem 'puma'
 gem 'pry-rails', :groups => [:development, :test]
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem 'pry-rails'
