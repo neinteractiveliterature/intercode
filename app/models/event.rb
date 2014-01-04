@@ -24,6 +24,13 @@ class Event < ActiveRecord::Base
 #      messsage: "%{value} is not a valid event status"
     }
 
+  # All events for a Convention must have a unique title.  Ignore any events
+  # that with a status of "Dropped" or "Rejected".  If they have a duplicate
+  # title we don't care.
+  validates_uniqueness_of :title,
+    scope: :convention,
+    conditions: -> { where.not(status: ['Dropped', 'Rejected']) }
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs
