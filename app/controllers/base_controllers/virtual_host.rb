@@ -14,6 +14,7 @@ module BaseControllers
     def convention
       @convention ||= env["intercode.convention"]
     end
+    helper_method :convention
 
     # Make the current convention object available to CMS templates, so they can do, for example:
     # <h1>Welcome to {{ convention.name }}, {{ user.name }}!</h1>
