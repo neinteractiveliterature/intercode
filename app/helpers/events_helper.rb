@@ -1,2 +1,2 @@
-module LarpsHelper
+module EventsHelper
 end

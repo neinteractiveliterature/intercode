@@ -10,10 +10,20 @@ class EventsController < BaseControllers::VirtualHost
   end
 
   def create
-    @larp = Events::Larp.new(params[:event])
-    if @user.save
+    @larp = Events::Larp.new(larp_params)
+    @larp.convention_id = convention.id
+    @larp.user_id = current_user.id
+    @larp.updated_by_id = current_user.id
+    if @larp.save
     else
       render 'new'
     end
+  end
+
+  # Having to "permit" access to every field to avoid an
+  # ActiveModel::ForbiddenAttributesError is an absolute pain in the ass.
+  def larp_params
+    params.require(:event).permit(:title, :length_seconds,
+                                  :description, :short_blurb)
   end
 end

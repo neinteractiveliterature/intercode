@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class LarpsControllerTest < ActionController::TestCase
+class EventsControllerTest < ActionController::TestCase
   test "should get new" do
     get :new
     assert_response :success

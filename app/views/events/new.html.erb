@@ -1,3 +1,4 @@
+<div id="form.new.larp">
 <h1>Propose a LARP for <%= convention.name %></h1>
 <!--
 <p>Find me in app/views/events/new.html.erb</p>
@@ -5,18 +6,55 @@
 
 <%= form_for(@larp.becomes(Event)) do |f| %>
 
+  <% if @larp.errors.any? %>
+    <div id="error-explanation">
+      <div class="alert alert-error">
+        The form contains <%= pluralize(@larp.errors.count, 'error') %>.
+      </div>
+      <ul>
+      <% @larp.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!--
+     Note that in the entries below 'size' refers to the size of the control,
+     *not* the size of the field in the database.
+  -->
+
   <%= f.label :title %>
-  <%= f.text_field :title %>
+  <%= f.text_field :title, class: 'form-text-line' %>
   <br />
   <%= f.label :length %>
-  <%= f.text_field :length_seconds %> (minutes)
+  <% times_array = @larp.larp_time_array %>
+  <%= select_tag(:length_seconds,
+                 options_for_select(times_array, @larp.length_seconds)) %>
   <br />
+  <%= f.label :author, 'Author(s)' %>
+  <%= f.text_field :author, class: 'form-text-line' %>
+  <br />
+
+  <%= f.label :organization %>
+  <%= f.text_field :organization, class: 'form-text-line' %>
+  <br />
+
+  <%= f.label :email, 'Game EMail' %>
+  <%= f.text_field :email, class: 'form-text-line' %>
+  <br />
+
+  <%= f.label :url, 'Game Homepage' %>
+  <%= f.text_field :url, class: 'form-text-line' %>
+  <br />
+
   <%= f.label :description %>
-  <%= f.text_field :description %>
+  <%= f.text_area :description, class: 'form-text-area', rows: '10' %>
   <br />
-  <%= f.label :short_blurb %>
-  <%= f.text_field :short_blurb %>
+  <%= f.label :short_blurb, 'Short Description (50 words or less)' %>
+  <%= f.text_area :short_blurb, class: 'form-text-area', rows: '5' %>
   <br />
   <%= f.submit %>
 
 <% end %>
+</div>
