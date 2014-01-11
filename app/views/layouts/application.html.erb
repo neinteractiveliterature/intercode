@@ -20,6 +20,12 @@
       <li class="logout">
         <%= link_to "Log Out", destroy_user_session_path, :method => "delete" %>
       </li>
+      <li class="propose-larp">
+	<%= link_to "Propose a LARP", new_event_path(type: 'larp') %>
+      </li>
+      <li class="propose-panel">
+	<%= link_to "Propose a Panel", new_event_path(type: 'panel') %>
+      </li>
     <% else -%>
       <li class="login">
         <%= link_to "Login", new_user_session_path %>
@@ -33,6 +39,8 @@
 	<p class="alert"><%= alert %></p>
 
 	<%= yield %>
+
+	<%= debug(params) if Rails.env.development? %>
 </div>
 
 </body>

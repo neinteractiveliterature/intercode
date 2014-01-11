@@ -1,0 +1,22 @@
+<h1>Propose a LARP for <%= convention.name %></h1>
+<!--
+<p>Find me in app/views/events/new.html.erb</p>
+-->
+
+<%= form_for(@larp.becomes(Event)) do |f| %>
+
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <br />
+  <%= f.label :length %>
+  <%= f.text_field :length_seconds %> (minutes)
+  <br />
+  <%= f.label :description %>
+  <%= f.text_field :description %>
+  <br />
+  <%= f.label :short_blurb %>
+  <%= f.text_field :short_blurb %>
+  <br />
+  <%= f.submit %>
+
+<% end %>
