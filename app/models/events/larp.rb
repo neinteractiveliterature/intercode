@@ -13,4 +13,34 @@ class Events::Larp < Event
       self.length_seconds = 4 * 60 * 60
     end
   end
+
+  # Return true if there's an author or organization
+  def author_or_org?
+    if self.author
+      return true
+    end
+    if self.organization
+      return true
+    end
+    false
+  end
+
+  # Returns the author of a LARP or the organization that wrote the LARP
+  def author_or_org
+    if self.author
+      return self.author
+    end
+
+    if self.organization
+      return self.organization
+    end
+
+    ''
+  end
+
+  # Generate an obfuscated email address. This really wants to be tied to the
+  # generation of the link, but I'm not sure how to do that at this point.
+  def obfuscated_email
+    self.email.gsub('.', ' DOT ').gsub('@', ' AT ')
+  end
 end

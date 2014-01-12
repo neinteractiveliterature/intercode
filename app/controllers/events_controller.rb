@@ -35,9 +35,20 @@ class EventsController < BaseControllers::VirtualHost
     @larp.updated_at = nil
 
     if @larp.update_attributes(larp_params)
+      redirect_to action: 'show'
     else
       render 'edit'
     end
+  end
+
+  # List the available LARPs
+  def index
+    @larps = Events::Larp.where("convention_id=?", convention.id)
+  end
+
+  # Show information about a LARP. The id is specified as part of the URL
+  def show
+    @larp = Event.find(params[:id])
   end
 
   # Permit access to fields that can be updated
