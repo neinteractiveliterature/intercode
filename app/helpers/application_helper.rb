@@ -13,4 +13,12 @@ module ApplicationHelper
       end
     end
   end
+
+  def intercode_mail_to(address, name=nil, html_options={})
+    if user_signed_in?
+      mail_to(address, name, html_options)
+    else
+      address.gsub('.', ' DOT ').gsub('@', ' AT ')
+    end
+  end
 end

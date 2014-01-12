@@ -31,11 +31,7 @@
 <% if ! @larp.email.empty? %>
   <tr class="larp-header-row">
     <th>Game Email:</th>
-    <% if user_signed_in? %>
-      <td><%= link_to @larp.email, "mailto:" + @larp.email %></td>
-    <% else %>
-      <td><%= @larp.obfuscated_email %></td>
-    <% end %>
+    <td><%= intercode_mail_to(@larp.email) %></td>
   </tr>
 <% end %>
 
