@@ -14,6 +14,11 @@ module ApplicationHelper
     end
   end
 
+  # Generate an obfuscated email address if the user is not logged in.
+  # Note that we may not need this.  Rails has other mechanisms to
+  # prevent the harvesting of email addresses. But this way all of the
+  # code to generate mailto links will be gathered in one place so we
+  # can easily modify them.
   def intercode_mail_to(address, name=nil, html_options={})
     if user_signed_in?
       mail_to(address, name, html_options)
