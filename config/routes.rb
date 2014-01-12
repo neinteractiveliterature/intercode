@@ -14,15 +14,18 @@ Intercode::Application.routes.draw do
     # Define "resource-ful" routes for events.  This will define the
     # following paths:
     #
-    # Action        HTTP Verb   Named Path             URL path
-    # ======        =========   ==========             ========
-    # index         GET         events_path            /events
-    # new           GET         new_events_path        /events/new
-    # create        POST        events_path            /events
-    # show          GET         events_path(:id)       /events/:id
-    # edit          GET         edit_events_path(:id)  /events/:id/edit
-    # update        PATCH/PUT   events_path(:id)       /events/:id
-    # destroy       DELETE      events_path(:id)       /events/:id
+    # Action        HTTP Verb   Named Path            URL path
+    # ======        =========   ==========            ========
+    # index         GET         events_path           /events
+    # new           GET         new_event_path        /events/new
+    # create        POST        event_path            /events
+    # show          GET         event_path(:id)       /events/:id
+    # edit          GET         edit_event_path(:id)  /events/:id/edit
+    # update        PATCH/PUT   event_path(:id)       /events/:id
+    # destroy       DELETE      event_path(:id)       /events/:id
+    #
+    # Note that you get (mostly) get this table using the command
+    #   rake routes
     resources :events
 
   end
