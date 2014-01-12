@@ -26,6 +26,9 @@
       <li class="propose-panel">
 	<%= link_to "Propose a Panel", new_event_path(type: 'panel') %>
       </li>
+      <li class="list-part">
+	<%= link_to "List LARPs", events_path %>
+      </li>
     <% else -%>
       <li class="login">
         <%= link_to "Login", new_user_session_path %>
