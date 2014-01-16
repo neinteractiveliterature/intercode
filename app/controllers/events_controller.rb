@@ -32,7 +32,7 @@ class EventsController < BaseControllers::VirtualHost
     @larp = Events::Larp.find(params[:id])
 
     @larp.updated_by_id = current_user.id
-    @larp.updated_at = nil
+#    @larp.updated_at = nil
 
     if @larp.update_attributes(larp_params)
       redirect_to action: 'show'

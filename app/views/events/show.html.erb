@@ -3,7 +3,11 @@
     <li class="menu-title">LARP Admin</li>
     <li class="edit-larp">
       <% le = @larp.becomes(Event) %>
-      <%= link_to("Edit LARP", edit_event_path(le)) %>
+      <%= link_to('Edit LARP', edit_event_path(le)) %>
+    </li>
+    <li class='edit-larp'>
+      <%= link_to('Edit GMs',
+	          team_members_path({event: @larp.id})) %>
     </li>
   </ul>
 </div>

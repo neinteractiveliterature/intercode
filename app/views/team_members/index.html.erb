@@ -1,0 +1,31 @@
+<h1><%= @plural %> for <span class="larp-title"><%= @title %></span></h1>
+
+<% if @team.count > 0 %>
+<table class="team-member-table">
+  <tr>
+    <th>Name</th>
+    <th>Display as <%= @singular %></th>
+    <th>Display EMail Address</th>
+    <th>Receive EMail from Con</th>
+    <th>Receive Email on Signup or Withdrawal</th>
+  </tr>
+  <% @team.each do |m| %>
+  <tr class="team-member-row">
+    <td class="team-member-name">
+      <%= link_to(m.last_name + ', ' + m.first_name,
+	          edit_team_member_path(m)) %>
+    </td>
+    <td><%= if m.display then 'X' else ' ' end %></td>
+    <td><%= if m.show_email then 'X' else ' ' end %></td>
+    <td><%= if m.receive_con_email then 'X' else ' ' end %></td>
+    <td><%= if m.receive_signup_email then 'X' else ' ' end %></td>
+  </tr>
+  <% end %>
+</table>
+<% end %>
+
+<p><%= link_to('Add a ' + @singular,
+               new_team_member_path({event: params[:event]})) %></p>
+<!--
+<p>Find me in app/views/team_member/index.html.erb</p>
+-->

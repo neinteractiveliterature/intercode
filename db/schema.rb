@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131227011316) do
+ActiveRecord::Schema.define(version: 20140112205637) do
 
   create_table "conventions", force: true do |t|
     t.string   "signups_allowed",     default: "not_yet", null: false
@@ -84,6 +84,18 @@ ActiveRecord::Schema.define(version: 20131227011316) do
 
   add_index "runs", ["event_id"], name: "index_runs_on_event_id"
   add_index "runs", ["updated_by_id"], name: "index_runs_on_updated_by_id"
+
+  create_table "team_members", force: true do |t|
+    t.integer  "event_id"
+    t.integer  "user_id"
+    t.datetime "updated_at"
+    t.integer  "updated_by_id"
+    t.boolean  "display"
+    t.boolean  "show_email"
+    t.boolean  "receive_con_email"
+    t.boolean  "receive_signup_email"
+    t.datetime "created_at"
+  end
 
   create_table "user_con_profiles", force: true do |t|
     t.integer  "user_id",                                    null: false

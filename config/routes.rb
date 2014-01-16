@@ -28,6 +28,8 @@ Intercode::Application.routes.draw do
     #   rake routes
     resources :events
 
+    # Routes for team_members (GMs)
+    resources :team_members
   end
 
   # the following routes apply only when we're not in a virtual host

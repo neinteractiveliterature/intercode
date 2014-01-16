@@ -55,8 +55,13 @@ class Event < ActiveRecord::Base
     ary.push([s, high_hour * 60 *60])
   end
 
-  # Generate an array of times for a LARP
+   # Generate an array of times for a LARP
    def larp_time_array
      time_array(2, 14)
+   end
+
+   # Generate array of team members for this event
+   def members
+    TeamMember.where("event_id=?", self.id)
    end
 end
