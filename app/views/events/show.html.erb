@@ -38,6 +38,25 @@
     <td><%= intercode_mail_to(@larp.email) %></td>
   </tr>
 <% end %>
+<% if ! @team.empty? %>
+  <tr class="larp-header-row">
+    <th>GMs:</th>
+    <td>
+      <table>
+	<% @team.each do |member| %>
+	<tr>
+	  <td>
+	    <%= member.name() %>
+	  </td>
+	  <td>
+	    <%= intercode_mail_to(member.email()) %>
+	  </td>
+	</tr>
+	<% end %>
+      </table>
+    </td>
+  </tr>
+<% end %>
 
 <!-- Insert GMs here -->
 </table>

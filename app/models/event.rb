@@ -61,7 +61,12 @@ class Event < ActiveRecord::Base
    end
 
    # Generate array of team members for this event
-   def members
+   def team_members
     TeamMember.where("event_id=?", self.id)
+   end
+
+   # Generate array of visible team members for this event
+   def visible_team_members
+    TeamMember.where("event_id=?", self.id).where(display: true)
    end
 end

@@ -15,4 +15,27 @@ class TeamMember < ActiveRecord::Base
       self.display = false
     end
   end
+
+  # Return the name of the team member
+  def name
+    user().name
+  end
+
+  # Return the email address for the team member, if it is to be displayed.
+  # If not, return an empty string
+  def email
+    if self.show_email
+      user().email
+    else
+      ''
+    end
+  end
+
+private
+
+  # Returns the User for this team member.  It's cached in an instance variable
+  # so we'll only fetch it once (at least in this instance)
+  def user
+    @user ||= User.find(self.user_id)
+  end
 end
