@@ -3,7 +3,10 @@ class Event < ActiveRecord::Base
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
   belongs_to :user
-  validates :user, presence: true
+  validates :user_id, presence: true, numericality: { only_integer: true }
+
+  # LARPs have GMs and Panels have Members
+  has_many :team_members
 
   # The user who last updated the event.  Used for tracking
   belongs_to :updated_by, :class_name => "User"
