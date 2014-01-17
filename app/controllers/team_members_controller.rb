@@ -16,10 +16,6 @@ class TeamMembersController < ApplicationController
     # Extract the team_member hash from the params
     m = params[:team_member]
 
-# Uncomment to create a bug so processing will stop and we'll see the
-# request info
-#    populate_event_fields(m[event_id])
-
     # Generate a TeamMember instance from the data
     @team_member = TeamMember.new(member_params)
 
@@ -44,13 +40,29 @@ class TeamMembersController < ApplicationController
   end
 
   def update
+# Uncomment to create a bug so processing will stop and we'll see the
+# request info
+#    populate_event_fields(m[event_id])
+
     @team_member = TeamMember.find(params[:id])
 
-    @team_member.updated_by_id = current_user.id
-
-    if @team_member.update_attributes(member_params)
+    # The edit page displays two buttons: one to update the settings, and
+    # the second to remove the GM.  Determine which was selected
+    action = params[:commit].split[0]
+    if ('Remove' == action)
+      @team_member.destroy
       redirect_to(team_members_path({event: @team_member.event_id}))
+    elsif ('Update' == action)
+      @team_member.updated_by_id = current_user.id
+
+      if @team_member.update_attributes(member_params)
+        redirect_to(team_members_path({event: @team_member.event_id}))
+      else
+        populate_event_fields(@team_member.event_id)
+        render 'update'
+      end
     else
+      @team_member.errors.add(:commit, 'is invalid')
       populate_event_fields(@team_member.event_id)
       render 'update'
     end
