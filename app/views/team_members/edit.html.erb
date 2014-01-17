@@ -1,2 +1,61 @@
-<h1>TeamMember#edit</h1>
+<div class="form.new.team-member">
+<h1>Edit <%= @singular %> Settings for <%= @team_member.name() %></h1>
+
+<%= form_for(@team_member) do |f| %>
+  <% if @team_member.errors.any? %>
+    <div id="error-explanation">
+      <div class="alert alert-error">
+        The form contains <%= pluralize(@team_member.errors.count, 'error') %>.
+      </div>
+      <ul>
+      <% @team_member.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tr>
+      <td><%= @activity %>:</td>
+      <td><span class="larp-title"><%= @title %></span></td>
+    </tr>
+    <tr>
+      <td>EMail:</td>
+      <td><%= intercode_mail_to(@team_member.email()) %></td>
+    </tr>
+    <tr>
+      <td>Daytime Phone:</td>
+      <td><%= @team_member.user().day_phone %></td>
+    </tr>
+    <tr>
+      <td>Evening Phone:</td>
+      <td><%= @team_member.user().evening_phone %></td>
+    </tr>
+    <tr>
+      <td>Best Time to Call:</td>
+      <td><%= @team_member.user().best_call_time %></td>
+    </tr>
+    <tr>
+      <td>Preferred Contact:</td>
+      <td><%= @team_member.user().preferred_contact %></td>
+    </tr>
+  </table>
+  <br />
+  <%= f.check_box :display %>
+  <%= f.label(:display, 'Display as ' + @singular) %>
+  <br />
+  <%= f.check_box :show_email %>
+  <%= f.label(:show_email, 'Show EMail address') %>
+  <br />
+  <%= f.check_box :receive_con_email %>
+  <%= f.label(:receive_con_email, 'Receive EMail from Con') %>
+  <br />
+  <%= f.check_box :receive_signup_email %>
+  <%= f.label(:receive_signup_email, 'Receive EMail on Signup and Withdrawal') %>
+  <br />
+  <%= f.submit('Update ' + @singular + ' Settings') %>
+<% end %>
+
 <p>Find me in app/views/team_member/edit.html.erb</p>
+</div>

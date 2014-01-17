@@ -8,14 +8,6 @@ class TeamMember < ActiveRecord::Base
   belongs_to :user
   validates :user, presence: :true
 
-  # Set default values for a LARP event
-  after_initialize do
-    if new_record?
-      # Display the team member
-      self.display = false
-    end
-  end
-
   # Return the name of the team member
   def name
     user().name
@@ -30,8 +22,6 @@ class TeamMember < ActiveRecord::Base
       ''
     end
   end
-
-private
 
   # Returns the User for this team member.  It's cached in an instance variable
   # so we'll only fetch it once (at least in this instance)

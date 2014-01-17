@@ -6,28 +6,29 @@ class TeamMembersController < ApplicationController
   def new
     @team_member = TeamMember.new
     @team_member.display = true
+    @team_member.show_email = true
+    @team_member.receive_con_email = false
+    @team_member.receive_signup_email = false
     populate_event_fields(params[:event])
   end
 
   def create
-    puts "In create - params"
-    puts params
+    # Extract the team_member hash from the params
     m = params[:team_member]
 
 # Uncomment to create a bug so processing will stop and we'll see the
 # request info
 #    populate_event_fields(m[event_id])
 
+    # Generate a TeamMember instance from the data
     @team_member = TeamMember.new(member_params)
 
-    puts "In create after new - params"
-    puts params
-
-    puts "In create - new team_member.display"
-    puts @team_member.display
-
+    # Note who created the record
     @team_member.updated_by_id = current_user.id
 
+    # The save succeeds, show the list of GMs for the event.
+    # If it fails, show the "new" page again.  This will show
+    # the errors and then the form.
     if @team_member.save
       redirect_to(team_members_path({event: m[:event_id]}))
     else
@@ -36,8 +37,10 @@ class TeamMembersController < ApplicationController
     end
   end
 
+  # Load a TeamMember for modification
   def edit
     @team_member = TeamMember.find(params[:id])
+    populate_event_fields(@team_member.event_id)
   end
 
   def update
@@ -46,16 +49,9 @@ class TeamMembersController < ApplicationController
     @team_member.updated_by_id = current_user.id
 
     if @team_member.update_attributes(member_params)
-#      redirect_to action: 'index'
-#      redirect_to(team_members_path({event: params[:id],
-#	                             title: params[:title],
-#                                     appellation: params[:appellation]
-#                                     id: 1}))
-      redirect_to(team_member_path({event: params[:id],
-	                             title: params[:title],
-                                     appellation: params[:appellation],
-                                     id: 1}))
+      redirect_to(team_members_path({event: @team_member.event_id}))
     else
+      populate_event_fields(@team_member.event_id)
       render 'update'
     end
   end
@@ -90,9 +86,11 @@ class TeamMembersController < ApplicationController
     if 'Events::Larp' == e[:type]
       @singular = 'GM'
       @plural = 'GMs'
+      @activity = 'LARP'
     else
       @singluar = 'Unknown'
       @plural = 'Unknown'
+      @activity = 'Unknown'
     end
     @title = e[:title]
   end
