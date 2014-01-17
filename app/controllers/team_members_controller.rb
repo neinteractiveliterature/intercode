@@ -5,6 +5,7 @@ class TeamMembersController < ApplicationController
 
   def new
     @team_member = TeamMember.new
+    @team_member.user_id = -1    # Invalid user id - displays prompt
     @team_member.display = true
     @team_member.show_email = true
     @team_member.receive_con_email = false
@@ -29,6 +30,7 @@ class TeamMembersController < ApplicationController
       redirect_to(team_members_path({event: m[:event_id]}))
     else
       populate_event_fields(m[:event_id])
+      params[:event] = m[:event_id]
       render 'new'
     end
   end

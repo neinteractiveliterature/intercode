@@ -19,7 +19,7 @@
 
   <%= f.label(:user_id, 'User') %>
   <%= f.select(:user_id,
-               options_for_select(users_array, @team_member.user_id)) %>
+               options_for_select(users_array(), @team_member.user_id)) %>
   <br />
   <%= f.check_box :display %>
   <%= f.label(:display, 'Display as ' + @singular) %>
