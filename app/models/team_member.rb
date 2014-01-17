@@ -5,10 +5,12 @@ class TeamMember < ActiveRecord::Base
   validates :event_id, presence: :true, numericality: { only_integer: true }
   validate :validate_event_id
 
-  # A team member is a user that exits
+  # A team member is a user that exits, and that he's not already a member
+  # of the team for this event
   belongs_to :user
   validates :user_id, presence: :true, numericality: { only_integer: true }
   validate :validate_user_id
+  validates_uniqueness_of :user_id, scope: :event
 
   # Return the name of the team member
   def name
