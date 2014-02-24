@@ -16,7 +16,7 @@ modern.
 
 To contact the Intercode 2 project team, you can:
 
-* [File a bug report on this Github project](https://github.com/neinteractiveliterature/intercode/issues)
+* [File an issue or feature request on our Jira tracker](https://intercode2.atlassian.net)
 * [Email the project mailing list](mailto:intercode2@lists.interactiveliterature.org).  Your message will be held for
 moderation but we'll see it and get back to you.
 
