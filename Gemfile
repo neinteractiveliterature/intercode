@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
-gem 'rails', '4.0.2'
+ruby '2.1.2'
+gem 'rails'
 
 platform :ruby do
   gem 'sqlite3', :groups => [:development, :test]
@@ -22,8 +22,8 @@ gem 'coffee-rails'
 gem 'uglifier', '>= 1.0.3'
   
 # Upload assets to Amazon S3 during compilation phase
-gem 'asset_sync'
-gem 'unf'
+#gem 'asset_sync'
+#gem 'unf'
 
 gem 'jquery-rails'
 
@@ -37,17 +37,20 @@ gem 'cadmus', '>= 0.5.0'
 # File uploading
 gem 'carrierwave'
 
-gem 'puma'
-gem 'pry-rails', :groups => [:development, :test]
-gem 'newrelic_rpm'
+#gem 'newrelic_rpm'
 
+# Fixture replacement for test suite
 group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl', '~> 2.6'
+  gem 'factory_girl_rails'
   gem 'pry-rails'
   gem 'pry-remote'
 end
 
-# Fixture replacement for test suite
-group :development, :test do
-  gem 'factory_girl', '~> 2.6'
-  gem 'factory_girl_rails'
+group :test do
+  gem 'shoulda-matchers'
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
+  gem 'selenium-webdriver'
 end
