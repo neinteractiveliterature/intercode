@@ -34,7 +34,7 @@ Given(/^I am Event Submitter$/) do
   pending
 end
 
-Given(/^I am GM Liason$/) do
+Given(/^I am GM Liaison$/) do
   pending
 end
 

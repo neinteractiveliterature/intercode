@@ -1,7 +1,7 @@
 Feature: Convention Email Privileges
 
   Scenario: Email GMs
-    Given I am GM Liason
+    Given I am GM Liaison
     When I send message to all GMs
     Then Email is sent to all GMs
 
