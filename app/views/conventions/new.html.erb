@@ -1,0 +1,17 @@
+<h1>Create new Convention</h1>
+
+<%= form_for :conventions, url: conventions_path do |f| %>
+    <p>
+      <%= f.label :name %><br>
+      <%= f.text_field :name %>
+    </p>
+
+    <p>
+      <%= f.label :domain %><br>
+      <%= f.text_field :domain %>
+    </p>
+
+    <p>
+      <%= f.submit %>
+    </p>
+<% end %>

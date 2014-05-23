@@ -37,7 +37,7 @@ module Intercode
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:password, :password_confirmation]
 
     # Use SQL instead of Active Record's schema dumper when creating the database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -57,5 +57,17 @@ module Intercode
     config.assets.precompile += %w( ie_less_than_8.css cadmus.previewablehtml.js )
     
     config.i18n.enforce_available_locales = true
+
+    #Don't generate RSpec tests for views and helpers
+    config.generators do |g|
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_girl, dir: 'spec/factories'
+      g.view_specs false
+      g.helper_specs false
+      g.stylesheets = false
+      g.javascripts = false
+      g.helper = false
+    end
+
   end
 end

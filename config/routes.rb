@@ -1,6 +1,7 @@
 require 'intercode/virtual_host_constraint'
 
 Intercode::Application.routes.draw do
+  get "home/index"
   devise_for :users
   
   constraints(Intercode::VirtualHostConstraint.new) do

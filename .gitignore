@@ -17,3 +17,6 @@
 public/uploads
 .rbenv-version
 .idea
+
+# Ignore application configuration
+/config/application.yml

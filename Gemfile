@@ -37,6 +37,9 @@ gem 'cadmus', '>= 0.5.0'
 # File uploading
 gem 'carrierwave'
 
+#Enviromental Variable Configuration
+gem 'figaro'
+
 #gem 'newrelic_rpm'
 
 # Fixture replacement for test suite
@@ -49,8 +52,10 @@ group :development, :test do
 end
 
 group :test do
-  gem 'shoulda-matchers'
+  gem 'capybara'
   gem 'cucumber-rails', require: false
+  gem 'email_spec'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
 end
