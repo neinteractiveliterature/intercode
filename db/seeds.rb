@@ -17,3 +17,11 @@ user = User.find_or_create_by!(:email => ENV['ADMIN_EMAIL'].dup) do |user|
   end
 
 puts 'user: ' << user.email
+
+puts 'Default Convention'
+
+convention = Convention.find_or_create_by(:domain => 'test.convention') do |convention|
+  convention.name = 'Test Convention'
+end
+
+puts 'convention: ' << convention.domain

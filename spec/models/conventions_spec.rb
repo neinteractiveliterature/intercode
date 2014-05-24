@@ -10,7 +10,7 @@ describe Convention do
     }
   end
 
-  it 'should create a new instance given a valid attribute' do
+  it 'should create a new instance given valid attributes' do
     Convention.create!(@attr)
   end
 
@@ -49,7 +49,7 @@ describe Convention do
 
       end
 
-      it 'should ' do
+      it 'should reject start_date after end_date' do
 
       end
 

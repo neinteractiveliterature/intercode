@@ -1,15 +1,3 @@
-When(/^I create a convention$/) do
-  pending
-end
-
-When(/^I disable a convention$/) do
-  pending
-end
-
-When(/^I edit a conventions properties$/) do
-  pending
-end
-
 Given(/^I am on the Intercode homepage$/) do
   visit "/conventions"
 end
@@ -34,19 +22,18 @@ When(/^I click on "([^"]*)"$/) do |link|
   click_on link
 end
 
-And(/^I fill "([^"]*)" as Name$/) do |name|
-  @name = name
-  fill_in "Name", :with => name
-end
-
-And(/^I fill "([^"]*)" as Domain$/) do |domain|
-  fill_in "Domain", :with => domain
-end
-
 And(/^I click "([^"]*)"$/) do |btn|
   click_button btn
 end
 
 Then(/^I should see the convention I created$/) do
   page.should have_content(@name)
+end
+
+Then(/^I should see "([^"]*)"$/) do |heading|
+  page.should have_content(heading)
+end
+
+And(/^The convention is displayed$/) do
+  page.should have_content(@test_convention[:domain])
 end

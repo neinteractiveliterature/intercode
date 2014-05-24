@@ -1,11 +1,12 @@
 require 'carrierwave/orm/activerecord'
+require File.expand_path('lib/domain_validator')
 
 class Convention < ActiveRecord::Base
   include Authority::Abilities
 
   belongs_to :updated_by, :class_name => "User"
   
-  validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }
+  validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now no) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
 
   validates :domain, uniqueness: true, domain: true
@@ -24,13 +25,25 @@ class Convention < ActiveRecord::Base
   liquid_methods :name
   
   def started?
-    starts_at && starts_at <= Time.now
+    start_date && start_date <= Time.now
   end
   
   def ended?
-    ends_at && ends_at <= Time.now
+    end_date && end_date <= Time.now
   end
-  
+
+  def current?
+    start_date && end_date && start_date <= Time.now && end_date >= Time.now
+  end
+
+  def upcoming?
+    start_date && start_date >= Time.now
+  end
+
+  def unspecified?
+    start_date == nil || end_date == nil
+  end
+
   def create_default_root_page
     return if root_page
     

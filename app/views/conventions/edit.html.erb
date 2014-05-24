@@ -1,0 +1,13 @@
+<h1>Edit Convention</h1>
+
+<%= simple_form_for @convention do |f| %>
+
+    <p>
+      <%= f.input :name %><br>
+      <%= f.input :domain %><br>
+      <%= f.input :start_date, as: :date_picker %>
+      <%= f.input :end_date, as: :date_picker %>
+      <%= f.button :submit %>
+<% end %>
+
+<%= link_to 'Back', convention_path %>

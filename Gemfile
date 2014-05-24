@@ -16,7 +16,8 @@ platform :jruby do
   gem 'mizuno'
 end
 
-gem 'sass-rails'
+gem 'sass-rails', '~> 4.0.0'
+gem 'bootstrap-sass'
 gem 'coffee-rails'
 
 gem 'uglifier', '>= 1.0.3'
@@ -26,6 +27,7 @@ gem 'uglifier', '>= 1.0.3'
 #gem 'unf'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # Devise for authentication, authority for authorization
 gem 'devise'
@@ -39,6 +41,9 @@ gem 'carrierwave'
 
 #Enviromental Variable Configuration
 gem 'figaro'
+
+gem 'simple_form'
+gem 'datetimepicker-rails', :require => 'datetimepicker-rails', :git => 'git://github.com/zpaulovics/datetimepicker-rails.git'
 
 #gem 'newrelic_rpm'
 

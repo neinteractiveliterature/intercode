@@ -12,4 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap
+//= require bootstrap-datetimepicker/core.js
+//= require bootstrap-datetimepicker/pickers.js
 //= require_tree .
