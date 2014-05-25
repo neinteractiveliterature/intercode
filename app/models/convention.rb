@@ -9,7 +9,10 @@ class Convention < ActiveRecord::Base
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now no) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
 
-  validates :domain, uniqueness: true, domain: true
+  validates :domain, uniqueness: true, :domain => true
+
+  validates_date :start_date, :allow_blank => true
+  validates_date :end_date, :on_or_after => :start_date, :allow_blank => true
 
   has_many :pages, :as => :parent
   belongs_to :root_page, :class_name => "Page"
@@ -47,7 +50,7 @@ class Convention < ActiveRecord::Base
   def create_default_root_page
     return if root_page
     
-    con_name = name || "Untitled con"
+    con_name = title || "Untitled con"
     content = <<-EOF
     <h1>#{con_name}</h1>
     

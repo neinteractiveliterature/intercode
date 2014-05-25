@@ -34,8 +34,6 @@ def sign_in
   click_button "Sign in"
 end
 
-##Steps
-
 Given(/^I am a Global$/) do
   create_global_user
   sign_in

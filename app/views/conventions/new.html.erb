@@ -1,17 +1,11 @@
 <h1>Create new Convention</h1>
 
-<%= form_for :conventions, url: conventions_path do |f| %>
-    <p>
-      <%= f.label :name %><br>
-      <%= f.text_field :name %>
-    </p>
+<%= simple_form_for @convention do |f| %>
 
-    <p>
-      <%= f.label :domain %><br>
-      <%= f.text_field :domain %>
-    </p>
+    <%= f.input :title %><br>
+    <%= f.input :domain %><br>
+    <%= f.button :submit, 'Create New Convention' %>
 
-    <p>
-      <%= f.submit %>
-    </p>
 <% end %>
+
+<%= link_to 'Back', conventions_path %>

@@ -10,7 +10,7 @@ end
 def create_convention
   create_test_convention
   delete_convention
-  @convention = FactoryGirl.create(:convention, domain: @test_convention[:domain])
+  @convention = FactoryGirl.create(:convention, title: @test_convention[:title], domain: @test_convention[:domain])
 end
 
 def delete_convention
@@ -22,16 +22,17 @@ def change_dates(start_date, end_date)
   @convention.update_attributes start_date: start_date, end_date: end_date
 end
 
-Given(/^There is a convention$/) do
+Given(/^There is a sample convention$/) do
   create_convention
 end
 
-And(/^I fill "([^"]*)" as Convention Name$/) do |name|
-  @name = name
-  fill_in 'Name', :with => name
+And(/^I fill "([^"]*)" as Convention Title$/) do |title|
+  @title = title
+  fill_in 'Title', :with => title
 end
 
 And(/^I fill "([^"]*)" as Convention Domain$/) do |domain|
+  @domain = domain
   fill_in 'Domain', :with => domain
 end
 
@@ -54,14 +55,6 @@ And(/^This convention has no dates$/) do
   change_dates(nil, nil)
 end
 
-When(/^I create a convention$/) do
-  pending
-end
-
 When(/^I disable a convention$/) do
-  pending
-end
-
-When(/^I edit a conventions properties$/) do
   pending
 end

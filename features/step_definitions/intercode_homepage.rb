@@ -1,5 +1,9 @@
 Given(/^I am on the Intercode homepage$/) do
-  visit "/conventions"
+  visit conventions_path
+end
+
+Given(/^I am on the Edit Convention page$/) do
+  visit edit_convention_path(@convention)
 end
 
 Then(/^I am redirected to the convention$/) do
@@ -18,22 +22,26 @@ Then(/^Email is sent to all Global Admins$/) do
   pending
 end
 
-When(/^I click on "([^"]*)"$/) do |link|
-  click_on link
+And(/^I should see the convention I created$/) do
+  convention_url = "http://#{@domain}/"
+  expect(page).to have_link(@title,:href => convention_url)
 end
 
-And(/^I click "([^"]*)"$/) do |btn|
-  click_button btn
+And(/^The sample convention is displayed$/) do
+  convention_url = "http://#{@test_convention[:domain]}/"
+  expect(page).to have_link(@test_convention[:title],:href => convention_url)
 end
 
-Then(/^I should see the convention I created$/) do
-  page.should have_content(@name)
+Then(/^I should be redirected to the Conventions Index$/) do
+  expect(current_path).to eq conventions_path
 end
 
-Then(/^I should see "([^"]*)"$/) do |heading|
-  page.should have_content(heading)
+And(/^I should see the renamed convention$/) do
+  convention_url = "http://#{@test_convention[:domain]}/"
+  expect(page).to have_link(@title,:href => convention_url)
 end
 
-And(/^The convention is displayed$/) do
-  page.should have_content(@test_convention[:domain])
+And(/^I should see the new conventions domain$/) do
+  convention_url = "http://#{@domain}/"
+  expect(page).to have_link(@test_convention[:title], :href => convention_url)
 end

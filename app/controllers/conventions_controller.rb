@@ -12,7 +12,8 @@ class ConventionsController < ApplicationController
   end
 
   def new
-    authorize_action_for ApplicationAuthorizer  #Is this the correct way to do this?
+    authorize_action_for ApplicationAuthorizer #Is this the correct way to do this?
+    @convention = Convention.new
   end
 
   def create
@@ -20,8 +21,7 @@ class ConventionsController < ApplicationController
     @convention = Convention.new(convention_params)
 
     if @convention.save
-      flash[:success] = "Convention Created"
-      redirect_to conventions_path
+      redirect_to conventions_path, :flash => { :success => 'Convention created!' }
     else
       render 'new'
     end
@@ -30,6 +30,18 @@ class ConventionsController < ApplicationController
   def edit
     @convention = Convention.find(params[:id])
     authorize_action_for @convention
+  end
+
+  def update
+    @convention = Convention.find(params[:id])
+    authorize_action_for @convention
+
+    if @convention.update(convention_params)
+      redirect_to conventions_path, :flash => { :success => 'Convention updated!' }
+    else
+      render 'edit'
+    end
+
   end
 
   def duplicate
@@ -65,7 +77,7 @@ class ConventionsController < ApplicationController
 
   private
   def convention_params
-    params.require(:conventions).permit(:name, :domain, :starts_at, :ends_at)
+    params.require(:convention).permit(:title, :domain, :start_date, :end_date)
   end
 
 end

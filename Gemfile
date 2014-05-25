@@ -44,6 +44,7 @@ gem 'figaro'
 
 gem 'simple_form'
 gem 'datetimepicker-rails', :require => 'datetimepicker-rails', :git => 'git://github.com/zpaulovics/datetimepicker-rails.git'
+gem 'validates_timeliness'
 
 #gem 'newrelic_rpm'
 
@@ -58,6 +59,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'capybara-mechanize'
   gem 'cucumber-rails', require: false
   gem 'email_spec'
   gem 'database_cleaner'

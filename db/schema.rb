@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140524040500) do
+ActiveRecord::Schema.define(version: 20140524203910) do
 
   create_table "conventions", force: true do |t|
     t.string   "signups_allowed",     default: "not_yet", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20140524040500) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.integer  "root_page_id"
-    t.string   "name"
+    t.string   "title"
     t.string   "banner_image"
     t.string   "domain",                                  null: false
   end
