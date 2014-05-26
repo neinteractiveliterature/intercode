@@ -39,7 +39,6 @@ Feature: Create Convention
     And I should see "Current Conventions"
     #And "global_admins@intercode2.org" should receive an email
 
-
   Scenario: Create a New Convention with Future Dates
     Given I am on the Intercode homepage
     And I am a Global Admin
