@@ -1,7 +1,7 @@
 <%= link_to convention.title, root_url(:host => convention.domain) %> /
 
 <% unless convention.unspecified? %>
-Dates: <% convention.start_date %> to <% convention.end_date %> /
+Dates: <%= convention.start_date.strftime('%m/%d/%Y')  %> to <%= convention.end_date.strftime('%m/%d/%Y') %> /
 <% end %>
 
 <% if current_user.try(:can_update?, Convention) -%>

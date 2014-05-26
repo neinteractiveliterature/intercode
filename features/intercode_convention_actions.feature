@@ -19,9 +19,28 @@ Feature: Edit Global Conventions
     And I should see the new conventions domain
     #And "global_admins@intercode2.org" should receive an email
 
-  #Do we want a 'disable' control?
-  Scenario: Disable Convention
-    Given I am a Global Admin
-    When I disable a convention
-    Then The convention redirects to the homepage
-    And Email is sent to all Global Admins
+  Scenario: Edit Convention Dates - Past
+    When I fill "1/1/2001" as Convention Start Date
+    And I fill "1/1/2002" as Convention End Date
+    And I click on "Update Convention"
+    Then I should be redirected to the Conventions Index
+    And I should see "Past Conventions"
+    And I should see the dates displayed
+    #And "global_admins@intercode2.org" should receive an email
+
+  Scenario: Edit Convention Dates - Current
+    When I fill current dates for Start and End Date
+    And I click on "Update Convention"
+    Then I should be redirected to the Conventions Index
+    And I should see "Current Conventions"
+    And I should see the dates displayed
+    #And "global_admins@intercode2.org" should receive an email
+
+  Scenario: Edit Convention Dates - Future
+    When I fill "1/1/3001" as Convention Start Date
+    And I fill "1/1/3002" as Convention End Date
+    And I click on "Update Convention"
+    Then I should be redirected to the Conventions Index
+    And I should see "Upcoming Conventions"
+    And I should see the dates displayed
+    #And "global_admins@intercode2.org" should receive an email

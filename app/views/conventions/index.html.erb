@@ -1,27 +1,43 @@
 <% if @convention_timeline.current_conventions.present? -%>
+
     <h1>Current Conventions</h1>
 
-    <%= render :collection => @convention_timeline.current_conventions, :partial => 'convention' %>
+    <%= render :collection => @convention_timeline.current_conventions, :partial => 'current_convention' %>
 <% end -%>
 
 <% if @convention_timeline.upcoming_conventions.present? -%>
 	<h1>Upcoming Conventions</h1>
 
-	<%= render :collection => @convention_timeline.upcoming_conventions, :partial => 'convention' %>
+    <table id="upcoming_conventions">
+      <%= render :partial => 'convention_table_header' %>
+    <tbody>
+      <%= render :collection => @convention_timeline.upcoming_conventions, :partial => 'convention_row' %>
+      </tbody>
+    </table>
+
 <% end -%>
 
 <% if @convention_timeline.past_conventions.present? -%>
 	<h1>Past Conventions</h1>
-  
-  <%= render :collection => @convention_timeline.past_conventions, :partial => 'convention' %>
+
+    <table id="past_conventions">
+        <%= render :partial => 'convention_table_header' %>
+      <tbody>
+        <%= render :collection => @convention_timeline.past_conventions, :partial => 'convention_row' %>
+      </tbody>
+
+    </table>
+
 <% end -%>
 
 <% if @convention_timeline.unspecified_dates.present? -%>
     <h1>Unspecified Dates</h1>
-    <%= render :collection => @convention_timeline.unspecified_dates, :partial => 'convention' %>
+    <%= render :collection => @convention_timeline.unspecified_dates, :partial => 'convention_unspecified' %>
 <% end -%>
 
-
+<p>
+<hr>
 <% if current_user.try(:can_create?, Convention) -%>
   <%= link_to "Add a new convention", new_convention_path %>
 <% end -%>
+</p>

@@ -1,0 +1,7 @@
+<%= link_to current_convention.title, root_url(:host => current_convention.domain) %> /
+
+Dates: <%= current_convention.start_date.strftime('%m/%d/%Y')  %> to <%= current_convention.end_date.strftime('%m/%d/%Y') %>
+
+<% if current_user.try(:can_update?, Convention) -%>
+    / <%= link_to 'Edit', edit_convention_path(current_convention) %>
+<% end %>

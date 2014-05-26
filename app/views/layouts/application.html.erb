@@ -6,7 +6,7 @@
   <!--[if IE lt 8]>
 	  <%= stylesheet_link_tag "ie_less_than_8" %>
   <![endif]-->
-  
+
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
@@ -17,22 +17,22 @@
 <div class="navbar">
   <ul class="menu accountControl priv">
     <% if user_signed_in? -%>
-      <li class="logout">
-        <%= link_to "Log Out", destroy_user_session_path, :method => "delete" %>
-      </li>
+        <li class="logout">
+          <%= link_to "Log Out", destroy_user_session_path, :method => "delete" %>
+        </li>
     <% else -%>
-      <li class="login">
-        <%= link_to "Login", new_user_session_path %>
-      </li>
+        <li class="login">
+          <%= link_to "Login", new_user_session_path %>
+        </li>
     <% end -%>
   </ul>
 </div>
 
 <div class="content">
-	<p class="notice"><%= notice %></p>
-	<p class="alert"><%= alert %></p>
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 
-	<%= yield %>
+  <%= yield %>
 </div>
 
 </body>

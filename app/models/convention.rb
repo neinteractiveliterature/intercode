@@ -28,19 +28,19 @@ class Convention < ActiveRecord::Base
   liquid_methods :name
   
   def started?
-    start_date && start_date <= Time.now
+    start_date && start_date <= Date.today
   end
   
   def ended?
-    end_date && end_date <= Time.now
+    end_date && end_date <= Date.today
   end
 
   def current?
-    start_date && end_date && start_date <= Time.now && end_date >= Time.now
+    start_date && end_date && start_date <= Date.today && end_date >= Date.today
   end
 
   def upcoming?
-    start_date && start_date >= Time.now
+    start_date && start_date >= Date.today
   end
 
   def unspecified?

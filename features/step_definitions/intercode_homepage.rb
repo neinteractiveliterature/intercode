@@ -22,18 +22,23 @@ Then(/^Email is sent to all Global Admins$/) do
   pending
 end
 
+Then(/^I should be redirected to the Conventions Index$/) do
+  expect(current_path).to eq conventions_path
+end
+
 And(/^I should see the convention I created$/) do
   convention_url = "http://#{@domain}/"
   expect(page).to have_link(@title,:href => convention_url)
+
+  if @start_date && @end_date then
+      expect(page).to have_content("#{@start_date.strftime('%m/%d/%Y')} to #{@end_date.strftime('%m/%d/%Y')}")
+  end
+
 end
 
 And(/^The sample convention is displayed$/) do
   convention_url = "http://#{@test_convention[:domain]}/"
   expect(page).to have_link(@test_convention[:title],:href => convention_url)
-end
-
-Then(/^I should be redirected to the Conventions Index$/) do
-  expect(current_path).to eq conventions_path
 end
 
 And(/^I should see the renamed convention$/) do
@@ -44,4 +49,18 @@ end
 And(/^I should see the new conventions domain$/) do
   convention_url = "http://#{@domain}/"
   expect(page).to have_link(@test_convention[:title], :href => convention_url)
+end
+
+When(/^I should see the dates displayed$/) do
+  expect(page).to have_content(@start_date.strftime('%m/%d/%Y'))
+  expect(page).to have_content(@end_date.strftime('%m/%d/%Y'))
+end
+
+When(/^I should not see the dates$/) do
+  expect(page).to have_content("#{@test_convention[:title]} /")
+end
+
+
+Then(/^I should see Edit Convention link$/) do
+  expect(page).to have_link('Edit', :href => edit_convention_path(@convention))
 end

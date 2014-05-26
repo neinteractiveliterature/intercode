@@ -28,3 +28,14 @@ Feature: Conventions List
     When I am on the Intercode homepage
     Then I should see "Unspecified"
     And The sample convention is displayed
+    And I should not see the dates
+
+  Scenario: Global Admins see Edit
+    Given I am a Global Admin
+    When I am on the Intercode homepage
+    Then I should see Edit Convention link
+
+  Scenario: Global Admins see Add a new Convention
+    Given I am a Global Admin
+    When I am on the Intercode homepage
+    Then I should see "Add a new convention"

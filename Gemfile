@@ -16,10 +16,6 @@ platform :jruby do
   gem 'mizuno'
 end
 
-gem 'sass-rails', '~> 4.0.0'
-gem 'bootstrap-sass'
-gem 'coffee-rails'
-
 gem 'uglifier', '>= 1.0.3'
   
 # Upload assets to Amazon S3 during compilation phase
@@ -42,11 +38,16 @@ gem 'carrierwave'
 #Enviromental Variable Configuration
 gem 'figaro'
 
-gem 'simple_form'
 gem 'datetimepicker-rails', :require => 'datetimepicker-rails', :git => 'git://github.com/zpaulovics/datetimepicker-rails.git'
 gem 'validates_timeliness'
 
 #gem 'newrelic_rpm'
+
+gem 'bootstrap-sass'
+gem 'sass-rails', '~> 4.0.0'
+gem 'coffee-rails'
+gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+
 
 # Fixture replacement for test suite
 group :development, :test do

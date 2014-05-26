@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/rweng/jquery-datatables-rails.git
+  revision: 477e49a649c8d862988298bc96a93e030d023e0e
+  specs:
+    jquery-datatables-rails (1.12.2)
+      jquery-rails
+      sass-rails
+
+GIT
   remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: f0316e55d6a46794e56d5e636ea838c9eaef34cb
   specs:
@@ -235,9 +243,6 @@ GEM
       websocket (~> 1.0.4)
     shoulda-matchers (2.6.1)
       activesupport (>= 3.0.0)
-    simple_form (3.0.2)
-      actionpack (~> 4.0)
-      activemodel (~> 4.0)
     slop (3.5.0)
     spoon (0.0.4)
       ffi
@@ -299,6 +304,7 @@ DEPENDENCIES
   factory_girl (~> 2.6)
   factory_girl_rails
   figaro
+  jquery-datatables-rails!
   jquery-rails
   jquery-ui-rails
   jruby-openssl
@@ -312,7 +318,6 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   selenium-webdriver
   shoulda-matchers
-  simple_form
   sqlite3
   uglifier (>= 1.0.3)
   validates_timeliness

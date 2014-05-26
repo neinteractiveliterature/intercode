@@ -34,7 +34,7 @@ def sign_in
   click_button "Sign in"
 end
 
-Given(/^I am a Global$/) do
+Given(/^I am a Global User$/) do
   create_global_user
   sign_in
 end

@@ -1,11 +1,5 @@
 <h1>Create new Convention</h1>
 
-<%= simple_form_for @convention do |f| %>
-
-    <%= f.input :title %><br>
-    <%= f.input :domain %><br>
-    <%= f.button :submit, 'Create New Convention' %>
-
-<% end %>
+<%= render :partial => 'form' %>
 
 <%= link_to 'Back', conventions_path %>

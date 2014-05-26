@@ -36,6 +36,23 @@ And(/^I fill "([^"]*)" as Convention Domain$/) do |domain|
   fill_in 'Domain', :with => domain
 end
 
+When(/^I fill (.*) as Convention Start Date$/) do |start_date|
+  @start_date = start_date.to_date
+  fill_in 'Start date', :with => start_date
+end
+
+When(/^I fill (.*) as Convention End Date$/) do |end_date|
+  @end_date = end_date.to_date
+  fill_in 'End date', :with => end_date
+end
+
+When(/^I fill current dates for Start and End Date$/) do
+  @start_date = Date.today
+  @end_date = Date.today
+  fill_in 'Start date', :with => @start_date
+  fill_in 'End date', :with => @end_date
+end
+
 And(/^This convention occurred in the past$/) do
   @date = Date.today - 1.year
   change_dates(@date, @date + 1.day)

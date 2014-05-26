@@ -61,10 +61,10 @@ class ConventionsController < ApplicationController
       @unspecified_dates = []
 
       conventions.each do |con|
-        if con.ended?
-          @past_conventions << con
-        elsif con.current?
+        if con.current?
           @current_conventions << con
+        elsif con.ended?
+          @past_conventions << con
         elsif con.upcoming?
           @upcoming_conventions << con
         else con.unspecified?

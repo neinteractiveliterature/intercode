@@ -1,0 +1,5 @@
+<%= link_to convention_unspecified.title, root_url(:host => convention_unspecified.domain) %> /
+
+<% if current_user.try(:can_update?, Convention) -%>
+    <%= link_to 'Edit', edit_convention_path(convention_unspecified) %>
+<% end %>
