@@ -5,7 +5,7 @@ describe Convention do
 
   before(:each) do
     @attr = {
-        :name => 'Example Convention',
+        :title => 'Example Convention',
         :domain => 'example.com'
     }
   end
@@ -79,6 +79,7 @@ describe Convention do
         same_day_convention = Convention.new(@attr.merge(:start_date => Date.today, :end_date => Date.today))
         expect(same_day_convention).to be_valid
       end
+
     end
 
 end

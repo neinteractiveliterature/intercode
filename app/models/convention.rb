@@ -44,7 +44,7 @@ class Convention < ActiveRecord::Base
   end
 
   def unspecified?
-    start_date == nil || end_date == nil
+    start_date.nil? || end_date.nil?
   end
 
   def create_default_root_page
