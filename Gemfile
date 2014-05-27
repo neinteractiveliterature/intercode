@@ -45,6 +45,7 @@ gem 'bootstrap-sass'
 gem 'sass-rails', '~> 4.0.0'
 gem 'coffee-rails'
 gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+gem 'will_paginate'
 
 # Fixture replacement for test suite
 group :development, :test do

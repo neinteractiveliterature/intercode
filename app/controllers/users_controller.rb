@@ -3,7 +3,10 @@ class UsersController < ApplicationController
 
   def index
     authorize_action_for ApplicationAuthorizer
-    @users = User.all
+    respond_to do |format|
+      format.html
+      format.json { render json: UsersDatatable.new(view_context) }
+    end
   end
 
   def show

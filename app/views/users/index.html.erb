@@ -1,6 +1,15 @@
 <h1>NOTE: THIS IS FOR TESTING PURPOSES ONLY!</h1>
 <p>Global User functions should be removed in favor of individual con preferences which affect global User status.</p>
 <br/>
-<% @users.each do |user| %>
-    <%= link_to user.email, user_path(user) %><br/>
-<% end %>
+
+<table id="users" data-source="<%= users_url(format: "json") %>">
+  <thead>
+  <tr>
+    <th>Email</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

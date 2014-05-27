@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140524203910) do
+ActiveRecord::Schema.define(version: 20140527024929) do
 
   create_table "conventions", force: true do |t|
     t.string   "signups_allowed",     default: "not_yet", null: false
@@ -115,16 +115,8 @@ ActiveRecord::Schema.define(version: 20140524203910) do
     t.string   "last_name",                           null: false
     t.string   "nickname"
     t.date     "birth_date"
-    t.string   "gender"
-    t.string   "address1"
-    t.string   "address2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zipcode"
-    t.string   "country"
-    t.string   "day_phone"
-    t.string   "evening_phone"
-    t.string   "best_call_time"
+    t.string   "default_gender"
+    t.string   "phone"
     t.string   "preferred_contact"
     t.boolean  "site_admin"
     t.string   "email",                  default: "", null: false
