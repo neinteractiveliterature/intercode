@@ -16,7 +16,7 @@
 
     <tr>
       <th><%= f.label :password %></th>
-      <td><%= f.password_field :password, :autocomplete => "off" %>
+      <td><%= f.password_field :password, :autocomplete => 'off' %>
         <% unless resource.new_record? -%>
           <i>(leave blank if you don't want to change it)</i>
         <% end -%>
@@ -24,7 +24,7 @@
     </tr>
     
     <tr>
-      <th><%= f.label :password_confirmation, "Confirm password" %></th>
+      <th><%= f.label :password_confirmation, 'Confirm password' %></th>
       <td><%= f.password_field :password_confirmation %></td>
     </tr>
 
@@ -51,8 +51,8 @@
     </tr>
 
     <tr>
-      <th><%= f.label :phone, "Phone number" %></th>
-      <td><%= f.text_field :phone %><br/>
+      <th><%= f.label :phone, 'Phone number' %></th>
+      <td><%= f.phone_field :phone %><br/>
       <b>Note:</b> Specifying your phone number is optional. Staff and your game GMs will have access to this.</td>
     </tr>
 
@@ -74,7 +74,7 @@
     
     <tr>
       <td colspan="2" style="text-align: center;">
-        <%= f.submit resource.new_record? ? "Register" : "Update" %>
+        <%= f.submit resource.new_record? ? 'Register' : 'Update' %>
       </td>
     </tr>
   </table>
