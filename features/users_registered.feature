@@ -11,24 +11,26 @@ Feature: Registered Users Admin Functions
 
   Scenario: Change Last Name
     Given I am on the Update User Information page
-    When I enter "Sample" as First Name
+    When I enter "Sample" as Last Name
 
   Scenario: Change Email
     Given I am on the Update User Information page
-    When I enter "Sample" as First Name
+    When I enter "Sample" as Email
 
   Scenario: Change Nickname
     Given I am on the Update User Information page
-    When I enter "Sample" as First Name
+    When I enter "Sample" as Nickname
 
   Scenario: Change Phone Number
     Given I am on the Update User Information page
-    When I enter "Sample" as First Name
+    When I enter "Sample" as Phone Number
 
-  Scenario: Change Default Gender
+  Scenario Outline: Change Default Gender
     Given I am on the Update User Information page
-    When I enter "Sample" as First Name
+    When I select <Options> as Default Gender
 
-  Scenario: Change Phone Number
-    Given I am on the Update User Information page
-    When I enter "Sample" as First Name
+  Examples:
+    | Options|
+    | either |
+    | female |
+    |  male  |

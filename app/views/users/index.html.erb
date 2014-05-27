@@ -1,0 +1,6 @@
+<h1>NOTE: THIS IS FOR TESTING PURPOSES ONLY!</h1>
+<p>Global User functions should be removed in favor of individual con preferences which affect global User status.</p>
+<br/>
+<% @users.each do |user| %>
+    <%= link_to user.email, user_path(user) %><br/>
+<% end %>

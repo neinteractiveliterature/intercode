@@ -1,0 +1,18 @@
+<h1>NOTE: THIS IS FOR TESTING PURPOSES ONLY!</h1>
+
+<%= form_for(@user) do |f| %>
+    First Name: <%= f.text_field :first_name %><br/>
+    Last Name: <%= f.text_field :last_name %><br/>
+    Email: <%= f.email_field :email %><br/>
+    Nickname: <%= f.text_field :nickname %><br/>
+    Phone: <%= f.phone_field :phone %><br/>
+    Default Gender:
+    <%= f.radio_button :default_gender, 'female' %>
+    <%= f.label :default_gender, 'Female', :value => 'female', :title => 'I prefer to be cast as Female' %>
+    <%= f.radio_button :default_gender, 'male' %>
+    <%= f.label :default_gender, 'Male', :value => 'male', :title => 'I prefer to be cast as Male' %>
+    <%= f.radio_button :default_gender, 'either' %>
+    <%= f.label :default_gender, 'Either', :value => 'either', :title => 'I do not have a preferred gender' %>
+    <br/>
+    <%= f.submit %>
+<% end %>

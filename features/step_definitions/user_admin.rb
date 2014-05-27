@@ -17,3 +17,7 @@ When(/^I enter "([^"]*)" as Nickname$/) do |nickname|
   @nickname = nickname
   fill_in 'Nickname', with => @nickname
 end
+
+When(/^I enter "([^"]*)" as Phone Number$/) do |arg|
+  pending
+end

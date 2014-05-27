@@ -15,4 +15,7 @@ Intercode::Application.routes.draw do
   # the following routes apply only when we're not in a virtual host
   resources :conventions
   root :to => 'conventions#index'
+
+  #Global User Resources. TESTING ONLY!!!!!!1
+  resources :users, only: [:index, :show, :edit, :update, :destroy]
 end
