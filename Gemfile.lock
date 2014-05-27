@@ -6,12 +6,6 @@ GIT
       jquery-rails
       sass-rails
 
-GIT
-  remote: git://github.com/zpaulovics/datetimepicker-rails.git
-  revision: f0316e55d6a46794e56d5e636ea838c9eaef34cb
-  specs:
-    datetimepicker-rails (0.0.8)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -298,7 +292,6 @@ DEPENDENCIES
   coffee-rails
   cucumber-rails
   database_cleaner
-  datetimepicker-rails!
   devise
   email_spec
   factory_girl (~> 2.6)

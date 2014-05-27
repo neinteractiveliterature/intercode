@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require dataTables/jquery.dataTables.bootstrap3
+ *= require bootstrap-datetimepicker
  *= require_self
  *= require_tree ./application
 */

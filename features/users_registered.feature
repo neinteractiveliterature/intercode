@@ -20,3 +20,15 @@ Feature: Registered Users Admin Functions
   Scenario: Change Nickname
     Given I am on the Update User Information page
     When I enter "Sample" as First Name
+
+  Scenario: Change Phone Number
+    Given I am on the Update User Information page
+    When I enter "Sample" as First Name
+
+  Scenario: Change Default Gender
+    Given I am on the Update User Information page
+    When I enter "Sample" as First Name
+
+  Scenario: Change Phone Number
+    Given I am on the Update User Information page
+    When I enter "Sample" as First Name
