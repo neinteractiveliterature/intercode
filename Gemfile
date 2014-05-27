@@ -37,8 +37,6 @@ gem 'carrierwave'
 
 #Enviromental Variable Configuration
 gem 'figaro'
-
-gem 'datetimepicker-rails', :require => 'datetimepicker-rails', :git => 'git://github.com/zpaulovics/datetimepicker-rails.git'
 gem 'validates_timeliness'
 
 #gem 'newrelic_rpm'
