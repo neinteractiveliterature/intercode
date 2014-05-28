@@ -1,25 +1,21 @@
-def create_test_account
-  @account ||= { :first_name => 'Test',
+def create_default_account
+  @account ||= { :first_name => 'Default',
                  :last_name => 'User',
-                 :email => 'test_user@example.com',
+                 :email => 'default_user@example.com',
                  :password => 'changeme',
                  :password_confirmation => 'changeme' }
 end
 
-def find_user
-  @user ||= User.first conditions: {:email => @account[:email]}
-end
-
 def create_global_user
-  create_test_account
+  create_default_account
   delete_user
   @user = FactoryGirl.create(:user, email: @account[:email])
 end
 
 def create_global_admin
-  create_test_account
+  create_default_account
   delete_user
-  @user = FactoryGirl.create(:global_admin, email: @account[:email])
+  @user = FactoryGirl.create(:user, :global_admin, email: @account[:email])
 end
 
 def delete_user

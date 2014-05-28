@@ -30,12 +30,26 @@ Feature: Conventions List
     And The sample convention is displayed
     And I should not see the dates
 
-  Scenario: Global Admins see Edit
+  Scenario: Non-registered User
+    Given I am not convention User
+    When I am on the Intercode homepage
+    Then I should not see Edit Convention link
+    And I should not see Add Convention link
+
+  Scenario: Registered User
+    Given I am a Global User
+    When I am on the Intercode homepage
+    Then I should not see Edit Convention link
+    And I should not see Add Convention link
+
+  Scenario: Staff User
+    Given I am Staff
+    When I am on the Intercode homepage
+    Then I should see Edit Convention link
+    And I should not see Add Convention link
+
+  Scenario: Global Admins see Edit / Add
     Given I am a Global Admin
     When I am on the Intercode homepage
     Then I should see Edit Convention link
-
-  Scenario: Global Admins see Add a new Convention
-    Given I am a Global Admin
-    When I am on the Intercode homepage
-    Then I should see "Add a new convention"
+    And I should see Add Convention link

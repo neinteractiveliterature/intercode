@@ -7,7 +7,7 @@ FactoryGirl.define do
     password_confirmation 'changeme'
   end
 
-  factory :global_admin, parent: :user do
+  trait :global_admin do
     site_admin true
   end
 

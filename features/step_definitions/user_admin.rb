@@ -1,3 +1,7 @@
+Given(/^I am on the Update User Information page$/) do
+  visit edit_user_registration_path(@user)
+end
+
 When(/^I enter "([^"]*)" as First Name$/) do |first_name|
   @first_name = first_name
   fill_in 'First Name', with => @first_name
@@ -18,6 +22,16 @@ When(/^I enter "([^"]*)" as Nickname$/) do |nickname|
   fill_in 'Nickname', with => @nickname
 end
 
-When(/^I enter "([^"]*)" as Phone Number$/) do |arg|
-  pending
+When(/^I enter "([^"]*)" as Phone Number$/) do |phone|
+  @phone = phone
+  fill_in 'Phone', with => @phone
+end
+
+When(/^I select (.*) as Default Gender$/) do |gender|
+  @gender = gender
+  choose @gender
+end
+
+And(/^I enter my password$/) do
+  fill_in 'Password', with => @account.password
 end

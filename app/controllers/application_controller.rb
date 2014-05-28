@@ -71,10 +71,10 @@ class ApplicationController < ActionController::Base
   # need to add more later if we customize the other Devise forms too.
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) do |user|
-      user.permit(:email, :password, :password_confirmation, :remember_me,
-        :first_name, :last_name, :nickname, :birth_date, :gender, :address1,
-        :address2, :city, :state, :zipcode, :country, :day_phone, :evening_phone,
-        :best_call_time, :preferred_contact)
+      user.permit(:email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :nickname, :birth_date, :default_gender, :phone)
+    end
+    devise_parameter_sanitizer.for(:account_update) do |user|
+      user.permit(:email, :password, :password_confirmation, :first_name, :last_name, :nickname, :birth_date, :default_gender, :phone, :current_password)
     end
   end
 end

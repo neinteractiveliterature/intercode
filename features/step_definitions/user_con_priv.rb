@@ -1,7 +1,7 @@
-def create_test_account
-  @account ||= { :first_name => 'Test',
+def create_default_convention_account
+  @account ||= { :first_name => 'Convention',
                  :last_name => 'User',
-                 :email => 'test_user@example.com',
+                 :email => 'convention_user@example.com',
                  :password => 'changeme',
                  :password_confirmation => 'changeme' }
 end
@@ -11,15 +11,8 @@ def find_user
 end
 
 def create_convention_user
-  create_test_account
+  create_default_convention_account
   delete_user
-  @user = FactoryGirl.create(:user_con_profile, email: @account[:email])
-end
-
-def create_global_admin
-  create_test_account
-  delete_user
-  @user = FactoryGirl.create(:global_admin, email: @account[:email])
 end
 
 def delete_user
@@ -29,18 +22,23 @@ end
 
 def sign_in
   visit '/users/sign_in'
-  fill_in "Email", :with => @account[:email]
-  fill_in "Password", :with => @account[:password]
-  click_button "Sign in"
+  fill_in 'Email', :with => @account[:email]
+  fill_in 'Password', :with => @account[:password]
+  click_button 'Sign in'
 end
 
+def sign_out
+  visit '/users/sign_out'
+end
 
 Given(/^I am not convention User$/) do
-  pending
+  sign_out
 end
 
 And(/^I am registered convention User$/) do
-  pending
+  create_convention_user
+  FactoryGirl.create(:user_con_profile, @user, @convention)
+  sign_in
 end
 
 Given(/^I am not Alumni$/) do
@@ -60,10 +58,20 @@ Given(/^I am Paid$/) do
 end
 
 Given(/^I am Staff$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:user_con_profile, :staff, @user, @convention)
+  sign_in
+end
+
+Given(/^I am not Staff$/) do
+
 end
 
 Given(/^I am Event GM$/) do
+  pending
+end
+
+Given(/^I am not Event GM$/) do
   pending
 end
 
@@ -71,30 +79,51 @@ Given(/^I am Event Submitter$/) do
   pending
 end
 
-Given(/^I am GM Liaison$/) do
+Given(/^I am not Event Submitter$/) do
   pending
+end
+
+Given(/^I am GM Liaison$/) do
+  create_convention_user
+  @user = FactoryGirl.create(:gm_liason, email: @account[:email])
+  sign_in
+
 end
 
 Given(/^I am Outreach$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:outreach, email: @account[:email])
+  sign_in
 end
 
 Given(/^I am Bid Committee$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:bid_committee, email: @account[:email])
+  sign_in
+
 end
 
 Given(/^I am Bid Chair$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:bid_chair, email: @account[:email])
+  sign_in
 end
 
 Given(/^I am Scheduling$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:scheduling, email: @account[:email])
+  sign_in
 end
 
 Given(/^I am Registration$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:registration, email: @account[:email])
+  sign_in
 end
 
 Given(/^I am Con Chair$/) do
-  pending
+  create_convention_user
+  @user = FactoryGirl.create(:con_chair, email: @account[:email])
+  sign_in
 end
+

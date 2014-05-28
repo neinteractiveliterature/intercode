@@ -4,7 +4,7 @@ require File.expand_path('lib/domain_validator')
 class Convention < ActiveRecord::Base
   include Authority::Abilities
 
-  belongs_to :updated_by, :class_name => "User"
+  belongs_to :updated_by, :class_name => 'User'
   
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now no) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
@@ -15,7 +15,7 @@ class Convention < ActiveRecord::Base
   validates_date :end_date, :on_or_after => :start_date, :allow_blank => true
 
   has_many :pages, :as => :parent
-  belongs_to :root_page, :class_name => "Page"
+  belongs_to :root_page, :class_name => 'Page'
   
   before_create :create_default_root_page
   after_create :fix_root_page_parent

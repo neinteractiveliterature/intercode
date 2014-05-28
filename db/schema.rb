@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140527024929) do
+ActiveRecord::Schema.define(version: 20140527180926) do
 
   create_table "conventions", force: true do |t|
     t.string   "signups_allowed",     default: "not_yet", null: false
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 20140527024929) do
     t.boolean  "mail_to_alumni",          default: false,    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "bio"
   end
 
   add_index "user_con_profiles", ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true

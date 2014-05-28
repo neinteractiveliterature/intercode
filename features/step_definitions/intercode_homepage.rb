@@ -64,3 +64,15 @@ end
 Then(/^I should see Edit Convention link$/) do
   expect(page).to have_link('Edit', :href => edit_convention_path(@convention))
 end
+
+Then(/^I should see Add Convention link$/) do
+  expect(page).to have_link('Add a new convention', :href => new_convention_path)
+end
+
+Then(/^I should not see Edit Convention link$/) do
+  expect(page).not_to have_link('Edit', :href => edit_convention_path(@convention))
+end
+
+And(/^I should not see Add Convention link$/) do
+  expect(page).not_to have_link('Add a new convention', :href => new_convention_path)
+end
