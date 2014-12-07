@@ -10,6 +10,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# Ignore SQLite journals
+*.sqlite3-journal
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
@@ -20,3 +23,6 @@ public/uploads
 
 .vagrant
 cookbooks
+
+# Ignore Emacs backup files
+*~

@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.boolean  "accepting_bids"
     t.boolean  "precon_bids_allowed"
     t.integer  "updated_by_id"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.integer  "root_page_id"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.string   "domain",                                  null: false
   end
 
-  add_index "conventions", ["domain"], name: "index_cons_on_domain", unique: true
-  add_index "conventions", ["updated_by_id"], name: "index_cons_on_updated_by_id"
+  add_index "conventions", ["domain"], name: "index_conventions_on_domain", unique: true
+  add_index "conventions", ["updated_by_id"], name: "index_conventions_on_updated_by_id"
 
   create_table "events", force: true do |t|
     t.string   "title"
@@ -48,15 +48,15 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.text     "description"
     t.text     "short_blurb"
     t.integer  "updated_by_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "convention_id"
     t.integer  "user_id"
     t.string   "type"
     t.string   "status"
   end
 
-  add_index "events", ["convention_id"], name: "index_events_on_con_id"
+  add_index "events", ["convention_id"], name: "index_events_on_convention_id"
   add_index "events", ["updated_by_id"], name: "index_events_on_updated_by_id"
   add_index "events", ["user_id"], name: "index_events_on_user_id"
 
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.text     "content"
     t.integer  "parent_id"
     t.string   "parent_type"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pages", ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.string   "title_suffix"
     t.text     "schedule_note"
     t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "runs", ["event_id"], name: "index_runs_on_event_id"
@@ -118,11 +118,11 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.boolean  "mail_to_vendors",         default: false,    null: false
     t.boolean  "mail_to_unpaid",          default: false,    null: false
     t.boolean  "mail_to_alumni",          default: false,    null: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "user_con_profiles", ["convention_id", "user_id"], name: "index_user_con_profiles_on_con_id_and_user_id", unique: true
+  add_index "user_con_profiles", ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true
   add_index "user_con_profiles", ["registration_status"], name: "index_user_con_profiles_on_registration_status"
 
   create_table "users", force: true do |t|
@@ -152,8 +152,8 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

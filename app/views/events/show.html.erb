@@ -1,0 +1,64 @@
+<div "class=larp-navbar">
+  <ul class="menu larp-control priv">
+    <li class="menu-title">LARP Admin</li>
+    <li class="edit-larp">
+      <% le = @larp.becomes(Event) %>
+      <%= link_to('Edit LARP', edit_event_path(le)) %>
+    </li>
+    <li class='edit-larp'>
+      <%= link_to('Edit GMs',
+	          team_members_path({event: @larp.id})) %>
+    </li>
+  </ul>
+</div>
+
+<h1 class="larp-title"><%= @larp.title %></h1>
+<table>
+<% if @larp.author %>
+  <tr class="larp-header-row">
+    <th>Author(s):</th>
+    <td><%= @larp.author %></td>
+  </tr>
+<% end %>
+<% if ! @larp.organization.empty? %>
+  <tr class="larp-header-row">
+    <th>Organization:</th>
+    <td><%= @larp.organization %></td>
+  </tr>
+<% end %>
+<% if ! @larp.url.empty? %>
+  <tr class="larp-header-row">
+    <th>Home Page:</th>
+    <td><%= link_to @larp.url, @larp.url, :target => '_blank' %></td>
+  </tr>
+<% end %>
+<% if ! @larp.email.empty? %>
+  <tr class="larp-header-row">
+    <th>Game Email:</th>
+    <td><%= intercode_mail_to(@larp.email) %></td>
+  </tr>
+<% end %>
+<% if ! @team.empty? %>
+  <tr class="larp-header-row">
+    <th>GMs:</th>
+    <td>
+      <table>
+	<% @team.each do |member| %>
+	<tr>
+	  <td>
+	    <%= member.name() %>
+	  </td>
+	  <td>
+	    <%= intercode_mail_to(member.email()) %>
+	  </td>
+	</tr>
+	<% end %>
+      </table>
+    </td>
+  </tr>
+<% end %>
+
+<!-- Insert GMs here -->
+</table>
+<hr />
+<%= @larp.description %>

@@ -321,3 +321,32 @@ p.dev_warning
 .page_banner {
 	display: block;
 }
+
+.larp-title
+{
+  font-style:italic;
+}
+
+.larp-header-row
+{
+  vertical-align: top;
+  th
+  {
+    text-align: right;
+  }
+}
+
+.team-member-table
+{
+}
+
+.team-member-row
+{
+  vertical-align: top;
+  text-align: center;
+}
+
+.team-member-name
+{
+  text-align: left;
+}

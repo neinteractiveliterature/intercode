@@ -11,4 +11,9 @@ class User < ActiveRecord::Base
   validates :last_name, presence: true
   
   liquid_methods :email, :first_name, :last_name, :nickname
+
+  # Return the user's name.  Should this include the nickname, if one exists?
+  def name
+    self.last_name + ', ' + self.first_name
+  end
 end
