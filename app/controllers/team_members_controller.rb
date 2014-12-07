@@ -1,7 +1,7 @@
 class TeamMembersController < ApplicationController
   # TODO: Verify that the user is logged in.  For now we're
   # skipping authorization.
-  skip_after_filter :ensure_authorization_performed
+  skip_authorization_check
 
   def new
     @team_member = TeamMember.new
