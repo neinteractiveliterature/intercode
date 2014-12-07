@@ -8,6 +8,10 @@ class ConventionAuthorizer < ApplicationAuthorizer
     true
   end
 
+  def self.creatable_by?(user)
+    user.site_admin?
+  end
+  
   # Only con staff or site admins can update a convention.
   def updatable_by?(user)
     staff_or_site_admin?(user)

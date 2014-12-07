@@ -5,6 +5,8 @@ class Convention < ActiveRecord::Base
 
   belongs_to :updated_by, :class_name => "User"
   
+  validates :name, :presence => true
+  validates :domain, :presence => true, :uniqueness => true
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
   

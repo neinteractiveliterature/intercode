@@ -1,6 +1,6 @@
 class ConventionsController < ApplicationController
   # You should always be able to get a list of conventions
-  skip_after_filter :ensure_authorization_performed, only: :index
+  skip_after_filter :ensure_authorization_performed
   
   def index
     @upcoming_cons = []
@@ -17,8 +17,27 @@ class ConventionsController < ApplicationController
     end
   end
   
+  def new
+    @convention = Convention.new
+  end
+  
+  # Write the new convention to the database
+  def create
+    @convention = Convention.new(convention_params)
+    if @convention.save
+      redirect_to conventions_url
+    else
+      render 'new'
+    end
+  end
+  
   def show
     @convention = Convention.find(params[:id])
     authorize_action_for @convention
   end  
+  
+  private
+  def convention_params
+    params.require(:convention).permit(:name, :domain)
+  end
 end
