@@ -14,7 +14,7 @@ Intercode 2 is a project to rearchitect Intercode from the ground up, making it 
 
 We've put a working Vagrantfile into this repository so that you can easily get a dev environment up and running.  Here are the basic steps:
 
-1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode`
+1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode.git`
 2. Download and install [VirtualBox](http://www.virtualbox.org)
 3. Download and install [Vagrant](http://www.vagrantup.com)
 4. Run the following commands from inside the Intercode source directory.  (It will take awhile to run `vagrant up` the first time, but it will finish eventually and you won't have to wait for it again the next time.)
