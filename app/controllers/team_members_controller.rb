@@ -75,10 +75,17 @@ class TeamMembersController < ApplicationController
                       .where('event_id=?', params[:event])
                       .select('team_members.*, users.first_name, users.last_name')
                       .order('last_name ASC, first_name ASC')
+                      .to_a
     populate_event_fields(params[:event])
   end
 
   def show
+    @team = TeamMember.joins(:user)
+                      .where('event_id=?', params[:event])
+                      .select('team_members.*, users.first_name, users.last_name')
+                      .order('last_name ASC, first_name ASC')
+                      .to_a
+    populate_event_fields(params[:event])
   end
 
   def destroy
