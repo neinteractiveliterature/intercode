@@ -1,6 +1,6 @@
 class ConventionsController < ApplicationController
   # You should always be able to get a list of conventions
-  skip_after_filter :ensure_authorization_performed
+  skip_authorization_check
   
   def index
     @upcoming_cons = []
