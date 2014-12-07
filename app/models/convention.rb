@@ -1,8 +1,6 @@
 require 'carrierwave/orm/activerecord'
 
 class Convention < ActiveRecord::Base
-  include Authority::Abilities
-
   belongs_to :updated_by, :class_name => "User"
   
   validates :name, :presence => true

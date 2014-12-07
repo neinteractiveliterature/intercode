@@ -1,7 +1,7 @@
 class TeamMembersController < ApplicationController
   # TODO: Verify that the user is logged in.  For now we're
   # skipping authorization.
-  skip_after_filter :ensure_authorization_performed
+  skip_authorization_check
 
   def new
     @team_member = TeamMember.new
@@ -75,10 +75,17 @@ class TeamMembersController < ApplicationController
                       .where('event_id=?', params[:event])
                       .select('team_members.*, users.first_name, users.last_name')
                       .order('last_name ASC, first_name ASC')
+                      .to_a
     populate_event_fields(params[:event])
   end
 
   def show
+    @team = TeamMember.joins(:user)
+                      .where('event_id=?', params[:event])
+                      .select('team_members.*, users.first_name, users.last_name')
+                      .order('last_name ASC, first_name ASC')
+                      .to_a
+    populate_event_fields(params[:event])
   end
 
   def destroy

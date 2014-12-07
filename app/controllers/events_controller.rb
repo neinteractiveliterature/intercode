@@ -2,7 +2,7 @@ class EventsController < BaseControllers::VirtualHost
 
   # TODO: Verify that the user is logged in.  For now we're
   # skipping authorization.
-  skip_after_filter :ensure_authorization_performed
+  skip_authorization_check
 
   # Display form to propose a new LARP.  Create a new LARP event to initialize
   # the form
@@ -17,6 +17,8 @@ class EventsController < BaseControllers::VirtualHost
     @larp.user_id = current_user.id
     @larp.updated_by_id = current_user.id
     if @larp.save
+      flash[:notice]="Thank you for submitting your LARP"
+      redirect_to event_path(@larp)
     else
       render 'new'
     end
