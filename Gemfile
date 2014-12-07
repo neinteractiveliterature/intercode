@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.2'
 gem 'rails', '4.0.2'
 
 platform :ruby do
@@ -37,8 +37,6 @@ gem 'cadmus', '>= 0.5.0'
 # File uploading
 gem 'carrierwave'
 
-gem 'puma'
-gem 'pry-rails', :groups => [:development, :test]
 gem 'newrelic_rpm'
 
 group :development, :test do

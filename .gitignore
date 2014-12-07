@@ -17,3 +17,6 @@
 public/uploads
 .rbenv-version
 .idea
+
+.vagrant
+cookbooks
