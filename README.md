@@ -18,19 +18,21 @@ We've put a working Vagrantfile into this repository so that you can easily get 
 2. Download and install [VirtualBox](http://www.virtualbox.org)
 3. Download and install [Vagrant](http://www.vagrantup.com)
 4. Run the following commands from inside the Intercode source directory.  (It will take awhile to run `vagrant up` the first time, but it will finish eventually and you won't have to wait for it again the next time.)
-  ```bash
-  vagrant plugin install vagrant-vbguest
-  vagrant plugin install vagrant-librarian-chef
-  vagrant up
-  vagrant ssh
-  ```
+    
+    ```bash
+    vagrant plugin install vagrant-vbguest
+    vagrant plugin install vagrant-librarian-chef
+    vagrant up
+    vagrant ssh
+    ```
 5. You're now inside a Linux virtual machine set up to run Intercode.  The Intercode source is mounted into this VM at `/vagrant`, and any changes you make locally will be reflected in the VM (and vice versa).  To set up and run the app, run these commands:
-  ```bash
-  cd /vagrant
-  bundle install
-  rake db:create db:migrate db:seed
-  rails server
-  ```
+    
+    ```bash
+    cd /vagrant
+    bundle install
+    rake db:create db:migrate db:seed
+    rails server
+    ```
 6. You should now be able to visit http://localhost:3000 in a web browser and see Intercode running!  Any changes you make locally will be reflected here, just as if you were running the app locally.
 
 # Contacting us
