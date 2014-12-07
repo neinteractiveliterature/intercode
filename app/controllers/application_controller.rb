@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   # Authority's built-in nag filter that will throw an error if no authorization check was performed.
-  # Only enabled for non-production environments.  To disable, do something like this in a controller:
-  # skip_after_filter :ensure_authorization_performed
-  after_filter :ensure_authorization_performed, :if => :auditing_security?, :unless => :devise_controller?
+  # Only enabled for non-production environments.  To disable, do this in a controller:
+  # skip_authorization_check
+  check_authorization :unless => :devise_controller?
   
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
   before_filter :configure_permitted_parameters, if: :devise_controller?
@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
   # logged in, or throw them back to the root URL with an error if they are.
-  def authority_forbidden(error)
-    Authority.logger.warn(error.message)
+  rescue_from CanCan::AccessDenied do |error|
+    Rails.logger.warn(error.message)
     
     if user_signed_in?
       redirect_to root_url, :alert => error.message
@@ -38,27 +38,6 @@ class ApplicationController < ActionController::Base
   # controller is useful for generating URLs in templates.
   def liquid_registers
     { "controller" => self }
-  end
-  
-  # This is used by the ensure_authorization_performed filter above, to check whether
-  # that filter should be enabled.  In this case we want it enabled for all environments
-  # except production.  (Code without authorization checks shouldn't make it to prod,
-  # but if it does, we don't want it throwing errors at users.)
-  def auditing_security?
-    Rails.env != 'production'
-  end
-  
-  # This is used by Authority (see config/initializers/authority.rb for where it's set up)
-  # to get the current user object.  It needs to have something that includes the
-  # Authority::UserAbilities module, so that it can call stuff like user.can_read?(object).
-  # If there isn't a current user signed in, then we construct an in-memory anonymous User
-  # object with no permissions so that anything requiring special permissions will fail.
-  def current_or_anonymous_user
-    if user_signed_in?
-      current_user
-    else
-      User.new
-    end
   end
   
   # Devise is going to do some operations in its controllers that require writing to a

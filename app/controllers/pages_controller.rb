@@ -19,14 +19,14 @@ class PagesController < BaseControllers::VirtualHost
   
   # Now it's safe to run authorize_actions_for.  We'll call out to the page_for_authorization
   # method to return the page we're using, and use read permissions for the root action.
-  authorize_actions_for :page_for_authorization, :actions => { :root => :read }
+  authorize_resource :page
   
   # If we're in the show action and being asked to show the root page, redirect to the domain
   # root URL.  Because pages should only have one canonical URL if possible, natch.
   before_filter :redirect_if_root_page, :only => [:show]
   
   # Just let everyone view the list of pages, it's easier that way.
-  skip_after_action :ensure_authorization_performed, :only => [:index]
+  skip_authorization_check :only => [:index]
   
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!

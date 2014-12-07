@@ -29,9 +29,9 @@ gem 'unf'
 
 gem 'jquery-rails'
 
-# Devise for authentication, authority for authorization
+# Devise for authentication, cancancan for authorization
 gem 'devise'
-gem 'authority'
+gem 'cancancan'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
 gem 'cadmus', '>= 0.5.0'
