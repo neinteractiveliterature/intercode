@@ -44,8 +44,12 @@ GEM
     authority (3.0.0)
       activesupport (>= 3.0.0)
       rake (>= 0.8.7)
+    autoprefixer-rails (3.1.2.20141016)
+      execjs
     bcrypt (3.1.9)
     bcrypt (3.1.9-java)
+    bootstrap-sass (3.2.0.2)
+      sass (~> 3.2)
     builder (3.2.2)
     cadmus (0.5.0)
       liquid
@@ -263,6 +267,8 @@ DEPENDENCIES
   activerecord-jdbcsqlite3-adapter
   asset_sync
   authority
+  autoprefixer-rails
+  bootstrap-sass
   cadmus (>= 0.5.0)
   carrierwave
   coffee-rails

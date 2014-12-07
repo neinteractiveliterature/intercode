@@ -18,6 +18,8 @@ end
 
 gem 'sass-rails'
 gem 'coffee-rails'
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
 
 gem 'uglifier', '>= 1.0.3'
   
