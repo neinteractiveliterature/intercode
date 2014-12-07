@@ -17,6 +17,8 @@ class EventsController < BaseControllers::VirtualHost
     @larp.user_id = current_user.id
     @larp.updated_by_id = current_user.id
     if @larp.save
+      flash[:notice]="Thank you for submitting your LARP"
+      redirect_to event_path(@larp)
     else
       render 'new'
     end
