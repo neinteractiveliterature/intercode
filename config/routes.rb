@@ -34,5 +34,6 @@ Intercode::Application.routes.draw do
 
   # the following routes apply only when we're not in a virtual host
   resources :conventions
+  resources :users
   root :to => 'conventions#index'
 end
