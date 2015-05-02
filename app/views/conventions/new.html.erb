@@ -1,15 +1,3 @@
 <h1>New convention</h1>
 
-<%= form_for @convention do |f| %>
-  <p>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </p>
-  
-  <p>
-    <%= f.label :domain %>
-    <%= f.text_field :domain %>
-  </p>
-  
-  <p><%= f.submit %></p>
-<% end %>
+<%= render partial: "form" %>

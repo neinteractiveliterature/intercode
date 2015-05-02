@@ -1,7 +1,9 @@
 <% if @upcoming_cons.present? -%>
 	<h1>Upcoming conventions</h1>
 
-	<%= render :collection => @upcoming_cons, :partial => "convention" %>
+  <ul class="list-group">
+    <%= render :collection => @upcoming_cons, :partial => "convention" %>
+  </ul>
 <% end -%>
 
 <% if @past_cons.present? -%>
