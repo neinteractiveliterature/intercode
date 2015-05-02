@@ -13,9 +13,9 @@ class EventsController < BaseControllers::VirtualHost
   # Write information from the new LARP to the database
   def create
     @larp = Events::Larp.new(larp_params)
-    @larp.convention_id = convention.id
-    @larp.user_id = current_user.id
-    @larp.updated_by_id = current_user.id
+    @larp.convention = convention
+    @larp.user = current_user
+    @larp.updated_by = current_user
     if @larp.save
       flash[:notice]="Thank you for submitting your LARP"
       redirect_to event_path(@larp)
@@ -33,7 +33,7 @@ class EventsController < BaseControllers::VirtualHost
   def update
     @larp = Events::Larp.find(params[:id])
 
-    @larp.updated_by_id = current_user.id
+    @larp.updated_by = current_user
 #    @larp.updated_at = nil
 
     if @larp.update_attributes(larp_params)

@@ -21,7 +21,7 @@ class TeamMembersController < ApplicationController
     @team_member = TeamMember.new(member_params)
 
     # Note who created the record
-    @team_member.updated_by_id = current_user.id
+    @team_member.updated_by = current_user
 
     # The save succeeds, show the list of GMs for the event.
     # If it fails, show the "new" page again.  This will show
