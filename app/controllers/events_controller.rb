@@ -51,7 +51,7 @@ class EventsController < BaseControllers::VirtualHost
   # Show information about a LARP. The id is specified as part of the URL
   def show
     @larp = Event.find(params[:id])
-    @team = @larp.visible_team_members()
+    @team = @larp.team_members.visible
   end
 
   # Permit access to fields that can be updated

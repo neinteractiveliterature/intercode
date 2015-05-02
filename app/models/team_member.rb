@@ -10,6 +10,8 @@ class TeamMember < ActiveRecord::Base
   validates_uniqueness_of :user_id, scope: :event
 
   delegate :name, to: :user
+  
+  scope :visible, -> { where(display: true) }
 
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string

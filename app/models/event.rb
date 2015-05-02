@@ -62,9 +62,4 @@ class Event < ActiveRecord::Base
    def larp_time_array
      time_array(2, 14)
    end
-
-   # Generate array of visible team members for this event
-   def visible_team_members
-    TeamMember.where("event_id=?", self.id).where(display: true)
-   end
 end
