@@ -12,10 +12,7 @@ class TeamMember < ActiveRecord::Base
   validate :validate_user_id
   validates_uniqueness_of :user_id, scope: :event
 
-  # Return the name of the team member
-  def name
-    user().name
-  end
+  delegate :name, to: :user
 
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string
