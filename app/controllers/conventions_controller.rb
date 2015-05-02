@@ -1,12 +1,9 @@
 class ConventionsController < ApplicationController
-  # You should always be able to get a list of conventions
-  skip_authorization_check
+  load_and_authorize_resource
   
   def index
     @upcoming_cons = []
     @past_cons = []
-
-    @conventions = Convention.all
 
     @conventions.each do |con|
       if con.ended?
@@ -18,12 +15,10 @@ class ConventionsController < ApplicationController
   end
   
   def new
-    @convention = Convention.new
   end
   
   # Write the new convention to the database
   def create
-    @convention = Convention.new(convention_params)
     if @convention.save
       redirect_to conventions_url
     else
@@ -31,10 +26,21 @@ class ConventionsController < ApplicationController
     end
   end
   
-  def show
-    @convention = Convention.find(params[:id])
-    authorize_action_for @convention
-  end  
+  def edit
+  end
+  
+  def update
+    if @convention.save
+      redirect_to conventions_url
+    else
+      render 'edit'
+    end
+  end
+  
+  def destroy
+    @convention.destroy!
+    redirect_to conventions_url
+  end
   
   private
   def convention_params
