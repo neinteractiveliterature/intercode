@@ -27,12 +27,6 @@ class TeamMember < ActiveRecord::Base
     end
   end
 
-  # Returns the User for this team member.  It's cached in an instance variable
-  # so we'll only fetch it once (at least in this instance)
-  def user
-    @user ||= User.find(self.user_id)
-  end
-
 private
   def validate_user_id
     errors.add(:user_id, 'is invalid') unless User.exists?(self.user_id)
