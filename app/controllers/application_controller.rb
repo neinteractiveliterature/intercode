@@ -27,6 +27,14 @@ class ApplicationController < ActionController::Base
   
   protected
   
+  # This allows any view template to say "convention" and get the current convention.
+  # By default, there is none; this is overridden by BaseControllers::VirtualHost to
+  # return the convention for the current domain.
+  def convention
+    nil
+  end
+  helper_method :convention
+
   # These variables will automatically be made available to Cadmus CMS content.  For
   # example, you'll be able to do {{ user.name }} in a page template.
   def liquid_assigns

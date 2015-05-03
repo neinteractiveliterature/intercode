@@ -28,18 +28,22 @@
         <li class="active"><a href="#">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
+        <% if convention -%>
+          <% if user_signed_in? -%>
+    	      <li class="propose-larp">
+    		      <%= link_to "Propose a LARP", new_event_path(type: 'larp') %>
+    	      </li>
+    	      <li class="propose-panel">
+              <%= link_to "Propose a Panel", new_event_path(type: 'panel') %>
+    	      </li>
+          <% end -%>
+  	      <li class="list-part">
+            <%= link_to "List LARPs", events_path %>
+  	      </li>
+        <% end -%>
   	    <% if user_signed_in? -%>
   	      <li class="logout">
   	        <%= link_to "Log Out", destroy_user_session_path, :method => "delete" %>
-  	      </li>
-  	      <li class="propose-larp">
-  		<%= link_to "Propose a LARP", new_event_path(type: 'larp') %>
-  	      </li>
-  	      <li class="propose-panel">
-  		<%= link_to "Propose a Panel", new_event_path(type: 'panel') %>
-  	      </li>
-  	      <li class="list-part">
-  		<%= link_to "List LARPs", events_path %>
   	      </li>
   	    <% else -%>
   	      <li class="login">
