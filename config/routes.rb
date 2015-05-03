@@ -30,6 +30,9 @@ Intercode::Application.routes.draw do
 
     # Routes for team_members (GMs)
     resources :team_members
+    
+    # Routes for user con profiles
+    resources :user_con_profiles
   end
 
   # the following routes apply only when we're not in a virtual host

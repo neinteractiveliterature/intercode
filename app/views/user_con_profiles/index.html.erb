@@ -1,0 +1,25 @@
+<h1>Listing attendees</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_con_profiles.each do |user_con_profile| %>
+      <tr>
+        <td><%= link_to user_con_profile.user.name, user_con_profile %></td>
+        <td><%= mail_to user_con_profile.user.email %></td>
+        <td><%= user_con_profile.registration_status.humanize %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User con profile', new_user_con_profile_path %>
