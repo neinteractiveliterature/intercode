@@ -1,4 +1,4 @@
-<%= form_for(@user_con_profile) do |f| %>
+<%= form_for(@user_con_profile, class: "form") do |f| %>
   <% if @user_con_profile.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user_con_profile.errors.count, "error") %> prohibited this record from being saved:</h2>
@@ -10,8 +10,69 @@
       </ul>
     </div>
   <% end %>
+  
+  <div class="form-group">
+    <%= f.label :user_email, "Email address" %>
+    <%= f.email_field :user_email, class: "form-control" %>
+  </div>
+  
+  <div class="form-group">
+    <label>Privileges</label>
+    <br/>
+    <% (UserConProfile::PRIV_NAMES - UserConProfile::MAIL_PRIV_NAMES).sort.each do |priv_name| -%>
+      <label class="checkbox-inline">
+        <%= f.check_box priv_name %>
+        <%= priv_name.humanize %>
+      </label>
+    <% end -%>
+  </div>
+  
+  <div class="form-group">
+    <label>Mail privileges</label>
+    <br/>
+    <% (UserConProfile::MAIL_PRIV_NAMES).sort.each do |priv_name| -%>
+      <label class="checkbox-inline">
+        <%= f.check_box priv_name %>
+        <%= priv_name.humanize %>
+      </label>
+    <% end -%>
+  </div>
+  
+  <fieldset>
+    <legend>Payment info for <%= @convention.name %></legend>
+    
+    <div class="form-group">
+      <label>Status</label>
+      <br/>
+      <% (UserConProfile::REGISTRATION_STATUSES).each do |registration_status| -%>
+        <label class="radio-inline">
+          <%= f.radio_button :registration_status, registration_status %>
+          <%= registration_status.humanize %>
+        </label>
+      <% end -%>
+    </div>
+    
+    <div class="form-group">
+      <%= f.label :payment_amount_cents, "Payment amount" %>
+      <div class="input-group">
+        <span class="input-group-addon"><%= currency_symbol %></span>
+        <%= f.text_field :payment_amount_cents, class: "form-control" %>
+        <span class="input-group-addon">.00</span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <%= f.label :payment_note, "Payment note" %>
+      <%= f.text_field :payment_note, class: "form-control" %>
+    </div>
+    
+    <div class="form-group">
+      <%= f.label :comp_event_id, "Comped for" %>
+      <%= f.collection_select :comp_event_id, @convention.events, :id, :name, {prompt: "None"}, class: 'form-control' %>
+    </div>
+  </fieldset>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: "btn btn-default" %>
   </div>
 <% end %>

@@ -5,7 +5,8 @@ class UserConProfile < ActiveRecord::Base
   PAID_REGISTRATION_STATUSES = Set.new(%w(paid comp marketing rollover))
   UNPAID_REGISTRATION_STATUSES = Set.new(%w(unpaid alumni))
   VENDOR_REGISTRATION_STATUSES = Set.new(%w(vendor))
-  validates :registration_status, :inclusion => { :in => PAID_REGISTRATION_STATUSES + UNPAID_REGISTRATION_STATUSES + VENDOR_REGISTRATION_STATUSES }
+  REGISTRATION_STATUSES = UNPAID_REGISTRATION_STATUSES + PAID_REGISTRATION_STATUSES + VENDOR_REGISTRATION_STATUSES
+  validates :registration_status, :inclusion => { :in => REGISTRATION_STATUSES }
 
   belongs_to :convention
   belongs_to :user
@@ -16,6 +17,8 @@ class UserConProfile < ActiveRecord::Base
   scope :vendor, -> { where(:registration_status => VENDOR_REGISTRATION_STATUSES) }
   
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
+  
+  delegate :email, to: :user, allow_nil: true, prefix: true
 
   def paid?
     PAID_REGISTRATION_STATUSES.include? registration_status
@@ -35,5 +38,9 @@ class UserConProfile < ActiveRecord::Base
   
   def privileges
     PRIV_NAMES.select { |priv| self.send(priv) }
+  end
+  
+  def user_email=(email)
+    self.user = User.find_by(email: email)
   end
 end

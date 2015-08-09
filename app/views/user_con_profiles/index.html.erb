@@ -12,9 +12,14 @@
   <tbody>
     <% @user_con_profiles.each do |user_con_profile| %>
       <tr>
-        <td><%= link_to user_con_profile.user.name, user_con_profile %></td>
-        <td><%= mail_to user_con_profile.user.email %></td>
-        <td><%= user_con_profile.registration_status.humanize %></td>
+        <td><%= link_to user_con_profile.user.name_inverted, user_con_profile %></td>
+        <td><%= mail_to user_con_profile.user_email %></td>
+        <td>
+          <%= user_con_profile.registration_status.humanize %>
+          <% if user_con_profile.payment_amount_cents.try(:>, 0) -%>
+            <%= humanized_money_with_symbol user_con_profile.payment_amount_cents %>
+          <% end -%>
+        </td>
       </tr>
     <% end %>
   </tbody>

@@ -13,9 +13,14 @@ class User < ActiveRecord::Base
   
   liquid_methods :email, :first_name, :last_name, :nickname
 
-  # Return the user's name.  Should this include the nickname, if one exists?
+  # Return the user's name.
   def name
-    self.last_name + ', ' + self.first_name
+    "#{first_name} #{last_name}"
+  end
+
+  # Return the user's name in last, first format.
+  def name_inverted
+    "#{last_name}, #{first_name}"
   end
   
   # More or less copied from:

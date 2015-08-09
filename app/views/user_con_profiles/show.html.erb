@@ -63,5 +63,8 @@
 
 <!-- TODO: add event signups and team membership stuff -->
 
-<%= link_to 'Edit', edit_user_con_profile_path(@user_con_profile) %> |
-<%= link_to 'Back', user_con_profiles_path %>
+<p>
+  <%= link_to 'Back', user_con_profiles_path, class: "btn btn-link" %>
+  <%= link_to 'Edit', edit_user_con_profile_path(@user_con_profile), class: "btn btn-default" %>
+  <%= link_to 'Delete', user_con_profile_path(@user_con_profile), method: "delete", class: "btn btn-danger", "data-confirm" => "Are you sure you want to remove #{@user_con_profile.user.name} from #{@convention.name}?" %>
+</p>
