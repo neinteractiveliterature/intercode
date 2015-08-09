@@ -17,7 +17,7 @@ class Events::Ops < Events::VolunteerEvent
         "your time and effort."
 
       # The Ops event does not need to be reviewed
-      self.status = "Accepted"
+      self.status = "accepted"
     end
   end
 end

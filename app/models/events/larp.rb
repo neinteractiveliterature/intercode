@@ -7,7 +7,7 @@ class Events::Larp < Event
   after_initialize do
     if new_record?
       # LARPs need to be reviewed by the Bid committee
-      self.status = "Proposed"
+      self.status = "proposed"
 
       # Default LARP length is 4 hours
       self.length_seconds = 4 * 60 * 60

@@ -1,9 +1,10 @@
 class Event < ActiveRecord::Base
+  STATUSES = Set.new(%w(proposed reviewing accepted rejected dropped))
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
   belongs_to :user
-  validates :user_id, presence: true, numericality: { only_integer: true }
+  validates :user, presence: true
 
   # LARPs have GMs and Panels have Members
   has_many :team_members
@@ -23,7 +24,7 @@ class Event < ActiveRecord::Base
   validates :status,
     inclusion:
     { 
-      :in => %w(Proposed Reviewing Accepted Rejected Dropped)
+      :in => STATUSES
 #      messsage: "%{value} is not a valid event status"
     }
 
@@ -32,7 +33,7 @@ class Event < ActiveRecord::Base
   # title we don't care.
   validates_uniqueness_of :title,
     scope: :convention,
-    conditions: -> { where.not(status: ['Dropped', 'Rejected']) }
+    conditions: -> { where.not(status: ['dropped', 'rejected']) }
 
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.

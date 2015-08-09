@@ -10,7 +10,7 @@ class Events::ConSuite < Events::VolunteerEvent
       self.description = "Help serve Intercon breakfast, lunch, and dinner."
 
       # The Con Suite event does not need to be reviewed
-      self.status = "Accepted"
+      self.status = "accepted"
     end
   end
 end

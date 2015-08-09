@@ -8,7 +8,7 @@ class Events::Panel < Event
   after_initialize do
     if new_record?
       # Panel proposals need to be reviewed by the Panel committee
-      self.status = "Proposed"
+      self.status = "proposed"
     end
   end
 end

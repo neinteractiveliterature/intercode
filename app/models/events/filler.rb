@@ -7,7 +7,7 @@ class Events::Filler < Event
   after_initialize do
     if new_record?
       # Filler events do not need to be reviewed
-      self.status = "Accepted"
+      self.status = "accepted"
     end
   end
 end
