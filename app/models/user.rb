@@ -37,4 +37,12 @@ class User < ActiveRecord::Base
     city_state_zip = [[city, state].reject(&:blank?).join(", "), zipcode].reject(&:blank?).join(" ")
     [address1, address2, city_state_zip, country].reject(&:blank?).join("\n")
   end
+  
+  def privileges
+    if site_admin?
+      ['site_admin']
+    else
+      []
+    end
+  end
 end

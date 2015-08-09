@@ -37,7 +37,7 @@ class UserConProfile < ActiveRecord::Base
   end
   
   def privileges
-    PRIV_NAMES.select { |priv| self.send(priv) }
+    user.privileges + PRIV_NAMES.select { |priv| self.send(priv) }
   end
   
   def user_email=(email)

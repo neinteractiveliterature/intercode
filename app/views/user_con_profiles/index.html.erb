@@ -6,6 +6,7 @@
       <th>Name</th>
       <th>Email</th>
       <th>Status</th>
+      <th>Privileges</th>
     </tr>
   </thead>
 
@@ -19,6 +20,9 @@
           <% if user_con_profile.payment_amount_cents.try(:>, 0) -%>
             <%= humanized_money_with_symbol user_con_profile.payment_amount_cents %>
           <% end -%>
+        </td>
+        <td>
+          <%= safe_join user_con_profile.privileges.map(&:humanize) %>
         </td>
       </tr>
     <% end %>
