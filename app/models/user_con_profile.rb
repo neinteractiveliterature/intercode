@@ -26,4 +26,12 @@ class UserConProfile < ActiveRecord::Base
   def vendor?
     VENDOR_REGISTRATION_STATUSES.include? registration_status
   end
+  
+  def age_as_of_convention
+    user.age_as_of convention.starts_at
+  end
+  
+  def privileges
+    PRIV_NAMES.select { |priv| self.send(priv) }
+  end
 end
