@@ -14,6 +14,8 @@ class UserConProfile < ActiveRecord::Base
   scope :paid, -> { where(:registration_status => PAID_REGISTRATION_STATUSES) }
   scope :unpaid, -> { where(:registration_status => UNPAID_REGISTRATION_STATUSES) }
   scope :vendor, -> { where(:registration_status => VENDOR_REGISTRATION_STATUSES) }
+  
+  monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 
   def paid?
     PAID_REGISTRATION_STATUSES.include? registration_status

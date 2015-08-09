@@ -39,6 +39,10 @@ gem 'cadmus', '>= 0.5.1'
 # File uploading
 gem 'carrierwave'
 
+# Handling of currency fields
+gem 'money-rails'
+gem 'eu_central_bank'
+
 gem 'newrelic_rpm'
 
 group :development, :test do
