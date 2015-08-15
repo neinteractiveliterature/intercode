@@ -15,14 +15,14 @@ module DurationHelper
   # for a drop-down list, where the ID for each entry is the time of the
   # event in seconds.  Events are (currently) scheduled with a granularity
   # of 1/4 hours...
-  def duration_array(min_duration, max_duration, step = 15.minutes)
+  def duration_options(min_duration, max_duration, step = 15.minutes)
     (min_duration..max_duration).step(step).map do |duration|
       [format_duration(duration), duration]
     end
   end
 
   # Generate an array of times for a LARP
-  def larp_duration_array
-    duration_array(2.hours, 14.hours)
+  def larp_length_options
+    duration_options(1.hour, 14.hours)
   end
 end

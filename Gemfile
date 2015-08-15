@@ -20,6 +20,7 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
+gem 'bootstrap_form'
 
 gem 'uglifier', '>= 1.0.3'
   
