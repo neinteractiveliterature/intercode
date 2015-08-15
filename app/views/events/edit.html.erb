@@ -28,9 +28,8 @@
   <%= f.text_field :title, class: 'form-text-line' %>
   <br />
   <%= f.label :length %>
-  <% times_array = @larp.larp_time_array %>
   <%= select_tag(:length_seconds,
-                 options_for_select(times_array, @larp.length_seconds)) %>
+                 options_for_select(larp_duration_array, @larp.length_seconds)) %>
   <br />
   <%= f.label :author, 'Author(s)' %>
   <%= f.text_field :author, class: 'form-text-line' %>

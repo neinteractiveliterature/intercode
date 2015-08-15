@@ -40,27 +40,4 @@ class Event < ActiveRecord::Base
   has_many :runs
 
 #  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
-
-  # Generate an array of times.  These can be used to create an option list
-  # for a drop-down list, where the ID for each entry is the time of the
-  # event in seconds.  Events are (currently) scheduled with a granularity
-  # of 1/4 hours...
-  def time_array (low_hour, high_hour)
-    ary = Array.new
-    (low_hour .. high_hour - 1).each do |h|
-      (0 .. 45).step(15) do |m|
-        s = '%02d:%02d' % [h, m]
-        ary.push([s, h * 60 * 60 + m * 60])
-      end
-    end
-
-    # Add the closing hour entry
-    s = '%02d:00' % [high_hour]
-    ary.push([s, high_hour * 60 *60])
-  end
-
-   # Generate an array of times for a LARP
-   def larp_time_array
-     time_array(2, 14)
-   end
 end
