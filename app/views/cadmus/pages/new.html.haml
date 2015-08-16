@@ -1,0 +1,4 @@
+%h1 New page
+= form_for(@page, :url => { :action => :create }, :class => "new_cadmus_page") do |f|
+  = render :partial => 'cadmus/pages/form', :locals => { :f => f }
+= link_to 'Back', { :action => 'index' }

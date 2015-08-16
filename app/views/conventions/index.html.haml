@@ -1,0 +1,9 @@
+- if @upcoming_cons.present?
+  %h1 Upcoming conventions
+  %ul.list-group
+    = render :collection => @upcoming_cons, :partial => "convention"
+- if @past_cons.present?
+  %h1 Past conventions
+  = render :collection => @past_cons, :partial => "convention"
+- if can? :create, Convention
+  = link_to "Add a new convention", new_convention_path

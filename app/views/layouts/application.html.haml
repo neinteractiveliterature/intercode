@@ -1,0 +1,57 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Intercode
+    = stylesheet_link_tag    "application", :media => "all"
+    /[if IE lt 8]
+      <haml_loud> stylesheet_link_tag &quot;ie_less_than_8&quot; </haml_loud>
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    %nav#intercode-nav.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{:href => "#"} Welcome to Intercode
+        #navbar.collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{:href => "#"} Home
+            - if convention
+              - if user_signed_in?
+                %li.dropdown{:role => "presentation"}
+                  %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+                    Propose events
+                    %span.caret
+                  %ul.dropdown-menu
+                    %li.propose-larp
+                      = link_to "Propose a LARP", new_event_path(type: 'larp')
+                    %li.propose-panel
+                      = link_to "Propose a Panel", new_event_path(type: 'panel')
+              %li.list-part
+                = link_to "List LARPs", events_path
+              - if can? :manage, convention.user_con_profiles.new
+                %li.dropdown{:role => "presentation"}
+                  %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+                    Admin
+                    %span.caret
+                  %ul.dropdown-menu
+                    %li
+                      = link_to "Attendees", user_con_profiles_path
+            - if user_signed_in?
+              %li.logout
+                = link_to "Log Out", destroy_user_session_path, :method => "delete"
+            - else
+              %li.login
+                = link_to "Login", new_user_session_path
+        / /.nav-collapse
+    .content
+      %p.notice= notice
+      %p.alert= alert
+      = yield
+      = debug(params) if Rails.env.development?

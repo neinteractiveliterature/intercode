@@ -1,0 +1,8 @@
+%li.list-group-item
+  - if can? :delete, convention
+    = link_to convention_path(convention), class: "pull-right", method: :delete, "data-confirm" => "Are you sure you want to delete #{convention.name}?  This cannot be undone." do
+      %span.glyphicon.glyphicon-trash{:title => "Delete convention"}
+  - if can? :edit, convention
+    = link_to edit_convention_path(convention), class: "pull-right" do
+      %span.glyphicon.glyphicon-cog{:title => "Admin settings"}
+  = link_to convention.name, root_url(:host => convention.domain)

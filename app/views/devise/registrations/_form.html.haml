@@ -1,0 +1,82 @@
+%table
+  %tr
+    %th= f.label :first_name
+    %td= f.text_field :first_name
+  %tr
+    %th= f.label :last_name
+    %td= f.text_field :last_name
+  %tr
+    %th= f.label :email
+    %td= f.email_field :email
+  %tr
+    %th= f.label :password
+    %td
+      = f.password_field :password, :autocomplete => "off"
+      - unless resource.new_record?
+        %i (leave blank if you don't want to change it)
+  %tr
+    %th= f.label :password_confirmation, "Confirm password"
+    %td= f.password_field :password_confirmation
+  %tr
+    %th= f.label :nickname
+    %td= f.text_field :nickname
+  %tr
+    %th= f.label :gender
+    %td
+      = f.radio_button :gender, "male"
+      = f.label :gender, "Male", :value => "male"
+      %span{:style => "width: 3em;"}
+      = f.radio_button :gender, "female"
+      = f.label :gender, "Female", :value => "female"
+  %tr
+    %th= f.label :birth_date
+    %td
+      = f.date_select :birth_date, :order => [:month, :day, :year], :include_blank => true, |
+        :start_year => Time.now.year - 100, :end_year => Time.now.year                      |
+      %br/
+      %b Note:
+      Specifying your birth date is optional.  But if you choose not to, you may
+      not be able to sign up for age-restricted games.
+  %tr.divider
+    %td
+  %tr
+    %th= f.label :address1, "Address"
+    %td
+      = f.text_field :address1
+      %br/
+      = f.text_field :address2
+  %tr
+    %th= f.label :city
+    %td= f.text_field :city
+  %tr
+    %th= f.label :state, "State / Province"
+    %td= f.text_field :state
+  %tr
+    %th= f.label :zipcode
+    %td= f.text_field :zipcode
+  %tr
+    %th= f.label :country
+    %td= f.text_field :country
+  %tr
+    %th= f.label :day_phone, "Daytime phone"
+    %td= f.text_field :day_phone
+  %tr
+    %th= f.label :evening_phone, "Evening phone"
+    %td= f.text_field :evening_phone
+  %tr
+    %th= f.label :best_call_time, "Best time to call"
+    %td= f.text_field :best_call_time
+  %tr
+    %th= f.label :preferred_contact, "Preferred contact"
+    %td= f.select :preferred_contact,                                                           |
+        [["Email", :email], ["Daytime phone", :day_phone], ["Evening phone", :evening_phone]], |
+        :include_blank => true                                                                 |
+  - unless resource.new_record?
+    %tr
+      %th= f.label :current_password
+      %td
+        = f.password_field :current_password
+        %i (we need your current password to verify your identity)
+  %tr
+    %td{:colspan => "2", :style => "text-align: center;"}
+      = f.submit resource.new_record? ? "Register" : "Update"

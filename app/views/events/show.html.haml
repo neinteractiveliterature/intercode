@@ -1,0 +1,10 @@
+%div>
+"class=larp-navbar"&gt;
+%ul.menu.larp-control.priv
+  %li.menu-title LARP Admin
+  %li.edit-larp
+    - le = @larp.becomes(Event)
+    = link_to('Edit LARP', edit_event_path(le))
+  %li.edit-larp
+    = link_to('Edit GMs',                   |
+      team_members_path({event: @larp.id})) |
