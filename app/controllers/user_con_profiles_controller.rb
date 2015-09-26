@@ -3,6 +3,7 @@ class UserConProfilesController < BaseControllers::VirtualHost
 
   # GET /user_con_profiles
   def index
+    @user_con_profiles = @user_con_profiles.joins(:user).includes(:user).order("users.last_name", "users.first_name")
   end
 
   # GET /user_con_profiles/1

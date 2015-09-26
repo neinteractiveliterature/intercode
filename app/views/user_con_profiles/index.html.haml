@@ -13,9 +13,9 @@
         %td= mail_to user_con_profile.user_email
         %td
           = user_con_profile.registration_status.humanize
-          - if user_con_profile.payment_amount_cents.try(:>, 0)
-            = humanized_money_with_symbol user_con_profile.payment_amount_cents
+          - if user_con_profile.payment_amount.try(:>, 0)
+            = humanized_money_with_symbol user_con_profile.payment_amount
         %td
-          = safe_join user_con_profile.privileges.map(&:humanize)
+          = safe_join user_con_profile.privileges.map(&:titleize).sort, ", "
 %br/
 = link_to 'New User con profile', new_user_con_profile_path

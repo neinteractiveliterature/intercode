@@ -15,17 +15,18 @@ class User < ActiveRecord::Base
 
   # Return the user's name.
   def name
-    "#{first_name} #{last_name}"
+    [first_name, last_name].compact.join(" ")
   end
 
   # Return the user's name in last, first format.
   def name_inverted
-    "#{last_name}, #{first_name}"
+    [last_name, first_name].compact.join(", ")
   end
   
   # More or less copied from:
   # http://stackoverflow.com/questions/819263/get-persons-age-in-ruby
   def age_as_of(date)
+    return unless birth_date
     date.year - birth_date.year - ((date.month > birth_date.month || (date.month == birth_date.month && date.day >= birth_date.day)) ? 0 : 1)
   end
   
