@@ -32,7 +32,11 @@ Intercode::Application.routes.draw do
     resources :team_members
     
     # Routes for user con profiles
-    resources :user_con_profiles
+    resources :user_con_profiles do
+      member do
+        post :become
+      end
+    end
   end
 
   # the following routes apply only when we're not in a virtual host

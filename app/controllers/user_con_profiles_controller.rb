@@ -41,6 +41,11 @@ class UserConProfilesController < BaseControllers::VirtualHost
     @user_con_profile.destroy
     redirect_to user_con_profiles_url, notice: 'User con profile was successfully destroyed.'
   end
+  
+  def become
+    sign_in @user_con_profile.user
+    redirect_to root_url, notice: "You are now signed in as #{@user_con_profile.user.name}."
+  end
 
   private
   
