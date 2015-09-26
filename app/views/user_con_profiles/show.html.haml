@@ -1,44 +1,55 @@
-%h1= @user_con_profile.user.name
 .row
-  %strong.col-sm-2.text-right Email
-  .col-sm-10= @user_con_profile.user.email
-- if convention.starts_at
-  .row
-    %strong.col-sm-2.text-right
-      Age at #{convention.name}
-    .col-sm-10= @user_con_profile.age_as_of_convention
-- else
-  .row
-    %strong.col-sm-2.text-right Age
-    .col-sm-10= @user_con_profile.user.age
-.row
-  %strong.col-sm-2.text-right Gender
-  .col-sm-10= @user_con_profile.user.gender
-.row
-  %strong.col-sm-2.text-right Address
-  .col-sm-10= simple_format @user_con_profile.user.address, {}, wrapper_tag: 'span'
-.row
-  %strong.col-sm-2.text-right Daytime phone
-  .col-sm-10= @user_con_profile.user.day_phone
-.row
-  %strong.col-sm-2.text-right Evening phone
-  .col-sm-10= @user_con_profile.user.evening_phone
-.row
-  %strong.col-sm-2.text-right Best time to call
-  .col-sm-10= @user_con_profile.user.best_call_time
-.row
-  %strong.col-sm-2.text-right Preferred contact method
-  .col-sm-10= @user_con_profile.user.preferred_contact
-/ TODO: Figure out how to handle "how heard about con" and display it here
-.row
-  %strong.col-sm-2.text-right Privileges
-  .col-sm-10= @user_con_profile.privileges.sort.map(&:humanize).join(", ")
-.row
-  %strong.col-sm-2.text-right Status
-  .col-sm-10= @user_con_profile.registration_status.humanize
-/ TODO: add payment info when we have payment stuff
-/ TODO: add event signups and team membership stuff
-%p
-  = link_to 'Back', user_con_profiles_path, class: "btn btn-link"
-  = link_to 'Edit', edit_user_con_profile_path(@user_con_profile), class: "btn btn-default"
-  = link_to 'Delete', user_con_profile_path(@user_con_profile), method: "delete", class: "btn btn-danger", "data-confirm" => "Are you sure you want to remove #{@user_con_profile.user.name} from #{@convention.name}?"
+  .col-md-9
+    %h1= @user_con_profile.user.name
+    .row
+      %strong.col-sm-2.text-right Email
+      .col-sm-10= @user_con_profile.user.email
+    - if convention.starts_at
+      .row
+        %strong.col-sm-2.text-right
+          Age at #{convention.name}
+        .col-sm-10= @user_con_profile.age_as_of_convention
+    - else
+      .row
+        %strong.col-sm-2.text-right Age
+        .col-sm-10= @user_con_profile.user.age
+    .row
+      %strong.col-sm-2.text-right Gender
+      .col-sm-10= @user_con_profile.user.gender
+    .row
+      %strong.col-sm-2.text-right Address
+      .col-sm-10= simple_format @user_con_profile.user.address, {}, wrapper_tag: 'span'
+    .row
+      %strong.col-sm-2.text-right Daytime phone
+      .col-sm-10= @user_con_profile.user.day_phone
+    .row
+      %strong.col-sm-2.text-right Evening phone
+      .col-sm-10= @user_con_profile.user.evening_phone
+    .row
+      %strong.col-sm-2.text-right Best time to call
+      .col-sm-10= @user_con_profile.user.best_call_time
+    .row
+      %strong.col-sm-2.text-right Preferred contact method
+      .col-sm-10= @user_con_profile.user.preferred_contact
+    / TODO: Figure out how to handle "how heard about con" and display it here
+    .row
+      %strong.col-sm-2.text-right Privileges
+      .col-sm-10= @user_con_profile.privileges.sort.map(&:humanize).join(", ")
+    .row
+      %strong.col-sm-2.text-right Status
+      .col-sm-10= @user_con_profile.registration_status.humanize
+    / TODO: add payment info when we have payment stuff
+    / TODO: add event signups and team membership stuff
+  .col-md-3
+    - if can? :edit, @user_con_profile
+      .panel.panel-default
+        .panel-heading User administration
+        %ul.list-group
+          %li.list-group-item
+            = link_to 'Edit', edit_user_con_profile_path(@user_con_profile)
+          - if can? :become, @user_con_profile
+            %li.list-group-item
+              = link_to 'Become user', become_user_con_profile_path(@user_con_profile), method: "post", "data-confirm" => "Are you sure you want to become #{@user_con_profile.user.name} for the duration of this session?"
+          - if can? :delete, @user_con_profile
+            %li.list-group-item
+              = link_to 'Delete', user_con_profile_path(@user_con_profile), method: "delete", "data-confirm" => "Are you sure you want to remove #{@user_con_profile.user.name} from #{@convention.name}?"

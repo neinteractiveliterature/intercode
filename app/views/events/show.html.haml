@@ -1,40 +1,43 @@
-.larp-navbar
-  %ul.menu.larp-control.priv
-    %li.menu-title LARP Admin
-    %li.edit-larp
-      - le = @larp.becomes(Event)
-      = link_to('Edit LARP', edit_event_path(le))
-    %li.edit-larp
-      = link_to('Edit GMs', team_members_path({event: @larp.id}))
-%h1.larp-title= @larp.title
-%table
-  - if @larp.author
-    %tr.larp-header-row
-      %th Author(s):
-      %td= @larp.author
-  - if ! @larp.organization.empty?
-    %tr.larp-header-row
-      %th Organization:
-      %td= @larp.organization
-  - if ! @larp.url.empty?
-    %tr.larp-header-row
-      %th Home Page:
-      %td= link_to @larp.url, @larp.url, :target => '_blank'
-  - if ! @larp.email.empty?
-    %tr.larp-header-row
-      %th Game Email:
-      %td= intercode_mail_to(@larp.email)
-  - if ! @team.empty?
-    %tr.larp-header-row
-      %th GMs:
-      %td
-        %table
-          - @team.each do |member|
-            %tr
-              %td
-                = member.name()
-              %td
-                = intercode_mail_to(member.email())
-  / Insert GMs here
-%hr/
-= @larp.description
+.row
+  .col-md-9
+    %h1.larp-title= @larp.title
+    %table
+      - if @larp.author
+        %tr.larp-header-row
+          %th Author(s):
+          %td= @larp.author
+      - if ! @larp.organization.empty?
+        %tr.larp-header-row
+          %th Organization:
+          %td= @larp.organization
+      - if ! @larp.url.empty?
+        %tr.larp-header-row
+          %th Home Page:
+          %td= link_to @larp.url, @larp.url, :target => '_blank'
+      - if ! @larp.email.empty?
+        %tr.larp-header-row
+          %th Game Email:
+          %td= intercode_mail_to(@larp.email)
+      - if ! @team.empty?
+        %tr.larp-header-row
+          %th GMs:
+          %td
+            %table
+              - @team.each do |member|
+                %tr
+                  %td
+                    = member.name()
+                  %td
+                    = intercode_mail_to(member.email())
+      / Insert GMs here
+    %hr/
+    = @larp.description
+  .col-md-3
+    .panel.panel-default
+      .panel-heading
+        LARP Admin
+      %ul.list-group
+        %li.list-group-item
+          = link_to('Edit LARP', [:edit, @larp.becomes(Event)])
+        %li.list-group-item
+          = link_to('Edit GMs', team_members_path({event: @larp.id}))
