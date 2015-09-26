@@ -57,3 +57,8 @@ group :development, :test do
   gem 'factory_girl', '~> 2.6'
   gem 'factory_girl_rails'
 end
+
+group :intercode1_import do
+  gem 'sequel'
+  gem 'mysql2'
+end

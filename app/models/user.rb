@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  validates :name, presence: true
+  validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_nil: true }
 
   has_many :user_con_profiles
   has_many :team_members
@@ -45,5 +45,16 @@ class User < ActiveRecord::Base
     else
       []
     end
+  end
+  
+  def blank_password!
+    @password_not_required = true
+  end
+  
+  protected
+  
+  def password_required?
+    return false if @password_not_required
+    super
   end
 end

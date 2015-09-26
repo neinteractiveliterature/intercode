@@ -241,6 +241,7 @@ GEM
       money (~> 6.5.0)
       railties (>= 3.0)
     multi_json (1.11.2)
+    mysql2 (0.3.19)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
@@ -302,6 +303,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    sequel (4.25.0)
     slop (3.6.0)
     spoon (0.0.4)
       ffi
@@ -352,6 +354,7 @@ DEPENDENCIES
   jruby-openssl
   mizuno
   money-rails
+  mysql2
   newrelic_rpm
   pg
   pry-rails
@@ -359,6 +362,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.3)
   sass-rails
+  sequel
   sqlite3
   uglifier (>= 1.0.3)
   unf
