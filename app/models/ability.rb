@@ -9,6 +9,8 @@ class Ability
     can :read, Convention
     can [:read, :root], Page
     
+    can :read, Event
+    
     # Anonymous user permissions end here.
     return unless user
     

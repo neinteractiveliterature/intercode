@@ -1,18 +1,13 @@
 class EventsController < BaseControllers::VirtualHost
-
-  # TODO: Verify that the user is logged in.  For now we're
-  # skipping authorization.
-  skip_authorization_check
+  load_and_authorize_resource through: :convention
 
   # Display form to propose a new LARP.  Create a new LARP event to initialize
   # the form
   def new
-    @larp = Events::Larp.new
   end
 
   # Write information from the new LARP to the database
   def create
-    @larp = Events::Larp.new(larp_params)
     @larp.convention = convention
     @larp.user = current_user
     @larp.updated_by = current_user
@@ -26,15 +21,11 @@ class EventsController < BaseControllers::VirtualHost
 
   # Edit information about a LARP. The id is specified as part of the URL
   def edit
-    @larp = Event.find(params[:id])
   end
 
   # Update information about a LARP to the database
   def update
-    @larp = Events::Larp.find(params[:id])
-
     @larp.updated_by = current_user
-#    @larp.updated_at = nil
 
     if @larp.update_attributes(larp_params)
       redirect_to action: 'show'
@@ -45,17 +36,15 @@ class EventsController < BaseControllers::VirtualHost
 
   # List the available LARPs
   def index
-    @larps = Events::Larp.where("convention_id=?", convention.id)
   end
 
   # Show information about a LARP. The id is specified as part of the URL
   def show
-    @larp = Event.find(params[:id])
     @team = @larp.team_members.visible
   end
 
   # Permit access to fields that can be updated
-  def larp_params
+  def event_params
     params.require(:event).permit(:author,
                                   :description,
                                   :email,
@@ -64,9 +53,5 @@ class EventsController < BaseControllers::VirtualHost
                                   :short_blurb,
                                   :title,
                                   :url)
-  end
-
-  def configure_permitted_parameters
-    ActionController::Parameters.permit_all_parameters = true
   end
 end

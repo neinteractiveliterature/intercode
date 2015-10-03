@@ -1,11 +1,11 @@
 %h1
-  LARPs at #{convention.name}
-- @larps.each do |l|
+  Events at #{convention.name}
+- @events.each do |event|
   %p
-    = link_to(l.title, l.becomes(Event))
+    = link_to event.title, event
     %br/
-    - if l.author_or_org?
+    - if event.author_or_org?
       %i
-        by #{l.author_or_org}
+        by #{event.author_or_org}
       %br/
-    = l.short_blurb
+    = event.short_blurb

@@ -1,10 +1,10 @@
-= bootstrap_form_for(@larp.becomes(Event)) do |f|
-  - if @larp.errors.any?
+= bootstrap_form_for(@event) do |f|
+  - if f.object.errors.any?
     #error-explanation
       .alert.alert-error
-        The form contains #{pluralize(@larp.errors.count, 'error')}.
+        The form contains #{pluralize(@f.object.errors.count, 'error')}.
       %ul
-        - @larp.errors.full_messages.each do |msg|
+        - f.object.errors.full_messages.each do |msg|
           %li= msg
   /
     Note that in the entries below 'size' refers to the size of the control,
