@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140112205637) do
+ActiveRecord::Schema.define(version: 20151003133150) do
 
   create_table "conventions", force: :cascade do |t|
     t.string   "signups_allowed",     default: "not_yet", null: false
@@ -52,8 +52,8 @@ ActiveRecord::Schema.define(version: 20140112205637) do
     t.datetime "updated_at"
     t.integer  "convention_id"
     t.integer  "user_id"
-    t.string   "type"
     t.string   "status"
+    t.string   "category"
   end
 
   add_index "events", ["convention_id"], name: "index_events_on_convention_id"
