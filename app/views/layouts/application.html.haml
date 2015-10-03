@@ -17,11 +17,13 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand{:href => "#"} Welcome to Intercode
+          %a.navbar-brand{:href => root_url} 
+            - if @convention
+              = @convention.name
+            - else
+              Welcome to Intercode
         #navbar.collapse.navbar-collapse
           %ul.nav.navbar-nav
-            %li.active
-              %a{:href => "#"} Home
             - if convention
               - if user_signed_in?
                 %li.dropdown{:role => "presentation"}
@@ -34,7 +36,7 @@
                     %li.propose-panel
                       = link_to "Propose a Panel", new_event_path(type: 'panel')
               %li.list-part
-                = link_to "List LARPs", events_path
+                = link_to "Events", events_path
               - if can? :manage, convention.user_con_profiles.new
                 %li.dropdown{:role => "presentation"}
                   %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
