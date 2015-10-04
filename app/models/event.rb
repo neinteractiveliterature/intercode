@@ -1,11 +1,11 @@
 class Event < ActiveRecord::Base
   STATUSES = Set.new(%w(proposed reviewing accepted rejected dropped))
-  CATEGORIES = Set.new(%w(larp panel volunteer_event filler))
+  CATEGORIES = Set.new(%w(larp panel board_game tabletop_rpg volunteer_event filler))
+  CON_MAIL_DESTINATIONS = Set.new(%w(event_email gms))
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
   belongs_to :user
-  validates :user, presence: true
 
   # LARPs have GMs and Panels have Members
   has_many :team_members

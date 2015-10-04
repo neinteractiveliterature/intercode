@@ -17,8 +17,10 @@ module Intercode
           con = con_table.build_con
           con.save!
           
-          # FIXME: replace the event map with an actual event map once we can import events
-          users_table = Intercode::Import::Intercode1::Tables::Users.new(connection, con, {})
+          events_table = Intercode::Import::Intercode1::Tables::Events.new(connection, con)
+          events_table.import!
+          
+          users_table = Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_table.event_id_map)
           users_table.import!
         end
       end
@@ -76,6 +78,62 @@ module Intercode
               accepting_bids: yn_to_bool(row[:AcceptingBids]),
               precon_bids_allowed: yn_to_bool(row[:PreconBidsAllowed])
             )
+          end
+        end
+        
+        class Events < Intercode::Import::Intercode1::Table
+          attr_accessor :event_id_map
+          
+          def initialize(connection, con)
+            super connection
+            @con = con
+            @event_id_map = {}
+          end
+          
+          # TODO: Import signup constraints
+          private
+          def build_record(row)
+            @event_id_map[row[:EventId]] = @con.events.new(
+              title: row[:Title],
+              author: row[:Author],
+              email: row[:GameEMail],
+              organization: row[:Organization],
+              url: row[:Homepage],
+              notify_on_changes: row[:NotifyOnChanges] == 'Y',
+              length_seconds: row[:Hours] * 1.hour,
+              can_play_concurrently: row[:CanPlayConcurrently] == 'Y',
+              con_mail_destination: con_mail_destination(row),
+              description: row[:Description],
+              short_blurb: row[:ShortBlurb],
+              category: event_category(row)
+            )
+          end
+          
+          def con_mail_destination(row)
+            case row[:ConMailDest]
+            when 'GameMail' then 'event_email'
+            when 'GMs' then 'gms'
+            when nil then nil
+            else raise "Unknown ConMailDest value: #{row[:ConMailDest]}"
+            end
+          end
+          
+          def event_category(row)
+            if row[:IsOps] == 'Y' || row[:IsConSuite] == 'Y'
+              return 'volunteer_event'
+            end
+            
+            if row[:SpecialEvent] == 1
+              return 'filler'
+            end
+            
+            case row[:GameType]
+            when 'Board Game' then 'board_game'
+            when 'Panel' then 'panel'
+            when 'Tabletop RPG' then 'tabletop_rpg'
+            when 'Other' then nil
+            else 'larp'
+            end
           end
         end
         
