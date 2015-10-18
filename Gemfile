@@ -26,7 +26,7 @@ gem 'haml'
 gem 'uglifier', '>= 1.0.3'
   
 # Upload assets to Amazon S3 during compilation phase
-gem 'asset_sync'
+#gem 'asset_sync'
 gem 'unf'
 
 gem 'jquery-rails'
@@ -46,6 +46,9 @@ gem 'money-rails'
 gem 'eu_central_bank'
 
 gem 'newrelic_rpm'
+
+# Database for production
+gem 'pg', group: 'production'
 
 group :development, :test do
   gem 'pry-rails'
