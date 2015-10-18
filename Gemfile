@@ -50,6 +50,9 @@ gem 'newrelic_rpm'
 # Database for production
 gem 'pg', group: 'production'
 
+# Heroku prod fix
+gem 'rails_12factor', group: 'production'
+
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-remote'
