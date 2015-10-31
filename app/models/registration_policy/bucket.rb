@@ -1,25 +1,23 @@
 class RegistrationPolicy::Bucket
-  attr_accessor :total_slots
-  attr_reader :key
+  include ActiveModel::Model
+  
+  attr_accessor :key, :total_slots, :slots_limited
+  alias_method :slots_limited?, :slots_limited
   
   def self.normalize_key(key)
     key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
   end
   
-  def initialize(key)
-    @key = self.class.normalize_key(key)
-  end
-  
-  def slots_limited?
-    !total_slots.nil?
+  def slots_unlimited=(value)
+    self.slots_limited = !value
   end
   
   def slots_unlimited?
     !slots_limited?
   end
   
-  def unlimited!
-    self.total_slots = nil
+  def key=(key)
+    @key = self.class.normalize_key(key)
   end
   
   def available_slots(signups)
