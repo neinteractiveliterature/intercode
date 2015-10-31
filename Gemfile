@@ -61,3 +61,7 @@ group :intercode1_import do
   gem 'sequel'
   gem 'mysql2'
 end
+
+group :test do
+  gem 'minitest-spec-rails'
+end
