@@ -2,8 +2,10 @@
 
 FactoryGirl.define do
   factory :convention do
-    signups_allowed "MyString"
-    show_schedule "MyString"
+    name "TestCon"
+    domain "testcon.example.com"
+    signups_allowed "yes"
+    show_schedule "yes"
     news "MyText"
     con_com_meetings "MyText"
     accepting_bids false
