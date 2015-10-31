@@ -47,19 +47,12 @@ gem 'eu_central_bank'
 
 gem 'newrelic_rpm'
 
-# Database for production
-gem 'pg', group: 'production'
-
 # Heroku prod fix
 gem 'rails_12factor', group: 'production'
 
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-remote'
-end
-
-# Fixture replacement for test suite
-group :development, :test do
   gem 'factory_girl', '~> 2.6'
   gem 'factory_girl_rails'
 end
