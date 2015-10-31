@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151003133150) do
+ActiveRecord::Schema.define(version: 20151031144823) do
 
   create_table "conventions", force: :cascade do |t|
     t.string   "signups_allowed",     default: "not_yet", null: false
@@ -84,6 +84,17 @@ ActiveRecord::Schema.define(version: 20151003133150) do
 
   add_index "runs", ["event_id"], name: "index_runs_on_event_id"
   add_index "runs", ["updated_by_id"], name: "index_runs_on_updated_by_id"
+
+  create_table "signups", force: :cascade do |t|
+    t.integer  "run_id"
+    t.string   "bucket_key"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "signups", ["run_id"], name: "index_signups_on_run_id"
+  add_index "signups", ["updated_by_id"], name: "index_signups_on_updated_by_id"
 
   create_table "team_members", force: :cascade do |t|
     t.integer  "event_id"

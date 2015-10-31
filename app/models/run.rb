@@ -1,6 +1,7 @@
 class Run < ActiveRecord::Base
   belongs_to :event
   belongs_to :updated_by, :class_name => "User"
+  has_many :signups
   
   delegate :length_seconds, :to => :event
   
