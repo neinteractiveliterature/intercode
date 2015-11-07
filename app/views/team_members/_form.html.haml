@@ -1,0 +1,10 @@
+= bootstrap_form_for([@event, @team_member]) do |f|
+  = f.collection_select :user_id, User.order(:last_name, :first_name), :id, :name_inverted, include_blank: true
+  = f.errors_on :user
+
+  = f.check_box :display, label: "Display as #{@event.team_member_name}"
+  = f.check_box :show_email, label: "Show email address"
+  = f.check_box :receive_con_email, label: "Receive email from convention"
+  = f.check_box :receive_signup_email, label: "Receive email on signup and withdrawal"
+
+  = f.submit

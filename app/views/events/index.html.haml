@@ -3,9 +3,10 @@
 - @events.each do |event|
   %p
     = link_to event.title, event
-    %br/
-    - if event.author_or_org?
+    %br
+    - author_or_org = event.author.presence || event.organization
+    - if author_or_org.present?
       %i
-        by #{event.author_or_org}
-      %br/
-    = event.short_blurb
+        by #{author_or_org}
+      %br
+    = sanitize event.short_blurb

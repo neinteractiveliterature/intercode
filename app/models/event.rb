@@ -24,7 +24,7 @@ class Event < ActiveRecord::Base
   # need to be approved (ConSuite, Ops, Filler) default to "Approved."
   validates :status,
     inclusion:
-    { 
+    {
       :in => STATUSES
 #      messsage: "%{value} is not a valid event status"
     }
@@ -33,7 +33,7 @@ class Event < ActiveRecord::Base
   # affect behavior of events.  Nevertheless we do want to make sure it's
   # in one of the allowed categories.
   validates :category, inclusion: { in: CATEGORIES }
-  
+
   # All events for a Convention must have a unique title.  Ignore any events
   # that with a status of "Dropped" or "Rejected".  If they have a duplicate
   # title we don't care.
@@ -48,7 +48,7 @@ class Event < ActiveRecord::Base
 #  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
 
   def self.build_con_suite
-    new( 
+    new(
       title: "ConSuite",
       short_blurb: "Help serve Intercon breakfast, lunch, and dinner.",
       description: "Help serve Intercon breakfast, lunch, and dinner.",
@@ -58,7 +58,7 @@ class Event < ActiveRecord::Base
       category: "volunteer_event"
     )
   end
-  
+
   def self.build_ops
     new(
       title: "Ops!",
@@ -75,5 +75,12 @@ class Event < ActiveRecord::Base
       status: "accepted",
       category: "volunteer_event"
     )
+  end
+
+  def team_member_name
+    case category
+    when 'larp' then 'GM'
+    else 'team member'
+    end
   end
 end

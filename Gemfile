@@ -24,7 +24,7 @@ gem 'bootstrap_form'
 gem 'haml'
 
 gem 'uglifier', '>= 1.0.3'
-  
+
 # Upload assets to Amazon S3 during compilation phase
 #gem 'asset_sync'
 gem 'unf'

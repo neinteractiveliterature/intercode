@@ -25,9 +25,9 @@ class EventsController < BaseControllers::VirtualHost
 
   # Update information about a LARP to the database
   def update
-    @larp.updated_by = current_user
+    @event.updated_by = current_user
 
-    if @larp.update_attributes(larp_params)
+    if @event.update_attributes(event_params)
       redirect_to action: 'show'
     else
       render 'edit'
@@ -36,11 +36,12 @@ class EventsController < BaseControllers::VirtualHost
 
   # List the available LARPs
   def index
+    @events = @events.order(:title)
   end
 
   # Show information about a LARP. The id is specified as part of the URL
   def show
-    @team = @larp.team_members.visible
+    @team = @event.team_members.visible
   end
 
   # Permit access to fields that can be updated

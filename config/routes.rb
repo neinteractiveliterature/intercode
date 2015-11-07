@@ -2,12 +2,12 @@ require 'intercode/virtual_host_constraint'
 
 Intercode::Application.routes.draw do
   devise_for :users
-  
+
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
     # all the /pages/* routes that Cadmus provides
     cadmus_pages
-    
+
     # http://con.domain/ will go to the root page of the con
     root :to => 'pages#root', :as => 'con_root'
 
@@ -26,11 +26,11 @@ Intercode::Application.routes.draw do
     #
     # Note that you get (mostly) get this table using the command
     #   rake routes
-    resources :events
+    resources :events do
+      # Routes for team_members (GMs)
+      resources :team_members
+    end
 
-    # Routes for team_members (GMs)
-    resources :team_members
-    
     # Routes for user con profiles
     resources :user_con_profiles do
       member do
