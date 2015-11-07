@@ -41,7 +41,7 @@ class EventsController < BaseControllers::VirtualHost
 
   # Show information about a LARP. The id is specified as part of the URL
   def show
-    @team = @event.team_members.visible
+    @team_members = @event.team_members.includes(:user).visible.sort_by { |m| m.user.name_inverted }
   end
 
   # Permit access to fields that can be updated

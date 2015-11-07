@@ -18,10 +18,6 @@ class TeamMember < ActiveRecord::Base
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string
   def email
-    if show_email?
-      user.email
-    else
-      ''
-    end
+    user.email if show_email?
   end
 end

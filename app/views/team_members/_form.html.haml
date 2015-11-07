@@ -8,6 +8,11 @@
   = f.check_box :receive_con_email, label: "Receive email from convention"
   = f.check_box :receive_signup_email, label: "Receive email on signup and withdrawal"
 
-  = f.submit
-  - if f.object.persisted?
-    = link_to "Remove as #{@event.team_member_name}", [@event, f.object], method: 'delete', "data-confirm" => "Are you sure you want to remove #{f.object.user.name} from the team for #{@event.title}?", class: "btn btn-danger"
+  %ul.list-inline
+    %li
+      - submit_verb = f.object.new_record? ? "Add" : "Update"
+      = f.submit "#{submit_verb} #{@event.team_member_name}", class: 'btn btn-primary'
+
+    - if f.object.persisted?
+      %li
+        = link_to "Remove #{@event.team_member_name}", [@event, f.object], method: 'delete', "data-confirm" => "Are you sure you want to remove #{f.object.user.name} from the team for #{@event.title}?", class: "btn btn-danger"

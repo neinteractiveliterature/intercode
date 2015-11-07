@@ -1,36 +1,32 @@
 .row
   .col-md-9
     %h1.larp-title= @event.title
-    %table
-      - if @event.author
-        %tr.larp-header-row
-          %th Author(s):
-          %td= @event.author
-      - if ! @event.organization.empty?
-        %tr.larp-header-row
-          %th Organization:
-          %td= @event.organization
-      - if ! @event.url.empty?
-        %tr.larp-header-row
-          %th Home Page:
-          %td= link_to @event.url, @event.url, :target => '_blank'
-      - if ! @event.email.empty?
-        %tr.larp-header-row
-          %th Game Email:
-          %td= intercode_mail_to(@event.email)
-      - if ! @team.empty?
-        %tr.larp-header-row
-          %th GMs:
-          %td
-            %table
-              - @team.each do |member|
-                %tr
-                  %td
-                    = member.name()
-                  %td
-                    = intercode_mail_to(member.email())
-      / Insert GMs here
-    %hr/
+
+    %dl.dl-horizontal
+      - if @event.author.present?
+        %dt Author(s)
+        %dd= @event.author
+      - if @event.organization.present?
+        %dt Organization
+        %dd= @event.organization
+      - if @event.url.present?
+        %dt Home page
+        %dd= link_to @event.url, @event.url, :target => '_blank'
+      - if @event.email.present?
+        %dt Game email
+        %dd= intercode_mail_to @event.email
+      - if @team_members.any?
+        %dt= @event.team_member_name.pluralize
+        %dd
+          %ul.list-unstyled
+            - @team_members.each do |team_member|
+              %li
+                = team_member.user.name
+                - if team_member.email
+                  (#{intercode_mail_to team_member.email})
+
+    %hr
+
     = sanitize @event.description
   .col-md-3
     - if can? :edit, @event
