@@ -1,6 +1,7 @@
 = bootstrap_form_for([@event, @team_member]) do |f|
-  = f.collection_select :user_id, User.order(:last_name, :first_name), :id, :name_inverted, include_blank: true
-  = f.errors_on :user
+  - if f.object.new_record?
+    = f.collection_select :user_id, User.order(:last_name, :first_name), :id, :name_inverted, include_blank: true
+    = f.errors_on :user
 
   = f.check_box :display, label: "Display as #{@event.team_member_name}"
   = f.check_box :show_email, label: "Show email address"
@@ -8,3 +9,5 @@
   = f.check_box :receive_signup_email, label: "Receive email on signup and withdrawal"
 
   = f.submit
+  - if f.object.persisted?
+    = link_to "Remove as #{@event.team_member_name}", [@event, f.object], method: 'delete', "data-confirm" => "Are you sure you want to remove #{f.object.user.name} from the team for #{@event.title}?", class: "btn btn-danger"

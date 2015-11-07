@@ -1,5 +1,7 @@
-class TeamMembersController < ApplicationController
-  load_resource :event
+class TeamMembersController < BaseControllers::VirtualHost
+  self.responder = NoShowActionResponder
+
+  load_resource :event, through: :convention
   load_and_authorize_resource through: :event
   respond_to :html
 
@@ -27,11 +29,8 @@ class TeamMembersController < ApplicationController
   end
 
   def index
-    @team_members = @team_members.joins(:user).order("users.last_name", "users.first_name")
+    @team_members = @team_members.joins(:user).includes(:user).order("users.last_name", "users.first_name")
   end
-  #
-  # def show
-  # end
 
   def destroy
     @team_member.destroy
