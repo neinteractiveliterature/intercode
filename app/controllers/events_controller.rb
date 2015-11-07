@@ -36,7 +36,7 @@ class EventsController < BaseControllers::VirtualHost
 
   # List the available LARPs
   def index
-    @events = @events.order(:title)
+    @events = @events.accepted.order(:title)
   end
 
   # Show information about a LARP. The id is specified as part of the URL

@@ -45,6 +45,8 @@ class Event < ActiveRecord::Base
   # An event may have 0 or more runs.
   has_many :runs
 
+  scope :accepted, -> { where(status: 'accepted') }
+
 #  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
 
   def self.build_con_suite
