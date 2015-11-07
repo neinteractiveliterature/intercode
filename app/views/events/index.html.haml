@@ -1,12 +1,12 @@
 %h1
   Events at #{convention.name}
 - @events.each do |event|
-  %p
-    = link_to event.title, event
-    %br
-    - author_or_org = event.author.presence || event.organization
-    - if author_or_org.present?
-      %i
-        by #{author_or_org}
-      %br
-    = sanitize event.short_blurb
+  .panel.panel-default
+    .panel-heading
+      %h4{style: "margin: 0"}= link_to event.title, event
+      - author_or_org = event.author.presence || event.organization
+      - if author_or_org.present?
+        %p{style: "margin: 0"}
+          %em by #{author_or_org}
+    .panel-body
+      = sanitize event.short_blurb
