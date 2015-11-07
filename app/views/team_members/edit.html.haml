@@ -2,25 +2,23 @@
   %h1
     Edit #{@singular} Settings for #{@team_member.name()}
 
-  %table
-    %tr
-      %td= "#{@event.category.humanize}:"
-      %td
-        %span.larp-title= @event.title
-    %tr
-      %td EMail:
-      %td= intercode_mail_to(@team_member.email())
-    %tr
-      %td Daytime Phone:
-      %td= @team_member.user().day_phone
-    %tr
-      %td Evening Phone:
-      %td= @team_member.user().evening_phone
-    %tr
-      %td Best Time to Call:
-      %td= @team_member.user().best_call_time
-    %tr
-      %td Preferred Contact:
-      %td= @team_member.user().preferred_contact
+  %dl.dl-horizontal
+    %dt= @event.category.humanize
+    %dd= @event.title
+
+    %dt Email
+    %dd= intercode_mail_to @team_member.email
+
+    %dt Daytime Phone
+    %dd= @team_member.user.day_phone
+
+    %dt Evening Phone
+    %dd= @team_member.user.evening_phone
+
+    %dt Best Time to Call
+    %dd= @team_member.user.best_call_time
+
+    %dt Preferred Contact
+    %dd= @team_member.user.preferred_contact
 
   = render 'form'
