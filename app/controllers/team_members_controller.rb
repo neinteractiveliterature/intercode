@@ -5,6 +5,10 @@ class TeamMembersController < BaseControllers::VirtualHost
   load_and_authorize_resource through: :event
   respond_to :html
 
+  def index
+    @team_members = @team_members.joins(:user).includes(:user).order("users.last_name", "users.first_name")
+  end
+
   def new
     @team_member.assign_attributes(
       display: true,
@@ -28,14 +32,12 @@ class TeamMembersController < BaseControllers::VirtualHost
     respond_with @event, @team_member
   end
 
-  def index
-    @team_members = @team_members.joins(:user).includes(:user).order("users.last_name", "users.first_name")
-  end
-
   def destroy
     @team_member.destroy
     respond_with @event, @team_member
   end
+
+  private
 
   # Permit access to fields that can be updated
   def team_member_params
