@@ -9,7 +9,7 @@
     = javascript_include_tag "application"
     = csrf_meta_tags
   %body
-    %nav#intercode-nav.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
+    %nav#intercode-nav.navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
       .container
         .navbar-header
           %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
@@ -17,7 +17,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand{:href => root_url} 
+          %a.navbar-brand{:href => root_url}
             - if @convention
               = @convention.name
             - else
@@ -52,7 +52,9 @@
               %li.login
                 = link_to "Login", new_user_session_path
         / /.nav-collapse
-    .content
-      %p.notice= notice
-      %p.alert= alert
+    .container
+      - if notice
+        .alert.alert-success= notice
+      - if alert
+        .alert.alert-danger= alert
       = yield
