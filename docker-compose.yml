@@ -1,0 +1,22 @@
+# mysql:
+#   image: mysql:latest
+#   expose:
+#     - "3306"
+#   ports:
+#     - "3307:3306"
+#   environment:
+#     MYSQL_DATABASE: database
+#     MYSQL_USER: root
+#     MYSQL_PASSWORD: admin123
+#     MYSQL_ROOT_PASSWORD: admin123
+web:
+  build: .
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - "3000:3000"
+  # environment:
+  #   BASE_URL: http://local.iiiepe.net
+  #   DRUPAL_ENVIRONMENT: development
+  # links:
+  #   - mysql:mysql
