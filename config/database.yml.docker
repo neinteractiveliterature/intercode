@@ -1,0 +1,12 @@
+development: &default
+  adapter: postgresql
+  encoding: unicode
+  database: intercode_development
+  pool: 5
+  username: postgres
+  password: postgres
+  host: postgres
+
+test:
+  <<: *default
+  database: intercode_test
