@@ -1,0 +1,20 @@
+%h1 Schedule
+
+- @dates.each do |date|
+  %h2= date.strftime("%A, %B %d")
+
+  %table.table.table-striped
+    %thead
+      %colgroup
+        %col.col-md-6
+        %col.col-md-3
+        %col.col-md-3
+    %tbody
+      - @runs_by_date[date].sort_by(&:starts_at).each do |run|
+        %tr
+          %td
+            %strong= link_to run.event.title, run.event
+            - if run.title_suffix.present?
+              (#{run.title_suffix})
+          %td= run.rooms.map(&:name).sort.join(", ")
+          %td #{run.starts_at.strftime("%H:%M")}-#{run.ends_at.strftime("%H:%M")}
