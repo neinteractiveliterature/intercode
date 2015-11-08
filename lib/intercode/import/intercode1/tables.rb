@@ -5,5 +5,6 @@ module Intercode::Import::Intercode1::Tables
   autoload :Events
   autoload :GMs, 'intercode/import/intercode1/tables/gms'
   autoload :Runs
+  autoload :Rooms
   autoload :Users
 end
