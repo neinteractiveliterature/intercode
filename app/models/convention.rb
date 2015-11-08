@@ -17,6 +17,7 @@ class Convention < ActiveRecord::Base
   has_many :user_con_profiles, dependent: :destroy
   has_many :users, :through => :user_con_profiles
   has_many :events, dependent: :destroy
+  has_many :rooms, dependent: :destroy
 
   mount_uploader :banner_image, BannerImageUploader
 

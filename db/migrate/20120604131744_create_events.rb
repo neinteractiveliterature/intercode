@@ -18,6 +18,7 @@ class CreateEvents < ActiveRecord::Migration
 
       t.timestamps
     end
+
     add_index :events, :updated_by_id
   end
 end
