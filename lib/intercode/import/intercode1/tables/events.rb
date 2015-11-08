@@ -8,7 +8,6 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     super.join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status)
   end
 
-  # TODO: Import signup constraints
   private
   def build_record(row)
     @con.events.new(
@@ -24,7 +23,8 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       description: row[:Description],
       short_blurb: row[:ShortBlurb],
       category: event_category(row),
-      status: event_status(row)
+      status: event_status(row),
+      registration_policy: registration_policy(row)
     )
   end
 
@@ -67,5 +67,21 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     when 'Rejected' then 'rejected'
     when 'Dropped' then 'dropped'
     end
+  end
+
+  def registration_policy(row)
+    buckets = %w(Male Female Neutral).map { |gender| registration_bucket(row, gender) }
+    buckets.reject! { |bucket| bucket.total_slots == 0 }
+    RegistrationPolicy.new(buckets: buckets)
+  end
+
+  def registration_bucket(row, gender)
+    RegistrationPolicy::Bucket.new(
+      key: gender.downcase,
+      slots_limited: true,
+      total_slots: row[:"MaxPlayers#{gender}"],
+      minimum_slots: row[:"MinPlayers#{gender}"],
+      preferred_slots: row[:"PrefPlayers#{gender}"]
+    )
   end
 end
