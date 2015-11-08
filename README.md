@@ -14,19 +14,23 @@ Intercode 2 is a project to rearchitect Intercode from the ground up, making it 
 
 This is the classic Rails development setup, and should work for Mac and Linux users.
 
-1. Make sure you have a working C/C++ development toolchain installed.  On Mac OS X, that's Xcode and its Command Line Tools.
-2. Install [rbenv](https://github.com/sstephenson/rbenv#readme)
-3. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
-4. Install Ruby 2.2.3: `rbenv install 2.2.3`
-5. (Optional, but if you don't, you'll have to set yourself using 2.2.3 some other way.) Make Ruby 2.2.3 your default: `rbenv global 2.2.3`
-6. Install Bundler: `gem install bundler`
-7. From the Intercode source folder:
-  1. Install all the dependencies of Intercode: `bundle install`
-  2. Set up your local database: `bin/rake db:create db:migrate`
-  3. Start up the Intercode server: `bin/rails server`
+1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode.git`
+2. Make sure you have a working C/C++ development toolchain installed.  On Mac OS X, that's Xcode and its Command Line Tools.
+3. Install [rbenv](https://github.com/sstephenson/rbenv#readme)
+4. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
+5. Install Ruby 2.2.3: `rbenv install 2.2.3`
+6. (Optional, but if you don't, you'll have to set yourself using 2.2.3 some other way.) Make Ruby 2.2.3 your default: `rbenv global 2.2.3`
+7. Install Bundler: `gem install bundler`
+8. From the Intercode source folder:
+  1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
+  2. Install all the dependencies of Intercode: `bundle install`
+  3. Set up your local database: `bin/rake db:create db:migrate`
+  4. Start up the Intercode server: `bin/rails server`
 9. You should now be able to go to http://localhost:3000 and see the app running!
 
 # Developer Quickstart with Vagrant
+
+**NOTE: THIS IS CURRENTLY BROKEN.  PLEASE DON'T TRY TO DO THIS.**
 
 We've put a working Vagrantfile into this repository so that you can easily get a dev environment up and running.  Here are the basic steps:
 
@@ -34,7 +38,7 @@ We've put a working Vagrantfile into this repository so that you can easily get 
 2. Download and install [VirtualBox](http://www.virtualbox.org)
 3. Download and install [Vagrant](http://www.vagrantup.com)
 4. Run the following commands from inside the Intercode source directory.  (It will take awhile to run `vagrant up` the first time, but it will finish eventually and you won't have to wait for it again the next time.)
-    
+
     ```bash
     vagrant plugin install vagrant-vbguest
     vagrant plugin install vagrant-librarian-chef
@@ -42,7 +46,7 @@ We've put a working Vagrantfile into this repository so that you can easily get 
     vagrant ssh
     ```
 5. You're now inside a Linux virtual machine set up to run Intercode.  The Intercode source is mounted into this VM at `/vagrant`, and any changes you make locally will be reflected in the VM (and vice versa).  To set up and run the app, run these commands:
-    
+
     ```bash
     cd /vagrant
     bundle install
