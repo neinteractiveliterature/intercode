@@ -31,21 +31,23 @@
                     Propose events
                     %span.caret
                   %ul.dropdown-menu
-                    %li.propose-larp
-                      = link_to "Propose a LARP", new_event_path(type: 'larp')
-                    %li.propose-panel
-                      = link_to "Propose a Panel", new_event_path(type: 'panel')
-              %li.list-part
-                = link_to "Events", events_path
+                    %li= link_to "Propose a LARP", new_event_path(type: 'larp')
+                    %li= link_to "Propose a Panel", new_event_path(type: 'panel')
+              %li.dropdown{role: "presentation"}
+                %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
+                  Events
+                  %span.caret
+                %ul.dropdown-menu
+                  %li= link_to "Con Schedule", schedule_events_path
+                  %li= link_to "List of Events", events_path
               - if can? :manage, convention.user_con_profiles.new
                 %li.dropdown{:role => "presentation"}
                   %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
                     Admin
                     %span.caret
                   %ul.dropdown-menu
-                    %li
-                      = link_to "Attendees", user_con_profiles_path
-                      = link_to "Pages", pages_path
+                    %li= link_to "Attendees", user_con_profiles_path
+                    %li= link_to "Pages", pages_path
             - if user_signed_in?
               %li.logout
                 = link_to "Log Out", destroy_user_session_path, :method => "delete"

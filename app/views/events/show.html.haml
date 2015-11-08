@@ -10,13 +10,13 @@
         %dt Organization
         %dd= @event.organization
       - if @event.url.present?
-        %dt Home page
+        %dt Home Page
         %dd= link_to @event.url, @event.url, :target => '_blank'
       - if @event.email.present?
-        %dt Game email
+        %dt Contact Email
         %dd= intercode_mail_to @event.email
       - if @team_members.any?
-        %dt= @event.team_member_name.pluralize
+        %dt= @event.team_member_name.titleize.pluralize
         %dd
           %ul.list-unstyled
             - @team_members.each do |team_member|
@@ -27,14 +27,29 @@
 
     %hr
 
+    .row
+      - @runs.sort_by(&:starts_at).each do |run|
+        .col-md-4
+          .panel.panel-default
+            .panel-body
+              - if run.title_suffix.present?
+                %p
+                  %strong= run.title_suffix
+
+              #{run.starts_at.strftime("%a %H:%M")}-#{run.ends_at.strftime("%H:%M")}
+              %br
+              = run.rooms.map(&:name).sort.join(", ")
+
+    %hr
+
     = sanitize @event.description
   .col-md-3
     - if can? :edit, @event
       .panel.panel-default
         .panel-heading
-          LARP Admin
+          Event Admin
         %ul.list-group
           %li.list-group-item
-            = link_to('Edit LARP', [:edit, @event])
+            = link_to('Edit Event', [:edit, @event])
           %li.list-group-item
-            = link_to('Edit GMs', [@event, :team_members])
+            = link_to("Edit #{@event.team_member_name.titleize.pluralize}", [@event, :team_members])

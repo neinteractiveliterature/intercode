@@ -27,8 +27,12 @@ Intercode::Application.routes.draw do
     # Note that you get (mostly) get this table using the command
     #   rake routes
     resources :events do
+      collection do
+        get :schedule
+      end
+
       # Routes for team_members (GMs)
-      resources :team_members
+      resources :team_members, except: [:show]
     end
 
     # Routes for user con profiles

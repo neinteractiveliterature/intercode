@@ -39,8 +39,20 @@ class EventsController < BaseControllers::VirtualHost
     @events = @events.accepted.order(:title)
   end
 
+  def schedule
+    @events = @events.accepted.includes(runs: :rooms)
+    runs = @events.flat_map(&:runs).sort_by(&:starts_at)
+
+    start_date = runs.first.starts_at.to_date
+    end_date = runs.last.ends_at.to_date
+
+    @dates = (start_date..end_date).to_a
+    @runs_by_date = runs.group_by { |run| run.starts_at.to_date }
+  end
+
   # Show information about a LARP. The id is specified as part of the URL
   def show
+    @runs = @event.runs.includes(:rooms)
     @team_members = @event.team_members.includes(:user).visible.sort_by { |m| m.user.name_inverted }
   end
 
