@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151108021933) do
+ActiveRecord::Schema.define(version: 20151108041735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20151108021933) do
     t.string   "name"
     t.string   "banner_image"
     t.string   "domain",                                  null: false
+    t.string   "timezone_name"
   end
 
   add_index "conventions", ["domain"], name: "index_conventions_on_domain", unique: true, using: :btree

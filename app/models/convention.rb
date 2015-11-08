@@ -48,4 +48,9 @@ class Convention < ActiveRecord::Base
     root_page.parent = self
     root_page.save!
   end
+
+  def timezone
+    return nil unless timezone_name.present?
+    ActiveSupport::TimeZone[timezone_name]
+  end
 end
