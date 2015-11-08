@@ -21,8 +21,8 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       show_schedule: row[:ShowSchedule].underscore,
       news: row[:News],
       con_com_meetings: row[:ConComMeetings],
-      accepting_bids: yn_to_bool(row[:AcceptingBids]),
-      precon_bids_allowed: yn_to_bool(row[:PreconBidsAllowed]),
+      accepting_bids: yesno_to_bool(row[:AcceptingBids]),
+      precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
       starts_at: @starts_at
     )
   end
