@@ -47,6 +47,8 @@ class Event < ActiveRecord::Base
 
   scope :accepted, -> { where(status: 'accepted') }
 
+  serialize :registration_policy, RegistrationPolicy
+
 #  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
 
   def self.build_con_suite
