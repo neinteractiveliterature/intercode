@@ -17,7 +17,8 @@ namespace :import do
     importer = Intercode::Import::Intercode1::Importer.new(
       Sequel.connect(fetch_env_param('INTERCODE1_DATABASE_URL')),
       fetch_env_param('CON_NAME'),
-      fetch_env_param('CON_DOMAIN')
+      fetch_env_param('CON_DOMAIN'),
+      Date.parse(fetch_env_param('FRIDAY_DATE'))
     )
 
     ActiveRecord::Base.connection.transaction do

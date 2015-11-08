@@ -12,14 +12,15 @@ module Intercode
       class Importer
         attr_reader :connection
 
-        def initialize(connection, con_name, con_domain)
+        def initialize(connection, con_name, con_domain, friday_date)
           @connection = connection
           @con_name = con_name
           @con_domain = con_domain
+          @friday_date = friday_date
         end
 
         def import!
-          con_table = Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain)
+          con_table = Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain, @friday_date)
           con = con_table.build_con
           con.save!
           Intercode::Import::Intercode1.logger.info("Imported con as ID #{con.id}")
@@ -27,16 +28,20 @@ module Intercode
           events_table = Intercode::Import::Intercode1::Tables::Events.new(connection, con)
           events_table.import!
 
-          users_table = Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_table.event_id_map)
+          users_table = Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_table.id_map)
           users_table.import!
+
+          runs_table = Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_table.id_map, users_table.id_map)
+          runs_table.import!
         end
       end
 
       class Table
-        attr_reader :connection
+        attr_reader :connection, :id_map
 
         def initialize(connection)
           @connection = connection
+          @id_map = {}
         end
 
         def dataset
@@ -50,9 +55,11 @@ module Intercode
         def import!
           logger.info "Importing #{object_name.pluralize}"
           dataset.each do |row|
-            record = build_record(row)
             logger.debug "Importing #{object_name} #{row_id(row)}"
-            build_record(row).save!
+            record = build_record(row)
+            record.save!
+
+            id_map[row_id(row)] = record
           end
         end
 
@@ -77,10 +84,13 @@ module Intercode
 
       module Tables
         class Con < Intercode::Import::Intercode1::Table
-          def initialize(connection, con_name, con_domain)
+          def initialize(connection, con_name, con_domain, friday_date, timezone_name="US/Eastern")
             super(connection)
             @con_name = con_name
             @con_domain = con_domain
+
+            timezone = ActiveSupport::TimeZone[timezone_name]
+            @starts_at = Time.new(friday_date.year, friday_date.month, friday_date.day, 0, 0, 0, timezone.formatted_offset)
           end
 
           def build_con
@@ -97,18 +107,16 @@ module Intercode
               news: row[:News],
               con_com_meetings: row[:ConComMeetings],
               accepting_bids: yn_to_bool(row[:AcceptingBids]),
-              precon_bids_allowed: yn_to_bool(row[:PreconBidsAllowed])
+              precon_bids_allowed: yn_to_bool(row[:PreconBidsAllowed]),
+              starts_at: @starts_at
             )
           end
         end
 
         class Events < Intercode::Import::Intercode1::Table
-          attr_accessor :event_id_map
-
           def initialize(connection, con)
             super connection
             @con = con
-            @event_id_map = {}
           end
 
           def dataset
@@ -118,7 +126,7 @@ module Intercode
           # TODO: Import signup constraints
           private
           def build_record(row)
-            @event_id_map[row[:EventId]] = @con.events.new(
+            @con.events.new(
               title: row[:Title],
               author: row[:Author],
               email: row[:GameEMail],
@@ -177,6 +185,44 @@ module Intercode
           end
         end
 
+        class Runs < Intercode::Import::Intercode1::Table
+          def initialize(connection, con, event_id_map, user_id_map)
+            super connection
+            @con = con
+            @event_id_map = event_id_map
+            @user_id_map = user_id_map
+          end
+
+          private
+          def build_record(row)
+            event = @event_id_map[row[:EventId]]
+
+            event.runs.new(
+              starts_at: start_time(row),
+              title_suffix: row[:TitleSuffix],
+              schedule_note: row[:ScheduleNote],
+              updated_by: @user_id_map[row[:UpdatedById]]
+            )
+          end
+
+          def row_id(row)
+            row[:RunId]
+          end
+
+          def day_offset(row)
+            case row[:Day]
+            when 'Thu' then -1
+            when 'Fri' then 0
+            when 'Sat' then 1
+            when 'Sun' then 2
+            end
+          end
+
+          def start_time(row)
+            @con.starts_at + day_offset(row).days + row[:StartHour].hours
+          end
+        end
+
         class Users < Intercode::Import::Intercode1::Table
           USER_FIELD_MAP = {
             first_name: :FirstName,
@@ -228,6 +274,7 @@ module Intercode
               user = build_user(row)
               logger.info "Importing User #{row[:UserId]}"
               user.save!
+              id_map[row[:UserId]] = user
 
               user_con_profile = build_user_con_profile(row, @con, user)
               user_con_profile.save!
