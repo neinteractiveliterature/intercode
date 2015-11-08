@@ -15,6 +15,7 @@ class Intercode::Import::Intercode1::Importer
 
     events_table.import!
     users_table.import!
+    rooms_table.import!
     runs_table.import!
     gms_table.import!
   end
@@ -41,12 +42,20 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def runs_table
-    return unless events_id_map && users_id_map
-    @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map)
+    return unless events_id_map && users_id_map && rooms_id_map
+    @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
   end
 
   def gms_table
     return unless events_id_map && users_id_map
     @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(connection, con, events_id_map, users_id_map)
+  end
+
+  def rooms_table
+    @rooms_table ||= Intercode::Import::Intercode1::Tables::Rooms.new(connection, con)
+  end
+
+  def rooms_id_map
+    @rooms_id_map ||= rooms_table.id_map
   end
 end

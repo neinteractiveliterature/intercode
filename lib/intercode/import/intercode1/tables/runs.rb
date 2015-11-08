@@ -1,9 +1,18 @@
 class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode1::Table
-  def initialize(connection, con, event_id_map, user_id_map)
+  def initialize(connection, con, event_id_map, user_id_map, room_id_map)
     super connection
     @con = con
     @event_id_map = event_id_map
     @user_id_map = user_id_map
+    @room_id_map = room_id_map
+  end
+
+  def dataset
+    super.
+      left_join(:RunsRooms, :RunId => :RunId).
+      select_all(:Runs).
+      select_append(Sequel.lit("GROUP_CONCAT(RunsRooms.RoomId)").as(:RoomIds)).
+      group_by(:RunId)
   end
 
   private
@@ -14,6 +23,7 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
       starts_at: start_time(row),
       title_suffix: row[:TitleSuffix],
       schedule_note: row[:ScheduleNote],
+      rooms: rooms(row),
       updated_by: @user_id_map[row[:UpdatedById]]
     )
   end
@@ -33,5 +43,10 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
 
   def start_time(row)
     @con.starts_at + day_offset(row).days + row[:StartHour].hours
+  end
+
+  def rooms(row)
+    room_ids = (row[:RoomIds] || '').split(",").map(&:to_i)
+    room_ids.map { |id| @room_id_map[id] }
   end
 end
