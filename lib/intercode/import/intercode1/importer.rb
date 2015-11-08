@@ -18,6 +18,7 @@ class Intercode::Import::Intercode1::Importer
     rooms_table.import!
     runs_table.import!
     gms_table.import!
+    signup_table.import!
   end
 
   def con_table
@@ -46,6 +47,10 @@ class Intercode::Import::Intercode1::Importer
     @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
   end
 
+  def run_id_map
+    @run_id_map ||= runs_table.id_map
+  end
+
   def gms_table
     return unless events_id_map && users_id_map
     @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(connection, con, events_id_map, users_id_map)
@@ -57,5 +62,9 @@ class Intercode::Import::Intercode1::Importer
 
   def rooms_id_map
     @rooms_id_map ||= rooms_table.id_map
+  end
+
+  def signup_table
+    @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map)
   end
 end
