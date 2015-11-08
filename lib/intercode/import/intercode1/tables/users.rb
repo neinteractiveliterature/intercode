@@ -47,7 +47,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
 
     dataset.each do |row|
       user = build_user(row)
-      logger.info "Importing User #{row[:UserId]}"
+      logger.debug "Importing User #{row[:UserId]}"
       user.save!
       id_map[row[:UserId]] = user
 
