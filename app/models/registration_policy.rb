@@ -46,6 +46,12 @@ class RegistrationPolicy
     end
   end
 
+  %i(total_slots minimum_slots preferred_slots).each do |method|
+    define_method method do
+      buckets.map(&method).sum
+    end
+  end
+
   def attributes
     {
       buckets: buckets
@@ -69,4 +75,5 @@ class RegistrationPolicy
       end
     end
   end
+  alias_method :assign_attributes, :attributes=
 end

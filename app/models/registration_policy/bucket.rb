@@ -2,7 +2,7 @@ class RegistrationPolicy::Bucket
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  attr_accessor :key, :total_slots, :slots_limited
+  attr_accessor :key, :minimum_slots, :preferred_slots, :total_slots, :slots_limited
   alias_method :slots_limited?, :slots_limited
 
   def self.normalize_key(key)
@@ -34,6 +34,8 @@ class RegistrationPolicy::Bucket
     {
       key: key,
       total_slots: total_slots,
+      minimum_slots: minimum_slots,
+      preferred_slots: preferred_slots,
       slots_limited: slots_limited
     }
   end
