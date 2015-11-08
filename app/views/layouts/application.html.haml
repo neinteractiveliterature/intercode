@@ -45,6 +45,7 @@
                   %ul.dropdown-menu
                     %li
                       = link_to "Attendees", user_con_profiles_path
+                      = link_to "Pages", pages_path
             - if user_signed_in?
               %li.logout
                 = link_to "Log Out", destroy_user_session_path, :method => "delete"
