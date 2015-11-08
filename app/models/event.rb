@@ -8,7 +8,7 @@ class Event < ActiveRecord::Base
   belongs_to :user
 
   # LARPs have GMs and Panels have Members
-  has_many :team_members
+  has_many :team_members, dependent: :destroy
 
   # The user who last updated the event.  Used for tracking
   belongs_to :updated_by, :class_name => "User"
@@ -43,7 +43,7 @@ class Event < ActiveRecord::Base
 
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
-  has_many :runs
+  has_many :runs, dependent: :destroy
 
   scope :accepted, -> { where(status: 'accepted') }
 
