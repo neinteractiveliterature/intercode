@@ -7,7 +7,7 @@ class CreateSignups < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    
-    add_foreign_key :signups, :users, column_name: 'updated_by_id'
+
+    add_foreign_key :signups, :users, column: 'updated_by_id'
   end
 end

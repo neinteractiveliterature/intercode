@@ -5,7 +5,7 @@ class Event < ActiveRecord::Base
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
-  belongs_to :user
+  belongs_to :owner, class_name: "User"
 
   # LARPs have GMs and Panels have Members
   has_many :team_members, dependent: :destroy
