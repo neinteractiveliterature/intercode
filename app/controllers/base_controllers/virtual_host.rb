@@ -1,13 +1,15 @@
 module BaseControllers
-  
+
   # This is an abstract base class for controllers that deal with actions for a particular Convention.
   # In theory that should be most things in this app.  It defines a couple convenience methods, most
   # notably a method called convention, which returns the current Convention object for the domain
   # name being requested.
   class VirtualHost < ApplicationController
-    
+
+    around_action :use_convention_timezone
+
     protected
-    
+
     # Returns the appropriate Convention object for the domain name of the request.  This relies on
     # the Intercode::FindVirtualHost Rack middleware having already run, since it sets the key
     # "intercode.convention" inside the Rack environment.
@@ -20,6 +22,15 @@ module BaseControllers
     def liquid_assigns
       super.merge("convention" => convention)
     end
+
+    def use_convention_timezone(&block)
+      timezone = convention.timezone
+      if timezone
+        Time.use_zone(convention.timezone, &block)
+      else
+        yield
+      end
+    end
   end
-  
+
 end
