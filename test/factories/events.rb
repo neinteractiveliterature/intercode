@@ -3,6 +3,8 @@
 FactoryGirl.define do
   factory :event do
     convention
+
+    sequence(:title) { |n| "Event #{n}" }
     status "accepted"
     category "larp"
   end
