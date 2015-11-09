@@ -21,9 +21,7 @@ module ApplicationHelper
   # can easily modify them.
   def intercode_mail_to(address, name=nil, html_options={})
     # If the address is empty, just return the empty string
-    if address.empty?
-      return address
-    end
+    return unless address.present?
 
     # If the user is logged in, return a mailto link.  Otherwise,
     # return an obfuscated version of the address
