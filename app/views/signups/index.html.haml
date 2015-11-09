@@ -18,4 +18,8 @@
 
       (#{bucket_max_descriptions.map(&:strip).join(", ")})
 
+= link_to polymorphic_path([@event, @run, :signups], format: :csv), class: 'btn btn-default' do
+  %i.fa.fa-file-excel-o
+  Download CSV
+
 = datagrid_table @signups_grid

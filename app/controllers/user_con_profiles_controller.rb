@@ -4,7 +4,18 @@ class UserConProfilesController < BaseControllers::VirtualHost
   # GET /user_con_profiles
   def index
     @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid] || {order: 'name'}) do |scope|
-      scope.where(convention_id: convention.id).page(params[:page])
+      scope = scope.where(convention_id: convention.id)
+      respond_to do |format|
+        format.html { scope.page(params[:page]) }
+        format.csv { scope }
+      end
+    end
+
+    respond_to do |format|
+      format.html { }
+      format.csv do
+        send_data @user_con_profiles_grid.to_csv, filename: "#{@convention.name} - Attendees.csv"
+      end
     end
   end
 
