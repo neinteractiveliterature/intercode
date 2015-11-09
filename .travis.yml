@@ -3,6 +3,9 @@ sudo: false
 rvm:
 - 2.2.3
 bundler_args: "--without development:production:intercode1_import"
+before_script:
+- cp config/database.yml.dev config/database.yml
+- bin/rake db:create db:migrate RAILS_ENV=test
 notifications:
   slack:
     secure: Fip6shy/5QPPqQc0qZvZnGGZeoc+ZObzQKeDKg46XsyBcAsiJO/f6GiALstWOY+Ne8Uo4V/FtzLEN3D/yV02FbJPAFh60JDcy15ltVBkQNZGeu9wQMIqdbuDkm+M7s9rp4f9/J3z39Yuas6EKzTk88Qt4EQyJTktqXDawKMKE+Q=
