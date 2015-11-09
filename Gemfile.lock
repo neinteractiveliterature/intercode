@@ -79,6 +79,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    datagrid (1.4.0)
+      rails (>= 3.2.18)
     devise (3.5.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -246,6 +248,7 @@ DEPENDENCIES
   cancancan
   carrierwave
   coffee-rails
+  datagrid
   devise
   eu_central_bank
   factory_girl (~> 2.6)

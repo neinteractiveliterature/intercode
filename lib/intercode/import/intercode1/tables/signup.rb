@@ -7,7 +7,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   end
 
   def dataset
-    super.where(:State => ['Confirmed', 'Waitlisted'])
+    super.where(:State => ['Confirmed', 'Waitlisted'], :Counted => 'Y').order(:TimeStamp)
   end
 
   private
@@ -16,12 +16,21 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
 
     run.signups.new(
       user: @user_id_map[row[:UserId]],
-      bucket_key: bucket_key(row),
+      bucket_key: bucket_key(row, run),
       updated_by: @user_id_map[row[:UserId]]
     )
   end
 
-  def bucket_key(row)
+  # Try to put them in the bucket for their signup gender first; if that fails, try to
+  # put them in the neutral bucket.  Failing all else, don't put them in a bucket (i.e.
+  # waitlist them).
+  def bucket_key(row, run)
+    [gender_bucket_key(row), "neutral"].find do |bucket_key|
+      run.bucket_has_available_slots?(bucket_key)
+    end
+  end
+
+  def gender_bucket_key(row)
     case row[:State]
     when 'Confirmed' then row[:Gender].downcase
     when 'Waitlisted' then nil

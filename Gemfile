@@ -48,6 +48,9 @@ gem 'carrierwave'
 gem 'money-rails'
 gem 'eu_central_bank'
 
+# Helpers for sortable, filterable and exportable tables
+gem 'datagrid'
+
 gem 'newrelic_rpm'
 
 # Heroku prod fix
