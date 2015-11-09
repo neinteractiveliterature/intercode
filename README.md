@@ -23,7 +23,9 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 7. Install Bundler: `gem install bundler`
 8. From the Intercode source folder:
   1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
-  2. Install all the dependencies of Intercode: `bundle install`
+  2. Install all the dependencies of Intercode: 
+    1. Install MySQL and PostgreSQL. With Homebrew: `brew install mysql postgres `
+    2. `bundle install`
   3. Set up your local database: `bin/rake db:create db:migrate`
   4. Start up the Intercode server: `bin/rails server`
 9. You should now be able to go to http://localhost:3000 and see the app running!
