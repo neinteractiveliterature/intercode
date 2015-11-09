@@ -2,6 +2,10 @@
 
 = datagrid_form_for @user_con_profiles_grid, :url => user_con_profiles_path
 
+= link_to user_con_profiles_path(format: :csv), class: 'btn btn-default' do
+  %i.fa.fa-file-excel-o
+  Download CSV
+
 = datagrid_table @user_con_profiles_grid
 = will_paginate @user_con_profiles_grid.assets, renderer: BootstrapPagination::Rails
 
