@@ -28,7 +28,7 @@ class TeamMembersController < BaseControllers::VirtualHost
   end
 
   def update
-    @team_member.update_attributes(member_params.merge(updated_by: current_user))
+    @team_member.update_attributes(team_member_params.merge(updated_by: current_user))
     respond_with @event, @team_member
   end
 
