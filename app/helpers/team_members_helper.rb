@@ -1,4 +1,4 @@
-module TeamMemberHelper
+module TeamMembersHelper
 
   # Build array of users for dropdown list
   def users_array
