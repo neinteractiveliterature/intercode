@@ -1,8 +1,16 @@
 require 'test_helper'
 
-class UserConProfilesControllerTest < ActionController::TestCase
+describe UserConProfilesController do
+  let(:user_con_profile) { FactoryGirl.create :user_con_profile }
+  let(:convention) { user_con_profile.convention }
+  let(:con_admin_profile) { FactoryGirl.create :user_con_profile, convention: convention, staff: true }
+  let(:con_admin) { con_admin_profile.user }
+
   setup do
-    @user_con_profile = user_con_profiles(:one)
+    set_convention convention
+    sign_in con_admin
+
+    user_con_profile
   end
 
   test "should get index" do
@@ -18,30 +26,34 @@ class UserConProfilesControllerTest < ActionController::TestCase
 
   test "should create user_con_profile" do
     assert_difference('UserConProfile.count') do
-      post :create, user_con_profile: {  }
+      post :create, user_con_profile: { user_email: FactoryGirl.create(:user).email }
     end
 
     assert_redirected_to user_con_profile_path(assigns(:user_con_profile))
   end
 
   test "should show user_con_profile" do
-    get :show, id: @user_con_profile
+    get :show, id: user_con_profile
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @user_con_profile
+    get :edit, id: user_con_profile
     assert_response :success
   end
 
   test "should update user_con_profile" do
-    patch :update, id: @user_con_profile, user_con_profile: {  }
+    user_con_profile.registration_status.must_equal "unpaid"
+
+    patch :update, id: user_con_profile, user_con_profile: { registration_status: "paid" }
+    user_con_profile.reload.registration_status.must_equal "paid"
+
     assert_redirected_to user_con_profile_path(assigns(:user_con_profile))
   end
 
   test "should destroy user_con_profile" do
     assert_difference('UserConProfile.count', -1) do
-      delete :destroy, id: @user_con_profile
+      delete :destroy, id: user_con_profile
     end
 
     assert_redirected_to user_con_profiles_path
