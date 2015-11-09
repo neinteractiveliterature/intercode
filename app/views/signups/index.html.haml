@@ -18,26 +18,4 @@
 
       (#{bucket_max_descriptions.map(&:strip).join(", ")})
 
-= datagrid_table @signups_grid, html: {class: "table table-striped"}
-/ %table.table.table-striped
-/   %thead
-/     %tr
-/       %th Seq
-/       %th Status
-/       %th Name
-/       %th Bucket
-/       %th Age
-/       %th Email
-/   %tbody
-/     - @run.signups.order(:created_at).each do |signup|
-/       %tr
-/         %td= signup.id
-/         %td
-/           - if signup.bucket
-/             Confirmed
-/           - else
-/             Waitlisted
-/         %td= link_to signup.user.name_inverted, [@event, @run, signup]
-/         %td= signup.bucket.try(:name)
-/         %td= signup.user.age_as_of @run.starts_at
-/         %td= intercode_mail_to signup.user.email
+= datagrid_table @signups_grid

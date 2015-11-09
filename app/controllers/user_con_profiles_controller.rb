@@ -3,7 +3,9 @@ class UserConProfilesController < BaseControllers::VirtualHost
 
   # GET /user_con_profiles
   def index
-    @user_con_profiles = @user_con_profiles.joins(:user).includes(:user).order("users.last_name", "users.first_name")
+    @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid] || {order: 'name'}) do |scope|
+      scope.where(convention_id: convention.id).page(params[:page])
+    end
   end
 
   # GET /user_con_profiles/1
@@ -41,22 +43,22 @@ class UserConProfilesController < BaseControllers::VirtualHost
     @user_con_profile.destroy
     redirect_to user_con_profiles_url, notice: 'User con profile was successfully destroyed.'
   end
-  
+
   def become
     sign_in @user_con_profile.user
     redirect_to root_url, notice: "You are now signed in as #{@user_con_profile.user.name}."
   end
 
   private
-  
+
   # Only allow a trusted parameter "white list" through.
   def user_con_profile_params
     params.require(:user_con_profile).permit(
-      :user_email, 
-      :registration_status, 
-      :payment_amount_cents, 
-      :payment_note, 
-      :comp_event_id, 
+      :user_email,
+      :registration_status,
+      :payment_amount_cents,
+      :payment_note,
+      :comp_event_id,
       *UserConProfile::PRIV_NAMES
     )
   end

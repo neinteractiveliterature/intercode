@@ -1,21 +1,9 @@
 %h1 Listing attendees
-%table.table
-  %thead
-    %tr
-      %th Name
-      %th Email
-      %th Status
-      %th Privileges
-  %tbody
-    - @user_con_profiles.each do |user_con_profile|
-      %tr
-        %td= link_to user_con_profile.user.name_inverted, user_con_profile
-        %td= mail_to user_con_profile.user_email
-        %td
-          = user_con_profile.registration_status.humanize
-          - if user_con_profile.payment_amount.try(:>, 0)
-            = humanized_money_with_symbol user_con_profile.payment_amount
-        %td
-          = safe_join user_con_profile.privileges.map(&:titleize).sort, ", "
-%br/
-= link_to 'New User con profile', new_user_con_profile_path
+
+= datagrid_form_for @user_con_profiles_grid, :url => user_con_profiles_path
+
+= datagrid_table @user_con_profiles_grid
+= will_paginate @user_con_profiles_grid.assets, renderer: BootstrapPagination::Rails
+
+%ul.list-inline
+  %li= link_to 'New User con profile', new_user_con_profile_path, class: 'btn btn-primary'

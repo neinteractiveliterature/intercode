@@ -5,8 +5,6 @@ class SignupsGrid
     Signup.includes(:user, run: :event)
   end
 
-  filter(:run_id, :integer)
-
   column(:id, header: "Seq")
   column(:status) do |signup|
     if signup.bucket
@@ -23,10 +21,10 @@ class SignupsGrid
   column(:bucket) do |signup|
     signup.bucket.try(:name)
   end
-  column(:age) do |signup|
+  column(:age, order: "users.birth_date") do |signup|
     signup.user.age_as_of signup.run.starts_at
   end
-  column(:email) do |signup|
+  column(:email, order: "users.email") do |signup|
     format(signup.user.email) do |email|
       intercode_mail_to email
     end
