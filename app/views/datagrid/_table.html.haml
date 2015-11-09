@@ -1,0 +1,17 @@
+-# Local variables:
+-# * grid - instance of Datagrid
+-# * assets - Array of database Entities
+-# * options - passed options Hash
+
+- if grid.html_columns(*options[:columns]).any?
+  %table.table.table-striped{options[:html]}
+    %thead
+      = datagrid_header(grid, options)
+    %tbody
+      - if assets.any?
+        = datagrid_rows(grid, assets, options)
+      - else
+        %tr
+          %td.noresults{:colspan => "100%"}= I18n.t('datagrid.no_results').html_safe
+- else
+  = I18n.t("datagrid.table.no_columns").html_safe

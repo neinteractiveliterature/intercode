@@ -1,0 +1,5 @@
+%span.order
+  = link_to url_for(grid.param_name => grid.as_query.merge(order: column.name, descending: false)), class: "asc" do
+    %i.fa.fa-angle-up{title: I18n.t("datagrid.table.order.asc")}
+  = link_to url_for(grid.param_name => grid.as_query.merge(order: column.name, descending: true)), class: "desc" do
+    %i.fa.fa-angle-down{title: I18n.t("datagrid.table.order.desc")}

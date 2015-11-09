@@ -19,6 +19,7 @@ end
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'bootstrap-sass'
+gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem 'haml'
@@ -50,6 +51,10 @@ gem 'eu_central_bank'
 
 # Helpers for sortable, filterable and exportable tables
 gem 'datagrid'
+
+# Pagination
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 gem 'newrelic_rpm'
 
