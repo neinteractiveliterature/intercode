@@ -78,10 +78,20 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   def registration_bucket(row, gender)
     RegistrationPolicy::Bucket.new(
       key: gender.downcase,
+      name: gender,
+      description: registration_bucket_description(gender),
       slots_limited: true,
       total_slots: row[:"MaxPlayers#{gender}"],
       minimum_slots: row[:"MinPlayers#{gender}"],
       preferred_slots: row[:"PrefPlayers#{gender}"]
     )
+  end
+
+  def registration_bucket_description(gender)
+    case gender
+    when 'Male' then 'Male characters'
+    when 'Female' then 'Female characters'
+    when 'Neutral' then 'Characters that are not strictly defined as male or female'
+    end
   end
 end

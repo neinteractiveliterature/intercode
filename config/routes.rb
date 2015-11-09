@@ -31,8 +31,11 @@ Intercode::Application.routes.draw do
         get :schedule
       end
 
-      # Routes for team_members (GMs)
       resources :team_members, except: [:show]
+
+      resources :runs, only: [] do
+        resources :signups
+      end
     end
 
     # Routes for user con profiles

@@ -3,4 +3,8 @@ class Signup < ActiveRecord::Base
   belongs_to :run
   has_one :event, through: :run
   belongs_to :updated_by, class_name: "User"
+
+  def bucket
+    run.registration_policy.bucket_with_key(bucket_key)
+  end
 end

@@ -2,7 +2,7 @@ class RegistrationPolicy::Bucket
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  attr_accessor :key, :minimum_slots, :preferred_slots, :total_slots, :slots_limited
+  attr_accessor :key, :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited
   alias_method :slots_limited?, :slots_limited
 
   def self.normalize_key(key)
@@ -21,9 +21,17 @@ class RegistrationPolicy::Bucket
     @key = self.class.normalize_key(key)
   end
 
+  def full?(signups)
+    available_slots(signups) == 0
+  end
+
+  def has_available_slots?(signups)
+    available_slots(signups) > 0
+  end
+
   def available_slots(signups)
     return nil if slots_unlimited?
-    total_slots - signups.size
+    [total_slots - signups.size, 0].max
   end
 
   def errors_for_signup(signup, other_signups)
@@ -33,6 +41,8 @@ class RegistrationPolicy::Bucket
   def attributes
     {
       key: key,
+      name: name,
+      description: description,
       total_slots: total_slots,
       minimum_slots: minimum_slots,
       preferred_slots: preferred_slots,

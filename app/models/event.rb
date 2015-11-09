@@ -81,6 +81,10 @@ class Event < ActiveRecord::Base
     )
   end
 
+  def to_param
+    "#{id}-#{title.parameterize}"
+  end
+
   def team_member_name
     case category
     when 'larp' then 'GM'

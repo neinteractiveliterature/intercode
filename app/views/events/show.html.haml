@@ -25,24 +25,6 @@
                 - if team_member.email
                   (#{intercode_mail_to team_member.email})
 
-    %hr
-
-    .row
-      - @runs.sort_by(&:starts_at).each do |run|
-        .col-md-4
-          .panel.panel-default
-            .panel-body
-              - if run.title_suffix.present?
-                %p
-                  %strong= run.title_suffix
-
-              #{run.starts_at.strftime("%a %H:%M")}-#{run.ends_at.strftime("%H:%M")}
-              %br
-              = run.rooms.map(&:name).sort.join(", ")
-
-    %hr
-
-    = sanitize @event.description
   .col-md-3
     - if can? :edit, @event
       .panel.panel-default
@@ -53,3 +35,44 @@
             = link_to('Edit Event', [:edit, @event])
           %li.list-group-item
             = link_to("Edit #{@event.team_member_name.titleize.pluralize}", [@event, :team_members])
+
+%hr
+
+.row
+  - @runs.sort_by(&:starts_at).each do |run|
+    .col-md-4.col-sm-6
+      .panel.panel-default
+        .panel-body
+          - if run.title_suffix.present?
+            %p
+              %strong= run.title_suffix
+
+          #{run.starts_at.strftime("%a %H:%M")}-#{run.ends_at.strftime("%H:%M")}
+          %br
+          = run.rooms.map(&:name).sort.join(", ")
+
+          %p
+            - signup_description = capture do
+              - signups_by_bucket_key = run.signups_by_bucket_key
+              - if signups_by_bucket_key.keys.select { |key| key }.size == 1
+                - bucket_descriptions = [signups_by_bucket_key.values.first.size.to_s]
+              - else
+                - bucket_descriptions = run.event.registration_policy.buckets.map do |bucket|
+                  - capture do
+                    #{bucket.name}: #{signups_by_bucket_key[bucket.key].size}
+
+              Signed up:
+              = bucket_descriptions.map(&:strip).join(", ")
+              - if signups_by_bucket_key[nil].any?
+                %br
+                Waitlisted: #{signups_by_bucket_key[nil].size}
+
+            - if can? :read, run.signups.new
+              - signup_link_or_text = link_to(signup_description, [@event, run, :signups])
+            - else
+              - signup_link_or_text = signup_description
+
+            #{signup_link_or_text}
+%hr
+
+= sanitize @event.description
