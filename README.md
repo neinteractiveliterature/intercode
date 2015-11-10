@@ -1,5 +1,7 @@
 # Intercode 2
 
+[ ![Codeship Status for neinteractiveliterature/intercode](https://codeship.com/projects/6a8bde80-69df-0133-bfd5-6e257542035e/status?branch=master)](https://codeship.com/projects/114682)
+
 Intercode is a web application that:
 
 * serves as the public-facing web site for a larp convention
