@@ -43,10 +43,14 @@ class EventsController < BaseControllers::VirtualHost
     @events = @events.accepted.includes(runs: :rooms)
     runs = @events.flat_map(&:runs).sort_by(&:starts_at)
 
-    start_date = runs.first.starts_at.to_date
-    end_date = runs.last.ends_at.to_date
+    if runs.any?
+      start_date = runs.first.starts_at.to_date
+      end_date = runs.last.ends_at.to_date
+      @dates = (start_date..end_date).to_a
+    else
+      @dates = []
+    end
 
-    @dates = (start_date..end_date).to_a
     @runs_by_date = runs.group_by { |run| run.starts_at.to_date }
   end
 
