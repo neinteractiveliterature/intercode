@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :name, presence: true
-  validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_nil: true }
+  validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_blank: true }
 
   has_many :user_con_profiles
   has_many :team_members

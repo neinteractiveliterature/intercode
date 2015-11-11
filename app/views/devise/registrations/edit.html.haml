@@ -4,7 +4,7 @@
   you sign up for.  Supplying the contact information is optional.  If you have concerns
   about sharing this information, please do not enter it.  But if you do not provide it, GMs
   may not be able to send you game-related materials.
-= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+= bootstrap_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
   = devise_error_messages!
   = render :partial => "form", :locals => { :resource => resource, :f => f }
 %h3 Cancel my account
