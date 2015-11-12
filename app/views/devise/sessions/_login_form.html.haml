@@ -1,15 +1,13 @@
-= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => "login form-horizontal" }) do |f|
+= bootstrap_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   .form-group
-    = f.label :email, :class => "col-sm-2 control-label"
-    = f.email_field :email, :class => "col-sm-10 form-control"
+    = f.email_field :email
   .form-group
-    = f.label :password, :class => "col-sm-2 control-label"
-    = f.password_field :password, :class => "col-sm-10 form-control"
+    = f.password_field :password
     - if devise_mapping.recoverable? && controller_name != 'passwords'
       = link_to "Forgot your password?", new_password_path(resource_name)
       %br/
   - if devise_mapping.rememberable?
     .form-group
-      = f.label :remember_me
       = f.check_box :remember_me
-  %div{:style => "text-align: center;"}= f.submit "Sign in"
+  %div
+    = f.submit "Sign in"
