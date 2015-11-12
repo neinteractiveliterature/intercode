@@ -1,8 +1,8 @@
 = bootstrap_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   .form-group
-    = f.email_field :email
+    = f.email_field :email, :required => true
   .form-group
-    = f.password_field :password
+    = f.password_field :password, :required => true
     - if devise_mapping.recoverable? && controller_name != 'passwords'
       = link_to "Forgot your password?", new_password_path(resource_name)
       %br/
