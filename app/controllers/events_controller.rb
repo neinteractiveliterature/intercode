@@ -1,5 +1,6 @@
 class EventsController < BaseControllers::VirtualHost
   load_and_authorize_resource through: :convention
+  respond_to :html, :json
 
   # Display form to propose a new LARP.  Create a new LARP event to initialize
   # the form
@@ -37,6 +38,7 @@ class EventsController < BaseControllers::VirtualHost
   # List the available LARPs
   def index
     @events = @events.accepted.order(:title)
+    respond_with @events
   end
 
   def schedule
@@ -58,6 +60,8 @@ class EventsController < BaseControllers::VirtualHost
   def show
     @runs = @event.runs.includes(:rooms)
     @team_members = @event.team_members.includes(:user).visible.sort_by { |m| m.user.name_inverted }
+
+    respond_with @event
   end
 
   # Permit access to fields that can be updated
