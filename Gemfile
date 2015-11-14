@@ -45,7 +45,8 @@ gem 'cadmus', '>= 0.5.1'
 # File uploading
 gem 'carrierwave'
 
-# Handling of currency fields
+# Filthy lucre
+gem 'activemerchant'
 gem 'money-rails'
 gem 'eu_central_bank'
 
