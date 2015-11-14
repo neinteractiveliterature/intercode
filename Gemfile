@@ -61,6 +61,12 @@ gem 'newrelic_rpm'
 # Heroku prod fix
 gem 'rails_12factor', group: 'production'
 
+# Super-slick error pages
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
+
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-remote'
