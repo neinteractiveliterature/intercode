@@ -1,8 +1,7 @@
-= form_for @convention do |f|
-  %p
-    = f.label :name
-    = f.text_field :name
-  %p
-    = f.label :domain
-    = f.text_field :domain
-  %p= f.submit
+= bootstrap_form_for @convention do |f|
+  = f.text_field :name
+  = f.text_field :domain, label: "Convention domain name"
+
+  = f.select :timezone_name, ActiveSupport::TimeZone.all.map { |zone| [zone.to_s, zone.tzinfo.identifier] }, include_blank: true, label: "Time zone"
+
+  = f.submit
