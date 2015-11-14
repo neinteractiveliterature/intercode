@@ -5,6 +5,7 @@ class Convention < ActiveRecord::Base
 
   validates :name, :presence => true
   validates :domain, :presence => true, :uniqueness => true
+  validates :timezone_name, presence: true
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
 
