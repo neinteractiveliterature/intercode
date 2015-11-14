@@ -10,6 +10,26 @@ class UserConProfilesGrid
     joins(:user).where("lower(users.last_name) like :value OR lower(users.first_name) like :value", value: "%#{value.downcase}%")
   end
 
+  filter(:email, :string)
+
+  filter(
+    :registration_status,
+    :enum,
+    select: UserConProfile::REGISTRATION_STATUSES.map { |status| [status.humanize, status] },
+    checkboxes: true
+  )
+
+  filter(
+    :privileges,
+    :enum,
+    select: UserConProfile::PRIV_NAMES.map { |priv_name| [priv_name.humanize.titleize, priv_name] },
+    checkboxes: true
+  ) do |value|
+    value.inject(self) do |scope, priv_name|
+      scope.where(priv_name => true)
+    end
+  end
+
   column(:name, order: "users.last_name, users.first_name") do |user_con_profile|
     format(user_con_profile.user.name_inverted) do |name|
       link_to name, user_con_profile
@@ -29,10 +49,14 @@ class UserConProfilesGrid
 
     status_parts.compact.join(" ")
   end
-  column(:privileges) do |user_con_profile|
+  column(:privileges, class: 'col-md-4') do |user_con_profile|
     user_con_profile.privileges.map(&:titleize).sort.join(", ")
   end
 
+
+  def self.human_attribute_name(attr)
+    attr.to_s.humanize
+  end
 
   # work around bootstrap_form_for's expectation that this be model-like
   def self.validators_on(*attributes)
