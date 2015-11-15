@@ -90,6 +90,7 @@ class ScheduledValue
 
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
+  extend ActsAsCoder
 
   attr_reader :timespans
 
