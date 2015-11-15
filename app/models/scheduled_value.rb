@@ -1,12 +1,22 @@
 class ScheduledValue
   class Timespan
     include Comparable
-    attr_reader :start, :finish
+    include ActiveModel::Model
+    include ActiveModel::Serializers::JSON
+    attr_accessor :start, :finish
 
-    def initialize(start, finish)
+    def initialize(attributes = {})
+      super
+
       raise "Either start, finish, or both must be specified" unless start || finish
+      raise "Finish must be after start" if start && finish && start >= finish
+    end
 
-      @start, @finish = start, finish
+    def attributes
+      {
+        start: start,
+        finish: finish
+      }
     end
 
     def contains?(timestamp)
@@ -25,16 +35,8 @@ class ScheduledValue
 
     def <=>(other)
       case other
-      when Timespan
-        return nil if other.overlaps?(self)
-        return -1 if finish && other.start >= finish
-        return 1 if start && other.finish <= start
-        0
-      when Date, Time, DateTime
-        return nil if contains?(other)
-        return -1 if finish && other >= finish
-        return 1 if start && other < start
-        0
+      when Timespan then compare_timespan(other)
+      when Date, Time, DateTime then compare_datetime(other)
       end
     end
 
@@ -57,14 +59,28 @@ class ScheduledValue
 
       "#{start_description} #{finish_description}"
     end
+
+    private
+    def compare_timespan(other)
+      return 0 if other.start == start && other.finish == finish
+      return nil if other.overlaps?(self)
+      return -1 if finish && other.start && other.start >= finish
+      return 1 if start && other.finish && other.finish <= start
+    end
+
+    def compare_datetime(other)
+      return nil if contains?(other)
+      return -1 if finish && other >= finish
+      return 1 if start && other < start
+      0
+    end
   end
 
   class TimespanWithValue < Timespan
-    attr_reader :value
+    attr_accessor :value
 
-    def initialize(start, finish, value)
-      super start, finish
-      @value = value
+    def attributes
+      super.merge(value: value)
     end
 
     def to_s
@@ -72,20 +88,43 @@ class ScheduledValue
     end
   end
 
+  include ActiveModel::Model
+  include ActiveModel::Serializers::JSON
+
   attr_reader :timespans
 
-  def initialize
+  def attributes
+    {
+      timespans: timespans
+    }
+  end
+
+  def timespans=(timespan_values)
     @timespans = SortedSet.new
+    @timespans.tap do |timespans|
+      timespan_values.each do |timespan_value|
+        timespan = case timespan_value
+        when TimespanWithValue then timespan_value
+        when Hash then TimespanWithValue.new(timespan_value)
+        end
+
+        self << timespan
+      end
+    end
+  end
+
+  def <<(timespan_with_value)
+    overlapping_timespan = timespan_overlapping(timespan_with_value)
+    raise "Timespan for value #{overlapping_timespan} would overlap with #{timespan_with_value}" if overlapping_timespan
+
+    @timespans << timespan_with_value
+    @timespans_array = nil
+
+    timespan_with_value
   end
 
   def set_value_for_timespan(start, finish, value)
-    timespan = TimespanWithValue.new(start, finish, value)
-    overlapping_timespan = timespan_overlapping(timespan)
-    raise "Timespan for value #{overlapping_timespan} would overlap with #{timespan}" if overlapping_timespan
-
-    @timespans << timespan
-    @timespans_array = nil
-
+    self << TimespanWithValue.new(start: start, finish: finish, vaule: value)
     value
   end
 
