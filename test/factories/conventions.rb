@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :convention do
     name "TestCon"
     domain "testcon.example.com"
+    timezone_name "US/Eastern"
     signups_allowed "yes"
     show_schedule "yes"
     news "MyText"
