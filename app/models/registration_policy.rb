@@ -4,19 +4,7 @@
 class RegistrationPolicy
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
-
-  def self.dump(policy)
-    policy.to_json
-  end
-
-  def self.load(json)
-    self.new.tap do |policy|
-      case json
-      when Hash then policy.assign_attributes(json)
-      when String then policy.from_json(json)
-      end
-    end
-  end
+  extend ActsAsCoder
 
   def self.unlimited
     new(buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_unlimited: true)])
