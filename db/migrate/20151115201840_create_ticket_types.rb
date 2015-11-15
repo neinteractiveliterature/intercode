@@ -4,7 +4,7 @@ class CreateTicketTypes < ActiveRecord::Migration
       t.references :convention, index: true, foreign_key: true
       t.text :name
       t.text :description
-      t.json :pricing_schedule
+      t.column :pricing_schedule, :text
 
       t.timestamps null: false
     end
