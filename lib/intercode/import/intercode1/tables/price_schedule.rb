@@ -1,11 +1,12 @@
 class Intercode::Import::Intercode1::Tables::PriceSchedule < Intercode::Import::Intercode1::Table
-  attr_reader :con, :price_schedule
+  attr_reader :con, :price_schedule, :php_timezone
 
-  def initialize(connection, con, price_schedule)
+  def initialize(connection, con, price_schedule, php_timezone)
     super(connection)
 
     @price_schedule = price_schedule
     @con = con
+    @php_timezone = php_timezone
   end
 
   def build_ticket_type
@@ -29,8 +30,10 @@ class Intercode::Import::Intercode1::Tables::PriceSchedule < Intercode::Import::
     { timespans: timespans }
   end
 
-  def convert_date(date)
-    return nil if date == 0
-    Time.at(date).in_time_zone(con.timezone).beginning_of_day
+  def convert_date(unix_timestamp)
+    return nil if unix_timestamp == 0
+
+    date = Time.at(unix_timestamp).in_time_zone(php_timezone).to_date
+    con.timezone.local(date.year, date.month, date.day, 0, 0, 0)
   end
 end

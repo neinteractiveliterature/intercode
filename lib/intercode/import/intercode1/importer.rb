@@ -10,7 +10,8 @@ class Intercode::Import::Intercode1::Importer
       "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
       "con_name" => CON_NAME,
       "con_domain" => CON_DOMAIN,
-      "friday_date" => FRI_DATE
+      "friday_date" => FRI_DATE,
+      "php_timezone" => date_default_timezone_get()
     );
 
     $price_schedule = array();
@@ -31,16 +32,18 @@ class Intercode::Import::Intercode1::Importer
       vars['con_name'],
       vars['con_domain'],
       Date.parse(vars['friday_date']),
-      vars['price_schedule']
+      vars['price_schedule'],
+      vars['php_timezone']
     )
   end
 
-  def initialize(connection, con_name, con_domain, friday_date, price_schedule)
+  def initialize(connection, con_name, con_domain, friday_date, price_schedule, php_timezone)
     @connection = connection
     @con_name = con_name
     @con_domain = con_domain
     @friday_date = friday_date
     @price_schedule = price_schedule
+    @php_timezone = ActiveSupport::TimeZone[php_timezone]
   end
 
   def import!
@@ -65,7 +68,7 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def price_schedule_table
-    @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(connection, @con, @price_schedule)
+    @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(connection, @con, @price_schedule, @php_timezone)
   end
 
   def events_table
