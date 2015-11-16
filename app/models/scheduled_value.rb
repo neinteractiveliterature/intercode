@@ -94,10 +94,18 @@ class ScheduledValue
 
   attr_reader :timespans
 
+  def self.timespan_with_value_class
+    TimespanWithValue
+  end
+
   def attributes
     {
       timespans: timespans
     }
+  end
+
+  def attributes=(attributes)
+    self.timespans = attributes.symbolize_keys[:timespans]
   end
 
   def timespans=(timespan_values)
@@ -105,8 +113,8 @@ class ScheduledValue
     @timespans.tap do |timespans|
       timespan_values.each do |timespan_value|
         timespan = case timespan_value
-        when TimespanWithValue then timespan_value
-        when Hash then TimespanWithValue.new(timespan_value)
+        when self.class.timespan_with_value_class then timespan_value
+        when Hash then self.class.timespan_with_value_class.new(timespan_value)
         end
 
         self << timespan
@@ -125,7 +133,7 @@ class ScheduledValue
   end
 
   def set_value_for_timespan(start, finish, value)
-    self << TimespanWithValue.new(start: start, finish: finish, vaule: value)
+    self << self.class.timespan_with_value_class.new(start: start, finish: finish, vaule: value)
     value
   end
 

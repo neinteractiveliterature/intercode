@@ -4,6 +4,7 @@ module Intercode::Import::Intercode1::Tables
   autoload :Con
   autoload :Events
   autoload :GMs, 'intercode/import/intercode1/tables/gms'
+  autoload :PriceSchedule
   autoload :Runs
   autoload :Rooms
   autoload :Signup
