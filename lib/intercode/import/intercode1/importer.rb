@@ -1,5 +1,30 @@
 class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :con
+  attr_accessor :con_domain, :con_name, :friday_date
+
+  def self.from_constants_file(filename)
+    php = <<-PHP
+    require "#{filename}";
+
+    $vars = array(
+      "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
+      "con_name" => CON_NAME,
+      "con_domain" => CON_DOMAIN,
+      "friday_date" => FRI_DATE
+    );
+
+    echo json_encode($vars);
+    PHP
+
+    vars = JSON.parse `php -r '#{php}'`
+
+    new(
+      Sequel.connect(vars['database_url']),
+      vars['con_name'],
+      vars['con_domain'],
+      Date.parse(vars['friday_date'])
+    )
+  end
 
   def initialize(connection, con_name, con_domain, friday_date)
     @connection = connection
