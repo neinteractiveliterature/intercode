@@ -13,6 +13,14 @@ class Intercode::Import::Intercode1::Importer
       "friday_date" => FRI_DATE
     );
 
+    $price_schedule = array();
+    $i = 0;
+    while (get_con_price ($i++, $price, $start_date, $end_date)) {
+      array_push($price_schedule, array("price" => $price, "start_date" => $start_date, "end_date" => $end_date));
+    }
+
+    $vars["price_schedule"] = $price_schedule;
+
     echo json_encode($vars);
     PHP
 
@@ -22,21 +30,27 @@ class Intercode::Import::Intercode1::Importer
       Sequel.connect(vars['database_url']),
       vars['con_name'],
       vars['con_domain'],
-      Date.parse(vars['friday_date'])
+      Date.parse(vars['friday_date']),
+      vars['price_schedule']
     )
   end
 
-  def initialize(connection, con_name, con_domain, friday_date)
+  def initialize(connection, con_name, con_domain, friday_date, price_schedule)
     @connection = connection
     @con_name = con_name
     @con_domain = con_domain
     @friday_date = friday_date
+    @price_schedule = price_schedule
   end
 
   def import!
     @con = con_table.build_con
     @con.save!
     Intercode::Import::Intercode1.logger.info("Imported con as ID #{@con.id}")
+
+    ticket_type = price_schedule_table.build_ticket_type
+    ticket_type.save!
+    Intercode::Import::Intercode1.logger.info("Imported ticket type as ID #{ticket_type.id}")
 
     events_table.import!
     users_table.import!
@@ -48,6 +62,10 @@ class Intercode::Import::Intercode1::Importer
 
   def con_table
     @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain, @friday_date)
+  end
+
+  def price_schedule_table
+    @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(connection, @con, @price_schedule)
   end
 
   def events_table
