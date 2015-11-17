@@ -19,6 +19,14 @@ class ScheduledValue
       }
     end
 
+    def start=(value)
+      @start = convert_time_value(value)
+    end
+
+    def finish=(value)
+      @finish = convert_time_value(value)
+    end
+
     def contains?(timestamp)
       return false if start && timestamp < start
       return false if finish && timestamp >= finish
@@ -73,6 +81,13 @@ class ScheduledValue
       return -1 if finish && other >= finish
       return 1 if start && other < start
       0
+    end
+
+    def convert_time_value(value)
+      case value
+      when String then Time.iso8601(value)
+      else value
+      end
     end
   end
 
