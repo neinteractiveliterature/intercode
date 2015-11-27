@@ -1,36 +1,43 @@
-%h1 Purchase a #{@ticket.ticket_type.description.downcase} for #{convention.name}
+- if @ticket.ticket_type
+  %h1 Purchase a #{@ticket.ticket_type.description.downcase} for #{convention.name}
 
-= bootstrap_form_tag url: ticket_path, layout: :horizontal, html: {"data-payment-form" => true} do |f|
-  .payment-errors.alert.alert-danger{style: "display: none"}
+  = bootstrap_form_tag url: ticket_path, layout: :horizontal, html: {"data-payment-form" => true} do |f|
+    .payment-errors.alert.alert-danger{style: "display: none"}
 
-  = f.static_control label: "Price" do
-    = current_price.format
+    = f.static_control label: "Price" do
+      = current_price.format
 
-    - next_value_change = pricing_schedule.next_value_change_after(Time.now)
-    - if next_value_change
-      - next_value = pricing_schedule.value_at(next_value_change)
-      %br
-      %small (#{next_value.format} starting #{next_value_change.strftime("%A, %B %d")})
+      - next_value_change = pricing_schedule.next_value_change_after(Time.now)
+      - if next_value_change
+        - next_value = pricing_schedule.value_at(next_value_change)
+        %br
+        %small (#{next_value.format} starting #{next_value_change.strftime("%A, %B %d")})
 
-  = hidden_field_tag "ticket[ticket_type_id]", @ticket.ticket_type_id
+    = hidden_field_tag "ticket[ticket_type_id]", @ticket.ticket_type_id
 
-  - cc_icon = capture do
-    %i.fa.fa-credit-card{"data-credit-card-icon" => true}
+    - cc_icon = capture do
+      %i.fa.fa-credit-card{"data-credit-card-icon" => true}
 
-  = f.telephone_field "", help: false, class: "cc-number", label: "Credit card number", placeholder: "•••• •••• •••• ••••", "data-stripe" => "number", append: cc_icon
-  = f.telephone_field "", help: false, class: "cc-cvc", label: "CVC", placeholder: "•••", "data-stripe" => "cvc"
+    = f.telephone_field "", help: false, class: "cc-number", label: "Credit card number", placeholder: "•••• •••• •••• ••••", "data-stripe" => "number", append: cc_icon
+    = f.telephone_field "", help: false, class: "cc-cvc", label: "CVC", placeholder: "•••", "data-stripe" => "cvc"
 
-  = f.form_group :expiration_date, label: { text: "Expiration date" } do
-    .row
-      .col-xs-4.col-md-2.col-lg-1
-        = text_field_tag "", '', class: 'form-control', size: 2, placeholder: "MM", "data-stripe" => "exp-month", "data-numeric" => true
-      .col-xs-8.col-md-4.col-lg-2
-        = text_field_tag "", '', class: 'form-control', size: 4, placeholder: "YYYY", "data-stripe" => "exp-year", "data-numeric" => true
+    = f.form_group :expiration_date, label: { text: "Expiration date" } do
+      .row
+        .col-xs-4.col-md-2.col-lg-1
+          = text_field_tag "", '', class: 'form-control', size: 2, placeholder: "MM", "data-stripe" => "exp-month", "data-numeric" => true
+        .col-xs-8.col-md-4.col-lg-2
+          = text_field_tag "", '', class: 'form-control', size: 4, placeholder: "YYYY", "data-stripe" => "exp-year", "data-numeric" => true
 
-  = f.form_group do
-    %button.btn.btn-primary
-      Submit payment
-      %i.fa.fa-spinner.fa-spin{style: 'display: none'}
+    = f.form_group do
+      %button.btn.btn-primary
+        Submit payment
+        %i.fa.fa-spinner.fa-spin{style: 'display: none'}
+- else
+  %p Choose a ticket type:
+
+  %ul
+    - @ticket_types.each do |ticket_type|
+      %li= link_to ticket_type.description, new_ticket_path(ticket: {ticket_type_id: ticket_type.id})
 
 = javascript_include_tag "https://js.stripe.com/v2/", "jquery.payment"
 :javascript

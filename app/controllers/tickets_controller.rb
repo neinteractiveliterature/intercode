@@ -2,9 +2,17 @@ class TicketsController < BaseControllers::VirtualHost
   load_and_authorize_resource through: :user_con_profile, singleton: true
 
   def show
+    redirect_to new_ticket_path unless @ticket
   end
 
   def new
+    unless @ticket.ticket_type
+      @ticket_types = convention.ticket_types
+
+      if @ticket_types.size == 1
+        redirect_to new_ticket_path(ticket: {ticket_type_id: @ticket_types.first.id})
+      end
+    end
   end
 
   def create
