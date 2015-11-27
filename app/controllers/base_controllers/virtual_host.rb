@@ -31,6 +31,10 @@ module BaseControllers
         yield
       end
     end
+
+    def user_con_profile
+      @user_con_profile ||= convention.user_con_profiles.find_by!(user_id: current_user.id)
+    end
   end
 
 end

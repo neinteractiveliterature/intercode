@@ -159,6 +159,13 @@ class ScheduledValue
     timespan.value
   end
 
+  def next_value_change_after(timestamp)
+    timespan = timespan_containing(timestamp)
+    return nil unless timespan
+
+    timespan.finish
+  end
+
   private
 
   def timespans_array
