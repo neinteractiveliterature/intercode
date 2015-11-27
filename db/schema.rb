@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115201840) do
+ActiveRecord::Schema.define(version: 20151116213829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,21 @@ ActiveRecord::Schema.define(version: 20151115201840) do
 
   add_index "ticket_types", ["convention_id"], name: "index_ticket_types_on_convention_id", using: :btree
 
+  create_table "tickets", force: :cascade do |t|
+    t.integer  "user_con_profile_id"
+    t.integer  "ticket_type_id"
+    t.string   "charge_id"
+    t.integer  "payment_amount_cents"
+    t.string   "payment_amount_currency"
+    t.text     "payment_note"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "tickets", ["charge_id"], name: "index_tickets_on_charge_id", unique: true, using: :btree
+  add_index "tickets", ["ticket_type_id"], name: "index_tickets_on_ticket_type_id", using: :btree
+  add_index "tickets", ["user_con_profile_id"], name: "index_tickets_on_user_con_profile_id", using: :btree
+
   create_table "user_con_profiles", force: :cascade do |t|
     t.integer  "user_id",                                    null: false
     t.integer  "convention_id",                              null: false
@@ -232,6 +247,8 @@ ActiveRecord::Schema.define(version: 20151115201840) do
   add_foreign_key "team_members", "events"
   add_foreign_key "team_members", "users"
   add_foreign_key "ticket_types", "conventions"
+  add_foreign_key "tickets", "ticket_types"
+  add_foreign_key "tickets", "user_con_profiles"
   add_foreign_key "user_con_profiles", "conventions"
   add_foreign_key "user_con_profiles", "events", column: "comp_event_id"
   add_foreign_key "user_con_profiles", "users"

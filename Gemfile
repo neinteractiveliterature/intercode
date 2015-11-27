@@ -31,6 +31,8 @@ gem 'uglifier', '>= 1.0.3'
 gem 'unf'
 
 gem 'jquery-rails'
+gem 'lodash-rails'
+gem 'react-rails'
 
 # Devise for authentication, cancancan for authorization
 gem 'devise'
@@ -46,9 +48,9 @@ gem 'cadmus', '>= 0.5.1'
 gem 'carrierwave'
 
 # Filthy lucre
-gem 'activemerchant'
 gem 'money-rails'
 gem 'eu_central_bank'
+gem 'stripe'
 
 # Helpers for sortable, filterable and exportable tables
 gem 'datagrid'
