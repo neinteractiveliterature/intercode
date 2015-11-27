@@ -1,0 +1,11 @@
+%h1 My ticket for #{convention.name}
+
+%dl.dl-horizontal
+  %dt Type
+  %dd= @ticket.ticket_type.description
+  %dt Purchased
+  %dd= @ticket.created_at.to_s(:short)
+  %dt Price
+  %dd= @ticket.payment_amount.format
+  %dt Transaction ID
+  %dd= @ticket.charge_id
