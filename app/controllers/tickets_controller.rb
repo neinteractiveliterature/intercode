@@ -1,5 +1,8 @@
 class TicketsController < BaseControllers::VirtualHost
+  before_action :check_existing_ticket, only: [:new, :create]
   load_and_authorize_resource through: :user_con_profile, singleton: true
+
+  respond_to :html, :json
 
   def show
     redirect_to new_ticket_path unless @ticket
@@ -17,7 +20,7 @@ class TicketsController < BaseControllers::VirtualHost
 
   def create
     customer = Stripe::Customer.create(
-      :email => params[:stripeEmail],
+      :email => current_user.email,
       :source  => params[:stripeToken]
     )
 
@@ -38,8 +41,8 @@ class TicketsController < BaseControllers::VirtualHost
     respond_with @ticket
 
   rescue Stripe::CardError => e
-    flash[:alert] = e.message
-    redirect_to new_ticket_path
+    @ticket.errors.add(:base, e.message)
+    responsd_with @ticket
   end
 
   private
@@ -56,4 +59,8 @@ class TicketsController < BaseControllers::VirtualHost
     @current_price ||= pricing_schedule.value_at(Time.now)
   end
   helper_method :current_price
+
+  def check_existing_ticket
+    redirect_to ticket_path if user_con_profile.ticket
+  end
 end

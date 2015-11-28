@@ -4,7 +4,7 @@
   %dt Type
   %dd= @ticket.ticket_type.description
   %dt Purchased
-  %dd= @ticket.created_at.to_s(:short)
+  %dd= @ticket.created_at.strftime('%B %e, %Y %l:%M %p %Z')
   %dt Price
   %dd= @ticket.payment_amount.format
   %dt Transaction ID

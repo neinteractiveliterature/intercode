@@ -11,3 +11,4 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( ie_less_than_8.css )
 Rails.application.config.assets.precompile += %w( cadmus.previewablehtml.js )
 Rails.application.config.assets.precompile += %w( jquery.payment.js )
+Rails.application.config.assets.precompile += %w( stripe.js )
