@@ -51,20 +51,24 @@ class ScheduledValue
       "#<#{self.class.name}: #{to_s}>"
     end
 
-    def to_s
-      start_description = if start
-        "from #{start}"
+    def to_s(format = nil)
+      "#{start_description(format)} #{finish_description(format)}"
+    end
+
+    def start_description(format = nil)
+      if start
+        "from #{start.to_s(format)}"
       else
         'anytime'
       end
+    end
 
-      finish_description = if finish
-        "up to #{finish}"
-      else
+    def finish_description(format = nil)
+      if finish
+        "up to #{finish.to_s(format)}"
+      elsif start
         "indefinitely"
       end
-
-      "#{start_description} #{finish_description}"
     end
 
     private
@@ -97,7 +101,7 @@ class ScheduledValue
       super.merge(value: value)
     end
 
-    def to_s
+    def to_s(format = nil)
       "#{value} #{super}"
     end
   end

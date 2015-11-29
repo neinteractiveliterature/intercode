@@ -1,0 +1,13 @@
+%h1 Ticket types for #{@convention.name}
+
+- @ticket_types.each do |ticket_type|
+  .panel.panel-default
+    .panel-heading
+      %p{style: 'margin: 0'}
+        %strong= ticket_type.description
+        %tt (#{ticket_type.name})
+
+    .panel-body
+      %ul
+        - ticket_type.pricing_schedule.timespans.each do |timespan|
+          %li= timespan.to_s(:short)

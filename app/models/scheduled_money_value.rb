@@ -14,6 +14,10 @@ class ScheduledMoneyValue < ScheduledValue
     def serializable_hash(options = {})
       super((options || {}).merge(except: :value)).merge(value: { fractional: value.fractional, currency_code: value.currency.iso_code })
     end
+
+    def to_s(format = nil)
+      "#{value.format} #{start_description(format)} #{finish_description(format)}"
+    end
   end
 
   def self.timespan_with_value_class
