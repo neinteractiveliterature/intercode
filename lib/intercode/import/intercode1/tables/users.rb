@@ -36,10 +36,11 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     "EvePhone" => :evening_phone
   }
 
-  def initialize(connection, con, event_id_map)
+  def initialize(connection, con, event_id_map, registration_status_map)
     super connection
     @con = con
     @event_id_map = event_id_map
+    @registration_status_map = registration_status_map
   end
 
   def import!
@@ -53,6 +54,9 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
 
       user_con_profile = build_user_con_profile(row, @con, user)
       user_con_profile.save!
+
+      ticket = build_ticket(row, user_con_profile)
+      ticket.save! if ticket
     end
   end
 
@@ -73,14 +77,24 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   def build_user_con_profile(row, con, user)
     profile_attrs = {
       convention: con,
-      registration_status: row[:CanSignup].try(:underscore),
-      comp_event: imported_event(row[:CompEventId]),
-      payment_amount_cents: row[:PaymentAmount],
-      payment_amount_currency: (row[:PaymentAmount].to_i > 0 ? 'USD' : nil),
-      payment_note: row[:PaymentNote]
     }.merge(priv_attributes(row))
 
     user.user_con_profiles.new(profile_attrs)
+  end
+
+  def build_ticket(row, user_con_profile)
+    ticket_type = @registration_status_map[row[:CanSignup]]
+    return unless ticket_type
+
+    provided_by_event = imported_event(row[:CompEventId]) if row[:CompEventId]
+
+    user_con_profile.build_ticket(
+      ticket_type: ticket_type,
+      provided_by_event: provided_by_event,
+      payment_amount_cents: row[:PaymentAmount],
+      payment_amount_currency: (row[:PaymentAmount].to_i > 0 ? 'USD' : nil),
+      payment_note: row[:PaymentNote]
+    )
   end
 
   def priv_attributes(row)

@@ -5,7 +5,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def dataset
-    super.join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status)
+    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status)
   end
 
   private

@@ -43,10 +43,10 @@ describe UserConProfilesController do
   end
 
   test "should update user_con_profile" do
-    user_con_profile.registration_status.must_equal "unpaid"
+    user_con_profile.staff.must_equal false
 
-    patch :update, id: user_con_profile, user_con_profile: { registration_status: "paid" }
-    user_con_profile.reload.registration_status.must_equal "paid"
+    patch :update, id: user_con_profile, user_con_profile: { staff: true }
+    user_con_profile.reload.staff.must_equal true
 
     assert_redirected_to user_con_profile_path(assigns(:user_con_profile))
   end

@@ -3,11 +3,11 @@ class TeamMember < ActiveRecord::Base
   belongs_to :event
   validates :event, presence: true
 
-  # A team member is a user that exits, and that he's not already a member
+  # A team member is a user that exists, and is not already a member
   # of the team for this event
   belongs_to :user
   validates :user, presence: true
-  validates_uniqueness_of :user_id, scope: :event
+  validates_uniqueness_of :user_id, scope: :event_id
 
   belongs_to :updated_by, class_name: "User"
 

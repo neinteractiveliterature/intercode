@@ -8,7 +8,6 @@ class ScheduledValue
     def initialize(attributes = {})
       super
 
-      raise "Either start, finish, or both must be specified" unless start || finish
       raise "Finish must be after start" if start && finish && start >= finish
     end
 
@@ -111,6 +110,11 @@ class ScheduledValue
 
   def self.timespan_with_value_class
     TimespanWithValue
+  end
+
+  def self.always(value)
+    timespan = timespan_with_value_class.new(start: nil, finish: nil, value: value)
+    self.new(timespans: [timespan])
   end
 
   def attributes

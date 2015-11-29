@@ -18,10 +18,8 @@ describe ScheduledValue::Timespan do
     both.finish.must_equal finish
   end
 
-  it "cannot be initialized without either a start or a finish" do
-    assert_raises do
-      ScheduledValue::Timespan.new
-    end
+  it "can be initialized without either a start or a finish" do
+    ScheduledValue::Timespan.new
   end
 
   it "cannot be initialized if start and finish are equal" do
@@ -61,6 +59,12 @@ describe ScheduledValue::Timespan do
       assert timespan.contains?(start)
       refute timespan.contains?(start - 1)
     end
+
+    it "unlimited timespans contain all dates" do
+      timespan = ScheduledValue::Timespan.new
+      assert timespan.contains?(start)
+      assert timespan.contains?(finish)
+    end
   end
 
   describe "#overlaps?" do
@@ -92,6 +96,12 @@ describe ScheduledValue::Timespan do
       other = ScheduledValue::Timespan.new(start: finish, finish: postfinish)
       refute timespan.overlaps?(other)
       refute other.overlaps?(timespan)
+    end
+
+    it "unlimited timespans overlap everything" do
+      other = ScheduledValue::Timespan.new
+      assert timespan.overlaps?(other)
+      assert other.overlaps?(timespan)
     end
   end
 

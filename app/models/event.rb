@@ -22,12 +22,7 @@ class Event < ActiveRecord::Base
   # that need to be reviewed (LARPs, PreCon) must be reviewed and approved
   # by the approprite committee and default to "Proposed."  Events that don't
   # need to be approved (ConSuite, Ops, Filler) default to "Approved."
-  validates :status,
-    inclusion:
-    {
-      :in => STATUSES
-#      messsage: "%{value} is not a valid event status"
-    }
+  validates :status, inclusion: { in: STATUSES, allow_nil: true }
 
   # Category is mostly for record-keeping purposes; it shouldn't actually
   # affect behavior of events.  Nevertheless we do want to make sure it's

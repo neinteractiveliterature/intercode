@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116213829) do
+ActiveRecord::Schema.define(version: 20151129154850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,39 +163,35 @@ ActiveRecord::Schema.define(version: 20151116213829) do
     t.text     "payment_note"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "provided_by_event_id"
   end
 
   add_index "tickets", ["charge_id"], name: "index_tickets_on_charge_id", unique: true, using: :btree
+  add_index "tickets", ["provided_by_event_id"], name: "index_tickets_on_provided_by_event_id", using: :btree
   add_index "tickets", ["ticket_type_id"], name: "index_tickets_on_ticket_type_id", using: :btree
   add_index "tickets", ["user_con_profile_id"], name: "index_tickets_on_user_con_profile_id", using: :btree
 
   create_table "user_con_profiles", force: :cascade do |t|
-    t.integer  "user_id",                                    null: false
-    t.integer  "convention_id",                              null: false
-    t.string   "registration_status",     default: "unpaid", null: false
-    t.integer  "comp_event_id"
-    t.integer  "payment_amount_cents"
-    t.string   "payment_amount_currency"
-    t.text     "payment_note"
-    t.boolean  "bid_committee",           default: false,    null: false
-    t.boolean  "staff",                   default: false,    null: false
-    t.boolean  "bid_chair",               default: false,    null: false
-    t.boolean  "gm_liaison",              default: false,    null: false
-    t.boolean  "registrar",               default: false,    null: false
-    t.boolean  "outreach",                default: false,    null: false
-    t.boolean  "con_com",                 default: false,    null: false
-    t.boolean  "scheduling",              default: false,    null: false
-    t.boolean  "mail_to_gms",             default: false,    null: false
-    t.boolean  "mail_to_attendees",       default: false,    null: false
-    t.boolean  "mail_to_vendors",         default: false,    null: false
-    t.boolean  "mail_to_unpaid",          default: false,    null: false
-    t.boolean  "mail_to_alumni",          default: false,    null: false
+    t.integer  "user_id",                           null: false
+    t.integer  "convention_id",                     null: false
+    t.boolean  "bid_committee",     default: false, null: false
+    t.boolean  "staff",             default: false, null: false
+    t.boolean  "bid_chair",         default: false, null: false
+    t.boolean  "gm_liaison",        default: false, null: false
+    t.boolean  "registrar",         default: false, null: false
+    t.boolean  "outreach",          default: false, null: false
+    t.boolean  "con_com",           default: false, null: false
+    t.boolean  "scheduling",        default: false, null: false
+    t.boolean  "mail_to_gms",       default: false, null: false
+    t.boolean  "mail_to_attendees", default: false, null: false
+    t.boolean  "mail_to_vendors",   default: false, null: false
+    t.boolean  "mail_to_unpaid",    default: false, null: false
+    t.boolean  "mail_to_alumni",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "user_con_profiles", ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true, using: :btree
-  add_index "user_con_profiles", ["registration_status"], name: "index_user_con_profiles_on_registration_status", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                          null: false
@@ -247,9 +243,9 @@ ActiveRecord::Schema.define(version: 20151116213829) do
   add_foreign_key "team_members", "events"
   add_foreign_key "team_members", "users"
   add_foreign_key "ticket_types", "conventions"
+  add_foreign_key "tickets", "events", column: "provided_by_event_id"
   add_foreign_key "tickets", "ticket_types"
   add_foreign_key "tickets", "user_con_profiles"
   add_foreign_key "user_con_profiles", "conventions"
-  add_foreign_key "user_con_profiles", "events", column: "comp_event_id"
   add_foreign_key "user_con_profiles", "users"
 end
