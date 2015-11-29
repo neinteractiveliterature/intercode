@@ -30,17 +30,34 @@
     %section
       %h2 Ticket
       - if @user_con_profile.ticket
-        = render 'tickets/ticket', ticket: @user_con_profile.ticket
+        %dl.dl-horizontal
+          = render 'tickets/ticket_data', ticket: @user_con_profile.ticket
+          %dt Payment note
+          %dd= @user_con_profile.ticket.payment_note
+
+        - if can? :edit, @user_con_profile.ticket
+          %ul.list-inline
+            %li
+              = link_to "Edit ticket", [:edit, @user_con_profile, :admin_ticket], class: "btn btn-default"
+            - if can? :delete, @user_con_profile.ticket
+              %li
+                = link_to "Delete ticket", [@user_con_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@user_con_profile.user.name}'s ticket?"
       - else
-        None
-      / TODO: add event signups and team membership stuff
+        %p No ticket
+        - if can? :create, @user_con_profile.build_ticket
+          %ul.list-inline
+            %li
+              = link_to "Create ticket", [:new, @user_con_profile, :admin_ticket], class: "btn btn-default"
+
+    / TODO: add event signups and team membership stuff
+
   .col-md-3
     - if can? :edit, @user_con_profile
       .panel.panel-default
         .panel-heading User administration
         %ul.list-group
           %li.list-group-item
-            = link_to 'Edit', edit_user_con_profile_path(@user_con_profile)
+            = link_to 'Edit profile/privileges', edit_user_con_profile_path(@user_con_profile)
           - if can? :become, @user_con_profile
             %li.list-group-item
               = link_to 'Become user', become_user_con_profile_path(@user_con_profile), method: "post", "data-confirm" => "Are you sure you want to become #{@user_con_profile.user.name} for the duration of this session?"

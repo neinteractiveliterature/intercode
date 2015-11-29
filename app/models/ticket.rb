@@ -9,6 +9,7 @@ class Ticket < ActiveRecord::Base
   validate :provided_by_event_must_be_part_of_convention, on: :create
 
   delegate :convention, to: :user_con_profile
+  delegate :user, to: :user_con_profile
 
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 

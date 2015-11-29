@@ -1,6 +1,7 @@
 class TicketsController < BaseControllers::VirtualHost
   before_action :check_existing_ticket, only: [:new, :create]
-  load_and_authorize_resource through: :user_con_profile, singleton: true
+  load_resource through: :user_con_profile, singleton: true
+  skip_authorization_check
 
   respond_to :html, :json
 
