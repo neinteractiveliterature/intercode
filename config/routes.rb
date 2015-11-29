@@ -11,7 +11,7 @@ Intercode::Application.routes.draw do
     # http://con.domain/ will go to the root page of the con
     root :to => 'pages#root', :as => 'con_root'
 
-    resource :ticket
+    resource :ticket, only: [:new, :show, :create]
 
     # Define "resource-ful" routes for events.  This will define the
     # following paths:
@@ -45,6 +45,8 @@ Intercode::Application.routes.draw do
       member do
         post :become
       end
+
+      resource :admin_ticket, only: [:new, :create, :edit, :update, :destroy]
     end
   end
 

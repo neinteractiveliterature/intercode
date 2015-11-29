@@ -1,0 +1,12 @@
+%dt Type
+%dd= ticket.ticket_type.description
+%dt Created
+%dd= ticket.created_at.strftime('%B %e, %Y %l:%M %p %Z')
+%dt Paid
+%dd= ticket.payment_amount.format
+- if ticket.payment_amount > 0
+  %dt Transaction ID
+  %dd= ticket.charge_id
+- if ticket.provided_by_event
+  %dt Provided by event
+  %dd= ticket.provided_by_event.title
