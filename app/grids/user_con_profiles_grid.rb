@@ -12,7 +12,7 @@ class UserConProfilesGrid
 
   filter(:email, :string)
 
-  filter(:ticket_type, :enum, select: :ticket_types, checkboxes: true) do |value|
+  filter(:ticket_status, :enum, select: :ticket_types, checkboxes: true) do |value|
     clauses = value.map do |ticket_type_id|
       if ticket_type_id == 'none'
         where("user_con_profiles.id NOT IN (?)", Ticket.select(:user_con_profile_id))
@@ -45,7 +45,7 @@ class UserConProfilesGrid
       intercode_mail_to email
     end
   end
-  column(:status) do |user_con_profile|
+  column(:ticket) do |user_con_profile|
     status_parts = []
 
     if user_con_profile.ticket
