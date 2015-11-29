@@ -10,14 +10,17 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
   def build_record(row)
     event = @event_id_map[row[:EventId]]
 
-    event.team_members.new(
-      user: @user_id_map[row[:UserId]],
-      display: yn_to_bool(row[:DisplayAsGM]),
-      show_email: yn_to_bool(row[:DisplayEMail]),
-      receive_con_email: yn_to_bool(row[:ReceiveConEMail]),
-      receive_signup_email: yn_to_bool(row[:ReceiveSignupEMail]),
-      updated_by: @user_id_map[row[:UpdatedById]]
-    )
+    # Ugh.  Unfortunately, Intercode 1 makes it possible to have the same user as a GM twice.
+    # Intercode 2 doesn't allow it, so if it happens, merge the two records' flags.
+    event.team_members.find_or_initialize_by(user_id: @user_id_map[row[:UserId]].id).tap do |team_member|
+      team_member.assign_attributes(
+        display: team_member.display || yn_to_bool(row[:DisplayAsGM]),
+        show_email: team_member.show_email || yn_to_bool(row[:DisplayEMail]),
+        receive_con_email: team_member.receive_con_email || yn_to_bool(row[:ReceiveConEMail]),
+        receive_signup_email: team_member.receive_signup_email || yn_to_bool(row[:ReceiveSignupEMail]),
+        updated_by: @user_id_map[row[:UpdatedById]]
+      )
+    end
   end
 
   def row_id(row)

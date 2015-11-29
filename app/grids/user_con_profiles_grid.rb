@@ -3,7 +3,7 @@ class UserConProfilesGrid
   extend MoneyRails::ActionViewExtension
 
   scope do
-    UserConProfile.includes(:user)
+    UserConProfile.includes(:user, ticket: :ticket_type)
   end
 
   filter(:name, :string) do |value|
@@ -12,12 +12,17 @@ class UserConProfilesGrid
 
   filter(:email, :string)
 
-  filter(
-    :registration_status,
-    :enum,
-    select: UserConProfile::REGISTRATION_STATUSES.map { |status| [status.humanize, status] },
-    checkboxes: true
-  )
+  filter(:ticket_type, :enum, select: :ticket_types, checkboxes: true) do |value|
+    clauses = value.map do |ticket_type_id|
+      if ticket_type_id == 'none'
+        where("user_con_profiles.id NOT IN (?)", Ticket.select(:user_con_profile_id))
+      else
+        joins(:ticket).where(tickets: {ticket_type_id: ticket_type_id})
+      end
+    end
+
+    where(clauses.map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})"}.join(" OR "))
+  end
 
   filter(
     :privileges,
@@ -41,10 +46,17 @@ class UserConProfilesGrid
     end
   end
   column(:status) do |user_con_profile|
-    status_parts = [user_con_profile.registration_status.humanize]
+    status_parts = []
 
-    if user_con_profile.payment_amount.try(:>, 0)
-      status_parts << humanized_money_with_symbol(user_con_profile.payment_amount)
+    if user_con_profile.ticket
+      status_parts << user_con_profile.ticket.ticket_type.name.humanize
+      payment_amount = user_con_profile.ticket.payment_amount
+
+      if payment_amount.try(:>, 0)
+        status_parts << humanized_money_with_symbol(payment_amount)
+      end
+    else
+      status_parts << "Unpaid"
     end
 
     status_parts.compact.join(" ")
@@ -61,5 +73,9 @@ class UserConProfilesGrid
   # work around bootstrap_form_for's expectation that this be model-like
   def self.validators_on(*attributes)
     []
+  end
+
+  def ticket_types
+    [["Unpaid", "none"]] + TicketType.where(id: scope.joins(:ticket).select(:ticket_type_id).distinct).pluck(:description, :id)
   end
 end

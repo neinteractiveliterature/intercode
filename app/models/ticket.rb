@@ -1,9 +1,12 @@
 class Ticket < ActiveRecord::Base
   belongs_to :user_con_profile
   belongs_to :ticket_type
+  belongs_to :provided_by_event, class_name: "Event"
 
   validates :user_con_profile, :ticket_type, presence: true
+  validates :user_con_profile, uniqueness: true
   validate :ticket_type_must_be_valid_for_convention
+  validate :provided_by_event_must_be_part_of_convention, on: :create
 
   delegate :convention, to: :user_con_profile
 
@@ -14,5 +17,11 @@ class Ticket < ActiveRecord::Base
     return unless ticket_type
 
     errors.add(:ticket_type, "is not a valid ticket type for #{convention}") unless convention.ticket_types.include? ticket_type
+  end
+
+  def provided_by_event_must_be_part_of_convention
+    return unless provided_by_event
+
+    errors.add(:provided_by_event, "is not part of #{convention}") unless convention.events.include? provided_by_event
   end
 end

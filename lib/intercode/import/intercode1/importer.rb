@@ -51,9 +51,10 @@ class Intercode::Import::Intercode1::Importer
     @con.save!
     Intercode::Import::Intercode1.logger.info("Imported con as ID #{@con.id}")
 
-    ticket_type = price_schedule_table.build_ticket_type
-    ticket_type.save!
-    Intercode::Import::Intercode1.logger.info("Imported ticket type as ID #{ticket_type.id}")
+    registration_status_map.each do |status, ticket_type|
+      ticket_type.save!
+      Intercode::Import::Intercode1.logger.info("Imported #{status} ticket type as ID #{ticket_type.id}")
+    end
 
     events_table.import!
     users_table.import!
@@ -81,7 +82,7 @@ class Intercode::Import::Intercode1::Importer
 
   def users_table
     return unless events_id_map
-    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map)
+    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map, registration_status_map)
   end
 
   def users_id_map
@@ -112,5 +113,31 @@ class Intercode::Import::Intercode1::Importer
 
   def signup_table
     @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map)
+  end
+
+  def registration_status_map
+    @registration_status_map ||= {
+      "Paid" => price_schedule_table.build_ticket_type,
+      "Comp" => con.ticket_types.new(
+        name: "event_comp",
+        description: "Comp ticket for event",
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
+      ),
+      "Marketing" => con.ticket_types.new(
+        name: "marketing_comp",
+        description: "Marketing comp ticket",
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
+      ),
+      "Vendor" => con.ticket_types.new(
+        name: "vendor",
+        description: "Vendor ticket",
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(2000, 'USD'))
+      ),
+      "Rollover" => con.ticket_types.new(
+        name: "rollover",
+        description: "Rollover ticket from previous year",
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
+      ),
+    }
   end
 end

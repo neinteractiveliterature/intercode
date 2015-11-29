@@ -1,45 +1,39 @@
 .row
   .col-md-9
     %h1= @user_con_profile.user.name
-    .row
-      %strong.col-sm-2.text-right Email
-      .col-sm-10= @user_con_profile.user.email
-    - if convention.starts_at
-      .row
-        %strong.col-sm-2.text-right
+    %dl.dl-horizontal
+      %dt Email
+      %dd= @user_con_profile.user.email
+      - if convention.starts_at
+        %dt
           Age at #{convention.name}
-        .col-sm-10= @user_con_profile.age_as_of_convention
-    - else
-      .row
-        %strong.col-sm-2.text-right Age
-        .col-sm-10= @user_con_profile.user.age
-    .row
-      %strong.col-sm-2.text-right Gender
-      .col-sm-10= @user_con_profile.user.gender
-    .row
-      %strong.col-sm-2.text-right Address
-      .col-sm-10= simple_format @user_con_profile.user.address, {}, wrapper_tag: 'span'
-    .row
-      %strong.col-sm-2.text-right Daytime phone
-      .col-sm-10= @user_con_profile.user.day_phone
-    .row
-      %strong.col-sm-2.text-right Evening phone
-      .col-sm-10= @user_con_profile.user.evening_phone
-    .row
-      %strong.col-sm-2.text-right Best time to call
-      .col-sm-10= @user_con_profile.user.best_call_time
-    .row
-      %strong.col-sm-2.text-right Preferred contact method
-      .col-sm-10= @user_con_profile.user.preferred_contact
-    / TODO: Figure out how to handle "how heard about con" and display it here
-    .row
-      %strong.col-sm-2.text-right Privileges
-      .col-sm-10= @user_con_profile.privileges.sort.map(&:humanize).join(", ")
-    .row
-      %strong.col-sm-2.text-right Status
-      .col-sm-10= @user_con_profile.registration_status.humanize
-    / TODO: add payment info when we have payment stuff
-    / TODO: add event signups and team membership stuff
+        %dd= @user_con_profile.age_as_of_convention
+      - else
+        %dt Age
+        %dd= @user_con_profile.user.age
+      %dt Gender
+      %dd= @user_con_profile.user.gender
+      %dt Address
+      %dd= simple_format @user_con_profile.user.address, {}, wrapper_tag: 'span'
+      %dt Daytime phone
+      %dd= @user_con_profile.user.day_phone
+      %dt Evening phone
+      %dd= @user_con_profile.user.evening_phone
+      %dt Best time to call
+      %dd= @user_con_profile.user.best_call_time
+      %dt Preferred contact
+      %dd= @user_con_profile.user.preferred_contact
+      / TODO: Figure out how to handle "how heard about con" and display it here
+      %dt Privileges
+      %dd= @user_con_profile.privileges.sort.map(&:humanize).join(", ")
+
+    %section
+      %h2 Ticket
+      - if @user_con_profile.ticket
+        = render 'tickets/ticket', ticket: @user_con_profile.ticket
+      - else
+        None
+      / TODO: add event signups and team membership stuff
   .col-md-3
     - if can? :edit, @user_con_profile
       .panel.panel-default
