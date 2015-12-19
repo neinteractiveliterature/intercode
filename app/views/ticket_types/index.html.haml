@@ -3,9 +3,15 @@
 - @ticket_types.each do |ticket_type|
   .panel.panel-default
     .panel-heading
-      %p{style: 'margin: 0'}
-        %strong= ticket_type.description
-        %tt (#{ticket_type.name})
+      .row
+        .col-md-8
+          %strong= ticket_type.description
+          %tt (#{ticket_type.name})
+        .col-md-4.text-right
+          - if can? :edit, ticket_type
+            = link_to [:edit, ticket_type], class: "btn btn-default btn-sm" do
+              %i.fa.fa-pencil-square-o
+              Edit
 
     .panel-body
       %ul
