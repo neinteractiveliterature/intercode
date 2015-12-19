@@ -34,6 +34,10 @@ gem 'jquery-rails'
 gem 'lodash-rails'
 gem 'react-rails'
 
+source 'https://rails-assets.org' do
+  gem 'rails-assets-react-date-picker'
+end
+
 # Devise for authentication, cancancan for authorization
 gem 'devise'
 gem 'cancancan'
