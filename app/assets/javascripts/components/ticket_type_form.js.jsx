@@ -1,54 +1,83 @@
 var TicketTypeForm = React.createClass({
-  render: function() {
-    var pricingScheduleFields = (this.props.ticketType.pricing_schedule.timespans || []).map(function (timespan) {
-      return (
-        <div className="row">
-          <div className="col-md-4">
-            <div className="form-group">
-              <label>
-                Start
-              </label>
-            </div>
-          </div>
+  getInitialState: function() {
+    return {
+      ticketType: this.props.initialTicketType
+    }
+  },
 
-          <div className="col-md-4">
-            <div className="form-group">
-              <label>
-                Finish
-              </label>
-            </div>
-          </div>
+  isUpdate: function() {
+    return this.state.ticketType.id;
+  },
 
-          <div className="col-md-4">
-            <div className="form-group">
-              <label>
-                Amount
-              </label>
-            </div>
-          </div>
-        </div>
-      );
+  resourceUrl: function() {
+    if (this.state.ticketType.id) {
+      return this.props.baseUrl + "/" + this.state.ticketType.id;
+    } else {
+      return this.props.baseUrl;
+    }
+  },
+
+  setTicketTypeAttribute: function(attribute, value) {
+    var newAttributes = _.clone(this.state.ticketType);
+    newAttributes[attribute] = value;
+
+    this.setState({ ticketType: newAttributes });
+  },
+
+  submitClicked: function(e) {
+    e.preventDefault();
+
+    var method = 'POST';
+    if (this.isUpdate()) {
+      method = 'PATCH';
+    }
+
+    var promise = $.ajax(
+      {
+        url: this.resourceUrl(),
+        type: method,
+        data: {
+          ticket_type: this.state.ticketType
+        },
+        dataType: 'json'
+      }
+    );
+
+    promise.done(function(data, textStatus, jqXHR) {
+      window.location.href = this.props.baseUrl;
     });
 
+    promise.fail(function(jqXHR, status, errorThrown) {
+      alert(jqXHR.responseText);
+    });
+  },
+
+  render: function() {
     return (
       <form>
         <div className="form-group">
           <label htmlFor="name">
             Name (no spaces allowed &mdash; only letters, numbers, and underscores)
           </label>
-          <input id="name" type="text" className="form-control" style={{ fontFamily: "monospace" }} value={this.props.ticketType.name}/>
+          <input id="name" type="text" className="form-control" style={{ fontFamily: "monospace" }} value={this.state.ticketType.name}/>
         </div>
 
         <div className="form-group">
           <label htmlFor="description">Description</label>
-          <input id="description" type="text" className="form-control" value={this.props.ticketType.description}/>
+          <input id="description" type="text" className="form-control" value={this.state.ticketType.description}/>
         </div>
 
         <fieldset>
-          <legend>Pricing schedule</legend>
+          <label>Pricing schedule</label>
 
-          {pricingScheduleFields}
+          <ScheduledValueEditor
+            scheduledValue={this.state.ticketType.pricing_schedule}
+            setScheduledValue={this.setTicketTypeAttribute.bind(this, 'pricing_schedule')} />
         </fieldset>
+
+        <div class="form-group">
+          <input type="submit" onClick={this.submitClicked} className="btn btn-primary" value="Save ticket type configuration"/>
+        </div>
       </form>
     );
   }
