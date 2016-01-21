@@ -157,6 +157,10 @@ GEM
       choice (>= 0.1.0)
       ffi (>= 1.0.0)
       rack (>= 1.0.0)
+    moment_timezone-rails (0.2.1)
+      momentjs-rails (~> 2.7)
+    momentjs-rails (2.10.6)
+      railties (>= 3.1)
     monetize (1.1.0)
       money (~> 6.5.0)
     money (6.5.1)
@@ -318,6 +322,8 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   mizuno
+  moment_timezone-rails
+  momentjs-rails
   money-rails
   mysql2
   newrelic_rpm

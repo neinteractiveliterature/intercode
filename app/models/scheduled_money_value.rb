@@ -2,6 +2,7 @@ class ScheduledMoneyValue < ScheduledValue
   class TimespanWithMoneyValue < TimespanWithValue
     def value=(new_value)
       @value = case new_value
+      when nil then nil
       when Money then new_value
       when Hash
         symbolized_value = new_value.symbolize_keys
@@ -12,6 +13,7 @@ class ScheduledMoneyValue < ScheduledValue
     end
 
     def serializable_hash(options = {})
+      return nil unless value
       super((options || {}).merge(except: :value)).merge(value: { fractional: value.fractional, currency_code: value.currency.iso_code })
     end
 

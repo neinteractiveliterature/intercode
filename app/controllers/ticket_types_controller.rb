@@ -27,7 +27,7 @@ class TicketTypesController < BaseControllers::VirtualHost
       :name,
       :description,
       pricing_schedule: {
-        timespans: [:start, :finish, :value]
+        timespans: [:start, :finish, value: [:fractional, :currency_code]]
       }
     )
   end
