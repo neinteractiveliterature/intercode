@@ -33,6 +33,8 @@ gem 'unf'
 gem 'jquery-rails'
 gem 'lodash-rails'
 gem 'react-rails'
+gem 'momentjs-rails'
+gem 'moment_timezone-rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-react-date-picker'

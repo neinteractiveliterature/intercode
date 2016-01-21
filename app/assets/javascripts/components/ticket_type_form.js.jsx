@@ -32,20 +32,23 @@ var TicketTypeForm = React.createClass({
       method = 'PATCH';
     }
 
+    var data = {
+      ticket_type: this.state.ticketType
+    };
+
     var promise = $.ajax(
       {
         url: this.resourceUrl(),
         type: method,
-        data: {
-          ticket_type: this.state.ticketType
-        },
+        data: JSON.stringify(data),
+        contentType: 'application/json',
         dataType: 'json'
       }
     );
 
     promise.done(function(data, textStatus, jqXHR) {
       window.location.href = this.props.baseUrl;
-    });
+    }.bind(this));
 
     promise.fail(function(jqXHR, status, errorThrown) {
       alert(jqXHR.responseText);
@@ -53,6 +56,8 @@ var TicketTypeForm = React.createClass({
   },
 
   render: function() {
+    var disableSubmit = !ScheduledValueEditor.isValid(this.state.ticketType.pricing_schedule);
+
     return (
       <form>
         <div className="form-group">
@@ -71,12 +76,13 @@ var TicketTypeForm = React.createClass({
           <label>Pricing schedule</label>
 
           <ScheduledValueEditor
+            timezone={this.props.timezone}
             scheduledValue={this.state.ticketType.pricing_schedule}
             setScheduledValue={this.setTicketTypeAttribute.bind(this, 'pricing_schedule')} />
         </fieldset>
 
         <div class="form-group">
-          <input type="submit" onClick={this.submitClicked} className="btn btn-primary" value="Save ticket type configuration"/>
+          <input type="submit" disabled={disableSubmit} onClick={this.submitClicked} className="btn btn-primary" value="Save ticket type configuration"/>
         </div>
       </form>
     );

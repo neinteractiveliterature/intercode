@@ -140,7 +140,7 @@ class ScheduledValue
         when Hash then self.class.timespan_with_value_class.new(timespan_value)
         end
 
-        self << timespan
+        self << timespan if timespan
       end
     end
   end
