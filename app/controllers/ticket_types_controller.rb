@@ -6,6 +6,9 @@ class TicketTypesController < BaseControllers::VirtualHost
   def index
   end
 
+  def new
+  end
+
   def update
     @ticket_type.update(ticket_type_params)
     respond_with @ticket_type
@@ -17,6 +20,10 @@ class TicketTypesController < BaseControllers::VirtualHost
   end
 
   def destroy
+    if @ticket_type.tickets.any?
+      return redirect_to ticket_types_path, alert: "#{@ticket_type.name} can't be deleted because tickets have been purchased using this ticket type."
+    end
+
     @ticket_type.destroy
     respond_with @ticket_type
   end

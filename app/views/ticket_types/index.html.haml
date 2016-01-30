@@ -8,6 +8,10 @@
           %strong= ticket_type.description
           %tt (#{ticket_type.name})
         .col-md-4.text-right
+          - if can? :delete, ticket_type
+            = link_to ticket_type, method: "DELETE", class: "btn btn-danger btn-sm", "data-confirm" => "Are you sure you want to delete the ticket type #{ticket_type.name}?" do
+              %i.fa.fa-trash-o
+              Delete
           - if can? :edit, ticket_type
             = link_to [:edit, ticket_type], class: "btn btn-default btn-sm" do
               %i.fa.fa-pencil-square-o
@@ -17,3 +21,6 @@
       %ul
         - ticket_type.pricing_schedule.timespans.each do |timespan|
           %li= timespan.to_s(:short)
+
+%p
+  = link_to "New ticket type", new_ticket_type_path, class: "btn btn-primary"
