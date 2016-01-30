@@ -17,6 +17,10 @@ var TicketTypeForm = React.createClass({
     }
   },
 
+  attributeFieldChanged: function(attribute, event) {
+    this.setTicketTypeAttribute(attribute, event.target.value);
+  },
+
   setTicketTypeAttribute: function(attribute, value) {
     var newAttributes = _.clone(this.state.ticketType);
     newAttributes[attribute] = value;
@@ -64,12 +68,21 @@ var TicketTypeForm = React.createClass({
           <label htmlFor="name">
             Name (no spaces allowed &mdash; only letters, numbers, and underscores)
           </label>
-          <input id="name" type="text" className="form-control" style={{ fontFamily: "monospace" }} value={this.state.ticketType.name}/>
+          <input id="name"
+            type="text"
+            className="form-control"
+            style={{ fontFamily: "monospace" }}
+            value={this.state.ticketType.name}
+            onChange={this.attributeFieldChanged.bind(this, 'name')} />
         </div>
 
         <div className="form-group">
           <label htmlFor="description">Description</label>
-          <input id="description" type="text" className="form-control" value={this.state.ticketType.description}/>
+          <input id="description"
+            type="text"
+            className="form-control"
+            value={this.state.ticketType.description}
+            onChange={this.attributeFieldChanged.bind(this, 'description')} />
         </div>
 
         <fieldset>
