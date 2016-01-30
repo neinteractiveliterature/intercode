@@ -145,7 +145,7 @@ var TimespanRow = React.createClass({
 var ScheduledValueEditor = React.createClass({
   statics: {
     isValid: function(scheduledValue) {
-      if (scheduledValue.timespans.length < 1) {
+      if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
         return false;
       }
 
@@ -162,11 +162,13 @@ var ScheduledValueEditor = React.createClass({
   addRowClicked: function(e) {
     e.preventDefault();
 
-    var newTimespans = _.clone(this.props.scheduledValue.timespans);
-    var lastTimespan = _.max(this.props.scheduledValue.timespans, function(timespan) {
+    var timespans = this.props.scheduledValue.timespans || [];
+
+    var newTimespans = _.clone(timespans);
+    var lastTimespan = _.max(timespans, function(timespan) {
       return moment(timespan.finish).toDate();
     });
-    var everyTimespanFinishes = this.props.scheduledValue.timespans.every(function(timespan) {
+    var everyTimespanFinishes = timespans.every(function(timespan) {
       return timespan.finish;
     });
 
@@ -203,9 +205,9 @@ var ScheduledValueEditor = React.createClass({
   },
 
   render: function() {
-    var timespans = this.props.scheduledValue.timespans;
+    var timespans = this.props.scheduledValue.timespans || [];
 
-    var timespanRows = (timespans || []).map(function (timespan, i) {
+    var timespanRows = timespans.map(function (timespan, i) {
       var otherTimespans = timespans.slice(0, i).concat(timespans.slice(i+1));
 
       return <TimespanRow
