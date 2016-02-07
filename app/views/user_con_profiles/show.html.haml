@@ -1,28 +1,28 @@
 .row
   .col-md-9
-    %h1= @user_con_profile.user.name
+    %h1= @user_con_profile.name
     %dl.dl-horizontal
       %dt Email
-      %dd= @user_con_profile.user.email
+      %dd= @user_con_profile.email
       - if convention.starts_at
         %dt
           Age at #{convention.name}
         %dd= @user_con_profile.age_as_of_convention
       - else
         %dt Age
-        %dd= @user_con_profile.user.age
+        %dd= @user_con_profile.age
       %dt Gender
-      %dd= @user_con_profile.user.gender
+      %dd= @user_con_profile.gender
       %dt Address
-      %dd= simple_format @user_con_profile.user.address, {}, wrapper_tag: 'span'
+      %dd= simple_format @user_con_profile.address, {}, wrapper_tag: 'span'
       %dt Daytime phone
-      %dd= @user_con_profile.user.day_phone
+      %dd= @user_con_profile.day_phone
       %dt Evening phone
-      %dd= @user_con_profile.user.evening_phone
+      %dd= @user_con_profile.evening_phone
       %dt Best time to call
-      %dd= @user_con_profile.user.best_call_time
+      %dd= @user_con_profile.best_call_time
       %dt Preferred contact
-      %dd= @user_con_profile.user.preferred_contact
+      %dd= @user_con_profile.preferred_contact
       / TODO: Figure out how to handle "how heard about con" and display it here
       %dt Privileges
       %dd= @user_con_profile.privileges.sort.map(&:humanize).join(", ")

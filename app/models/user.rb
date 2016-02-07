@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Concerns::Names
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -11,16 +13,6 @@ class User < ActiveRecord::Base
   has_many :team_members
 
   liquid_methods :email, :first_name, :last_name, :nickname
-
-  # Return the user's name.
-  def name
-    [first_name, last_name].compact.join(" ")
-  end
-
-  # Return the user's name in last, first format.
-  def name_inverted
-    [last_name, first_name].compact.join(", ")
-  end
 
   def privileges
     if site_admin?

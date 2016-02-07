@@ -25,8 +25,10 @@ describe UserConProfilesController do
   end
 
   test "should create user_con_profile" do
+    user = FactoryGirl.create(:user)
+
     assert_difference('UserConProfile.count') do
-      post :create, user_con_profile: { email: FactoryGirl.create(:user).email }
+      post :create, user_con_profile: { email: user.email }
     end
 
     assert_redirected_to user_con_profile_path(assigns(:user_con_profile))

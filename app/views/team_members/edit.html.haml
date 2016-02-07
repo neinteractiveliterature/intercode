@@ -10,15 +10,15 @@
     %dd= intercode_mail_to @team_member.email
 
     %dt Daytime Phone
-    %dd= @team_member.user.day_phone
+    %dd= @team_member.user_con_profile.day_phone
 
     %dt Evening Phone
-    %dd= @team_member.user.evening_phone
+    %dd= @team_member.user_con_profile.evening_phone
 
     %dt Best Time to Call
-    %dd= @team_member.user.best_call_time
+    %dd= @team_member.user_con_profile.best_call_time
 
     %dt Preferred Contact
-    %dd= @team_member.user.preferred_contact
+    %dd= @team_member.user_con_profile.preferred_contact
 
   = render 'form'

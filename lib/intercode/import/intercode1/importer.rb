@@ -89,6 +89,10 @@ class Intercode::Import::Intercode1::Importer
     @users_id_map ||= users_table.id_map
   end
 
+  def user_con_profiles_id_map
+    @user_con_profiles_id_map ||= users_table.user_con_profile_id_map
+  end
+
   def runs_table
     return unless events_id_map && users_id_map && rooms_id_map
     @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
@@ -100,7 +104,7 @@ class Intercode::Import::Intercode1::Importer
 
   def gms_table
     return unless events_id_map && users_id_map
-    @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(connection, con, events_id_map, users_id_map)
+    @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(connection, con, events_id_map, users_id_map, user_con_profiles_id_map)
   end
 
   def rooms_table

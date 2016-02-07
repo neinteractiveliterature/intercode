@@ -79,7 +79,7 @@ end
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-remote'
-  gem 'factory_girl', '~> 2.6'
+  gem 'factory_girl'
   gem 'factory_girl_rails'
 end
 

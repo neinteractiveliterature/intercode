@@ -42,7 +42,7 @@ class TeamMembersController < BaseControllers::VirtualHost
   # Permit access to fields that can be updated
   def team_member_params
     params.require(:team_member).permit(:event_id,
-                                        :user_id,
+                                        :user_con_profile_id,
                                         :display,
                                         :show_email,
                                         :receive_con_email,
