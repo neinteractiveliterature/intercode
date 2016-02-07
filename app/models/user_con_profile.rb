@@ -6,7 +6,10 @@ class UserConProfile < ActiveRecord::Base
   belongs_to :user
   has_one :ticket, dependent: :destroy
 
-  delegate :email, to: :user, allow_nil: true, prefix: true
+  delegate :email, to: :user, allow_nil: true
+  delegate :first_name, :last_name, to: :user
+
+  validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_blank: true }
 
   def paid?
     ticket
@@ -20,11 +23,42 @@ class UserConProfile < ActiveRecord::Base
     user.age_as_of convention.starts_at
   end
 
+  # More or less copied from:
+  # http://stackoverflow.com/questions/819263/get-persons-age-in-ruby
+  def age_as_of(date)
+    return unless birth_date
+
+    on_or_after_birthday = (
+      date.month > birth_date.month || (
+        date.month == birth_date.month &&
+        date.day >= birth_date.day
+      )
+    )
+
+    date.year - birth_date.year - (on_or_after_birthday ? 0 : 1)
+  end
+
+  def age
+    age_as_of Date.today
+  end
+
+  def address
+    [address1, address2, city_state_zip, country].reject(&:blank?).join("\n")
+  end
+
+  def city_state_zip
+    [city_state, zipcode].reject(&:blank?).join(" ")
+  end
+
+  def city_state
+    [city, state].reject(&:blank?).join(", ")
+  end
+
   def privileges
     user.privileges + PRIV_NAMES.select { |priv| self.send(priv) }
   end
 
-  def user_email=(email)
+  def email=(email)
     self.user = User.find_by(email: email)
   end
 end
