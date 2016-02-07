@@ -1,14 +1,17 @@
 class UserConProfile < ActiveRecord::Base
+  include Concerns::Names
+
   MAIL_PRIV_NAMES = Set.new(%w(gms attendees vendors unpaid alumni).map { |group| "mail_to_#{group}" })
   PRIV_NAMES = Set.new(%w(bid_committee staff bid_chair gm_liaison registrar outreach con_com scheduling) + MAIL_PRIV_NAMES.to_a)
 
   belongs_to :convention
   belongs_to :user
   has_one :ticket, dependent: :destroy
+  has_many :team_members, dependent: :destroy
 
   delegate :email, to: :user, allow_nil: true
-  delegate :first_name, :last_name, to: :user
 
+  validates :first_name, :last_name, presence: true
   validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_blank: true }
 
   def paid?
@@ -60,5 +63,7 @@ class UserConProfile < ActiveRecord::Base
 
   def email=(email)
     self.user = User.find_by(email: email)
+    self.first_name ||= user.first_name
+    self.last_name ||= user.last_name
   end
 end

@@ -24,8 +24,10 @@ describe TeamMembersController do
   end
 
   test "should create team_member" do
+    user_con_profile = FactoryGirl.create(:user_con_profile, convention: convention)
+
     assert_difference('TeamMember.count') do
-      post :create, event_id: event, team_member: { user_id: FactoryGirl.create(:user).id }
+      post :create, event_id: event, team_member: { user_con_profile_id: user_con_profile.id }
     end
 
     assert_redirected_to [event, :team_members]

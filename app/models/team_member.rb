@@ -1,13 +1,16 @@
 class TeamMember < ActiveRecord::Base
   # All team members must be assigned to an event that exists
   belongs_to :event
-  validates :event, presence: true
+  belongs_to :user_con_profile
+  has_one :user, through: :user_con_profile
 
   # A team member is a user that exists, and is not already a member
   # of the team for this event
-  belongs_to :user
-  validates :user, presence: true
-  validates_uniqueness_of :user_id, scope: :event_id
+  validates :user_con_profile, presence: true
+  validates_uniqueness_of :user_con_profile_id, scope: :event_id
+
+  validates :event, presence: true
+  validate :user_con_profile_and_event_must_belong_to_same_convention
 
   belongs_to :updated_by, class_name: "User"
 
@@ -18,6 +21,15 @@ class TeamMember < ActiveRecord::Base
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string
   def email
-    user.email if show_email?
+    user_con_profile.email if show_email?
+  end
+
+  private
+  def user_con_profile_and_event_must_belong_to_same_convention
+    return unless event && user_con_profile
+
+    unless event.convention == user_con_profile.convention
+      errors.add(:base, "User con profile and event must belong to the same convention!  User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and event #{event.name} is from #{event.convention.name}.")
+    end
   end
 end

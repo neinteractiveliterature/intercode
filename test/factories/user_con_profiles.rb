@@ -4,5 +4,8 @@ FactoryGirl.define do
   factory :user_con_profile do
     user
     convention
+
+    first_name { |profile| profile.user.first_name }
+    last_name { |profile| profile.user.last_name }
   end
 end

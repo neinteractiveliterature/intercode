@@ -65,7 +65,9 @@ class UserConProfilesController < BaseControllers::VirtualHost
   # Only allow a trusted parameter "white list" through.
   def user_con_profile_params
     params.require(:user_con_profile).permit(
-      :user_email,
+      :email,
+      :first_name,
+      :last_name,
       *UserConProfile::PRIV_NAMES
     )
   end

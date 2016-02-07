@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160207184126) do
+ActiveRecord::Schema.define(version: 20160207190435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,7 +133,6 @@ ActiveRecord::Schema.define(version: 20160207184126) do
 
   create_table "team_members", force: :cascade do |t|
     t.integer  "event_id"
-    t.integer  "user_id"
     t.datetime "updated_at"
     t.integer  "updated_by_id"
     t.boolean  "display"
@@ -141,7 +140,10 @@ ActiveRecord::Schema.define(version: 20160207184126) do
     t.boolean  "receive_con_email"
     t.boolean  "receive_signup_email"
     t.datetime "created_at"
+    t.integer  "user_con_profile_id",  null: false
   end
+
+  add_index "team_members", ["user_con_profile_id"], name: "index_team_members_on_user_con_profile_id", using: :btree
 
   create_table "ticket_types", force: :cascade do |t|
     t.integer  "convention_id"
@@ -243,7 +245,7 @@ ActiveRecord::Schema.define(version: 20160207184126) do
   add_foreign_key "signups", "users"
   add_foreign_key "signups", "users", column: "updated_by_id"
   add_foreign_key "team_members", "events"
-  add_foreign_key "team_members", "users"
+  add_foreign_key "team_members", "user_con_profiles"
   add_foreign_key "ticket_types", "conventions"
   add_foreign_key "tickets", "events", column: "provided_by_event_id"
   add_foreign_key "tickets", "ticket_types"

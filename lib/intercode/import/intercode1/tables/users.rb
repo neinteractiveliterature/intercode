@@ -39,8 +39,12 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     "EvePhone" => :evening_phone
   }
 
+  attr_reader :user_con_profile_id_map
+
   def initialize(connection, con, event_id_map, registration_status_map)
     super connection
+
+    @user_con_profile_id_map = {}
     @con = con
     @event_id_map = event_id_map
     @registration_status_map = registration_status_map
@@ -57,6 +61,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
 
       user_con_profile = build_user_con_profile(row, @con, user)
       user_con_profile.save!
+      user_con_profile_id_map[row[:UserId]] = user_con_profile
 
       ticket = build_ticket(row, user_con_profile)
       ticket.save! if ticket

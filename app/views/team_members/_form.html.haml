@@ -1,7 +1,7 @@
 = bootstrap_form_for([@event, @team_member]) do |f|
   - if f.object.new_record?
-    = f.collection_select :user_id, User.order(:last_name, :first_name), :id, :name_inverted, include_blank: true
-    = f.errors_on :user
+    = f.collection_select :user_con_profile_id, convention.user_con_profiles.order(:last_name, :first_name), :id, :name_inverted, include_blank: true
+    = f.errors_on :user_con_profile
 
   = f.check_box :display, label: "Display as #{@event.team_member_name}"
   = f.check_box :show_email, label: "Show email address"
