@@ -33,6 +33,8 @@ Intercode::Application.routes.draw do
 
       resource :admin_ticket, only: [:new, :create, :edit, :update, :destroy]
     end
+
+    resource :my_profile
   end
 
   # the following routes apply only when we're not in a virtual host

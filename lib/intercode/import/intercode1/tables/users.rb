@@ -1,5 +1,5 @@
 class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercode1::Table
-  USER_FIELD_MAP = {
+  CONTACT_FIELD_MAP = {
     first_name: :FirstName,
     last_name: :LastName,
     nickname: :Nickname,
@@ -11,7 +11,10 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     country: :Country,
     day_phone: :DayPhone,
     evening_phone: :EvePhone,
-    best_call_time: :BestTime
+    best_call_time: :BestTime,
+    gender: :Gender,
+    preferred_contact: :PreferredContact,
+    birth_date: :BirthYear
   }
 
   PRIV_MAP = {
@@ -63,13 +66,6 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   private
   def build_user(row)
     User.find_or_initialize_by(email: row[:EMail].downcase).tap do |user|
-      USER_FIELD_MAP.each do |new_field, old_field|
-        next if user.send(new_field).present?
-        user.send("#{new_field}=", row[old_field])
-      end
-
-      user.gender ||= row[:Gender].try(:downcase)
-      user.preferred_contact ||= PREFERRED_CONTACT_MAP[row[:PreferredContact]]
       user.blank_password! unless user.encrypted_password.present?
     end
   end
@@ -77,9 +73,22 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   def build_user_con_profile(row, con, user)
     profile_attrs = {
       convention: con,
-    }.merge(priv_attributes(row))
+    }.merge(priv_attributes(row)).merge(contact_attributes(row))
 
     user.user_con_profiles.new(profile_attrs)
+  end
+
+  def contact_attributes(row)
+    CONTACT_FIELD_MAP.each_with_object({}) do |(new_field, old_field), attributes|
+      old_value = row[old_field]
+
+      attributes[new_field] = case old_field
+      when :Gender then old_value.downcase
+      when :PreferredContact then PREFERRED_CONTACT_MAP[old_value]
+      when :BirthYear then Date.new(old_value, 1, 1) if old_value && old_value > 0
+      else old_value
+      end
+    end
   end
 
   def build_ticket(row, user_con_profile)
