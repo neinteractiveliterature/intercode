@@ -26,12 +26,7 @@
             - if convention
               - if user_signed_in?
                 %li.dropdown{:role => "presentation"}
-                  %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
-                    Propose events
-                    %span.caret
-                  %ul.dropdown-menu
-                    %li= link_to "Propose a LARP", new_event_path(type: 'larp')
-                    %li= link_to "Propose a Panel", new_event_path(type: 'panel')
+                  = link_to "My profile", my_profile_path
               %li.dropdown{role: "presentation"}
                 %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
                   Events
@@ -39,6 +34,7 @@
                 %ul.dropdown-menu
                   %li= link_to "Con Schedule", schedule_events_path
                   %li= link_to "List of Events", events_path
+                  %li= link_to "Propose an Event", new_event_path
               - if can? :manage, convention.user_con_profiles.new
                 %li.dropdown{:role => "presentation"}
                   %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
