@@ -23,7 +23,7 @@ class UserConProfile < ActiveRecord::Base
   end
 
   def age_as_of_convention
-    user.age_as_of convention.starts_at
+    age_as_of convention.starts_at
   end
 
   # More or less copied from:
@@ -65,5 +65,14 @@ class UserConProfile < ActiveRecord::Base
     self.user = User.find_by(email: email)
     self.first_name ||= user.first_name
     self.last_name ||= user.last_name
+  end
+
+  def preferred_contact_humanized
+    case preferred_contact
+    when 'day_phone' then 'Daytime phone'
+    when 'evening_phone' then 'Evening phone'
+    when 'email' then 'Email'
+    else preferred_contact.try(:humanize)
+    end
   end
 end

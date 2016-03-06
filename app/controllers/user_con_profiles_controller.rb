@@ -1,5 +1,6 @@
 class UserConProfilesController < BaseControllers::VirtualHost
   load_and_authorize_resource through: :convention
+  before_action :authorize_admin_profiles
 
   # GET /user_con_profiles
   def index
@@ -70,5 +71,12 @@ class UserConProfilesController < BaseControllers::VirtualHost
       :last_name,
       *UserConProfile::PRIV_NAMES
     )
+  end
+
+  # Only allow people who can update arbitrary user con profiles for this convention to access this controller.
+  # In other words, users shouldn't be able to access even their own profile here (because they could use this
+  # controller to escalate their privileges).
+  def authorize_admin_profiles
+    authorize! :update, convention.user_con_profiles.new
   end
 end

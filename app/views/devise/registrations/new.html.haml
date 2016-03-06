@@ -1,4 +1,18 @@
-%h2 Sign up
+%h2 Create your account
+
+- if session[:register_via_convention_id]
+  - convention = Convention.find(session[:register_via_convention_id])
+
+  .alert.alert-success
+    %h3{style: "margin-top: 0"} Welcome!
+
+    To begin the registration process for #{convention.name}, first create your account using this form.
+    If you already have an account on this site,
+    = succeed "." do
+      = link_to "click here to sign in", new_user_session_path
+
+    After you've created your account, you'll be redirected back to the convention to set up your profile.
+
 = bootstrap_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
   = devise_error_messages!
   = render :partial => "form", :locals => { :resource => resource, :f => f }

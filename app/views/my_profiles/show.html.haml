@@ -1,8 +1,4 @@
-%h1 My Profile
+%h1 My #{convention.name} Profile
 
-%p
-  Your contact information will be made available to #{convention.name} staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information,
-  %strong please do not enter it.
-  But if you do not provide it, organizers may not be able to send you event-related materials.
-
-= render 'form'
+%dl.dl-horizontal
+  = render 'user_con_profiles/common_profile_data', user_con_profile: @user_con_profile

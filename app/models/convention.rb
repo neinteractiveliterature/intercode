@@ -55,4 +55,8 @@ class Convention < ActiveRecord::Base
     return nil unless timezone_name.present?
     ActiveSupport::TimeZone[timezone_name]
   end
+
+  def bucket_metadata_from_events
+    events.pluck(:registration_policy).flat_map { |p| p.buckets.flat_map(&:metadata) }.uniq
+  end
 end

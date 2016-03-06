@@ -33,7 +33,9 @@ module BaseControllers
     end
 
     def user_con_profile
-      @user_con_profile ||= convention.user_con_profiles.find_by!(user_id: current_user.id)
+      if user_signed_in?
+        @user_con_profile ||= convention.user_con_profiles.find_by(user_id: current_user.id)
+      end
     end
   end
 
