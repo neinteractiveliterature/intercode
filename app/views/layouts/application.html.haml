@@ -24,9 +24,6 @@
         #navbar.collapse.navbar-collapse
           %ul.nav.navbar-nav
             - if convention
-              - if user_signed_in?
-                %li.dropdown{:role => "presentation"}
-                  = link_to "My profile", my_profile_path
               %li.dropdown{role: "presentation"}
                 %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
                   Events
@@ -45,12 +42,17 @@
                     %li= link_to "Pages", pages_path
                     %li= link_to "Ticket Types", ticket_types_path
             - if user_signed_in?
+              - if convention
+                %li.dropdown{:role => "presentation"}
+                  = link_to "My Profile", my_profile_path
               %li.logout
                 = link_to "Log Out", destroy_user_session_path, :method => "delete"
             - else
               %li.login
-                = link_to "Login", new_user_session_path
-        / /.nav-collapse
+                = link_to "Log In", new_user_session_path
+              %li
+                .navbar-btn
+                  = link_to "Sign Up", (convention ? my_profile_path : new_user_registration_path), class: "btn btn-default"
     .container
       - if notice
         .alert.alert-success= notice

@@ -50,6 +50,14 @@ class RegistrationPolicy::Bucket
     }
   end
 
+  def metadata
+    {
+      key: key,
+      name: name,
+      description: description
+    }
+  end
+
   def ==(bucket)
     attributes == bucket.attributes
   end

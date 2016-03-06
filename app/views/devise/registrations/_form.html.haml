@@ -1,44 +1,15 @@
 %fieldset
-= f.text_field :first_name, :placeholder => :first_name, :required => true
-= f.text_field :last_name, :placeholder => :last_name, :required => true
-= f.email_field :email, :placeholder => :email, :required => true
+  = f.text_field :first_name, :placeholder => :first_name, :required => true
+  = f.text_field :last_name, :placeholder => :last_name, :required => true
+  = f.email_field :email, :placeholder => :email, :required => true
 %fieldset
   = f.password_field :password, :autocomplete => "off"
   - unless resource.new_record?
     %i (leave blank if you don't want to change it)
   = f.password_field :password_confirmation
-%fieldset
-  = f.text_field :nickname, :placeholder => :nickname
-%fieldset
-  =f.form_group :gender, label: { text: 'Gender'} do
-    = f.radio_button :gender, "male", label: "Male"
-    = f.radio_button :gender, "female", label: "Female"
-%fieldset
-  = f.date_select :birth_date, :order => [:month, :day, :year], :include_blank => true, :start_year => Time.now.year - 100, :end_year => Time.now.year                      
-  %div 
-    Note: Specifying your birth date is optional.  But if you choose not to, you may not be able to sign up for age-restricted games.
-%fieldset
-  = f.text_field :address1, :placeholder => 'Address Line 1'
-  = f.text_field :address2, :placeholder => 'Address Line 2'
-  %br
-  = f.text_field :city, :placeholder => 'City'
-  = f.text_field :state, :placeholder => "State/Province"
-  = f.text_field :zipcode, :placeholder => "Zip"
-  %br
-  = f.text_field :country, :placeholder => :country
-%fieldset
-  = f.telephone_field :day_phone, :placeholder => 'Daytime Phone'
-  %br
-  = f.telephone_field :evening_phone, :placeholder => 'Evening Phone'
-  %br
-  = f.text_field :best_call_time, :placeholder => "Best time to call"
-  %br
-  = f.select :preferred_contact,                                                           
-    [["Email", :email], ["Daytime phone", :day_phone], ["Evening phone", :evening_phone]], 
-    :include_blank => true                                                                 
-  - unless resource.new_record?
-    %li
-      = f.label :current_password
-      = f.password_field :current_password
-      %i (we need your current password to verify your identity)
-= f.submit resource.new_record? ? "Register" : "Update"
+- unless resource.new_record?
+  %fieldset
+    = f.label :current_password
+    = f.password_field :current_password
+    %i (we need your current password to verify your identity)
+= f.submit resource.new_record? ? "Create account" : "Update account"
