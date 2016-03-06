@@ -1,7 +1,7 @@
 # Be sure to restart your server when you modify this file.
 
 cookie_options = { key: '_intercode_session' }
-default_host = Rails.application.config.action_mailer.default_url_options.try(:host)
+default_host = Rails.application.config.action_mailer.default_url_options.try(:[], :host)
 
 if default_host
   just_hostname = URI.parse("http://#{default_host}").host  # get rid of port number if it's there
