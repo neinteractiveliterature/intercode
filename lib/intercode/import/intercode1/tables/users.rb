@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercode1::Table
   CONTACT_FIELD_MAP = {
     first_name: :FirstName,
@@ -72,6 +74,15 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   def build_user(row)
     User.find_or_initialize_by(email: row[:EMail].downcase).tap do |user|
       user.blank_password! unless user.encrypted_password.present?
+
+      contact_attrs = contact_attributes(row).slice(:first_name, :last_name)
+      contact_attrs.each do |key, value|
+        user.send("#{key}=", value) unless user.send(key).present?
+      end
+
+      if row[:HashedPassword].present? && !user.legacy_password_md5.present?
+        user.legacy_password_md5 = BCrypt::Password.create(row[:HashedPassword])
+      end
     end
   end
 
