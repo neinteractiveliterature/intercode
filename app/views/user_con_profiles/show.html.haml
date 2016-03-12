@@ -1,46 +1,46 @@
 .row
   .col-md-9
-    %h1= @user_con_profile.name
+    %h1= @subject_profile.name
     %dl.dl-horizontal
-      = render 'user_con_profiles/common_profile_data', user_con_profile: @user_con_profile
+      = render 'user_con_profiles/common_profile_data', user_con_profile: @subject_profile
       / TODO: Figure out how to handle "how heard about con" and display it here
       %dt Privileges
-      %dd= @user_con_profile.privileges.sort.map(&:humanize).join(", ")
+      %dd= @subject_profile.privileges.sort.map(&:humanize).join(", ")
 
     %section
       %h2 Ticket
-      - if @user_con_profile.ticket
+      - if @subject_profile.ticket
         %dl.dl-horizontal
-          = render 'tickets/ticket_data', ticket: @user_con_profile.ticket
+          = render 'tickets/ticket_data', ticket: @subject_profile.ticket
           %dt Payment note
-          %dd= @user_con_profile.ticket.payment_note
+          %dd= @subject_profile.ticket.payment_note
 
-        - if can? :edit, @user_con_profile.ticket
+        - if can? :edit, @subject_profile.ticket
           %ul.list-inline
             %li
-              = link_to "Edit ticket", [:edit, @user_con_profile, :admin_ticket], class: "btn btn-default"
-            - if can? :delete, @user_con_profile.ticket
+              = link_to "Edit ticket", [:edit, @subject_profile, :admin_ticket], class: "btn btn-default"
+            - if can? :delete, @subject_profile.ticket
               %li
-                = link_to "Delete ticket", [@user_con_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@user_con_profile.user.name}'s ticket?"
+                = link_to "Delete ticket", [@subject_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@subject_profile.user.name}'s ticket?"
       - else
         %p No ticket
-        - if can? :create, @user_con_profile.build_ticket
+        - if can? :create, @subject_profile.build_ticket
           %ul.list-inline
             %li
-              = link_to "Create ticket", [:new, @user_con_profile, :admin_ticket], class: "btn btn-default"
+              = link_to "Create ticket", [:new, @subject_profile, :admin_ticket], class: "btn btn-default"
 
     / TODO: add event signups and team membership stuff
 
   .col-md-3
-    - if can? :edit, @user_con_profile
+    - if can? :edit, @subject_profile
       .panel.panel-default
         .panel-heading User administration
         %ul.list-group
           %li.list-group-item
-            = link_to 'Edit profile/privileges', edit_user_con_profile_path(@user_con_profile)
-          - if can? :become, @user_con_profile
+            = link_to 'Edit profile/privileges', edit_user_con_profile_path(@subject_profile)
+          - if can? :become, @subject_profile
             %li.list-group-item
-              = link_to 'Become user', become_user_con_profile_path(@user_con_profile), method: "post", "data-confirm" => "Are you sure you want to become #{@user_con_profile.user.name} for the duration of this session?"
-          - if can? :delete, @user_con_profile
+              = link_to 'Become user', become_user_con_profile_path(@subject_profile), method: "post", "data-confirm" => "Are you sure you want to become #{@subject_profile.user.name} for the duration of this session?"
+          - if can? :delete, @subject_profile
             %li.list-group-item
-              = link_to 'Delete', user_con_profile_path(@user_con_profile), method: "delete", "data-confirm" => "Are you sure you want to remove #{@user_con_profile.user.name} from #{@convention.name}?"
+              = link_to 'Delete', user_con_profile_path(@subject_profile), method: "delete", "data-confirm" => "Are you sure you want to remove #{@subject_profile.user.name} from #{@convention.name}?"

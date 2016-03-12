@@ -16,7 +16,7 @@ describe UserConProfilesController do
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:user_con_profiles)
+    assert_not_nil assigns(:user_con_profiles_grid)
   end
 
   test "should get new" do
@@ -28,10 +28,10 @@ describe UserConProfilesController do
     user = FactoryGirl.create(:user)
 
     assert_difference('UserConProfile.count') do
-      post :create, user_con_profile: { email: user.email }
+      post :create, subject_profile: { email: user.email }
     end
 
-    assert_redirected_to user_con_profile_path(assigns(:user_con_profile))
+    assert_redirected_to user_con_profile_path(assigns(:subject_profile))
   end
 
   test "should show user_con_profile" do
@@ -47,10 +47,10 @@ describe UserConProfilesController do
   test "should update user_con_profile" do
     user_con_profile.staff.must_equal false
 
-    patch :update, id: user_con_profile, user_con_profile: { staff: true }
+    patch :update, id: user_con_profile, subject_profile: { staff: true }
     user_con_profile.reload.staff.must_equal true
 
-    assert_redirected_to user_con_profile_path(assigns(:user_con_profile))
+    assert_redirected_to user_con_profile_path(assigns(:subject_profile))
   end
 
   test "should destroy user_con_profile" do

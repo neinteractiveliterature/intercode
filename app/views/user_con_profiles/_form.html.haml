@@ -1,11 +1,11 @@
-= bootstrap_form_for @user_con_profile do |f|
-  - if @user_con_profile.errors.any?
+= bootstrap_form_for @subject_profile, as: :subject_profile do |f|
+  - if @subject_profile.errors.any?
     #error_explanation
       %h2
-        = pluralize(@user_con_profile.errors.count, "error")
+        = pluralize(@subject_profile.errors.count, "error")
         prohibited this record from being saved:
       %ul
-        - @user_con_profile.errors.full_messages.each do |message|
+        - @subject_profile.errors.full_messages.each do |message|
           %li= message
   = f.email_field :email, class: "form-control", label: "Email address"
   = f.form_group :privileges, label: { text: "Privileges" } do
