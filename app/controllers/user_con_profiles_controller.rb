@@ -1,11 +1,16 @@
 class UserConProfilesController < BaseControllers::VirtualHost
-  load_and_authorize_resource through: :convention
+  # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be @user_con_profile,
+  # which is unsafe for us to use because BaseControllers::VirtualHost uses it to mean the current user, and we use
+  # that for authorization checking.  So instead, we'll call the user con profile we're working on the "subject
+  # profile" (as in the subject of our actions).
+  load_and_authorize_resource :subject_profile, id_param: :id, parent: false, class: "UserConProfile",
+    through: :convention, through_association: :user_con_profiles
   before_action :authorize_admin_profiles
 
   # GET /user_con_profiles
   def index
     @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid] || {order: 'name'}) do |scope|
-      scope = scope.where(convention_id: convention.id)
+      scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
       respond_to do |format|
         format.html { scope.page(params[:page]) }
         format.csv { scope }
@@ -34,8 +39,8 @@ class UserConProfilesController < BaseControllers::VirtualHost
 
   # POST /user_con_profiles
   def create
-    if @user_con_profile.save
-      redirect_to @user_con_profile, notice: 'User con profile was successfully created.'
+    if @subject_profile.save
+      redirect_to @subject_profile, notice: 'Profile was successfully created.'
     else
       render :new
     end
@@ -43,8 +48,8 @@ class UserConProfilesController < BaseControllers::VirtualHost
 
   # PATCH/PUT /user_con_profiles/1
   def update
-    if @user_con_profile.update(user_con_profile_params)
-      redirect_to @user_con_profile, notice: 'User con profile was successfully updated.'
+    if @subject_profile.update(subject_profile_params)
+      redirect_to @subject_profile, notice: 'Profile was successfully updated.'
     else
       render :edit
     end
@@ -52,20 +57,20 @@ class UserConProfilesController < BaseControllers::VirtualHost
 
   # DELETE /user_con_profiles/1
   def destroy
-    @user_con_profile.destroy
-    redirect_to user_con_profiles_url, notice: 'User con profile was successfully destroyed.'
+    @subject_profile.destroy
+    redirect_to user_con_profiles_url, notice: 'Profile was successfully destroyed.'
   end
 
   def become
-    sign_in @user_con_profile.user
-    redirect_to root_url, notice: "You are now signed in as #{@user_con_profile.user.name}."
+    sign_in @subject_profile.user
+    redirect_to root_url, notice: "You are now signed in as #{@subject_profile.user.name}."
   end
 
   private
 
   # Only allow a trusted parameter "white list" through.
-  def user_con_profile_params
-    params.require(:user_con_profile).permit(
+  def subject_profile_params
+    params.require(:subject_profile).permit(
       :email,
       :first_name,
       :last_name,
