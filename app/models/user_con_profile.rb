@@ -11,7 +11,7 @@ class UserConProfile < ActiveRecord::Base
 
   delegate :email, to: :user, allow_nil: true
 
-  validates :first_name, :last_name, presence: true
+  validates :name, presence: true
   validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_blank: true }
 
   def paid?
