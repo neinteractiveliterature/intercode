@@ -30,10 +30,14 @@ class Ability
         can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
         can :manage, TicketType, convention_id: staff_con_ids
         can :manage, Event, convention_id: staff_con_ids
+        can :manage, Run, event: { convention_id: staff_con_ids }
+        can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
       end
 
       if team_member_event_ids.any?
         can :manage, Event, id: team_member_event_ids
+        can :manage, Run, event_id: team_member_event_ids
+        can :manage, Signup, run: { event_id: team_member_event_ids }
         can :manage, TeamMember, event_id: team_member_event_ids
       end
     end

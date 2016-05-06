@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310141909) do
+ActiveRecord::Schema.define(version: 20160506223047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,14 +122,14 @@ ActiveRecord::Schema.define(version: 20160310141909) do
     t.integer  "run_id"
     t.string   "bucket_key"
     t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "user_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "user_con_profile_id", null: false
   end
 
   add_index "signups", ["run_id"], name: "index_signups_on_run_id", using: :btree
   add_index "signups", ["updated_by_id"], name: "index_signups_on_updated_by_id", using: :btree
-  add_index "signups", ["user_id"], name: "index_signups_on_user_id", using: :btree
+  add_index "signups", ["user_con_profile_id"], name: "index_signups_on_user_con_profile_id", using: :btree
 
   create_table "team_members", force: :cascade do |t|
     t.integer  "event_id"
@@ -243,7 +243,7 @@ ActiveRecord::Schema.define(version: 20160310141909) do
   add_foreign_key "runs", "events"
   add_foreign_key "runs", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
-  add_foreign_key "signups", "users"
+  add_foreign_key "signups", "user_con_profiles"
   add_foreign_key "signups", "users", column: "updated_by_id"
   add_foreign_key "team_members", "events"
   add_foreign_key "team_members", "user_con_profiles"

@@ -8,6 +8,7 @@ class UserConProfile < ActiveRecord::Base
   belongs_to :user
   has_one :ticket, dependent: :destroy
   has_many :team_members, dependent: :destroy
+  has_many :signups, dependent: :destroy
 
   delegate :email, to: :user, allow_nil: true
 
