@@ -10,7 +10,6 @@ class User < ActiveRecord::Base
   validates :name, presence: true
 
   has_many :user_con_profiles
-  has_many :team_members
 
   liquid_methods :email, :first_name, :last_name, :nickname
 

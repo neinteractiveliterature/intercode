@@ -14,7 +14,7 @@ class SignupsGrid
     end
   end
   column(:name, order: "users.last_name, users.first_name") do |signup|
-    format(signup.user.name_inverted) do |name|
+    format(signup.user_con_profile.name_inverted) do |name|
       link_to name, [@event, @run, signup]
     end
   end
@@ -22,7 +22,7 @@ class SignupsGrid
     signup.bucket.try(:name)
   end
   column(:age, order: "users.birth_date") do |signup|
-    signup.user.age_as_of signup.run.starts_at
+    signup.user_con_profile.age_as_of signup.run.starts_at
   end
   column(:email, order: "users.email") do |signup|
     format(signup.user.email) do |email|

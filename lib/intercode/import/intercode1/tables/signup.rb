@@ -1,9 +1,10 @@
 class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Intercode1::Table
-  def initialize(connection, con, run_id_map, user_id_map)
+  def initialize(connection, con, run_id_map, user_id_map, user_con_profile_id_map)
     super connection
     @con = con
     @run_id_map = run_id_map
     @user_id_map = user_id_map
+    @user_con_profile_id_map = user_con_profile_id_map
   end
 
   def dataset
@@ -15,7 +16,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     run = @run_id_map[row[:RunId]]
 
     run.signups.new(
-      user: @user_id_map[row[:UserId]],
+      user_con_profile: @user_con_profile_id_map[row[:UserId]],
       bucket_key: bucket_key(row, run),
       updated_by: @user_id_map[row[:UserId]]
     )

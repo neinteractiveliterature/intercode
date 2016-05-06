@@ -116,7 +116,7 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def signup_table
-    @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map)
+    @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map, user_con_profiles_id_map)
   end
 
   def registration_status_map
