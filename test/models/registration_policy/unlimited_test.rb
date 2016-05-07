@@ -12,7 +12,8 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
     3.times do |i|
       event_run.signups.reload
 
-      signup = FactoryGirl.build(:signup, run: event_run)
+      signup_user_con_profile = FactoryGirl.create(:user_con_profile, convention: event_run.event.convention)
+      signup = FactoryGirl.build(:signup, run: event_run, user_con_profile: signup_user_con_profile)
       bucket = subject.bucket_for_new_signup(signup, event_run.signups)
       bucket.wont_be_nil
 

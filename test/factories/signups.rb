@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :signup do
     run
-    user
+    user_con_profile
     bucket_key nil
     updated_by nil
   end

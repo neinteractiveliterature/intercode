@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :convention do
     name "TestCon"
-    domain "testcon.example.com"
+    sequence(:domain) { |n| "testcon#{n}.example.com" }
     timezone_name "US/Eastern"
     signups_allowed "yes"
     show_schedule "yes"
