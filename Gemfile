@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-ruby '2.2.3'
-gem 'rails', '4.2.4'
+ruby '2.3.1'
+gem 'rails', '4.2.7.1'
 
 platform :ruby do
   gem 'sqlite3', :groups => [:development, :test]
@@ -17,7 +17,6 @@ platform :jruby do
 end
 
 gem 'sass-rails'
-gem 'coffee-rails'
 gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
@@ -79,8 +78,6 @@ end
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-remote'
-  gem 'factory_girl'
-  gem 'factory_girl_rails'
 end
 
 group :intercode1_import do
@@ -92,4 +89,7 @@ end
 group :test do
   gem 'minitest-spec-rails'
   gem 'minitest-reporters'
+  gem 'database_cleaner'
+  gem 'factory_girl'
+  gem 'factory_girl_rails'
 end
