@@ -19,7 +19,7 @@ class RegistrationPolicy
 
   def bucket_with_key(key)
     key = RegistrationPolicy::Bucket.normalize_key(key)
-    buckets.find { |bucket| bucket.key == key }
+    buckets_by_key[key]
   end
 
   def bucket_for_new_signup(signup, other_signups)
@@ -53,6 +53,8 @@ class RegistrationPolicy
       else RegistrationPolicy::Bucket.new(value)
       end
     end
+
+    @buckets_by_key = nil
   end
 
   def attributes=(attributes)
@@ -64,4 +66,8 @@ class RegistrationPolicy
     end
   end
   alias_method :assign_attributes, :attributes=
+
+  def buckets_by_key
+    @buckets_by_key ||= buckets.index_by(&:key)
+  end
 end
