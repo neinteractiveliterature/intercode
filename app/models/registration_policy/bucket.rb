@@ -26,7 +26,7 @@ class RegistrationPolicy::Bucket
   end
 
   def has_available_slots?(signups)
-    available_slots(signups) > 0
+    slots_unlimited? || available_slots(signups) > 0
   end
 
   def available_slots(signups)
