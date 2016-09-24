@@ -8,6 +8,14 @@ Minitest::Reporters.use!(
   ENV,
   Minitest.backtrace_filter
 )
+
+DatabaseCleaner.strategy = :transaction
+
+class ActiveSupport::TestCase
+  before(:each) { DatabaseCleaner.start }
+  after(:each) { DatabaseCleaner.clean }
+end
+
 class ActionController::TestCase
   include Devise::TestHelpers
 
@@ -16,3 +24,4 @@ class ActionController::TestCase
     @controller.env["intercode.convention"] = convention
   end
 end
+
