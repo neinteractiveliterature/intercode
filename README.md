@@ -23,6 +23,7 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 5. Install Ruby 2.2.3: `rbenv install 2.2.3`
 6. (Optional, but if you don't, you'll have to set yourself using 2.2.3 some other way.) Make Ruby 2.2.3 your default: `rbenv global 2.2.3`
 7. Install Bundler: `gem install bundler`
+8. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line:<br/><br/>`127.0.0.1 intercode`
 8. From the Intercode source folder:
   1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
   2. Install all the dependencies of Intercode: 
@@ -30,7 +31,7 @@ This is the classic Rails development setup, and should work for Mac and Linux u
     2. `bundle install`
   3. Set up your local database: `bin/rake db:create db:migrate`
   4. Start up the Intercode server: `bin/rails server`
-9. You should now be able to go to http://localhost:3000 and see the app running!
+9. You should now be able to go to http://intercode:3000 and see the app running!
 
 # Developer Quickstart with Vagrant
 
