@@ -20,8 +20,8 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 2. Make sure you have a working C/C++ development toolchain installed.  On Mac OS X, that's Xcode and its Command Line Tools.
 3. Install [rbenv](https://github.com/sstephenson/rbenv#readme)
 4. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
-5. Install Ruby 2.2.3: `rbenv install 2.2.3`
-6. (Optional, but if you don't, you'll have to set yourself using 2.2.3 some other way.) Make Ruby 2.2.3 your default: `rbenv global 2.2.3`
+5. Install Ruby 2.3.1: `rbenv install 2.3.1`
+6. (Optional, but if you don't, you'll have to set yourself using 2.3.1 some other way.) Make Ruby 2.3.1 your default: `rbenv global 2.3.1`
 7. Install Bundler: `gem install bundler`
 8. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode`
 9. From the Intercode source folder:
