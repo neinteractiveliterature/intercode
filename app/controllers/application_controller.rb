@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
   # the sign_up action, because that's the only place we customized the form, but we might
   # need to add more later if we customize the other Devise forms too.
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) do |user|
+    devise_parameter_sanitizer.permit(:sign_up) do |user|
       user.permit(:email, :password, :password_confirmation, :remember_me, :first_name, :last_name)
     end
   end
