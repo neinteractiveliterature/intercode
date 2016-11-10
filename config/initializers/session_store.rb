@@ -11,7 +11,7 @@ if default_host
   # www.interconlarp.org becomes interconlarp.org
   second_level_domain = just_hostname.split(".").reverse.take(2).reverse.join(".")
 
-  cookie_options[:domain] = second_level_domain
+  cookie_options[:domain] = ".#{second_level_domain}"
 end
 
 Rails.application.config.session_store :active_record_store, cookie_options
