@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   check_authorization :unless => :devise_controller?
 
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
-  before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
