@@ -1,7 +1,7 @@
 require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
-  belongs_to :updated_by, :class_name => "User"
+  belongs_to :updated_by, :class_name => "User", optional: true
 
   validates :name, :presence => true
   validates :domain, :presence => true, :uniqueness => true

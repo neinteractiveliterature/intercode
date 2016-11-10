@@ -12,7 +12,7 @@ class TeamMember < ApplicationRecord
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
 
-  belongs_to :updated_by, class_name: "User"
+  belongs_to :updated_by, class_name: "User", optional: true
 
   delegate :name, to: :user
 

@@ -1,6 +1,6 @@
 class Run < ApplicationRecord
   belongs_to :event
-  belongs_to :updated_by, :class_name => "User"
+  belongs_to :updated_by, :class_name => "User", optional: true
   has_many :signups, dependent: :destroy
   has_and_belongs_to_many :rooms
 
