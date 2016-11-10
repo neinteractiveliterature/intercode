@@ -26,14 +26,14 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 8. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode`
 9. From the Intercode source folder:
   1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
-  2. Install all the dependencies of Intercode: 
+  2. Install all the dependencies of Intercode:
     1. Install MySQL and PostgreSQL. With Homebrew: `brew install mysql postgres `
     2. `bundle install`
   3. Set up your local database: `bin/rake db:create db:migrate`
   4. Start up the Intercode server: `bin/rails server`
-10. You should now be able to go to http://intercode:3000 and see the app running!
+10. You should now be able to go to http://intercode.dev:3000 and see the app running!
 
-**IMPORTANT NOTE:** Intercode 2 in development mode uses `intercode` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode` domain name.
+**IMPORTANT NOTE:** Intercode 2 in development mode uses `intercode.dev` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.dev` domain name.
 
 # Contacting us
 
