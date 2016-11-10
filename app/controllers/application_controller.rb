@@ -68,8 +68,8 @@ class ApplicationController < ActionController::Base
       if convention
         return my_profile_url(host: convention.domain)
       end
-    elsif env['intercode.convention']
-      if env['intercode.convention'].user_con_profiles.where(user_id: resource.id).blank?
+    elsif request.env['intercode.convention']
+      if request.env['intercode.convention'].user_con_profiles.where(user_id: resource.id).blank?
         return new_my_profile_path
       end
     end
