@@ -1,4 +1,4 @@
-class TeamMember < ActiveRecord::Base
+class TeamMember < ApplicationRecord
   # All team members must be assigned to an event that exists
   belongs_to :event
   belongs_to :user_con_profile

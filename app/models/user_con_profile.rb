@@ -1,4 +1,4 @@
-class UserConProfile < ActiveRecord::Base
+class UserConProfile < ApplicationRecord
   include Concerns::Names
 
   MAIL_PRIV_NAMES = Set.new(%w(gms attendees vendors unpaid alumni).map { |group| "mail_to_#{group}" })

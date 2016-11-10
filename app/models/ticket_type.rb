@@ -1,4 +1,4 @@
-class TicketType < ActiveRecord::Base
+class TicketType < ApplicationRecord
   belongs_to :convention
   serialize :pricing_schedule, ScheduledMoneyValue
 

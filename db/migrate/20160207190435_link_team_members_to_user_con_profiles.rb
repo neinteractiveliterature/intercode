@@ -1,22 +1,22 @@
 class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration
-  class TeamMember < ActiveRecord::Base
+  class TeamMember < ApplicationRecord
     belongs_to :user_con_profile, class_name: "LinkTeamMembersToUserConProfiles::UserConProfile"
     belongs_to :user, class_name: "LinkTeamMembersToUserConProfiles::User"
     belongs_to :event, class_name: "LinkTeamMembersToUserConProfiles::Event"
   end
 
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     belongs_to :convention, class_name: "LinkTeamMembersToUserConProfiles::Convention"
   end
 
-  class Convention < ActiveRecord::Base
+  class Convention < ApplicationRecord
     has_many :user_con_profiles, class_name: "LinkTeamMembersToUserConProfiles::UserConProfile"
   end
 
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
   end
 
-  class UserConProfile < ActiveRecord::Base
+  class UserConProfile < ApplicationRecord
   end
 
   def up
