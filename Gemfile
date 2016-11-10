@@ -47,7 +47,7 @@ gem 'cancancan'
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem 'cadmus', '>= 0.5.1'
+gem 'cadmus', '~> 0.5.2'
 
 # File uploading
 gem 'carrierwave'
