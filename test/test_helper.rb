@@ -21,7 +21,7 @@ class ActionController::TestCase
 
   def set_convention(convention)
     @request.host = convention.domain
-    @controller.env["intercode.convention"] = convention
+    @controller.request.env["intercode.convention"] = convention
   end
 end
 
