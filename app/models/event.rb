@@ -1,4 +1,4 @@
-class Event < ActiveRecord::Base
+class Event < ApplicationRecord
   STATUSES = Set.new(%w(proposed reviewing accepted rejected dropped))
   CATEGORIES = Set.new(%w(larp panel board_game tabletop_rpg volunteer_event filler))
   CON_MAIL_DESTINATIONS = Set.new(%w(event_email gms))

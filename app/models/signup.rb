@@ -1,4 +1,4 @@
-class Signup < ActiveRecord::Base
+class Signup < ApplicationRecord
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
   belongs_to :run
