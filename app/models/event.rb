@@ -36,6 +36,9 @@ class Event < ActiveRecord::Base
     scope: :convention,
     conditions: -> { where.not(status: ['dropped', 'rejected']) }
 
+  # The event's registration policy must also be valid.
+  validate :validate_registration_policy
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
@@ -84,6 +87,17 @@ class Event < ActiveRecord::Base
     case category
     when 'larp' then 'GM'
     else 'team member'
+    end
+  end
+
+  private
+
+  def validate_registration_policy
+    return unless registration_policy
+    return if registration_policy.valid?
+
+    registration_policy.errors.each do |attribute, error|
+      errors.add "registration_policy.#{attribute}", error
     end
   end
 end

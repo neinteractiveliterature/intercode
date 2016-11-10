@@ -6,6 +6,8 @@ class RegistrationPolicy
   include ActiveModel::Serializers::JSON
   extend ActsAsCoder
 
+  validate :validate_anything_bucket
+
   def self.unlimited
     new(buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_unlimited: true)])
   end
@@ -22,7 +24,7 @@ class RegistrationPolicy
     buckets_by_key[key]
   end
 
-  def bucket_for_new_signup(signup, other_signups)
+  def best_bucket_for_signup(signup, other_signups)
     buckets.find { |bucket| bucket.errors_for_signup(signup, other_signups).empty? }
   end
 
@@ -55,6 +57,7 @@ class RegistrationPolicy
     end
 
     @buckets_by_key = nil
+    @anything_bucket = nil
   end
 
   def attributes=(attributes)
@@ -69,5 +72,24 @@ class RegistrationPolicy
 
   def buckets_by_key
     @buckets_by_key ||= buckets.index_by(&:key)
+  end
+
+  def anything_bucket
+    @anything_bucket ||= buckets.find(&:anything?)
+  end
+
+  private
+
+  def validate_anything_bucket
+    anything_buckets = buckets.select(&:anything?)
+    return unless anything_buckets.any?
+
+    if anything_buckets.size > 1
+      errors.add(:buckets, "can contain at most 1 anything bucket, but there are #{anything_buckets.size}")
+    end
+
+    unless buckets.last == anything_buckets.last
+      errors.add(:buckets, "must have the anything bucket last in the priority list")
+    end
   end
 end
