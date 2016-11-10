@@ -9,25 +9,25 @@ class PagesController < BaseControllers::VirtualHost
   # root page of a Convention (http://subdomain.interactiveliterature.org/).  Every Convention
   # has at least one page it defines as its root using the root_page association, so we'll need
   # to find it and get Cadmus to display it just as if it was showing some other page.
-  
+
   include Cadmus::PagesController
-  
+
   # In the case of the root action, we'll need to load the root page from the database before
-  # Authority has a chance to run its authorization checks.  So we use a before_filter that
+  # Authority has a chance to run its authorization checks.  So we use a before_action filter that
   # comes before authorize_actions_for in the chain.
-  before_filter :find_root_page, :only => [:root]
-  
+  before_action :find_root_page, :only => [:root]
+
   # Now it's safe to run authorize_actions_for.  We'll call out to the page_for_authorization
   # method to return the page we're using, and use read permissions for the root action.
   authorize_resource :page
-  
+
   # If we're in the show action and being asked to show the root page, redirect to the domain
   # root URL.  Because pages should only have one canonical URL if possible, natch.
-  before_filter :redirect_if_root_page, :only => [:show]
-  
+  before_action :redirect_if_root_page, :only => [:show]
+
   # Just let everyone view the list of pages, it's easier that way.
   skip_authorization_check :only => [:index]
-  
+
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
   def root
@@ -73,8 +73,8 @@ class PagesController < BaseControllers::VirtualHost
   def page_parent
     convention
   end
-  
-  # See above comment on the before_filter for this.
+
+  # See above comment on the before_action for this.
   def redirect_if_root_page
     if @page == convention.root_page
       redirect_to root_url
