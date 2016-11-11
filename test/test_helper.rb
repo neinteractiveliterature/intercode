@@ -17,11 +17,11 @@ class ActiveSupport::TestCase
 end
 
 class ActionController::TestCase
-  include Devise::TestHelpers
+  include Devise::Test::ControllerHelpers
 
   def set_convention(convention)
     @request.host = convention.domain
-    @controller.env["intercode.convention"] = convention
+    @controller.request.env["intercode.convention"] = convention
   end
 end
 

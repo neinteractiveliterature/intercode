@@ -1,26 +1,26 @@
 class LinkSignupsToUserConProfiles < ActiveRecord::Migration
-  class Signup < ActiveRecord::Base
+  class Signup < ApplicationRecord
     belongs_to :user_con_profile, class_name: "LinkSignupsToUserConProfiles::UserConProfile"
     belongs_to :user, class_name: "LinkSignupsToUserConProfiles::User"
     belongs_to :run, class_name: "LinkSignupsToUserConProfiles::Run"
   end
 
-  class Run < ActiveRecord::Base
+  class Run < ApplicationRecord
     belongs_to :event, class_name: "LinkSignupsToUserConProfiles::Event"
   end
 
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     belongs_to :convention, class_name: "LinkSignupsToUserConProfiles::Convention"
   end
 
-  class Convention < ActiveRecord::Base
+  class Convention < ApplicationRecord
     has_many :user_con_profiles, class_name: "LinkSignupsToUserConProfiles::UserConProfile"
   end
 
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
   end
 
-  class UserConProfile < ActiveRecord::Base
+  class UserConProfile < ApplicationRecord
   end
 
   def up
