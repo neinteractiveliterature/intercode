@@ -20,44 +20,20 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 2. Make sure you have a working C/C++ development toolchain installed.  On Mac OS X, that's Xcode and its Command Line Tools.
 3. Install [rbenv](https://github.com/sstephenson/rbenv#readme)
 4. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
-5. Install Ruby 2.2.3: `rbenv install 2.2.3`
-6. (Optional, but if you don't, you'll have to set yourself using 2.2.3 some other way.) Make Ruby 2.2.3 your default: `rbenv global 2.2.3`
+5. Install Ruby 2.3.1: `rbenv install 2.3.1`
+6. (Optional, but if you don't, you'll have to set yourself using 2.3.1 some other way.) Make Ruby 2.3.1 your default: `rbenv global 2.3.1`
 7. Install Bundler: `gem install bundler`
-8. From the Intercode source folder:
+8. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode`
+9. From the Intercode source folder:
   1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
-  2. Install all the dependencies of Intercode: 
+  2. Install all the dependencies of Intercode:
     1. Install MySQL and PostgreSQL. With Homebrew: `brew install mysql postgres `
     2. `bundle install`
   3. Set up your local database: `bin/rake db:create db:migrate`
   4. Start up the Intercode server: `bin/rails server`
-9. You should now be able to go to http://localhost:3000 and see the app running!
+10. You should now be able to go to http://intercode.dev:3000 and see the app running!
 
-# Developer Quickstart with Vagrant
-
-**NOTE: THIS IS CURRENTLY BROKEN.  PLEASE DON'T TRY TO DO THIS.**
-
-We've put a working Vagrantfile into this repository so that you can easily get a dev environment up and running.  Here are the basic steps:
-
-1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode.git`
-2. Download and install [VirtualBox](http://www.virtualbox.org)
-3. Download and install [Vagrant](http://www.vagrantup.com)
-4. Run the following commands from inside the Intercode source directory.  (It will take awhile to run `vagrant up` the first time, but it will finish eventually and you won't have to wait for it again the next time.)
-
-    ```bash
-    vagrant plugin install vagrant-vbguest
-    vagrant plugin install vagrant-librarian-chef
-    vagrant up
-    vagrant ssh
-    ```
-5. You're now inside a Linux virtual machine set up to run Intercode.  The Intercode source is mounted into this VM at `/vagrant`, and any changes you make locally will be reflected in the VM (and vice versa).  To set up and run the app, run these commands:
-
-    ```bash
-    cd /vagrant
-    bundle install
-    rake db:create db:migrate db:seed
-    rails server
-    ```
-6. You should now be able to visit http://localhost:3000 in a web browser and see Intercode running!  Any changes you make locally will be reflected here, just as if you were running the app locally.
+**IMPORTANT NOTE:** Intercode 2 in development mode uses `intercode.dev` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.dev` domain name.
 
 # Contacting us
 

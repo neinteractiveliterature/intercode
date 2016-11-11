@@ -28,26 +28,26 @@ describe UserConProfilesController do
     user = FactoryGirl.create(:user)
 
     assert_difference('UserConProfile.count') do
-      post :create, subject_profile: { email: user.email }
+      post :create, params: { subject_profile: { email: user.email } }
     end
 
     assert_redirected_to user_con_profile_path(assigns(:subject_profile))
   end
 
   test "should show user_con_profile" do
-    get :show, id: user_con_profile
+    get :show, params: { id: user_con_profile }
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: user_con_profile
+    get :edit, params: { id: user_con_profile }
     assert_response :success
   end
 
   test "should update user_con_profile" do
     user_con_profile.staff.must_equal false
 
-    patch :update, id: user_con_profile, subject_profile: { staff: true }
+    patch :update, params: { id: user_con_profile, subject_profile: { staff: true } }
     user_con_profile.reload.staff.must_equal true
 
     assert_redirected_to user_con_profile_path(assigns(:subject_profile))
@@ -55,7 +55,7 @@ describe UserConProfilesController do
 
   test "should destroy user_con_profile" do
     assert_difference('UserConProfile.count', -1) do
-      delete :destroy, id: user_con_profile
+      delete :destroy, params: { id: user_con_profile }
     end
 
     assert_redirected_to user_con_profiles_path
