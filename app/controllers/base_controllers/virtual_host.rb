@@ -14,7 +14,7 @@ module BaseControllers
     # the Intercode::FindVirtualHost Rack middleware having already run, since it sets the key
     # "intercode.convention" inside the Rack environment.
     def convention
-      @convention ||= env["intercode.convention"]
+      @convention ||= request.env["intercode.convention"]
     end
 
     # Make the current convention object available to CMS templates, so they can do, for example:

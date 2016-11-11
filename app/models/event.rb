@@ -1,4 +1,4 @@
-class Event < ActiveRecord::Base
+class Event < ApplicationRecord
   STATUSES = Set.new(%w(proposed reviewing accepted rejected dropped))
   CATEGORIES = Set.new(%w(larp panel board_game tabletop_rpg volunteer_event filler))
   CON_MAIL_DESTINATIONS = Set.new(%w(event_email gms))
@@ -11,7 +11,7 @@ class Event < ActiveRecord::Base
   has_many :team_members, dependent: :destroy
 
   # The user who last updated the event.  Used for tracking
-  belongs_to :updated_by, :class_name => "User"
+  belongs_to :updated_by, :class_name => "User", optional: true
 
   # Each event must belong to a convention
   belongs_to :convention

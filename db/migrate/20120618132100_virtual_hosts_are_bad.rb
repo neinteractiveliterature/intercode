@@ -1,16 +1,16 @@
 class VirtualHostsAreBad < ActiveRecord::Migration
-  class VirtualHost < ActiveRecord::Base
+  class VirtualHost < ApplicationRecord
     belongs_to :con
   end
-  
-  class Con < ActiveRecord::Base
+
+  class Con < ApplicationRecord
   end
-  
+
   def up
     add_column :cons, :domain, :string
-    
+
     Con.reset_column_information
-    
+
     if table_exists? :virtual_hosts
       VirtualHost.includes(:con).find_each do |vhost|
         con = vhost.con
@@ -18,7 +18,7 @@ class VirtualHostsAreBad < ActiveRecord::Migration
         con.save!
       end
     end
-    
+
     change_column :cons, :domain, :string, :null => false
     add_index :cons, :domain, :unique => true
     drop_table :virtual_hosts if table_exists?(:virtual_hosts)

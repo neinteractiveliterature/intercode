@@ -1,4 +1,4 @@
-class TeamMember < ActiveRecord::Base
+class TeamMember < ApplicationRecord
   # All team members must be assigned to an event that exists
   belongs_to :event
   belongs_to :user_con_profile
@@ -12,7 +12,7 @@ class TeamMember < ActiveRecord::Base
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
 
-  belongs_to :updated_by, class_name: "User"
+  belongs_to :updated_by, class_name: "User", optional: true
 
   delegate :name, to: :user
 

@@ -1,7 +1,7 @@
-class Ticket < ActiveRecord::Base
+class Ticket < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :ticket_type
-  belongs_to :provided_by_event, class_name: "Event"
+  belongs_to :provided_by_event, class_name: "Event", optional: true
 
   validates :user_con_profile, :ticket_type, presence: true
   validates :user_con_profile, uniqueness: true

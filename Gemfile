@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.3.1'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 
 platform :ruby do
   gem 'sqlite3', :groups => [:development, :test]
@@ -47,7 +47,7 @@ gem 'cancancan'
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem 'cadmus', '>= 0.5.1'
+gem 'cadmus', '~> 0.5.2'
 
 # File uploading
 gem 'carrierwave'
@@ -92,4 +92,7 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'factory_girl_rails'
+
+  # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
+  gem 'rails-controller-testing'
 end
