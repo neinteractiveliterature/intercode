@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include Concerns::Names
 
   # Include default devise modules. Others available are:

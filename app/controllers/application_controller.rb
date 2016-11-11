@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   check_authorization :unless => :devise_controller?
 
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
-  before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
   # the sign_up action, because that's the only place we customized the form, but we might
   # need to add more later if we customize the other Devise forms too.
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) do |user|
+    devise_parameter_sanitizer.permit(:sign_up) do |user|
       user.permit(:email, :password, :password_confirmation, :remember_me, :first_name, :last_name)
     end
   end
@@ -68,8 +68,8 @@ class ApplicationController < ActionController::Base
       if convention
         return my_profile_url(host: convention.domain)
       end
-    elsif env['intercode.convention']
-      if env['intercode.convention'].user_con_profiles.where(user_id: resource.id).blank?
+    elsif request.env['intercode.convention']
+      if request.env['intercode.convention'].user_con_profiles.where(user_id: resource.id).blank?
         return new_my_profile_path
       end
     end
