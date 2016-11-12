@@ -4,6 +4,7 @@ class Intercode::Import::Intercode1::Importer
 
   def self.from_constants_file(filename)
     php = <<-PHP
+    error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
     require "#{filename}";
 
     $vars = array(

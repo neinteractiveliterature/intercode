@@ -27,4 +27,12 @@ class Run < ApplicationRecord
     bucket = bucket_with_key(bucket_key)
     bucket && bucket.has_available_slots?(signups_by_bucket_key[bucket_key])
   end
+
+  def timespan
+    ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
+  end
+
+  def overlaps?(other_run)
+    timespan.overlaps?(other_run.timespan)
+  end
 end
