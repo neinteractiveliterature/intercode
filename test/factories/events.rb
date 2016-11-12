@@ -7,5 +7,6 @@ FactoryGirl.define do
     sequence(:title) { |n| "Event #{n}" }
     status "accepted"
     category "larp"
+    registration_policy RegistrationPolicy.unlimited
   end
 end

@@ -1,4 +1,10 @@
 class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Intercode1::Table
+  STATE_MAP = {
+    "Confirmed" => 'confirmed',
+    "Waitlisted" => 'waitlisted',
+    "Withdrawn" => 'withdrawn'
+  }
+
   def initialize(connection, con, run_id_map, user_id_map, user_con_profile_id_map)
     super connection
     @con = con
@@ -8,7 +14,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   end
 
   def dataset
-    super.where(:State => ['Confirmed', 'Waitlisted'], :Counted => 'Y').order(:TimeStamp)
+    super.order(:TimeStamp)
   end
 
   private
@@ -18,6 +24,8 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     run.signups.new(
       user_con_profile: @user_con_profile_id_map[row[:UserId]],
       bucket_key: bucket_key(row, run),
+      state: STATE_MAP[row[:State]],
+      counted: row[:Counted] == 'Y',
       updated_by: @user_id_map[row[:UserId]]
     )
   end
