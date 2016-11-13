@@ -21,9 +21,12 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   def build_record(row)
     run = @run_id_map[row[:RunId]]
 
+    row_bucket_key = bucket_key(row, run)
+
     run.signups.new(
       user_con_profile: @user_con_profile_id_map[row[:UserId]],
-      bucket_key: bucket_key(row, run),
+      bucket_key: row_bucket_key,
+      requested_bucket_key: row[:Gender].downcase,
       state: STATE_MAP[row[:State]],
       counted: row[:Counted] == 'Y',
       updated_by: @user_id_map[row[:UserId]]
@@ -31,10 +34,10 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   end
 
   # Try to put them in the bucket for their signup gender first; if that fails, try to
-  # put them in the neutral bucket.  Failing all else, don't put them in a bucket (i.e.
+  # put them in the anything bucket.  Failing all else, don't put them in a bucket (i.e.
   # waitlist them).
   def bucket_key(row, run)
-    [gender_bucket_key(row), "neutral"].find do |bucket_key|
+    [gender_bucket_key(row), "anything"].find do |bucket_key|
       run.bucket_has_available_slots?(bucket_key)
     end
   end

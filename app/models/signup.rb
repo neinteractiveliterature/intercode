@@ -20,4 +20,8 @@ class Signup < ApplicationRecord
   def bucket
     run.registration_policy.bucket_with_key(bucket_key)
   end
+
+  def requested_bucket
+    run.registration_policy.bucket_with_key(requested_bucket_key)
+  end
 end

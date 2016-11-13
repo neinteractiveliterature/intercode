@@ -76,9 +76,19 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def registration_bucket(row, gender)
+    key = case gender
+    when 'Neutral' then 'anything'
+    else gender.downcase
+    end
+
+    name = case gender
+    when 'Neutral' then 'Anything'
+    else gender
+    end
+
     RegistrationPolicy::Bucket.new(
-      key: gender.downcase,
-      name: gender,
+      key: key,
+      name: name,
       description: registration_bucket_description(gender),
       slots_limited: true,
       total_slots: row[:"MaxPlayers#{gender}"],
