@@ -120,7 +120,7 @@ ActiveRecord::Schema.define(version: 20161113163044) do
     t.integer  "user_con_profile_id",                        null: false
     t.string   "state",                default: "confirmed", null: false
     t.boolean  "counted"
-    t.string   "requested_bucket_key",                       null: false
+    t.string   "requested_bucket_key"
     t.index ["run_id"], name: "index_signups_on_run_id", using: :btree
     t.index ["updated_by_id"], name: "index_signups_on_updated_by_id", using: :btree
     t.index ["user_con_profile_id"], name: "index_signups_on_user_con_profile_id", using: :btree
