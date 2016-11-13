@@ -19,6 +19,8 @@ class Intercode::Import::Intercode1::Table
     dataset.each do |row|
       logger.debug "Importing #{object_name} #{row_id(row)}"
       record = build_record(row)
+      next unless record
+
       record.save!
 
       id_map[row_id(row)] = record
