@@ -36,7 +36,7 @@ class DatabaseSanitizer
       country: Faker::Address.country,
       day_phone: Faker::PhoneNumber.phone_number,
       evening_phone: Faker::PhoneNumber.phone_number,
-      best_call_time: Faker::Lorem.words
+      best_call_time: Faker::Lorem.sentence
     }
 
     sanitized_present_fields = sanitized_fields.select { |key, value| user_con_profile.public_send(key).present? }
