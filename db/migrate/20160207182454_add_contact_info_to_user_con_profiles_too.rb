@@ -1,4 +1,4 @@
-class AddContactInfoToUserConProfilesToo < ActiveRecord::Migration
+class AddContactInfoToUserConProfilesToo < ActiveRecord::Migration[4.2]
   class User < ApplicationRecord
     has_many :user_con_profiles, class_name: "AddContactInfoToUserConProfilesToo::UserConProfile"
   end

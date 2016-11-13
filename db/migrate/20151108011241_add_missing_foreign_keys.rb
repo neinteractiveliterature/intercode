@@ -1,4 +1,4 @@
-class AddMissingForeignKeys < ActiveRecord::Migration
+class AddMissingForeignKeys < ActiveRecord::Migration[4.2]
   def change
     rename_column :events, :user_id, :owner_id
 

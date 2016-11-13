@@ -1,4 +1,4 @@
-class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration
+class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration[4.2]
   class TeamMember < ApplicationRecord
     belongs_to :user_con_profile, class_name: "LinkTeamMembersToUserConProfiles::UserConProfile"
     belongs_to :user, class_name: "LinkTeamMembersToUserConProfiles::User"

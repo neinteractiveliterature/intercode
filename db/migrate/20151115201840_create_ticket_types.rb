@@ -1,4 +1,4 @@
-class CreateTicketTypes < ActiveRecord::Migration
+class CreateTicketTypes < ActiveRecord::Migration[4.2]
   def change
     create_table :ticket_types do |t|
       t.references :convention, index: true, foreign_key: true

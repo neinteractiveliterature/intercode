@@ -1,4 +1,4 @@
-class CreateCons < ActiveRecord::Migration
+class CreateCons < ActiveRecord::Migration[4.2]
   def change
     create_table :cons do |t|
       t.string :signups_allowed, :null => false, :default => "not_yet"
@@ -11,7 +11,7 @@ class CreateCons < ActiveRecord::Migration
 
       t.timestamps
     end
-    
+
     add_index :cons, :updated_by_id
   end
 end
