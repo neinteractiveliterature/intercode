@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161112203319) do
+ActiveRecord::Schema.define(version: 20161113163044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,11 +115,12 @@ ActiveRecord::Schema.define(version: 20161112203319) do
     t.integer  "run_id"
     t.string   "bucket_key"
     t.integer  "updated_by_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.integer  "user_con_profile_id", null: false
-    t.string   "state",               null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "user_con_profile_id",                        null: false
+    t.string   "state",                default: "confirmed", null: false
     t.boolean  "counted"
+    t.string   "requested_bucket_key",                       null: false
     t.index ["run_id"], name: "index_signups_on_run_id", using: :btree
     t.index ["updated_by_id"], name: "index_signups_on_updated_by_id", using: :btree
     t.index ["user_con_profile_id"], name: "index_signups_on_user_con_profile_id", using: :btree

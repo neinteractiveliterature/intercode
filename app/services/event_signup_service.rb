@@ -44,7 +44,8 @@ class EventSignupService
 
     signup = run.signups.create!(
       run: run,
-      bucket_key: actual_bucket_key,
+      bucket_key: actual_bucket.try!(:key),
+      requested_bucket_key: requested_bucket_key,
       user_con_profile: user_con_profile,
       counted: counts_towards_total?,
       state: signup_state
@@ -83,9 +84,11 @@ class EventSignupService
     ].compact
   end
 
-  def actual_bucket_key
-    signups = run.signups
-    prioritized_buckets.find { |bucket| !bucket.full?(signups) }
+  def actual_bucket
+    @actual_bucket ||= begin
+      signups = run.signups
+      prioritized_buckets.find { |bucket| !bucket.full?(signups) }
+    end
   end
 
   def user_signup_count
