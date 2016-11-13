@@ -1,4 +1,4 @@
-class RemovePaymentColumnsFromUserConProfiles < ActiveRecord::Migration
+class RemovePaymentColumnsFromUserConProfiles < ActiveRecord::Migration[4.2]
   def change
     remove_column :user_con_profiles, "registration_status", :string, default: "unpaid", null: false
     remove_column :user_con_profiles, "comp_event_id", :integer

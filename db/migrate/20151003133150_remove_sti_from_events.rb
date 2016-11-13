@@ -1,4 +1,4 @@
-class RemoveStiFromEvents < ActiveRecord::Migration
+class RemoveStiFromEvents < ActiveRecord::Migration[4.2]
   class Event < ApplicationRecord
   end
 

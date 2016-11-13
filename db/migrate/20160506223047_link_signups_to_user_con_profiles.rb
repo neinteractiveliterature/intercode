@@ -1,4 +1,4 @@
-class LinkSignupsToUserConProfiles < ActiveRecord::Migration
+class LinkSignupsToUserConProfiles < ActiveRecord::Migration[4.2]
   class Signup < ApplicationRecord
     belongs_to :user_con_profile, class_name: "LinkSignupsToUserConProfiles::UserConProfile"
     belongs_to :user, class_name: "LinkSignupsToUserConProfiles::User"

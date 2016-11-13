@@ -1,7 +1,7 @@
-class DeviseCreateUsers < ActiveRecord::Migration
+class DeviseCreateUsers < ActiveRecord::Migration[4.2]
   def change
     create_table(:users) do |t|
-      
+
       ## Intercode profile
       t.string :first_name,         :null => false
       t.string :last_name,          :null => false
@@ -18,10 +18,10 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :evening_phone
       t.string :best_call_time
       t.string :preferred_contact
-      
+
       ## Permissions
       t.boolean :site_admin
-      
+
       ## Database authenticatable
       t.string :email,              :null => false, :default => ""
       t.string :encrypted_password, :null => false, :default => ""
