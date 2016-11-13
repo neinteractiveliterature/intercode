@@ -18,6 +18,7 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
   private
   def build_record(row)
     event = @event_id_map[row[:EventId]]
+    return unless event
 
     event.runs.new(
       starts_at: start_time(row),
