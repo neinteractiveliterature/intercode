@@ -63,12 +63,6 @@ GEM
       execjs (~> 2.0)
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
-    better_errors (2.1.1)
-      coderay (>= 1.0.0)
-      erubis (>= 2.6.6)
-      rack (>= 0.9.0)
-    binding_of_caller (0.7.2)
-      debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -95,7 +89,6 @@ GEM
     database_cleaner (1.5.3)
     datagrid (1.5.1)
       rails (>= 3.2.22.2)
-    debug_inspector (0.0.2)
     devise (4.2.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -114,6 +107,8 @@ GEM
     factory_girl_rails (4.7.0)
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
+    faker (1.6.6)
+      i18n (~> 0.5)
     ffi (1.9.14-java)
     font-awesome-sass (4.7.0)
       sass (>= 3.2)
@@ -307,8 +302,6 @@ DEPENDENCIES
   activerecord-jdbcsqlite3-adapter
   activerecord-session_store
   autoprefixer-rails
-  better_errors
-  binding_of_caller
   bootstrap-sass
   bootstrap_form
   cadmus (~> 0.5.2)
@@ -320,6 +313,7 @@ DEPENDENCIES
   eu_central_bank
   factory_girl
   factory_girl_rails
+  faker
   font-awesome-sass
   haml
   jquery-rails
