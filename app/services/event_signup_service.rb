@@ -1,20 +1,47 @@
 class EventSignupService
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets
+  class Result
+    attr_reader :signup, :error
+
+    def self.success(signup)
+      new(true, signup, nil)
+    end
+
+    def self.failure(error)
+      new(false, nil, error)
+    end
+
+    def initialize(success, signup, error)
+      @success = success
+      @signup = signup
+      @error = error
+    end
+
+    def success?
+      @success
+    end
+  end
+
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed
 
   def initialize(user_con_profile, run, requested_bucket_key)
     @user_con_profile = user_con_profile
     @run = run
     @requested_bucket_key = requested_bucket_key
+
+    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
   end
 
   def call
-    return failure unless signup_count_allowed?(user_signup_count + 1)
-
-    if !event.can_play_concurrently? && concurrent_signup?
-      return failure
+    unless signup_count_allowed?(user_signup_count + 1)
+      return Result.failure("You are already signed up for #{user_signup_count} events, which is the maximum allowed at this time.")
     end
 
-    #signup_user_for_event
+    if !event.can_play_concurrently? && concurrent_signups.any?
+      event_names = concurrent_signups.map { |signup| signup.event.name }
+      verb = (event_names.size > 1) ? 'conflict' : 'conflicts'
+      return Result.failure("You are already signed up for #{event_names.to_sentence}, which #{verb} with #{event.name}.")
+    end
+
     signup = run.signups.create!(
       run: run,
       bucket_key: actual_bucket_key,
@@ -26,7 +53,7 @@ class EventSignupService
 
     notify_team_members
 
-    signup
+    Result.success(signup)
   end
 
   private
@@ -79,17 +106,15 @@ class EventSignupService
   end
 
   def signup_count_allowed?(signup_count)
-    current_max = convention.maximum_event_signups.value_at(Time.now)
-
-    case current_max
+    case max_signups_allowed
     when 'unlimited' then true
     when Numeric then signup_count <= current_max
     else false
     end
   end
 
-  def concurrent_signup?
-    other_signups.any? do |signup|
+  def concurrent_signups
+    @concurrent_signups ||= other_signups.select do |signup|
       other_run = signup.run
       !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
     end

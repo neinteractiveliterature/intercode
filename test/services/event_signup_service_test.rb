@@ -10,7 +10,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   subject { EventSignupService.new(user_con_profile, the_run, requested_bucket_key) }
 
   it 'signs the user up for an event' do
-    signup = subject.call
-    signup.must_be :confirmed?
+    result = subject.call
+    result.must_be :success?
+    result.signup.must_be :confirmed?
   end
 end
