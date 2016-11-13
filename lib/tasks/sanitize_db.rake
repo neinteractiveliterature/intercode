@@ -48,7 +48,14 @@ end
 task :sanitize_db => :environment do
   require 'faker'
 
-  email_blacklist = ['natbudin@gmail.com']
+  email_blacklist = [
+    'natbudin@gmail.com',
+    'j.l.unrein@gmail.com',
+    'kenright@iit.edu',
+    'barry.tannenbaum@gmail.com',
+    'david@rigitech.com',
+    'elfracal@electric-monk.net'
+  ]
   sanitizer = DatabaseSanitizer.new(email_blacklist)
 
   ActiveRecord::Base.transaction do
