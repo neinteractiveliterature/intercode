@@ -21,5 +21,7 @@ FactoryGirl.define do
         }
       ]
     )
+    starts_at Time.new(2016, 10, 28, 18, 0, 0)
+    ends_at Time.new(2016, 10, 30, 18, 0, 0)
   end
 end
