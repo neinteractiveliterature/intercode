@@ -37,9 +37,9 @@ class EventSignupService
     end
 
     if !event.can_play_concurrently? && concurrent_signups.any?
-      event_names = concurrent_signups.map { |signup| signup.event.name }
-      verb = (event_names.size > 1) ? 'conflict' : 'conflicts'
-      return Result.failure("You are already signed up for #{event_names.to_sentence}, which #{verb} with #{event.name}.")
+      event_titles = concurrent_signups.map { |signup| signup.event.title }
+      verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
+      return Result.failure("You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}.")
     end
 
     signup = run.signups.create!(
