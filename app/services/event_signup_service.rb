@@ -60,7 +60,7 @@ class EventSignupService
   private
 
   def counts_towards_total?
-    is_team_member?
+    !is_team_member?
   end
 
   def signup_state

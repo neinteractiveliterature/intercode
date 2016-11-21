@@ -13,16 +13,14 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
   end
 
   it "allows all signups" do
+    bucket_key = subject.buckets.first.key
+
     3.times do |i|
       event_run.signups.reload
 
       signup_user_con_profile = FactoryGirl.create(:user_con_profile, convention: event_run.event.convention)
-      signup = FactoryGirl.build(:signup, run: event_run, user_con_profile: signup_user_con_profile)
-      bucket = subject.best_bucket_for_signup(signup, event_run.signups)
-      bucket.wont_be_nil
-
-      signup.bucket_key = bucket.key
-      signup.save!
+      result = EventSignupService.new(signup_user_con_profile, event_run, bucket_key).call
+      result.must_be :success?
     end
   end
 

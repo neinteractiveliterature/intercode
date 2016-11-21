@@ -41,6 +41,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   # waitlist them).
   def bucket_key(row, run)
     return unless row[:Counted] == 'Y'
+    return unless row[:State] == 'Confirmed'
 
     [gender_bucket_key(row), "anything"].find do |bucket_key|
       run.bucket_has_available_slots?(bucket_key)
