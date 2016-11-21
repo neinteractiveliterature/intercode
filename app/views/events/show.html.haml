@@ -52,20 +52,13 @@
           = run.rooms.map(&:name).sort.join(", ")
 
           %p
+            - signup_count_presenter = SignupCountPresenter.new(run)
             - signup_description = capture do
-              - signups_by_bucket_key = run.signups_by_bucket_key
-              - if signups_by_bucket_key.keys.select { |key| key }.size == 1
-                - bucket_descriptions = [signups_by_bucket_key.values.first.size.to_s]
-              - else
-                - bucket_descriptions = run.event.registration_policy.buckets.map do |bucket|
-                  - capture do
-                    #{bucket.name}: #{signups_by_bucket_key[bucket.key].size}
-
               Signed up:
-              = bucket_descriptions.map(&:strip).join(", ")
-              - if signups_by_bucket_key[nil].any?
+              = signup_count_presenter.confirmed_bucket_descriptions.map(&:strip).join(", ")
+              - if signup_count_presenter.has_waitlist?
                 %br
-                Waitlisted: #{signups_by_bucket_key[nil].size}
+                Waitlisted: #{signup_count_presenter.waitlist_count}
 
             - if can? :read, run.signups.new
               - signup_link_or_text = link_to(signup_description, [@event, run, :signups])
