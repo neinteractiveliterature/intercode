@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class EventSignupServiceTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   let(:event) { FactoryGirl.create :event }
   let(:the_run) { FactoryGirl.create :run, event: event }
   let(:convention) { event.convention }
@@ -13,6 +15,23 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     result = subject.call
     result.must_be :success?
     result.signup.must_be :confirmed?
+  end
+
+  it 'emails the team members who have requested it' do
+    email_team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
+    email_team_member2 = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
+    no_email_team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: false)
+
+    perform_enqueued_jobs do
+      result = subject.call
+      result.must_be :success?
+
+      ActionMailer::Base.deliveries.size.must_equal 2
+      recipients = ActionMailer::Base.deliveries.map(&:to)
+      recipients.must_include [email_team_member.user_con_profile.email]
+      recipients.must_include [email_team_member2.user_con_profile.email]
+      recipients.wont_include [no_email_team_member.user_con_profile.email]
+    end
   end
 
   describe 'with limited buckets' do

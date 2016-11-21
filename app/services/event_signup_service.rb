@@ -52,7 +52,7 @@ class EventSignupService
     )
     withdraw_user_from_conflicting_waitlist_signups # TODO: maybe, and with confirmation
 
-    notify_team_members
+    notify_team_members(signup)
 
     Result.success(signup)
   end
@@ -128,7 +128,9 @@ class EventSignupService
     # TODO: do the withdraw
   end
 
-  def notify_team_members
-    # TODO: do the notification
+  def notify_team_members(signup)
+    event.team_members.where(receive_signup_email: true).find_each do |team_member|
+      EventSignupMailer.new_signup(signup, team_member).deliver_later
+    end
   end
 end
