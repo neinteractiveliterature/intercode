@@ -34,6 +34,27 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
+  it 'withdraws the user from conflicting waitlist games' do
+    skip("Can't be implemented until the withdraw service is implemented")
+
+    other_event = FactoryGirl.create(:event, length_seconds: event.length_seconds)
+    other_run = FactoryGirl.create(:run, starts_at: the_run.starts_at)
+    waitlist_signup1 = FactoryGirl.create(
+      :signup,
+      user_con_profile: user_con_profile,
+      run: other_run,
+      state: 'waitlisted',
+      bucket_key: nil,
+      requested_bucket_key: 'anything'
+    )
+
+    waitlist_signup1.must_be :waitlisted?
+
+    result = subject.call
+    result.must_be :success?
+    waitlist_signup1.reload.must_be :withdrawn?
+  end
+
   describe 'with limited buckets' do
     let(:event) do
       FactoryGirl.create(
