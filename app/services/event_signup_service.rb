@@ -119,7 +119,7 @@ class EventSignupService
   def concurrent_signups
     @concurrent_signups ||= other_signups.select do |signup|
       other_run = signup.run
-      !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
+      signup.confirmed? && !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
     end
   end
 
