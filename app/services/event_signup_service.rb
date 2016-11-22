@@ -19,6 +19,10 @@ class EventSignupService
     def success?
       @success
     end
+
+    def failure?
+      !success?
+    end
   end
 
   attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed
@@ -27,13 +31,13 @@ class EventSignupService
     @user_con_profile = user_con_profile
     @run = run
     @requested_bucket_key = requested_bucket_key
-
-    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
   end
 
   def call
+    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
+
     unless signup_count_allowed?(user_signup_count + 1)
-      return Result.failure("You are already signed up for #{user_signup_count} events, which is the maximum allowed at this time.")
+      return Result.failure("You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time.")
     end
 
     if !event.can_play_concurrently? && concurrent_signups.any?
@@ -111,7 +115,7 @@ class EventSignupService
   def signup_count_allowed?(signup_count)
     case max_signups_allowed
     when 'unlimited' then true
-    when Numeric then signup_count <= current_max
+    when Numeric then signup_count <= max_signups_allowed
     else false
     end
   end
