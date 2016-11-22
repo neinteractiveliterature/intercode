@@ -34,25 +34,79 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
-  it 'withdraws the user from conflicting waitlist games' do
-    skip("Can't be implemented until the withdraw service is implemented")
+  describe 'with a conflicting event' do
+    let(:other_event) { FactoryGirl.create(:event, length_seconds: event.length_seconds) }
+    let(:other_run) { FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at) }
 
-    other_event = FactoryGirl.create(:event, length_seconds: event.length_seconds)
-    other_run = FactoryGirl.create(:run, starts_at: the_run.starts_at)
-    waitlist_signup1 = FactoryGirl.create(
-      :signup,
-      user_con_profile: user_con_profile,
-      run: other_run,
-      state: 'waitlisted',
-      bucket_key: nil,
-      requested_bucket_key: 'anything'
+    it 'withdraws the user from conflicting waitlist games' do
+      skip("Can't be implemented until the withdraw service is implemented")
+
+      waitlist_signup1 = FactoryGirl.create(
+        :signup,
+        user_con_profile: user_con_profile,
+        run: other_run,
+        state: 'waitlisted',
+        bucket_key: nil,
+        requested_bucket_key: 'anything'
+      )
+
+      waitlist_signup1.must_be :waitlisted?
+
+      result = subject.call
+      result.must_be :success?
+      waitlist_signup1.reload.must_be :withdrawn?
+    end
+
+    it 'disallows signups to conflicting events' do
+      other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key)
+      other_signup_service.call.must_be :success?
+
+      result = subject.call
+      result.must_be :failure?
+      result.error.must_match /\AYou are already signed up for #{Regexp.escape other_event.title}/
+    end
+
+    it 'allows signups to conflicting events that allow concurrent signups' do
+      other_event.update!(can_play_concurrently: true)
+      other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key)
+      other_signup_service.call.must_be :success?
+
+      result = subject.call
+      result.must_be :success?
+    end
+
+    it 'allows signups to conflicting events if this one allows concurrent signups' do
+      other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key)
+      other_signup_service.call.must_be :success?
+
+      event.update!(can_play_concurrently: true)
+
+      result = subject.call
+      result.must_be :success?
+    end
+  end
+
+  it 'disallows signups if the user has reached the current signup limit' do
+    convention.update!(
+      maximum_event_signups: ScheduledValue.new(
+        timespans: [
+          {
+            start: nil,
+            finish: nil,
+            value: 1
+          }
+        ]
+      )
     )
 
-    waitlist_signup1.must_be :waitlisted?
+    other_event = FactoryGirl.create(:event, length_seconds: event.length_seconds)
+    other_run = FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
+    other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key)
+    other_signup_service.call.must_be :success?
 
     result = subject.call
-    result.must_be :success?
-    waitlist_signup1.reload.must_be :withdrawn?
+    result.must_be :failure?
+    result.error.must_match /\AYou are already signed up for 1 event/
   end
 
   describe 'with limited buckets' do
