@@ -25,15 +25,18 @@ class EventSignupService
     end
   end
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed, :whodunit
 
-  def initialize(user_con_profile, run, requested_bucket_key)
+  def initialize(user_con_profile, run, requested_bucket_key, whodunit)
     @user_con_profile = user_con_profile
     @run = run
     @requested_bucket_key = requested_bucket_key
+    @whodunit = whodunit
   end
 
   def call
+    # TODO fail if registrations are locked
+
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     unless signup_count_allowed?(user_signup_count + 1)
@@ -52,13 +55,20 @@ class EventSignupService
       requested_bucket_key: requested_bucket_key,
       user_con_profile: user_con_profile,
       counted: counts_towards_total?,
-      state: signup_state
+      state: signup_state,
+      updated_by: whodunit
     )
-    withdraw_user_from_conflicting_waitlist_signups # TODO: maybe, and with confirmation
+    withdraw_user_from_conflicting_waitlist_signups
 
     notify_team_members(signup)
 
     Result.success(signup)
+  end
+
+  def conflicting_waitlist_signups
+    @conflicting_waitlist_signups ||= other_signups.select do |signup|
+      signup.waitlisted? && run.overlaps?(signup.run)
+    end
   end
 
   private
@@ -128,8 +138,9 @@ class EventSignupService
   end
 
   def withdraw_user_from_conflicting_waitlist_signups
-    conflicting_waitlist_signups = other_signups.select { |signup| signup.waitlisted? && run.overlaps?(signup.run) }
-    # TODO: do the withdraw
+    conflicting_waitlist_signups.each do |conflicting_waitlist_signup|
+      EventWithdrawService.new(conflicting_waitlist_signup, whodunit).call
+    end
   end
 
   def notify_team_members(signup)
