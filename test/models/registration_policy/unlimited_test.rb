@@ -19,7 +19,7 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
       event_run.signups.reload
 
       signup_user_con_profile = FactoryGirl.create(:user_con_profile, convention: event_run.event.convention)
-      result = EventSignupService.new(signup_user_con_profile, event_run, bucket_key).call
+      result = EventSignupService.new(signup_user_con_profile, event_run, bucket_key, signup_user_con_profile.user).call
       result.must_be :success?
     end
   end
