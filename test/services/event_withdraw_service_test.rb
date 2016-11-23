@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class EventSignupServiceTest < ActiveSupport::TestCase
+class EventWithdrawServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   let(:event) { FactoryGirl.create :event }
