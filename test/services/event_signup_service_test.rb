@@ -39,6 +39,19 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     let(:other_event) { FactoryGirl.create(:event, length_seconds: event.length_seconds) }
     let(:other_run) { FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at) }
 
+    it 'correctly determines the conflicting waitlist signups' do
+      waitlist_signup1 = FactoryGirl.create(
+        :signup,
+        user_con_profile: user_con_profile,
+        run: other_run,
+        state: 'waitlisted',
+        bucket_key: nil,
+        requested_bucket_key: 'anything'
+      )
+
+      subject.conflicting_waitlist_signups.must_equal [waitlist_signup1]
+    end
+
     it 'withdraws the user from conflicting waitlist games' do
       waitlist_signup1 = FactoryGirl.create(
         :signup,
