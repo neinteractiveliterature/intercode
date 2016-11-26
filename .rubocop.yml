@@ -71,6 +71,7 @@ Lint/EmptyInterpolation:
 Lint/EndAlignment:
   Description: 'Align ends correctly.'
   Enabled: true
+  AlignWith: variable
 
 Lint/EndInMethod:
   Description: 'END blocks should not be placed inside method definitions.'
