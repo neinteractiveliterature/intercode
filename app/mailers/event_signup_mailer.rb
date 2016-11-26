@@ -22,7 +22,7 @@ class EventSignupMailer < ApplicationMailer
 
   def user_signup_moved(move_result)
     @move_result = move_result
-    @move_result = EventWithdrawService::SignupMoveResult.from_h(@move_result) if @move_result.is_a?(Hash)
+    @move_result = EventVacancyFillService::SignupMoveResult.from_h(@move_result) if @move_result.is_a?(Hash)
     @signup = @move_result.signup
 
     mail(

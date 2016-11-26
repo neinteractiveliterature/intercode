@@ -94,10 +94,6 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       signup.reload.must_be :withdrawn?
 
       result.move_results.size.must_equal 1
-      move_result = result.move_results.first
-      move_result.signup_id.must_equal anything_signup.id
-      move_result.prev_state.must_equal 'confirmed'
-      move_result.prev_bucket_key.must_equal 'anything'
 
       anything_signup.reload.bucket_key.must_equal bucket_key
     end
@@ -110,10 +106,6 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       signup.reload.must_be :withdrawn?
 
       result.move_results.size.must_equal 1
-      move_result = result.move_results.first
-      move_result.signup_id.must_equal waitlist_signup.id
-      move_result.prev_state.must_equal 'waitlisted'
-      move_result.prev_bucket_key.must_be :nil?
 
       waitlist_signup.reload.bucket_key.must_equal bucket_key
     end
@@ -127,16 +119,6 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       signup.reload.must_be :withdrawn?
 
       result.move_results.size.must_equal 2
-
-      anything_move_result = result.move_results.first
-      anything_move_result.signup_id.must_equal anything_signup.id
-      anything_move_result.prev_state.must_equal 'confirmed'
-      anything_move_result.prev_bucket_key.must_equal 'anything'
-
-      waitlist_move_result = result.move_results.second
-      waitlist_move_result.signup_id.must_equal waitlist_signup.id
-      waitlist_move_result.prev_state.must_equal 'waitlisted'
-      waitlist_move_result.prev_bucket_key.must_be :nil?
 
       anything_signup.reload.bucket_key.must_equal bucket_key
       waitlist_signup.reload.bucket_key.must_equal 'anything'
@@ -152,19 +134,6 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
         recipients = ActionMailer::Base.deliveries.map(&:to)
         recipients.must_include [team_member.user_con_profile.email]
-      end
-    end
-
-    it 'notifies moved users' do
-      anything_signup
-
-      perform_enqueued_jobs do
-        result = subject.call
-        result.must_be :success?
-
-        ActionMailer::Base.deliveries.size.must_equal 1
-        recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_equal [[anything_signup.user_con_profile.email]]
       end
     end
   end
