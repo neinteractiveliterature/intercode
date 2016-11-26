@@ -39,7 +39,7 @@ class DatabaseSanitizer
       best_call_time: Faker::Lorem.sentence
     }
 
-    sanitized_present_fields = sanitized_fields.select { |key, value| user_con_profile.public_send(key).present? }
+    sanitized_present_fields = sanitized_fields.select { |key, _| user_con_profile.public_send(key).present? }
 
     user_con_profile.update!(sanitized_present_fields)
   end
