@@ -1,28 +1,6 @@
 class EventWithdrawService
-  class Result
-    attr_reader :error, :move_results
-
-    def self.success(move_results)
-      new(true, move_results, nil)
-    end
-
-    def self.failure(error)
-      new(false, nil, error)
-    end
-
-    def initialize(success, move_results, error)
-      @success = success
-      @move_results = move_results
-      @error = error
-    end
-
-    def success?
-      @success
-    end
-
-    def failure?
-      !success?
-    end
+  class Result < ServiceResult
+    attr_accessor :move_results
   end
 
   class SignupMoveResult
@@ -84,10 +62,18 @@ class EventWithdrawService
 
     notify_team_members(signup, move_results)
     move_results.each { |result| notify_moved_signup(result) }
-    Result.success(move_results)
+    success(move_results)
   end
 
   private
+
+  def success(move_results)
+    Result.success(move_results: move_results)
+  end
+
+  def failure(error)
+    Result.failure(error: error)
+  end
 
   def fill_bucket_vacancy(bucket_key)
     signup_to_move = best_signup_to_fill_bucket_vacancy(bucket_key)
