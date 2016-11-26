@@ -1,28 +1,6 @@
 class EventSignupService
-  class Result
-    attr_reader :signup, :error
-
-    def self.success(signup)
-      new(true, signup, nil)
-    end
-
-    def self.failure(error)
-      new(false, nil, error)
-    end
-
-    def initialize(success, signup, error)
-      @success = success
-      @signup = signup
-      @error = error
-    end
-
-    def success?
-      @success
-    end
-
-    def failure?
-      !success?
-    end
+  class Result < ServiceResult
+    attr_accessor :signup
   end
 
   attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed, :whodunit
@@ -40,13 +18,13 @@ class EventSignupService
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     unless signup_count_allowed?(user_signup_count + 1)
-      return Result.failure("You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time.")
+      return failure("You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time.")
     end
 
     if !event.can_play_concurrently? && concurrent_signups.any?
       event_titles = concurrent_signups.map { |signup| signup.event.title }
       verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
-      return Result.failure("You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}.")
+      return failure("You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}.")
     end
 
     signup = run.signups.create!(
@@ -62,7 +40,7 @@ class EventSignupService
 
     notify_team_members(signup)
 
-    Result.success(signup)
+    success(signup)
   end
 
   def conflicting_waitlist_signups
@@ -72,6 +50,14 @@ class EventSignupService
   end
 
   private
+
+  def success(signup)
+    Result.success(signup: signup)
+  end
+
+  def failure(error)
+    Result.failure(error: error)
+  end
 
   def counts_towards_total?
     !is_team_member?
