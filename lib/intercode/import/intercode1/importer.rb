@@ -31,17 +31,7 @@ class Intercode::Import::Intercode1::Importer
     ?>
     PHP
 
-    temp_program = Tempfile.new('dump_con_vars.php')
-    begin
-      temp_program.write php
-      temp_program.flush
-
-      output, status = Open3.capture2e('php', temp_program.path)
-      vars = JSON.parse output
-    ensure
-      temp_program.close
-      temp_program.unlink
-    end
+    vars = exec_php_and_parse_json(php, 'dump_con_vars.php')
 
     new(
       Sequel.connect(vars['database_url']),
@@ -51,6 +41,20 @@ class Intercode::Import::Intercode1::Importer
       vars['price_schedule'],
       vars['php_timezone']
     )
+  end
+
+  def self.exec_php_and_parse_json(php, filename = 'program.php')
+    temp_program = Tempfile.new(filename)
+    begin
+      temp_program.write php
+      temp_program.flush
+
+      output, _ = Open3.capture2e('php', temp_program.path)
+      JSON.parse output
+    ensure
+      temp_program.close
+      temp_program.unlink
+    end
   end
 
   def initialize(connection, con_name, con_domain, friday_date, price_schedule, php_timezone)
