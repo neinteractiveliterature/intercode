@@ -1,0 +1,8 @@
+%h1 Your signup for #{run_description @signup.run} is now #{new_signup_state_description(@move_result)}
+
+%p A slot has opened in #{run_description @signup.run}.  As a result, the following change has been made to your signup:
+
+%p
+  Previously: #{prev_signup_state_description(@move_result)}
+  %br
+  Now: #{new_signup_state_description(@move_result)}

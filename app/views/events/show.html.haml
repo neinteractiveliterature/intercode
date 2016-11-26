@@ -52,13 +52,7 @@
           = run.rooms.map(&:name).sort.join(", ")
 
           %p
-            - signup_count_presenter = SignupCountPresenter.new(run)
-            - signup_description = capture do
-              Signed up:
-              = signup_count_presenter.confirmed_bucket_descriptions.map(&:strip).join(", ")
-              - if signup_count_presenter.has_waitlist?
-                %br
-                Waitlisted: #{signup_count_presenter.waitlist_count}
+            - signup_description = simple_format(SignupCountPresenter.new(run).signups_description)
 
             - if can? :read, run.signups.new
               - signup_link_or_text = link_to(signup_description, [@event, run, :signups])

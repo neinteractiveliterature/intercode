@@ -26,13 +26,37 @@ class EventWithdrawService
   end
 
   class SignupMoveResult
-    attr_reader :signup, :prev_state, :prev_bucket_key
-    delegate :state, :bucket_key, :user_con_profile, to: :signup
+    attr_reader :signup_id, :state, :bucket_key, :prev_state, :prev_bucket_key
 
-    def initialize(signup, prev_state, prev_bucket_key)
-      @signup = signup
+    def initialize(signup_id, state, bucket_key, prev_state, prev_bucket_key)
+      @signup_id = signup_id
+      @state = state
+      @bucket_key = bucket_key
       @prev_state = prev_state
       @prev_bucket_key = prev_bucket_key
+    end
+
+    def to_h
+      {
+        signup_id: signup_id,
+        state: state,
+        bucket_key: bucket_key,
+        prev_state: prev_state,
+        prev_bucket_key: prev_bucket_key
+      }
+    end
+
+    def signup
+      @signup ||= Signup.find(signup_id)
+    end
+
+    def self.from_h(hash)
+      hash = hash.symbolize_keys
+      new(hash[:signup_id], hash[:state], hash[:bucket_key], hash[:prev_state], hash[:prev_bucket_key])
+    end
+
+    def self.from_signup(signup, prev_state, prev_bucket_key)
+      new(signup.id, signup.state, signup.bucket_key, prev_state, prev_bucket_key)
     end
   end
 
@@ -73,7 +97,7 @@ class EventWithdrawService
     prev_bucket_key = signup_to_move.bucket_key
     prev_state = signup_to_move.state
     update_signup!(signup_to_move, state: 'confirmed', bucket_key: bucket_key)
-    result = SignupMoveResult.new(signup_to_move, prev_state, prev_bucket_key)
+    result = SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
 
     if moving_confirmed_signup
       # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill that vacancy
@@ -114,10 +138,12 @@ class EventWithdrawService
   end
 
   def notify_team_members(signup, move_results)
-    # TODO
+    event.team_members.where(receive_signup_email: true).find_each do |team_member|
+      EventSignupMailer.withdrawal(signup, move_results.map(&:to_h), team_member).deliver_later
+    end
   end
 
   def notify_moved_signup(result)
-    # TODO
+    EventSignupMailer.user_signup_moved(result.to_h).deliver_later
   end
 end

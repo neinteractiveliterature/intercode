@@ -1,3 +1,7 @@
-New signup for #{@signup.event.title}
+New signup for #{run_description @signup.run}
 
 <%= signup_description(@signup, "has signed up for") %>
+
+As of this signup, this event run has:
+
+<%= @signup_count_presenter.signups_description %>
