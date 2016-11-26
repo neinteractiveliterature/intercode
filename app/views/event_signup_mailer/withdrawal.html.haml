@@ -1,0 +1,16 @@
+%h1 Withdrawal from #{run_description @signup.run}
+
+%p= signup_description(@signup, "has withdrawn from")
+
+- if @move_results.any?
+  %p To fill the vacancy, the following signups were moved:
+
+  %ul
+    - @move_results.each do |move_result|
+      %li= move_result_description(move_result)
+- else
+  %p There were no signups that could be moved to fill the vacancy.
+
+%p As of this withdrawal, this event run has:
+
+= simple_format @signup_count_presenter.signups_description
