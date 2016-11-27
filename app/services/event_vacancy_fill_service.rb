@@ -1,4 +1,4 @@
-class EventVacancyFillService
+class EventVacancyFillService < ApplicationService
   class SignupMoveResult
     attr_reader :signup_id, :state, :bucket_key, :prev_state, :prev_bucket_key
 
@@ -37,32 +37,25 @@ class EventVacancyFillService
   class Result < ServiceResult
     attr_accessor :move_results
   end
+  self.result_class = Result
 
   attr_reader :run, :bucket_key
   delegate :event, to: :run
   delegate :convention, to: :event
+
+  include Concerns::ConventionRegistrationFreeze
 
   def initialize(run, bucket_key)
     @run = run
     @bucket_key = bucket_key
   end
 
-  def call
-    return failure(["Registrations for #{convention.name} are frozen."]) if convention.registrations_frozen?
-
-    move_results = fill_bucket_vacancy(bucket_key)
-    move_results.each { |result| notify_moved_signup(result) }
-    success(move_results)
-  end
-
   private
 
-  def success(move_results)
-    Result.success(move_results: move_results)
-  end
-
-  def failure(errors)
-    Result.failure(errors: errors)
+  def inner_call
+    move_results = fill_bucket_vacancy(bucket_key)
+    move_results.each { |result| notify_moved_signup(result) }
+    success(move_results: move_results)
   end
 
   def fill_bucket_vacancy(bucket_key)

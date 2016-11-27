@@ -55,7 +55,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     result = subject.call
     result.must_be :failure?
-    result.errors.join('\n').must_match /\AYou are already signed up for 1 event/
+    result.errors.full_messages.join('\n').must_match /\AYou are already signed up for 1 event/
   end
 
   it 'disallows signups to a frozen convention' do
@@ -63,7 +63,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     result = subject.call
     result.must_be :failure?
-    result.errors.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+    result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
   end
 
   describe 'with a conflicting event' do
@@ -106,7 +106,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.join('\n').must_match /\AYou are already signed up for #{Regexp.escape other_event.title}/
+      result.errors.full_messages.join('\n').must_match /\AYou are already signed up for #{Regexp.escape other_event.title}/
     end
 
     it 'allows signups to conflicting events that allow concurrent signups' do
