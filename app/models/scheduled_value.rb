@@ -48,7 +48,7 @@ class ScheduledValue
     end
 
     def inspect
-      "#<#{self.class.name}: #{to_s}>"
+      "#<#{self.class.name}: #{self}>"
     end
 
     def to_s(format = nil)
