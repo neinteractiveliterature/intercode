@@ -5,6 +5,8 @@ class EventWithdrawService
 
   attr_reader :signup, :whodunit
   delegate :run, to: :signup
+  delegate :event, to: :run
+  delegate :convention, to: :event
 
   def initialize(signup, whodunit)
     @signup = signup
@@ -12,7 +14,7 @@ class EventWithdrawService
   end
 
   def call
-    # TODO fail if registrations are locked
+    return failure(["Registrations for #{convention.name} are frozen."]) if convention.registrations_frozen?
 
     prev_state = signup.state
     prev_bucket_key = signup.bucket_key
@@ -38,11 +40,7 @@ class EventWithdrawService
   end
 
   def failure(errors)
-    Result.failure(error: errors)
-  end
-
-  def event
-    @event ||= run.event
+    Result.failure(errors: errors)
   end
 
   def notify_team_members(signup, move_results)

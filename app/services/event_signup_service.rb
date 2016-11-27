@@ -4,6 +4,8 @@ class EventSignupService
   end
 
   attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed, :whodunit
+  delegate :event, to: :run
+  delegate :convention, to: :event
 
   def initialize(user_con_profile, run, requested_bucket_key, whodunit)
     @user_con_profile = user_con_profile
@@ -47,7 +49,7 @@ class EventSignupService
 
       @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
-      # TODO fail if registrations are locked
+      errors << "Registrations for #{convention.name} are frozen." if convention.registrations_frozen?
 
       unless signup_count_allowed?(user_signup_count + 1)
         errors << "You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
@@ -112,14 +114,6 @@ class EventSignupService
   def is_team_member?
     return @is_team_member unless @is_team_member.nil?
     @is_team_member = event.team_members.where(user_con_profile_id: user_con_profile.id).any?
-  end
-
-  def event
-    @event ||= run.event
-  end
-
-  def convention
-    @convention ||= event.convention
   end
 
   def signup_count_allowed?(signup_count)

@@ -35,6 +35,37 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
+  it 'disallows signups if the user has reached the current signup limit' do
+    convention.update!(
+      maximum_event_signups: ScheduledValue.new(
+        timespans: [
+          {
+            start: nil,
+            finish: nil,
+            value: 1
+          }
+        ]
+      )
+    )
+
+    other_event = FactoryGirl.create(:event, length_seconds: event.length_seconds)
+    other_run = FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
+    other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
+    other_signup_service.call.must_be :success?
+
+    result = subject.call
+    result.must_be :failure?
+    result.errors.join('\n').must_match /\AYou are already signed up for 1 event/
+  end
+
+  it 'disallows signups to a frozen convention' do
+    convention.update!(registrations_frozen: true)
+
+    result = subject.call
+    result.must_be :failure?
+    result.errors.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+  end
+
   describe 'with a conflicting event' do
     let(:other_event) { FactoryGirl.create(:event, length_seconds: event.length_seconds) }
     let(:other_run) { FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at) }
@@ -96,29 +127,6 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       result = subject.call
       result.must_be :success?
     end
-  end
-
-  it 'disallows signups if the user has reached the current signup limit' do
-    convention.update!(
-      maximum_event_signups: ScheduledValue.new(
-        timespans: [
-          {
-            start: nil,
-            finish: nil,
-            value: 1
-          }
-        ]
-      )
-    )
-
-    other_event = FactoryGirl.create(:event, length_seconds: event.length_seconds)
-    other_run = FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
-    other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
-    other_signup_service.call.must_be :success?
-
-    result = subject.call
-    result.must_be :failure?
-    result.errors.join('\n').must_match /\AYou are already signed up for 1 event/
   end
 
   describe 'with limited buckets' do

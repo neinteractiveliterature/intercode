@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161113163044) do
+ActiveRecord::Schema.define(version: 20161127205353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20161113163044) do
     t.string   "domain",                                    null: false
     t.string   "timezone_name"
     t.text     "maximum_event_signups"
+    t.boolean  "frozen",                default: false,     null: false
     t.index ["domain"], name: "index_conventions_on_domain", unique: true, using: :btree
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id", using: :btree
   end
