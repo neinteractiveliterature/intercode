@@ -1,21 +1,24 @@
-class EventWithdrawService
+class EventWithdrawService < ApplicationService
   class Result < ServiceResult
     attr_accessor :move_results
   end
+  self.result_class = Result
 
   attr_reader :signup, :whodunit
   delegate :run, to: :signup
   delegate :event, to: :run
   delegate :convention, to: :event
 
+  include Concerns::ConventionRegistrationFreeze
+
   def initialize(signup, whodunit)
     @signup = signup
     @whodunit = whodunit
   end
 
-  def call
-    return failure(["Registrations for #{convention.name} are frozen."]) if convention.registrations_frozen?
+  private
 
+  def inner_call
     prev_state = signup.state
     prev_bucket_key = signup.bucket_key
 
@@ -30,17 +33,7 @@ class EventWithdrawService
     end
 
     notify_team_members(signup, move_results)
-    success(move_results)
-  end
-
-  private
-
-  def success(move_results)
-    Result.success(move_results: move_results)
-  end
-
-  def failure(errors)
-    Result.failure(errors: errors)
+    success(move_results: move_results)
   end
 
   def notify_team_members(signup, move_results)

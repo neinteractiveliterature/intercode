@@ -1,11 +1,17 @@
-class EventSignupService
+class EventSignupService < ApplicationService
   class Result < ServiceResult
     attr_accessor :signup
   end
+  self.result_class = Result
 
   attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed, :whodunit
   delegate :event, to: :run
   delegate :convention, to: :event
+
+  validate :signup_count_must_be_allowed
+  validate :must_not_have_conflicting_signups
+
+  include Concerns::ConventionRegistrationFreeze
 
   def initialize(user_con_profile, run, requested_bucket_key, whodunit)
     @user_con_profile = user_con_profile
@@ -14,9 +20,15 @@ class EventSignupService
     @whodunit = whodunit
   end
 
-  def call
-    return failure(signup_errors) if signup_errors.any?
+  def conflicting_waitlist_signups
+    @conflicting_waitlist_signups ||= other_signups.select do |signup|
+      signup.waitlisted? && run.overlaps?(signup.run)
+    end
+  end
 
+  private
+
+  def inner_call
     signup = run.signups.create!(
       run: run,
       bucket_key: actual_bucket.try!(:key),
@@ -26,53 +38,25 @@ class EventSignupService
       state: signup_state,
       updated_by: whodunit
     )
+
     withdraw_user_from_conflicting_waitlist_signups
-
     notify_team_members(signup)
-
-    success(signup)
+    success(signup: signup)
   end
 
-  def conflicting_waitlist_signups
-    @conflicting_waitlist_signups ||= other_signups.select do |signup|
-      signup.waitlisted? && run.overlaps?(signup.run)
+  def signup_count_must_be_allowed
+    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
+    unless signup_count_allowed?(user_signup_count + 1)
+      errors.add :base, "You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
     end
   end
 
-  def can_signup?
-    signup_errors.empty?
-  end
-
-  def signup_errors
-    @signup_errors ||= begin
-      errors = []
-
-      @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
-
-      errors << "Registrations for #{convention.name} are frozen." if convention.registrations_frozen?
-
-      unless signup_count_allowed?(user_signup_count + 1)
-        errors << "You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
-      end
-
-      if !event.can_play_concurrently? && concurrent_signups.any?
-        event_titles = concurrent_signups.map { |signup| signup.event.title }
-        verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
-        errors << "You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}."
-      end
-
-      errors
+  def must_not_have_conflicting_signups
+    if !event.can_play_concurrently? && concurrent_signups.any?
+      event_titles = concurrent_signups.map { |signup| signup.event.title }
+      verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
+      errors.add :base, "You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}."
     end
-  end
-
-  private
-
-  def success(signup)
-    Result.success(signup: signup)
-  end
-
-  def failure(errors)
-    Result.failure(errors: errors)
   end
 
   def counts_towards_total?

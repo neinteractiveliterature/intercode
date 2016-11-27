@@ -52,7 +52,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
     result = subject.call
     result.must_be :failure?
-    result.errors.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+    result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
   end
 
   describe 'with limited buckets' do
