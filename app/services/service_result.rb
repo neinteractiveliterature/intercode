@@ -1,6 +1,6 @@
 class ServiceResult
   include ActiveModel::Model
-  attr_accessor :success, :error
+  attr_accessor :success, :errors
 
   def self.success(attributes = {})
     new(attributes.merge(success: true))
