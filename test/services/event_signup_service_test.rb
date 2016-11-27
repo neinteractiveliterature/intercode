@@ -75,7 +75,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.error.must_match /\AYou are already signed up for #{Regexp.escape other_event.title}/
+      result.errors.join('\n').must_match /\AYou are already signed up for #{Regexp.escape other_event.title}/
     end
 
     it 'allows signups to conflicting events that allow concurrent signups' do
@@ -118,7 +118,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     result = subject.call
     result.must_be :failure?
-    result.error.must_match /\AYou are already signed up for 1 event/
+    result.errors.join('\n').must_match /\AYou are already signed up for 1 event/
   end
 
   describe 'with limited buckets' do

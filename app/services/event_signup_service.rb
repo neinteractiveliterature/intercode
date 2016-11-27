@@ -13,19 +13,7 @@ class EventSignupService
   end
 
   def call
-    # TODO fail if registrations are locked
-
-    @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
-
-    unless signup_count_allowed?(user_signup_count + 1)
-      return failure("You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time.")
-    end
-
-    if !event.can_play_concurrently? && concurrent_signups.any?
-      event_titles = concurrent_signups.map { |signup| signup.event.title }
-      verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
-      return failure("You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}.")
-    end
+    return failure(signup_errors) if signup_errors.any?
 
     signup = run.signups.create!(
       run: run,
@@ -49,14 +37,40 @@ class EventSignupService
     end
   end
 
+  def can_signup?
+    signup_errors.empty?
+  end
+
+  def signup_errors
+    @signup_errors ||= begin
+      errors = []
+
+      @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
+
+      # TODO fail if registrations are locked
+
+      unless signup_count_allowed?(user_signup_count + 1)
+        errors << "You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
+      end
+
+      if !event.can_play_concurrently? && concurrent_signups.any?
+        event_titles = concurrent_signups.map { |signup| signup.event.title }
+        verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
+        errors << "You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}."
+      end
+
+      errors
+    end
+  end
+
   private
 
   def success(signup)
     Result.success(signup: signup)
   end
 
-  def failure(error)
-    Result.failure(error: error)
+  def failure(errors)
+    Result.failure(errors: errors)
   end
 
   def counts_towards_total?

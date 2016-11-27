@@ -37,8 +37,8 @@ class EventWithdrawService
     Result.success(move_results: move_results)
   end
 
-  def failure(error)
-    Result.failure(error: error)
+  def failure(errors)
+    Result.failure(error: errors)
   end
 
   def event

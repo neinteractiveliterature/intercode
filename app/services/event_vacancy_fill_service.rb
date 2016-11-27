@@ -57,8 +57,8 @@ class EventVacancyFillService
     Result.success(move_results: move_results)
   end
 
-  def failure(error)
-    Result.failure(error: error)
+  def failure(errors)
+    Result.failure(errors: errors)
   end
 
   def fill_bucket_vacancy(bucket_key)
