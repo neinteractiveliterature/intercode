@@ -133,16 +133,17 @@ class ScheduledValue
 
   def timespans=(timespan_values)
     @timespans = SortedSet.new
-    @timespans.tap do |timespans|
-      timespan_values.each do |timespan_value|
-        timespan = case timespan_value
-        when self.class.timespan_with_value_class then timespan_value
-        when Hash then self.class.timespan_with_value_class.new(timespan_value)
-        end
 
-        self << timespan if timespan
+    timespan_values.each do |timespan_value|
+      timespan = case timespan_value
+      when self.class.timespan_with_value_class then timespan_value
+      when Hash then self.class.timespan_with_value_class.new(timespan_value)
       end
+
+      self << timespan if timespan
     end
+
+    @timespans
   end
 
   def <<(timespan_with_value)
