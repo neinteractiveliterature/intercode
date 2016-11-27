@@ -39,6 +39,8 @@ class EventVacancyFillService
   end
 
   attr_reader :run, :bucket_key
+  delegate :event, to: :run
+  delegate :convention, to: :event
 
   def initialize(run, bucket_key)
     @run = run
@@ -46,6 +48,8 @@ class EventVacancyFillService
   end
 
   def call
+    return failure(["Registrations for #{convention.name} are frozen."]) if convention.registrations_frozen?
+
     move_results = fill_bucket_vacancy(bucket_key)
     move_results.each { |result| notify_moved_signup(result) }
     success(move_results)
@@ -98,10 +102,6 @@ class EventVacancyFillService
       run.signups.reload
       run.signups.order(:created_at).to_a
     end
-  end
-
-  def event
-    @event ||= run.event
   end
 
   def notify_moved_signup(result)

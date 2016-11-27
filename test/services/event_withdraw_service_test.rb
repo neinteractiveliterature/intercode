@@ -47,6 +47,14 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     end
   end
 
+  it 'disallows withdrawals in a frozen convention' do
+    convention.update!(registrations_frozen: true)
+
+    result = subject.call
+    result.must_be :failure?
+    result.errors.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+  end
+
   describe 'with limited buckets' do
     let(:event) do
       FactoryGirl.create(

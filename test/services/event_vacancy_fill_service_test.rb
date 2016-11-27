@@ -110,4 +110,12 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
       recipients.must_equal [[anything_signup.user_con_profile.email]]
     end
   end
+
+  it 'disallows vacancy filling in a frozen convention' do
+    convention.update!(registrations_frozen: true)
+
+    result = subject.call
+    result.must_be :failure?
+    result.errors.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+  end
 end
