@@ -175,6 +175,10 @@ class ScheduledValue
     timespan.finish
   end
 
+  def covers_all_time?
+    !timespans.first.start && !timespans.last.finish
+  end
+
   private
 
   def timespans_array

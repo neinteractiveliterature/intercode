@@ -21,6 +21,8 @@ class Convention < ApplicationRecord
   validates :timezone_name, presence: true
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
+  validates :maximum_signups_allowed, presence: true
+  validate :maximum_signups_allowed_must_cover_all_time
 
   mount_uploader :banner_image, BannerImageUploader
 
@@ -59,5 +61,13 @@ class Convention < ApplicationRecord
 
   def bucket_metadata_from_events
     events.pluck(:registration_policy).flat_map { |p| p.buckets.flat_map(&:metadata) }.uniq
+  end
+
+  private
+
+  def maximum_signups_allowed_must_cover_all_time
+    return if maximum_signups_allowed.try!(:covers_all_time?)
+
+    errors.add(:maximum_signups_allowed, "must cover all time")
   end
 end
