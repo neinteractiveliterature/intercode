@@ -1,4 +1,4 @@
-class SignupsGrid
+class AdminSignupsGrid
   include Datagrid
 
   scope do
@@ -9,7 +9,7 @@ class SignupsGrid
   column(:state)
   column(:name, order: "users.last_name, users.first_name") do |signup|
     format(signup.user_con_profile.name_inverted) do |name|
-      link_to name, [@event, @run, signup]
+      link_to name, event_run_admin_signup_path(@event, @run, signup)
     end
   end
   column(:bucket, order: 'signups.bucket_key') do |signup|

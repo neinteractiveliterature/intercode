@@ -47,6 +47,7 @@
             %p
               %strong= run.title_suffix
 
+
           #{run.starts_at.strftime("%a %H:%M")}-#{run.ends_at.strftime("%H:%M")}
           %br
           = run.rooms.map(&:name).sort.join(", ")
@@ -55,7 +56,7 @@
             - signup_description = simple_format(SignupCountPresenter.new(run).signups_description)
 
             - if can? :read, run.signups.new
-              - signup_link_or_text = link_to(signup_description, [@event, run, :signups])
+              - signup_link_or_text = link_to(signup_description, [@event, run, :admin_signups])
             - else
               - signup_link_or_text = signup_description
 
