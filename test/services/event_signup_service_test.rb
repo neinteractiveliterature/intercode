@@ -77,7 +77,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         run: other_run,
         state: 'waitlisted',
         bucket_key: nil,
-        requested_bucket_key: 'anything'
+        requested_bucket_key: 'unlimited'
       )
 
       subject.conflicting_waitlist_signups.must_equal [waitlist_signup1]
@@ -90,7 +90,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         run: other_run,
         state: 'waitlisted',
         bucket_key: nil,
-        requested_bucket_key: 'anything'
+        requested_bucket_key: 'unlimited'
       )
 
       waitlist_signup1.must_be :waitlisted?
