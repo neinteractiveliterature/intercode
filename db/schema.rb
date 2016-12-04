@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20161127205353) do
     t.string   "domain",                                    null: false
     t.string   "timezone_name"
     t.text     "maximum_event_signups"
-    t.boolean  "frozen",                default: false,     null: false
+    t.boolean  "registrations_frozen",  default: false,     null: false
     t.index ["domain"], name: "index_conventions_on_domain", unique: true, using: :btree
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id", using: :btree
   end
