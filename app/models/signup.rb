@@ -11,7 +11,7 @@ class Signup < ApplicationRecord
   validates :bucket_key, presence: { if: -> (signup) { signup.counted? && signup.confirmed? } }
   validates :requested_bucket_key, presence: { if: :counted? }
   validate :must_be_counted_if_and_only_if_not_team_member
-
+  validate :must_be_in_existing_bucket
 
   STATES.each do |state_name|
     define_method "#{state_name}?" do
@@ -44,5 +44,13 @@ class Signup < ApplicationRecord
     else
       errors.add(:counted, "must be true for non-team members") if !counted?
     end
+  end
+
+  def must_be_in_existing_bucket
+    return if !counted? || withdrawn?
+
+    bucket_names = run.registration_policy.buckets.map(&:key).to_sentence(last_word_connector: ", or ", two_words_connector: " or ")
+    errors.add(:bucket_key, "must be one of #{bucket_names}") if bucket_key && !bucket
+    errors.add(:requested_bucket_key, "must be one of #{bucket_names}") if requested_bucket_key && !requested_bucket
   end
 end
