@@ -176,7 +176,8 @@ class ScheduledValue
   end
 
   def covers_all_time?
-    !timespans.first.start && !timespans.last.finish
+    timespans_array = timespans.to_a
+    !timespans_array.first.start && !timespans_array.last.finish
   end
 
   private

@@ -21,8 +21,8 @@ class Convention < ApplicationRecord
   validates :timezone_name, presence: true
   validates :signups_allowed, :inclusion => { :in => %w(not_yet 1 2 3 yes not_now) }
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
-  validates :maximum_signups_allowed, presence: true
-  validate :maximum_signups_allowed_must_cover_all_time
+  validates :maximum_event_signups, presence: true
+  validate :maximum_event_signups_must_cover_all_time
 
   mount_uploader :banner_image, BannerImageUploader
 
@@ -65,9 +65,9 @@ class Convention < ApplicationRecord
 
   private
 
-  def maximum_signups_allowed_must_cover_all_time
-    return if maximum_signups_allowed.try!(:covers_all_time?)
+  def maximum_event_signups_must_cover_all_time
+    return if maximum_event_signups.try!(:covers_all_time?)
 
-    errors.add(:maximum_signups_allowed, "must cover all time")
+    errors.add(:maximum_event_signups, "must cover all time")
   end
 end
