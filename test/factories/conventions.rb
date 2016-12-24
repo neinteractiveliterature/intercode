@@ -12,7 +12,7 @@ FactoryGirl.define do
     accepting_bids false
     precon_bids_allowed false
     updated_by nil
-    maximum_event_signups ScheduledValue.new(
+    maximum_event_signups ScheduledValue::ScheduledValue.new(
       timespans: [
         {
           start: nil,

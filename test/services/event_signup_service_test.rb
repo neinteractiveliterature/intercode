@@ -37,7 +37,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
   it 'disallows signups if the user has reached the current signup limit' do
     convention.update!(
-      maximum_event_signups: ScheduledValue.new(
+      maximum_event_signups: ScheduledValue::ScheduledValue.new(
         timespans: [
           {
             start: nil,

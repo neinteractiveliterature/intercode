@@ -49,6 +49,9 @@ gem 'activerecord-session_store'
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
 gem 'cadmus', '~> 0.5.2'
 
+# Extracted from this app!  Values that change over time based on a schedule
+gem 'scheduled_value'
+
 # File uploading
 gem 'carrierwave'
 

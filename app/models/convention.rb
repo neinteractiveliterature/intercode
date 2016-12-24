@@ -14,7 +14,7 @@ class Convention < ApplicationRecord
   before_create :create_default_root_page
   after_create :fix_root_page_parent
 
-  serialize :maximum_event_signups, ScheduledValue
+  serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
   validates :name, :presence => true
   validates :domain, :presence => true, :uniqueness => true

@@ -4,7 +4,6 @@
 class RegistrationPolicy
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
-  extend ActsAsCoder
 
   validate :validate_anything_bucket
 
