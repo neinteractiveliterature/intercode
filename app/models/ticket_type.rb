@@ -1,6 +1,6 @@
 class TicketType < ApplicationRecord
   belongs_to :convention
-  serialize :pricing_schedule, ScheduledMoneyValue
+  serialize :pricing_schedule, ActiveModelCoder.new('ScheduledMoneyValue')
 
   has_many :tickets
 

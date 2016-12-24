@@ -45,7 +45,7 @@ class Event < ApplicationRecord
 
   scope :accepted, -> { where(status: 'accepted') }
 
-  serialize :registration_policy, RegistrationPolicy
+  serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
 #  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
 

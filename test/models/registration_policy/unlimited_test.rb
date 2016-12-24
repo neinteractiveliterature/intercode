@@ -25,8 +25,8 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
   end
 
   it "serializes and deserializes" do
-    json = RegistrationPolicy.dump(subject)
-    deserialized = RegistrationPolicy.load(json)
+    json = subject.to_json
+    deserialized = RegistrationPolicy.new.from_json(json)
     deserialized.buckets.must_equal subject.buckets
   end
 end
