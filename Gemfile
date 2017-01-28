@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 gem 'rails', '5.0.0.1'
 
-gem 'sqlite3'
+gem 'sqlite3', groups: [:development, :test]
 gem 'mysql2'
 gem 'pg'
 gem 'puma'
