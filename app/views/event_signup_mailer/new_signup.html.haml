@@ -1,0 +1,7 @@
+%h1 New signup for #{run_description @signup.run}
+
+%p= signup_description(@signup, "has signed up for")
+
+%p As of ths signup, this event run has:
+
+= simple_format @signup_count_presenter.signups_description

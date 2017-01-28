@@ -1,10 +1,10 @@
-class SignupsController < BaseControllers::VirtualHost
+class AdminSignupsController < BaseControllers::VirtualHost
   load_resource :event, through: :convention
   load_resource :run, through: :event
-  load_and_authorize_resource
+  load_and_authorize_resource class: Signup
 
   def index
-    @signups_grid = SignupsGrid.new(params[:signups_grid] || {order: 'id'}) do |scope|
+    @signups_grid = AdminSignupsGrid.new(params[:signups_grid] || {order: 'id'}) do |scope|
       scope.where(run_id: @run.id)
     end
 

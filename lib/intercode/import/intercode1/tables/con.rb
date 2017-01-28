@@ -24,7 +24,16 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       accepting_bids: yesno_to_bool(row[:AcceptingBids]),
       precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
       starts_at: @starts_at,
-      timezone_name: @timezone.name
+      timezone_name: @timezone.name,
+      maximum_event_signups: {
+        timespans: [
+          {
+            start: nil,
+            finish: nil,
+            value: 'unlimited'
+          }
+        ]
+      }
     )
   end
 end

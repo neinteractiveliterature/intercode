@@ -1,0 +1,17 @@
+Withdrawal from #{run_description @signup.run}
+
+<%= signup_description(@signup, "has withdrawn from") %>
+
+<% if @move_results.any? -%>
+To fill the vacancy, the following signups were moved:
+
+<% @move_results.each do |move_result| -%>
+* <%= move_result_description(move_result) %>
+<% end -%>
+<% else -%>
+There were no signups that could be moved to fill the vacancy.
+<% end -%>
+
+As of this withdrawal, this event run has:
+
+<%= @signup_count_presenter.signups_description %>

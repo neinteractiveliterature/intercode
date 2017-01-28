@@ -12,8 +12,11 @@ Minitest::Reporters.use!(
 DatabaseCleaner.strategy = :transaction
 
 class ActiveSupport::TestCase
-  before(:each) { DatabaseCleaner.start }
-  after(:each) { DatabaseCleaner.clean }
+  before do
+    DatabaseCleaner.start
+    ActionMailer::Base.deliveries.clear # TODO: remove once Rails merges PR #24688 to do this itself
+  end
+  after { DatabaseCleaner.clean }
 end
 
 class ActionController::TestCase

@@ -1,0 +1,5 @@
+class AddMaximumEventSignupsToConventions < ActiveRecord::Migration[5.0]
+  def change
+    add_column :conventions, :maximum_event_signups, :text
+  end
+end

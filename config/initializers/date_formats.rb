@@ -1,0 +1,1 @@
+Time::DATE_FORMATS[:long_with_weekday] = "%A, %B %-d, %Y at l:%M %p"
