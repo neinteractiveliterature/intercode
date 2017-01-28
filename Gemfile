@@ -74,7 +74,6 @@ end
 
 group :intercode1_import do
   gem 'sequel'
-  gem 'mysql2'
   gem 'term-ansicolor'
 end
 
