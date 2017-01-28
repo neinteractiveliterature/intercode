@@ -13,4 +13,4 @@ test:
 <% elsif ENV['DATABASE'] == 'postgresql' %>
   adapter: postgresql
   database: intercode_test
-<% end -%>
+<% end %>
