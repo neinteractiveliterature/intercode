@@ -32,3 +32,6 @@ cookbooks
 
 # Ignore sqlite3 advisory locks
 /.lock-*
+
+# Ignore SimpleCov test coverage results
+/coverage
