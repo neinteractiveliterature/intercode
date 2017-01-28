@@ -45,15 +45,20 @@ class EventVacancyFillService < ApplicationService
 
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(run, bucket_key)
+  def initialize(run, bucket_key, skip_locking: false)
     @run = run
     @bucket_key = bucket_key
+    @skip_locking = skip_locking
   end
 
   private
 
   def inner_call
-    move_results = fill_bucket_vacancy(bucket_key)
+    move_results = nil
+    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
+      move_results = fill_bucket_vacancy(bucket_key)
+    end
+
     move_results.each { |result| notify_moved_signup(result) }
     success(move_results: move_results)
   end

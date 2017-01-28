@@ -11,9 +11,10 @@ class EventWithdrawService < ApplicationService
 
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(signup, whodunit)
+  def initialize(signup, whodunit, skip_locking: false)
     @signup = signup
     @whodunit = whodunit
+    @skip_locking = skip_locking
   end
 
   private
@@ -21,15 +22,18 @@ class EventWithdrawService < ApplicationService
   def inner_call
     prev_state = signup.state
     prev_bucket_key = signup.bucket_key
+    move_results = nil
 
-    signup.update!(state: 'withdrawn', updated_by: whodunit)
+    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
+      signup.update!(state: 'withdrawn', updated_by: whodunit)
 
-    move_results = if signup.counted? && prev_state == 'confirmed'
-      vacancy_fill_result = EventVacancyFillService.new(run, prev_bucket_key).call
-      return failure(vacancy_fill_result.error) if vacancy_fill_result.failure?
-      vacancy_fill_result.move_results
-    else
-      []
+      move_results = if signup.counted? && prev_state == 'confirmed'
+        vacancy_fill_result = EventVacancyFillService.new(run, prev_bucket_key, skip_locking: true).call
+        return failure(vacancy_fill_result.error) if vacancy_fill_result.failure?
+        vacancy_fill_result.move_results
+      else
+        []
+      end
     end
 
     notify_team_members(signup, move_results)

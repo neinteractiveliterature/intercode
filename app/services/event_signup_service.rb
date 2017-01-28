@@ -13,11 +13,12 @@ class EventSignupService < ApplicationService
 
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(user_con_profile, run, requested_bucket_key, whodunit)
+  def initialize(user_con_profile, run, requested_bucket_key, whodunit, skip_locking: false)
     @user_con_profile = user_con_profile
     @run = run
     @requested_bucket_key = requested_bucket_key
     @whodunit = whodunit
+    @skip_locking = skip_locking
   end
 
   def conflicting_waitlist_signups
@@ -29,17 +30,21 @@ class EventSignupService < ApplicationService
   private
 
   def inner_call
-    signup = run.signups.create!(
-      run: run,
-      bucket_key: actual_bucket.try!(:key),
-      requested_bucket_key: requested_bucket_key,
-      user_con_profile: user_con_profile,
-      counted: counts_towards_total?,
-      state: signup_state,
-      updated_by: whodunit
-    )
+    signup = nil
+    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
+      signup = run.signups.create!(
+        run: run,
+        bucket_key: actual_bucket.try!(:key),
+        requested_bucket_key: requested_bucket_key,
+        user_con_profile: user_con_profile,
+        counted: counts_towards_total?,
+        state: signup_state,
+        updated_by: whodunit
+      )
 
-    withdraw_user_from_conflicting_waitlist_signups
+      withdraw_user_from_conflicting_waitlist_signups
+    end
+
     notify_team_members(signup)
     success(signup: signup)
   end
@@ -117,7 +122,7 @@ class EventSignupService < ApplicationService
 
   def withdraw_user_from_conflicting_waitlist_signups
     conflicting_waitlist_signups.each do |conflicting_waitlist_signup|
-      EventWithdrawService.new(conflicting_waitlist_signup, whodunit).call
+      EventWithdrawService.new(conflicting_waitlist_signup, whodunit, skip_locking: true).call
     end
   end
 
