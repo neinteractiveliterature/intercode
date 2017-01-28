@@ -76,6 +76,6 @@ class UserConProfilesGrid
   end
 
   def ticket_types
-    [["Unpaid", "none"]] + TicketType.where(id: scope.joins(:ticket).select(:ticket_type_id).distinct).pluck(:description, :id)
+    [["Unpaid", "none"]] + TicketType.where(id: scope.unscope(:limit, :offset).joins(:ticket).select(:ticket_type_id).distinct).pluck(:description, :id)
   end
 end
