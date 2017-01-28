@@ -10,6 +10,7 @@ class EventSignupService < ApplicationService
 
   validate :signup_count_must_be_allowed
   validate :must_not_have_conflicting_signups
+  validate :must_have_ticket
 
   include Concerns::ConventionRegistrationFreeze
 
@@ -61,6 +62,12 @@ class EventSignupService < ApplicationService
       event_titles = concurrent_signups.map { |signup| signup.event.title }
       verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
       errors.add :base, "You are already signed up for #{event_titles.to_sentence}, which #{verb} with #{event.title}."
+    end
+  end
+
+  def must_have_ticket
+    unless user_con_profile.ticket
+      errors.add :base, "You must have a valid ticket to #{convention.name} to sign up for events."
     end
   end
 
