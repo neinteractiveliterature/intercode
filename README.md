@@ -1,6 +1,8 @@
 # Intercode 2
 
-[ ![Codeship Status for neinteractiveliterature/intercode](https://codeship.com/projects/6a8bde80-69df-0133-bfd5-6e257542035e/status?branch=master)](https://codeship.com/projects/114682)
+[![Build Status](https://travis-ci.org/neinteractiveliterature/intercode.svg?branch=master)](https://travis-ci.org/neinteractiveliterature/intercode)
+[![Code Climate](https://codeclimate.com/github/neinteractiveliterature/intercode/badges/gpa.svg)](https://codeclimate.com/github/neinteractiveliterature/intercode)
+[![Test Coverage](https://codeclimate.com/github/neinteractiveliterature/intercode/badges/coverage.svg)](https://codeclimate.com/github/neinteractiveliterature/intercode/coverage)
 
 Intercode is a web application that:
 
