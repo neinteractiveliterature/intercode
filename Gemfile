@@ -22,6 +22,7 @@ gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem 'haml'
+gem 'with_advisory_lock'
 
 gem 'uglifier', '>= 1.0.3'
 

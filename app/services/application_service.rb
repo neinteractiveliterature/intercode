@@ -1,6 +1,8 @@
 class ApplicationService
   include ActiveModel::Validations
 
+  attr_reader :skip_locking
+
   class << self
     attr_accessor :result_class
   end
@@ -23,5 +25,13 @@ class ApplicationService
 
   def inner_call
     raise "Subclasses are expected to override #inner_call"
+  end
+
+  def with_advisory_lock_unless_skip_locking(name, &block)
+    if skip_locking
+      yield
+    else
+      ActiveRecord::Base.with_advisory_lock(name, &block)
+    end
   end
 end

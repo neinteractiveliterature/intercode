@@ -293,6 +293,9 @@ GEM
     will_paginate (3.1.5)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    with_advisory_lock (3.0.0)
+      activerecord (>= 3.2)
+      thread_safe
 
 PLATFORMS
   java
@@ -347,6 +350,7 @@ DEPENDENCIES
   unf
   will_paginate
   will_paginate-bootstrap
+  with_advisory_lock
 
 BUNDLED WITH
    1.10.6
