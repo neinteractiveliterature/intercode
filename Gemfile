@@ -3,18 +3,10 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 gem 'rails', '5.0.0.1'
 
-platform :ruby do
-  gem 'sqlite3', :groups => [:development, :test]
-  gem 'pg', :group => :production
-  gem 'puma'
-end
-
-platform :jruby do
-  gem 'jruby-openssl'
-  gem 'activerecord-jdbcsqlite3-adapter', :groups => [:development, :test]
-  gem 'activerecord-jdbcpostgresql-adapter', :group => :production
-  gem 'mizuno'
-end
+gem 'sqlite3'
+gem 'mysql2'
+gem 'pg'
+gem 'puma'
 
 gem 'sass-rails'
 gem 'bootstrap-sass'
