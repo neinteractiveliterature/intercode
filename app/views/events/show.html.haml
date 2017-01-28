@@ -47,32 +47,32 @@
             %p
               %strong= run.title_suffix
 
+
           #{run.starts_at.strftime("%a %H:%M")}-#{run.ends_at.strftime("%H:%M")}
           %br
           = run.rooms.map(&:name).sort.join(", ")
 
           %p
-            - signup_description = capture do
-              - signups_by_bucket_key = run.signups_by_bucket_key
-              - if signups_by_bucket_key.keys.select { |key| key }.size == 1
-                - bucket_descriptions = [signups_by_bucket_key.values.first.size.to_s]
-              - else
-                - bucket_descriptions = run.event.registration_policy.buckets.map do |bucket|
-                  - capture do
-                    #{bucket.name}: #{signups_by_bucket_key[bucket.key].size}
-
-              Signed up:
-              = bucket_descriptions.map(&:strip).join(", ")
-              - if signups_by_bucket_key[nil].any?
-                %br
-                Waitlisted: #{signups_by_bucket_key[nil].size}
+            - signup_description = simple_format(SignupCountPresenter.new(run).signups_description)
 
             - if can? :read, run.signups.new
-              - signup_link_or_text = link_to(signup_description, [@event, run, :signups])
+              - signup_link_or_text = link_to(signup_description, [@event, run, :admin_signups])
             - else
               - signup_link_or_text = signup_description
 
             #{signup_link_or_text}
+
+          - if @user_signup_by_run_id[run.id]
+            %p
+              %em You are signed up
+
+            %p= link_to "Withdraw", [@event, run, :user_signup], method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
+          - else
+            - run.registration_policy.buckets.each do |bucket|
+              = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-default" do
+                %strong Sign up
+                %br
+                #{bucket.name}
 %hr
 
 = sanitize @event.description

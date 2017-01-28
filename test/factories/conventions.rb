@@ -12,5 +12,16 @@ FactoryGirl.define do
     accepting_bids false
     precon_bids_allowed false
     updated_by nil
+    maximum_event_signups ScheduledValue::ScheduledValue.new(
+      timespans: [
+        {
+          start: nil,
+          finish: nil,
+          value: 'unlimited'
+        }
+      ]
+    )
+    starts_at Time.new(2016, 10, 28, 18, 0, 0)
+    ends_at Time.new(2016, 10, 30, 18, 0, 0)
   end
 end

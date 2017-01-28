@@ -10,6 +10,7 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
   private
   def build_record(row)
     event = @event_id_map[row[:EventId]]
+    return unless event
 
     # Ugh.  Unfortunately, Intercode 1 makes it possible to have the same user as a GM twice.
     # Intercode 2 doesn't allow it, so if it happens, merge the two records' flags.

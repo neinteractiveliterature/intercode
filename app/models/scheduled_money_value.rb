@@ -1,5 +1,5 @@
-class ScheduledMoneyValue < ScheduledValue
-  class TimespanWithMoneyValue < TimespanWithValue
+class ScheduledMoneyValue < ScheduledValue::ScheduledValue
+  class TimespanWithMoneyValue < ScheduledValue::TimespanWithValue
     def value=(new_value)
       @value = case new_value
       when nil then nil

@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160506223047) do
+ActiveRecord::Schema.define(version: 20161127205353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "conventions", force: :cascade do |t|
-    t.string   "signups_allowed",     default: "not_yet", null: false
-    t.string   "show_schedule",       default: "no",      null: false
+    t.string   "signups_allowed",       default: "not_yet", null: false
+    t.string   "show_schedule",         default: "no",      null: false
     t.text     "news"
     t.text     "con_com_meetings"
     t.boolean  "accepting_bids"
@@ -31,12 +30,13 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.integer  "root_page_id"
     t.string   "name"
     t.string   "banner_image"
-    t.string   "domain",                                  null: false
+    t.string   "domain",                                    null: false
     t.string   "timezone_name"
+    t.text     "maximum_event_signups"
+    t.boolean  "registrations_frozen",  default: false,     null: false
+    t.index ["domain"], name: "index_conventions_on_domain", unique: true, using: :btree
+    t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id", using: :btree
   end
-
-  add_index "conventions", ["domain"], name: "index_conventions_on_domain", unique: true, using: :btree
-  add_index "conventions", ["updated_by_id"], name: "index_conventions_on_updated_by_id", using: :btree
 
   create_table "events", force: :cascade do |t|
     t.string   "title"
@@ -59,11 +59,10 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.string   "status"
     t.string   "category"
     t.text     "registration_policy"
+    t.index ["convention_id"], name: "index_events_on_convention_id", using: :btree
+    t.index ["owner_id"], name: "index_events_on_owner_id", using: :btree
+    t.index ["updated_by_id"], name: "index_events_on_updated_by_id", using: :btree
   end
-
-  add_index "events", ["convention_id"], name: "index_events_on_convention_id", using: :btree
-  add_index "events", ["owner_id"], name: "index_events_on_owner_id", using: :btree
-  add_index "events", ["updated_by_id"], name: "index_events_on_updated_by_id", using: :btree
 
   create_table "pages", force: :cascade do |t|
     t.text     "name"
@@ -73,27 +72,24 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.string   "parent_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true, using: :btree
   end
-
-  add_index "pages", ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true, using: :btree
 
   create_table "rooms", force: :cascade do |t|
     t.integer  "convention_id"
     t.string   "name"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["convention_id"], name: "index_rooms_on_convention_id", using: :btree
   end
-
-  add_index "rooms", ["convention_id"], name: "index_rooms_on_convention_id", using: :btree
 
   create_table "rooms_runs", id: false, force: :cascade do |t|
     t.integer "room_id", null: false
     t.integer "run_id",  null: false
+    t.index ["room_id"], name: "index_rooms_runs_on_room_id", using: :btree
+    t.index ["run_id", "room_id"], name: "index_rooms_runs_on_run_id_and_room_id", unique: true, using: :btree
+    t.index ["run_id"], name: "index_rooms_runs_on_run_id", using: :btree
   end
-
-  add_index "rooms_runs", ["room_id"], name: "index_rooms_runs_on_room_id", using: :btree
-  add_index "rooms_runs", ["run_id", "room_id"], name: "index_rooms_runs_on_run_id_and_room_id", unique: true, using: :btree
-  add_index "rooms_runs", ["run_id"], name: "index_rooms_runs_on_run_id", using: :btree
 
   create_table "runs", force: :cascade do |t|
     t.integer  "event_id"
@@ -103,33 +99,33 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.integer  "updated_by_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["event_id"], name: "index_runs_on_event_id", using: :btree
+    t.index ["updated_by_id"], name: "index_runs_on_updated_by_id", using: :btree
   end
-
-  add_index "runs", ["event_id"], name: "index_runs_on_event_id", using: :btree
-  add_index "runs", ["updated_by_id"], name: "index_runs_on_updated_by_id", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
+    t.index ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
   end
-
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "signups", force: :cascade do |t|
     t.integer  "run_id"
     t.string   "bucket_key"
     t.integer  "updated_by_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.integer  "user_con_profile_id", null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "user_con_profile_id",                        null: false
+    t.string   "state",                default: "confirmed", null: false
+    t.boolean  "counted"
+    t.string   "requested_bucket_key"
+    t.index ["run_id"], name: "index_signups_on_run_id", using: :btree
+    t.index ["updated_by_id"], name: "index_signups_on_updated_by_id", using: :btree
+    t.index ["user_con_profile_id"], name: "index_signups_on_user_con_profile_id", using: :btree
   end
-
-  add_index "signups", ["run_id"], name: "index_signups_on_run_id", using: :btree
-  add_index "signups", ["updated_by_id"], name: "index_signups_on_updated_by_id", using: :btree
-  add_index "signups", ["user_con_profile_id"], name: "index_signups_on_user_con_profile_id", using: :btree
 
   create_table "team_members", force: :cascade do |t|
     t.integer  "event_id"
@@ -141,9 +137,8 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.boolean  "receive_signup_email"
     t.datetime "created_at"
     t.integer  "user_con_profile_id",  null: false
+    t.index ["user_con_profile_id"], name: "index_team_members_on_user_con_profile_id", using: :btree
   end
-
-  add_index "team_members", ["user_con_profile_id"], name: "index_team_members_on_user_con_profile_id", using: :btree
 
   create_table "ticket_types", force: :cascade do |t|
     t.integer  "convention_id"
@@ -152,9 +147,8 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.text     "pricing_schedule"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.index ["convention_id"], name: "index_ticket_types_on_convention_id", using: :btree
   end
-
-  add_index "ticket_types", ["convention_id"], name: "index_ticket_types_on_convention_id", using: :btree
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "user_con_profile_id"
@@ -166,12 +160,11 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "provided_by_event_id"
+    t.index ["charge_id"], name: "index_tickets_on_charge_id", unique: true, using: :btree
+    t.index ["provided_by_event_id"], name: "index_tickets_on_provided_by_event_id", using: :btree
+    t.index ["ticket_type_id"], name: "index_tickets_on_ticket_type_id", using: :btree
+    t.index ["user_con_profile_id"], name: "index_tickets_on_user_con_profile_id", using: :btree
   end
-
-  add_index "tickets", ["charge_id"], name: "index_tickets_on_charge_id", unique: true, using: :btree
-  add_index "tickets", ["provided_by_event_id"], name: "index_tickets_on_provided_by_event_id", using: :btree
-  add_index "tickets", ["ticket_type_id"], name: "index_tickets_on_ticket_type_id", using: :btree
-  add_index "tickets", ["user_con_profile_id"], name: "index_tickets_on_user_con_profile_id", using: :btree
 
   create_table "user_con_profiles", force: :cascade do |t|
     t.integer  "user_id",                           null: false
@@ -206,9 +199,8 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.string   "evening_phone"
     t.string   "best_call_time"
     t.string   "preferred_contact"
+    t.index ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true, using: :btree
   end
-
-  add_index "user_con_profiles", ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                          null: false
@@ -227,10 +219,9 @@ ActiveRecord::Schema.define(version: 20160506223047) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "legacy_password_md5"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"

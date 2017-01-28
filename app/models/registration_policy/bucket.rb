@@ -2,8 +2,9 @@ class RegistrationPolicy::Bucket
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  attr_accessor :key, :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited
+  attr_accessor :key, :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited, :anything
   alias_method :slots_limited?, :slots_limited
+  alias_method :anything?, :anything
 
   def self.normalize_key(key)
     key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
@@ -46,7 +47,8 @@ class RegistrationPolicy::Bucket
       total_slots: total_slots,
       minimum_slots: minimum_slots,
       preferred_slots: preferred_slots,
-      slots_limited: slots_limited
+      slots_limited: slots_limited,
+      anything: anything
     }
   end
 

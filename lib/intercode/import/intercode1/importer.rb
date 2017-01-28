@@ -1,31 +1,37 @@
+require 'tempfile'
+require 'open3'
+
 class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :con
   attr_accessor :con_domain, :con_name, :friday_date
 
   def self.from_constants_file(filename)
     php = <<-PHP
-    require "#{filename}";
+    <?php
+      error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
+      require "#{filename}";
 
-    $vars = array(
-      "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
-      "con_name" => CON_NAME,
-      "con_domain" => CON_DOMAIN,
-      "friday_date" => FRI_DATE,
-      "php_timezone" => date_default_timezone_get()
-    );
+      $vars = array(
+        "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
+        "con_name" => CON_NAME,
+        "con_domain" => CON_DOMAIN,
+        "friday_date" => FRI_DATE,
+        "php_timezone" => date_default_timezone_get()
+      );
 
-    $price_schedule = array();
-    $i = 0;
-    while (get_con_price ($i++, $price, $start_date, $end_date)) {
-      array_push($price_schedule, array("price" => $price, "start_date" => $start_date, "end_date" => $end_date));
-    }
+      $price_schedule = array();
+      $i = 0;
+      while (get_con_price ($i++, $price, $start_date, $end_date)) {
+        array_push($price_schedule, array("price" => $price, "start_date" => $start_date, "end_date" => $end_date));
+      }
 
-    $vars["price_schedule"] = $price_schedule;
+      $vars["price_schedule"] = $price_schedule;
 
-    echo json_encode($vars);
+      echo json_encode($vars);
+    ?>
     PHP
 
-    vars = JSON.parse `php -r '#{php}'`
+    vars = exec_php_and_parse_json(php, 'dump_con_vars.php')
 
     new(
       Sequel.connect(vars['database_url']),
@@ -35,6 +41,20 @@ class Intercode::Import::Intercode1::Importer
       vars['price_schedule'],
       vars['php_timezone']
     )
+  end
+
+  def self.exec_php_and_parse_json(php, filename = 'program.php')
+    temp_program = Tempfile.new(filename)
+    begin
+      temp_program.write php
+      temp_program.flush
+
+      output, _ = Open3.capture2e('php', temp_program.path)
+      JSON.parse output
+    ensure
+      temp_program.close
+      temp_program.unlink
+    end
   end
 
   def initialize(connection, con_name, con_domain, friday_date, price_schedule, php_timezone)

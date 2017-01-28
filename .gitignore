@@ -29,3 +29,6 @@ cookbooks
 
 # Ignore Emacs backup files
 *~
+
+# Ignore sqlite3 advisory locks
+/.lock-*

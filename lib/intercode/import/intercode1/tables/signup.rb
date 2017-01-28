@@ -1,4 +1,10 @@
 class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Intercode1::Table
+  STATE_MAP = {
+    "Confirmed" => 'confirmed',
+    "Waitlisted" => 'waitlisted',
+    "Withdrawn" => 'withdrawn'
+  }
+
   def initialize(connection, con, run_id_map, user_id_map, user_con_profile_id_map)
     super connection
     @con = con
@@ -8,32 +14,50 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   end
 
   def dataset
-    super.where(:State => ['Confirmed', 'Waitlisted'], :Counted => 'Y').order(:TimeStamp)
+    super.order(:TimeStamp)
   end
 
   private
   def build_record(row)
     run = @run_id_map[row[:RunId]]
+    return unless run
+
+    counted = (row[:Counted] == 'Y')
+    row_bucket_key = (counted ? bucket_key(row, run) : nil)
+    requested_bucket_key = (counted ? row[:Gender].downcase : nil)
+    requested_bucket_key = 'anything' if requested_bucket_key && !run.registration_policy.bucket_with_key(requested_bucket_key)
 
     run.signups.new(
       user_con_profile: @user_con_profile_id_map[row[:UserId]],
-      bucket_key: bucket_key(row, run),
+      bucket_key: row_bucket_key,
+      requested_bucket_key: requested_bucket_key,
+      state: STATE_MAP[row[:State]],
+      counted: counted,
       updated_by: @user_id_map[row[:UserId]]
     )
   end
 
   # Try to put them in the bucket for their signup gender first; if that fails, try to
-  # put them in the neutral bucket.  Failing all else, don't put them in a bucket (i.e.
+  # put them in the anything bucket.  Failing all else, don't put them in a bucket (i.e.
   # waitlist them).
   def bucket_key(row, run)
-    [gender_bucket_key(row), "neutral"].find do |bucket_key|
+    return unless row[:Counted] == 'Y'
+    return unless row[:State] == 'Confirmed'
+
+    [gender_bucket_key(row, run), "anything"].find do |bucket_key|
       run.bucket_has_available_slots?(bucket_key)
     end
   end
 
-  def gender_bucket_key(row)
+  def gender_bucket_key(row, run)
     case row[:State]
-    when 'Confirmed' then row[:Gender].downcase
+    when 'Confirmed'
+      bucket_key = row[:Gender].downcase
+      if run.registration_policy.bucket_with_key(bucket_key)
+        bucket_key
+      else
+        'anything'
+      end
     when 'Waitlisted' then nil
     end
   end

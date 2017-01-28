@@ -4,27 +4,29 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
   let(:event_run) { FactoryGirl.create :run }
   subject { RegistrationPolicy.unlimited }
 
+  it "is valid" do
+    subject.must_be :valid?
+  end
+
   it "has one bucket" do
     subject.buckets.size.must_equal 1
   end
 
   it "allows all signups" do
+    bucket_key = subject.buckets.first.key
+
     3.times do |i|
       event_run.signups.reload
 
       signup_user_con_profile = FactoryGirl.create(:user_con_profile, convention: event_run.event.convention)
-      signup = FactoryGirl.build(:signup, run: event_run, user_con_profile: signup_user_con_profile)
-      bucket = subject.bucket_for_new_signup(signup, event_run.signups)
-      bucket.wont_be_nil
-
-      signup.bucket_key = bucket.key
-      signup.save!
+      result = EventSignupService.new(signup_user_con_profile, event_run, bucket_key, signup_user_con_profile.user).call
+      result.must_be :success?
     end
   end
 
   it "serializes and deserializes" do
-    json = RegistrationPolicy.dump(subject)
-    deserialized = RegistrationPolicy.load(json)
+    json = subject.to_json
+    deserialized = RegistrationPolicy.new.from_json(json)
     deserialized.buckets.must_equal subject.buckets
   end
 end

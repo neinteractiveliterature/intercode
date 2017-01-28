@@ -1,4 +1,4 @@
-class LinkSignupsToUserConProfiles < ActiveRecord::Migration
+class LinkSignupsToUserConProfiles < ActiveRecord::Migration[4.2]
   class Signup < ApplicationRecord
     belongs_to :user_con_profile, class_name: "LinkSignupsToUserConProfiles::UserConProfile"
     belongs_to :user, class_name: "LinkSignupsToUserConProfiles::User"
@@ -30,6 +30,7 @@ class LinkSignupsToUserConProfiles < ActiveRecord::Migration
       signup.update!(user_con_profile: signup.run.event.convention.user_con_profiles.find_by!(user_id: signup.user_id))
     end
 
+    remove_foreign_key :signups, column: 'user_id'
     remove_reference :signups, :user
     change_column :signups, :user_con_profile_id, :integer, null: false
   end

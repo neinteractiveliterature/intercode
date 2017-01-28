@@ -22,7 +22,6 @@ class TeamMembersController < BaseControllers::VirtualHost
     @team_member.updated_by = current_user
     @team_member.save
 
-    binding.pry unless @team_member.valid?
     respond_with @event, @team_member
   end
 

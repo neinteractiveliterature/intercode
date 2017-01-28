@@ -1,20 +1,12 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 ruby '2.3.1'
 gem 'rails', '5.0.0.1'
 
-platform :ruby do
-  gem 'sqlite3', :groups => [:development, :test]
-  gem 'pg', :group => :production
-  gem 'puma'
-end
-
-platform :jruby do
-  gem 'jruby-openssl'
-  gem 'activerecord-jdbcsqlite3-adapter', :groups => [:development, :test]
-  gem 'activerecord-jdbcpostgresql-adapter', :group => :production
-  gem 'mizuno'
-end
+gem 'sqlite3'
+gem 'mysql2'
+gem 'pg'
+gem 'puma'
 
 gem 'sass-rails'
 gem 'bootstrap-sass'
@@ -22,6 +14,7 @@ gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem 'haml'
+gem 'with_advisory_lock'
 
 gem 'uglifier', '>= 1.0.3'
 
@@ -49,6 +42,9 @@ gem 'activerecord-session_store'
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
 gem 'cadmus', '~> 0.5.2'
 
+# Extracted from this app!  Values that change over time based on a schedule
+gem 'scheduled_value'
+
 # File uploading
 gem 'carrierwave'
 
@@ -69,11 +65,7 @@ gem 'newrelic_rpm'
 # Heroku prod fix
 gem 'rails_12factor', group: 'production'
 
-# Super-slick error pages
-group :development do
-  gem 'better_errors'
-  gem 'binding_of_caller'
-end
+gem 'faker', group: 'development', require: false
 
 group :development, :test do
   gem 'pry-rails'
@@ -82,7 +74,6 @@ end
 
 group :intercode1_import do
   gem 'sequel'
-  gem 'mysql2'
   gem 'term-ansicolor'
 end
 
