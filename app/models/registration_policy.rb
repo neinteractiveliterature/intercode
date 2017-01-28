@@ -23,18 +23,6 @@ class RegistrationPolicy
     buckets_by_key[key]
   end
 
-  def best_bucket_for_signup(signup, other_signups)
-    buckets.find { |bucket| bucket.errors_for_signup(signup, other_signups).empty? }
-  end
-
-  def available_slots_by_bucket(signups)
-    signups_by_bucket_key = signups.group_by(&:bucket_key)
-
-    buckets.each_with_object({}) do |bucket, hash|
-      hash[bucket.key] = bucket.available_slots(signups_by_bucket_key[bucket.key])
-    end
-  end
-
   %i(total_slots minimum_slots preferred_slots).each do |method|
     define_method method do
       buckets.map(&method).sum
