@@ -28,11 +28,23 @@ class Run < ApplicationRecord
     bucket && bucket.has_available_slots?(signups_by_bucket_key[bucket_key])
   end
 
+  def full?
+    registration_policy.buckets.all? { |bucket| bucket_full?(bucket.key) }
+  end
+
+  def has_available_slots?
+    registration_policy.buckets.any? { |bucket| bucket_has_available_slots?(bucket.key) }
+  end
+
   def timespan
     ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
   end
 
   def overlaps?(other_run)
     timespan.overlaps?(other_run.timespan)
+  end
+
+  def to_liquid
+    RunDrop.new(self)
   end
 end
