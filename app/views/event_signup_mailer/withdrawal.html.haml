@@ -1,6 +1,8 @@
 %h1 Withdrawal from #{run_description @signup.run}
 
-%p= signup_description(@signup, "has withdrawn from")
+%p
+  = signup_description(@signup, "has withdrawn from")
+  = prev_state_description(@prev_state, @prev_bucket)
 
 - if @move_results.any?
   %p To fill the vacancy, the following signups were moved:
