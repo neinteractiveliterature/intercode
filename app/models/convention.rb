@@ -6,6 +6,7 @@ class Convention < ApplicationRecord
   has_many :user_con_profiles, dependent: :destroy
   has_many :users, :through => :user_con_profiles
   has_many :events, dependent: :destroy
+  has_many :runs, through: :events
   has_many :rooms, dependent: :destroy
   has_many :ticket_types, dependent: :destroy
 
@@ -25,8 +26,6 @@ class Convention < ApplicationRecord
   validate :maximum_event_signups_must_cover_all_time
 
   mount_uploader :banner_image, BannerImageUploader
-
-  liquid_methods :name
 
   def started?
     starts_at && starts_at <= Time.now
@@ -61,6 +60,10 @@ class Convention < ApplicationRecord
 
   def bucket_metadata_from_events
     events.pluck(:registration_policy).flat_map { |p| p.buckets.flat_map(&:metadata) }.uniq
+  end
+
+  def to_liquid
+    ConventionDrop.new(self)
   end
 
   private
