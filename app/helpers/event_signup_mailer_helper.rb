@@ -3,6 +3,11 @@ module EventSignupMailerHelper
     "#{@signup.user_con_profile.name} #{action_description} #{run_description(signup.run)}."
   end
 
+  def prev_state_description(prev_state, prev_bucket)
+    bucket_description = prev_bucket ? " in the #{prev_bucket.name} bucket" : ""
+    "(Previously, they were #{prev_state}#{bucket_description}.)"
+  end
+
   def run_description(run)
     if run.event.runs.size > 1
       "#{run.event.title} on #{run.starts_at.to_s(:long_with_weekday)}"

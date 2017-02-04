@@ -1,6 +1,6 @@
 class EventWithdrawService < ApplicationService
   class Result < ServiceResult
-    attr_accessor :move_results
+    attr_accessor :move_results, :prev_bucket_key, :prev_state
   end
   self.result_class = Result
 
@@ -36,13 +36,13 @@ class EventWithdrawService < ApplicationService
       end
     end
 
-    notify_team_members(signup, move_results)
-    success(move_results: move_results)
+    notify_team_members(signup, prev_state, prev_bucket_key, move_results)
+    success(prev_state: prev_state, prev_bucket_key: prev_bucket_key, move_results: move_results)
   end
 
-  def notify_team_members(signup, move_results)
+  def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
     event.team_members.where(receive_signup_email: true).find_each do |team_member|
-      EventSignupMailer.withdrawal(signup, move_results.map(&:to_h), team_member).deliver_later
+      EventSignupMailer.withdrawal(signup, prev_state, prev_bucket_key, move_results.map(&:to_h), team_member).deliver_later
     end
   end
 end
