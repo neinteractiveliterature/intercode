@@ -76,4 +76,8 @@ class UserConProfile < ApplicationRecord
     else preferred_contact.try(:humanize)
     end
   end
+
+  def to_liquid
+    UserConProfileDrop.new(self)
+  end
 end
