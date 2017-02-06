@@ -1,4 +1,5 @@
 require 'intercode/liquid/tags'
+require 'intercode/liquid/filters'
 
 # In development and test mode, expose the actual exception to developers if there is one
 if Rails.env.development? || Rails.env.test?
