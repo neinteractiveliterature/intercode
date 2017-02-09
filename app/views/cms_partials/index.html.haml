@@ -1,0 +1,12 @@
+= render partial: 'layouts/cms_header'
+
+%table.table.table-striped
+  - @cms_partials.each do |cms_partial|
+    %tr
+      %td
+        = cms_partial.identifier
+      %td.text-right
+        = link_to "Edit", edit_cms_partial_path(cms_partial), class: 'btn btn-default btn-sm'
+        = link_to "Delete", cms_partial_path(cms_partial), method: 'DELETE', class: 'btn btn-danger btn-sm', "data-confirm" => "Are you sure you want to delete #{cms_partial.identifier}?"
+
+= link_to 'New CMS Partial', new_cms_partial_path, class: 'btn btn-default'
