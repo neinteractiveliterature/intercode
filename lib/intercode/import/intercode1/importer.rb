@@ -71,6 +71,8 @@ class Intercode::Import::Intercode1::Importer
     @con.save!
     Intercode::Import::Intercode1.logger.info("Imported con as ID #{@con.id}")
 
+    create_default_cms_content(@con)
+
     registration_status_map.each do |status, ticket_type|
       ticket_type.save!
       Intercode::Import::Intercode1.logger.info("Imported #{status} ticket type as ID #{ticket_type.id}")
@@ -163,5 +165,72 @@ class Intercode::Import::Intercode1::Importer
         pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
       ),
     }
+  end
+
+  def create_default_cms_content(con)
+    con.root_page.update!(content: <<-LIQUID)
+<h1>{{ convention.name }}</h1>
+
+{% include 'runs_with_openings' %}
+{% include 'user_signups' %}
+{% include 'user_team_member_events' %}
+LIQUID
+
+    con.cms_partials.create!(identifier: 'runs_with_openings', content: <<-LIQUID)
+{% assign runs = convention.non_volunteer_runs_with_openings | sort: "starts_at" %}
+
+{% if runs.size > 0 %}
+  <h3>There's still openings in all these great games!</h3>
+
+  <ul>
+    {% for run in runs limit:5 %}
+      <li>{{ run.event.title }} - {{ run.starts_at | date: "%a %l:%M%P" }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+LIQUID
+
+    con.cms_partials.create!(identifier: 'user_signups', content: <<-LIQUID)
+{% assign signups = user_con_profile.signups | sort: "starts_at" %}
+
+{% if signups.size > 0 %}
+  <h3>You are currently signed up for {{ signups.size | pluralize: "event", "events" }}:</h3>
+
+  <table class="table table-striped table-condensed">
+    {% for signup in signups %}
+      <tr>
+        <td>{{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}</td>
+        <td>
+          <a href="{{ signup.event_url }}">{{ signup.event.title }}</a>
+          {% if signup.state != 'confirmed' %}
+            [{{ signup.state | capitalize }}]
+          {% endif %}
+          {% if signup.team_member? %}
+            [{{ signup.event.team_member_name }}]
+          {% endif %}
+        </td>
+
+        <td>
+          <a class="btn btn-sm btn-danger" href="{{ signup.withdraw_url }}" data-method="DELETE" data-confirm="Are you sure you want to withdraw from {{ signup.event.title }}?">Withdraw</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+LIQUID
+
+    con.cms_partials.create!(identifier: 'user_team_member_events', content: <<-LIQUID)
+{% assign team_member_events = user_con_profile.team_member_events %}
+
+{% if team_member_events.size > 0 %}
+  <h3>Links to Games You're a GM For</h3>
+
+  <ul class="list-unstyled">
+    {% for event in team_member_events %}
+      <li><a href="{{ event.url }}">{{ event.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
+LIQUID
   end
 end

@@ -41,9 +41,9 @@ class Convention < ApplicationRecord
 
     con_name = name || "Untitled con"
     content = <<-EOF
-    <h1>#{con_name}</h1>
+    <h1>{{ convention.name }}</h1>
 
-    <p>Welcome to #{con_name}.  Content goes here.</p>
+    <p>Welcome to {{ convention.name }}.  Content goes here.</p>
     EOF
 
     self.create_root_page(:content => content, :name => "Home page")
