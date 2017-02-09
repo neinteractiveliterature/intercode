@@ -1,0 +1,2 @@
+module CmsPartialsHelper
+end

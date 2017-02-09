@@ -35,6 +35,8 @@ Intercode::Application.routes.draw do
       resource :admin_ticket, only: [:new, :create, :edit, :update, :destroy]
     end
 
+    resources :cms_partials
+
     resource :my_profile
   end
 
