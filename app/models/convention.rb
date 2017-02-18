@@ -13,9 +13,6 @@ class Convention < ApplicationRecord
 
   belongs_to :root_page, :class_name => "Page"
 
-  before_create :create_default_root_page
-  after_create :fix_root_page_parent
-
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
   validates :name, :presence => true
@@ -36,22 +33,8 @@ class Convention < ApplicationRecord
     ends_at && ends_at <= Time.now
   end
 
-  def create_default_root_page
-    return if root_page
-
-    con_name = name || "Untitled con"
-    content = <<-EOF
-    <h1>{{ convention.name }}</h1>
-
-    <p>Welcome to {{ convention.name }}.  Content goes here.</p>
-    EOF
-
-    self.create_root_page(:content => content, :name => "Home page")
-  end
-
-  def fix_root_page_parent
-    root_page.parent = self
-    root_page.save!
+  def load_cms_content_set(name)
+    LoadCmsContentSet.new(convention: self, content_set_name: name).call!
   end
 
   def timezone
