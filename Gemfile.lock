@@ -237,7 +237,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    scheduled_value (1.0.0)
+    scheduled_value (1.1.1)
     sequel (4.40.0)
     simplecov (0.13.0)
       docile (~> 1.1.0)
@@ -328,7 +328,7 @@ DEPENDENCIES
   rails_12factor
   react-rails
   sass-rails
-  scheduled_value
+  scheduled_value (~> 1.1)
   sequel
   sqlite3
   stripe
