@@ -1,16 +1,38 @@
 class ApplicationService
+  class ServiceFailure < StandardError
+    attr_reader :service, :result
+
+    def initialize(service, result)
+      @service = service
+      @result = result
+      super("#{service.class.name} failed: #{result.errors.full_messages.join(', ')}")
+    end
+  end
+
   include ActiveModel::Validations
 
   attr_reader :skip_locking
 
   class << self
     attr_accessor :result_class
+
+    def result_class
+      @result_class || ServiceResult
+    end
   end
 
   def call
     return failure(errors) unless valid?
 
     inner_call
+  end
+
+  def call!
+    raise ServiceFailure.new(self, failure(errors)) unless valid?
+
+    result = inner_call
+    raise ServiceFailure.new(self, result) if result.failure?
+    result
   end
 
   private
