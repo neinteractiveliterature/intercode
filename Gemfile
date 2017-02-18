@@ -43,7 +43,7 @@ gem 'activerecord-session_store'
 gem 'cadmus', '~> 0.5.3'
 
 # Extracted from this app!  Values that change over time based on a schedule
-gem 'scheduled_value'
+gem 'scheduled_value', '~> 1.1'
 
 # File uploading
 gem 'carrierwave'
