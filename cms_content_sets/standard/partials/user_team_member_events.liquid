@@ -1,0 +1,11 @@
+{% assign team_member_events = user_con_profile.team_member_events %}
+
+{% if team_member_events.size > 0 %}
+  <h3>Links to Games You're a GM For</h3>
+
+  <ul class="list-unstyled">
+    {% for event in team_member_events %}
+      <li><a href="{{ event.url }}">{{ event.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
