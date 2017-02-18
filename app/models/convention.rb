@@ -22,6 +22,7 @@ class Convention < ApplicationRecord
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
+  validate :timezone_name_must_be_valid
 
   mount_uploader :banner_image, BannerImageUploader
 
@@ -56,5 +57,11 @@ class Convention < ApplicationRecord
     return if maximum_event_signups.try!(:covers_all_time?)
 
     errors.add(:maximum_event_signups, "must cover all time")
+  end
+
+  def timezone_name_must_be_valid
+    return unless timezone_name.present?
+
+    errors.add(:timezone_name, "must refer to a valid POSIX timezone") unless timezone
   end
 end
