@@ -31,3 +31,11 @@ class ActionController::TestCase
   end
 end
 
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
+  def set_convention(convention)
+    self.default_url_options = { host: convention.domain }
+  end
+end
+
