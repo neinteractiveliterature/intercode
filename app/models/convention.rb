@@ -35,7 +35,7 @@ class Convention < ApplicationRecord
   end
 
   def load_cms_content_set(name)
-    LoadCmsContentSet.new(convention: self, content_set_name: name).call!
+    LoadCmsContentSetService.new(convention: self, content_set_name: name).call!
   end
 
   def timezone
