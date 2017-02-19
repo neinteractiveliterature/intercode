@@ -13,6 +13,6 @@ class EventDrop < Liquid::Drop
   end
 
   def url
-    event_path(run.event)
+    event_path(event)
   end
 end
