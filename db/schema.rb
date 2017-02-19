@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208234244) do
+ActiveRecord::Schema.define(version: 20170219064321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,8 +28,6 @@ ActiveRecord::Schema.define(version: 20170208234244) do
   create_table "conventions", force: :cascade do |t|
     t.string   "signups_allowed",       default: "not_yet", null: false
     t.string   "show_schedule",         default: "no",      null: false
-    t.text     "news"
-    t.text     "con_com_meetings"
     t.boolean  "accepting_bids"
     t.boolean  "precon_bids_allowed"
     t.integer  "updated_by_id"
