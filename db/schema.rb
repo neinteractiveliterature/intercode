@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20170219064321) do
 
   create_table "cms_partials", force: :cascade do |t|
     t.integer  "convention_id", null: false
-    t.text     "identifier",    null: false
+    t.string   "identifier",    null: false
     t.text     "content"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false

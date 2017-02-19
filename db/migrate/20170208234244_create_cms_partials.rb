@@ -2,7 +2,7 @@ class CreateCmsPartials < ActiveRecord::Migration[5.0]
   def change
     create_table :cms_partials do |t|
       t.references :convention, null: false
-      t.text :identifier, null: false
+      t.string :identifier, null: false
       t.text :content
 
       t.timestamps
