@@ -20,7 +20,7 @@ module BaseControllers
     # Make the current convention object available to CMS templates, so they can do, for example:
     # <h1>Welcome to {{ convention.name }}, {{ user.name }}!</h1>
     def liquid_assigns
-      super.merge("convention" => convention)
+      super.merge("convention" => convention, "user_con_profile" => user_con_profile)
     end
 
     def use_convention_timezone(&block)

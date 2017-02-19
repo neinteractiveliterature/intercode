@@ -1,0 +1,7 @@
+%h1 CMS
+
+%ul.nav.nav-tabs{role: "tablist"}
+  %li{class: (params[:controller] == 'pages' ? 'active' : ''), role: "presentation"}= link_to "Pages", pages_path
+  %li{class: (params[:controller] == 'cms_partials' ? 'active' : ''), role: "presentation"}= link_to "Partials", cms_partials_path
+
+%br

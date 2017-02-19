@@ -71,6 +71,12 @@ class Intercode::Import::Intercode1::Importer
     @con.save!
     Intercode::Import::Intercode1.logger.info("Imported con as ID #{@con.id}")
 
+    @con.load_cms_content_set('standard')
+    Intercode::Import::Intercode1.logger.info("Loaded standard CMS content set")
+
+    con_table.update_cms_content(@con)
+    Intercode::Import::Intercode1.logger.info("Updated CMS content with con data")
+
     registration_status_map.each do |status, ticket_type|
       ticket_type.save!
       Intercode::Import::Intercode1.logger.info("Imported #{status} ticket type as ID #{ticket_type.id}")
