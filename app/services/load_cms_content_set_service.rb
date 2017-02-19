@@ -1,7 +1,8 @@
-class LoadCmsContentSet < ApplicationService
+class LoadCmsContentSetService < ApplicationService
   attr_reader :convention, :content_set_name
 
   validates_presence_of :convention, :content_set_name
+  validate :ensure_content_set_exists
   validate :ensure_no_conflicting_pages
   validate :ensure_no_conflicting_partials
 
@@ -51,6 +52,10 @@ class LoadCmsContentSet < ApplicationService
 
   def content_set_root
     File.expand_path(File.join('cms_content_sets', content_set_name), Rails.root)
+  end
+
+  def ensure_content_set_exists
+    errors.add(:base, "No content set found at #{content_set_root}") unless Dir.exists?(content_set_root)
   end
 
   def ensure_no_conflicting_pages
