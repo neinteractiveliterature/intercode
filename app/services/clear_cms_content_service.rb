@@ -1,4 +1,4 @@
-class ClearCmsContent < ApplicationService
+class ClearCmsContentService < ApplicationService
   attr_reader :convention
 
   def initialize(convention:)
