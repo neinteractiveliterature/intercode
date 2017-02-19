@@ -2,8 +2,7 @@
 
 FactoryGirl.define do
   factory :page do
-    name "MyText"
-    slug "MyString"
+    sequence(:name) { |n| "Page #{n}" }
     content "MyText"
     association :parent, factory: :convention
   end

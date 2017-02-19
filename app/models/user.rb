@@ -11,8 +11,6 @@ class User < ApplicationRecord
 
   has_many :user_con_profiles
 
-  liquid_methods :email, :first_name, :last_name, :nickname
-
   def privileges
     if site_admin?
       ['site_admin']
@@ -23,6 +21,10 @@ class User < ApplicationRecord
 
   def blank_password!
     @password_not_required = true
+  end
+
+  def to_liquid
+    UserDrop.new(self)
   end
 
   protected

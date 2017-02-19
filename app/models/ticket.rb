@@ -13,6 +13,10 @@ class Ticket < ApplicationRecord
 
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 
+  def to_liquid
+    TicketDrop.new(self)
+  end
+
   private
   def ticket_type_must_be_valid_for_convention
     return unless ticket_type

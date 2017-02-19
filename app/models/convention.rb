@@ -2,17 +2,16 @@ require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
   belongs_to :updated_by, :class_name => "User", optional: true
-  has_many :pages, :as => :parent
+  has_many :pages, :as => :parent, dependent: :destroy
+  has_many :cms_partials, dependent: :destroy
   has_many :user_con_profiles, dependent: :destroy
   has_many :users, :through => :user_con_profiles
   has_many :events, dependent: :destroy
+  has_many :runs, through: :events
   has_many :rooms, dependent: :destroy
   has_many :ticket_types, dependent: :destroy
 
   belongs_to :root_page, :class_name => "Page"
-
-  before_create :create_default_root_page
-  after_create :fix_root_page_parent
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
@@ -23,10 +22,9 @@ class Convention < ApplicationRecord
   validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
+  validate :timezone_name_must_be_valid
 
   mount_uploader :banner_image, BannerImageUploader
-
-  liquid_methods :name
 
   def started?
     starts_at && starts_at <= Time.now
@@ -36,22 +34,8 @@ class Convention < ApplicationRecord
     ends_at && ends_at <= Time.now
   end
 
-  def create_default_root_page
-    return if root_page
-
-    con_name = name || "Untitled con"
-    content = <<-EOF
-    <h1>#{con_name}</h1>
-
-    <p>Welcome to #{con_name}.  Content goes here.</p>
-    EOF
-
-    self.create_root_page(:content => content, :name => "Home page")
-  end
-
-  def fix_root_page_parent
-    root_page.parent = self
-    root_page.save!
+  def load_cms_content_set(name)
+    LoadCmsContentSetService.new(convention: self, content_set_name: name).call!
   end
 
   def timezone
@@ -63,11 +47,21 @@ class Convention < ApplicationRecord
     events.pluck(:registration_policy).flat_map { |p| p.buckets.flat_map(&:metadata) }.uniq
   end
 
+  def to_liquid
+    ConventionDrop.new(self)
+  end
+
   private
 
   def maximum_event_signups_must_cover_all_time
     return if maximum_event_signups.try!(:covers_all_time?)
 
     errors.add(:maximum_event_signups, "must cover all time")
+  end
+
+  def timezone_name_must_be_valid
+    return unless timezone_name.present?
+
+    errors.add(:timezone_name, "must refer to a valid POSIX timezone") unless timezone
   end
 end

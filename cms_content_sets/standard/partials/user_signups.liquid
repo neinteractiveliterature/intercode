@@ -1,0 +1,26 @@
+{% assign signups = user_con_profile.signups | sort: "starts_at" %}
+
+{% if signups.size > 0 %}
+  <h3>You are currently signed up for {{ signups.size | pluralize: "event", "events" }}:</h3>
+
+  <table class="table table-striped table-condensed">
+    {% for signup in signups %}
+      <tr>
+        <td>{{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}</td>
+        <td>
+          <a href="{{ signup.event_url }}">{{ signup.event.title }}</a>
+          {% if signup.state != 'confirmed' %}
+            [{{ signup.state | capitalize }}]
+          {% endif %}
+          {% if signup.team_member? %}
+            [{{ signup.event.team_member_name }}]
+          {% endif %}
+        </td>
+
+        <td>
+          <a class="btn btn-sm btn-danger" href="{{ signup.withdraw_url }}" data-method="DELETE" data-confirm="Are you sure you want to withdraw from {{ signup.event.title }}?">Withdraw</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}

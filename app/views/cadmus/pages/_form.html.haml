@@ -17,13 +17,12 @@
 %p Type html in the box below and see a preview right under it
 .field
   = f.label :content
-  = f.text_area :content, :style => "font-family: monospace; width: 60em;",   |
-    :class => "cadmus-previewable-html", :"data-preview-in" => "html-preview" |
+  = find_and_preserve(f.text_area :content, :style => "font-family: monospace; width: 60em; height: 20em", :class => "cadmus-previewable-html", :"data-preview-in" => "html-preview")
 .actions
   = f.submit
 = javascript_include_tag "cadmus.previewablehtml.js"
 :javascript
-  $(document).ready(function(){		
+  $(document).ready(function(){
     $('.cadmus-previewable-html').cadmusPreviewableHtml();
   });
 %p

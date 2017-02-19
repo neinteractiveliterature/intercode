@@ -90,6 +90,10 @@ class Event < ApplicationRecord
     end
   end
 
+  def to_liquid
+    EventDrop.new(self)
+  end
+
   private
 
   def validate_registration_policy

@@ -36,6 +36,10 @@ class Signup < ApplicationRecord
     event.team_members.any? { |team_member| team_member.user_con_profile == user_con_profile }
   end
 
+  def to_liquid
+    SignupDrop.new(self)
+  end
+
   private
 
   def must_be_counted_if_and_only_if_not_team_member
