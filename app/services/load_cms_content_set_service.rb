@@ -55,29 +55,31 @@ class LoadCmsContentSetService < ApplicationService
   end
 
   def ensure_content_set_exists
-    errors.add(:base, "No content set found at #{content_set_root}") unless Dir.exists?(content_set_root)
+    errors.add(:base, "No content set found at #{content_set_root}") unless Dir.exist?(content_set_root)
   end
 
   def ensure_no_conflicting_pages
     return unless convention && content_set_name
 
-    all_template_paths_with_names('pages').each do |path, name|
-      if convention.pages.any? { |page| page.name == name }
-        errors.add(:base, "A page named #{name} already exists in #{convention.name}")
-      end
+    ensure_no_conflicting_content('pages', convention.pages.pluck(:name))
 
-      if name == 'root' && convention.root_page
-        errors.add(:base, "#{convention.name} already has a root page")
-      end
+    if all_template_paths_with_names('pages').map(&:last).include?('root') && convention.root_page
+      errors.add(:base, "#{convention.name} already has a root page")
     end
   end
 
   def ensure_no_conflicting_partials
     return unless convention && content_set_name
 
-    all_template_paths_with_names('partials').each do |path, name|
-      if convention.cms_partials.any? { |partial| partial.identifier == name }
-        errors.add(:base, "A partial named #{name} already exists in #{convention.name}")
+    ensure_no_conflicting_content('partials', convention.cms_partials.pluck(:identifier))
+  end
+
+  def ensure_no_conflicting_content(subdir, content_identifiers)
+    content_identifiers = Set.new(content_identifiers)
+
+    all_template_paths_with_names(subdir).each do |_path, name|
+      if content_identifiers.include?(name)
+        errors.add(:base, "A #{subdir.singularize} named #{name} already exists in #{convention.name}")
       end
     end
   end

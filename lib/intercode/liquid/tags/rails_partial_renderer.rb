@@ -9,11 +9,11 @@ module Intercode
           )
         end
 
-        def partial(context)
+        def partial(_context)
           raise "RailsPartialRenderer#partial must be implemented by subclasses"
         end
 
-        def locals(context)
+        def locals(_context)
           {}
         end
       end
