@@ -16,6 +16,7 @@ class Intercode::Import::Intercode1::Importer
         "con_name" => CON_NAME,
         "con_domain" => CON_DOMAIN,
         "friday_date" => FRI_DATE,
+        "text_dir" => TEXT_DIR,
         "php_timezone" => date_default_timezone_get()
       );
 
@@ -31,7 +32,9 @@ class Intercode::Import::Intercode1::Importer
     ?>
     PHP
 
-    vars = exec_php_and_parse_json(php, 'dump_con_vars.php')
+    vars = JSON.parse(Intercode::Import::Intercode1::Php.exec_php(php, 'dump_con_vars.php'))
+
+    text_dir = File.expand_path(vars['text_dir'], File.dirname(filename))
 
     new(
       Sequel.connect(vars['database_url']),
@@ -39,31 +42,21 @@ class Intercode::Import::Intercode1::Importer
       vars['con_domain'],
       Date.parse(vars['friday_date']),
       vars['price_schedule'],
-      vars['php_timezone']
+      vars['php_timezone'],
+      filename,
+      text_dir
     )
   end
 
-  def self.exec_php_and_parse_json(php, filename = 'program.php')
-    temp_program = Tempfile.new(filename)
-    begin
-      temp_program.write php
-      temp_program.flush
-
-      output, _ = Open3.capture2e('php', temp_program.path)
-      JSON.parse output
-    ensure
-      temp_program.close
-      temp_program.unlink
-    end
-  end
-
-  def initialize(connection, con_name, con_domain, friday_date, price_schedule, php_timezone)
+  def initialize(connection, con_name, con_domain, friday_date, price_schedule, php_timezone, constants_file, text_dir)
     @connection = connection
     @con_name = con_name
     @con_domain = con_domain
     @friday_date = friday_date
     @price_schedule = price_schedule
     @php_timezone = ActiveSupport::TimeZone[php_timezone]
+    @constants_file = constants_file
+    @text_dir = text_dir
   end
 
   def import!
@@ -76,6 +69,8 @@ class Intercode::Import::Intercode1::Importer
 
     con_table.update_cms_content(@con)
     Intercode::Import::Intercode1.logger.info("Updated CMS content with con data")
+
+    html_content.import!
 
     registration_status_map.each do |status, ticket_type|
       ticket_type.save!
@@ -143,6 +138,10 @@ class Intercode::Import::Intercode1::Importer
 
   def signup_table
     @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map, user_con_profiles_id_map)
+  end
+
+  def html_content
+    @html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
   end
 
   def registration_status_map
