@@ -40,15 +40,15 @@ class Intercode::Import::Intercode1::HtmlContent
       link['href'] = intercode2_path_for_link(link['href'])
     end
 
-    doc.to_s
+    doc.to_s.gsub(/__PAGE_URL_(\w+)/, '{% page_url \1 %}')
   end
 
   def intercode2_path_for_link(url)
     case url
     when /ConComSchedule\.php/
-      "/pages/con_com_schedule"
+      "__PAGE_URL_con_com_schedule"
     when /Static\.php\?page=(\w+)/
-      "/pages/#{Cadmus::Slugs.slugify($1)}"
+      "__PAGE_URL_#{Cadmus::Slugs.slugify($1)}"
     else
       url
     end
