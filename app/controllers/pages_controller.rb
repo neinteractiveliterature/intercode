@@ -25,8 +25,9 @@ class PagesController < BaseControllers::VirtualHost
   # root URL.  Because pages should only have one canonical URL if possible, natch.
   before_action :redirect_if_root_page, :only => [:show]
 
-  # Just let everyone view the list of pages, it's easier that way.
-  skip_authorization_check :only => [:index]
+  # We don't want to let the general public view the list of pages, so we'll use a special extra
+  # authorization filter here.
+  before_action :authorize_index, :only => [:index]
 
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
@@ -79,5 +80,10 @@ class PagesController < BaseControllers::VirtualHost
     if @page == convention.root_page
       redirect_to root_url
     end
+  end
+
+  # See above comment on the before_action for this.
+  def authorize_index
+    authorize! :create, Page
   end
 end
