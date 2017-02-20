@@ -30,7 +30,7 @@ class Intercode::Import::Intercode1::HtmlContent
 
   def html_content(html_path)
     raw_content = File.read(html_path)
-    php = "<?php require \"#{constants_file}\" ?>\n#{raw_content}";
+    php = "<?php require \"#{constants_file}\" ?>\n#{raw_content}"
 
     processed_content = Intercode::Import::Intercode1::Php.exec_php(php).strip
     doc = Nokogiri::HTML(processed_content, nil, 'UTF-8')
