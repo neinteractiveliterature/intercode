@@ -8,7 +8,6 @@ class Intercode::Import::Intercode1::HtmlContent
   end
 
   def import!
-    logger = Intercode::Import::Intercode1.logger
     logger.info "Importing HTML content"
 
     html_paths.each do |html_path|
@@ -18,6 +17,10 @@ class Intercode::Import::Intercode1::HtmlContent
   end
 
   private
+
+  def logger
+    Intercode::Import::Intercode1.logger
+  end
 
   def html_paths
     @html_paths ||= Dir[File.expand_path('*.html', content_path)]
@@ -30,7 +33,8 @@ class Intercode::Import::Intercode1::HtmlContent
 
   def html_content(html_path)
     raw_content = File.read(html_path)
-    php = "<?php require \"#{constants_file}\" ?>\n#{raw_content}"
+    intercon_db_inc = File.expand_path("intercon_db.inc", File.dirname(constants_file))
+    php = "<?php error_reporting(E_ERROR); require \"#{intercon_db_inc}\"; ?>\n#{raw_content}"
 
     processed_content = Intercode::Import::Intercode1::Php.exec_php(php).strip
     doc = Nokogiri::HTML(processed_content, nil, 'UTF-8')
@@ -45,11 +49,16 @@ class Intercode::Import::Intercode1::HtmlContent
 
   def intercode2_path_for_link(url)
     case url
+    when /\A\\\"(.*)\\\"\z/ then intercode2_path_for_link($1)  # somehow, some URLs are improperly escaped/quoted
     when /ConComSchedule\.php/
       "__PAGE_URL_con_com_schedule"
-    when /Static\.php\?page=(\w+)/
+    when /[Ss]tatic\.php\?page=(\w+)/
       "__PAGE_URL_#{Cadmus::Slugs.slugify($1)}"
     else
+      parsed_url = URI.parse(url) rescue binding.pry
+      if parsed_url.scheme.blank? && parsed_url.path.present?
+        logger.warn("Unknown URL: #{url}")
+      end
       url
     end
   end
