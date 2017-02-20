@@ -5,6 +5,7 @@ class CmsPartialsController < BaseControllers::VirtualHost
   respond_to :html
 
   def index
+    @cms_partials = @cms_partials.order(:identifier)
   end
 
   def new
