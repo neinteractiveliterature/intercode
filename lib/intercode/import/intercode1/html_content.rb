@@ -12,7 +12,7 @@ class Intercode::Import::Intercode1::HtmlContent
 
     html_paths.each do |html_path|
       logger.info "Importing #{html_path}"
-      build_page(html_path).save!
+      build_content(html_path).save!
     end
   end
 
@@ -26,9 +26,18 @@ class Intercode::Import::Intercode1::HtmlContent
     @html_paths ||= Dir[File.expand_path('*.html', content_path)]
   end
 
-  def build_page(html_path)
+  def build_content(html_path)
     page_name = Pathname.new(html_path).relative_path_from(Pathname.new(content_path)).to_s.gsub(/\.html\z/, '')
-    convention.pages.new(name: page_name, content: html_content(html_path))
+    content = html_content(html_path)
+
+    case page_name
+    when 'acceptingbids', 'bidding1', 'bidearly', 'copyright', 'logintop', 'loginbottom'
+      # The TEXT_DIR contains partials mixed with pages, with no real indication which is which.  This is a list
+      # of known partials in Intercode 1, which we'll turn into partials here too.
+      convention.cms_partials.new(identifier: page_name, content: html_content(html_path))
+    else
+      convention.pages.new(name: page_name, content: html_content(html_path))
+    end
   end
 
   def html_content(html_path)
@@ -48,7 +57,7 @@ class Intercode::Import::Intercode1::HtmlContent
   # The "html" files inside Intercode 1 are actually fragments of PHP that assume intercon_db.inc has been
   # loaded before they're executed.  So let's do the needful here.
   def process_php_fragment(path)
-    raw_content = File.read(html_path)
+    raw_content = File.read(path)
     php = "<?php error_reporting(E_ERROR); require \"#{intercon_db_inc_path}\"; ?>\n#{raw_content}"
 
     Intercode::Import::Intercode1::Php.exec_php(php).strip
