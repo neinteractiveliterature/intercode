@@ -25,7 +25,9 @@ module Intercode
         "#{severity_rep} #{col.dark(col.yellow(time.strftime('%H:%M:%S.%L')))} - #{msg}\n"
       end
 
+      autoload :HtmlContent
       autoload :Importer
+      autoload :Php
       autoload :Table
       autoload :Tables
     end
