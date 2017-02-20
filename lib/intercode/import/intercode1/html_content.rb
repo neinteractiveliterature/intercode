@@ -32,11 +32,7 @@ class Intercode::Import::Intercode1::HtmlContent
   end
 
   def html_content(html_path)
-    raw_content = File.read(html_path)
-    intercon_db_inc = File.expand_path("intercon_db.inc", File.dirname(constants_file))
-    php = "<?php error_reporting(E_ERROR); require \"#{intercon_db_inc}\"; ?>\n#{raw_content}"
-
-    processed_content = Intercode::Import::Intercode1::Php.exec_php(php).strip
+    processed_content = process_php_fragment(html_path)
     doc = Nokogiri::HTML(processed_content, nil, 'UTF-8')
 
     # Try to fix up internal links to other CMS pages
@@ -44,12 +40,26 @@ class Intercode::Import::Intercode1::HtmlContent
       link['href'] = intercode2_path_for_link(link['href'])
     end
 
+    # Nokogiri will escape "{% page_url something_or_other %}" in a href tag, so we temporarily set the href to
+    # __PAGE_URL_something_or_other and then post-process it to Liquid here.
     doc.to_s.gsub(/__PAGE_URL_(\w+)/, '{% page_url \1 %}')
+  end
+
+  # The "html" files inside Intercode 1 are actually fragments of PHP that assume intercon_db.inc has been
+  # loaded before they're executed.  So let's do the needful here.
+  def process_php_fragment(path)
+    raw_content = File.read(html_path)
+    php = "<?php error_reporting(E_ERROR); require \"#{intercon_db_inc_path}\"; ?>\n#{raw_content}"
+
+    Intercode::Import::Intercode1::Php.exec_php(php).strip
   end
 
   def intercode2_path_for_link(url)
     case url
-    when /\A\\\"(.*)\\\"\z/ then intercode2_path_for_link($1)  # somehow, some URLs are improperly escaped/quoted
+    when /\A\\\"(.*)\\\"\z/
+      # Some URLs are improperly escaped/quoted in the Intercode 1 content set.  Let's go above and beyond the
+      # call of duty and fix them.
+      intercode2_path_for_link($1)
     when /ConComSchedule\.php/
       "__PAGE_URL_con_com_schedule"
     when /[Ss]tatic\.php\?page=(\w+)/
@@ -61,5 +71,9 @@ class Intercode::Import::Intercode1::HtmlContent
       end
       url
     end
+  end
+
+  def intercon_db_inc_path
+    @intercon_db_inc_path ||= File.expand_path("intercon_db.inc", File.dirname(constants_file))
   end
 end
