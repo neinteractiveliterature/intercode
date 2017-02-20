@@ -58,7 +58,14 @@ class Intercode::Import::Intercode1::HtmlContent
   # loaded before they're executed.  So let's do the needful here.
   def process_php_fragment(path)
     raw_content = File.read(path)
-    php = "<?php error_reporting(E_ERROR); require \"#{intercon_db_inc_path}\"; ?>\n#{raw_content}"
+    php = <<-PHP
+<?php
+  error_reporting(E_ERROR);
+  date_default_timezone_set(\"#{convention.timezone_name}\");
+  require \"#{intercon_db_inc_path}\";
+?>
+#{raw_content}
+PHP
 
     Intercode::Import::Intercode1::Php.exec_php(php).strip
   end
