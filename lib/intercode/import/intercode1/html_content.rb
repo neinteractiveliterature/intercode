@@ -42,7 +42,7 @@ class Intercode::Import::Intercode1::HtmlContent
 
   def html_content(html_path)
     processed_content = process_php_fragment(html_path)
-    doc = Nokogiri::HTML(processed_content, nil, 'UTF-8')
+    doc = Nokogiri::HTML::DocumentFragment.parse(processed_content, 'UTF-8')
 
     # Try to fix up internal links to other CMS pages
     doc.css('a[href]').each do |link|
