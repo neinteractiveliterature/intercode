@@ -27,6 +27,8 @@ namespace :import do
     #   Date.parse(fetch_env_param('FRIDAY_DATE'))
     # )
 
+    importer.build_password_hashes
+
     ActiveRecord::Base.connection.transaction do
       importer.import!
     end

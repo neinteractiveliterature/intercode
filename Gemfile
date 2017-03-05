@@ -75,6 +75,7 @@ end
 group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
+  gem 'parallel'
 end
 
 group :test do

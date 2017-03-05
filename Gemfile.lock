@@ -162,6 +162,7 @@ GEM
       mini_portile2 (~> 2.1.0)
     nokogiri (1.6.8.1-java)
     orm_adapter (0.5.0)
+    parallel (1.10.0)
     pg (0.19.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -318,6 +319,7 @@ DEPENDENCIES
   money-rails
   mysql2
   newrelic_rpm
+  parallel
   pg
   pry-rails
   pry-remote
