@@ -1,5 +1,3 @@
-require 'bcrypt'
-
 class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercode1::Table
   CONTACT_FIELD_MAP = {
     first_name: :FirstName,
@@ -43,20 +41,21 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
 
   attr_reader :user_con_profile_id_map
 
-  def initialize(connection, con, event_id_map, registration_status_map)
+  def initialize(connection, con, event_id_map, registration_status_map, legacy_password_md5s)
     super connection
 
     @user_con_profile_id_map = {}
     @con = con
     @event_id_map = event_id_map
     @registration_status_map = registration_status_map
+    @legacy_password_md5s = legacy_password_md5s
   end
 
   def import!
     logger.info "Importing #{object_name.pluralize}"
 
     dataset.each do |row|
-      user = build_user(row)
+      user = build_user(row, @legacy_password_md5s[row[:UserId]])
       logger.debug "Importing User #{row[:UserId]}"
       user.save!
       id_map[row[:UserId]] = user
@@ -71,7 +70,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   end
 
   private
-  def build_user(row)
+  def build_user(row, legacy_password_md5)
     User.find_or_initialize_by(email: row[:EMail].downcase).tap do |user|
       user.blank_password! unless user.encrypted_password.present?
 
@@ -81,7 +80,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       end
 
       if row[:HashedPassword].present? && !user.legacy_password_md5.present?
-        user.legacy_password_md5 = BCrypt::Password.create(row[:HashedPassword])
+        user.legacy_password_md5 = legacy_password_md5
       end
     end
   end

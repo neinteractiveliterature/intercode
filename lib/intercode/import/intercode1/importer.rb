@@ -1,5 +1,7 @@
 require 'tempfile'
 require 'open3'
+require 'parallel'
+require 'bcrypt'
 
 class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :con
@@ -37,7 +39,7 @@ class Intercode::Import::Intercode1::Importer
     text_dir = File.expand_path(vars['text_dir'], File.dirname(filename))
 
     new(
-      Sequel.connect(vars['database_url']),
+      vars['database_url'],
       vars['con_name'],
       vars['con_domain'],
       Date.parse(vars['friday_date']),
@@ -48,8 +50,9 @@ class Intercode::Import::Intercode1::Importer
     )
   end
 
-  def initialize(connection, con_name, con_domain, friday_date, price_schedule, php_timezone, constants_file, text_dir)
-    @connection = connection
+  def initialize(database_url, con_name, con_domain, friday_date, price_schedule, php_timezone, constants_file, text_dir)
+    @database_url = database_url
+    @connection = Sequel.connect(@database_url)
     @con_name = con_name
     @con_domain = con_domain
     @friday_date = friday_date
@@ -57,6 +60,22 @@ class Intercode::Import::Intercode1::Importer
     @php_timezone = ActiveSupport::TimeZone[php_timezone]
     @constants_file = constants_file
     @text_dir = text_dir
+    @legacy_password_md5s = {}
+  end
+
+  def build_password_hashes
+    Intercode::Import::Intercode1.logger.info "Hashing legacy MD5 passwords with BCrypt"
+    rows = connection[:Users].select(:UserId, :HashedPassword).to_a
+
+    # build users in parallel because password hashing is expensive
+    legacy_password_md5s = Parallel.map(rows, in_processes: Parallel.processor_count) do |row|
+      Intercode::Import::Intercode1.logger.debug "Hashing password for user #{row[:UserId]}"
+      [row[:UserId], BCrypt::Password.create(row[:HashedPassword])]
+    end
+
+    @connection = Sequel.connect(@database_url)
+
+    @legacy_password_md5s = Hash[legacy_password_md5s]
   end
 
   def import!
@@ -103,7 +122,7 @@ class Intercode::Import::Intercode1::Importer
 
   def users_table
     return unless events_id_map
-    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map, registration_status_map)
+    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map, registration_status_map, @legacy_password_md5s)
   end
 
   def users_id_map
