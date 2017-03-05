@@ -23,6 +23,10 @@ module BaseControllers
       super.merge("convention" => convention, "user_con_profile" => user_con_profile)
     end
 
+    def liquid_registers
+      super.merge("convention" => convention, "user_con_profile" => user_con_profile)
+    end
+
     def use_convention_timezone(&block)
       timezone = convention.timezone
       if timezone

@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170219064321) do
+ActiveRecord::Schema.define(version: 20170225162643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cms_files", force: :cascade do |t|
+    t.integer  "convention_id"
+    t.integer  "uploader_id"
+    t.string   "file",          null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["convention_id"], name: "index_cms_files_on_convention_id", using: :btree
+    t.index ["uploader_id"], name: "index_cms_files_on_uploader_id", using: :btree
+  end
 
   create_table "cms_partials", force: :cascade do |t|
     t.integer  "convention_id", null: false
@@ -231,6 +241,8 @@ ActiveRecord::Schema.define(version: 20170219064321) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "cms_files", "conventions"
+  add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "events", "conventions"
