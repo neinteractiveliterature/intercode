@@ -96,7 +96,7 @@ PHP
     when /[Ss]tatic\.php\?page=(\w+)/
       "__PAGE_URL_#{Cadmus::Slugs.slugify($1)}"
     else
-      parsed_url = URI.parse(url) rescue binding.pry
+      parsed_url = URI.parse(url)
       if parsed_url.scheme.blank? && parsed_url.path.present?
         logger.warn("Unknown URL: #{url}")
       end
