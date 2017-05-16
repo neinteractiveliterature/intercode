@@ -36,6 +36,7 @@ Intercode::Application.routes.draw do
     end
 
     resources :cms_partials
+    resources :cms_files
 
     resource :my_profile
   end
