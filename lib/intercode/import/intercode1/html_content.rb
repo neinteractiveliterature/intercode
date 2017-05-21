@@ -34,7 +34,7 @@ class Intercode::Import::Intercode1::HtmlContent
     when 'acceptingbids', 'bidding1', 'bidearly', 'copyright', 'logintop', 'loginbottom'
       # The TEXT_DIR contains partials mixed with pages, with no real indication which is which.  This is a list
       # of known partials in Intercode 1, which we'll turn into partials here too.
-      convention.cms_partials.new(identifier: page_name, content: content)
+      convention.cms_partials.new(name: page_name, content: content)
     else
       convention.pages.new(name: page_name, content: content)
     end
