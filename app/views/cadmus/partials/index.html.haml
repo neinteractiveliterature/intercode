@@ -1,0 +1,11 @@
+%ul.list-group.mb-4
+  - @cms_partials.each do |cms_partial|
+    %li.list-group-item
+      .row.w-100
+        .col
+          = cms_partial.public_send(cms_partial.class.name_field)
+        .col.text-right
+          = link_to "Edit", url_for(action: 'edit', id: cms_partial), class: 'btn btn-secondary btn-sm'
+          = link_to "Delete", url_for(action: 'destroy', id: cms_partial), method: 'DELETE', "data-confirm" => "Are you sure you want to delete this partial?", class: 'btn btn-danger btn-sm'
+
+= link_to "New partial", url_for(action: 'new'), class: 'btn btn-primary'

@@ -4,7 +4,7 @@ class CmsPartialsControllerTest < ActionDispatch::IntegrationTest
   let(:convention) { FactoryGirl.create(:convention) }
   let(:user_con_profile) { FactoryGirl.create(:staff_user_con_profile, convention: convention) }
   let(:user) { user_con_profile.user }
-  let(:cms_partial) { FactoryGirl.create(:cms_partial, convention: convention) }
+  let(:cms_partial) { FactoryGirl.create(:cms_partial, parent: convention) }
 
   before do
     set_convention convention
@@ -23,7 +23,7 @@ class CmsPartialsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create cms_partial" do
     assert_difference('CmsPartial.count') do
-      post cms_partials_url, params: { cms_partial: { identifier: 'jack', content: 'white' } }
+      post cms_partials_url, params: { cms_partial: { name: 'jack', content: 'white' } }
     end
 
     assert_redirected_to cms_partials_url
