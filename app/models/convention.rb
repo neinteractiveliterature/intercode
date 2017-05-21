@@ -4,7 +4,7 @@ class Convention < ApplicationRecord
   belongs_to :updated_by, :class_name => "User", optional: true
   has_many :pages, :as => :parent, dependent: :destroy
   has_many :cms_partials, as: :parent, dependent: :destroy
-  has_many :cms_files, dependent: :destroy
+  has_many :cms_files, as: :parent, dependent: :destroy
   has_many :user_con_profiles, dependent: :destroy
   has_many :users, :through => :user_con_profiles
   has_many :events, dependent: :destroy
