@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/gively/cadmus.git
-  revision: f57e313504eed8a57f42ec2f3ca41b93e9764f53
+  revision: edf2e792dab844644ec4310a661e8b7767784957
   branch: partials_and_layouts
   specs:
     cadmus (0.6.0)
