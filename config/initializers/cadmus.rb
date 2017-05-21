@@ -1,0 +1,1 @@
+Cadmus.partial_model = CmsPartial
