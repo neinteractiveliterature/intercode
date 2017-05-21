@@ -38,34 +38,11 @@ class PagesController < BaseControllers::VirtualHost
 
   protected
 
-  # Returns the Page object to check against for authorization.  Either @page will have already
-  # been set before we run the check (either by find_root_page or Cadmus's built-in before_actions),
-  # or if not, we'll construct an in-memory Page object within the current Convention.  (page_scope
-  # is a built-in Cadmus method that returns a scope containing all the parent object's pages.)
-  def page_for_authorization
-    @page || page_scope.new
-  end
-
   # Set the @page variable if we're looking for the root page.  We expect a root page to exist on the
   # Convention.  If not, it's an error (which will become a 404).
   def find_root_page
     @page = page_parent.root_page
     raise ActiveRecord::RecordNotFound unless @page
-  end
-
-  # Cadmus needs us to set this on the controller level so it can build new page objects in memory.
-  def page_class
-    Page
-  end
-
-  # Similarly, Cadmus requires that we set this up.
-  def page_parent_class
-    convention && Convention
-  end
-
-  # Cadmus requires we define this for UI messaging purposes (e.g. "Create a new page in this convention").
-  def page_parent_name
-    convention && "convention"
   end
 
   # Cadmus requires this too.  This method is supposed to return the parent object to look for pages in,
