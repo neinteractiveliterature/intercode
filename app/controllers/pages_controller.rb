@@ -12,6 +12,8 @@ class PagesController < BaseControllers::VirtualHost
 
   include Cadmus::PagesController
 
+  layout :determine_layout
+
   # In the case of the root action, we'll need to load the root page from the database before
   # Authority has a chance to run its authorization checks.  So we use a before_action filter that
   # comes before authorize_actions_for in the chain.
@@ -78,6 +80,13 @@ class PagesController < BaseControllers::VirtualHost
   def redirect_if_root_page
     if @page == convention.root_page
       redirect_to root_url
+    end
+  end
+
+  def determine_layout
+    case params[:action]
+    when 'root', 'show' then 'application'
+    else 'cms_admin'
     end
   end
 end
