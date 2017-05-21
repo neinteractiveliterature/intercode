@@ -7,6 +7,17 @@ GIT
       liquid
       rails (>= 4.0.0)
 
+GIT
+  remote: git://github.com/nbudin/cadmus_files.git
+  revision: b6ca1955a9633f9719c0e343f7bbf02a2ff34d82
+  branch: cadmus_0_6
+  specs:
+    cadmus_files (0.2.0)
+      cadmus
+      carrierwave
+      liquid
+      rails (>= 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -304,6 +315,7 @@ DEPENDENCIES
   bootstrap-sass
   bootstrap_form
   cadmus!
+  cadmus_files!
   cancancan
   carrierwave
   codeclimate-test-reporter
