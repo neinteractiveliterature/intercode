@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/gively/cadmus.git
+  revision: f57e313504eed8a57f42ec2f3ca41b93e9764f53
+  branch: partials_and_layouts
+  specs:
+    cadmus (0.6.0)
+      liquid
+      rails (>= 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -60,9 +69,6 @@ GEM
       sass (>= 3.3.4)
     bootstrap_form (2.5.2)
     builder (3.2.3)
-    cadmus (0.5.3)
-      liquid
-      rails (>= 4.0.0)
     cancancan (1.15.0)
     carrierwave (0.11.2)
       activemodel (>= 3.2.0)
@@ -296,7 +302,7 @@ DEPENDENCIES
   autoprefixer-rails
   bootstrap-sass
   bootstrap_form
-  cadmus (~> 0.5.3)
+  cadmus!
   cancancan
   carrierwave
   codeclimate-test-reporter
