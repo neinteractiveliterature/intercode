@@ -15,7 +15,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
   end
 
   def update_cms_content(con)
-    con.cms_partials.find_by!(identifier: 'news').update!(content: @row[:News])
+    con.cms_partials.find_by!(name: 'news').update!(content: @row[:News])
     con.pages.create!(name: 'con_com_schedule', content: @row[:ConComMeetings])
   end
 
