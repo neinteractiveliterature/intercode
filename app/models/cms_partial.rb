@@ -1,6 +1,5 @@
 class CmsPartial < ApplicationRecord
-  belongs_to :convention
+  include Cadmus::Partial
 
-  validates :convention, presence: true
-  validates :identifier, uniqueness: { scope: 'convention_id' }, presence: true
+  cadmus_partial
 end

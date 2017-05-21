@@ -25,7 +25,7 @@ class Ability
       if staff_con_ids.any?
         can :manage, Convention, id: staff_con_ids
         can :manage, Page, parent_type: 'Convention', parent_id: staff_con_ids
-        can :manage, CmsPartial, convention_id: staff_con_ids
+        can :manage, CmsPartial, parent_type: 'Convention', parent_id: staff_con_ids
         can :manage, UserConProfile, convention_id: staff_con_ids
         can :read, UserConProfile, convention_id: staff_con_ids
         can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
