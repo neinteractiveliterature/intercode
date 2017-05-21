@@ -20,7 +20,7 @@ describe LoadCmsContentSetService do
     end
 
     it 'loads partials' do
-      assert convention.cms_partials.find_by(identifier: 'news')
+      assert convention.cms_partials.find_by(name: 'news')
     end
   end
 
@@ -48,7 +48,7 @@ describe LoadCmsContentSetService do
   end
 
   it 'is invalid if a partial with the same name exists' do
-    convention.cms_partials.create!(identifier: 'news', content: 'No news is good news')
+    convention.cms_partials.create!(name: 'news', content: 'No news is good news')
     result = service.call
 
     assert result.failure?

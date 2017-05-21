@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :cms_partial do
-    identifier "a_partial"
+    sequence(:name) { |n| "partial_#{n}" }
     content "Some text"
-    convention
+    association :parent, factory: :convention
   end
 end

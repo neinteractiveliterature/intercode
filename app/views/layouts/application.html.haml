@@ -58,4 +58,8 @@
         .alert.alert-success= notice
       - if alert
         .alert.alert-danger= alert
-      = yield
+
+      - if content_for?(:content)
+        = yield :content
+      - else
+        = yield
