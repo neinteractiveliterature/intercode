@@ -7,7 +7,7 @@ describe ClearCmsContentService do
   before do
     convention.update!(root_page: FactoryGirl.build(:page, parent: convention))
     FactoryGirl.create(:page, parent: convention)
-    FactoryGirl.create(:cms_partial, convention: convention)
+    FactoryGirl.create(:cms_partial, parent: convention)
   end
 
   describe 'successfully running' do

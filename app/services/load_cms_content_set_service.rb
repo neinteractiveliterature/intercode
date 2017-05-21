@@ -20,7 +20,7 @@ class LoadCmsContentSetService < ApplicationService
     end
 
     all_template_paths_with_names('partials').each do |path, name|
-      @convention.cms_partials.create!(identifier: name, content: template_content(path))
+      @convention.cms_partials.create!(name: name, content: template_content(path))
     end
 
     success
@@ -71,7 +71,7 @@ class LoadCmsContentSetService < ApplicationService
   def ensure_no_conflicting_partials
     return unless convention && content_set_name
 
-    ensure_no_conflicting_content('partials', convention.cms_partials.pluck(:identifier))
+    ensure_no_conflicting_content('partials', convention.cms_partials.pluck(:name))
   end
 
   def ensure_no_conflicting_content(subdir, content_identifiers)
