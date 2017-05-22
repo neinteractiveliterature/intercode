@@ -1,21 +1,21 @@
-%dt Email
-%dd= user_con_profile.email
+%dt.col-md-3 Email
+%dd.col-md-9= user_con_profile.email
 - if convention.starts_at
-  %dt
+  %dt.col-md-3
     Age at #{convention.name}
-  %dd= user_con_profile.age_as_of_convention
+  %dd.col-md-9= user_con_profile.age_as_of_convention
 - else
-  %dt Age
-  %dd= user_con_profile.age
-%dt Gender
-%dd= user_con_profile.gender
-%dt Address
-%dd= simple_format user_con_profile.address, {}, wrapper_tag: 'span'
-%dt Daytime phone
-%dd= user_con_profile.day_phone
-%dt Evening phone
-%dd= user_con_profile.evening_phone
-%dt Best time to call
-%dd= user_con_profile.best_call_time
-%dt Preferred contact
-%dd= user_con_profile.preferred_contact_humanized
+  %dt.col-md-3 Age
+  %dd.col-md-9= user_con_profile.age
+%dt.col-md-3 Gender
+%dd.col-md-9= user_con_profile.gender
+%dt.col-md-3 Address
+%dd.col-md-9= simple_format user_con_profile.address, {}, wrapper_tag: 'span'
+%dt.col-md-3 Daytime phone
+%dd.col-md-9= user_con_profile.day_phone
+%dt.col-md-3 Evening phone
+%dd.col-md-9= user_con_profile.evening_phone
+%dt.col-md-3 Best time to call
+%dd.col-md-9= user_con_profile.best_call_time
+%dt.col-md-3 Preferred contact
+%dd.col-md-9= user_con_profile.preferred_contact_humanized

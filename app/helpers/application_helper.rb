@@ -35,6 +35,8 @@ module ApplicationHelper
   def check_mark_for(boolean)
     return '' unless boolean
 
-    content_tag(:i, "✓", class: "fa fa-check")
+    content_tag(:i, class: "fa fa-check") do
+      content_tag(:span, "✓", class: 'sr-only')
+    end
   end
 end

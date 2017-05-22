@@ -2,22 +2,22 @@
   .col-md-9
     %h1.larp-title= @event.title
 
-    %dl.dl-horizontal
+    %dl.row
       - if @event.author.present?
-        %dt Author(s)
-        %dd= @event.author
+        %dt.col-md-3 Author(s)
+        %dd.col-md-9= @event.author
       - if @event.organization.present?
-        %dt Organization
-        %dd= @event.organization
+        %dt.col-md-3 Organization
+        %dd.col-md-9= @event.organization
       - if @event.url.present?
-        %dt Home Page
-        %dd= link_to @event.url, @event.url, :target => '_blank'
+        %dt.col-md-3 Home Page
+        %dd.col-md-9= link_to @event.url, @event.url, :target => '_blank'
       - if @event.email.present?
-        %dt Contact Email
-        %dd= intercode_mail_to @event.email
+        %dt.col-md-3 Contact Email
+        %dd.col-md-9= intercode_mail_to @event.email
       - if @team_members.any?
-        %dt= @event.team_member_name.titleize.pluralize
-        %dd
+        %dt.col-md-3= @event.team_member_name.titleize.pluralize
+        %dd.col-md-9
           %ul.list-unstyled
             - @team_members.each do |team_member|
               %li
@@ -38,11 +38,11 @@
 
 %hr
 
-.row
-  - @runs.sort_by(&:starts_at).each do |run|
-    .col-md-4.col-sm-6
-      .panel.panel-default
-        .panel-body
+- @runs.sort_by(&:starts_at).each_slice(4) do |runs|
+  .card-deck
+    - runs.each do |run|
+      .card.mb-3
+        .card-header
           - if run.title_suffix.present?
             %p
               %strong= run.title_suffix
@@ -52,6 +52,7 @@
           %br
           = run.rooms.map(&:name).sort.join(", ")
 
+        .card-block
           %p
             - signup_description = simple_format(SignupCountPresenter.new(run).signups_description)
 
@@ -69,10 +70,11 @@
             %p= link_to "Withdraw", [@event, run, :user_signup], method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
           - else
             - run.registration_policy.buckets.each do |bucket|
-              = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-secondary" do
+              = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-secondary mx-1" do
                 %strong Sign up
                 %br
                 #{bucket.name}
+
 %hr
 
 = sanitize @event.description
