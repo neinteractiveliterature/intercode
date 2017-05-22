@@ -1,6 +1,20 @@
 module ApplicationHelper
+  def page_title
+    parts = []
+
+    if @convention
+      parts << @convention.name
+    else
+      parts << "Intercode"
+    end
+
+    parts << @event.title if @event
+
+    parts.join(" - ")
+  end
+
   def page_banner
-    banner_image_url = @con && @con.banner_image.try(:url)
+    banner_image_url = @convention && @convention.banner_image.try(:url)
 
     if banner_image_url
       image_tag banner_image_url, :class => "page_banner"
