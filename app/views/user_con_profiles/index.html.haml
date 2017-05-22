@@ -2,7 +2,7 @@
 
 = datagrid_form_for @user_con_profiles_grid, :url => user_con_profiles_path
 
-= link_to user_con_profiles_path(format: :csv), class: 'btn btn-secondary' do
+= link_to user_con_profiles_path(format: :csv), class: 'btn btn-secondary my-4' do
   %i.fa.fa-file-excel-o
   Download CSV
 
@@ -10,4 +10,4 @@
 = will_paginate @user_con_profiles_grid.assets, renderer: BootstrapPagination::Rails
 
 %ul.list-inline
-  %li= link_to 'New Profile', new_user_con_profile_path, class: 'btn btn-primary'
+  %li.list-inline-item= link_to 'New Profile', new_user_con_profile_path, class: 'btn btn-primary'

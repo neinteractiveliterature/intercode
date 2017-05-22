@@ -1,12 +1,12 @@
-%dt Type
-%dd= ticket.ticket_type.description
+%dt.col-md-3 Type
+%dd.col-md-9= ticket.ticket_type.description
 - if ticket.provided_by_event
-  %dt Provided by event
-  %dd= ticket.provided_by_event.title
-%dt Paid
-%dd= ticket.payment_amount.format
+  %dt.col-md-3 Provided by event
+  %dd.col-md-9= ticket.provided_by_event.title
+%dt.col-md-3 Paid
+%dd.col-md-9= ticket.payment_amount.format
 - if ticket.payment_amount > 0
-  %dt Transaction ID
-  %dd= ticket.charge_id
-%dt Created
-%dd= ticket.created_at.strftime('%B %e, %Y %l:%M %p %Z')
+  %dt.col-md-3 Transaction ID
+  %dd.col-md-9= ticket.charge_id
+%dt.col-md-3 Created
+%dd.col-md-9= ticket.created_at.strftime('%B %e, %Y %l:%M %p %Z')

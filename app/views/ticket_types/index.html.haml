@@ -1,7 +1,7 @@
 %h1 Ticket types for #{@convention.name}
 
 - @ticket_types.each do |ticket_type|
-  .card
+  .card.my-4
     .card-header
       .row
         .col-md-8
@@ -9,12 +9,12 @@
           %tt (#{ticket_type.name})
         .col-md-4.text-right
           - if can? :delete, ticket_type
-            = link_to ticket_type, method: "DELETE", class: "btn btn-danger btn-sm", "data-confirm" => "Are you sure you want to delete the ticket type #{ticket_type.name}?" do
-              %i.fa.fa-trash-o
+            = link_to ticket_type, method: "DELETE", class: "btn btn-danger btn-sm mx-1", "data-confirm" => "Are you sure you want to delete the ticket type #{ticket_type.name}?" do
+              %i.fa.fa-trash-o.mr-1
               Delete
           - if can? :edit, ticket_type
-            = link_to [:edit, ticket_type], class: "btn btn-secondary btn-sm" do
-              %i.fa.fa-pencil-square-o
+            = link_to [:edit, ticket_type], class: "btn btn-secondary btn-sm mx-1" do
+              %i.fa.fa-pencil-square-o.mr-1
               Edit
 
     .card-block

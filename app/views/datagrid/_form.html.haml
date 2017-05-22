@@ -7,7 +7,7 @@
           = f.datagrid_filter filter, partials: options[:partials]
       = f.form_group do
         %ul.list-inline.datagrid-actions
-          %li= f.submit I18n.t("datagrid.form.search").html_safe
+          %li.list-inline-item= f.submit I18n.t("datagrid.form.search").html_safe
 
           - empty_parameter = Rails.version >= "4.1.0" && Rails.version <= '4.1.2' ? nil : {}
-          %li= link_to I18n.t('datagrid.form.reset').html_safe, url_for(grid.to_param => empty_parameter), :class => "btn btn-unstyled datagrid-reset"
+          %li.list-inline-item= link_to I18n.t('datagrid.form.reset').html_safe, url_for(grid.to_param => empty_parameter), :class => "btn btn-unstyled datagrid-reset"

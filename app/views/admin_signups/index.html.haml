@@ -5,13 +5,13 @@
 
 %h3{style: "margin-top: 0"}
   %ul.list-inline
-    %li= @run.starts_at.strftime("%A, %B %d, %Y")
-    %li #{@run.starts_at.strftime("%H:%M")}-#{@run.ends_at.strftime("%H:%M")}
+    %li.list-inline-item= @run.starts_at.strftime("%A, %B %d, %Y")
+    %li.list-inline-item #{@run.starts_at.strftime("%H:%M")}-#{@run.ends_at.strftime("%H:%M")}
 
 %ul.list-inline
-  %li Max: #{@event.registration_policy.total_slots}
+  %li.list-inline-item Max: #{@event.registration_policy.total_slots}
   - if @event.registration_policy.buckets.size > 1
-    %li
+    %li.list-inline-item
       - bucket_max_descriptions = @event.registration_policy.buckets.map do |bucket|
         - capture do
           #{bucket.name}: #{bucket.total_slots}

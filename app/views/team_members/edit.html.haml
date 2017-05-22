@@ -1,24 +1,24 @@
 %div{:class => "form.new.team-member"}
   %h1
-    Edit #{@singular} Settings for #{@team_member.name()}
+    Edit #{@singular} Settings for #{@team_member.name}
 
-  %dl.dl-horizontal
-    %dt= @event.category.humanize
-    %dd= @event.title
+  %dl.row
+    %dt.col-md-3= @event.category.humanize
+    %dd.col-md-9= @event.title
 
-    %dt Email
-    %dd= intercode_mail_to @team_member.email
+    %dt.col-md-3 Email
+    %dd.col-md-9= intercode_mail_to @team_member.email
 
-    %dt Daytime Phone
-    %dd= @team_member.user_con_profile.day_phone
+    %dt.col-md-3 Daytime Phone
+    %dd.col-md-9= @team_member.user_con_profile.day_phone
 
-    %dt Evening Phone
-    %dd= @team_member.user_con_profile.evening_phone
+    %dt.col-md-3 Evening Phone
+    %dd.col-md-9= @team_member.user_con_profile.evening_phone
 
-    %dt Best Time to Call
-    %dd= @team_member.user_con_profile.best_call_time
+    %dt.col-md-3 Best Time to Call
+    %dd.col-md-9= @team_member.user_con_profile.best_call_time
 
-    %dt Preferred Contact
-    %dd= @team_member.user_con_profile.preferred_contact
+    %dt.col-md-3 Preferred Contact
+    %dd.col-md-9= @team_member.user_con_profile.preferred_contact
 
   = render 'form'
