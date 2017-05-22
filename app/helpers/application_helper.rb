@@ -53,4 +53,10 @@ module ApplicationHelper
       content_tag(:span, "✓", class: 'sr-only')
     end
   end
+
+  def nav_link_to(name, url, html_options = nil, &block)
+    html_options = html_options.symbolize_keys
+    classes = [html_options[:class], 'nav-link', (html_options.delete(:active) ? 'active' : '')].compact.join(' ')
+    link_to(name, url, html_options.merge(class: classes), &block)
+  end
 end
