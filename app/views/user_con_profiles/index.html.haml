@@ -7,7 +7,7 @@
   Download CSV
 
 = datagrid_table @user_con_profiles_grid
-= will_paginate @user_con_profiles_grid.assets, renderer: BootstrapPagination::Rails
+= will_paginate @user_con_profiles_grid.assets, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
 
 %ul.list-inline
   %li.list-inline-item= link_to 'New Profile', new_user_con_profile_path, class: 'btn btn-primary'
