@@ -9,7 +9,7 @@ gem 'pg'
 gem 'puma'
 
 gem 'sass-rails'
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.0.0.alpha6'
 gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
@@ -30,6 +30,7 @@ gem 'moment_timezone-rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-react-date-picker'
+  gem 'rails-assets-tether', '>= 1.3.3'
 end
 
 # Devise for authentication, cancancan for authorization
