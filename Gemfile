@@ -46,7 +46,7 @@ gem 'cadmus', github: 'gively/cadmus', branch: 'partials_and_layouts'
 gem 'cadmus_files', github: 'nbudin/cadmus_files', branch: 'cadmus_0_6'
 
 # Extracted from this app!  Values that change over time based on a schedule
-gem 'scheduled_value', '~> 1.1'
+gem 'scheduled_value', '~> 1.1.2'
 
 # File uploading
 gem 'carrierwave'
