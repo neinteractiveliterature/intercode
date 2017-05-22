@@ -6,9 +6,9 @@
     .col-md-9
       = content_for :page_content
     .col-md-3
-      .panel.panel-default
-        .panel-heading= @page.name
-        %ul.list-group
+      .card
+        .card-header= @page.name
+        %ul.list-group.list-group-flush
           %li.list-group-item
             = link_to "Edit page", [:edit, @page]
           - if can?(:delete?, @page) && @page.parent.root_page != @page
