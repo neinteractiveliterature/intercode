@@ -18,7 +18,7 @@
 
       (#{bucket_max_descriptions.map(&:strip).join(", ")})
 
-= link_to polymorphic_path([@event, @run, :admin_signups], format: :csv), class: 'btn btn-default' do
+= link_to polymorphic_path([@event, @run, :admin_signups], format: :csv), class: 'btn btn-secondary' do
   %i.fa.fa-file-excel-o
   Download CSV
 
