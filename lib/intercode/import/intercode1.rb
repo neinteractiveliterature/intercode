@@ -26,6 +26,7 @@ module Intercode
       end
 
       autoload :HtmlContent
+      autoload :HtmlConverter
       autoload :Importer
       autoload :Php
       autoload :Table

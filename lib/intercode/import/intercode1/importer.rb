@@ -105,7 +105,7 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def con_table
-    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain, @friday_date)
+    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain, @friday_date, @constants_file)
   end
 
   def price_schedule_table
