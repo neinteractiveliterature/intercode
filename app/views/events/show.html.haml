@@ -27,10 +27,10 @@
 
   .col-md-3
     - if can? :edit, @event
-      .panel.panel-default
-        .panel-heading
+      .card
+        .card-header
           Event Admin
-        %ul.list-group
+        %ul.list-group.list-group-flush
           %li.list-group-item
             = link_to('Edit Event', [:edit, @event])
           %li.list-group-item

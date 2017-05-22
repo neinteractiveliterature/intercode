@@ -33,9 +33,9 @@
 
   .col-md-3
     - if can? :edit, @subject_profile
-      .panel.panel-default
-        .panel-heading User administration
-        %ul.list-group
+      .card
+        .card-header User administration
+        %ul.list-group.list-group-flush
           %li.list-group-item
             = link_to 'Edit profile/privileges', edit_user_con_profile_path(@subject_profile)
           - if can? :become, @subject_profile
