@@ -1,8 +1,11 @@
 %h1 CMS
 
 %ul.nav.nav-tabs{role: "tablist"}
-  %li{class: (params[:controller] == 'pages' ? 'active' : ''), role: "presentation"}= link_to "Pages", pages_path
-  %li{class: (params[:controller] == 'cms_partials' ? 'active' : ''), role: "presentation"}= link_to "Partials", cms_partials_path
-  %li{class: (params[:controller] == 'cms_files' ? 'active' : ''), role: "presentation"}= link_to "Files", cms_files_path
+  %li.nav-item
+    = nav_link_to "Pages", pages_path, active: (params[:controller] == 'pages'), role: "presentation"
+  %li.nav-item
+    = nav_link_to "Partials", cms_partials_path, active: (params[:controller] == 'cms_partials'), role: "presentation"
+  %li.nav-item
+    = nav_link_to "Files", cms_files_path, active: (params[:controller] == 'cms_files'), role: "presentation"
 
 %br
