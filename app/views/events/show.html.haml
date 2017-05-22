@@ -69,7 +69,7 @@
             %p= link_to "Withdraw", [@event, run, :user_signup], method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
           - else
             - run.registration_policy.buckets.each do |bucket|
-              = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-default" do
+              = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-secondary" do
                 %strong Sign up
                 %br
                 #{bucket.name}

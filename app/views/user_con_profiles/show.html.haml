@@ -18,7 +18,7 @@
         - if can? :edit, @subject_profile.ticket
           %ul.list-inline
             %li
-              = link_to "Edit ticket", [:edit, @subject_profile, :admin_ticket], class: "btn btn-default"
+              = link_to "Edit ticket", [:edit, @subject_profile, :admin_ticket], class: "btn btn-secondary"
             - if can? :delete, @subject_profile.ticket
               %li
                 = link_to "Delete ticket", [@subject_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@subject_profile.user.name}'s ticket?"
@@ -27,7 +27,7 @@
         - if can? :create, @subject_profile.build_ticket
           %ul.list-inline
             %li
-              = link_to "Create ticket", [:new, @subject_profile, :admin_ticket], class: "btn btn-default"
+              = link_to "Create ticket", [:new, @subject_profile, :admin_ticket], class: "btn btn-secondary"
 
     / TODO: add event signups and team membership stuff
 
