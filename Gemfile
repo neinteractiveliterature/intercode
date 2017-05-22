@@ -61,7 +61,7 @@ gem 'datagrid'
 
 # Pagination
 gem 'will_paginate'
-gem 'will_paginate-bootstrap'
+gem 'will_paginate-bootstrap4'
 
 gem 'newrelic_rpm'
 
