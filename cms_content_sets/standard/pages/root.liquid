@@ -1,7 +1,9 @@
 <h1>{{ convention.name }}</h1>
 
-<h3>{{ convention.name }} News</h3>
-{% include 'news' %}
+<section class="my-4">
+  <h3>{{ convention.name }} News</h3>
+  {% include 'news' %}
+</section>
 
 {% include 'runs_with_openings' %}
 {% include 'user_signups' %}
