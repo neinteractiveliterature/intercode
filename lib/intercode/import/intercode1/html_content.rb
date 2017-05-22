@@ -42,31 +42,12 @@ class Intercode::Import::Intercode1::HtmlContent
 
   def html_content(html_path)
     processed_content = process_php_fragment(html_path)
-    doc = Nokogiri::HTML::DocumentFragment.parse(processed_content, 'UTF-8')
 
-    # Try to fix up internal links to other CMS pages
-    doc.css('a[href]').each do |link|
-      if link['href'] =~ /\.pdf\z/
-        cms_file = upload_file(link['href'])
-        if cms_file
-          link['href'] = "__CMS_FILE_URL_#{cms_file.file.filename}"
-        end
-      else
-        link['href'] = intercode2_path_for_link(link['href'])
-      end
-    end
-
-    # Find and upload images
-    doc.css('img').each do |img|
-      cms_file = upload_file(img['src'])
-      if cms_file
-        img['src'] = "__CMS_FILE_URL_#{cms_file.file.filename}"
-      end
-    end
-
-    # Nokogiri will escape "{% page_url something_or_other %}" in a href tag, so we temporarily set the href to
-    # __PAGE_URL_something_or_other and then post-process it to Liquid here.
-    doc.to_s.gsub(/__PAGE_URL_(\w+)/, '{% page_url \1 %}').gsub(/__CMS_FILE_URL_([^\"]+)/, '{% file_url "\1" %}')
+    Intercode::Import::Intercode1::HtmlConverter.new(
+      html: processed_content,
+      convention: convention,
+      file_root: source_path
+    ).convert
   end
 
   # The "html" files inside Intercode 1 are actually fragments of PHP that assume intercon_db.inc has been
@@ -83,44 +64,6 @@ class Intercode::Import::Intercode1::HtmlContent
 PHP
 
     Intercode::Import::Intercode1::Php.exec_php(php).strip
-  end
-
-  def intercode2_path_for_link(url)
-    case url
-    when /\A\\\"(.*)\\\"\z/
-      # Some URLs are improperly escaped/quoted in the Intercode 1 content set.  Let's go above and beyond the
-      # call of duty and fix them.
-      intercode2_path_for_link($1)
-    when /ConComSchedule\.php/
-      "__PAGE_URL_con_com_schedule"
-    when /[Ss]tatic\.php\?page=(\w+)/
-      "__PAGE_URL_#{Cadmus::Slugs.slugify($1)}"
-    else
-      parsed_url = URI.parse(url)
-      if parsed_url.scheme.blank? && parsed_url.path.present?
-        logger.warn("Unknown URL: #{url}")
-      end
-      url
-    end
-  end
-
-  def upload_file(url)
-    parsed_url = URI.parse(url)
-    return unless parsed_url.scheme.blank? && parsed_url.path.present? # it's a local file in the source tree
-
-    cms_file = convention.cms_files.find_by(file: File.basename(url))
-
-    if cms_file
-      cms_file
-    else
-      cms_file = convention.cms_files.new
-      File.open(File.expand_path(url, source_path)) do |f|
-        cms_file.file = f
-      end
-
-      cms_file.save!
-      cms_file
-    end
   end
 
   def intercon_db_inc_path
