@@ -1,11 +1,13 @@
 {% assign runs = convention.non_volunteer_runs_with_openings | sort: "starts_at" %}
 
 {% if runs.size > 0 %}
-  <h3>There's still openings in all these great games!</h3>
+  <section class="my-4">
+    <h3>There's still openings in all these great games!</h3>
 
-  <ul>
-    {% for run in runs limit:5 %}
-      <li>{{ run.event.title }} - {{ run.starts_at | date: "%a %l:%M%P" }}</li>
-    {% endfor %}
-  </ul>
+    <ul>
+      {% for run in runs limit:5 %}
+        <li>{{ run.event.title }} - {{ run.starts_at | date: "%a %l:%M%P" }}</li>
+      {% endfor %}
+    </ul>
+  </section>
 {% endif %}
