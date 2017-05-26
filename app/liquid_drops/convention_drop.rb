@@ -13,4 +13,8 @@ class ConventionDrop < Liquid::Drop
   def non_volunteer_runs_with_openings
     runs_with_openings.reject { |run| run.event.category == 'volunteer_event' }
   end
+
+  def bio_eligible_user_con_profiles
+    convention.user_con_profiles.can_have_bio.to_a
+  end
 end
