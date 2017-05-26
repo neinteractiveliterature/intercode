@@ -9,13 +9,13 @@
           %li= message
   = f.email_field :email, class: "form-control", label: "Email address"
   = f.form_group :privileges, label: { text: "Privileges" } do
-    %div
+    %ul.list-inline
       - (UserConProfile::PRIV_NAMES - UserConProfile::MAIL_PRIV_NAMES).sort.each do |priv_name|
-        = f.check_box priv_name, label: priv_name.humanize, inline: true
+        %li.list-inline-item= f.check_box priv_name, label: priv_name.humanize
   = f.form_group :mail_privileges, label: { text: "Mail privileges" } do
-    %div
+    %ul.list-inline
       - (UserConProfile::MAIL_PRIV_NAMES).sort.each do |priv_name|
-        = f.check_box priv_name, label: priv_name.humanize, inline: true
+        %li.list-inline-item= f.check_box priv_name, label: priv_name.humanize
   / %fieldset
   /   %legend
   /     Payment info for #{@convention.name}

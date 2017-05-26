@@ -98,6 +98,7 @@ class Intercode::Import::Intercode1::Importer
 
     events_table.import!
     users_table.import!
+    bios_table.import!
     rooms_table.import!
     runs_table.import!
     gms_table.import!
@@ -131,6 +132,12 @@ class Intercode::Import::Intercode1::Importer
 
   def user_con_profiles_id_map
     @user_con_profiles_id_map ||= users_table.user_con_profile_id_map
+  end
+
+  def bios_table
+    return unless user_con_profiles_id_map
+
+    @bios_table ||= Intercode::Import::Intercode1::Tables::Bios.new(connection, user_con_profiles_id_map)
   end
 
   def runs_table

@@ -63,6 +63,9 @@ gem 'datagrid'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
+# Markdown
+gem 'redcarpet'
+
 gem 'newrelic_rpm'
 
 # Heroku prod fix
@@ -79,6 +82,7 @@ group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
   gem 'parallel'
+  gem 'upmark'
 end
 
 group :test do

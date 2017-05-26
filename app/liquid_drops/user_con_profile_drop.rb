@@ -3,7 +3,7 @@ class UserConProfileDrop < Liquid::Drop
   include BioHelper
 
   attr_reader :user_con_profile
-  delegate :email, :first_name, :last_name, :name, :name_inverted, :nickname, :ticket, to: :user_con_profile
+  delegate :bio_name, :email, :first_name, :last_name, :name, :name_inverted, :nickname, :ticket, to: :user_con_profile
 
   def initialize(user_con_profile)
     @user_con_profile = user_con_profile
@@ -19,5 +19,9 @@ class UserConProfileDrop < Liquid::Drop
 
   def bio
     format_bio(user_con_profile.bio)
+  end
+
+  def privileges
+    user_con_profile.privileges.map(&:titleize)
   end
 end

@@ -1,0 +1,21 @@
+<h1>Who's Who</h1>
+
+{% assign user_con_profiles = convention.bio_eligible_user_con_profiles | sort_natural:'name_inverted' %}
+{% for user_con_profile in user_con_profiles %}
+  {% assign privileges = user_con_profile.privileges | join:', ' %}
+  {% assign team_member_event_names = user_con_profile.team_member_events | map:'title' | join:', ' %}
+
+  <section class="mb-3">
+    <h2>{{ user_con_profile.bio_name }}</h2>
+    <ul class="list-unstyled">
+      {% unless team_member_event_names == blank %}
+        <li>GM for: {{ team_member_event_names }}</li>
+      {% endunless %}
+      {% unless privileges == blank %}
+        <li>{{ privileges }}</li>
+      {% endunless %}
+    </ul>
+
+    {{ user_con_profile.bio }}
+  </section>
+{% endfor %}
