@@ -1,0 +1,6 @@
+%h1 My #{convention.name} Bio
+
+= bootstrap_form_for @user_con_profile, url: my_profile_path, layout: :horizontal do |f|
+  = f.text_area :bio, rows: 8
+
+  = f.submit "Save bio", class: "btn btn-primary"
