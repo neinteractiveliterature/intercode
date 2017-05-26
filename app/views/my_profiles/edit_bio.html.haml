@@ -1,7 +1,7 @@
 %h1 My #{convention.name} Bio
 
 = bootstrap_form_for @user_con_profile, url: my_profile_path do |f|
-  = f.text_area :bio, rows: 8
-  = f.check_box :show_nickname_in_bio, label: "Show nickname (if any)", help: "If selected, your nickname from your profile will be shown as part of your name on your bio."
+  = f.text_area :bio, rows: 8, help: "Use #{link_to "Markdown syntax", "https://en.support.wordpress.com/markdown-quick-reference/", target: "_blank"} for formatting.".html_safe
+  = f.check_box :show_nickname_in_bio, label: "Show nickname (if any) in bio"
 
   = f.submit "Save bio", class: "btn btn-primary"

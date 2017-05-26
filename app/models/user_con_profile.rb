@@ -106,4 +106,20 @@ class UserConProfile < ApplicationRecord
   def to_liquid
     UserConProfileDrop.new(self)
   end
+
+  def name_parts
+    [
+      first_name,
+      nickname.present? ? "\"#{nickname}\"" : nil,
+      last_name
+    ]
+  end
+
+  def bio_name
+    [
+      first_name,
+      (show_nickname_in_bio && nickname.present?) ? "\"#{nickname}\"" : nil,
+      last_name
+    ].compact.join(" ")
+  end
 end
