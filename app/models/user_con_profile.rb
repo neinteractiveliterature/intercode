@@ -15,6 +15,26 @@ class UserConProfile < ApplicationRecord
   validates :name, presence: true
   validates :preferred_contact, inclusion: { in: %w(email day_phone evening_phone), allow_blank: true }
 
+  scope :has_any_privileges, -> {
+    sql_clauses = PRIV_NAMES.map { |priv_name| "#{priv_name} = ?" }
+    where(sql_clauses.join(" OR "), *sql_clauses.map { |clause| true })
+  }
+
+  scope :is_team_member, -> {
+    where(<<-SQL)
+    id IN (
+      select team_members.user_con_profile_id
+      from team_members
+      inner join events on team_members.event_id = events.id
+      where events.convention_id = user_con_profiles.convention_id
+    )
+    SQL
+  }
+
+  scope :can_have_bio, -> {
+    has_any_privileges.or(is_team_member)
+  }
+
   def paid?
     ticket
   end
@@ -60,6 +80,12 @@ class UserConProfile < ApplicationRecord
 
   def privileges
     user.privileges + PRIV_NAMES.select { |priv| self.send(priv) }
+  end
+
+  %w(has_any_privileges is_team_member can_have_bio).each do |scope_name|
+    define_method "#{scope_name}?" do
+      self.class.public_send(scope_name).where(id: id).any?
+    end
   end
 
   def email=(email)
