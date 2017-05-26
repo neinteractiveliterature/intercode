@@ -7,7 +7,9 @@ module BioHelper
     if sanitized_bio.present?
       simple_format(sanitized_bio, sanitize: false)
     else
-      content_tag(:em, "No bio provided")
+      content_tag(:p) do
+        content_tag(:em, "No bio provided")
+      end
     end
   end
 end
