@@ -38,7 +38,11 @@ Intercode::Application.routes.draw do
     resources :cms_partials
     resources :cms_files
 
-    resource :my_profile
+    resource :my_profile do
+      member do
+        get :edit_bio
+      end
+    end
   end
 
   # the following routes apply only when we're not in a virtual host
