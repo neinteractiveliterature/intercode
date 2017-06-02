@@ -2,6 +2,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   def initialize(connection, con)
     super connection
     @con = con
+    @markdownifier = Intercode::Import::Intercode1::Markdownifier.new(logger)
   end
 
   def dataset
@@ -20,8 +21,8 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       length_seconds: row[:Hours] * 1.hour,
       can_play_concurrently: row[:CanPlayConcurrently] == 'Y',
       con_mail_destination: con_mail_destination(row),
-      description: row[:Description],
-      short_blurb: row[:ShortBlurb],
+      description: @markdownifier.markdownify(row[:Description]),
+      short_blurb: @markdownifier.markdownify(row[:ShortBlurb]),
       category: event_category(row),
       status: event_status(row),
       registration_policy: registration_policy(row)

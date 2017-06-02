@@ -82,7 +82,7 @@ group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
   gem 'parallel'
-  gem 'upmark'
+  gem 'reverse_markdown'
 end
 
 group :test do
