@@ -11,6 +11,9 @@ class MyProfilesController < BaseControllers::VirtualHost
   def edit
   end
 
+  def edit_bio
+  end
+
   def update
     @user_con_profile.update(user_con_profile_params)
     respond_with @user_con_profile, location: my_profile_path
@@ -61,6 +64,6 @@ class MyProfilesController < BaseControllers::VirtualHost
   end
 
   def user_con_profile_param_names
-    [:first_name, :last_name, :nickname]
+    [:first_name, :last_name, :nickname, :bio]
   end
 end

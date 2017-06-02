@@ -12,7 +12,7 @@ gem 'sass-rails'
 gem 'bootstrap', '~> 4.0.0.alpha6'
 gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
-gem 'bootstrap_form'
+gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
 gem 'haml'
 gem 'with_advisory_lock'
 
@@ -63,6 +63,9 @@ gem 'datagrid'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
+# Markdown
+gem 'redcarpet'
+
 gem 'newrelic_rpm'
 
 # Heroku prod fix
@@ -79,6 +82,7 @@ group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
   gem 'parallel'
+  gem 'reverse_markdown'
 end
 
 group :test do
