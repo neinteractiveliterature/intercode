@@ -17,7 +17,7 @@ class UserConProfile < ApplicationRecord
 
   scope :has_any_privileges, -> {
     sql_clauses = PRIV_NAMES.map { |priv_name| "#{priv_name} = ?" }
-    where(sql_clauses.join(" OR "), *sql_clauses.map { |clause| true })
+    where(sql_clauses.join(" OR "), *sql_clauses.map { |_clause| true })
   }
 
   scope :is_team_member, -> {

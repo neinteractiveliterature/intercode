@@ -4,12 +4,12 @@ module Intercode
       class Youtube < ::Liquid::Tag
         attr_reader :video_id
 
-        def initialize(tag_name, video_id, options)
+        def initialize(tag_name, video_id, _options)
            super
            @video_id = video_id.gsub(/[^A-Za-z0-9_-]/, '')
         end
 
-        def render(context)
+        def render(_context)
           <<-HTML
           <iframe type="text/html" width="640" height="390"
             src="http://www.youtube.com/embed/#{video_id}?enablejsapi=1&origin=http://example.com"
