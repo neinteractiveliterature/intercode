@@ -1,6 +1,8 @@
 class UserConProfileDrop < Liquid::Drop
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
+
   attr_reader :user_con_profile
-  delegate :email, :first_name, :last_name, :nickname, :ticket, to: :user_con_profile
+  delegate :bio_name, :email, :first_name, :last_name, :name, :name_inverted, :nickname, :ticket, to: :user_con_profile
 
   def initialize(user_con_profile)
     @user_con_profile = user_con_profile
@@ -12,5 +14,18 @@ class UserConProfileDrop < Liquid::Drop
 
   def signups
     user_con_profile.signups.includes(run: { event: :team_members }).reject(&:withdrawn?).to_a
+  end
+
+  def bio
+    markdown_presenter.render(user_con_profile.bio)
+  end
+
+  def privileges
+    user_con_profile.privileges.map(&:titleize)
+  end
+
+  private
+  def markdown_presenter
+    @markdown_presenter ||= MarkdownPresenter.new("No bio provided")
   end
 end

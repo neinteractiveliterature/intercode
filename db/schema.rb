@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170521222419) do
+ActiveRecord::Schema.define(version: 20170526163733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20170521222419) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "parent_type"
+    t.index ["parent_id", "file"], name: "index_cms_files_on_parent_id_and_file", unique: true, using: :btree
     t.index ["parent_id"], name: "index_cms_files_on_parent_id", using: :btree
     t.index ["uploader_id"], name: "index_cms_files_on_uploader_id", using: :btree
   end
@@ -187,25 +188,25 @@ ActiveRecord::Schema.define(version: 20170521222419) do
   end
 
   create_table "user_con_profiles", force: :cascade do |t|
-    t.integer  "user_id",                           null: false
-    t.integer  "convention_id",                     null: false
-    t.boolean  "bid_committee",     default: false, null: false
-    t.boolean  "staff",             default: false, null: false
-    t.boolean  "bid_chair",         default: false, null: false
-    t.boolean  "gm_liaison",        default: false, null: false
-    t.boolean  "registrar",         default: false, null: false
-    t.boolean  "outreach",          default: false, null: false
-    t.boolean  "con_com",           default: false, null: false
-    t.boolean  "scheduling",        default: false, null: false
-    t.boolean  "mail_to_gms",       default: false, null: false
-    t.boolean  "mail_to_attendees", default: false, null: false
-    t.boolean  "mail_to_vendors",   default: false, null: false
-    t.boolean  "mail_to_unpaid",    default: false, null: false
-    t.boolean  "mail_to_alumni",    default: false, null: false
+    t.integer  "user_id",                              null: false
+    t.integer  "convention_id",                        null: false
+    t.boolean  "bid_committee",        default: false, null: false
+    t.boolean  "staff",                default: false, null: false
+    t.boolean  "bid_chair",            default: false, null: false
+    t.boolean  "gm_liaison",           default: false, null: false
+    t.boolean  "registrar",            default: false, null: false
+    t.boolean  "outreach",             default: false, null: false
+    t.boolean  "con_com",              default: false, null: false
+    t.boolean  "scheduling",           default: false, null: false
+    t.boolean  "mail_to_gms",          default: false, null: false
+    t.boolean  "mail_to_attendees",    default: false, null: false
+    t.boolean  "mail_to_vendors",      default: false, null: false
+    t.boolean  "mail_to_unpaid",       default: false, null: false
+    t.boolean  "mail_to_alumni",       default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "first_name",                        null: false
-    t.string   "last_name",                         null: false
+    t.string   "first_name",                           null: false
+    t.string   "last_name",                            null: false
     t.string   "nickname"
     t.date     "birth_date"
     t.string   "gender"
@@ -219,6 +220,8 @@ ActiveRecord::Schema.define(version: 20170521222419) do
     t.string   "evening_phone"
     t.string   "best_call_time"
     t.string   "preferred_contact"
+    t.text     "bio"
+    t.boolean  "show_nickname_in_bio"
     t.index ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true, using: :btree
   end
 
@@ -243,7 +246,6 @@ ActiveRecord::Schema.define(version: 20170521222419) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_foreign_key "cms_files", "conventions", column: "parent_id"
   add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"

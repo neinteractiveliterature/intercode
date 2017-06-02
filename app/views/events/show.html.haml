@@ -77,4 +77,4 @@
 
 %hr
 
-= sanitize @event.description
+= MarkdownPresenter.new('No description provided').render @event.description

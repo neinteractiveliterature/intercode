@@ -18,6 +18,13 @@ GIT
       liquid
       rails (>= 4.0.0)
 
+GIT
+  remote: https://github.com/bootstrap-ruby/rails-bootstrap-forms.git
+  revision: 16d82d6d8c32b5f6dcbe14ab3a3189e6b012839c
+  branch: bootstrap-v4
+  specs:
+    bootstrap_form (2.6.0)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -78,7 +85,6 @@ GEM
     bootstrap (4.0.0.alpha6)
       autoprefixer-rails (>= 6.0.3)
       sass (>= 3.4.19)
-    bootstrap_form (2.5.2)
     builder (3.2.3)
     cancancan (1.15.0)
     carrierwave (1.1.0)
@@ -239,12 +245,15 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    redcarpet (3.4.0)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
     rest-client (2.0.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    reverse_markdown (0.8.2)
+      nokogiri
     ruby-progressbar (1.8.1)
     sass (3.4.22)
     sass-rails (5.0.6)
@@ -311,7 +320,7 @@ DEPENDENCIES
   activerecord-session_store
   autoprefixer-rails
   bootstrap (~> 4.0.0.alpha6)
-  bootstrap_form
+  bootstrap_form!
   cadmus!
   cadmus_files!
   cancancan
@@ -346,6 +355,8 @@ DEPENDENCIES
   rails-controller-testing
   rails_12factor
   react-rails
+  redcarpet
+  reverse_markdown
   sass-rails
   scheduled_value (~> 1.1.2)
   sequel
