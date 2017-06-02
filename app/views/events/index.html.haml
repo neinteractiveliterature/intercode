@@ -1,5 +1,7 @@
 %h1
   Events at #{convention.name}
+
+- markdown_presenter = MarkdownPresenter.new('No description provided')
 - @events.each do |event|
   .card.my-4
     .card-header
@@ -9,4 +11,4 @@
         %p{style: "margin: 0"}
           %em by #{author_or_org}
     .card-block
-      = sanitize event.short_blurb
+      = markdown_presenter.render event.short_blurb
