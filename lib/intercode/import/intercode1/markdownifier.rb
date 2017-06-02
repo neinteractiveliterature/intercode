@@ -13,7 +13,7 @@ class Intercode::Import::Intercode1::Markdownifier
     parsed_html = nil
     begin
       parsed_html = Nokogiri::HTML::DocumentFragment.parse(html)
-    rescue Exception => e
+    rescue StandardError => e
       logger.warn("Error parsing HTML #{html.inspect}: #{e.message}")
       return html
     end
@@ -28,7 +28,7 @@ class Intercode::Import::Intercode1::Markdownifier
 
     begin
       ReverseMarkdown.convert(cleaned_html)
-    rescue Exception => e
+    rescue StandardError => e
       logger.warn("Error converting #{cleaned_html.inspect} to Markdown: #{e.message}")
       cleaned_html
     end
