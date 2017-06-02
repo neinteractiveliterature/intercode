@@ -10,9 +10,8 @@ class Intercode::Import::Intercode1::Tables::Bios < Intercode::Import::Intercode
   def build_record(row)
     user_con_profile = UserConProfile.find(@user_con_profile_id_map[row[:UserId]])
 
-    # TODO: import titles somehow
     user_con_profile.assign_attributes(
-      bio: @markdownifier.markdownify(row[:BioText]),
+      bio: compose_bio(row),
       show_nickname_in_bio: row[:ShowNickname] != 0
     )
 
@@ -21,5 +20,14 @@ class Intercode::Import::Intercode1::Tables::Bios < Intercode::Import::Intercode
 
   def row_id(row)
     row[:BioId]
+  end
+
+  def compose_bio(row)
+    title = row[:Title].presence
+    title = "*#{title}*<br>\n" if title
+
+    body = @markdownifier.markdownify(row[:BioText])
+
+    [title, body].compact.join('')
   end
 end
