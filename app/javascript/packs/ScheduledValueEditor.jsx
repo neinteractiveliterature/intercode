@@ -1,46 +1,47 @@
-//= require 'moment'
-//= require 'moment-timezone-with-data-2010-2020'
-//= require 'react-datetime'
-//= require 'react-currency-masked-input'
+import React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import momentTimezone from 'moment-timezone';
+import Datetime from 'react-datetime';
+import CurrencyMaskedInput from 'react-currency-masked-input';
+import maxBy from 'lodash.maxby';
 
-var TimespanRow = React.createClass({
-  statics: {
-    isValid: function(timespan) {
-      if (!timespan.value) {
-        return false;
-      }
-
-      return true;
+class TimespanRow extends React.Component {
+  static isValid = (timespan) => {
+    if (!timespan.value) {
+      return false;
     }
-  },
 
-  timeChanged: function(property, newTime) {
+    return true;
+  }
+
+  timeChanged = (property, newTime) => {
     var value = null;
     if (newTime) {
       value = newTime.tz(this.props.timezone).toISOString();
     }
 
     this.props.attributeDidChange(property, value);
-  },
+  }
 
-  valueChanged: function(e, value) {
-    var newValue = _.clone(this.props.timespan.value) || {};
+  valueChanged = (e, value) => {
+    var newValue = Object.assign({}, this.props.timespan.value || {});
     newValue.fractional = value * 100.0;
     this.props.attributeDidChange('value', newValue);
-  },
+  }
 
-  isBeforeFinishTime: function(date) {
+  isBeforeFinishTime = (date) => {
     var finishTime = this.getFinishTime();
     return (!finishTime || date.isBefore(finishTime));
-  },
+  }
 
-  isAfterStartTime: function(date) {
+  isAfterStartTime = (date) => {
     var startTime = this.getStartTime();
     return (!startTime || date.isAfter(startTime));
-  },
+  }
 
-  doesNotOverlapOtherTimespans: function(date) {
-    return this.props.otherTimespans.every(function(otherTimespan) {
+  doesNotOverlapOtherTimespans = (date) => {
+    return this.props.otherTimespans.every((otherTimespan) => {
       if (otherTimespan.start) {
         if (date.isSame(otherTimespan.start)) {
           return false;
@@ -63,38 +64,38 @@ var TimespanRow = React.createClass({
 
       return true;
     });
-  },
+  }
 
-  isValidStartTime: function(date) {
+  isValidStartTime = (date) => {
     return (this.isBeforeFinishTime(date) && this.doesNotOverlapOtherTimespans(date));
-  },
+  }
 
-  isValidFinishTime: function(date) {
+  isValidFinishTime = (date) => {
     return (this.isAfterStartTime(date) && this.doesNotOverlapOtherTimespans(date));
-  },
+  }
 
-  getStartTime: function() {
+  getStartTime = () => {
     if (!this.startTime && this.props.timespan.start) {
       this.startTime = moment(this.props.timespan.start).tz(this.props.timezone);
     }
 
     return this.startTime;
-  },
+  }
 
-  getFinishTime: function() {
+  getFinishTime = () => {
     if (!this.finishTime && this.props.timespan.finish) {
       this.finishTime = moment(this.props.timespan.finish).tz(this.props.timezone);
     }
 
     return this.finishTime;
-  },
+  }
 
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps = (newProps) => {
     this.startTime = null;
     this.finishTime = null;
-  },
+  }
 
-  render: function() {
+  render = () => {
     var dollarValue = null;
 
     if (this.props.timespan.value && this.props.timespan.value.fractional !== null) {
@@ -140,37 +141,31 @@ var TimespanRow = React.createClass({
       </tr>
     );
   }
-});
+}
 
-var ScheduledValueEditor = React.createClass({
-  statics: {
-    isValid: function(scheduledValue) {
-      if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
+class ScheduledValueEditor extends React.Component {
+  static isValid = (scheduledValue) => {
+    if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
+      return false;
+    }
+
+    return scheduledValue.timespans.every(function (timespan) {
+      if (!TimespanRow.isValid(timespan)) {
         return false;
       }
 
-      return scheduledValue.timespans.every(function (timespan) {
-        if (!TimespanRow.isValid(timespan)) {
-          return false;
-        }
+      return true;
+    });
+  }
 
-        return true;
-      });
-    }
-  },
-
-  addRowClicked: function(e) {
+  addRowClicked = (e) => {
     e.preventDefault();
 
     var timespans = this.props.scheduledValue.timespans || [];
 
-    var newTimespans = _.clone(timespans);
-    var lastTimespan = _.max(timespans, function(timespan) {
-      return moment(timespan.finish).toDate();
-    });
-    var everyTimespanFinishes = timespans.every(function(timespan) {
-      return timespan.finish;
-    });
+    var newTimespans = Object.assign({}, timespans);
+    var lastTimespan = maxBy(timespans, (timespan) => moment(timespan.finish).toDate());
+    var everyTimespanFinishes = timespans.every((timespan) => timespan.finish);
 
     var startTime = null;
     if (lastTimespan && everyTimespanFinishes) {
@@ -180,31 +175,31 @@ var ScheduledValueEditor = React.createClass({
     newTimespans.push({ start: startTime, finish: null, value: null });
 
     this.setTimespans(newTimespans);
-  },
+  }
 
-  deleteRowClicked: function(index, e) {
+  deleteRowClicked = (index, e) => {
     e.preventDefault();
 
     var oldTimespans = this.props.scheduledValue.timespans;
     var newTimespans = oldTimespans.slice(0, index).concat(oldTimespans.slice(index + 1));
 
     this.setTimespans(newTimespans);
-  },
+  }
 
-  setTimespans: function(newTimespans) {
-    var newScheduledValue = _.extend(_.clone(this.props.scheduledValue), {timespans: newTimespans});
+  setTimespans = (newTimespans) => {
+    var newScheduledValue = Object.assign({}, this.props.scheduledValue, {timespans: newTimespans});
     this.props.setScheduledValue(newScheduledValue);
-  },
+  }
 
-  timespanAttributeDidChange: function(index, attributeName, newValue) {
-    var newTimespans = _.clone(this.props.scheduledValue.timespans);
-    newTimespans[index] = _.clone(newTimespans[index]);
+  timespanAttributeDidChange = (index, attributeName, newValue) => {
+    var newTimespans = Object.assign({}, this.props.scheduledValue.timespans);
+    newTimespans[index] = Object.assign({}, newTimespans[index]);
     newTimespans[index][attributeName] = newValue;
 
     this.setTimespans(newTimespans);
-  },
+  }
 
-  render: function() {
+  render = () => {
     var timespans = this.props.scheduledValue.timespans || [];
 
     var timespanRows = timespans.map(function (timespan, i) {
@@ -232,4 +227,6 @@ var ScheduledValueEditor = React.createClass({
       </table>
     );
   }
-});
+}
+
+export default ScheduledValueEditor;
