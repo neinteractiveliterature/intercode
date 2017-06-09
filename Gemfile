@@ -15,6 +15,7 @@ gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
 gem 'haml'
 gem 'webpacker'
+gem 'webpacker-react', "~> 0.3.1"
 gem 'uglifier', '>= 1.0.3'
 
 gem 'with_advisory_lock'
@@ -25,12 +26,8 @@ gem 'unf'
 
 gem 'jquery-rails'
 gem 'lodash-rails'
-gem 'react-rails'
-gem 'momentjs-rails'
-gem 'moment_timezone-rails'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-react-date-picker'
   gem 'rails-assets-tether', '>= 1.3.3'
 end
 

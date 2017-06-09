@@ -1,8 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScheduledValueEditor from './ScheduledValueEditor';
+import { ScheduledValuePropType } from './ScheduledValuePropTypes';
 
 class TicketTypeForm extends React.Component {
+  static propTypes = {
+    initialTicketType: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      pricing_schedule: ScheduledValuePropType.isRequired,
+    }).isRequired,
+    baseUrl: PropTypes.string.isRequired,
+    timezone: PropTypes.string.isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -100,7 +112,7 @@ class TicketTypeForm extends React.Component {
             setScheduledValue={this.setTicketTypeAttribute.bind(this, 'pricing_schedule')} />
         </fieldset>
 
-        <div class="form-group">
+        <div className="form-group">
           <input type="submit" disabled={disableSubmit} onClick={this.submitClicked} className="btn btn-primary" value="Save ticket type configuration"/>
         </div>
       </form>
