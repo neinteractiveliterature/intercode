@@ -12,7 +12,7 @@ class Convention < ApplicationRecord
   has_many :rooms, dependent: :destroy
   has_many :ticket_types, dependent: :destroy
 
-  belongs_to :root_page, :class_name => "Page"
+  belongs_to :root_page, :class_name => "Page", optional: true
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
