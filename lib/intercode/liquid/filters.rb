@@ -8,6 +8,16 @@ module Intercode
           "#{input} #{plural}"
         end
       end
+
+      def email_link(input)
+        return unless input
+
+        if @context['user']
+          %{<a href="mailto:#{input}">#{input}</a>}
+        else
+          ApplicationHelper.obfuscated_email(input)
+        end
+      end
     end
   end
 end

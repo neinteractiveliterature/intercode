@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526163733) do
+ActiveRecord::Schema.define(version: 20170602200806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,20 @@ ActiveRecord::Schema.define(version: 20170526163733) do
     t.index ["user_con_profile_id"], name: "index_signups_on_user_con_profile_id", using: :btree
   end
 
+  create_table "staff_positions", force: :cascade do |t|
+    t.integer  "convention_id"
+    t.text     "name"
+    t.text     "email"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["convention_id"], name: "index_staff_positions_on_convention_id", using: :btree
+  end
+
+  create_table "staff_positions_user_con_profiles", id: false, force: :cascade do |t|
+    t.integer "staff_position_id",   null: false
+    t.integer "user_con_profile_id", null: false
+  end
+
   create_table "team_members", force: :cascade do |t|
     t.integer  "event_id"
     t.datetime "updated_at"
@@ -260,6 +274,7 @@ ActiveRecord::Schema.define(version: 20170526163733) do
   add_foreign_key "signups", "runs"
   add_foreign_key "signups", "user_con_profiles"
   add_foreign_key "signups", "users", column: "updated_by_id"
+  add_foreign_key "staff_positions", "conventions"
   add_foreign_key "team_members", "events"
   add_foreign_key "team_members", "user_con_profiles"
   add_foreign_key "ticket_types", "conventions"

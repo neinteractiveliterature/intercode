@@ -17,4 +17,8 @@ class ConventionDrop < Liquid::Drop
   def bio_eligible_user_con_profiles
     convention.user_con_profiles.can_have_bio.to_a
   end
+
+  def staff_positions
+    convention.staff_positions.to_a
+  end
 end

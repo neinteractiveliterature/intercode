@@ -9,6 +9,7 @@ class UserConProfile < ApplicationRecord
   has_one :ticket, dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
+  has_and_belongs_to_many :staff_positions
 
   delegate :email, to: :user, allow_nil: true
 
@@ -105,6 +106,10 @@ class UserConProfile < ApplicationRecord
 
   def to_liquid
     UserConProfileDrop.new(self)
+  end
+
+  def name_without_nickname
+    [first_name, last_name].compact.join(' ')
   end
 
   def name_parts

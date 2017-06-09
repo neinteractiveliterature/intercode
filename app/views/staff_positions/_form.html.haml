@@ -1,0 +1,15 @@
+= bootstrap_form_for(staff_position) do |f|
+  - if staff_position.errors.any?
+    #error_explanation
+      %h2 #{pluralize(staff_position.errors.count, "error")} prohibited this staff_position from being saved:
+
+      %ul
+        - staff_position.errors.full_messages.each do |message|
+          %li= message
+
+  = f.text_field :name, label: "Position name"
+  = f.email_field :email, label: "Contact email"
+
+  = f.collection_check_boxes :user_con_profile_ids, convention.user_con_profiles, :id, :name
+
+  = f.submit class: 'btn btn-primary'
