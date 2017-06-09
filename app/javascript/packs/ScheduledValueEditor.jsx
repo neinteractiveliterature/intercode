@@ -3,10 +3,19 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import momentTimezone from 'moment-timezone';
 import Datetime from 'react-datetime';
-import CurrencyMaskedInput from 'react-currency-masked-input';
+require('react-datetime/css/react-datetime.css');
+import NumberInput from 'react-number-input';
 import maxBy from 'lodash.maxby';
+import { TimespanPropType, ScheduledValuePropType } from './ScheduledValuePropTypes';
 
 class TimespanRow extends React.Component {
+  static propTypes = {
+    timespan: TimespanPropType.isRequired,
+    otherTimespans: PropTypes.arrayOf(TimespanPropType.isRequired).isRequired,
+    timezone: PropTypes.string.isRequired,
+    attributeDidChange: PropTypes.func.isRequired,
+  }
+
   static isValid = (timespan) => {
     if (!timespan.value) {
       return false;
@@ -96,7 +105,7 @@ class TimespanRow extends React.Component {
   }
 
   render = () => {
-    var dollarValue = null;
+    let dollarValue = null;
 
     if (this.props.timespan.value && this.props.timespan.value.fractional !== null) {
       dollarValue = (this.props.timespan.value.fractional / 100.0).toFixed(2);
@@ -107,7 +116,12 @@ class TimespanRow extends React.Component {
         <td className="col-md-3">
           <div className="input-group">
             <span className="input-group-addon">$</span>
-            <CurrencyMaskedInput className="form-control" value={dollarValue} onChange={this.valueChanged} />
+            <NumberInput
+              className="form-control"
+              value={dollarValue}
+              onChange={this.valueChanged}
+              format="0,0.00"
+            />
           </div>
         </td>
 
@@ -144,6 +158,11 @@ class TimespanRow extends React.Component {
 }
 
 class ScheduledValueEditor extends React.Component {
+  static propTypes = {
+    scheduledValue: ScheduledValuePropType.isRequired,
+    timezone: PropTypes.string.isRequired,
+  }
+
   static isValid = (scheduledValue) => {
     if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
       return false;
@@ -163,7 +182,7 @@ class ScheduledValueEditor extends React.Component {
 
     var timespans = this.props.scheduledValue.timespans || [];
 
-    var newTimespans = Object.assign({}, timespans);
+    var newTimespans = [...timespans];
     var lastTimespan = maxBy(timespans, (timespan) => moment(timespan.finish).toDate());
     var everyTimespanFinishes = timespans.every((timespan) => timespan.finish);
 
@@ -192,9 +211,8 @@ class ScheduledValueEditor extends React.Component {
   }
 
   timespanAttributeDidChange = (index, attributeName, newValue) => {
-    var newTimespans = Object.assign({}, this.props.scheduledValue.timespans);
-    newTimespans[index] = Object.assign({}, newTimespans[index]);
-    newTimespans[index][attributeName] = newValue;
+    var newTimespans = [...this.props.scheduledValue.timespans];
+    newTimespans[index] = Object.assign({}, newTimespans[index], {[attributeName]: newValue});
 
     this.setTimespans(newTimespans);
   }

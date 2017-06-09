@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import CreditCardNumberInput from './CreditCardNumberInput';
 import { enableUniqueIds } from 'react-html-id';
 
