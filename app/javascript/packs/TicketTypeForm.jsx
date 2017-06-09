@@ -1,34 +1,40 @@
-var TicketTypeForm = React.createClass({
-  getInitialState: function() {
-    return {
+import React from 'react';
+import PropTypes from 'prop-types';
+import ScheduledValueEditor from './ScheduledValueEditor';
+
+class TicketTypeForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       ticketType: this.props.initialTicketType
-    }
-  },
+    };
+  }
 
-  isUpdate: function() {
+  isUpdate = () => {
     return this.state.ticketType.id;
-  },
+  }
 
-  resourceUrl: function() {
+  resourceUrl = () => {
     if (this.state.ticketType.id) {
       return this.props.baseUrl + "/" + this.state.ticketType.id;
     } else {
       return this.props.baseUrl;
     }
-  },
+  }
 
-  attributeFieldChanged: function(attribute, event) {
+  attributeFieldChanged = (attribute, event) => {
     this.setTicketTypeAttribute(attribute, event.target.value);
-  },
+  }
 
-  setTicketTypeAttribute: function(attribute, value) {
-    var newAttributes = _.clone(this.state.ticketType);
+  setTicketTypeAttribute = (attribute, value) => {
+    var newAttributes = Object.assign({}, this.state.ticketType);
     newAttributes[attribute] = value;
 
     this.setState({ ticketType: newAttributes });
-  },
+  }
 
-  submitClicked: function(e) {
+  submitClicked = (e) => {
     e.preventDefault();
 
     var method = 'POST';
@@ -57,9 +63,9 @@ var TicketTypeForm = React.createClass({
     promise.fail(function(jqXHR, status, errorThrown) {
       alert(jqXHR.responseText);
     });
-  },
+  }
 
-  render: function() {
+  render = () => {
     var disableSubmit = !ScheduledValueEditor.isValid(this.state.ticketType.pricing_schedule);
 
     return (
@@ -100,4 +106,6 @@ var TicketTypeForm = React.createClass({
       </form>
     );
   }
-});
+}
+
+export default TicketTypeForm;

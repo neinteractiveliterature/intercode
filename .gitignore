@@ -38,3 +38,5 @@ cookbooks
 
 # Dear god, don't look at node_modules
 /node_modules
+/public/packs
+/node_modules
