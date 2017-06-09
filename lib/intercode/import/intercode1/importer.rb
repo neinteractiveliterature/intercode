@@ -30,6 +30,37 @@ class Intercode::Import::Intercode1::Importer
 
       $vars["price_schedule"] = $price_schedule;
 
+      $possible_position_names = array(
+        "ADVERTISING",
+        "ATTENDEE_COORDINATOR",
+        "BID_CHAIR",
+        "CON_CHAIR",
+        "CON_SUITE",
+        "GM_COORDINATOR",
+        "HOTEL_LIAISON",
+        "IRON_GM",
+        "OPS",
+        "OPS2",
+        "OUTREACH",
+        "REGISTRAR",
+        "SAFETY_COORDINATOR",
+        "STAFF_COORDINATOR",
+        "THURSDAY",
+        "TREASURER",
+        "VENDOR_LIAISON"
+      );
+      $staff_positions = array();
+      foreach($possible_position_names as $position_name) {
+        if (defined("NAME_" . $position_name) || defined("EMAIL_" . $position_name)) {
+          $staff_positions[$position_name] = array(
+            "name" => constant("NAME_" . $position_name),
+            "email" => constant("EMAIL_" . $position_name)
+          );
+        }
+      }
+
+      $vars["staff_positions"] = $staff_positions;
+
       echo json_encode($vars);
     ?>
     PHP
@@ -44,19 +75,21 @@ class Intercode::Import::Intercode1::Importer
       vars['con_domain'],
       Date.parse(vars['friday_date']),
       vars['price_schedule'],
+      vars['staff_positions'],
       vars['php_timezone'],
       filename,
       text_dir
     )
   end
 
-  def initialize(database_url, con_name, con_domain, friday_date, price_schedule, php_timezone, constants_file, text_dir)
+  def initialize(database_url, con_name, con_domain, friday_date, price_schedule, staff_positions, php_timezone, constants_file, text_dir)
     @database_url = database_url
     @connection = Sequel.connect(@database_url)
     @con_name = con_name
     @con_domain = con_domain
     @friday_date = friday_date
     @price_schedule = price_schedule
+    @staff_positions = staff_positions
     @php_timezone = ActiveSupport::TimeZone[php_timezone]
     @constants_file = constants_file
     @text_dir = text_dir
@@ -98,6 +131,7 @@ class Intercode::Import::Intercode1::Importer
 
     events_table.import!
     users_table.import!
+    staff_position_importer.import!
     bios_table.import!
     rooms_table.import!
     runs_table.import!
@@ -164,6 +198,10 @@ class Intercode::Import::Intercode1::Importer
 
   def signup_table
     @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map, user_con_profiles_id_map)
+  end
+
+  def staff_position_importer
+    @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(con, @staff_positions)
   end
 
   def html_content

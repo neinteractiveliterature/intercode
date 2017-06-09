@@ -34,6 +34,7 @@ class Ability
         can :manage, Event, convention_id: staff_con_ids
         can :manage, Run, event: { convention_id: staff_con_ids }
         can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
+        can :manage, StaffPosition, convention_id: staff_con_ids
         can :manage, TeamMember, event: { convention_id: staff_con_ids }
       end
 
