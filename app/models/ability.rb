@@ -22,28 +22,8 @@ class Ability
     else
       can [:read, :create, :update], UserConProfile, user_id: user.id
 
-      if staff_con_ids.any?
-        can :manage, Convention, id: staff_con_ids
-        can :manage, Page, parent_type: 'Convention', parent_id: staff_con_ids
-        can :manage, CmsPartial, parent_type: 'Convention', parent_id: staff_con_ids
-        can :manage, CmsFile, parent_type: 'Convention', parent_id: staff_con_ids
-        can :manage, UserConProfile, convention_id: staff_con_ids
-        can :read, UserConProfile, convention_id: staff_con_ids
-        can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
-        can :manage, TicketType, convention_id: staff_con_ids
-        can :manage, Event, convention_id: staff_con_ids
-        can :manage, Run, event: { convention_id: staff_con_ids }
-        can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
-        can :manage, StaffPosition, convention_id: staff_con_ids
-        can :manage, TeamMember, event: { convention_id: staff_con_ids }
-      end
-
-      if team_member_event_ids.any?
-        can :manage, Event, id: team_member_event_ids
-        can :manage, Run, event_id: team_member_event_ids
-        can :manage, Signup, run: { event_id: team_member_event_ids }
-        can :manage, TeamMember, event_id: team_member_event_ids
-      end
+      add_con_staff_abilities if staff_con_ids.any?
+      add_team_member_abilities if team_member_event_ids.any?
     end
   end
 
@@ -59,6 +39,29 @@ class Ability
   end
 
   private
+
+  def add_con_staff_abilities
+    can :manage, Convention, id: staff_con_ids
+    can :manage, Page, parent_type: 'Convention', parent_id: staff_con_ids
+    can :manage, CmsPartial, parent_type: 'Convention', parent_id: staff_con_ids
+    can :manage, CmsFile, parent_type: 'Convention', parent_id: staff_con_ids
+    can :manage, UserConProfile, convention_id: staff_con_ids
+    can :read, UserConProfile, convention_id: staff_con_ids
+    can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
+    can :manage, TicketType, convention_id: staff_con_ids
+    can :manage, Event, convention_id: staff_con_ids
+    can :manage, Run, event: { convention_id: staff_con_ids }
+    can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
+    can :manage, StaffPosition, convention_id: staff_con_ids
+    can :manage, TeamMember, event: { convention_id: staff_con_ids }
+  end
+
+  def add_team_member_abilities
+    can :manage, Event, id: team_member_event_ids
+    can :manage, Run, event_id: team_member_event_ids
+    can :manage, Signup, run: { event_id: team_member_event_ids }
+    can :manage, TeamMember, event_id: team_member_event_ids
+  end
 
   def staff_con_ids
     @staff_con_ids ||= begin
