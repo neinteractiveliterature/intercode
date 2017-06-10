@@ -5,7 +5,7 @@ module TicketsHelper
     end
   end
 
-  def ticket_purchase_form
+  def ticket_purchase_form(ticket)
     ticket_types_data = convention.ticket_types.map do |ticket_type|
       {
         id: ticket_type.id,
@@ -19,8 +19,8 @@ module TicketsHelper
     end
 
     react_component "TicketPurchaseForm", {
-      ticketPriceFormatted: current_price.format,
-      ticketTypeId: @ticket.ticket_type_id,
+      ticketPriceFormatted: ticket&.ticket_type&.price&.format,
+      ticketTypeId: ticket&.ticket_type&.id,
       createChargeUrl: ticket_path,
       purchaseCompleteUrl: ticket_path,
       ticketTypes: ticket_types_data

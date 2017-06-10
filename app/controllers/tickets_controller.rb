@@ -51,16 +51,6 @@ class TicketsController < BaseControllers::VirtualHost
     params.require(:ticket).permit(:ticket_type_id)
   end
 
-  def pricing_schedule
-    @pricing_schedule ||= @ticket.ticket_type.pricing_schedule
-  end
-  helper_method :pricing_schedule
-
-  def current_price
-    @current_price ||= pricing_schedule.value_at(Time.now)
-  end
-  helper_method :current_price
-
   def check_existing_ticket
     redirect_to ticket_path if user_con_profile.ticket
   end
