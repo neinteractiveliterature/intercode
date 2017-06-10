@@ -15,7 +15,7 @@ engines:
   eslint:
     enabled: true
     config:
-      config: .eslintrc.yml
+      config: .eslintrc.js
   fixme:
     enabled: true
   rubocop:
