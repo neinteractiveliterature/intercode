@@ -16,6 +16,8 @@ engines:
     enabled: true
     config:
       config: .eslintrc.js
+      import/extensions:
+        enabled: false
   fixme:
     enabled: true
   rubocop:
