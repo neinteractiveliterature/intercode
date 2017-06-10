@@ -6,6 +6,7 @@ bundler_args: "--without development:production:intercode1_import"
 cache: bundler
 before_script:
 - nvm install
+- npm install --global yarn
 - cp config/database.yml.ci config/database.yml
 - bin/rake db:create db:migrate RAILS_ENV=test
 notifications:
