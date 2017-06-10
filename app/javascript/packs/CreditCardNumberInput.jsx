@@ -3,44 +3,50 @@ import PropTypes from 'prop-types';
 import Payment from 'payment';
 
 const CARD_TYPE_ICONS = {
-  'visa': 'fa-cc-visa',
-  'mastercard': 'fa-cc-mastercard',
-  'amex': 'fa-cc-amex',
-  'dinersclub': 'fa-cc-dinersclub',
-  'discover': 'fa-cc-discover',
-  'jcb': 'fa-cc-jcb',
-  'unknown': 'fa-credit-card'
+  visa: 'fa-cc-visa',
+  mastercard: 'fa-cc-mastercard',
+  amex: 'fa-cc-amex',
+  dinersclub: 'fa-cc-dinersclub',
+  discover: 'fa-cc-discover',
+  jcb: 'fa-cc-jcb',
+  unknown: 'fa-credit-card',
 };
 
 class CreditCardNumberInput extends React.Component {
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    value: PropTypes.string,
+  };
+
+  static defaultProps = {
+    value: '',
+  };
+
   getIconClass = () => {
     let iconClass;
-    let backgroundClass;
     let colorClass;
     const cardNumber = this.props.value;
 
     if (cardNumber && cardNumber.length > 0) {
-      var cardType = Payment.fns.cardType(cardNumber);
+      const cardType = Payment.fns.cardType(cardNumber);
 
       if (cardType) {
-        iconClass = CARD_TYPE_ICONS[cardType] || CARD_TYPE_ICONS['unknown'];
+        iconClass = CARD_TYPE_ICONS[cardType] || CARD_TYPE_ICONS.unknown;
 
-        var cardTypeObject = Payment.getCardArray().find((card) => { return card.type === cardType });
+        const cardTypeObject = Payment.getCardArray().find(card => card.type === cardType);
         if (cardTypeObject.length.includes(cardNumber.replace(/\s/g, '').length)) {
           if (Payment.fns.validateCardNumber(cardNumber)) {
-            backgroundClass = 'bg-success';
             colorClass = 'text-success';
           } else {
             iconClass = 'fa-exclamation-triangle';
-            backgroundClass = 'bg-danger';
             colorClass = 'text-danger';
           }
         }
       } else {
-        iconClass = CARD_TYPE_ICONS['unknown'];
+        iconClass = CARD_TYPE_ICONS.unknown;
       }
     } else {
-      iconClass = CARD_TYPE_ICONS['unknown'];
+      iconClass = CARD_TYPE_ICONS.unknown;
     }
 
     return `fa ${iconClass} ${colorClass}`;
@@ -58,7 +64,7 @@ class CreditCardNumberInput extends React.Component {
             {...this.props}
           />
           <span className="input-group-addon">
-            <i className={this.getIconClass()}></i>
+            <i className={this.getIconClass()} />
           </span>
         </div>
       </div>

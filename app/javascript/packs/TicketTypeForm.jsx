@@ -21,6 +21,7 @@ class TicketTypeForm extends React.Component {
 
     this.state = {
       ticketType: this.props.initialTicketType,
+      error: null,
     };
   }
 
@@ -58,8 +59,18 @@ class TicketTypeForm extends React.Component {
     })).then(() => {
       window.location.href = this.props.baseUrl;
     }).catch((error) => {
-      alert(error.response.data);
+      this.setState({ error: error.response.data });
     });
+  }
+
+  renderError = () => {
+    if (this.state.error) {
+      return (
+        <div className="alert alert-danger">{this.state.error}</div>
+      );
+    }
+
+    return null;
   }
 
   render = () => {
@@ -67,6 +78,8 @@ class TicketTypeForm extends React.Component {
 
     return (
       <form>
+        {this.renderError()}
+
         <div className="form-group">
           <label htmlFor="name">
             Name (no spaces allowed &mdash; only letters, numbers, and underscores)
