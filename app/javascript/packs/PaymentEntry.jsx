@@ -27,22 +27,26 @@ class PaymentEntry extends React.Component {
     enableUniqueIds(this);
   }
 
-  renderLabeledInput = (name, label, type, value, onChange, placeholder) => {
+  renderLabeledInputInCol4 = (name, label, type, value, onChange, placeholder) => {
     const inputId = this.nextUniqueId();
 
     return (
-      <div>
-        <label htmlFor={inputId} className="control-label">{label}</label>
-        <input
-          type={type}
-          name={name}
-          disabled={this.props.disabled}
-          id={inputId}
-          value={value}
-          onChange={onChange}
-          className="form-control"
-          placeholder={placeholder}
-        />
+      <div className="col-sm-6 col-md-4">
+        <div className="form-group">
+          <div>
+            <label htmlFor={inputId} className="control-label">{label}</label>
+            <input
+              type={type}
+              name={name}
+              disabled={this.props.disabled}
+              id={inputId}
+              value={value}
+              onChange={onChange}
+              className="form-control"
+              placeholder={placeholder}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -76,17 +80,8 @@ class PaymentEntry extends React.Component {
             </div>
           </div>
 
-          <div className="col-sm-6 col-md-4">
-            <div className="form-group">
-              {this.renderLabeledInput('cvc', 'CVC', 'tel', this.props.cvc, this.props.onCvcChanged, '•••')}
-            </div>
-          </div>
-
-          <div className="col-sm-6 col-md-4">
-            <div className="form-group">
-              {this.renderLabeledInput('zip', 'ZIP/Postal Code', 'tel', this.props.zip, this.props.onZipChanged, '')}
-            </div>
-          </div>
+          {this.renderLabeledInputInCol4('cvc', 'CVC', 'tel', this.props.cvc, this.props.onCvcChanged, '•••')}
+          {this.renderLabeledInputInCol4('zip', 'ZIP/Postal Code', 'tel', this.props.zip, this.props.onZipChanged, '')}
         </div>
       </div>
     );
