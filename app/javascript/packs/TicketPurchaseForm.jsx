@@ -118,6 +118,8 @@ class TicketPurchaseForm extends React.Component {
     }
   }
 
+  isDisabled = () => ((!this.state.ticketTypeId) || this.state.submitting);
+
   renderPaymentError = () => {
     if (!this.state.paymentError) {
       return null;
@@ -167,55 +169,36 @@ class TicketPurchaseForm extends React.Component {
     return options;
   }
 
+  renderFormGroup = (name, label, type, value) => {
+    const inputId = this.nextUniqueId();
+
+    return (
+      <div className="form-group">
+        <label htmlFor={inputId}>{label}</label>
+        <input
+          className="form-control"
+          id={inputId}
+          name={name}
+          type={type}
+          value={value}
+          onChange={this.fieldChanged}
+          disabled={this.isDisabled()}
+        />
+      </div>
+    );
+  }
+
   renderPaymentSection = () => {
-    const disabled = (!this.state.ticketTypeId) || this.state.submitting;
-    const nameId = this.nextUniqueId();
-    const emailId = this.nextUniqueId();
-    const phoneId = this.nextUniqueId();
+    const disabled = this.isDisabled();
 
     return (
       <div>
         <hr />
         {this.renderPaymentError()}
 
-        <div className="form-group">
-          <label htmlFor={nameId}>Name</label>
-          <input
-            disabled={disabled}
-            className="form-control"
-            id={nameId}
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.fieldChanged}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor={emailId}>Email</label>
-          <input
-            disabled={disabled}
-            className="form-control"
-            id={emailId}
-            name="email"
-            type="email"
-            value={this.state.email}
-            onChange={this.fieldChanged}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor={phoneId}>Phone number</label>
-          <input
-            disabled={disabled}
-            className="form-control"
-            id={phoneId}
-            name="phone"
-            type="email"
-            value={this.state.phone}
-            onChange={this.fieldChanged}
-          />
-        </div>
+        {this.renderFormGroup('name', 'Name', 'text', this.state.name)}
+        {this.renderFormGroup('email', 'Email', 'email', this.state.email)}
+        {this.renderFormGroup('phone', 'Phone number', 'tel', this.state.phone)}
 
         <PaymentEntry
           ccNumber={this.state.ccNumber}
