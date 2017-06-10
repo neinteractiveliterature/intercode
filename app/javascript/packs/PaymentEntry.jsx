@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CreditCardNumberInput from './CreditCardNumberInput';
 import { enableUniqueIds } from 'react-html-id';
+import CreditCardNumberInput from './CreditCardNumberInput';
 
 class PaymentEntry extends React.Component {
   static propTypes = {
@@ -15,7 +15,11 @@ class PaymentEntry extends React.Component {
     onExpYearChanged: PropTypes.func.isRequired,
     onCvcChanged: PropTypes.func.isRequired,
     onZipChanged: PropTypes.func.isRequired,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    disabled: false,
   };
 
   constructor(props) {
@@ -25,6 +29,7 @@ class PaymentEntry extends React.Component {
 
   render = () => {
     const ccNumberId = this.nextUniqueId();
+    const expMonthId = this.nextUniqueId();
     const cvcId = this.nextUniqueId();
     const zipId = this.nextUniqueId();
 
@@ -41,10 +46,10 @@ class PaymentEntry extends React.Component {
         <div className="row">
           <div className="col-md-4">
             <div className="form-group">
-              <label className="control-label">Expiration date</label>
+              <label className="control-label" htmlFor={expMonthId}>Expiration date</label>
               <div className="row">
                 <div className="col">
-                  <input type="tel" name="expMonth" disabled={this.props.disabled} value={this.props.expMonth} onChange={this.props.onExpMonthChanged} className="form-control" size="2" placeholder="MM" />
+                  <input type="tel" id={expMonthId} name="expMonth" disabled={this.props.disabled} value={this.props.expMonth} onChange={this.props.onExpMonthChanged} className="form-control" size="2" placeholder="MM" />
                 </div>
                 <div className="col">
                   <input type="tel" name="expYear" disabled={this.props.disabled} value={this.props.expYear} onChange={this.props.onExpYearChanged} className="form-control" size="4" placeholder="YYYY" />
