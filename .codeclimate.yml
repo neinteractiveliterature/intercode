@@ -16,6 +16,7 @@ engines:
     enabled: true
     config:
       config: .eslintrc.js
+    checks:
       import/extensions:
         enabled: false
   fixme:
