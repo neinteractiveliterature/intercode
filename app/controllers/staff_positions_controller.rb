@@ -17,7 +17,7 @@ class StaffPositionsController < BaseControllers::VirtualHost
   # POST /staff_positions
   def create
     if @staff_position.save
-      redirect_to action: 'index', notice: 'Staff position was successfully created.'
+      redirect_to action: 'index'
     else
       render :new
     end
@@ -26,7 +26,7 @@ class StaffPositionsController < BaseControllers::VirtualHost
   # PATCH/PUT /staff_positions/1
   def update
     if @staff_position.update(staff_position_params)
-      redirect_to action: 'index', notice: 'Staff position was successfully updated.'
+      redirect_to action: 'index'
     else
       render :edit
     end
@@ -35,7 +35,7 @@ class StaffPositionsController < BaseControllers::VirtualHost
   # DELETE /staff_positions/1
   def destroy
     @staff_position.destroy
-    redirect_to action: 'index', notice: 'Staff position was successfully destroyed.'
+    redirect_to action: 'index'
   end
 
   private
