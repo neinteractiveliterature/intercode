@@ -6,10 +6,10 @@ const TimespanPropType = PropTypes.shape({
 });
 
 const ScheduledValuePropType = PropTypes.shape({
-  timespans: PropTypes.arrayOf(TimespanPropType.isRequired)
+  timespans: PropTypes.arrayOf(TimespanPropType.isRequired),
 });
 
 export {
   TimespanPropType,
-  ScheduledValuePropType
+  ScheduledValuePropType,
 };
