@@ -10,4 +10,27 @@ class TicketType < ApplicationRecord
   def price_at(time)
     pricing_schedule.value_at(time)
   end
+
+  def price
+    price_at(Time.now)
+  end
+
+  def next_price_change_after(time)
+    pricing_schedule.next_value_change_after(time)
+  end
+
+  def next_price_change
+    next_price_change_after(Time.now)
+  end
+
+  def next_price_after(time)
+    next_change = next_price_change_after(time)
+    return unless next_change
+
+    pricing_schedule.value_at(next_change)
+  end
+
+  def next_price
+    next_price_after(Time.now)
+  end
 end

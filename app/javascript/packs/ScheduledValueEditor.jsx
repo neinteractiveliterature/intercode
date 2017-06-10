@@ -113,7 +113,7 @@ class TimespanRow extends React.Component {
 
     return (
       <tr>
-        <td className="col-md-3">
+        <td className="w-25">
           <div className="input-group">
             <span className="input-group-addon">$</span>
             <NumberInput
@@ -125,30 +125,25 @@ class TimespanRow extends React.Component {
           </div>
         </td>
 
-        <td className="col-md-4">
-          <div className="media" style={{overflow: "visible"}}>
-            <div className="media-left" style={{verticalAlign: "middle"}}>from</div>
-            <div className="media-body" style={{overflow: "visible"}}>
-              <Datetime value={this.getStartTime()}
-                onChange={this.timeChanged.bind(this, 'start')}
-                isValidDate={this.isValidStartTime} />
-            </div>
+        <td className="w-75">
+          <div className="d-flex flex-row align-items-center justify-content-stretch">
+            <div>from&nbsp;</div>
+            <Datetime
+              value={this.getStartTime()}
+              onChange={this.timeChanged.bind(this, 'start')}
+              isValidDate={this.isValidStartTime}
+            />
+            <div className="ml-4">to&nbsp;</div>
+            <Datetime
+              value={this.getFinishTime()}
+              onChange={this.timeChanged.bind(this, 'finish')}
+              isValidDate={this.isValidFinishTime}
+            />
           </div>
         </td>
 
-        <td className="col-md-4">
-          <div className="media" style={{overflow: "visible"}}>
-            <div className="media-left" style={{verticalAlign: "middle"}}>to</div>
-            <div className="media-body" style={{overflow: "visible"}}>
-              <Datetime value={this.getFinishTime()}
-                onChange={this.timeChanged.bind(this, 'finish')}
-                isValidDate={this.isValidFinishTime} />
-            </div>
-          </div>
-        </td>
-
-        <td className="col-md-1 text-right">
-          <button className="btn btn-danger" onClick={this.props.deleteClicked}>
+        <td className="w-25 text-right" style={{verticalAlign: 'middle'}}>
+          <button className="btn btn-danger btn-sm" onClick={this.props.deleteClicked}>
             <i className="fa fa-trash-o"/>
           </button>
         </td>
