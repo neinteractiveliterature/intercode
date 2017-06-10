@@ -27,11 +27,29 @@ class PaymentEntry extends React.Component {
     enableUniqueIds(this);
   }
 
+  renderLabeledInput = (name, label, type, value, onChange, placeholder) => {
+    const inputId = this.nextUniqueId();
+
+    return (
+      <div>
+        <label htmlFor={inputId} className="control-label">{label}</label>
+        <input
+          type={type}
+          name={name}
+          disabled={this.props.disabled}
+          id={inputId}
+          value={value}
+          onChange={onChange}
+          className="form-control"
+          placeholder={placeholder}
+        />
+      </div>
+    );
+  }
+
   render = () => {
     const ccNumberId = this.nextUniqueId();
     const expMonthId = this.nextUniqueId();
-    const cvcId = this.nextUniqueId();
-    const zipId = this.nextUniqueId();
 
     return (
       <div>
@@ -60,15 +78,13 @@ class PaymentEntry extends React.Component {
 
           <div className="col-sm-6 col-md-4">
             <div className="form-group">
-              <label htmlFor={cvcId} className="control-label">CVC</label>
-              <input type="tel" name="cvc" disabled={this.props.disabled} id={cvcId} value={this.props.cvc} onChange={this.props.onCvcChanged} className="form-control" placeholder="•••" />
+              {this.renderLabeledInput('cvc', 'CVC', 'tel', this.props.cvc, this.props.onCvcChanged, '•••')}
             </div>
           </div>
 
           <div className="col-sm-6 col-md-4">
             <div className="form-group">
-              <label htmlFor={zipId} className="control-label">ZIP/Postal Code</label>
-              <input type="tel" name="zip" disabled={this.props.disabled} id={zipId} value={this.props.zip} onChange={this.props.onZipChanged} className="form-control" placeholder="" />
+              {this.renderLabeledInput('zip', 'ZIP/Postal Code', 'tel', this.props.zip, this.props.onZipChanged, '')}
             </div>
           </div>
         </div>
