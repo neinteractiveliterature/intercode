@@ -81,6 +81,7 @@ class ScheduledValueEditor extends React.Component {
           otherTimespans={otherTimespans}
           timezone={this.props.timezone}
           key={i} // eslint-disable-line react/no-array-index-key
+          rowIdentifier={i}
           deleteClicked={this.deleteRowClicked}
           attributeDidChange={this.timespanAttributeDidChange}
         />

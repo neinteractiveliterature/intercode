@@ -1,16 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Datetime from 'react-datetime';
 import NumberInput from 'react-number-input';
 import { TimespanPropType } from './ScheduledValuePropTypes';
+import ScheduledValueTimespanRowDatepicker from './ScheduledValueTimespanRowDatepicker';
 
 require('moment-timezone');
-require('react-datetime/css/react-datetime.css');
+
+function getOppositeTimeFieldName(fieldName) {
+  switch (fieldName) {
+    case 'start':
+      return 'finish';
+    case 'finish':
+      return 'start';
+    default:
+      return null;
+  }
+}
 
 class ScheduledValueTimespanRow extends React.Component {
   static propTypes = {
-    key: PropTypes.number.isRequired,
+    rowIdentifier: PropTypes.number.isRequired,
     timespan: TimespanPropType.isRequired,
     otherTimespans: PropTypes.arrayOf(TimespanPropType.isRequired).isRequired,
     timezone: PropTypes.string.isRequired,
@@ -26,34 +36,42 @@ class ScheduledValueTimespanRow extends React.Component {
     return true;
   }
 
-  componentWillReceiveProps = () => {
-    this.startTime = null;
-    this.finishTime = null;
-  }
-
-  getStartTime = () => {
-    if (!this.startTime && this.props.timespan.start) {
-      this.startTime = moment(this.props.timespan.start).tz(this.props.timezone);
+  getTimeField = (fieldName) => {
+    const fieldValue = this.props.timespan[fieldName];
+    if (!fieldValue) {
+      return null;
     }
 
-    return this.startTime;
+    return moment(fieldValue).tz(this.props.timezone);
   }
 
-  getFinishTime = () => {
-    if (!this.finishTime && this.props.timespan.finish) {
-      this.finishTime = moment(this.props.timespan.finish).tz(this.props.timezone);
+  isValidTimeForField = (fieldName, date) => {
+    if (!this.doesNotOverlapOtherTimespans(date)) {
+      return false;
     }
 
-    return this.finishTime;
+    const oppositeTime = this.getTimeField(getOppositeTimeFieldName(fieldName));
+    if (!oppositeTime) {
+      return true;
+    }
+
+    switch (fieldName) {
+      case 'start':
+        if (date.isAfter(oppositeTime)) {
+          return false;
+        }
+        break;
+      case 'finish':
+        if (date.isBefore(oppositeTime)) {
+          return false;
+        }
+        break;
+      default:
+        return true;
+    }
+
+    return true;
   }
-
-  isValidStartTime = date => (
-    this.isBeforeFinishTime(date) && this.doesNotOverlapOtherTimespans(date)
-  )
-
-  isValidFinishTime = date => (
-    this.isAfterStartTime(date) && this.doesNotOverlapOtherTimespans(date)
-  )
 
   timeChanged = (property, newTime) => {
     let value = null;
@@ -61,15 +79,7 @@ class ScheduledValueTimespanRow extends React.Component {
       value = newTime.tz(this.props.timezone).toISOString();
     }
 
-    this.props.attributeDidChange(this.props.key, property, value);
-  }
-
-  startTimeChanged = (newTime) => {
-    this.timeChanged('start', newTime);
-  }
-
-  finishTimeChanged = (newTime) => {
-    this.timeChanged('finish', newTime);
+    this.props.attributeDidChange(this.props.rowIdentifier, property, value);
   }
 
   valueChanged = (e, value) => {
@@ -79,16 +89,6 @@ class ScheduledValueTimespanRow extends React.Component {
       { fractional: value * 100.0 },
     );
     this.props.attributeDidChange(this.props.key, 'value', newValue);
-  }
-
-  isBeforeFinishTime = (date) => {
-    const finishTime = this.getFinishTime();
-    return (!finishTime || date.isBefore(finishTime));
-  }
-
-  isAfterStartTime = (date) => {
-    const startTime = this.getStartTime();
-    return (!startTime || date.isAfter(startTime));
   }
 
   doesNotOverlapOtherTimespans = date => this.props.otherTimespans.every((otherTimespan) => {
@@ -112,6 +112,15 @@ class ScheduledValueTimespanRow extends React.Component {
 
     return true;
   })
+
+  renderDatetimePicker = fieldName => (
+    <ScheduledValueTimespanRowDatepicker
+      fieldName={fieldName}
+      value={this.getTimeField(fieldName)}
+      onChange={this.timeChanged}
+      validateDate={this.isValidTimeForField}
+    />
+  )
 
   render = () => {
     let dollarValue = null;
@@ -137,17 +146,9 @@ class ScheduledValueTimespanRow extends React.Component {
         <td className="w-75">
           <div className="d-flex flex-row align-items-center justify-content-stretch">
             <div>from&nbsp;</div>
-            <Datetime
-              value={this.getStartTime()}
-              onChange={this.startTimeChanged}
-              isValidDate={this.isValidStartTime}
-            />
+            {this.renderDatetimePicker('start')}
             <div className="ml-4">to&nbsp;</div>
-            <Datetime
-              value={this.getFinishTime()}
-              onChange={this.finishTimeChanged}
-              isValidDate={this.isValidFinishTime}
-            />
+            {this.renderDatetimePicker('finish')}
           </div>
         </td>
 
