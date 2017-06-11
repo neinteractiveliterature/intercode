@@ -70,19 +70,19 @@ class Intercode::Import::Intercode1::Importer
     text_dir = File.expand_path(vars['text_dir'], File.dirname(filename))
 
     new(
-      vars['database_url'],
-      vars['con_name'],
-      vars['con_domain'],
-      Date.parse(vars['friday_date']),
-      vars['price_schedule'],
-      vars['staff_positions'],
-      vars['php_timezone'],
-      filename,
-      text_dir
+      database_url: vars['database_url'],
+      con_name: vars['con_name'],
+      con_domain: vars['con_domain'],
+      friday_date: Date.parse(vars['friday_date']),
+      price_schedule: vars['price_schedule'],
+      staff_positions: vars['staff_positions'],
+      php_timezone: vars['php_timezone'],
+      constants_file: filename,
+      text_dir: text_dir
     )
   end
 
-  def initialize(database_url, con_name, con_domain, friday_date, price_schedule, staff_positions, php_timezone, constants_file, text_dir)
+  def initialize(database_url:, con_name:, con_domain:, friday_date:, price_schedule:, staff_positions:, php_timezone:, constants_file:, text_dir:)
     @database_url = database_url
     @connection = Sequel.connect(@database_url)
     @con_name = con_name
