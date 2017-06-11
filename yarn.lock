@@ -3314,7 +3314,7 @@ moment-timezone@^0.5.13:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.18.1:
+"moment@>= 2.9.0", moment@>=1.6.0, moment@^2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -4372,6 +4372,12 @@ react-datetime@^2.8.10:
 react-html-id@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-html-id/-/react-html-id-0.1.0.tgz#936bb7cfe712c34355011b620c084a3a67a38e77"
+
+react-moment-proptypes@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-moment-proptypes/-/react-moment-proptypes-1.4.0.tgz#831e329ebcec6cf794e75852d82d54a03817023f"
+  dependencies:
+    moment ">=1.6.0"
 
 react-number-input@^15.5.1:
   version "15.5.1"
