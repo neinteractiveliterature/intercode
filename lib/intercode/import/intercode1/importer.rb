@@ -7,7 +7,16 @@ class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :con
   attr_accessor :con_domain, :con_name, :friday_date
 
-  def self.from_constants_file(filename)
+  def initialize(constants_file, con_domain)
+    @constants_file = constants_file
+    @con_domain = con_domain
+    @legacy_password_md5s = {}
+
+    setup_from_constants_file(constants_file)
+    @connection = Sequel.connect(@database_url)
+  end
+
+  def setup_from_constants_file(filename)
     php = <<-PHP
     <?php
       error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
@@ -69,31 +78,14 @@ class Intercode::Import::Intercode1::Importer
 
     text_dir = File.expand_path(vars['text_dir'], File.dirname(filename))
 
-    new(
-      database_url: vars['database_url'],
-      con_name: vars['con_name'],
-      con_domain: vars['con_domain'],
-      friday_date: Date.parse(vars['friday_date']),
-      price_schedule: vars['price_schedule'],
-      staff_positions: vars['staff_positions'],
-      php_timezone: vars['php_timezone'],
-      constants_file: filename,
-      text_dir: text_dir
-    )
-  end
-
-  def initialize(database_url:, con_name:, con_domain:, friday_date:, price_schedule:, staff_positions:, php_timezone:, constants_file:, text_dir:)
-    @database_url = database_url
-    @connection = Sequel.connect(@database_url)
-    @con_name = con_name
-    @con_domain = con_domain
-    @friday_date = friday_date
-    @price_schedule = price_schedule
-    @staff_positions = staff_positions
-    @php_timezone = ActiveSupport::TimeZone[php_timezone]
-    @constants_file = constants_file
+    @database_url = vars['database_url']
+    @con_name = vars['con_name']
+    @con_domain = vars['con_domain']
+    @friday_date = Date.parse(vars['friday_date'])
+    @price_schedule = vars['price_schedule']
+    @staff_positions = vars['staff_positions']
+    @php_timezone = ActiveSupport::TimeZone[vars['php_timezone']]
     @text_dir = text_dir
-    @legacy_password_md5s = {}
   end
 
   def build_password_hashes
