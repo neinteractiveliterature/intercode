@@ -1,18 +1,1 @@
-= bootstrap_form_for([@event, @team_member]) do |f|
-  - if f.object.new_record?
-    = f.collection_select :user_con_profile_id, convention.user_con_profiles.order(:last_name, :first_name), :id, :name_inverted, include_blank: true
-    = f.errors_on :user_con_profile
-
-  = f.check_box :display, label: "Display as #{@event.team_member_name}"
-  = f.check_box :show_email, label: "Show email address"
-  = f.check_box :receive_con_email, label: "Receive email from convention"
-  = f.check_box :receive_signup_email, label: "Receive email on signup and withdrawal"
-
-  %ul.list-inline
-    %li.list-inline-item
-      - submit_verb = f.object.new_record? ? "Add" : "Update"
-      = f.submit "#{submit_verb} #{@event.team_member_name}", class: 'btn btn-primary'
-
-    - if f.object.persisted?
-      %li.list-inline-item
-        = link_to "Remove #{@event.team_member_name}", [@event, f.object], method: 'delete', "data-confirm" => "Are you sure you want to remove #{f.object.user.name} from the team for #{@event.title}?", class: "btn btn-danger"
+= team_member_form @team_member

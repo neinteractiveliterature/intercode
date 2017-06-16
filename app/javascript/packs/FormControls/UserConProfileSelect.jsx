@@ -31,7 +31,7 @@ class UserConProfileSelect extends React.Component {
   }
 
   loadOptions = (input) => {
-    const params = { 'user_con_profiles_grid[name]': input, per_page: 100 };
+    const params = { 'user_con_profiles_grid[name]': input, per_page: 1000 };
     const url = `/user_con_profiles?${queryString.stringify(params)}`;
 
     const processPage = (json) => {
