@@ -16,7 +16,7 @@ namespace :import do
 
     importer = Intercode::Import::Intercode1::Importer.new(
       fetch_env_param('CONSTANTS_FILE'),
-      fetch_env_param('CON_DOMAIN')
+      ENV['CON_DOMAIN']
     )
 
     importer.build_password_hashes

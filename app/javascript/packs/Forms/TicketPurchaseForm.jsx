@@ -3,8 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import PaymentEntry from './PaymentEntry';
-import { fetchAndThrow, buildJSONFetchOptions } from './HTTPUtils';
+import PaymentEntry from '../FormControls/PaymentEntry';
+import { performRequest } from '../HTTPUtils';
 
 class TicketPurchaseForm extends React.Component {
   static propTypes = {
@@ -94,7 +94,7 @@ class TicketPurchaseForm extends React.Component {
     } else {
       this.setState({ stripeToken: response.id });
 
-      fetchAndThrow(this.props.createChargeUrl, buildJSONFetchOptions({
+      performRequest(this.props.createChargeUrl, {
         method: 'POST',
         body: {
           stripeToken: this.state.stripeToken,
@@ -105,7 +105,7 @@ class TicketPurchaseForm extends React.Component {
             phone: this.state.phone,
           },
         },
-      })).then(() => {
+      }).then(() => {
         window.location.href = this.props.purchaseCompleteUrl;
       }).catch((error) => {
         error.response.text().then((text) => {
