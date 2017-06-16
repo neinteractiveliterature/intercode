@@ -9,11 +9,13 @@
 
 import WebpackerReact from 'webpacker-react';
 import StaffPositionForm from './Forms/StaffPositionForm';
+import TeamMemberForm from './Forms/TeamMemberForm';
 import TicketPurchaseForm from './Forms/TicketPurchaseForm';
 import TicketTypeForm from './Forms/TicketTypeForm';
 
 WebpackerReact.setup({
   StaffPositionForm,
+  TeamMemberForm,
   TicketPurchaseForm,
   TicketTypeForm,
 });

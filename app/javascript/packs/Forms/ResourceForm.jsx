@@ -8,13 +8,16 @@ class ResourceForm extends React.Component {
     baseUrl: PropTypes.string.isRequired,
     resourceId: PropTypes.number,
     getSubmitRequestBody: PropTypes.func.isRequired,
-    submitText: PropTypes.string.isRequired,
+    renderSubmitSection: PropTypes.func,
+    submitText: PropTypes.string,
     submitDisabled: PropTypes.bool,
   };
 
   static defaultProps = {
     resourceId: null,
     submitDisabled: false,
+    submitText: "Save",
+    renderSubmitSection: null,
   };
 
   constructor(props) {
@@ -61,11 +64,14 @@ class ResourceForm extends React.Component {
     return null;
   }
 
-  render = () => (
-    <form className="form">
-      {this.renderError()}
-      {this.props.children}
+  renderSubmitSection = () => {
+    const submitDisabled = (this.props.submitDisabled || this.state.isSubmitting);
 
+    if (this.props.renderSubmitSection) {
+      return this.props.renderSubmitSection(this.submitClicked, submitDisabled);
+    }
+
+    return (
       <div className="form-group">
         <input
           type="submit"
@@ -75,6 +81,14 @@ class ResourceForm extends React.Component {
           disabled={this.props.submitDisabled || this.state.isSubmitting}
         />
       </div>
+    );
+  }
+
+  render = () => (
+    <form className="form">
+      {this.renderError()}
+      {this.props.children}
+      {this.renderSubmitSection()}
     </form>
   )
 }
