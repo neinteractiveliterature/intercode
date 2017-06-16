@@ -13,6 +13,10 @@ class ScheduledValueTimespanRowDatepicker extends React.Component {
     validateDate: PropTypes.func.isRequired,
   };
 
+  static defaultProps = {
+    value: null,
+  };
+
   datetimeValueChanged = (newValue) => {
     this.props.onChange(this.props.fieldName, newValue);
   }

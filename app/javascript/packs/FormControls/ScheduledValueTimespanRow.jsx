@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import NumberInput from 'react-number-input';
-import { TimespanPropType } from './ScheduledValuePropTypes';
+import { TimespanPropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRowDatepicker from './ScheduledValueTimespanRowDatepicker';
 
 require('moment-timezone');
@@ -83,12 +83,11 @@ class ScheduledValueTimespanRow extends React.Component {
   }
 
   valueChanged = (e, value) => {
-    const newValue = Object.assign(
-      {},
-      this.props.timespan.value || {},
-      { fractional: value * 100.0 },
-    );
-    this.props.attributeDidChange(this.props.key, 'value', newValue);
+    const newValue = {
+      ...(this.props.timespan.value || {}),
+      fractional: value * 100.0,
+    };
+    this.props.attributeDidChange(this.props.key, 'value', newValue); // eslint-disable-line react/prop-types
   }
 
   doesNotOverlapOtherTimespans = date => this.props.otherTimespans.every((otherTimespan) => {

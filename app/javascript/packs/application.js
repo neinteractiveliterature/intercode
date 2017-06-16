@@ -8,10 +8,12 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import WebpackerReact from 'webpacker-react';
-import TicketPurchaseForm from './TicketPurchaseForm';
-import TicketTypeForm from './TicketTypeForm';
+import StaffPositionForm from './Forms/StaffPositionForm';
+import TicketPurchaseForm from './Forms/TicketPurchaseForm';
+import TicketTypeForm from './Forms/TicketTypeForm';
 
 WebpackerReact.setup({
+  StaffPositionForm,
   TicketPurchaseForm,
   TicketTypeForm,
 });

@@ -80,7 +80,7 @@ class Intercode::Import::Intercode1::Importer
 
     @database_url = vars['database_url']
     @con_name = vars['con_name']
-    @con_domain = vars['con_domain']
+    @con_domain ||= vars['con_domain']
     @friday_date = Date.parse(vars['friday_date'])
     @price_schedule = vars['price_schedule']
     @staff_positions = vars['staff_positions']

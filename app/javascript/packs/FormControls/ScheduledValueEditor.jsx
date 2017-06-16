@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import maxBy from 'lodash.maxby';
 import moment from 'moment';
-import { ScheduledValuePropType } from './ScheduledValuePropTypes';
+import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRow from './ScheduledValueTimespanRow';
 
 class ScheduledValueEditor extends React.Component {

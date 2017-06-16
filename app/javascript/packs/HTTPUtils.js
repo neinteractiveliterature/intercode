@@ -23,7 +23,7 @@ function getJSONRequestHeaders() {
   };
 }
 
-function buildJSONFetchOptions(options) {
+function buildJSONFetchOptions(options = {}) {
   return Object.assign(
     {},
     options,
@@ -35,9 +35,19 @@ function buildJSONFetchOptions(options) {
   );
 }
 
+function performRequest(url, options = {}) {
+  return fetchAndThrow(url, buildJSONFetchOptions(options));
+}
+
+function performJSONRequest(url, options = {}) {
+  return performRequest(url, options).then(response => response.json());
+}
+
 export {
   fetchAndThrow,
   getCSRFToken,
   getJSONRequestHeaders,
   buildJSONFetchOptions,
+  performRequest,
+  performJSONRequest,
 };

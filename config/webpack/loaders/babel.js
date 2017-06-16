@@ -4,7 +4,8 @@ module.exports = {
   loader: 'babel-loader',
   options: {
     plugins: [
-      'transform-class-properties'
+      'transform-class-properties',
+      'transform-object-rest-spread',
     ]
   }
 }

@@ -1,4 +1,6 @@
 class StaffPositionsController < BaseControllers::VirtualHost
+  self.responder = NoShowActionResponder
+
   load_and_authorize_resource through: :convention
   respond_to :html, :json
 
@@ -16,31 +18,25 @@ class StaffPositionsController < BaseControllers::VirtualHost
 
   # POST /staff_positions
   def create
-    if @staff_position.save
-      redirect_to action: 'index'
-    else
-      render :new
-    end
+    @staff_position.save
+    respond_with @staff_position
   end
 
   # PATCH/PUT /staff_positions/1
   def update
-    if @staff_position.update(staff_position_params)
-      redirect_to action: 'index'
-    else
-      render :edit
-    end
+    @staff_position.update(staff_position_params)
+    respond_with @staff_position
   end
 
   # DELETE /staff_positions/1
   def destroy
     @staff_position.destroy
-    redirect_to action: 'index'
+    respond_with @staff_position
   end
 
   private
 
   def staff_position_params
-    params.require(:staff_position).permit(:name, :email)
+    params.require(:staff_position).permit(:name, :email, user_con_profile_ids: [])
   end
 end
