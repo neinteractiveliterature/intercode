@@ -16,7 +16,7 @@ class ResourceForm extends React.Component {
   static defaultProps = {
     resourceId: null,
     submitDisabled: false,
-    submitText: "Save",
+    submitText: 'Save',
     renderSubmitSection: null,
   };
 
