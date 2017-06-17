@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.3.1'
-gem 'rails', '5.0.0.1'
+gem 'rails', '5.1.1'
 
 gem 'sqlite3', groups: [:development, :test]
 gem 'mysql2'
@@ -14,9 +14,11 @@ gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
 gem 'haml'
-gem 'with_advisory_lock'
-
+gem 'webpacker'
+gem 'webpacker-react', "~> 0.3.1"
 gem 'uglifier', '>= 1.0.3'
+
+gem 'with_advisory_lock'
 
 # Upload assets to Amazon S3 during compilation phase
 #gem 'asset_sync'
@@ -24,12 +26,8 @@ gem 'unf'
 
 gem 'jquery-rails'
 gem 'lodash-rails'
-gem 'react-rails'
-gem 'momentjs-rails'
-gem 'moment_timezone-rails'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-react-date-picker'
   gem 'rails-assets-tether', '>= 1.3.3'
 end
 

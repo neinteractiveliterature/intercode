@@ -43,6 +43,8 @@ Intercode::Application.routes.draw do
         get :edit_bio
       end
     end
+
+    resources :staff_positions
   end
 
   # the following routes apply only when we're not in a virtual host

@@ -30,6 +30,7 @@ module Intercode
       autoload :Importer
       autoload :Markdownifier
       autoload :Php
+      autoload :StaffPositionImporter
       autoload :Table
       autoload :Tables
     end

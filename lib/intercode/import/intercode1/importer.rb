@@ -7,7 +7,16 @@ class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :con
   attr_accessor :con_domain, :con_name, :friday_date
 
-  def self.from_constants_file(filename)
+  def initialize(constants_file, con_domain)
+    @constants_file = constants_file
+    @con_domain = con_domain
+    @legacy_password_md5s = {}
+
+    setup_from_constants_file(constants_file)
+    @connection = Sequel.connect(@database_url)
+  end
+
+  def setup_from_constants_file(filename)
     php = <<-PHP
     <?php
       error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
@@ -30,6 +39,37 @@ class Intercode::Import::Intercode1::Importer
 
       $vars["price_schedule"] = $price_schedule;
 
+      $possible_position_names = array(
+        "ADVERTISING",
+        "ATTENDEE_COORDINATOR",
+        "BID_CHAIR",
+        "CON_CHAIR",
+        "CON_SUITE",
+        "GM_COORDINATOR",
+        "HOTEL_LIAISON",
+        "IRON_GM",
+        "OPS",
+        "OPS2",
+        "OUTREACH",
+        "REGISTRAR",
+        "SAFETY_COORDINATOR",
+        "STAFF_COORDINATOR",
+        "THURSDAY",
+        "TREASURER",
+        "VENDOR_LIAISON"
+      );
+      $staff_positions = array();
+      foreach($possible_position_names as $position_name) {
+        if (defined("NAME_" . $position_name) || defined("EMAIL_" . $position_name)) {
+          $staff_positions[$position_name] = array(
+            "name" => constant("NAME_" . $position_name),
+            "email" => constant("EMAIL_" . $position_name)
+          );
+        }
+      }
+
+      $vars["staff_positions"] = $staff_positions;
+
       echo json_encode($vars);
     ?>
     PHP
@@ -38,29 +78,14 @@ class Intercode::Import::Intercode1::Importer
 
     text_dir = File.expand_path(vars['text_dir'], File.dirname(filename))
 
-    new(
-      vars['database_url'],
-      vars['con_name'],
-      vars['con_domain'],
-      Date.parse(vars['friday_date']),
-      vars['price_schedule'],
-      vars['php_timezone'],
-      filename,
-      text_dir
-    )
-  end
-
-  def initialize(database_url, con_name, con_domain, friday_date, price_schedule, php_timezone, constants_file, text_dir)
-    @database_url = database_url
-    @connection = Sequel.connect(@database_url)
-    @con_name = con_name
-    @con_domain = con_domain
-    @friday_date = friday_date
-    @price_schedule = price_schedule
-    @php_timezone = ActiveSupport::TimeZone[php_timezone]
-    @constants_file = constants_file
+    @database_url = vars['database_url']
+    @con_name = vars['con_name']
+    @con_domain ||= vars['con_domain']
+    @friday_date = Date.parse(vars['friday_date'])
+    @price_schedule = vars['price_schedule']
+    @staff_positions = vars['staff_positions']
+    @php_timezone = ActiveSupport::TimeZone[vars['php_timezone']]
     @text_dir = text_dir
-    @legacy_password_md5s = {}
   end
 
   def build_password_hashes
@@ -98,6 +123,7 @@ class Intercode::Import::Intercode1::Importer
 
     events_table.import!
     users_table.import!
+    staff_position_importer.import!
     bios_table.import!
     rooms_table.import!
     runs_table.import!
@@ -164,6 +190,10 @@ class Intercode::Import::Intercode1::Importer
 
   def signup_table
     @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map, user_con_profiles_id_map)
+  end
+
+  def staff_position_importer
+    @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(con, @staff_positions)
   end
 
   def html_content
