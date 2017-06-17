@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def self.obfuscated_email(address)
+    address.gsub('.', ' DOT ').gsub('@', ' AT ')
+  end
+
   def page_title
     parts = []
 
@@ -42,7 +46,7 @@ module ApplicationHelper
     if user_signed_in?
       mail_to(address, name, html_options)
     else
-      address.gsub('.', ' DOT ').gsub('@', ' AT ')
+      ApplicationHelper.obfuscated_email(address)
     end
   end
 

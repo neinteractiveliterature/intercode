@@ -1,7 +1,7 @@
 class CmsFile < ApplicationRecord
   include CadmusFiles::File
 
-  belongs_to :uploader, class_name: 'User'
+  belongs_to :uploader, class_name: 'User', optional: true
   mount_uploader :file, CmsFileUploader
 
   cadmus_file :file

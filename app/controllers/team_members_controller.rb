@@ -3,7 +3,7 @@ class TeamMembersController < BaseControllers::VirtualHost
 
   load_resource :event, through: :convention
   load_and_authorize_resource through: :event
-  respond_to :html
+  respond_to :html, :json
 
   def index
     @team_members = @team_members.joins(:user).includes(:user).order("users.last_name", "users.first_name")

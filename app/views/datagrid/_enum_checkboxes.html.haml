@@ -3,4 +3,4 @@
     - elements.each do |value, text, checked|
       - id = [form.object_name, filter.name, value].join('_').underscore
       %li.list-inline-item
-        = form.check_box(filter.name, form.datagrid_extra_checkbox_options.merge(:multiple => true, :id => id, :checked => checked, :label => text), value.to_s, nil)
+        = form.check_box(filter.name, { :multiple => true, :id => id, :checked => checked, :include_hidden => false, :label => text }, value.to_s, nil)

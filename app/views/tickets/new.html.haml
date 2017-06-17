@@ -1,13 +1,4 @@
-- if @ticket.ticket_type
-  %h1 Purchase a #{@ticket.ticket_type.description.downcase} for #{convention.name}
+%h1= convention.name
 
-  - next_value_change = pricing_schedule.next_value_change_after(Time.now)
-  = react_component "TicketPurchaseForm", {ticketPriceFormatted: current_price.format, nextPriceChange: {date: next_value_change, priceFormatted: pricing_schedule.value_at(next_value_change).format}, ticketTypeId: @ticket.ticket_type_id, ticketCreateUrl: ticket_path, purchaseCompleteUrl: ticket_path}
-
-  = javascript_include_tag "stripe", "jquery.payment"
-- else
-  %p Choose a ticket type:
-
-  %ul
-    - @ticket_types.each do |ticket_type|
-      %li= link_to ticket_type.description, new_ticket_path(ticket: {ticket_type_id: ticket_type.id})
+= stripe_include_tag
+= ticket_purchase_form(@ticket)

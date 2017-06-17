@@ -12,7 +12,8 @@ class UserConProfilesController < BaseControllers::VirtualHost
     @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid] || {order: 'name'}) do |scope|
       scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
       respond_to do |format|
-        format.html { scope.page(params[:page]) }
+        format.html { scope.paginate(page: params[:page], per_page: params[:per_page]) }
+        format.json { scope.paginate(page: params[:page], per_page: params[:per_page]) }
         format.csv { scope }
       end
     end
@@ -21,6 +22,18 @@ class UserConProfilesController < BaseControllers::VirtualHost
       format.html { }
       format.csv do
         send_data @user_con_profiles_grid.to_csv, filename: "#{@convention.name} - Attendees.csv"
+      end
+      format.json do
+        render json: {
+          user_con_profiles: @user_con_profiles_grid.assets,
+          page_info: {
+            current_page: @user_con_profiles_grid.scope.current_page,
+            next_page: @user_con_profiles_grid.scope.next_page,
+            per_page: @user_con_profiles_grid.scope.per_page,
+            total_entries: @user_con_profiles_grid.scope.total_entries,
+            total_pages: @user_con_profiles_grid.scope.total_pages,
+          }
+        }
       end
     end
   end

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+yarn run eslint -- --ext .jsx,.js './app/javascript/**'

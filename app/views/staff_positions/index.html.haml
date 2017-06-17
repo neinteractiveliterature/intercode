@@ -1,0 +1,21 @@
+%h1 Staff Positions
+
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th People
+      %th Email
+      %th
+
+  %tbody
+    - @staff_positions.order(:name).each do |staff_position|
+      %tr
+        %td= staff_position.name
+        %td= staff_position.user_con_profiles.map(&:name).join(', ')
+        %td= staff_position.email
+        %td
+          = link_to 'Edit', edit_staff_position_path(staff_position), class: 'btn btn-secondary btn-sm'
+          = link_to 'Delete', staff_position, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm'
+
+= link_to 'New Staff Position', new_staff_position_path, class: 'btn btn-primary'
