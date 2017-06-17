@@ -31,7 +31,7 @@ class BootstrapFormCheckbox extends React.Component {
             id={inputId}
             name={this.props.name}
             type="checkbox"
-            value={this.props.value}
+            checked={this.props.checked}
             onChange={this.props.onChange}
             disabled={this.props.disabled}
             {...this.props}

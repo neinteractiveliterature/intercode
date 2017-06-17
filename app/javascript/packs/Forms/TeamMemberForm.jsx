@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import BootstrapFormCheckbox from '../FormControls/BootstrapFormCheckbox';
-import BootstrapFormInput from '../FormControls/BootstrapFormInput';
+import ModalConfirm from '../ModalConfirm';
 import ResourceForm from './ResourceForm';
 import UserConProfileSelect from '../FormControls/UserConProfileSelect';
 import { performRequest } from '../HTTPUtils';
@@ -26,8 +26,9 @@ class TeamMemberForm extends React.Component {
     enableUniqueIds(this);
 
     this.state = {
-      teamMember: { ...this.props.initialTeamMember }
-    }
+      teamMember: { ...this.props.initialTeamMember },
+      confirmingDelete: false,
+    };
   }
 
   getSubmitText = () => (
@@ -51,15 +52,21 @@ class TeamMemberForm extends React.Component {
   }
 
   deleteClicked = () => {
-    if (!confirm(`Are you sure you want to delete this ${this.props.teamMemberName}?`)) {
-      return;
-    }
+    this.setState({ confirmingDelete: true });
+  }
 
+  deleteConfirmed = () => {
     performRequest(`${this.props.baseUrl}/${this.state.teamMember.id}`, {
       method: 'DELETE',
     }).then(() => {
       window.location.href = this.props.baseUrl;
+    }).catch(() => {
+      this.deleteCanceled();
     });
+  }
+
+  deleteCanceled = () => {
+    this.setState({ confirmingDelete: false });
   }
 
   renderDeleteButtonItem = (submitDisabled) => {
@@ -118,6 +125,25 @@ class TeamMemberForm extends React.Component {
     );
   }
 
+  renderCheckboxes = () => {
+    const checkboxes = [
+      { name: 'display', label: `Display as ${this.props.teamMemberName}` },
+      { name: 'show_email', label: 'Show email address' },
+      { name: 'receive_con_email', label: 'Receive email from convention' },
+      { name: 'receive_signup_email', label: 'Receive email on signup and withdrawal' },
+    ];
+
+    return checkboxes.map(checkbox => (
+      <BootstrapFormCheckbox
+        key={checkbox.name}
+        label={checkbox.label}
+        name={checkbox.name}
+        checked={this.state.teamMember[checkbox.name]}
+        onChange={this.checkboxChanged}
+      />
+    ));
+  }
+
   render = () => (
     <ResourceForm
       baseUrl={this.props.baseUrl}
@@ -126,34 +152,16 @@ class TeamMemberForm extends React.Component {
       renderSubmitSection={this.renderSubmitSection}
     >
       {this.renderUserConProfileSelect()}
+      {this.renderCheckboxes()}
 
-      <BootstrapFormCheckbox
-        label={`Display as ${this.props.teamMemberName}`}
-        name="display"
-        checked={this.state.teamMember.display}
-        onChange={this.checkboxChanged}
-      />
-
-      <BootstrapFormCheckbox
-        label="Show email address"
-        name="show_email"
-        checked={this.state.teamMember.show_email}
-        onChange={this.checkboxChanged}
-      />
-
-      <BootstrapFormCheckbox
-        label="Receive email from convention"
-        name="receive_con_email"
-        checked={this.state.teamMember.receive_con_email}
-        onChange={this.checkboxChanged}
-      />
-
-      <BootstrapFormCheckbox
-        label="Receive email on signup and withdrawal"
-        name="receive_signup_email"
-        checked={this.state.teamMember.receive_signup_email}
-        onChange={this.checkboxChanged}
-      />
+      <ModalConfirm
+        title="Confirmation"
+        onClickOk={this.deleteConfirmed}
+        onClickCancel={this.deleteCanceled}
+        visible={this.state.confirmingDelete}
+      >
+        {`Are you sure you want to remove this ${this.props.teamMemberName}?`}
+      </ModalConfirm>
     </ResourceForm>
   )
 }

@@ -36,6 +36,7 @@
                   .dropdown-menu
                     = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
                     = link_to "Pages", pages_path, class: 'dropdown-item'
+                    = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
                     = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'
             - if user_signed_in?
               - if convention
