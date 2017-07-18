@@ -1,4 +1,4 @@
-class RenameConsToConventions < ActiveRecord::Migration[4.2]
+class RenameConsToConventions < ActiveRecord::Migration[5.1]
   def up
     rename_table :cons, :conventions
     rename_column :events, :con_id, :convention_id

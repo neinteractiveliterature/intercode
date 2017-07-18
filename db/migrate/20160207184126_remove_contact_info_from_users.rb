@@ -1,4 +1,4 @@
-class RemoveContactInfoFromUsers < ActiveRecord::Migration[4.2]
+class RemoveContactInfoFromUsers < ActiveRecord::Migration[5.1]
   def change
     remove_column "users", "nickname", :string
     remove_column "users", "birth_date", :date

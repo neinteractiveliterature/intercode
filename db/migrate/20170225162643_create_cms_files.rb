@@ -1,4 +1,4 @@
-class CreateCmsFiles < ActiveRecord::Migration[5.0]
+class CreateCmsFiles < ActiveRecord::Migration[5.1]
   def change
     create_table :cms_files do |t|
       t.references :convention, foreign_key: true

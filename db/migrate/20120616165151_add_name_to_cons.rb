@@ -1,4 +1,4 @@
-class AddNameToCons < ActiveRecord::Migration[4.2]
+class AddNameToCons < ActiveRecord::Migration[5.1]
   def change
     change_table :cons do |t|
       t.string :name
