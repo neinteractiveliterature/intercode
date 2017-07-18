@@ -9,8 +9,5 @@ class CreateRuns < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-
-    add_index :runs, :event_id
-    add_index :runs, :updated_by_id
   end
 end

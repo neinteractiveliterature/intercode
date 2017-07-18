@@ -20,7 +20,7 @@ class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration[5.1]
   end
 
   def up
-    add_reference :team_members, :user_con_profile, index: true, foreign_key: true
+    add_reference :team_members, :user_con_profile, index: true
 
     LinkTeamMembersToUserConProfiles::TeamMember.includes(:event => :convention).find_each do |team_member|
       team_member.update!(user_con_profile: team_member.event.convention.user_con_profiles.find_by!(user_id: team_member.user_id))
@@ -28,6 +28,7 @@ class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration[5.1]
 
     remove_foreign_key :team_members, column: 'user_id'
     remove_reference :team_members, :user
-    change_column :team_members, :user_con_profile_id, :integer, null: false
+    change_column_null :team_members, :user_con_profile_id, false
+    add_foreign_key :team_members, :user_con_profiles
   end
 end

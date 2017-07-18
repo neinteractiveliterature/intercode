@@ -11,7 +11,5 @@ class CreateCons < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-
-    add_index :cons, :updated_by_id
   end
 end
