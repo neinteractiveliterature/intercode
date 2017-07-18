@@ -8,12 +8,14 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import WebpackerReact from 'webpacker-react';
+import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import StaffPositionForm from './Forms/StaffPositionForm';
 import TeamMemberForm from './Forms/TeamMemberForm';
 import TicketPurchaseForm from './Forms/TicketPurchaseForm';
 import TicketTypeForm from './Forms/TicketTypeForm';
 
 WebpackerReact.setup({
+  CadmusNavbarAdminApp,
   StaffPositionForm,
   TeamMemberForm,
   TicketPurchaseForm,

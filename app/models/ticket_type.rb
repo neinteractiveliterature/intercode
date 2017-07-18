@@ -33,4 +33,8 @@ class TicketType < ApplicationRecord
   def next_price
     next_price_after(Time.now)
   end
+
+  def to_liquid
+    TicketTypeDrop.new(self)
+  end
 end

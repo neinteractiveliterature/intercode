@@ -1,4 +1,4 @@
-class CreateStaffPositions < ActiveRecord::Migration[5.0]
+class CreateStaffPositions < ActiveRecord::Migration[5.1]
   def change
     create_table :staff_positions do |t|
       t.references :convention, foreign_key: true

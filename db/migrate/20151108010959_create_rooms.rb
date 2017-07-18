@@ -1,4 +1,4 @@
-class CreateRooms < ActiveRecord::Migration[4.2]
+class CreateRooms < ActiveRecord::Migration[5.1]
   def change
     create_table :rooms do |t|
       t.references :convention, index: true, foreign_key: true
