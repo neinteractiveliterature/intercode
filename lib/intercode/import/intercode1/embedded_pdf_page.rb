@@ -18,7 +18,7 @@ class Intercode::Import::Intercode1::EmbeddedPdfPage
     end
 
     logger.info("Creating embedded PDF page #{page_name} for #{pdf_filename}")
-    cms_file = upload_file(convention, file_path)
+    upload_file(convention, file_path)
     convention.pages.create!(name: page_name, content: page_content(File.basename(pdf_filename)))
   end
 
