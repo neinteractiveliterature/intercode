@@ -1,6 +1,6 @@
 require File.expand_path('app/models/user_con_profile', Rails.root)
 
-class CreateUserConProfiles < ActiveRecord::Migration[4.2]
+class CreateUserConProfiles < ActiveRecord::Migration[5.1]
   def change
     create_table :user_con_profiles do |t|
       t.references :user, :null => false

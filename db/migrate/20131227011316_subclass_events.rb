@@ -1,4 +1,4 @@
-class SubclassEvents < ActiveRecord::Migration[4.2]
+class SubclassEvents < ActiveRecord::Migration[5.1]
   def change
     add_reference :events, :user, index: true
     add_column :events, :type, :string

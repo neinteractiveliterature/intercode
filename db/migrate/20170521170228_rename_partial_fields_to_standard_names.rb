@@ -1,4 +1,4 @@
-class RenamePartialFieldsToStandardNames < ActiveRecord::Migration[5.0]
+class RenamePartialFieldsToStandardNames < ActiveRecord::Migration[5.1]
   def change
     change_table :cms_partials do |t|
       t.rename :convention_id, :parent_id

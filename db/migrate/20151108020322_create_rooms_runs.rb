@@ -1,4 +1,4 @@
-class CreateRoomsRuns < ActiveRecord::Migration[4.2]
+class CreateRoomsRuns < ActiveRecord::Migration[5.1]
   def change
     create_table :rooms_runs, id: false do |t|
       t.references :room, null: false, index: true, foreign_key: true
