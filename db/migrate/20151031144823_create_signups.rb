@@ -1,4 +1,4 @@
-class CreateSignups < ActiveRecord::Migration[4.2]
+class CreateSignups < ActiveRecord::Migration[5.1]
   def change
     create_table :signups do |t|
       t.references :run, index: true, foreign_key: true

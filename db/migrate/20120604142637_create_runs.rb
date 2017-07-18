@@ -1,4 +1,4 @@
-class CreateRuns < ActiveRecord::Migration[4.2]
+class CreateRuns < ActiveRecord::Migration[5.1]
   def change
     create_table :runs do |t|
       t.references :event
@@ -9,8 +9,5 @@ class CreateRuns < ActiveRecord::Migration[4.2]
 
       t.timestamps
     end
-
-    add_index :runs, :event_id
-    add_index :runs, :updated_by_id
   end
 end

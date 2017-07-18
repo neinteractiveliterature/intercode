@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 function fetchAndThrow(...params) {
   return fetch(...params).then((response) => {
     if (response.status >= 200 && response.status < 300) {

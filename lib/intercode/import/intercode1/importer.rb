@@ -28,7 +28,9 @@ class Intercode::Import::Intercode1::Importer
         "con_domain" => CON_DOMAIN,
         "friday_date" => FRI_DATE,
         "text_dir" => TEXT_DIR,
-        "php_timezone" => date_default_timezone_get()
+        "php_timezone" => date_default_timezone_get(),
+        "show_flyer" => NAV_SHOW_FLYER,
+        "show_program" => NAV_SHOW_PROGRAM,
       );
 
       $price_schedule = array();
@@ -86,6 +88,8 @@ class Intercode::Import::Intercode1::Importer
     @staff_positions = vars['staff_positions']
     @php_timezone = ActiveSupport::TimeZone[vars['php_timezone']]
     @text_dir = text_dir
+    @show_flyer = vars['show_flyer']
+    @show_program = vars['show_program']
   end
 
   def build_password_hashes
@@ -115,6 +119,8 @@ class Intercode::Import::Intercode1::Importer
     Intercode::Import::Intercode1.logger.info("Updated CMS content with con data")
 
     html_content.import!
+    embedded_pdf_pages.each(&:import!)
+    navigation_items.import!
 
     registration_status_map.each do |status, ticket_type|
       ticket_type.save!
@@ -200,6 +206,10 @@ class Intercode::Import::Intercode1::Importer
     @html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
   end
 
+  def navigation_items
+    @navigation_items ||= Intercode::Import::Intercode1::NavigationItems.new(con)
+  end
+
   def registration_status_map
     @registration_status_map ||= {
       "Paid" => price_schedule_table.build_ticket_type,
@@ -224,5 +234,24 @@ class Intercode::Import::Intercode1::Importer
         pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
       ),
     }
+  end
+
+  def embedded_pdf_pages
+    embedded_pdf_pages = []
+    src_dir = File.dirname(@constants_file)
+
+    if @show_flyer
+      embedded_pdf_pages << Intercode::Import::Intercode1::EmbeddedPdfPage.new(
+        con, src_dir, 'InterconFlyer.pdf', 'Flyer'
+      )
+    end
+
+    if @show_program
+      embedded_pdf_pages << Intercode::Import::Intercode1::EmbeddedPdfPage.new(
+        con, src_dir, 'program-page-order.pdf', 'Program'
+      )
+    end
+
+    embedded_pdf_pages
   end
 end

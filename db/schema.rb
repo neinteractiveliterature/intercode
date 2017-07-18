@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602200806) do
+ActiveRecord::Schema.define(version: 20170717141614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,20 @@ ActiveRecord::Schema.define(version: 20170602200806) do
     t.index ["parent_id", "file"], name: "index_cms_files_on_parent_id_and_file", unique: true
     t.index ["parent_id"], name: "index_cms_files_on_parent_id"
     t.index ["uploader_id"], name: "index_cms_files_on_uploader_id"
+  end
+
+  create_table "cms_navigation_items", force: :cascade do |t|
+    t.text "title"
+    t.string "parent_type"
+    t.bigint "parent_id"
+    t.bigint "navigation_section_id"
+    t.bigint "page_id"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["navigation_section_id"], name: "index_cms_navigation_items_on_navigation_section_id"
+    t.index ["page_id"], name: "index_cms_navigation_items_on_page_id"
+    t.index ["parent_type", "parent_id"], name: "index_cms_navigation_items_on_parent_type_and_parent_id"
   end
 
   create_table "cms_partials", id: :serial, force: :cascade do |t|
@@ -261,6 +275,8 @@ ActiveRecord::Schema.define(version: 20170602200806) do
   end
 
   add_foreign_key "cms_files", "users", column: "uploader_id"
+  add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
+  add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "events", "conventions"

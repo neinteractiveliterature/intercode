@@ -1,4 +1,4 @@
-class AddStartAndEndTimesToCons < ActiveRecord::Migration[4.2]
+class AddStartAndEndTimesToCons < ActiveRecord::Migration[5.1]
   def change
     change_table :cons do |t|
       t.datetime :starts_at

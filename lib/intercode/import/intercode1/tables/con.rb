@@ -31,7 +31,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
     ).convert
 
     con.cms_partials.find_by!(name: 'news').update!(content: news_content)
-    con.pages.create!(name: 'con_com_schedule', content: con_com_meetings_content)
+    con.pages.create!(name: 'ConCom Schedule', content: con_com_meetings_content)
   end
 
   private
@@ -44,6 +44,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       accepting_bids: yesno_to_bool(row[:AcceptingBids]),
       precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
       starts_at: @starts_at,
+      ends_at: @starts_at + 3.days,
       timezone_name: @timezone.name,
       maximum_event_signups: {
         timespans: [

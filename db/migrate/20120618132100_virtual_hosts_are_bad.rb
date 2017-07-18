@@ -1,4 +1,4 @@
-class VirtualHostsAreBad < ActiveRecord::Migration[4.2]
+class VirtualHostsAreBad < ActiveRecord::Migration[5.1]
   class VirtualHost < ApplicationRecord
     belongs_to :con
   end

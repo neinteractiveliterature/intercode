@@ -29,21 +29,26 @@
                   = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
                   = link_to "List of Events", events_path, class: 'dropdown-item'
                   = link_to "Propose an Event", new_event_path, class: 'dropdown-item'
+              = CadmusNavbar::Renderers::Bootstrap4.new(request: request, url_for_page: ->(page) { page_url(page) }, root_items: convention.cms_navigation_items.root).render_navigation_items
               - if can? :manage, convention.user_con_profiles.new
                 %li.nav-item.dropdown{:role => "presentation"}
                   %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
                     Admin
                   .dropdown-menu
                     = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
-                    = link_to "Pages", pages_path, class: 'dropdown-item'
+                    = link_to "Site Content", pages_path, class: 'dropdown-item'
                     = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
                     = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'
+          %ul.navbar-nav
             - if user_signed_in?
-              - if convention
-                %li.nav-item{:role => "presentation"}
-                  = link_to "My Profile", my_profile_path, class: 'nav-link'
-              %li.nav-item.logout
-                = link_to "Log Out", destroy_user_session_path, class: 'nav-link', :method => "delete"
+              %li.nav-item.dropdown{role: "presentation"}
+                %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
+                  %i.fa.fa-user
+                  = current_user.name
+                .dropdown-menu
+                  - if convention
+                    = link_to "My Profile", my_profile_path, class: 'dropdown-item'
+                  = link_to "Log Out", destroy_user_session_path, class: 'dropdown-item', :method => "delete"
             - else
               %li.nav-item.login
                 = link_to "Log In", new_user_session_path, class: 'nav-link'
