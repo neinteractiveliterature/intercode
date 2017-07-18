@@ -10,7 +10,7 @@ class CreateCmsNavigationItems < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_foreign_key :cms_navigation_sections, :pages
-    add_foreign_key :cms_navigation_sections, :cms_navigation_sections, column: :navigation_section_id
+    add_foreign_key :cms_navigation_items, :pages
+    add_foreign_key :cms_navigation_items, :cms_navigation_items, column: :navigation_section_id
   end
 end
