@@ -49,6 +49,8 @@ gem 'scheduled_value', '~> 1.1.2'
 
 # File uploading
 gem 'carrierwave'
+gem 'fog'
+gem 'fog-aws'
 
 # Filthy lucre
 gem 'money-rails'
