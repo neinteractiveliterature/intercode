@@ -7,5 +7,7 @@
     = nav_link_to "Partials", cms_partials_path, active: (params[:controller] == 'cms_partials'), role: "presentation"
   %li.nav-item
     = nav_link_to "Files", cms_files_path, active: (params[:controller] == 'cms_files'), role: "presentation"
+  %li.nav-item
+    = nav_link_to "Navigation", cms_navigation_items_path, active: (params[:controller] == 'cms_navigation_items'), role: "presentation"
 
 %br
