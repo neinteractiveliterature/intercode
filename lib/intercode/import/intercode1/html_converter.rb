@@ -1,4 +1,6 @@
 class Intercode::Import::Intercode1::HtmlConverter
+  include Intercode::Import::Intercode1::UploadFile
+
   attr_reader :html, :convention, :file_root
 
   def initialize(html:, convention:, file_root:)
@@ -13,7 +15,7 @@ class Intercode::Import::Intercode1::HtmlConverter
     # Try to fix up internal links to other CMS pages
     doc.css('a[href]').each do |link|
       if link['href'] =~ /\.pdf\z/
-        cms_file = upload_file(link['href'])
+        cms_file = upload_url(link['href'])
         if cms_file
           link['href'] = "__CMS_FILE_URL_#{cms_file.file.filename}"
         end
@@ -22,9 +24,14 @@ class Intercode::Import::Intercode1::HtmlConverter
       end
     end
 
+    # Fix the weird bad iframe href on the con com meetings page
+    doc.css('iframe').each do |iframe|
+      iframe['src'] = iframe['src'].gsub("\r\n", '')
+    end
+
     # Find and upload images
     doc.css('img').each do |img|
-      cms_file = upload_file(img['src'])
+      cms_file = upload_url(img['src'])
       if cms_file
         img['src'] = "__CMS_FILE_URL_#{cms_file.file.filename}"
       end
@@ -68,22 +75,10 @@ class Intercode::Import::Intercode1::HtmlConverter
     end
   end
 
-  def upload_file(url)
+  def upload_url(url)
     parsed_url = URI.parse(url)
     return unless parsed_url.scheme.blank? && parsed_url.path.present? # it's a local file in the source tree
 
-    cms_file = convention.cms_files.find_by(file: File.basename(url))
-
-    if cms_file
-      cms_file
-    else
-      cms_file = convention.cms_files.new
-      File.open(File.expand_path(url, file_root)) do |f|
-        cms_file.file = f
-      end
-
-      cms_file.save!
-      cms_file
-    end
+    upload_file(convention, File.expand_path(url, file_root))
   end
 end

@@ -37,6 +37,7 @@ Intercode::Application.routes.draw do
 
     resources :cms_partials
     resources :cms_files
+    resources :cms_navigation_items
 
     resource :my_profile do
       member do
