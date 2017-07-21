@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import BootstrapFormCheckbox from '../FormControls/BootstrapFormCheckbox';
+import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import ModalConfirm from '../ModalConfirm';
 import ResourceForm from './ResourceForm';
-import UserConProfileSelect from '../FormControls/UserConProfileSelect';
+import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { performRequest } from '../HTTPUtils';
 
 class TeamMemberForm extends React.Component {

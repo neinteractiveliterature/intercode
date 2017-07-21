@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BootstrapFormInput from '../FormControls/BootstrapFormInput';
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ResourceForm from './ResourceForm';
-import ScheduledValueEditor from '../FormControls/ScheduledValueEditor';
+import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 
 class TicketTypeForm extends React.Component {

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import BootstrapFormInput from '../FormControls/BootstrapFormInput';
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ResourceForm from './ResourceForm';
-import UserConProfileSelect from '../FormControls/UserConProfileSelect';
+import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 
 class StaffPositionForm extends React.Component {
   static propTypes = {

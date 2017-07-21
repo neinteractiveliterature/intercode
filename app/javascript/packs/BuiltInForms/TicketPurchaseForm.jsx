@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import PaymentEntry from '../FormControls/PaymentEntry';
+import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
 import { performRequest } from '../HTTPUtils';
 
 class TicketPurchaseForm extends React.Component {
