@@ -5,7 +5,7 @@ class CreateFormItems < ActiveRecord::Migration[5.1]
       t.integer :position
       t.text :identifier
       t.text :item_type
-      t.json :properties
+      t.text :properties
 
       t.timestamps
     end
