@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170717141614) do
+ActiveRecord::Schema.define(version: 20170721235511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,34 @@ ActiveRecord::Schema.define(version: 20170717141614) do
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
+  end
+
+  create_table "form_items", force: :cascade do |t|
+    t.bigint "form_section_id"
+    t.integer "position"
+    t.text "identifier"
+    t.text "item_type"
+    t.text "properties"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_section_id"], name: "index_form_items_on_form_section_id"
+  end
+
+  create_table "form_sections", force: :cascade do |t|
+    t.bigint "form_id"
+    t.text "title"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_id"], name: "index_form_sections_on_form_id"
+  end
+
+  create_table "forms", force: :cascade do |t|
+    t.text "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "convention_id"
+    t.index ["convention_id"], name: "index_forms_on_convention_id"
   end
 
   create_table "pages", id: :serial, force: :cascade do |t|
@@ -282,6 +310,9 @@ ActiveRecord::Schema.define(version: 20170717141614) do
   add_foreign_key "events", "conventions"
   add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "events", "users", column: "updated_by_id"
+  add_foreign_key "form_items", "form_sections"
+  add_foreign_key "form_sections", "forms"
+  add_foreign_key "forms", "conventions"
   add_foreign_key "rooms", "conventions"
   add_foreign_key "rooms_runs", "rooms"
   add_foreign_key "rooms_runs", "runs"
