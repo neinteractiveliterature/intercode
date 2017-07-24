@@ -231,7 +231,7 @@ MARKDOWN
           item_type: 'free_text',
           identifier: 'other_games',
           lines: 4,
-          caption: 'What other LARPs have your written or run? Where and when were they run?'
+          caption: 'What other LARPs have you written or run? Where and when were they run?'
         }
       ]
     },
