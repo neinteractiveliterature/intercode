@@ -44,6 +44,7 @@
     "react-simple-currency": "^1.0.15",
     "react-virtualized": "^9.8.0",
     "react-virtualized-select": "^3.0.1",
+    "reduce-reducers": "^0.1.2",
     "redux-actions": "^2.2.1",
     "redux-thunk-actions": "^1.1.6",
     "resolve-url-loader": "^2.0.2",
