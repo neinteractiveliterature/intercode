@@ -16,3 +16,11 @@
 @import "bootstrap_custom";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+
+.form-item-label p:last-child {
+  margin-bottom: 0;
+}
+
+.progress-bar {
+  transition: width 1s;
+}

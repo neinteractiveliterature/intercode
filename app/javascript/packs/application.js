@@ -7,8 +7,11 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import WebpackerReact from 'webpacker-react';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
+import WebpackerReact from 'webpacker-react';
+
+// import FormEditor from './FormEditor';
+import FormPresenter from './FormPresenter';
 import StaffPositionForm from './BuiltInForms/StaffPositionForm';
 import TeamMemberForm from './BuiltInForms/TeamMemberForm';
 import TicketPurchaseForm from './BuiltInForms/TicketPurchaseForm';
@@ -16,6 +19,8 @@ import TicketTypeForm from './BuiltInForms/TicketTypeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
+//  FormEditor,
+  FormPresenter,
   StaffPositionForm,
   TeamMemberForm,
   TicketPurchaseForm,

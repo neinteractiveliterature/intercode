@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724165907) do
+ActiveRecord::Schema.define(version: 20170724172123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,7 +69,9 @@ ActiveRecord::Schema.define(version: 20170724165907) do
     t.string "timezone_name"
     t.text "maximum_event_signups"
     t.boolean "registrations_frozen", default: false, null: false
+    t.bigint "event_proposal_form_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
+    t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
   end
 
@@ -325,6 +327,7 @@ ActiveRecord::Schema.define(version: 20170724165907) do
   add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
+  add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "event_proposals", "conventions"

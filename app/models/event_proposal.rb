@@ -3,7 +3,7 @@ class EventProposal < ApplicationRecord
 
   belongs_to :convention
   belongs_to :owner, class_name: 'UserConProfile'
-  belongs_to :event
+  belongs_to :event, optional: true
 
   serialize :additional_info, JSON
 

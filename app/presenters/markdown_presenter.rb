@@ -5,7 +5,11 @@ class MarkdownPresenter
   include ActionView::Helpers::TextHelper
 
   def self.markdown_processor
-    @markdown_processor ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML.new, no_intra_emphasis: true, autolink: true)
+    @markdown_processor ||= Redcarpet::Markdown.new(
+      Redcarpet::Render::HTML.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
+      no_intra_emphasis: true,
+      autolink: true
+    )
   end
 
   attr_reader :default_content
