@@ -121,6 +121,7 @@ class Intercode::Import::Intercode1::Importer
     html_content.import!
     embedded_pdf_pages.each(&:import!)
     navigation_items.import!
+    proposal_form.import!
 
     registration_status_map.each do |status, ticket_type|
       ticket_type.save!
@@ -253,5 +254,9 @@ class Intercode::Import::Intercode1::Importer
     end
 
     embedded_pdf_pages
+  end
+
+  def proposal_form
+    @proposal_form ||= Intercode::Import::Intercode1::ProposalForm.new(con)
   end
 end

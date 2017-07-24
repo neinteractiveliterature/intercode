@@ -32,6 +32,7 @@ module Intercode
       autoload :Markdownifier
       autoload :NavigationItems
       autoload :Php
+      autoload :ProposalForm
       autoload :StaffPositionImporter
       autoload :Table
       autoload :Tables
