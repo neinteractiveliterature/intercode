@@ -18,7 +18,7 @@ function renderProgress(form, section) {
   const progressPercent = `${progressPercentValue}%`;
 
   return (
-    <div className="progress">
+    <div className="progress card-img-top" style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
       <div
         className="progress-bar"
         role="progressbar"
@@ -39,13 +39,17 @@ function renderSection(form, section) {
   ));
 
   return (
-    <section>
-      <h2>{section.title}</h2>
-
+    <div>
       {renderProgress(form, section)}
 
-      {items}
-    </section>
+      <div className="card-header">
+        <h4>{section.title}</h4>
+      </div>
+
+      <div className="card-block">
+        {items}
+      </div>
+    </div>
   );
 }
 
@@ -83,10 +87,10 @@ const FormPresenter = ({ form, currentSectionId, previousSection, nextSection })
   const currentSectionIndex = sections.indexOf(currentSection);
 
   return (
-    <div>
+    <div className="card mb-4">
       {renderSection(form, currentSection)}
 
-      <div className="my-4 d-flex justify-content-between">
+      <div className="card-footer d-flex justify-content-between">
         <div>{renderBackButton(currentSectionIndex, previousSection)}</div>
         <div>{renderContinueButton(currentSectionIndex, sections, nextSection)}</div>
       </div>
