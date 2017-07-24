@@ -1,0 +1,12 @@
+%h1 Forms in #{convention.name}
+
+%ul
+  - @forms.each do |form|
+    %li= link_to form.title || 'Untitled form', form
+
+.card
+  .card-header Create a new form
+  .card-block
+    = bootstrap_form_for :form do |f|
+      = f.text_field :title
+      = f.submit "Create form"

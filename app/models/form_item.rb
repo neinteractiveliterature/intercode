@@ -12,6 +12,9 @@ class FormItem < ApplicationRecord
       style: :required,
       choices: :required,
     },
+    registration_policy: {
+      identifier: :required,
+    },
     static_text: {
       content: :required,
       style: :required,

@@ -49,15 +49,25 @@ class Intercode::Import::Intercode1::ProposalForm
           identifier: 'description',
           lines: 15,
           caption: <<-MARKDOWN
-**Description** for use on the {{ convention.name }} website. This information will displayed on the page users see for the game. The description should be at least a couple of paragraphs, but can be as long as you like.
+**Description** for use on the {{ convention.name }} website. This information will displayed on
+the page users see for the game. The description should be at least a couple of paragraphs, but can
+be as long as you like.
 
-The game description is used to promote your game and attract players who will enjoy it. Be reasonably clear on where and when the game is set, and what the game is about. Let your players know what can they expect to be doing during the LARP, and make them excited to play your game! (We can offer suggestions if you would like advice on this.)
+The game description is used to promote your game and attract players who will enjoy it. Be
+reasonably clear on where and when the game is set, and what the game is about. Let your players
+know what can they expect to be doing during the LARP, and make them excited to play your game!
+(We can offer suggestions if you would like advice on this.)
 
-**Per NEIL policy, game descriptions must include either a content warning or an explicit statement that no content warnings are applicable.** For more information, [see the NEIL policies page](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy).
+**Per NEIL policy, game descriptions must include either a content warning or an explicit statement
+that no content warnings are applicable.** For more information,
+[see the NEIL policies page](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy).
 
-Please also include the preferred ages of players for your larp. Examples are "Players must be 18 or older", or "players under 16 must check with the GMs before playing", to "children at least [age] years old are welcome in this game".
+Please also include the preferred ages of players for your larp. Examples are "Players must be 18 or
+older", or "players under 16 must check with the GMs before playing", to "children at least [age]
+years old are welcome in this game".
 
-The description will be displayed in the user's browser. You must use Markdown for formatting. [A quick primer on Markdown syntax is available here.](https://en.support.wordpress.com/markdown-quick-reference/)
+The description will be displayed in the user's browser. You must use Markdown for formatting.
+[A quick primer on Markdown syntax is available here.](https://en.support.wordpress.com/markdown-quick-reference/)
 MARKDOWN
         },
         {
@@ -65,9 +75,11 @@ MARKDOWN
           identifier: 'short_blurb',
           lines: 4,
           caption: <<-MARKDOWN
-A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the convention program. Information in the Short Blurb must also be present in the (full) description!
+A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the
+convention program. Information in the Short Blurb must also be present in the (full) description!
 
-The short blurb will be displayed in the user's browser. You must use Markdown for formatting. [A quick primer on Markdown syntax is available here.](https://en.support.wordpress.com/markdown-quick-reference/)
+The short blurb will be displayed in the user's browser. You must use Markdown for formatting.
+[A quick primer on Markdown syntax is available here.](https://en.support.wordpress.com/markdown-quick-reference/)
 MARKDOWN
         },
         {
@@ -77,7 +89,9 @@ MARKDOWN
           caption: <<-MARKDOWN
 **Player Communications**
 
-How will you distribute game information to your players? Will you be using a casting form? Will character roles be cast and distributed before the convention or on site, or will characters be developed as part of the game?
+How will you distribute game information to your players? Will you be using a casting form? Will
+character roles be cast and distributed before the convention or on site, or will characters be
+developed as part of the game?
 MARKDOWN
         }
       ]
@@ -90,6 +104,36 @@ MARKDOWN
           style: 'subhead',
           content: 'This will be shown on the Public description of the game.'
         },
+        {
+          item_type: 'static_text',
+          style: 'normal',
+          content: <<-MARKDOWN
+Enter the minimum, preferred and maximum number of characters for your LARP. The character counts
+will be visible to users signing up to your LARP.
+
+* Minimum -	The minimum number of characters required for your LARP. If there are fewer than the
+  minimum number of characters signed up, you should talk with the GM Liaison about lowering the
+  minimum number of players or cancelling the LARP.
+* Preferred -	The number of characters that you'd prefer to have in your LARP. If you're not sure,
+  make this the same number as the Maximum.
+* Maximum -	The maximum number of players that your LARP can accomodate.
+
+Each of your characters can be male, female or neutral. A male or female character is one which must
+be a specific gender. A neutral character is one which can be cast as either male or female,
+depending on who signs up for the game. The website will enforce your gender limits, so if only
+female roles are available, any players that signup who have specified that they prefer to play male
+characters will be put on the waitlist. Once you've cast the game, you'll be able to "freeze" the
+gender balance of the game; essentially converting all of your neutral characters to male or female
+to match the preferred character gender of the players who are signed up. This way, if a player
+drops out, the website will pick the first player on the waitlist with a matching preferred
+character gender so you don't have to frantically rewrite the character sheet to match the preferred
+character gender of the new player.
+MARKDOWN
+        },
+        {
+          item_type: 'registration_policy',
+          identifier: 'registration_policy',
+        }
       ]
     },
     {
@@ -120,7 +164,10 @@ MARKDOWN
           item_type: 'free_text',
           identifier: 'run_before',
           lines: 1,
-          caption: '{{ convention.name }} is looking for games that are new and games that have run before, either at a convention, or elsewhere. If this game has run before, where was that?'
+          caption: <<-MARKDOWN
+{{ convention.name }} is looking for games that are new and games that have run before, either at a
+convention, or elsewhere. If this game has run before, where was that?
+MARKDOWN
         },
         {
           item_type: 'free_text',
@@ -144,13 +191,21 @@ MARKDOWN
           item_type: 'free_text',
           identifier: 'other_committee_info',
           lines: 4,
-          caption: 'Please enter any additional background information here, or any other information you wish to tell the Proposals Committee. This information will be shown only to the Proposals Committee.'
+          caption: <<-MARKDOWN
+Please enter any additional background information here, or any other information you wish to tell
+the Proposals Committee. This information will be shown only to the Proposals Committee.
+MARKDOWN
         },
         {
           item_type: 'free_text',
           identifier: 'setup_teardown',
           lines: 4,
-          caption: 'Are there any special setup or teardown requirements for this LARP? For example, do you need extra time to set up or tear down a complex set? (Requests for standard furniture will be handled separately closer to the convention. Intercon can not provide unusual setup materials for your game.)'
+          caption: <<-MARKDOWN
+Are there any special setup or teardown requirements for this LARP? For example, do you need extra
+time to set up or tear down a complex set? (Requests for standard furniture will be handled
+separately closer to the convention. Intercon can not provide unusual setup materials for your
+game.)
+MARKDOWN
         }
       ]
     },
@@ -167,7 +222,9 @@ MARKDOWN
           identifier: 'gms',
           lines: 2,
           caption: <<-MARKDOWN
-**GMs for your game.** Note that the GMs listed here are only for the purpose of evaluating your proposal. If your proposal is accepted, you'll be able to select GMs from the users registered for {{ convention.name }}.
+**GMs for your game.** Note that the GMs listed here are only for the purpose of evaluating your
+proposal. If your proposal is accepted, you'll be able to select GMs from the users registered for
+{{ convention.name }}.
 MARKDOWN
         },
         {
@@ -190,7 +247,10 @@ MARKDOWN
           item_type: 'static_text',
           style: 'normal',
           content: <<-MARKDOWN
-Intercon R appeals to a diverse group of players of all ages, ethnicities, belief systems, sexual orientations, physical capabilities, experience, etc. Authors can write interesting games that might not be suitable for all audiences. In order for the con staff to balance these potentially opposing requirements, please answer the following questions.
+Intercon R appeals to a diverse group of players of all ages, ethnicities, belief systems, sexual
+orientations, physical capabilities, experience, etc. Authors can write interesting games that might
+not be suitable for all audiences. In order for the con staff to balance these potentially opposing
+requirements, please answer the following questions.
 
 Note that answering yes to any or all of these questions does not disqualify your proposal.
 MARKDOWN
@@ -199,19 +259,32 @@ MARKDOWN
           item_type: 'free_text',
           identifier: 'offensive',
           lines: 4,
-          caption: 'Are there any components of your LARP that might offend or upset some group of attendees? For example, adult themes, potentially offensive story arcs, etc. If so, please explain and consider if this needs to be mentioned in the game descriptions.'
+          caption: <<-MARKDOWN
+Are there any components of your LARP that might offend or upset some group of attendees? For
+example, adult themes, potentially offensive story arcs, etc. If so, please explain and consider if
+this needs to be mentioned in the game descriptions.
+MARKDOWN
         },
         {
           item_type: 'free_text',
           identifier: 'physical_restrictions',
           lines: 4,
-          caption: 'Are there any physical restrictions imposed by your LARP? For example, live boffer combat, confined sets, etc. If so, please explain and consider if this needs to be mentioned in the game descriptions.'
+          caption: <<-MARKDOWN
+Are there any physical restrictions imposed by your LARP? For example, live boffer combat, confined
+sets, etc. If so, please explain and consider if this needs to be mentioned in the game
+descriptions.
+MARKDOWN
         },
         {
           item_type: 'free_text',
           identifier: 'age_appropriate',
           lines: 4,
-          caption: 'Is your game appropriate for players under the age of 18? Please discuss any age restrictions here. If there are any components of your LARP that might be illegal for attendees under the age of 18 (props or items that are illegal for a minor to possess, alcohol, etc.) please explain. If your game has age restrictions, please be sure to mention this in the game descriptions.'
+          caption: <<-MARKDOWN
+Is your game appropriate for players under the age of 18? Please discuss any age restrictions here.
+If there are any components of your LARP that might be illegal for attendees under the age of 18
+(props or items that are illegal for a minor to possess, alcohol, etc.) please explain. If your
+game has age restrictions, please be sure to mention this in the game descriptions.
+MARKDOWN
         },
       ]
     },
@@ -226,7 +299,11 @@ MARKDOWN
         {
           item_type: 'static_text',
           style: 'normal',
-          content: 'The con can schedule your game into one (or more) of the time slots available over the weekend. The con has to put together a balanced schedule so we can satisfy the most players in the most time slots. Your flexibility in scheduling your game is vital.'
+          content: <<-MARKDOWN
+The con can schedule your game into one (or more) of the time slots available over the weekend. The
+con has to put together a balanced schedule so we can satisfy the most players in the most time
+slots. Your flexibility in scheduling your game is vital.
+MARKDOWN
         },
         {
           item_type: 'timeblock_preference',
@@ -266,7 +343,8 @@ MARKDOWN
           caption: <<-MARKDOWN
 If you are willing to hold the LARP more than once, please discuss your preferences here.
 
-In addition, if there are scheduling constraints on your LARP (for example, if are you proposing another event), or there are times your LARP cannot be scheduled, please discuss them as well.
+In addition, if there are scheduling constraints on your LARP (for example, if are you proposing
+another event), or there are times your LARP cannot be scheduled, please discuss them as well.
 MARKDOWN
         },
         {
@@ -288,7 +366,8 @@ MARKDOWN
   def import!
     logger.info "Importing proposal form"
 
-    form = convention.forms.create!(title: "Proposal form")
+    form = convention.create_event_proposal_form!(title: "Proposal form", convention: convention)
+    convention.save!
 
     PROPOSAL_FORM_SECTIONS.each do |section_attributes|
       logger.info "Importing section #{section_attributes[:title]}"
