@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170721235511) do
+ActiveRecord::Schema.define(version: 20170724165907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,26 @@ ActiveRecord::Schema.define(version: 20170721235511) do
     t.boolean "registrations_frozen", default: false, null: false
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
+  end
+
+  create_table "event_proposals", force: :cascade do |t|
+    t.bigint "convention_id"
+    t.bigint "owner_id"
+    t.bigint "event_id"
+    t.string "status"
+    t.text "title"
+    t.text "email"
+    t.integer "length_seconds"
+    t.text "description"
+    t.text "short_blurb"
+    t.text "registration_policy"
+    t.boolean "can_play_concurrently"
+    t.text "additional_info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
+    t.index ["event_id"], name: "index_event_proposals_on_event_id"
+    t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
   end
 
   create_table "events", id: :serial, force: :cascade do |t|
@@ -307,6 +327,9 @@ ActiveRecord::Schema.define(version: 20170721235511) do
   add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
+  add_foreign_key "event_proposals", "conventions"
+  add_foreign_key "event_proposals", "events"
+  add_foreign_key "event_proposals", "user_con_profiles", column: "owner_id"
   add_foreign_key "events", "conventions"
   add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "events", "users", column: "updated_by_id"

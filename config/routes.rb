@@ -27,6 +27,8 @@ Intercode::Application.routes.draw do
       end
     end
 
+    resources :event_proposals
+
     resources :user_con_profiles do
       member do
         post :become
