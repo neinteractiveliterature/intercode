@@ -18,7 +18,7 @@ function renderProgress(form, section) {
   const progressPercent = `${progressPercentValue}%`;
 
   return (
-    <div className="progress card-img-top" style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+    <div className="progress card-img-top" style={{ borderRadius: 0 }}>
       <div
         className="progress-bar"
         role="progressbar"
@@ -40,11 +40,11 @@ function renderSection(form, section) {
 
   return (
     <div>
-      {renderProgress(form, section)}
-
       <div className="card-header">
-        <h4>{section.title}</h4>
+        <h4 className="mb-0">{section.title}</h4>
       </div>
+
+      {renderProgress(form, section)}
 
       <div className="card-block">
         {items}
