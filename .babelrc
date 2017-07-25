@@ -11,7 +11,8 @@
         "useBuiltIns": true
       }
     ],
-    "react"
+    "react",
+    "flow"
   ],
   "plugins": [
     "syntax-dynamic-import",
