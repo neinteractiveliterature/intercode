@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import FormEditor from '../components/FormEditor';
 
-const mapStateToProps = (state) => ({ form: state.form });
+const mapStateToProps = state => ({ form: state.form });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({});
 

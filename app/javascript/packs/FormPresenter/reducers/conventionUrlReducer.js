@@ -2,7 +2,7 @@ import { handleAction } from 'redux-actions';
 import actions from '../actions';
 
 export default handleAction(
-  actions.setFormUrl,
-  (state, action) => action.payload.formUrl,
+  actions.setConventionUrl,
+  (state, action) => action.payload.conventionUrl,
   null,
 );

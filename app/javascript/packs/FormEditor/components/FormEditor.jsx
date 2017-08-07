@@ -11,11 +11,11 @@ function renderSectionList(form) {
 
 const FormEditor = ({ form }) => {
   if (!form) {
-    return <div></div>;
+    return <div />;
   }
 
   return <div>{renderSectionList(form)}</div>;
-}
+};
 
 FormEditor.propTypes = {
   form: PropTypes.shape({

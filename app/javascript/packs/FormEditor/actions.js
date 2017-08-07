@@ -4,7 +4,7 @@ import API from '../API';
 
 const actions = {
   ...createActions({
-    'SET_BASE_URL': baseUrl => ({ baseUrl }),
+    SET_BASE_URL: baseUrl => ({ baseUrl }),
   }),
 
   fetchFormContent: createActionThunk('FETCH_FORM_CONTENT', ({ getState }) => API.fetchFormContent(getState().baseUrl)),

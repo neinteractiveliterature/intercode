@@ -5,16 +5,16 @@ import FormItem from './FormItem';
 
 function getCurrentSection(form, currentSectionId) {
   if (!currentSectionId) {
-    return form.getSections().get(0);
-  } else {
-    return form.getSection(currentSectionId);
+    return form.getSections().get(5);
   }
+  return form.getSection(currentSectionId);
 }
 
 function renderProgress(form, section) {
-  const sections = form.getSections();
-  const sectionIndex = sections.indexOf(section);
-  const progressPercentValue = Math.round((sectionIndex / sections.size) * 100);
+  const items = form.getAllItems();
+  const sectionItems = form.getItemsInSection(section.id);
+  const itemIndex = items.indexOf(sectionItems.get(0));
+  const progressPercentValue = Math.round((itemIndex / items.count()) * 100);
   const progressPercent = `${progressPercentValue}%`;
 
   return (
@@ -33,9 +33,9 @@ function renderProgress(form, section) {
   );
 }
 
-function renderSection(form, section) {
+function renderSection(convention, form, section) {
   const items = form.getItemsInSection(section.id).map(item => (
-    <FormItem key={item.id} formItem={item} />
+    <FormItem key={item.id} formItem={item} convention={convention} />
   ));
 
   return (
@@ -60,7 +60,7 @@ function renderBackButton(currentSectionIndex, onClick) {
 
   return (
     <button className="btn btn-secondary" onClick={onClick}>
-      <i className="fa fa-chevron-left"></i> Back
+      <i className="fa fa-chevron-left" /> Back
     </button>
   );
 }
@@ -72,14 +72,14 @@ function renderContinueButton(currentSectionIndex, sections, onClick) {
 
   return (
     <button className="btn btn-primary" onClick={onClick}>
-      Continue <i className="fa fa-chevron-right"></i>
+      Continue <i className="fa fa-chevron-right" />
     </button>
   );
 }
 
-const FormPresenter = ({ form, currentSectionId, previousSection, nextSection }) => {
-  if (!form) {
-    return <div></div>;
+const FormPresenter = ({ convention, form, currentSectionId, previousSection, nextSection }) => {
+  if (!form || !convention) {
+    return <div />;
   }
 
   const currentSection = getCurrentSection(form, currentSectionId);
@@ -88,7 +88,7 @@ const FormPresenter = ({ form, currentSectionId, previousSection, nextSection })
 
   return (
     <div className="card mb-4">
-      {renderSection(form, currentSection)}
+      {renderSection(convention, form, currentSection)}
 
       <div className="card-footer d-flex justify-content-between">
         <div>{renderBackButton(currentSectionIndex, previousSection)}</div>
@@ -96,9 +96,14 @@ const FormPresenter = ({ form, currentSectionId, previousSection, nextSection })
       </div>
     </div>
   );
-}
+};
 
 FormPresenter.propTypes = {
+  convention: PropTypes.shape({
+    starts_at: PropTypes.string.isRequired,
+    ends_at: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+  }),
   form: Form.propType,
   currentSectionId: PropTypes.number,
   previousSection: PropTypes.func.isRequired,

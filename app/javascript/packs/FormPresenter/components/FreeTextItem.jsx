@@ -8,16 +8,13 @@ class FreeTextItem extends React.Component {
     enableUniqueIds(this);
   }
 
-  renderLabel = (formItem, domId) => {
-    return <label htmlFor={domId} className="form-item-label" dangerouslySetInnerHTML={{ __html: formItem.caption }} />;
-  }
+  renderLabel = (formItem, domId) => <label htmlFor={domId} className="form-item-label" dangerouslySetInnerHTML={{ __html: formItem.caption }} />
 
   renderInput = (formItem, domId) => {
     if (formItem.lines === 1) {
       return <input id={domId} type={formItem.free_text_type || 'text'} className="form-control" />;
-    } else {
-      return <textarea id={domId} rows={formItem.lines} className="form-control" />;
     }
+    return <textarea id={domId} rows={formItem.lines} className="form-control" />;
   }
 
   render = () => {
@@ -29,7 +26,7 @@ class FreeTextItem extends React.Component {
         {this.renderLabel(formItem, domId)}
         {this.renderInput(formItem, domId)}
       </div>
-    )
+    );
   };
 }
 
