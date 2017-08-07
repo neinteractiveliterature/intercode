@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
@@ -125,7 +124,11 @@ class TimeblockPreferenceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend" dangerouslySetInnerHTML={{ __html: this.props.formItem.caption }} />
+        <legend
+          className="col-form-legend"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: this.props.formItem.caption }}
+        />
         <table className="table">
           <thead>
             <tr>

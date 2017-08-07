@@ -3,6 +3,7 @@
 import React from 'react';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import classNames from 'classnames';
+import { enableUniqueIds } from 'react-html-id';
 import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 import InPlaceEditor from './InPlaceEditor';
 
@@ -28,43 +29,50 @@ class RegistrationBucketRow extends React.Component {
     showKey: true,
   };
 
+  constructor(props: Props) {
+    super(props);
+    enableUniqueIds(this);
+  }
+
   state: State = {
     isConfirmingDelete: false,
   };
 
   props: Props
 
-  bucketPropChanged = (propName, newValue) => {
+  nextUniqueId: () => string
+
+  bucketPropChanged = (propName: string, newValue: string) => {
     const originalKey = this.props.registrationBucket.get('key');
     this.props.onChange(originalKey, this.props.registrationBucket.set(propName, newValue));
   }
 
-  keyChanged = newKey => this.bucketPropChanged('key', newKey)
-  nameChanged = newName => this.bucketPropChanged('name', newName)
-  descriptionChanged = newName => this.bucketPropChanged('description', newName)
+  keyChanged = (newKey: string) => this.bucketPropChanged('key', newKey)
+  nameChanged = (newName: string) => this.bucketPropChanged('name', newName)
+  descriptionChanged = (newDescription: string) => this.bucketPropChanged('description', newDescription)
 
-  minimumSlotsChanged = (event) => {
+  minimumSlotsChanged = (event: SyntheticInputEvent) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setMinimumSlots(parseInt(event.target.value, 10)),
     );
   }
 
-  preferredSlotsChanged = (event) => {
+  preferredSlotsChanged = (event: SyntheticInputEvent) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setPreferredSlots(parseInt(event.target.value, 10)),
     );
   }
 
-  totalSlotsChanged = (event) => {
+  totalSlotsChanged = (event: SyntheticInputEvent) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setTotalSlots(parseInt(event.target.value, 10)),
     );
   }
 
-  slotsLimitedChanged = (event) => {
+  slotsLimitedChanged = (event: SyntheticInputEvent) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setSlotsLimited(event.target.checked),
@@ -88,10 +96,13 @@ class RegistrationBucketRow extends React.Component {
       return null;
     }
 
+    const inputId = this.nextUniqueId();
+
     return (
       <div className="form-check form-check-inline mr-2">
-        <label className="form-check-label text-nowrap">
+        <label className="form-check-label text-nowrap" htmlFor={inputId}>
           <input
+            id={inputId}
             className="form-check-input"
             type="checkbox"
             checked={this.props.registrationBucket.get('slotsLimited')}
@@ -104,18 +115,23 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  renderLimits = (): React.Node | null => {
+  renderLimits = (): React.Element | null => {
     const bucket = this.props.registrationBucket;
 
     if (!bucket.get('slotsLimited')) {
       return null;
     }
 
+    const minId = this.nextUniqueId();
+    const prefId = this.nextUniqueId();
+    const maxId = this.nextUniqueId();
+
     return (
       <div className="form-inline ml-1 flex-nowrap">
         <div className="d-inline-flex mr-1">
-          <label>Min</label>
+          <label htmlFor={minId}>Min</label>
           <input
+            id={minId}
             type="number"
             size="2"
             className="form-control form-control-sm"
@@ -128,8 +144,9 @@ class RegistrationBucketRow extends React.Component {
         </div>
 
         <div className="d-inline-flex mr-1">
-          <label>Pref</label>
+          <label htmlFor={prefId}>Pref</label>
           <input
+            id={prefId}
             type="number"
             size="2"
             className="form-control form-control-sm"
@@ -142,8 +159,9 @@ class RegistrationBucketRow extends React.Component {
         </div>
 
         <div className="d-inline-flex">
-          <label>Max</label>
+          <label htmlFor={maxId}>Max</label>
           <input
+            id={maxId}
             type="number"
             size="2"
             className="form-control form-control-sm"

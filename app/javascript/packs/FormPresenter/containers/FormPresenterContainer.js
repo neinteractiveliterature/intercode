@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
   convention: state.convention,
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   previousSection: () => dispatch(actions.previousSection()),
   nextSection: () => dispatch(actions.nextSection()),
 });

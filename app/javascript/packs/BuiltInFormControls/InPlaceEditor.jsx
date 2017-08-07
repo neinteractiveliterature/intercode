@@ -5,7 +5,7 @@ import React from 'react';
 type Props = {
   value: string,
   onChange: (string) => void,
-  children?: React.Element<*>
+  children?: React.Children
 };
 
 type State = {
