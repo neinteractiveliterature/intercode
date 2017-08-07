@@ -58,6 +58,8 @@ class RegistrationPolicyEditor extends React.Component {
 
   props: Props
 
+  nextUniqueId: () => string
+
   addBucket = () => {
     this.props.onChange(this.props.registrationPolicy.addBucket('untitled'));
   }
@@ -131,7 +133,7 @@ class RegistrationPolicyEditor extends React.Component {
   renderTable = () => {
     const bucketRows = this.props.registrationPolicy.buckets.map((bucket) => {
       const bucketInPreset = (
-        this.state.preset && this.state.preset.policy.buckets.find(
+        this.state.preset && !!this.state.preset.policy.buckets.find(
           presetBucket => presetBucket.key === bucket.key,
         )
       );
@@ -190,23 +192,23 @@ class RegistrationPolicyEditor extends React.Component {
       <option value={preset.name} key={preset.name}>{preset.name}</option>
     ));
 
+    const selectId = this.nextUniqueId();
+
     return (
-      <select className="form-control" value={selectorValue} onChange={this.presetSelected}>
-        <option value="" />
-        {presetOptions}
-        <option value="_custom">Custom registration policy (advanced)</option>
-      </select>
+      <div className="form-group">
+        <label htmlFor={selectId}>Registration policy</label>
+        <select id={selectId} className="form-control" value={selectorValue} onChange={this.presetSelected}>
+          <option value="" />
+          {presetOptions}
+          <option value="_custom">Custom registration policy (advanced)</option>
+        </select>
+      </div>
     );
   }
 
   render = () => {
     if (this.props.presets) {
-      const selectorRow = (
-        <div className="form-group">
-          <label>Registration policy</label>
-          {this.renderPresetSelector()}
-        </div>
-      );
+      const selectorRow = this.renderPresetSelector();
 
       if (this.state.preset || this.state.custom) {
         return (

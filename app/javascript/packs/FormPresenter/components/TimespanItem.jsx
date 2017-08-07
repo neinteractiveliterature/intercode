@@ -1,7 +1,17 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
+
+type Props = {
+  formItem: {
+    caption: string,
+  },
+};
+
+type State = {
+  unit: string,
+};
 
 class TimespanItem extends React.Component {
   static units = [
@@ -9,7 +19,7 @@ class TimespanItem extends React.Component {
     { name: 'minute(s)', length_seconds: 60 },
   ];
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     enableUniqueIds(this);
 
@@ -18,8 +28,11 @@ class TimespanItem extends React.Component {
     };
   }
 
+  state: State
+  props: Props
+  nextUniqueId: () => string
+
   render = () => {
-    const { formItem } = this.props;
     const inputId = this.nextUniqueId();
     const options = TimespanItem.units.map(unit => (
       <option key={unit.length_seconds} value={unit.length_seconds}>{unit.name}</option>
@@ -27,7 +40,12 @@ class TimespanItem extends React.Component {
 
     return (
       <div className="form-group">
-        <label htmlFor={inputId} className="form-item-label" dangerouslySetInnerHTML={{ __html: formItem.caption }} />
+        <label
+          htmlFor={inputId}
+          className="form-item-label"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: this.props.formItem.caption }}
+        />
         <div className="d-flex">
           <input id={inputId} type="number" min="1" className="form-control w-25" />
           <select className="form-control ml-2">{options}</select>

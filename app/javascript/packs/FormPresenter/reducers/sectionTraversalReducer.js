@@ -1,4 +1,3 @@
-import { handleActions } from 'redux-actions';
 import actions from '../actions';
 
 function getCurrentSectionIndex(form, currentSectionId) {
@@ -20,13 +19,23 @@ function addToSectionIndex(state, offset, limiter) {
 }
 
 export default function (state, action) {
+  let maxSectionIndex;
+
   switch (action.type) {
     case actions.previousSection.toString():
-      return addToSectionIndex(state, -1, newSectionIndex => Math.max(newSectionIndex, 0));
+      return addToSectionIndex(
+        state,
+        -1,
+        newSectionIndex => Math.max(newSectionIndex, 0),
+      );
 
     case actions.nextSection.toString():
-      const maxSectionIndex = state.form.getSections().size - 1;
-      return addToSectionIndex(state, 1, newSectionIndex => Math.min(newSectionIndex, maxSectionIndex));
+      maxSectionIndex = state.form.getSections().size - 1;
+      return addToSectionIndex(
+        state,
+        1,
+        newSectionIndex => Math.min(newSectionIndex, maxSectionIndex),
+      );
 
     default:
       return state;
