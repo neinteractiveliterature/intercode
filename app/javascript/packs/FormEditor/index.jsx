@@ -21,13 +21,11 @@ class FormEditorApp extends React.Component {
     this.store.dispatch(actions.fetchFormContent());
   }
 
-  render = () => {
-    return (
-      <Provider store={this.store}>
-        <FormEditorContainer />
-      </Provider>
-    );
-  }
+  render = () => (
+    <Provider store={this.store}>
+      <FormEditorContainer />
+    </Provider>
+    )
 }
 
 export default FormEditorApp;

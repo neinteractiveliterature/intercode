@@ -4,8 +4,6 @@ import Form from '../../Models/Form';
 
 export default handleAction(
   actions.fetchFormContent.SUCCEEDED,
-  (state, action) => {
-    return Form.fromApiResponse(action.payload.body);
-  },
+  (state, action) => Form.fromApiResponse(action.payload.body),
   null,
 );

@@ -2,9 +2,10 @@ import { connect } from 'react-redux';
 import actions from '../actions';
 import FormPresenter from '../components/FormPresenter';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   currentSectionId: state.currentSectionId,
   form: state.form,
+  convention: state.convention,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

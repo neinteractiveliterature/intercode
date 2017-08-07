@@ -11,6 +11,8 @@ Intercode::Application.routes.draw do
     # http://con.domain/ will go to the root page of the con
     root :to => 'pages#root', :as => 'con_root'
 
+    resource :convention
+
     resource :ticket, only: [:new, :show, :create]
     resources :ticket_types, except: [:show]
 
