@@ -52,7 +52,7 @@
           %br
           = run.rooms.map(&:name).sort.join(", ")
 
-        .card-block
+        .card-body
           %p
             - signup_description = simple_format(SignupCountPresenter.new(run).signups_description)
 

@@ -1,7 +1,8 @@
 // @flow
 
-import { Map, IndexedSeq } from 'immutable';
+import { Map } from 'immutable';
 import PropTypes from 'prop-types';
+import memoize from 'memoized-class-decorator';
 
 type FormItem = {
   id: number,
@@ -36,7 +37,6 @@ export default class Form {
   properties: any;
   formSections: Map<number, FormSection>;
   formItems: Map<number, FormItem>;
-  _sections: IndexedSeq<any>;
 
   constructor(
     properties: any,
@@ -48,12 +48,9 @@ export default class Form {
     this.formItems = formItems;
   }
 
+  @memoize
   getSections() {
-    if (!this._sections) {
-      this._sections = this.formSections.valueSeq().sortBy(section => section.position);
-    }
-
-    return this._sections;
+    return this.formSections.valueSeq().sortBy(section => section.position);
   }
 
   getSection(sectionId: number) {
