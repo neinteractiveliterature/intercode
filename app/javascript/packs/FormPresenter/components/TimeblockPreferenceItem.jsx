@@ -17,10 +17,16 @@ type Timeblock = {
   finish: FuzzyTime,
 };
 
+type TimeblockOmission = {
+  label: string,
+  date: string,
+};
+
 type Props = {
   formItem: {
     caption: string,
     timeblocks: Array<Timeblock>,
+    omit_timeblocks: Array<TimeblockOmission>,
   },
   convention: {
     starts_at: string,
@@ -62,7 +68,15 @@ class TimeblockPreferenceItem extends React.Component {
         const timeblockStart = moment(dayStart).set(timeblock.start);
         const timeblockFinish = moment(dayStart).set(timeblock.finish);
 
-        if (timeblockFinish.isSameOrBefore(startsAt) || timeblockStart.isSameOrAfter(endsAt)) {
+        const timeblockOutOfBounds = (
+          timeblockFinish.isSameOrBefore(startsAt) || timeblockStart.isSameOrAfter(endsAt)
+        );
+        const timeblockOmitted = this.props.formItem.omit_timeblocks.some((omission) => {
+          const omissionDate = moment.tz(omission.date, this.props.convention.timezone_name).startOf('day');
+          return (omission.label === timeblock.label && omissionDate.isSame(dayStart));
+        });
+
+        if (timeblockOutOfBounds || timeblockOmitted) {
           return { timeblock, dayStart, contents: null };
         }
 
@@ -115,7 +129,7 @@ class TimeblockPreferenceItem extends React.Component {
           <td>
             {timeblock.label}
             <br />
-            {describeTimeblock(timeblock)}
+            <small>{describeTimeblock(timeblock)}</small>
           </td>
           {cells}
         </tr>

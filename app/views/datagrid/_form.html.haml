@@ -1,6 +1,6 @@
 .card
   .card-header Search
-  .card-block
+  .card-body
     = bootstrap_form_for grid, { layout: :horizontal }.merge(options) do |f|
       - grid.filters.each do |filter|
         .datagrid-filter.filter

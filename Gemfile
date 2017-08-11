@@ -9,7 +9,7 @@ gem 'pg'
 gem 'puma'
 
 gem 'sass-rails'
-gem 'bootstrap', '~> 4.0.0.alpha6'
+gem 'bootstrap', '~> 4.0.0.beta'
 gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
@@ -26,10 +26,6 @@ gem 'unf'
 
 gem 'jquery-rails'
 gem 'lodash-rails'
-
-source 'https://rails-assets.org' do
-  gem 'rails-assets-tether', '>= 1.3.3'
-end
 
 # Devise for authentication, cancancan for authorization
 gem 'devise'

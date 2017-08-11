@@ -31,6 +31,7 @@ class Intercode::Import::Intercode1::Importer
         "php_timezone" => date_default_timezone_get(),
         "show_flyer" => NAV_SHOW_FLYER,
         "show_program" => NAV_SHOW_PROGRAM,
+        "thursday_enabled" => THURSDAY_ENABLED,
       );
 
       $price_schedule = array();
@@ -90,6 +91,7 @@ class Intercode::Import::Intercode1::Importer
     @text_dir = text_dir
     @show_flyer = vars['show_flyer']
     @show_program = vars['show_program']
+    @thursday_enabled = (vars['thursday_enabled'] == 1)
   end
 
   def build_password_hashes
@@ -139,7 +141,15 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def con_table
-    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain, @friday_date, @constants_file)
+    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(
+      connection,
+      @con_name,
+      @con_domain,
+      @friday_date,
+      @constants_file,
+      "US/Eastern",
+      @thursday_enabled
+    )
   end
 
   def price_schedule_table

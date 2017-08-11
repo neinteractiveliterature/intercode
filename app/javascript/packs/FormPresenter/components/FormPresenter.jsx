@@ -46,7 +46,7 @@ function renderSection(convention, form, section) {
 
       {renderProgress(form, section)}
 
-      <div className="card-block">
+      <div className="card-body">
         {items}
       </div>
     </div>

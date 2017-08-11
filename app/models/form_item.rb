@@ -23,6 +23,7 @@ class FormItem < ApplicationRecord
       identifier: :required,
       caption: :required,
       timeblocks: :required,
+      omit_timeblocks: :optional,
     },
     timespan: {
       identifier: :required,
