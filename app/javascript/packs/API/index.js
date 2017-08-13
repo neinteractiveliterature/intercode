@@ -8,4 +8,8 @@ export default {
   fetchConvention(baseUrl) {
     return jsonFetch(baseUrl, { method: 'GET', expectedStatuses: [200] });
   },
+
+  fetchFormResponse(baseUrl) {
+    return jsonFetch(baseUrl, { method: 'GET', expectedStatuses: [200] });
+  }
 };

@@ -19,6 +19,12 @@ export default class RegistrationPolicy {
     this.buckets = buckets || new List();
   }
 
+  getAPIRepresentation(): RegistrationPolicyAPIRepresentation {
+    return {
+      buckets: this.buckets.map(bucket => bucket.getAPIRepresentation()).toJS(),
+    };
+  }
+
   setAttributesFromAPI(json: RegistrationPolicyAPIRepresentation): RegistrationPolicy {
     let returnRecord = this;
 

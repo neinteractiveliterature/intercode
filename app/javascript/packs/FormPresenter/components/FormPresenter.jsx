@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Models/Form';
 import FormItem from './FormItem';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function getCurrentSection(form, currentSectionId) {
   if (!currentSectionId) {
-    return form.getSections().get(5);
+    return form.getSections().get(0);
   }
   return form.getSection(currentSectionId);
 }
@@ -33,9 +34,15 @@ function renderProgress(form, section) {
   );
 }
 
-function renderSection(convention, form, section) {
+function renderSection(convention, form, section, response, responseValueChanged) {
   const items = form.getItemsInSection(section.id).map(item => (
-    <FormItem key={item.id} formItem={item} convention={convention} />
+    <FormItem
+      key={item.id}
+      formItem={item}
+      convention={convention}
+      value={response[item.identifier]}
+      onChange={responseValueChanged}
+    />
   ));
 
   return (
@@ -77,9 +84,21 @@ function renderContinueButton(currentSectionIndex, sections, onClick) {
   );
 }
 
-const FormPresenter = ({ convention, form, currentSectionId, previousSection, nextSection }) => {
-  if (!form || !convention) {
-    return <div />;
+const FormPresenter = ({
+  convention,
+  form,
+  currentSectionId,
+  previousSection,
+  nextSection,
+  response,
+  responseValueChanged,
+}) => {
+  if (!form || !convention || !response) {
+    return (
+      <div>
+        <LoadingIndicator size={4} />
+      </div>
+    );
   }
 
   const currentSection = getCurrentSection(form, currentSectionId);
@@ -88,7 +107,7 @@ const FormPresenter = ({ convention, form, currentSectionId, previousSection, ne
 
   return (
     <div className="card mb-4">
-      {renderSection(convention, form, currentSection)}
+      {renderSection(convention, form, currentSection, response, responseValueChanged)}
 
       <div className="card-footer d-flex justify-content-between">
         <div>{renderBackButton(currentSectionIndex, previousSection)}</div>
@@ -105,6 +124,8 @@ FormPresenter.propTypes = {
     timezone_name: PropTypes.string.isRequired,
   }),
   form: Form.propType,
+  response: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  responseValueChanged: PropTypes.func,
   currentSectionId: PropTypes.number,
   previousSection: PropTypes.func.isRequired,
   nextSection: PropTypes.func.isRequired,

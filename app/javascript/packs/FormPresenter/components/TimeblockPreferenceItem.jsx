@@ -4,23 +4,15 @@ import React from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
-
-type FuzzyTime = {
-  hour?: number,
-  minute?: number,
-  second?: number,
-};
-
-type Timeblock = {
-  label: string,
-  start: FuzzyTime,
-  finish: FuzzyTime,
-};
-
-type TimeblockOmission = {
-  label: string,
-  date: string,
-};
+import TimeblockTypes from '../TimeblockTypes';
+import type {
+  Timeblock,
+  TimeblockOmission,
+  TimeblockPreference,
+  TimeblockPreferenceAPIRepresentation,
+  TimeblockWithDate
+} from '../TimeblockTypes';
+import TimeblockPreferenceCell from './TimeblockPreferenceCell';
 
 type Props = {
   formItem: {
@@ -33,7 +25,15 @@ type Props = {
     ends_at: string,
     timezone_name: string,
   },
+  value?: Array<TimeblockPreferenceAPIRepresentation>,
+  onChange: (any) => undefined,
 };
+
+type State = {
+  preferences: Array<TimeblockWithDate>,
+};
+
+const { preferencesMatch } = TimeblockTypes;
 
 function describeTimeblock(timeblock: Timeblock) {
   const start = moment().startOf('day').set(timeblock.start);
@@ -43,12 +43,68 @@ function describeTimeblock(timeblock: Timeblock) {
 }
 
 class TimeblockPreferenceItem extends React.Component {
+  static defaultProps = {
+    value: [],
+  };
+
   constructor(props: Props) {
     super(props);
     enableUniqueIds(this);
+
+    this.state = {
+      preferences: (this.props.value || []).map(apiRepresentation => ({
+        start: moment(apiRepresentation.start),
+        finish: moment(apiRepresentation.finish),
+        label: apiRepresentation.label,
+      })),
+    };
   }
 
+  state: State
   props: Props
+
+  preferenceDidChange = (newOrdinality: string, hypotheticalPreference: TimeblockPreference) => {
+    const existingPreference = this.state.preferences.find(
+      p => preferencesMatch(p, hypotheticalPreference),
+    );
+
+    if (newOrdinality === '') {
+      this.setState({
+        preferences: this.state.preferences.filter(
+          p => (!(preferencesMatch(p, hypotheticalPreference))),
+        ),
+      }, this.preferencesDidChange);
+    } else if (existingPreference) {
+      this.setState({
+        preferences: this.state.preferences.map((p) => {
+          if (preferencesMatch(p, hypotheticalPreference)) {
+            return { ...p, ordinality: newOrdinality };
+          }
+
+          return p;
+        }),
+      }, this.preferencesDidChange);
+    } else {
+      this.setState({
+        preferences: [
+          ...this.state.preferences,
+          {
+            ...hypotheticalPreference,
+            ordinality: newOrdinality,
+          },
+        ],
+      }, this.preferencesDidChange);
+    }
+  }
+
+  preferencesDidChange = () => {
+    this.props.onChange(this.state.preferences.map(preference => ({
+      start: preference.start.toISOString(),
+      finish: preference.finish.toISOString(),
+      label: preference.label,
+      ordinality: preference.ordinality,
+    })));
+  }
 
   render = () => {
     const startsAt = moment(this.props.convention.starts_at)
@@ -76,37 +132,24 @@ class TimeblockPreferenceItem extends React.Component {
           return (omission.label === timeblock.label && omissionDate.isSame(dayStart));
         });
 
-        if (timeblockOutOfBounds || timeblockOmitted) {
-          return { timeblock, dayStart, contents: null };
-        }
-
-        const selector = (
-          <select className="form-control">
-            <option value="">Don&apos;t care</option>
-            <option value="1">1st choice</option>
-            <option value="2">2nd choice</option>
-            <option value="3">3rd choice</option>
-            <option value="X">Prefer not</option>
-          </select>
-        );
-
-        return { timeblock, dayStart, contents: selector };
+        return {
+          timeblock,
+          dayStart,
+          start: timeblockStart,
+          finish: timeblockFinish,
+          render: !(timeblockOutOfBounds || timeblockOmitted)
+        };
       });
-
-      if (cellContents.every(contents => contents.contents === null)) {
-        return { dayStart, cells: cellContents.map(() => null) };
-      }
 
       return {
         dayStart,
-        cells: cellContents.map(contents => (
-          <td key={contents.dayStart.format('dddd')}>{contents.contents}</td>
-        )),
+        cells: cellContents,
+        render: cellContents.some(contents => contents.render),
       };
     });
 
     const headers = dayStarts.map((dayStart, i) => {
-      if (columns[i].cells.every(cell => !cell)) {
+      if (!columns[i].render) {
         return null;
       }
 
@@ -118,11 +161,32 @@ class TimeblockPreferenceItem extends React.Component {
     });
 
     const rows = this.props.formItem.timeblocks.map((timeblock, i) => {
-      const cells = columns.map(column => column.cells[i]);
+      const cellContents = dayStarts.map((dayStart, j) => {
+        if (!columns[j].render) {
+          return null;
+        }
 
-      if (cells.every(cell => !cell)) {
+        return columns[j].cells[i];
+      }).filter(cellContent => cellContent);
+
+      if (cellContents.every(cellContent => !cellContent.render)) {
         return null;
       }
+
+      const cells = cellContents.map(({ dayStart, render, start, finish }) => {
+        return (
+          <TimeblockPreferenceCell
+            key={dayStart.format('dddd')}
+            render={render}
+            timeblock={timeblock}
+            existingPreferences={this.state.preferences}
+            dayStart={dayStart}
+            start={start}
+            finish={finish}
+            onChange={this.preferenceDidChange}
+          />
+        );
+      });
 
       return (
         <tr key={timeblock.label}>

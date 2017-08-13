@@ -10,6 +10,7 @@ class FormPresenterApp extends React.Component {
   static propTypes = {
     formUrl: PropTypes.string.isRequired,
     conventionUrl: PropTypes.string.isRequired,
+    responseUrl: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -17,11 +18,13 @@ class FormPresenterApp extends React.Component {
     this.store = buildReduxStore(reducer);
     this.store.dispatch(actions.setConventionUrl(this.props.conventionUrl));
     this.store.dispatch(actions.setFormUrl(this.props.formUrl));
+    this.store.dispatch(actions.setResponseUrl(this.props.responseUrl));
   }
 
   componentDidMount = () => {
     this.store.dispatch(actions.fetchFormContent());
     this.store.dispatch(actions.fetchConvention());
+    this.store.dispatch(actions.fetchResponse());
   }
 
   render = () => (

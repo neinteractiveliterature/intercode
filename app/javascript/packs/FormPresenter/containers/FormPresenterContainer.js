@@ -6,9 +6,11 @@ const mapStateToProps = state => ({
   currentSectionId: state.currentSectionId,
   form: state.form,
   convention: state.convention,
+  response: state.response,
 });
 
 const mapDispatchToProps = dispatch => ({
+  responseValueChanged: (field, value) => dispatch(actions.responseValueChanged(field, value)),
   previousSection: () => dispatch(actions.previousSection()),
   nextSection: () => dispatch(actions.nextSection()),
 });

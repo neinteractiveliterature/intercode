@@ -2,12 +2,14 @@
 
 import React from 'react';
 import { enableUniqueIds } from 'react-html-id';
-import RegistrationPolicy from '../../Models/RegistrationPolicy';
+import RegistrationPolicy, { type RegistrationPolicyAPIRepresentation } from '../../Models/RegistrationPolicy';
 import RegistrationPolicyEditor from '../../BuiltInFormControls/RegistrationPolicyEditor';
 import type { RegistrationPolicyPreset } from '../../BuiltInFormControls/RegistrationPolicyEditor';
 
 type Props = {
   formItem: {},
+  value?: RegistrationPolicyAPIRepresentation,
+  onChange: (any) => undefined,
 };
 
 type State = {
@@ -83,7 +85,10 @@ class RegistrationPolicyItem extends React.Component {
   props: Props
 
   registrationPolicyChanged = (newRegistrationPolicy: RegistrationPolicy) => {
-    this.setState({ registrationPolicy: newRegistrationPolicy });
+    this.setState(
+      { registrationPolicy: newRegistrationPolicy },
+      () => { this.props.onChange(newRegistrationPolicy.getAPIRepresentation()); },
+    );
   }
 
   render = () => (
