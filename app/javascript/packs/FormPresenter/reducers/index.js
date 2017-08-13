@@ -4,6 +4,8 @@ import conventionReducer from './conventionReducer';
 import conventionUrlReducer from './conventionUrlReducer';
 import formReducer from './formReducer';
 import formUrlReducer from './formUrlReducer';
+import responseReducer from './responseReducer';
+import responseUrlReducer from './responseUrlReducer';
 import sectionTraversalReducer from './sectionTraversalReducer';
 
 export default reduceReducers(
@@ -13,6 +15,8 @@ export default reduceReducers(
     conventionUrl: conventionUrlReducer,
     form: formReducer,
     formUrl: formUrlReducer,
+    response: responseReducer,
+    responseUrl: responseUrlReducer,
   }),
 
   sectionTraversalReducer,

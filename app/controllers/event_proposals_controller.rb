@@ -20,6 +20,15 @@ class EventProposalsController < BaseControllers::VirtualHost
     end
   end
 
+  def show
+    respond_with @event_proposal do |format|
+      format.json do
+        presenter = FormResponsePresenter.new(convention.event_proposal_form, @event_proposal)
+        render json: presenter.as_json
+      end
+    end
+  end
+
   def edit
   end
 

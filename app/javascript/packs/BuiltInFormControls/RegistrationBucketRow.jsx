@@ -115,7 +115,7 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  renderLimits = (): React.Element | null => {
+  renderLimits = (): React.Element<*> | null => {
     const bucket = this.props.registrationBucket;
 
     if (!bucket.get('slotsLimited')) {

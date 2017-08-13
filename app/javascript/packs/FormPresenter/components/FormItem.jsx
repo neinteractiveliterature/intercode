@@ -2,7 +2,7 @@
 
 import React from 'react';
 import FreeTextItem from './FreeTextItem';
-import MultipleChoiceItem from './MultipleChoiceItem';
+import MultipleChoiceItem, { type MultipleChoiceFormItem } from './MultipleChoiceItem';
 import RegistrationPolicyItem from './RegistrationPolicyItem';
 import StaticTextItem from './StaticTextItem';
 import TimeblockPreferenceItem from './TimeblockPreferenceItem';
@@ -13,6 +13,8 @@ type Props = {
     item_type: string,
     identifier?: string,
   },
+  value: any,
+  onChange: (string, any) => undefined,
   convention: {
     starts_at: string,
     ends_at: string,
@@ -20,20 +22,25 @@ type Props = {
   },
 };
 
-const FormItem = ({ formItem, convention }: Props) => {
+const FormItem = ({ formItem, convention, value, onChange }: Props) => {
+  const valueDidChange = (newValue) => {
+    onChange(formItem.identifier, newValue);
+  };
+  const commonProps = { formItem, value, onChange: valueDidChange };
+
   switch (formItem.item_type) {
     case 'free_text':
-      return <FreeTextItem formItem={formItem} />;
+      return <FreeTextItem {...commonProps} />;
     case 'multiple_choice':
-      return <MultipleChoiceItem formItem={formItem} />;
+      return <MultipleChoiceItem {...commonProps} />;
     case 'registration_policy':
-      return <RegistrationPolicyItem formItem={formItem} />;
+      return <RegistrationPolicyItem {...commonProps} />;
     case 'static_text':
-      return <StaticTextItem formItem={formItem} />;
+      return <StaticTextItem {...commonProps} />;
     case 'timeblock_preference':
-      return <TimeblockPreferenceItem formItem={formItem} convention={convention} />;
+      return <TimeblockPreferenceItem {...commonProps} convention={convention} />;
     case 'timespan':
-      return <TimespanItem formItem={formItem} />;
+      return <TimespanItem {...commonProps} />;
     default:
       return <div><code>{formItem.identifier}</code></div>;
   }
