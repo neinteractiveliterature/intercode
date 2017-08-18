@@ -12,7 +12,7 @@ class EventProposal < ApplicationRecord
     :can_play_concurrently
 
   belongs_to :convention
-  belongs_to :owner, class_name: 'UserConProfile'
+  belongs_to :owner, class_name: 'UserConProfile', optional: true
   belongs_to :event, optional: true
 
   STATUSES.each do |status|

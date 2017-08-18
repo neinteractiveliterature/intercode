@@ -1,6 +1,7 @@
 module Intercode::Import::Intercode1::Tables
   extend ActiveSupport::Autoload
 
+  autoload :Bids
   autoload :Bios
   autoload :Con
   autoload :Events
