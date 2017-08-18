@@ -33,6 +33,7 @@ module Intercode
       autoload :NavigationItems
       autoload :Php
       autoload :ProposalForm
+      autoload :RegistrationPolicyFactory
       autoload :StaffPositionImporter
       autoload :Table
       autoload :Tables
