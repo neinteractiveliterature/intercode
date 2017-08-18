@@ -5,15 +5,18 @@ class FormItem < ApplicationRecord
       caption: :required,
       lines: :required,
       free_text_type: :optional,
+      required: :optional,
     },
     multiple_choice: {
       identifier: :required,
       caption: :required,
       style: :required,
       choices: :required,
+      required: :optional,
     },
     registration_policy: {
       identifier: :required,
+      required: :optional,
     },
     static_text: {
       content: :required,
@@ -24,10 +27,12 @@ class FormItem < ApplicationRecord
       caption: :required,
       timeblocks: :required,
       omit_timeblocks: :optional,
+      required: :optional,
     },
     timespan: {
       identifier: :required,
       caption: :required,
+      required: :optional,
     }
   }.deep_stringify_keys
 
