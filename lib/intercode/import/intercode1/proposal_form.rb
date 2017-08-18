@@ -53,13 +53,15 @@ class Intercode::Import::Intercode1::ProposalForm
             item_type: 'free_text',
             identifier: 'title',
             caption: 'Event Title',
-            lines: 1
+            lines: 1,
+            required: true
           },
           {
             item_type: 'free_text',
             identifier: 'authors',
             caption: 'Author(s)',
-            lines: 1
+            lines: 1,
+            required: true
           },
           {
             item_type: 'free_text',
@@ -78,17 +80,20 @@ class Intercode::Import::Intercode1::ProposalForm
             identifier: 'email',
             caption: 'Email for Event Inquiries',
             lines: 1,
-            free_text_type: 'email'
+            free_text_type: 'email',
+            required: true
           },
           {
             item_type: 'timespan',
             identifier: 'length_seconds',
-            caption: 'Event Length'
+            caption: 'Event Length',
+            required: true
           },
           {
             item_type: 'free_text',
             identifier: 'description',
             lines: 15,
+            required: true,
             caption: <<-MARKDOWN
   **Description** for use on the {{ convention.name }} website. This information will displayed on
   the page users see for the game. The description should be at least a couple of paragraphs, but can
@@ -115,6 +120,7 @@ class Intercode::Import::Intercode1::ProposalForm
             item_type: 'free_text',
             identifier: 'short_blurb',
             lines: 4,
+            required: true,
             caption: <<-MARKDOWN
   A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the
   convention program. Information in the Short Blurb must also be present in the (full) description!
@@ -127,6 +133,7 @@ class Intercode::Import::Intercode1::ProposalForm
             item_type: 'free_text',
             identifier: 'player_communications',
             lines: 4,
+            required: true,
             caption: <<-MARKDOWN
   **Player Communications**
 
@@ -174,6 +181,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'registration_policy',
             identifier: 'registration_policy',
+            required: true,
           }
         ]
       },
@@ -189,7 +197,8 @@ class Intercode::Import::Intercode1::ProposalForm
             item_type: 'free_text',
             identifier: 'genre',
             lines: 1,
-            caption: 'Genre:'
+            caption: 'Genre:',
+            required: true,
           },
           {
             item_type: 'multiple_choice',
