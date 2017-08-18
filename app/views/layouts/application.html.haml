@@ -28,7 +28,7 @@
                 .dropdown-menu
                   = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
                   = link_to "List of Events", events_path, class: 'dropdown-item'
-                  = link_to "Propose an Event", new_event_proposal_path, class: 'dropdown-item'
+                  = link_to "Propose an Event", event_proposals_path, class: 'dropdown-item'
               = CadmusNavbar::Renderers::Bootstrap4.new(request: request, url_for_page: ->(page) { page_url(page) }, root_items: convention.cms_navigation_items.root).render_navigation_items
               - if can? :manage, convention.user_con_profiles.new
                 %li.nav-item.dropdown{:role => "presentation"}

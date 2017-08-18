@@ -34,7 +34,7 @@ function renderProgress(form, section) {
   );
 }
 
-function renderSection(convention, form, section, response, responseValueChanged) {
+function renderSection(convention, form, section, response, responseValueChanged, isUpdatingResponse) {
   const items = form.getItemsInSection(section.id).map(item => (
     <FormItem
       key={item.id}
@@ -45,10 +45,18 @@ function renderSection(convention, form, section, response, responseValueChanged
     />
   ));
 
+  let loadingIndicator = null;
+  if (isUpdatingResponse) {
+    loadingIndicator = <LoadingIndicator />;
+  }
+
   return (
     <div>
       <div className="card-header">
-        <h4 className="mb-0">{section.title}</h4>
+        <div className="d-flex justify-content-between">
+          <h4 className="mb-0">{section.title}</h4>
+          {loadingIndicator}
+        </div>
       </div>
 
       {renderProgress(form, section)}
@@ -72,13 +80,13 @@ function renderBackButton(currentSectionIndex, onClick) {
   );
 }
 
-function renderContinueButton(currentSectionIndex, sections, onClick) {
+function renderContinueButton(currentSectionIndex, sections, onClick, disabled) {
   if (currentSectionIndex >= sections.size - 1) {
     return null;
   }
 
   return (
-    <button className="btn btn-primary" onClick={onClick}>
+    <button className="btn btn-primary" onClick={onClick} disabled={disabled}>
       Continue <i className="fa fa-chevron-right" />
     </button>
   );
@@ -92,6 +100,7 @@ const FormPresenter = ({
   nextSection,
   response,
   responseValueChanged,
+  isUpdatingResponse,
 }) => {
   if (!form || !convention || !response) {
     return (
@@ -105,13 +114,30 @@ const FormPresenter = ({
   const sections = form.getSections();
   const currentSectionIndex = sections.indexOf(currentSection);
 
+  const disableContinue = form.getItemsInSection(currentSection.id).some(item => (
+    !item.valueIsComplete(response[item.identifier])
+  ));
+
   return (
     <div className="card mb-4">
-      {renderSection(convention, form, currentSection, response, responseValueChanged)}
+      {
+        renderSection(
+          convention,
+          form,
+          currentSection,
+          response,
+          responseValueChanged,
+          isUpdatingResponse,
+        )
+      }
 
       <div className="card-footer d-flex justify-content-between">
         <div>{renderBackButton(currentSectionIndex, previousSection)}</div>
-        <div>{renderContinueButton(currentSectionIndex, sections, nextSection)}</div>
+        <div>
+          {
+            renderContinueButton(currentSectionIndex, sections, nextSection, disableContinue)
+          }
+        </div>
       </div>
     </div>
   );
@@ -126,6 +152,7 @@ FormPresenter.propTypes = {
   form: Form.propType,
   response: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   responseValueChanged: PropTypes.func,
+  isUpdatingResponse: PropTypes.bool,
   currentSectionId: PropTypes.number,
   previousSection: PropTypes.func.isRequired,
   nextSection: PropTypes.func.isRequired,

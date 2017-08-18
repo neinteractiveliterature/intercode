@@ -82,7 +82,7 @@ class TimespanItem extends React.Component {
           htmlFor={inputId}
           className="form-item-label"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: this.props.formItem.caption }}
+          dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
         />
         <div className="d-flex">
           <input

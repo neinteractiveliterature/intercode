@@ -120,14 +120,14 @@ class TimeblockPreferenceItem extends React.Component {
     }
 
     const columns = dayStarts.map((dayStart) => {
-      const cellContents = this.props.formItem.timeblocks.map((timeblock) => {
+      const cellContents = this.props.formItem.properties.timeblocks.map((timeblock) => {
         const timeblockStart = moment(dayStart).set(timeblock.start);
         const timeblockFinish = moment(dayStart).set(timeblock.finish);
 
         const timeblockOutOfBounds = (
           timeblockFinish.isSameOrBefore(startsAt) || timeblockStart.isSameOrAfter(endsAt)
         );
-        const timeblockOmitted = this.props.formItem.omit_timeblocks.some((omission) => {
+        const timeblockOmitted = this.props.formItem.properties.omit_timeblocks.some((omission) => {
           const omissionDate = moment.tz(omission.date, this.props.convention.timezone_name).startOf('day');
           return (omission.label === timeblock.label && omissionDate.isSame(dayStart));
         });
@@ -160,7 +160,7 @@ class TimeblockPreferenceItem extends React.Component {
       );
     });
 
-    const rows = this.props.formItem.timeblocks.map((timeblock, i) => {
+    const rows = this.props.formItem.properties.timeblocks.map((timeblock, i) => {
       const cellContents = dayStarts.map((dayStart, j) => {
         if (!columns[j].render) {
           return null;
@@ -205,7 +205,7 @@ class TimeblockPreferenceItem extends React.Component {
         <legend
           className="col-form-legend"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: this.props.formItem.caption }}
+          dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
         />
         <table className="table">
           <thead>

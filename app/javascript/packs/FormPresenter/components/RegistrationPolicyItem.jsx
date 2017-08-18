@@ -77,7 +77,7 @@ class RegistrationPolicyItem extends React.Component {
     enableUniqueIds(this);
 
     this.state = {
-      registrationPolicy: new RegistrationPolicy(),
+      registrationPolicy: RegistrationPolicy.fromAPI(this.props.value),
     };
   }
 

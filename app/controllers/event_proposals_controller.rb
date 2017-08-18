@@ -2,7 +2,7 @@ class EventProposalsController < BaseControllers::VirtualHost
   load_and_authorize_resource through: :convention
   respond_to :html, :json
 
-  def new
+  def index
   end
 
   def create
@@ -33,7 +33,9 @@ class EventProposalsController < BaseControllers::VirtualHost
   end
 
   def update
+    @event_proposal.assign_form_response_attributes(params[:form_response])
     @event_proposal.save
+
     respond_with @event_proposal
   end
 

@@ -28,7 +28,7 @@ const FormItem = ({ formItem, convention, value, onChange }: Props) => {
   };
   const commonProps = { formItem, value, onChange: valueDidChange };
 
-  switch (formItem.item_type) {
+  switch (formItem.itemType) {
     case 'free_text':
       return <FreeTextItem {...commonProps} />;
     case 'multiple_choice':
