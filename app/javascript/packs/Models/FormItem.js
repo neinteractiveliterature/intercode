@@ -91,6 +91,8 @@ export default class FormItem extends Record(defaultProperties) {
       case 'multiple_choice':
         if (typeof value === 'string') {
           return value.trim() !== '';
+        } else if (typeof value === 'boolean') {
+          return true;
         }
 
         return false;
