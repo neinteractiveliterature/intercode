@@ -1,1 +1,2 @@
-= react_component 'FormPresenter', formUrl: form_url(convention.event_proposal_form), conventionUrl: convention_url, responseUrl: event_proposal_url(@event_proposal)
+- authenticity_token = form_authenticity_token(form_options: { action: event_proposal_path(@event_proposal), method: 'PATCH' })
+= react_component 'FormPresenter', formUrl: form_url(convention.event_proposal_form), conventionUrl: convention_url, responseUrl: event_proposal_url(@event_proposal), authenticityToken: authenticity_token

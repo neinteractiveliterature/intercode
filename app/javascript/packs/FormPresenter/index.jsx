@@ -11,6 +11,7 @@ class FormPresenterApp extends React.Component {
     formUrl: PropTypes.string.isRequired,
     conventionUrl: PropTypes.string.isRequired,
     responseUrl: PropTypes.string.isRequired,
+    authenticityToken: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -19,6 +20,7 @@ class FormPresenterApp extends React.Component {
     this.store.dispatch(actions.setConventionUrl(this.props.conventionUrl));
     this.store.dispatch(actions.setFormUrl(this.props.formUrl));
     this.store.dispatch(actions.setResponseUrl(this.props.responseUrl));
+    this.store.dispatch(actions.setAuthenticityToken(this.props.authenticityToken));
   }
 
   componentDidMount = () => {

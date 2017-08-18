@@ -3,15 +3,7 @@
 import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import memoize from 'memoized-class-decorator';
-
-type FormItem = {
-  id: number,
-  form_section_id: number,
-  position: number,
-  item_type: string,
-  identifier?: string,
-  properties: {},
-};
+import FormItem from './FormItem';
 
 type FormSection = {
   id: number,
@@ -29,7 +21,7 @@ export default class Form {
   static fromApiResponse(body) {
     const { form_sections: formSections, form_items: formItems, ...properties } = body;
     const formSectionsById = Map((formSections || []).map(section => [section.id, section]));
-    const formItemsById = Map(formItems.map(item => [item.id, item]));
+    const formItemsById = Map(formItems.map(item => [item.id, FormItem.fromAPI(item)]));
 
     return new Form(Map(properties), formSectionsById, formItemsById);
   }
@@ -63,7 +55,7 @@ export default class Form {
 
   getItemsInSection(sectionId: number) {
     return this.formItems.valueSeq().filter(
-      item => item.form_section_id === sectionId,
+      item => item.formSectionId === sectionId,
     ).sortBy(item => item.position);
   }
 

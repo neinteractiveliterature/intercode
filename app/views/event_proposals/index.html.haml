@@ -1,0 +1,12 @@
+%h1 Propose an Event for #{convention.name}
+
+- if @event_proposals.draft.any?
+  %section
+    %h2 My proposals in progress
+
+    %ul
+      - @event_proposals.draft.each do |event_proposal|
+        %li= link_to event_proposal.title || 'Untitled', edit_event_proposal_path(event_proposal)
+
+= bootstrap_form_for convention.event_proposals.new do |f|
+  = f.submit "Start a new event proposal", class: 'btn btn-primary'

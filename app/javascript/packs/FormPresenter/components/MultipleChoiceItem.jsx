@@ -43,7 +43,7 @@ class MultipleChoiceItem extends React.Component {
         className={
           classNames(
             'form-check',
-            { 'form-check-inline': this.props.formItem.style === 'radio_horizontal' },
+            { 'form-check-inline': this.props.formItem.properties.style === 'radio_horizontal' },
           )
         }
         key={choice.value}
@@ -64,7 +64,7 @@ class MultipleChoiceItem extends React.Component {
   }
 
   render = () => {
-    const choices = this.props.formItem.choices.map(
+    const choices = this.props.formItem.properties.choices.map(
       choice => this.renderChoice(choice),
     );
 
@@ -73,7 +73,7 @@ class MultipleChoiceItem extends React.Component {
         <legend
           className="col-form-legend"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: this.props.formItem.caption }}
+          dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
         />
         {choices}
       </fieldset>

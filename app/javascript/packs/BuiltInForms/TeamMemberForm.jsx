@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
+import { ConfirmModal } from 'react-bootstrap4-modal';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
-import ModalConfirm from '../ModalConfirm';
 import ResourceForm from './ResourceForm';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { performRequest } from '../HTTPUtils';
@@ -154,14 +154,14 @@ class TeamMemberForm extends React.Component {
       {this.renderUserConProfileSelect()}
       {this.renderCheckboxes()}
 
-      <ModalConfirm
+      <ConfirmModal
         title="Confirmation"
-        onClickOk={this.deleteConfirmed}
-        onClickCancel={this.deleteCanceled}
+        onOK={this.deleteConfirmed}
+        onCancel={this.deleteCanceled}
         visible={this.state.confirmingDelete}
       >
         {`Are you sure you want to remove this ${this.props.teamMemberName}?`}
-      </ModalConfirm>
+      </ConfirmModal>
     </ResourceForm>
   )
 }

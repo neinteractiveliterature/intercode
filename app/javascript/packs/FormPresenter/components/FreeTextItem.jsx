@@ -32,7 +32,7 @@ class FreeTextItem extends React.Component {
       htmlFor={domId}
       className="form-item-label"
       // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: formItem.caption }}
+      dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}
     />
   )
 
@@ -41,7 +41,7 @@ class FreeTextItem extends React.Component {
       return (
         <input
           id={domId}
-          type={formItem.free_text_type || 'text'}
+          type={formItem.properties.free_text_type || 'text'}
           className="form-control"
           value={this.props.value || ''}
           onChange={this.valueDidChange}
@@ -51,7 +51,7 @@ class FreeTextItem extends React.Component {
     return (
       <textarea
         id={domId}
-        rows={formItem.lines}
+        rows={formItem.properties.lines}
         className="form-control"
         value={this.props.value || ''}
         onChange={this.valueDidChange}
