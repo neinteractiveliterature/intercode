@@ -58,10 +58,12 @@ class Ability
     can :manage, StaffPosition, convention_id: staff_con_ids
     can :manage, TeamMember, event: { convention_id: staff_con_ids }
     can :manage, Form, convention_id: staff_con_ids
+    can :manage, EventProposal, convention_id: staff_con_ids
   end
 
   def add_team_member_abilities
     can :manage, Event, id: team_member_event_ids
+    can :manage, EventProposal, event_id: team_member_event_ids
     can :manage, Run, event_id: team_member_event_ids
     can :manage, Signup, run: { event_id: team_member_event_ids }
     can :manage, TeamMember, event_id: team_member_event_ids
