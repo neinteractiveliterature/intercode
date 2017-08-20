@@ -134,6 +134,7 @@ class Intercode::Import::Intercode1::Importer
     users_table.import!
     staff_position_importer.import!
     bids_table.import!
+    bid_times_table.import!
     bios_table.import!
     rooms_table.import!
     runs_table.import!
@@ -188,6 +189,16 @@ class Intercode::Import::Intercode1::Importer
     return unless events_id_map && user_con_profiles_id_map
 
     @bids_table ||= Intercode::Import::Intercode1::Tables::Bids.new(connection, con, events_id_map, user_con_profiles_id_map)
+  end
+
+  def event_proposals_id_map
+    @event_proposals_id_map ||= bids_table.id_map
+  end
+
+  def bid_times_table
+    return unless event_proposals_id_map
+
+    @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(connection, con, event_proposals_id_map)
   end
 
   def runs_table
