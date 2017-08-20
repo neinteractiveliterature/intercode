@@ -40,9 +40,26 @@ class RegistrationPolicyEditor extends React.Component {
     super(props);
     enableUniqueIds(this);
 
+    let initialPreset;
+    if (Array.isArray(this.props.presets)) {
+      initialPreset = this.props.presets.find(preset => (
+        preset.policy.buckets.every(
+          bucket => (
+            typeof bucket.key === 'string' &&
+            this.props.registrationPolicy.getBucket(bucket.key)
+          ),
+        ) &&
+        this.props.registrationPolicy.buckets.every(
+          bucket => preset.policy.buckets.find(
+            presetBucket => presetBucket.key === bucket.key,
+          ),
+        )
+      ));
+    }
+
     this.state = {
       custom: false,
-      preset: undefined,
+      preset: initialPreset,
     };
   }
 
