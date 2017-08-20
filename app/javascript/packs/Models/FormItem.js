@@ -80,6 +80,10 @@ export default class FormItem extends Record(defaultProperties) {
   }
 
   valueIsComplete(value: any): boolean {
+    if (!this.properties.required) {
+      return true;
+    }
+
     switch (this.itemType) {
       case 'free_text':
         if (typeof value === 'string') {

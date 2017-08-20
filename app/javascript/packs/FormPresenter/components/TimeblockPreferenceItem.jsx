@@ -4,13 +4,14 @@ import React from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
+import RequiredIndicator from './RequiredIndicator';
 import TimeblockTypes from '../TimeblockTypes';
 import type {
   Timeblock,
   TimeblockOmission,
   TimeblockPreference,
   TimeblockPreferenceAPIRepresentation,
-  TimeblockWithDate
+  TimeblockWithDate,
 } from '../TimeblockTypes';
 import TimeblockPreferenceCell from './TimeblockPreferenceCell';
 
@@ -202,11 +203,13 @@ class TimeblockPreferenceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend
-          className="col-form-legend"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
-        />
+        <legend className="col-form-legend">
+          <span
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
+          />
+          <RequiredIndicator formItem={this.props.formItem} />
+        </legend>
         <table className="table">
           <thead>
             <tr>
