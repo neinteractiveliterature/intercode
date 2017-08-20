@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { enableUniqueIds } from 'react-html-id';
+import RequiredIndicator from './RequiredIndicator';
 
 type Props = {
   formItem: {
@@ -78,12 +79,13 @@ class TimespanItem extends React.Component {
 
     return (
       <div className="form-group">
-        <label
-          htmlFor={inputId}
-          className="form-item-label"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
-        />
+        <label htmlFor={inputId} className="form-item-label">
+          <span
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
+          />
+          <RequiredIndicator formItem={this.props.formItem} />
+        </label>
         <div className="d-flex">
           <input
             id={inputId}

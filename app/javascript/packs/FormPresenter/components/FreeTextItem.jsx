@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { enableUniqueIds } from 'react-html-id';
+import RequiredIndicator from './RequiredIndicator';
 
 type Props = {
   formItem: {
@@ -27,14 +28,17 @@ class FreeTextItem extends React.Component {
     this.props.onChange(event.target.value);
   }
 
-  renderLabel = (formItem, domId) => (
-    <label
-      htmlFor={domId}
-      className="form-item-label"
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}
-    />
-  )
+  renderLabel = (formItem, domId) => {
+    return (
+      <label htmlFor={domId} className="form-item-label">
+        <span
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}
+        />
+        <RequiredIndicator formItem={formItem} />
+      </label>
+    );
+  }
 
   renderInput = (formItem, domId) => {
     if (formItem.lines === 1) {
