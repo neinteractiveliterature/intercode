@@ -12,6 +12,17 @@ class MarkdownPresenter
     )
   end
 
+  def self.strip_single_p(html)
+    fragment = Nokogiri::HTML::DocumentFragment.parse(html)
+    non_blank_children = fragment.children.reject { |child| child.text? && child.content.blank? }
+
+    if non_blank_children.size == 1 && non_blank_children.first.name == 'p'
+      non_blank_children.first.inner_html
+    else
+      html
+    end
+  end
+
   attr_reader :default_content
 
   def initialize(default_content)

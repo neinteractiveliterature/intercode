@@ -111,9 +111,9 @@ export default class FormItem extends Record(defaultProperties) {
 
             if (
               bucket.slotsLimited && !(
-                typeof bucket.minimumSlots === 'number' &&
-                typeof bucket.preferredSlots === 'number' &&
-                typeof bucket.totalSlots === 'number'
+                typeof bucket.minimumSlots === 'number' && bucket.minimumSlots >= 0 &&
+                typeof bucket.preferredSlots === 'number' && bucket.preferredSlots >= 0 &&
+                typeof bucket.totalSlots === 'number' && bucket.totalSlots >= 0
               )
             ) {
               return false;

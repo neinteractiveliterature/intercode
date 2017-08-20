@@ -27,7 +27,7 @@ type Props = {
     timezone_name: string,
   },
   value?: Array<TimeblockPreferenceAPIRepresentation>,
-  onChange: (any) => undefined,
+  onChange: (any) => void,
 };
 
 type State = {
@@ -57,6 +57,7 @@ class TimeblockPreferenceItem extends React.Component {
         start: moment(apiRepresentation.start),
         finish: moment(apiRepresentation.finish),
         label: apiRepresentation.label,
+        ordinality: apiRepresentation.ordinality,
       })),
     };
   }
@@ -138,7 +139,7 @@ class TimeblockPreferenceItem extends React.Component {
           dayStart,
           start: timeblockStart,
           finish: timeblockFinish,
-          render: !(timeblockOutOfBounds || timeblockOmitted)
+          render: !(timeblockOutOfBounds || timeblockOmitted),
         };
       });
 

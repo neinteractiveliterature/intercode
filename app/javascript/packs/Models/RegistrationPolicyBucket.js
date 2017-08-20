@@ -94,7 +94,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
 
     returnRecord = returnRecord.set('slotsLimited', !!slotsLimited);
 
-    if (returnRecord.get('slotsLimited')) {
+    if (!returnRecord.get('slotsLimited')) {
       returnRecord = returnRecord.set('totalSlots', null);
       returnRecord = returnRecord.set('minimumSlots', null);
       returnRecord = returnRecord.set('preferredSlots', null);

@@ -23,8 +23,8 @@ module Concerns::FormResponse
     new_model_attrs = {}
     new_additional_info = self.additional_info || {}
 
-    attributes.each do |key, value|
-      if form_response_attrs.include?(key.to_s)
+    attributes.stringify_keys.each do |key, value|
+      if form_response_attrs.include?(key)
         new_model_attrs[key] = value
       else
         new_additional_info[key] = value
@@ -32,5 +32,14 @@ module Concerns::FormResponse
     end
 
     assign_attributes(new_model_attrs.merge(additional_info: new_additional_info))
+  end
+
+  def read_form_response_attribute(attribute)
+    if self.class.form_response_attrs.include?(attribute.to_s)
+      public_send(attribute)
+    else
+      return nil unless additional_info
+      additional_info[attribute.to_s]
+    end
   end
 end
