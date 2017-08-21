@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>Proposing an Event for {{ convention.name }}</h3>
+    {% include 'bidding1' %}
+
+    <h3><a name=\"deadlines\">Proposal Deadlines</a></h3>
+    {% include 'ProposalInfo' %}
+
+    <p>{{ convention.name }} actively solicits proposals in the months leading up to the convention. As the convention attendance grows, based on registration numbers, we may need a third round of proposals to fill in the slate of games already accepted for the convention.</p>
+
+    <div class="text-center my-4">
+      <button class="btn btn-primary">
+        I want to BID!
+      </button>
+    </div>
+
+    <p>Please fill out the proposal form with <i>as much information as possible</i>. This is the <i>best</i> way to help us evaluate your proposal quickly!</p>
+
+    {% assign proposal_chair = convention.staff_positions_by_name.game_proposals_chair %}
+
+    <p>If you have <i>any</i> questions, please contact {{ proposal_chair.user_con_profiles[0].name }}, our {{ proposal_chair.name }}, at {{ proposal_chair.email | email_link }}.</p>
+  </div>
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h3>Questions?</h3>
+        <ul class="list-unstyled">
+          <li><a href="{% page_url bidfaq %}#gamekind">What kind of games are you looking for?</a></li>
+          <li><a href="{% page_url bidfaq %}#audience">What kind of players come to {{ convention.name }}?</li>
+          <li><a href="#deadlines">When do I have to get my proposal in?</a></li>
+          <li><a href="{% page_url bidfaq %}#bidFollowup">What happens when I submit my proposal?</a></li>
+          <li><a href="{% page_url bidfaq %}">Other Frequently Asked Questions About Proposals</a></li>
+        </ul>
+
+        <h3>What do I have to know if I become a GM at the con?</h3>
+
+        <p><a href="{% page_url gmpolicies %}">Con GM Policies and Services</a></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        {% include 'bidearly' %}
+      </div>
+    </div>
+  </div>
+</div>
