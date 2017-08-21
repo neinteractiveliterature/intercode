@@ -120,7 +120,8 @@ class Intercode::Import::Intercode1::Importer
     con_table.update_cms_content(@con)
     Intercode::Import::Intercode1.logger.info("Updated CMS content with con data")
 
-    html_content.import!
+    root_html_content.import!
+    text_dir_html_content.import!
     embedded_pdf_pages.each(&:import!)
     navigation_items.import!
     proposal_form.import!
@@ -135,6 +136,7 @@ class Intercode::Import::Intercode1::Importer
     staff_position_importer.import!
     bids_table.import!
     bid_times_table.import!
+    bid_info_table.import!
     bios_table.import!
     rooms_table.import!
     runs_table.import!
@@ -201,6 +203,10 @@ class Intercode::Import::Intercode1::Importer
     @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(connection, con, event_proposals_id_map)
   end
 
+  def bid_info_table
+    @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(connection, con, @constants_file)
+  end
+
   def runs_table
     return unless events_id_map && users_id_map && rooms_id_map
     @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
@@ -231,8 +237,12 @@ class Intercode::Import::Intercode1::Importer
     @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(con, @staff_positions)
   end
 
-  def html_content
-    @html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
+  def root_html_content
+    @root_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, File.dirname(@constants_file), @constants_file)
+  end
+
+  def text_dir_html_content
+    @text_dir_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
   end
 
   def navigation_items
