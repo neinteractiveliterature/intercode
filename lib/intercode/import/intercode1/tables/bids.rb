@@ -71,10 +71,6 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
 
     # OtherGMs: It doesn't seem that we've ever asked this, at least
     # not since we started using source control
-
-
-    # TODO: separate importer for BidTimes
-    # TODO: separate importer for BidInfo
   }
 
   def initialize(connection, convention, events_id_map, user_con_profile_id_map)
