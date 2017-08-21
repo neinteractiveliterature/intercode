@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.3.1'
-gem 'rails', '5.1.1'
+ruby '2.4.1'
+gem 'rails', '5.1.3'
 
 gem 'sqlite3', groups: [:development, :test]
 gem 'mysql2'
