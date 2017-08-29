@@ -29,12 +29,18 @@ class MarkdownPresenter
     @default_content = default_content
   end
 
-  def render(markdown, sanitize_content: true)
+  def render(markdown, sanitize_content: true, strip_single_p: true)
     rendered_html = MarkdownPresenter.markdown_processor.render(markdown || '')
     sanitized_html = sanitize_html(rendered_html, sanitize_content: sanitize_content)
 
     content = sanitized_html.presence || "<p><em>#{default_content}</em></p>"
-    render_liquid(content)
+    rendered_liquid = render_liquid(content)
+
+    if strip_single_p
+      self.class.strip_single_p(rendered_liquid)
+    else
+      rendered_liquid
+    end
   end
 
   private
