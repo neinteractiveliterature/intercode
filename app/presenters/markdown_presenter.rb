@@ -17,7 +17,7 @@ class MarkdownPresenter
     non_blank_children = fragment.children.reject { |child| child.text? && child.content.blank? }
 
     if non_blank_children.size == 1 && non_blank_children.first.name == 'p'
-      non_blank_children.first.inner_html
+      non_blank_children.first.inner_html.html_safe
     else
       html
     end
