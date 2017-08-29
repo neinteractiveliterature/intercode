@@ -6,6 +6,7 @@ class FormItem < ApplicationRecord
       lines: :required,
       free_text_type: :optional,
       required: :optional,
+      format: :optional,
     },
     multiple_choice: {
       identifier: :required,

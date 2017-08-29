@@ -34,6 +34,7 @@ Intercode::Application.routes.draw do
         patch :submit
       end
     end
+    resources :admin_event_proposals
 
     resources :user_con_profiles do
       member do

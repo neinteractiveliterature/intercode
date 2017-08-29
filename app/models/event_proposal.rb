@@ -9,7 +9,8 @@ class EventProposal < ApplicationRecord
     :description,
     :short_blurb,
     :registration_policy,
-    :can_play_concurrently
+    :can_play_concurrently,
+    :timeblock_preferences
 
   belongs_to :convention
   belongs_to :owner, class_name: 'UserConProfile', optional: true
@@ -20,6 +21,7 @@ class EventProposal < ApplicationRecord
   end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
+  serialize :timeblock_preferences, JsonArrayCoderWrapper.new(ActiveModelCoder.new('EventProposal::TimeblockPreference'))
 
   validates :status, inclusion: { in: STATUSES }
 

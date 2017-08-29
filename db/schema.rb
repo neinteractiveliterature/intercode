@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724172123) do
+ActiveRecord::Schema.define(version: 20170829204511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 20170724172123) do
     t.text "additional_info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "timeblock_preferences"
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
@@ -129,6 +130,7 @@ ActiveRecord::Schema.define(version: 20170724172123) do
     t.text "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "admin_description"
     t.index ["form_section_id"], name: "index_form_items_on_form_section_id"
   end
 
