@@ -16,8 +16,8 @@ class Intercode::Import::Intercode1::ProposalForm
       section = form.form_sections.create!(section_attributes.slice(:title))
       (section_attributes[:section_items] || []).each do |item_attributes|
         logger.info "Importing #{item_attributes[:item_type]} item #{item_attributes[:identifier]}"
-        direct_properties = item_attributes.slice(:item_type, :identifier)
-        other_properties = item_attributes.except(:item_type, :identifier)
+        direct_properties = item_attributes.slice(:item_type, :identifier, :admin_description)
+        other_properties = item_attributes.except(:item_type, :identifier, :admin_description)
         section.form_items.create!(direct_properties.merge(properties: other_properties))
       end
     end
@@ -92,8 +92,10 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'description',
+            admin_description: 'Description',
             lines: 15,
             required: true,
+            format: 'markdown',
             caption: <<-MARKDOWN
   **Description** for use on the {{ convention.name }} website. This information will displayed on
   the page users see for the game. The description should be at least a couple of paragraphs, but can
@@ -119,8 +121,10 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'short_blurb',
+            admin_description: 'Short Blurb',
             lines: 4,
             required: true,
+            format: 'markdown',
             caption: <<-MARKDOWN
   A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the
   convention program. Information in the Short Blurb must also be present in the (full) description!
@@ -132,6 +136,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'player_communications',
+            admin_description: 'Player Communications',
             lines: 4,
             required: true,
             caption: <<-MARKDOWN
@@ -181,6 +186,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'registration_policy',
             identifier: 'registration_policy',
+            admin_description: 'Registration Policy',
             required: true,
           }
         ]
@@ -196,6 +202,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'genre',
+            admin_description: 'Genre',
             lines: 1,
             caption: 'Genre:',
             required: true,
@@ -203,6 +210,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'multiple_choice',
             identifier: 'ongoing_campaign',
+            admin_description: 'Ongoing Campaign',
             style: 'radio_horizontal',
             caption: 'Is this game part of an ongoing campaign?',
             choices: [
@@ -213,6 +221,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'run_before',
+            admin_description: 'Run Before?',
             lines: 1,
             caption: <<-MARKDOWN
   {{ convention.name }} is looking for games that are new and games that have run before, either at a
@@ -222,12 +231,14 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'game_system',
+            admin_description: 'Game System',
             lines: 1,
             caption: 'Game System:'
           },
           {
             item_type: 'multiple_choice',
             identifier: 'combat_resolution',
+            admin_description: 'Combat Resolution',
             style: 'radio_vertical',
             caption: 'How combat will be resolved:',
             choices: [
@@ -240,6 +251,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'other_committee_info',
+            admin_description: 'Other Info for the Committee',
             lines: 4,
             caption: <<-MARKDOWN
   Please enter any additional background information here, or any other information you wish to tell
@@ -249,6 +261,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'setup_teardown',
+            admin_description: 'Setup/Teardown',
             lines: 4,
             caption: <<-MARKDOWN
   Are there any special setup or teardown requirements for this LARP? For example, do you need extra
@@ -270,6 +283,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'gms',
+            admin_description: 'GMs',
             lines: 2,
             caption: <<-MARKDOWN
   **GMs for your game.** Note that the GMs listed here are only for the purpose of evaluating your
@@ -280,6 +294,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'other_games',
+            admin_description: 'Other LARPs from Team',
             lines: 4,
             caption: 'What other LARPs have you written or run? Where and when were they run?'
           }
@@ -308,6 +323,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'offensive',
+            admin_description: 'Offensive Elements',
             lines: 4,
             caption: <<-MARKDOWN
   Are there any components of your LARP that might offend or upset some group of attendees? For
@@ -318,6 +334,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'physical_restrictions',
+            admin_description: 'Physical Restrictions',
             lines: 4,
             caption: <<-MARKDOWN
   Are there any physical restrictions imposed by your LARP? For example, live boffer combat, confined
@@ -328,6 +345,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'age_appropriate',
+            admin_description: 'Appropriate for Under 18?',
             lines: 4,
             caption: <<-MARKDOWN
   Is your game appropriate for players under the age of 18? Please discuss any age restrictions here.
@@ -358,6 +376,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'timeblock_preference',
             identifier: 'timeblock_preferences',
+            admin_description: 'Timeblock Preferences',
             caption: "Please pick your top three preferences for when you'd like to run your game.",
             timeblocks: [
               { label: 'Morning', start: { hour: 9 }, finish: { hour: 13 } },
@@ -372,6 +391,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'multiple_choice',
             identifier: 'can_play_concurrently',
+            admin_description: 'Can Play Concurrently?',
             style: 'radio_horizontal',
             caption: 'Can players play in your LARP and another event at the same time?',
             choices: [
@@ -382,6 +402,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'multiple_choice',
             identifier: 'multiple_runs',
+            admin_description: 'Can Do Multiple Runs?',
             style: 'radio_horizontal',
             caption: 'Are you willing to hold this LARP more than once at this convention?',
             choices: [
@@ -392,6 +413,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'scheduling_constraints',
+            admin_description: 'Scheduling Constraints',
             lines: 4,
             caption: <<-MARKDOWN
   If you are willing to hold the LARP more than once, please discuss your preferences here.
@@ -403,6 +425,7 @@ class Intercode::Import::Intercode1::ProposalForm
           {
             item_type: 'free_text',
             identifier: 'space_requirements',
+            admin_description: 'Space Requirements',
             lines: 2,
             caption: 'Space Requirements:'
           }

@@ -2,6 +2,8 @@ class EventProposalsController < BaseControllers::VirtualHost
   load_and_authorize_resource through: :convention
   respond_to :html, :json
 
+  helper :form_reponse
+
   def index
     redirect_to page_url('new-proposal')
   end
