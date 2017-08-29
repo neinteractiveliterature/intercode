@@ -3,6 +3,7 @@ class EventProposalsController < BaseControllers::VirtualHost
   respond_to :html, :json
 
   def index
+    redirect_to page_url('new-proposal')
   end
 
   def create
@@ -36,6 +37,11 @@ class EventProposalsController < BaseControllers::VirtualHost
     @event_proposal.assign_form_response_attributes(params[:form_response])
     @event_proposal.save
 
+    respond_with @event_proposal
+  end
+
+  def submit
+    @event_proposal.update!(status: 'proposed') if @event_proposal.status == 'draft'
     respond_with @event_proposal
   end
 

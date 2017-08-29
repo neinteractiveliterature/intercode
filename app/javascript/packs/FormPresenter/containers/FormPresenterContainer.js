@@ -17,6 +17,7 @@ const mapDispatchToProps = dispatch => ({
   },
   previousSection: () => dispatch(actions.previousSection()),
   nextSection: () => dispatch(actions.nextSection()),
+  submitForm: () => dispatch(actions.submitForm()),
 });
 
 const FormPresenterContainer = connect(

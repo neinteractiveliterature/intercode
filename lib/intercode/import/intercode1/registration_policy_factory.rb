@@ -2,6 +2,17 @@ class Intercode::Import::Intercode1::RegistrationPolicyFactory
   def registration_policy(row)
     buckets = %w(Male Female Neutral).map { |gender| registration_bucket(row, gender) }
     buckets.reject! { |bucket| bucket.total_slots == 0 }
+
+    if buckets.size == 1 && buckets.first.key == 'anything'
+      single_bucket = buckets.first
+      single_bucket.assign_attributes(
+        key: 'signups',
+        name: 'Signups',
+        description: 'Signups for this event',
+        anything: false
+      )
+    end
+
     RegistrationPolicy.new(buckets: buckets)
   end
 

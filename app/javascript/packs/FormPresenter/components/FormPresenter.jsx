@@ -92,12 +92,25 @@ function renderContinueButton(currentSectionIndex, sections, onClick, disabled) 
   );
 }
 
+function renderSubmitButton(currentSectionIndex, sections, onClick, disabled) {
+  if (currentSectionIndex < sections.size - 1) {
+    return null;
+  }
+
+  return (
+    <button className="btn btn-primary" onClick={onClick} disabled={disabled}>
+      Submit
+    </button>
+  );
+}
+
 const FormPresenter = ({
   convention,
   form,
   currentSectionId,
   previousSection,
   nextSection,
+  submitForm,
   response,
   responseValueChanged,
   isUpdatingResponse,
@@ -134,9 +147,8 @@ const FormPresenter = ({
       <div className="card-footer d-flex justify-content-between">
         <div>{renderBackButton(currentSectionIndex, previousSection)}</div>
         <div>
-          {
-            renderContinueButton(currentSectionIndex, sections, nextSection, disableContinue)
-          }
+          {renderContinueButton(currentSectionIndex, sections, nextSection, disableContinue)}
+          {renderSubmitButton(currentSectionIndex, sections, submitForm, isUpdatingResponse)}
         </div>
       </div>
     </div>
@@ -152,6 +164,7 @@ FormPresenter.propTypes = {
   form: Form.propType,
   response: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   responseValueChanged: PropTypes.func,
+  submitForm: PropTypes.func,
   isUpdatingResponse: PropTypes.bool,
   currentSectionId: PropTypes.number,
   previousSection: PropTypes.func.isRequired,

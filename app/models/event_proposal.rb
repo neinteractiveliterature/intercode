@@ -22,4 +22,8 @@ class EventProposal < ApplicationRecord
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
   validates :status, inclusion: { in: STATUSES }
+
+  def to_liquid
+    EventProposalDrop.new(self)
+  end
 end

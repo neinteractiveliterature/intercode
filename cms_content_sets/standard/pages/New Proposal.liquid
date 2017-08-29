@@ -1,5 +1,7 @@
 <div class="row">
   <div class="col-md-8">
+    {% include 'user_event_proposals' %}
+
     <h3>Proposing an Event for {{ convention.name }}</h3>
     {% include 'bidding1' %}
 
@@ -9,9 +11,7 @@
     <p>{{ convention.name }} actively solicits proposals in the months leading up to the convention. As the convention attendance grows, based on registration numbers, we may need a third round of proposals to fill in the slate of games already accepted for the convention.</p>
 
     <div class="text-center my-4">
-      <button class="btn btn-primary">
-        I want to BID!
-      </button>
+      {% new_event_proposal_button "Propose an event!" btn btn-primary %}
     </div>
 
     <p>Please fill out the proposal form with <i>as much information as possible</i>. This is the <i>best</i> way to help us evaluate your proposal quickly!</p>
