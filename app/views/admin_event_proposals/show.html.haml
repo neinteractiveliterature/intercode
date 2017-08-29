@@ -1,4 +1,15 @@
-%h1= @admin_event_proposal.title
+.d-flex.justify-space-between.align-items-baseline
+  .col
+    %h1= @admin_event_proposal.title
+  - if can? :update, @admin_event_proposal
+    %div
+      = bootstrap_form_for @admin_event_proposal, url: admin_event_proposal_path(@admin_event_proposal), layout: :inline do |f|
+        = f.select :status, ['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'], { label: 'Status:' }, class: 'form-control-sm ml-1 mr-2'
+        = f.submit "Update", class: 'btn btn-sm btn-primary'
+  - else
+    %div
+      %strong Status:
+      = @admin_event_proposal.status
 
 %ul.list-unstyled.my-4
   %li.p-3

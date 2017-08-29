@@ -2,6 +2,8 @@ class AdminEventProposalsController < BaseControllers::VirtualHost
   load_resource class: EventProposal, through: :convention, through_association: :event_proposals
   before_action :authorize_admin
 
+  helper :form_response
+
   def index
     @admin_event_proposals = @admin_event_proposals.includes(:owner).sort_by do |event_proposal|
       [
@@ -18,7 +20,7 @@ class AdminEventProposalsController < BaseControllers::VirtualHost
 
   def update
     if @admin_event_proposal.update(admin_event_proposal_params)
-      redirect_to @admin_event_proposal, notice: 'Admin event proposal was successfully updated.'
+      redirect_to [:admin, @admin_event_proposal], notice: 'Admin event proposal was successfully updated.'
     else
       render :edit
     end
@@ -32,6 +34,6 @@ class AdminEventProposalsController < BaseControllers::VirtualHost
   end
 
   def admin_event_proposal_params
-    params.fetch(:admin_event_proposal, {})
+    params.require(:event_proposal).permit(:status)
   end
 end
