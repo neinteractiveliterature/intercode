@@ -9,7 +9,7 @@ import type { RegistrationPolicyPreset } from '../../BuiltInFormControls/Registr
 type Props = {
   formItem: {},
   value?: RegistrationPolicyAPIRepresentation,
-  onChange: (any) => undefined,
+  onChange: (any) => void,
 };
 
 type State = {

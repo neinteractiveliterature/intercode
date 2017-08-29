@@ -25,7 +25,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     counted = (row[:Counted] == 'Y')
     row_bucket_key = (counted ? bucket_key(row, run) : nil)
     requested_bucket_key = (counted ? row[:Gender].downcase : nil)
-    requested_bucket_key = 'anything' if requested_bucket_key && !run.registration_policy.bucket_with_key(requested_bucket_key)
+    requested_bucket_key = anything_bucket_key(run) if requested_bucket_key && !run.registration_policy.bucket_with_key(requested_bucket_key)
 
     run.signups.new(
       user_con_profile: @user_con_profile_id_map[row[:UserId]],
@@ -44,8 +44,16 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     return unless row[:Counted] == 'Y'
     return unless row[:State] == 'Confirmed'
 
-    [gender_bucket_key(row, run), "anything"].find do |bucket_key|
+    [gender_bucket_key(row, run), anything_bucket_key(run)].find do |bucket_key|
       run.bucket_has_available_slots?(bucket_key)
+    end
+  end
+
+  def anything_bucket_key(run)
+    if run.registration_policy.buckets.size == 1
+      run.registration_policy.buckets.first.key
+    else
+      'anything'
     end
   end
 
@@ -56,7 +64,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
       if run.registration_policy.bucket_with_key(bucket_key)
         bucket_key
       else
-        'anything'
+        anything_bucket_key(run)
       end
     when 'Waitlisted' then nil
     end

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { enableUniqueIds } from 'react-html-id';
+import { List } from 'immutable';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
@@ -41,6 +42,7 @@ class RegistrationPolicyEditor extends React.Component {
     enableUniqueIds(this);
 
     let initialPreset;
+    let initiallyCustom = false;
     if (Array.isArray(this.props.presets)) {
       initialPreset = this.props.presets.find(preset => (
         preset.policy.buckets.every(
@@ -55,10 +57,14 @@ class RegistrationPolicyEditor extends React.Component {
           ),
         )
       ));
+
+      if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
+        initiallyCustom = true;
+      }
     }
 
     this.state = {
-      custom: false,
+      custom: initiallyCustom,
       preset: initialPreset,
     };
   }

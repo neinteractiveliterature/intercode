@@ -13,6 +13,16 @@ export default {
     return jsonFetch(baseUrl, { method: 'GET', expectedStatuses: [200] });
   },
 
+  submitFormResponse(baseUrl, authenticityToken) {
+    return jsonFetch(`${baseUrl}/submit`, {
+      method: 'PATCH',
+      headers: {
+        'X-CSRF-Token': authenticityToken,
+      },
+      expectedStatuses: [204],
+    });
+  },
+
   updateFormResponse(baseUrl, response, authenticityToken) {
     return jsonFetch(baseUrl, {
       method: 'PATCH',

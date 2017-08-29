@@ -28,6 +28,10 @@ class UserConProfileDrop < Liquid::Drop
     user_con_profile.staff_positions.to_a
   end
 
+  def event_proposals
+    user_con_profile.event_proposals.to_a
+  end
+
   private
   def markdown_presenter
     @markdown_presenter ||= MarkdownPresenter.new("No bio provided")

@@ -2,7 +2,7 @@ class EventDrop < Liquid::Drop
   include Rails.application.routes.url_helpers
 
   attr_reader :event
-  delegate :title, :team_member_name, to: :event
+  delegate :title, :team_member_name, :event_proposal, to: :event
 
   def initialize(event)
     @event = event
