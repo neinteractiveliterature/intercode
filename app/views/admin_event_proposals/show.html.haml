@@ -1,0 +1,29 @@
+.d-flex.justify-space-between.align-items-baseline
+  .col
+    %h1= @admin_event_proposal.title
+  - if can? :update, @admin_event_proposal
+    %div
+      = bootstrap_form_for @admin_event_proposal, url: admin_event_proposal_path(@admin_event_proposal), layout: :inline do |f|
+        = f.select :status, ['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'], { label: 'Status:' }, class: 'form-control-sm ml-1 mr-2'
+        = f.submit "Update", class: 'btn btn-sm btn-primary'
+  - else
+    %div
+      %strong Status:
+      = @admin_event_proposal.status
+
+%ul.list-unstyled.my-4
+  %li.p-3
+    .row
+      .col-md-2
+        %strong Submitted by
+      .col-md-10= @admin_event_proposal.owner&.name
+
+  - @form_items.each do |form_item|
+    - next if form_item.item_type == 'static_text'
+
+    %li.p-3.border.border-left-0.border-right-0.border-bottom-0.border-secondary
+      .row
+        .col-md-2
+          %strong= form_item.admin_description || form_item.properties['caption'] || form_item.identifier
+        .col-md-10
+          = render_form_response_value(form_item, @admin_event_proposal.read_form_response_attribute(form_item.identifier))

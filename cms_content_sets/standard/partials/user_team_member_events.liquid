@@ -1,12 +1,12 @@
 {% assign team_member_events = user_con_profile.team_member_events %}
 
 {% if team_member_events.size > 0 %}
-  <section class="my-4">
-    <h3>Links to Games You're a GM For</h3>
+  <section class="card bg-info text-white my-4">
+    <div class="card-header">Games I'm a GM For</div>
 
-    <ul class="list-unstyled">
+    <ul class="list-group list-group-flush text-dark">
       {% for event in team_member_events %}
-        <li><a href="{{ event.url }}">{{ event.title }}</a></li>
+        <li class="list-group-item"><a href="{{ event.url }}">{{ event.title }}</a></li>
       {% endfor %}
     </ul>
   </section>

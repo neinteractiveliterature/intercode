@@ -16,3 +16,15 @@
 @import "bootstrap_custom";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+
+.form-item-label p:last-child, legend p:last-child {
+  margin-bottom: 0;
+}
+
+.progress-bar {
+  transition: width 1s;
+}
+
+.anything-bucket {
+  background-color: #8fb6db;
+}

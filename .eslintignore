@@ -1,1 +1,4 @@
 **/*{.,-}min.js
+config/*
+node_modules/*
+public/*

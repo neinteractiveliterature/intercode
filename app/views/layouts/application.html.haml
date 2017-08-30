@@ -3,14 +3,14 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title= page_title
-    = stylesheet_link_tag 'application', :media => "all"
     = stylesheet_pack_tag 'application', media: 'all'
-    = javascript_include_tag 'application'
+    = stylesheet_link_tag 'application', :media => "all"
     = javascript_pack_tag 'application'
+    = javascript_include_tag 'application'
     = csrf_meta_tags
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
   %body
-    %nav#intercode-nav.navbar.navbar-inverse.navbar-fixed-top.navbar-toggleable-md.mb-4{:role => "navigation"}
+    %nav#intercode-nav.navbar.navbar-dark.navbar-fixed-top.navbar-expand-md.mb-4{:role => "navigation"}
       .container
         %button.navbar-toggler.navbar-toggler-right{type: "button", "data-toggle" => "collapse", "data-target" => "#navbarSupportedContent", "aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
           %span.navbar-toggler-icon
@@ -28,7 +28,7 @@
                 .dropdown-menu
                   = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
                   = link_to "List of Events", events_path, class: 'dropdown-item'
-                  = link_to "Propose an Event", new_event_path, class: 'dropdown-item'
+                  = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
               = CadmusNavbar::Renderers::Bootstrap4.new(request: request, url_for_page: ->(page) { page_url(page) }, root_items: convention.cms_navigation_items.root).render_navigation_items
               - if can? :manage, convention.user_con_profiles.new
                 %li.nav-item.dropdown{:role => "presentation"}
@@ -36,6 +36,7 @@
                     Admin
                   .dropdown-menu
                     = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
+                    = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
                     = link_to "Site Content", pages_path, class: 'dropdown-item'
                     = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
                     = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'

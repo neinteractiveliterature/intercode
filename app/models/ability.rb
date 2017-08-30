@@ -11,7 +11,8 @@ class Ability
     # All users, anonymous or otherwise, should be allowed to view Cons.
     can :read, Convention
     can [:read, :root], Page
-    can [:read, :schedule], Event
+    can [:read, :schedule], Event, status: 'active'
+    can :read, Form
 
     # Anonymous user permissions end here.
     return unless user
@@ -21,6 +22,8 @@ class Ability
       can :manage, :all
     else
       can [:read, :create, :update], UserConProfile, user_id: user.id
+      can :create, EventProposal
+      can [:read, :update], EventProposal, id: own_event_proposal_ids
 
       add_con_staff_abilities if staff_con_ids.any?
       add_team_member_abilities if team_member_event_ids.any?
@@ -54,10 +57,13 @@ class Ability
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, StaffPosition, convention_id: staff_con_ids
     can :manage, TeamMember, event: { convention_id: staff_con_ids }
+    can :manage, Form, convention_id: staff_con_ids
+    can :manage, EventProposal, convention_id: staff_con_ids, status: (EventProposal::STATUSES.to_a - ['draft'])
   end
 
   def add_team_member_abilities
     can :manage, Event, id: team_member_event_ids
+    can :manage, EventProposal, event_id: team_member_event_ids
     can :manage, Run, event_id: team_member_event_ids
     can :manage, Signup, run: { event_id: team_member_event_ids }
     can :manage, TeamMember, event_id: team_member_event_ids
@@ -74,6 +80,13 @@ class Ability
     @team_member_event_ids ||= begin
       team_member_events = Event.joins(team_members: :user_con_profile).where(user_con_profiles: { user_id: user.id })
       team_member_events.pluck(:id)
+    end
+  end
+
+  def own_event_proposal_ids
+    @own_event_proposal_ids ||= begin
+      own_event_proposals = EventProposal.joins(:owner).where(user_con_profiles: { user_id: user.id })
+      own_event_proposals.pluck(:id)
     end
   end
 end
