@@ -10,5 +10,5 @@
       - if author_or_org.present?
         %p{style: "margin: 0"}
           %em by #{author_or_org}
-    .card-block
+    .card-body
       = markdown_presenter.render event.short_blurb

@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  STATUSES = Set.new(%w(proposed reviewing accepted rejected dropped))
+  STATUSES = Set.new(%w(active dropped))
   CATEGORIES = Set.new(%w(larp panel board_game tabletop_rpg volunteer_event filler))
   CON_MAIL_DESTINATIONS = Set.new(%w(event_email gms))
 
@@ -17,11 +17,8 @@ class Event < ApplicationRecord
   belongs_to :convention
   validates :convention, presence: true
 
-  # Status specifies the status of the proposed event.  It must be one of
-  # "Proposed", "Reviewing", "Accepted", "Rejected" or "Dropped".  Events
-  # that need to be reviewed (LARPs, PreCon) must be reviewed and approved
-  # by the approprite committee and default to "Proposed."  Events that don't
-  # need to be approved (ConSuite, Ops, Filler) default to "Approved."
+  # Status specifies the status of the event.  It must be one of
+  # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES, allow_nil: true }
 
   # Category is mostly for record-keeping purposes; it shouldn't actually
@@ -30,11 +27,11 @@ class Event < ApplicationRecord
   validates :category, inclusion: { in: CATEGORIES }
 
   # All events for a Convention must have a unique title.  Ignore any events
-  # that with a status of "Dropped" or "Rejected".  If they have a duplicate
-  # title we don't care.
+  # that have a status of "Dropped".  If they have a duplicate title we don't
+  # care.
   validates_uniqueness_of :title,
     scope: :convention,
-    conditions: -> { where.not(status: ['dropped', 'rejected']) }
+    conditions: -> { where.not(status: 'dropped') }
 
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
@@ -43,7 +40,7 @@ class Event < ApplicationRecord
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
 
-  scope :accepted, -> { where(status: 'accepted') }
+  scope :active, -> { where(status: 'active') }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
@@ -56,7 +53,7 @@ class Event < ApplicationRecord
       description: "Help serve Intercon breakfast, lunch, and dinner.",
 
       # The Con Suite event does not need to be reviewed
-      status: "accepted",
+      status: "active",
       category: "volunteer_event"
     )
   end
@@ -74,7 +71,7 @@ class Event < ApplicationRecord
         "your time and effort.",
 
       # The Ops event does not need to be reviewed
-      status: "accepted",
+      status: "active",
       category: "volunteer_event"
     )
   end

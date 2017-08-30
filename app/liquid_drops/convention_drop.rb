@@ -24,6 +24,12 @@ class ConventionDrop < Liquid::Drop
     convention.staff_positions.to_a
   end
 
+  def staff_positions_by_name
+    convention.staff_positions.index_by do |staff_position|
+      staff_position.name.gsub(/\W/, '_').downcase
+    end
+  end
+
   def ticket_types
     convention.ticket_types.to_a
   end

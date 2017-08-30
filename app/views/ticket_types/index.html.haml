@@ -17,7 +17,7 @@
               %i.fa.fa-pencil-square-o.mr-1
               Edit
 
-    .card-block
+    .card-body
       %ul
         - ticket_type.pricing_schedule.timespans.each do |timespan|
           %li= timespan.to_s(:short)

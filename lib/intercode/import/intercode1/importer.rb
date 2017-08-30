@@ -31,6 +31,7 @@ class Intercode::Import::Intercode1::Importer
         "php_timezone" => date_default_timezone_get(),
         "show_flyer" => NAV_SHOW_FLYER,
         "show_program" => NAV_SHOW_PROGRAM,
+        "thursday_enabled" => THURSDAY_ENABLED,
       );
 
       $price_schedule = array();
@@ -90,6 +91,7 @@ class Intercode::Import::Intercode1::Importer
     @text_dir = text_dir
     @show_flyer = vars['show_flyer']
     @show_program = vars['show_program']
+    @thursday_enabled = (vars['thursday_enabled'] == 1)
   end
 
   def build_password_hashes
@@ -118,9 +120,11 @@ class Intercode::Import::Intercode1::Importer
     con_table.update_cms_content(@con)
     Intercode::Import::Intercode1.logger.info("Updated CMS content with con data")
 
-    html_content.import!
+    root_html_content.import!
+    text_dir_html_content.import!
     embedded_pdf_pages.each(&:import!)
     navigation_items.import!
+    proposal_form.import!
 
     registration_status_map.each do |status, ticket_type|
       ticket_type.save!
@@ -130,6 +134,9 @@ class Intercode::Import::Intercode1::Importer
     events_table.import!
     users_table.import!
     staff_position_importer.import!
+    bids_table.import!
+    bid_times_table.import!
+    bid_info_table.import!
     bios_table.import!
     rooms_table.import!
     runs_table.import!
@@ -138,7 +145,15 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def con_table
-    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(connection, @con_name, @con_domain, @friday_date, @constants_file)
+    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(
+      connection,
+      con_name: @con_name,
+      con_domain: @con_domain,
+      friday_date: @friday_date,
+      constants_file: @constants_file,
+      timezone_name: "US/Eastern",
+      thursday_enabled: @thursday_enabled
+    )
   end
 
   def price_schedule_table
@@ -172,6 +187,26 @@ class Intercode::Import::Intercode1::Importer
     @bios_table ||= Intercode::Import::Intercode1::Tables::Bios.new(connection, user_con_profiles_id_map)
   end
 
+  def bids_table
+    return unless events_id_map && user_con_profiles_id_map
+
+    @bids_table ||= Intercode::Import::Intercode1::Tables::Bids.new(connection, con, events_id_map, user_con_profiles_id_map)
+  end
+
+  def event_proposals_id_map
+    @event_proposals_id_map ||= bids_table.id_map
+  end
+
+  def bid_times_table
+    return unless event_proposals_id_map
+
+    @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(connection, con, event_proposals_id_map)
+  end
+
+  def bid_info_table
+    @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(connection, con, @constants_file)
+  end
+
   def runs_table
     return unless events_id_map && users_id_map && rooms_id_map
     @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
@@ -202,8 +237,12 @@ class Intercode::Import::Intercode1::Importer
     @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(con, @staff_positions)
   end
 
-  def html_content
-    @html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
+  def root_html_content
+    @root_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, File.dirname(@constants_file), @constants_file)
+  end
+
+  def text_dir_html_content
+    @text_dir_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
   end
 
   def navigation_items
@@ -253,5 +292,9 @@ class Intercode::Import::Intercode1::Importer
     end
 
     embedded_pdf_pages
+  end
+
+  def proposal_form
+    @proposal_form ||= Intercode::Import::Intercode1::ProposalForm.new(con)
   end
 end

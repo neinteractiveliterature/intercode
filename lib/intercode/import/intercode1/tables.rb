@@ -1,6 +1,9 @@
 module Intercode::Import::Intercode1::Tables
   extend ActiveSupport::Autoload
 
+  autoload :BidInfo
+  autoload :Bids
+  autoload :BidTimes
   autoload :Bios
   autoload :Con
   autoload :Events

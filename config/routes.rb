@@ -11,6 +11,8 @@ Intercode::Application.routes.draw do
     # http://con.domain/ will go to the root page of the con
     root :to => 'pages#root', :as => 'con_root'
 
+    resource :convention
+
     resource :ticket, only: [:new, :show, :create]
     resources :ticket_types, except: [:show]
 
@@ -26,6 +28,13 @@ Intercode::Application.routes.draw do
         resources :admin_signups
       end
     end
+
+    resources :event_proposals do
+      member do
+        patch :submit
+      end
+    end
+    resources :admin_event_proposals
 
     resources :user_con_profiles do
       member do
@@ -46,6 +55,7 @@ Intercode::Application.routes.draw do
     end
 
     resources :staff_positions
+    resources :forms
   end
 
   # the following routes apply only when we're not in a virtual host

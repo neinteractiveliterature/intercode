@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import BootstrapFormCheckbox from '../FormControls/BootstrapFormCheckbox';
-import ModalConfirm from '../ModalConfirm';
+import { ConfirmModal } from 'react-bootstrap4-modal';
+import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import ResourceForm from './ResourceForm';
-import UserConProfileSelect from '../FormControls/UserConProfileSelect';
+import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { performRequest } from '../HTTPUtils';
+import { getStateChangeForCheckboxChange } from '../FormUtils';
 
 class TeamMemberForm extends React.Component {
   static propTypes = {
@@ -40,9 +41,7 @@ class TeamMemberForm extends React.Component {
   })
 
   checkboxChanged = (event) => {
-    this.setState({
-      teamMember: { ...this.state.teamMember, [event.target.name]: event.target.checked },
-    });
+    this.setState(getStateChangeForCheckboxChange(event, this.state, 'teamMember'));
   }
 
   userConProfileIdChanged = (selection) => {
@@ -154,14 +153,14 @@ class TeamMemberForm extends React.Component {
       {this.renderUserConProfileSelect()}
       {this.renderCheckboxes()}
 
-      <ModalConfirm
+      <ConfirmModal
         title="Confirmation"
-        onClickOk={this.deleteConfirmed}
-        onClickCancel={this.deleteCanceled}
+        onOK={this.deleteConfirmed}
+        onCancel={this.deleteCanceled}
         visible={this.state.confirmingDelete}
       >
         {`Are you sure you want to remove this ${this.props.teamMemberName}?`}
-      </ModalConfirm>
+      </ConfirmModal>
     </ResourceForm>
   )
 }

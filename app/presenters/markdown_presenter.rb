@@ -5,7 +5,22 @@ class MarkdownPresenter
   include ActionView::Helpers::TextHelper
 
   def self.markdown_processor
-    @markdown_processor ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML.new, no_intra_emphasis: true, autolink: true)
+    @markdown_processor ||= Redcarpet::Markdown.new(
+      Redcarpet::Render::HTML.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
+      no_intra_emphasis: true,
+      autolink: true
+    )
+  end
+
+  def self.strip_single_p(html)
+    fragment = Nokogiri::HTML::DocumentFragment.parse(html)
+    non_blank_children = fragment.children.reject { |child| child.text? && child.content.blank? }
+
+    if non_blank_children.size == 1 && non_blank_children.first.name == 'p'
+      non_blank_children.first.inner_html.html_safe
+    else
+      html
+    end
   end
 
   attr_reader :default_content
@@ -14,12 +29,18 @@ class MarkdownPresenter
     @default_content = default_content
   end
 
-  def render(markdown, sanitize_content: true)
+  def render(markdown, sanitize_content: true, strip_single_p: true)
     rendered_html = MarkdownPresenter.markdown_processor.render(markdown || '')
     sanitized_html = sanitize_html(rendered_html, sanitize_content: sanitize_content)
 
     content = sanitized_html.presence || "<p><em>#{default_content}</em></p>"
-    render_liquid(content)
+    rendered_liquid = render_liquid(content)
+
+    if strip_single_p
+      self.class.strip_single_p(rendered_liquid)
+    else
+      rendered_liquid
+    end
   end
 
   private

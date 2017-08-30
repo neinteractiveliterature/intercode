@@ -3,10 +3,11 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     super connection
     @con = con
     @markdownifier = Intercode::Import::Intercode1::Markdownifier.new(logger)
+    @registration_policy_factory = Intercode::Import::Intercode1::RegistrationPolicyFactory.new
   end
 
   def dataset
-    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status)
+    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status).where(Status: ['Accepted', 'Dropped'])
   end
 
   private
@@ -25,7 +26,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       short_blurb: @markdownifier.markdownify(row[:ShortBlurb]),
       category: event_category(row),
       status: event_status(row),
-      registration_policy: registration_policy(row)
+      registration_policy: @registration_policy_factory.registration_policy(row)
     )
   end
 
@@ -62,47 +63,8 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
 
   def event_status(row)
     case row[:Status]
-    when 'Pending' then 'proposed'
-    when 'Under Review' then 'reviewing'
-    when 'Accepted' then 'accepted'
-    when 'Rejected' then 'rejected'
+    when 'Accepted' then 'active'
     when 'Dropped' then 'dropped'
-    end
-  end
-
-  def registration_policy(row)
-    buckets = %w(Male Female Neutral).map { |gender| registration_bucket(row, gender) }
-    buckets.reject! { |bucket| bucket.total_slots == 0 }
-    RegistrationPolicy.new(buckets: buckets)
-  end
-
-  def registration_bucket(row, gender)
-    key = case gender
-    when 'Neutral' then 'anything'
-    else gender.downcase
-    end
-
-    name = case gender
-    when 'Neutral' then 'Anything'
-    else gender
-    end
-
-    RegistrationPolicy::Bucket.new(
-      key: key,
-      name: name,
-      description: registration_bucket_description(gender),
-      slots_limited: true,
-      total_slots: row[:"MaxPlayers#{gender}"],
-      minimum_slots: row[:"MinPlayers#{gender}"],
-      preferred_slots: row[:"PrefPlayers#{gender}"]
-    )
-  end
-
-  def registration_bucket_description(gender)
-    case gender
-    when 'Male' then 'Male characters'
-    when 'Female' then 'Female characters'
-    when 'Neutral' then 'Characters that are not strictly defined as male or female'
     end
   end
 end

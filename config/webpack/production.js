@@ -5,6 +5,7 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
+const BabiliPlugin = require("babili-webpack-plugin")
 const sharedConfig = require('./shared.js')
 
 module.exports = merge(sharedConfig, {
@@ -13,18 +14,19 @@ module.exports = merge(sharedConfig, {
   stats: 'normal',
 
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      sourceMap: true,
-
-      compress: {
-        warnings: false
-      },
-
-      output: {
-        comments: false
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   minimize: true,
+    //   sourceMap: true,
+    //
+    //   compress: {
+    //     warnings: false
+    //   },
+    //
+    //   output: {
+    //     comments: false
+    //   }
+    // }),
+    new BabiliPlugin(),
 
     new CompressionPlugin({
       asset: '[path].gz[query]',

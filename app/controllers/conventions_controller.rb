@@ -1,4 +1,5 @@
 class ConventionsController < ApplicationController
+  before_action :try_virtual_host
   load_and_authorize_resource
 
   def index
@@ -29,6 +30,12 @@ class ConventionsController < ApplicationController
   def edit
   end
 
+  def show
+    respond_to do |format|
+      format.json { render json: @convention }
+    end
+  end
+
   def update
     if @convention.save
       redirect_to conventions_url
@@ -43,6 +50,12 @@ class ConventionsController < ApplicationController
   end
 
   private
+  def try_virtual_host
+    if request.env["intercode.convention"]
+      @convention = request.env["intercode.convention"]
+    end
+  end
+
   def convention_params
     params.require(:convention).permit(:name, :domain, :timezone_name)
   end

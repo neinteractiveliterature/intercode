@@ -1,12 +1,30 @@
 class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1::Table
-  def initialize(connection, con_name, con_domain, friday_date, constants_file, timezone_name="US/Eastern")
+  def initialize(connection, config)
     super(connection)
-    @con_name = con_name
-    @con_domain = con_domain
-    @constants_file = constants_file
 
-    @timezone = ActiveSupport::TimeZone[timezone_name]
-    @starts_at = Time.new(friday_date.year, friday_date.month, friday_date.day, 0, 0, 0, @timezone.formatted_offset)
+    config.symbolize_keys!
+    @con_name = config[:con_name]
+    @con_domain = config[:con_domain]
+    @constants_file = config[:constants_file]
+
+    @timezone = ActiveSupport::TimeZone[config[:timezone_name]]
+    friday_date = config[:friday_date]
+    friday_start = @timezone.local(
+      friday_date.year,
+      friday_date.month,
+      friday_date.day,
+      0,
+      0,
+      0,
+    )
+
+    if config[:thursday_enabled]
+      @starts_at = (friday_start - 1.day).beginning_of_day.change(hour: 18)
+    else
+      @starts_at = friday_start
+    end
+
+    @ends_at = (friday_start + 2.days).beginning_of_day.change(hour: 15)
 
     @row = dataset.first
   end
@@ -44,7 +62,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       accepting_bids: yesno_to_bool(row[:AcceptingBids]),
       precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
       starts_at: @starts_at,
-      ends_at: @starts_at + 3.days,
+      ends_at: @ends_at,
       timezone_name: @timezone.name,
       maximum_event_signups: {
         timespans: [

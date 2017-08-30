@@ -13,8 +13,11 @@ class Convention < ApplicationRecord
   has_many :rooms, dependent: :destroy
   has_many :ticket_types, dependent: :destroy
   has_many :staff_positions, dependent: :destroy
+  has_many :forms, dependent: :destroy
+  has_many :event_proposals, dependent: :destroy
 
   belongs_to :root_page, :class_name => "Page", optional: true
+  belongs_to :event_proposal_form, :class_name => "Form", optional: true
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
