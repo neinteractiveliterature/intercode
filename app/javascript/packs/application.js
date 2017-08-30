@@ -22,7 +22,6 @@ import TicketTypeForm from './BuiltInForms/TicketTypeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
-//  FormEditor,
   FormPresenter,
   StaffPositionForm,
   TeamMemberForm,
