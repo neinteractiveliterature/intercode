@@ -55,7 +55,6 @@ Intercode::Application.routes.draw do
     end
 
     resources :staff_positions
-    resources :forms
   end
 
   # the following routes apply only when we're not in a virtual host
