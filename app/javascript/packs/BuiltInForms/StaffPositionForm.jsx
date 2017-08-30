@@ -4,6 +4,7 @@ import { enableUniqueIds } from 'react-html-id';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ResourceForm from './ResourceForm';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
+import { getStateChangeForInputChange } from '../FormUtils';
 
 class StaffPositionForm extends React.Component {
   static propTypes = {
@@ -39,9 +40,7 @@ class StaffPositionForm extends React.Component {
   })
 
   fieldChanged = (event) => {
-    this.setState({
-      staffPosition: { ...this.state.staffPosition, [event.target.name]: event.target.value },
-    });
+    this.setState(getStateChangeForInputChange(event, this.state, 'staffPosition'));
   }
 
   userConProfileIdsChanged = (selections) => {

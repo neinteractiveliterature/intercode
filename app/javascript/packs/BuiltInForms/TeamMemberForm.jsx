@@ -6,6 +6,7 @@ import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox'
 import ResourceForm from './ResourceForm';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { performRequest } from '../HTTPUtils';
+import { getStateChangeForCheckboxChange } from '../FormUtils';
 
 class TeamMemberForm extends React.Component {
   static propTypes = {
@@ -40,9 +41,7 @@ class TeamMemberForm extends React.Component {
   })
 
   checkboxChanged = (event) => {
-    this.setState({
-      teamMember: { ...this.state.teamMember, [event.target.name]: event.target.checked },
-    });
+    this.setState(getStateChangeForCheckboxChange(event, this.state, 'teamMember'));
   }
 
   userConProfileIdChanged = (selection) => {
