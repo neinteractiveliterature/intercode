@@ -41,7 +41,13 @@ class EventProposalsController < BaseControllers::VirtualHost
   end
 
   def submit
-    @event_proposal.update!(status: 'proposed') if @event_proposal.status == 'draft'
+    if @event_proposal.status == 'draft'
+      @event_proposal.update!(status: 'proposed')
+      EventProposalsMailer.new_proposal(@event_proposal).deliver_later
+    else
+      EventProposalsMailer.proposal_updated(@event_proposal).deliver_later
+    end
+
     respond_with @event_proposal
   end
 
