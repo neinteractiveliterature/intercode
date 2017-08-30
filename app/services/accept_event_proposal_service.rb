@@ -18,7 +18,7 @@ class AcceptEventProposalService < ApplicationService
   }
 
   DEFAULT_EVENT_ATTRIBUTES = {
-    category: 'larp',    # TODO: add real event categories
+    category: 'larp',
     status: 'accepted'   # TODO: do we even need this anymore?
   }
 
