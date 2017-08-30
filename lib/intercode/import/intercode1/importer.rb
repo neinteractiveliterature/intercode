@@ -147,12 +147,12 @@ class Intercode::Import::Intercode1::Importer
   def con_table
     @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(
       connection,
-      @con_name,
-      @con_domain,
-      @friday_date,
-      @constants_file,
-      "US/Eastern",
-      @thursday_enabled
+      con_name: @con_name,
+      con_domain: @con_domain,
+      friday_date: @friday_date,
+      constants_file: @constants_file,
+      timezone_name: "US/Eastern",
+      thursday_enabled: @thursday_enabled
     )
   end
 

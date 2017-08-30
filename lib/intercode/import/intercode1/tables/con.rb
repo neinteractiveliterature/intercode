@@ -1,11 +1,14 @@
 class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1::Table
-  def initialize(connection, con_name, con_domain, friday_date, constants_file, timezone_name, thursday_enabled)
+  def initialize(connection, config)
     super(connection)
-    @con_name = con_name
-    @con_domain = con_domain
-    @constants_file = constants_file
 
-    @timezone = ActiveSupport::TimeZone[timezone_name]
+    config.symbolize_keys!
+    @con_name = config[:con_name]
+    @con_domain = config[:con_domain]
+    @constants_file = config[:constants_file]
+
+    @timezone = ActiveSupport::TimeZone[config[:timezone_name]]
+    friday_date = config[:friday_date]
     friday_start = @timezone.local(
       friday_date.year,
       friday_date.month,
@@ -15,7 +18,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       0,
     )
 
-    if thursday_enabled
+    if config[:thursday_enabled]
       @starts_at = (friday_start - 1.day).beginning_of_day.change(hour: 18)
     else
       @starts_at = friday_start
