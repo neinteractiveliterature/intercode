@@ -37,12 +37,12 @@ class EventsController < BaseControllers::VirtualHost
 
   # List the available LARPs
   def index
-    @events = @events.accepted.order(:title)
+    @events = @events.active.order(:title)
     respond_with @events
   end
 
   def schedule
-    @events = @events.accepted.includes(runs: :rooms)
+    @events = @events.active.includes(runs: :rooms)
     runs = @events.flat_map(&:runs).sort_by(&:starts_at)
 
     if runs.any?

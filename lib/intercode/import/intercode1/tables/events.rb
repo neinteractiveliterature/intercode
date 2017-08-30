@@ -7,7 +7,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def dataset
-    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status)
+    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status).where(Status: ['Accepted', 'Dropped'])
   end
 
   private
@@ -63,10 +63,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
 
   def event_status(row)
     case row[:Status]
-    when 'Pending' then 'proposed'
-    when 'Under Review' then 'reviewing'
-    when 'Accepted' then 'accepted'
-    when 'Rejected' then 'rejected'
+    when 'Accepted' then 'active'
     when 'Dropped' then 'dropped'
     end
   end
