@@ -1,7 +1,6 @@
 class EventProposalsMailer < ApplicationMailer
   def new_proposal(event_proposal)
     @event_proposal = event_proposal
-    @event_proposal_url = event_proposal_url(event_proposal)
 
     mail(
       to: proposal_mail_destination(event_proposal.convention),
@@ -11,7 +10,6 @@ class EventProposalsMailer < ApplicationMailer
 
   def proposal_updated(event_proposal)
     @event_proposal = event_proposal
-    @event_proposal_url = event_proposal_url(event_proposal)
 
     mail(
       to: proposal_mail_destination(event_proposal.convention),
@@ -31,7 +29,8 @@ class EventProposalsMailer < ApplicationMailer
     "[#{event_proposal.title}: Event Proposal]"
   end
 
-  def event_proposal_url(event_proposal)
+  def event_proposal_url_for_convention(event_proposal)
     admin_event_proposal_url(event_proposal, host: event_proposal.convention.domain)
   end
+  helper_method :event_proposal_url_for_convention
 end
