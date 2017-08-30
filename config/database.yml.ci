@@ -10,6 +10,8 @@ test:
 <% elsif ENV['DATABASE'] == 'mysql' %>
   adapter: mysql2
   database: intercode_test
+  username: travis
+  encoding: utf8
 <% elsif ENV['DATABASE'] == 'postgresql' %>
   adapter: postgresql
   database: intercode_test
