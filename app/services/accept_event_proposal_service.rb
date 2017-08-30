@@ -19,7 +19,7 @@ class AcceptEventProposalService < ApplicationService
 
   DEFAULT_EVENT_ATTRIBUTES = {
     category: 'larp',
-    status: 'accepted'   # TODO: do we even need this anymore?
+    status: 'active'
   }
 
   attr_reader :event_proposal

@@ -11,7 +11,7 @@ class Ability
     # All users, anonymous or otherwise, should be allowed to view Cons.
     can :read, Convention
     can [:read, :root], Page
-    can [:read, :schedule], Event
+    can [:read, :schedule], Event, status: 'active'
     can :read, Form
 
     # Anonymous user permissions end here.
