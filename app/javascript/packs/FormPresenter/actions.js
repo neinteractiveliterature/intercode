@@ -19,6 +19,10 @@ function createActionThunkWithMeta(type, fn, createMeta) {
   return factory;
 }
 
+function createAPIFetchCallback(urlProperty) {
+  return ({ getState }) => API.fetchFormResponse(getState().apiConfiguration[urlProperty]);
+}
+
 const actions = {
   ...createActions({
     PREVIOUS_SECTION: undefined,
@@ -29,16 +33,17 @@ const actions = {
 
   fetchConvention: createActionThunk(
     'FETCH_CONVENTION',
-    ({ getState }) => API.fetchConvention(getState().apiConfiguration.conventionUrl),
+    createAPIFetchCallback('conventionUrl'),
   ),
   fetchFormContent: createActionThunk(
     'FETCH_FORM_CONTENT',
-    ({ getState }) => API.fetchFormContent(getState().apiConfiguration.formUrl),
+    createAPIFetchCallback('formUrl'),
   ),
   fetchResponse: createActionThunk(
     'FETCH_RESPONSE',
-    ({ getState }) => API.fetchFormResponse(getState().apiConfiguration.responseUrl),
+    createAPIFetchCallback('responseUrl'),
   ),
+
   submitForm: createActionThunk(
     'SUBMIT_FORM',
     ({ getState }) => {
@@ -48,6 +53,7 @@ const actions = {
       });
     },
   ),
+
   updateResponse: createActionThunkWithMeta(
     'UPDATE_RESPONSE',
     ({ getState }) => {

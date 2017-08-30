@@ -175,20 +175,18 @@ class TimeblockPreferenceItem extends React.Component {
         return null;
       }
 
-      const cells = cellContents.map(({ dayStart, render, start, finish }) => {
-        return (
-          <TimeblockPreferenceCell
-            key={dayStart.format('dddd')}
-            render={render}
-            timeblock={timeblock}
-            existingPreferences={this.state.preferences}
-            dayStart={dayStart}
-            start={start}
-            finish={finish}
-            onChange={this.preferenceDidChange}
-          />
-        );
-      });
+      const cells = cellContents.map(({ dayStart, render, start, finish }) => (
+        <TimeblockPreferenceCell
+          key={dayStart.format('dddd')}
+          render={render}
+          timeblock={timeblock}
+          existingPreferences={this.state.preferences}
+          dayStart={dayStart}
+          start={start}
+          finish={finish}
+          onChange={this.preferenceDidChange}
+        />
+        ));
 
       return (
         <tr key={timeblock.label}>

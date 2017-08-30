@@ -28,17 +28,15 @@ class FreeTextItem extends React.Component {
     this.props.onChange(event.target.value);
   }
 
-  renderLabel = (formItem, domId) => {
-    return (
-      <label htmlFor={domId} className="form-item-label">
-        <span
+  renderLabel = (formItem, domId) => (
+    <label htmlFor={domId} className="form-item-label">
+      <span
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}
-        />
-        <RequiredIndicator formItem={formItem} />
-      </label>
-    );
-  }
+        dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}
+      />
+      <RequiredIndicator formItem={formItem} />
+    </label>
+    )
 
   renderInput = (formItem, domId) => {
     if (formItem.lines === 1) {
