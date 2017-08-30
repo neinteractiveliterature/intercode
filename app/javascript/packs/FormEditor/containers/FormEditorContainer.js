@@ -3,7 +3,7 @@ import FormEditor from '../components/FormEditor';
 
 const mapStateToProps = state => ({ form: state.form });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({});
+const mapDispatchToProps = () => ({});
 
 const FormEditorContainer = connect(
   mapStateToProps,

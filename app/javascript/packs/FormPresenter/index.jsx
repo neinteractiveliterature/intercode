@@ -25,7 +25,7 @@ class FormPresenterApp extends React.Component {
       responseUrl,
       afterSubmitUrl,
       authenticityToken,
-      submitAuthenticityToken
+      submitAuthenticityToken,
     } = this.props;
 
     this.store = buildReduxStore(reducer);
