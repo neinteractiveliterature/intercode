@@ -1,20 +1,12 @@
 class EventProposalsMailer < ApplicationMailer
   def new_proposal(event_proposal)
     @event_proposal = event_proposal
-
-    mail(
-      to: proposal_mail_destination(event_proposal.convention),
-      subject: "#{subject_prefix(event_proposal)} New: #{event_proposal.title}"
-    )
+    event_proposal_mail(event_proposal, 'New')
   end
 
   def proposal_updated(event_proposal)
     @event_proposal = event_proposal
-
-    mail(
-      to: proposal_mail_destination(event_proposal.convention),
-      subject: "#{subject_prefix(event_proposal)} New: #{event_proposal.title}"
-    )
+    event_proposal_mail(event_proposal, 'Update')
   end
 
   private
@@ -26,11 +18,18 @@ class EventProposalsMailer < ApplicationMailer
   end
 
   def subject_prefix(event_proposal)
-    "[#{event_proposal.title}: Event Proposal]"
+    "[#{event_proposal.convention.name}: Event Proposal]"
   end
 
   def event_proposal_url_for_convention(event_proposal)
     admin_event_proposal_url(event_proposal, host: event_proposal.convention.domain)
   end
   helper_method :event_proposal_url_for_convention
+
+  def event_proposal_mail(event_proposal, status_change)
+    mail(
+      to: proposal_mail_destination(event_proposal.convention),
+      subject: "#{subject_prefix(event_proposal)} #{status_change}: #{event_proposal.title}"
+    )
+  end
 end
