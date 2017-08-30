@@ -57,6 +57,11 @@ class FormItem < ApplicationRecord
     schema = PROPERTIES_SCHEMA[item_type]
     return unless schema
 
+    ensure_no_missing_required_properties(schema)
+    ensure_no_extra_properties(schema)
+  end
+
+  def ensure_no_missing_required_properties(schema)
     schema.each do |field, required|
       next unless required == :required
 
@@ -64,7 +69,9 @@ class FormItem < ApplicationRecord
         errors.add :properties, "does not include #{field}, which is required"
       end
     end
+  end
 
+  def ensure_no_extra_properties(schema)
     (properties.keys - schema.keys).each do |extra_field|
       errors.add :properties, "includes unknown field #{extra_field}"
     end
