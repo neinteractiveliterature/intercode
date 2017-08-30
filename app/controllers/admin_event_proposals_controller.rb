@@ -39,8 +39,8 @@ class AdminEventProposalsController < BaseControllers::VirtualHost
 
   private
 
-  # TODO: figure out if there's a more elegant way to check that the user can
-  # manage event proposals generally
+  # Even if the user can manage some event proposals (i.e. their own), only
+  # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
     permission = params[:action] == 'update' ? :update : :read
     authorize! permission, convention.event_proposals.new(status: 'proposed')
