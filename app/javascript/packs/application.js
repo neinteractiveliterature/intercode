@@ -13,12 +13,11 @@ import Rails from 'rails-ujs';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
-// import FormEditor from './FormEditor';
-import FormPresenter from './FormPresenter';
-import StaffPositionForm from './BuiltInForms/StaffPositionForm';
-import TeamMemberForm from './BuiltInForms/TeamMemberForm';
-import TicketPurchaseForm from './BuiltInForms/TicketPurchaseForm';
-import TicketTypeForm from './BuiltInForms/TicketTypeForm';
+import FormPresenter from '../FormPresenter';
+import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
+import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
+import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
+import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
