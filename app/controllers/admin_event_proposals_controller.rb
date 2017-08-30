@@ -1,11 +1,11 @@
 class AdminEventProposalsController < BaseControllers::VirtualHost
-  load_resource class: EventProposal, through: :convention, through_association: :event_proposals
+  load_and_authorize_resource class: EventProposal, through: :convention, through_association: :event_proposals
   before_action :authorize_admin
 
   helper :form_response
 
   def index
-    @admin_event_proposals = @admin_event_proposals.includes(:owner).sort_by do |event_proposal|
+    @admin_event_proposals = @admin_event_proposals.where.not(status: 'draft').includes(:owner).sort_by do |event_proposal|
       [
         ['proposed', 'reviewing'].include?(event_proposal.status) ? 0 : 1,
         event_proposal.status,
@@ -19,8 +19,19 @@ class AdminEventProposalsController < BaseControllers::VirtualHost
   end
 
   def update
+    if admin_event_proposal_params[:status] == 'accepted' && !@admin_event_proposal.event
+      result = AcceptEventProposalService.new(event_proposal: @admin_event_proposal).call
+
+      if result.success?
+        flash[:notice] = "Event successfully accepted for #{@convention.name}!"
+      else
+        flash.now[:alert] = result.errors.join(', ')
+        return render :edit
+      end
+    end
+
     if @admin_event_proposal.update(admin_event_proposal_params)
-      redirect_to [:admin, @admin_event_proposal], notice: 'Admin event proposal was successfully updated.'
+      redirect_to [:admin, @admin_event_proposal]
     else
       render :edit
     end
@@ -28,9 +39,11 @@ class AdminEventProposalsController < BaseControllers::VirtualHost
 
   private
 
+  # TODO: figure out if there's a more elegant way to check that the user can
+  # manage event proposals generally
   def authorize_admin
     permission = params[:action] == 'update' ? :update : :read
-    authorize! permission, convention.event_proposals.new
+    authorize! permission, convention.event_proposals.new(status: 'proposed')
   end
 
   def admin_event_proposal_params

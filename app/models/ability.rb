@@ -58,7 +58,7 @@ class Ability
     can :manage, StaffPosition, convention_id: staff_con_ids
     can :manage, TeamMember, event: { convention_id: staff_con_ids }
     can :manage, Form, convention_id: staff_con_ids
-    can :manage, EventProposal, convention_id: staff_con_ids
+    can :manage, EventProposal, convention_id: staff_con_ids, status: (EventProposal::STATUSES.to_a - ['draft'])
   end
 
   def add_team_member_abilities
