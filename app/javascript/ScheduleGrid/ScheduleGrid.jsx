@@ -26,6 +26,7 @@ query {
     length_seconds
     category
     short_blurb_html
+    event_page_url
 
     registration_policy {
       slots_limited
@@ -220,8 +221,10 @@ class ScheduleGrid extends React.Component {
     };
 
     return (
-      <div style={gridStyle} key={key}>
-        {runDivs}
+      <div style={{ borderTop: '2px rgba(0, 0, 0, .1) solid', paddingTop: '2px', paddingBottom: '2px', }}>
+        <div style={gridStyle} key={key}>
+          {runDivs}
+        </div>
       </div>
     );
   }
@@ -235,8 +238,9 @@ class ScheduleGrid extends React.Component {
     const eventRunsByCategory = this.groupEventRunsByCategory(eventRuns);
 
     const volunteerEventRuns = eventRunsByCategory.get('volunteer_event') || [];
+    const panelEventRuns = eventRunsByCategory.get('panel') || [];
     const otherEventRuns = [...eventRunsByCategory.entries()].map(([category, eventRunsInCategory]) => {
-      if (category === 'volunteer_event') {
+      if (category === 'volunteer_event' || category === 'panel') {
         return [];
       }
 
@@ -244,14 +248,14 @@ class ScheduleGrid extends React.Component {
     }).reduce((eventRunList, categoryEventRuns) => [...eventRunList, ...categoryEventRuns], []);
 
     const scheduleBlocks = [
-      [new ScheduleBlock(maxTimespan, otherEventRuns)],
-      [new ScheduleBlock(maxTimespan, volunteerEventRuns)],
-    ];
-
+      new ScheduleBlock(maxTimespan, panelEventRuns),
+      new ScheduleBlock(maxTimespan, otherEventRuns),
+      new ScheduleBlock(maxTimespan, volunteerEventRuns),
+    ].filter(scheduleBlock => scheduleBlock.eventRuns.length > 0);
 
     const hourDivs = this.renderHours(maxTimespan);
     const scheduleBlockDivs = scheduleBlocks.map(
-      ([scheduleBlock, options], i) => this.renderScheduleBlock(scheduleBlock, i, options),
+      (scheduleBlock, i) => this.renderScheduleBlock(scheduleBlock, i),
     );
 
     const gridLineStyle = {
@@ -289,7 +293,12 @@ class ScheduleGrid extends React.Component {
           href="#"
           onClick={() => this.setConventionDay(conventionDay)}
         >
-          {conventionDay.format('dddd')}
+          <span className="d-inline d-md-none">
+            {conventionDay.format('ddd')}
+          </span>
+          <span className="d-none d-md-inline">
+            {conventionDay.format('dddd')}
+          </span>
         </a>
       </li>
     ));

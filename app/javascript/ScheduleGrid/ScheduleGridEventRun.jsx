@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
+import classNames from 'classnames';
 
 class ScheduleGridEventRun extends React.Component {
   constructor(props) {
@@ -65,6 +66,10 @@ class ScheduleGridEventRun extends React.Component {
                 </li>
               </ul>
 
+              <a href={event.event_page_url} className="btn btn-primary btn-sm mb-2">
+                Go to event &raquo;
+              </a>
+
               <div
                 className="small"
                 style={{ overflowY: 'auto', maxHeight: '200px' }}
@@ -109,8 +114,6 @@ class ScheduleGridEventRun extends React.Component {
       cursor: 'pointer',
     };
 
-    const categoryClass = `event-category-${event.category.replace(/_/g, '-')}`;
-
     let runBadge = null;
     if (run.my_signups.some(signup => signup.state === 'confirmed')) {
       runBadge = <i className="fa fa-check-square" title="Confirmed signup" />;
@@ -118,9 +121,24 @@ class ScheduleGridEventRun extends React.Component {
       runBadge = <i className="fa fa-hourglass-half" title="Waitlisted" />;
     }
 
+    const userSignedUp = run.my_signups.some(signup => signup.state === 'confirmed' || signup.state === 'waitlisted');
+    const eventFull = (event.registration_policy.slots_limited && run.confirmed_signup_count === event.registration_policy.total_slots);
+
+    const eventRunClasses = classNames(
+      className,
+      'schedule-grid-event',
+      'small',
+      'p-1',
+      `event-category-${event.category.replace(/_/g, '-')}`,
+      {
+        'signed-up': userSignedUp,
+        full: eventFull && !userSignedUp,
+      },
+    );
+
     return (
       <Manager>
-        <Target style={style} className={`${className} schedule-grid-event ${categoryClass} small border border-light p-1`} role="button" onClick={this.showPopover}>
+        <Target style={style} className={eventRunClasses} role="button" onClick={this.showPopover}>
           {this.renderAvailabilityBar()}
           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {runBadge}

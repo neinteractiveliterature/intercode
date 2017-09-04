@@ -33,14 +33,20 @@ Types::EventType = GraphQL::ObjectType.define do
   end
 
   field :short_blurb_html, types.String do
-    resolve ->(obj, _args, ctx) {
+    resolve ->(obj, _args, _ctx) {
       MarkdownPresenter.new('No blurb provided').render obj.short_blurb
     }
   end
 
   field :description_html, types.String do
-    resolve ->(obj, _args, ctx) {
+    resolve ->(obj, _args, _ctx) {
       MarkdownPresenter.new('No description provided').render obj.description
+    }
+  end
+
+  field :event_page_url, types.String do
+    resolve ->(obj, _args, _ctx) {
+      Rails.application.routes.url_helpers.event_path(obj)
     }
   end
 end
