@@ -19,7 +19,13 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :events, types[Types::EventType] do
     resolve ->(_obj, _args, ctx) {
-      ctx[:convention].events.active.includes(:runs)
+      events = ctx[:convention].events.active.includes(:runs => [:rooms])
+
+      ctx[:confirmed_signup_count_by_run_id] = Signup.confirmed.counted.where(
+        run_id: Run.where(event_id: events.map(&:id)).select(:id)
+      ).group(:run_id).count
+      
+      events
     }
   end
 

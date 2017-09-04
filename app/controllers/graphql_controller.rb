@@ -2,6 +2,13 @@ class GraphqlController < BaseControllers::VirtualHost
   skip_authorization_check
 
   def execute
+    result = execute_from_params(params)
+    render json: result
+  end
+
+  private
+
+  def execute_from_params(params)
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
@@ -10,11 +17,8 @@ class GraphqlController < BaseControllers::VirtualHost
       user_con_profile: user_con_profile,
       convention: convention
     }
-    result = IntercodeSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
-    render json: result
+    IntercodeSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
   end
-
-  private
 
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)

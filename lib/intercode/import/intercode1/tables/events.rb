@@ -16,6 +16,8 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
 
   private
   def build_record(row)
+    category = event_category(row)
+
     @con.events.new(
       title: event_title(row),
       author: row[:Author],
@@ -28,9 +30,9 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       con_mail_destination: con_mail_destination(row),
       description: @markdownifier.markdownify(row[:Description]),
       short_blurb: @markdownifier.markdownify(row[:ShortBlurb]),
-      category: event_category(row),
+      category: category,
       status: event_status(row),
-      registration_policy: @registration_policy_factory.registration_policy(row)
+      registration_policy: registration_policy(row, category)
     )
   end
 
@@ -98,6 +100,13 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     case row[:Status]
     when 'Accepted' then 'active'
     when 'Dropped' then 'dropped'
+    end
+  end
+
+  def registration_policy(row, category)
+    case category
+    when 'larp', 'volunteer_event' then @registration_policy_factory.registration_policy(row)
+    else RegistrationPolicy.unlimited
     end
   end
 end

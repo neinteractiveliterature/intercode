@@ -49,6 +49,7 @@
     "react-html-id": "^0.1.0",
     "react-moment-proptypes": "^1.4.0",
     "react-number-input": "^15.5.1",
+    "react-popper": "^0.7.2",
     "react-redux": "^5.0.5",
     "react-select": "^1.0.0-rc.5",
     "react-select-fast-filter-options": "^0.2.1",
