@@ -1,4 +1,6 @@
 class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Intercode1::Table
+  INTERCON_Q_PRECON_PREFIXES = ['DISCUSSION', 'PANEL', 'RANT', 'WORKSHOP', 'PRESENTATION', 'MEETUP']
+
   def initialize(connection, con)
     super connection
     @con = con
@@ -7,13 +9,15 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def dataset
-    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).select_append(:Status).where(Status: ['Accepted', 'Dropped'])
+    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).
+      select_append(:Status).
+      where(Status: ['Accepted', 'Dropped']).or(SpecialEvent: 1)
   end
 
   private
   def build_record(row)
     @con.events.new(
-      title: row[:Title],
+      title: event_title(row),
       author: row[:Author],
       email: row[:GameEMail],
       organization: row[:Organization],
@@ -49,7 +53,12 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     end
 
     if row[:SpecialEvent] == 1
-      return 'filler'
+      intercon_q_precon_event = parse_intercon_q_precon_event(row)
+      if intercon_q_precon_event
+        return 'panel'
+      else
+        return 'filler'
+      end
     end
 
     case row[:GameType]
@@ -61,7 +70,31 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     end
   end
 
+  def parse_intercon_q_precon_event(row)
+    return unless row[:SpecialEvent] == 1
+
+    INTERCON_Q_PRECON_PREFIXES.each do |prefix|
+      if row[:Title] =~ /\A#{prefix}\s*[:-]\s*(.*)\z/
+        return [prefix, $1]
+      end
+    end
+
+    nil
+  end
+
+  def event_title(row)
+    intercon_q_precon_event = parse_intercon_q_precon_event(row)
+
+    if intercon_q_precon_event
+      intercon_q_precon_event[1]
+    else
+      row[:Title]
+    end
+  end
+
   def event_status(row)
+    return 'active' if row[:SpecialEvent]
+
     case row[:Status]
     when 'Accepted' then 'active'
     when 'Dropped' then 'dropped'

@@ -28,3 +28,30 @@
 .anything-bucket {
   background-color: #8fb6db;
 }
+
+.schedule-grid {
+  border-width: 1px;
+  border-top-width: 0;
+  border-style: solid;
+  border-color: $nav-tabs-border-color;
+}
+
+.schedule-grid-event {
+  background-color: map-get($theme-colors, 'info');
+  color: white;
+
+  &.event-category-larp {
+    background-color: $purple;
+    color: white;
+  }
+
+  &.event-category-volunteer-event {
+    background-color: map-get($theme-colors, 'dark');
+    color: white;
+  }
+
+  &.event-category-panel {
+    background-color: $yellow;
+    color: black;
+  }
+}

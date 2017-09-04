@@ -60,6 +60,10 @@ gem 'datagrid'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
+# GraphQL server
+gem 'graphql'
+gem 'graphiql-rails', group: :development
+
 # Markdown
 gem 'redcarpet'
 
