@@ -8,9 +8,16 @@ Types::RunType = GraphQL::ObjectType.define do
   field :schedule_note, types.String
   field :rooms, types[Types::RoomType]
 
+  field :confirmed_signup_count, types.Int do
+    resolve ->(obj, _args, ctx) {
+      ctx[:confirmed_signup_count_by_run_id][obj.id] || 0
+    }
+  end
+
   field :my_signups, types[Types::SignupType] do
     resolve ->(obj, _args, ctx) {
-      obj.signups.where(user_con_profile_id: ctx[:user_con_profile]&.id)
+      return [] unless ctx[:user_con_profile]
+      ctx[:user_con_profile].signups.select { |signup| signup.run_id == obj.id }
     }
   end
 end

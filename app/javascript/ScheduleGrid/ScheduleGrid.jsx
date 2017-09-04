@@ -8,7 +8,6 @@ import { gql, graphql } from 'react-apollo';
 import { propType } from 'graphql-anywhere';
 import LoadingIndicator from '../LoadingIndicator';
 import EventRun from '../PCSG/EventRun';
-import RunDimensions from '../PCSG/RunDimensions';
 import ScheduleBlock, { ScheduleLayoutResult } from '../PCSG/ScheduleBlock';
 import Timespan from '../PCSG/Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
@@ -26,12 +25,20 @@ query {
     title
     length_seconds
     category
+    short_blurb_html
+
+    registration_policy {
+      slots_limited
+      total_slots
+    }
 
     runs {
       id
       starts_at
       schedule_note
       title_suffix
+
+      confirmed_signup_count
 
       rooms {
         name
@@ -163,27 +170,6 @@ class ScheduleGrid extends React.Component {
     this.setState({ conventionDay });
   }
 
-  renderRunContent = (event: any, run: any, runDimensions: RunDimensions) => (
-    <div className={classNames({ small: true })}>
-      <ul className="list-unstyled">
-        <li>
-          <strong>{event.title}</strong>
-          {
-            run.title_suffix ? [<span key="mdash">&mdash;</span>, <em key="title-suffix">{run.title_suffix}</em>] : []
-          }
-        </li>
-        <li>
-          {runDimensions.eventRun.timespan.start.tz(this.props.data.convention.timezone_name).format('ddd h:mma')}
-          {' - '}
-          {runDimensions.eventRun.timespan.finish.tz(this.props.data.convention.timezone_name).format('h:mma')}
-        </li>
-        <li>
-          {run.rooms.map(room => room.name).sort().join(', ')}
-        </li>
-      </ul>
-    </div>
-  )
-
   renderEvents = (layoutResult: ScheduleLayoutResult, options: any = {}): Array<*> => (
     layoutResult.runDimensions.map((runDimensions) => {
       const eventRun = runDimensions.eventRun;
@@ -197,6 +183,7 @@ class ScheduleGrid extends React.Component {
           runDimensions={runDimensions}
           event={event}
           run={run}
+          convention={this.props.data.convention}
           options={options}
         />
       );
@@ -270,6 +257,7 @@ class ScheduleGrid extends React.Component {
     const gridLineStyle = {
       backgroundImage: 'linear-gradient(90deg, rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .1) 1%, transparent 2%, transparent)',
       backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px`,
+      minHeight: '300px',
     };
 
     return (

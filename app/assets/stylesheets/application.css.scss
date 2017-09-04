@@ -37,21 +37,35 @@
 }
 
 .schedule-grid-event {
-  background-color: map-get($theme-colors, 'info');
-  color: white;
+  background-color: lighten(map-get($theme-colors, 'info'), 50%);
 
   &.event-category-larp {
-    background-color: $purple;
-    color: white;
+    background-color: lighten($indigo, 35%);
   }
 
   &.event-category-volunteer-event {
-    background-color: map-get($theme-colors, 'dark');
-    color: white;
+    background-color: $gray-300;
   }
 
   &.event-category-panel {
-    background-color: $yellow;
-    color: black;
+    background-color: lighten($yellow, 20%);
+  }
+}
+
+.availability-bar {
+  background-color: map-get($theme-colors, 'success');
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+
+  .unavailable {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background-color: $gray-200;
   }
 }
