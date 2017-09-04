@@ -42,8 +42,20 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
     end
   end
 
+  def friday_start
+    @friday_start ||= begin
+      starts_at = @con.starts_at.in_time_zone(@con.timezone)
+
+      if starts_at.friday?
+        starts_at.beginning_of_day
+      elsif starts_at.thursday?
+        (starts_at.beginning_of_day + 1.day)
+      end
+    end
+  end
+
   def start_time(row)
-    @con.starts_at + day_offset(row).days + row[:StartHour].hours
+    friday_start + day_offset(row).days + row[:StartHour].hours
   end
 
   def rooms(row)

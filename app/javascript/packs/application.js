@@ -14,6 +14,7 @@ import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
 import FormPresenter from '../FormPresenter';
+import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
@@ -22,6 +23,7 @@ import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
   FormPresenter,
+  ScheduleGrid,
   StaffPositionForm,
   TeamMemberForm,
   TicketPurchaseForm,
