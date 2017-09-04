@@ -38,17 +38,38 @@
 
 .schedule-grid-event {
   background-color: lighten(map-get($theme-colors, 'info'), 50%);
+  border: 1px map-get($theme-colors, 'light') solid;
+
+  &.full {
+    opacity: 0.6;
+  }
+
+  &.signed-up {
+    border-color: map-get($theme-colors, 'info');
+  }
 
   &.event-category-larp {
     background-color: lighten($indigo, 35%);
+
+    &.signed-up {
+      border-color: $indigo;
+    }
   }
 
   &.event-category-volunteer-event {
     background-color: $gray-300;
+
+    &.signed-up {
+      border-color: $gray-700;
+    }
   }
 
   &.event-category-panel {
     background-color: lighten($yellow, 20%);
+
+    &.signed-up {
+      border-color: $yellow;
+    }
   }
 }
 
