@@ -8,10 +8,11 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
-      - javascript
-      - python
-      - php
+        ruby:
+        javascript:
+          mass_threshold: 60
+      javascript_plugins:
+        - flow
   eslint:
     enabled: true
     config:

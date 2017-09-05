@@ -60,6 +60,10 @@ gem 'datagrid'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
+# GraphQL server
+gem 'graphql'
+gem 'graphiql-rails', group: :development
+
 # Markdown
 gem 'redcarpet'
 
@@ -69,6 +73,17 @@ gem 'newrelic_rpm'
 gem 'rails_12factor', group: 'production'
 
 gem 'faker', group: 'development', require: false
+
+group :development do
+  gem 'rack-mini-profiler'
+
+  # For memory profiling (requires Ruby MRI 2.1+)
+  gem 'memory_profiler'
+
+  # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
+  gem 'flamegraph'
+  gem 'stackprof'
+end
 
 group :development, :test do
   gem 'pry-rails'

@@ -29,6 +29,14 @@ class RegistrationPolicy
     end
   end
 
+  def slots_unlimited?
+    buckets.any?(&:slots_unlimited?)
+  end
+
+  def slots_limited?
+    !slots_unlimited?
+  end
+
   def attributes
     {
       buckets: buckets
