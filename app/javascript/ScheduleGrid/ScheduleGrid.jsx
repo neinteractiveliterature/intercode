@@ -223,7 +223,7 @@ class ScheduleGrid extends React.Component {
     };
 
     return (
-      <div style={{ borderTop: '2px rgba(0, 0, 0, .1) solid', paddingTop: '2px', paddingBottom: '2px', }}>
+      <div style={{ borderTop: '2px rgba(0, 0, 0, .1) solid', paddingTop: '2px', paddingBottom: '2px', flexGrow: (options.flexGrow ? 1 : null) }}>
         <div style={gridStyle} key={key}>
           {runDivs}
         </div>
@@ -250,14 +250,14 @@ class ScheduleGrid extends React.Component {
     }).reduce((eventRunList, categoryEventRuns) => [...eventRunList, ...categoryEventRuns], []);
 
     const scheduleBlocks = [
-      new ScheduleBlock(maxTimespan, panelEventRuns),
-      new ScheduleBlock(maxTimespan, otherEventRuns),
-      new ScheduleBlock(maxTimespan, volunteerEventRuns),
-    ].filter(scheduleBlock => scheduleBlock.eventRuns.length > 0);
+      [new ScheduleBlock(maxTimespan, panelEventRuns)],
+      [new ScheduleBlock(maxTimespan, otherEventRuns), { flexGrow: 1 }],
+      [new ScheduleBlock(maxTimespan, volunteerEventRuns)],
+    ].filter(scheduleBlock => scheduleBlock[0].eventRuns.length > 0);
 
     const hourDivs = this.renderHours(maxTimespan);
     const scheduleBlockDivs = scheduleBlocks.map(
-      (scheduleBlock, i) => this.renderScheduleBlock(scheduleBlock, i),
+      ([scheduleBlock, options], i) => this.renderScheduleBlock(scheduleBlock, i, options),
     );
 
     const gridLineStyle = {
@@ -268,7 +268,7 @@ class ScheduleGrid extends React.Component {
 
     return (
       <div className="schedule-grid mb-4 bg-light" style={{ overflowX: 'auto' }}>
-        <div style={{ ...gridLineStyle, display: 'inline-block' }}>
+        <div style={{ ...gridLineStyle, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <div style={{ width: this.getPixelWidth(maxTimespan), height: '2em', position: 'relative' }} className="small mt-1">
             {hourDivs}
           </div>
