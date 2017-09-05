@@ -129,7 +129,6 @@ GEM
       i18n (~> 0.5)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
-    fast_stack (0.2.0)
     ffi (1.9.18)
     ffi (1.9.18-java)
     fission (0.5.0)
@@ -505,7 +504,6 @@ DEPENDENCIES
   factory_girl
   factory_girl_rails
   faker
-  fast_stack
   flamegraph
   fog
   fog-aws
