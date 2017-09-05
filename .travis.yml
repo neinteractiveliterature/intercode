@@ -6,7 +6,12 @@ branches:
 rvm:
 - 2.4.1
 bundler_args: "--without development:production:intercode1_import"
-cache: bundler
+cache:
+  bundler: true
+  directories:
+    - node_modules
+    - public/packs-test
+  yarn: true
 before_script:
 - nvm install
 - npm install --global yarn
