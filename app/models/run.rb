@@ -36,6 +36,14 @@ class Run < ApplicationRecord
     registration_policy.buckets.any? { |bucket| bucket_has_available_slots?(bucket.key) }
   end
 
+  def available_slots_by_bucket_key
+    signups = signups_by_bucket_key
+
+    registration_policy.buckets.map(&:key).each_with_object({}) do |bucket_key, hash|
+      hash[bucket_key] = bucket_with_key(bucket_key).available_slots(signups[bucket_key] || [])
+    end
+  end
+
   def timespan
     ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
   end
