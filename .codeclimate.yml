@@ -8,10 +8,9 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
-      - javascript
-      - python
-      - php
+        ruby:
+        javascript:
+          mass_threshold: 60
   eslint:
     enabled: true
     config:
