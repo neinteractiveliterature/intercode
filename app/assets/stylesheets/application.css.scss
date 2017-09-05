@@ -34,6 +34,9 @@
   border-top-width: 0;
   border-style: solid;
   border-color: $nav-tabs-border-color;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
 }
 
 .schedule-grid-event {
