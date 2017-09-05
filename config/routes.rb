@@ -1,6 +1,11 @@
 require 'intercode/virtual_host_constraint'
 
 Intercode::Application.routes.draw do
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+  end
+
+  post "/graphql", to: "graphql#execute"
   devise_for :users, controllers: { registrations: "registrations" }
 
   # All of these pages must be within the virtual host
