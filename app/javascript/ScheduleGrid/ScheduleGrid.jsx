@@ -8,9 +8,11 @@ import { gql, graphql } from 'react-apollo';
 import { propType } from 'graphql-anywhere';
 import LoadingIndicator from '../LoadingIndicator';
 import EventRun from '../PCSG/EventRun';
-import ScheduleBlock, { ScheduleLayoutResult } from '../PCSG/ScheduleBlock';
+import ScheduleBlock from '../PCSG/ScheduleBlock';
+import ScheduleLayoutResult from '../PCSG/ScheduleLayoutResult';
 import Timespan from '../PCSG/Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
+import computeRunDimensionsWithoutSpanning from '../PCSG/computeRunDimensionsWithoutSpanning';
 
 const ScheduleQuery = gql`
 query {
@@ -212,7 +214,7 @@ class ScheduleGrid extends React.Component {
   }
 
   renderScheduleBlock(scheduleBlock: ScheduleBlock, key: any, options: any = {}) {
-    const layoutResult = scheduleBlock.computeRunDimensionsWithoutSpanning();
+    const layoutResult = computeRunDimensionsWithoutSpanning(scheduleBlock);
     const runDivs = this.renderEvents(layoutResult, options);
     const gridStyle = {
       position: 'relative',
