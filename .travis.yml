@@ -7,6 +7,7 @@ cache:
   bundler: true
   directories:
     - node_modules
+    - public/packs-test
   yarn: true
 before_script:
 - nvm install
