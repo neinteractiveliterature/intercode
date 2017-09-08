@@ -24,6 +24,7 @@ Intercode::Application.routes.draw do
     resources :events do
       collection do
         get :schedule
+        get :schedule_with_counts
       end
 
       resources :team_members, except: [:show]

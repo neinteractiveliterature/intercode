@@ -42,18 +42,9 @@ class EventsController < BaseControllers::VirtualHost
   end
 
   def schedule
-    # @events = @events.active.includes(runs: :rooms)
-    # runs = @events.flat_map(&:runs).sort_by(&:starts_at)
-    #
-    # if runs.any?
-    #   start_date = runs.first.starts_at.to_date
-    #   end_date = runs.last.ends_at.to_date
-    #   @dates = (start_date..end_date).to_a
-    # else
-    #   @dates = []
-    # end
-    #
-    # @runs_by_date = runs.group_by { |run| run.starts_at.to_date }
+  end
+
+  def schedule_with_counts
   end
 
   # Show information about a LARP. The id is specified as part of the URL

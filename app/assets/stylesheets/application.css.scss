@@ -37,6 +37,16 @@
   min-height: 450px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+}
+
+.schedule-grid-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: min-content;
+  min-height: 300px;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .1) 1%, transparent 2%, transparent);
 }
 
 .schedule-grid-event {
@@ -72,6 +82,26 @@
 
     &.signed-up {
       border-color: $yellow;
+    }
+  }
+
+  &.event-fullness-below-minimum {
+    background-color: lighten(map-get($theme-colors, 'danger'), 20%);
+  }
+
+  &.event-fullness-minimum {
+    background-color: lighten(map-get($theme-colors, 'warning'), 20%);
+  }
+
+  &.event-fullness-preferred {
+    background-color: lighten(map-get($theme-colors, 'success'), 20%);
+  }
+
+  &.event-fullness-full {
+    background-color: lighten(map-get($theme-colors, 'primary'), 20%);
+
+    &.full {
+      opacity: 1.0;
     }
   }
 }

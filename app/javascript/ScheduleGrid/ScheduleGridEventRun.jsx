@@ -1,10 +1,38 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import classNames from 'classnames';
 
+function userSignupStatus(run) {
+  if (run.my_signups.some(signup => signup.state === 'confirmed')) {
+    return 'confirmed'
+  } else if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
+    return 'waitlisted';
+  }
+
+  return null;
+}
+
 class ScheduleGridEventRun extends React.Component {
+  static propTypes = {
+    event: PropTypes.object.isRequired,
+    run: PropTypes.object.isRequired,
+    runDimensions: PropTypes.arrayOf(
+      PropTypes.object.isRequired,
+    ).isRequired,
+    convention: PropTypes.object.isRequired,
+    layoutResult: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    showSignedUp: PropTypes.bool,
+    showSignupStatusBadge: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    className: null,
+    showSignedUp: false,
+    showSignupStatusBadge: false,
+  };
+
   constructor(props) {
     super(props);
 
@@ -38,7 +66,7 @@ class ScheduleGridEventRun extends React.Component {
 
     return (
       <Popper placement="bottom">
-        {({ popperProps, restProps }) => (
+        {({ popperProps }) => (
           <div className={`popover bs-popover-${popperProps['data-placement']} show`} role="tooltip" {...popperProps}>
             <Arrow className="arrow" />
             <div className="popover-header">
@@ -101,6 +129,20 @@ class ScheduleGridEventRun extends React.Component {
     );
   }
 
+  renderSignupStatusBadge = (signupStatus) => {
+    if (!this.props.showSignupStatusBadge) {
+      return null;
+    }
+
+    if (signupStatus === 'confirmed') {
+      return <i className="fa fa-check-square" title="Confirmed signup" />;
+    } else if (signupStatus === 'waitlisted') {
+      return <i className="fa fa-hourglass-half" title="Waitlisted" />;
+    }
+
+    return null;
+  }
+
   render = () => {
     const { layoutResult, runDimensions, event, run, className } = this.props;
 
@@ -114,25 +156,18 @@ class ScheduleGridEventRun extends React.Component {
       cursor: 'pointer',
     };
 
-    let runBadge = null;
-    if (run.my_signups.some(signup => signup.state === 'confirmed')) {
-      runBadge = <i className="fa fa-check-square" title="Confirmed signup" />;
-    } else if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
-      runBadge = <i className="fa fa-hourglass-half" title="Waitlisted" />;
-    }
-
-    const userSignedUp = run.my_signups.some(signup => signup.state === 'confirmed' || signup.state === 'waitlisted');
+    const signupStatus = userSignupStatus(run);
     const eventFull = (event.registration_policy.slots_limited && run.confirmed_signup_count === event.registration_policy.total_slots);
+    const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
 
     const eventRunClasses = classNames(
       className,
       'schedule-grid-event',
       'small',
       'p-1',
-      `event-category-${event.category.replace(/_/g, '-')}`,
       {
-        'signed-up': userSignedUp,
-        full: eventFull && !userSignedUp,
+        'signed-up': this.props.showSignedUp && signupStatus != null,
+        full: eventFull && signupStatus == null,
       },
     );
 
@@ -141,8 +176,8 @@ class ScheduleGridEventRun extends React.Component {
         <Target style={style} className={eventRunClasses} role="button" onClick={this.showPopover}>
           {this.renderAvailabilityBar()}
           <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {runBadge}
-            {runBadge ? ' ' : ''}
+            {signupStatusBadge}
+            {signupStatusBadge ? ' ' : ''}
             {event.title}
           </div>
         </Target>
