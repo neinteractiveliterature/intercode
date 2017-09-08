@@ -26,7 +26,7 @@ class ScheduleGridApp extends React.Component {
 
   render = () => (
     <ApolloProvider client={this.client}>
-      <ScheduleGrid />
+      <ScheduleGrid {...this.props} />
     </ApolloProvider>
   );
 }

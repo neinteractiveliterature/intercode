@@ -33,6 +33,8 @@ query {
     registration_policy {
       slots_limited
       total_slots
+      preferred_slots
+      minimum_slots
     }
 
     runs {
@@ -91,10 +93,16 @@ class ScheduleGrid extends React.Component {
       loading: PropTypes.boolean,
       error: PropTypes.object,
     }),
+    classifyEventsBy: PropTypes.oneOf(['category', 'fullness']),
+    showSignedUp: PropTypes.bool,
+    showSignupStatusBadge: PropTypes.bool,
   };
 
   static defaultProps = {
     data: null,
+    classifyEventsBy: null,
+    showSignedUp: false,
+    showSignupStatusBadge: false,
   };
 
   constructor(props) {
@@ -173,11 +181,36 @@ class ScheduleGrid extends React.Component {
     this.setState({ conventionDay });
   }
 
-  renderEvents = (layoutResult: ScheduleLayoutResult, options: any = {}): Array<*> => (
+  renderEvents = (layoutResult: ScheduleLayoutResult): Array<*> => (
     layoutResult.runDimensions.map((runDimensions) => {
       const eventRun = runDimensions.eventRun;
       const run = this.runsById.get(eventRun.runId);
+      if (run == null) {
+        return null;
+      }
+
       const event = this.eventsById.get(run.event_id);
+      if (event == null) {
+        return null;
+      }
+
+      let className;
+
+      if (this.props.classifyEventsBy === 'category') {
+        className = `event-category-${event.category.replace(/_/g, '-')}`;
+      } else if (this.props.classifyEventsBy === 'fullness') {
+        if (!event.registration_policy.slots_limited) {
+          className = 'event-fullness-unlimited';
+        } else if (run.confirmed_signup_count >= event.registration_policy.total_slots) {
+          className = 'event-fullness-full';
+        } else if (run.confirmed_signup_count >= event.registration_policy.preferred_slots) {
+          className = 'event-fullness-preferred';
+        } else if (run.confirmed_signup_count >= event.registration_policy.minimum_slots) {
+          className = 'event-fullness-minimum';
+        } else {
+          className = 'event-fullness-below-minimum';
+        }
+      }
 
       return (
         <ScheduleGridEventRun
@@ -187,7 +220,9 @@ class ScheduleGrid extends React.Component {
           event={event}
           run={run}
           convention={this.props.data.convention}
-          options={options}
+          className={className}
+          showSignedUp={this.props.showSignedUp}
+          showSignupStatusBadge={this.props.showSignupStatusBadge}
         />
       );
     })
@@ -260,15 +295,9 @@ class ScheduleGrid extends React.Component {
       ([scheduleBlock, options], i) => this.renderScheduleBlock(scheduleBlock, i, options),
     );
 
-    const gridLineStyle = {
-      backgroundImage: 'linear-gradient(90deg, rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .1) 1%, transparent 2%, transparent)',
-      backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px`,
-      minHeight: '300px',
-    };
-
     return (
       <div className="schedule-grid mb-4 bg-light" style={{ overflowX: 'auto' }}>
-        <div style={{ ...gridLineStyle, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
           <div style={{ width: this.getPixelWidth(maxTimespan), height: '2em', position: 'relative' }} className="small mt-1">
             {hourDivs}
           </div>
