@@ -14,6 +14,18 @@ Types::RunType = GraphQL::ObjectType.define do
     }
   end
 
+  field :waitlisted_signup_count, types.Int do
+    resolve ->(obj, _args, ctx) {
+      ctx[:waitlisted_signup_count_by_run_id][obj.id] || 0
+    }
+  end
+
+  field :not_counted_signup_count, types.Int do
+    resolve ->(obj, _args, ctx) {
+      ctx[:not_counted_signup_count_by_run_id][obj.id] || 0
+    }
+  end
+
   field :my_signups, types[Types::SignupType] do
     resolve ->(obj, _args, ctx) {
       return [] unless ctx[:user_con_profile]
