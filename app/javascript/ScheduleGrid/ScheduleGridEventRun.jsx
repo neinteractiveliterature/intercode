@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import classNames from 'classnames';
+import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 
 function userSignupStatus(run) {
   if (run.my_signups.some(signup => signup.state === 'confirmed')) {
@@ -17,20 +18,16 @@ class ScheduleGridEventRun extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     run: PropTypes.object.isRequired,
-    runDimensions: PropTypes.arrayOf(
-      PropTypes.object.isRequired,
-    ).isRequired,
+    runDimensions: PropTypes.object.isRequired,
     convention: PropTypes.object.isRequired,
     layoutResult: PropTypes.object.isRequired,
     className: PropTypes.string,
-    showSignedUp: PropTypes.bool,
-    showSignupStatusBadge: PropTypes.bool,
+    config: ConfigPropType,
   };
 
   static defaultProps = {
     className: null,
-    showSignedUp: false,
-    showSignupStatusBadge: false,
+    config: defaultConfigProp,
   };
 
   constructor(props) {
@@ -129,8 +126,26 @@ class ScheduleGridEventRun extends React.Component {
     );
   }
 
+  renderExtendedCounts = () => {
+    const { event, run, config } = this.props;
+
+    if (!config.showExtendedCounts || !event.registration_policy.slots_limited) {
+      return null;
+    }
+
+    return (
+      <div className="event-extended-counts p-1">
+        <span className="text-success">{run.confirmed_signup_count}</span>
+        {'/'}
+        <span className="text-info">{run.not_counted_signup_count}</span>
+        {'/'}
+        <span className="text-danger">{run.waitlisted_signup_count}</span>
+      </div>
+    );
+  }
+
   renderSignupStatusBadge = (signupStatus) => {
-    if (!this.props.showSignupStatusBadge) {
+    if (!this.props.config.showSignupStatusBadge) {
       return null;
     }
 
@@ -164,9 +179,8 @@ class ScheduleGridEventRun extends React.Component {
       className,
       'schedule-grid-event',
       'small',
-      'p-1',
       {
-        'signed-up': this.props.showSignedUp && signupStatus != null,
+        'signed-up': this.props.config.showSignedUp && signupStatus != null,
         full: eventFull && signupStatus == null,
       },
     );
@@ -175,10 +189,13 @@ class ScheduleGridEventRun extends React.Component {
       <Manager>
         <Target style={style} className={eventRunClasses} role="button" onClick={this.showPopover}>
           {this.renderAvailabilityBar()}
-          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {signupStatusBadge}
-            {signupStatusBadge ? ' ' : ''}
-            {event.title}
+          <div className="d-flex">
+            {this.renderExtendedCounts()}
+            <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {signupStatusBadge}
+              {signupStatusBadge ? ' ' : ''}
+              {event.title}
+            </div>
           </div>
         </Target>
         {this.renderPopover()}

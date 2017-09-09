@@ -18,13 +18,25 @@ Types::QueryType = GraphQL::ObjectType.define do
   end
 
   field :events, types[Types::EventType] do
-    resolve ->(_obj, _args, ctx) {
+    argument :extendedCounts, types.Boolean
+
+    resolve ->(_obj, args, ctx) {
       events = ctx[:convention].events.active.includes(:runs => [:rooms])
 
       ctx[:confirmed_signup_count_by_run_id] = Signup.confirmed.counted.where(
         run_id: Run.where(event_id: events.map(&:id)).select(:id)
       ).group(:run_id).count
-      
+
+      if args['extendedCounts']
+        ctx[:waitlisted_signup_count_by_run_id] = Signup.waitlisted.counted.where(
+          run_id: Run.where(event_id: events.map(&:id)).select(:id)
+        ).group(:run_id).count
+
+        ctx[:not_counted_signup_count_by_run_id] = Signup.not_counted.where(
+          run_id: Run.where(event_id: events.map(&:id)).select(:id)
+        ).group(:run_id).count
+      end
+
       events
     }
   end
