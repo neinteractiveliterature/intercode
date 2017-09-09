@@ -66,49 +66,53 @@
   &.signed-up {
     border-color: map-get($theme-colors, 'info');
   }
+}
 
-  &.event-category-larp {
-    background-color: lighten($indigo, 35%);
+.event-category-larp {
+  background-color: lighten($indigo, 35%);
 
-    &.signed-up {
-      border-color: $indigo;
-    }
+  &.signed-up {
+    border-color: $indigo;
   }
+}
 
-  &.event-category-volunteer-event {
-    background-color: $gray-300;
+.event-category-volunteer-event {
+  background-color: $gray-300;
 
-    &.signed-up {
-      border-color: $gray-700;
-    }
+  &.signed-up {
+    border-color: $gray-700;
   }
+}
 
-  &.event-category-panel {
-    background-color: lighten($yellow, 20%);
+.event-category-panel {
+  background-color: lighten($yellow, 20%);
 
-    &.signed-up {
-      border-color: $yellow;
-    }
+  &.signed-up {
+    border-color: $yellow;
   }
+}
 
-  &.event-fullness-below-minimum {
-    background-color: lighten(map-get($theme-colors, 'danger'), 20%);
-  }
+.event-fullness-unlimited {
+  background-color: lighten(map-get($theme-colors, 'info'), 50%);
+}
 
-  &.event-fullness-minimum {
-    background-color: lighten(map-get($theme-colors, 'warning'), 20%);
-  }
+.event-fullness-below-minimum {
+  background-color: lighten(map-get($theme-colors, 'danger'), 20%);
+}
 
-  &.event-fullness-preferred {
-    background-color: lighten(map-get($theme-colors, 'success'), 20%);
-  }
+.event-fullness-minimum {
+  background-color: lighten(map-get($theme-colors, 'warning'), 20%);
+}
 
-  &.event-fullness-full {
-    background-color: lighten(map-get($theme-colors, 'primary'), 20%);
+.event-fullness-preferred {
+  background-color: lighten(map-get($theme-colors, 'success'), 20%);
+}
 
-    &.full {
-      opacity: 1.0;
-    }
+.event-fullness-full {
+  background-color: lighten(map-get($theme-colors, 'primary'), 20%);
+
+  &.full {
+    opacity: 1.0;
   }
 }
 
