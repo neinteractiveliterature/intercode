@@ -1,1 +1,37 @@
-= schedule_grid classifyEventsBy: 'fullness', showExtendedCounts: true
+%h1 Schedule With Counts
+
+.row
+  .col-xl-9
+    = schedule_grid classifyEventsBy: 'fullness', showExtendedCounts: true
+  .col-xl-3
+    .card.bg-light.mb-4
+      .card-header Legend
+      .card-body
+        %h5 Event fullness colors
+
+        .row.px-2.small
+          .col-md.col-xl-12.event-fullness-below-minimum
+            Below minimum
+          .col-md.col-xl-12.event-fullness-minimum
+            Reached minimum
+          .col-md.col-xl-12.event-fullness-preferred
+            Reached preferred
+          .col-md.col-xl-12.event-fullness-full
+            Full
+          .col-md.col-xl-12.event-fullness-unlimited
+            Unlimited capacity
+
+        %h5.mt-4 Attendee counts
+
+        .small.text-muted
+          %div min/preferred/max
+          %div
+            %abbr.text-success{title: "confirmed signups"}<> conf
+            \/
+            %abbr.text-info{title: "non-counted signups (usually staff or NPCs)"}<> nocount
+            \/
+            %abbr.text-danger{title: "waitlisted signups"}<> waitlist
+            \/
+            %abbr{title: "people marked as away from the convention"}<> away
+          %div
+            Players: [total of above 4 numbers]
