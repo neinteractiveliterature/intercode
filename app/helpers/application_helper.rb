@@ -6,13 +6,14 @@ module ApplicationHelper
   def page_title
     parts = []
 
+    parts << @page_title if @page_title.present?
+    parts << @event.title if @event
+
     if @convention
       parts << @convention.name
     else
       parts << "Intercode"
     end
-
-    parts << @event.title if @event
 
     parts.join(" - ")
   end
