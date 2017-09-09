@@ -10,4 +10,5 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :domain, types.String
   field :timezone_name, types.String
   field :registrations_frozen, types.Boolean
+  field :away_blocks, types[Types::AwayBlockType]
 end

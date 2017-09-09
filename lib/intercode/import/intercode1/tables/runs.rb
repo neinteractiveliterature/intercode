@@ -1,4 +1,6 @@
 class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode1::Table
+  include Intercode::Import::Intercode1::DateHelpers
+
   def initialize(connection, con, event_id_map, user_id_map, room_id_map)
     super connection
     @con = con
@@ -33,29 +35,8 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
     row[:RunId]
   end
 
-  def day_offset(row)
-    case row[:Day]
-    when 'Thu' then -1
-    when 'Fri' then 0
-    when 'Sat' then 1
-    when 'Sun' then 2
-    end
-  end
-
-  def friday_start
-    @friday_start ||= begin
-      starts_at = @con.starts_at.in_time_zone(@con.timezone)
-
-      if starts_at.friday?
-        starts_at.beginning_of_day
-      elsif starts_at.thursday?
-        (starts_at.beginning_of_day + 1.day)
-      end
-    end
-  end
-
   def start_time(row)
-    friday_start + day_offset(row).days + row[:StartHour].hours
+    start_of_convention_day(@con, row[:Day]) + row[:StartHour].hours
   end
 
   def rooms(row)

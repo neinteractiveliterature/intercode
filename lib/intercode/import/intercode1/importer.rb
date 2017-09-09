@@ -134,6 +134,7 @@ class Intercode::Import::Intercode1::Importer
     events_table.import!
     users_table.import!
     staff_position_importer.import!
+    away_table.import!
     bids_table.import!
     bid_times_table.import!
     bid_info_table.import!
@@ -179,6 +180,12 @@ class Intercode::Import::Intercode1::Importer
 
   def user_con_profiles_id_map
     @user_con_profiles_id_map ||= users_table.user_con_profile_id_map
+  end
+
+  def away_table
+    return unless user_con_profiles_id_map
+
+    @away_table ||= Intercode::Import::Intercode1::Tables::Away.new(connection, con, user_con_profiles_id_map)
   end
 
   def bios_table
