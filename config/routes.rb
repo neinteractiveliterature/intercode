@@ -23,8 +23,8 @@ Intercode::Application.routes.draw do
 
     resources :events do
       collection do
-        get :schedule
-        get :schedule_with_counts
+        get 'schedule(/*extra)' => :schedule, as: :schedule
+        get 'schedule_with_counts(/*extra)' => :schedule_with_counts, as: :schedule_with_counts
       end
 
       resources :team_members, except: [:show]

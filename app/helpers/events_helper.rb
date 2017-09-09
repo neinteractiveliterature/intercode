@@ -1,11 +1,10 @@
 module EventsHelper
-  def schedule_grid(classify_events_by: nil, show_signed_up: false, show_signup_status_badge: false)
+  def schedule_grid(config = {})
     react_component(
       "ScheduleGrid",
       authenticityToken: form_authenticity_token(form_options: { action: graphql_path, method: 'POST' }),
-      classifyEventsBy: classify_events_by,
-      showSignedUp: show_signed_up,
-      showSignupStatusBadge: show_signup_status_badge
+      basename: url_for(params.permit!.to_h.merge(extra: nil, only_path: true)),
+      config: config
     )
   end
 end

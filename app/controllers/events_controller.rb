@@ -42,9 +42,11 @@ class EventsController < BaseControllers::VirtualHost
   end
 
   def schedule
+    @page_title = "Event Schedule"
   end
 
   def schedule_with_counts
+    @page_title = "Schedule With Counts"
   end
 
   # Show information about a LARP. The id is specified as part of the URL

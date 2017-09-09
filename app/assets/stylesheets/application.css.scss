@@ -49,6 +49,12 @@
   background-image: linear-gradient(90deg, rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .1) 1%, transparent 2%, transparent);
 }
 
+.schedule-grid-block {
+  border-top: 2px rgba(0, 0, 0, .1) solid;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 .schedule-grid-event {
   background-color: lighten(map-get($theme-colors, 'info'), 50%);
   border: 1px map-get($theme-colors, 'light') solid;
@@ -104,6 +110,12 @@
       opacity: 1.0;
     }
   }
+}
+
+.event-extended-counts {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-right: 1px rgba(0, 0, 0, 0.6) solid;
+  z-index: -2;
 }
 
 .availability-bar {

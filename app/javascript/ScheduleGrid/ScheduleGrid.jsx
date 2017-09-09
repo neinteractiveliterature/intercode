@@ -1,28 +1,26 @@
-// @flow
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import classNames from 'classnames';
 import { gql, graphql } from 'react-apollo';
 import { propType } from 'graphql-anywhere';
+import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 import LoadingIndicator from '../LoadingIndicator';
 import EventRun from '../PCSG/EventRun';
 import ScheduleBlock from '../PCSG/ScheduleBlock';
-import ScheduleLayoutResult from '../PCSG/ScheduleLayoutResult';
 import Timespan from '../PCSG/Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
 import computeRunDimensionsWithoutSpanning from '../PCSG/computeRunDimensionsWithoutSpanning';
 
 const ScheduleQuery = gql`
-query {
+query($extendedCounts: Boolean!) {
   convention {
     starts_at
     ends_at
     timezone_name
   }
 
-  events {
+  events(extendedCounts: $extendedCounts) {
     id
     title
     length_seconds
@@ -44,6 +42,8 @@ query {
       title_suffix
 
       confirmed_signup_count
+      waitlisted_signup_count @include(if: $extendedCounts)
+      not_counted_signup_count @include(if: $extendedCounts)
 
       rooms {
         name
@@ -70,9 +70,9 @@ function GraphQLPropType(query, rootKey) {
   };
 }
 
-function formatTime(time: moment, timezoneName: string): string {
+function formatTime(time, timezoneName) {
   const timeInZone = time.tz(timezoneName);
-  let phrasing: string;
+  let phrasing;
   if (timeInZone.hour() === 0) {
     phrasing = 'Midnight';
   } else if (timeInZone.hour() === 12) {
@@ -84,7 +84,16 @@ function formatTime(time: moment, timezoneName: string): string {
   return phrasing;
 }
 
-@graphql(ScheduleQuery)
+@graphql(
+  ScheduleQuery,
+  {
+    options: props => ({
+      variables: {
+        extendedCounts: props.config.showExtendedCounts || false,
+      },
+    }),
+  },
+)
 class ScheduleGrid extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
@@ -93,27 +102,16 @@ class ScheduleGrid extends React.Component {
       loading: PropTypes.boolean,
       error: PropTypes.object,
     }),
-    classifyEventsBy: PropTypes.oneOf(['category', 'fullness']),
-    showSignedUp: PropTypes.bool,
-    showSignupStatusBadge: PropTypes.bool,
+    config: ConfigPropType,
   };
 
   static defaultProps = {
     data: null,
     classifyEventsBy: null,
-    showSignedUp: false,
-    showSignupStatusBadge: false,
+    config: defaultConfigProp,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      conventionDay: null,
-    };
-  }
-
-  componentWillReceiveProps = (nextProps: any) => {
+  componentWillReceiveProps = (nextProps) => {
     const { data } = nextProps;
 
     if (data.loading || data.error) {
@@ -140,26 +138,20 @@ class ScheduleGrid extends React.Component {
       this.conventionDays.push(now.clone().add(6, 'hours')); // start convention days at 6am
       now.add(1, 'day');
     }
-
-    if (this.state.conventionDay == null) {
-      this.setState({ conventionDay: this.conventionDays[0] });
-    }
   }
 
-  getPixelWidth = (timespan: Timespan): number => timespan.getLength('hour') * PIXELS_PER_HOUR
+  getPixelWidth = timespan => timespan.getLength('hour') * PIXELS_PER_HOUR
 
-  runsById: Map<number, any>;
-  eventsById: Map<number, any>;
-  eventsByCategory: Map<string, Array<any>>;
-  conventionTimespan: Timespan;
-  conventionDays: Array<moment>;
+  setConventionDay = (conventionDay) => {
+    this.setState({ conventionDay });
+  }
 
-  buildScheduleBlock = (events: Array<any>): ScheduleBlock => {
+  buildScheduleBlock = (events) => {
     const eventRuns = EventRun.buildEventRunsFromApi(events);
     return new ScheduleBlock(this.conventionTimespan, eventRuns);
   }
 
-  groupEventRunsByCategory = (eventRuns: Array<EventRun>): Map<string, Array<any>> => (
+  groupEventRunsByCategory = eventRuns => (
     eventRuns.reduce(
       (eventRunsByCategory, eventRun) => {
         const { runId } = eventRun;
@@ -177,11 +169,7 @@ class ScheduleGrid extends React.Component {
     )
   )
 
-  setConventionDay = (conventionDay: moment) => {
-    this.setState({ conventionDay });
-  }
-
-  renderEvents = (layoutResult: ScheduleLayoutResult): Array<*> => (
+  renderEvents = layoutResult => (
     layoutResult.runDimensions.map((runDimensions) => {
       const eventRun = runDimensions.eventRun;
       const run = this.runsById.get(eventRun.runId);
@@ -196,9 +184,9 @@ class ScheduleGrid extends React.Component {
 
       let className;
 
-      if (this.props.classifyEventsBy === 'category') {
+      if (this.props.config.classifyEventsBy === 'category') {
         className = `event-category-${event.category.replace(/_/g, '-')}`;
-      } else if (this.props.classifyEventsBy === 'fullness') {
+      } else if (this.props.config.classifyEventsBy === 'fullness') {
         if (!event.registration_policy.slots_limited) {
           className = 'event-fullness-unlimited';
         } else if (run.confirmed_signup_count >= event.registration_policy.total_slots) {
@@ -221,14 +209,13 @@ class ScheduleGrid extends React.Component {
           run={run}
           convention={this.props.data.convention}
           className={className}
-          showSignedUp={this.props.showSignedUp}
-          showSignupStatusBadge={this.props.showSignupStatusBadge}
+          config={this.props.config}
         />
       );
     })
   )
 
-  renderHours = (timespan: Timespan) => {
+  renderHours = (timespan) => {
     const hourCount = timespan.getLength('hour');
 
     const now = timespan.start.clone();
@@ -248,25 +235,25 @@ class ScheduleGrid extends React.Component {
     return hourDivs;
   }
 
-  renderScheduleBlock(scheduleBlock: ScheduleBlock, key: any, options: any = {}) {
+  renderScheduleBlock(scheduleBlock, key, options = {}) {
     const layoutResult = computeRunDimensionsWithoutSpanning(scheduleBlock);
     const runDivs = this.renderEvents(layoutResult, options);
-    const gridStyle = {
+    const blockContentStyle = {
       position: 'relative',
       width: `${this.getPixelWidth(scheduleBlock.timespan)}px`,
       height: `${layoutResult.laneCount * PIXELS_PER_LANE}px`,
     };
 
     return (
-      <div style={{ borderTop: '2px rgba(0, 0, 0, .1) solid', paddingTop: '2px', paddingBottom: '2px', flexGrow: (options.flexGrow ? 1 : null) }}>
-        <div style={gridStyle} key={key}>
+      <div className="schedule-grid-block" style={{ flexGrow: (options.flexGrow ? 1 : null) }} key={key}>
+        <div style={blockContentStyle}>
           {runDivs}
         </div>
       </div>
     );
   }
 
-  renderGridWithEventRuns = (eventRuns: Array<EventRun>, gridTimespan: Timespan): ?React$Element<*> => {
+  renderGridWithEventRuns = (eventRuns, gridTimespan) => {
     const maxTimespan = eventRuns.reduce(
       (timespan, eventRun) => timespan.expandedToFit(eventRun.timespan),
       eventRuns.length > 0 ? eventRuns[0].timespan : gridTimespan,
@@ -319,32 +306,42 @@ class ScheduleGrid extends React.Component {
 
     const conventionDayTabs = this.conventionDays.map(conventionDay => (
       <li className="nav-item" key={conventionDay.toISOString()}>
-        <a // eslint-disable-line jsx-a11y/href-no-hash
-          className={classNames('nav-link', { active: conventionDay.isSame(this.state.conventionDay) })}
-          href="#"
-          onClick={() => this.setConventionDay(conventionDay)}
-        >
+        <NavLink to={`/${conventionDay.format('dddd').toLowerCase()}`} className="nav-link">
           <span className="d-inline d-md-none">
             {conventionDay.format('ddd')}
           </span>
           <span className="d-none d-md-inline">
             {conventionDay.format('dddd')}
           </span>
-        </a>
+        </NavLink>
       </li>
     ));
 
     const eventRuns = EventRun.buildEventRunsFromApi(this.props.data.events);
 
-    const conventionDayTimespan = new Timespan(this.state.conventionDay, this.state.conventionDay.clone().add(1, 'day'));
-    const conventionDayEvents = eventRuns.filter(eventRun => conventionDayTimespan.overlapsTimespan(eventRun.timespan));
+    const conventionDayGrids = this.conventionDays.map((conventionDay) => {
+      const conventionDayTimespan = new Timespan(conventionDay, conventionDay.clone().add(1, 'day'));
+      const conventionDayEvents = eventRuns.filter(eventRun => conventionDayTimespan.overlapsTimespan(eventRun.timespan));
+      const renderer = () => this.renderGridWithEventRuns(conventionDayEvents, conventionDayTimespan);
+
+      return (
+        <Route
+          path={`/${conventionDay.format('dddd').toLowerCase()}`}
+          render={renderer}
+          key={conventionDay.toISOString()}
+        />
+      );
+    });
 
     return (
       <div>
         <ul className="nav nav-tabs">
           {conventionDayTabs}
         </ul>
-        {this.renderGridWithEventRuns(conventionDayEvents, conventionDayTimespan)}
+        <Switch>
+          {conventionDayGrids}
+          <Redirect to={`${this.conventionDays[0].format('dddd').toLowerCase()}`} />
+        </Switch>
       </div>
     );
   }
