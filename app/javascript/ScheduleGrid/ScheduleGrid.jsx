@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gql, graphql } from 'react-apollo';
-import { propType } from 'graphql-anywhere';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
+import GraphQLResultPropType from '../GraphQLResultPropType';
 import LoadingIndicator from '../LoadingIndicator';
 import EventRun from '../PCSG/EventRun';
 import ScheduleBlock from '../PCSG/ScheduleBlock';
@@ -65,16 +64,6 @@ query($extendedCounts: Boolean!) {
 const PIXELS_PER_HOUR = 100;
 const PIXELS_PER_LANE = 30;
 
-function GraphQLPropType(query, rootKey) {
-  return (props) => {
-    if (!props.loading) {
-      return propType(query)(props[rootKey]);
-    }
-
-    return undefined;
-  };
-}
-
 function formatTime(time, timezoneName) {
   const timeInZone = time.tz(timezoneName);
   let phrasing;
@@ -101,18 +90,11 @@ function formatTime(time, timezoneName) {
 )
 class ScheduleGrid extends React.Component {
   static propTypes = {
-    data: PropTypes.shape({
-      events: GraphQLPropType(ScheduleQuery, 'events'),
-      convention: GraphQLPropType(ScheduleQuery, 'convention'),
-      loading: PropTypes.boolean,
-      error: PropTypes.object,
-    }),
+    data: GraphQLResultPropType(ScheduleQuery, 'events', 'convention').isRequired,
     config: ConfigPropType,
   };
 
   static defaultProps = {
-    data: null,
-    classifyEventsBy: null,
     config: defaultConfigProp,
   };
 
