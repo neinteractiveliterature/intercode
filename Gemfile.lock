@@ -287,6 +287,8 @@ GEM
     graphiql-rails (1.4.4)
       rails
     graphql (1.6.7)
+    graphql-guard (1.0.0)
+      graphql (>= 1.6.0, < 2)
     haml (5.0.2)
       temple (>= 0.8.0)
       tilt
@@ -510,6 +512,7 @@ DEPENDENCIES
   font-awesome-sass
   graphiql-rails
   graphql
+  graphql-guard
   haml
   jquery-rails
   lodash-rails
