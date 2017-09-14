@@ -34,6 +34,8 @@ Intercode::Application.routes.draw do
         resources :admin_signups
       end
     end
+    
+    resources :admin_events
 
     resources :event_proposals do
       member do

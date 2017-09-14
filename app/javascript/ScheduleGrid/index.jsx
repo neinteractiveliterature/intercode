@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
+import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter } from 'react-router-dom';
+import buildApolloClient from '../buildApolloClient';
 import ScheduleGrid from './ScheduleGrid';
 
 class ScheduleGridApp extends React.Component {
@@ -12,18 +13,7 @@ class ScheduleGridApp extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.client = new ApolloClient({
-      networkInterface: createNetworkInterface({
-        uri: '/graphql',
-        opts: {
-          credentials: 'same-origin',
-          headers: {
-            'X-CSRF-Token': this.props.authenticityToken,
-          },
-        },
-      }),
-    });
+    this.client = buildApolloClient(this.props.authenticityToken);
   }
 
   render = () => (

@@ -53,13 +53,6 @@ class ScheduleGridEventRun extends React.Component {
 
     const { event, run, runDimensions, convention } = this.props;
     const timespan = runDimensions.eventRun.timespan;
-    const start = timespan.start.tz(convention.timezone_name);
-    const finish = timespan.finish.tz(convention.timezone_name);
-
-    let finishTimeFormat = 'h:mma';
-    if (finish.date() !== start.date()) {
-      finishTimeFormat = 'ddd h:mma';
-    }
 
     return (
       <Popper placement="bottom">
@@ -81,11 +74,7 @@ class ScheduleGridEventRun extends React.Component {
             </div>
             <div className="popover-body">
               <ul className="list-unstyled mb-2">
-                <li>
-                  {start.format('ddd h:mma')}
-                  {' - '}
-                  {finish.format(finishTimeFormat)}
-                </li>
+                <li>{timespan.humanizeInTimezone(convention.timezone_name)}</li>
                 <li>
                   {run.rooms.map(room => room.name).sort().join(', ')}
                 </li>
