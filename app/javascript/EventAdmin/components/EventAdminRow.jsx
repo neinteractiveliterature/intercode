@@ -32,6 +32,18 @@ class EventAdminRow extends React.Component {
     editRun: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      expanded: false,
+    };
+  }
+
+  expand = () => {
+    this.setState({ expanded: true });
+  }
+
   renderRun = (event, run) => {
     const start = moment(run.starts_at);
     const timespan = new Timespan(start, start.clone().add(event.length_seconds, 'seconds'));
@@ -57,11 +69,31 @@ class EventAdminRow extends React.Component {
     );
   }
 
+  renderRuns = (event) => {
+    if (this.state.expanded || event.runs.length <= 2) {
+      const sortedRuns = [...event.runs].sort(
+        (a, b) => moment(a.starts_at).diff(moment(b.starts_at)),
+      );
+
+      return (
+        <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
+          {sortedRuns.map(run => this.renderRun(event, run))}
+          <button className="btn btn-primary btn-sm m-1" onClick={() => { this.props.newRun(event); }}>
+            <i className="fa fa-plus" />
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <button className="btn btn-outline-secondary" onClick={this.expand}>
+        Show {event.runs.length} runs
+      </button>
+    );
+  }
+
   render = () => {
     const { event } = this.props;
-    const sortedRuns = [...event.runs].sort(
-      (a, b) => moment(a.starts_at).diff(moment(b.starts_at)),
-    );
 
     return (
       <tr>
@@ -73,14 +105,7 @@ class EventAdminRow extends React.Component {
           <small>({event.category})</small>
         </td>
         <td>{moment.duration(event.length_seconds, 'seconds').humanize()}</td>
-        <td>
-          <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
-            {sortedRuns.map(run => this.renderRun(event, run))}
-            <button className="btn btn-primary btn-sm m-1" onClick={() => { this.props.newRun(event) }}>
-              <i className="fa fa-plus" />
-            </button>
-          </div>
-        </td>
+        <td>{this.renderRuns(event)}</td>
       </tr>
     );
   }
