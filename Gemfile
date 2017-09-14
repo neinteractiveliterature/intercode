@@ -62,6 +62,7 @@ gem 'will_paginate-bootstrap4'
 
 # GraphQL server
 gem 'graphql'
+gem 'graphql-guard'
 gem 'graphiql-rails', group: :development
 
 # Markdown
