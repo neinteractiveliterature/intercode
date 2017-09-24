@@ -139,3 +139,13 @@
     background-color: $gray-200;
   }
 }
+
+table.no-top-border thead th {
+  border-top: 0;
+}
+
+.hidden-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

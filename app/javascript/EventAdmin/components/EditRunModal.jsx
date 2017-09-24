@@ -1,49 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gql, graphql, compose } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import { propType } from 'graphql-anywhere';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
 import moment from 'moment';
 import Select from 'react-select';
+import ConventionDaySelect from './ConventionDaySelect';
+import TimeSelect from './TimeSelect';
 import eventsQuery, { fragments } from '../eventsQuery';
+import { createRunMutation, updateRunMutation, deleteRunMutation } from '../mutations';
 import Timespan from '../../PCSG/Timespan';
+import { timespanFromConvention } from '../TimespanUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-
-const createRunMutation = gql`
-mutation($input: CreateRunInput!) {
-  createRun(input: $input) {
-    run {
-      ...RunFields
-    }
-  }
-}
-
-${fragments.run}
-`;
-
-const updateRunMutation = gql`
-mutation($input: UpdateRunInput!) {
-  updateRun(input: $input) {
-    run {
-      ...RunFields
-    }
-  }
-}
-
-${fragments.run}
-`;
-
-const deleteRunMutation = gql`
-mutation($input: DeleteRunInput!) {
-  deleteRun(input: $input) {
-    run {
-      ...RunFields
-    }
-  }
-}
-
-${fragments.run}
-`;
 
 @compose(
   graphql(createRunMutation, { name: 'createRun' }),
@@ -83,10 +51,7 @@ class EditRunModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.conventionTimespan = new Timespan(
-      moment(nextProps.convention.starts_at),
-      moment(nextProps.convention.ends_at),
-    );
+    this.conventionTimespan = timespanFromConvention(nextProps.convention);
 
     if (this.props.run && !nextProps.run) {
       // the run just cleared out; reset the form state
@@ -114,20 +79,8 @@ class EditRunModal extends React.Component {
     });
   }
 
-  dayInputChanged = (event) => {
-    const newDayString = event.target.value;
-
-    if (newDayString != null) {
-      this.setState(
-        { day: moment(newDayString).tz(this.props.convention.timezone_name) },
-        this.recalculateStartsAt,
-      );
-    } else {
-      this.setState(
-        { day: null },
-        this.recalculateStartsAt,
-      );
-    }
+  dayInputChanged = (day) => {
+    this.setState({ day }, this.recalculateStartsAt);
   }
 
   roomsInputChanged = (rooms) => {
@@ -138,20 +91,8 @@ class EditRunModal extends React.Component {
     this.props.fieldChanged(event.target.name, event.target.value);
   }
 
-  timeInputChanged = (event) => {
-    const newValue = event.target.value;
-
-    if (newValue && newValue !== '') {
-      this.setState(
-        { [event.target.name]: parseInt(newValue, 10) },
-        this.recalculateStartsAt,
-      );
-    } else {
-      this.setState(
-        { [event.target.name]: null },
-        this.recalculateStartsAt,
-      );
-    }
+  timeInputChanged = ({ hour, minute }) => {
+    this.setState({ hour, minute }, this.recalculateStartsAt);
   }
 
   recalculateStartsAt = () => {
@@ -249,102 +190,33 @@ class EditRunModal extends React.Component {
     return `Add run of ${event.title}`;
   }
 
-  renderDaySelect = () => {
-    const { convention } = this.props;
-    if (!this.conventionTimespan) {
-      return null;
-    }
-
-    const conventionDays = [];
-    const now = this.conventionTimespan.start.clone().tz(convention.timezone_name).startOf('day');
-    while (now.isBefore(this.conventionTimespan.finish)) {
-      conventionDays.push(now.clone());
-      now.add(1, 'day');
-    }
-
-    const options = conventionDays.map(day => (
-      <div className="form-check form-check-inline" key={day.toISOString()}>
-        <label className="form-check-label">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="day"
-            value={day.toISOString()}
-            checked={day.isSame(this.state.day)}
-            onChange={this.dayInputChanged}
-          />
-          {' '}
-          {day.format('dddd')}
-        </label>
-      </div>
-    ));
-
-    return (
-      <fieldset className="form-group">
-        <legend className="col-form-legend">Day</legend>
-        {options}
-      </fieldset>
-    );
-  }
-
   renderTimeSelect = () => {
-    if (!this.state.day) {
+    const { day, hour, minute } = this.state;
+
+    if (!day) {
       return null;
     }
 
-    const hourOptions = [];
-    const now = this.state.day.clone();
-    const startOfNextDay = this.state.day.clone().add(1, 'day');
-    while (now.isBefore(startOfNextDay)) {
-      hourOptions.push(
-        <option
-          key={now.toISOString()}
-          value={now.hour()}
-        >
-          {now.hour()}
-        </option>,
-      );
-      now.add(1, 'hour');
-    }
-
-    const minuteOptions = [0, 15, 30, 45].map(minute => (
-      <option key={minute} value={minute}>{minute.toString(10).padStart(2, '0')}</option>
-    ));
+    const timespan = new Timespan(
+      this.state.day.clone(),
+      this.state.day.clone().add(1, 'day'),
+    ).intersection(this.conventionTimespan);
 
     const startTime = this.getStartTime();
 
     return (
       <fieldset className="form-group">
         <legend className="col-form-legend">Time</legend>
-        <div className="form-inline">
-          <label className="sr-only">Hour</label>
-          <select
-            className="form-control mr-1"
-            name="hour"
-            value={this.state.hour == null ? '' : this.state.hour}
-            onChange={this.timeInputChanged}
-          >
-            <option />
-            {hourOptions}
-          </select>
-
-          <span className="mx-1">:</span>
-
-          <label className="sr-only">Minute</label>
-          <select
-            className="form-control mr-1"
-            name="minute"
-            value={this.state.minute == null ? '' : this.state.minute}
-            onChange={this.timeInputChanged}
-          >
-            <option />
-            {minuteOptions}
-          </select>
+        <TimeSelect
+          value={{ hour, minute }}
+          onChange={this.timeInputChanged}
+          timespan={timespan}
+        >
           {
             startTime &&
             `- ${startTime.clone().add(this.props.event.length_seconds, 'seconds').format('H:mm')}`
           }
-        </div>
+        </TimeSelect>
       </fieldset>
     );
   }
@@ -356,7 +228,11 @@ class EditRunModal extends React.Component {
 
     return (
       <div className="modal-body">
-        {this.renderDaySelect()}
+        <ConventionDaySelect
+          convention={this.props.convention}
+          value={this.state.day}
+          onChange={this.dayInputChanged}
+        />
         {this.renderTimeSelect()}
 
         <BootstrapFormInput
