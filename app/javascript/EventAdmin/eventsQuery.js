@@ -44,6 +44,7 @@ fragment EventFields on Event {
   title
   length_seconds
   category
+  description_html
 
   runs {
     ...RunFields

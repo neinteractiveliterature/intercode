@@ -3,11 +3,12 @@ import { graphql } from 'react-apollo';
 import EditRunModalContainer from '../containers/EditRunModalContainer';
 import EventAdminRowContainer from '../containers/EventAdminRowContainer';
 import GraphQLResultPropType from '../../GraphQLResultPropType';
-import LoadingIndicator from '../../LoadingIndicator';
+import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
 import eventsQuery from '../eventsQuery';
 
 @graphql(eventsQuery)
-class EventAdmin extends React.Component {
+@GraphQLQueryResultWrapper
+class EventAdminRunsTable extends React.Component {
   static propTypes = {
     data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
   };
@@ -15,20 +16,15 @@ class EventAdmin extends React.Component {
   render = () => {
     const { data } = this.props;
 
-    if (data.loading) {
-      return <LoadingIndicator />;
-    }
-    if (data.error) {
-      return <div className="alert alert-danger">{this.props.data.error.message}</div>;
-    }
-
     const getNormalizedTitle = event => event.title.replace(/^(the|a|) /i, '').replace(/[^A-Za-z0-9]/g, '').toLocaleLowerCase();
 
     const sortedEvents = [...data.events].sort(
       (a, b) => getNormalizedTitle(a).localeCompare(getNormalizedTitle(b)),
     );
 
-    const eventRows = sortedEvents.map(event => (
+    const eventRows = sortedEvents.filter(event => (
+      event.category !== 'filler' && event.category !== 'volunteer_event'
+    )).map(event => (
       <EventAdminRowContainer
         event={event}
         convention={this.props.data.convention}
@@ -38,7 +34,7 @@ class EventAdmin extends React.Component {
 
     return (
       <div>
-        <table className="table table-striped">
+        <table className="table table-striped no-top-border">
           <thead>
             <tr>
               <th style={{ minWidth: '200px' }}>Title</th>
@@ -57,4 +53,4 @@ class EventAdmin extends React.Component {
   }
 }
 
-export default EventAdmin;
+export default EventAdminRunsTable;
