@@ -25,7 +25,6 @@ gem 'with_advisory_lock'
 gem 'unf'
 
 gem 'jquery-rails'
-gem 'lodash-rails'
 
 # Devise for authentication, cancancan for authorization
 gem 'devise'
