@@ -301,8 +301,6 @@ GEM
     json (1.8.6)
     json (1.8.6-java)
     liquid (4.0.0)
-    lodash-rails (4.17.4)
-      railties (>= 3.1)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -516,7 +514,6 @@ DEPENDENCIES
   graphql
   haml
   jquery-rails
-  lodash-rails
   memory_profiler
   minitest-reporters
   minitest-spec-rails
