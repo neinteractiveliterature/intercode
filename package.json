@@ -15,7 +15,7 @@
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
     "coffee-loader": "^0.8.0",
-    "coffee-script": "^1.12.6",
+    "coffee-script": "^1.12.7",
     "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.0",
