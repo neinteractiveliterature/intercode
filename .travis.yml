@@ -5,6 +5,8 @@ branches:
     - master
 rvm:
 - 2.4.1
+node_js:
+- latest
 bundler_args: "--without development:production:intercode1_import"
 cache:
   bundler: true
