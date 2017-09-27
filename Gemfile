@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.4.1'
-gem 'rails', '5.1.3'
+gem 'rails', '= 5.1.4'
 
 gem 'sqlite3', groups: [:development, :test]
 gem 'mysql2'
@@ -15,7 +15,7 @@ gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
 gem 'haml'
 gem 'webpacker'
-gem 'webpacker-react', "~> 0.3.1"
+gem 'webpacker-react', "~> 0.3.2"
 gem 'uglifier', '>= 1.0.3'
 
 gem 'with_advisory_lock'
@@ -25,7 +25,6 @@ gem 'with_advisory_lock'
 gem 'unf'
 
 gem 'jquery-rails'
-gem 'lodash-rails'
 
 # Devise for authentication, cancancan for authorization
 gem 'devise'
