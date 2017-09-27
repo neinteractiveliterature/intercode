@@ -14,7 +14,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
-    "coffee-loader": "^0.7.3",
+    "coffee-loader": "^0.8.0",
     "coffee-script": "^1.12.6",
     "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.4",
