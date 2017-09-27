@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "yarn": ">=0.25.2"
+  },
   "dependencies": {
     "@rails/webpacker": "^3.0.1",
     "autoprefixer": "^7.1.4",
