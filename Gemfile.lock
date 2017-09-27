@@ -119,7 +119,7 @@ GEM
     eu_central_bank (1.1.3)
       money (~> 6.9.0)
       nokogiri (>= 1.6.3, < 2.0)
-    excon (0.58.0)
+    excon (0.59.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
@@ -177,7 +177,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (1.4.0)
+    fog-aws (1.4.1)
       fog-core (~> 1.38)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
