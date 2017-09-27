@@ -287,7 +287,7 @@ GEM
       activesupport (>= 4.2.0)
     graphiql-rails (1.4.4)
       rails
-    graphql (1.6.7)
+    graphql (1.7.3)
     haml (5.0.3)
       temple (>= 0.8.0)
       tilt
