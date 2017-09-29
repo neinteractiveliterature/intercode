@@ -41,7 +41,7 @@
     "popper.js": "^1.11.1",
     "postcss-loader": "^2.0.5",
     "postcss-smart-import": "^0.7.4",
-    "precss": "^1.4.0",
+    "precss": "^2.0.0",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
     "rails-erb-loader": "^5.0.1",
