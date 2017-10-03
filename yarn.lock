@@ -5869,10 +5869,11 @@ react-bootstrap4-modal@^1.1.1:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-react-currency-masked-input@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-currency-masked-input/-/react-currency-masked-input-2.0.2.tgz#c24f71ba2d4e4b8d861e4be3b83cfc933d987997"
+react-currency-masked-input@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-currency-masked-input/-/react-currency-masked-input-2.2.0.tgz#787cd3669b1f4da24efa2a84a6f6de43febeaebc"
   dependencies:
+    prop-types "^15.5.10"
     react "^15.4.1"
 
 react-datetime@^2.8.10:
