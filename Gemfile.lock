@@ -95,7 +95,7 @@ GEM
       sass (>= 3.4.19)
     builder (3.2.3)
     cancancan (2.0.0)
-    carrierwave (1.1.0)
+    carrierwave (1.2.0)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
