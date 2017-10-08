@@ -3983,6 +3983,15 @@ json-fetch@^7.2.0:
     lodash.pick "^4.4.0"
     promise-retry "^1.0.1"
 
+json-fetch@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.3.0.tgz#9701e5bd788849eee4d99b5eca5b9c1346ad9d77"
+  dependencies:
+    babel-runtime "^6.26.0"
+    isomorphic-fetch "^2.2.1"
+    lodash.pick "^4.4.0"
+    promise-retry "^1.0.1"
+
 json-loader@^0.5.4:
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.4.tgz#8baa1365a632f58a3c46d20175fc6002c96e37de"
