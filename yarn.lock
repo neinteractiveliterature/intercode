@@ -6033,9 +6033,9 @@ react-simple-currency@^1.0.15:
   dependencies:
     classnames "^2.1.2"
 
-react-virtualized-select@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-virtualized-select/-/react-virtualized-select-3.0.1.tgz#7a9727849987c9d49bbbd8707a8254c4288a815a"
+react-virtualized-select@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-virtualized-select/-/react-virtualized-select-3.1.0.tgz#968e89c4d74d98890cacf480378b6abee743c2d8"
   dependencies:
     babel-runtime "^6.11.6"
     prop-types "^15.5.8"
