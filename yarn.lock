@@ -6011,14 +6011,13 @@ react-router@^4.2.0:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
-react-select-fast-filter-options@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/react-select-fast-filter-options/-/react-select-fast-filter-options-0.2.1.tgz#38014ea83fc9da20b72265c7324a05b42918a796"
+react-select-fast-filter-options@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-select-fast-filter-options/-/react-select-fast-filter-options-0.2.3.tgz#d9f667ab1fe7bcc2dd8bfd74277e56c771e9e518"
   dependencies:
     js-search "^1.3.1"
-    react-select "^1.0.0-beta14"
 
-react-select@^1.0.0-beta14, react-select@^1.0.0-rc.2, react-select@^1.0.0-rc.5:
+react-select@^1.0.0-rc.2, react-select@^1.0.0-rc.5:
   version "1.0.0-rc.5"
   resolved "https://registry.yarnpkg.com/react-select/-/react-select-1.0.0-rc.5.tgz#9d316f252b1adc372ddb5cdf1f119c6b7cfdb5d6"
   dependencies:
