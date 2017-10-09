@@ -40,7 +40,7 @@ gem 'cadmus_files', github: 'nbudin/cadmus_files', branch: 'cadmus_0_6'
 gem 'cadmus_navbar', github: 'nbudin/cadmus_navbar'
 
 # Extracted from this app!  Values that change over time based on a schedule
-gem 'scheduled_value', '~> 1.1.2'
+gem 'scheduled_value', '~> 1.1.3'
 
 # File uploading
 gem 'carrierwave'
