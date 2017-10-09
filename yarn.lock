@@ -1424,14 +1424,6 @@ babel-preset-jest@^19.0.0:
   dependencies:
     babel-plugin-jest-hoist "^19.0.0"
 
-babel-preset-minify@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/babel-preset-minify/-/babel-preset-minify-0.0.0.tgz#ccede0e043f80c488d65d8fe7b3ec6c2c68d284a"
-  dependencies:
-    babel-plugin-transform-member-expression-literals "^6.8.0"
-    babel-plugin-transform-merge-sibling-variables "^6.8.0"
-    babel-plugin-transform-property-literals "^6.8.0"
-
 babel-preset-minify@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/babel-preset-minify/-/babel-preset-minify-0.2.0.tgz#006566552d9b83834472273f306c0131062a0acc"
