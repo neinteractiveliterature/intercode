@@ -7246,9 +7246,9 @@ webpack@^3.4.1, webpack@^3.5.5:
     webpack-sources "^1.0.1"
     yargs "^8.0.2"
 
-webpacker-react@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/webpacker-react/-/webpacker-react-0.3.0.tgz#176d4537d997772f66641d565b796f33dfbb0272"
+webpacker-react@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/webpacker-react/-/webpacker-react-0.3.2.tgz#18c417a3fd51978d0ca98b62a47454d800754e09"
 
 websocket-driver@>=0.5.1:
   version "0.6.5"
