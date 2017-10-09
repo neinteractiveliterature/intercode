@@ -479,9 +479,8 @@ GEM
     will_paginate (3.1.6)
     will_paginate-bootstrap4 (0.1.2)
       will_paginate (~> 3.0, >= 3.0.9)
-    with_advisory_lock (3.1.1)
+    with_advisory_lock (3.2.0)
       activerecord (>= 3.2)
-      thread_safe
     xml-simple (1.1.5)
 
 PLATFORMS
