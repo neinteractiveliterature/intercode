@@ -1156,7 +1156,7 @@ babel-plugin-transform-inline-consecutive-adds@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-inline-consecutive-adds/-/babel-plugin-transform-inline-consecutive-adds-0.2.0.tgz#15dae78921057f4004f8eafd79e15ddc5f12f426"
 
-babel-plugin-transform-member-expression-literals@^6.8.0, babel-plugin-transform-member-expression-literals@^6.8.4:
+babel-plugin-transform-member-expression-literals@^6.8.4:
   version "6.8.4"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-member-expression-literals/-/babel-plugin-transform-member-expression-literals-6.8.4.tgz#05679bc40596b91293401959aa1620ab1b2be437"
 
@@ -1164,7 +1164,7 @@ babel-plugin-transform-member-expression-literals@^6.8.5:
   version "6.8.5"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-member-expression-literals/-/babel-plugin-transform-member-expression-literals-6.8.5.tgz#e06ae305cf48d819822e93a70d79269f04d89eec"
 
-babel-plugin-transform-merge-sibling-variables@^6.8.0, babel-plugin-transform-merge-sibling-variables@^6.8.5:
+babel-plugin-transform-merge-sibling-variables@^6.8.5:
   version "6.8.5"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-merge-sibling-variables/-/babel-plugin-transform-merge-sibling-variables-6.8.5.tgz#03abdf107c61241913eb268ddede6d5bc541862c"
 
@@ -1194,7 +1194,7 @@ babel-plugin-transform-object-rest-spread@^6.23.0, babel-plugin-transform-object
     babel-plugin-syntax-object-rest-spread "^6.8.0"
     babel-runtime "^6.26.0"
 
-babel-plugin-transform-property-literals@^6.8.0, babel-plugin-transform-property-literals@^6.8.4:
+babel-plugin-transform-property-literals@^6.8.4:
   version "6.8.4"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-property-literals/-/babel-plugin-transform-property-literals-6.8.4.tgz#6ad311110b80a192a56efb5ddf4fe3ca6f7a61da"
   dependencies:
@@ -4924,13 +4924,9 @@ pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
 
-popper.js@^1.10.8:
+popper.js@^1.10.8, popper.js@^1.12.5:
   version "1.12.5"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.5.tgz#229e4dea01629e1f1a1e26991ffade5024220fa6"
-
-popper.js@^1.11.1:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.11.1.tgz#f5aca9a73bca1ce1fdbd9be8b1ba68677cbdd8e0"
 
 portfinder@^1.0.9:
   version "1.0.13"
