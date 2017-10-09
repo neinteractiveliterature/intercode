@@ -4849,9 +4849,9 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-payment@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/payment/-/payment-2.2.1.tgz#8827394606b20f82677180808fcac40efd6305f9"
+payment@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/payment/-/payment-2.3.0.tgz#b2a95e9c3052459647da3926b8b66c553d93098f"
   dependencies:
     qj "~2.0.0"
 
