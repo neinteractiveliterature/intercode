@@ -6,7 +6,7 @@ const actions = {
     EDIT_RUN: (event, run) => ({ event, run }),
     CANCEL_EDITING_RUN: () => ({}),
     DELETE_EDITING_RUN: () => ({}),
-    EDITING_RUN_FIELD_CHANGED: (field, value) => ({ field, value }),
+    EDITING_RUN_CHANGED: editingRunProps => ({ editingRunProps }),
   }),
 
   saveEditingRun: {

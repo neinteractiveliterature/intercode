@@ -4,14 +4,9 @@ import { graphql, compose } from 'react-apollo';
 import { propType } from 'graphql-anywhere';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
 import moment from 'moment';
-import Select from 'react-select';
-import ConventionDaySelect from './ConventionDaySelect';
-import TimeSelect from './TimeSelect';
 import eventsQuery, { fragments } from '../eventsQuery';
 import { createRunMutation, updateRunMutation, deleteRunMutation } from '../mutations';
-import Timespan from '../../PCSG/Timespan';
-import { timespanFromConvention } from '../TimespanUtils';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
+import RunFormFields from '../../BuiltInForms/RunFormFields';
 
 @compose(
   graphql(createRunMutation, { name: 'createRun' }),
@@ -23,7 +18,7 @@ class EditRunModal extends React.Component {
     run: propType(fragments.runFragment),
     event: propType(fragments.eventFragment),
     convention: propType(fragments.conventionFragment).isRequired,
-    fieldChanged: PropTypes.func.isRequired,
+    editingRunChanged: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     onSaveStart: PropTypes.func.isRequired,
     onSaveSucceeded: PropTypes.func.isRequired,
@@ -51,55 +46,10 @@ class EditRunModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.conventionTimespan = timespanFromConvention(nextProps.convention);
-
     if (this.props.run && !nextProps.run) {
       // the run just cleared out; reset the form state
-      this.setState({ day: null, hour: null, minute: null, isConfirmingDelete: false });
+      this.setState({ isConfirmingDelete: false });
     }
-
-    if (nextProps.run && nextProps.run.starts_at) {
-      const startsAt = moment(nextProps.run.starts_at).tz(nextProps.convention.timezone_name);
-      this.setState({
-        day: startsAt.clone().startOf('day'),
-        hour: startsAt.hour(),
-        minute: startsAt.minute(),
-      });
-    }
-  }
-
-  getStartTime = () => {
-    if (this.state.day == null || this.state.hour == null || this.state.minute == null) {
-      return null;
-    }
-
-    return this.state.day.clone().set({
-      hour: this.state.hour,
-      minute: this.state.minute,
-    });
-  }
-
-  dayInputChanged = (day) => {
-    this.setState({ day }, this.recalculateStartsAt);
-  }
-
-  roomsInputChanged = (rooms) => {
-    this.props.fieldChanged('rooms', rooms.map(room => ({ id: room.value, name: room.label })));
-  }
-
-  textInputChanged = (event) => {
-    this.props.fieldChanged(event.target.name, event.target.value);
-  }
-
-  timeInputChanged = ({ hour, minute }) => {
-    this.setState({ hour, minute }, this.recalculateStartsAt);
-  }
-
-  recalculateStartsAt = () => {
-    const startTime = this.getStartTime();
-    const startsAtString = (startTime ? startTime.toISOString() : null);
-
-    this.props.fieldChanged('starts_at', startsAtString);
   }
 
   initiateSaveMutation = () => {
@@ -190,37 +140,6 @@ class EditRunModal extends React.Component {
     return `Add run of ${event.title}`;
   }
 
-  renderTimeSelect = () => {
-    const { day, hour, minute } = this.state;
-
-    if (!day) {
-      return null;
-    }
-
-    const timespan = new Timespan(
-      this.state.day.clone(),
-      this.state.day.clone().add(1, 'day'),
-    ).intersection(this.conventionTimespan);
-
-    const startTime = this.getStartTime();
-
-    return (
-      <fieldset className="form-group">
-        <legend className="col-form-legend">Time</legend>
-        <TimeSelect
-          value={{ hour, minute }}
-          onChange={this.timeInputChanged}
-          timespan={timespan}
-        >
-          {
-            startTime &&
-            `- ${startTime.clone().add(this.props.event.length_seconds, 'seconds').format('H:mm')}`
-          }
-        </TimeSelect>
-      </fieldset>
-    );
-  }
-
   renderFormBody = () => {
     if (!this.props.run) {
       return <div className="modal-body" />;
@@ -228,38 +147,12 @@ class EditRunModal extends React.Component {
 
     return (
       <div className="modal-body">
-        <ConventionDaySelect
+        <RunFormFields
+          run={this.props.run}
+          event={this.props.event}
           convention={this.props.convention}
-          value={this.state.day}
-          onChange={this.dayInputChanged}
+          onChange={this.props.editingRunChanged}
         />
-        {this.renderTimeSelect()}
-
-        <BootstrapFormInput
-          name="title_suffix"
-          label="Title suffix"
-          value={this.props.run.title_suffix}
-          onChange={this.textInputChanged}
-        />
-        <BootstrapFormInput
-          name="schedule_note"
-          label="Schedule note"
-          value={this.props.run.schedule_note}
-          onChange={this.textInputChanged}
-        />
-
-        <div className="form-group">
-          <label>Room(s)</label>
-          <Select
-            name="room_ids"
-            options={
-              this.props.convention.rooms.map(room => ({ label: room.name, value: room.id }))
-            }
-            multi
-            value={this.props.run.rooms.map(room => room.id)}
-            onChange={this.roomsInputChanged}
-          />
-        </div>
       </div>
     );
   }

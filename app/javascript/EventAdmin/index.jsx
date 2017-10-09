@@ -4,6 +4,7 @@ import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter, NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import EventAdminRunsTable from './components/EventAdminRunsTable';
+import FillerEventAdmin from './components/FillerEventAdmin';
 import VolunteerEventAdmin from './components/VolunteerEventAdmin';
 import buildApolloClient from '../buildApolloClient';
 import { getComposeEnhancers, defaultMiddleware } from '../buildReduxStore';
@@ -51,6 +52,7 @@ class EventAdminApp extends React.Component {
           <Switch>
             <Route path="/runs" component={EventAdminRunsTable} />
             <Route path="/volunteer_events" component={VolunteerEventAdmin} />
+            <Route path="/filler_events" component={FillerEventAdmin} />
             <Redirect to="/runs" />
           </Switch>
         </div>

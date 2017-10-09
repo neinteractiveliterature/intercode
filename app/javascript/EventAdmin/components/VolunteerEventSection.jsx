@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { propType } from 'graphql-anywhere';
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
-import Timespan from '../../PCSG/Timespan';
 import { fragments } from '../eventsQuery';
+import { timespanFromConvention } from '../../TimespanUtils';
 
 class VolunteerEventSection extends React.Component {
   static propTypes = {
@@ -22,18 +22,12 @@ class VolunteerEventSection extends React.Component {
     };
   }
 
-  getConventionDays = () => {
-    const conventionTimespan = new Timespan(
-      moment(this.props.convention.starts_at),
-      moment(this.props.convention.ends_at),
-    );
-
-    return conventionTimespan.getTimespansWithin(
+  getConventionDays = () => timespanFromConvention(this.props.convention)
+    .getTimespansWithin(
       this.props.convention.timezone_name,
       'day',
       moment.duration(6, 'hours'),
-    );
-  }
+    )
 
   toggleExpanded = () => {
     this.setState({ expanded: !this.state.expanded });

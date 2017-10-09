@@ -42,6 +42,9 @@ fragments.event = gql`
 fragment EventFields on Event {
   id
   title
+  description
+  short_blurb
+  email
   length_seconds
   category
   description_html
