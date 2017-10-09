@@ -8,7 +8,7 @@ import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 class TicketTypeForm extends React.Component {
   static propTypes = {
     initialTicketType: PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.number,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       pricing_schedule: ScheduledValuePropType.isRequired,

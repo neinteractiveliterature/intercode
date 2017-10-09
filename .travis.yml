@@ -18,6 +18,9 @@ before_script:
 - yarn install
 - cp config/database.yml.ci config/database.yml
 - bin/rake db:create db:migrate RAILS_ENV=test
+script:
+- bin/rake test
+- yarn run test
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
