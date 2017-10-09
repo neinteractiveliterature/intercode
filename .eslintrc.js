@@ -10,16 +10,25 @@ module.exports = {
     es6: true,
     jquery: false,
     node: true,
+    "jest/globals": true
   },
 
   extends: [
     "airbnb",
     "plugin:flowtype/recommended",
   ],
-  
+
   parser: "babel-eslint",
 
   plugins: [
     'flowtype',
+    'jest',
   ],
+
+  rules: {
+    'jest/no-disabled-tests': "warn",
+    'jest/no-focused-tests': "error",
+    'jest/no-identical-title': "error",
+    'jest/valid-expect': "error"
+  }
 };
