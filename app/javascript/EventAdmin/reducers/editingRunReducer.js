@@ -20,8 +20,8 @@ export default handleActions(
     [actions.deleteEditingRun]: () => null,
     [actions.cancelEditingRun]: () => null,
     [actions.saveEditingRun.SUCCEEDED]: () => null,
-    [actions.editingRunFieldChanged]: (state, action) => (
-      { ...state, run: { ...state.run, [action.payload.field]: action.payload.value } }
+    [actions.editingRunChanged]: (state, action) => (
+      { ...state, run: { ...state.run, ...action.payload.editingRunProps } }
     ),
   },
   null,

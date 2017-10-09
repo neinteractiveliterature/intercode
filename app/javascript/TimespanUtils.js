@@ -1,7 +1,7 @@
 // @flow
 
 import moment from 'moment';
-import Timespan from '../PCSG/Timespan';
+import Timespan from './PCSG/Timespan';
 
 export function timespanFromConvention(
   convention: { starts_at: string, ends_at: string, timezone_name: string},

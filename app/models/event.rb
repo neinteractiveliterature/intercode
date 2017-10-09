@@ -36,6 +36,9 @@ class Event < ApplicationRecord
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
 
+  # Filler events have to have exactly one run
+  validate :filler_events_must_have_exactly_one_run
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
@@ -99,6 +102,14 @@ class Event < ApplicationRecord
 
     registration_policy.errors.each do |attribute, error|
       errors.add "registration_policy.#{attribute}", error
+    end
+  end
+
+  def filler_events_must_have_exactly_one_run
+    return unless category == 'filler'
+
+    if runs.size != 1
+      errors.add(:base, 'Filler events must have exactly one run')
     end
   end
 end

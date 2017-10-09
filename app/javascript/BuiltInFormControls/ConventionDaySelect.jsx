@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
-import { propType } from 'graphql-anywhere';
 import moment from 'moment';
-import { fragments } from '../eventsQuery';
 import { timespanFromConvention } from '../TimespanUtils';
 
 class ConventionDaySelect extends React.Component {
   static propTypes = {
-    convention: propType(fragments.conventionFragment).isRequired,
+    convention: PropTypes.shape({
+      starts_at: PropTypes.string.isRequired,
+      ends_at: PropTypes.string.isRequired,
+      timezone_name: PropTypes.string.isRequired,
+    }).isRequired,
     value: MomentPropTypes.momentObj,
     onChange: PropTypes.func.isRequired,
   };
