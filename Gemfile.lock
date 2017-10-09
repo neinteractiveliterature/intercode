@@ -425,7 +425,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    scheduled_value (1.1.2)
+    scheduled_value (1.1.3)
     sequel (5.1.0)
     simplecov (0.13.0)
       docile (~> 1.1.0)
@@ -531,7 +531,7 @@ DEPENDENCIES
   redcarpet
   reverse_markdown
   sass-rails
-  scheduled_value (~> 1.1.2)
+  scheduled_value (~> 1.1.3)
   sequel
   sqlite3
   stackprof
