@@ -17,7 +17,7 @@ class CommonEventFormFields extends React.Component {
         buckets: PropTypes.arrayOf({
           total_slots: PropTypes.number.isRequired,
         }).isRequired,
-      }).isRequired,
+      }),
     }).isRequired,
     onChange: PropTypes.func.isRequired,
   };

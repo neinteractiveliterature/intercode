@@ -1,19 +1,80 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
-import { Link, Switch, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { compose, graphql } from 'react-apollo';
+import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import FillerEventForm from '../../BuiltInForms/FillerEventForm';
 import EditRunModalContainer from '../containers/EditRunModalContainer';
 import GraphQLResultPropType from '../../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
 import eventsQuery from '../eventsQuery';
 import { timespanFromRun } from '../../TimespanUtils';
+import {
+  createRunMutation,
+  updateRunMutation,
+  createEventMutation,
+  updateEventMutation,
+} from '../mutations';
 
-@graphql(eventsQuery)
+@withRouter
+@compose(
+  graphql(eventsQuery),
+  graphql(createRunMutation, { name: 'createRun' }),
+  graphql(updateRunMutation, { name: 'updateRun' }),
+  graphql(createEventMutation, { name: 'createEvent' }),
+  graphql(updateEventMutation, { name: 'updateEvent' }),
+)
 @GraphQLQueryResultWrapper
 class FillerEventAdmin extends React.Component {
   static propTypes = {
     data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    createRun: PropTypes.func.isRequired,
+    updateRun: PropTypes.func.isRequired,
+    createEvent: PropTypes.func.isRequired,
+    updateEvent: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      error: null,
+    };
+  }
+
+  updateFillerEvent = ({ event, run }) => {
+    const eventInput = {
+      id: event.id,
+      event: {
+        title: event.title,
+        description: event.description,
+        short_blurb: event.short_blurb,
+        email: event.email,
+        length_seconds: event.length_seconds,
+        category: event.category,
+      },
+    };
+
+    const runInput = {
+      id: run.id,
+      run: {
+        starts_at: run.starts_at,
+        schedule_note: run.schedule_note,
+        title_suffix: run.title_suffix,
+        room_ids: run.rooms.map(room => room.id),
+      },
+    };
+
+    this.props.updateEvent({ variables: { input: eventInput } }).then(
+      () => this.props.updateRun({ variables: { input: runInput } }),
+    ).then(() => {
+      this.props.history.push('/filler_events');
+    }).catch((error) => {
+      this.setState({ error });
+    });
+  }
 
   renderFillerEventsList = () => {
     const { data } = this.props;
@@ -65,12 +126,22 @@ class FillerEventAdmin extends React.Component {
 
   renderEditFillerEventForm = ({ match }) => {
     const event = this.props.data.events.find(e => e.id.toString() === match.params.id);
+
+    let errorDisplay = null;
+    if (this.state.error) {
+      errorDisplay = <div className="alert alert-danger">{this.state.error.message}</div>;
+    }
+
     return (
-      <FillerEventForm
-        initialEvent={event}
-        convention={this.props.data.convention}
-        cancelPath="/filler_events"
-      />
+      <div>
+        <FillerEventForm
+          initialEvent={event}
+          convention={this.props.data.convention}
+          cancelPath="/filler_events"
+          onSave={this.updateFillerEvent}
+        />
+        {errorDisplay}
+      </div>
     );
   }
 

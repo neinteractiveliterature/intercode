@@ -7,6 +7,13 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
+  field :updateEvent, Mutations::UpdateEvent.field do
+    guard ->(_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:id])
+      ctx[:current_ability].can?(:update, event)
+    }
+  end
+
   field :createRun, Mutations::CreateRun.field do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])

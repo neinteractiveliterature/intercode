@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { propType } from 'graphql-anywhere';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
-import moment from 'moment';
 import eventsQuery, { fragments } from '../eventsQuery';
 import { createRunMutation, updateRunMutation, deleteRunMutation } from '../mutations';
 import RunFormFields from '../../BuiltInForms/RunFormFields';
@@ -55,10 +54,12 @@ class EditRunModal extends React.Component {
   initiateSaveMutation = () => {
     const { run } = this.props;
     const commonProps = {
-      starts_at: run.starts_at,
-      title_suffix: run.title_suffix,
-      schedule_note: run.schedule_note,
-      room_ids: run.rooms.map(room => room.id),
+      run: {
+        starts_at: run.starts_at,
+        title_suffix: run.title_suffix,
+        schedule_note: run.schedule_note,
+        room_ids: run.rooms.map(room => room.id),
+      },
     };
 
     if (run.id) {

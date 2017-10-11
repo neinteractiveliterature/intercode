@@ -1,6 +1,31 @@
 import { gql } from 'react-apollo';
 import { fragments } from './eventsQuery';
 
+export const createEventMutation = gql`
+mutation($input: CreateEventInput!) {
+  createEvent(input: $input) {
+    event {
+      ...EventFields
+    }
+  }
+}
+
+${fragments.event}
+`;
+
+
+export const updateEventMutation = gql`
+mutation($input: UpdateEventInput!) {
+  updateEvent(input: $input) {
+    event {
+      ...EventFields
+    }
+  }
+}
+
+${fragments.event}
+`;
+
 export const createVolunteerEventMutation = gql`
 mutation($input: CreateVolunteerEventInput!) {
   createVolunteerEvent(input: $input) {
