@@ -8,12 +8,16 @@ class FillerEventForm extends React.Component {
   static propTypes = {
     initialEvent: PropTypes.shape({
       id: PropTypes.number,
-      runs: PropTypes.arrayOf({
+      runs: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number,
-      }),
+      })),
     }).isRequired,
-    convention: RunFormFields.propTypes.convention.isRequired,
+
+    // The convention prop type we're using is already required
+    // eslint-disable-next-line react/require-default-props
+    convention: RunFormFields.propTypes.convention,
     cancelPath: PropTypes.string,
+    onSave: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -31,6 +35,15 @@ class FillerEventForm extends React.Component {
 
   eventFieldChanged = (eventData) => {
     this.setState({ event: { ...this.state.event, ...eventData } });
+  }
+
+  runChanged = (runData) => {
+    this.setState({ run: { ...this.state.run, ...runData } });
+  }
+
+  saveClicked = (event) => {
+    event.preventDefault();
+    this.props.onSave({ event: this.state.event, run: this.state.run });
   }
 
   render = () => {
@@ -58,7 +71,7 @@ class FillerEventForm extends React.Component {
           onChange={this.runChanged}
         />
 
-        <button className="btn btn-primary">{saveCaption}</button>
+        <button className="btn btn-primary" onClick={this.saveClicked}>{saveCaption}</button>
         {cancelLink}
       </form>
     );
