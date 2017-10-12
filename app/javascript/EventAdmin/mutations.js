@@ -13,6 +13,27 @@ mutation($input: CreateEventInput!) {
 ${fragments.event}
 `;
 
+export const createFillerEventMutation = gql`
+mutation($input: CreateFillerEventInput!) {
+  createFillerEvent(input: $input) {
+    event {
+      ...EventFields
+    }
+  }
+}
+
+${fragments.event}
+`;
+
+export const deleteEventMutation = gql`
+mutation($input: DeleteEventInput!) {
+  deleteEvent(input: $input) {
+    event {
+      id
+    }
+  }
+}
+`;
 
 export const updateEventMutation = gql`
 mutation($input: UpdateEventInput!) {

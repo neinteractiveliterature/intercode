@@ -10,8 +10,14 @@ class FillerEventForm extends React.Component {
       id: PropTypes.number,
       runs: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number,
-      })),
+        rooms: PropTypes.arrayOf(PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired,
+        }).isRequired).isRequired,
+      })).isRequired,
     }).isRequired,
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
 
     // The convention prop type we're using is already required
     // eslint-disable-next-line react/require-default-props
@@ -22,6 +28,8 @@ class FillerEventForm extends React.Component {
 
   static defaultProps = {
     cancelPath: null,
+    disabled: false,
+    error: null,
   };
 
   constructor(props) {
@@ -32,6 +40,12 @@ class FillerEventForm extends React.Component {
       run: props.initialEvent.runs[0] || {},
     };
   }
+
+  isDataComplete = () => (
+    this.state.event.title != null &&
+    this.state.event.length_seconds &&
+    this.state.run.starts_at != null
+  );
 
   eventFieldChanged = (eventData) => {
     this.setState({ event: { ...this.state.event, ...eventData } });
@@ -46,12 +60,37 @@ class FillerEventForm extends React.Component {
     this.props.onSave({ event: this.state.event, run: this.state.run });
   }
 
+  renderRunFormFields = () => {
+    if (!this.state.event.length_seconds) {
+      return null;
+    }
+
+    return (
+      <RunFormFields
+        run={this.state.run}
+        event={this.state.event}
+        convention={this.props.convention}
+        onChange={this.runChanged}
+      />
+    );
+  }
+
+  renderErrorDisplay = () => {
+    if (this.props.error) {
+      return <div className="alert alert-danger">{this.props.error}</div>;
+    }
+
+    return null;
+  }
+
   render = () => {
     const saveCaption = (this.state.event.id ? 'Save filler event' : 'Create filler event');
     let cancelLink = null;
     if (this.props.cancelPath) {
       cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
     }
+
+    const disabled = this.props.disabled || !this.isDataComplete();
 
     return (
       <form className="my-4">
@@ -64,14 +103,13 @@ class FillerEventForm extends React.Component {
           onChange={this.eventFieldChanged}
         />
 
-        <RunFormFields
-          run={this.state.run}
-          event={this.state.event}
-          convention={this.props.convention}
-          onChange={this.runChanged}
-        />
+        {this.renderRunFormFields()}
 
-        <button className="btn btn-primary" onClick={this.saveClicked}>{saveCaption}</button>
+        {this.renderErrorDisplay()}
+
+        <button className="btn btn-primary" onClick={this.saveClicked} disabled={disabled}>
+          {saveCaption}
+        </button>
         {cancelLink}
       </form>
     );

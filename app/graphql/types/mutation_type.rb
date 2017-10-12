@@ -7,6 +7,25 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
+  field :createEvent, Mutations::CreateEvent.field do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(:create, ctx[:convention].events.new(args[:event].to_h))
+    }
+  end
+
+  field :createFillerEvent, Mutations::CreateFillerEvent.field do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(:create, ctx[:convention].events.new(args[:event].to_h))
+    }
+  end
+
+  field :deleteEvent, Mutations::DeleteEvent.field do
+    guard ->(_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:id])
+      ctx[:current_ability].can?(:delete, event)
+    }
+  end
+
   field :updateEvent, Mutations::UpdateEvent.field do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:id])
@@ -17,7 +36,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   field :createRun, Mutations::CreateRun.field do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
-      ctx[:current_ability].can?(:create, event.runs.new)
+      ctx[:current_ability].can?(:create, event.runs.new(args[:run].to_h))
     }
   end
 
@@ -25,7 +44,7 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard ->(_obj, args, ctx) {
       events = ctx[:convention].events.find(args[:runs].map { |run| run[:event_id] })
       events.all? do |event|
-        ctx[:current_ability].can?(:create, event.runs.new)
+        ctx[:current_ability].can?(:create, event.runs.new(args))
       end
     }
   end

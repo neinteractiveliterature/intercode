@@ -41,6 +41,13 @@ class CommonEventFormFields extends React.Component {
     });
   }
 
+  lengthSecondsDidChange = (lengthSeconds) => {
+    this.props.onChange({
+      ...this.props.event,
+      length_seconds: lengthSeconds,
+    });
+  }
+
   totalSlotsForVolunteerEventDidChange = (totalSlots) => {
     this.props.onChange({
       ...this.props.event,
