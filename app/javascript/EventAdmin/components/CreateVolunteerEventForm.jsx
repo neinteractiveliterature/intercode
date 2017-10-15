@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { Link, withRouter } from 'react-router-dom';
 import { enableUniqueIds } from 'react-html-id';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
-import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';
-import TimespanItem from '../../FormPresenter/components/TimespanItem';
+import CommonEventFormFields from '../../BuiltInForms/CommonEventFormFields';
 import eventsQuery from '../eventsQuery';
-import { createVolunteerEventMutation } from '../mutations';
+import { createEventMutation } from '../mutations';
 
 @withRouter
-@graphql(createVolunteerEventMutation, { name: 'createVolunteerEvent' })
+@graphql(createEventMutation, { name: 'createEvent' })
 class CreateVolunteerEventForm extends React.Component {
   static propTypes = {
-    createVolunteerEvent: PropTypes.func.isRequired,
+    convention: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+    createEvent: PropTypes.func.isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
@@ -24,44 +25,40 @@ class CreateVolunteerEventForm extends React.Component {
     enableUniqueIds(this);
 
     this.state = {
-      title: '',
-      email: '',
-      short_blurb: '',
-      description: '',
-      length_seconds: null,
-      total_slots: null,
+      event: {
+        category: 'volunteer_event',
+        can_play_concurrently: false,
+        con_mail_destination: 'event_email',
+        author: `${this.props.convention.name} Staff`,
+        title: '',
+        email: '',
+        short_blurb: '',
+        description: '',
+        length_seconds: null,
+        registration_policy: CommonEventFormFields.buildRegistrationPolicyForVolunteerEvent(null),
+      },
     };
   }
 
   isDataComplete = () => (
-    this.state.title && this.state.email &&
-    this.state.short_blurb && this.state.description &&
-    this.state.length_seconds > 0 && this.state.total_slots > 0
+    this.state.event.title &&
+    this.state.event.short_blurb && this.state.event.description &&
+    this.state.event.length_seconds > 0 &&
+    this.state.event.registration_policy.buckets[0].total_slots > 0
   )
 
-  formInputDidChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  }
-
-  lengthSecondsDidChange = (lengthSeconds) => {
-    this.setState({ length_seconds: lengthSeconds });
+  eventFieldChanged = (newEventData) => {
+    this.setState({ event: { ...this.state.event, ...newEventData } });
   }
 
   createEvent = () => {
-    const { title, email, short_blurb, description, length_seconds, total_slots } = this.state;
-
-    return this.props.createVolunteerEvent({
+    return this.props.createEvent({
       variables: {
         input: {
-          title,
-          email,
-          short_blurb,
-          description,
-          length_seconds,
-          total_slots: parseInt(total_slots, 10),
+          event: this.state.event,
         },
       },
-      update: (store, { data: { createVolunteerEvent: { event: newEvent } } }) => {
+      update: (store, { data: { createEvent: { event: newEvent } } }) => {
         const eventsData = store.readQuery({ query: eventsQuery });
         eventsData.events.push(newEvent);
         store.writeQuery({ query: eventsQuery, data: eventsData });
@@ -71,47 +68,10 @@ class CreateVolunteerEventForm extends React.Component {
   }
 
   renderFormBody = () => (
-    <div>
-      <BootstrapFormInput
-        name="title"
-        label="Title"
-        value={this.state.title}
-        onChange={this.formInputDidChange}
-      />
-      <BootstrapFormInput
-        type="email"
-        name="email"
-        label="Contact email"
-        value={this.state.email}
-        onChange={this.formInputDidChange}
-      />
-      <BootstrapFormTextarea
-        name="short_blurb"
-        label="Short blurb"
-        value={this.state.short_blurb}
-        onChange={this.formInputDidChange}
-        rows={4}
-      />
-      <BootstrapFormTextarea
-        name="description"
-        label="Description"
-        value={this.state.description}
-        onChange={this.formInputDidChange}
-        rows={10}
-      />
-      <TimespanItem
-        formItem={{ properties: { caption: 'Length of each run' } }}
-        value={this.state.length_seconds}
-        onChange={this.lengthSecondsDidChange}
-      />
-      <BootstrapFormInput
-        type="number"
-        name="total_slots"
-        label="Volunteer slots in each run"
-        value={this.state.total_slots || ''}
-        onChange={this.formInputDidChange}
-      />
-    </div>
+    <CommonEventFormFields
+      event={this.state.event}
+      onChange={this.eventFieldChanged}
+    />
   )
 
   render = () => (

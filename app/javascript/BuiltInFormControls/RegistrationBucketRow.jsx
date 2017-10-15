@@ -79,7 +79,8 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  beginDelete = () => {
+  beginDelete = (event: SyntheticInputEvent) => {
+    event.preventDefault();
     this.setState({ isConfirmingDelete: true });
   }
 

@@ -42,12 +42,31 @@ fragments.event = gql`
 fragment EventFields on Event {
   id
   title
+  author
   description
+  organization
+  url
+  con_mail_destination
+  can_play_concurrently
   short_blurb
+  participant_communications
   email
   length_seconds
   category
   description_html
+
+  registration_policy {
+    buckets {
+      key
+      name
+      description
+      minimum_slots
+      preferred_slots
+      total_slots
+      slots_limited
+      anything
+    }
+  }
 
   runs {
     ...RunFields

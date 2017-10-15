@@ -12,9 +12,12 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
     event = @event_id_map[row[:EventId]]
     return unless event
 
+    user_con_profile = @user_con_profile_id_map[row[:UserId]]
+    return unless user_con_profile
+
     # Ugh.  Unfortunately, Intercode 1 makes it possible to have the same user as a GM twice.
     # Intercode 2 doesn't allow it, so if it happens, merge the two records' flags.
-    event.team_members.find_or_initialize_by(user_con_profile_id: @user_con_profile_id_map[row[:UserId]].id).tap do |team_member|
+    event.team_members.find_or_initialize_by(user_con_profile_id: user_con_profile.id).tap do |team_member|
       team_member.assign_attributes(
         display: team_member.display || yn_to_bool(row[:DisplayAsGM]),
         show_email: team_member.show_email || yn_to_bool(row[:DisplayEMail]),
