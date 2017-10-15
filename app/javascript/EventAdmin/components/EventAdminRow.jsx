@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import Timespan from '../../PCSG/Timespan';
 
 class EventAdminRow extends React.Component {
@@ -98,9 +99,12 @@ class EventAdminRow extends React.Component {
     return (
       <tr>
         <td>
-          <span className={`rounded p-1 event-category-${event.category}`}>
+          <Link
+            to={`/${event.id}/edit`}
+            className={`rounded p-1 event-category-${event.category} text-dark`}
+          >
             {event.title}
-          </span>
+          </Link>
           {' '}
           <small>({event.category})</small>
         </td>

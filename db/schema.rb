@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170909175825) do
+ActiveRecord::Schema.define(version: 20171015182922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,8 +111,6 @@ ActiveRecord::Schema.define(version: 20170909175825) do
     t.string "email"
     t.string "organization"
     t.text "url"
-    t.boolean "notify_on_changes"
-    t.text "player_constraints"
     t.integer "length_seconds"
     t.boolean "can_play_concurrently"
     t.string "con_mail_destination"
@@ -123,9 +121,10 @@ ActiveRecord::Schema.define(version: 20170909175825) do
     t.datetime "updated_at"
     t.integer "convention_id"
     t.integer "owner_id"
-    t.string "status"
+    t.string "status", default: "active", null: false
     t.string "category"
     t.text "registration_policy"
+    t.text "participant_communications"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"

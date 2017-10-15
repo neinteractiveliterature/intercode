@@ -14,7 +14,8 @@ class AcceptEventProposalService < ApplicationService
     can_play_concurrently: 'can_play_concurrently',
     description: 'description',
     short_blurb: 'short_blurb',
-    registration_policy: 'registration_policy'
+    registration_policy: 'registration_policy',
+    participant_communications: 'player_communications'
   }
 
   DEFAULT_EVENT_ATTRIBUTES = {
