@@ -1,6 +1,6 @@
-def guard_for_event(action)
+def guard_for_convention_associated_model(association, action)
   ->(_obj, args, ctx) {
-    event = ctx[:convention].events.find(args[:id])
+    event = ctx[:convention].public_send(association).find(args[:id])
     ctx[:current_ability].can?(action, event)
   }
 end
@@ -8,13 +8,6 @@ end
 GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
   ctx[:current_ability].can?(:create, ctx[:convention].events.new(args[:event].to_h))
 }
-
-def guard_for_run(action)
-  ->(_obj, args, ctx) {
-    run = ctx[:convention].runs.find(args[:id])
-    ctx[:current_ability].can?(action, run)
-  }
-end
 
 Types::MutationType = GraphQL::ObjectType.define do
   name "Mutation"
@@ -28,11 +21,11 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :dropEvent, Mutations::DropEvent.field do
-    guard(guard_for_event(:drop))
+    guard(guard_for_convention_associated_model(:events, :drop))
   end
 
   field :updateEvent, Mutations::UpdateEvent.field do
-    guard(guard_for_event(:update))
+    guard(guard_for_convention_associated_model(:events, :update))
   end
 
   field :createRun, Mutations::CreateRun.field do
@@ -52,10 +45,10 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteRun, Mutations::DeleteRun.field do
-    guard(guard_for_run(:delete))
+    guard(guard_for_convention_associated_model(:run, :delete))
   end
 
   field :updateRun, Mutations::UpdateRun.field do
-    guard(guard_for_run(:update))
+    guard(guard_for_convention_associated_model(:run, :update))
   end
 end
