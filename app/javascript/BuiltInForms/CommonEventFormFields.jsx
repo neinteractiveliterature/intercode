@@ -125,6 +125,16 @@ class CommonEventFormFields extends React.Component {
     });
   }
 
+  regularEventFieldRenderer = renderFunc => (
+    (...args) => {
+      if (!isRegularEvent(this.props.event)) {
+        return null;
+      }
+
+      return renderFunc(...args);
+    }
+  )
+
   renderRegistrationPolicyInput = () => {
     if (this.props.event.category === 'volunteer_event') {
       const totalSlots = this.props.event.registration_policy.buckets[0].total_slots;
@@ -180,67 +190,53 @@ class CommonEventFormFields extends React.Component {
     );
   }
 
-  renderAuthorField = () => {
-    if (!isRegularEvent(this.props.event)) {
-      return null;
-    }
-
-    return (
+  renderAuthorField = this.regularEventFieldRenderer(
+    () => (
       <BootstrapFormInput
         name="author"
         label="Author(s)"
         value={this.props.event.author}
         onChange={this.formInputDidChange}
       />
-    );
-  }
+    ),
+  )
 
-  renderConMailDestinationField = () => {
-    if (!isRegularEvent(this.props.event)) {
-      return null;
-    }
+  renderConMailDestinationField = this.regularEventFieldRenderer(
+    () => {
+      const choices = ['event_email', 'gms'].map(value => (
+        <BootstrapFormCheckbox
+          key={`con_mail_destination_${value}`}
+          type="radio"
+          name="con_mail_destination"
+          value={value}
+          checked={this.props.event.con_mail_destination === value}
+          onChange={this.formInputDidChange}
+          label="Event email address"
+        />
+      ));
 
-    const choices = ['event_email', 'gms'].map(value => (
-      <BootstrapFormCheckbox
-        key={`con_mail_destination_${value}`}
-        type="radio"
-        name="con_mail_destination"
-        value={value}
-        checked={this.props.event.con_mail_destination === value}
-        onChange={this.formInputDidChange}
-        label="Event email address"
-      />
-    ));
+      return (
+        <fieldset className="form-group">
+          <legend className="col-form-legend">Send convention email to:</legend>
+          {choices}
+        </fieldset>
+      );
+    },
+  )
 
-    return (
-      <fieldset className="form-group">
-        <legend className="col-form-legend">Send convention email to:</legend>
-        {choices}
-      </fieldset>
-    );
-  }
-
-  renderOrganizationField = () => {
-    if (!isRegularEvent(this.props.event)) {
-      return null;
-    }
-
-    return (
+  renderOrganizationField = this.regularEventFieldRenderer(
+    () => (
       <BootstrapFormInput
         name="organization"
         label="Organization"
         value={this.props.event.organization}
         onChange={this.formInputDidChange}
       />
-    );
-  }
+    ),
+  )
 
-  renderParticipantCommunicationsField = () => {
-    if (!isRegularEvent(this.props.event)) {
-      return null;
-    }
-
-    return (
+  renderParticipantCommunicationsField = this.regularEventFieldRenderer(
+    () => (
       <BootstrapFormTextarea
         name="participant_communications"
         label="Participant communications"
@@ -248,23 +244,19 @@ class CommonEventFormFields extends React.Component {
         onChange={this.formInputDidChange}
         rows={4}
       />
-    );
-  }
+    ),
+  )
 
-  renderUrlField = () => {
-    if (!isRegularEvent(this.props.event)) {
-      return null;
-    }
-
-    return (
+  renderUrlField = this.regularEventFieldRenderer(
+    () => (
       <BootstrapFormInput
         name="url"
         label="URL of event homepage"
         value={this.props.event.url}
         onChange={this.formInputDidChange}
       />
-    );
-  }
+    ),
+  )
 
   render = () => (
     <div>
