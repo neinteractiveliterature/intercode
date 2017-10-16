@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
+import { enableUniqueIds } from 'react-html-id';
 
 class TimeSelect extends React.Component {
   static propTypes = {
@@ -19,6 +20,11 @@ class TimeSelect extends React.Component {
   static defaultProps = {
     children: null,
   };
+
+  constructor(props) {
+    super(props);
+    enableUniqueIds(this);
+  }
 
   inputChanged = (event) => {
     const newValue = event.target.value;
@@ -59,31 +65,33 @@ class TimeSelect extends React.Component {
       <option key={minute} value={minute}>{minute.toString(10).padStart(2, '0')}</option>
     ));
 
+    const [hourSelect, minuteSelect] = [
+      ['Hour', 'hour', hourOptions],
+      ['Minute', 'minute', minuteOptions],
+    ].map(([label, name, options]) => {
+      const selectId = this.nextUniqueId();
+
+      return [
+        <label key={`label_${name}`} className="sr-only" htmlFor={selectId}>{label}</label>,
+        <select
+          key={`select_${name}`}
+          id={selectId}
+          className="form-control mr-1"
+          name={name}
+          value={value[name] == null ? '' : value[name]}
+          onChange={this.inputChanged}
+        >
+          <option />
+          {options}
+        </select>,
+      ];
+    });
+
     return (
       <div className="form-inline">
-        <label className="sr-only">Hour</label>
-        <select
-          className="form-control mr-1"
-          name="hour"
-          value={value.hour == null ? '' : value.hour}
-          onChange={this.inputChanged}
-        >
-          <option />
-          {hourOptions}
-        </select>
-
+        {hourSelect}
         <span className="mx-1">:</span>
-
-        <label className="sr-only">Minute</label>
-        <select
-          className="form-control mr-1"
-          name="minute"
-          value={value.minute == null ? '' : value.minute}
-          onChange={this.inputChanged}
-        >
-          <option />
-          {minuteOptions}
-        </select>
+        {minuteSelect}
 
         {this.props.children}
       </div>
