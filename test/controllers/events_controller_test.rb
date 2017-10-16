@@ -21,8 +21,8 @@ describe EventsController do
       sign_in staff_user
     end
 
-    test "should get new" do
-      get :new
+    test "should get edit" do
+      get :edit, params: { id: event.id }
       assert_response :success
     end
   end
