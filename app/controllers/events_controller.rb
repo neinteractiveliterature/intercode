@@ -4,7 +4,8 @@ class EventsController < BaseControllers::VirtualHost
 
   # List the available LARPs
   def index
-    @events = @events.active.order(:title)
+    @events = @events.active.sort_by { |event| event.title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '') }
+    @page_title = "Event List"
     respond_with @events
   end
 
@@ -31,5 +32,8 @@ class EventsController < BaseControllers::VirtualHost
     end
 
     respond_with @event
+  end
+
+  def edit
   end
 end
