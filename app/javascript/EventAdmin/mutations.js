@@ -25,11 +25,12 @@ mutation($input: CreateFillerEventInput!) {
 ${fragments.event}
 `;
 
-export const deleteEventMutation = gql`
-mutation($input: DeleteEventInput!) {
-  deleteEvent(input: $input) {
+export const dropEventMutation = gql`
+mutation($input: DropEventInput!) {
+  dropEvent(input: $input) {
     event {
       id
+      status
     }
   }
 }

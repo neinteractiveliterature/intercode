@@ -19,10 +19,10 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :deleteEvent, Mutations::DeleteEvent.field do
+  field :dropEvent, Mutations::DropEvent.field do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:id])
-      ctx[:current_ability].can?(:delete, event)
+      ctx[:current_ability].can?(:drop, event)
     }
   end
 

@@ -10,7 +10,7 @@ import eventsQuery from '../eventsQuery';
 import { timespanFromRun } from '../../TimespanUtils';
 import {
   createFillerEventMutation,
-  deleteEventMutation,
+  dropEventMutation,
   updateEventMutation,
   updateRunMutation,
 } from '../mutations';
@@ -39,7 +39,7 @@ const buildRunInput = run => ({
 @compose(
   graphql(eventsQuery),
   graphql(createFillerEventMutation, { name: 'createFillerEvent' }),
-  graphql(deleteEventMutation, { name: 'deleteEvent' }),
+  graphql(dropEventMutation, { name: 'dropEvent' }),
   graphql(updateEventMutation, { name: 'updateEvent' }),
   graphql(updateRunMutation, { name: 'updateRun' }),
 )
@@ -51,7 +51,7 @@ class FillerEventAdmin extends React.Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
     createFillerEvent: PropTypes.func.isRequired,
-    deleteEvent: PropTypes.func.isRequired,
+    dropEvent: PropTypes.func.isRequired,
     updateEvent: PropTypes.func.isRequired,
     updateRun: PropTypes.func.isRequired,
   };
@@ -60,7 +60,7 @@ class FillerEventAdmin extends React.Component {
     super(props);
 
     this.state = {
-      confirmingDeleteEventId: null,
+      confirmingDropEventId: null,
       error: null,
       requestInProgress: false,
     };
@@ -74,7 +74,6 @@ class FillerEventAdmin extends React.Component {
     const input = {
       event: {
         ...buildEventInput(event).event,
-        status: 'active',
         can_play_concurrently: false,
         con_mail_destination: 'event_email',
         author: `${this.props.data.convention.name} Staff`,
@@ -128,30 +127,24 @@ class FillerEventAdmin extends React.Component {
     );
   }
 
-  deleteClicked = (eventId) => {
-    this.setState({ confirmingDeleteEventId: eventId });
+  dropClicked = (eventId) => {
+    this.setState({ confirmingDropEventId: eventId });
   }
 
-  deleteCanceled = () => {
-    this.setState({ confirmingDeleteEventId: null });
+  dropCanceled = () => {
+    this.setState({ confirmingDropEventId: null });
   }
 
-  deleteConfirmed = () => {
-    const id = this.state.confirmingDeleteEventId;
+  dropConfirmed = () => {
+    const id = this.state.confirmingDropEventId;
 
     this.setState(
       { requestInProgress: true },
       () => {
-        this.props.deleteEvent({
+        this.props.dropEvent({
           variables: { input: { id } },
-          update: (store) => {
-            const eventsData = store.readQuery({ query: eventsQuery });
-            const eventIndex = eventsData.events.findIndex(event => event.id === id);
-            eventsData.events.splice(eventIndex, 1);
-            store.writeQuery({ query: eventsQuery, data: eventsData });
-          },
         }).then(() => {
-          this.setState({ requestInProgress: false, confirmingDeleteEventId: null });
+          this.setState({ requestInProgress: false, confirmingDropEventId: null });
         }).catch((error) => {
           this.setState({ error, requestInProgress: false });
         });
@@ -162,7 +155,7 @@ class FillerEventAdmin extends React.Component {
   renderFillerEventsList = () => {
     const { data } = this.props;
 
-    const fillerEvents = data.events.filter(event => event.category === 'filler');
+    const fillerEvents = data.events.filter(event => event.category === 'filler' && event.status === 'active');
     fillerEvents.sort((a, b) => {
       const timespanA = timespanFromRun(this.props.data.convention, a, a.runs[0]);
       const timespanB = timespanFromRun(this.props.data.convention, b, b.runs[0]);
@@ -184,7 +177,7 @@ class FillerEventAdmin extends React.Component {
               Edit
             </Link>
             {' '}
-            <button className="btn btn-outline-danger btn-sm" onClick={() => this.deleteClicked(event.id)}>
+            <button className="btn btn-outline-danger btn-sm" onClick={() => this.dropClicked(event.id)}>
               <i className="fa fa-trash-o" />
             </button>
           </td>
@@ -203,11 +196,11 @@ class FillerEventAdmin extends React.Component {
           </tbody>
         </table>
         <ConfirmModal
-          visible={this.state.confirmingDeleteEventId != null}
-          onCancel={this.deleteCanceled}
-          onOK={this.deleteConfirmed}
+          visible={this.state.confirmingDropEventId != null}
+          onCancel={this.dropCanceled}
+          onOK={this.dropConfirmed}
         >
-          Are you sure you want to delete this filler event?
+          Are you sure you want to drop this filler event?
         </ConfirmModal>
       </div>
     );
