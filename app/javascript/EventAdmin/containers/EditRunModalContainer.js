@@ -12,7 +12,7 @@ const mapDispatchToProps = dispatch => ({
   onSaveFailed: error => dispatch(actions.saveEditingRun.FAILED(error)),
   onCancel: () => dispatch(actions.cancelEditingRun()),
   onDelete: () => dispatch(actions.deleteEditingRun()),
-  editingRunChanged: (editingRunProps) => dispatch(actions.editingRunChanged(editingRunProps)),
+  editingRunChanged: editingRunProps => dispatch(actions.editingRunChanged(editingRunProps)),
 });
 
 const EditRunModalContainer = connect(

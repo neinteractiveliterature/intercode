@@ -146,6 +146,21 @@ class CommonEventFormFields extends React.Component {
       return null;
     }
 
+    const currentValue = this.props.event.can_play_concurrently;
+
+    const choices = [['Yes', true], ['No', false]].map(([label, value]) => (
+      <BootstrapFormCheckbox
+        key={`can_play_concurrently_${value}`}
+        type="radio"
+        name="can_play_concurrently"
+        value={value.toString()}
+        className="form-check-inline"
+        checked={value ? currentValue : !currentValue}
+        onChange={this.canPlayConcurrentlyDidChange}
+        label={label}
+      />
+    ));
+
     return (
       <div className="card my-4">
         <div className="card-header">Registration options</div>
@@ -158,26 +173,7 @@ class CommonEventFormFields extends React.Component {
 
           <fieldset className="form-group">
             <legend className="col-form-legend">Can this event be played concurrently with other events?</legend>
-
-            <BootstrapFormCheckbox
-              type="radio"
-              name="can_play_concurrently"
-              value="true"
-              className="form-check-inline"
-              checked={this.props.event.can_play_concurrently}
-              onChange={this.canPlayConcurrentlyDidChange}
-              label="Yes"
-            />
-
-            <BootstrapFormCheckbox
-              type="radio"
-              name="can_play_concurrently"
-              value="false"
-              className="form-check-inline"
-              checked={!this.props.event.can_play_concurrently}
-              onChange={this.canPlayConcurrentlyDidChange}
-              label="No"
-            />
+            {choices}
           </fieldset>
         </div>
       </div>
@@ -204,28 +200,22 @@ class CommonEventFormFields extends React.Component {
       return null;
     }
 
+    const choices = ['event_email', 'gms'].map(value => (
+      <BootstrapFormCheckbox
+        key={`con_mail_destination_${value}`}
+        type="radio"
+        name="con_mail_destination"
+        value={value}
+        checked={this.props.event.con_mail_destination === value}
+        onChange={this.formInputDidChange}
+        label="Event email address"
+      />
+    ));
+
     return (
       <fieldset className="form-group">
         <legend className="col-form-legend">Send convention email to:</legend>
-
-        <BootstrapFormCheckbox
-          type="radio"
-          name="con_mail_destination"
-          value="event_email"
-          checked={this.props.event.con_mail_destination === 'event_email'}
-          onChange={this.formInputDidChange}
-          label="Event email address"
-        />
-
-        <BootstrapFormCheckbox
-          type="radio"
-          name="con_mail_destination"
-          value="gms"
-          checked={this.props.event.con_mail_destination === 'gms'}
-          onChange={this.formInputDidChange}
-          label="Individual team members for this event"
-        />
-
+        {choices}
       </fieldset>
     );
   }
