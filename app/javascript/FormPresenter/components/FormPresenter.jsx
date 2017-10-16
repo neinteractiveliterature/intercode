@@ -34,7 +34,14 @@ function renderProgress(form, section) {
   );
 }
 
-function renderSection(convention, form, section, response, responseValueChanged, isUpdatingResponse) {
+function renderSection(
+  convention,
+  form,
+  section,
+  response,
+  responseValueChanged,
+  isUpdatingResponse
+) {
   const items = form.getItemsInSection(section.id).map(item => (
     <FormItem
       key={item.id}
@@ -104,17 +111,8 @@ function renderSubmitButton(currentSectionIndex, sections, onClick, disabled) {
   );
 }
 
-const FormPresenter = ({
-  convention,
-  form,
-  currentSectionId,
-  previousSection,
-  nextSection,
-  submitForm,
-  response,
-  responseValueChanged,
-  isUpdatingResponse,
-}) => {
+const FormPresenter = (props) => {
+  const { form, convention, response } = props;
   if (!form || !convention || !response) {
     return (
       <div>
@@ -123,7 +121,7 @@ const FormPresenter = ({
     );
   }
 
-  const currentSection = getCurrentSection(form, currentSectionId);
+  const currentSection = getCurrentSection(form, props.currentSectionId);
   const sections = form.getSections();
   const currentSectionIndex = sections.indexOf(currentSection);
 
@@ -139,16 +137,23 @@ const FormPresenter = ({
           form,
           currentSection,
           response,
-          responseValueChanged,
-          isUpdatingResponse,
+          props.responseValueChanged,
+          props.isUpdatingResponse,
         )
       }
 
       <div className="card-footer d-flex justify-content-between">
-        <div>{renderBackButton(currentSectionIndex, previousSection)}</div>
+        <div>{renderBackButton(currentSectionIndex, props.previousSection)}</div>
         <div>
-          {renderContinueButton(currentSectionIndex, sections, nextSection, disableContinue)}
-          {renderSubmitButton(currentSectionIndex, sections, submitForm, isUpdatingResponse)}
+          {renderContinueButton(currentSectionIndex, sections, props.nextSection, disableContinue)}
+          {
+            renderSubmitButton(
+              currentSectionIndex,
+              sections,
+              props.submitForm,
+              props.isUpdatingResponse,
+            )
+          }
         </div>
       </div>
     </div>
