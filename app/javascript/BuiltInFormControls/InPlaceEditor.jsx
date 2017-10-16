@@ -35,18 +35,27 @@ class InPlaceEditor extends React.Component {
     this.setState({ editingValue: event.target.value });
   }
 
-  beginEditing = () => {
+  beginEditing = (event: SyntheticInputEvent) => {
+    event.preventDefault();
     this.setState(
       { editing: true, editingValue: this.props.value },
       () => { this.input.focus(); },
     );
   }
 
-  cancelEditing = () => {
+  cancelEditing = (event: ?SyntheticInputEvent) => {
+    if (event != null) {
+      event.preventDefault();
+    }
+
     this.setState({ editing: false, editingValue: undefined });
   }
 
-  commitEditing = () => {
+  commitEditing = (event: ?SyntheticInputEvent) => {
+    if (event != null) {
+      event.preventDefault();
+    }
+
     this.props.onChange(this.state.editingValue);
     this.setState({ editing: false, editingValue: undefined });
   }

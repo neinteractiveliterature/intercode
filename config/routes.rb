@@ -35,6 +35,8 @@ Intercode::Application.routes.draw do
       end
     end
 
+    get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
+
     resources :event_proposals do
       member do
         patch :submit

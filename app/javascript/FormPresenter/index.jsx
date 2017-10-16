@@ -28,17 +28,20 @@ class FormPresenterApp extends React.Component {
       submitAuthenticityToken,
     } = this.props;
 
-    this.store = buildReduxStore(reducer);
-    this.store.dispatch(actions.setApiConfiguration(
+    this.store = buildReduxStore(
+      'FormPresenterApp',
+      reducer,
       {
-        conventionUrl,
-        formUrl,
-        responseUrl,
-        afterSubmitUrl,
-        authenticityToken,
-        submitAuthenticityToken,
+        apiConfiguration: {
+          conventionUrl,
+          formUrl,
+          responseUrl,
+          afterSubmitUrl,
+          authenticityToken,
+          submitAuthenticityToken,
+        },
       },
-    ));
+    );
   }
 
   componentDidMount = () => {

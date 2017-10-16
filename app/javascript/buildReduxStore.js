@@ -6,16 +6,26 @@ import { createStore, applyMiddleware, compose } from 'redux';
 const loggerMiddleware = createLogger();
 const debounceMiddleware = createDebounce();
 
-// eslint-disable-next-line no-underscore-dangle
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-export default function buildReduxStore(reducer) {
+export const defaultMiddleware = [
+  debounceMiddleware,
+  thunkMiddleware,
+  loggerMiddleware,
+];
+
+export function getComposeEnhancers(name) {
+  // eslint-disable-next-line no-underscore-dangle
+  return window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name }) || compose;
+}
+
+export default function buildReduxStore(name, reducer, initialState) {
+  const composeEnhancers = getComposeEnhancers(name);
+
   return createStore(
     reducer,
+    initialState,
     composeEnhancers(
       applyMiddleware(
-        debounceMiddleware,
-        thunkMiddleware,
-        loggerMiddleware,
+        ...defaultMiddleware,
       ),
     ),
   );

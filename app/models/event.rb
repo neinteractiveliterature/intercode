@@ -19,7 +19,7 @@ class Event < ApplicationRecord
 
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
-  validates :status, inclusion: { in: STATUSES, allow_nil: true }
+  validates :status, inclusion: { in: STATUSES }
 
   # Category is mostly for record-keeping purposes; it shouldn't actually
   # affect behavior of events.  Nevertheless we do want to make sure it's
@@ -36,13 +36,20 @@ class Event < ApplicationRecord
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
 
+  # Filler events have to have exactly one run
+  validate :filler_events_must_have_exactly_one_run, unless: :bypass_filler_event_run_check
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
 
-  scope :active, -> { where(status: 'active') }
+  STATUSES.each do |status|
+    scope status, -> { where(status: status) }
+  end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
+
+  attr_accessor :bypass_filler_event_run_check
 
 #  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
 
@@ -99,6 +106,14 @@ class Event < ApplicationRecord
 
     registration_policy.errors.each do |attribute, error|
       errors.add "registration_policy.#{attribute}", error
+    end
+  end
+
+  def filler_events_must_have_exactly_one_run
+    return unless category == 'filler' && status == 'active'
+
+    if runs.size != 1
+      errors.add(:base, 'Filler events must have exactly one run')
     end
   end
 end

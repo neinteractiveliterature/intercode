@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-prop-types */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
@@ -9,10 +11,14 @@ class BootstrapFormCheckbox extends React.Component {
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
+    type: PropTypes.oneOf(['radio', 'checkbox']),
+    className: PropTypes.string,
   };
 
   static defaultProps = {
     disabled: false,
+    type: 'checkbox',
+    className: '',
   };
 
   constructor(props) {
@@ -24,16 +30,11 @@ class BootstrapFormCheckbox extends React.Component {
     const inputId = this.nextUniqueId();
 
     return (
-      <div className="form-check">
+      <div className={`form-check ${this.props.className}`}>
         <label className="form-check-label" htmlFor={inputId}>
           <input
             className="form-check-input"
             id={inputId}
-            name={this.props.name}
-            type="checkbox"
-            checked={this.props.checked}
-            onChange={this.props.onChange}
-            disabled={this.props.disabled}
             {...this.props}
           />
           {' '}

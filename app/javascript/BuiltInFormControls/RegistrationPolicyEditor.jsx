@@ -83,11 +83,13 @@ class RegistrationPolicyEditor extends React.Component {
 
   nextUniqueId: () => string
 
-  addBucket = () => {
+  addBucket = (event: SyntheticInputEvent) => {
+    event.preventDefault();
     this.props.onChange(this.props.registrationPolicy.addBucket('untitled'));
   }
 
-  addAnythingBucket = () => {
+  addAnythingBucket = (event: SyntheticInputEvent) => {
+    event.preventDefault();
     this.props.onChange(this.props.registrationPolicy.addBucket(
       'anything',
       { anything: true },
@@ -144,7 +146,7 @@ class RegistrationPolicyEditor extends React.Component {
           <button
             className="btn btn-secondary anything-bucket"
             disabled={hasAnythingBucket}
-            onClick={this.addBucket}
+            onClick={this.addAnythingBucket}
           >
               Add anything bucket
           </button>

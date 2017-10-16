@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gql, graphql } from 'react-apollo';
-import { propType } from 'graphql-anywhere';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import LoadingIndicator from '../LoadingIndicator';
 import EventRun from '../PCSG/EventRun';
 import ScheduleBlock from '../PCSG/ScheduleBlock';
@@ -65,16 +65,6 @@ query($extendedCounts: Boolean!) {
 const PIXELS_PER_HOUR = 100;
 const PIXELS_PER_LANE = 30;
 
-function GraphQLPropType(query, rootKey) {
-  return (props) => {
-    if (!props.loading) {
-      return propType(query)(props[rootKey]);
-    }
-
-    return undefined;
-  };
-}
-
 function formatTime(time, timezoneName) {
   const timeInZone = time.tz(timezoneName);
   let phrasing;
@@ -99,24 +89,33 @@ function formatTime(time, timezoneName) {
     }),
   },
 )
+@GraphQLQueryResultWrapper
 class ScheduleGrid extends React.Component {
   static propTypes = {
-    data: PropTypes.shape({
-      events: GraphQLPropType(ScheduleQuery, 'events'),
-      convention: GraphQLPropType(ScheduleQuery, 'convention'),
-      loading: PropTypes.boolean,
-      error: PropTypes.object,
-    }),
+    data: GraphQLResultPropType(ScheduleQuery, 'events', 'convention').isRequired,
     config: ConfigPropType,
   };
 
   static defaultProps = {
-    data: null,
-    classifyEventsBy: null,
     config: defaultConfigProp,
   };
 
+  constructor(props) {
+    super(props);
+    this.recalculateGridFromProps(props);
+  }
+
   componentWillReceiveProps = (nextProps) => {
+    this.recalculateGridFromProps(nextProps);
+  }
+
+  getPixelWidth = timespan => timespan.getLength('hour') * PIXELS_PER_HOUR
+
+  setConventionDay = (conventionDay) => {
+    this.setState({ conventionDay });
+  }
+
+  recalculateGridFromProps = (nextProps) => {
     const { data } = nextProps;
 
     if (data.loading || data.error) {
@@ -137,18 +136,11 @@ class ScheduleGrid extends React.Component {
       moment(data.convention.ends_at),
     );
 
-    this.conventionDays = [];
-    const now = this.conventionTimespan.start.clone().tz(data.convention.timezone_name).startOf('day');
-    while (now.isBefore(this.conventionTimespan.finish)) {
-      this.conventionDays.push(now.clone().add(6, 'hours')); // start convention days at 6am
-      now.add(1, 'day');
-    }
-  }
-
-  getPixelWidth = timespan => timespan.getLength('hour') * PIXELS_PER_HOUR
-
-  setConventionDay = (conventionDay) => {
-    this.setState({ conventionDay });
+    this.conventionDays = this.conventionTimespan.getTimeHopsWithin(
+      data.convention.timezone_name,
+      'day',
+      moment.duration(6, 'hours'), // start convention days at 6:00am
+    );
   }
 
   buildScheduleBlock = (events) => {
@@ -168,7 +160,10 @@ class ScheduleGrid extends React.Component {
           eventRunsByCategory.set(category, []);
         }
 
-        return eventRunsByCategory.set(category, eventRunsByCategory.get(category).concat(eventRun));
+        return eventRunsByCategory.set(
+          category,
+          eventRunsByCategory.get(category).concat(eventRun),
+        );
       },
       new Map(),
     )
@@ -221,13 +216,9 @@ class ScheduleGrid extends React.Component {
   )
 
   renderHours = (timespan, eventRuns) => {
-    const hourCount = timespan.getLength('hour');
-
     const now = timespan.start.clone();
     const hourDivs = [];
     while (timespan.includesTime(now)) {
-      const left = (now.diff(timespan.start, 'hour') / hourCount) * 100;
-
       let extendedCounts = null;
       if (this.props.config.showExtendedCounts) {
         const hourTimespan = new Timespan(now, now.clone().add(1, 'hour'));
@@ -376,13 +367,6 @@ class ScheduleGrid extends React.Component {
   render = () => {
     const { data } = this.props;
 
-    if (data.loading) {
-      return <LoadingIndicator />;
-    }
-    if (data.error) {
-      return <div className="alert alert-danger">{this.props.data.error.message}</div>;
-    }
-
     const conventionDayTabs = this.conventionDays.map(conventionDay => (
       <li className="nav-item" key={conventionDay.toISOString()}>
         <NavLink to={`/${conventionDay.format('dddd').toLowerCase()}`} className="nav-link">
@@ -396,7 +380,7 @@ class ScheduleGrid extends React.Component {
       </li>
     ));
 
-    const eventRuns = EventRun.buildEventRunsFromApi(this.props.data.events);
+    const eventRuns = EventRun.buildEventRunsFromApi(data.events);
 
     const conventionDayGrids = this.conventionDays.map((conventionDay) => {
       const conventionDayTimespan = new Timespan(conventionDay, conventionDay.clone().add(1, 'day'));

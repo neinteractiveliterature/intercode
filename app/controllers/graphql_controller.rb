@@ -14,6 +14,7 @@ class GraphqlController < BaseControllers::VirtualHost
     operation_name = params[:operationName]
     context = {
       current_user: current_user,
+      current_ability: current_ability,
       user_con_profile: user_con_profile,
       convention: convention
     }

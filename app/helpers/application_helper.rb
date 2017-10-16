@@ -64,4 +64,8 @@ module ApplicationHelper
     classes = [html_options[:class], 'nav-link', (html_options.delete(:active) ? 'active' : '')].compact.join(' ')
     link_to(name, url, html_options.merge(class: classes), &block)
   end
+
+  def graphql_authenticity_token
+    form_authenticity_token(form_options: { action: graphql_path, method: 'POST' })
+  end
 end
