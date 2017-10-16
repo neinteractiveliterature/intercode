@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-prop-types */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
@@ -31,11 +33,6 @@ class BootstrapFormInput extends React.Component {
         <input
           className="form-control"
           id={inputId}
-          name={this.props.name}
-          type={this.props.type}
-          value={this.props.value}
-          onChange={this.props.onChange}
-          disabled={this.props.disabled}
           {...this.props}
         />
       </div>

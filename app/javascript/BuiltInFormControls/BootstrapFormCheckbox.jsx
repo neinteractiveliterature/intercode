@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-prop-types */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
@@ -33,11 +35,6 @@ class BootstrapFormCheckbox extends React.Component {
           <input
             className="form-check-input"
             id={inputId}
-            name={this.props.name}
-            type={this.props.type}
-            checked={this.props.checked}
-            onChange={this.props.onChange}
-            disabled={this.props.disabled}
             {...this.props}
           />
           {' '}
