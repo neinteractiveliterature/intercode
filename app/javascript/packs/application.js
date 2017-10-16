@@ -13,18 +13,22 @@ import Rails from 'rails-ujs';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
+import EventAdmin from '../EventAdmin';
 import FormPresenter from '../FormPresenter';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
+import StandaloneEditEvent from '../StandaloneEditEvent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
+  EventAdmin,
   FormPresenter,
   ScheduleGrid,
   StaffPositionForm,
+  StandaloneEditEvent,
   TeamMemberForm,
   TicketPurchaseForm,
   TicketTypeForm,

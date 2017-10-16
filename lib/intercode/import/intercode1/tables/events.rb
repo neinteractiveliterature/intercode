@@ -24,15 +24,18 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       email: row[:GameEMail],
       organization: row[:Organization],
       url: row[:Homepage],
-      notify_on_changes: row[:NotifyOnChanges] == 'Y',
       length_seconds: row[:Hours] * 1.hour,
       can_play_concurrently: row[:CanPlayConcurrently] == 'Y',
       con_mail_destination: con_mail_destination(row),
       description: @markdownifier.markdownify(row[:Description]),
       short_blurb: @markdownifier.markdownify(row[:ShortBlurb]),
+      participant_communications: @markdownifier.markdownify(row[:PlayerCommunications]),
       category: category,
       status: event_status(row),
-      registration_policy: registration_policy(row, category)
+      registration_policy: registration_policy(row, category),
+      bypass_filler_event_run_check: true # we won't yet have the run for filler events
+
+      # notify_on_changes: this doesn't seem to be used anymore
     )
   end
 

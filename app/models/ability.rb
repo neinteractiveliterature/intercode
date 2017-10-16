@@ -62,10 +62,10 @@ class Ability
   end
 
   def add_team_member_abilities
-    can :manage, Event, id: team_member_event_ids
-    can :manage, EventProposal, event_id: team_member_event_ids
-    can :manage, Run, event_id: team_member_event_ids
-    can :manage, Signup, run: { event_id: team_member_event_ids }
+    can :update, Event, id: team_member_event_ids
+    can :update, EventProposal, event_id: team_member_event_ids
+    can :update, Run, event_id: team_member_event_ids
+    can :show, Signup, run: { event_id: team_member_event_ids }
     can :manage, TeamMember, event_id: team_member_event_ids
   end
 
