@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-//import reduceReducers from 'reduce-reducers';
 import editingRunReducer from './editingRunReducer';
 
 function buildReducer(client) {
