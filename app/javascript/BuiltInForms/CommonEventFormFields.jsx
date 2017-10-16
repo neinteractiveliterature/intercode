@@ -190,17 +190,6 @@ class CommonEventFormFields extends React.Component {
     );
   }
 
-  renderAuthorField = this.regularEventFieldRenderer(
-    () => (
-      <BootstrapFormInput
-        name="author"
-        label="Author(s)"
-        value={this.props.event.author}
-        onChange={this.formInputDidChange}
-      />
-    ),
-  )
-
   renderConMailDestinationField = this.regularEventFieldRenderer(
     () => {
       const choices = ['event_email', 'gms'].map(value => (
@@ -224,17 +213,6 @@ class CommonEventFormFields extends React.Component {
     },
   )
 
-  renderOrganizationField = this.regularEventFieldRenderer(
-    () => (
-      <BootstrapFormInput
-        name="organization"
-        label="Organization"
-        value={this.props.event.organization}
-        onChange={this.formInputDidChange}
-      />
-    ),
-  )
-
   renderParticipantCommunicationsField = this.regularEventFieldRenderer(
     () => (
       <BootstrapFormTextarea
@@ -247,12 +225,12 @@ class CommonEventFormFields extends React.Component {
     ),
   )
 
-  renderUrlField = this.regularEventFieldRenderer(
-    () => (
+  renderSimpleRegularEventInput = this.regularEventFieldRenderer(
+    (name, label) => (
       <BootstrapFormInput
-        name="url"
-        label="URL of event homepage"
-        value={this.props.event.url}
+        name={name}
+        label={label}
+        value={this.props.event[name]}
         onChange={this.formInputDidChange}
       />
     ),
@@ -266,7 +244,7 @@ class CommonEventFormFields extends React.Component {
         value={this.props.event.title}
         onChange={this.formInputDidChange}
       />
-      {this.renderAuthorField()}
+      {this.renderSimpleRegularEventInput('author', 'Author(s)')}
       <BootstrapFormInput
         type="email"
         name="email"
@@ -274,8 +252,8 @@ class CommonEventFormFields extends React.Component {
         value={this.props.event.email}
         onChange={this.formInputDidChange}
       />
-      {this.renderOrganizationField()}
-      {this.renderUrlField()}
+      {this.renderSimpleRegularEventInput('organization', 'Organization')}
+      {this.renderSimpleRegularEventInput('url', 'URL of event homepage')}
       {this.renderConMailDestinationField()}
       <TimespanItem
         formItem={{ properties: { caption: this.getLengthSecondsCaption() } }}
