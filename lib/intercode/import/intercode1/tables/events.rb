@@ -29,7 +29,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       con_mail_destination: con_mail_destination(row),
       description: @markdownifier.markdownify(row[:Description]),
       short_blurb: @markdownifier.markdownify(row[:ShortBlurb]),
-      participant_communications: row[:PlayerCommunications],
+      participant_communications: @markdownifier.markdownify(row[:PlayerCommunications]),
       category: category,
       status: event_status(row),
       registration_policy: registration_policy(row, category),

@@ -8,7 +8,7 @@ const GraphQLQueryResultWrapper = (WrappedComponent) => {
       return <LoadingIndicator />;
     }
     if (data.error) {
-      return <div className="alert alert-danger">{this.props.data.error.message}</div>;
+      return <div className="alert alert-danger">{data.error.message}</div>;
     }
 
     return <WrappedComponent data={data} {...props} />;

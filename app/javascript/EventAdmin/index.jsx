@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter, NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
-import EditEvent from './components/EditEvent';
+import EventAdminEditEvent from './components/EventAdminEditEvent';
 import EventAdminRunsTable from './components/EventAdminRunsTable';
 import FillerEventAdmin from './components/FillerEventAdmin';
 import VolunteerEventAdmin from './components/VolunteerEventAdmin';
@@ -54,7 +54,7 @@ class EventAdminApp extends React.Component {
             <Route path="/runs" component={EventAdminRunsTable} />
             <Route path="/volunteer_events" component={VolunteerEventAdmin} />
             <Route path="/filler_events" component={FillerEventAdmin} />
-            <Route path="/:id/edit" component={EditEvent} />
+            <Route path="/:id/edit" component={EventAdminEditEvent} />
             <Redirect to="/runs" />
           </Switch>
         </div>

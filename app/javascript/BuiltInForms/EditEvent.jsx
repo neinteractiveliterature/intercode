@@ -1,31 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
-import { withRouter } from 'react-router-dom';
-import eventsQuery from '../eventsQuery';
-import { updateEventMutation } from '../mutations';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import EventForm from '../../BuiltInForms/EventForm';
+import EventForm from './EventForm';
 
-@withRouter
-@compose(
-  graphql(eventsQuery),
-  graphql(updateEventMutation, { name: 'updateEvent' }),
-)
-@GraphQLQueryResultWrapper
 class EditEvent extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
+    event: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
     updateEvent: PropTypes.func.isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+    dropEvent: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
+    onDrop: PropTypes.func.isRequired,
+    cancelPath: PropTypes.string,
+    showDropButton: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    cancelPath: null,
+    showDropButton: false,
   };
 
   constructor(props) {
@@ -71,8 +63,7 @@ class EditEvent extends React.Component {
       { requestInProgress: true },
       () => {
         this.props.updateEvent({ variables: { input: eventInput } }).then(() => {
-          this.props.history.push('/runs');
-          this.setState({ requestInProgress: false });
+          this.setState({ requestInProgress: false }, this.props.onSave);
         }).catch((error) => {
           this.setState({ error, requestInProgress: false });
         });
@@ -80,19 +71,32 @@ class EditEvent extends React.Component {
     );
   }
 
-  render = () => {
-    const event = this.props.data.events.find(e => e.id.toString() === this.props.match.params.id);
-
-    return (
-      <EventForm
-        disabled={this.state.requestInProgress}
-        error={this.state.error ? this.state.error.message : null}
-        initialEvent={event}
-        cancelPath="/runs"
-        onSave={this.updateEvent}
-      />
+  dropEvent = () => {
+    this.setState(
+      { requestInProgress: true },
+      () => {
+        this.props.dropEvent({
+          variables: { input: { id: this.props.event.id } },
+        }).then(() => {
+          this.setState({ requestInProgress: false }, this.props.onDrop);
+        }).catch((error) => {
+          this.setState({ error, requestInProgress: false });
+        });
+      },
     );
   }
+
+  render = () => (
+    <EventForm
+      disabled={this.state.requestInProgress}
+      error={this.state.error ? this.state.error.message : null}
+      initialEvent={this.props.event}
+      cancelPath={this.props.cancelPath}
+      onSave={this.updateEvent}
+      onDrop={this.dropEvent}
+      showDropButton={this.props.showDropButton}
+    />
+  )
 }
 
 export default EditEvent;

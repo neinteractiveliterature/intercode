@@ -11,6 +11,7 @@ class EventForm extends React.Component {
     }).isRequired,
     disabled: PropTypes.bool,
     error: PropTypes.string,
+    showDropButton: PropTypes.bool,
 
     cancelPath: PropTypes.string,
     onSave: PropTypes.func.isRequired,
@@ -21,6 +22,7 @@ class EventForm extends React.Component {
     cancelPath: null,
     disabled: false,
     error: null,
+    showDropButton: false,
   };
 
   constructor(props) {
@@ -63,7 +65,7 @@ class EventForm extends React.Component {
 
   renderHeader = () => {
     let dropButton = null;
-    if (this.state.event.status !== 'dropped') {
+    if (this.props.showDropButton && this.state.event.status !== 'dropped') {
       dropButton = (
         <button className="btn btn-outline-danger float-right" onClick={this.beginDrop}>
           Drop event
