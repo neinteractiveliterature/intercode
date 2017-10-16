@@ -53,6 +53,7 @@ fragment EventFields on Event {
   email
   length_seconds
   category
+  status
   description_html
 
   registration_policy {

@@ -110,7 +110,7 @@ class Event < ApplicationRecord
   end
 
   def filler_events_must_have_exactly_one_run
-    return unless category == 'filler'
+    return unless category == 'filler' && status == 'active'
 
     if runs.size != 1
       errors.add(:base, 'Filler events must have exactly one run')
