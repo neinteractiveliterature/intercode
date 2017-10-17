@@ -6,16 +6,17 @@ engines:
     enabled: true
   duplication:
     enabled: true
-    exclude_paths:
-      # Mutations involve a bunch of boilerplate that's making duplication go nuts
-      - app/graphql/mutations/
-    config:
-      languages:
-        ruby:
-        javascript:
-          mass_threshold: 60
-      javascript_plugins:
-        - flow
+    channel: beta
+#    exclude_paths:
+#      # Mutations involve a bunch of boilerplate that's making duplication go nuts
+#      - app/graphql/mutations/
+#    config:
+#      languages:
+#        ruby:
+#        javascript:
+#          mass_threshold: 60
+#      javascript_plugins:
+#        - flow
   eslint:
     enabled: true
     config:
