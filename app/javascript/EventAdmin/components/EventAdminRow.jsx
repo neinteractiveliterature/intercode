@@ -49,17 +49,20 @@ class EventAdminRow extends React.Component {
     const start = moment(run.starts_at);
     const timespan = new Timespan(start, start.clone().add(event.length_seconds, 'seconds'));
 
-    const runMetadata = [];
-    if (run.title_suffix) {
-      runMetadata.push(<li key="title_suffix"><strong>{run.title_suffix}</strong></li>);
-    }
+    const [titleSuffix, scheduleNote] = [['title_suffix', 'font-weight-bold'], ['schedule_note', 'font-italic']].map(([field, className]) => {
+      if (run[field]) {
+        return <li key={field} className={className}>{run[field]}</li>;
+      }
 
-    runMetadata.push(<li key="timespan">{timespan.humanizeInTimezone(this.props.convention.timezone_name)}</li>);
-    runMetadata.push(<li key="rooms">{run.rooms.map(room => room.name).sort().join(', ')}</li>);
+      return null;
+    });
 
-    if (run.schedule_note) {
-      runMetadata.push(<li key="schedule_note"><em>{run.schedule_note}</em></li>);
-    }
+    const runMetadata = [
+      titleSuffix,
+      <li key="timespan">{timespan.humanizeInTimezone(this.props.convention.timezone_name)}</li>,
+      <li key="rooms">{run.rooms.map(room => room.name).sort().join(', ')}</li>,
+      scheduleNote,
+    ];
 
     return (
       <button className="btn btn-secondary m-1 p-2 text-left" key={run.id} onClick={() => this.props.editRun(event, run)}>
