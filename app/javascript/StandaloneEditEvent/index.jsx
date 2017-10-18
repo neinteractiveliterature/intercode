@@ -1,10 +1,10 @@
 import React from 'react';
-import { ApolloProvider, compose, gql, graphql } from 'react-apollo';
+import { compose, gql, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import buildApolloClient from '../buildApolloClient';
+import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 
 const eventFragment = gql`
 fragment StandaloneEditEvent_EventFields on Event {
@@ -72,45 +72,36 @@ mutation($input: UpdateEventInput!) {
 ${eventFragment}
 `;
 
-const StandaloneEditEvent = ({ data, updateEvent, dropEvent, showDropButton }) => (
-  <EditEvent
-    event={data.event}
-    onSave={() => { window.location.href = `/events/${data.event.id}`; }}
-    onDrop={() => { window.location.href = '/events'; }}
-    updateEvent={updateEvent}
-    dropEvent={dropEvent}
-    showDropButton={showDropButton}
-  />
-);
-
-StandaloneEditEvent.propTypes = {
-  eventId: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
-  showDropButton: PropTypes.bool.isRequired,
-  data: GraphQLResultPropType(eventQuery, 'event').isRequired,
-  updateEvent: PropTypes.func.isRequired,
-  dropEvent: PropTypes.func.isRequired,
-};
-
-const ConnectedStandaloneEditEvent = compose(
+@StandaloneGraphQLComponent
+@compose(
   graphql(eventQuery),
   graphql(updateEventMutation, { name: 'updateEvent' }),
   graphql(dropEventMutation, { name: 'dropEvent' }),
-)(
-  GraphQLQueryResultWrapper(StandaloneEditEvent),
-);
+)
+@GraphQLQueryResultWrapper
+class StandaloneEditEvent extends React.Component {
+  static propTypes = {
+    eventId: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
+    showDropButton: PropTypes.bool.isRequired,
+    data: GraphQLResultPropType(eventQuery, 'event').isRequired,
+    updateEvent: PropTypes.func.isRequired,
+    dropEvent: PropTypes.func.isRequired,
+  };
 
-const StandaloneEditEventWithApollo = ({ authenticityToken, ...props }) => {
-  const client = buildApolloClient(authenticityToken);
+  render = () => {
+    const { data, updateEvent, dropEvent, showDropButton } = this.props;
 
-  return (
-    <ApolloProvider client={client}>
-      <ConnectedStandaloneEditEvent {...props} />
-    </ApolloProvider>
-  );
-};
+    return (
+      <EditEvent
+        event={data.event}
+        onSave={() => { window.location.href = `/events/${data.event.id}`; }}
+        onDrop={() => { window.location.href = '/events'; }}
+        updateEvent={updateEvent}
+        dropEvent={dropEvent}
+        showDropButton={showDropButton}
+      />
+    );
+  }
+}
 
-StandaloneEditEventWithApollo.propTypes = {
-  authenticityToken: PropTypes.string.isRequired,
-};
-
-export default StandaloneEditEventWithApollo;
+export default StandaloneEditEvent;
