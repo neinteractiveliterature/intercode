@@ -1,4 +1,4 @@
-class CmsPartialsController < BaseControllers::VirtualHost
+class CmsPartialsController < ApplicationController
   include Cadmus::PartialsController
 
   authorize_resource :cms_partial

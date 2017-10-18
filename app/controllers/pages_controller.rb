@@ -1,4 +1,4 @@
-class PagesController < BaseControllers::VirtualHost
+class PagesController < ApplicationController
 
   # Cadmus::PagesController defines index, show, new, create, edit, update, and destroy actions for
   # CMS pages that include the cadmus_page directive.  So we don't need to implement those here;
@@ -48,7 +48,7 @@ class PagesController < BaseControllers::VirtualHost
 
   # Cadmus requires this too.  This method is supposed to return the parent object to look for pages in,
   # for this particular HTTP request.  We can simply use the convention method defined by this controller's
-  # parent class (BaseControllers::VirtualHost) to look up the appropriate Convention object using the
+  # parent class (ApplicationController) to look up the appropriate Convention object using the
   # domain name for this HTTP request.
   def page_parent
     convention

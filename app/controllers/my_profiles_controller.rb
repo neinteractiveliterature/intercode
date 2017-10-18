@@ -1,4 +1,4 @@
-class MyProfilesController < BaseControllers::VirtualHost
+class MyProfilesController < ApplicationController
   before_action :ensure_user_con_profile, except: [:new, :create]
   before_action :build_user_con_profile, only: [:new, :create]
   authorize_resource :user_con_profile

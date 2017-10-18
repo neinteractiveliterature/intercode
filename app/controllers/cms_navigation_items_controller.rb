@@ -1,4 +1,4 @@
-class CmsNavigationItemsController < BaseControllers::VirtualHost
+class CmsNavigationItemsController < ApplicationController
   include CadmusNavbar::AdminController
 
   authorize_resource :cms_navigation_items

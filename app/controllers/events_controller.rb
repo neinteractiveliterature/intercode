@@ -1,4 +1,4 @@
-class EventsController < BaseControllers::VirtualHost
+class EventsController < ApplicationController
   load_and_authorize_resource through: :convention
   respond_to :html, :json
 
