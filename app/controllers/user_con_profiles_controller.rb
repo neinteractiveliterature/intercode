@@ -1,6 +1,6 @@
-class UserConProfilesController < BaseControllers::VirtualHost
+class UserConProfilesController < ApplicationController
   # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be @user_con_profile,
-  # which is unsafe for us to use because BaseControllers::VirtualHost uses it to mean the current user, and we use
+  # which is unsafe for us to use because ApplicationController uses it to mean the current user, and we use
   # that for authorization checking.  So instead, we'll call the user con profile we're working on the "subject
   # profile" (as in the subject of our actions).
   load_and_authorize_resource :subject_profile, id_param: :id, parent: false, class: "UserConProfile",

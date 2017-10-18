@@ -1,4 +1,4 @@
-class FormsController < BaseControllers::VirtualHost
+class FormsController < ApplicationController
   include Cadmus::Renderable
 
   load_and_authorize_resource through: :convention

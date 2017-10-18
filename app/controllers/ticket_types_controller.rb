@@ -1,4 +1,4 @@
-class TicketTypesController < BaseControllers::VirtualHost
+class TicketTypesController < ApplicationController
   load_and_authorize_resource through: :convention
 
   respond_to :html, :json

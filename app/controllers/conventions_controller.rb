@@ -1,5 +1,5 @@
 class ConventionsController < ApplicationController
-  before_action :try_virtual_host
+  before_action :convention # just so that load_and_authorize_resource won't try it if we're in a virtual host
   load_and_authorize_resource
 
   def index
@@ -50,11 +50,6 @@ class ConventionsController < ApplicationController
   end
 
   private
-  def try_virtual_host
-    if request.env["intercode.convention"]
-      @convention = request.env["intercode.convention"]
-    end
-  end
 
   def convention_params
     params.require(:convention).permit(:name, :domain, :timezone_name)

@@ -1,4 +1,4 @@
-class AdminEventsController < BaseControllers::VirtualHost
+class AdminEventsController < ApplicationController
   before_action :authorize_admin
 
   def index

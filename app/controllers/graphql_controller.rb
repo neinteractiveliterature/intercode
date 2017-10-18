@@ -1,4 +1,4 @@
-class GraphqlController < BaseControllers::VirtualHost
+class GraphqlController < ApplicationController
   skip_authorization_check
 
   def execute

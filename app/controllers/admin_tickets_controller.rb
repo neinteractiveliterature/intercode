@@ -1,4 +1,4 @@
-class AdminTicketsController < BaseControllers::VirtualHost
+class AdminTicketsController < ApplicationController
   load_resource :user_con_profile
   before_action :check_existing_ticket, only: [:new, :create]
   load_and_authorize_resource :ticket, parent: false, through: :user_con_profile, singleton: true

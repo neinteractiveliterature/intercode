@@ -1,4 +1,4 @@
-class CmsFilesController < BaseControllers::VirtualHost
+class CmsFilesController < ApplicationController
   include CadmusFiles::AdminController
 
   load_and_authorize_resource through: :convention
