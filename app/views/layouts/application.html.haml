@@ -30,7 +30,8 @@
                   = link_to "List of Events", events_path, class: 'dropdown-item'
                   - if can? :schedule_with_counts, convention.events.new
                     = link_to "Schedule With Counts", schedule_with_counts_events_path, class: 'dropdown-item'
-                  = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
+                  - if convention.accepting_proposals
+                    = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
               = CadmusNavbar::Renderers::Bootstrap4.new(request: request, url_for_page: ->(page) { page_url(page) }, root_items: convention.cms_navigation_items.root).render_navigation_items
               - if can? :manage, convention.user_con_profiles.new
                 %li.nav-item.dropdown{:role => "presentation"}

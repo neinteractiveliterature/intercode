@@ -7,7 +7,7 @@ FactoryGirl.define do
     timezone_name "US/Eastern"
     signups_allowed "yes"
     show_schedule "yes"
-    accepting_bids false
+    accepting_proposals false
     precon_bids_allowed false
     updated_by nil
     maximum_event_signups ScheduledValue::ScheduledValue.new(

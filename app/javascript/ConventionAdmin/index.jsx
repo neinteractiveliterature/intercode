@@ -7,7 +7,7 @@ import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 const conventionQuery = gql`
 query($id: Int!) {
   convention(id: $id) {
-    accepting_bids
+    accepting_proposals
     precon_bids_allowed
     created_at
     updated_at
