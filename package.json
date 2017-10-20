@@ -61,7 +61,7 @@
     "react-select": "^1.0.0-rc.5",
     "react-select-fast-filter-options": "^0.2.3",
     "react-simple-currency": "^1.0.15",
-    "react-virtualized": "^9.10.1",
+    "react-virtualized": "^9.11.1",
     "react-virtualized-select": "^3.1.0",
     "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
