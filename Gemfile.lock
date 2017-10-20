@@ -298,7 +298,7 @@ GEM
     graphql (1.7.4)
     graphql-guard (1.0.0)
       graphql (>= 1.6.0, < 2)
-    haml (5.0.3)
+    haml (5.0.4)
       temple (>= 0.8.0)
       tilt
     http-cookie (1.0.3)
