@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql, gql } from 'react-apollo';
+import ConventionForm from '../BuiltInForms/ConventionForm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
@@ -17,6 +18,7 @@ query($id: Int!) {
     domain
     timezone_name
     registrations_frozen
+    show_schedule
 
     rooms {
       id
@@ -34,9 +36,11 @@ class ConventionAdmin extends React.Component {
     data: GraphQLResultPropType(conventionQuery, 'convention').isRequired,
   };
 
-  render = () => {
-    return <div>{this.props.data.convention.name}</div>;
-  }
+  render = () => (
+    <ConventionForm
+      initialConvention={this.props.data.convention}
+    />
+  )
 }
 
 export default ConventionAdmin;
