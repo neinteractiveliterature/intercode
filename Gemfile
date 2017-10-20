@@ -9,7 +9,7 @@ gem 'pg'
 gem 'puma'
 
 gem 'sass-rails'
-gem 'bootstrap', '~> 4.0.0.beta'
+gem 'bootstrap', '~> 4.0.0.beta2'
 gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
