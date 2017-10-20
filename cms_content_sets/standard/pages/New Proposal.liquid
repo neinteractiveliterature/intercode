@@ -10,11 +10,15 @@
 
     <p>{{ convention.name }} actively solicits proposals in the months leading up to the convention. As the convention attendance grows, based on registration numbers, we may need a third round of proposals to fill in the slate of games already accepted for the convention.</p>
 
-    <div class="text-center my-4">
-      {% new_event_proposal_button "Propose an event!" btn btn-primary %}
-    </div>
+    {% if convention.accepting_proposals %}
+      <div class="text-center my-4">
+        {% new_event_proposal_button "Propose an event!" btn btn-primary %}
+      </div>
 
-    <p>Please fill out the proposal form with <i>as much information as possible</i>. This is the <i>best</i> way to help us evaluate your proposal quickly!</p>
+      <p>Please fill out the proposal form with <i>as much information as possible</i>. This is the <i>best</i> way to help us evaluate your proposal quickly!</p>
+    {% else %}
+      <p>{{ convention.name }} is not currently accepting event proposals.</p>
+    {% endif %}
 
     {% assign proposal_chair = convention.staff_positions_by_name.game_proposals_chair %}
 

@@ -59,7 +59,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       domain: @con_domain,
       signups_allowed: row[:SignupsAllowed].underscore,
       show_schedule: row[:ShowSchedule].underscore,
-      accepting_bids: yesno_to_bool(row[:AcceptingBids]),
+      accepting_proposals: yesno_to_bool(row[:AcceptingBids]),
       precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
       starts_at: @starts_at,
       ends_at: @ends_at,
