@@ -1,4 +1,4 @@
-Types::TimespanWithValueType = GraphQL::ObjectType do
+Types::TimespanWithValueType = GraphQL::ObjectType.define do
   name "TimespanWithValue"
 
   field :start, Types::DateType

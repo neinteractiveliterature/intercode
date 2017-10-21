@@ -10,6 +10,7 @@ class ScheduledValueEditor extends React.Component {
     scheduledValue: ScheduledValuePropType.isRequired,
     timezone: PropTypes.string.isRequired,
     setScheduledValue: PropTypes.func.isRequired,
+    buildValueInput: PropTypes.func.isRequired,
   }
 
   static isValid = (scheduledValue) => {
@@ -84,6 +85,7 @@ class ScheduledValueEditor extends React.Component {
           rowIdentifier={i}
           deleteClicked={this.deleteRowClicked}
           attributeDidChange={this.timespanAttributeDidChange}
+          buildInput={this.props.buildValueInput}
         />
       );
     });

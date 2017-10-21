@@ -6843,8 +6843,8 @@ react-number-input@^15.5.1:
     react-dom "^0.14 || ^15.0.0-rc || ^15.0"
 
 react-onclickoutside@^6.5.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.6.0.tgz#8526d0675fad26558e9f0a400c983b813c99ef3c"
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.6.2.tgz#8446f665460ffda1c68b7f3aeeea3a217bfdf18f"
 
 react-popper@^0.7.3:
   version "0.7.3"
