@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
+import Datetime from 'react-datetime';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
@@ -69,6 +71,17 @@ class ConventionForm extends React.Component {
       convention: {
         ...this.state.convention,
         [event.target.name]: event.target.value === 'true',
+      },
+    });
+  }
+
+  datetimeValueDidChange = (fieldName, newValue) => {
+    const newValueInTimezone = moment(newValue.toObject(), this.state.convention.timezone_name);
+
+    this.setState({
+      convention: {
+        ...this.state.convention,
+        [fieldName]: newValueInTimezone.toISOString(),
       },
     });
   }
@@ -148,6 +161,27 @@ class ConventionForm extends React.Component {
         value={this.state.convention.timezone_name}
         onChange={this.timezoneNameDidChange}
       />
+
+      <div className="row form-group">
+        <div className="col-md-6">
+          Convention starts
+          <Datetime
+            value={moment(this.state.convention.starts_at).tz(this.state.convention.timezone_name)}
+            onChange={(newValue) => { this.datetimeValueDidChange('starts_at', newValue); }}
+            dateFormat="dddd, MMMM DD, YYYY"
+            timeFormat="[at] h:mma"
+          />
+        </div>
+        <div className="col-md-6">
+          Convention ends
+          <Datetime
+            value={moment(this.state.convention.ends_at).tz(this.state.convention.timezone_name)}
+            onChange={(newValue) => { this.datetimeValueDidChange('ends_at', newValue); }}
+            dateFormat="dddd, MMMM DD, YYYY"
+            timeFormat="[at] h:mma"
+          />
+        </div>
+      </div>
 
       {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
       {

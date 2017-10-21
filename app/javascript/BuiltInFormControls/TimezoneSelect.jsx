@@ -4,11 +4,17 @@ import Select from 'react-select';
 import moment from 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
 
+const NOW = new Date().getTime();
 const TIMEZONE_OPTIONS = moment.tz.names()
   .map(name => moment.tz.zone(name))
   .sort((a, b) => ((b.offsets[0] - a.offsets[0]) || a.name.localeCompare(b.name)))
   .map((zone) => {
-    const offset = zone.offsets[0];
+    let offsetIndex = zone.untils.findIndex(until => until > NOW);
+    if (offsetIndex === -1) {
+      offsetIndex = zone.untils.length - 1;
+    }
+
+    const offset = zone.offsets[offsetIndex];
     const offsetSign = offset < 0 ? '-' : '+';
     const offsetHours = Math.abs(Math.floor(offset / 60));
     const offsetMinutes = Math.abs(Math.round(offset % 60));
@@ -18,8 +24,7 @@ const TIMEZONE_OPTIONS = moment.tz.names()
       label: `[${formattedOffset}] ${zone.name}`,
       value: zone.name,
     };
-  },
-);
+  });
 
 class TimezoneSelect extends React.Component {
   static propTypes = {
