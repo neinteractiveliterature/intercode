@@ -61,6 +61,14 @@ class ConventionAdmin extends React.Component {
     updateConvention: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      error: null,
+    };
+  }
+
   saveConvention = (convention) => {
     const input = {
       convention: {
@@ -82,7 +90,21 @@ class ConventionAdmin extends React.Component {
       },
     };
 
-    this.props.updateConvention({ variables: { input } }).then(() => { window.location.href = '/'; });
+    this.props.updateConvention({ variables: { input } })
+      .then(() => { window.location.href = '/'; })
+      .catch((error) => {
+        this.setState({ error: error.graphQLErrors.map(graphQLError => graphQLError.message).join(', ') });
+      });
+  }
+
+  renderError = () => {
+    if (!this.state.error) {
+      return null;
+    }
+
+    return (
+      <div className="alert alert-danger">{this.state.error}</div>
+    );
   }
 
   render = () => (
@@ -91,6 +113,8 @@ class ConventionAdmin extends React.Component {
         initialConvention={this.props.data.convention}
         saveConvention={this.saveConvention}
       />
+
+      {this.renderError()}
     </div>
   )
 }
