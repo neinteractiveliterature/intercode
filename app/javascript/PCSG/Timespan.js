@@ -1,6 +1,6 @@
 // @flow
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const humanizeTime = (time, includeDay) => {
   if (time.millisecond() === 0 && time.second() === 0 && time.minute() === 0) {

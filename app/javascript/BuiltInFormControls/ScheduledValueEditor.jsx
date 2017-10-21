@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import maxBy from 'lodash.maxby';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRow from './ScheduledValueTimespanRow';
 

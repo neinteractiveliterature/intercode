@@ -1,6 +1,6 @@
 // @flow
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Timespan from './Timespan';
 
 class EventRun {
