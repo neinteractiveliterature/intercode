@@ -5,7 +5,6 @@ FactoryGirl.define do
     name "TestCon"
     sequence(:domain) { |n| "testcon#{n}.example.com" }
     timezone_name "US/Eastern"
-    signups_allowed "yes"
     show_schedule "yes"
     accepting_proposals false
     precon_bids_allowed false
