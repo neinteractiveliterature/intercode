@@ -57,7 +57,6 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
     Convention.new(
       name: @con_name,
       domain: @con_domain,
-      signups_allowed: row[:SignupsAllowed].underscore,
       show_schedule: row[:ShowSchedule].underscore,
       accepting_proposals: yesno_to_bool(row[:AcceptingBids]),
       precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
