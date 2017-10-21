@@ -12,6 +12,13 @@ GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
 Types::MutationType = GraphQL::ObjectType.define do
   name "Mutation"
 
+  field :updateConvention, Mutations::UpdateConvention.field do
+    guard ->(_obj, args, ctx) {
+      convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
+      ctx[:current_ability].can?(:update, convention)
+    }
+  end
+
   field :createEvent, Mutations::CreateEvent.field do
     guard(GUARD_FOR_CREATE_EVENT)
   end
