@@ -2,7 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
+
+const buildMaximumEventSignupsInput = (value, onChange) => {
+  const processChangeEvent = (event) => {
+    onChange(event.target.value);
+  };
+
+  const options = ['not_yet', '1', '2', '3', 'unlimited', 'not_now'].map(choice => (
+    <option key={choice} value={choice}>{choice}</option>
+  ));
+
+  return (
+    <select className="form-control" value={value} onChange={processChangeEvent}>
+      <option />
+      {options}
+    </select>
+  );
+};
 
 class ConventionForm extends React.Component {
   static propTypes = {
@@ -10,7 +28,18 @@ class ConventionForm extends React.Component {
       name: PropTypes.string.isRequired,
       domain: PropTypes.string.isRequired,
       timezone_name: PropTypes.string.isRequired,
+      accepting_proposals: PropTypes.bool.isRequired,
+      registrations_frozen: PropTypes.bool.isRequired,
+      show_schedule: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
+      maximum_event_signups: PropTypes.shape({
+        timespans: PropTypes.arrayOf(PropTypes.shape({
+          start: PropTypes.string,
+          finish: PropTypes.string,
+          value: PropTypes.string.isRequired,
+        }).isRequired).isRequired,
+      }).isRequired,
     }).isRequired,
+    saveConvention: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -19,6 +48,10 @@ class ConventionForm extends React.Component {
     this.state = {
       convention: props.initialConvention,
     };
+  }
+
+  onClickSave = () => {
+    this.props.saveConvention(this.state.convention);
   }
 
   formInputDidChange = (event) => {
@@ -35,6 +68,15 @@ class ConventionForm extends React.Component {
       convention: {
         ...this.state.convention,
         [event.target.name]: event.target.value === 'true',
+      },
+    });
+  }
+
+  maximumEventSignupsDidChange = (newMaximumEventSignups) => {
+    this.setState({
+      convention: {
+        ...this.state.convention,
+        maximum_event_signups: newMaximumEventSignups,
       },
     });
   }
@@ -117,12 +159,26 @@ class ConventionForm extends React.Component {
             { value: 'gms', label: 'Only to event team members and users with any privileges' },
             { value: 'yes', label: 'Yes, to everyone' },
           ],
+          undefined,
+          this.formInputDidChange,
         )
       }
 
       {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
 
-      <button className="btn btn-primary">Save settings</button>
+      <fieldset>
+        <legend className="col-form-legend">Event signup schedule</legend>
+        <ScheduledValueEditor
+          scheduledValue={this.state.convention.maximum_event_signups}
+          timezone={this.state.convention.timezone_name}
+          setScheduledValue={this.maximumEventSignupsDidChange}
+          buildValueInput={buildMaximumEventSignupsInput}
+        />
+      </fieldset>
+
+      <button className="btn btn-primary" onClick={this.onClickSave}>
+        Save settings
+      </button>
     </form>
   )
 }

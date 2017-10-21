@@ -20,6 +20,14 @@ query($id: Int!) {
     registrations_frozen
     show_schedule
 
+    maximum_event_signups {
+      timespans {
+        start
+        finish
+        value
+      }
+    }
+
     rooms {
       id
       name
@@ -37,9 +45,11 @@ class ConventionAdmin extends React.Component {
   };
 
   render = () => (
-    <ConventionForm
-      initialConvention={this.props.data.convention}
-    />
+    <div className="mb-4">
+      <ConventionForm
+        initialConvention={this.props.data.convention}
+      />
+    </div>
   )
 }
 

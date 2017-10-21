@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import NumberInput from 'react-number-input';
 import { TimespanPropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRowDatepicker from './ScheduledValueTimespanRowDatepicker';
 
@@ -20,6 +19,7 @@ function getOppositeTimeFieldName(fieldName) {
 
 class ScheduledValueTimespanRow extends React.Component {
   static propTypes = {
+    buildInput: PropTypes.func.isRequired,
     rowIdentifier: PropTypes.number.isRequired,
     timespan: TimespanPropType.isRequired,
     otherTimespans: PropTypes.arrayOf(TimespanPropType.isRequired).isRequired,
@@ -42,7 +42,7 @@ class ScheduledValueTimespanRow extends React.Component {
       return null;
     }
 
-    return moment(fieldValue).tz(this.props.timezone);
+    return moment(fieldValue);
   }
 
   isValidTimeForField = (fieldName, date) => {
@@ -76,18 +76,15 @@ class ScheduledValueTimespanRow extends React.Component {
   timeChanged = (property, newTime) => {
     let value = null;
     if (newTime) {
-      value = newTime.tz(this.props.timezone).toISOString();
+      const newTimeInTimezone = moment(newTime.toObject(), this.props.timezone);
+      value = newTimeInTimezone.toISOString();
     }
 
     this.props.attributeDidChange(this.props.rowIdentifier, property, value);
   }
 
-  valueChanged = (e, value) => {
-    const newValue = {
-      ...(this.props.timespan.value || {}),
-      fractional: value * 100.0,
-    };
-    this.props.attributeDidChange(this.props.key, 'value', newValue); // eslint-disable-line react/prop-types
+  valueChanged = (value) => {
+    this.props.attributeDidChange(this.props.rowIdentifier, 'value', value);
   }
 
   doesNotOverlapOtherTimespans = date => this.props.otherTimespans.every((otherTimespan) => {
@@ -121,44 +118,28 @@ class ScheduledValueTimespanRow extends React.Component {
     />
   )
 
-  render = () => {
-    let dollarValue = null;
+  render = () => (
+    <tr>
+      <td className="w-25">
+        {this.props.buildInput(this.props.timespan.value, this.valueChanged)}
+      </td>
 
-    if (this.props.timespan.value && this.props.timespan.value.fractional !== null) {
-      dollarValue = (this.props.timespan.value.fractional / 100.0).toFixed(2);
-    }
+      <td className="w-75">
+        <div className="d-flex flex-row align-items-center justify-content-stretch">
+          <div>from&nbsp;</div>
+          {this.renderDatetimePicker('start')}
+          <div className="ml-4">to&nbsp;</div>
+          {this.renderDatetimePicker('finish')}
+        </div>
+      </td>
 
-    return (
-      <tr>
-        <td className="w-25">
-          <div className="input-group">
-            <span className="input-group-addon">$</span>
-            <NumberInput
-              className="form-control"
-              value={dollarValue}
-              onChange={this.valueChanged}
-              format="0,0.00"
-            />
-          </div>
-        </td>
-
-        <td className="w-75">
-          <div className="d-flex flex-row align-items-center justify-content-stretch">
-            <div>from&nbsp;</div>
-            {this.renderDatetimePicker('start')}
-            <div className="ml-4">to&nbsp;</div>
-            {this.renderDatetimePicker('finish')}
-          </div>
-        </td>
-
-        <td className="w-25 text-right" style={{ verticalAlign: 'middle' }}>
-          <button className="btn btn-danger btn-sm" onClick={this.props.deleteClicked}>
-            <i className="fa fa-trash-o" />
-          </button>
-        </td>
-      </tr>
-    );
-  }
+      <td className="w-25 text-right" style={{ verticalAlign: 'middle' }}>
+        <button className="btn btn-danger btn-sm" onClick={this.props.deleteClicked}>
+          <i className="fa fa-trash-o" />
+        </button>
+      </td>
+    </tr>
+  )
 }
 
 export default ScheduledValueTimespanRow;
