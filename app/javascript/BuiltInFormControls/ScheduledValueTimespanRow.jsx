@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import NumberInput from 'react-number-input';
 import { TimespanPropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRowDatepicker from './ScheduledValueTimespanRowDatepicker';

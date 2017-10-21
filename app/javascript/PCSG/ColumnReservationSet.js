@@ -1,6 +1,6 @@
 // @flow
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import ColumnReservation from './ColumnReservation';
 import EventRun from './EventRun';
 import Timespan from './Timespan';
