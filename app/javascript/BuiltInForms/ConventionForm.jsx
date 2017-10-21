@@ -76,7 +76,7 @@ class ConventionForm extends React.Component {
   }
 
   datetimeValueDidChange = (fieldName, newValue) => {
-    const newValueInTimezone = moment(newValue.toObject(), this.state.convention.timezone_name);
+    const newValueInTimezone = moment.tz(newValue.toObject(), this.state.convention.timezone_name);
 
     this.setState({
       convention: {
