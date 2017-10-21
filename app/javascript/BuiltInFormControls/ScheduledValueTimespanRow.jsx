@@ -42,7 +42,7 @@ class ScheduledValueTimespanRow extends React.Component {
       return null;
     }
 
-    return moment(fieldValue);
+    return moment(fieldValue).tz(this.props.timezone);
   }
 
   isValidTimeForField = (fieldName, date) => {
@@ -76,7 +76,7 @@ class ScheduledValueTimespanRow extends React.Component {
   timeChanged = (property, newTime) => {
     let value = null;
     if (newTime) {
-      const newTimeInTimezone = moment(newTime.toObject(), this.props.timezone);
+      const newTimeInTimezone = moment.tz(newTime.toObject(), this.props.timezone);
       value = newTimeInTimezone.toISOString();
     }
 
