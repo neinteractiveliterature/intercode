@@ -6842,7 +6842,7 @@ react-number-input@^15.5.1:
     react "^0.14 || ^15.0.0-rc || ^15.0"
     react-dom "^0.14 || ^15.0.0-rc || ^15.0"
 
-react-onclickoutside@^6.5.0:
+react-onclickoutside@^6.5.0, react-onclickoutside@^6.6.2:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.6.2.tgz#8446f665460ffda1c68b7f3aeeea3a217bfdf18f"
 

@@ -50,7 +50,8 @@ class ConventionForm extends React.Component {
     };
   }
 
-  onClickSave = () => {
+  onClickSave = (event) => {
+    event.preventDefault();
     this.props.saveConvention(this.state.convention);
   }
 
@@ -81,11 +82,11 @@ class ConventionForm extends React.Component {
     });
   }
 
-  timezoneNameDidChange = (timezoneName) => {
+  timezoneNameDidChange = (option) => {
     this.setState({
       convention: {
         ...this.state.convention,
-        timezone_name: timezoneName,
+        timezone_name: option.value,
       },
     });
   }
