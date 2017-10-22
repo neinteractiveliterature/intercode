@@ -1,6 +1,6 @@
 class ConventionDrop < Liquid::Drop
   attr_reader :convention
-  delegate :name, :started?, :ended?, to: :convention
+  delegate :name, :started?, :ended?, :accepting_proposals, to: :convention
   alias_method :started, :started?
   alias_method :ended, :ended?
 

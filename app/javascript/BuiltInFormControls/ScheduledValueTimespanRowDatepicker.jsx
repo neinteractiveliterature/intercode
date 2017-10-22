@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
 import MomentPropTypes from 'react-moment-proptypes';
 
-require('react-datetime/css/react-datetime.css');
+import 'react-datetime/css/react-datetime.css';
+import '../react-datetime-width-fix.css';
 
 class ScheduledValueTimespanRowDatepicker extends React.Component {
   static propTypes = {

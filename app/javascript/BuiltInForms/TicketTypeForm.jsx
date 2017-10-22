@@ -1,9 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import NumberInput from 'react-number-input';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ResourceForm from './ResourceForm';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
+
+const buildScheduledMoneyValueInput = (value, onChange) => {
+  const processNumberInputChangeEvent = (event, newValue) => {
+    const moneyValue = {
+      ...(value || {}),
+      fractional: newValue * 100.0,
+    };
+
+    onChange(moneyValue);
+  };
+
+  let dollarValue = null;
+
+  if (value && value.fractional !== null) {
+    dollarValue = (value.fractional / 100.0).toFixed(2);
+  }
+
+  return (
+    <td className="w-25">
+      <div className="input-group">
+        <span className="input-group-addon">$</span>
+        <NumberInput
+          className="form-control"
+          value={dollarValue}
+          onChange={processNumberInputChangeEvent}
+          format="0,0.00"
+        />
+      </div>
+    </td>
+  );
+};
 
 class TicketTypeForm extends React.Component {
   static propTypes = {
@@ -77,6 +109,7 @@ class TicketTypeForm extends React.Component {
             timezone={this.props.timezone}
             scheduledValue={this.state.ticketType.pricing_schedule}
             setScheduledValue={this.pricingScheduleChanged}
+            buildValueInput={buildScheduledMoneyValueInput}
           />
         </fieldset>
       </ResourceForm>

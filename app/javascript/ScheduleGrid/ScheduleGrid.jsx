@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { gql, graphql } from 'react-apollo';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';

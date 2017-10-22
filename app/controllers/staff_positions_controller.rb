@@ -1,4 +1,4 @@
-class StaffPositionsController < BaseControllers::VirtualHost
+class StaffPositionsController < ApplicationController
   self.responder = NoShowActionResponder
 
   load_and_authorize_resource through: :convention

@@ -1,4 +1,4 @@
-class UserSignupsController < BaseControllers::VirtualHost
+class UserSignupsController < ApplicationController
   load_resource :event, through: :convention
   load_resource :run, through: :event
   respond_to :html, :json

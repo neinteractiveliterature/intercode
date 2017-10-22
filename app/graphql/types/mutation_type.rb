@@ -12,6 +12,13 @@ GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
 Types::MutationType = GraphQL::ObjectType.define do
   name "Mutation"
 
+  field :updateConvention, Mutations::UpdateConvention.field do
+    guard ->(_obj, args, ctx) {
+      convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
+      ctx[:current_ability].can?(:update, convention)
+    }
+  end
+
   field :createEvent, Mutations::CreateEvent.field do
     guard(GUARD_FOR_CREATE_EVENT)
   end
@@ -45,10 +52,24 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteRun, Mutations::DeleteRun.field do
-    guard(guard_for_convention_associated_model(:run, :delete))
+    guard(guard_for_convention_associated_model(:runs, :delete))
   end
 
   field :updateRun, Mutations::UpdateRun.field do
-    guard(guard_for_convention_associated_model(:run, :update))
+    guard(guard_for_convention_associated_model(:runs, :update))
+  end
+
+  field :createRoom, Mutations::CreateRoom.field do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(:create, ctx[:convention].rooms.new(args[:room].to_h))
+    }
+  end
+
+  field :updateRoom, Mutations::UpdateRoom.field do
+    guard(guard_for_convention_associated_model(:rooms, :update))
+  end
+
+  field :deleteRoom, Mutations::DeleteRoom.field do
+    guard(guard_for_convention_associated_model(:rooms, :delete))
   end
 end

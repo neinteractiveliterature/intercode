@@ -1,4 +1,4 @@
-class TicketsController < BaseControllers::VirtualHost
+class TicketsController < ApplicationController
   before_action :check_existing_ticket, only: [:new, :create]
   load_resource through: :user_con_profile, singleton: true
   skip_authorization_check

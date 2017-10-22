@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import maxBy from 'lodash.maxby';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRow from './ScheduledValueTimespanRow';
 
@@ -10,6 +10,7 @@ class ScheduledValueEditor extends React.Component {
     scheduledValue: ScheduledValuePropType.isRequired,
     timezone: PropTypes.string.isRequired,
     setScheduledValue: PropTypes.func.isRequired,
+    buildValueInput: PropTypes.func.isRequired,
   }
 
   static isValid = (scheduledValue) => {
@@ -84,6 +85,7 @@ class ScheduledValueEditor extends React.Component {
           rowIdentifier={i}
           deleteClicked={this.deleteRowClicked}
           attributeDidChange={this.timespanAttributeDidChange}
+          buildInput={this.props.buildValueInput}
         />
       );
     });
