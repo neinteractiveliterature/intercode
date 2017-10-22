@@ -1,4 +1,4 @@
-class TeamMembersController < BaseControllers::VirtualHost
+class TeamMembersController < ApplicationController
   self.responder = NoShowActionResponder
 
   load_resource :event, through: :convention

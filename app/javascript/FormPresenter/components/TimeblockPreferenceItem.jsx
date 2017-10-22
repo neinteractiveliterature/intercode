@@ -1,8 +1,7 @@
 // @flow
 
 import React from 'react';
-import moment from 'moment';
-import 'moment-timezone';
+import moment from 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
 import RequiredIndicator from './RequiredIndicator';
 import TimeblockTypes from '../TimeblockTypes';

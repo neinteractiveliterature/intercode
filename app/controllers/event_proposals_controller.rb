@@ -1,5 +1,6 @@
-class EventProposalsController < BaseControllers::VirtualHost
+class EventProposalsController < ApplicationController
   load_and_authorize_resource through: :convention
+  before_action :ensure_accepting_proposals, only: [:create]
   respond_to :html, :json
 
   def index
@@ -55,5 +56,11 @@ class EventProposalsController < BaseControllers::VirtualHost
 
   def event_proposal_params
     (params[:event_proposal] || ActionController::Parameters.new).permit()
+  end
+
+  def ensure_accepting_proposals
+    unless convention.accepting_proposals
+      redirect_to root_path, alert: "#{convention.name} is not currently accepting event proposals."
+    end
   end
 end

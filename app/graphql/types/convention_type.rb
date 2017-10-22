@@ -1,6 +1,6 @@
 Types::ConventionType = GraphQL::ObjectType.define do
   name "Convention"
-  field :accepting_bids, types.Boolean
+  field :accepting_proposals, types.Boolean
   field :precon_bids_allowed, types.Boolean
   field :created_at, Types::DateType
   field :updated_at, Types::DateType
@@ -10,6 +10,9 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :domain, types.String
   field :timezone_name, types.String
   field :registrations_frozen, types.Boolean
+  field :show_schedule, Types::ShowScheduleType
+
   field :away_blocks, types[Types::AwayBlockType]
   field :rooms, types[Types::RoomType]
+  field :maximum_event_signups, Types::ScheduledValueType
 end

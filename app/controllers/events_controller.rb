@@ -1,4 +1,4 @@
-class EventsController < BaseControllers::VirtualHost
+class EventsController < ApplicationController
   load_and_authorize_resource through: :convention
   respond_to :html, :json
 
@@ -10,10 +10,12 @@ class EventsController < BaseControllers::VirtualHost
   end
 
   def schedule
+    authorize! :schedule, convention
     @page_title = "Event Schedule"
   end
 
   def schedule_with_counts
+    authorize! :schedule_with_counts, convention
     @page_title = "Schedule With Counts"
   end
 

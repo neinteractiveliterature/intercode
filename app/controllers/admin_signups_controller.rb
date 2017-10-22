@@ -1,4 +1,4 @@
-class AdminSignupsController < BaseControllers::VirtualHost
+class AdminSignupsController < ApplicationController
   load_resource :event, through: :convention
   load_resource :run, through: :event
   load_and_authorize_resource class: Signup

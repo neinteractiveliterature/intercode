@@ -61,13 +61,13 @@ class InPlaceEditor extends React.Component {
   }
 
   keyDownInInput = (event: KeyboardEvent) => {
-    switch (event.keyCode) {
-      case 27:
+    switch (event.key) {
+      case 'Escape':
         event.preventDefault();
         this.cancelEditing();
         break;
 
-      case 13:
+      case 'Enter':
         event.preventDefault();
         this.commitEditing();
         break;

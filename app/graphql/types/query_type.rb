@@ -4,8 +4,14 @@ Types::QueryType = GraphQL::ObjectType.define do
   # They will be entry points for queries on your schema.
 
   field :convention, Types::ConventionType do
-    resolve ->(_obj, _args, ctx) {
-      ctx[:convention]
+    argument :id, types.Int
+
+    resolve ->(_obj, args, ctx) {
+      if args[:id]
+        Convention.find(args[:id])
+      else
+        ctx[:convention]
+      end
     }
   end
 

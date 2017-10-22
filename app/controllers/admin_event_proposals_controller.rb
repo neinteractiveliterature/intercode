@@ -1,4 +1,4 @@
-class AdminEventProposalsController < BaseControllers::VirtualHost
+class AdminEventProposalsController < ApplicationController
   load_and_authorize_resource class: EventProposal, through: :convention, through_association: :event_proposals
   before_action :authorize_admin
 

@@ -26,11 +26,13 @@
                 %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
                   Events
                 .dropdown-menu
-                  = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
+                  - if can? :schedule, convention
+                    = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
                   = link_to "List of Events", events_path, class: 'dropdown-item'
-                  - if can? :schedule_with_counts, convention.events.new
+                  - if can? :schedule_with_counts, convention
                     = link_to "Schedule With Counts", schedule_with_counts_events_path, class: 'dropdown-item'
-                  = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
+                  - if convention.accepting_proposals
+                    = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
               = CadmusNavbar::Renderers::Bootstrap4.new(request: request, url_for_page: ->(page) { page_url(page) }, root_items: convention.cms_navigation_items.root).render_navigation_items
               - if can? :manage, convention.user_con_profiles.new
                 %li.nav-item.dropdown{:role => "presentation"}
@@ -38,10 +40,12 @@
                     Admin
                   .dropdown-menu
                     = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
+                    = link_to "Convention Settings", edit_convention_path, class: 'dropdown-item'
                     = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
                     = link_to "Event Scheduling", admin_events_path, class: 'dropdown-item'
                     = link_to "Site Content", pages_path, class: 'dropdown-item'
                     = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
+                    = link_to "Rooms", rooms_path, class: 'dropdown-item'
                     = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'
           %ul.navbar-nav
             - if user_signed_in?

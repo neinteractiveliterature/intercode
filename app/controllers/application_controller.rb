@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  # If we're in a convention, use the convention's timezone.
+  around_action :use_convention_timezone
+
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
   # logged in, or throw them back to the root URL with an error if they are.
@@ -27,25 +30,42 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  # This allows any view template to say "convention" and get the current convention.
-  # By default, there is none; this is overridden by BaseControllers::VirtualHost to
-  # return the convention for the current domain.
+  # Returns the appropriate Convention object for the domain name of the request.  This relies on
+  # the Intercode::FindVirtualHost Rack middleware having already run, since it sets the key
+  # "intercode.convention" inside the Rack environment.
   def convention
-    nil
+    @convention ||= request.env["intercode.convention"]
   end
   helper_method :convention
+
+  def user_con_profile
+    if convention && user_signed_in?
+      @user_con_profile ||= convention.user_con_profiles.find_by(user_id: current_user.id)
+    end
+  end
+  helper_method :user_con_profile
+
+  def use_convention_timezone(&block)
+    timezone = convention&.timezone
+
+    if timezone
+      Time.use_zone(timezone, &block)
+    else
+      yield
+    end
+  end
 
   # These variables will automatically be made available to Cadmus CMS content.  For
   # example, you'll be able to do {{ user.name }} in a page template.
   def liquid_assigns
-    { "user" => current_user }
+    { "user" => current_user, "convention" => convention, "user_con_profile" => user_con_profile }
   end
 
   # These variables aren't available from Cadmus CMS templates, but are available to
   # custom Liquid filters and tags via the Liquid::Context object.  Exposing the
   # controller is useful for generating URLs in templates.
   def liquid_registers
-    { "controller" => self }
+    liquid_assigns.merge("controller" => self)
   end
 
   # Devise is going to do some operations in its controllers that require writing to a
