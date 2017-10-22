@@ -68,7 +68,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
           {
             start: nil,
             finish: nil,
-            value: 'unlimited'
+            value: row[:SignupsAllowed].underscore
           }
         ]
       }
