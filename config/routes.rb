@@ -62,8 +62,10 @@ Intercode::Application.routes.draw do
       end
     end
 
+    resources :rooms, only: [:index]
+
     resources :staff_positions
-    resources :forms
+    resources :forms, only: [:show]
   end
 
   # the following routes apply only when we're not in a virtual host

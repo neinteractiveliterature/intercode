@@ -16,6 +16,7 @@ import WebpackerReact from 'webpacker-react';
 import ConventionAdmin from '../ConventionAdmin';
 import EventAdmin from '../EventAdmin';
 import FormPresenter from '../FormPresenter';
+import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
 import StandaloneEditEvent from '../StandaloneEditEvent';
@@ -28,6 +29,7 @@ WebpackerReact.setup({
   ConventionAdmin,
   EventAdmin,
   FormPresenter,
+  RoomsAdmin,
   ScheduleGrid,
   StaffPositionForm,
   StandaloneEditEvent,
