@@ -12,6 +12,12 @@ class ReportsController < ApplicationController
     )
   end
 
+  def per_user
+    @user_con_profiles = convention.user_con_profiles.joins(:ticket).includes(
+      signups: [:event, run: :rooms]
+    ).sort_by { |ucp| ucp.name_inverted.downcase }
+  end
+
   private
   def ensure_authorized
     authorize! :view_reports, convention
