@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
 
   def per_event
     @events = Event.title_sort(
-      convention.events.where.not(category: %w(volunteer_event filler)).active.includes(
+      convention.events.regular.active.includes(
         team_members: :user_con_profile,
         runs: [:rooms, signups: :user_con_profile]
       )
@@ -30,6 +30,12 @@ class ReportsController < ApplicationController
         runs: [signups: :user_con_profile]
       )
     )
+  end
+
+  def events_by_time
+    @runs = convention.runs.where(
+      event_id: convention.events.where.not(category: 'filler').active.select(:id)
+    ).order(:starts_at).includes(:event, :rooms)
   end
 
   private
