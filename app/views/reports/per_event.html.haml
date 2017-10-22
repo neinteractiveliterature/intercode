@@ -1,0 +1,67 @@
+- @events.each do |event|
+  - event.runs.each do |run|
+    .page-break-after
+      %section
+        .d-flex
+          .col.pl-0
+            %h1
+              = event.title
+              - if run.title_suffix.present?
+                %br
+                = run.title_suffix
+
+            %ul.list-inline
+              - event.registration_policy.buckets.each do |bucket|
+                %li.list-inline-item.mr-4
+                  %strong #{bucket.name}:
+                  - if bucket.slots_limited?
+                    #{bucket.minimum_slots} &ndash; #{bucket.total_slots}
+                  - else
+                    unlimited
+
+          .text-right.font-weight-bold.mt-2
+            = run.starts_at.strftime('%a %l:%M%P')
+            %br
+            = run.rooms.map(&:name).sort.join(', ')
+
+      %section
+        .d-flex
+          %div.mr-1
+            %strong #{event.team_member_name.titleize.pluralize}:
+          %div
+            %ul.list-unstyled
+              - event.team_members.each do |team_member|
+                %li= team_member.name
+
+      - signup_counts = SignupCountPresenter.new(run)
+
+      %section
+        %p.font-weight-bold.mb-0
+          = pluralize signup_counts.confirmed_count, 'Confirmed Signup'
+          - if event.registration_policy.buckets.size > 1
+            &mdash;
+            = signup_counts.bucket_descriptions_text('confirmed')
+        %ul.list-unstyled{style: 'columns: 2 auto'}
+          - confirmed_signups = signup_counts.counted_signups_by_state('confirmed')
+          - confirmed_signups.sort_by { |signup| signup.user_con_profile.name_inverted.downcase }.each do |signup|
+            %li= signup.user_con_profile.name_inverted
+
+      - if signup_counts.waitlist_count > 0
+        %section
+          %p.font-weight-bold.mb-0
+            = pluralize signup_counts.waitlist_count, 'Waitlisted Signup'
+            = '- In signup order'
+
+          %ol
+            - waitlist_signups = signup_counts.counted_signups_by_state('waitlisted')
+            - waitlist_signups.sort_by(&:created_at).each do |signup|
+              %li
+                = signup.user_con_profile.name_inverted
+                - if event.registration_policy.buckets.size > 0
+                  (#{event.registration_policy.bucket_with_key(signup.requested_bucket_key).name})
+
+      - available_slots = run.available_slots_by_bucket_key.values.sum
+      - if available_slots > 0
+        %section
+          %p.font-weight-bold
+            = pluralize available_slots, 'Available Slot'

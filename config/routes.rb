@@ -62,6 +62,14 @@ Intercode::Application.routes.draw do
       end
     end
 
+    namespace :reports do
+      get :per_event
+      get :per_user
+      get :per_room
+      get :volunteer_events
+      get :events_by_time
+    end
+
     resources :rooms, only: [:index]
 
     resources :staff_positions
