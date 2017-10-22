@@ -8,11 +8,12 @@ class Ability
   def initialize(user)
     @user = user
 
-    # All users, anonymous or otherwise, should be allowed to view Cons.
+    # Here's what the general public can do...
     can :read, Convention
     can [:read, :root], Page
-    can [:read, :schedule], Event, status: 'active'
     can :read, Form
+    can :read, Event, status: 'active'
+    can :schedule, Convention, show_schedule: 'yes'
 
     # Anonymous user permissions end here.
     return unless user
@@ -47,7 +48,8 @@ class Ability
     can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem],
       parent_type: 'Convention', parent_id: staff_con_ids
 
-    can :manage, Convention, id: staff_con_ids
+    can :update, Convention, id: staff_con_ids
+    can [:schedule, :schedule_with_counts], Convention, id: staff_con_ids, show_schedule: %w(priv gms yes)
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: staff_con_ids
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
@@ -63,6 +65,7 @@ class Ability
 
   def add_team_member_abilities
     can :update, Event, id: team_member_event_ids
+    can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w(gms yes)
     can :update, EventProposal, event_id: team_member_event_ids
     can :update, Run, event_id: team_member_event_ids
     can :show, Signup, run: { event_id: team_member_event_ids }
@@ -76,11 +79,19 @@ class Ability
     end
   end
 
-  def team_member_event_ids
-    @team_member_event_ids ||= begin
+  def team_member_event_ids_and_convention_ids
+    @team_member_event_ids_and_convention_ids ||= begin
       team_member_events = Event.joins(team_members: :user_con_profile).where(user_con_profiles: { user_id: user.id })
-      team_member_events.pluck(:id)
+      team_member_events.pluck(:id, :convention_id)
     end
+  end
+
+  def team_member_event_ids
+    @team_member_event_ids ||= team_member_event_ids_and_convention_ids.map(&:first)
+  end
+
+  def team_member_convention_ids
+    @team_member_convention_ids ||= team_member_event_ids_and_convention_ids.map(&:second).uniq
   end
 
   def own_event_proposal_ids

@@ -26,9 +26,10 @@
                 %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
                   Events
                 .dropdown-menu
-                  = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
+                  - if can? :schedule, convention
+                    = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
                   = link_to "List of Events", events_path, class: 'dropdown-item'
-                  - if can? :schedule_with_counts, convention.events.new
+                  - if can? :schedule_with_counts, convention
                     = link_to "Schedule With Counts", schedule_with_counts_events_path, class: 'dropdown-item'
                   - if convention.accepting_proposals
                     = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
