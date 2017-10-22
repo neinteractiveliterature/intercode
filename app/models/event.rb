@@ -49,6 +49,8 @@ class Event < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
+  scope :regular, -> { where.not(category: %w(volunteer_event filler)) }
+
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
   attr_accessor :bypass_filler_event_run_check
