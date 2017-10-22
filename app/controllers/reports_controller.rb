@@ -24,6 +24,14 @@ class ReportsController < ApplicationController
     ).sort_by { |room| room.name.downcase }
   end
 
+  def volunteer_events
+    @events = Event.title_sort(
+      convention.events.where(category: 'volunteer_event').active.includes(
+        runs: [signups: :user_con_profile]
+      )
+    )
+  end
+
   private
   def ensure_authorized
     authorize! :view_reports, convention
