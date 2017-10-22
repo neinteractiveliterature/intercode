@@ -14,7 +14,7 @@ class TeamMember < ApplicationRecord
 
   belongs_to :updated_by, class_name: "User", optional: true
 
-  delegate :name, to: :user
+  delegate :name, to: :user_con_profile
 
   scope :visible, -> { where(display: true) }
 

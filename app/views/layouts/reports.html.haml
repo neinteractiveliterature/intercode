@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title= page_title
+    = stylesheet_pack_tag 'application', media: 'all'
+    = stylesheet_link_tag 'application', :media => "all"
+    = csrf_meta_tags
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+  %body
+    = yield

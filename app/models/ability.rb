@@ -48,7 +48,7 @@ class Ability
     can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem],
       parent_type: 'Convention', parent_id: staff_con_ids
 
-    can :update, Convention, id: staff_con_ids
+    can [:update, :view_reports], Convention, id: staff_con_ids
     can [:schedule, :schedule_with_counts], Convention, id: staff_con_ids, show_schedule: %w(priv gms yes)
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: staff_con_ids

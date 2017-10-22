@@ -149,3 +149,11 @@ table.no-top-border thead th {
   border: none;
   cursor: pointer;
 }
+
+.page-break-after {
+  page-break-after: always;
+  
+  &:last-child {
+    page-break-after: inherit;
+  }
+}

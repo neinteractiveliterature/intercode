@@ -28,12 +28,20 @@ class SignupCountPresenter
     end
   end
 
+  def confirmed_count
+    @confirmed_count ||= signups_by_state_and_bucket_key['confirmed'].values.map(&:size).sum
+  end
+
   def waitlist_count
-    @waitlist_count ||= run.signups.counted.waitlisted.count
+    @waitlist_count ||= signups_by_state_and_bucket_key['waitlisted'].values.map(&:size).sum
   end
 
   def has_waitlist?
     waitlist_count > 0
+  end
+
+  def counted_signups_by_state(state)
+    signups_by_state_and_bucket_key[state].values.flatten
   end
 
   private
@@ -42,7 +50,7 @@ class SignupCountPresenter
     @signups_by_state_and_bucket_key ||= begin
       signups_hash = empty_signups_hash
 
-      run.signups.counted.each do |signup|
+      run.signups.select(&:counted?).each do |signup|
         bucket_key = if signup.waitlisted?
           signup.requested_bucket_key
         else

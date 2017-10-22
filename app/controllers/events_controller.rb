@@ -4,7 +4,7 @@ class EventsController < ApplicationController
 
   # List the available LARPs
   def index
-    @events = @events.active.sort_by { |event| event.title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '') }
+    @events = Event.title_sort(@events.active)
     @page_title = "Event List"
     respond_with @events
   end
