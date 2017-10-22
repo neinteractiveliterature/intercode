@@ -18,6 +18,12 @@ class ReportsController < ApplicationController
     ).sort_by { |ucp| ucp.name_inverted.downcase }
   end
 
+  def per_room
+    @rooms = convention.rooms.includes(
+      runs: [:event, :rooms]
+    ).sort_by { |room| room.name.downcase }
+  end
+
   private
   def ensure_authorized
     authorize! :view_reports, convention

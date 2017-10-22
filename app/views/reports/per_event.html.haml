@@ -20,7 +20,7 @@
                     unlimited
 
           .text-right.font-weight-bold.mt-2
-            = run.starts_at.strftime('%a %l:%M%P')
+            = format_run_day_and_time run.starts_at
             %br
             = run.rooms.map(&:name).sort.join(', ')
 
