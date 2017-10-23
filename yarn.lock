@@ -4039,11 +4039,7 @@ ignore@^3.3.3:
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.5.tgz#c4e715455f6073a8d7e5dae72d2fc9d71663dba6"
 
-immutable@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
-
-immutable@^3.8.2:
+immutable@3.8.2, immutable@^3.8.1, immutable@^3.8.2:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
@@ -4746,15 +4742,7 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
 
-json-fetch@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.2.0.tgz#93da17e75e3eb545b60bd63179fe5d898601d78c"
-  dependencies:
-    isomorphic-fetch "^2.2.1"
-    lodash.pick "^4.4.0"
-    promise-retry "^1.0.1"
-
-json-fetch@^7.3.0:
+json-fetch@7.3.0, json-fetch@^7.2.0, json-fetch@^7.3.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.3.0.tgz#9701e5bd788849eee4d99b5eca5b9c1346ad9d77"
   dependencies:
@@ -6738,14 +6726,7 @@ react-apollo@^1.4.16:
     object-assign "^4.0.1"
     prop-types "^15.5.8"
 
-react-bootstrap4-modal@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.1.0.tgz#35dbe18e01b7857416baa6fc4f1a88eba96024f0"
-  dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.5.10"
-
-react-bootstrap4-modal@^1.1.1:
+react-bootstrap4-modal@1.1.1, react-bootstrap4-modal@^1.1.0, react-bootstrap4-modal@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.1.1.tgz#5f99b9b29ee60c6e2c9035a6ccb305570bfdf9ad"
   dependencies:
