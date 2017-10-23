@@ -7,9 +7,11 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import Popper from 'popper.js';
+import 'popper.js';
 import Rails from 'rails-ujs';
-import jQuery from 'jquery';
+import 'jquery';
+import 'bootstrap/js/dist/util';
+import 'bootstrap/js/dist/dropdown';
 
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
@@ -40,8 +42,3 @@ WebpackerReact.setup({
 });
 
 Rails.start();
-window.Popper = Popper;
-window.jQuery = jQuery;
-window.$ = jQuery;
-
-require('bootstrap');
