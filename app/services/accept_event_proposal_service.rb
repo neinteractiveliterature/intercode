@@ -36,6 +36,8 @@ class AcceptEventProposalService < ApplicationService
       hash[event_attribute] = event_proposal.read_form_response_attribute(form_attribute)
     end
 
+    event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
+
     event = convention.events.create!(
       DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes)
     )

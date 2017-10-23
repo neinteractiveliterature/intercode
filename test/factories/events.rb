@@ -9,5 +9,6 @@ FactoryGirl.define do
     category "larp"
     registration_policy RegistrationPolicy.unlimited
     length_seconds 4.hours
+    con_mail_destination 'event_email'
   end
 end
