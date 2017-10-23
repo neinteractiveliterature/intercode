@@ -4,18 +4,25 @@
       "env",
       {
         "modules": false,
+        "useBuiltIns": true,
         "targets": {
-          "browsers": "> 1%"
-        },
-        "useBuiltIns": true
+          "browsers": [
+            "Chrome >= 60",
+            "Safari >= 10.1",
+            "iOS >= 10.3",
+            "Firefox >= 54",
+            "Edge >= 15",
+          ]
+        }
       }
     ],
     "react",
-    "flow",
-    "stage-0"
+    "flow"
   ],
   "plugins": [
     "transform-decorators-legacy",
+    "transform-class-properties",
+    "transform-object-rest-spread"
   ],
   "env": {
     "test": {

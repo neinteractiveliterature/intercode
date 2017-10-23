@@ -9,6 +9,7 @@
 
 import Popper from 'popper.js';
 import Rails from 'rails-ujs';
+import jQuery from 'jquery';
 
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
@@ -40,3 +41,7 @@ WebpackerReact.setup({
 
 Rails.start();
 window.Popper = Popper;
+window.jQuery = jQuery;
+window.$ = jQuery;
+
+require('bootstrap');
