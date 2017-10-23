@@ -1,7 +1,11 @@
 class ReportsController < ApplicationController
   before_action :ensure_authorized
 
-  layout 'reports'
+  layout 'reports', except: 'index'
+  layout 'application', only: 'index'
+
+  def index
+  end
 
   def per_event
     @events = Event.title_sort(

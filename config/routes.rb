@@ -62,6 +62,7 @@ Intercode::Application.routes.draw do
       end
     end
 
+    get 'reports' => 'reports#index'
     namespace :reports do
       get :per_event
       get :per_user
