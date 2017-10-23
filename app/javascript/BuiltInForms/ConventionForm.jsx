@@ -139,83 +139,80 @@ class ConventionForm extends React.Component {
     )
   )
 
-  render = () => (
-    <form>
-      <BootstrapFormInput
-        name="name"
-        label="Name"
-        value={this.state.convention.name}
-        onChange={this.formInputDidChange}
-      />
-
-      <BootstrapFormInput
-        name="domain"
-        label="Convention domain name"
-        value={this.state.convention.domain}
-        onChange={this.formInputDidChange}
-      />
-
-      <TimezoneSelect
-        name="timezone_name"
-        label="Time zone"
-        value={this.state.convention.timezone_name}
-        onChange={this.timezoneNameDidChange}
-      />
-
-      <div className="row form-group">
-        <div className="col-md-6">
-          Convention starts
-          <Datetime
-            value={moment(this.state.convention.starts_at).tz(this.state.convention.timezone_name)}
-            onChange={(newValue) => { this.datetimeValueDidChange('starts_at', newValue); }}
-            dateFormat="dddd, MMMM DD, YYYY"
-            timeFormat="[at] h:mma"
-          />
-        </div>
-        <div className="col-md-6">
-          Convention ends
-          <Datetime
-            value={moment(this.state.convention.ends_at).tz(this.state.convention.timezone_name)}
-            onChange={(newValue) => { this.datetimeValueDidChange('ends_at', newValue); }}
-            dateFormat="dddd, MMMM DD, YYYY"
-            timeFormat="[at] h:mma"
-          />
-        </div>
-      </div>
-
-      {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
-      {
-        this.renderMultipleChoiceInput(
-          'show_schedule',
-          'Show event schedule',
-          [
-            { value: 'no', label: 'No' },
-            { value: 'priv', label: 'Only to users with scheduling privileges' },
-            { value: 'gms', label: 'Only to event team members and users with any privileges' },
-            { value: 'yes', label: 'Yes, to everyone' },
-          ],
-          undefined,
-          this.formInputDidChange,
-        )
-      }
-
-      {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
-
-      <fieldset>
-        <legend className="col-form-legend">Event signup schedule</legend>
-        <ScheduledValueEditor
-          scheduledValue={this.state.convention.maximum_event_signups}
-          timezone={this.state.convention.timezone_name}
-          setScheduledValue={this.maximumEventSignupsDidChange}
-          buildValueInput={buildMaximumEventSignupsInput}
+  render = () => {
+    const startEndFields = [['starts_at', 'Convention starts'], ['ends_at', 'Convention ends']].map(([name, label]) => (
+      <div className="col-md-6" key={name}>
+        {label}
+        <Datetime
+          value={moment(this.state.convention[name]).tz(this.state.convention.timezone_name)}
+          onChange={(newValue) => { this.datetimeValueDidChange(name, newValue); }}
+          dateFormat="dddd, MMMM DD, YYYY"
+          timeFormat="[at] h:mma"
         />
-      </fieldset>
+      </div>
+    ));
 
-      <button className="btn btn-primary" onClick={this.onClickSave}>
-        Save settings
-      </button>
-    </form>
-  )
+    return (
+      <form>
+        <BootstrapFormInput
+          name="name"
+          label="Name"
+          value={this.state.convention.name}
+          onChange={this.formInputDidChange}
+        />
+
+        <BootstrapFormInput
+          name="domain"
+          label="Convention domain name"
+          value={this.state.convention.domain}
+          onChange={this.formInputDidChange}
+        />
+
+        <TimezoneSelect
+          name="timezone_name"
+          label="Time zone"
+          value={this.state.convention.timezone_name}
+          onChange={this.timezoneNameDidChange}
+        />
+
+        <div className="row form-group">
+          {startEndFields}
+        </div>
+
+        {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
+        {
+          this.renderMultipleChoiceInput(
+            'show_schedule',
+            'Show event schedule',
+            [
+              { value: 'no', label: 'No' },
+              { value: 'priv', label: 'Only to users with scheduling privileges' },
+              { value: 'gms', label: 'Only to event team members and users with any privileges' },
+              { value: 'yes', label: 'Yes, to everyone' },
+            ],
+            undefined,
+            this.formInputDidChange,
+          )
+        }
+
+        {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
+
+        <fieldset>
+          <legend className="col-form-legend">Event signup schedule</legend>
+          <ScheduledValueEditor
+            scheduledValue={this.state.convention.maximum_event_signups}
+            timezone={this.state.convention.timezone_name}
+            setScheduledValue={this.maximumEventSignupsDidChange}
+            buildValueInput={buildMaximumEventSignupsInput}
+          />
+        </fieldset>
+
+        <button className="btn btn-primary" onClick={this.onClickSave}>
+          Save settings
+        </button>
+      </form>
+    );
+  }
 }
 
 export default ConventionForm;
