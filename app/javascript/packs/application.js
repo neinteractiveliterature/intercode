@@ -9,9 +9,7 @@
 
 import 'popper.js';
 import Rails from 'rails-ujs';
-import 'jquery';
-import 'bootstrap/js/dist/util';
-import 'bootstrap/js/dist/dropdown';
+import 'bootstrap.native/dist/bootstrap-native-v4';
 
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
