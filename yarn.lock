@@ -6850,9 +6850,9 @@ react-onclickoutside@^6.5.0, react-onclickoutside@^6.6.2:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.6.2.tgz#8446f665460ffda1c68b7f3aeeea3a217bfdf18f"
 
-react-popper@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.3.tgz#fa2809a80fbe7ec516e9bac01d81bc47a8b5cd3b"
+react-popper@^0.7.4:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.4.tgz#8649d539837e7c6f47bc9b24c9cf57a404e199a1"
   dependencies:
     popper.js "^1.12.5"
     prop-types "^15.5.10"
