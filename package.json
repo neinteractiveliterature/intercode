@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@rails/webpacker": "^3.0.2",
-    "autoprefixer": "^7.1.5",
+    "autoprefixer": "^7.1.6",
     "babel-core": "^6.26.0",
     "babel-loader": "7.x",
     "babel-minify-webpack-plugin": "^0.2.0",
