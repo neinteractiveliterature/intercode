@@ -26,6 +26,8 @@ class Event < ApplicationRecord
   # in one of the allowed categories.
   validates :category, inclusion: { in: CATEGORIES }
 
+  validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS }
+
   # All events for a Convention must have a unique title.  Ignore any events
   # that have a status of "Dropped".  If they have a duplicate title we don't
   # care.
@@ -47,40 +49,14 @@ class Event < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
+  scope :regular, -> { where.not(category: %w(volunteer_event filler)) }
+
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
   attr_accessor :bypass_filler_event_run_check
 
-#  validates :con_mail_destination, :inclusion => { :in => %w(game_email gms) }
-
-  def self.build_con_suite
-    new(
-      title: "ConSuite",
-      short_blurb: "Help serve Intercon breakfast, lunch, and dinner.",
-      description: "Help serve Intercon breakfast, lunch, and dinner.",
-
-      # The Con Suite event does not need to be reviewed
-      status: "active",
-      category: "volunteer_event"
-    )
-  end
-
-  def self.build_ops
-    new(
-      title: "Ops!",
-      short_blurb: "Volunteer for Ops shifts!",
-      description:
-        "The Intercon Operations Crew takes care of ensuring the cogs of the " +
-        "con keep on turning. Whether it's handing out registration packets, " +
-        "setting up for the raffle, helping players find games, or any of the " +
-        "dozens of other things that come up, Ops needs volunteers like you " +
-        "to make it happen. Volunteering for Ops shifts is a valuable use of " +
-        "your time and effort.",
-
-      # The Ops event does not need to be reviewed
-      status: "active",
-      category: "volunteer_event"
-    )
+  def self.title_sort(events)
+    events.sort_by { |event| event.title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '') }
   end
 
   def to_param
