@@ -44,7 +44,7 @@
     "postcss-smart-import": "^0.7.5",
     "precss": "^2.0.0",
     "prop-types": "^15.6.0",
-    "query-string": "^5.0.0",
+    "query-string": "^5.0.1",
     "rails-erb-loader": "^5.2.1",
     "rails-ujs": "^5.1.4",
     "react": "^16.0.0",
