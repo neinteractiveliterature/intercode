@@ -70,6 +70,7 @@ Intercode::Application.routes.draw do
       get :per_event
       get :per_user
       get :per_room
+      get :signup_spy
       get :volunteer_events
     end
 
