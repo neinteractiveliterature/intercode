@@ -27,7 +27,7 @@ class ReportsController < ApplicationController
     )
 
     @tickets_by_event_id = @tickets.to_a.group_by(&:provided_by_event_id)
-    @events = Event.title_sort(convention.events.regular.active)
+    @events = Event.title_sort(@tickets.map(&:provided_by_event).uniq)
   end
 
   def events_by_time
