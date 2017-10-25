@@ -1,8 +1,18 @@
-%h1 Printable reports
+%header
+  %h1 Reports
 
-%ul
-  %li= link_to 'Per user report', reports_per_user_path, target: '_blank'
-  %li= link_to 'Per event report', reports_per_event_path, target: '_blank'
-  %li= link_to 'Per room report', reports_per_room_path, target: '_blank'
-  %li= link_to 'Volunteer events report', reports_volunteer_events_path, target: '_blank'
-  %li= link_to 'Events by time report', reports_events_by_time_path, target: '_blank'
+.card.mt-4
+  .card-header Regular reports
+  .card-body
+    %ul.mb-0
+      %li= link_to 'Attendance by payment amount', reports_attendance_by_payment_amount_path
+
+.card.mt-4
+  .card-header Printable reports
+  .card-body
+    %ul.mb-0
+      %li= link_to 'Events by time', reports_events_by_time_path, target: '_blank'
+      %li= link_to 'Per event report', reports_per_event_path, target: '_blank'
+      %li= link_to 'Per room report', reports_per_room_path, target: '_blank'
+      %li= link_to 'Per user report', reports_per_user_path, target: '_blank'
+      %li= link_to 'Volunteer event signups', reports_volunteer_events_path, target: '_blank'

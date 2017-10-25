@@ -1,0 +1,30 @@
+%h1 Attendance by payment amount
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Ticket type
+      %th.text-right Count
+      %th.text-right Revenue
+  %tbody
+    - @count_by_ticket_type_and_payment_amount.keys.sort_by { |(ticket_type, payment_amount)| [ticket_type.name, payment_amount] }.each do |(ticket_type, payment_amount)|
+      - ticket_count = @count_by_ticket_type_and_payment_amount[[ticket_type, payment_amount]]
+      - ticket_type_description = capture do
+        = ticket_type.description
+        - if payment_amount > 0
+          @
+          = payment_amount.format
+
+      %tr
+        - if ticket_type.pricing_schedule.timespans.any? { |timespan| timespan.value == payment_amount }
+          %td= ticket_type_description
+        - else
+          %td.text-danger{title: "#{payment_amount.format} does not appear in the pricing schedule for #{ticket_type.name}"}
+            %i.fa.fa-exclamation-circle
+            = ticket_type_description
+        %td.text-right= link_to ticket_count, user_con_profiles_path(user_con_profiles_grid: { ticket_status: [ticket_type.id], payment_amount: payment_amount.cents / 100 })
+        %td.text-right= (payment_amount * ticket_count).format
+  %tfoot
+    %tr.font-weight-bold
+      %td.text-right{colspan: 2} Total revenue
+      %td.text-right= @count_by_ticket_type_and_payment_amount.map { |(_ticket_type, payment_amount), count| payment_amount * count }.sum.format

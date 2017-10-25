@@ -24,6 +24,10 @@ class UserConProfilesGrid
     where(clauses.map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})"}.join(" OR "))
   end
 
+  filter(:payment_amount, :integer) do |value|
+    joins(:ticket).where(tickets: { payment_amount_cents: value * 100 })
+  end
+
   filter(
     :privileges,
     :enum,

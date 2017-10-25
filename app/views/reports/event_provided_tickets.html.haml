@@ -1,0 +1,13 @@
+%h1 Event-provided tickets report
+
+%h3.mt-4 Total: #{pluralize @tickets.size, "event-provided tickets"}
+
+- @events.each do |event|
+  %section.mb-4
+    %p.font-weight-bold.mb-0= event.title
+
+    %ul.list-unstyled
+      - (@tickets_by_event_id[event.id] || []).sort_by { |ticket| ticket.user_con_profile.name_inverted }.each do |ticket|
+        %li
+          = ticket.user_con_profile.name_inverted
+          %span.text-muted (#{ticket.ticket_type.description})
