@@ -10,6 +10,7 @@ class Convention < ApplicationRecord
   has_many :users, :through => :user_con_profiles
   has_many :events, dependent: :destroy
   has_many :runs, through: :events
+  has_many :signups, through: :runs
   has_many :rooms, dependent: :destroy
   has_many :ticket_types, dependent: :destroy
   has_many :tickets, through: :ticket_types

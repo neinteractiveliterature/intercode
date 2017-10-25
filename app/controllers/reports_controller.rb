@@ -57,6 +57,27 @@ class ReportsController < ApplicationController
     ).sort_by { |room| room.name.downcase }
   end
 
+  def signup_spy
+    @signups_grid = SignupSpyGrid.new(params[:signups_grid] || { order: 'timestamp' }) do |scope|
+      signup_spy_scope = scope.joins(run: :event).includes(user_con_profile: :signups).where(events: { convention_id: convention.id })
+
+      respond_to do |format|
+        format.html { signup_spy_scope.paginate(page: params[:page], per_page: params[:per_page] || 100) }
+        format.csv { signup_spy_scope }
+      end
+    end
+
+    respond_to do |format|
+      format.html {}
+      format.csv do
+        filename = [convention.name, "Signups", Date.today.iso8601].compact.join(" - ")
+        filename << ".csv"
+
+        send_data @signups_grid.to_csv, filename: filename
+      end
+    end
+  end
+
   def volunteer_events
     @events = Event.title_sort(
       convention.events.where(category: 'volunteer_event').active.includes(

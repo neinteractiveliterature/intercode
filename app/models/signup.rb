@@ -5,6 +5,7 @@ class Signup < ApplicationRecord
   has_one :user, through: :user_con_profile
   belongs_to :run
   has_one :event, through: :run
+  has_one :convention, through: :event
   belongs_to :updated_by, class_name: "User", optional: true
 
   validates :state, inclusion: { in: STATES }
