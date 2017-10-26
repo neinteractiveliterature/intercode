@@ -17,6 +17,8 @@ class Event < ApplicationRecord
   belongs_to :convention
   validates :convention, presence: true
 
+  has_many :provided_tickets, class_name: 'Ticket', inverse_of: 'provided_by_event', foreign_key: 'provided_by_event_id'
+
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
