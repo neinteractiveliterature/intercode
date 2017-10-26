@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class StaffPositionsControllerTest < ActionDispatch::IntegrationTest
-  let(:user_con_profile) { FactoryGirl.create(:staff_user_con_profile) }
+  let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile) }
   let(:convention) { user_con_profile.convention }
-  let(:staff_position) { FactoryGirl.create(:staff_position, convention: convention) }
+  let(:staff_position) { FactoryBot.create(:staff_position, convention: convention) }
 
   setup do
     set_convention convention

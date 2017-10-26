@@ -1,11 +1,11 @@
 require 'test_helper'
 
 describe UserConProfileDrop do
-  let(:ticket) { FactoryGirl.create(:ticket) }
+  let(:ticket) { FactoryBot.create(:ticket) }
   let(:user_con_profile) { ticket.user_con_profile }
   let(:user_con_profile_drop) { UserConProfileDrop.new(user_con_profile) }
   let(:convention) { user_con_profile.convention }
-  let(:events) { 5.times.map { FactoryGirl.create(:event, convention: convention) } }
+  let(:events) { 5.times.map { FactoryBot.create(:event, convention: convention) } }
 
   %w(email first_name last_name nickname ticket).each do |field|
     it "returns the #{field} of the user con profile" do
@@ -14,7 +14,7 @@ describe UserConProfileDrop do
   end
 
   describe 'with team member events' do
-    let(:team_members) { events.map { |event| FactoryGirl.create(:team_member, user_con_profile: user_con_profile, event: event) } }
+    let(:team_members) { events.map { |event| FactoryBot.create(:team_member, user_con_profile: user_con_profile, event: event) } }
 
     before do
       team_members
@@ -26,9 +26,9 @@ describe UserConProfileDrop do
   end
 
   describe 'with signups' do
-    let(:runs) { events.map { |event| FactoryGirl.create(:run, event: event) } }
-    let(:confirmed_signups) { runs.map { |run| FactoryGirl.create(:signup, user_con_profile: user_con_profile, run: run, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') } }
-    let(:withdrawn_signups) { runs.map { |run| FactoryGirl.create(:signup, user_con_profile: user_con_profile, run: run, state: 'withdrawn', requested_bucket_key: 'unlimited') } }
+    let(:runs) { events.map { |event| FactoryBot.create(:run, event: event) } }
+    let(:confirmed_signups) { runs.map { |run| FactoryBot.create(:signup, user_con_profile: user_con_profile, run: run, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') } }
+    let(:withdrawn_signups) { runs.map { |run| FactoryBot.create(:signup, user_con_profile: user_con_profile, run: run, state: 'withdrawn', requested_bucket_key: 'unlimited') } }
 
     before do
       confirmed_signups

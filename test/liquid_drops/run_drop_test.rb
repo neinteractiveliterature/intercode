@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe RunDrop do
-  let(:the_run) { FactoryGirl.create(:run) }
+  let(:the_run) { FactoryBot.create(:run) }
   let(:run_drop) { RunDrop.new(the_run) }
   let(:event) { the_run.event }
 

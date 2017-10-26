@@ -4,7 +4,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   let(:event) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :event,
       registration_policy: {
         buckets: [
@@ -16,13 +16,13 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     )
   end
 
-  let(:the_run) { FactoryGirl.create :run, event: event }
+  let(:the_run) { FactoryBot.create :run, event: event }
   let(:convention) { event.convention }
   let(:bucket_key) { 'dogs' }
 
-  let(:anything_user_con_profile) { FactoryGirl.create(:user_con_profile, convention: convention) }
+  let(:anything_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
   let(:anything_signup) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :signup,
       user_con_profile: anything_user_con_profile,
       run: the_run,
@@ -32,9 +32,9 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     )
   end
 
-  let(:waitlist_user_con_profile) { FactoryGirl.create(:user_con_profile, convention: convention) }
+  let(:waitlist_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
   let(:waitlist_signup) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :signup,
       user_con_profile: anything_user_con_profile,
       run: the_run,

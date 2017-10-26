@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe TeamMembersController do
-  let(:team_member) { FactoryGirl.create(:team_member) }
+  let(:team_member) { FactoryBot.create(:team_member) }
   let(:event) { team_member.event }
   let(:convention) { event.convention }
 
@@ -24,7 +24,7 @@ describe TeamMembersController do
   end
 
   test "should create team_member" do
-    user_con_profile = FactoryGirl.create(:user_con_profile, convention: convention)
+    user_con_profile = FactoryBot.create(:user_con_profile, convention: convention)
 
     assert_difference('TeamMember.count') do
       post :create, params: { event_id: event, team_member: { user_con_profile_id: user_con_profile.id } }

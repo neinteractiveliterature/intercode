@@ -1,9 +1,9 @@
 require 'test_helper'
 
 describe UserConProfilesController do
-  let(:user_con_profile) { FactoryGirl.create :user_con_profile }
+  let(:user_con_profile) { FactoryBot.create :user_con_profile }
   let(:convention) { user_con_profile.convention }
-  let(:con_admin_profile) { FactoryGirl.create :user_con_profile, convention: convention, staff: true }
+  let(:con_admin_profile) { FactoryBot.create :user_con_profile, convention: convention, staff: true }
   let(:con_admin) { con_admin_profile.user }
 
   setup do
@@ -25,7 +25,7 @@ describe UserConProfilesController do
   end
 
   test "should create user_con_profile" do
-    user = FactoryGirl.create(:user)
+    user = FactoryBot.create(:user)
 
     assert_difference('UserConProfile.count') do
       post :create, params: { subject_profile: { email: user.email } }

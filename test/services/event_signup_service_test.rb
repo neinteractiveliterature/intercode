@@ -3,13 +3,13 @@ require 'test_helper'
 class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:event) { FactoryGirl.create :event }
-  let(:the_run) { FactoryGirl.create :run, event: event }
+  let(:event) { FactoryBot.create :event }
+  let(:the_run) { FactoryBot.create :run, event: event }
   let(:convention) { event.convention }
-  let(:user_con_profile) { FactoryGirl.create :user_con_profile, convention: convention }
+  let(:user_con_profile) { FactoryBot.create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
-  let(:ticket_type) { FactoryGirl.create :free_ticket_type, convention: convention }
-  let(:ticket) { FactoryGirl.create :ticket, ticket_type: ticket_type, user_con_profile: user_con_profile }
+  let(:ticket_type) { FactoryBot.create :free_ticket_type, convention: convention }
+  let(:ticket) { FactoryBot.create :ticket, ticket_type: ticket_type, user_con_profile: user_con_profile }
   let(:requested_bucket_key) { :unlimited }
 
   subject { EventSignupService.new(user_con_profile, the_run, requested_bucket_key, user) }
@@ -34,9 +34,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it 'emails the team members who have requested it' do
-      email_team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
-      email_team_member2 = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
-      no_email_team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: false)
+      email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
+      email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
+      no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: false)
 
       perform_enqueued_jobs do
         result = subject.call
@@ -63,8 +63,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
       )
 
-      other_event = FactoryGirl.create(:event, length_seconds: event.length_seconds)
-      other_run = FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
+      other_event = FactoryBot.create(:event, length_seconds: event.length_seconds)
+      other_run = FactoryBot.create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
       other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
       other_signup_service.call.must_be :success?
 
@@ -82,11 +82,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     describe 'with a conflicting event' do
-      let(:other_event) { FactoryGirl.create(:event, length_seconds: event.length_seconds) }
-      let(:other_run) { FactoryGirl.create(:run, event: other_event, starts_at: the_run.starts_at) }
+      let(:other_event) { FactoryBot.create(:event, length_seconds: event.length_seconds) }
+      let(:other_run) { FactoryBot.create(:run, event: other_event, starts_at: the_run.starts_at) }
 
       it 'correctly determines the conflicting waitlist signups' do
-        waitlist_signup1 = FactoryGirl.create(
+        waitlist_signup1 = FactoryBot.create(
           :signup,
           user_con_profile: user_con_profile,
           run: other_run,
@@ -99,7 +99,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
 
       it 'withdraws the user from conflicting waitlist games' do
-        waitlist_signup1 = FactoryGirl.create(
+        waitlist_signup1 = FactoryBot.create(
           :signup,
           user_con_profile: user_con_profile,
           run: other_run,
@@ -146,7 +146,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     describe 'with limited buckets' do
       let(:event) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :event,
           registration_policy: {
             buckets: [
@@ -194,8 +194,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   private
 
   def create_other_signup(bucket_key)
-    signup_user_con_profile = FactoryGirl.create(:user_con_profile, convention: convention)
-    FactoryGirl.create(
+    signup_user_con_profile = FactoryBot.create(:user_con_profile, convention: convention)
+    FactoryBot.create(
       :signup,
       user_con_profile: signup_user_con_profile,
       run: the_run,
