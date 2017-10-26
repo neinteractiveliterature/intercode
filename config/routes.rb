@@ -66,6 +66,7 @@ Intercode::Application.routes.draw do
     namespace :reports do
       get :attendance_by_payment_amount
       get :event_provided_tickets
+      get :events_by_choice
       get :events_by_time
       get :per_event
       get :per_user
