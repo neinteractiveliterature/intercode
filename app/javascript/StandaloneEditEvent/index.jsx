@@ -1,5 +1,6 @@
 import React from 'react';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
 import GraphQLResultPropType from '../GraphQLResultPropType';

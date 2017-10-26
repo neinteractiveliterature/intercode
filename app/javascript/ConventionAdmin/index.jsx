@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, gql, compose } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
 import ConventionForm from '../BuiltInForms/ConventionForm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';

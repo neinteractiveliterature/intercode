@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 import GraphQLResultPropType from '../GraphQLResultPropType';
