@@ -1,0 +1,36 @@
+%h1 Event-provided tickets report
+
+%h3.mt-4 Total: #{pluralize @tickets.size, "event-provided tickets"}
+
+%ul.nav.nav-tabs.mt-4{role: 'tablist'}
+  %li.nav-item
+    %a.nav-link.active{'data-toggle' => 'tab', href: '#by-event', role: 'tab'} By event
+  %li.nav-item
+    %a.nav-link{'data-toggle' => 'tab', href: '#by-user', role: 'tab'} By user
+
+.tab-content.mt-2
+  #by-event.tab-pane.active{role: 'tabpanel'}
+    - @events.each do |event|
+      %section.mb-4
+        %p.font-weight-bold.mb-0= event.title
+
+        %ul.list-unstyled
+          - (@tickets_by_event_id[event.id] || []).sort_by { |ticket| ticket.user_con_profile.name_inverted }.each do |ticket|
+            %li
+              = ticket.user_con_profile.name_inverted
+              %span.text-muted (#{ticket.ticket_type.description})
+
+  #by-user.tab-pane{role: 'tabpanel'}
+    %table.table.table-striped
+      %thead
+        %tr
+          %th.border-top-0 User
+          %th.border-top-0 Event
+          %th.border-top-0 Ticket type
+
+      %tbody
+        - @tickets.sort_by { |ticket| ticket.user_con_profile.name_inverted }.each do |ticket|
+          %tr
+            %td= ticket.user_con_profile.name_inverted
+            %td= ticket.provided_by_event.title
+            %td= ticket.ticket_type.description

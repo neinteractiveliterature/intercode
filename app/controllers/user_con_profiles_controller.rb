@@ -9,7 +9,7 @@ class UserConProfilesController < ApplicationController
 
   # GET /user_con_profiles
   def index
-    @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid] || {order: 'name'}) do |scope|
+    @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid]&.permit! || {order: 'name'}) do |scope|
       scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
       respond_to do |format|
         format.html { scope.paginate(page: params[:page], per_page: params[:per_page]) }

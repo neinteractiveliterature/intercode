@@ -1,3 +1,8 @@
-%tr{:class => "#{options[:cycle] && cycle(*options[:cycle])}"}
+- if grid.respond_to?(:row_class)
+  - row_class = grid.row_class(asset)
+- else
+  - row_class = nil
+
+%tr{:class => "#{row_class} #{options[:cycle] && cycle(*options[:cycle])}"}
   - grid.html_columns(*options[:columns]).each do |column|
     %td{:class => "#{datagrid_column_classes(grid, column)}"}= datagrid_value(grid, column, asset)
