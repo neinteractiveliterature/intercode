@@ -1,4 +1,4 @@
-import { gql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { fragments } from './eventsQuery';
 
 export const createEventMutation = gql`

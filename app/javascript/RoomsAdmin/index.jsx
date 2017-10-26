@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, gql, compose } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import pluralize from 'pluralize';
 import ErrorDisplay from '../ErrorDisplay';
