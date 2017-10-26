@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class CmsPartialsControllerTest < ActionDispatch::IntegrationTest
-  let(:convention) { FactoryGirl.create(:convention) }
-  let(:user_con_profile) { FactoryGirl.create(:staff_user_con_profile, convention: convention) }
+  let(:convention) { FactoryBot.create(:convention) }
+  let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile, convention: convention) }
   let(:user) { user_con_profile.user }
-  let(:cms_partial) { FactoryGirl.create(:cms_partial, parent: convention) }
+  let(:cms_partial) { FactoryBot.create(:cms_partial, parent: convention) }
 
   before do
     set_convention convention

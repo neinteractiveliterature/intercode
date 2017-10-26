@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class AdminEventProposalsControllerTest < ActionDispatch::IntegrationTest
-  let(:convention) { FactoryGirl.create(:convention) }
-  let(:user_con_profile) { FactoryGirl.create(:staff_user_con_profile, convention: convention) }
+  let(:convention) { FactoryBot.create(:convention) }
+  let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile, convention: convention) }
   let(:user) { user_con_profile.user }
-  let(:event_proposal) { FactoryGirl.create(:event_proposal, convention: convention) }
+  let(:event_proposal) { FactoryBot.create(:event_proposal, convention: convention) }
 
   before do
     proposal_form = Form.create!(convention: convention)
@@ -20,7 +20,7 @@ class AdminEventProposalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not allow viewing drafts" do
-    draft = FactoryGirl.create(:event_proposal, convention: convention, status: 'draft')
+    draft = FactoryBot.create(:event_proposal, convention: convention, status: 'draft')
     get admin_event_proposal_url(draft)
     assert_redirected_to root_url
   end

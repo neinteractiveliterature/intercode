@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class CmsFilesControllerTest < ActionDispatch::IntegrationTest
-  let(:convention) { FactoryGirl.create(:convention) }
-  let(:user_con_profile) { FactoryGirl.create(:staff_user_con_profile, convention: convention) }
+  let(:convention) { FactoryBot.create(:convention) }
+  let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile, convention: convention) }
   let(:user) { user_con_profile.user }
-  let(:cms_file) { FactoryGirl.create(:cms_file, parent: convention) }
+  let(:cms_file) { FactoryBot.create(:cms_file, parent: convention) }
 
   before do
     set_convention convention

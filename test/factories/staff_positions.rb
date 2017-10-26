@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :staff_position do
     convention
     name "Chief Wrangler"

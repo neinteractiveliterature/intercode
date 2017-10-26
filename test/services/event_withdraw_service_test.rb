@@ -3,15 +3,15 @@ require 'test_helper'
 class EventWithdrawServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:event) { FactoryGirl.create :event }
-  let(:the_run) { FactoryGirl.create :run, event: event }
+  let(:event) { FactoryBot.create :event }
+  let(:the_run) { FactoryBot.create :run, event: event }
   let(:convention) { event.convention }
-  let(:user_con_profile) { FactoryGirl.create :user_con_profile, convention: convention }
+  let(:user_con_profile) { FactoryBot.create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
   let(:bucket_key) { 'unlimited' }
   let(:signup_state) { 'confirmed' }
   let(:signup) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :signup,
       user_con_profile: user_con_profile,
       run: the_run,
@@ -31,9 +31,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   end
 
   it 'notifies team members who have requested it' do
-    email_team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
-    email_team_member2 = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
-    no_email_team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: false)
+    email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
+    email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
+    no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: false)
 
     perform_enqueued_jobs do
       result = subject.call
@@ -57,7 +57,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
   describe 'with limited buckets' do
     let(:event) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :event,
         registration_policy: {
           buckets: [
@@ -71,9 +71,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
     let(:bucket_key) { 'dogs' }
 
-    let(:anything_user_con_profile) { FactoryGirl.create(:user_con_profile, convention: convention) }
+    let(:anything_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
     let(:anything_signup) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :signup,
         user_con_profile: anything_user_con_profile,
         run: the_run,
@@ -83,9 +83,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       )
     end
 
-    let(:waitlist_user_con_profile) { FactoryGirl.create(:user_con_profile, convention: convention) }
+    let(:waitlist_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
     let(:waitlist_signup) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :signup,
         user_con_profile: anything_user_con_profile,
         run: the_run,
@@ -133,7 +133,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     end
 
     it 'notifies team members who have requested it' do
-      team_member = FactoryGirl.create(:team_member, event: event, receive_signup_email: true)
+      team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
       anything_signup
 
       perform_enqueued_jobs do

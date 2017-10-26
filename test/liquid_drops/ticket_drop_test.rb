@@ -1,10 +1,10 @@
 require 'test_helper'
 
 describe TicketDrop do
-  let(:convention) { FactoryGirl.create(:convention) }
-  let(:user_con_profile) { FactoryGirl.create(:user_con_profile, convention: convention) }
-  let(:event) { FactoryGirl.create(:event, convention: convention) }
-  let(:ticket) { FactoryGirl.create(:ticket, user_con_profile: user_con_profile, provided_by_event: event) }
+  let(:convention) { FactoryBot.create(:convention) }
+  let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+  let(:event) { FactoryBot.create(:event, convention: convention) }
+  let(:ticket) { FactoryBot.create(:ticket, user_con_profile: user_con_profile, provided_by_event: event) }
   let(:ticket_drop) { TicketDrop.new(ticket) }
   let(:ticket_type) { ticket.ticket_type }
 

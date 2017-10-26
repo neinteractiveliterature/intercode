@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe SignupDrop do
-  let(:signup) { FactoryGirl.create(:signup, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') }
+  let(:signup) { FactoryBot.create(:signup, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') }
   let(:signup_drop) { SignupDrop.new(signup) }
   let(:the_run) { signup.run }
   let(:event) { the_run.event }

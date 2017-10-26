@@ -101,8 +101,8 @@ group :test do
   gem 'minitest-spec-rails'
   gem 'minitest-reporters'
   gem 'database_cleaner'
-  gem 'factory_girl'
-  gem 'factory_girl_rails'
+  gem 'factory_bot'
+  gem 'factory_bot_rails'
   gem 'codeclimate-test-reporter'
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
