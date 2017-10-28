@@ -1,0 +1,63 @@
+%p= pluralize emails.size, 'recipient'
+
+- @hacky_mailing_list_sequence ||= 0
+- @hacky_mailing_list_sequence += 1
+- @metadata_fields ||= []
+- textarea_rows = [emails.size, 20].min
+
+%ul.nav.nav-tabs.mb-4{role: 'tablist'}
+  %li.nav-item
+    %a.nav-link.active{id: "table-view-tab-#{@hacky_mailing_list_sequence}", href: "#table-view-#{@hacky_mailing_list_sequence}", 'data-toggle' => 'tab', role: 'tab', 'aria-controls' => "#table-view-#{@hacky_mailing_list_sequence}", 'aria-selected' => true} Table view
+  %li.nav-item
+    %a.nav-link{id: "comma-separated-tab-#{@hacky_mailing_list_sequence}", href: "#comma-separated-#{@hacky_mailing_list_sequence}", 'data-toggle' => 'tab', role: 'tab', 'aria-controls' => "#comma-separated-#{@hacky_mailing_list_sequence}"} Comma-separated
+  %li.nav-item
+    %a.nav-link{id: "semicolon-separated-tab-#{@hacky_mailing_list_sequence}", href: "#semicolon-separated-#{@hacky_mailing_list_sequence}", 'data-toggle' => 'tab', role: 'tab', 'aria-controls' => "#semicolon-separated-#{@hacky_mailing_list_sequence}"} Semicolon-separated
+
+.tab-content
+  .tab-pane.show.active{id: "table-view-#{@hacky_mailing_list_sequence}", 'aria-labelledby' => "table-view-tab-#{@hacky_mailing_list_sequence}"}
+    %table.table.table-striped.table-sm
+      %thead
+        %tr
+          %th Email
+          %th Name
+          - @metadata_fields.each do |field|
+            %th= field.to_s.humanize
+      %tbody
+        - emails.each do |email|
+          %tr
+            %td= intercode_mail_to email.formatted_address, email.email
+            %td= email.name
+            - @metadata_fields.each do |field|
+              %td= email.metadata[field]
+
+  .tab-pane{id: "comma-separated-#{@hacky_mailing_list_sequence}", 'aria-labelledby' => "comma-separated-tab-#{@hacky_mailing_list_sequence}"}
+    - addresses = emails.map(&:formatted_address).join(', ')
+
+    %ul.list-inline.mb-2
+      %li.list-inline-item
+        %button.btn.btn-secondary.mb-2{'data-clipboard-target' => "#comma-separated-#{@hacky_mailing_list_sequence} textarea"}
+          %i.fa.fa-copy
+          Copy to clipboard
+
+        = mail_to '', bcc: addresses, class: 'btn btn-secondary mb-2' do
+          %i.fa.fa-envelope
+          Compose email
+
+    %textarea.form-control{readonly: true, rows: textarea_rows}
+      = addresses
+
+  .tab-pane{id: "semicolon-separated-#{@hacky_mailing_list_sequence}", 'aria-labelledby' => "semicolon-separated-tab-#{@hacky_mailing_list_sequence}"}
+    - addresses = emails.map(&:formatted_address).join('; ')
+
+    %ul.list-inline.mb-2
+      %li.list-inline-item
+        %button.btn.btn-secondary.mb-2{'data-clipboard-target' => "#semicolon-separated-#{@hacky_mailing_list_sequence} textarea"}
+          %i.fa.fa-copy
+          Copy to clipboard
+
+        = mail_to '', bcc: addresses, class: 'btn btn-secondary mb-2' do
+          %i.fa.fa-envelope
+          Compose email
+
+    %textarea.form-control{readonly: true, rows: textarea_rows}
+      = addresses
