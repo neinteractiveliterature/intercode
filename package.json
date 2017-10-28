@@ -23,6 +23,7 @@
     "bootstrap.native": "^2.0.17",
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
+    "clipboard": "^1.7.1",
     "compression-webpack-plugin": "^1.0.1",
     "css-loader": "^0.28.7",
     "exports-loader": "^0.6.4",
@@ -63,7 +64,7 @@
     "react-popper": "^0.7.4",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-select": "^1.0.0-rc.5",
+    "react-select": "^1.0.0-rc.10",
     "react-select-fast-filter-options": "^0.2.3",
     "react-simple-currency": "^1.0.16",
     "react-virtualized": "^9.12.0",
@@ -105,17 +106,6 @@
     "jest": "^21.2.1",
     "react-test-renderer": "^16.0.0",
     "webpack-dev-server": "^2.9.3"
-  },
-  "resolutions": {
-    "immutable": "3.8.2",
-    "json-fetch": "7.3.0",
-    "lodash": "4.17.4",
-    "popper.js": "1.12.6",
-    "prop-types": "15.6.0",
-    "react": "16.0.0",
-    "react-bootstrap4-modal": "1.1.1",
-    "react-dom": "16.0.0",
-    "react-virtualized": "9.12.0"
   },
   "scripts": {
     "test": "jest test/javascript",
