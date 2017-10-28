@@ -16,7 +16,6 @@ before_script:
 - nvm install
 - npm install --global yarn
 - yarn install
-- yarn check
 - cp config/database.yml.ci config/database.yml
 - bin/rake db:create db:migrate RAILS_ENV=test
 script:
