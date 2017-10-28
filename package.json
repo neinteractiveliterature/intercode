@@ -23,6 +23,7 @@
     "bootstrap.native": "^2.0.17",
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
+    "clipboard": "^1.7.1",
     "compression-webpack-plugin": "^1.0.1",
     "css-loader": "^0.28.7",
     "exports-loader": "^0.6.4",
