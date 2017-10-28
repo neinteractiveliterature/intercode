@@ -1,0 +1,13 @@
+%h1 Mail to waitlists
+
+- @runs.each do |run|
+  .card.my-4
+    .card-header
+      = run.starts_at.strftime('%a %l:%M%P')
+      &mdash;
+      = run.event.title
+      - if run.title_suffix.present?
+        (#{run.title_suffix})
+
+    .card-body
+      = render partial: 'mailing_lists/mailing_list', locals: { emails: @emails_by_run[run] }

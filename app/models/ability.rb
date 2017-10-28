@@ -49,6 +49,13 @@ class Ability
       parent_type: 'Convention', parent_id: staff_con_ids
 
     can [:update, :view_reports], Convention, id: staff_con_ids
+
+    # Mail privileges (smash the patriarchy)
+    can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
+    UserConProfile::MAIL_PRIV_NAMES.each do |mail_priv_name|
+      can mail_priv_name.to_sym, Convention, id: con_ids_with_privilege(mail_priv_name)
+    end
+
     can [:schedule, :schedule_with_counts], Convention, id: staff_con_ids, show_schedule: %w(priv gms yes)
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: staff_con_ids
@@ -73,11 +80,20 @@ class Ability
     can :manage, TeamMember, event_id: team_member_event_ids
   end
 
-  def staff_con_ids
-    @staff_con_ids ||= begin
-      staff_cons = Convention.joins(:user_con_profiles).where(user_con_profiles: { user_id: user.id, staff: true })
-      staff_cons.pluck(:id)
+  def con_ids_with_privilege(*privileges)
+    @con_ids_by_privilege ||= begin
+      UserConProfile.where(user_id: user.id).flat_map do |user_con_profile|
+        user_con_profile.privileges.map { |privilege| [user_con_profile.convention_id, privilege] }
+      end.group_by { |(_, privilege)| privilege }.transform_values { |(convention_id, _)| convention_id }
     end
+
+    (privileges + ['staff']).uniq.flat_map do |privilege|
+      @con_ids_by_privilege[privilege.to_s]
+    end.uniq
+  end
+
+  def staff_con_ids
+    con_ids_with_privilege(:staff)
   end
 
   def team_member_event_ids_and_convention_ids

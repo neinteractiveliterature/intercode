@@ -1,0 +1,6 @@
+%h1 Who's free
+
+= react_component 'WhosFreeForm', authenticityToken: graphql_authenticity_token, initialStart: params[:start], initialFinish: params[:finish], baseUrl: mailing_lists_whos_free_path
+
+- if @emails
+  = render partial: 'mailing_lists/mailing_list', locals: { emails: @emails }

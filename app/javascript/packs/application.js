@@ -8,6 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import 'popper.js';
+import Clipboard from 'clipboard';
 import Rails from 'rails-ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
 
@@ -24,6 +25,7 @@ import StandaloneEditEvent from '../StandaloneEditEvent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
+import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
@@ -37,6 +39,10 @@ WebpackerReact.setup({
   TeamMemberForm,
   TicketPurchaseForm,
   TicketTypeForm,
+  WhosFreeForm,
 });
 
 Rails.start();
+
+// eslint-disable-next-line no-new
+new Clipboard('[data-clipboard-target], [data-clipboard-text]');
