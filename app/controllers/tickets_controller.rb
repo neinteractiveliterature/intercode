@@ -1,5 +1,7 @@
 class TicketsController < ApplicationController
   before_action :check_existing_ticket, only: [:new, :create]
+  before_action :check_convention_maximum, only: [:new, :create]
+  before_action :check_publicly_available, only: [:create]
   load_resource through: :user_con_profile, singleton: true
   skip_authorization_check
 
@@ -10,8 +12,10 @@ class TicketsController < ApplicationController
   end
 
   def new
-    unless @ticket.ticket_type
-      @ticket_types = convention.ticket_types
+    if @ticket.ticket_type
+      check_publicly_available
+    else
+      @ticket_types = convention.ticket_types.publicly_available
 
       if @ticket_types.size == 1
         redirect_to new_ticket_path(ticket: {ticket_type_id: @ticket_types.first.id})
@@ -53,5 +57,21 @@ class TicketsController < ApplicationController
 
   def check_existing_ticket
     redirect_to ticket_path if user_con_profile.ticket
+  end
+
+  def check_convention_maximum
+    return unless convention.maximum_tickets
+
+    if convention.tickets.counts_towards_convention_maximum.count >= convention.maximum_tickets
+      flash[:alert] = "We're sorry, but #{convention.name} is currently sold out."
+      redirect_to root_path
+    end
+  end
+
+  def check_publicly_available
+    unless @ticket.ticket_type.publicly_available?
+      flash[:alert] = "Sorry, but \"#{@ticket.ticket_type.description}\" tickets are not publicly available.  Please choose a different ticket type or contact #{convention.name} staff."
+      redirect_to new_ticket_path
+    end
   end
 end

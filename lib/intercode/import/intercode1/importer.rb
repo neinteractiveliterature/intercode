@@ -32,6 +32,7 @@ class Intercode::Import::Intercode1::Importer
         "show_flyer" => NAV_SHOW_FLYER,
         "show_program" => NAV_SHOW_PROGRAM,
         "thursday_enabled" => THURSDAY_ENABLED,
+        "maximum_tickets" => CON_MAX
       );
 
       $price_schedule = array();
@@ -92,6 +93,7 @@ class Intercode::Import::Intercode1::Importer
     @show_flyer = vars['show_flyer']
     @show_program = vars['show_program']
     @thursday_enabled = (vars['thursday_enabled'] == 1)
+    @maximum_tickets = vars['maximum_tickets']
   end
 
   def build_password_hashes
@@ -153,7 +155,8 @@ class Intercode::Import::Intercode1::Importer
       friday_date: @friday_date,
       constants_file: @constants_file,
       timezone_name: "US/Eastern",
-      thursday_enabled: @thursday_enabled
+      thursday_enabled: @thursday_enabled,
+      maximum_tickets: @maximum_tickets
     )
   end
 
@@ -262,22 +265,27 @@ class Intercode::Import::Intercode1::Importer
       "Comp" => con.ticket_types.new(
         name: "event_comp",
         description: "Comp ticket for event",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
+        publicly_available: false
       ),
       "Marketing" => con.ticket_types.new(
         name: "marketing_comp",
         description: "Marketing comp ticket",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
+        publicly_available: false
       ),
       "Vendor" => con.ticket_types.new(
         name: "vendor",
         description: "Vendor ticket",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(2000, 'USD'))
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(2000, 'USD')),
+        publicly_available: false,
+        counts_towards_convention_maximum: false
       ),
       "Rollover" => con.ticket_types.new(
         name: "rollover",
         description: "Rollover ticket from previous year",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
+        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
+        publicly_available: false
       ),
     }
   end

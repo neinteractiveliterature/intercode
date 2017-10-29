@@ -7,6 +7,8 @@ class TicketType < ApplicationRecord
   # Only allow letters, numbers, and underscores
   validates_format_of :name, with: /\A\w+\z/, allow_blank: true
 
+  scope :publicly_available, -> { where(publicly_available: true) }
+
   def price_at(time)
     pricing_schedule.value_at(time)
   end
