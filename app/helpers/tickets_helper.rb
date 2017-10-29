@@ -6,7 +6,7 @@ module TicketsHelper
   end
 
   def ticket_purchase_form(ticket)
-    ticket_types_data = convention.ticket_types.map do |ticket_type|
+    ticket_types_data = convention.ticket_types.publicly_available.map do |ticket_type|
       {
         id: ticket_type.id,
         name: ticket_type.description,

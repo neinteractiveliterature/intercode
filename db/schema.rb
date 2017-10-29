@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171021154612) do
+ActiveRecord::Schema.define(version: 20171029163343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20171021154612) do
     t.text "maximum_event_signups"
     t.boolean "registrations_frozen", default: false, null: false
     t.bigint "event_proposal_form_id"
+    t.integer "maximum_tickets"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
@@ -255,6 +256,8 @@ ActiveRecord::Schema.define(version: 20171021154612) do
     t.text "pricing_schedule"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "publicly_available", default: true, null: false
+    t.boolean "counts_towards_convention_maximum", default: true, null: false
     t.index ["convention_id"], name: "index_ticket_types_on_convention_id"
   end
 
