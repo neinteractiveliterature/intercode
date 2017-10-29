@@ -11,6 +11,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :timezone_name, types.String
   field :registrations_frozen, types.Boolean
   field :show_schedule, Types::ShowScheduleType
+  field :maximum_tickets, types.Int
 
   field :away_blocks, types[Types::AwayBlockType]
   field :rooms, types[Types::RoomType]

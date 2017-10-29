@@ -40,6 +40,7 @@ class ConventionForm extends React.Component {
           value: PropTypes.string.isRequired,
         }).isRequired).isRequired,
       }).isRequired,
+      maximum_tickets: PropTypes.number,
     }).isRequired,
     saveConvention: PropTypes.func.isRequired,
   }
@@ -71,6 +72,20 @@ class ConventionForm extends React.Component {
       convention: {
         ...this.state.convention,
         [event.target.name]: event.target.value === 'true',
+      },
+    });
+  }
+
+  integerInputDidChange = (event) => {
+    let integer = parseInt(event.target.value, 10);
+    if (Number.isNaN(integer)) {
+      integer = null;
+    }
+
+    this.setState({
+      convention: {
+        ...this.state.convention,
+        [event.target.name]: integer,
       },
     });
   }
@@ -194,6 +209,14 @@ class ConventionForm extends React.Component {
             this.formInputDidChange,
           )
         }
+
+        <BootstrapFormInput
+          name="maximum_tickets"
+          label="Maximum tickets"
+          type="number"
+          value={(this.state.convention.maximum_tickets || '').toString()}
+          onChange={this.integerInputDidChange}
+        />
 
         {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
 
