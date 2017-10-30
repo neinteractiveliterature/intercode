@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import NumberInput from 'react-number-input';
+import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ResourceForm from './ResourceForm';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
@@ -23,17 +24,15 @@ const buildScheduledMoneyValueInput = (value, onChange) => {
   }
 
   return (
-    <td className="w-25">
-      <div className="input-group">
-        <span className="input-group-addon">$</span>
-        <NumberInput
-          className="form-control"
-          value={dollarValue}
-          onChange={processNumberInputChangeEvent}
-          format="0,0.00"
-        />
-      </div>
-    </td>
+    <div className="input-group">
+      <span className="input-group-addon">$</span>
+      <NumberInput
+        className="form-control"
+        value={dollarValue}
+        onChange={processNumberInputChangeEvent}
+        format="0,0.00"
+      />
+    </div>
   );
 };
 
@@ -44,6 +43,7 @@ class TicketTypeForm extends React.Component {
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       pricing_schedule: ScheduledValuePropType.isRequired,
+      publicly_available: PropTypes.bool.isRequired,
     }).isRequired,
     baseUrl: PropTypes.string.isRequired,
     timezone: PropTypes.string.isRequired,
@@ -61,17 +61,31 @@ class TicketTypeForm extends React.Component {
     ticket_type: this.state.ticketType,
   })
 
-  setTicketTypeAttribute = (attribute, value) => {
-    this.setState({ ticketType: Object.assign({}, this.state.ticketType, { [attribute]: value }) });
-  }
-
   inputChanged = (event) => {
-    const { name, value } = event.target;
-    this.setTicketTypeAttribute(name, value);
+    this.setState({
+      ticketType: {
+        ...this.state.ticketType,
+        [event.target.name]: event.target.value,
+      },
+    });
   }
 
   pricingScheduleChanged = (newPricingSchedule) => {
-    this.setTicketTypeAttribute('pricing_schedule', newPricingSchedule);
+    this.setState({
+      ticketType: {
+        ...this.state.ticketType,
+        pricing_schedule: newPricingSchedule,
+      },
+    });
+  }
+
+  publiclyAvailableChanged = (value) => {
+    this.setState({
+      ticketType: {
+        ...this.state.ticketType,
+        publicly_available: value,
+      },
+    });
   }
 
   render = () => {
@@ -100,6 +114,13 @@ class TicketTypeForm extends React.Component {
           type="text"
           value={this.state.ticketType.description}
           onChange={this.inputChanged}
+        />
+
+        <BooleanInput
+          caption="Publicly available for purchase?"
+          name="publicly_available"
+          value={this.state.ticketType.publicly_available}
+          onChange={this.publiclyAvailableChanged}
         />
 
         <fieldset>

@@ -28,17 +28,18 @@ class BootstrapFormCheckbox extends React.Component {
 
   render = () => {
     const inputId = this.nextUniqueId();
+    const { className, label, ...otherProps } = this.props;
 
     return (
-      <div className={`form-check ${this.props.className}`}>
+      <div className={`form-check ${className}`}>
         <label className="form-check-label" htmlFor={inputId}>
           <input
             className="form-check-input"
             id={inputId}
-            {...this.props}
+            {...otherProps}
           />
           {' '}
-          {this.props.label}
+          {label}
         </label>
       </div>
     );
