@@ -111,9 +111,9 @@ class TicketPurchaseForm extends React.Component {
       }).then(() => {
         window.location.href = this.props.purchaseCompleteUrl;
       }).catch((error) => {
-        error.response.text().then((text) => {
+        error.response.json().then((json) => {
           this.setState({
-            paymentError: text,
+            paymentError: json.errors.base.join(', '),
             submitting: false,
           });
         });
