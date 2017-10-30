@@ -1,11 +1,12 @@
 class TicketsController < ApplicationController
   before_action :check_existing_ticket, only: [:new, :create]
+
+  load_resource through: :user_con_profile, singleton: true
   before_action :check_convention_maximum, only: [:new, :create]
   before_action :check_publicly_available, only: [:create]
-  load_resource through: :user_con_profile, singleton: true
   skip_authorization_check
 
-  respond_to :html, :json
+  respond_to :json, only: [:create]
 
   def show
     redirect_to new_ticket_path unless @ticket
@@ -24,6 +25,8 @@ class TicketsController < ApplicationController
   end
 
   def create
+    current_price = @ticket.ticket_type.price
+
     customer = Stripe::Customer.create(
       :email => current_user.email,
       :source  => params[:stripeToken]
@@ -47,7 +50,7 @@ class TicketsController < ApplicationController
 
   rescue Stripe::CardError => e
     @ticket.errors.add(:base, e.message)
-    responsd_with @ticket
+    respond_with @ticket
   end
 
   private

@@ -105,6 +105,7 @@ GEM
     concurrent-ruby (1.0.5)
     concurrent-ruby (1.0.5-java)
     crass (1.0.2)
+    dante (0.2.0)
     database_cleaner (1.6.1)
     datagrid (1.5.5)
       rails (>= 4.0)
@@ -466,6 +467,10 @@ GEM
     stackprof (0.2.10)
     stripe (3.7.0)
       faraday (~> 0.10)
+    stripe-ruby-mock (2.5.0)
+      dante (>= 0.2.0)
+      multi_json (~> 1.0)
+      stripe (>= 2.0.3)
     temple (0.8.0)
     term-ansicolor (1.6.0)
       tins (~> 1.0)
@@ -557,6 +562,7 @@ DEPENDENCIES
   sqlite3
   stackprof
   stripe
+  stripe-ruby-mock
   term-ansicolor
   uglifier (>= 1.0.3)
   unf
