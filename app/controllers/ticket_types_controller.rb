@@ -4,6 +4,7 @@ class TicketTypesController < ApplicationController
   respond_to :html, :json
 
   def index
+    @ticket_types = @ticket_types.sort_by { |ticket_type| [ticket_type.publicly_available? ? 0 : 1, ticket_type.name] }
   end
 
   def new
@@ -33,6 +34,7 @@ class TicketTypesController < ApplicationController
     params.require(:ticket_type).permit(
       :name,
       :description,
+      :publicly_available,
       pricing_schedule: {
         timespans: [:start, :finish, value: [:fractional, :currency_code]]
       }
