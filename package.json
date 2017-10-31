@@ -60,7 +60,7 @@
     "react-html-id": "^0.1.1",
     "react-moment-proptypes": "^1.5.0",
     "react-number-input": "^15.5.1",
-    "react-onclickoutside": "^6.6.2",
+    "react-onclickoutside": "^6.6.3",
     "react-popper": "^0.7.4",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
