@@ -44,6 +44,7 @@ class TicketTypeForm extends React.Component {
       description: PropTypes.string.isRequired,
       pricing_schedule: ScheduledValuePropType.isRequired,
       publicly_available: PropTypes.bool.isRequired,
+      maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired,
     baseUrl: PropTypes.string.isRequired,
     timezone: PropTypes.string.isRequired,
@@ -66,6 +67,17 @@ class TicketTypeForm extends React.Component {
       ticketType: {
         ...this.state.ticketType,
         [event.target.name]: event.target.value,
+      },
+    });
+  }
+
+  integerInputChanged = (event) => {
+    const intValue = parseInt(event.target.value, 10);
+
+    this.setState({
+      ticketType: {
+        ...this.state.ticketType,
+        [event.target.name]: Number.isNaN(intValue) ? null : intValue,
       },
     });
   }
@@ -121,6 +133,14 @@ class TicketTypeForm extends React.Component {
           name="publicly_available"
           value={this.state.ticketType.publicly_available}
           onChange={this.publiclyAvailableChanged}
+        />
+
+        <BootstrapFormInput
+          label="Number of event-provided tickets of this type (per event)"
+          name="maximum_event_provided_tickets"
+          type="number"
+          value={this.state.ticketType.maximum_event_provided_tickets.toString()}
+          onChange={this.integerInputChanged}
         />
 
         <fieldset>

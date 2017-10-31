@@ -4,10 +4,18 @@ class TicketTypesController < ApplicationController
   respond_to :html, :json
 
   def index
-    @ticket_types = @ticket_types.sort_by { |ticket_type| [ticket_type.publicly_available? ? 0 : 1, ticket_type.name] }
+    @ticket_types = @ticket_types.sort_by do |ticket_type|
+      [
+        ticket_type.publicly_available? ? 0 : 1,
+        ticket_type.event_provided? ? 0 : 1,
+        ticket_type.name
+      ]
+    end
   end
 
   def new
+    @ticket_type.name ||= ''
+    @ticket_type.description ||= ''
   end
 
   def update
@@ -35,6 +43,7 @@ class TicketTypesController < ApplicationController
       :name,
       :description,
       :publicly_available,
+      :maximum_event_provided_tickets,
       pricing_schedule: {
         timespans: [:start, :finish, value: [:fractional, :currency_code]]
       }

@@ -266,7 +266,8 @@ class Intercode::Import::Intercode1::Importer
         name: "event_comp",
         description: "Comp ticket for event",
         pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
-        publicly_available: false
+        publicly_available: false,
+        maximum_event_provided_tickets: 2
       ),
       "Marketing" => con.ticket_types.new(
         name: "marketing_comp",
