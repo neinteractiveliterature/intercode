@@ -20,7 +20,7 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "bootstrap.native": "^2.0.17",
+    "bootstrap.native": "^2.0.18",
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
     "clipboard": "^1.7.1",

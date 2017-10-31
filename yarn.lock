@@ -1670,9 +1670,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap.native@^2.0.17:
-  version "2.0.17"
-  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.17.tgz#b91d836f505f8dc9a1340ff3049476cbfdfba37e"
+bootstrap.native@^2.0.18:
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.18.tgz#02153153f1dac7ef02337b7add613e75016465d5"
 
 brace-expansion@^1.1.7:
   version "1.1.8"
