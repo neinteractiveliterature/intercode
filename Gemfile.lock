@@ -464,7 +464,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
     stackprof (0.2.10)
-    stripe (3.7.0)
+    stripe (3.8.0)
       faraday (~> 0.10)
     temple (0.8.0)
     term-ansicolor (1.6.0)
