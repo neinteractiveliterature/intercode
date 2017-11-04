@@ -54,7 +54,7 @@ class FormPresenterApp extends React.Component {
     <Provider store={this.store}>
       <FormPresenterContainer />
     </Provider>
-    )
+  )
 }
 
 export default FormPresenterApp;

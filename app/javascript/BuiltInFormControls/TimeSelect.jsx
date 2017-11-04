@@ -30,13 +30,9 @@ class TimeSelect extends React.Component {
     const newValue = event.target.value;
 
     if (newValue && newValue !== '') {
-      this.props.onChange(
-        { ...this.props.value, [event.target.name]: parseInt(newValue, 10) },
-      );
+      this.props.onChange({ ...this.props.value, [event.target.name]: parseInt(newValue, 10) });
     } else {
-      this.props.onChange(
-        { ...this.props.value, [event.target.name]: null },
-      );
+      this.props.onChange({ ...this.props.value, [event.target.name]: null });
     }
   }
 
@@ -53,11 +49,9 @@ class TimeSelect extends React.Component {
         description += ` (+${dayDiff} ${dayDiff > 1 ? 'days' : 'day'})`;
       }
 
-      hourOptions.push(
-        <option key={hourOffset} value={hourOffset + timespan.start.hour()}>
-          {description}
-        </option>,
-      );
+      hourOptions.push(<option key={hourOffset} value={hourOffset + timespan.start.hour()}>
+        {description}
+                       </option>);
       hourOffset += 1;
     }
 

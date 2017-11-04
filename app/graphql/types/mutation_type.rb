@@ -72,4 +72,23 @@ Types::MutationType = GraphQL::ObjectType.define do
   field :deleteRoom, Mutations::DeleteRoom.field do
     guard(guard_for_convention_associated_model(:rooms, :delete))
   end
+
+  field :createTeamMember, Mutations::CreateTeamMember.field do
+    guard ->(_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:event_id])
+      ctx[:current_ability].can?(:create, event.team_members.new(args[:team_member].to_h))
+    }
+  end
+
+  field :deleteTeamMember, Mutations::DeleteTeamMember.field do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(:delete, TeamMember.find(args[:id]))
+    }
+  end
+
+  field :updateTeamMember, Mutations::UpdateTeamMember.field do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(:update, TeamMember.find(args[:id]))
+    }
+  end
 end

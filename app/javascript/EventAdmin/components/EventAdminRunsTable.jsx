@@ -18,9 +18,7 @@ class EventAdminRunsTable extends React.Component {
 
     const getNormalizedTitle = event => event.title.replace(/^(the|a|) /i, '').replace(/[^A-Za-z0-9]/g, '').toLocaleLowerCase();
 
-    const sortedEvents = [...data.events].sort(
-      (a, b) => getNormalizedTitle(a).localeCompare(getNormalizedTitle(b)),
-    );
+    const sortedEvents = [...data.events].sort((a, b) => getNormalizedTitle(a).localeCompare(getNormalizedTitle(b)));
 
     const eventRows = sortedEvents.filter(event => (
       event.category !== 'filler' && event.category !== 'volunteer_event'

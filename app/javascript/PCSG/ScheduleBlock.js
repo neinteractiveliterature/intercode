@@ -23,18 +23,16 @@ class ScheduleBlock {
   }
 
   getTimeSortedEventRuns(): Array<EventRun> {
-    return [...this.eventRuns].sort(
-      (a, b) => {
-        const timeDiff = a.timespan.start.diff(b.timespan.start);
+    return [...this.eventRuns].sort((a, b) => {
+      const timeDiff = a.timespan.start.diff(b.timespan.start);
 
-        if (timeDiff === 0) {
-          // as a tiebreaker, sort longer events first
-          return b.timespan.finish.diff(a.timespan.finish);
-        }
+      if (timeDiff === 0) {
+        // as a tiebreaker, sort longer events first
+        return b.timespan.finish.diff(a.timespan.finish);
+      }
 
-        return timeDiff;
-      },
-    );
+      return timeDiff;
+    });
   }
 }
 

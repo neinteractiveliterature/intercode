@@ -45,17 +45,11 @@ class RegistrationPolicyEditor extends React.Component {
     let initiallyCustom = false;
     if (Array.isArray(this.props.presets)) {
       initialPreset = this.props.presets.find(preset => (
-        preset.policy.buckets.every(
-          bucket => (
-            typeof bucket.key === 'string' &&
+        preset.policy.buckets.every(bucket => (
+          typeof bucket.key === 'string' &&
             this.props.registrationPolicy.getBucket(bucket.key)
-          ),
-        ) &&
-        this.props.registrationPolicy.buckets.every(
-          bucket => preset.policy.buckets.find(
-            presetBucket => presetBucket.key === bucket.key,
-          ),
-        )
+        )) &&
+        this.props.registrationPolicy.buckets.every(bucket => preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key))
       ));
 
       if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
@@ -158,9 +152,7 @@ class RegistrationPolicyEditor extends React.Component {
   renderTable = () => {
     const bucketRows = this.props.registrationPolicy.buckets.map((bucket) => {
       const bucketInPreset = (
-        this.state.preset && !!this.state.preset.policy.buckets.find(
-          presetBucket => presetBucket.key === bucket.key,
-        )
+        this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key)
       );
 
       const lockDelete = (

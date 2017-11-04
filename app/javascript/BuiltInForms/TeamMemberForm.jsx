@@ -1,25 +1,116 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
-import ResourceForm from './ResourceForm';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { performRequest } from '../HTTPUtils';
 import { getStateChangeForCheckboxChange } from '../FormUtils';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import ErrorDisplay from '../ErrorDisplay';
 
+const teamMemberFragment = gql`
+fragment TeamMemberFields on TeamMember {
+  id
+  display
+  show_email
+  receive_con_email
+  receive_signup_email
+
+  user_con_profile {
+    id
+    ticket {
+      id
+
+      provided_by_event {
+        id
+      }
+    }
+  }
+}
+`;
+
+const teamMemberQuery = gql`
+query($eventId: Int!) {
+  convention {
+    ticket_types {
+      id
+      name
+      description
+      maximum_event_provided_tickets
+    }
+  }
+
+  event(id: $eventId) {
+    team_member_name
+
+    team_members {
+      ...TeamMemberFields
+    }
+  }
+}
+
+${teamMemberFragment}
+`;
+
+const createTeamMemberMutation = gql`
+mutation($input: CreateTeamMemberInput!) {
+  createTeamMember(input: $input) {
+    team_member {
+      ...TeamMemberFields
+    }
+  }
+}
+
+${teamMemberFragment}
+`;
+
+const deleteTeamMemberMutation = gql`
+mutation($input: DeleteTeamMemberInput!) {
+  deleteTeamMember(input: $input) {
+    team_member {
+      ...TeamMemberFields
+    }
+  }
+}
+
+${teamMemberFragment}
+`;
+
+const updateTeamMemberMutation = gql`
+mutation($input: UpdateTeamMemberInput!) {
+  updateTeamMember(input: $input) {
+    team_member {
+      ...TeamMemberFields
+    }
+  }
+}
+
+${teamMemberFragment}
+`;
+
+@compose(
+  graphql(teamMemberQuery),
+  graphql(createTeamMemberMutation, { name: 'createTeamMember' }),
+  graphql(deleteTeamMemberMutation, { name: 'deleteTeamMember' }),
+  graphql(updateTeamMemberMutation, { name: 'updateTeamMember' }),
+)
+@GraphQLQueryResultWrapper
 class TeamMemberForm extends React.Component {
   static propTypes = {
+    data: GraphQLResultPropType(teamMemberQuery, 'event', 'convention').isRequired,
     baseUrl: PropTypes.string.isRequired,
-    initialTeamMember: PropTypes.shape({
-      id: PropTypes.number,
-      user_con_profile_id: PropTypes.number,
-      display: PropTypes.bool.isRequired,
-      show_email: PropTypes.bool.isRequired,
-      receive_con_email: PropTypes.bool.isRequired,
-      receive_signup_email: PropTypes.bool.isRequired,
-    }).isRequired,
-    teamMemberName: PropTypes.string.isRequired,
+    eventId: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
+    teamMemberId: PropTypes.number,
+    createTeamMember: PropTypes.func.isRequired,
+    deleteTeamMember: PropTypes.func.isRequired,
+    updateTeamMember: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    teamMemberId: null,
   };
 
   constructor(props) {
@@ -27,13 +118,26 @@ class TeamMemberForm extends React.Component {
     enableUniqueIds(this);
 
     this.state = {
-      teamMember: { ...this.props.initialTeamMember },
       confirmingDelete: false,
+      requestInProgress: false,
     };
+
+    if (this.props.teamMemberId) {
+      this.state.teamMember = this.props.data.event.team_members
+        .find(teamMember => teamMember.id === this.props.teamMemberId);
+    } else {
+      this.state.teamMember = {
+        user_con_profile_id: null,
+        display: true,
+        show_email: true,
+        receive_con_email: true,
+        receive_signup_email: false,
+      };
+    }
   }
 
   getSubmitText = () => (
-    `${this.state.teamMember.id ? 'Update' : 'Add'} ${this.props.teamMemberName}`
+    `${this.state.teamMember.id ? 'Update' : 'Add'} ${this.props.data.event.team_member_name}`
   )
 
   getSubmitRequestBody = () => ({
@@ -54,18 +158,57 @@ class TeamMemberForm extends React.Component {
     this.setState({ confirmingDelete: true });
   }
 
-  deleteConfirmed = () => {
-    performRequest(`${this.props.baseUrl}/${this.state.teamMember.id}`, {
-      method: 'DELETE',
-    }).then(() => {
+  deleteConfirmed = async () => {
+    try {
+      await this.props.deleteTeamMember({ variables: { input: { id: this.state.teamMember.id } } });
       window.location.href = this.props.baseUrl;
-    }).catch(() => {
+    } catch (error) {
+      this.setState({ error });
       this.deleteCanceled();
-    });
+    }
   }
 
   deleteCanceled = () => {
     this.setState({ confirmingDelete: false });
+  }
+
+  submitClicked = async (event) => {
+    event.preventDefault();
+
+    const { teamMember } = this.state;
+
+    const teamMemberInput = {
+      display: teamMember.display,
+      show_email: teamMember.show_email,
+      receive_con_email: teamMember.receive_con_email,
+      receive_signup_email: teamMember.receive_signup_email,
+    };
+
+    this.setState({ requestInProgress: true });
+
+    try {
+      if (this.state.teamMember.id) {
+        await this.props.updateTeamMember({
+          variables: { input: { id: teamMember.id, team_member: teamMemberInput } },
+        });
+      } else {
+        await this.props.createTeamMember({
+          variables: {
+            input: {
+              event_id: this.props.eventId,
+              user_con_profile_id: teamMember.user_con_profile_id,
+              team_member: teamMemberInput,
+            },
+          },
+        });
+      }
+
+      window.location.href = this.props.baseUrl;
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ requestInProgress: false });
+    }
   }
 
   renderDeleteButtonItem = (submitDisabled) => {
@@ -81,24 +224,24 @@ class TeamMemberForm extends React.Component {
           onClick={this.deleteClicked}
           disabled={submitDisabled}
         >
-          {`Remove ${this.props.teamMemberName}`}
+          {`Remove ${this.props.data.event.team_member_name}`}
         </button>
       </li>
     );
   }
 
-  renderSubmitSection = (onClick, submitDisabled) => (
+  renderSubmitSection = () => (
     <ul className="list-inline">
       <li className="list-inline-item">
         <input
           type="submit"
           className="btn btn-primary"
-          onClick={onClick}
+          onClick={this.submitClicked}
           value={this.getSubmitText()}
-          disabled={submitDisabled}
+          disabled={this.state.requestInProgress}
         />
       </li>
-      {this.renderDeleteButtonItem(submitDisabled)}
+      {this.renderDeleteButtonItem(this.state.requestInProgress)}
     </ul>
   )
 
@@ -113,7 +256,7 @@ class TeamMemberForm extends React.Component {
     return (
       <div className="form-group">
         <label htmlFor={userConProfileSelectId}>
-          {`${this.props.teamMemberName} name`}
+          {`${this.props.data.event.team_member_name} name`}
         </label>
         <UserConProfileSelect
           id={userConProfileSelectId}
@@ -124,32 +267,26 @@ class TeamMemberForm extends React.Component {
     );
   }
 
-  renderCheckboxes = () => {
-    const checkboxes = [
-      { name: 'display', label: `Display as ${this.props.teamMemberName}` },
+  renderCheckboxes = () => (
+    [
+      { name: 'display', label: `Display as ${this.props.data.event.team_member_name}` },
       { name: 'show_email', label: 'Show email address' },
       { name: 'receive_con_email', label: 'Receive email from convention' },
       { name: 'receive_signup_email', label: 'Receive email on signup and withdrawal' },
-    ];
-
-    return checkboxes.map(checkbox => (
+    ].map(({ name, label }) => (
       <BootstrapFormCheckbox
-        key={checkbox.name}
-        label={checkbox.label}
-        name={checkbox.name}
-        checked={this.state.teamMember[checkbox.name]}
+        key={name}
+        label={label}
+        name={name}
+        checked={this.state.teamMember[name]}
         onChange={this.checkboxChanged}
       />
-    ));
-  }
+    ))
+  )
 
   render = () => (
-    <ResourceForm
-      baseUrl={this.props.baseUrl}
-      resourceId={this.state.teamMember.id}
-      getSubmitRequestBody={this.getSubmitRequestBody}
-      renderSubmitSection={this.renderSubmitSection}
-    >
+    <form>
+      <ErrorDisplay graphQLError={this.state.error} />
       {this.renderUserConProfileSelect()}
       {this.renderCheckboxes()}
 
@@ -159,9 +296,11 @@ class TeamMemberForm extends React.Component {
         onCancel={this.deleteCanceled}
         visible={this.state.confirmingDelete}
       >
-        {`Are you sure you want to remove this ${this.props.teamMemberName}?`}
+        {`Are you sure you want to remove this ${this.props.data.event.team_member_name}?`}
       </ConfirmModal>
-    </ResourceForm>
+
+      {this.renderSubmitSection()}
+    </form>
   )
 }
 

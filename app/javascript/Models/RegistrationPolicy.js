@@ -29,9 +29,7 @@ export default class RegistrationPolicy {
     let returnRecord = this;
 
     if (json.buckets !== undefined) {
-      returnRecord = returnRecord.setBuckets(
-        json.buckets.map(bucket => RegistrationPolicyBucket.fromAPI(bucket)),
-      );
+      returnRecord = returnRecord.setBuckets(json.buckets.map(bucket => RegistrationPolicyBucket.fromAPI(bucket)));
     }
 
     return returnRecord;

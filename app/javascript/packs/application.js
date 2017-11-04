@@ -22,6 +22,7 @@ import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
 import StandaloneEditEvent from '../StandaloneEditEvent';
+import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
@@ -29,17 +30,17 @@ import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
-  ConventionAdmin,
+  ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   EventAdmin,
   FormPresenter,
-  RoomsAdmin,
-  ScheduleGrid,
+  RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
+  ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
   StaffPositionForm,
-  StandaloneEditEvent,
-  TeamMemberForm,
+  StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
+  TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketPurchaseForm,
   TicketTypeForm,
-  WhosFreeForm,
+  WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
 });
 
 Rails.start();

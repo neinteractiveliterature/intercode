@@ -22,7 +22,9 @@ type Props = {
   },
 };
 
-const FormItem = ({ formItem, convention, value, onChange }: Props) => {
+const FormItem = ({
+  formItem, convention, value, onChange }: 
+Props) => {
   const valueDidChange = (newValue) => {
     onChange(formItem.identifier, newValue);
   };
