@@ -10,19 +10,15 @@ class EventAdminRow extends React.Component {
       id: PropTypes.number.isRequired,
       category: PropTypes.string.isRequired,
       length_seconds: PropTypes.number.isRequired,
-      runs: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired,
-          starts_at: PropTypes.string.isRequired,
-          title_suffix: PropTypes.string,
-          schedule_note: PropTypes.string,
-          rooms: PropTypes.arrayOf(
-            PropTypes.shape({
-              name: PropTypes.string.isRequired,
-            }).isRequired,
-          ).isRequired,
-        }).isRequired,
-      ).isRequired,
+      runs: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        starts_at: PropTypes.string.isRequired,
+        title_suffix: PropTypes.string,
+        schedule_note: PropTypes.string,
+        rooms: PropTypes.arrayOf(PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        }).isRequired).isRequired,
+      }).isRequired).isRequired,
     }).isRequired,
 
     convention: PropTypes.shape({
@@ -75,9 +71,7 @@ class EventAdminRow extends React.Component {
 
   renderRuns = (event) => {
     if (this.state.expanded || event.runs.length <= 2) {
-      const sortedRuns = [...event.runs].sort(
-        (a, b) => moment(a.starts_at).diff(moment(b.starts_at)),
-      );
+      const sortedRuns = [...event.runs].sort((a, b) => moment(a.starts_at).diff(moment(b.starts_at)));
 
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>

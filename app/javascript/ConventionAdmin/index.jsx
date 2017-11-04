@@ -5,7 +5,6 @@ import gql from 'graphql-tag';
 import ConventionForm from '../BuiltInForms/ConventionForm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
-import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 
 const conventionFragment = gql`
 fragment ConventionAdminConventionFields on Convention {
@@ -51,7 +50,6 @@ mutation($input: UpdateConventionInput!) {
 ${conventionFragment}
 `;
 
-@StandaloneGraphQLComponent
 @compose(
   graphql(conventionQuery),
   graphql(updateConventionMutation, { name: 'updateConvention' }),

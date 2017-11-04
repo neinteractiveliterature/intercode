@@ -65,15 +65,11 @@ class TimeblockPreferenceItem extends React.Component {
   props: Props
 
   preferenceDidChange = (newOrdinality: string, hypotheticalPreference: TimeblockPreference) => {
-    const existingPreference = this.state.preferences.find(
-      p => preferencesMatch(p, hypotheticalPreference),
-    );
+    const existingPreference = this.state.preferences.find(p => preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
       this.setState({
-        preferences: this.state.preferences.filter(
-          p => (!(preferencesMatch(p, hypotheticalPreference))),
-        ),
+        preferences: this.state.preferences.filter(p => (!(preferencesMatch(p, hypotheticalPreference)))),
       }, this.preferencesDidChange);
     } else if (existingPreference) {
       this.setState({
@@ -174,7 +170,9 @@ class TimeblockPreferenceItem extends React.Component {
         return null;
       }
 
-      const cells = cellContents.map(({ dayStart, render, start, finish }) => (
+      const cells = cellContents.map(({
+        dayStart, render, start, finish,
+      }) => (
         <TimeblockPreferenceCell
           key={dayStart.format('dddd')}
           render={render}
@@ -185,7 +183,7 @@ class TimeblockPreferenceItem extends React.Component {
           finish={finish}
           onChange={this.preferenceDidChange}
         />
-        ));
+      ));
 
       return (
         <tr key={timeblock.label}>

@@ -119,9 +119,7 @@ class CommonEventFormFields extends React.Component {
   totalSlotsForVolunteerEventDidChange = (event) => {
     this.props.onChange({
       ...this.props.event,
-      registration_policy: CommonEventFormFields.buildRegistrationPolicyForVolunteerEvent(
-        parseInt(event.target.value, 10),
-      ),
+      registration_policy: CommonEventFormFields.buildRegistrationPolicyForVolunteerEvent(parseInt(event.target.value, 10)),
     });
   }
 
@@ -190,51 +188,45 @@ class CommonEventFormFields extends React.Component {
     );
   }
 
-  renderConMailDestinationField = this.regularEventFieldRenderer(
-    () => {
-      const choices = ['event_email', 'gms'].map(value => (
-        <BootstrapFormCheckbox
-          key={`con_mail_destination_${value}`}
-          type="radio"
-          name="con_mail_destination"
-          value={value}
-          checked={this.props.event.con_mail_destination === value}
-          onChange={this.formInputDidChange}
-          label="Event email address"
-        />
-      ));
-
-      return (
-        <fieldset className="form-group">
-          <legend className="col-form-legend">Send convention email to:</legend>
-          {choices}
-        </fieldset>
-      );
-    },
-  )
-
-  renderParticipantCommunicationsField = this.regularEventFieldRenderer(
-    () => (
-      <BootstrapFormTextarea
-        name="participant_communications"
-        label="Participant communications"
-        value={this.props.event.participant_communications}
+  renderConMailDestinationField = this.regularEventFieldRenderer(() => {
+    const choices = ['event_email', 'gms'].map(value => (
+      <BootstrapFormCheckbox
+        key={`con_mail_destination_${value}`}
+        type="radio"
+        name="con_mail_destination"
+        value={value}
+        checked={this.props.event.con_mail_destination === value}
         onChange={this.formInputDidChange}
-        rows={4}
+        label="Event email address"
       />
-    ),
-  )
+    ));
 
-  renderSimpleRegularEventInput = this.regularEventFieldRenderer(
-    (name, label) => (
-      <BootstrapFormInput
-        name={name}
-        label={label}
-        value={this.props.event[name]}
-        onChange={this.formInputDidChange}
-      />
-    ),
-  )
+    return (
+      <fieldset className="form-group">
+        <legend className="col-form-legend">Send convention email to:</legend>
+        {choices}
+      </fieldset>
+    );
+  })
+
+  renderParticipantCommunicationsField = this.regularEventFieldRenderer(() => (
+    <BootstrapFormTextarea
+      name="participant_communications"
+      label="Participant communications"
+      value={this.props.event.participant_communications}
+      onChange={this.formInputDidChange}
+      rows={4}
+    />
+  ))
+
+  renderSimpleRegularEventInput = this.regularEventFieldRenderer((name, label) => (
+    <BootstrapFormInput
+      name={name}
+      label={label}
+      value={this.props.event[name]}
+      onChange={this.formInputDidChange}
+    />
+  ))
 
   render = () => (
     <div>

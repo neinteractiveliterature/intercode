@@ -6,7 +6,7 @@ import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 
 function userSignupStatus(run) {
   if (run.my_signups.some(signup => signup.state === 'confirmed')) {
-    return 'confirmed'
+    return 'confirmed';
   } else if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
     return 'waitlisted';
   }
@@ -51,7 +51,9 @@ class ScheduleGridEventRun extends React.Component {
       return null;
     }
 
-    const { event, run, runDimensions, convention } = this.props;
+    const {
+      event, run, runDimensions, convention,
+    } = this.props;
     const timespan = runDimensions.eventRun.timespan;
 
     return (
@@ -148,7 +150,9 @@ class ScheduleGridEventRun extends React.Component {
   }
 
   render = () => {
-    const { layoutResult, runDimensions, event, run, className } = this.props;
+    const {
+      layoutResult, runDimensions, event, run, className,
+    } = this.props;
 
     const style = {
       top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
@@ -191,6 +195,6 @@ class ScheduleGridEventRun extends React.Component {
       </Manager>
     );
   }
-};
+}
 
 export default ScheduleGridEventRun;

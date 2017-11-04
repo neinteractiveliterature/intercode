@@ -40,7 +40,7 @@ function renderSection(
   section,
   response,
   responseValueChanged,
-  isUpdatingResponse
+  isUpdatingResponse,
 ) {
   const items = form.getItemsInSection(section.id).map(item => (
     <FormItem

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 
 const eventFragment = gql`
 fragment StandaloneEditEvent_EventFields on Event {
@@ -73,7 +72,6 @@ mutation($input: UpdateEventInput!) {
 ${eventFragment}
 `;
 
-@StandaloneGraphQLComponent
 @compose(
   graphql(eventQuery),
   graphql(updateEventMutation, { name: 'updateEvent' }),
@@ -90,7 +88,9 @@ class StandaloneEditEvent extends React.Component {
   };
 
   render = () => {
-    const { data, updateEvent, dropEvent, showDropButton } = this.props;
+    const {
+      data, updateEvent, dropEvent, showDropButton,
+    } = this.props;
 
     return (
       <EditEvent

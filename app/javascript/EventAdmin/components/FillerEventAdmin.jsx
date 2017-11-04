@@ -115,9 +115,7 @@ class FillerEventAdmin extends React.Component {
     this.setState(
       { requestInProgress: true },
       () => {
-        this.props.updateEvent({ variables: { input: eventInput } }).then(
-          () => this.props.updateRun({ variables: { input: runInput } }),
-        ).then(() => {
+        this.props.updateEvent({ variables: { input: eventInput } }).then(() => this.props.updateRun({ variables: { input: runInput } })).then(() => {
           this.props.history.push('/filler_events');
           this.setState({ requestInProgress: false });
         }).catch((error) => {
@@ -211,7 +209,9 @@ class FillerEventAdmin extends React.Component {
       <FillerEventForm
         disabled={this.state.requestInProgress}
         error={this.state.error ? this.state.error.message : null}
-        initialEvent={{ category: 'filler', email: '', short_blurb: '', description: '', title: '', runs: [{ rooms: [] }] }}
+        initialEvent={{
+ category: 'filler', email: '', short_blurb: '', description: '', title: '', runs: [{ rooms: [] }],
+}}
         convention={this.props.data.convention}
         cancelPath="/filler_events"
         onSave={this.createFillerEvent}

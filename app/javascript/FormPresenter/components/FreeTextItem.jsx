@@ -36,7 +36,7 @@ class FreeTextItem extends React.Component {
       />
       <RequiredIndicator formItem={formItem} />
     </label>
-    )
+  )
 
   renderInput = (formItem, domId) => {
     if (formItem.lines === 1) {

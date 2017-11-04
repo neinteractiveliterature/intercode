@@ -36,9 +36,7 @@ class TimeblockPreferenceCell extends React.Component {
 
     const hypotheticalPreference = this.getHypotheticalPreference();
 
-    const existingPreference = this.props.existingPreferences.find(
-      p => preferencesMatch(p, hypotheticalPreference),
-    );
+    const existingPreference = this.props.existingPreferences.find(p => preferencesMatch(p, hypotheticalPreference));
     let ordinality = '';
     if (existingPreference) {
       ordinality = existingPreference.ordinality;

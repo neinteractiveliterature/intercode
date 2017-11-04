@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import pluralize from 'pluralize';
 import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 
 const roomsQuery = gql`
 query {
@@ -65,7 +63,6 @@ mutation($input: DeleteRoomInput!) {
 }
 `;
 
-@StandaloneGraphQLComponent
 @compose(
   graphql(roomsQuery),
   graphql(createRoomMutation, { name: 'createRoom' }),

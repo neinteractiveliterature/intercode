@@ -3,9 +3,7 @@
 import moment from 'moment-timezone';
 import Timespan from './PCSG/Timespan';
 
-export function timespanFromConvention(
-  convention: { starts_at: string, ends_at: string, timezone_name: string},
-): Timespan {
+export function timespanFromConvention(convention: { starts_at: string, ends_at: string, timezone_name: string}): Timespan {
   return Timespan.fromStrings(convention.starts_at, convention.ends_at)
     .tz(convention.timezone_name);
 }

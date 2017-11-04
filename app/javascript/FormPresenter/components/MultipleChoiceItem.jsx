@@ -65,9 +65,7 @@ class MultipleChoiceItem extends React.Component {
   }
 
   render = () => {
-    const choices = this.props.formItem.properties.choices.map(
-      choice => this.renderChoice(choice),
-    );
+    const choices = this.props.formItem.properties.choices.map(choice => this.renderChoice(choice));
 
     return (
       <fieldset className="form-group">
