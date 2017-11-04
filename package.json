@@ -103,7 +103,7 @@
     "flow-bin": "^0.58.0",
     "jest": "^21.2.1",
     "react-test-renderer": "^16.0.0",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.4"
   },
   "scripts": {
     "test": "jest test/javascript",
