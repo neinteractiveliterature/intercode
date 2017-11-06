@@ -94,7 +94,7 @@
     "babel-preset-minify": "^0.2.0",
     "babili-webpack-plugin": "^0.1.2",
     "enzyme": "^3.1.1",
-    "enzyme-adapter-react-16": "^1.0.3",
+    "enzyme-adapter-react-16": "^1.0.4",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-flowtype": "^2.39.1",
