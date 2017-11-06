@@ -4,12 +4,30 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+import { humanize } from 'inflected';
+import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { getStateChangeForCheckboxChange } from '../FormUtils';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import ErrorDisplay from '../ErrorDisplay';
+import pluralizeWithCount from '../pluralizeWithCount';
+
+const ticketFragment = gql`
+fragment TeamMemberTicketFields on Ticket {
+  id
+
+  ticket_type {
+    name
+  }
+
+  provided_by_event {
+    id
+    title
+  }
+}
+`;
 
 const teamMemberFragment = gql`
 fragment TeamMemberFields on TeamMember {
@@ -21,20 +39,22 @@ fragment TeamMemberFields on TeamMember {
 
   user_con_profile {
     id
-    ticket {
-      id
+    name_without_nickname
 
-      provided_by_event {
-        id
-      }
+    ticket {
+      ...TeamMemberTicketFields
     }
   }
 }
+
+${ticketFragment}
 `;
 
 const teamMemberQuery = gql`
 query($eventId: Int!) {
   convention {
+    name
+
     ticket_types {
       id
       name
@@ -44,10 +64,17 @@ query($eventId: Int!) {
   }
 
   event(id: $eventId) {
+    title
     team_member_name
 
     team_members {
       ...TeamMemberFields
+    }
+
+    provided_tickets {
+      ticket_type {
+        id
+      }
     }
   }
 }
@@ -91,11 +118,40 @@ mutation($input: UpdateTeamMemberInput!) {
 ${teamMemberFragment}
 `;
 
+const provideEventTicketMutation = gql`
+mutation($input: ProvideEventTicketInput!) {
+  provideEventTicket(input: $input) {
+    ticket {
+      ...TeamMemberTicketFields
+    }
+  }
+}
+
+${ticketFragment}
+`;
+
 @compose(
   graphql(teamMemberQuery),
   graphql(createTeamMemberMutation, { name: 'createTeamMember' }),
   graphql(deleteTeamMemberMutation, { name: 'deleteTeamMember' }),
   graphql(updateTeamMemberMutation, { name: 'updateTeamMember' }),
+  graphql(provideEventTicketMutation, {
+    props: ({ mutate }) => ({
+      provideEventTicket: (eventId, userConProfileId, ticketTypeId, options) => {
+        debugger;
+        mutate({
+          variables: {
+            input: {
+              event_id: eventId,
+              user_con_profile_id: userConProfileId,
+              ticket_type_id: ticketTypeId,
+            },
+          },
+          options: options || {},
+        });
+      },
+    }),
+  }),
 )
 @GraphQLQueryResultWrapper
 class TeamMemberForm extends React.Component {
@@ -107,6 +163,7 @@ class TeamMemberForm extends React.Component {
     createTeamMember: PropTypes.func.isRequired,
     deleteTeamMember: PropTypes.func.isRequired,
     updateTeamMember: PropTypes.func.isRequired,
+    provideEventTicket: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -211,6 +268,34 @@ class TeamMemberForm extends React.Component {
     }
   }
 
+  provideEventTicketForExistingTeamMember = async (ticketTypeId) => {
+    this.setState({ requestInProgress: true });
+
+    try {
+      await this.props.provideEventTicket(
+        this.props.eventId,
+        this.state.teamMember.user_con_profile.id,
+        ticketTypeId,
+        {
+          update: (store, { data: { provideEventTicket: { ticket } } }) => {
+            const data = store.readQuery(teamMemberQuery);
+            const teamMemberToUpdate = data.event.team_members.find(teamMember =>
+              teamMember.user_con_profile.id === this.state.teamMember.user_con_profile.id);
+            teamMemberToUpdate.user_con_profile.ticket = ticket;
+
+            debugger;
+
+            store.writeQuery({ query: teamMemberQuery, data });
+          },
+        },
+      );
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ requestInProgress: false });
+    }
+  }
+
   renderDeleteButtonItem = (submitDisabled) => {
     if (!this.state.teamMember.id) {
       return null;
@@ -284,11 +369,113 @@ class TeamMemberForm extends React.Component {
     ))
   )
 
+  renderTicketingSection = () => {
+    const statusDescription = [];
+    const providableTicketTypes = this.props.data.convention.ticket_types.filter((
+      ticketType => ticketType.maximum_event_provided_tickets > 0
+    ));
+    const providedTicketCountByType = Object.assign(
+      {},
+      ...providableTicketTypes.map((
+        ticketType => ({
+          [ticketType.id]: this.props.data.event.provided_tickets.filter((
+            ticket => ticket.ticket_type.id === ticketType.id
+          )).length,
+        })
+      )),
+    );
+
+    let ticketingControls = null;
+
+    if (this.state.teamMember.id) {
+      statusDescription.push(this.state.teamMember.user_con_profile.name_without_nickname);
+
+      const existingTicket = this.state.teamMember.user_con_profile.ticket
+
+      if (existingTicket) {
+        statusDescription.push(` has a ${humanize(existingTicket.ticket_type.name).toLowerCase()} ticket`);
+        if (existingTicket.provided_by_event) {
+          statusDescription.push(` provided by ${existingTicket.provided_by_event.title}`);
+        }
+      } else {
+        statusDescription.push((
+          <span key="unticketed-warning">
+            <span className="text-danger"> is unticketed for {this.props.data.convention.name}.</span>
+            {' '}
+              Without a ticket, users cannot sign up for events at the convention
+          </span>
+        ));
+
+        const providableTicketTypeDescriptions = providableTicketTypes.map((ticketType) => {
+          const remaining = (
+            ticketType.maximum_event_provided_tickets -
+            providedTicketCountByType[ticketType.id]
+          );
+
+          return pluralizeWithCount(`${humanize(ticketType.name).toLowerCase()} ticket`, remaining);
+        });
+
+        const providabilityDescription = [
+          `${this.props.data.event.title} has`,
+          (
+            providableTicketTypeDescriptions.length > 0 ?
+              arrayToSentence(providableTicketTypeDescriptions) :
+              'no tickets'
+          ),
+          'remaining to provide',
+        ].join(' ');
+
+        const providableTicketTypesWithRemainingTickets =
+          providableTicketTypes.filter(ticketType =>
+            ticketType.maximum_event_provided_tickets > providedTicketCountByType[ticketType.id]);
+
+        const provideButtons = providableTicketTypesWithRemainingTickets.map(ticketType => (
+          <li className="list-inline-item" key={ticketType.id}>
+            <button
+              className="btn btn-success"
+              onClick={() => { this.provideEventTicketForExistingTeamMember(ticketType.id); }}
+              disabled={this.state.requestInProgress}
+            >
+              Provide {humanize(ticketType.name).toLowerCase()} ticket
+            </button>
+          </li>
+        ));
+
+        ticketingControls = (
+          <div className="mt-3">
+            <div>
+              {providabilityDescription}.
+            </div>
+
+            <ul className="list-inline mt-2 mb-0">{provideButtons}</ul>
+          </div>
+        );
+      }
+
+      statusDescription.push('.');
+    } else {
+      // TODO figure out how to handle ticketed users in the case of a new team member
+    }
+
+    return (
+      <section className="card bg-light my-4">
+        <div className="card-body">
+          <h5 className="mb-3">Ticketing</h5>
+
+          <p className="m-0">{statusDescription}</p>
+
+          {ticketingControls}
+        </div>
+      </section>
+    );
+  }
+
   render = () => (
     <form>
       <ErrorDisplay graphQLError={this.state.error} />
       {this.renderUserConProfileSelect()}
       {this.renderCheckboxes()}
+      {this.renderTicketingSection()}
 
       <ConfirmModal
         title="Confirmation"
