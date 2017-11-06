@@ -12,6 +12,8 @@ class MutationErrorHandler
       GraphQL::ExecutionError.new(
         "Invalid input for #{err.record.class.name}: #{err.record.errors.full_messages.join(', ')}"
       )
+    rescue ApplicationService::ServiceFailure => err
+      GraphQL::ExecutionError.new(err.result.errors.full_messages.join(', '))
     end
   end
 end

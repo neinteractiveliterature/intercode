@@ -5,6 +5,7 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field :convention, Types::ConventionType
   field :privileges, types[types.String]
   field :name, types.String
+  field :name_without_nickname, types.String
   field :first_name, types.String
   field :last_name, types.String
   field :nickname, types.String

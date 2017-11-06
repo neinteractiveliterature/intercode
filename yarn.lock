@@ -281,6 +281,10 @@ array-includes@^3.0.3:
     define-properties "^1.1.2"
     es-abstract "^1.7.0"
 
+array-to-sentence@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/array-to-sentence/-/array-to-sentence-1.1.0.tgz#c804956dafa53232495b205a9452753a258d39fc"
+
 array-union@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/array-union/-/array-union-1.0.2.tgz#9a34410e4f4e3da23dea375be5be70f24778ec39"
@@ -3680,6 +3684,10 @@ indexes-of@^1.0.1:
 indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
+
+inflected@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/inflected/-/inflected-2.0.2.tgz#1bc31ac427ca5321b2a16cc56d6ff29fcd2ff80c"
 
 inflight@^1.0.4:
   version "1.0.6"

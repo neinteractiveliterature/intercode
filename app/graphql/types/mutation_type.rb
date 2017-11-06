@@ -91,4 +91,11 @@ Types::MutationType = GraphQL::ObjectType.define do
       ctx[:current_ability].can?(:update, TeamMember.find(args[:id]))
     }
   end
+
+  field :provideEventTicket, Mutations::ProvideEventTicket.field do
+    guard -> (_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:event_id])
+      ctx[:current_ability].can?(:update, event.team_members.new)
+    }
+  end
 end
