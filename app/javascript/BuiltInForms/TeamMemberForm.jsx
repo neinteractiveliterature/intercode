@@ -18,7 +18,12 @@ const ticketFragment = gql`
 fragment TeamMemberTicketFields on Ticket {
   id
 
+  user_con_profile {
+    id
+  }
+
   ticket_type {
+    id
     name
   }
 
@@ -130,15 +135,59 @@ mutation($input: ProvideEventTicketInput!) {
 ${ticketFragment}
 `;
 
+const buildTeamMemberInput = teamMember => ({
+  display: teamMember.display,
+  show_email: teamMember.show_email,
+  receive_con_email: teamMember.receive_con_email,
+  receive_signup_email: teamMember.receive_signup_email,
+});
+
+const describeTicketType = ticketType => `${humanize(ticketType.name).toLowerCase()} ticket`;
+
+const describeTicketTypeProvidability = (ticketType, alreadyProvidedCount) => {
+  const remaining = (
+    ticketType.maximum_event_provided_tickets - alreadyProvidedCount
+  );
+
+  return pluralizeWithCount(describeTicketType(ticketType), remaining);
+};
+
 @compose(
   graphql(teamMemberQuery),
-  graphql(createTeamMemberMutation, { name: 'createTeamMember' }),
+  graphql(createTeamMemberMutation, {
+    props: ({ mutate }) => ({
+      createTeamMember: (eventId, userConProfileId, teamMember, provideTicketTypeId) => {
+        mutate({
+          variables: {
+            input: {
+              event_id: eventId,
+              user_con_profile_id: userConProfileId,
+              team_member: buildTeamMemberInput(teamMember),
+              provide_ticket_type_id: provideTicketTypeId,
+            },
+          },
+        });
+      },
+    }),
+  }),
   graphql(deleteTeamMemberMutation, { name: 'deleteTeamMember' }),
-  graphql(updateTeamMemberMutation, { name: 'updateTeamMember' }),
+  graphql(updateTeamMemberMutation, {
+    props: ({ mutate }) => ({
+      updateTeamMember: (teamMember) => {
+        mutate({
+          variables: {
+            input: {
+              id: teamMember.id,
+              team_member: buildTeamMemberInput(teamMember),
+            },
+          },
+        });
+      },
+    }),
+  }),
   graphql(provideEventTicketMutation, {
     props: ({ mutate }) => ({
-      provideEventTicket: (eventId, userConProfileId, ticketTypeId, options) => {
-        debugger;
+      provideEventTicket: (eventId, userConProfileId, ticketTypeId) => {
         mutate({
           variables: {
             input: {
@@ -147,7 +196,15 @@ ${ticketFragment}
               ticket_type_id: ticketTypeId,
             },
           },
-          options: options || {},
+          update: (proxy, { data: { provideEventTicket: { ticket } } }) => {
+            const data = proxy.readQuery({ query: teamMemberQuery, variables: { eventId } });
+            data.event.provided_tickets.push(ticket);
+            const teamMemberToUpdate = data.event.team_members.find(teamMember =>
+              teamMember.user_con_profile.id === ticket.user_con_profile.id);
+            teamMemberToUpdate.user_con_profile.ticket = ticket;
+
+            proxy.writeQuery({ query: teamMemberQuery, variables: { eventId }, data });
+          },
         });
       },
     }),
@@ -176,7 +233,9 @@ class TeamMemberForm extends React.Component {
 
     this.state = {
       confirmingDelete: false,
+      confirmingProvideEventTicketTypeId: null,
       requestInProgress: false,
+      provideTicketTypeId: null,
     };
 
     if (this.props.teamMemberId) {
@@ -234,30 +293,18 @@ class TeamMemberForm extends React.Component {
 
     const { teamMember } = this.state;
 
-    const teamMemberInput = {
-      display: teamMember.display,
-      show_email: teamMember.show_email,
-      receive_con_email: teamMember.receive_con_email,
-      receive_signup_email: teamMember.receive_signup_email,
-    };
-
     this.setState({ requestInProgress: true });
 
     try {
       if (this.state.teamMember.id) {
-        await this.props.updateTeamMember({
-          variables: { input: { id: teamMember.id, team_member: teamMemberInput } },
-        });
+        await this.props.updateTeamMember(teamMember);
       } else {
-        await this.props.createTeamMember({
-          variables: {
-            input: {
-              event_id: this.props.eventId,
-              user_con_profile_id: teamMember.user_con_profile_id,
-              team_member: teamMemberInput,
-            },
-          },
-        });
+        await this.props.createTeamMember(
+          this.props.eventId,
+          teamMember.userConProfileId,
+          teamMember,
+          this.state.provideTicketTypeId,
+        );
       }
 
       window.location.href = this.props.baseUrl;
@@ -268,26 +315,25 @@ class TeamMemberForm extends React.Component {
     }
   }
 
-  provideEventTicketForExistingTeamMember = async (ticketTypeId) => {
-    this.setState({ requestInProgress: true });
+  provideEventTicketForExistingTeamMemberClicked = (event, ticketTypeId) => {
+    event.preventDefault();
+    this.setState({ confirmingProvideEventTicketTypeId: ticketTypeId });
+  }
+
+  provideEventTicketForExistingTeamMemberCanceled = (event) => {
+    event.preventDefault();
+    this.setState({ confirmingProvideEventTicketTypeId: null });
+  }
+
+  provideEventTicketForExistingTeamMemberConfirmed = async () => {
+    const ticketTypeId = this.state.confirmingProvideEventTicketTypeId;
+    this.setState({ confirmingProvideEventTicketTypeId: null, requestInProgress: true });
 
     try {
       await this.props.provideEventTicket(
         this.props.eventId,
         this.state.teamMember.user_con_profile.id,
         ticketTypeId,
-        {
-          update: (store, { data: { provideEventTicket: { ticket } } }) => {
-            const data = store.readQuery(teamMemberQuery);
-            const teamMemberToUpdate = data.event.team_members.find(teamMember =>
-              teamMember.user_con_profile.id === this.state.teamMember.user_con_profile.id);
-            teamMemberToUpdate.user_con_profile.ticket = ticket;
-
-            debugger;
-
-            store.writeQuery({ query: teamMemberQuery, data });
-          },
-        },
       );
     } catch (error) {
       this.setState({ error });
@@ -390,10 +436,12 @@ class TeamMemberForm extends React.Component {
     if (this.state.teamMember.id) {
       statusDescription.push(this.state.teamMember.user_con_profile.name_without_nickname);
 
-      const existingTicket = this.state.teamMember.user_con_profile.ticket
+      const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
+        teamMember.id === this.state.teamMember.id);
+      const existingTicket = teamMemberFromData.user_con_profile.ticket;
 
       if (existingTicket) {
-        statusDescription.push(` has a ${humanize(existingTicket.ticket_type.name).toLowerCase()} ticket`);
+        statusDescription.push(` has a ${describeTicketType(existingTicket.ticket_type)}`);
         if (existingTicket.provided_by_event) {
           statusDescription.push(` provided by ${existingTicket.provided_by_event.title}`);
         }
@@ -406,14 +454,8 @@ class TeamMemberForm extends React.Component {
           </span>
         ));
 
-        const providableTicketTypeDescriptions = providableTicketTypes.map((ticketType) => {
-          const remaining = (
-            ticketType.maximum_event_provided_tickets -
-            providedTicketCountByType[ticketType.id]
-          );
-
-          return pluralizeWithCount(`${humanize(ticketType.name).toLowerCase()} ticket`, remaining);
-        });
+        const providableTicketTypeDescriptions = providableTicketTypes.map(ticketType =>
+          describeTicketTypeProvidability(ticketType, providedTicketCountByType[ticketType.id]));
 
         const providabilityDescription = [
           `${this.props.data.event.title} has`,
@@ -433,10 +475,12 @@ class TeamMemberForm extends React.Component {
           <li className="list-inline-item" key={ticketType.id}>
             <button
               className="btn btn-success"
-              onClick={() => { this.provideEventTicketForExistingTeamMember(ticketType.id); }}
+              onClick={(event) => {
+                this.provideEventTicketForExistingTeamMemberClicked(event, ticketType.id);
+              }}
               disabled={this.state.requestInProgress}
             >
-              Provide {humanize(ticketType.name).toLowerCase()} ticket
+              Provide {describeTicketType(ticketType)}
             </button>
           </li>
         ));
@@ -484,6 +528,17 @@ class TeamMemberForm extends React.Component {
         visible={this.state.confirmingDelete}
       >
         {`Are you sure you want to remove this ${this.props.data.event.team_member_name}?`}
+      </ConfirmModal>
+
+      <ConfirmModal
+        onOK={this.provideEventTicketForExistingTeamMemberConfirmed}
+        onCancel={this.provideEventTicketForExistingTeamMemberCanceled}
+        visible={this.state.confirmingProvideEventTicketTypeId != null}
+      >
+        Are you sure you want to provide a ticket to
+        {' '}
+        {(this.state.teamMember.user_con_profile || {}).name_without_nickname}?
+        This will use up one of {this.props.data.event.title}&apos;s tickets.
       </ConfirmModal>
 
       {this.renderSubmitSection()}

@@ -17,4 +17,6 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :rooms, types[Types::RoomType]
   field :maximum_event_signups, Types::ScheduledValueType
   field :ticket_types, types[Types::TicketTypeType]
+
+  field :user_con_profiles, Types::UserConProfile.connection_type, max_page_size: 1000
 end
