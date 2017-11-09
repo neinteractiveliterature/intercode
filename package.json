@@ -5,8 +5,8 @@
   },
   "dependencies": {
     "@rails/webpacker": "^3.0.2",
-    "apollo-cache-inmemory": "^1.0.0",
-    "apollo-client": "^2.0.1",
+    "apollo-cache-inmemory": "^1.1.0",
+    "apollo-client": "^2.0.2",
     "apollo-link": "^1.0.0",
     "apollo-link-http": "^1.1.0",
     "array-to-sentence": "^1.1.0",
@@ -86,7 +86,7 @@
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "^8.0.2",
     "babel-minify": "^0.2.0",
     "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-transform-decorators": "^6.24.1",
