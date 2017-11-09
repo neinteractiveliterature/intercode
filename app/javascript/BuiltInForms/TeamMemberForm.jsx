@@ -80,6 +80,7 @@ query($eventId: Int!) {
   event(id: $eventId) {
     title
     team_member_name
+    can_provide_tickets
 
     team_members {
       ...TeamMemberFields
@@ -446,7 +447,7 @@ class TeamMemberForm extends React.Component {
     return (
       <div className="form-group">
         <label htmlFor={userConProfileSelectId}>
-          {`${this.props.data.event.team_member_name} name`}
+          {`${humanize(this.props.data.event.team_member_name)}`}
         </label>
         <UserConProfileSelect
           id={userConProfileSelectId}
@@ -476,6 +477,10 @@ class TeamMemberForm extends React.Component {
   )
 
   renderTicketingSection = () => {
+    if (!this.props.data.event.can_provide_tickets) {
+      return null;
+    }
+
     let statusDescription;
     const providableTicketTypes = this.props.data.convention.ticket_types.filter((
       ticketType => ticketType.maximum_event_provided_tickets > 0

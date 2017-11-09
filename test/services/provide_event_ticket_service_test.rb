@@ -31,6 +31,16 @@ describe ProvideEventTicketService do
     end
   end
 
+  describe 'if the event cannot provide tickets' do
+    let(:event) { FactoryBot.create(:event, category: 'filler', convention: convention) }
+
+    it 'fails' do
+      result = service.call
+      assert result.failure?
+      assert_match /cannot provide tickets/, result.errors.full_messages.join("\n")
+    end
+  end
+
   describe 'if the ticket type is not event-providable' do
     let(:ticket_type) { FactoryBot.create(:paid_ticket_type, convention: convention) }
 

@@ -23,6 +23,7 @@ Types::EventType = GraphQL::ObjectType.define do
   end
   field :team_member_name, !types.String
   field :provided_tickets, !types[!Types::TicketType]
+  field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
 
   field :registration_policy, Types::RegistrationPolicyType
 
