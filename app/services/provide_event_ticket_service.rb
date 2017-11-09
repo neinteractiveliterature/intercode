@@ -8,6 +8,7 @@ class ProvideEventTicketService < ApplicationService
 
   self.validate_manually = true
   validate :ticket_type_must_be_providable
+  validate :event_must_be_able_to_provide_tickets
   validate :event_must_have_remaining_tickets_of_type
   validate :user_con_profile_must_not_have_ticket
 
@@ -40,6 +41,12 @@ class ProvideEventTicketService < ApplicationService
   def ticket_type_must_be_providable
     if ticket_type.maximum_event_provided_tickets < 1
       errors.add :base, "#{ticket_type.name} tickets cannot be provided by events"
+    end
+  end
+
+  def event_must_be_able_to_provide_tickets
+    unless event.can_provide_tickets?
+      errors.add :base, "#{event.title} cannot provide tickets to attendees"
     end
   end
 
