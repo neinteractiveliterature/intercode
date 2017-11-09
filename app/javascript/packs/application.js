@@ -15,6 +15,8 @@ import 'bootstrap.native/dist/bootstrap-native-v4';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
+import '../inflections';
+
 import ConventionAdmin from '../ConventionAdmin';
 import EventAdmin from '../EventAdmin';
 import FormPresenter from '../FormPresenter';
