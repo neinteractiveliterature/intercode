@@ -4,7 +4,7 @@ class EventsController < ApplicationController
 
   # List the available LARPs
   def index
-    @events = Event.title_sort(@events.active)
+    @events = Event.title_sort(@events.active.where.not(category: 'filler'))
     @page_title = "Event List"
     respond_with @events
   end
