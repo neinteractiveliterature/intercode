@@ -7,6 +7,7 @@ import { ConfirmModal } from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { getStateChangeForCheckboxChange } from '../FormUtils';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -34,6 +35,19 @@ fragment TeamMemberTicketFields on Ticket {
 }
 `;
 
+const userConProfileFragment = gql`
+fragment TeamMemberUserConProfileFields on UserConProfile {
+  id
+  name_without_nickname
+
+  ticket {
+    ...TeamMemberTicketFields
+  }
+}
+
+${ticketFragment}
+`;
+
 const teamMemberFragment = gql`
 fragment TeamMemberFields on TeamMember {
   id
@@ -43,16 +57,11 @@ fragment TeamMemberFields on TeamMember {
   receive_signup_email
 
   user_con_profile {
-    id
-    name_without_nickname
-
-    ticket {
-      ...TeamMemberTicketFields
-    }
+    ...TeamMemberUserConProfileFields
   }
 }
 
-${ticketFragment}
+${userConProfileFragment}
 `;
 
 const teamMemberQuery = gql`
@@ -85,6 +94,27 @@ query($eventId: Int!) {
 }
 
 ${teamMemberFragment}
+`;
+
+const userConProfilesQuery = gql`
+query($cursor: String) {
+  convention {
+    user_con_profiles(first: 1000, after: $cursor) {
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+
+      edges {
+        node {
+          ...TeamMemberUserConProfileFields
+        }
+      }
+    }
+  }
+}
+
+${userConProfileFragment}
 `;
 
 const createTeamMemberMutation = gql`
@@ -152,61 +182,79 @@ const describeTicketTypeProvidability = (ticketType, alreadyProvidedCount) => {
   return pluralizeWithCount(describeTicketType(ticketType), remaining);
 };
 
+const describeTicketingStatus = (userConProfile, existingTicket, convention) => {
+  const statusDescription = [];
+  statusDescription.push(userConProfile.name_without_nickname);
+
+  if (existingTicket) {
+    statusDescription.push(` has a ${describeTicketType(existingTicket.ticket_type)}`);
+    if (existingTicket.provided_by_event) {
+      statusDescription.push(` provided by ${existingTicket.provided_by_event.title}`);
+    }
+  } else {
+    statusDescription.push((
+      <span key="unticketed-warning">
+        <span className="text-danger"> is unticketed for {convention.name}.</span>
+        {' '}
+          Without a ticket, users cannot sign up for events at the convention
+      </span>
+    ));
+  }
+
+  statusDescription.push('.');
+
+  return statusDescription;
+}
+
 @compose(
   graphql(teamMemberQuery),
   graphql(createTeamMemberMutation, {
     props: ({ mutate }) => ({
-      createTeamMember: (eventId, userConProfileId, teamMember, provideTicketTypeId) => {
-        mutate({
-          variables: {
-            input: {
-              event_id: eventId,
-              user_con_profile_id: userConProfileId,
-              team_member: buildTeamMemberInput(teamMember),
-              provide_ticket_type_id: provideTicketTypeId,
-            },
+      createTeamMember: (eventId, userConProfileId, teamMember, provideTicketTypeId) => mutate({
+        variables: {
+          input: {
+            event_id: eventId,
+            user_con_profile_id: userConProfileId,
+            team_member: buildTeamMemberInput(teamMember),
+            provide_ticket_type_id: provideTicketTypeId,
           },
-        });
-      },
+        },
+      }),
     }),
   }),
   graphql(deleteTeamMemberMutation, { name: 'deleteTeamMember' }),
   graphql(updateTeamMemberMutation, {
     props: ({ mutate }) => ({
-      updateTeamMember: (teamMember) => {
-        mutate({
-          variables: {
-            input: {
-              id: teamMember.id,
-              team_member: buildTeamMemberInput(teamMember),
-            },
+      updateTeamMember: teamMember => mutate({
+        variables: {
+          input: {
+            id: teamMember.id,
+            team_member: buildTeamMemberInput(teamMember),
           },
-        });
-      },
+        },
+      }),
     }),
   }),
   graphql(provideEventTicketMutation, {
     props: ({ mutate }) => ({
-      provideEventTicket: (eventId, userConProfileId, ticketTypeId) => {
-        mutate({
-          variables: {
-            input: {
-              event_id: eventId,
-              user_con_profile_id: userConProfileId,
-              ticket_type_id: ticketTypeId,
-            },
+      provideEventTicket: (eventId, userConProfileId, ticketTypeId) => mutate({
+        variables: {
+          input: {
+            event_id: eventId,
+            user_con_profile_id: userConProfileId,
+            ticket_type_id: ticketTypeId,
           },
-          update: (proxy, { data: { provideEventTicket: { ticket } } }) => {
-            const data = proxy.readQuery({ query: teamMemberQuery, variables: { eventId } });
-            data.event.provided_tickets.push(ticket);
-            const teamMemberToUpdate = data.event.team_members.find(teamMember =>
-              teamMember.user_con_profile.id === ticket.user_con_profile.id);
-            teamMemberToUpdate.user_con_profile.ticket = ticket;
+        },
+        update: (proxy, { data: { provideEventTicket: { ticket } } }) => {
+          const data = proxy.readQuery({ query: teamMemberQuery, variables: { eventId } });
+          data.event.provided_tickets.push(ticket);
+          const teamMemberToUpdate = data.event.team_members.find(teamMember =>
+            teamMember.user_con_profile.id === ticket.user_con_profile.id);
+          teamMemberToUpdate.user_con_profile.ticket = ticket;
 
-            proxy.writeQuery({ query: teamMemberQuery, variables: { eventId }, data });
-          },
-        });
-      },
+          proxy.writeQuery({ query: teamMemberQuery, variables: { eventId }, data });
+        },
+      }),
     }),
   }),
 )
@@ -243,13 +291,20 @@ class TeamMemberForm extends React.Component {
         .find(teamMember => teamMember.id === this.props.teamMemberId);
     } else {
       this.state.teamMember = {
-        user_con_profile_id: null,
+        user_con_profile: null,
         display: true,
         show_email: true,
         receive_con_email: true,
         receive_signup_email: false,
       };
     }
+  }
+
+  getExistingTicket = () => {
+    const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
+      teamMember.id === this.state.teamMember.id);
+    // TODO figure out how to get ticket data onto an autocompleted user con profile
+    const existingTicket = teamMemberFromData.user_con_profile.ticket;
   }
 
   getSubmitText = () => (
@@ -266,8 +321,12 @@ class TeamMemberForm extends React.Component {
 
   userConProfileIdChanged = (selection) => {
     this.setState({
-      teamMember: { ...this.state.teamMember, user_con_profile_id: selection.value },
+      teamMember: { ...this.state.teamMember, user_con_profile: selection.data },
     });
+  }
+
+  provideTicketTypeIdChanged = (value) => {
+    this.setState({ provideTicketTypeId: value === '' ? null : parseInt(value, 10) });
   }
 
   deleteClicked = () => {
@@ -301,7 +360,7 @@ class TeamMemberForm extends React.Component {
       } else {
         await this.props.createTeamMember(
           this.props.eventId,
-          teamMember.userConProfileId,
+          teamMember.user_con_profile.id,
           teamMember,
           this.state.provideTicketTypeId,
         );
@@ -391,8 +450,9 @@ class TeamMemberForm extends React.Component {
         </label>
         <UserConProfileSelect
           id={userConProfileSelectId}
-          value={this.state.teamMember.user_con_profile_id}
+          value={(this.state.teamMember.user_con_profile || {}).id}
           onChange={this.userConProfileIdChanged}
+          userConProfilesQuery={userConProfilesQuery}
         />
       </div>
     );
@@ -416,7 +476,7 @@ class TeamMemberForm extends React.Component {
   )
 
   renderTicketingSection = () => {
-    const statusDescription = [];
+    let statusDescription;
     const providableTicketTypes = this.props.data.convention.ticket_types.filter((
       ticketType => ticketType.maximum_event_provided_tickets > 0
     ));
@@ -431,29 +491,24 @@ class TeamMemberForm extends React.Component {
       )),
     );
 
+    if (providableTicketTypes.length < 1) {
+      return null;
+    }
+
     let ticketingControls = null;
 
     if (this.state.teamMember.id) {
-      statusDescription.push(this.state.teamMember.user_con_profile.name_without_nickname);
-
       const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
         teamMember.id === this.state.teamMember.id);
       const existingTicket = teamMemberFromData.user_con_profile.ticket;
 
-      if (existingTicket) {
-        statusDescription.push(` has a ${describeTicketType(existingTicket.ticket_type)}`);
-        if (existingTicket.provided_by_event) {
-          statusDescription.push(` provided by ${existingTicket.provided_by_event.title}`);
-        }
-      } else {
-        statusDescription.push((
-          <span key="unticketed-warning">
-            <span className="text-danger"> is unticketed for {this.props.data.convention.name}.</span>
-            {' '}
-              Without a ticket, users cannot sign up for events at the convention
-          </span>
-        ));
+      statusDescription = describeTicketingStatus(
+        teamMemberFromData.user_con_profile,
+        existingTicket,
+        this.props.data.convention,
+      );
 
+      if (!existingTicket) {
         const providableTicketTypeDescriptions = providableTicketTypes.map(ticketType =>
           describeTicketTypeProvidability(ticketType, providedTicketCountByType[ticketType.id]));
 
@@ -495,10 +550,44 @@ class TeamMemberForm extends React.Component {
           </div>
         );
       }
-
-      statusDescription.push('.');
     } else {
-      // TODO figure out how to handle ticketed users in the case of a new team member
+      if (!this.state.teamMember.user_con_profile) {
+        return null;
+      }
+
+      const existingTicket = this.state.teamMember.user_con_profile.ticket;
+      statusDescription = describeTicketingStatus(
+        this.state.teamMember.user_con_profile,
+        existingTicket,
+        this.props.data.convention,
+      );
+
+      if (!existingTicket) {
+        const choices = providableTicketTypes.map((ticketType) => {
+          const remaining = (
+            ticketType.maximum_event_provided_tickets - providedTicketCountByType[ticketType.id]
+          );
+
+          return {
+            label: `Provide ${describeTicketType(ticketType)} (${remaining} remaining)`,
+            value: ticketType.id.toString(),
+            disabled: remaining < 1,
+          };
+        });
+
+        ticketingControls = (
+          <MultipleChoiceInput
+            name="provideTicketTypeId"
+            caption=""
+            choices={[
+              { label: 'Don\'t provide a ticket at this time', value: '' },
+              ...choices,
+            ]}
+            value={this.state.provideTicketTypeId == null ? '' : this.state.provideTicketTypeId.toString()}
+            onChange={this.provideTicketTypeIdChanged}
+          />
+        );
+      }
     }
 
     return (
