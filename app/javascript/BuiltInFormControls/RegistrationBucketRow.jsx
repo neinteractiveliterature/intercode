@@ -1,27 +1,22 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
-import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 import InPlaceEditor from './InPlaceEditor';
-
-type Props = {
-  registrationBucket: RegistrationPolicyBucket,
-  onChange: (string, RegistrationPolicyBucket) => void,
-  onDelete: (string) => void,
-  lockNameAndDescription: ?boolean,
-  lockLimited: ?boolean,
-  lockDelete: ?boolean,
-  showKey: ?boolean,
-};
-
-type State = {
-  isConfirmingDelete: boolean,
-};
+import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 
 class RegistrationBucketRow extends React.Component {
+  static propTypes = {
+    registrationBucket: RegistrationPolicyBucket.propType.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    lockNameAndDescription: PropTypes.bool,
+    lockLimited: PropTypes.bool,
+    lockDelete: PropTypes.bool,
+    showKey: PropTypes.bool,
+  };
+
   static defaultProps = {
     lockNameAndDescription: false,
     lockLimited: false,
@@ -29,57 +24,53 @@ class RegistrationBucketRow extends React.Component {
     showKey: true,
   };
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
   }
 
-  state: State = {
+  state = {
     isConfirmingDelete: false,
   };
 
-  props: Props
-
-  nextUniqueId: () => string
-
-  bucketPropChanged = (propName: string, newValue: string) => {
+  bucketPropChanged = (propName, newValue) => {
     const originalKey = this.props.registrationBucket.get('key');
     this.props.onChange(originalKey, this.props.registrationBucket.set(propName, newValue));
   }
 
-  keyChanged = (newKey: string) => this.bucketPropChanged('key', newKey)
-  nameChanged = (newName: string) => this.bucketPropChanged('name', newName)
-  descriptionChanged = (newDescription: string) => this.bucketPropChanged('description', newDescription)
+  keyChanged = newKey => this.bucketPropChanged('key', newKey)
+  nameChanged = newName => this.bucketPropChanged('name', newName)
+  descriptionChanged = newDescription => this.bucketPropChanged('description', newDescription)
 
-  minimumSlotsChanged = (event: SyntheticInputEvent) => {
+  minimumSlotsChanged = (event) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setMinimumSlots(parseInt(event.target.value, 10)),
     );
   }
 
-  preferredSlotsChanged = (event: SyntheticInputEvent) => {
+  preferredSlotsChanged = (event) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setPreferredSlots(parseInt(event.target.value, 10)),
     );
   }
 
-  totalSlotsChanged = (event: SyntheticInputEvent) => {
+  totalSlotsChanged = (event) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setTotalSlots(parseInt(event.target.value, 10)),
     );
   }
 
-  slotsLimitedChanged = (event: SyntheticInputEvent) => {
+  slotsLimitedChanged = (event) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setSlotsLimited(event.target.checked),
     );
   }
 
-  beginDelete = (event: SyntheticInputEvent) => {
+  beginDelete = (event) => {
     event.preventDefault();
     this.setState({ isConfirmingDelete: true });
   }
@@ -116,7 +107,7 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  renderLimits = (): React.Element<*> | null => {
+  renderLimits = () => {
     const bucket = this.props.registrationBucket;
 
     if (!bucket.get('slotsLimited')) {

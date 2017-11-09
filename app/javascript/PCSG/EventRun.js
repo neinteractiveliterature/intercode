@@ -1,12 +1,7 @@
-// @flow
-
 import moment from 'moment-timezone';
 import Timespan from './Timespan';
 
 class EventRun {
-  runId: number;
-  timespan: Timespan;
-
   static buildEventRunsFromApi(apiResponse) {
     const runsByEvent = apiResponse.map(apiEvent => (
       apiEvent.runs.map((apiRun) => {
@@ -20,7 +15,7 @@ class EventRun {
     return runsByEvent.reduce((a, b) => [...a, ...b], []);
   }
 
-  constructor(runId: number, timespan: Timespan) {
+  constructor(runId, timespan) {
     this.runId = runId;
     this.timespan = timespan;
   }

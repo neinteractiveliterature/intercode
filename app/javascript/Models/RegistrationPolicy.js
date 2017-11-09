@@ -1,31 +1,31 @@
-// @flow
-
 import { List } from 'immutable';
+import PropTypes from 'prop-types';
 import RegistrationPolicyBucket from './RegistrationPolicyBucket';
-import type { RegistrationPolicyBucketAPIRepresentation } from './RegistrationPolicyBucket';
-
-export type RegistrationPolicyAPIRepresentation = {
-  buckets: Array<RegistrationPolicyBucketAPIRepresentation>,
-};
 
 export default class RegistrationPolicy {
-  buckets: List<RegistrationPolicyBucket>
+  static propType = PropTypes.shape({
+    buckets: PropTypes.arrayOf(RegistrationPolicyBucket.propType.isRequired).isRequired,
+  });
+  static apiRepresentationPropType = PropTypes.shape({
+    buckets:
+      PropTypes.arrayOf(RegistrationPolicyBucket.apiRepresentationPropType.isRequired).isRequired,
+  });
 
-  static fromAPI(json: RegistrationPolicyAPIRepresentation): RegistrationPolicy {
+  static fromAPI(json) {
     return new RegistrationPolicy().setAttributesFromAPI(json);
   }
 
-  constructor(buckets: List<RegistrationPolicyBucket> | null = null) {
+  constructor(buckets = null) {
     this.buckets = buckets || new List();
   }
 
-  getAPIRepresentation(): RegistrationPolicyAPIRepresentation {
+  getAPIRepresentation() {
     return {
       buckets: this.buckets.map(bucket => bucket.getAPIRepresentation()).toJS(),
     };
   }
 
-  setAttributesFromAPI(json: RegistrationPolicyAPIRepresentation): RegistrationPolicy {
+  setAttributesFromAPI(json) {
     let returnRecord = this;
 
     if (json.buckets !== undefined) {
@@ -36,7 +36,7 @@ export default class RegistrationPolicy {
     return returnRecord;
   }
 
-  sumBucketProperty = (getter: (RegistrationPolicyBucket) => number | null): number => (
+  sumBucketProperty = getter => (
     this.buckets.reduce((sum, bucket) => sum + (getter(bucket) || 0), 0)
   )
 
@@ -45,23 +45,20 @@ export default class RegistrationPolicy {
   getPreferredSlots = () => this.sumBucketProperty(bucket => bucket.preferredSlots)
   slotsLimited = () => this.buckets.every(bucket => bucket.slotsLimited)
 
-  addBucket(
-    key: string,
-    props: RegistrationPolicyBucketAPIRepresentation = {},
-  ): RegistrationPolicy {
+  addBucket(key, props) {
     const bucket = new RegistrationPolicyBucket({ key });
     return new RegistrationPolicy(this.buckets.push(bucket.setAttributesFromAPI(props)));
   }
 
-  getBucket(key: string): ?RegistrationPolicyBucket {
+  getBucket(key) {
     return this.buckets.find(bucket => bucket.get('key') === key);
   }
 
-  deleteBucket(key: string): RegistrationPolicy {
+  deleteBucket(key) {
     return new RegistrationPolicy(this.buckets.filter(bucket => bucket.get('key') !== key));
   }
 
-  updateBucket(key: string, newBucket: RegistrationPolicyBucket): RegistrationPolicy {
+  updateBucket(key, newBucket) {
     const index = this.buckets.findIndex(bucket => bucket.get('key') === key);
 
     if (index === -1) {
@@ -72,7 +69,7 @@ export default class RegistrationPolicy {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  setBuckets(buckets: List<RegistrationPolicyBucket> | Array<RegistrationPolicyBucket> | null) {
+  setBuckets(buckets) {
     if (Array.isArray(buckets)) {
       return new RegistrationPolicy(new List(buckets));
     }
@@ -80,7 +77,7 @@ export default class RegistrationPolicy {
     return new RegistrationPolicy(buckets);
   }
 
-  getAnythingBucket(): ?RegistrationPolicyBucket {
+  getAnythingBucket() {
     return this.buckets.find(bucket => bucket.get('anything'));
   }
 }

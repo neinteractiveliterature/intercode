@@ -1,8 +1,4 @@
-// @flow
-
-import type { RegistrationPolicyPreset } from './BuiltInFormControls/RegistrationPolicyEditor';
-
-const presets: Array<RegistrationPolicyPreset> = [
+const presets = [
   {
     name: 'Unlimited slots',
     policy: {
