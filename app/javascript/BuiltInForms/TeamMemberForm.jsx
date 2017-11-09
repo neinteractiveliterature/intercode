@@ -302,10 +302,15 @@ class TeamMemberForm extends React.Component {
   }
 
   getExistingTicket = () => {
-    const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
-      teamMember.id === this.state.teamMember.id);
-    // TODO figure out how to get ticket data onto an autocompleted user con profile
-    const existingTicket = teamMemberFromData.user_con_profile.ticket;
+    if (this.state.teamMember.id) {
+      const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
+        teamMember.id === this.state.teamMember.id);
+      return teamMemberFromData.user_con_profile.ticket;
+    } else if (this.state.teamMember.user_con_profile) {
+      return this.state.teamMember.user_con_profile.ticket;
+    }
+
+    return null;
   }
 
   getSubmitText = () => (
@@ -501,11 +506,11 @@ class TeamMemberForm extends React.Component {
     }
 
     let ticketingControls = null;
+    const existingTicket = this.getExistingTicket();
 
     if (this.state.teamMember.id) {
       const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
         teamMember.id === this.state.teamMember.id);
-      const existingTicket = teamMemberFromData.user_con_profile.ticket;
 
       statusDescription = describeTicketingStatus(
         teamMemberFromData.user_con_profile,
@@ -560,7 +565,6 @@ class TeamMemberForm extends React.Component {
         return null;
       }
 
-      const existingTicket = this.state.teamMember.user_con_profile.ticket;
       statusDescription = describeTicketingStatus(
         this.state.teamMember.user_con_profile,
         existingTicket,
