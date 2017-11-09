@@ -23,5 +23,9 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field :evening_phone, types.String
   field :best_call_time, types.String
   field :preferred_contact, types.String
-  field :ticket, Types::TicketType
+  field :ticket, Types::TicketType do
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(UserConProfile, :ticket).load(obj)
+    }
+  end
 end
