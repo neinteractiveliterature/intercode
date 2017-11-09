@@ -9,6 +9,7 @@ class MultipleChoiceInput extends React.Component {
     choices: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
+      disabled: PropTypes.bool,
     }).isRequired).isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string.isRequired,
@@ -40,7 +41,7 @@ class MultipleChoiceInput extends React.Component {
   render = () => {
     const choiceType = this.props.multiple ? 'checkbox' : 'radio';
 
-    const options = this.props.choices.map(({ label, value }) => (
+    const options = this.props.choices.map(({ label, value, disabled = false }) => (
       <BootstrapFormCheckbox
         key={`${this.props.name}_${value}`}
         name={this.props.name}
@@ -50,6 +51,7 @@ class MultipleChoiceInput extends React.Component {
         value={value}
         checked={this.props.value === value}
         onChange={this.onChange}
+        disabled={disabled}
       />
     ));
 
