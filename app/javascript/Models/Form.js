@@ -54,7 +54,8 @@ export default class Form {
   }
 
   getItemsInSection(sectionId: number) {
-    return this.formItems.valueSeq().filter(item => item.formSectionId === sectionId).sortBy(item => item.position);
+    const sectionItems = this.formItems.valueSeq().filter(item => item.formSectionId === sectionId);
+    return sectionItems.sortBy(item => item.position);
   }
 
   getAllItems() {
