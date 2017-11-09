@@ -1,11 +1,8 @@
-// @flow
-
 import ColumnReservationSet from './ColumnReservationSet';
-import ScheduleBlock from './ScheduleBlock';
 import ScheduleLayoutResult from './ScheduleLayoutResult';
 import RunDimensions from './RunDimensions';
 
-function computeRunDimensionsWithoutSpanning(scheduleBlock: ScheduleBlock): ScheduleLayoutResult {
+function computeRunDimensionsWithoutSpanning(scheduleBlock) {
   const columnReservations = new ColumnReservationSet();
   const myLength = scheduleBlock.timespan.getLength();
   let maxColumns = 0;

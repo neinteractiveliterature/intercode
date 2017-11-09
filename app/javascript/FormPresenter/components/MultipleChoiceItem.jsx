@@ -1,43 +1,41 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
 import RequiredIndicator from './RequiredIndicator';
 
-export type Choice = {
-  caption: string,
-  value: string,
-};
-
-export type MultipleChoiceFormItem = {
-  identifier: string,
-  caption: string,
-  style?: string,
-  choices: Array<Choice>,
-};
-
-type Props = {
-  formItem: MultipleChoiceFormItem,
-  onChange: (any) => undefined,
-  value?: string,
-};
-
 class MultipleChoiceItem extends React.Component {
-  constructor(props: Props) {
+  static propTypes = {
+    formItem: PropTypes.shape({
+      identifier: PropTypes.string.isRequired,
+      properties: PropTypes.shape({
+        style: PropTypes.string,
+        caption: PropTypes.string.isRequired,
+        choices: PropTypes.arrayOf(PropTypes.shape({
+          caption: PropTypes.string.isRequired,
+          value: PropTypes.string.isRequired,
+        }).isRequired).isRequired,
+      }).isRequired,
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.string,
+  };
+
+  static defaultProps = {
+    value: null,
+  };
+
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
   }
 
-  props: Props
-  nextUniqueId: () => string
-
-  inputDidChange = (event: SyntheticInputEvent) => {
+  inputDidChange = (event) => {
     this.props.onChange(event.target.value);
   }
 
-  renderChoice = (choice: Choice) => {
-    const domId: string = this.nextUniqueId();
+  renderChoice = (choice) => {
+    const domId = this.nextUniqueId();
 
     return (
       <div

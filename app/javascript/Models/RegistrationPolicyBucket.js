@@ -1,28 +1,8 @@
-// @flow
-
 import { Record } from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
 
-export type RegistrationPolicyBucketAPIRepresentation = {
-  key?: string,
-  name?: string,
-  description?: string,
-  total_slots?: number,
-  minimum_slots?: number,
-  preferred_slots?: number,
-  slots_limited?: boolean,
-  anything?: boolean
-};
-
-const defaultProperties: {
-  key: string | null,
-  name: string | null,
-  description: string | null,
-  totalSlots: number | null,
-  minimumSlots: number | null,
-  preferredSlots: number | null,
-  slotsLimited: boolean,
-  anything: boolean,
-} = {
+const defaultProperties = {
   key: null,
   name: null,
   description: null,
@@ -33,12 +13,26 @@ const defaultProperties: {
   anything: false,
 };
 
+const fieldPropTypes = {
+  key: PropTypes.string,
+  name: PropTypes.string,
+  description: PropTypes.string,
+  totalSlots: PropTypes.number,
+  minimumSlots: PropTypes.number,
+  preferredSlots: PropTypes.number,
+  slotsLimited: PropTypes.number,
+  anything: PropTypes.bool,
+};
+
 export default class RegistrationPolicyBucket extends Record(defaultProperties) {
-  static fromAPI(json: RegistrationPolicyBucketAPIRepresentation): RegistrationPolicyBucket {
+  static propType = ImmutablePropTypes.recordOf(fieldPropTypes);
+  static apiRepresentationPropType = PropTypes.shape(fieldPropTypes);
+
+  static fromAPI(json) {
     return new RegistrationPolicyBucket().setAttributesFromAPI(json);
   }
 
-  setAttributesFromAPI(json: RegistrationPolicyBucketAPIRepresentation): RegistrationPolicyBucket {
+  setAttributesFromAPI(json) {
     let returnRecord = this;
 
     if (json.key !== undefined) {
@@ -76,7 +70,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
     return returnRecord;
   }
 
-  getAPIRepresentation(): RegistrationPolicyBucketAPIRepresentation {
+  getAPIRepresentation() {
     return {
       key: this.get('key'),
       name: this.get('name'),
@@ -89,7 +83,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
     };
   }
 
-  setSlotsLimited(slotsLimited: boolean): RegistrationPolicyBucket {
+  setSlotsLimited(slotsLimited) {
     let returnRecord = this;
 
     returnRecord = returnRecord.set('slotsLimited', !!slotsLimited);
@@ -103,7 +97,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
     return returnRecord;
   }
 
-  setMinimumSlots(newCount: number): RegistrationPolicyBucket {
+  setMinimumSlots(newCount) {
     let returnRecord = this;
 
     returnRecord = returnRecord.set('minimumSlots', newCount);
@@ -114,7 +108,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
     return returnRecord;
   }
 
-  setPreferredSlots(newCount: number): RegistrationPolicyBucket {
+  setPreferredSlots(newCount) {
     let returnRecord = this;
 
     returnRecord = returnRecord.set('preferredSlots', newCount);
@@ -125,7 +119,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
     return returnRecord;
   }
 
-  setTotalSlots(newCount: number): RegistrationPolicyBucket {
+  setTotalSlots(newCount) {
     return this.set('totalSlots', newCount);
   }
 }

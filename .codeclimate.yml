@@ -15,8 +15,6 @@ engines:
         ruby:
         javascript:
           mass_threshold: 60
-      javascript_plugins:
-        - flow
   eslint:
     enabled: true
     config:

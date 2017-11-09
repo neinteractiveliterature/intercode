@@ -1,15 +1,7 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 
-type Props = {
-  formItem: {
-    content: string,
-    style?: string,
-  },
-}
-
-const StaticTextItem = ({ formItem }: Props) => {
+const StaticTextItem = ({ formItem }) => {
   switch (formItem.properties.style) {
     case 'subhead':
       // eslint-disable-next-line react/no-danger
@@ -18,6 +10,14 @@ const StaticTextItem = ({ formItem }: Props) => {
       // eslint-disable-next-line react/no-danger
       return <div dangerouslySetInnerHTML={{ __html: formItem.properties.content }} />;
   }
+};
+
+StaticTextItem.propTypes = {
+  formItem: PropTypes.shape({
+    properties: PropTypes.shape({
+      style: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default StaticTextItem;
