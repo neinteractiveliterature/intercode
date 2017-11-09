@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import { humanize } from 'inflected';
+import { humanize, underscore } from 'inflected';
 import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
@@ -447,7 +447,7 @@ class TeamMemberForm extends React.Component {
     return (
       <div className="form-group">
         <label htmlFor={userConProfileSelectId}>
-          {`${humanize(this.props.data.event.team_member_name)}`}
+          {`${humanize(underscore(this.props.data.event.team_member_name))}`}
         </label>
         <UserConProfileSelect
           id={userConProfileSelectId}
