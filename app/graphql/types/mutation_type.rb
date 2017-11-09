@@ -15,9 +15,7 @@ end
 
 def guard_for_model_with_id(model_class, action)
   guard ->(_obj, args, ctx) {
-    guard ->(_obj, args, ctx) {
-      ctx[:current_ability].can?(action, model_class.find(args[:id]))
-    }
+    ctx[:current_ability].can?(action, model_class.find(args[:id]))
   }
 end
 
