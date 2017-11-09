@@ -297,6 +297,9 @@ GEM
     graphiql-rails (1.4.7)
       rails
     graphql (1.7.4)
+    graphql-batch (0.3.5)
+      graphql (>= 0.8, < 2)
+      promise.rb (~> 0.7.2)
     graphql-guard (1.0.0)
       graphql (>= 1.6.0, < 2)
     haml (5.0.4)
@@ -358,6 +361,7 @@ GEM
     parallel (1.12.0)
     pg (0.21.0)
     popper_js (1.12.5)
+    promise.rb (0.7.4)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -537,6 +541,7 @@ DEPENDENCIES
   font-awesome-sass
   graphiql-rails
   graphql
+  graphql-batch
   graphql-guard
   haml
   jquery-rails

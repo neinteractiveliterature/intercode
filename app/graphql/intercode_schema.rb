@@ -3,4 +3,5 @@ IntercodeSchema = GraphQL::Schema.define do
   query(Types::QueryType)
 
   use GraphQL::Guard.new
+  use GraphQL::Batch
 end

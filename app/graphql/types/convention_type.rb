@@ -12,11 +12,29 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :registrations_frozen, types.Boolean
   field :show_schedule, Types::ShowScheduleType
   field :maximum_tickets, types.Int
-
-  field :away_blocks, types[Types::AwayBlockType]
-  field :rooms, types[Types::RoomType]
   field :maximum_event_signups, Types::ScheduledValueType
-  field :ticket_types, types[Types::TicketTypeType]
 
-  field :user_con_profiles, Types::UserConProfile.connection_type, max_page_size: 1000
+  field :away_blocks, types[Types::AwayBlockType] do
+    resolve ->(convention, _args, _ctx) do
+      AssociationLoader.for(Convention, :away_blocks).load(convention)
+    end
+  end
+
+  field :rooms, types[Types::RoomType] do
+    resolve -> (convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :rooms).load(convention)
+    }
+  end
+
+  field :ticket_types, types[Types::TicketTypeType] do
+    resolve ->(convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :ticket_types).load(convention)
+    }
+  end
+
+  connection :user_con_profiles, Types::UserConProfileType.connection_type, max_page_size: 1000 do
+    resolve ->(convention, _args, _ctx) {
+      convention.user_con_profiles.order('last_name', 'first_name')
+    }
+  end
 end
