@@ -45,17 +45,9 @@ class RegistrationBucketRow extends React.Component {
   slotsChanged = (event, field) => {
     const { registrationBucket } = this.props;
 
-    let changeMethod;
-    switch (field) {
-      case 'minimumSlots': changeMethod = registrationBucket.setMinimumSlots; break;
-      case 'preferredSlots': changeMethod = registrationBucket.setPreferredSlots; break;
-      case 'totalSlots': changeMethod = registrationBucket.setTotalSlots; break;
-      default: return;
-    }
-
     this.props.onChange(
       registrationBucket.get('key'),
-      changeMethod.call(registrationBucket, parseInt(event.target.value, 10)),
+      registrationBucket.setSlotField(field, parseInt(event.target.value, 10)),
     );
   }
 
