@@ -10,5 +10,11 @@ FactoryBot.define do
     registration_policy RegistrationPolicy.unlimited
     length_seconds 4.hours
     con_mail_destination 'event_email'
+
+    factory :filler_event do
+      category 'filler'
+
+      after(:build) { |filler_event| filler_event.runs << FactoryBot.build(:run, event: filler_event) }
+    end
   end
 end
