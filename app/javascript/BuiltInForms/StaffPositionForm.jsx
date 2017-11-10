@@ -4,7 +4,7 @@ import { enableUniqueIds } from 'react-html-id';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ResourceForm from './ResourceForm';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { getStateChangeForInputChange } from '../FormUtils';
+import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 
 class StaffPositionForm extends React.Component {
   static propTypes = {
@@ -33,23 +33,20 @@ class StaffPositionForm extends React.Component {
     this.state = {
       staffPosition: { ...this.props.initialStaffPosition },
     };
+
+    this.staffPositionMutator = new ModelStateChangeCalculator(
+      'staffPosition',
+      {
+        name: FIELD_TYPES.STRING,
+        email: FIELD_TYPES.STRING,
+        user_con_profile_ids: FIELD_TYPES.SELECT_MULTIPLE,
+      },
+    ).getMutatorForComponent(this);
   }
 
   getSubmitRequestBody = () => ({
     staff_position: this.state.staffPosition,
   })
-
-  fieldChanged = (event) => {
-    this.setState(getStateChangeForInputChange(event, this.state, 'staffPosition'));
-  }
-
-  userConProfileIdsChanged = (selections) => {
-    const userConProfileIds = selections.map(selection => selection.value);
-
-    this.setState({
-      staffPosition: { ...this.state.staffPosition, user_con_profile_ids: userConProfileIds },
-    });
-  }
 
   render = () => {
     const userConProfileSelectId = this.nextUniqueId();
@@ -65,7 +62,7 @@ class StaffPositionForm extends React.Component {
           name="name"
           label="Position name"
           value={this.state.staffPosition.name || ''}
-          onChange={this.fieldChanged}
+          onChange={this.staffPositionMutator.onInputChange}
         />
 
         <BootstrapFormInput
@@ -73,7 +70,7 @@ class StaffPositionForm extends React.Component {
           type="email"
           label="Contact email"
           value={this.state.staffPosition.email || ''}
-          onChange={this.fieldChanged}
+          onChange={this.staffPositionMutator.onInputChange}
         />
 
         <div className="form-group">
@@ -82,7 +79,7 @@ class StaffPositionForm extends React.Component {
             id={userConProfileSelectId}
             multi
             value={this.state.staffPosition.user_con_profile_ids || []}
-            onChange={this.userConProfileIdsChanged}
+            onChange={this.staffPositionMutator.valueChangeCallback('user_con_profile_ids')}
           />
         </div>
       </ResourceForm>

@@ -189,7 +189,10 @@ class CommonEventFormFields extends React.Component {
   }
 
   renderConMailDestinationField = this.regularEventFieldRenderer(() => {
-    const choices = ['event_email', 'gms'].map(value => (
+    const choices = [
+      ['Event email address', 'event_email'],
+      ['Team members who have elected to receive email from the convention', 'gms'],
+    ].map(([label, value]) => (
       <BootstrapFormCheckbox
         key={`con_mail_destination_${value}`}
         type="radio"
@@ -197,7 +200,7 @@ class CommonEventFormFields extends React.Component {
         value={value}
         checked={this.props.event.con_mail_destination === value}
         onChange={this.formInputDidChange}
-        label="Event email address"
+        label={label}
       />
     ));
 
