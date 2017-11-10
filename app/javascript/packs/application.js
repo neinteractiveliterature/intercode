@@ -37,7 +37,7 @@ WebpackerReact.setup({
   FormPresenter,
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
-  StaffPositionForm,
+  StaffPositionForm: StandaloneGraphQLComponent(StaffPositionForm),
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketPurchaseForm,

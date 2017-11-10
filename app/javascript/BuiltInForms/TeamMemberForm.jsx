@@ -317,10 +317,6 @@ class TeamMemberForm extends React.Component {
     `${this.state.teamMember.id ? 'Update' : 'Add'} ${this.props.data.event.team_member_name}`
   )
 
-  getSubmitRequestBody = () => ({
-    team_member: this.state.teamMember,
-  })
-
   checkboxChanged = (event) => {
     this.setState(getStateChangeForCheckboxChange(event, this.state, 'teamMember'));
   }
