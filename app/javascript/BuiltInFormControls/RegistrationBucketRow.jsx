@@ -42,24 +42,20 @@ class RegistrationBucketRow extends React.Component {
   nameChanged = newName => this.bucketPropChanged('name', newName)
   descriptionChanged = newDescription => this.bucketPropChanged('description', newDescription)
 
-  minimumSlotsChanged = (event) => {
-    this.props.onChange(
-      this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setMinimumSlots(parseInt(event.target.value, 10)),
-    );
-  }
+  slotsChanged = (event, field) => {
+    const { registrationBucket } = this.props;
 
-  preferredSlotsChanged = (event) => {
-    this.props.onChange(
-      this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setPreferredSlots(parseInt(event.target.value, 10)),
-    );
-  }
+    let changeMethod;
+    switch (field) {
+      case 'minimumSlots': changeMethod = registrationBucket.setMinimumSlots; break;
+      case 'preferredSlots': changeMethod = registrationBucket.setPreferredSlots; break;
+      case 'totalSlots': changeMethod = registrationBucket.setTotalSlots; break;
+      default: return;
+    }
 
-  totalSlotsChanged = (event) => {
     this.props.onChange(
-      this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setTotalSlots(parseInt(event.target.value, 10)),
+      registrationBucket.get('key'),
+      changeMethod.call(registrationBucket, parseInt(event.target.value, 10)),
     );
   }
 
@@ -117,25 +113,21 @@ class RegistrationBucketRow extends React.Component {
     const slotControls = [
       {
         label: 'Min',
-        onChange: this.minimumSlotsChanged,
         field: 'minimumSlots',
         min: 0,
       },
       {
         label: 'Pref',
-        onChange: this.preferredSlotsChanged,
         field: 'preferredSlots',
         min: bucket.get('minimumSlots'),
       },
       {
         label: 'Max',
-        onChange: this.totalSlotsChanged,
         field: 'totalSlots',
         min: bucket.get('preferredSlots'),
       },
     ].map(({
       label,
-      onChange,
       field,
       min,
     }, i) => {
@@ -152,7 +144,7 @@ class RegistrationBucketRow extends React.Component {
             min={min}
             placeholder="Min"
             value={bucket.get(field) || ''}
-            onChange={onChange}
+            onChange={(event) => { this.slotsChanged(event, field); }}
             style={{ width: '4em' }}
           />
         </div>
