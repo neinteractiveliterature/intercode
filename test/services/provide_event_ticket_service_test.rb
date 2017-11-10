@@ -32,7 +32,7 @@ describe ProvideEventTicketService do
   end
 
   describe 'if the event cannot provide tickets' do
-    let(:event) { FactoryBot.create(:event, category: 'filler', convention: convention) }
+    let(:event) { FactoryBot.create(:filler_event, convention: convention) }
 
     it 'fails' do
       result = service.call
