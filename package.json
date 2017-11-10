@@ -87,6 +87,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.0.2",
+    "babel-jest": "^21.2.0",
     "babel-minify": "^0.2.0",
     "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-transform-decorators": "^6.24.1",

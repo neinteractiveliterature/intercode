@@ -25,7 +25,7 @@
   ],
   "env": {
     "test": {
-      "presets": ["stage-0", "react"],
+      "presets": ["env", "stage-0", "react"],
       "plugins": [
         "transform-decorators-legacy",
         "transform-class-properties",
