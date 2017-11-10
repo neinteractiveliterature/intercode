@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
-import RequiredIndicator from './RequiredIndicator';
+import CaptionLegend from './CaptionLegend';
 
 class MultipleChoiceItem extends React.Component {
   static propTypes = {
@@ -67,13 +67,7 @@ class MultipleChoiceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend">
-          <span
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
-          />
-          <RequiredIndicator formItem={this.props.formItem} />
-        </legend>
+        <CaptionLegend formItem={formItem} />
         {choices}
       </fieldset>
     );

@@ -114,57 +114,54 @@ class RegistrationBucketRow extends React.Component {
       return null;
     }
 
-    const minId = this.nextUniqueId();
-    const prefId = this.nextUniqueId();
-    const maxId = this.nextUniqueId();
+    const slotControls = [
+      {
+        label: 'Min',
+        onChange: this.minimumSlotsChanged,
+        field: 'minimumSlots',
+        min: 0,
+      },
+      {
+        label: 'Pref',
+        onChange: this.preferredSlotsChanged,
+        field: 'preferredSlots',
+        min: bucket.get('minimumSlots'),
+      },
+      {
+        label: 'Max',
+        onChange: this.totalSlotsChanged,
+        field: 'totalSlots',
+        min: bucket.get('preferredSlots'),
+      },
+    ].map(({
+      label,
+      onChange,
+      field,
+      min,
+    }, i) => {
+      const inputId = this.nextUniqueId();
+
+      return (
+        <div className={classNames('d-inline-flex', { 'ml-1': i > 0 })} key={field}>
+          <label htmlFor={inputId}>{label}</label>
+          <input
+            id={inputId}
+            type="number"
+            size="2"
+            className="form-control form-control-sm ml-1"
+            min={min}
+            placeholder="Min"
+            value={bucket.get(field) || ''}
+            onChange={onChange}
+            style={{ width: '4em' }}
+          />
+        </div>
+      );
+    });
 
     return (
       <div className="form-inline ml-1 flex-nowrap">
-        <div className="d-inline-flex mr-1">
-          <label htmlFor={minId}>Min</label>
-          <input
-            id={minId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm"
-            min="0"
-            placeholder="Min"
-            value={bucket.get('minimumSlots') || ''}
-            onChange={this.minimumSlotsChanged}
-            style={{ width: '4em' }}
-          />
-        </div>
-
-        <div className="d-inline-flex mr-1">
-          <label htmlFor={prefId}>Pref</label>
-          <input
-            id={prefId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm"
-            min={bucket.get('minimumSlots')}
-            placeholder="Pref"
-            value={bucket.get('preferredSlots') || ''}
-            onChange={this.preferredSlotsChanged}
-            style={{ width: '4em' }}
-          />
-        </div>
-
-        <div className="d-inline-flex">
-          <label htmlFor={maxId}>Max</label>
-          <input
-            id={maxId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm"
-            min={bucket.get('preferredSlots')}
-            placeholder="Max"
-            value={bucket.get('totalSlots') || ''}
-            onChange={this.totalSlotsChanged}
-            style={{ width: '4em' }}
-
-          />
-        </div>
+        {slotControls}
       </div>
     );
   }

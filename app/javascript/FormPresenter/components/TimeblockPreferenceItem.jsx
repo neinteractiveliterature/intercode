@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
-import RequiredIndicator from './RequiredIndicator';
+import CaptionLegend from './CaptionLegend';
 import TimeblockTypes, {
   TimeblockPropType,
   TimeblockOmissionPropType,
@@ -193,13 +193,7 @@ class TimeblockPreferenceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend">
-          <span
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
-          />
-          <RequiredIndicator formItem={this.props.formItem} />
-        </legend>
+        <CaptionLegend formItem={this.props.formItem} />
         <table className="table">
           <thead>
             <tr>
