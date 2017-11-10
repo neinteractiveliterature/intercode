@@ -1,13 +1,10 @@
-// @flow
-
 import ColumnReservationSet from './ColumnReservationSet';
-import ScheduleBlock from './ScheduleBlock';
 import ScheduleLayoutResult from './ScheduleLayoutResult';
 import RunDimensions from './RunDimensions';
 
-function computeRunDimensionsWithSpanning(scheduleBlock: ScheduleBlock): ScheduleLayoutResult {
+function computeRunDimensionsWithSpanning(scheduleBlock) {
   const columnReservations = new ColumnReservationSet();
-  const runDimensions: Map<number, RunDimensions> = new Map();
+  const runDimensions = new Map();
   const myLength = scheduleBlock.timespan.getLength();
   const upcomingRuns = scheduleBlock.getTimeSortedEventRuns();
   let maxColumns = 0;

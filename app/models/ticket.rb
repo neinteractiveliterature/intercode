@@ -13,6 +13,8 @@ class Ticket < ApplicationRecord
 
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 
+  scope :counts_towards_convention_maximum, -> { joins(:ticket_type).where(ticket_types: { counts_towards_convention_maximum: true }) }
+
   def to_liquid
     TicketDrop.new(self)
   end

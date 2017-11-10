@@ -6,7 +6,12 @@ Types::RunType = GraphQL::ObjectType.define do
   field :starts_at, Types::DateType
   field :title_suffix, types.String
   field :schedule_note, types.String
-  field :rooms, types[Types::RoomType]
+
+  field :rooms, types[Types::RoomType] do
+    resolve ->(obj, _args, _ctx) do
+      AssociationLoader.for(Run, :rooms).load(obj)
+    end
+  end
 
   field :confirmed_signup_count, types.Int do
     resolve ->(obj, _args, ctx) {

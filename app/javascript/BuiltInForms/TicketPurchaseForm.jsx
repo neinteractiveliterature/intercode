@@ -8,17 +8,20 @@ import { performRequest } from '../HTTPUtils';
 
 class TicketPurchaseForm extends React.Component {
   static propTypes = {
-    ticketTypes: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        formattedPrice: PropTypes.string.isRequired,
-        available: PropTypes.bool.isRequired,
-      }),
-    ).isRequired,
+    ticketTypes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      formattedPrice: PropTypes.string.isRequired,
+      available: PropTypes.bool.isRequired,
+    })).isRequired,
     createChargeUrl: PropTypes.string.isRequired,
     purchaseCompleteUrl: PropTypes.string.isRequired,
+    ticketTypeId: PropTypes.number,
+  };
+
+  static defaultProps = {
+    ticketTypeId: '',
   };
 
   constructor(props) {
@@ -28,7 +31,7 @@ class TicketPurchaseForm extends React.Component {
       paymentError: null,
       submitting: false,
       stripeToken: null,
-      ticketTypeId: '',
+      ticketTypeId: (this.props.ticketTypeId || '').toString(),
       ccNumber: '',
       cvc: '',
       expMonth: '',
@@ -108,9 +111,9 @@ class TicketPurchaseForm extends React.Component {
       }).then(() => {
         window.location.href = this.props.purchaseCompleteUrl;
       }).catch((error) => {
-        error.response.text().then((text) => {
+        error.response.json().then((json) => {
           this.setState({
-            paymentError: text,
+            paymentError: json.errors.base.join(', '),
             submitting: false,
           });
         });

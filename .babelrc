@@ -17,7 +17,6 @@
       }
     ],
     "react",
-    "flow"
   ],
   "plugins": [
     "transform-decorators-legacy",
@@ -26,7 +25,12 @@
   ],
   "env": {
     "test": {
-      "presets": ["es2015", "stage-0", "react", "flow"]
-    }
+      "presets": ["env", "stage-0", "react"],
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-object-rest-spread"
+      ]
+    },
   }
 }

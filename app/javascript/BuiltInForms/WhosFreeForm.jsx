@@ -7,7 +7,6 @@ import queryString from 'query-string';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../PCSG/Timespan';
 
@@ -35,7 +34,6 @@ const momentToTimeObject = (momentValue) => {
   };
 };
 
-@StandaloneGraphQLComponent
 @graphql(conventionQuery)
 @GraphQLQueryResultWrapper
 class WhosFreeForm extends React.Component {

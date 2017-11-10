@@ -1,18 +1,10 @@
-// @flow
-
-import Timespan from './Timespan';
-import EventRun from './EventRun';
-
 class ColumnReservation {
-  timespan: Timespan;
-  eventRuns: Array<EventRun>;
-
-  constructor(eventRun: EventRun) {
+  constructor(eventRun) {
     this.timespan = eventRun.timespan;
     this.eventRuns = [eventRun];
   }
 
-  addEventRun(eventRun: EventRun) {
+  addEventRun(eventRun) {
     this.eventRuns.push(eventRun);
     this.timespan = this.timespan.expandedToFit(eventRun.timespan);
   }

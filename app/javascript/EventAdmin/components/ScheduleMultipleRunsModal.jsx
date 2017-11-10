@@ -38,7 +38,9 @@ class ScheduleMultipleRunsModal extends React.Component {
       return null;
     }
 
-    const { startHour, startMinute, finishHour, finishMinute } = this.state;
+    const {
+      startHour, startMinute, finishHour, finishMinute,
+    } = this.state;
 
     return new Timespan(
       this.state.day.clone().set({ hour: startHour, minute: startMinute }),
@@ -73,9 +75,7 @@ class ScheduleMultipleRunsModal extends React.Component {
     const existingRunTimespans = this.getExistingRunTimespans();
 
     return runTimespans.filter(runTimespan => (
-      !existingRunTimespans.some(
-        existingTimespan => existingTimespan.overlapsTimespan(runTimespan),
-      )
+      !existingRunTimespans.some(existingTimespan => existingTimespan.overlapsTimespan(runTimespan))
     ));
   }
 
@@ -121,7 +121,9 @@ class ScheduleMultipleRunsModal extends React.Component {
 
   renderTimeSelects = () => {
     const { convention } = this.props;
-    const { day, startHour, startMinute, finishHour, finishMinute } = this.state;
+    const {
+      day, startHour, startMinute, finishHour, finishMinute,
+    } = this.state;
 
     if (!day) {
       return null;
@@ -171,9 +173,7 @@ class ScheduleMultipleRunsModal extends React.Component {
     const runTimespanItems = runTimespans.map((runTimespan) => {
       let description = runTimespan.start.format('h:mma');
       const runConflicts = (
-        nonConflictingTimespans.find(
-          nonConflictingTimespan => nonConflictingTimespan.isSame(runTimespan),
-        ) == null
+        nonConflictingTimespans.find(nonConflictingTimespan => nonConflictingTimespan.isSame(runTimespan)) == null
       );
 
       if (runConflicts) {

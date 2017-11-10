@@ -8,7 +8,9 @@ import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
 import eventsQuery from '../eventsQuery';
 import { updateEventMutation, dropEventMutation } from '../mutations';
 
-const EventAdminEditEvent = ({ data, match, history, updateEvent, dropEvent }) => {
+const EventAdminEditEvent = ({
+  data, match, history, updateEvent, dropEvent,
+}) => {
   const eventId = match.params.id;
   const event = data.events.find(e => e.id.toString() === eventId);
 
@@ -39,12 +41,8 @@ EventAdminEditEvent.propTypes = {
   dropEvent: PropTypes.func.isRequired,
 };
 
-export default withRouter(
-  compose(
-    graphql(eventsQuery),
-    graphql(updateEventMutation, { name: 'updateEvent' }),
-    graphql(dropEventMutation, { name: 'dropEvent' }),
-  )(
-    GraphQLQueryResultWrapper(EventAdminEditEvent),
-  ),
-);
+export default withRouter(compose(
+  graphql(eventsQuery),
+  graphql(updateEventMutation, { name: 'updateEvent' }),
+  graphql(dropEventMutation, { name: 'dropEvent' }),
+)(GraphQLQueryResultWrapper(EventAdminEditEvent)));

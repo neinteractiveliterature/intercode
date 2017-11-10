@@ -1,13 +1,49 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
 import VirtualizedSelect from 'react-virtualized-select';
 import createFilterOptions from 'react-select-fast-filter-options';
-import queryString from 'query-string';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
-import { performJSONRequest } from '../HTTPUtils';
 
+const DEFAULT_USER_CON_PROFILES_QUERY = gql`
+query($cursor: String) {
+  convention {
+    user_con_profiles(first: 1000, after: $cursor) {
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+
+      edges {
+        node {
+          id
+          name_without_nickname
+        }
+      }
+    }
+  }
+}
+`;
+
+@withApollo
 class UserConProfileSelect extends React.Component {
+  static propTypes = {
+    client: PropTypes.shape({
+      query: PropTypes.func.isRequired,
+    }).isRequired,
+    userConProfilesQuery: PropTypes.shape({
+      kind: PropTypes.string.isRequired,
+      definitions: PropTypes.array.isRequired,
+    }),
+  };
+
+  static defaultProps = {
+    userConProfilesQuery: null,
+  };
+
   constructor(props) {
     super(props);
 
@@ -21,53 +57,50 @@ class UserConProfileSelect extends React.Component {
   // con profiles and provide them once to a synchronous select
   //
   // https://github.com/JedWatson/react-select/issues/1771
-  componentDidMount = () => {
-    this.loadOptions().then((results) => {
-      this.setState({
-        options: results.options,
-        filterOptions: createFilterOptions(results.options),
-      });
+  componentDidMount = async () => {
+    const results = await this.loadOptions();
+
+    this.setState({
+      options: results.options,
+      filterOptions: createFilterOptions(results.options),
     });
   }
 
-  loadOptions = (input) => {
-    const params = { 'user_con_profiles_grid[name]': input, per_page: 1000 };
-    const url = `/user_con_profiles?${queryString.stringify(params)}`;
+  loadOptions = async (input) => {
+    const variables = { name: input };
 
-    const processPage = (json) => {
-      const options = json.user_con_profiles.map(userConProfile => ({
-        label: `${userConProfile.first_name} ${userConProfile.last_name}`,
-        value: userConProfile.id,
+    let nextVariables = variables;
+    let options = [];
+    do {
+      // eslint-disable-next-line no-await-in-loop
+      const results = await this.props.client.query({
+        query: this.props.userConProfilesQuery || DEFAULT_USER_CON_PROFILES_QUERY,
+        variables: nextVariables,
+      });
+
+      const userConProfiles = results.data.convention.user_con_profiles;
+      const currentPageOptions = userConProfiles.edges.map(edge => ({
+        label: edge.node.name_without_nickname,
+        value: edge.node.id,
+        data: edge.node,
       }));
 
-      let nextUrl;
-      if (json.page_info.next_page) {
-        const nextUrlParams = { page: json.page_info.next_page, ...params };
-        nextUrl = `/user_con_profiles?${queryString.stringify(nextUrlParams)}`;
+      if (userConProfiles.pageInfo.hasNextPage) {
+        nextVariables = {
+          ...variables,
+          cursor: userConProfiles.pageInfo.endCursor,
+        };
+      } else {
+        nextVariables = null;
       }
 
-      return { options, nextUrl };
+      options = [...options, ...currentPageOptions];
+    } while (nextVariables != null);
+
+    return {
+      options,
+      complete: (!input || input === ''),
     };
-
-    const processResults = (results) => {
-      if (results.nextUrl) {
-        return performJSONRequest(results.nextUrl).then((nextResults) => {
-          const processedPage = processPage(nextResults);
-
-          return {
-            options: results.options.concat(processedPage.options),
-            nextUrl: processedPage.nextUrl,
-          };
-        }).then(processResults);
-      }
-
-      return {
-        options: results.options,
-        complete: (!input || input === ''),
-      };
-    };
-
-    return performJSONRequest(url).then(processPage).then(processResults);
   }
 
   render = () => {

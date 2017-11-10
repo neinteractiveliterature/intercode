@@ -23,10 +23,6 @@ export default function buildReduxStore(name, reducer, initialState) {
   return createStore(
     reducer,
     initialState,
-    composeEnhancers(
-      applyMiddleware(
-        ...defaultMiddleware,
-      ),
-    ),
+    composeEnhancers(applyMiddleware(...defaultMiddleware)),
   );
 }

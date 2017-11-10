@@ -5,7 +5,6 @@ import gql from 'graphql-tag';
 import ConventionForm from '../BuiltInForms/ConventionForm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
-import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 
 const conventionFragment = gql`
 fragment ConventionAdminConventionFields on Convention {
@@ -17,6 +16,7 @@ fragment ConventionAdminConventionFields on Convention {
   timezone_name
   registrations_frozen
   show_schedule
+  maximum_tickets
 
   maximum_event_signups {
     timespans {
@@ -50,7 +50,6 @@ mutation($input: UpdateConventionInput!) {
 ${conventionFragment}
 `;
 
-@StandaloneGraphQLComponent
 @compose(
   graphql(conventionQuery),
   graphql(updateConventionMutation, { name: 'updateConvention' }),
@@ -81,6 +80,7 @@ class ConventionAdmin extends React.Component {
         timezone_name: convention.timezone_name,
         registrations_frozen: convention.registrations_frozen,
         show_schedule: convention.show_schedule,
+        maximum_tickets: convention.maximum_tickets,
         maximum_event_signups: {
           timespans: convention.maximum_event_signups.timespans.map(timespan => ({
             start: timespan.start,

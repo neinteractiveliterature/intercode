@@ -15,7 +15,15 @@ Types::EventType = GraphQL::ObjectType.define do
   field :description, types.String
   field :short_blurb, types.String
   field :status, types.String
-  field :runs, types[Types::RunType]
+  field :runs, !types[!Types::RunType]
+  field :team_members, !types[!Types::TeamMemberType] do
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(Event, :team_members).load(obj)
+    }
+  end
+  field :team_member_name, !types.String
+  field :provided_tickets, !types[!Types::TicketType]
+  field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
 
   field :registration_policy, Types::RegistrationPolicyType
 

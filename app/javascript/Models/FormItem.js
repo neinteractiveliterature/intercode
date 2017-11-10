@@ -1,25 +1,8 @@
-// @flow
-
 import { Record } from 'immutable';
 import PropTypes from 'prop-types';
 import RegistrationPolicy from './RegistrationPolicy';
 
-type FormItemAPIRepresentation = {
-  id?: number,
-  form_section_id?: number,
-  position?: number,
-  item_type?: string,
-  identifier?: string,
-};
-
-const defaultProperties: {
-  id: number | null,
-  formSectionId: number | null,
-  position: number | null,
-  itemType: string | null,
-  identifier: string | null,
-  properties: {},
-} = {
+const defaultProperties = {
   id: null,
   formSectionId: null,
   position: null,
@@ -37,11 +20,11 @@ export default class FormItem extends Record(defaultProperties) {
     identifier: PropTypes.string.isRequired,
   });
 
-  static fromAPI(body: FormItemAPIRepresentation) {
+  static fromAPI(body) {
     return new FormItem().setAttributesFromAPI(body);
   }
 
-  setAttributesFromAPI(json: FormItemAPIRepresentation): FormItem {
+  setAttributesFromAPI(json) {
     const {
       id,
       form_section_id: formSectionId,
@@ -79,7 +62,7 @@ export default class FormItem extends Record(defaultProperties) {
     return returnRecord;
   }
 
-  valueIsComplete(value: any): boolean {
+  valueIsComplete(value) {
     if (!this.properties.required) {
       return true;
     }

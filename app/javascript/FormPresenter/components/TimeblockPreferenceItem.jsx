@@ -1,41 +1,18 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
-import RequiredIndicator from './RequiredIndicator';
-import TimeblockTypes from '../TimeblockTypes';
-import type {
-  Timeblock,
-  TimeblockOmission,
-  TimeblockPreference,
-  TimeblockPreferenceAPIRepresentation,
-  TimeblockWithDate,
+import CaptionLegend from './CaptionLegend';
+import TimeblockTypes, {
+  TimeblockPropType,
+  TimeblockOmissionPropType,
+  TimeblockPreferenceAPIRepresentationPropType,
 } from '../TimeblockTypes';
 import TimeblockPreferenceCell from './TimeblockPreferenceCell';
 
-type Props = {
-  formItem: {
-    caption: string,
-    timeblocks: Array<Timeblock>,
-    omit_timeblocks: Array<TimeblockOmission>,
-  },
-  convention: {
-    starts_at: string,
-    ends_at: string,
-    timezone_name: string,
-  },
-  value?: Array<TimeblockPreferenceAPIRepresentation>,
-  onChange: (any) => void,
-};
-
-type State = {
-  preferences: Array<TimeblockWithDate>,
-};
-
 const { preferencesMatch } = TimeblockTypes;
 
-function describeTimeblock(timeblock: Timeblock) {
+function describeTimeblock(timeblock) {
   const start = moment().startOf('day').set(timeblock.start);
   const finish = moment().startOf('day').set(timeblock.finish);
 
@@ -43,11 +20,29 @@ function describeTimeblock(timeblock: Timeblock) {
 }
 
 class TimeblockPreferenceItem extends React.Component {
+  static propTypes = {
+    formItem: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      properties: PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+        timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
+        omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
+      }).isRequired,
+    }).isRequired,
+    convention: PropTypes.shape({
+      starts_at: PropTypes.string.isRequired,
+      ends_at: PropTypes.string.isRequired,
+      timezone_name: PropTypes.string.isRequired,
+    }).isRequired,
+    value: PropTypes.arrayOf(TimeblockPreferenceAPIRepresentationPropType.isRequired),
+    onChange: PropTypes.func.isRequired,
+  };
+
   static defaultProps = {
     value: [],
   };
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
 
@@ -61,19 +56,14 @@ class TimeblockPreferenceItem extends React.Component {
     };
   }
 
-  state: State
-  props: Props
-
-  preferenceDidChange = (newOrdinality: string, hypotheticalPreference: TimeblockPreference) => {
-    const existingPreference = this.state.preferences.find(
-      p => preferencesMatch(p, hypotheticalPreference),
-    );
+  preferenceDidChange = (newOrdinality, hypotheticalPreference) => {
+    const existingPreference = this.state.preferences.find(p =>
+      preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
       this.setState({
-        preferences: this.state.preferences.filter(
-          p => (!(preferencesMatch(p, hypotheticalPreference))),
-        ),
+        preferences: this.state.preferences.filter(p =>
+          (!(preferencesMatch(p, hypotheticalPreference)))),
       }, this.preferencesDidChange);
     } else if (existingPreference) {
       this.setState({
@@ -174,7 +164,9 @@ class TimeblockPreferenceItem extends React.Component {
         return null;
       }
 
-      const cells = cellContents.map(({ dayStart, render, start, finish }) => (
+      const cells = cellContents.map(({
+        dayStart, render, start, finish,
+      }) => (
         <TimeblockPreferenceCell
           key={dayStart.format('dddd')}
           render={render}
@@ -185,7 +177,7 @@ class TimeblockPreferenceItem extends React.Component {
           finish={finish}
           onChange={this.preferenceDidChange}
         />
-        ));
+      ));
 
       return (
         <tr key={timeblock.label}>
@@ -201,13 +193,7 @@ class TimeblockPreferenceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend">
-          <span
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: this.props.formItem.properties.caption }}
-          />
-          <RequiredIndicator formItem={this.props.formItem} />
-        </legend>
+        <CaptionLegend formItem={this.props.formItem} />
         <table className="table">
           <thead>
             <tr>

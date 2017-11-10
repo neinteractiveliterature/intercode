@@ -1,7 +1,21 @@
 def guard_for_convention_associated_model(association, action)
   ->(_obj, args, ctx) {
-    event = ctx[:convention].public_send(association).find(args[:id])
-    ctx[:current_ability].can?(action, event)
+    model = ctx[:convention].public_send(association).find(args[:id])
+    ctx[:current_ability].can?(action, model)
+  }
+end
+
+def guard_for_create_event_associated_model(association, arg_name)
+  guard ->(_obj, args, ctx) {
+    event = ctx[:convention].events.find(args[:event_id])
+    model = event.public_send(association).new(args[arg_name].to_h)
+    ctx[:current_ability].can?(:create, model)
+  }
+end
+
+def guard_for_model_with_id(model_class, action)
+  guard ->(_obj, args, ctx) {
+    ctx[:current_ability].can?(action, model_class.find(args[:id]))
   }
 end
 
@@ -36,10 +50,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :createRun, Mutations::CreateRun.field do
-    guard ->(_obj, args, ctx) {
-      event = ctx[:convention].events.find(args[:event_id])
-      ctx[:current_ability].can?(:create, event.runs.new(args[:run].to_h))
-    }
+    guard(guard_for_create_event_associated_model(:runs, :run))
   end
 
   field :createMultipleRuns, Mutations::CreateMultipleRuns.field do
@@ -71,5 +82,24 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   field :deleteRoom, Mutations::DeleteRoom.field do
     guard(guard_for_convention_associated_model(:rooms, :delete))
+  end
+
+  field :createTeamMember, Mutations::CreateTeamMember.field do
+    guard(guard_for_create_event_associated_model(:team_members, :team_member))
+  end
+
+  field :deleteTeamMember, Mutations::DeleteTeamMember.field do
+    guard(guard_for_model_with_id(TeamMember, :delete))
+  end
+
+  field :updateTeamMember, Mutations::UpdateTeamMember.field do
+    guard(guard_for_model_with_id(TeamMember, :update))
+  end
+
+  field :provideEventTicket, Mutations::ProvideEventTicket.field do
+    guard -> (_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:event_id])
+      ctx[:current_ability].can?(:update, event.team_members.new)
+    }
   end
 end

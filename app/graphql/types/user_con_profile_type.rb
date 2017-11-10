@@ -1,8 +1,11 @@
 Types::UserConProfileType = GraphQL::ObjectType.define do
   name "UserConProfile"
+
+  field :id, !types.Int
   field :convention, Types::ConventionType
   field :privileges, types[types.String]
   field :name, types.String
+  field :name_without_nickname, types.String
   field :first_name, types.String
   field :last_name, types.String
   field :nickname, types.String
@@ -20,4 +23,9 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field :evening_phone, types.String
   field :best_call_time, types.String
   field :preferred_contact, types.String
+  field :ticket, Types::TicketType do
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(UserConProfile, :ticket).load(obj)
+    }
+  end
 end

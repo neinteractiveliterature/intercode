@@ -1,9 +1,4 @@
-// @flow
-
-import moment from 'moment-timezone';
 import ColumnReservation from './ColumnReservation';
-import EventRun from './EventRun';
-import Timespan from './Timespan';
 
 // helper function for sorting columns - should help eliminate holes
 // in the schedule by allowing events to span columns if possible
@@ -12,7 +7,7 @@ import Timespan from './Timespan';
 // in case of two reservations starting at the same time, reservations that end
 // later go first.
 // finally, reservations with fewer events go first.
-function compareReservationsForSort(a: ?ColumnReservation, b: ?ColumnReservation): number {
+function compareReservationsForSort(a, b) {
   if (a == null && b == null) {
     return 0;
   }
@@ -37,9 +32,6 @@ function compareReservationsForSort(a: ?ColumnReservation, b: ?ColumnReservation
 }
 
 class ColumnReservationSet {
-  reservations: Array<?ColumnReservation>;
-  columnNumberByRunId: Map<number, number>;
-
   constructor() {
     this.clear();
   }
@@ -49,7 +41,7 @@ class ColumnReservationSet {
     this.columnNumberByRunId = new Map();
   }
 
-  reserve(columnNumber: number, eventRun: EventRun) {
+  reserve(columnNumber, eventRun) {
     if (this.reservations[columnNumber] != null) {
       this.reservations[columnNumber].addEventRun(eventRun);
     } else {
@@ -59,12 +51,12 @@ class ColumnReservationSet {
     this.columnNumberByRunId.set(eventRun.runId, columnNumber);
   }
 
-  getReservationForColumn(columnNumber: number): ?ColumnReservation {
+  getReservationForColumn(columnNumber) {
     return this.reservations[columnNumber];
   }
 
-  getReservedColumnNumbers(): Array<number> {
-    const reservedColumnNumbers: Array<number> = this.reservations.map((reservation, i) => {
+  getReservedColumnNumbers() {
+    const reservedColumnNumbers = this.reservations.map((reservation, i) => {
       if (reservation != null) {
         return i;
       }
@@ -75,12 +67,12 @@ class ColumnReservationSet {
     return (reservedColumnNumbers.filter(columnNumber => columnNumber !== -1));
   }
 
-  getLastReservedColumnNumber(): ?number {
+  getLastReservedColumnNumber() {
     const reservedColumnNumbers = this.getReservedColumnNumbers();
     return reservedColumnNumbers[reservedColumnNumbers.length - 1];
   }
 
-  expire(cutoff: moment) {
+  expire(cutoff) {
     this.getReservedColumnNumbers().forEach((columnNumber) => {
       const reservation = this.reservations[columnNumber];
       if (reservation == null) {
@@ -93,11 +85,11 @@ class ColumnReservationSet {
     });
   }
 
-  isEmpty(): boolean {
+  isEmpty() {
     return this.reservations.every(reservation => reservation == null);
   }
 
-  nextFreeColumn(): number {
+  nextFreeColumn() {
     const foundNull = this.reservations.findIndex(reservation => reservation == null);
     if (foundNull !== -1) {
       return foundNull;
@@ -106,8 +98,8 @@ class ColumnReservationSet {
     return this.reservations.length;
   }
 
-  getFinishTime(): ?moment {
-    let lastFinish: ?moment;
+  getFinishTime() {
+    let lastFinish;
     this.reservations.forEach((reservation) => {
       if (reservation == null) {
         return;
@@ -121,8 +113,8 @@ class ColumnReservationSet {
     return lastFinish;
   }
 
-  findFreeColumnForEventRun(eventRun: EventRun): number {
-    let columnNumber: ?number;
+  findFreeColumnForEventRun(eventRun) {
+    let columnNumber;
 
     this.reservations.forEach((reservation, i) => {
       if (columnNumber != null) {
@@ -141,7 +133,7 @@ class ColumnReservationSet {
     return this.reservations.length;
   }
 
-  columnFreeBetween(columnNumber: number, timespan: Timespan): boolean {
+  columnFreeBetween(columnNumber, timespan) {
     const reservation = this.reservations[columnNumber];
 
     return (reservation == null || !reservation.timespan.overlapsTimespan(timespan));
@@ -165,7 +157,7 @@ class ColumnReservationSet {
     this.recalculateRunColumns();
   }
 
-  isColumnReservedForRunId(runId: number): boolean {
+  isColumnReservedForRunId(runId) {
     return this.columnNumberByRunId.has(runId);
   }
 }

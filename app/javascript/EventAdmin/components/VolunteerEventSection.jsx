@@ -113,9 +113,7 @@ class VolunteerEventSection extends React.Component {
 
     const { event } = this.props;
 
-    const runLists = this.getConventionDays().map(
-      conventionDay => this.renderRunList(conventionDay),
-    );
+    const runLists = this.getConventionDays().map(conventionDay => this.renderRunList(conventionDay));
 
     return (
       <div>

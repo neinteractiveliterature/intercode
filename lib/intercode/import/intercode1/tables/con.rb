@@ -6,6 +6,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
     @con_name = config[:con_name]
     @con_domain = config[:con_domain]
     @constants_file = config[:constants_file]
+    @maximum_tickets = config[:maximum_tickets]
 
     @timezone = ActiveSupport::TimeZone[config[:timezone_name]]
     friday_date = config[:friday_date]
@@ -63,6 +64,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       starts_at: @starts_at,
       ends_at: @ends_at,
       timezone_name: @timezone.name,
+      maximum_tickets: @maximum_tickets,
       maximum_event_signups: {
         timespans: [
           {

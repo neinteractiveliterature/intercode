@@ -1,22 +1,19 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import RequiredIndicator from './RequiredIndicator';
 
-type Props = {
-  formItem: {
-    caption: string,
-  },
-  value?: number,
-  onChange: (number) => undefined,
-};
-
-type State = {
-  unit: string,
-};
-
 class TimespanItem extends React.Component {
+  static propTypes = {
+    formItem: PropTypes.shape({
+      properties: PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+    value: PropTypes.number,
+    onChange: PropTypes.func.isRequired,
+  };
+
   static defaultProps = {
     value: null,
   };
@@ -26,7 +23,7 @@ class TimespanItem extends React.Component {
     { name: 'minute(s)', length_seconds: 60 },
   ];
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
 
@@ -43,14 +40,9 @@ class TimespanItem extends React.Component {
     };
   }
 
-  state: State
-
   getCurrentUnit = () => TimespanItem.units.find(u => this.state.unit === u.name);
 
-  props: Props
-  nextUniqueId: () => string
-
-  inputDidChange = (event: SyntheticInputEvent) => {
+  inputDidChange = (event) => {
     const quantity = parseInt(event.target.value, 10);
 
     if (Number.isNaN(quantity)) {
@@ -60,7 +52,7 @@ class TimespanItem extends React.Component {
     }
   }
 
-  unitSelectorDidChange = (event: SyntheticInputEvent) => {
+  unitSelectorDidChange = (event) => {
     this.setState({ unit: event.target.value });
   }
 

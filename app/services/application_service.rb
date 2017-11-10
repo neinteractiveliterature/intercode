@@ -14,7 +14,7 @@ class ApplicationService
   attr_reader :skip_locking
 
   class << self
-    attr_accessor :result_class
+    attr_accessor :result_class, :validate_manually
 
     def result_class
       @result_class || ServiceResult
@@ -22,13 +22,17 @@ class ApplicationService
   end
 
   def call
-    return failure(errors) unless valid?
+    unless self.class.validate_manually
+      return failure(errors) unless valid?
+    end
 
     inner_call
   end
 
   def call!
-    raise ServiceFailure.new(self, failure(errors)) unless valid?
+    unless self.class.validate_manually
+      raise ServiceFailure.new(self, failure(errors)) unless valid?
+    end
 
     result = inner_call
     raise ServiceFailure.new(self, result) if result.failure?
