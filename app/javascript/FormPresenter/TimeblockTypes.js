@@ -18,18 +18,21 @@ export const TimeblockOmissionPropType = PropTypes.shape({
   date: PropTypes.string.isRequired,
 });
 
+const timeblockPreferenceCommonProps = {
+  label: PropTypes.string.isRequired,
+  ordinality: PropTypes.string.isRequired,
+};
+
 export const TimeblockPreferencePropType = PropTypes.shape({
   start: MomentPropTypes.momentObj.isRequired,
   finish: MomentPropTypes.momentObj.isRequired,
-  label: PropTypes.string.isRequired,
-  ordinality: PropTypes.string.isRequired,
+  ...timeblockPreferenceCommonProps,
 });
 
 export const TimeblockPreferenceAPIRepresentationPropType = PropTypes.shape({
   start: PropTypes.string.isRequired,
   finish: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  ordinality: PropTypes.string.isRequired,
+  ...timeblockPreferenceCommonProps,
 });
 
 export default {
