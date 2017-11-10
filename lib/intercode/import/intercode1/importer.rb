@@ -32,6 +32,7 @@ class Intercode::Import::Intercode1::Importer
         "show_flyer" => NAV_SHOW_FLYER,
         "show_program" => NAV_SHOW_PROGRAM,
         "thursday_enabled" => THURSDAY_ENABLED,
+        "maximum_tickets" => CON_MAX
       );
 
       $price_schedule = array();
@@ -92,6 +93,7 @@ class Intercode::Import::Intercode1::Importer
     @show_flyer = vars['show_flyer']
     @show_program = vars['show_program']
     @thursday_enabled = (vars['thursday_enabled'] == 1)
+    @maximum_tickets = vars['maximum_tickets']
   end
 
   def build_password_hashes
@@ -125,12 +127,7 @@ class Intercode::Import::Intercode1::Importer
     embedded_pdf_pages.each(&:import!)
     navigation_items.import!
     proposal_form.import!
-
-    registration_status_map.each do |status, ticket_type|
-      ticket_type.save!
-      Intercode::Import::Intercode1.logger.info("Imported #{status} ticket type as ID #{ticket_type.id}")
-    end
-
+    registration_statuses.import!
     events_table.import!
     users_table.import!
     staff_position_importer.import!
@@ -153,7 +150,8 @@ class Intercode::Import::Intercode1::Importer
       friday_date: @friday_date,
       constants_file: @constants_file,
       timezone_name: "US/Eastern",
-      thursday_enabled: @thursday_enabled
+      thursday_enabled: @thursday_enabled,
+      maximum_tickets: @maximum_tickets
     )
   end
 
@@ -171,7 +169,7 @@ class Intercode::Import::Intercode1::Importer
 
   def users_table
     return unless events_id_map
-    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map, registration_status_map, @legacy_password_md5s)
+    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map, registration_statuses.registration_status_map, @legacy_password_md5s)
   end
 
   def users_id_map
@@ -256,30 +254,8 @@ class Intercode::Import::Intercode1::Importer
     @navigation_items ||= Intercode::Import::Intercode1::NavigationItems.new(con)
   end
 
-  def registration_status_map
-    @registration_status_map ||= {
-      "Paid" => price_schedule_table.build_ticket_type,
-      "Comp" => con.ticket_types.new(
-        name: "event_comp",
-        description: "Comp ticket for event",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
-      ),
-      "Marketing" => con.ticket_types.new(
-        name: "marketing_comp",
-        description: "Marketing comp ticket",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
-      ),
-      "Vendor" => con.ticket_types.new(
-        name: "vendor",
-        description: "Vendor ticket",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(2000, 'USD'))
-      ),
-      "Rollover" => con.ticket_types.new(
-        name: "rollover",
-        description: "Rollover ticket from previous year",
-        pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD'))
-      ),
-    }
+  def registration_statuses
+    @registration_statuses ||= Intercode::Import::Intercode1::RegistrationStatuses.new(con, price_schedule_table.build_ticket_type)
   end
 
   def embedded_pdf_pages

@@ -1,27 +1,22 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
-import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 import InPlaceEditor from './InPlaceEditor';
-
-type Props = {
-  registrationBucket: RegistrationPolicyBucket,
-  onChange: (string, RegistrationPolicyBucket) => void,
-  onDelete: (string) => void,
-  lockNameAndDescription: ?boolean,
-  lockLimited: ?boolean,
-  lockDelete: ?boolean,
-  showKey: ?boolean,
-};
-
-type State = {
-  isConfirmingDelete: boolean,
-};
+import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 
 class RegistrationBucketRow extends React.Component {
+  static propTypes = {
+    registrationBucket: RegistrationPolicyBucket.propType.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    lockNameAndDescription: PropTypes.bool,
+    lockLimited: PropTypes.bool,
+    lockDelete: PropTypes.bool,
+    showKey: PropTypes.bool,
+  };
+
   static defaultProps = {
     lockNameAndDescription: false,
     lockLimited: false,
@@ -29,57 +24,41 @@ class RegistrationBucketRow extends React.Component {
     showKey: true,
   };
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
   }
 
-  state: State = {
+  state = {
     isConfirmingDelete: false,
   };
 
-  props: Props
-
-  nextUniqueId: () => string
-
-  bucketPropChanged = (propName: string, newValue: string) => {
+  bucketPropChanged = (propName, newValue) => {
     const originalKey = this.props.registrationBucket.get('key');
     this.props.onChange(originalKey, this.props.registrationBucket.set(propName, newValue));
   }
 
-  keyChanged = (newKey: string) => this.bucketPropChanged('key', newKey)
-  nameChanged = (newName: string) => this.bucketPropChanged('name', newName)
-  descriptionChanged = (newDescription: string) => this.bucketPropChanged('description', newDescription)
+  keyChanged = newKey => this.bucketPropChanged('key', newKey)
+  nameChanged = newName => this.bucketPropChanged('name', newName)
+  descriptionChanged = newDescription => this.bucketPropChanged('description', newDescription)
 
-  minimumSlotsChanged = (event: SyntheticInputEvent) => {
+  slotsChanged = (event, field) => {
+    const { registrationBucket } = this.props;
+
     this.props.onChange(
-      this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setMinimumSlots(parseInt(event.target.value, 10)),
+      registrationBucket.get('key'),
+      registrationBucket.setSlotField(field, parseInt(event.target.value, 10)),
     );
   }
 
-  preferredSlotsChanged = (event: SyntheticInputEvent) => {
-    this.props.onChange(
-      this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setPreferredSlots(parseInt(event.target.value, 10)),
-    );
-  }
-
-  totalSlotsChanged = (event: SyntheticInputEvent) => {
-    this.props.onChange(
-      this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setTotalSlots(parseInt(event.target.value, 10)),
-    );
-  }
-
-  slotsLimitedChanged = (event: SyntheticInputEvent) => {
+  slotsLimitedChanged = (event) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
       this.props.registrationBucket.setSlotsLimited(event.target.checked),
     );
   }
 
-  beginDelete = (event: SyntheticInputEvent) => {
+  beginDelete = (event) => {
     event.preventDefault();
     this.setState({ isConfirmingDelete: true });
   }
@@ -116,64 +95,57 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  renderLimits = (): React.Element<*> | null => {
+  renderLimits = () => {
     const bucket = this.props.registrationBucket;
 
     if (!bucket.get('slotsLimited')) {
       return null;
     }
 
-    const minId = this.nextUniqueId();
-    const prefId = this.nextUniqueId();
-    const maxId = this.nextUniqueId();
+    const slotControls = [
+      {
+        label: 'Min',
+        field: 'minimumSlots',
+        min: 0,
+      },
+      {
+        label: 'Pref',
+        field: 'preferredSlots',
+        min: bucket.get('minimumSlots'),
+      },
+      {
+        label: 'Max',
+        field: 'totalSlots',
+        min: bucket.get('preferredSlots'),
+      },
+    ].map(({
+      label,
+      field,
+      min,
+    }, i) => {
+      const inputId = this.nextUniqueId();
+
+      return (
+        <div className={classNames('d-inline-flex', { 'ml-1': i > 0 })} key={field}>
+          <label htmlFor={inputId}>{label}</label>
+          <input
+            id={inputId}
+            type="number"
+            size="2"
+            className="form-control form-control-sm ml-1"
+            min={min}
+            placeholder="Min"
+            value={bucket.get(field) || ''}
+            onChange={(event) => { this.slotsChanged(event, field); }}
+            style={{ width: '4em' }}
+          />
+        </div>
+      );
+    });
 
     return (
       <div className="form-inline ml-1 flex-nowrap">
-        <div className="d-inline-flex mr-1">
-          <label htmlFor={minId}>Min</label>
-          <input
-            id={minId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm"
-            min="0"
-            placeholder="Min"
-            value={bucket.get('minimumSlots') || ''}
-            onChange={this.minimumSlotsChanged}
-            style={{ width: '4em' }}
-          />
-        </div>
-
-        <div className="d-inline-flex mr-1">
-          <label htmlFor={prefId}>Pref</label>
-          <input
-            id={prefId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm"
-            min={bucket.get('minimumSlots')}
-            placeholder="Pref"
-            value={bucket.get('preferredSlots') || ''}
-            onChange={this.preferredSlotsChanged}
-            style={{ width: '4em' }}
-          />
-        </div>
-
-        <div className="d-inline-flex">
-          <label htmlFor={maxId}>Max</label>
-          <input
-            id={maxId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm"
-            min={bucket.get('preferredSlots')}
-            placeholder="Max"
-            value={bucket.get('totalSlots') || ''}
-            onChange={this.totalSlotsChanged}
-            style={{ width: '4em' }}
-
-          />
-        </div>
+        {slotControls}
       </div>
     );
   }

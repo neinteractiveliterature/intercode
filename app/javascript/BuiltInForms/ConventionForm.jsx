@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import Datetime from 'react-datetime';
-import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
+import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 
@@ -40,6 +42,7 @@ class ConventionForm extends React.Component {
           value: PropTypes.string.isRequired,
         }).isRequired).isRequired,
       }).isRequired,
+      maximum_tickets: PropTypes.number,
     }).isRequired,
     saveConvention: PropTypes.func.isRequired,
   }
@@ -50,6 +53,23 @@ class ConventionForm extends React.Component {
     this.state = {
       convention: props.initialConvention,
     };
+
+    this.conventionMutator = new ModelStateChangeCalculator(
+      'convention',
+      {
+        name: FIELD_TYPES.STRING,
+        domain: FIELD_TYPES.STRING,
+        timezone_name: FIELD_TYPES.SELECT,
+        starts_at: FIELD_TYPES.DATETIME,
+        ends_at: FIELD_TYPES.DATETIME,
+        accepting_proposals: FIELD_TYPES.BOOLEAN,
+        registrations_frozen: FIELD_TYPES.BOOLEAN,
+        show_schedule: FIELD_TYPES.CHECKBOX,
+        maximum_event_signups: FIELD_TYPES.OBJECT,
+        maximum_tickets: FIELD_TYPES.INTEGER,
+      },
+      () => this.state.convention.timezone_name,
+    ).getMutatorForComponent(this);
   }
 
   onClickSave = (event) => {
@@ -57,86 +77,13 @@ class ConventionForm extends React.Component {
     this.props.saveConvention(this.state.convention);
   }
 
-  formInputDidChange = (event) => {
-    this.setState({
-      convention: {
-        ...this.state.convention,
-        [event.target.name]: event.target.value,
-      },
-    });
-  }
-
-  booleanInputDidChange = (event) => {
-    this.setState({
-      convention: {
-        ...this.state.convention,
-        [event.target.name]: event.target.value === 'true',
-      },
-    });
-  }
-
-  datetimeValueDidChange = (fieldName, newValue) => {
-    const newValueInTimezone = moment.tz(newValue.toObject(), this.state.convention.timezone_name);
-
-    this.setState({
-      convention: {
-        ...this.state.convention,
-        [fieldName]: newValueInTimezone.toISOString(),
-      },
-    });
-  }
-
-  maximumEventSignupsDidChange = (newMaximumEventSignups) => {
-    this.setState({
-      convention: {
-        ...this.state.convention,
-        maximum_event_signups: newMaximumEventSignups,
-      },
-    });
-  }
-
-  timezoneNameDidChange = (option) => {
-    this.setState({
-      convention: {
-        ...this.state.convention,
-        timezone_name: option.value,
-      },
-    });
-  }
-
-  renderMultipleChoiceInput = (name, caption, choices, className, onChange) => {
-    const options = choices.map(({ label, value }) => (
-      <BootstrapFormCheckbox
-        key={`${name}_${value}`}
-        name={name}
-        type="radio"
-        className={className}
-        label={label}
-        value={value.toString()}
-        checked={this.state.convention[name] === value}
-        onChange={onChange}
-      />
-    ));
-
-    return (
-      <fieldset className="form-group">
-        <legend className="col-form-legend">{caption}</legend>
-        {options}
-      </fieldset>
-    );
-  }
-
   renderBooleanInput = (name, caption) => (
-    this.renderMultipleChoiceInput(
-      name,
-      caption,
-      [
-        { label: 'Yes', value: true },
-        { label: 'No', value: false },
-      ],
-      'form-check-inline',
-      this.booleanInputDidChange,
-    )
+    <BooleanInput
+      name={name}
+      caption={caption}
+      value={this.state.convention[name]}
+      onChange={this.conventionMutator.valueChangeCallback(name)}
+    />
   )
 
   render = () => {
@@ -145,7 +92,7 @@ class ConventionForm extends React.Component {
         {label}
         <Datetime
           value={moment(this.state.convention[name]).tz(this.state.convention.timezone_name)}
-          onChange={(newValue) => { this.datetimeValueDidChange(name, newValue); }}
+          onChange={this.conventionMutator.valueChangeCallback(name)}
           dateFormat="dddd, MMMM DD, YYYY"
           timeFormat="[at] h:mma"
         />
@@ -158,21 +105,21 @@ class ConventionForm extends React.Component {
           name="name"
           label="Name"
           value={this.state.convention.name}
-          onChange={this.formInputDidChange}
+          onChange={this.conventionMutator.onInputChange}
         />
 
         <BootstrapFormInput
           name="domain"
           label="Convention domain name"
           value={this.state.convention.domain}
-          onChange={this.formInputDidChange}
+          onChange={this.conventionMutator.onInputChange}
         />
 
         <TimezoneSelect
           name="timezone_name"
           label="Time zone"
           value={this.state.convention.timezone_name}
-          onChange={this.timezoneNameDidChange}
+          onChange={this.conventionMutator.valueChangeCallback('timezone_name')}
         />
 
         <div className="row form-group">
@@ -180,20 +127,27 @@ class ConventionForm extends React.Component {
         </div>
 
         {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
-        {
-          this.renderMultipleChoiceInput(
-            'show_schedule',
-            'Show event schedule',
-            [
-              { value: 'no', label: 'No' },
-              { value: 'priv', label: 'Only to users with scheduling privileges' },
-              { value: 'gms', label: 'Only to event team members and users with any privileges' },
-              { value: 'yes', label: 'Yes, to everyone' },
-            ],
-            undefined,
-            this.formInputDidChange,
-          )
-        }
+
+        <MultipleChoiceInput
+          name="show_schedule"
+          caption="Show event schedule"
+          choices={[
+            { value: 'no', label: 'No' },
+            { value: 'priv', label: 'Only to users with scheduling privileges' },
+            { value: 'gms', label: 'Only to event team members and users with any privileges' },
+            { value: 'yes', label: 'Yes, to everyone' },
+          ]}
+          value={this.state.convention.show_schedule}
+          onChange={this.conventionMutator.valueChangeCallback('show_schedule')}
+        />
+
+        <BootstrapFormInput
+          name="maximum_tickets"
+          label="Maximum tickets"
+          type="number"
+          value={(this.state.convention.maximum_tickets || '').toString()}
+          onChange={this.conventionMutator.onInputChange}
+        />
 
         {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
 
@@ -202,7 +156,7 @@ class ConventionForm extends React.Component {
           <ScheduledValueEditor
             scheduledValue={this.state.convention.maximum_event_signups}
             timezone={this.state.convention.timezone_name}
-            setScheduledValue={this.maximumEventSignupsDidChange}
+            setScheduledValue={this.conventionMutator.valueChangeCallback('maximum_event_signups')}
             buildValueInput={buildMaximumEventSignupsInput}
           />
         </fieldset>

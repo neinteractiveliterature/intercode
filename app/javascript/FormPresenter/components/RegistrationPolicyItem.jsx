@@ -1,23 +1,21 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import RegistrationPolicy, { type RegistrationPolicyAPIRepresentation } from '../../Models/RegistrationPolicy';
+import RegistrationPolicy from '../../Models/RegistrationPolicy';
 import RegistrationPolicyEditor from '../../BuiltInFormControls/RegistrationPolicyEditor';
 import presets from '../../RegistrationPolicyPresets';
 
-type Props = {
-  formItem: {},
-  value?: RegistrationPolicyAPIRepresentation,
-  onChange: (any) => void,
-};
-
-type State = {
-  registrationPolicy: RegistrationPolicy,
-};
-
 class RegistrationPolicyItem extends React.Component {
-  constructor(props: Props) {
+  static propTypes = {
+    value: RegistrationPolicy.apiRepresentationPropType,
+    onChange: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    value: null,
+  };
+
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
 
@@ -26,10 +24,7 @@ class RegistrationPolicyItem extends React.Component {
     };
   }
 
-  state: State
-  props: Props
-
-  registrationPolicyChanged = (newRegistrationPolicy: RegistrationPolicy) => {
+  registrationPolicyChanged = (newRegistrationPolicy) => {
     this.setState(
       { registrationPolicy: newRegistrationPolicy },
       () => { this.props.onChange(newRegistrationPolicy.getAPIRepresentation()); },

@@ -1,5 +1,3 @@
-// @flow
-
 import moment from 'moment-timezone';
 
 const humanizeTime = (time, includeDay) => {
@@ -29,14 +27,11 @@ const humanizeTime = (time, includeDay) => {
 };
 
 class Timespan {
-  start: moment;
-  finish: moment;
-
-  static fromStrings(start: string, finish: string): Timespan {
+  static fromStrings(start, finish) {
     return new Timespan(moment(start), moment(finish));
   }
 
-  constructor(start: moment, finish: moment) {
+  constructor(start, finish) {
     if (start.isAfter(finish)) {
       throw new Error('Start cannot be after finish');
     }
@@ -45,27 +40,27 @@ class Timespan {
     this.finish = finish;
   }
 
-  tz(timezoneName: string) {
+  tz(timezoneName) {
     return new Timespan(this.start.tz(timezoneName), this.finish.tz(timezoneName));
   }
 
-  includesTime(time: moment) {
+  includesTime(time) {
     return (this.start.isSameOrBefore(time) && this.finish.isAfter(time));
   }
 
-  includesTimespan(other: Timespan) {
+  includesTimespan(other) {
     return this.start.isSameOrBefore(other.start) && this.finish.isSameOrAfter(other.finish);
   }
 
-  overlapsTimespan(other: Timespan) {
+  overlapsTimespan(other) {
     return this.start.isBefore(other.finish) && other.start.isBefore(this.finish);
   }
 
-  isSame(other: Timespan) {
+  isSame(other) {
     return this.start.isSame(other.start) && this.finish.isSame(other.finish);
   }
 
-  expandedToFit(other: Timespan): Timespan {
+  expandedToFit(other) {
     let newStart = this.start;
     let newFinish = this.finish;
 
@@ -80,11 +75,11 @@ class Timespan {
     return new Timespan(newStart, newFinish);
   }
 
-  union(other: Timespan): Timespan {
+  union(other) {
     return this.expandedToFit(other);
   }
 
-  intersection(other: Timespan): Timespan {
+  intersection(other) {
     let newStart = this.start;
     let newFinish = this.finish;
 
@@ -99,11 +94,11 @@ class Timespan {
     return new Timespan(newStart, newFinish);
   }
 
-  getLength(unit: string = 'millisecond'): number {
+  getLength(unit = 'millisecond') {
     return this.finish.diff(this.start, unit);
   }
 
-  humanizeInTimezone(timezoneName: string): string {
+  humanizeInTimezone(timezoneName) {
     const start = this.start.tz(timezoneName);
     const finish = this.finish.tz(timezoneName);
 
@@ -112,11 +107,7 @@ class Timespan {
     return `${humanizeTime(start, true)} - ${humanizeTime(finish, includeDayInFinish)}`;
   }
 
-  getTimeHopsWithin(
-    timezoneName: string,
-    unit: string,
-    offset: ?moment.duration,
-  ): Array<moment> {
+  getTimeHopsWithin(timezoneName, unit, offset) {
     const timeBlocks = [];
     const now = this.start.clone().tz(timezoneName).startOf(unit);
     while (now.isBefore(this.finish)) {
@@ -131,11 +122,7 @@ class Timespan {
     return timeBlocks;
   }
 
-  getTimespansWithin(
-    timezoneName: string,
-    unit: string,
-    offset: ?moment.duration,
-  ): Array<Timespan> {
+  getTimespansWithin(timezoneName, unit, offset) {
     const timeHops = this.getTimeHopsWithin(timezoneName, unit, offset);
     return timeHops.map((timeHop, i) => {
       if (i < timeHops.length - 1) {
@@ -150,7 +137,7 @@ class Timespan {
     });
   }
 
-  clone(): Timespan {
+  clone() {
     return new Timespan(this.start.clone(), this.finish.clone());
   }
 }

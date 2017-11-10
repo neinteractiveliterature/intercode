@@ -1,7 +1,13 @@
 %h1 Ticket types for #{@convention.name}
 
 - @ticket_types.each do |ticket_type|
-  .card.my-4
+  - card_class = 'bg-dark text-white'
+  - if ticket_type.publicly_available?
+    - card_class = ''
+  - elsif ticket_type.event_provided?
+    - card_class = 'bg-success text-white'
+
+  .card.my-4{class: card_class}
     .card-header
       .row
         .col-md-8
@@ -17,8 +23,20 @@
               %i.fa.fa-pencil-square-o.mr-1
               Edit
 
+      %p.mb-0
+        %small
+          %em
+            - if ticket_type.publicly_available?
+              Available for purchase by the general public
+              - if ticket_type.event_provided?
+                and events can provide up to #{pluralize ticket_type.maximum_event_provided_tickets, 'ticket'}
+            - elsif ticket_type.event_provided?
+              Events can provide up to #{pluralize ticket_type.maximum_event_provided_tickets, 'ticket'}
+            - else
+              Private ticket type (cannot be purchased through the web)
+
     .card-body
-      %ul
+      %ul.mb-0
         - ticket_type.pricing_schedule.timespans.each do |timespan|
           %li= timespan.to_s(:short)
 

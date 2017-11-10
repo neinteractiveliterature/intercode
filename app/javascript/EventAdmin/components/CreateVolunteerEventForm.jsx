@@ -51,21 +51,19 @@ class CreateVolunteerEventForm extends React.Component {
     this.setState({ event: { ...this.state.event, ...newEventData } });
   }
 
-  createEvent = () => {
-    return this.props.createEvent({
-      variables: {
-        input: {
-          event: this.state.event,
-        },
+  createEvent = () => this.props.createEvent({
+    variables: {
+      input: {
+        event: this.state.event,
       },
-      update: (store, { data: { createEvent: { event: newEvent } } }) => {
-        const eventsData = store.readQuery({ query: eventsQuery });
-        eventsData.events.push(newEvent);
-        store.writeQuery({ query: eventsQuery, data: eventsData });
-        this.props.history.replace('/volunteer_events');
-      },
-    });
-  }
+    },
+    update: (store, { data: { createEvent: { event: newEvent } } }) => {
+      const eventsData = store.readQuery({ query: eventsQuery });
+      eventsData.events.push(newEvent);
+      store.writeQuery({ query: eventsQuery, data: eventsData });
+      this.props.history.replace('/volunteer_events');
+    },
+  })
 
   renderFormBody = () => (
     <CommonEventFormFields

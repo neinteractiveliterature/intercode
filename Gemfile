@@ -62,6 +62,7 @@ gem 'will_paginate-bootstrap4'
 # GraphQL server
 gem 'graphql'
 gem 'graphql-guard'
+gem 'graphql-batch'
 gem 'graphiql-rails', group: :development
 
 # Markdown
@@ -104,6 +105,7 @@ group :test do
   gem 'factory_bot'
   gem 'factory_bot_rails'
   gem 'codeclimate-test-reporter'
+  gem 'stripe-ruby-mock', require: 'stripe_mock'
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
   gem 'rails-controller-testing'

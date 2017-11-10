@@ -25,12 +25,10 @@ class EventAdminApp extends React.Component {
 
     this.store = createStore(
       buildReducer(this.client),
-      composeEnhancers(
-        applyMiddleware(
-          this.client.middleware(),
-          ...defaultMiddleware,
-        ),
-      ),
+      composeEnhancers(applyMiddleware(
+        this.client.middleware(),
+        ...defaultMiddleware,
+      )),
     );
   }
 

@@ -1,24 +1,18 @@
-// @flow
-
 import React from 'react';
-
-type Props = {
-  value: string,
-  onChange: (string) => void,
-  children?: React.Children
-};
-
-type State = {
-  editing: boolean,
-  editingValue: string,
-};
+import PropTypes from 'prop-types';
 
 class InPlaceEditor extends React.Component {
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    children: PropTypes.node,
+  };
+
   static defaultProps = {
     children: null,
   }
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -27,15 +21,11 @@ class InPlaceEditor extends React.Component {
     };
   }
 
-  state: State
-  props: Props
-  input: HTMLElement
-
-  inputChanged = (event: SyntheticInputEvent) => {
+  inputChanged = (event) => {
     this.setState({ editingValue: event.target.value });
   }
 
-  beginEditing = (event: SyntheticInputEvent) => {
+  beginEditing = (event) => {
     event.preventDefault();
     this.setState(
       { editing: true, editingValue: this.props.value },
@@ -43,7 +33,7 @@ class InPlaceEditor extends React.Component {
     );
   }
 
-  cancelEditing = (event: ?SyntheticInputEvent) => {
+  cancelEditing = (event) => {
     if (event != null) {
       event.preventDefault();
     }
@@ -51,7 +41,7 @@ class InPlaceEditor extends React.Component {
     this.setState({ editing: false, editingValue: undefined });
   }
 
-  commitEditing = (event: ?SyntheticInputEvent) => {
+  commitEditing = (event) => {
     if (event != null) {
       event.preventDefault();
     }
@@ -60,7 +50,7 @@ class InPlaceEditor extends React.Component {
     this.setState({ editing: false, editingValue: undefined });
   }
 
-  keyDownInInput = (event: KeyboardEvent) => {
+  keyDownInInput = (event) => {
     switch (event.key) {
       case 'Escape':
         event.preventDefault();

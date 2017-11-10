@@ -7,6 +7,9 @@ class TicketType < ApplicationRecord
   # Only allow letters, numbers, and underscores
   validates_format_of :name, with: /\A\w+\z/, allow_blank: true
 
+  scope :publicly_available, -> { where(publicly_available: true) }
+  scope :event_provided, -> { where('maximum_event_provided_tickets > 0') }
+
   def price_at(time)
     pricing_schedule.value_at(time)
   end
@@ -32,6 +35,10 @@ class TicketType < ApplicationRecord
 
   def next_price
     next_price_after(Time.now)
+  end
+
+  def event_provided?
+    maximum_event_provided_tickets > 0
   end
 
   def to_liquid

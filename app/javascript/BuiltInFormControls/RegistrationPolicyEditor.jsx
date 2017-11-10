@@ -1,34 +1,25 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
-import type { RegistrationPolicyAPIRepresentation } from '../Models/RegistrationPolicy';
-
-export type RegistrationPolicyPreset = {
-  name: string,
-  policy: RegistrationPolicyAPIRepresentation,
-};
-
-type Props = {
-  registrationPolicy: RegistrationPolicy,
-  onChange: (RegistrationPolicy) => void,
-  lockNameAndDescription: boolean,
-  lockLimitedBuckets?: Array<string>,
-  lockDeleteBuckets?: Array<string>,
-  showKey: boolean,
-  presets?: Array<RegistrationPolicyPreset>,
-};
-
-type State = {
-  custom: boolean,
-  preset?: RegistrationPolicyPreset,
-};
 
 class RegistrationPolicyEditor extends React.Component {
+  static propTypes = {
+    registrationPolicy: RegistrationPolicy.propType.isRequired,
+    onChange: PropTypes.func.isRequired,
+    lockNameAndDescription: PropTypes.bool,
+    lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
+    lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
+    showKey: PropTypes.bool,
+    presets: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      policy: RegistrationPolicy.apiRepresentationPropType.isRequired,
+    }).isRequired),
+  }
+
   static defaultProps = {
     lockNameAndDescription: false,
     lockLimitedBuckets: null,
@@ -37,7 +28,7 @@ class RegistrationPolicyEditor extends React.Component {
     presets: [],
   }
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
 
@@ -45,17 +36,12 @@ class RegistrationPolicyEditor extends React.Component {
     let initiallyCustom = false;
     if (Array.isArray(this.props.presets)) {
       initialPreset = this.props.presets.find(preset => (
-        preset.policy.buckets.every(
-          bucket => (
-            typeof bucket.key === 'string' &&
+        preset.policy.buckets.every(bucket => (
+          typeof bucket.key === 'string' &&
             this.props.registrationPolicy.getBucket(bucket.key)
-          ),
-        ) &&
-        this.props.registrationPolicy.buckets.every(
-          bucket => preset.policy.buckets.find(
-            presetBucket => presetBucket.key === bucket.key,
-          ),
-        )
+        )) &&
+        this.props.registrationPolicy.buckets.every(bucket =>
+          preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key))
       ));
 
       if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
@@ -69,8 +55,6 @@ class RegistrationPolicyEditor extends React.Component {
     };
   }
 
-  state: State
-
   getHeaderLabels = () => [
     ...(this.props.showKey ? ['Key'] : []),
     'Name',
@@ -79,16 +63,12 @@ class RegistrationPolicyEditor extends React.Component {
     '',
   ]
 
-  props: Props
-
-  nextUniqueId: () => string
-
-  addBucket = (event: SyntheticInputEvent) => {
+  addBucket = (event) => {
     event.preventDefault();
     this.props.onChange(this.props.registrationPolicy.addBucket('untitled'));
   }
 
-  addAnythingBucket = (event: SyntheticInputEvent) => {
+  addAnythingBucket = (event) => {
     event.preventDefault();
     this.props.onChange(this.props.registrationPolicy.addBucket(
       'anything',
@@ -96,15 +76,15 @@ class RegistrationPolicyEditor extends React.Component {
     ));
   }
 
-  bucketChanged = (key: string, newBucket: RegistrationPolicyBucket) => {
+  bucketChanged = (key, newBucket) => {
     this.props.onChange(this.props.registrationPolicy.updateBucket(key, newBucket));
   }
 
-  deleteBucket = (key: string) => {
+  deleteBucket = (key) => {
     this.props.onChange(this.props.registrationPolicy.deleteBucket(key));
   }
 
-  presetSelected = (event: SyntheticInputEvent) => {
+  presetSelected = (event) => {
     if (!this.props.presets) {
       return;
     }
@@ -158,9 +138,8 @@ class RegistrationPolicyEditor extends React.Component {
   renderTable = () => {
     const bucketRows = this.props.registrationPolicy.buckets.map((bucket) => {
       const bucketInPreset = (
-        this.state.preset && !!this.state.preset.policy.buckets.find(
-          presetBucket => presetBucket.key === bucket.key,
-        )
+        this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket =>
+          presetBucket.key === bucket.key)
       );
 
       const lockDelete = (

@@ -1,22 +1,11 @@
-// @flow
-
-import EventRun from './EventRun';
-
 class RunDimensions {
-  eventRun: EventRun;
-  laneIndex: number;
-  timePlacement: number;
-  timeSpan: number;
-  lanePlacement: ?number;
-  laneSpan: ?number;
-
   constructor(
-    eventRun: EventRun,
-    laneIndex: number,
-    timePlacement: number,
-    timeSpan: number,
-    lanePlacement: ?number,
-    laneSpan: ?number,
+    eventRun,
+    laneIndex,
+    timePlacement,
+    timeSpan,
+    lanePlacement,
+    laneSpan,
   ) {
     this.eventRun = eventRun;
     this.lanePlacement = lanePlacement;

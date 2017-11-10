@@ -8,6 +8,7 @@ class EventSignupService < ApplicationService
   delegate :event, to: :run
   delegate :convention, to: :event
 
+  self.validate_manually = true
   validate :signup_count_must_be_allowed
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket
@@ -33,6 +34,8 @@ class EventSignupService < ApplicationService
   def inner_call
     signup = nil
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
+      return failure(errors) unless valid?
+
       signup = run.signups.create!(
         run: run,
         bucket_key: actual_bucket.try!(:key),

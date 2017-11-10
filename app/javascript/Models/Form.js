@@ -1,15 +1,7 @@
-// @flow
-
 import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import memoize from 'memoized-class-decorator';
 import FormItem from './FormItem';
-
-type FormSection = {
-  id: number,
-  title: string,
-  position: number,
-};
 
 export default class Form {
   static propType = PropTypes.shape({
@@ -26,15 +18,7 @@ export default class Form {
     return new Form(Map(properties), formSectionsById, formItemsById);
   }
 
-  properties: any;
-  formSections: Map<number, FormSection>;
-  formItems: Map<number, FormItem>;
-
-  constructor(
-    properties: any,
-    formSections: Map<number, FormSection>,
-    formItems: Map<number, FormItem>,
-  ) {
+  constructor(properties, formSections, formItems) {
     this.properties = properties;
     this.formSections = formSections;
     this.formItems = formItems;
@@ -45,18 +29,17 @@ export default class Form {
     return this.formSections.valueSeq().sortBy(section => section.position);
   }
 
-  getSection(sectionId: number) {
+  getSection(sectionId) {
     return this.formSections.get(sectionId);
   }
 
-  getSectionIndex(sectionId: number): number {
+  getSectionIndex(sectionId) {
     return this.getSections().indexOf(this.getSection(sectionId));
   }
 
-  getItemsInSection(sectionId: number) {
-    return this.formItems.valueSeq().filter(
-      item => item.formSectionId === sectionId,
-    ).sortBy(item => item.position);
+  getItemsInSection(sectionId) {
+    const sectionItems = this.formItems.valueSeq().filter(item => item.formSectionId === sectionId);
+    return sectionItems.sortBy(item => item.position);
   }
 
   getAllItems() {

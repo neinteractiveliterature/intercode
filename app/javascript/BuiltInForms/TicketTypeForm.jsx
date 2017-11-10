@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import NumberInput from 'react-number-input';
+import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 import ResourceForm from './ResourceForm';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
@@ -23,17 +25,15 @@ const buildScheduledMoneyValueInput = (value, onChange) => {
   }
 
   return (
-    <td className="w-25">
-      <div className="input-group">
-        <span className="input-group-addon">$</span>
-        <NumberInput
-          className="form-control"
-          value={dollarValue}
-          onChange={processNumberInputChangeEvent}
-          format="0,0.00"
-        />
-      </div>
-    </td>
+    <div className="input-group">
+      <span className="input-group-addon">$</span>
+      <NumberInput
+        className="form-control"
+        value={dollarValue}
+        onChange={processNumberInputChangeEvent}
+        format="0,0.00"
+      />
+    </div>
   );
 };
 
@@ -44,6 +44,8 @@ class TicketTypeForm extends React.Component {
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       pricing_schedule: ScheduledValuePropType.isRequired,
+      publicly_available: PropTypes.bool.isRequired,
+      maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired,
     baseUrl: PropTypes.string.isRequired,
     timezone: PropTypes.string.isRequired,
@@ -55,24 +57,22 @@ class TicketTypeForm extends React.Component {
     this.state = {
       ticketType: this.props.initialTicketType,
     };
+
+    this.ticketTypeMutator = new ModelStateChangeCalculator(
+      'ticketType',
+      {
+        name: FIELD_TYPES.STRING,
+        description: FIELD_TYPES.STRING,
+        pricing_schedule: FIELD_TYPES.OBJECT,
+        publicly_available: FIELD_TYPES.BOOLEAN,
+        maximum_event_provided_tickets: FIELD_TYPES.INTEGER,
+      },
+    ).getMutatorForComponent(this);
   }
 
   getSubmitRequestBody = () => ({
     ticket_type: this.state.ticketType,
   })
-
-  setTicketTypeAttribute = (attribute, value) => {
-    this.setState({ ticketType: Object.assign({}, this.state.ticketType, { [attribute]: value }) });
-  }
-
-  inputChanged = (event) => {
-    const { name, value } = event.target;
-    this.setTicketTypeAttribute(name, value);
-  }
-
-  pricingScheduleChanged = (newPricingSchedule) => {
-    this.setTicketTypeAttribute('pricing_schedule', newPricingSchedule);
-  }
 
   render = () => {
     const disableSubmit = !ScheduledValueEditor.isValid(this.state.ticketType.pricing_schedule);
@@ -91,7 +91,7 @@ class TicketTypeForm extends React.Component {
           type="text"
           style={{ fontFamily: 'monospace' }}
           value={this.state.ticketType.name}
-          onChange={this.inputChanged}
+          onChange={this.ticketTypeMutator.onInputChange}
         />
 
         <BootstrapFormInput
@@ -99,7 +99,22 @@ class TicketTypeForm extends React.Component {
           name="description"
           type="text"
           value={this.state.ticketType.description}
-          onChange={this.inputChanged}
+          onChange={this.ticketTypeMutator.onInputChange}
+        />
+
+        <BooleanInput
+          caption="Publicly available for purchase?"
+          name="publicly_available"
+          value={this.state.ticketType.publicly_available}
+          onChange={this.ticketTypeMutator.valueChangeCallback('publicly_available')}
+        />
+
+        <BootstrapFormInput
+          label="Number of event-provided tickets of this type (per event)"
+          name="maximum_event_provided_tickets"
+          type="number"
+          value={this.state.ticketType.maximum_event_provided_tickets.toString()}
+          onChange={this.ticketTypeMutator.onInputChange}
         />
 
         <fieldset>
@@ -108,7 +123,7 @@ class TicketTypeForm extends React.Component {
           <ScheduledValueEditor
             timezone={this.props.timezone}
             scheduledValue={this.state.ticketType.pricing_schedule}
-            setScheduledValue={this.pricingScheduleChanged}
+            setScheduledValue={this.ticketTypeMutator.valueChangeCallback('pricing_schedule')}
             buildValueInput={buildScheduledMoneyValueInput}
           />
         </fieldset>

@@ -15,6 +15,8 @@ import 'bootstrap.native/dist/bootstrap-native-v4';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
+import '../inflections';
+
 import ConventionAdmin from '../ConventionAdmin';
 import EventAdmin from '../EventAdmin';
 import FormPresenter from '../FormPresenter';
@@ -22,6 +24,7 @@ import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
 import StandaloneEditEvent from '../StandaloneEditEvent';
+import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
@@ -29,17 +32,17 @@ import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
-  ConventionAdmin,
+  ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   EventAdmin,
   FormPresenter,
-  RoomsAdmin,
-  ScheduleGrid,
-  StaffPositionForm,
-  StandaloneEditEvent,
-  TeamMemberForm,
+  RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
+  ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
+  StaffPositionForm: StandaloneGraphQLComponent(StaffPositionForm),
+  StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
+  TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketPurchaseForm,
   TicketTypeForm,
-  WhosFreeForm,
+  WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
 });
 
 Rails.start();

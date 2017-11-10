@@ -1,30 +1,27 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import RequiredIndicator from './RequiredIndicator';
 
-type Props = {
-  formItem: {
-    caption: string,
-  },
-  value?: string,
-  onChange: (value) => undefined,
-};
-
 class FreeTextItem extends React.Component {
+  static propTypes = {
+    formItem: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+    }).isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+  };
+
   static defaultProps = {
     value: null,
   };
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     enableUniqueIds(this);
   }
 
-  props: Props
-
-  valueDidChange = (event: SyntheticInputEvent) => {
+  valueDidChange = (event) => {
     this.props.onChange(event.target.value);
   }
 
@@ -36,7 +33,7 @@ class FreeTextItem extends React.Component {
       />
       <RequiredIndicator formItem={formItem} />
     </label>
-    )
+  )
 
   renderInput = (formItem, domId) => {
     if (formItem.lines === 1) {
