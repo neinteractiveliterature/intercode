@@ -97,26 +97,31 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
     return returnRecord;
   }
 
-  setMinimumSlots(newCount) {
-    let returnRecord = this;
+  setSlotField(field, value) {
+    switch (field) {
+      case 'minimumSlots': return this.setMinimumSlots(value);
+      case 'preferredSlots': return this.setPreferredSlots(value);
+      case 'totalSlots': return this.setTotalSlots(value);
+      default: throw new Error(`Unknown field: ${field}`);
+    }
+  }
 
-    returnRecord = returnRecord.set('minimumSlots', newCount);
-    if (returnRecord.get('preferredSlots') < newCount) {
-      returnRecord = returnRecord.setPreferredSlots(newCount);
+  checkFieldMinimum(targetField, minimumSettingField) {
+    const minimumValue = this.get(minimumSettingField);
+
+    if (this.get(targetField) < minimumValue) {
+      return this.setSlotField(targetField, minimumValue);
     }
 
-    return returnRecord;
+    return this;
+  }
+
+  setMinimumSlots(newCount) {
+    return this.set('minimumSlots', newCount).checkFieldMinimum('preferredSlots', 'minimumSlots');
   }
 
   setPreferredSlots(newCount) {
-    let returnRecord = this;
-
-    returnRecord = returnRecord.set('preferredSlots', newCount);
-    if (returnRecord.get('totalSlots') < newCount) {
-      returnRecord = returnRecord.setTotalSlots(newCount);
-    }
-
-    return returnRecord;
+    return this.set('preferredSlots', newCount).checkFieldMinimum('totalSlots', 'preferredSlots');
   }
 
   setTotalSlots(newCount) {
