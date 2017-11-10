@@ -35,6 +35,7 @@ module Intercode
       autoload :Php
       autoload :ProposalForm
       autoload :RegistrationPolicyFactory
+      autoload :RegistrationStatuses
       autoload :StaffPositionImporter
       autoload :Table
       autoload :Tables
