@@ -18,7 +18,7 @@ module ApplicationHelper
     renderer = CadmusNavbar::Renderers::Bootstrap4.new(
       request: request,
       url_for_page: ->(page) { page_url(page) },
-      root_items: convention.cms_navigation_items.root
+      root_items: convention&.cms_navigation_items&.root || []
     )
     render partial: 'layouts/navigation_bar', locals: { renderer: renderer, navbar_classes: navbar_classes }
   end
