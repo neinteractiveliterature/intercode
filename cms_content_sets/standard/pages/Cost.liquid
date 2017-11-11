@@ -8,26 +8,28 @@
 
 <div class="d-flex flex-wrap">
   {% for ticket_type in convention.ticket_types %}
-    <section class="card m-2" style="display: inline-block; min-width: 300px;">
-      <div class="card-header">
-        {{ ticket_type.description }}
-      </div>
-      <div class="card-body">
-        <p>
-          Current price: {{ ticket_type.price }}
-          {% if ticket_type.next_price_change %}
-            <br>{{ ticket_type.next_price }} starting {{ ticket_type.next_price_change }}
-          {% endif %}
-        </p>
+    {% if ticket_type.publicly_available %}
+      <section class="card m-2" style="display: inline-block; min-width: 300px;">
+        <div class="card-header">
+          {{ ticket_type.description }}
+        </div>
+        <div class="card-body">
+          <p>
+            Current price: {{ ticket_type.price }}
+            {% if ticket_type.next_price_change %}
+              <br>{{ ticket_type.next_price }} starting {{ ticket_type.next_price_change }}
+            {% endif %}
+          </p>
 
-        <ul class="list-unstyled">
-          {% for timespan in ticket_type.pricing_schedule.timespans %}
-            <li>
-              <small><strong>{{ timespan.value }}</strong> {{ timespan.short_description_without_value }}</small>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </section>
+          <ul class="list-unstyled">
+            {% for timespan in ticket_type.pricing_schedule.timespans %}
+              <li>
+                <small><strong>{{ timespan.value }}</strong> {{ timespan.short_description_without_value }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+    {% endif %}
   {% endfor %}
 </div>

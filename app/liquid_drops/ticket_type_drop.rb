@@ -1,6 +1,7 @@
 class TicketTypeDrop < Liquid::Drop
   attr_reader :ticket_type
-  delegate :name, :description, :price_change, :next_price_change, to: :ticket_type
+  delegate :name, :description, :price_change, :next_price_change,
+    :publicly_available, :maximum_event_provided_tickets, to: :ticket_type
 
   def initialize(ticket_type)
     @ticket_type = ticket_type
