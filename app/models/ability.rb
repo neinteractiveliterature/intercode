@@ -45,7 +45,7 @@ class Ability
   private
 
   def add_con_staff_abilities
-    can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem],
+    can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem, CmsLayout],
       parent_type: 'Convention', parent_id: staff_con_ids
 
     can [:update, :view_reports], Convention, id: staff_con_ids

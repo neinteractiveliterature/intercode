@@ -68,7 +68,7 @@ class PagesController < ApplicationController
 
   def determine_layout
     case params[:action]
-    when 'root', 'show' then 'application'
+    when 'root', 'show' then 'cms_page'
     else 'cms_admin'
     end
   end

@@ -3,6 +3,7 @@ require 'carrierwave/orm/activerecord'
 class Convention < ApplicationRecord
   belongs_to :updated_by, :class_name => "User", optional: true
   has_many :pages, :as => :parent, dependent: :destroy
+  has_many :cms_layouts, as: :parent, dependent: :destroy
   has_many :cms_partials, as: :parent, dependent: :destroy
   has_many :cms_files, as: :parent, dependent: :destroy
   has_many :cms_navigation_items, as: :parent, dependent: :destroy
@@ -20,6 +21,7 @@ class Convention < ApplicationRecord
   has_many :away_blocks, through: :user_con_profiles
 
   belongs_to :root_page, :class_name => "Page", optional: true
+  belongs_to :default_layout, :class_name => "CmsLayout", optional: true
   belongs_to :event_proposal_form, :class_name => "Form", optional: true
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
