@@ -1,76 +1,19 @@
-!!!
-%html
-  %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title= page_title
-    = stylesheet_pack_tag 'application', media: 'all'
-    = stylesheet_link_tag 'application', :media => "all"
-    = javascript_pack_tag 'application', type: 'module'
-    = csrf_meta_tags
-    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
-  %body
-    %nav#intercode-nav.navbar.navbar-dark.navbar-fixed-top.navbar-expand-md.mb-4{:role => "navigation"}
-      .container
-        %button.navbar-toggler.navbar-toggler-right{type: "button", "data-toggle" => "collapse", "data-target" => "#navbarSupportedContent", "aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
-          %span.navbar-toggler-icon
-        %a.navbar-brand{:href => root_url}
-          - if @convention
-            = @convention.name
-          - else
-            Welcome to Intercode
-        #navbarSupportedContent.collapse.navbar-collapse
-          %ul.navbar-nav.mr-auto
-            - if convention
-              %li.nav-item.dropdown{role: "presentation"}
-                %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
-                  Events
-                .dropdown-menu
-                  - if can? :schedule, convention
-                    = link_to "Con Schedule", schedule_events_path, class: 'dropdown-item'
-                  = link_to "List of Events", events_path, class: 'dropdown-item'
-                  - if can? :schedule_with_counts, convention
-                    = link_to "Schedule With Counts", schedule_with_counts_events_path, class: 'dropdown-item'
-                  - if convention.accepting_proposals
-                    = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
-              = CadmusNavbar::Renderers::Bootstrap4.new(request: request, url_for_page: ->(page) { page_url(page) }, root_items: convention.cms_navigation_items.root).render_navigation_items
-              - if can? :manage, convention.user_con_profiles.new
-                %li.nav-item.dropdown{:role => "presentation"}
-                  %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
-                    Admin
-                  .dropdown-menu
-                    = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
-                    = link_to "Convention Settings", edit_convention_path, class: 'dropdown-item'
-                    = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
-                    = link_to "Event Scheduling", admin_events_path, class: 'dropdown-item'
-                    = link_to "Mailing Lists", mailing_lists_path, class: 'dropdown-item'
-                    = link_to "Reports", reports_path, class: 'dropdown-item'
-                    = link_to "Site Content", pages_path, class: 'dropdown-item'
-                    = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
-                    = link_to "Rooms", rooms_path, class: 'dropdown-item'
-                    = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'
-          %ul.navbar-nav
-            - if user_signed_in?
-              %li.nav-item.dropdown{role: "presentation"}
-                %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
-                  %i.fa.fa-user
-                  = current_user.name
-                .dropdown-menu
-                  - if convention
-                    = link_to "My Profile", my_profile_path, class: 'dropdown-item'
-                  = link_to "Log Out", destroy_user_session_path, class: 'dropdown-item', :method => "delete"
-            - else
-              %li.nav-item.login
-                = link_to "Log In", new_user_session_path, class: 'nav-link'
-              %li.nav-item.my-auto
-                .nav-link
-                  = link_to "Sign Up", (convention ? my_profile_path : new_user_registration_path), class: "btn btn-primary btn-sm"
-    .container
-      - if notice
-        .alert.alert-success= notice
-      - if alert
-        .alert.alert-danger= alert
+- page_content = capture do
+  = render partial: 'layouts/flash_messages'
 
-      - if content_for?(:content)
-        = yield :content
-      - else
-        = yield
+  - if content_for?(:content)
+    = yield :content
+  - else
+    = yield
+
+- if convention&.default_layout
+  = render_in_cadmus_layout(page_content, convention.default_layout)
+- else
+  !!!
+  %html
+    %head
+      = render partial: 'layouts/head'
+    %body
+      = navigation_bar
+      .container
+        = page_content

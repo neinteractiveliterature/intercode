@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Cadmus::Renderable
+  helper_method :cadmus_renderer
 
   # Turn on Rails' built-in CSRF protection (see http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   protect_from_forgery with: :exception

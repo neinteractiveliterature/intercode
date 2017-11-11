@@ -3,6 +3,26 @@ module ApplicationHelper
     address.gsub('.', ' DOT ').gsub('@', ' AT ')
   end
 
+  # Cadmus checks for this when rendering a page
+  def liquid_assigns_for_layout(cms_layout)
+    head_content = render(partial: 'layouts/head')
+    {
+      'content_for_head' => head_content,
+      'content_for_navbar' => navigation_bar(cms_layout.navbar_classes)
+    }
+  end
+
+  def navigation_bar(navbar_classes = nil)
+    navbar_classes ||= 'navbar-dark bg-intercode-blue'
+
+    renderer = CadmusNavbar::Renderers::Bootstrap4.new(
+      request: request,
+      url_for_page: ->(page) { page_url(page) },
+      root_items: convention.cms_navigation_items.root
+    )
+    render partial: 'layouts/navigation_bar', locals: { renderer: renderer, navbar_classes: navbar_classes }
+  end
+
   def page_title
     parts = []
 

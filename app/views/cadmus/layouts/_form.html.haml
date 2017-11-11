@@ -1,0 +1,17 @@
+.form-group
+  = f.label :name
+  = f.text_field :name, class: 'form-control'
+
+.form-group
+  = f.label :navbar_classes
+  = f.text_field :navbar_classes, label: "Navigation bar CSS classes", class: 'form-control form-control-monospace'
+  %small
+    Overrides the default CSS classes for the Bootstrap navigation bar (by default,
+    = succeed ')' do
+      %code navbar-dark bg-intercode-blue
+
+.form-group
+  = f.label :content
+  = f.text_area(:content, :style => "font-family: monospace; min-height: 40vh;", class: 'form-control')
+
+= f.submit class: 'btn btn-primary'

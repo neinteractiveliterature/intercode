@@ -6,7 +6,7 @@
 
     <ul>
       {% for run in runs limit:5 %}
-        <li>{{ run.event.title }} - {{ run.starts_at | date: "%a %l:%M%P" }}</li>
+        <li><a href="{{ run.event.url }}">{{ run.event.title }}</a> - {{ run.starts_at | date: "%a %l:%M%P" }}</li>
       {% endfor %}
     </ul>
   </section>

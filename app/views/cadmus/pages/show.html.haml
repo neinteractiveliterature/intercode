@@ -1,14 +1,16 @@
-- content_for :page_content do
-  = cadmus_renderer.render(@page.liquid_template, :html)
+- admin_bar = capture do
+  - if can? :update, @page
+    %nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
+      .collapse.navbar-collapse
+        .navbar-brand
+          Admin options
+        .navbar-nav
+          = link_to "Edit page", [:edit, @page], class: 'nav-item nav-link'
+          - if can?(:delete?, @page) && @page.parent.root_page != @page
+            = link_to "Delete page", page_path(@page), :method => :delete, "data-confirm" => "Are you sure you want to delete this page?", class: 'nav-item nav-link'
 
-- if can? :update, @page
-  %nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
-    .collapse.navbar-collapse
-      .navbar-brand
-        Admin options
-      .navbar-nav
-        = link_to "Edit page", [:edit, @page], class: 'nav-item nav-link'
-        - if can?(:delete?, @page) && @page.parent.root_page != @page
-          = link_to "Delete page", page_path(@page), :method => :delete, "data-confirm" => "Are you sure you want to delete this page?", class: 'nav-item nav-link'
+- page_content = cadmus_renderer.render(@page.liquid_template, :html)
+- flash_messages_content = render(partial: 'layouts/flash_messages')
+- all_content = safe_join([admin_bar, flash_messages_content, page_content].compact, '')
 
-= content_for :page_content
+= render_in_cadmus_layout(all_content, @page.effective_cms_layout, 'page' => @page)
