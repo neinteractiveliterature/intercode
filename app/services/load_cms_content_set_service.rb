@@ -52,11 +52,15 @@ class LoadCmsContentSetService < ApplicationService
   end
 
   def ensure_no_conflicting_pages
-    ensure_no_conflicting_content('pages', convention.pages.pluck(:name))
-
-    if content_set.all_template_names('pages').include?('root') && convention.root_page
-      errors.add(:base, "#{convention.name} already has a root page")
-    end
+    ensure_no_conflicting_content(
+      'pages',
+      convention.pages.pluck(:name),
+      (
+        convention.root_page ?
+        { 'root' => 'root page' } :
+        {}
+      )
+    )
   end
 
   def ensure_no_conflicting_partials
@@ -64,17 +68,25 @@ class LoadCmsContentSetService < ApplicationService
   end
 
   def ensure_no_conflicting_layouts
-    ensure_no_conflicting_content('layouts', convention.cms_layouts.pluck(:name))
-
-    if content_set.all_template_names('layouts').include?('Default') && convention.default_layout
-      errors.add(:base, "#{convention.name} already has a default layout")
-    end
+    ensure_no_conflicting_content(
+      'layouts',
+      convention.cms_layouts.pluck(:name),
+      (
+        convention.default_layout ?
+        { 'Default' => 'default layout' } :
+        {}
+      )
+    )
   end
 
-  def ensure_no_conflicting_content(subdir, content_identifiers)
+  def ensure_no_conflicting_content(subdir, content_identifiers, taken_special_identifiers = {})
     content_identifiers = Set.new(content_identifiers)
 
-    content_set.all_template_paths_with_names(subdir).each do |_path, name|
+    content_set.all_template_names(subdir).each do |name|
+      if taken_special_identifiers[name]
+        errors.add(:base, "#{convention.name} already has a #{taken_special_identifiers[name]}")
+      end
+
       if content_identifiers.include?(name)
         errors.add(:base, "A #{subdir.singularize} named #{name} already exists in #{convention.name}")
       end
