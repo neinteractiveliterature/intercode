@@ -1,8 +1,8 @@
 require 'test_helper'
 
 describe EventsController do
-  let(:event) { FactoryBot.create(:event) }
-  let(:convention) { event.convention }
+  let(:convention) { FactoryBot.create(:convention) }
+  let(:event) { FactoryBot.create(:event, convention: convention) }
 
   setup do
     set_convention convention
@@ -11,6 +11,13 @@ describe EventsController do
   test "should get index" do
     get :index
     assert_response :success
+  end
+
+  it 'should not let you view the index page in run order unless you can see the schedule' do
+    convention.update!(show_schedule: 'gms')
+    get :index, params: { sort: 'first_scheduled_run' }
+    assert_response :redirect
+    assert flash[:alert]
   end
 
   describe "as a con staffer" do
