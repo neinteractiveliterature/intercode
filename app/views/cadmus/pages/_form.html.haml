@@ -6,27 +6,16 @@
     %ul
       - @page.errors.full_messages.each do |msg|
         %li= msg
-.field
-  = f.label :name
-  = f.text_field :name
-.field
-  = f.label :slug, "URL"
-  %p
-    = url_for(:action => 'show', :page_glob => "slug", :only_path => false).sub(/slug$/, '')
-    = f.text_field :slug
-%p Type html in the box below and see a preview right under it
-.field
-  = f.label :content
-  = find_and_preserve(f.text_area :content, :style => "font-family: monospace; width: 60em; height: 20em", :class => "cadmus-previewable-html", :"data-preview-in" => "html-preview")
-.actions
-  = f.submit
-= javascript_include_tag "cadmus.previewablehtml.js"
-:javascript
-  $(document).ready(function(){
-    $('.cadmus-previewable-html').cadmusPreviewableHtml();
-  });
-%p
-  %b Rendered html preview
-#html-preview{:style => "border:1px solid;"}
-%br/
-%br/
+
+= f.text_field :name
+= f.text_field :slug, style: "font-family: monospace;", label: 'URL', prepend: url_for(:action => 'show', :page_glob => "slug", :only_path => false).sub(/slug$/, '')
+
+- if convention
+  - default_layout_label = convention.default_layout ? "Default (currently set as #{convention.default_layout.name})" : "Default layout"
+  = f.collection_select :cms_layout_id, convention.cms_layouts.order(:name), :id, :name, include_blank: default_layout_label, label: 'Layout'
+- else
+  = f.collection_select :cms_layout_id, CmsLayout.global.order(:name), :id, :name, include_blank: 'Default layout', label: 'Layout'
+
+= find_and_preserve(f.text_area :content, :style => "font-family: monospace; height: 20em")
+
+= f.submit class: 'btn btn-primary'
