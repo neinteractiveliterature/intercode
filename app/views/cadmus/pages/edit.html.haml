@@ -1,7 +1,4 @@
 %h1
   Editing page "#{@page.name}"
-= form_for(@page, :url => { :action => :update, :page_glob => @page.slug }, :class => "edit_cadmus_page") do |f|
+= bootstrap_form_for(@page, :url => { :action => :update, :page_glob => @page.slug }, :class => "edit_cadmus_page") do |f|
   = render :partial => 'cadmus/pages/form', :locals => { :f => f }
-= link_to 'Show', { :action => 'show', :page_glob => @page.slug }
-|
-= link_to 'Back', { :action => 'index' }

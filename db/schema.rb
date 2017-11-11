@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171031202206) do
+ActiveRecord::Schema.define(version: 20171111161320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,17 @@ ActiveRecord::Schema.define(version: 20171031202206) do
     t.index ["parent_id", "file"], name: "index_cms_files_on_parent_id_and_file", unique: true
     t.index ["parent_id"], name: "index_cms_files_on_parent_id"
     t.index ["uploader_id"], name: "index_cms_files_on_uploader_id"
+  end
+
+  create_table "cms_layouts", force: :cascade do |t|
+    t.string "parent_type"
+    t.bigint "parent_id"
+    t.text "name"
+    t.text "content"
+    t.text "navbar_classes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_type", "parent_id"], name: "index_cms_layouts_on_parent_type_and_parent_id"
   end
 
   create_table "cms_navigation_items", force: :cascade do |t|
@@ -79,6 +90,8 @@ ActiveRecord::Schema.define(version: 20171031202206) do
     t.boolean "registrations_frozen", default: false, null: false
     t.bigint "event_proposal_form_id"
     t.integer "maximum_tickets"
+    t.bigint "default_layout_id"
+    t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
@@ -167,6 +180,8 @@ ActiveRecord::Schema.define(version: 20171031202206) do
     t.string "parent_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.bigint "cms_layout_id"
+    t.index ["cms_layout_id"], name: "index_pages_on_cms_layout_id"
     t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
   end
 
@@ -341,6 +356,7 @@ ActiveRecord::Schema.define(version: 20171031202206) do
   add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
+  add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
   add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
@@ -353,6 +369,7 @@ ActiveRecord::Schema.define(version: 20171031202206) do
   add_foreign_key "form_items", "form_sections"
   add_foreign_key "form_sections", "forms"
   add_foreign_key "forms", "conventions"
+  add_foreign_key "pages", "cms_layouts"
   add_foreign_key "rooms", "conventions"
   add_foreign_key "rooms_runs", "rooms"
   add_foreign_key "rooms_runs", "runs"

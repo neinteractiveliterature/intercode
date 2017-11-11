@@ -1,0 +1,30 @@
+---
+navbar_classes: navbar-dark bg-rock-and-romance-red
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ content_for_head }}
+
+    <style type="text/css">
+      .bg-rock-and-romance-red {
+        background-color: #9d2022;
+        box-shadow: 0 0 25px #FFB90F;
+      }
+
+      a {
+        color: #9d2022;
+      }
+
+      a:hover {
+        color: #DA1316;
+      }
+    </style>
+  <body>
+    {{ content_for_navbar }}
+
+    <div class="container">
+      {{ content_for_layout }}
+    </div>
+  </body>
+</html>

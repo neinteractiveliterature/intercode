@@ -1,11 +1,23 @@
 <h1>{{ convention.name }}</h1>
 
-<section class="my-4">
-  <h3>{{ convention.name }} News</h3>
-  {% include 'news' %}
-</section>
+{% capture sidebar_content %}
+  {% include 'user_signups' %}
+  {% include 'user_team_member_events' %}
+  {% include 'user_event_proposals' %}
+{% endcapture %}
+{% assign sidebar_content_stripped = (sidebar_content | strip) %}
 
-{% include 'runs_with_openings' %}
-{% include 'user_signups' %}
-{% include 'user_team_member_events' %}
-{% include 'user_event_proposals' %}
+<div class="row">
+  <div class="col col-sm-12 {% if sidebar_content_stripped != '' %}col-xl-6{% else %}col-xl-12{% endif %}">
+    <section class="my-4">
+      <h3>{{ convention.name }} News</h3>
+      {% include 'news' %}
+    </section>
+    {% include 'runs_with_openings' %}
+  </div>
+  {% if sidebar_content_stripped != '' %}
+    <div class="col col-sm-12 col-xl-6">
+      {{ sidebar_content_stripped }}
+    </div>
+  {% endif %}
+</div>
