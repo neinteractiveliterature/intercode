@@ -19,6 +19,10 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       0,
     )
 
+    unless friday_start.friday?
+      raise "FATAL: The FRI_DATE constant in intercon_constants.inc is not a Friday.  It is set to #{friday_start.strftime('%A, %b %d, %Y')}."
+    end
+
     if config[:thursday_enabled]
       @starts_at = (friday_start - 1.day).beginning_of_day.change(hour: 18)
     else
