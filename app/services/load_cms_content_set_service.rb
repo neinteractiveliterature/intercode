@@ -16,24 +16,35 @@ class LoadCmsContentSetService < ApplicationService
   private
 
   def inner_call
-    content_set.all_template_paths_with_names('layouts').each do |path, name|
-      content, attrs = content_set.template_content(path)
-      cms_layout = @convention.cms_layouts.create!(name: name, content: content, **attrs)
-      @convention.update!(default_layout: cms_layout) if name == 'Default'
+    load_content_for_subdir('layouts') do |cms_layout|
+      @convention.update!(default_layout: cms_layout) if cms_layout.name == 'Default'
     end
 
-    content_set.all_template_paths_with_names('pages').each do |path, name|
-      content, attrs = content_set.template_content(path)
-      page = @convention.pages.create!(name: name, content: content, **attrs)
-      @convention.update!(root_page: page) if name == 'root'
+    load_content_for_subdir('pages') do |page|
+      @convention.update!(root_page: page) if page.name == 'root'
     end
 
-    content_set.all_template_paths_with_names('partials').each do |path, name|
-      content, attrs = content_set.template_content(path)
-      @convention.cms_partials.create!(name: name, content: content, **attrs)
-    end
+    load_content_for_subdir('partials')
 
     success
+  end
+
+  def load_content_for_subdir(subdir, &block)
+    content_set.all_template_paths_with_names(subdir).each do |path, name|
+      content, attrs = content_set.template_content(path)
+      model = association_for_subdir(subdir).create!(name: name, content: content, **attrs)
+
+      block.call(model) if block
+    end
+  end
+
+  def association_for_subdir(subdir)
+    case subdir
+    when 'layouts' then @convention.cms_layouts
+    when 'pages' then @convention.pages
+    when 'partials' then @convention.cms_partials
+    else raise "Unknown content type: #{subdir}"
+    end
   end
 
   def ensure_content_set_exists
