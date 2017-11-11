@@ -106,6 +106,9 @@
     "react-test-renderer": "^16.1.0",
     "webpack-dev-server": "^2.9.4"
   },
+  "resolutions": {
+    "webpack-sources": "1.0.1"
+  },
   "scripts": {
     "test": "jest test/javascript",
     "test:watch": "jest --watch test/javascript"
