@@ -68,4 +68,12 @@ module ApplicationHelper
   def graphql_authenticity_token
     form_authenticity_token(form_options: { action: graphql_path, method: 'POST' })
   end
+
+  def beginning_of_convention_day(time)
+    if time.hour < 6
+      (time - 1.day).beginning_of_day.change(hour: 6)
+    else
+      time.beginning_of_day.change(hour: 6)
+    end
+  end
 end

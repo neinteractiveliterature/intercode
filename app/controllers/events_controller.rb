@@ -4,7 +4,30 @@ class EventsController < ApplicationController
 
   # List the available LARPs
   def index
-    @events = Event.title_sort(@events.active.where.not(category: 'filler'))
+    @events = @events.active.where.not(category: 'filler')
+
+    case (params[:sort].presence || 'title')
+    when 'first_scheduled_run'
+      authorize! :schedule, convention
+      run_time_by_event_id = Run.group(:event_id).minimum(:starts_at)
+      event_id_order = run_time_by_event_id.to_a.sort_by(&:second).map(&:first)
+
+      @events = @events.includes(:runs).sort_by do |event|
+        [
+          run_time_by_event_id[event.id] || convention.ends_at,
+          Event.normalize_title_for_sort(event.title)
+        ]
+      end
+    when 'accepted_asc'
+      @events = @events.order(created_at: 'asc')
+    when 'accepted_desc'
+      @events = @events.order(created_at: 'desc')
+    when 'title'
+      @events = Event.title_sort(@events)
+    else
+      raise "Unknown sort for events: #{params[:sort]}"
+    end
+
     @page_title = "Event List"
     respond_with @events
   end
