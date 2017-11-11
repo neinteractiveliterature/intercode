@@ -5,7 +5,7 @@ FactoryBot.define do
     event
 
     after(:build) do |run|
-      run.starts_at = run.event.convention.starts_at
+      run.starts_at ||= run.event.convention.starts_at
     end
   end
 end
