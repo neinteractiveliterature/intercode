@@ -41,27 +41,21 @@ class LoadCmsContentSetService < ApplicationService
   end
 
   def ensure_no_conflicting_pages
-    return unless convention && content_set_name
-
     ensure_no_conflicting_content('pages', convention.pages.pluck(:name))
 
-    if content_set.all_template_paths_with_names('pages').map(&:last).include?('root') && convention.root_page
+    if content_set.all_template_names('pages').include?('root') && convention.root_page
       errors.add(:base, "#{convention.name} already has a root page")
     end
   end
 
   def ensure_no_conflicting_partials
-    return unless convention && content_set_name
-
     ensure_no_conflicting_content('partials', convention.cms_partials.pluck(:name))
   end
 
   def ensure_no_conflicting_layouts
-    return unless convention && content_set_name
-
     ensure_no_conflicting_content('layouts', convention.cms_layouts.pluck(:name))
 
-    if content_set.all_template_paths_with_names('layouts').map(&:last).include?('Default') && convention.default_layout
+    if content_set.all_template_names('layouts').include?('Default') && convention.default_layout
       errors.add(:base, "#{convention.name} already has a default layout")
     end
   end
