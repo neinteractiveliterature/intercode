@@ -74,6 +74,6 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /partial named Default already exists/
+    result.errors.full_messages.join("\n").must_match /layout named Default already exists/
   end
 end
