@@ -4,7 +4,9 @@ class EventsController < ApplicationController
 
   # List the available LARPs
   def index
-    @events = Event.title_sort(@events.active.where.not(category: 'filler'))
+    authorize! :schedule, convention if params[:sort] == 'first_scheduled_run'
+
+    @events = EventListPresenter.new(convention, sort: params[:sort]).sorted_events
     @page_title = "Event List"
     respond_with @events
   end
