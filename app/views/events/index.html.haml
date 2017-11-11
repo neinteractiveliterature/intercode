@@ -1,16 +1,57 @@
-%h1
-  Events at #{convention.name}
+.d-flex.align-items-center.flex-wrap
+  .col.p-0
+    %h1.text-nowrap
+      Events at #{convention.name}
+
+  .dropdown
+    %button#sort-dropdown.btn.btn-outline-primary.dropdown-toggle{type: 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => true, 'aria-expanded' => false}
+      Sorting by
+      - case params[:sort]
+        - when 'title'
+          title
+        - when 'first_scheduled_run'
+          convention order
+        - when 'accepted_asc'
+          order added (oldest first)
+        - when 'accepted_desc'
+          order added (newest first)
+    .dropdown-menu{'aria-labelledby' => 'sort-dropdown'}
+      = link_to 'Title', events_path(sort: 'title'), class: 'dropdown-item'
+      - if can? :schedule, convention
+        = link_to 'Convention order', events_path(sort: 'first_scheduled_run'), class: 'dropdown-item'
+      = link_to 'Order added (oldest first)', events_path(sort: 'accepted_asc'), class: 'dropdown-item'
+      = link_to 'Order added (newest first)', events_path(sort: 'accepted_desc'), class: 'dropdown-item'
 
 - markdown_presenter = MarkdownPresenter.new('No description provided')
+- previous_first_run = nil
 - @events.each do |event|
+  - first_run = nil
+  - if params[:sort] == 'first_scheduled_run'
+    - first_run = event.runs.sort_by(&:starts_at).first
+    - if first_run && (!previous_first_run || beginning_of_convention_day(previous_first_run.starts_at) != beginning_of_convention_day(first_run.starts_at))
+      %h3.mt-4= beginning_of_convention_day(first_run.starts_at).strftime('%A, %b %d')
+
   .card.my-4
     .card-header
-      %h4{style: "margin: 0"}
+      %h4.m-0
         = link_to event.title, event
         %small.text-muted &mdash; #{event.category.humanize}
-      - author_or_org = event.author.presence || event.organization
-      - if author_or_org.present?
-        %p{style: "margin: 0"}
+      %p.m-0
+        - author_or_org = event.author.presence || event.organization
+        - if author_or_org.present?
           %em by #{author_or_org}
+
+      %p.m-0
+        - if %w(accepted_desc accepted_asc).include? params[:sort]
+          %strong Added #{event.created_at.to_s(:long_with_weekday)}
+        - elsif params[:sort] == 'first_scheduled_run'
+          %strong
+            - if event.runs.size > 0
+              = event.runs.sort_by(&:starts_at).map { |run| run.starts_at.to_s(:short_weekday_with_time) }.to_sentence
+            - else
+              Unscheduled
     .card-body
       = markdown_presenter.render event.short_blurb
+
+  - if first_run
+    - previous_first_run = first_run

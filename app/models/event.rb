@@ -57,8 +57,12 @@ class Event < ApplicationRecord
 
   attr_accessor :bypass_filler_event_run_check
 
+  def self.normalize_title_for_sort(title)
+    title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '')
+  end
+
   def self.title_sort(events)
-    events.sort_by { |event| event.title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '') }
+    events.sort_by { |event| normalize_title_for_sort(event.title) }
   end
 
   # TODO: when we make real adminable categories, we'll need to unbake this
