@@ -14,7 +14,6 @@ class EventListPresenter
     case sort
     when 'first_scheduled_run'
       run_time_by_event_id = Run.group(:event_id).minimum(:starts_at)
-      event_id_order = run_time_by_event_id.to_a.sort_by(&:second).map(&:first)
 
       events.includes(:runs).sort_by do |event|
         [
