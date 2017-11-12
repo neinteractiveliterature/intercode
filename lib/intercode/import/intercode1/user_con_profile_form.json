@@ -1,0 +1,104 @@
+[
+  {
+    "title": "Your {{ convention.name }} profile",
+    "section_items": [
+      {
+        "item_type": "static_text",
+        "style": "normal",
+        "content": "Your contact information will be made available to Intercon Q staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information, **please do not enter it**. But if you do not provide it, organizers may not be able to send you event-related materials."
+      },
+      {
+        "item_type": "static_text",
+        "style": "normal",
+        "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Name: {{ user.name }}</li><li>Email: {{ user.email | email_link }}</li></ul><p class=\"m-0\"><strong>To change this information or your password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "nickname",
+        "caption": "Nickname",
+        "lines": 1
+      },
+      {
+        "item_type": "date",
+        "identifier": "birth_date",
+        "caption": "<p class=\"m-0\">Birth date<br>\n<small>Note: Specifying your birth date is optional. But if you choose not to, you may not be able to sign up for age-restricted games.</small></p>"
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "gender",
+        "caption": "Gender",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "address",
+        "caption": "Street address",
+        "lines": 2
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "city",
+        "caption": "City",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "state",
+        "caption": "State/province",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "zipcode",
+        "caption": "ZIP/postal code",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "country",
+        "caption": "Country",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "free_text_type": "tel",
+        "identifier": "day_phone",
+        "caption": "Daytime phone",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "free_text_type": "tel",
+        "identifier": "evening_phone",
+        "caption": "Evening phone",
+        "lines": 1
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "best_call_time",
+        "caption": "Best time to call",
+        "lines": 1
+      },
+      {
+        "item_type": "multiple_choice",
+        "identifier": "preferred_contact",
+        "caption": "Preferred contact method",
+        "style": "radio_vertical",
+        "choices": [
+          {
+            "caption": "Email",
+            "value": "email"
+          },
+          {
+            "caption": "Daytime phone",
+            "value": "day_phone"
+          },
+          {
+            "caption": "Evening phone",
+            "value": "evening_phone"
+          }
+        ]
+      }
+    ]
+  }
+]

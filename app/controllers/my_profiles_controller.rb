@@ -1,11 +1,18 @@
 class MyProfilesController < ApplicationController
-  before_action :ensure_user_con_profile, except: [:new, :create]
-  before_action :build_user_con_profile, only: [:new, :create]
+  before_action :ensure_user_con_profile, except: [:new]
+  before_action :build_user_con_profile, only: [:new]
   authorize_resource :user_con_profile
 
-  respond_to :html
+  respond_to :html, except: [:update]
+  respond_to :json, only: [:show, :update]
 
   def show
+    respond_with @user_con_profile do |format|
+      format.json do
+        presenter = FormResponsePresenter.new(convention.user_con_profile_form, @user_con_profile)
+        render json: presenter.as_json
+      end
+    end
   end
 
   def edit
@@ -15,23 +22,22 @@ class MyProfilesController < ApplicationController
   end
 
   def update
-    @user_con_profile.update(user_con_profile_params)
-    respond_with @user_con_profile, location: my_profile_path
+    @user_con_profile.assign_form_response_attributes(params[:form_response])
+    @user_con_profile.save
+
+    respond_with @user_con_profile
   end
 
   def new
-  end
-
-  def create
-    @user_con_profile.save
-    respond_with @user_con_profile, location: my_profile_path
+    @user_con_profile.save!
+    redirect_to edit_my_profile_path
   end
 
   private
   def ensure_user_con_profile
     unless user_con_profile
       if user_signed_in?
-        redirect_to new_my_profile_path
+        redirect_to new_my_profile_path if params[:type] == 'html'
       else
         session[:register_via_convention_id] = convention.id
         redirect_to new_user_registration_url(host: Rails.application.config.action_mailer.default_url_options[:host])

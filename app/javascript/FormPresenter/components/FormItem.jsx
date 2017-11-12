@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import DateItem from './DateItem';
 import FreeTextItem from './FreeTextItem';
 import MultipleChoiceItem from './MultipleChoiceItem';
 import RegistrationPolicyItem from './RegistrationPolicyItem';
@@ -16,6 +17,8 @@ const FormItem = ({
   const commonProps = { formItem, value, onChange: valueDidChange };
 
   switch (formItem.itemType) {
+    case 'date':
+      return <DateItem {...commonProps} />;
     case 'free_text':
       return <FreeTextItem {...commonProps} />;
     case 'multiple_choice':

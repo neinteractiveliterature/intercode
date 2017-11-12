@@ -67,7 +67,7 @@ class MultipleChoiceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <CaptionLegend formItem={formItem} />
+        <CaptionLegend formItem={this.props.formItem} />
         {choices}
       </fieldset>
     );

@@ -20,7 +20,7 @@ class FormApiPresenter
   def form_section_json(section)
     {
       id: section.id,
-      title: section.title,
+      title: render_markdown(section.title),
       position: section.position,
     }
   end

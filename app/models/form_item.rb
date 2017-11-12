@@ -1,5 +1,10 @@
 class FormItem < ApplicationRecord
   PROPERTIES_SCHEMA = {
+    date: {
+      identifier: :required,
+      caption: :required,
+      required: :optional
+    },
     free_text: {
       identifier: :required,
       caption: :required,

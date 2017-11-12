@@ -27,6 +27,7 @@ module Intercode
 
       autoload :DateHelpers
       autoload :EmbeddedPdfPage
+      autoload :FormImporter
       autoload :HtmlContent
       autoload :HtmlConverter
       autoload :Importer
@@ -40,6 +41,7 @@ module Intercode
       autoload :Table
       autoload :Tables
       autoload :UploadFile
+      autoload :UserConProfileForm
     end
   end
 end

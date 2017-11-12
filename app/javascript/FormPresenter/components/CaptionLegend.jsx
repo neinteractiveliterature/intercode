@@ -14,7 +14,7 @@ const CaptionLegend = ({ formItem }) => (
 
 CaptionLegend.propTypes = {
   formItem: PropTypes.shape({
-    PropTypes: PropTypes.shape({
+    properties: PropTypes.shape({
       caption: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
