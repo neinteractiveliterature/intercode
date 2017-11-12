@@ -13,9 +13,7 @@ module MyProfilesHelper
       formUrl: form_url(convention.user_con_profile_form),
       conventionUrl: convention_url,
       responseUrl: my_profile_path,
-      authenticityToken: update_authenticity_token,
-      submitAuthenticityToken: submit_authenticity_token,
-      afterSubmitUrl: root_path
+      authenticityToken: update_authenticity_token
     )
   end
 end
