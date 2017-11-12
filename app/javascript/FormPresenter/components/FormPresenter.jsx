@@ -16,7 +16,7 @@ function renderProgress(form, section) {
   if (form.getSections().size < 2) {
     return null;
   }
-  
+
   const items = form.getAllItems();
   const sectionItems = form.getItemsInSection(section.id);
   const itemIndex = items.indexOf(sectionItems.get(0));
