@@ -39,7 +39,9 @@ class UserConProfile < ApplicationRecord
     has_any_privileges.or(is_team_member)
   }
 
-  register_form_response_attrs :nickname,
+  register_form_response_attrs :first_name,
+    :last_name,
+    :nickname,
     :birth_date,
     :gender,
     :address,
