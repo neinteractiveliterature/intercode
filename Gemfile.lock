@@ -94,7 +94,7 @@ GEM
       popper_js (>= 1.12.3, < 2)
       sass (>= 3.5.2)
     builder (3.2.3)
-    cancancan (2.1.0)
+    cancancan (2.1.1)
     carrierwave (1.2.1)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
