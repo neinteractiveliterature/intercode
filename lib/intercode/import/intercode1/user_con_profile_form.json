@@ -5,12 +5,7 @@
       {
         "item_type": "static_text",
         "style": "normal",
-        "content": "Your contact information will be made available to {{ convention.name }} staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information, **please do not enter it**. But if you do not provide it, organizers may not be able to send you event-related materials."
-      },
-      {
-        "item_type": "static_text",
-        "style": "normal",
-        "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email | email_link }}</li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
+        "content": "<div class=\"mb-4\">Your contact information will be made available to {{ convention.name }} staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information, <strong>please do not enter it</strong>. But if you do not provide it, organizers may not be able to send you event-related materials.</div>"
       },
       {
         "item_type": "free_text",
@@ -23,6 +18,11 @@
         "identifier": "last_name",
         "caption": "Last name",
         "lines": 1
+      },
+      {
+        "item_type": "static_text",
+        "style": "normal",
+        "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email }}</li><li>Password: <em>not shown</em></li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
       },
       {
         "item_type": "free_text",
@@ -110,6 +110,12 @@
             "value": "evening_phone"
           }
         ]
+      },
+      {
+        "item_type": "free_text",
+        "identifier": "how_heard",
+        "caption": "How did you hear about {{ convention.name }}?",
+        "lines": 1
       }
     ]
   }

@@ -86,6 +86,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   def build_user_con_profile(row, con, user)
     profile_attrs = {
       convention: con,
+      additional_info: additional_info(row)
     }.merge(priv_attributes(row)).merge(contact_attributes(row))
 
     user.user_con_profiles.new(profile_attrs)
@@ -104,6 +105,12 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     end.merge(
       address: [row[:Address1], row[:Address2]].map(&:presence).compact.join("\n").presence
     )
+  end
+
+  def additional_info(row)
+    {
+      how_heard: row[:HowHeard]
+    }
   end
 
   def build_ticket(row, user_con_profile)
