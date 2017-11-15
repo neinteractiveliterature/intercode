@@ -351,7 +351,7 @@ GEM
       railties (>= 3.0)
     multi_json (1.12.2)
     multipart-post (2.0.0)
-    mysql2 (0.4.9)
+    mysql2 (0.4.10)
     netrc (0.11.0)
     newrelic_rpm (4.6.0.338)
     nio4r (2.1.0)
