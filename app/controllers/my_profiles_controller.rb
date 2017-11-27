@@ -55,6 +55,7 @@ class MyProfilesController < ApplicationController
     @user_con_profile = current_user.user_con_profiles.build(
       user_params.merge(convention_id: convention.id)
     )
+    @user_con_profile.assign_default_values_from_form_items(convention.user_con_profile_form.form_items)
 
     most_recent_profile = current_user.user_con_profiles.order(:created_at).last
     if most_recent_profile
