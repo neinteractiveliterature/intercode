@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { enableUniqueIds } from 'react-html-id';
 import CaptionLegend from './CaptionLegend';
+import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 
 class MultipleChoiceItem extends React.Component {
   static propTypes = {
@@ -18,57 +17,40 @@ class MultipleChoiceItem extends React.Component {
       }).isRequired,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    ]),
   };
 
   static defaultProps = {
     value: null,
   };
 
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
-  }
-
-  inputDidChange = (event) => {
-    this.props.onChange(event.target.value);
-  }
-
-  renderChoice = (choice) => {
-    const domId = this.nextUniqueId();
-
-    return (
-      <div
-        className={
-          classNames(
-            'form-check',
-            { 'form-check-inline': this.props.formItem.properties.style === 'radio_horizontal' },
-          )
-        }
-        key={choice.value}
-      >
-        <label className="form-check-label" htmlFor={domId}>
-          <input
-            id={domId}
-            className="form-check-input"
-            type="radio"
-            name={this.props.formItem.identifier}
-            value={choice.value}
-            checked={this.props.value === choice.value.toString()}
-            onChange={this.inputDidChange}
-          /> {choice.caption}
-        </label>
-      </div>
-    );
-  }
-
   render = () => {
-    const choices = this.props.formItem.properties.choices.map(choice => this.renderChoice(choice));
+    const isMultiple = ['checkbox_vertical', 'checkbox_horizontal'].includes(this.props.formItem.properties.style);
+    const choiceClassName = (
+      ['radio_horizontal', 'checkbox_horizontal'].includes(this.props.formItem.properties.style) ?
+        'form-check-inline' :
+        null
+    );
+
+    const choicesForChoiceSet = this.props.formItem.properties.choices.map(choice => ({
+      label: choice.caption,
+      value: choice.value,
+    }));
 
     return (
       <fieldset className="form-group">
         <CaptionLegend formItem={this.props.formItem} />
-        {choices}
+        <ChoiceSet
+          name={this.props.formItem.identifier}
+          choices={choicesForChoiceSet}
+          value={this.props.value}
+          onChange={this.props.onChange}
+          multiple={isMultiple}
+          choiceClassName={choiceClassName}
+        />
       </fieldset>
     );
   };

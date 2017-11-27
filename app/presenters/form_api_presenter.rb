@@ -1,4 +1,6 @@
 class FormApiPresenter
+  include Concerns::FormMarkdown
+
   attr_reader :form, :cadmus_renderer
 
   def initialize(form, cadmus_renderer)
@@ -26,12 +28,7 @@ class FormApiPresenter
   end
 
   def form_item_json(item)
-    properties = item.properties.deep_dup
-    if item.item_type == 'static_text'
-      properties['content'] = render_markdown(properties['content'])
-    elsif properties['caption']
-      properties['caption'] = render_markdown(properties['caption'])
-    end
+    properties = FormItemPresenter.new(item, cadmus_renderer).rendered_properties
 
     {
       id: item.id,
@@ -40,13 +37,5 @@ class FormApiPresenter
       identifier: item.identifier,
       position: item.position,
     }.merge(properties)
-  end
-
-  def render_markdown(content)
-    liquid = MarkdownPresenter.markdown_processor.render(content || '')
-    liquid = MarkdownPresenter.strip_single_p(liquid)
-
-    template = Liquid::Template.parse(liquid)
-    cadmus_renderer.render(template, :html)
   end
 end

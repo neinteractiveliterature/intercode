@@ -19,3 +19,13 @@
 %dd.col-md-9= user_con_profile.best_call_time
 %dt.col-md-3 Preferred contact
 %dd.col-md-9= user_con_profile.preferred_contact_humanized
+- (convention.user_con_profile_form.form_items.map(&:identifier).compact - UserConProfile.form_response_attrs.to_a).each do |form_item_identifier|
+  - form_item = convention.user_con_profile_form.form_items.find_by(identifier: form_item_identifier)
+  - presenter = FormItemPresenter.new(form_item, cadmus_renderer)
+  - value = user_con_profile.read_form_response_attribute(form_item_identifier)
+  %dt.col-md-3= presenter.rendered_properties['caption'].presence || form_item_identifier
+  %dd.col-md-9
+    - if value.is_a?(Array)
+      = value.map(&:humanize).to_sentence
+    - else
+      = value
