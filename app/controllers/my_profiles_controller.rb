@@ -1,4 +1,6 @@
 class MyProfilesController < ApplicationController
+  include Concerns::FormResponseController
+
   before_action :ensure_user_con_profile, except: [:new]
   before_action :build_user_con_profile, only: [:new]
   authorize_resource :user_con_profile
@@ -7,12 +9,7 @@ class MyProfilesController < ApplicationController
   respond_to :json, only: [:show, :update]
 
   def show
-    respond_with @user_con_profile do |format|
-      format.json do
-        presenter = FormResponsePresenter.new(convention.user_con_profile_form, @user_con_profile)
-        render json: presenter.as_json
-      end
-    end
+    send_form_response(convention.user_con_profile_form, @user_con_profile)
   end
 
   def edit
@@ -22,10 +19,7 @@ class MyProfilesController < ApplicationController
   end
 
   def update
-    @user_con_profile.assign_form_response_attributes(params[:form_response])
-    @user_con_profile.save
-
-    respond_with @user_con_profile
+    update_form_response(@user_con_profile)
   end
 
   def new
