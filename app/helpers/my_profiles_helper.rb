@@ -1,10 +1,6 @@
 module MyProfilesHelper
-  def user_con_profile_form(user_con_profile)
+  def user_con_profile_form
     update_authenticity_token = form_authenticity_token(
-      form_options: { action: my_profile_path, method: 'PATCH' }
-    )
-
-    submit_authenticity_token = form_authenticity_token(
       form_options: { action: my_profile_path, method: 'PATCH' }
     )
 
