@@ -9,8 +9,6 @@ engines:
     exclude_paths:
       # Mutations involve a bunch of boilerplate that's making duplication go nuts
       - app/graphql/mutations/
-      - node_modules
-      - public
     config:
       languages:
         ruby:
@@ -41,9 +39,13 @@ ratings:
   - "**.module"
   - "**.php"
   - "**.py"
-exclude_paths:
+exclude_patterns:
 - config/
 - db/
+- log/
+- node_modules/
+- public/
 - script/
 - test/
 - vendor/
+
