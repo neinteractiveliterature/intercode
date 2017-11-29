@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171111161320) do
+ActiveRecord::Schema.define(version: 20171127182439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,10 +91,12 @@ ActiveRecord::Schema.define(version: 20171111161320) do
     t.bigint "event_proposal_form_id"
     t.integer "maximum_tickets"
     t.bigint "default_layout_id"
+    t.bigint "user_con_profile_form_id"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
+    t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
   end
 
   create_table "event_proposals", force: :cascade do |t|
@@ -152,6 +154,7 @@ ActiveRecord::Schema.define(version: 20171111161320) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "admin_description"
+    t.text "default_value"
     t.index ["form_section_id"], name: "index_form_items_on_form_section_id"
   end
 
@@ -316,8 +319,6 @@ ActiveRecord::Schema.define(version: 20171111161320) do
     t.string "nickname"
     t.date "birth_date"
     t.string "gender"
-    t.string "address1"
-    t.string "address2"
     t.string "city"
     t.string "state"
     t.string "zipcode"
@@ -328,6 +329,8 @@ ActiveRecord::Schema.define(version: 20171111161320) do
     t.string "preferred_contact"
     t.text "bio"
     t.boolean "show_nickname_in_bio"
+    t.text "address"
+    t.text "additional_info"
     t.index ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true
   end
 
@@ -358,6 +361,7 @@ ActiveRecord::Schema.define(version: 20171111161320) do
   add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
   add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
+  add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "event_proposals", "conventions"

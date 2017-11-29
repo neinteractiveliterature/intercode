@@ -2,7 +2,8 @@ class UserConProfileDrop < Liquid::Drop
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
 
   attr_reader :user_con_profile
-  delegate :bio_name, :email, :first_name, :last_name, :name, :name_inverted, :nickname, :name_without_nickname, :ticket, to: :user_con_profile
+  delegate :bio_name, :email, :first_name, :last_name, :name, :name_inverted,
+    :nickname, :name_without_nickname, :ticket, to: :user_con_profile
 
   def initialize(user_con_profile)
     @user_con_profile = user_con_profile

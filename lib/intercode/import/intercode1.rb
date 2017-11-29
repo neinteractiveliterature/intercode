@@ -10,7 +10,7 @@ module Intercode
 
       mattr_accessor :logger
       self.logger = Logger.new(STDERR)
-      self.logger.formatter = Proc.new do |severity, time, progname, msg|
+      self.logger.formatter = Proc.new do |severity, time, _progname, msg|
         severity_padded = '%-7s' % ["[#{severity}]"]
 
         severity_rep = case severity
@@ -27,6 +27,7 @@ module Intercode
 
       autoload :DateHelpers
       autoload :EmbeddedPdfPage
+      autoload :FormImporter
       autoload :HtmlContent
       autoload :HtmlConverter
       autoload :Importer
@@ -40,6 +41,7 @@ module Intercode
       autoload :Table
       autoload :Tables
       autoload :UploadFile
+      autoload :UserConProfileForm
     end
   end
 end

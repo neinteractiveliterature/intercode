@@ -6,7 +6,9 @@ import RequiredIndicator from './RequiredIndicator';
 class FreeTextItem extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
+      properties: PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired,
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,

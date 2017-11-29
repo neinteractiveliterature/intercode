@@ -127,6 +127,7 @@ class Intercode::Import::Intercode1::Importer
     embedded_pdf_pages.each(&:import!)
     navigation_items.import!
     proposal_form.import!
+    user_con_profile_form.import!
     registration_statuses.import!
     events_table.import!
     users_table.import!
@@ -279,5 +280,9 @@ class Intercode::Import::Intercode1::Importer
 
   def proposal_form
     @proposal_form ||= Intercode::Import::Intercode1::ProposalForm.new(con)
+  end
+
+  def user_con_profile_form
+    @user_con_profile_form ||= Intercode::Import::Intercode1::UserConProfileForm.new(con)
   end
 end

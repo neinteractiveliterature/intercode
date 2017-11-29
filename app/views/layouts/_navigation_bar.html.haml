@@ -44,6 +44,7 @@
               %i.fa.fa-user
               = current_user.name
             .dropdown-menu
+              = link_to "My Account", edit_user_registration_path, class: 'dropdown-item'
               - if convention
                 = link_to "My Profile", my_profile_path, class: 'dropdown-item'
               = link_to "Log Out", destroy_user_session_path, class: 'dropdown-item', :method => "delete"

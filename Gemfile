@@ -101,6 +101,7 @@ end
 group :test do
   gem 'minitest-spec-rails'
   gem 'minitest-reporters'
+  gem 'minitest-focus'
   gem 'database_cleaner'
   gem 'factory_bot'
   gem 'factory_bot_rails'

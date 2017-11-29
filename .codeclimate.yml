@@ -6,7 +6,6 @@ engines:
     enabled: true
   duplication:
     enabled: true
-    channel: beta
     exclude_paths:
       # Mutations involve a bunch of boilerplate that's making duplication go nuts
       - app/graphql/mutations/
@@ -40,9 +39,15 @@ ratings:
   - "**.module"
   - "**.php"
   - "**.py"
-exclude_paths:
+exclude_patterns:
+- .idea/
 - config/
+- coverage/
 - db/
+- log/
+- node_modules/
+- public/
 - script/
 - test/
 - vendor/
+
