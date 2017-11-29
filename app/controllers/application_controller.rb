@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    if request.env['intercode.convention'] && request.env['intercode.convention'].user_con_profiles.where(user_id: resource.id).blank?
+    if convention && convention.user_con_profiles.where(user_id: resource.id).none?
       return new_my_profile_path
     end
 

@@ -39,7 +39,7 @@ class UserConProfilesGrid
     end
   end
 
-  column(:name, order: "users.last_name, users.first_name") do |user_con_profile|
+  column(:name, order: "users.last_name, users.first_name", mandatory: true) do |user_con_profile|
     format(user_con_profile.user.name_inverted) do |name|
       link_to name, user_con_profile
     end
@@ -68,6 +68,8 @@ class UserConProfilesGrid
   column(:privileges, class: 'col-md-4') do |user_con_profile|
     user_con_profile.privileges.map(&:titleize).sort.join(", ")
   end
+
+  column_names_filter(header: 'Columns', checkboxes: true, default: [:email, :ticket, :privileges])
 
 
   def self.human_attribute_name(attr)

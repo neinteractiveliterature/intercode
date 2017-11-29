@@ -1,9 +1,4 @@
 module.exports = {
-  ecmaFeatures: {
-    modules: true,
-    jsx: true,
-  },
-
   env: {
     amd: true,
     browser: true,
@@ -18,6 +13,13 @@ module.exports = {
   ],
 
   parser: "babel-eslint",
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 6,
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
 
   plugins: [
     'jest',

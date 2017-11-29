@@ -205,7 +205,7 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
   statusDescription.push('.');
 
   return statusDescription;
-}
+};
 
 @compose(
   graphql(teamMemberQuery),

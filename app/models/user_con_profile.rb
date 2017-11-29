@@ -1,4 +1,5 @@
 class UserConProfile < ApplicationRecord
+  include Concerns::FormResponse
   include Concerns::Names
 
   MAIL_PRIV_NAMES = Set.new(%w(gms attendees vendors unpaid alumni).map { |group| "mail_to_#{group}" })
@@ -38,6 +39,21 @@ class UserConProfile < ApplicationRecord
     has_any_privileges.or(is_team_member)
   }
 
+  register_form_response_attrs :first_name,
+    :last_name,
+    :nickname,
+    :birth_date,
+    :gender,
+    :address,
+    :city,
+    :state,
+    :zipcode,
+    :country,
+    :day_phone,
+    :evening_phone,
+    :best_call_time,
+    :preferred_contact
+
   def paid?
     ticket
   end
@@ -69,8 +85,8 @@ class UserConProfile < ApplicationRecord
     age_as_of Date.today
   end
 
-  def address
-    [address1, address2, city_state_zip, country].reject(&:blank?).join("\n")
+  def full_address
+    [address, city_state_zip, country].reject(&:blank?).join("\n")
   end
 
   def city_state_zip

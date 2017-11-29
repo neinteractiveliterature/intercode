@@ -1,11 +1,15 @@
 class MyProfilesController < ApplicationController
-  before_action :ensure_user_con_profile, except: [:new, :create]
-  before_action :build_user_con_profile, only: [:new, :create]
+  include Concerns::FormResponseController
+
+  before_action :ensure_user_con_profile, except: [:new]
+  before_action :build_user_con_profile, only: [:new]
   authorize_resource :user_con_profile
 
-  respond_to :html
+  respond_to :html, except: [:update]
+  respond_to :json, only: [:show, :update]
 
   def show
+    send_form_response(convention.user_con_profile_form, @user_con_profile)
   end
 
   def edit
@@ -15,23 +19,21 @@ class MyProfilesController < ApplicationController
   end
 
   def update
-    @user_con_profile.update(user_con_profile_params)
-    respond_with @user_con_profile, location: my_profile_path
+    update_form_response(@user_con_profile)
   end
 
   def new
-  end
-
-  def create
-    @user_con_profile.save
-    respond_with @user_con_profile, location: my_profile_path
+    @user_con_profile.save!
+    redirect_to edit_my_profile_path
   end
 
   private
   def ensure_user_con_profile
     unless user_con_profile
       if user_signed_in?
-        redirect_to new_my_profile_path
+        respond_to do |format|
+          format.html { redirect_to new_my_profile_path }
+        end
       else
         session[:register_via_convention_id] = convention.id
         redirect_to new_user_registration_url(host: Rails.application.config.action_mailer.default_url_options[:host])
@@ -40,30 +42,20 @@ class MyProfilesController < ApplicationController
   end
 
   def build_user_con_profile
-    @user_con_profile = current_user.user_con_profiles.build(
-      default_user_con_profile_params.merge(user_con_profile_params).merge(convention_id: convention.id)
-    )
-  end
-
-  def user_con_profile_params
-    params[:user_con_profile].try!(:permit, *user_con_profile_param_names) || {}
-  end
-
-  def default_user_con_profile_params
     user_params = {
-      first_name: current_user.first_name,
-      last_name: current_user.last_name
+      'first_name' => current_user.first_name,
+      'last_name' => current_user.last_name
     }
+    @user_con_profile = current_user.user_con_profiles.build(
+      user_params.merge(convention_id: convention.id)
+    )
+    @user_con_profile.assign_default_values_from_form_items(convention.user_con_profile_form.form_items)
 
     most_recent_profile = current_user.user_con_profiles.order(:created_at).last
     if most_recent_profile
-      user_params.merge(most_recent_profile.attributes.slice(*user_con_profile_param_names))
-    else
-      user_params
+      @user_con_profile.assign_form_response_attributes(
+        FormResponsePresenter.new(convention.user_con_profile_form, most_recent_profile).as_json
+      )
     end
-  end
-
-  def user_con_profile_param_names
-    [:first_name, :last_name, :nickname, :bio]
   end
 end

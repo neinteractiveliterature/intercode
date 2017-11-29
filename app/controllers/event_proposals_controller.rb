@@ -1,4 +1,6 @@
 class EventProposalsController < ApplicationController
+  include Concerns::FormResponseController
+
   load_and_authorize_resource through: :convention
   before_action :ensure_accepting_proposals, only: [:create]
   respond_to :html, :json
@@ -23,22 +25,14 @@ class EventProposalsController < ApplicationController
   end
 
   def show
-    respond_with @event_proposal do |format|
-      format.json do
-        presenter = FormResponsePresenter.new(convention.event_proposal_form, @event_proposal)
-        render json: presenter.as_json
-      end
-    end
+    send_form_response(convention.event_proposal_form, @event_proposal)
   end
 
   def edit
   end
 
   def update
-    @event_proposal.assign_form_response_attributes(params[:form_response])
-    @event_proposal.save
-
-    respond_with @event_proposal
+    update_form_response(@event_proposal)
   end
 
   def submit
