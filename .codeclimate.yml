@@ -6,7 +6,6 @@ engines:
     enabled: true
   duplication:
     enabled: true
-    channel: beta
     exclude_paths:
       # Mutations involve a bunch of boilerplate that's making duplication go nuts
       - app/graphql/mutations/
