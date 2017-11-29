@@ -40,7 +40,9 @@ ratings:
   - "**.php"
   - "**.py"
 exclude_patterns:
+- .idea/
 - config/
+- coverage/
 - db/
 - log/
 - node_modules/
