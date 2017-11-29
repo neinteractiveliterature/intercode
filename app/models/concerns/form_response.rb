@@ -42,4 +42,15 @@ module Concerns::FormResponse
       additional_info[attribute.to_s]
     end
   end
+
+  def assign_default_values_from_form_items(form_items)
+    default_values = {}
+
+    form_items.each do |form_item|
+      next unless form_item.identifier && form_item.default_value
+      default_values[form_item.identifier.to_s] = form_item.default_value
+    end
+
+    assign_form_response_attributes(default_values)
+  end
 end

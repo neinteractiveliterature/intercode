@@ -13,8 +13,7 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field :show_nickname_in_bio, types.Boolean
   field :birth_date, Types::DateType
   field :gender, types.String
-  field :address1, types.String
-  field :address2, types.String
+  field :address, types.String
   field :city, types.String
   field :state, types.String
   field :zipcode, types.String

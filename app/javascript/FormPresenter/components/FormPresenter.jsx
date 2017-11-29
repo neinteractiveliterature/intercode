@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Models/Form';
 import FormItem from './FormItem';
+import FormFooterContainer from '../containers/FormFooterContainer';
 import LoadingIndicator from '../../LoadingIndicator';
 
 function getCurrentSection(form, currentSectionId) {
@@ -12,6 +13,10 @@ function getCurrentSection(form, currentSectionId) {
 }
 
 function renderProgress(form, section) {
+  if (form.getSections().size < 2) {
+    return null;
+  }
+
   const items = form.getAllItems();
   const sectionItems = form.getItemsInSection(section.id);
   const itemIndex = items.indexOf(sectionItems.get(0));
@@ -68,46 +73,10 @@ function renderSection(
 
       {renderProgress(form, section)}
 
-      <div className="card-body">
+      <div className="card-body pb-0">
         {items}
       </div>
     </div>
-  );
-}
-
-function renderBackButton(currentSectionIndex, onClick) {
-  if (currentSectionIndex < 1) {
-    return null;
-  }
-
-  return (
-    <button className="btn btn-secondary" onClick={onClick}>
-      <i className="fa fa-chevron-left" /> Back
-    </button>
-  );
-}
-
-function renderContinueButton(currentSectionIndex, sections, onClick, disabled) {
-  if (currentSectionIndex >= sections.size - 1) {
-    return null;
-  }
-
-  return (
-    <button className="btn btn-primary" onClick={onClick} disabled={disabled}>
-      Continue <i className="fa fa-chevron-right" />
-    </button>
-  );
-}
-
-function renderSubmitButton(currentSectionIndex, sections, onClick, disabled) {
-  if (currentSectionIndex < sections.size - 1) {
-    return null;
-  }
-
-  return (
-    <button className="btn btn-primary" onClick={onClick} disabled={disabled}>
-      Submit
-    </button>
   );
 }
 
@@ -142,20 +111,11 @@ const FormPresenter = (props) => {
         )
       }
 
-      <div className="card-footer d-flex justify-content-between">
-        <div>{renderBackButton(currentSectionIndex, props.previousSection)}</div>
-        <div>
-          {renderContinueButton(currentSectionIndex, sections, props.nextSection, disableContinue)}
-          {
-            renderSubmitButton(
-              currentSectionIndex,
-              sections,
-              props.submitForm,
-              props.isUpdatingResponse,
-            )
-          }
-        </div>
-      </div>
+      <FormFooterContainer
+        currentSectionIndex={currentSectionIndex}
+        sectionCount={sections.size}
+        disableContinue={disableContinue}
+      />
     </div>
   );
 };
@@ -165,15 +125,16 @@ FormPresenter.propTypes = {
     starts_at: PropTypes.string.isRequired,
     ends_at: PropTypes.string.isRequired,
     timezone_name: PropTypes.string.isRequired,
-  }),
-  form: Form.propType,
-  response: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  responseValueChanged: PropTypes.func,
-  submitForm: PropTypes.func,
-  isUpdatingResponse: PropTypes.bool,
+  }).isRequired,
+  form: Form.propType.isRequired,
+  response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  responseValueChanged: PropTypes.func.isRequired,
+  isUpdatingResponse: PropTypes.bool.isRequired,
   currentSectionId: PropTypes.number,
-  previousSection: PropTypes.func.isRequired,
-  nextSection: PropTypes.func.isRequired,
+};
+
+FormPresenter.defaultProps = {
+  currentSectionId: null,
 };
 
 export default FormPresenter;

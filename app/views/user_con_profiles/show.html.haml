@@ -5,29 +5,30 @@
       = render 'user_con_profiles/common_profile_data', user_con_profile: @subject_profile
       / TODO: Figure out how to handle "how heard about con" and display it here
       %dt.col-md-3 Privileges
-      %dd.col-md-9= @subject_profile.privileges.sort.map(&:humanize).join(", ")
+      %dd.col-md-9= @subject_profile.privileges.sort.map(&:humanize).join(", ").presence || 'none'
 
-    %section
-      %h2 Ticket
-      - if @subject_profile.ticket
-        %dl.row
-          = render 'tickets/ticket_data', ticket: @subject_profile.ticket
-          %dt.col-md-3 Payment note
-          %dd.col-md-9= @subject_profile.ticket.payment_note
+    %section.card
+      .card-header Ticket
+      .card-body.pb-0
+        - if @subject_profile.ticket
+          %dl.row
+            = render 'tickets/ticket_data', ticket: @subject_profile.ticket
+            %dt.col-md-3 Payment note
+            %dd.col-md-9= @subject_profile.ticket.payment_note
 
-        - if can? :edit, @subject_profile.ticket
-          %ul.list-inline
-            %li.list-inline-item
-              = link_to "Edit ticket", [:edit, @subject_profile, :admin_ticket], class: "btn btn-secondary"
-            - if can? :delete, @subject_profile.ticket
+          - if can? :edit, @subject_profile.ticket
+            %ul.list-inline
               %li.list-inline-item
-                = link_to "Delete ticket", [@subject_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@subject_profile.user.name}'s ticket?"
-      - else
-        %p No ticket
-        - if can? :create, @subject_profile.build_ticket
-          %ul.list-inline
-            %li.list-inline-item
-              = link_to "Create ticket", [:new, @subject_profile, :admin_ticket], class: "btn btn-secondary"
+                = link_to "Edit ticket", [:edit, @subject_profile, :admin_ticket], class: "btn btn-secondary"
+              - if can? :delete, @subject_profile.ticket
+                %li.list-inline-item
+                  = link_to "Delete ticket", [@subject_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@subject_profile.user.name}'s ticket?"
+        - else
+          %p No ticket
+          - if can? :create, @subject_profile.build_ticket
+            %ul.list-inline
+              %li.list-inline-item
+                = link_to "Create ticket", [:new, @subject_profile, :admin_ticket], class: "btn btn-secondary"
 
     / TODO: add event signups and team membership stuff
 

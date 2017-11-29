@@ -2,7 +2,7 @@ module Intercode
   module Liquid
     module Tags
       class LoginForm < RailsPartialRenderer
-        def partial(context)
+        def partial(_context)
           "devise/sessions/login_form"
         end
 

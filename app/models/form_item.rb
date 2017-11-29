@@ -1,5 +1,10 @@
 class FormItem < ApplicationRecord
   PROPERTIES_SCHEMA = {
+    date: {
+      identifier: :required,
+      caption: :required,
+      required: :optional
+    },
     free_text: {
       identifier: :required,
       caption: :required,
@@ -42,6 +47,7 @@ class FormItem < ApplicationRecord
   acts_as_list scope: :form_section
 
   serialize :properties, JSON
+  serialize :default_value, JSON
 
   validates_presence_of :item_type
   validates_inclusion_of :item_type, in: PROPERTIES_SCHEMA.keys.map(&:to_s)
