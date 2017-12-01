@@ -32,9 +32,10 @@ notifications:
 env:
   global:
     - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
-  - DATABASE=sqlite
-  - DATABASE=mysql
-  - DATABASE=postgresql
+  matrix:
+    - DATABASE=sqlite
+    - DATABASE=mysql
+    - DATABASE=postgresql
 addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
