@@ -7,7 +7,12 @@
   - unless resource.new_record?
     %i (leave blank if you don't want to change it)
   = f.password_field :password_confirmation
-- unless resource.new_record?
+- if resource.new_record?
+  .form-group
+    - if flash[:recaptcha_error].present?
+      .alert.alert-danger= flash[:recaptcha_error]
+    = recaptcha_tags
+- else
   %fieldset
     = f.label :current_password
     = f.password_field :current_password
