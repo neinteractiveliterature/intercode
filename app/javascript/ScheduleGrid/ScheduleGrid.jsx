@@ -19,11 +19,6 @@ query($extendedCounts: Boolean!) {
     starts_at
     ends_at
     timezone_name
-
-    away_blocks @include(if: $extendedCounts) {
-      start
-      finish
-    }
   }
 
   events(extendedCounts: $extendedCounts) {
@@ -222,9 +217,6 @@ class ScheduleGrid extends React.Component {
       if (this.props.config.showExtendedCounts) {
         const hourTimespan = new Timespan(now, now.clone().add(1, 'hour'));
         const hourEventRuns = eventRuns.filter(eventRun => hourTimespan.overlapsTimespan(eventRun.timespan));
-        const awayTimespans = this.props.data.convention.away_blocks.map(awayBlock => (
-          new Timespan(moment(awayBlock.start), moment(awayBlock.finish))
-        ));
 
         const hourRunData = hourEventRuns.map((eventRun) => {
           const run = this.runsById.get(eventRun.runId);
@@ -262,9 +254,7 @@ class ScheduleGrid extends React.Component {
           0,
         );
 
-        const awayCount = awayTimespans.filter(awayTimespan => awayTimespan.overlapsTimespan(hourTimespan)).length;
-
-        const playerCount = confirmedSignups + notCountedSignups + waitlistedSignups + awayCount;
+        const playerCount = confirmedSignups + notCountedSignups + waitlistedSignups;
 
         extendedCounts = (
           <div className="schedule-grid-hour-extended-counts">
@@ -275,8 +265,6 @@ class ScheduleGrid extends React.Component {
               <span className="text-info">{notCountedSignups}</span>
               {'/'}
               <span className="text-danger">{waitlistedSignups}</span>
-              {'/'}
-              {awayCount}
             </div>
             <div>Players: {playerCount}</div>
           </div>
