@@ -1,6 +1,7 @@
 class MyProfilesController < ApplicationController
   include Concerns::FormResponseController
 
+  skip_before_action :ensure_user_con_profile_exists
   before_action :ensure_user_con_profile, except: [:new]
   before_action :build_user_con_profile, only: [:new]
   authorize_resource :user_con_profile
