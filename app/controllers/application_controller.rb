@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # Turn on Rails' built-in CSRF protection (see http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   protect_from_forgery with: :exception
 
-  # Authority's built-in nag filter that will throw an error if no authorization check was performed.
+  # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
   # Only enabled for non-production environments.  To disable, do this in a controller:
   # skip_authorization_check
   check_authorization :unless => :devise_controller?
