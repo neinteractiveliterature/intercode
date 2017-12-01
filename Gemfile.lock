@@ -1,5 +1,12 @@
 GIT
-  remote: git://github.com/gively/cadmus.git
+  remote: https://github.com/bootstrap-ruby/rails-bootstrap-forms.git
+  revision: 16d82d6d8c32b5f6dcbe14ab3a3189e6b012839c
+  branch: bootstrap-v4
+  specs:
+    bootstrap_form (2.6.0)
+
+GIT
+  remote: https://github.com/gively/cadmus
   revision: 14888751568278af15d0cc29999b190994a39729
   branch: partials_and_layouts
   specs:
@@ -8,7 +15,7 @@ GIT
       rails (>= 5.0.0)
 
 GIT
-  remote: git://github.com/nbudin/cadmus_files.git
+  remote: https://github.com/nbudin/cadmus_files
   revision: 3bf74e76b536543eb4bbddb7f2d3a041a38ff31d
   branch: cadmus_0_6
   specs:
@@ -19,20 +26,13 @@ GIT
       rails (>= 4.0.0)
 
 GIT
-  remote: git://github.com/nbudin/cadmus_navbar.git
+  remote: https://github.com/nbudin/cadmus_navbar
   revision: 93abd8ffa3821a95bec884c549300f0e4b61644d
   specs:
     cadmus_navbar (0.1.0)
       acts_as_list
       cadmus
       rails (>= 5.0.0)
-
-GIT
-  remote: https://github.com/bootstrap-ruby/rails-bootstrap-forms.git
-  revision: 16d82d6d8c32b5f6dcbe14ab3a3189e6b012839c
-  branch: bootstrap-v4
-  specs:
-    bootstrap_form (2.6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -81,7 +81,7 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    acts_as_list (0.9.7)
+    acts_as_list (0.9.10)
       activerecord (>= 3.0)
     ansi (1.5.0)
     arel (8.0.0)

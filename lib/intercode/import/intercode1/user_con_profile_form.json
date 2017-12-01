@@ -137,6 +137,23 @@
           }
         ],
         "default_value": ["intercon"]
+      },
+      {
+        "item_type": "multiple_choice",
+        "identifier": "receive_whos_free_emails",
+        "style": "radio_vertical",
+        "caption": "Closer to the convention, {{ convention.name }} may email attendees who are free in particular time slots, to promote events that need signups in order to run.  These emails are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
+        "choices": [
+          {
+            "caption": "Receive emails about events that need signups",
+            "value": "true"
+          },
+          {
+            "caption": "Opt out of these emails",
+            "value": "false"
+          }
+        ],
+        "default_value": "true"
       }
     ]
   }

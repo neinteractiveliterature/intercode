@@ -14,12 +14,6 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :maximum_tickets, types.Int
   field :maximum_event_signups, Types::ScheduledValueType
 
-  field :away_blocks, types[Types::AwayBlockType] do
-    resolve ->(convention, _args, _ctx) do
-      AssociationLoader.for(Convention, :away_blocks).load(convention)
-    end
-  end
-
   field :rooms, types[Types::RoomType] do
     resolve -> (convention, _args, _ctx) {
       AssociationLoader.for(Convention, :rooms).load(convention)
