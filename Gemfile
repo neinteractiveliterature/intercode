@@ -8,6 +8,8 @@ gem 'mysql2'
 gem 'pg'
 gem 'puma'
 
+gem 'dotenv-rails', require: 'dotenv/rails-now'
+
 gem 'sass-rails'
 gem 'bootstrap', '~> 4.0.0.beta2'
 gem 'font-awesome-sass'
@@ -29,6 +31,7 @@ gem 'jquery-rails'
 # Devise for authentication, cancancan for authorization
 gem 'devise'
 gem 'cancancan'
+gem 'recaptcha', require: 'recaptcha/rails'
 
 # Let's store sessions in the database, shall we?
 gem 'activerecord-session_store'
