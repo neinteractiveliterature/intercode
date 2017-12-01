@@ -36,6 +36,9 @@ cookbooks
 # Ignore SimpleCov test coverage results
 /coverage
 
+# Don't check in secrets
+/.env.development
+
 # Dear god, don't look at node_modules
 /node_modules
 /public/packs
