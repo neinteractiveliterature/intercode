@@ -94,7 +94,7 @@ class MailingListsController < ApplicationController
       end
       busy_user_con_profile_ids = Set.new(signups_during_timespan.map(&:user_con_profile_id))
 
-      ticketed_user_con_profiles = convention.user_con_profiles.where(receive_whos_free_emails: true).joins(:ticket)
+      ticketed_user_con_profiles = convention.user_con_profiles.includes(:user).where(receive_whos_free_emails: true).joins(:ticket)
       free_user_con_profiles = ticketed_user_con_profiles.
         reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
 
