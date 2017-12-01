@@ -68,6 +68,8 @@ gem 'graphiql-rails', group: :development
 # Markdown
 gem 'redcarpet'
 
+# Miscellany
+gem 'parallel'
 gem 'newrelic_rpm'
 
 # Heroku prod fix
@@ -94,7 +96,6 @@ end
 group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
-  gem 'parallel'
   gem 'reverse_markdown'
 end
 
