@@ -1,3 +1,5 @@
+require 'parallel'
+
 class DatabaseSanitizer
   attr_reader :email_blacklist
 
@@ -28,8 +30,7 @@ class DatabaseSanitizer
       last_name: user.last_name,
       nickname: Faker::Lorem.word.titleize,
       birth_date: Faker::Time.between(Date.today - 70.years, Date.today - 16.years),
-      address1: Faker::Address.street_address,
-      address2: Faker::Address.secondary_address,
+      address: Faker::Address.street_address([true, false, false, false].sample),
       city: Faker::Address.city,
       state: Faker::Address.state_abbr,
       zipcode: Faker::Address.postcode,
@@ -59,17 +60,16 @@ task :sanitize_db => :environment do
   ]
   sanitizer = DatabaseSanitizer.new(email_blacklist)
 
-  ActiveRecord::Base.transaction do
-    User.find_each do |user|
-      puts "Sanitizing user #{user.id}"
+  Parallel.each(User.all, in_processes: Parallel.processor_count) do |user|
+    puts "Sanitizing user #{user.id}"
+    sanitizer.sanitize_user(user)
+  end
 
-      sanitizer.sanitize_user(user)
-    end
+  ActiveRecord::Base.connection.reconnect!
 
-    UserConProfile.includes(:user).find_each do |user_con_profile|
-      puts "Sanitizing user con profile #{user_con_profile.id}"
+  Parallel.each(UserConProfile.includes(:user).all, in_processes: Parallel.processor_count) do |user_con_profile|
+    puts "Sanitizing user con profile #{user_con_profile.id}"
 
-      sanitizer.sanitize_user_con_profile(user_con_profile)
-    end
+    sanitizer.sanitize_user_con_profile(user_con_profile)
   end
 end
