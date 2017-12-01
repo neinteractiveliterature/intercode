@@ -17,10 +17,7 @@ class MultipleChoiceItem extends React.Component {
       }).isRequired,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string.isRequired,
-      PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    ]),
+    value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
   };
 
   static defaultProps = {
@@ -40,13 +37,22 @@ class MultipleChoiceItem extends React.Component {
       value: choice.value,
     }));
 
+    let typecastValue;
+    if (isMultiple) {
+      typecastValue = (this.props.value || []).map(singleValue => singleValue.toString());
+    } else if (this.props.value != null) {
+      typecastValue = this.props.value.toString();
+    } else {
+      typecastValue = null;
+    }
+
     return (
       <fieldset className="form-group">
         <CaptionLegend formItem={this.props.formItem} />
         <ChoiceSet
           name={this.props.formItem.identifier}
           choices={choicesForChoiceSet}
-          value={this.props.value}
+          value={typecastValue}
           onChange={this.props.onChange}
           multiple={isMultiple}
           choiceClassName={choiceClassName}
