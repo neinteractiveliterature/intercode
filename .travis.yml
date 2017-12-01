@@ -30,6 +30,8 @@ notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
 env:
+  global:
+    - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
   - DATABASE=sqlite
   - DATABASE=mysql
   - DATABASE=postgresql
