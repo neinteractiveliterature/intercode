@@ -51,7 +51,8 @@ class UserConProfile < ApplicationRecord
     :day_phone,
     :evening_phone,
     :best_call_time,
-    :preferred_contact
+    :preferred_contact,
+    :receive_whos_free_emails
 
   def paid?
     ticket
