@@ -16,6 +16,9 @@ class ApplicationController < ActionController::Base
   # If we're in a convention, use the convention's timezone.
   around_action :use_convention_timezone
 
+  # Make the user create their profile for this con if they haven't got one
+  before_action :ensure_user_con_profile_exists, unless: :devise_controller?
+
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
   # logged in, or throw them back to the root URL with an error if they are.
@@ -101,5 +104,12 @@ class ApplicationController < ActionController::Base
     else
       root_path
     end
+  end
+
+  def ensure_user_con_profile_exists
+    return unless convention && user_signed_in?
+    return if user_con_profile
+
+    redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed into this convention before, so please take a moment to update your profile."
   end
 end
