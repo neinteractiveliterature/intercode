@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # Turn on Rails' built-in CSRF protection (see http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   protect_from_forgery with: :exception
 
-  # Authority's built-in nag filter that will throw an error if no authorization check was performed.
+  # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
   # Only enabled for non-production environments.  To disable, do this in a controller:
   # skip_authorization_check
   check_authorization :unless => :devise_controller?
@@ -15,6 +15,9 @@ class ApplicationController < ActionController::Base
 
   # If we're in a convention, use the convention's timezone.
   around_action :use_convention_timezone
+
+  # Make the user create their profile for this con if they haven't got one
+  before_action :ensure_user_con_profile_exists, unless: :devise_controller?
 
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
@@ -101,5 +104,12 @@ class ApplicationController < ActionController::Base
     else
       root_path
     end
+  end
+
+  def ensure_user_con_profile_exists
+    return unless convention && user_signed_in?
+    return if user_con_profile
+
+    redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed into this convention before, so please take a moment to update your profile."
   end
 end

@@ -11,7 +11,6 @@ class UserConProfile < ApplicationRecord
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
-  has_many :away_blocks, dependent: :destroy
   has_and_belongs_to_many :staff_positions
 
   delegate :email, to: :user, allow_nil: true
@@ -52,7 +51,8 @@ class UserConProfile < ApplicationRecord
     :day_phone,
     :evening_phone,
     :best_call_time,
-    :preferred_contact
+    :preferred_contact,
+    :receive_whos_free_emails
 
   def paid?
     ticket

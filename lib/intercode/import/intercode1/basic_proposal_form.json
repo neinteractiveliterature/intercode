@@ -121,11 +121,11 @@
         "choices": [
           {
             "caption": "Yes",
-            "value": true
+            "value": "true"
           },
           {
             "caption": "No",
-            "value": false
+            "value": "false"
           }
         ]
       },
@@ -310,11 +310,11 @@
         "choices": [
           {
             "caption": "Yes",
-            "value": true
+            "value": "true"
           },
           {
             "caption": "No",
-            "value": false
+            "value": "false"
           }
         ]
       },
@@ -327,11 +327,11 @@
         "choices": [
           {
             "caption": "Yes",
-            "value": true
+            "value": "true"
           },
           {
             "caption": "No",
-            "value": false
+            "value": "false"
           }
         ]
       },
