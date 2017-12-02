@@ -28,7 +28,7 @@ const EventAdminEditEvent = ({
 };
 
 EventAdminEditEvent.propTypes = {
-  data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
+  data: GraphQLResultPropType(eventsQuery).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,

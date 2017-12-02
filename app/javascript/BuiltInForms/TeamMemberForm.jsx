@@ -262,7 +262,7 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
 @GraphQLQueryResultWrapper
 class TeamMemberForm extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(teamMemberQuery, 'event', 'convention').isRequired,
+    data: GraphQLResultPropType(teamMemberQuery).isRequired,
     baseUrl: PropTypes.string.isRequired,
     eventId: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
     teamMemberId: PropTypes.number,

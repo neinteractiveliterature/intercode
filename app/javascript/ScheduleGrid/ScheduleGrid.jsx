@@ -88,7 +88,7 @@ function formatTime(time, timezoneName) {
 @GraphQLQueryResultWrapper
 class ScheduleGrid extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(ScheduleQuery, 'events', 'convention').isRequired,
+    data: GraphQLResultPropType(ScheduleQuery).isRequired,
     config: ConfigPropType,
   };
 

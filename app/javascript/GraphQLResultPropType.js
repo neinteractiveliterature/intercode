@@ -1,27 +1,23 @@
-import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 
-export function GraphQLFieldPropType(query, rootKey) {
-  return (props) => {
-    if (!props.loading) {
-      return propType(query)(props[rootKey]);
+export default function GraphQLResultPropType(query) {
+  const queryPropType = propType(query);
+
+  const checkType = (isRequired, props, propName, ...args) => {
+    if (props[propName].loading) {
+      return null;
     }
 
-    return undefined;
+    let graphQLPropType = queryPropType;
+    if (isRequired) {
+      graphQLPropType = graphQLPropType.isRequired;
+    }
+
+    return graphQLPropType(props, propName, ...args);
   };
+
+  const chainedCheckType = checkType.bind(null, false);
+  chainedCheckType.isRequired = checkType.bind(null, true);
+
+  return chainedCheckType;
 }
-
-function GraphQLResultPropType(query, ...fields) {
-  const fieldProps = Object.assign(
-    {},
-    ...fields.map(fieldName => ({ [fieldName]: GraphQLFieldPropType(query, fieldName) })),
-  );
-
-  return PropTypes.shape({
-    ...fieldProps,
-    loading: PropTypes.boolean,
-    error: PropTypes.object,
-  });
-}
-
-export default GraphQLResultPropType;

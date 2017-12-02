@@ -38,7 +38,7 @@ const momentToTimeObject = (momentValue) => {
 @GraphQLQueryResultWrapper
 class WhosFreeForm extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(conventionQuery, 'convention').isRequired,
+    data: GraphQLResultPropType(conventionQuery).isRequired,
     initialStart: PropTypes.string,
     initialFinish: PropTypes.string,
     baseUrl: PropTypes.string.isRequired,
