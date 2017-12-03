@@ -50,7 +50,7 @@ class ChoiceSet extends React.Component {
         value={value}
         checked={(
           this.props.multiple ?
-          (this.props.value && this.props.value.includes(value)) :
+          ((this.props.value || []).includes(value)) :
           this.props.value === value
         )}
         onChange={this.onChange}

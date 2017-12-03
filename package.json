@@ -104,6 +104,7 @@
     "eslint-plugin-react": "^7.4.0",
     "jest": "^21.2.1",
     "react-test-renderer": "^16.1.0",
+    "sinon": "^4.1.2",
     "webpack-dev-server": "^2.9.4"
   },
   "resolutions": {
@@ -120,7 +121,9 @@
       "!**/node_modules/**"
     ],
     "coverageDirectory": "coverage",
-    "coverageReporters": ["lcov"],
+    "coverageReporters": [
+      "lcov"
+    ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"

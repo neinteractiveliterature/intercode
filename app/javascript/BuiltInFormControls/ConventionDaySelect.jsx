@@ -22,11 +22,7 @@ class ConventionDaySelect extends React.Component {
   onChange = (event) => {
     const newDayString = event.target.value;
 
-    if (newDayString != null) {
-      this.props.onChange(moment(newDayString).tz(this.props.convention.timezone_name));
-    } else {
-      this.props.onChange(null);
-    }
+    this.props.onChange(moment(newDayString).tz(this.props.convention.timezone_name));
   }
 
   render = () => {
