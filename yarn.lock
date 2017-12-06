@@ -93,7 +93,7 @@
   version "8.0.51"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.51.tgz#b31d716fb8d58eeb95c068a039b9b6292817d5fb"
 
-"@types/zen-observable@^0.5.3":
+"@types/zen-observable@0.5.3", "@types/zen-observable@^0.5.3":
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.5.3.tgz#91b728599544efbb7386d8b6633693a3c2e7ade5"
 
@@ -250,33 +250,49 @@ apollo-cache@^1.0.0:
   dependencies:
     apollo-utilities "^1.0.0"
 
-apollo-client@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.0.2.tgz#f2b01898c404c867fc2bd8edf7c3ccded2b96fc6"
+apollo-cache@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.0.2.tgz#e3df98696c648649d16a6c3ca9c19e90a556effa"
+  dependencies:
+    apollo-utilities "^1.0.3"
+
+apollo-client@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.1.0.tgz#1d3716cb5d4ad70c3a4147da629fdfcb53925e7b"
   dependencies:
     "@types/zen-observable" "^0.5.3"
-    apollo-cache "^1.0.0"
-    apollo-link "1.0.0"
-    apollo-link-dedup "1.0.0"
-    apollo-utilities "^1.0.0"
+    apollo-cache "^1.0.2"
+    apollo-link "^1.0.0"
+    apollo-link-dedup "^1.0.0"
+    apollo-utilities "^1.0.3"
     symbol-observable "^1.0.2"
     zen-observable "^0.6.0"
   optionalDependencies:
     "@types/async" "2.0.45"
 
-apollo-link-dedup@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-1.0.0.tgz#f0134ac495cc42e7e43dfafe7126645baa1e03bc"
+apollo-link-dedup@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-1.0.3.tgz#10df05214afb53ffb19c361451f8ae19d1964c83"
+  dependencies:
+    apollo-link "^1.0.4"
 
 apollo-link-http@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.1.0.tgz#a85cc43d9a5286bb54ac32213f7a16bef3554ae4"
 
-apollo-link@1.0.0, apollo-link@^1.0.0:
+apollo-link@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.0.0.tgz#3d334285789c217f95712ebce434d56ce7f3e991"
   dependencies:
     apollo-utilities "^0.2.0-beta.0"
+    zen-observable "^0.6.0"
+
+apollo-link@^1.0.4:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.0.5.tgz#7ce058b61cb2f5071496968ef82499c202211d10"
+  dependencies:
+    "@types/zen-observable" "0.5.3"
+    apollo-utilities "^1.0.0"
     zen-observable "^0.6.0"
 
 apollo-utilities@^0.2.0-beta.0:
