@@ -278,6 +278,10 @@ apollo-utilities@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.1.tgz#34b4df0bd6ed71d0afaa7c62489173dca5d07e92"
 
+apollo-utilities@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.3.tgz#bf435277609850dd442cf1d5c2e8bc6655eaa943"
+
 append-transform@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/append-transform/-/append-transform-0.4.0.tgz#d76ebf8ca94d276e247a36bad44a4b74ab611991"
@@ -3385,6 +3389,12 @@ graphql-anywhere@^4.0.0:
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.0.tgz#4cf7ae7ed93aabeb95d329caa08c3867ddaef45e"
   dependencies:
     apollo-utilities "^1.0.0"
+
+graphql-anywhere@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.2.tgz#1dd13a53a659c5e09d0b6ccecfba771ee4939fa1"
+  dependencies:
+    apollo-utilities "^1.0.3"
 
 graphql-tag@^2.5.0:
   version "2.5.0"
