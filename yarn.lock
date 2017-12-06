@@ -3726,9 +3726,9 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
-inflected@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/inflected/-/inflected-2.0.2.tgz#1bc31ac427ca5321b2a16cc56d6ff29fcd2ff80c"
+inflected@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/inflected/-/inflected-2.0.3.tgz#d16e166d0c10b5bdd7e741228e08733410ebfc8d"
 
 inflight@^1.0.4:
   version "1.0.6"
