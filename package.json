@@ -44,7 +44,7 @@
     "node-sass": "^4.6.0",
     "path-complete-extname": "^0.1.0",
     "payment": "^2.3.0",
-    "popper.js": "^1.12.6",
+    "popper.js": "^1.12.9",
     "postcss-loader": "^2.0.8",
     "postcss-smart-import": "^0.7.5",
     "precss": "^2.0.0",
