@@ -24,7 +24,7 @@ class RegistrationPolicyEditor extends React.Component {
     lockLimitedBuckets: null,
     lockDeleteBuckets: null,
     showKey: true,
-    presets: [],
+    presets: null,
   }
 
   constructor(props) {
