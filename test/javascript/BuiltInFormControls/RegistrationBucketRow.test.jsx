@@ -62,6 +62,19 @@ describe('RegistrationBucketRow', () => {
     ]);
   });
 
+  test('showKey', () => {
+    const component = renderRegistrationBucketRow({ showKey: false });
+    expect(component.find('.anything-bucket').length).toEqual(0);
+    expect(component.find('td').at(0).text()).toEqual('test');
+    expect(component.find('td').at(1).text()).toEqual('a bucket for testing');
+    expect(component.find('td').at(2).find('input[type="checkbox"]').prop('checked')).toBeTruthy();
+    expect(component.find('td').at(2).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+      2,
+      5,
+      10,
+    ]);
+  });
+
   test('lockNameAndDescription', () => {
     const component = renderRegistrationBucketRow({ lockNameAndDescription: true });
     expect(component.find('.anything-bucket').length).toEqual(0);
