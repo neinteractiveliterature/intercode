@@ -4,7 +4,6 @@ import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
-import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
