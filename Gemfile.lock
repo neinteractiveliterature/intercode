@@ -99,8 +99,6 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-    codeclimate-test-reporter (1.0.8)
-      simplecov (<= 0.13)
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
     concurrent-ruby (1.0.5-java)
@@ -535,7 +533,6 @@ DEPENDENCIES
   cadmus_navbar!
   cancancan
   carrierwave
-  codeclimate-test-reporter
   database_cleaner
   datagrid
   devise
@@ -576,6 +573,7 @@ DEPENDENCIES
   sass-rails
   scheduled_value (~> 1.1.3)
   sequel
+  simplecov
   sqlite3
   stackprof
   stripe
