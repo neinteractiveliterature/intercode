@@ -1,10 +1,11 @@
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import RegistrationPolicyBucket from './RegistrationPolicyBucket';
 
 export default class RegistrationPolicy {
   static propType = PropTypes.shape({
-    buckets: PropTypes.arrayOf(RegistrationPolicyBucket.propType.isRequired).isRequired,
+    buckets: ImmutablePropTypes.listOf(RegistrationPolicyBucket.propType.isRequired).isRequired,
   });
   static apiRepresentationPropType = PropTypes.shape({
     buckets:
