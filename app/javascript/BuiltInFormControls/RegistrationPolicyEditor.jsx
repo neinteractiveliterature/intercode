@@ -134,36 +134,39 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
+  renderBucketRow = (bucket) => {
+    const bucketInPreset = (
+      this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket =>
+        presetBucket.key === bucket.key)
+    );
+
+    const lockDelete = (
+      bucketInPreset ||
+      (this.props.lockDeleteBuckets && this.props.lockDeleteBuckets.includes(bucket.key))
+    );
+
+    const lockLimited = (
+      bucketInPreset ||
+      (this.props.lockLimitedBuckets && this.props.lockLimitedBuckets.includes(bucket.key))
+    );
+
+    return (
+      <RegistrationBucketRow
+        key={bucket.key}
+        registrationBucket={bucket}
+        onChange={this.bucketChanged}
+        onDelete={this.deleteBucket}
+        showKey={this.props.showKey && !bucketInPreset}
+        lockNameAndDescription={bucketInPreset || this.props.lockNameAndDescription}
+        lockLimited={lockLimited}
+        lockDelete={lockDelete}
+      />
+    );
+  }
+
   renderTable = () => {
-    const bucketRows = this.props.registrationPolicy.buckets.map((bucket) => {
-      const bucketInPreset = (
-        this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket =>
-          presetBucket.key === bucket.key)
-      );
-
-      const lockDelete = (
-        bucketInPreset ||
-        (this.props.lockDeleteBuckets && this.props.lockDeleteBuckets.includes(bucket.key))
-      );
-
-      const lockLimited = (
-        bucketInPreset ||
-        (this.props.lockLimitedBuckets && this.props.lockLimitedBuckets.includes(bucket.key))
-      );
-
-      return (
-        <RegistrationBucketRow
-          key={bucket.key}
-          registrationBucket={bucket}
-          onChange={this.bucketChanged}
-          onDelete={this.deleteBucket}
-          showKey={this.props.showKey && !bucketInPreset}
-          lockNameAndDescription={bucketInPreset || this.props.lockNameAndDescription}
-          lockLimited={lockLimited}
-          lockDelete={lockDelete}
-        />
-      );
-    });
+    const bucketRows = this.props.registrationPolicy.buckets.map(bucket =>
+      this.renderBucketRow(bucket));
 
     return (
       <table className="table">
