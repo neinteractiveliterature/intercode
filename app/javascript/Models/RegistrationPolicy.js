@@ -48,7 +48,7 @@ export default class RegistrationPolicy {
 
   addBucket(key, props) {
     const bucket = new RegistrationPolicyBucket({ key });
-    return new RegistrationPolicy(this.buckets.push(bucket.setAttributesFromAPI(props)));
+    return new RegistrationPolicy(this.buckets.push(bucket.setAttributesFromAPI(props || {})));
   }
 
   getBucket(key) {
