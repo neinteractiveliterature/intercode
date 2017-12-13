@@ -107,7 +107,7 @@ GEM
     crass (1.0.3)
     dante (0.2.0)
     database_cleaner (1.6.2)
-    datagrid (1.5.7)
+    datagrid (1.5.8)
       rails (>= 4.0)
     devise (4.3.0)
       bcrypt (~> 3.0)
