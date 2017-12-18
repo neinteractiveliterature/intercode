@@ -39,7 +39,7 @@
     "json-fetch": "^7.3.0",
     "lodash": "^4.17.4",
     "memoized-class-decorator": "^1.5.0",
-    "moment": "^2.19.4",
+    "moment": "^2.20.0",
     "moment-timezone": "^0.5.14",
     "node-sass": "^4.7.2",
     "path-complete-extname": "^0.1.0",
