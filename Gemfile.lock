@@ -364,7 +364,7 @@ GEM
       mini_portile2 (~> 2.3.0)
     nokogiri (1.8.1-java)
     orm_adapter (0.5.0)
-    parallel (1.12.0)
+    parallel (1.12.1)
     pg (0.21.0)
     popper_js (1.12.5)
     promise.rb (0.7.4)
