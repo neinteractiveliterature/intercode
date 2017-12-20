@@ -1,29 +1,43 @@
 import moment from 'moment-timezone';
 
-const humanizeTime = (time, includeDay) => {
-  if (time.millisecond() === 0 && time.second() === 0 && time.minute() === 0) {
-    if (time.hour() === 0) {
-      if (includeDay) {
-        return `${time.format('ddd')} midnight`;
-      }
+const timeIsOnTheHour = time => (
+  time.millisecond() === 0 && time.second() === 0 && time.minute() === 0
+);
 
-      return 'midnight';
+const humanTimeFormat = (time) => {
+  if (timeIsOnTheHour(time)) {
+    if (time.hour() === 0) {
+      return '[midnight]';
     }
 
     if (time.hour() === 12) {
-      if (includeDay) {
-        return `${time.format('ddd')} noon`;
-      }
-
-      return 'noon';
+      return '[noon]';
     }
   }
 
+  return 'h:mma';
+};
+
+const humanizeTime = (time, includeDay) => {
+  let timeFormat = humanTimeFormat(time);
   if (includeDay) {
-    return time.format('ddd h:mma');
+    timeFormat = `ddd ${timeFormat}`;
   }
 
-  return time.format('h:mma');
+  return time.format(timeFormat);
+};
+
+const onlyOneIsNull = (a, b) => (
+  (a == null && b != null) ||
+  (a != null && b == null)
+);
+
+const timesAreSameOrBothNull = (a, b) => {
+  if (onlyOneIsNull(a, b)) {
+    return false;
+  }
+
+  return (a == null && b == null) || a.isSame(b);
 };
 
 class Timespan {
@@ -76,23 +90,9 @@ class Timespan {
   }
 
   isSame(other) {
-    if (
-      (this.start == null && other.start != null) ||
-      (this.start != null && other.start == null)
-    ) {
-      return false;
-    }
-
-    if (
-      (this.finish == null && other.finish != null) ||
-      (this.finish != null && other.finish == null)
-    ) {
-      return false;
-    }
-
     return (
-      ((this.start == null && other.start == null) || this.start.isSame(other.start)) &&
-      ((this.finish == null && other.finish == null) || this.finish.isSame(other.finish))
+      timesAreSameOrBothNull(this.start, other.start) &&
+      timesAreSameOrBothNull(this.finish, other.finish)
     );
   }
 
