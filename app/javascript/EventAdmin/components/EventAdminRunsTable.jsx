@@ -10,7 +10,7 @@ import eventsQuery from '../eventsQuery';
 @GraphQLQueryResultWrapper
 class EventAdminRunsTable extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
+    data: GraphQLResultPropType(eventsQuery).isRequired,
   };
 
   render = () => {

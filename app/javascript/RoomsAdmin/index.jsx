@@ -72,7 +72,7 @@ mutation($input: DeleteRoomInput!) {
 @GraphQLQueryResultWrapper
 class RoomsAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(roomsQuery, 'convention').isRequired,
+    data: GraphQLResultPropType(roomsQuery).isRequired,
     createRoom: PropTypes.func.isRequired,
     updateRoom: PropTypes.func.isRequired,
     deleteRoom: PropTypes.func.isRequired,

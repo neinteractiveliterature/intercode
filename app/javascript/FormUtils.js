@@ -118,6 +118,6 @@ export class ModelStateChangeCalculator {
     return getStateChangeForValueChange(state, this.modelKey, field, convertedValue);
   }
 
-  getMutator = (state, setState) => new StateMutator(this, state, setState)
+  getMutator = (getState, setState) => new StateMutator(this, getState, setState)
   getMutatorForComponent = component => StateMutator.forComponent(this, component)
 }

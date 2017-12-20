@@ -57,7 +57,7 @@ ${conventionFragment}
 @GraphQLQueryResultWrapper
 class ConventionAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(conventionQuery, 'convention').isRequired,
+    data: GraphQLResultPropType(conventionQuery).isRequired,
     updateConvention: PropTypes.func.isRequired,
   };
 

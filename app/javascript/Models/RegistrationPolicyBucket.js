@@ -20,7 +20,7 @@ const fieldPropTypes = {
   totalSlots: PropTypes.number,
   minimumSlots: PropTypes.number,
   preferredSlots: PropTypes.number,
-  slotsLimited: PropTypes.number,
+  slotsLimited: PropTypes.bool,
   anything: PropTypes.bool,
 };
 

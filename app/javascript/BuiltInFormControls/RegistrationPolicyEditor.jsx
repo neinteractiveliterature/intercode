@@ -4,7 +4,6 @@ import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
-import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
@@ -25,7 +24,7 @@ class RegistrationPolicyEditor extends React.Component {
     lockLimitedBuckets: null,
     lockDeleteBuckets: null,
     showKey: true,
-    presets: [],
+    presets: null,
   }
 
   constructor(props) {
@@ -135,36 +134,39 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
+  renderBucketRow = (bucket) => {
+    const bucketInPreset = (
+      this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket =>
+        presetBucket.key === bucket.key)
+    );
+
+    const lockDelete = (
+      bucketInPreset ||
+      (this.props.lockDeleteBuckets && this.props.lockDeleteBuckets.includes(bucket.key))
+    );
+
+    const lockLimited = (
+      bucketInPreset ||
+      (this.props.lockLimitedBuckets && this.props.lockLimitedBuckets.includes(bucket.key))
+    );
+
+    return (
+      <RegistrationBucketRow
+        key={bucket.key}
+        registrationBucket={bucket}
+        onChange={this.bucketChanged}
+        onDelete={this.deleteBucket}
+        showKey={this.props.showKey && !bucketInPreset}
+        lockNameAndDescription={bucketInPreset || this.props.lockNameAndDescription}
+        lockLimited={lockLimited}
+        lockDelete={lockDelete}
+      />
+    );
+  }
+
   renderTable = () => {
-    const bucketRows = this.props.registrationPolicy.buckets.map((bucket) => {
-      const bucketInPreset = (
-        this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket =>
-          presetBucket.key === bucket.key)
-      );
-
-      const lockDelete = (
-        bucketInPreset ||
-        (this.props.lockDeleteBuckets && this.props.lockDeleteBuckets.includes(bucket.key))
-      );
-
-      const lockLimited = (
-        bucketInPreset ||
-        (this.props.lockLimitedBuckets && this.props.lockLimitedBuckets.includes(bucket.key))
-      );
-
-      return (
-        <RegistrationBucketRow
-          key={bucket.key}
-          registrationBucket={bucket}
-          onChange={this.bucketChanged}
-          onDelete={this.deleteBucket}
-          showKey={this.props.showKey && !bucketInPreset}
-          lockNameAndDescription={bucketInPreset || this.props.lockNameAndDescription}
-          lockLimited={lockLimited}
-          lockDelete={lockDelete}
-        />
-      );
-    });
+    const bucketRows = this.props.registrationPolicy.buckets.map(bucket =>
+      this.renderBucketRow(bucket));
 
     return (
       <table className="table">
@@ -200,12 +202,14 @@ class RegistrationPolicyEditor extends React.Component {
 
     return (
       <div className="form-group">
-        <label htmlFor={selectId}>Registration policy</label>
-        <select id={selectId} className="form-control" value={selectorValue} onChange={this.presetSelected}>
-          <option value="" />
-          {presetOptions}
-          <option value="_custom">Custom registration policy (advanced)</option>
-        </select>
+        <label htmlFor={selectId}>
+          Registration policy
+          <select id={selectId} className="form-control" value={selectorValue} onChange={this.presetSelected}>
+            <option value="" />
+            {presetOptions}
+            <option value="_custom">Custom registration policy (advanced)</option>
+          </select>
+        </label>
       </div>
     );
   }

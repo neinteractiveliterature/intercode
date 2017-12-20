@@ -82,7 +82,7 @@ class StandaloneEditEvent extends React.Component {
   static propTypes = {
     eventId: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
     showDropButton: PropTypes.bool.isRequired,
-    data: GraphQLResultPropType(eventQuery, 'event').isRequired,
+    data: GraphQLResultPropType(eventQuery).isRequired,
     updateEvent: PropTypes.func.isRequired,
     dropEvent: PropTypes.func.isRequired,
   };

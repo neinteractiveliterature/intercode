@@ -1,0 +1,184 @@
+import React from 'react';
+import sinon from 'sinon';
+import { mount } from 'enzyme';
+import { ConfirmModal } from 'react-bootstrap4-modal';
+import InPlaceEditor from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
+import RegistrationPolicyBucket from '../../../app/javascript/Models/RegistrationPolicyBucket';
+import RegistrationBucketRow from '../../../app/javascript/BuiltInFormControls/RegistrationBucketRow';
+
+describe('RegistrationBucketRow', () => {
+  let onChange;
+  let onDelete;
+
+  const defaultRegistrationBucketProps = {
+    key: 'testBucket',
+    name: 'test',
+    description: 'a bucket for testing',
+    totalSlots: 10,
+    preferredSlots: 5,
+    minimumSlots: 2,
+    slotsLimited: true,
+    anything: false,
+  };
+
+  beforeEach(() => {
+    onChange = sinon.spy();
+    onDelete = sinon.spy();
+  });
+
+  const renderRegistrationBucketRow = (props, registrationBucketProps) => mount((
+    <table>
+      <tbody>
+        <RegistrationBucketRow
+          registrationBucket={
+            new RegistrationPolicyBucket({
+              ...defaultRegistrationBucketProps,
+              ...registrationBucketProps,
+            })
+          }
+          onChange={onChange}
+          onDelete={onDelete}
+          lockNameAndDescription={false}
+          lockLimited={false}
+          lockDelete={false}
+          showKey
+          {...props}
+        />
+      </tbody>
+    </table>
+  ));
+
+  test('it renders the correct field values', () => {
+    const component = renderRegistrationBucketRow();
+    expect(component.find('.anything-bucket').length).toEqual(0);
+    expect(component.find('td').at(0).text()).toEqual('testBucket');
+    expect(component.find('td').at(1).text()).toEqual('test');
+    expect(component.find('td').at(2).text()).toEqual('a bucket for testing');
+    expect(component.find('td').at(3).find('input[type="checkbox"]').prop('checked')).toBeTruthy();
+    expect(component.find('td').at(3).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+      2,
+      5,
+      10,
+    ]);
+  });
+
+  test('showKey', () => {
+    const component = renderRegistrationBucketRow({ showKey: false });
+    expect(component.find('.anything-bucket').length).toEqual(0);
+    expect(component.find('td').at(0).text()).toEqual('test');
+    expect(component.find('td').at(1).text()).toEqual('a bucket for testing');
+    expect(component.find('td').at(2).find('input[type="checkbox"]').prop('checked')).toBeTruthy();
+    expect(component.find('td').at(2).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+      2,
+      5,
+      10,
+    ]);
+  });
+
+  test('lockNameAndDescription', () => {
+    const component = renderRegistrationBucketRow({ lockNameAndDescription: true });
+    expect(component.find('.anything-bucket').length).toEqual(0);
+    expect(component.find('td').at(0).text()).toEqual('testBucket');
+    expect(component.find('td').at(1).text()).toEqual('test');
+    expect(component.find('td').at(1).prop('title')).toEqual('a bucket for testing');
+    expect(component.find('td').at(2).find('input[type="checkbox"]').prop('checked')).toBeTruthy();
+    expect(component.find('td').at(2).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+      2,
+      5,
+      10,
+    ]);
+  });
+
+  test('lockLimited', () => {
+    const component = renderRegistrationBucketRow({ lockLimited: true });
+    expect(component.find('.anything-bucket').length).toEqual(0);
+    expect(component.find('td').at(0).text()).toEqual('testBucket');
+    expect(component.find('td').at(1).text()).toEqual('test');
+    expect(component.find('td').at(2).text()).toEqual('a bucket for testing');
+    expect(component.find('td').at(3).find('input[type="checkbox"]').length).toEqual(0);
+    expect(component.find('td').at(3).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+      2,
+      5,
+      10,
+    ]);
+  });
+
+  test('lockDelete', () => {
+    const component = renderRegistrationBucketRow({ lockDelete: true });
+    expect(component.find('.anything-bucket').length).toEqual(0);
+    expect(component.find('td').at(4).find('button').length).toEqual(0);
+  });
+
+  test('anything bucket renders properly', () => {
+    const component = renderRegistrationBucketRow({}, { anything: true });
+    expect(component.find('.anything-bucket').length).toEqual(1);
+  });
+
+  test('changing the key', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(0).find(InPlaceEditor).prop('onChange')('newvalue');
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('key')).toEqual('newvalue');
+  });
+
+  test('changing the name', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(1).find(InPlaceEditor).prop('onChange')('new name');
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('name')).toEqual('new name');
+  });
+
+  test('changing the description', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(2).find(InPlaceEditor).prop('onChange')('a new description');
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('description')).toEqual('a new description');
+  });
+
+  test('changing slotsLimited', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(3).find('input[type="checkbox"]').simulate('change', { target: { checked: false } });
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('slotsLimited')).toEqual(false);
+  });
+
+  test('changing minimumSlots', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(3).find('input[type="number"]').at(0)
+      .simulate('change', { target: { value: 4 } });
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('minimumSlots')).toEqual(4);
+  });
+
+  test('changing preferredSlots', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(3).find('input[type="number"]').at(1)
+      .simulate('change', { target: { value: 6 } });
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('preferredSlots')).toEqual(6);
+  });
+
+  test('changing totalSlots', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(3).find('input[type="number"]').at(2)
+      .simulate('change', { target: { value: 55 } });
+    expect(onChange.getCall(0).args[0]).toEqual('testBucket');
+    expect(onChange.getCall(0).args[1].get('totalSlots')).toEqual(55);
+  });
+
+  test('deleting', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(4).find('button').at(0)
+      .simulate('click');
+    component.find(ConfirmModal).find('button').at(1).simulate('click');
+    expect(onDelete.getCall(0).args[0]).toEqual('testBucket');
+  });
+
+  test('canceling delete', () => {
+    const component = renderRegistrationBucketRow();
+    component.find('td').at(4).find('button').at(0)
+      .simulate('click');
+    component.find(ConfirmModal).find('button').at(0).simulate('click');
+    expect(onDelete.getCall(0)).toBeFalsy();
+  });
+});
