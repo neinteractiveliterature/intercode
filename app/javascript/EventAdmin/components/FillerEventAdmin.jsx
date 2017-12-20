@@ -46,7 +46,7 @@ const buildRunInput = run => ({
 @GraphQLQueryResultWrapper
 class FillerEventAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
+    data: GraphQLResultPropType(eventsQuery).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,

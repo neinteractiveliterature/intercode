@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Payment from 'payment';
+import classNames from 'classnames';
 
 const CARD_TYPE_ICONS = {
   visa: 'fa-cc-visa',
@@ -49,7 +50,7 @@ class CreditCardNumberInput extends React.Component {
       iconClass = CARD_TYPE_ICONS.unknown;
     }
 
-    return `fa ${iconClass} ${colorClass}`;
+    return classNames('fa', iconClass, colorClass);
   }
 
   render() {

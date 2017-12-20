@@ -12,7 +12,7 @@ import eventsQuery from '../eventsQuery';
 @GraphQLQueryResultWrapper
 class VolunteerEventAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery, 'events', 'convention').isRequired,
+    data: GraphQLResultPropType(eventsQuery).isRequired,
   };
 
   renderVolunteerEventsList = () => {

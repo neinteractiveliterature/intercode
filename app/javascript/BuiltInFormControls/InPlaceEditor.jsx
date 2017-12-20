@@ -34,18 +34,12 @@ class InPlaceEditor extends React.Component {
   }
 
   cancelEditing = (event) => {
-    if (event != null) {
-      event.preventDefault();
-    }
-
+    event.preventDefault();
     this.setState({ editing: false, editingValue: undefined });
   }
 
   commitEditing = (event) => {
-    if (event != null) {
-      event.preventDefault();
-    }
-
+    event.preventDefault();
     this.props.onChange(this.state.editingValue);
     this.setState({ editing: false, editingValue: undefined });
   }
@@ -54,12 +48,12 @@ class InPlaceEditor extends React.Component {
     switch (event.key) {
       case 'Escape':
         event.preventDefault();
-        this.cancelEditing();
+        this.cancelEditing(event);
         break;
 
       case 'Enter':
         event.preventDefault();
-        this.commitEditing();
+        this.commitEditing(event);
         break;
 
       default:
