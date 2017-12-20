@@ -1,63 +1,6 @@
 import moment from 'moment-timezone';
-
-const timeIsOnTheHour = time => (
-  time.millisecond() === 0 && time.second() === 0 && time.minute() === 0
-);
-
-const humanTimeFormat = (time) => {
-  if (timeIsOnTheHour(time)) {
-    if (time.hour() === 0) {
-      return '[midnight]';
-    }
-
-    if (time.hour() === 12) {
-      return '[noon]';
-    }
-  }
-
-  return 'h:mma';
-};
-
-const humanizeTime = (time, includeDay) => {
-  let timeFormat = humanTimeFormat(time);
-  if (includeDay) {
-    timeFormat = `ddd ${timeFormat}`;
-  }
-
-  return time.format(timeFormat);
-};
-
-const onlyOneIsNull = (a, b) => (
-  (a == null && b != null) ||
-  (a != null && b == null)
-);
-
-const timesAreSameOrBothNull = (a, b) => {
-  if (onlyOneIsNull(a, b)) {
-    return false;
-  }
-
-  return (a == null && b == null) || a.isSame(b);
-};
-
-const compareMomentsAscending = (a, b) => {
-  if (a.isBefore(b)) {
-    return -1;
-  }
-
-  if (b.isBefore(a)) {
-    return 1;
-  }
-
-  return 0;
-};
-
-const compareMomentsDescending = (a, b) => compareMomentsAscending(b, a);
-
-const chooseAmong = (values, sortFunction) => {
-  const nonNullValues = values.filter(value => value != null);
-  return nonNullValues.sort(sortFunction)[0];
-};
+import { compareTimesAscending, compareTimesDescending, timesAreSameOrBothNull } from '../TimeUtils';
+import { chooseAmong } from '../ValueUtils';
 
 class Timespan {
   static fromStrings(start, finish) {
@@ -117,15 +60,15 @@ class Timespan {
 
   intersection(other) {
     return new Timespan(
-      chooseAmong([this.start, other.start], compareMomentsDescending),
-      chooseAmong([this.finish, other.finish], compareMomentsAscending),
+      chooseAmong([this.start, other.start], compareTimesDescending),
+      chooseAmong([this.finish, other.finish], compareTimesAscending),
     );
   }
 
   union(other) {
     return new Timespan(
-      chooseAmong([this.start, other.start], compareMomentsAscending),
-      chooseAmong([this.finish, other.finish], compareMomentsDescending),
+      chooseAmong([this.start, other.start], compareTimesAscending),
+      chooseAmong([this.finish, other.finish], compareTimesDescending),
     );
   }
 
