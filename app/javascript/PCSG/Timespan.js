@@ -40,6 +40,25 @@ const timesAreSameOrBothNull = (a, b) => {
   return (a == null && b == null) || a.isSame(b);
 };
 
+const compareMomentsAscending = (a, b) => {
+  if (a.isBefore(b)) {
+    return -1;
+  }
+
+  if (b.isBefore(a)) {
+    return 1;
+  }
+
+  return 0;
+};
+
+const compareMomentsDescending = (a, b) => compareMomentsAscending(b, a);
+
+const chooseAmong = (values, sortFunction) => {
+  const nonNullValues = values.filter(value => value != null);
+  return nonNullValues.sort(sortFunction)[0];
+};
+
 class Timespan {
   static fromStrings(start, finish) {
     return new Timespan(
@@ -96,38 +115,22 @@ class Timespan {
     );
   }
 
-  expandedToFit(other) {
-    let newStart = this.start || other.start;
-    let newFinish = this.finish || other.finish;
-
-    if (newStart != null && other.start != null && newStart.isAfter(other.start)) {
-      newStart = other.start;
-    }
-
-    if (newFinish != null && other.finish != null && newFinish.isBefore(other.finish)) {
-      newFinish = other.finish;
-    }
-
-    return new Timespan(newStart, newFinish);
+  intersection(other) {
+    return new Timespan(
+      chooseAmong([this.start, other.start], compareMomentsDescending),
+      chooseAmong([this.finish, other.finish], compareMomentsAscending),
+    );
   }
 
   union(other) {
-    return this.expandedToFit(other);
+    return new Timespan(
+      chooseAmong([this.start, other.start], compareMomentsAscending),
+      chooseAmong([this.finish, other.finish], compareMomentsDescending),
+    );
   }
 
-  intersection(other) {
-    let newStart = this.start || other.start;
-    let newFinish = this.finish || other.finish;
-
-    if (newStart != null && other.start != null && newStart.isBefore(other.start)) {
-      newStart = other.start;
-    }
-
-    if (newFinish != null && other.finish != null && newFinish.isAfter(other.finish)) {
-      newFinish = other.finish;
-    }
-
-    return new Timespan(newStart, newFinish);
+  expandedToFit(other) {
+    return this.union(other);
   }
 
   getLength(unit = 'millisecond') {
