@@ -1,5 +1,10 @@
 import moment from 'moment-timezone';
-import { compareTimesAscending, compareTimesDescending, timesAreSameOrBothNull } from '../TimeUtils';
+import {
+  compareTimesAscending,
+  compareTimesDescending,
+  humanizeTime,
+  timesAreSameOrBothNull,
+} from '../TimeUtils';
 import { chooseAmong } from '../ValueUtils';
 
 class Timespan {
