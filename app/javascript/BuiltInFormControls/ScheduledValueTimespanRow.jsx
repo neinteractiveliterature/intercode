@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { TimespanPropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRowDatepicker from './ScheduledValueTimespanRowDatepicker';
+import Timespan from '../PCSG/Timespan';
 
 require('moment-timezone');
 
@@ -46,7 +47,13 @@ class ScheduledValueTimespanRow extends React.Component {
   }
 
   isValidTimeForField = (fieldName, date) => {
-    if (!this.doesNotOverlapOtherTimespans(date)) {
+    const prospectiveTimespan = new Timespan({
+      start: moment(this.props.timespan.start),
+      finish: moment(this.props.timespan.finish),
+      [fieldName]: date,
+    });
+
+    if (!this.doesNotOverlapOtherTimespans(prospectiveTimespan)) {
       return false;
     }
 
@@ -87,27 +94,15 @@ class ScheduledValueTimespanRow extends React.Component {
     this.props.attributeDidChange(this.props.rowIdentifier, 'value', value);
   }
 
-  doesNotOverlapOtherTimespans = date => this.props.otherTimespans.every((otherTimespan) => {
-    if (otherTimespan.start) {
-      if (date.isSame(otherTimespan.start)) {
-        return false;
-      }
+  doesNotOverlapOtherTimespans = prospectiveTimespan =>
+    this.props.otherTimespans.every((otherTimespanProps) => {
+      const otherTimespan = new Timespan({
+        start: moment(otherTimespanProps.start),
+        finish: moment(otherTimespanProps.finish),
+      });
 
-      if (otherTimespan.finish) {
-        if (date.isBetween(otherTimespan.start, otherTimespan.finish)) {
-          return false;
-        }
-      } else if (date.isAfter(otherTimespan.start)) {
-        return false;
-      }
-    } else if (otherTimespan.finish) {
-      if (date.isBefore(otherTimespan.finish)) {
-        return false;
-      }
-    }
-
-    return true;
-  })
+      return !prospectiveTimespan.overlapsTimespan(otherTimespan);
+    });
 
   renderDatetimePicker = fieldName => (
     <ScheduledValueTimespanRowDatepicker

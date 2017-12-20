@@ -28,11 +28,14 @@ const humanizeTime = (time, includeDay) => {
 
 class Timespan {
   static fromStrings(start, finish) {
-    return new Timespan(moment(start), moment(finish));
+    return new Timespan(
+      (start != null ? moment(start) : null),
+      (finish != null ? moment(finish) : null),
+    );
   }
 
   constructor(start, finish) {
-    if (start.isAfter(finish)) {
+    if (start && finish && start.isAfter(finish)) {
       throw new Error('Start cannot be after finish');
     }
 
@@ -41,34 +44,67 @@ class Timespan {
   }
 
   tz(timezoneName) {
-    return new Timespan(this.start.tz(timezoneName), this.finish.tz(timezoneName));
+    return new Timespan(
+      (this.start != null ? this.start.tz(timezoneName) : null),
+      (this.finish != null ? this.finish.tz(timezoneName) : null),
+    );
+  }
+
+  isFinite() {
+    return (this.start != null && this.finish != null);
   }
 
   includesTime(time) {
-    return (this.start.isSameOrBefore(time) && this.finish.isAfter(time));
+    return (
+      (this.start == null || this.start.isSameOrBefore(time)) &&
+      (this.finish == null || this.finish.isAfter(time))
+    );
   }
 
   includesTimespan(other) {
-    return this.start.isSameOrBefore(other.start) && this.finish.isSameOrAfter(other.finish);
+    return (
+      (this.start == null || other.start == null || this.start.isSameOrBefore(other.start)) &&
+      (this.finish == null || other.finish == null || this.finish.isSameOrAfter(other.finish))
+    );
   }
 
   overlapsTimespan(other) {
-    return this.start.isBefore(other.finish) && other.start.isBefore(this.finish);
+    return (
+      (this.start == null || other.finish == null || this.start.isBefore(other.finish)) &&
+      (this.finish == null || other.start == null || other.start.isBefore(this.finish))
+    );
   }
 
   isSame(other) {
-    return this.start.isSame(other.start) && this.finish.isSame(other.finish);
+    if (
+      (this.start == null && other.start != null) ||
+      (this.start != null && other.start == null)
+    ) {
+      return false;
+    }
+
+    if (
+      (this.finish == null && other.finish != null) ||
+      (this.finish != null && other.finish == null)
+    ) {
+      return false;
+    }
+
+    return (
+      ((this.start == null && other.start == null) || this.start.isSame(other.start)) &&
+      ((this.finish == null && other.finish == null) || this.finish.isSame(other.finish))
+    );
   }
 
   expandedToFit(other) {
-    let newStart = this.start;
-    let newFinish = this.finish;
+    let newStart = this.start || other.start;
+    let newFinish = this.finish || other.finish;
 
-    if (newStart.isAfter(other.start)) {
+    if (newStart != null && other.start != null && newStart.isAfter(other.start)) {
       newStart = other.start;
     }
 
-    if (newFinish.isBefore(other.finish)) {
+    if (newFinish != null && other.finish != null && newFinish.isBefore(other.finish)) {
       newFinish = other.finish;
     }
 
@@ -80,14 +116,14 @@ class Timespan {
   }
 
   intersection(other) {
-    let newStart = this.start;
-    let newFinish = this.finish;
+    let newStart = this.start || other.start;
+    let newFinish = this.finish || other.finish;
 
-    if (newStart.isBefore(other.start)) {
+    if (newStart != null && other.start != null && newStart.isBefore(other.start)) {
       newStart = other.start;
     }
 
-    if (newFinish.isAfter(other.finish)) {
+    if (newFinish != null && other.finish != null && newFinish.isAfter(other.finish)) {
       newFinish = other.finish;
     }
 
@@ -95,19 +131,43 @@ class Timespan {
   }
 
   getLength(unit = 'millisecond') {
+    if (!this.isFinite()) {
+      return null;
+    }
+
     return this.finish.diff(this.start, unit);
   }
 
-  humanizeInTimezone(timezoneName) {
+  humanizeStartInTimezone(timezoneName) {
+    if (this.start == null) {
+      return 'anytime';
+    }
+
+    const start = this.start.tz(timezoneName);
+    return humanizeTime(start, true);
+  }
+
+  humanizeFinishInTimezone(timezoneName) {
+    if (this.finish == null) {
+      return 'indefinitely';
+    }
+
     const start = this.start.tz(timezoneName);
     const finish = this.finish.tz(timezoneName);
-
     const includeDayInFinish = (finish.date() !== start.date());
 
-    return `${humanizeTime(start, true)} - ${humanizeTime(finish, includeDayInFinish)}`;
+    return humanizeTime(finish, includeDayInFinish);
+  }
+
+  humanizeInTimezone(timezoneName) {
+    return `${this.humanizeStartInTimezone(timezoneName)} - ${this.humanizeFinishInTimezone(timezoneName)}`;
   }
 
   getTimeHopsWithin(timezoneName, unit, offset) {
+    if (!this.isFinite()) {
+      throw new Error(`getTimeHopsWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
+    }
+
     const timeBlocks = [];
     const now = this.start.clone().tz(timezoneName).startOf(unit);
     while (now.isBefore(this.finish)) {
@@ -123,6 +183,10 @@ class Timespan {
   }
 
   getTimespansWithin(timezoneName, unit, offset) {
+    if (!this.isFinite()) {
+      throw new Error(`getTimespansWithin called on an infinite Timespan ${this.humanizeInTimezone(timezoneName)}`);
+    }
+
     const timeHops = this.getTimeHopsWithin(timezoneName, unit, offset);
     return timeHops.map((timeHop, i) => {
       if (i < timeHops.length - 1) {
@@ -138,7 +202,10 @@ class Timespan {
   }
 
   clone() {
-    return new Timespan(this.start.clone(), this.finish.clone());
+    return new Timespan(
+      (this.start != null ? this.start.clone() : null),
+      (this.finish != null ? this.finish.clone() : null),
+    );
   }
 }
 
