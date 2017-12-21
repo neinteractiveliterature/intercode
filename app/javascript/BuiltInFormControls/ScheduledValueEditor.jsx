@@ -28,12 +28,10 @@ class ScheduledValueEditor extends React.Component {
   }
 
   setTimespans = (newTimespans) => {
-    const newScheduledValue = Object.assign(
-      {},
-      this.props.scheduledValue,
-      { timespans: newTimespans },
-    );
-    this.props.setScheduledValue(newScheduledValue);
+    this.props.setScheduledValue({
+      ...this.props.scheduledValue,
+      timespans: newTimespans,
+    });
   }
 
   addRowClicked = (e) => {
@@ -65,7 +63,7 @@ class ScheduledValueEditor extends React.Component {
 
   timespanAttributeDidChange = (index, attributeName, newValue) => {
     const newTimespans = [...this.props.scheduledValue.timespans];
-    newTimespans[index] = Object.assign({}, newTimespans[index], { [attributeName]: newValue });
+    newTimespans[index] = { ...newTimespans[index], [attributeName]: newValue };
 
     this.setTimespans(newTimespans);
   }
