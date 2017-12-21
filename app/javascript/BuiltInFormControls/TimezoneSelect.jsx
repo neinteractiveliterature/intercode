@@ -16,8 +16,8 @@ const TIMEZONE_OPTIONS = moment.tz.names()
 
     const offset = zone.offsets[offsetIndex];
     const offsetSign = offset < 0 ? '-' : '+';
-    const offsetHours = Math.abs(Math.floor(offset / 60));
-    const offsetMinutes = Math.abs(Math.round(offset % 60));
+    const offsetHours = Math.floor(Math.abs(offset / 60));
+    const offsetMinutes = Math.round(Math.abs(offset % 60));
     const formattedOffset = `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`;
 
     return {
