@@ -49,9 +49,11 @@ class TimeSelect extends React.Component {
         description += ` (+${dayDiff} ${dayDiff > 1 ? 'days' : 'day'})`;
       }
 
-      hourOptions.push(<option key={hourOffset} value={hourOffset + timespan.start.hour()}>
-        {description}
-                       </option>);
+      hourOptions.push((
+        <option key={hourOffset} value={hourOffset + timespan.start.hour()}>
+          {description}
+        </option>
+      ));
       hourOffset += 1;
     }
 
