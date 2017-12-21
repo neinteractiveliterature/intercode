@@ -41,8 +41,10 @@ class TimezoneSelect extends React.Component {
 
     return (
       <div className="form-group">
-        <label htmlFor={selectId}>{this.props.label}</label>
-        <Select id={selectId} options={TIMEZONE_OPTIONS} {...this.props} />
+        <label htmlFor={selectId}>
+          {this.props.label}
+          <Select id={selectId} options={TIMEZONE_OPTIONS} {...this.props} />
+        </label>
       </div>
     );
   }
