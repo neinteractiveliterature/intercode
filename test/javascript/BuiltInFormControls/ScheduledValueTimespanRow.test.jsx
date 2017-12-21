@@ -3,17 +3,9 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import moment from 'moment';
 import Datetime from 'react-datetime';
+import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueTimespanRow from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
-
-const buildInput = (value, onChange) => {
-  const processChangeEvent = (event) => {
-    onChange(event.target.value);
-  };
-
-  return (
-    <input className="testInput" type="text" value={value} onChange={processChangeEvent} />
-  );
-};
+import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRowDatepicker';
 
 describe('ScheduledValueTimespanRow', () => {
   let attributeDidChange;
@@ -39,7 +31,7 @@ describe('ScheduledValueTimespanRow', () => {
       <table>
         <tbody>
           <ScheduledValueTimespanRow
-            buildInput={buildInput}
+            buildInput={buildTestScheduledValueInput}
             rowIdentifier={42}
             timespan={timespan}
             otherTimespans={[]}
