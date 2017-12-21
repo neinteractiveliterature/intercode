@@ -52,9 +52,7 @@ class ScheduledValueEditor extends React.Component {
     this.setTimespans(newTimespans);
   }
 
-  deleteRowClicked = (index, e) => {
-    e.preventDefault();
-
+  deleteRowClicked = (index) => {
     const oldTimespans = this.props.scheduledValue.timespans;
     const newTimespans = oldTimespans.slice(0, index).concat(oldTimespans.slice(index + 1));
 
