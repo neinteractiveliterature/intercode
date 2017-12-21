@@ -67,20 +67,21 @@ class TimeSelect extends React.Component {
     ].map(([label, name, options]) => {
       const selectId = this.nextUniqueId();
 
-      return [
-        <label key={`label_${name}`} className="sr-only" htmlFor={selectId}>{label}</label>,
-        <select
-          key={`select_${name}`}
-          id={selectId}
-          className="form-control mr-1"
-          name={name}
-          value={value[name] == null ? '' : value[name]}
-          onChange={this.inputChanged}
-        >
-          <option />
-          {options}
-        </select>,
-      ];
+      return (
+        <label key={name} className="sr-only" htmlFor={selectId}>
+          {label}
+          <select
+            id={selectId}
+            className="form-control mr-1"
+            name={name}
+            value={value[name] == null ? '' : value[name]}
+            onChange={this.inputChanged}
+          >
+            <option />
+            {options}
+          </select>
+        </label>
+      );
     });
 
     return (
