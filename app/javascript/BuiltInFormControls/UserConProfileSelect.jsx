@@ -8,7 +8,7 @@ import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
 
-const DEFAULT_USER_CON_PROFILES_QUERY = gql`
+export const DEFAULT_USER_CON_PROFILES_QUERY = gql`
 query($cursor: String) {
   convention {
     user_con_profiles(first: 1000, after: $cursor) {
@@ -28,7 +28,6 @@ query($cursor: String) {
 }
 `;
 
-@withApollo
 class UserConProfileSelect extends React.Component {
   static propTypes = {
     client: PropTypes.shape({
@@ -48,6 +47,7 @@ class UserConProfileSelect extends React.Component {
     super(props);
 
     this.state = {
+      isLoading: true,
       options: null,
       filterOptions: null,
     };
@@ -67,11 +67,15 @@ class UserConProfileSelect extends React.Component {
   }
 
   loadOptions = async (input) => {
+    this.setState({ isLoading: true });
     const variables = { name: input };
 
     let nextVariables = variables;
     let options = [];
     do {
+      // no-await-in-loop is based on the assumption that most multi-promise
+      // situations are parallelizable.  This one isn't, and the docs say in
+      // cases like this to disable the check.
       // eslint-disable-next-line no-await-in-loop
       const results = await this.props.client.query({
         query: this.props.userConProfilesQuery || DEFAULT_USER_CON_PROFILES_QUERY,
@@ -97,6 +101,8 @@ class UserConProfileSelect extends React.Component {
       options = [...options, ...currentPageOptions];
     } while (nextVariables != null);
 
+    this.setState({ isLoading: false });
+
     return {
       options,
       complete: (!input || input === ''),
@@ -104,7 +110,7 @@ class UserConProfileSelect extends React.Component {
   }
 
   render = () => {
-    if (!this.state.options) {
+    if (this.state.isLoading) {
       return (
         <div>
           Loading... <i className="fa fa-circle-o-notch fa-spin" aria-hidden="true" />
@@ -115,10 +121,12 @@ class UserConProfileSelect extends React.Component {
     return (
       <VirtualizedSelect
         options={this.state.options}
+        filterOptions={this.state.filterOptions}
         {...this.props}
       />
     );
   }
 }
 
-export default UserConProfileSelect;
+export default withApollo(UserConProfileSelect);
+export { UserConProfileSelect as PureUserConProfileSelect };
