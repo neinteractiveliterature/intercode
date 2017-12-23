@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../../app/javascript/BuiltInFormControls/BootstrapFormTextarea';
@@ -9,7 +9,7 @@ import RegistrationPolicyEditor from '../../../app/javascript/BuiltInFormControl
 import TimespanItem from '../../../app/javascript/FormPresenter/components/TimespanItem';
 
 describe('CommonEventFormFields', () => {
-  const renderCommonEventFormFields = (props, eventProps) => shallow((
+  const renderCommonEventFormFields = (props, eventProps) => mount((
     <CommonEventFormFields
       event={{
         category: 'larp',
@@ -97,7 +97,7 @@ describe('CommonEventFormFields', () => {
     test('formInputDidChange', () => {
       const onChange = jest.fn();
       const component = renderCommonEventFormFields({ onChange });
-      component.instance().formInputDidChange({
+      component.find('input').filter({ name: 'title' }).simulate('change', {
         target: {
           name: 'title',
           value: 'a new title',
@@ -109,7 +109,7 @@ describe('CommonEventFormFields', () => {
     test('canPlayConcurrentlyDidChange', () => {
       const onChange = jest.fn();
       const component = renderCommonEventFormFields({ onChange });
-      component.instance().canPlayConcurrentlyDidChange({
+      component.find('input').filter({ name: 'can_play_concurrently', value: 'true' }).simulate('change', {
         target: {
           name: 'can_play_concurrently',
           value: 'true',
@@ -121,12 +121,12 @@ describe('CommonEventFormFields', () => {
     test('registrationPolicyDidChange', () => {
       const onChange = jest.fn();
       const component = renderCommonEventFormFields({ onChange });
-      component.instance().registrationPolicyDidChange((
-        RegistrationPolicy.fromAPI((
-          CommonEventFormFields.buildRegistrationPolicyForVolunteerEvent(3)
-        ))
-      ));
-      expect(onChange.mock.calls[0][0].registration_policy.buckets[0].total_slots).toEqual(3);
+      component.find(RegistrationPolicyEditor).find('select').simulate('change', {
+        target: {
+          value: 'Limited slots by gender',
+        },
+      });
+      expect(onChange.mock.calls[0][0].registration_policy.buckets.length).toEqual(3);
     });
 
     test('totalSlotsForVolunteerEventDidChange', () => {
@@ -135,7 +135,7 @@ describe('CommonEventFormFields', () => {
         category: 'volunteer_event',
         registration_policy: CommonEventFormFields.buildRegistrationPolicyForVolunteerEvent(5),
       });
-      component.instance().totalSlotsForVolunteerEventDidChange({
+      component.find('input').filter({ name: 'total_slots' }).simulate('change', {
         target: {
           name: 'total_slots',
           value: '15',
