@@ -29,6 +29,8 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
 class ConventionForm extends React.Component {
   static propTypes = {
     initialConvention: PropTypes.shape({
+      starts_at: PropTypes.string.isRequired,
+      ends_at: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       domain: PropTypes.string.isRequired,
       timezone_name: PropTypes.string.isRequired,
@@ -91,7 +93,7 @@ class ConventionForm extends React.Component {
       <div className="col-md-6" key={name}>
         {label}
         <Datetime
-          value={moment(this.state.convention[name]).tz(this.state.convention.timezone_name)}
+          value={moment.tz(this.state.convention[name], this.state.convention.timezone_name)}
           onChange={this.conventionMutator.valueChangeCallback(name)}
           dateFormat="dddd, MMMM DD, YYYY"
           timeFormat="[at] h:mma"
