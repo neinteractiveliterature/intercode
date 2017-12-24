@@ -4,7 +4,6 @@ import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/B
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../../app/javascript/BuiltInFormControls/BootstrapFormTextarea';
 import CommonEventFormFields from '../../../app/javascript/BuiltInForms/CommonEventFormFields';
-import RegistrationPolicy from '../../../app/javascript/Models/RegistrationPolicy';
 import RegistrationPolicyEditor from '../../../app/javascript/BuiltInFormControls/RegistrationPolicyEditor';
 import TimespanItem from '../../../app/javascript/FormPresenter/components/TimespanItem';
 
