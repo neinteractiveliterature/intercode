@@ -355,7 +355,7 @@ GEM
     multipart-post (2.0.0)
     mysql2 (0.4.9)
     netrc (0.11.0)
-    newrelic_rpm (4.7.0.339)
+    newrelic_rpm (4.7.1.340)
     nio4r (2.1.0)
     nio4r (2.1.0-java)
     nokogiri (1.8.1)
