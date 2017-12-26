@@ -86,7 +86,7 @@
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.1.1",
+    "babel-eslint": "^8.1.2",
     "babel-jest": "^22.0.4",
     "babel-minify": "^0.2.0",
     "babel-minify-webpack-plugin": "^0.2.0",
