@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EventForm from './EventForm';
+import RegistrationPolicy from '../Models/RegistrationPolicy';
 
 class EditEvent extends React.Component {
   static propTypes = {
     event: PropTypes.shape({
       id: PropTypes.number.isRequired,
+      registration_policy: RegistrationPolicy.apiRepresentationPropType.isRequired,
     }).isRequired,
     updateEvent: PropTypes.func.isRequired,
     dropEvent: PropTypes.func.isRequired,
@@ -59,31 +61,31 @@ class EditEvent extends React.Component {
       },
     };
 
-    this.setState(
-      { requestInProgress: true },
-      () => {
-        this.props.updateEvent({ variables: { input: eventInput } }).then(() => {
-          this.setState({ requestInProgress: false }, this.props.onSave);
-        }).catch((error) => {
-          this.setState({ error, requestInProgress: false });
-        });
-      },
-    );
+    const afterSave = async () => {
+      try {
+        await this.props.updateEvent({ variables: { input: eventInput } });
+        this.setState({ requestInProgress: false }, this.props.onSave);
+      } catch (error) {
+        this.setState({ error, requestInProgress: false });
+      }
+    };
+
+    this.setState({ requestInProgress: true }, afterSave);
+    return afterSave;
   }
 
   dropEvent = () => {
-    this.setState(
-      { requestInProgress: true },
-      () => {
-        this.props.dropEvent({
-          variables: { input: { id: this.props.event.id } },
-        }).then(() => {
-          this.setState({ requestInProgress: false }, this.props.onDrop);
-        }).catch((error) => {
-          this.setState({ error, requestInProgress: false });
-        });
-      },
-    );
+    const afterDrop = async () => {
+      try {
+        await this.props.dropEvent({ variables: { input: { id: this.props.event.id } } });
+        this.setState({ requestInProgress: false }, this.props.onDrop);
+      } catch (error) {
+        this.setState({ error, requestInProgress: false });
+      }
+    };
+
+    this.setState({ requestInProgress: true }, afterDrop);
+    return afterDrop;
   }
 
   render = () => (
