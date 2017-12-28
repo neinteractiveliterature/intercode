@@ -94,6 +94,11 @@ class ScheduledValueTimespanRow extends React.Component {
     this.props.attributeDidChange(this.props.rowIdentifier, 'value', value);
   }
 
+  deleteClicked = (e) => {
+    e.preventDefault();
+    this.props.deleteClicked(this.props.rowIdentifier);
+  }
+
   doesNotOverlapOtherTimespans = prospectiveTimespan =>
     this.props.otherTimespans.every((otherTimespanProps) => {
       const otherTimespan = new Timespan({
@@ -129,7 +134,7 @@ class ScheduledValueTimespanRow extends React.Component {
       </td>
 
       <td className="w-25 text-right" style={{ verticalAlign: 'middle' }}>
-        <button className="btn btn-danger btn-sm" onClick={this.props.deleteClicked}>
+        <button className="btn btn-danger btn-sm" onClick={this.deleteClicked}>
           <i className="fa fa-trash-o" />
         </button>
       </td>
