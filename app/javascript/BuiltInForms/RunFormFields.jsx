@@ -19,7 +19,7 @@ class RunFormFields extends React.Component {
       starts_at: PropTypes.string,
       title_suffix: PropTypes.string,
       schedule_note: PropTypes.string,
-      rooms: PropTypes.arrayOf(roomPropType).isRequired,
+      rooms: PropTypes.arrayOf(roomPropType),
     }).isRequired,
     event: PropTypes.shape({
       length_seconds: PropTypes.number.isRequired,
@@ -164,7 +164,7 @@ class RunFormFields extends React.Component {
             this.props.convention.rooms.map(room => ({ label: room.name, value: room.id }))
           }
           multi
-          value={this.props.run.rooms.map(room => room.id)}
+          value={(this.props.run.rooms || []).map(room => room.id)}
           onChange={this.roomsInputChanged}
         />
       </div>
