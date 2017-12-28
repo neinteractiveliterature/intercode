@@ -3,17 +3,9 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import moment from 'moment';
 import Datetime from 'react-datetime';
+import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueTimespanRow from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
-
-const buildInput = (value, onChange) => {
-  const processChangeEvent = (event) => {
-    onChange(event.target.value);
-  };
-
-  return (
-    <input className="testInput" type="text" value={value} onChange={processChangeEvent} />
-  );
-};
+import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRowDatepicker';
 
 describe('ScheduledValueTimespanRow', () => {
   let attributeDidChange;
@@ -39,7 +31,7 @@ describe('ScheduledValueTimespanRow', () => {
       <table>
         <tbody>
           <ScheduledValueTimespanRow
-            buildInput={buildInput}
+            buildInput={buildTestScheduledValueInput}
             rowIdentifier={42}
             timespan={timespan}
             otherTimespans={[]}
@@ -65,6 +57,21 @@ describe('ScheduledValueTimespanRow', () => {
     expect(attributeDidChange.getCall(0).args).toEqual([42, 'value', 'newvalue']);
   });
 
+  test('changing time ignores the timezone', () => {
+    const component = renderScheduledValueTimespanRow();
+    const saintPatricksDay = moment.tz(
+      {
+        year: 2017,
+        month: 2,
+        day: 17,
+        hour: 0,
+      },
+      'US/Eastern',
+    );
+    component.find(ScheduledValueTimespanRowDatepicker).get(0).props.onChange('start', saintPatricksDay);
+    expect(attributeDidChange.getCall(0).args).toEqual([42, 'start', '2017-03-17T00:00:00.000Z']);
+  });
+
   test('overlap checking', () => {
     const otherTimespans = [
       {
@@ -75,5 +82,35 @@ describe('ScheduledValueTimespanRow', () => {
     ];
     const component = renderScheduledValueTimespanRow({ otherTimespans });
     expect(component.find(Datetime).at(1).prop('isValidDate')(moment(otherTimespans[0].finish))).toBeFalsy();
+  });
+
+  test('range orientation checking', () => {
+    const onlyStartSet = renderScheduledValueTimespanRow({}, {
+      start: timespanFinish,
+      finish: null,
+    });
+    const onlyFinishSet = renderScheduledValueTimespanRow({}, {
+      start: null,
+      finish: timespanStart,
+    });
+
+    expect(onlyStartSet.find(Datetime).at(1).prop('isValidDate')(moment(timespanStart))).toBeFalsy();
+    expect(onlyFinishSet.find(Datetime).at(0).prop('isValidDate')(moment(timespanFinish))).toBeFalsy();
+  });
+
+  describe('isValid', () => {
+    test('it requires a value', () => {
+      expect(ScheduledValueTimespanRow.isValid({})).toBeFalsy();
+      expect(ScheduledValueTimespanRow.isValid({ value: null })).toBeFalsy();
+      expect(ScheduledValueTimespanRow.isValid({ value: 6 })).toBeTruthy();
+    });
+
+    test('it does not require a start or a finish', () => {
+      expect(ScheduledValueTimespanRow.isValid({
+        value: 6,
+        start: null,
+        finish: null,
+      })).toBeTruthy();
+    });
   });
 });

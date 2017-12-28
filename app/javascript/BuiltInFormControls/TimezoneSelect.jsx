@@ -16,8 +16,8 @@ const TIMEZONE_OPTIONS = moment.tz.names()
 
     const offset = zone.offsets[offsetIndex];
     const offsetSign = offset < 0 ? '-' : '+';
-    const offsetHours = Math.abs(Math.floor(offset / 60));
-    const offsetMinutes = Math.abs(Math.round(offset % 60));
+    const offsetHours = Math.floor(Math.abs(offset / 60));
+    const offsetMinutes = Math.round(Math.abs(offset % 60));
     const formattedOffset = `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`;
 
     return {
@@ -41,8 +41,10 @@ class TimezoneSelect extends React.Component {
 
     return (
       <div className="form-group">
-        <label htmlFor={selectId}>{this.props.label}</label>
-        <Select id={selectId} options={TIMEZONE_OPTIONS} {...this.props} />
+        <label htmlFor={selectId}>
+          {this.props.label}
+          <Select id={selectId} options={TIMEZONE_OPTIONS} {...this.props} />
+        </label>
       </div>
     );
   }
