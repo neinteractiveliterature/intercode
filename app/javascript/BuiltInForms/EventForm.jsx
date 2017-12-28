@@ -50,7 +50,7 @@ class EventForm extends React.Component {
   }
 
   isDataComplete = () => (
-    this.state.event.title != null &&
+    this.state.event.title != null && this.state.event.title !== '' &&
     this.state.event.length_seconds
   );
 
@@ -65,7 +65,7 @@ class EventForm extends React.Component {
 
   renderHeader = () => {
     let dropButton = null;
-    if (this.props.showDropButton && this.state.event.status !== 'dropped') {
+    if (this.props.showDropButton && this.state.event.id && this.state.event.status !== 'dropped') {
       dropButton = (
         <button className="btn btn-outline-danger float-right" onClick={this.beginDrop}>
           Drop event
