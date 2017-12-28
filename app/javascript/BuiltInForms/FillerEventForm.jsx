@@ -43,7 +43,7 @@ class FillerEventForm extends React.Component {
   }
 
   isDataComplete = () => (
-    this.state.event.form_response_attrs.title != null &&
+    this.state.event.form_response_attrs.title != null && this.state.event.form_response_attrs.title !== '' &&
     this.state.event.form_response_attrs.length_seconds &&
     this.state.run.starts_at != null
   )
