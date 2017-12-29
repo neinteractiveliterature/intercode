@@ -41,8 +41,8 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 
 To contact the Intercode 2 project team, you can:
 
-* [File an issue or feature request on our Jira tracker](https://intercode2.atlassian.net)
-* [Email the project mailing list](mailto:intercode2@lists.interactiveliterature.org).  Your message will be held for moderation but we'll see it and get back to you.
+* [File an issue or feature request here](https://github.com/neinteractiveliterature/issues)
+* [Email Nat Budin](mailto:natbudin@gmail.com).
 
 # License
 
