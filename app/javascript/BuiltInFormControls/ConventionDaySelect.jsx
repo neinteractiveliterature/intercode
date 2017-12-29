@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
 import moment from 'moment-timezone';
+import { enableUniqueIds } from 'react-html-id';
 import { timespanFromConvention } from '../TimespanUtils';
 
 class ConventionDaySelect extends React.Component {
@@ -19,6 +20,11 @@ class ConventionDaySelect extends React.Component {
     value: null,
   };
 
+  constructor(props) {
+    super(props);
+    enableUniqueIds(this);
+  }
+
   onChange = (event) => {
     const newDayString = event.target.value;
 
@@ -30,10 +36,13 @@ class ConventionDaySelect extends React.Component {
     const conventionTimespan = timespanFromConvention(convention);
     const conventionDays = conventionTimespan.getTimeHopsWithin(convention.timezone_name, 'day');
 
-    const options = conventionDays.map(day => (
-      <div className="form-check form-check-inline" key={day.toISOString()}>
-        <label className="form-check-label">
+    const options = conventionDays.map((day) => {
+      const inputId = this.nextUniqueId();
+
+      return (
+        <div className="form-check form-check-inline" key={day.toISOString()}>
           <input
+            id={inputId}
             className="form-check-input"
             type="radio"
             name="day"
@@ -42,10 +51,12 @@ class ConventionDaySelect extends React.Component {
             onChange={this.onChange}
           />
           {' '}
-          {day.format('dddd')}
-        </label>
-      </div>
-    ));
+          <label className="form-check-label" htmlFor={inputId}>
+            {day.format('dddd')}
+          </label>
+        </div>
+      );
+    });
 
     return (
       <fieldset className="form-group">

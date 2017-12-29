@@ -35,5 +35,12 @@ module.exports = {
       env: 'apollo',
       schemaJsonFilepath: './schema.json',
     }],
+    "jsx-a11y/label-has-for": [ "error", {
+      "components": [ "label" ],
+      "required": {
+        "every": [ "id" ]
+      },
+      "allowChildren": false
+    }]
   }
 };
