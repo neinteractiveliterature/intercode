@@ -11,7 +11,7 @@ gem 'puma'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'sass-rails'
-gem 'bootstrap', '~> 4.0.0.beta2'
+gem 'bootstrap', '~> 4.0.0.beta3'
 gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
