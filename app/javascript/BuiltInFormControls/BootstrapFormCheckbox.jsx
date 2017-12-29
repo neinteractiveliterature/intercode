@@ -39,13 +39,13 @@ class BootstrapFormCheckbox extends React.Component {
 
     return (
       <div className={`form-check ${className}`}>
+        <input
+          className={`form-check-input ${inputClassName}`}
+          id={inputId}
+          {...otherProps}
+        />
+        {' '}
         <label className="form-check-label" htmlFor={inputId}>
-          <input
-            className={`form-check-input ${inputClassName}`}
-            id={inputId}
-            {...otherProps}
-          />
-          {' '}
           {label}
         </label>
       </div>
