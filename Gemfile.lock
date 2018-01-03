@@ -85,7 +85,7 @@ GEM
       activerecord (>= 3.0)
     ansi (1.5.0)
     arel (8.0.0)
-    autoprefixer-rails (7.2.3)
+    autoprefixer-rails (7.2.4)
       execjs
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
