@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/bootstrap-ruby/rails-bootstrap-forms.git
-  revision: 16d82d6d8c32b5f6dcbe14ab3a3189e6b012839c
+  revision: a68a2425336851fe781549cb48957df4458fefe5
   branch: bootstrap-v4
   specs:
-    bootstrap_form (2.6.0)
+    bootstrap_form (4.0.0.dev)
 
 GIT
   remote: https://github.com/gively/cadmus
