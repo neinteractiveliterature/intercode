@@ -1418,7 +1418,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.2.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0:
+babel-runtime@6.26.0, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.2.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -4467,7 +4467,7 @@ isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
 
-isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
+isomorphic-fetch@2.2.1, isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -4858,7 +4858,7 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
 
-json-fetch@^7.2.0, json-fetch@^7.3.0:
+json-fetch@^7.2.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.3.0.tgz#9701e5bd788849eee4d99b5eca5b9c1346ad9d77"
   dependencies:
@@ -4866,6 +4866,15 @@ json-fetch@^7.2.0, json-fetch@^7.3.0:
     isomorphic-fetch "^2.2.1"
     lodash.pick "^4.4.0"
     promise-retry "^1.0.1"
+
+json-fetch@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.4.0.tgz#43ae603f94b36cf89d191a033ccee38621ebd768"
+  dependencies:
+    babel-runtime "6.26.0"
+    isomorphic-fetch "2.2.1"
+    lodash.pick "4.4.0"
+    promise-retry "1.0.1"
 
 json-loader@^0.5.4:
   version "0.5.7"
@@ -5157,7 +5166,7 @@ lodash.mergewith@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.0.tgz#150cf0a16791f5903b8891eab154609274bdea55"
 
-lodash.pick@^4.4.0:
+lodash.pick@4.4.0, lodash.pick@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
 
@@ -6845,12 +6854,24 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
+promise-retry@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/promise-retry/-/promise-retry-1.0.1.tgz#5d8c8920f1c255f73d668532c78759c09de20e25"
+  dependencies:
+    err-code "^1.0.0"
+    promise-try "^1.0.1"
+    retry "^0.8.0"
+
 promise-retry@^1.0.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/promise-retry/-/promise-retry-1.1.1.tgz#6739e968e3051da20ce6497fb2b50f6911df3d6d"
   dependencies:
     err-code "^1.0.0"
     retry "^0.10.0"
+
+promise-try@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/promise-try/-/promise-try-1.0.1.tgz#7b20b38ce23400bd09dd7ebbbe9f1d0a4a34a248"
 
 promise@^7.1.1:
   version "7.3.1"
@@ -7681,6 +7702,10 @@ ret@~0.1.10:
 retry@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
+
+retry@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/retry/-/retry-0.8.0.tgz#2367628dc0edb247b1eab649dc53ac8628ac2d5f"
 
 rework-visit@^1.0.0:
   version "1.0.0"
