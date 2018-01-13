@@ -26,6 +26,25 @@ const presets = [
     },
   },
   {
+    name: 'Limited slots for horde larps',
+    policy: {
+      buckets: [
+        {
+          key: 'horde',
+          name: 'Horde',
+          description: 'Players who will be playing multiple characters over the course of the game',
+          slots_limited: true,
+        },
+        {
+          key: 'cast',
+          name: 'Cast',
+          description: 'Players who will have one character for the entire game',
+          slots_limited: true,
+        },
+      ],
+    },
+  },
+  {
     name: 'Limited slots by gender',
     policy: {
       buckets: [
