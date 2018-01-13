@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.4.1'
+ruby '2.4.2'
 gem 'rails', '= 5.1.4'
 
 gem 'sqlite3', groups: [:development, :test]
@@ -89,6 +89,8 @@ group :development do
   # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
   gem 'flamegraph'
   gem 'stackprof'
+
+  gem 'capistrano-rails', '~> 1.1'
 end
 
 group :development, :test do
