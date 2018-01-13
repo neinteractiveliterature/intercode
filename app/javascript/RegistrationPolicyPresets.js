@@ -7,7 +7,7 @@ const presets = [
           key: 'unlimited',
           name: 'Signups',
           description: 'Signups for this event',
-          slots_limited: true,
+          slots_limited: false,
         },
       ],
     },
