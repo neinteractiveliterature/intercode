@@ -40,7 +40,8 @@ class RegistrationPolicyEditor extends React.Component {
             this.props.registrationPolicy.getBucket(bucket.key)
         )) &&
         this.props.registrationPolicy.buckets.every(bucket =>
-          preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key))
+          preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key &&
+            presetBucket.slots_limited === bucket.slotsLimited))
       ));
 
       if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
