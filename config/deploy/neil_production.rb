@@ -9,7 +9,7 @@
 
 server "vps1.interconlarp.org", user: "deploy", roles: %w{app db web}
 
-
+set :rails_env, 'production'
 
 # role-based syntax
 # ==================
