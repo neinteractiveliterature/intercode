@@ -45,7 +45,7 @@ const presets = [
     },
   },
   {
-    name: 'Limited slots by gender',
+    name: 'Limited slots by binary gender',
     policy: {
       buckets: [
         {
