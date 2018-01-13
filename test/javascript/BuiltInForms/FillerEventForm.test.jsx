@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { ConfirmModal } from 'react-bootstrap4-modal';
 import { BrowserRouter, Link } from 'react-router-dom';
 import CommonEventFormFields from '../../../app/javascript/BuiltInForms/CommonEventFormFields';
 import RunFormFields from '../../../app/javascript/BuiltInForms/RunFormFields';
+import sampleRooms from './sampleRooms';
 import FillerEventForm from '../../../app/javascript/BuiltInForms/FillerEventForm';
 
 describe('FillerEventForm', () => {
@@ -27,16 +27,7 @@ describe('FillerEventForm', () => {
       starts_at: '2017-01-01T00:00:00Z',
       ends_at: '2017-01-02T00:00:00Z',
       timezone_name: 'UTC',
-      rooms: [
-        {
-          id: 1,
-          name: 'A Room With A View',
-        },
-        {
-          id: 2,
-          name: "A Room Of One's Own",
-        },
-      ],
+      rooms: sampleRooms,
     },
     onSave: () => {},
   };

@@ -8,15 +8,14 @@ import { ConfirmModal } from 'react-bootstrap4-modal';
 import { humanize, underscore, capitalize, pluralize } from 'inflected';
 import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { getStateChangeForCheckboxChange } from '../FormUtils';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import ErrorDisplay from '../ErrorDisplay';
-import pluralizeWithCount from '../pluralizeWithCount';
+import TeamMemberFormProvideTicketSection from './TeamMemberFormProvideTicketSection';
 
-const ticketFragment = gql`
+export const ticketFragment = gql`
 fragment TeamMemberTicketFields on Ticket {
   id
 
@@ -65,7 +64,7 @@ fragment TeamMemberFields on TeamMember {
 ${userConProfileFragment}
 `;
 
-const teamMemberQuery = gql`
+export const teamMemberQuery = gql`
 query($eventId: Int!) {
   convention {
     name
@@ -99,7 +98,7 @@ query($eventId: Int!) {
 ${teamMemberFragment}
 `;
 
-const userConProfilesQuery = gql`
+export const userConProfilesQuery = gql`
 query($cursor: String) {
   convention {
     user_con_profiles(first: 1000, after: $cursor) {
@@ -120,7 +119,7 @@ query($cursor: String) {
 ${userConProfileFragment}
 `;
 
-const createTeamMemberMutation = gql`
+export const createTeamMemberMutation = gql`
 mutation($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
     team_member {
@@ -132,7 +131,7 @@ mutation($input: CreateTeamMemberInput!) {
 ${teamMemberFragment}
 `;
 
-const deleteTeamMemberMutation = gql`
+export const deleteTeamMemberMutation = gql`
 mutation($input: DeleteTeamMemberInput!) {
   deleteTeamMember(input: $input) {
     team_member {
@@ -144,7 +143,7 @@ mutation($input: DeleteTeamMemberInput!) {
 ${teamMemberFragment}
 `;
 
-const updateTeamMemberMutation = gql`
+export const updateTeamMemberMutation = gql`
 mutation($input: UpdateTeamMemberInput!) {
   updateTeamMember(input: $input) {
     team_member {
@@ -154,18 +153,6 @@ mutation($input: UpdateTeamMemberInput!) {
 }
 
 ${teamMemberFragment}
-`;
-
-const provideEventTicketMutation = gql`
-mutation($input: ProvideEventTicketInput!) {
-  provideEventTicket(input: $input) {
-    ticket {
-      ...TeamMemberTicketFields
-    }
-  }
-}
-
-${ticketFragment}
 `;
 
 const buildTeamMemberInput = teamMember => ({
@@ -243,28 +230,6 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
       }),
     }),
   }),
-  graphql(provideEventTicketMutation, {
-    props: ({ mutate }) => ({
-      provideEventTicket: (eventId, userConProfileId, ticketTypeId) => mutate({
-        variables: {
-          input: {
-            event_id: eventId,
-            user_con_profile_id: userConProfileId,
-            ticket_type_id: ticketTypeId,
-          },
-        },
-        update: (proxy, { data: { provideEventTicket: { ticket } } }) => {
-          const data = proxy.readQuery({ query: teamMemberQuery, variables: { eventId } });
-          data.event.provided_tickets.push(ticket);
-          const teamMemberToUpdate = data.event.team_members.find(teamMember =>
-            teamMember.user_con_profile.id === ticket.user_con_profile.id);
-          teamMemberToUpdate.user_con_profile.ticket = ticket;
-
-          proxy.writeQuery({ query: teamMemberQuery, variables: { eventId }, data });
-        },
-      }),
-    }),
-  }),
 ])
 @GraphQLQueryResultWrapper
 class TeamMemberForm extends React.Component {
@@ -276,7 +241,6 @@ class TeamMemberForm extends React.Component {
     createTeamMember: PropTypes.func.isRequired,
     deleteTeamMember: PropTypes.func.isRequired,
     updateTeamMember: PropTypes.func.isRequired,
-    provideEventTicket: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -289,9 +253,7 @@ class TeamMemberForm extends React.Component {
 
     this.state = {
       confirmingDelete: false,
-      confirmingProvideEventTicketTypeId: null,
       requestInProgress: false,
-      provideTicketTypeId: null,
     };
 
     if (this.props.teamMemberId) {
@@ -376,33 +338,6 @@ class TeamMemberForm extends React.Component {
       }
 
       window.location.href = this.props.baseUrl;
-    } catch (error) {
-      this.setState({ error });
-    } finally {
-      this.setState({ requestInProgress: false });
-    }
-  }
-
-  provideEventTicketForExistingTeamMemberClicked = (event, ticketTypeId) => {
-    event.preventDefault();
-    this.setState({ confirmingProvideEventTicketTypeId: ticketTypeId });
-  }
-
-  provideEventTicketForExistingTeamMemberCanceled = (event) => {
-    event.preventDefault();
-    this.setState({ confirmingProvideEventTicketTypeId: null });
-  }
-
-  provideEventTicketForExistingTeamMemberConfirmed = async () => {
-    const ticketTypeId = this.state.confirmingProvideEventTicketTypeId;
-    this.setState({ confirmingProvideEventTicketTypeId: null, requestInProgress: true });
-
-    try {
-      await this.props.provideEventTicket(
-        this.props.eventId,
-        this.state.teamMember.user_con_profile.id,
-        ticketTypeId,
-      );
     } catch (error) {
       this.setState({ error });
     } finally {
@@ -625,7 +560,14 @@ class TeamMemberForm extends React.Component {
       <ErrorDisplay graphQLError={this.state.error} />
       {this.renderUserConProfileSelect()}
       {this.renderCheckboxes()}
-      {this.renderTicketingSection()}
+
+      <TeamMemberFormProvideTicketSection
+        convention={this.props.data.convention}
+        event={this.props.data.event}
+        eventId={this.props.eventId}
+        teamMember={this.state.teamMember}
+        didError={(error) => { this.setState({ error }); }}
+      />
 
       <ConfirmModal
         title="Confirmation"
