@@ -122,7 +122,7 @@ describe('CommonEventFormFields', () => {
       const component = renderCommonEventFormFields({ onChange });
       component.find(RegistrationPolicyEditor).find('select').simulate('change', {
         target: {
-          value: 'Limited slots by gender',
+          value: 'Limited slots by binary gender',
         },
       });
       expect(onChange.mock.calls[0][0].registration_policy.buckets.length).toEqual(3);

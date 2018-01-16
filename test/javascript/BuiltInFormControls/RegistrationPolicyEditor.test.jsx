@@ -112,14 +112,14 @@ describe('RegistrationPolicyEditor', () => {
   });
 
   describe('with presets', () => {
-    const preset = defaultPresets.find(aPreset => aPreset.name === 'Limited slots by gender');
+    const preset = defaultPresets.find(aPreset => aPreset.name === 'Limited slots by binary gender');
     const presetBuckets = preset.policy.buckets.map(presetBucket =>
       ({ ...defaultRegistrationPolicyBucket, ...presetBucket }));
 
     test('renders the selector by default', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, []);
       expect(component.find('select').length).toEqual(1);
-      expect(component.find('select option').length).toEqual(5); // number of presets + blank + custom
+      expect(component.find('select option').length).toEqual(6); // number of presets + blank + custom
       expect(component.find(RegistrationBucketRow).length).toEqual(0);
       expect(component.find('ul button').length).toEqual(0);
     });
