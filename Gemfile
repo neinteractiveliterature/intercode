@@ -80,6 +80,9 @@ gem 'rails_12factor', group: 'stage'
 
 gem 'faker', group: 'development', require: false
 
+gem 'rollbar'
+gem 'oj', '~> 2.16.1'
+
 group :development do
   gem 'rack-mini-profiler'
 
