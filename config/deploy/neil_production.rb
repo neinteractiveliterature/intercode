@@ -16,7 +16,7 @@ namespace :deploy do
   task :set_permissions do
     on roles(:app) do
       within "#{current_path}" do
-        %w{log/* tmp}.each do |path|
+        %w{tmp}.each do |path|
           execute 'chown', 'deploy:www-data', path
         end
       end
