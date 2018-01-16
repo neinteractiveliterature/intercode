@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RequiredIndicator from './RequiredIndicator';
 
 const CaptionLegend = ({ formItem }) => (
-  <legend className="col-form-legend">
+  <legend className="col-form-label">
     <span
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}

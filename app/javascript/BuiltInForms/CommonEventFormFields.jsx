@@ -180,7 +180,7 @@ class CommonEventFormFields extends React.Component {
           />
 
           <fieldset className="form-group">
-            <legend className="col-form-legend">Can this event be played concurrently with other events?</legend>
+            <legend className="col-form-label">Can this event be played concurrently with other events?</legend>
             {choices}
           </fieldset>
         </div>
@@ -206,7 +206,7 @@ class CommonEventFormFields extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend">Send convention email to:</legend>
+        <legend className="col-form-label">Send convention email to:</legend>
         {choices}
       </fieldset>
     );

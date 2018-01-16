@@ -142,7 +142,7 @@ class ScheduleMultipleRunsModal extends React.Component {
     return (
       <div>
         <fieldset className="form-group">
-          <legend className="col-form-legend">From</legend>
+          <legend className="col-form-label">From</legend>
           <TimeSelect
             value={{ hour: startHour, minute: startMinute }}
             onChange={this.startTimeInputChanged}
@@ -151,7 +151,7 @@ class ScheduleMultipleRunsModal extends React.Component {
         </fieldset>
 
         <fieldset className="form-group">
-          <legend className="col-form-legend">Until</legend>
+          <legend className="col-form-label">Until</legend>
           <TimeSelect
             value={{ hour: finishHour, minute: finishMinute }}
             onChange={this.finishTimeInputChanged}

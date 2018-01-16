@@ -119,7 +119,7 @@ class RunFormFields extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend">Time</legend>
+        <legend className="col-form-label">Time</legend>
         <TimeSelect
           value={{ hour, minute }}
           onChange={this.timeInputChanged}
