@@ -94,6 +94,7 @@ group :development do
   gem 'stackprof'
 
   gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-passenger'
 end
 
 group :development, :test do
