@@ -10,6 +10,9 @@
     #navbarSupportedContent.collapse.navbar-collapse
       %ul.navbar-nav.mr-auto
         - if convention
+          - if user_con_profile && !user_con_profile.ticket && convention.ticket_types.publicly_available.any?
+            %li.nav-item.my-auto
+              = link_to "Buy a ticket!", new_ticket_path, class: "btn btn-sm btn-primary"
           %li.nav-item.dropdown{role: "presentation"}
             %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", href: "#", role: "button"}
               Events
