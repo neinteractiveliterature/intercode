@@ -11,6 +11,19 @@ server "vps1.interconlarp.org", user: "deploy", roles: %w{app db web}
 
 set :rails_env, 'production'
 
+namespace :intercode do
+  desc 'set ownership on shared dirs/files'
+  task :set_permissions do
+    on roles(:app) do
+      within "#{current_path}" do
+        %w{log/* tmp}.each do |path|
+          execute 'chown', 'deploy:www-data', path
+        end
+      end
+    end
+  end
+end
+
 # role-based syntax
 # ==================
 

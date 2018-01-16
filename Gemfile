@@ -76,7 +76,7 @@ gem 'parallel'
 gem 'newrelic_rpm'
 
 # Heroku prod fix
-gem 'rails_12factor', group: 'production'
+gem 'rails_12factor', group: 'stage'
 
 gem 'faker', group: 'development', require: false
 
