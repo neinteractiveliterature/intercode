@@ -14,6 +14,11 @@ export const defaultMiddleware = [
 
 export function getComposeEnhancers(name) {
   // eslint-disable-next-line no-underscore-dangle
+  if (!window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+    return compose;
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
   return window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name }) || compose;
 }
 
