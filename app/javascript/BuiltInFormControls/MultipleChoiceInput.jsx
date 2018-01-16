@@ -4,7 +4,7 @@ import ChoiceSet from './ChoiceSet';
 
 const MultipleChoiceInput = ({ caption, ...choiceSetProps }) => (
   <fieldset className="form-group">
-    <legend className="col-form-legend">{caption}</legend>
+    <legend className="col-form-label">{caption}</legend>
     <ChoiceSet {...choiceSetProps} />
   </fieldset>
 );

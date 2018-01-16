@@ -49,7 +49,7 @@ class ConventionDaySelect extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <legend className="col-form-legend">Day</legend>
+        <legend className="col-form-label">Day</legend>
         {options}
       </fieldset>
     );

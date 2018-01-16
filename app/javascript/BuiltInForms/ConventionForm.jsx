@@ -154,7 +154,7 @@ class ConventionForm extends React.Component {
         {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
 
         <fieldset>
-          <legend className="col-form-legend">Event signup schedule</legend>
+          <legend className="col-form-label">Event signup schedule</legend>
           <ScheduledValueEditor
             scheduledValue={this.state.convention.maximum_event_signups}
             timezone={this.state.convention.timezone_name}
