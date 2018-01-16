@@ -4,6 +4,9 @@ lock "~> 3.10.1"
 set :application, "intercode"
 set :repo_url, "https://github.com/neinteractiveliterature/intercode"
 
+set :rollbar_env, Proc.new { fetch :rails_env }
+set :rollbar_role, Proc.new { :app }
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
