@@ -11,7 +11,7 @@ server "vps1.interconlarp.org", user: "deploy", roles: %w{app db web}
 
 set :rails_env, 'production'
 
-namespace :intercode do
+namespace :deploy do
   desc 'set ownership on shared dirs/files'
   task :set_permissions do
     on roles(:app) do
@@ -22,6 +22,8 @@ namespace :intercode do
       end
     end
   end
+
+  before :publishing, :set_permissions
 end
 
 # role-based syntax
