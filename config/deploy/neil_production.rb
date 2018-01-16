@@ -7,24 +7,9 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server "vps1.interconlarp.org", user: "deploy", roles: %w{app db web}
+server "vps1.interconlarp.org", user: "www-data", roles: %w{app db web}
 
 set :rails_env, 'production'
-
-namespace :deploy do
-  desc 'set ownership on shared dirs/files'
-  task :set_permissions do
-    on roles(:app) do
-      within "#{current_path}" do
-        %w{tmp}.each do |path|
-          execute 'chown', 'deploy:www-data', path
-        end
-      end
-    end
-  end
-
-  before :publishing, :set_permissions
-end
 
 # role-based syntax
 # ==================
