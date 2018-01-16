@@ -4,6 +4,13 @@ lock "~> 3.10.1"
 set :application, "intercode"
 set :repo_url, "https://github.com/neinteractiveliterature/intercode"
 
+task :load_remote_environment do
+  on roles(:app) do
+    set :rollbar_token, Dotenv::Parser.call(capture("cat #{shared_path}/.env.production"))['ROLLBAR_ACCESS_TOKEN']
+  end
+end
+after 'deploy:set_current_revision', 'load_remote_environment'
+
 set :rollbar_env, Proc.new { fetch :rails_env }
 set :rollbar_role, Proc.new { :app }
 
