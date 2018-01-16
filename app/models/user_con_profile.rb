@@ -42,7 +42,6 @@ class UserConProfile < ApplicationRecord
     :last_name,
     :nickname,
     :birth_date,
-    :gender,
     :address,
     :city,
     :state,

@@ -37,12 +37,6 @@
       },
       {
         "item_type": "free_text",
-        "identifier": "gender",
-        "caption": "Gender",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
         "identifier": "address",
         "caption": "Street address",
         "lines": 2
