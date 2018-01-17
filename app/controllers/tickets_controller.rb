@@ -1,4 +1,5 @@
 class TicketsController < ApplicationController
+  before_action :authenticate_user!
   before_action :check_existing_ticket, only: [:new, :create]
 
   load_resource through: :user_con_profile, singleton: true
