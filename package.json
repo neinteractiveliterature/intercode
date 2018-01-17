@@ -105,7 +105,7 @@
     "jest": "^22.1.2",
     "react-test-renderer": "^16.2.0",
     "sinon": "^4.1.4",
-    "webpack-dev-server": "^2.10.1"
+    "webpack-dev-server": "^2.11.0"
   },
   "resolutions": {
     "webpack-sources": "1.0.1"
