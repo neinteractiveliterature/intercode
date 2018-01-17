@@ -1785,8 +1785,8 @@ cache-base@^1.0.1:
     unset-value "^1.0.0"
 
 cadmus-navbar-admin@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/cadmus-navbar-admin/-/cadmus-navbar-admin-1.0.1.tgz#f38a24d9ea7620850a063eb336fda6b0cfab34e0"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/cadmus-navbar-admin/-/cadmus-navbar-admin-1.0.2.tgz#bad7564a492816206e76b480c83c1a7900866b89"
   dependencies:
     classnames "^2.2.5"
     immutable "^3.8.1"
@@ -2670,8 +2670,8 @@ discontinuous-range@1.0.0:
   resolved "https://registry.yarnpkg.com/discontinuous-range/-/discontinuous-range-1.0.0.tgz#e38331f0844bba49b9a9cb71c771585aab1bc65a"
 
 disposables@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/disposables/-/disposables-1.0.1.tgz#064727a25b54f502bd82b89aa2dfb8df9f1b39e3"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/disposables/-/disposables-1.0.2.tgz#36c6a674475f55a2d6913567a601444e487b4b6e"
 
 dnd-core@^2.5.4:
   version "2.5.4"
@@ -4876,16 +4876,7 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
 
-json-fetch@^7.2.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.3.0.tgz#9701e5bd788849eee4d99b5eca5b9c1346ad9d77"
-  dependencies:
-    babel-runtime "^6.26.0"
-    isomorphic-fetch "^2.2.1"
-    lodash.pick "^4.4.0"
-    promise-retry "^1.0.1"
-
-json-fetch@^7.4.0:
+json-fetch@^7.2.0, json-fetch@^7.4.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.4.0.tgz#43ae603f94b36cf89d191a033ccee38621ebd768"
   dependencies:
@@ -6880,13 +6871,6 @@ promise-retry@1.0.1:
     promise-try "^1.0.1"
     retry "^0.8.0"
 
-promise-retry@^1.0.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/promise-retry/-/promise-retry-1.1.1.tgz#6739e968e3051da20ce6497fb2b50f6911df3d6d"
-  dependencies:
-    err-code "^1.0.0"
-    retry "^0.10.0"
-
 promise-try@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-try/-/promise-try-1.0.1.tgz#7b20b38ce23400bd09dd7ebbbe9f1d0a4a34a248"
@@ -7121,8 +7105,8 @@ react-dnd-multi-backend@^2.3.7:
     react-dnd-touch-backend "^0.3.13"
 
 react-dnd-touch-backend@^0.3.13:
-  version "0.3.19"
-  resolved "https://registry.yarnpkg.com/react-dnd-touch-backend/-/react-dnd-touch-backend-0.3.19.tgz#f3c2062bee05c812b01e1bbd790f5c2ef5dd113f"
+  version "0.3.20"
+  resolved "https://registry.yarnpkg.com/react-dnd-touch-backend/-/react-dnd-touch-backend-0.3.20.tgz#9565023248930f5acbf2b799bdb323b19297d60f"
   dependencies:
     invariant "^2.2.2"
     react-dnd "^2.5.4"
@@ -7716,10 +7700,6 @@ restore-cursor@^2.0.0:
 ret@~0.1.10:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
-
-retry@^0.10.0:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
 
 retry@^0.8.0:
   version "0.8.0"
