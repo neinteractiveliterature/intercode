@@ -7987,16 +7987,16 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-sinon@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-4.1.4.tgz#36bb237bae38ddf9cc92dcc1b16c51e7785bbc9c"
+sinon@^4.1.6:
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-4.1.6.tgz#9cb346bddb180d68a804429ffe14978d7fafd629"
   dependencies:
     diff "^3.1.0"
     formatio "1.2.0"
     lodash.get "^4.4.2"
     lolex "^2.2.0"
     nise "^1.2.0"
-    supports-color "^4.4.0"
+    supports-color "^5.1.0"
     type-detect "^4.0.5"
 
 slash@^1.0.0:
