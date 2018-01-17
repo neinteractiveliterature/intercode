@@ -111,8 +111,8 @@
     "webpack-sources": "1.0.1"
   },
   "scripts": {
-    "test": "jest test/javascript",
-    "test:watch": "jest --watch test/javascript"
+    "test": "jest --testPathPattern=test/javascript",
+    "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
   "jest": {
     "collectCoverage": true,
