@@ -129,5 +129,10 @@
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "setupTestFrameworkScriptFile": "./test/javascript/setupTests.js"
-  }
+  },
+  "browserslist": [
+    "> 5%",
+    "Last 2 versions",
+    "IE >= 11"
+  ]
 }
