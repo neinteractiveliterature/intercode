@@ -3,6 +3,8 @@ class CmsNavigationItemsController < ApplicationController
 
   authorize_resource :cms_navigation_items
 
+  layout 'cms_admin'
+
   private
 
   def parent_model
