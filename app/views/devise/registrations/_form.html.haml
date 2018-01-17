@@ -3,9 +3,7 @@
   = f.text_field :last_name, :placeholder => :last_name, :required => true
   = f.email_field :email, :placeholder => :email, :required => true
 %fieldset
-  = f.password_field :password, :autocomplete => "off"
-  - unless resource.new_record?
-    %i (leave blank if you don't want to change it)
+  = f.password_field :password, :autocomplete => "off", help: (resource.new_record? ? nil : "Leave blank if you don't want to change it")
   = f.password_field :password_confirmation
 - if resource.new_record?
   .form-group
@@ -14,7 +12,5 @@
     = recaptcha_tags
 - else
   %fieldset
-    = f.label :current_password
-    = f.password_field :current_password
-    %i (we need your current password to verify your identity)
+    = f.password_field :current_password, help: "We need your current password to verify your identity"
 = f.submit resource.new_record? ? "Create account" : "Update account"
