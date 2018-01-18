@@ -3,24 +3,7 @@
     %h1.text-nowrap
       Events at #{convention.name}
 
-  .btn-group
-    %button#sort-dropdown.btn.btn-outline-primary.dropdown-toggle{type: 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => true, 'aria-expanded' => false}
-      Sorting by
-      - case params[:sort]
-        - when 'title'
-          title
-        - when 'first_scheduled_run'
-          convention order
-        - when 'accepted_asc'
-          order added (oldest first)
-        - when 'accepted_desc'
-          order added (newest first)
-    .dropdown-menu.dropdown-menu-right{'aria-labelledby' => 'sort-dropdown'}
-      = link_to 'Title', events_path(sort: 'title'), class: 'dropdown-item'
-      - if can? :schedule, convention
-        = link_to 'Convention order', events_path(sort: 'first_scheduled_run'), class: 'dropdown-item'
-      = link_to 'Order added (oldest first)', events_path(sort: 'accepted_asc'), class: 'dropdown-item'
-      = link_to 'Order added (newest first)', events_path(sort: 'accepted_desc'), class: 'dropdown-item'
+  = react_component 'EventListSortDropdown', showConventionOrder: can?(:schedule, convention), className: 'btn btn-outline-primary'
 
 - markdown_presenter = MarkdownPresenter.new('No description provided')
 - previous_first_run = nil
