@@ -1563,6 +1563,10 @@ bootstrap.native@^2.0.21:
   version "2.0.21"
   resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.21.tgz#8368fd66bbd2c36c461ac6497fe4ca8ca4deba86"
 
+bootstrap@^4.0.0.beta3:
+  version "4.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.3.tgz#60f0660bc3d121176514b361f6f83201c7ff8874"
+
 brace-expansion@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
@@ -3438,6 +3442,10 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
 
+font-awesome@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
+
 for-in@^0.1.3:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-0.1.8.tgz#d8773908e31256109952b1fdb9b3fa867d2775e1"
@@ -4762,6 +4770,10 @@ jest@^22.1.2:
   resolved "https://registry.yarnpkg.com/jest/-/jest-22.1.2.tgz#54dce0f4946a089a00d5fdac8291d5926e24f6ab"
   dependencies:
     jest-cli "^22.1.2"
+
+jquery@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.4.1"

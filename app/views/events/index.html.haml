@@ -3,7 +3,7 @@
     %h1.text-nowrap
       Events at #{convention.name}
 
-  .dropdown
+  .btn-group
     %button#sort-dropdown.btn.btn-outline-primary.dropdown-toggle{type: 'button', 'data-toggle' => 'dropdown', 'aria-haspopup' => true, 'aria-expanded' => false}
       Sorting by
       - case params[:sort]
@@ -15,7 +15,7 @@
           order added (oldest first)
         - when 'accepted_desc'
           order added (newest first)
-    .dropdown-menu{'aria-labelledby' => 'sort-dropdown'}
+    .dropdown-menu.dropdown-menu-right{'aria-labelledby' => 'sort-dropdown'}
       = link_to 'Title', events_path(sort: 'title'), class: 'dropdown-item'
       - if can? :schedule, convention
         = link_to 'Convention order', events_path(sort: 'first_scheduled_run'), class: 'dropdown-item'
