@@ -7,13 +7,9 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'popper.js';
 import Clipboard from 'clipboard';
 import Rails from 'rails-ujs';
-import 'bootstrap/js/dist/util';
-import 'bootstrap/js/dist/collapse';
-import 'bootstrap/js/dist/dropdown';
-//import 'bootstrap.native/dist/bootstrap-native-v4';
+import 'bootstrap.native/dist/bootstrap-native-v4';
 
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
@@ -23,6 +19,7 @@ import '../inflections';
 
 import ConventionAdmin from '../ConventionAdmin';
 import EventAdmin from '../EventAdmin';
+import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormPresenter from '../FormPresenter';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
@@ -38,6 +35,7 @@ WebpackerReact.setup({
   CadmusNavbarAdminApp,
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   EventAdmin,
+  EventListSortDropdown,
   FormPresenter,
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
