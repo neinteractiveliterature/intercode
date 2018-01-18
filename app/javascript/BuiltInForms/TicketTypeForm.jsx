@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NumberInput from 'react-number-input';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
+import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import ResourceForm from './ResourceForm';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import { ScheduledValuePropType } from '../ScheduledValuePropTypes';
 
 const buildScheduledMoneyValueInput = (value, onChange) => {
-  const processNumberInputChangeEvent = (event, newValue) => {
+  const processNumberInputChangeEvent = (newValue) => {
+    const floatValue = parseFloat(newValue);
+
     const moneyValue = {
       ...(value || {}),
-      fractional: newValue * 100.0,
+      fractional: Number.isNaN(floatValue) ? null : floatValue * 100.0,
     };
 
     onChange(moneyValue);
@@ -21,18 +23,17 @@ const buildScheduledMoneyValueInput = (value, onChange) => {
   let dollarValue = null;
 
   if (value && value.fractional !== null) {
-    dollarValue = (value.fractional / 100.0).toFixed(2);
+    dollarValue = (value.fractional / 100.0).toFixed(2).toString();
   }
 
   return (
     <div className="input-group">
-      <span className="input-group-addon">$</span>
-      <NumberInput
-        className="form-control"
+      <InPlaceEditor
         value={dollarValue}
         onChange={processNumberInputChangeEvent}
-        format="0,0.00"
-      />
+      >
+        ${dollarValue}
+      </InPlaceEditor>
     </div>
   );
 };
