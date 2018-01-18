@@ -64,6 +64,7 @@ Intercode::Application.routes.draw do
     resource :my_profile do
       member do
         get :edit_bio
+        patch :update_bio
       end
     end
 

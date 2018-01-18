@@ -23,6 +23,11 @@ class MyProfilesController < ApplicationController
     update_form_response(@user_con_profile)
   end
 
+  def update_bio
+    @user_con_profile.update!(bio_attributes)
+    redirect_to my_profile_path
+  end
+
   def new
     @user_con_profile.save!
     redirect_to edit_my_profile_path
@@ -58,5 +63,9 @@ class MyProfilesController < ApplicationController
         FormResponsePresenter.new(convention.user_con_profile_form, most_recent_profile).as_json
       )
     end
+  end
+
+  def bio_attributes
+    params.require(:user_con_profile).permit(:bio)
   end
 end
