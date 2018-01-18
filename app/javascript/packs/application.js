@@ -10,11 +10,15 @@
 import 'popper.js';
 import Clipboard from 'clipboard';
 import Rails from 'rails-ujs';
-import 'bootstrap.native/dist/bootstrap-native-v4';
+import 'bootstrap/js/dist/util';
+import 'bootstrap/js/dist/collapse';
+import 'bootstrap/js/dist/dropdown';
+//import 'bootstrap.native/dist/bootstrap-native-v4';
 
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
+import '../styles/application.scss';
 import '../inflections';
 
 import ConventionAdmin from '../ConventionAdmin';

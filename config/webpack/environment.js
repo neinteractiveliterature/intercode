@@ -4,7 +4,12 @@ const webpack = require('webpack')
 environment.plugins.set(
   'Provide',
   new webpack.ProvidePlugin({
+    $: ['jquery'],
+    jQuery: ['jquery'],
+    Collapse: 'exports-loader?Dropdown!bootstrap/js/dist/collapse',
+    Dropdown: 'exports-loader?Dropdown!bootstrap/js/dist/dropdown',
     Popper: ['popper.js', 'default'],
+    Util: 'exports-loader?Util!bootstrap/js/dist/util',
   }),
 )
 
