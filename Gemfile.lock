@@ -329,6 +329,8 @@ GEM
     json (2.1.0)
     json (2.1.0-java)
     liquid (4.0.0)
+    liquid-md5 (0.0.3)
+      liquid (>= 2.5, < 5.0)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -569,6 +571,7 @@ DEPENDENCIES
   graphql-guard
   haml
   jquery-rails
+  liquid-md5
   memory_profiler
   minitest-focus
   minitest-reporters
