@@ -7,7 +7,7 @@
   Event team members are excluded from these counts.
   Note that there may be some players waitlisted for this game because the bucket they requested was full.
 
-- choice_columns = @choice_data_by_event_id.values.map(&:size).max
+- choice_columns = @choice_data_by_event_id.values.map(&:size).max || 0
 %table.table.table-bordered.table-hover
   %thead
     %tr
