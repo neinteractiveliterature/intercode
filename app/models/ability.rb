@@ -53,7 +53,7 @@ class Ability
       parent_type: 'Convention', parent_id: staff_con_ids
 
     can :update, Convention, id: staff_con_ids
-    can :view_reports, id: con_ids_with_privilege(:con_com)
+    can :view_reports, Convention, id: con_ids_with_privilege(:con_com)
 
     # Mail privileges (smash the patriarchy)
     can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
