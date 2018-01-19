@@ -10,7 +10,11 @@ class AdminSignupsGrid
   column(:state)
   column(:name, order: "users.last_name, users.first_name") do |signup|
     format(signup.user_con_profile.name_inverted) do |name|
-      link_to name, event_run_admin_signup_path(@event, @run, signup)
+      if can?(:update, signup)
+        link_to name, event_run_admin_signup_path(@event, @run, signup)
+      else
+        name
+      end
     end
   end
 
