@@ -20,7 +20,6 @@ class EventAdminApp extends React.Component {
   constructor(props) {
     super(props);
     this.client = buildApolloClient(this.props.authenticityToken);
-
     this.store = buildReduxStore('EventAdmin', rootReducer);
   }
 
