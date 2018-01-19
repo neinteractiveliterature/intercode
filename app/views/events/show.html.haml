@@ -60,6 +60,8 @@
 
                 - if can? :read, run.signups.new
                   - signup_link_or_text = link_to(signup_description, [@event, run, :admin_signups])
+                - elsif can? :signup_summary, run
+                  - signup_link_or_text = link_to(signup_description, [:signup_summary, @event, run])
                 - else
                   - signup_link_or_text = signup_description
 
