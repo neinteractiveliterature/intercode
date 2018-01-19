@@ -2,7 +2,7 @@ class RunDrop < Liquid::Drop
   include Rails.application.routes.url_helpers
 
   attr_reader :run
-  delegate :event, :starts_at, :ends_at, :length_seconds, to: :run
+  delegate :id, :event, :starts_at, :ends_at, :length_seconds, to: :run
 
   def initialize(run)
     @run = run
