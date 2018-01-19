@@ -30,6 +30,10 @@ Intercode::Application.routes.draw do
       resources :team_members, except: [:show]
 
       resources :runs, only: [] do
+        member do
+          get :signup_summary
+        end
+        
         resource :user_signup
         resources :admin_signups
       end

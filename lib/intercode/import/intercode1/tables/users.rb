@@ -20,7 +20,6 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     staff: "Staff",
     bid_chair: "BidChair",
     gm_liaison: "GMLiaison",
-    registrar: "Registrar",
     outreach: "Outreach",
     con_com: "ConCom",
     scheduling: "Scheduling",

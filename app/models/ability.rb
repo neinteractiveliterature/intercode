@@ -1,4 +1,6 @@
 class Ability
+  EVENT_PROPOSAL_NON_DRAFT_STATUSES = EventProposal::STATUSES.to_a - ['draft']
+
   include CanCan::Ability
 
   attr_reader :user
@@ -25,8 +27,10 @@ class Ability
       can [:read, :create, :update], UserConProfile, user_id: user.id
       can :create, EventProposal
       can [:read, :update], EventProposal, id: own_event_proposal_ids
+      can :signup_summary, Run, id: signed_up_run_ids
 
-      add_con_staff_abilities if staff_con_ids.any?
+      add_con_staff_abilities
+      add_event_proposal_abilities
       add_team_member_abilities if team_member_event_ids.any?
     end
   end
@@ -48,7 +52,8 @@ class Ability
     can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem, CmsLayout],
       parent_type: 'Convention', parent_id: staff_con_ids
 
-    can [:update, :view_reports], Convention, id: staff_con_ids
+    can :update, Convention, id: staff_con_ids
+    can :view_reports, id: con_ids_with_privilege(:con_com)
 
     # Mail privileges (smash the patriarchy)
     can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
@@ -56,39 +61,49 @@ class Ability
       can mail_priv_name.to_sym, Convention, id: con_ids_with_privilege(mail_priv_name)
     end
 
-    can [:schedule, :schedule_with_counts], Convention, id: staff_con_ids, show_schedule: %w(priv gms yes)
+    can [:schedule, :schedule_with_counts], Convention, id: con_ids_with_privilege(:scheduling, :gm_liaison), show_schedule: %w(priv gms yes)
+    can [:schedule, :schedule_with_counts], Convention, id: con_ids_with_privilege(:con_com), show_schedule: %w(gms yes)
     can :manage, UserConProfile, convention_id: staff_con_ids
-    can :read, UserConProfile, convention_id: staff_con_ids
+    can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
     can :manage, TicketType, convention_id: staff_con_ids
-    can :manage, Event, convention_id: staff_con_ids
-    can :manage, Run, event: { convention_id: staff_con_ids }
+    can :manage, Event, convention_id: con_ids_with_privilege(:bid_chair, :gm_liaison, :scheduling)
+    can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
+    can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach) } }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, StaffPosition, convention_id: staff_con_ids
-    can :manage, TeamMember, event: { convention_id: staff_con_ids }
+    can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
     can :manage, Form, convention_id: staff_con_ids
-    can :manage, EventProposal, convention_id: staff_con_ids, status: (EventProposal::STATUSES.to_a - ['draft'])
-    can :manage, Room, convention_id: staff_con_ids
+    can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
+  end
+
+  def add_event_proposal_abilities
+    can :read, EventProposal, convention_id: con_ids_with_privilege(:bid_committee, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :update, EventProposal, convention_id: con_ids_with_privilege(:bid_chair, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :manage, EventProposal, convention_id: con_ids_with_privilege(:bid_chair), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
   end
 
   def add_team_member_abilities
     can :update, Event, id: team_member_event_ids
     can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w(gms yes)
     can :update, EventProposal, event_id: team_member_event_ids
-    can :update, Run, event_id: team_member_event_ids
-    can :show, Signup, run: { event_id: team_member_event_ids }
+    can :read, Signup, run: { event_id: team_member_event_ids }
     can :manage, TeamMember, event_id: team_member_event_ids
   end
 
   def con_ids_with_privilege(*privileges)
     @con_ids_by_privilege ||= begin
-      UserConProfile.where(user_id: user.id).flat_map do |user_con_profile|
+      con_ids_with_privileges = UserConProfile.where(user_id: user.id).flat_map do |user_con_profile|
         user_con_profile.privileges.map { |privilege| [user_con_profile.convention_id, privilege] }
-      end.group_by { |(_, privilege)| privilege }.transform_values { |(convention_id, _)| convention_id }
+      end
+
+      con_ids_with_privileges
+        .group_by { |(_, privilege)| privilege }
+        .transform_values { |privilege_tuples| privilege_tuples.map { |(convention_id, _)| convention_id } }
     end
 
     (privileges + ['staff']).uniq.flat_map do |privilege|
-      @con_ids_by_privilege[privilege.to_s]
+      @con_ids_by_privilege[privilege.to_s] || []
     end.uniq
   end
 
@@ -109,6 +124,12 @@ class Ability
 
   def team_member_convention_ids
     @team_member_convention_ids ||= team_member_event_ids_and_convention_ids.map(&:second).uniq
+  end
+
+  def signed_up_run_ids
+    @signed_up_event_ids ||= Signup.joins(:user_con_profile)
+      .where(user_con_profiles: { user_id: user.id }, state: %w(confirmed waitlisted))
+      .pluck(:run_id)
   end
 
   def own_event_proposal_ids
