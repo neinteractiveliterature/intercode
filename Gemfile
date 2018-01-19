@@ -39,6 +39,7 @@ gem 'activerecord-session_store'
 gem 'cadmus', git: 'https://github.com/gively/cadmus', branch: 'partials_and_layouts'
 gem 'cadmus_files', git: 'https://github.com/nbudin/cadmus_files', branch: 'cadmus_0_6'
 gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
+gem 'liquid-md5'
 
 # Extracted from this app!  Values that change over time based on a schedule
 gem 'scheduled_value', '~> 1.1.3'
