@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-for */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
@@ -37,14 +39,15 @@ class TimezoneSelect extends React.Component {
   }
 
   render = () => {
+    const { label, ...otherProps } = this.props;
     const selectId = this.nextUniqueId();
 
     return (
       <div className="form-group">
         <label htmlFor={selectId}>
-          {this.props.label}
-          <Select id={selectId} options={TIMEZONE_OPTIONS} {...this.props} />
+          {label}
         </label>
+        <Select id={selectId} options={TIMEZONE_OPTIONS} {...otherProps} />
       </div>
     );
   }
