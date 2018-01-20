@@ -79,8 +79,8 @@ class Ability
 
   def add_event_proposal_abilities
     can :read, EventProposal, convention_id: con_ids_with_privilege(:bid_committee, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :update, EventProposal, convention_id: con_ids_with_privilege(:bid_chair, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
     can :manage, EventProposal, convention_id: con_ids_with_privilege(:bid_chair), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :update, EventProposal, convention_id: con_ids_with_privilege(:gm_liaison), status: ['accepted', 'withdrawn']
   end
 
   def add_team_member_abilities
