@@ -15,7 +15,7 @@
     - @admin_event_proposals.each do |event_proposal|
       %tr
         %td= link_to event_proposal.title, admin_event_proposal_path(event_proposal)
-        %td= event_proposal.owner&.name
+        %td= event_proposal.owner&.name_without_nickname
         %td.text-right
           - if event_proposal.registration_policy.slots_limited?
             - if event_proposal.registration_policy.minimum_slots != event_proposal.registration_policy.total_slots
