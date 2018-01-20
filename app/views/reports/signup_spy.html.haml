@@ -4,7 +4,7 @@
 %ul.list-unstyled
   %li
     %strong Total signups:
-    = signup_counts_by_state['confirmed'] || 0 + signup_counts_by_state['waitlisted'] || 0
+    = signup_counts_by_state.slice('confirmed', 'waitlisted').values.compact.sum
     (confirmed + waitlisted)
   %li
     %ul.list-inline
