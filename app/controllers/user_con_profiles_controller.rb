@@ -5,7 +5,7 @@ class UserConProfilesController < ApplicationController
   # profile" (as in the subject of our actions).
   load_and_authorize_resource :subject_profile, id_param: :id, parent: false, class: "UserConProfile",
     through: :convention, through_association: :user_con_profiles
-  before_action :authorize_admin_profiles
+  before_action :authorize_admin_profiles, except: [:index, :show]
 
   # GET /user_con_profiles
   def index
