@@ -24,7 +24,7 @@
             - else
               = event_proposal.registration_policy.total_slots
           - else
-            'unlimited'
+            unlimited
         %td.text-right
           #{(event_proposal.length_seconds / 1.hour).floor}:#{sprintf('%02d', (event_proposal.length_seconds / 1.minute) % (1.hour / 1.minute))}
         %td= event_proposal.status

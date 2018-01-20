@@ -80,11 +80,11 @@ class RegistrationPolicy
     return unless anything_buckets.any?
 
     if anything_buckets.size > 1
-      errors.add(:buckets, "can contain at most 1 anything bucket, but there are #{anything_buckets.size}")
+      errors.add(:buckets, "can contain at most 1 flex bucket, but there are #{anything_buckets.size}")
     end
 
     unless buckets.last == anything_buckets.last
-      errors.add(:buckets, "must have the anything bucket last in the priority list")
+      errors.add(:buckets, "must have the flex bucket last in the priority list")
     end
   end
 end
