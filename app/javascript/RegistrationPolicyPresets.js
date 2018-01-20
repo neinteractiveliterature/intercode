@@ -61,8 +61,8 @@ const presets = [
           slots_limited: true,
         },
         {
-          key: 'anything',
-          name: 'Anything',
+          key: 'flex',
+          name: 'Flex',
           description: 'Characters that are not strictly defined as male or female',
           slots_limited: true,
           anything: true,

@@ -18,12 +18,12 @@ class Intercode::Import::Intercode1::RegistrationPolicyFactory
 
   def registration_bucket(row, gender)
     key = case gender
-    when 'Neutral' then 'anything'
+    when 'Neutral' then 'flex'
     else gender.downcase
     end
 
     name = case gender
-    when 'Neutral' then 'Anything'
+    when 'Neutral' then 'Flex'
     else gender
     end
 
@@ -35,7 +35,7 @@ class Intercode::Import::Intercode1::RegistrationPolicyFactory
       total_slots: row[:"MaxPlayers#{gender}"],
       minimum_slots: row[:"MinPlayers#{gender}"],
       preferred_slots: row[:"PrefPlayers#{gender}"],
-      anything: key == 'anything'
+      anything: key == 'flex'
     )
   end
 

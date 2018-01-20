@@ -128,7 +128,7 @@ class RegistrationPolicyEditor extends React.Component {
             disabled={hasAnythingBucket}
             onClick={this.addAnythingBucket}
           >
-              Add anything bucket
+              Add flex bucket
           </button>
         </li>
       </ul>
