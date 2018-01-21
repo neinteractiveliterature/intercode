@@ -22,17 +22,21 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 2. Make sure you have a working C/C++ development toolchain installed.  On Mac OS X, that's Xcode and its Command Line Tools.
 3. Install [rbenv](https://github.com/sstephenson/rbenv#readme)
 4. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
-5. Install Ruby 2.3.1: `rbenv install 2.3.1`
-6. (Optional, but if you don't, you'll have to set yourself using 2.3.1 some other way.) Make Ruby 2.3.1 your default: `rbenv global 2.3.1`
+5. Install Ruby 2.4.2: `rbenv install 2.4.2`
+6. (Optional, but if you don't, you'll have to set yourself using 2.3.1 some other way.) Make Ruby 2.3.1 your default: `rbenv global 2.4.2`
 7. Install Bundler: `gem install bundler`
 8. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode`
 9. From the Intercode source folder:
   1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
   2. Install all the dependencies of Intercode:
     1. Install MySQL and PostgreSQL. With Homebrew: `brew install mysql postgres `
-    2. `bundle install`
+    2. Make sure you have Node JS installed. `brew install node`
+    3. Make sure you have Yarn installed. With Homebrew: `brew install yarn`
+    4. `bundle install`
   3. Set up your local database: `bin/rake db:create db:migrate`
-  4. Start up the Intercode server: `bin/rails server`
+  4. `yarn install`
+  5. Start up the Intercode server: `bin/rails server`
+  6. Start up the Webpack server: `bin/webpack-dev-server`
 10. You should now be able to go to http://intercode.dev:3000 and see the app running!
 
 **IMPORTANT NOTE:** Intercode 2 in development mode uses `intercode.dev` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.dev` domain name.
