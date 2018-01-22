@@ -44,6 +44,16 @@ class AcceptEventProposalService < ApplicationService
 
     event_proposal.update!(event: event)
 
+    if event_proposal.owner
+      event.team_members.create!(
+        display: true,
+        show_email: false,
+        receive_con_email: true,
+        receive_signup_email: false,
+        user_con_profile: event_proposal.owner
+      )
+    end
+
     success(event: event)
   end
 
