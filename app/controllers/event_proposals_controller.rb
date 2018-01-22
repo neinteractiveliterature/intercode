@@ -25,6 +25,7 @@ class EventProposalsController < ApplicationController
   end
 
   def show
+    no_cache
     send_form_response(convention.event_proposal_form, @event_proposal)
   end
 

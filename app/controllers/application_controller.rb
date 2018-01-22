@@ -112,4 +112,10 @@ class ApplicationController < ActionController::Base
 
     redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed into this convention before, so please take a moment to update your profile."
   end
+
+  def no_cache
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
 end
