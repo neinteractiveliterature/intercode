@@ -72,6 +72,6 @@ class MyProfilesController < ApplicationController
   end
 
   def bio_attributes
-    params.require(:user_con_profile).permit(:bio)
+    params.require(:user_con_profile).permit(:bio, :gravatar_enabled)
   end
 end

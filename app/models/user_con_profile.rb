@@ -144,4 +144,12 @@ class UserConProfile < ApplicationRecord
       last_name
     ].compact.join(" ")
   end
+
+  def gravatar_url
+    if gravatar_enabled?
+      "https://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.strip.downcase)}"
+    else
+      "https://gravatar.com/avatar/#{Digest::MD5.hexdigest('badrequest')}"
+    end
+  end
 end
