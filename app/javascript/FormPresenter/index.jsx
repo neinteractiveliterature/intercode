@@ -14,6 +14,16 @@ class FormPresenterApp extends React.Component {
     afterSubmitUrl: PropTypes.string.isRequired,
     authenticityToken: PropTypes.string.isRequired,
     submitAuthenticityToken: PropTypes.string.isRequired,
+    exitButton: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }),
+    submitCaption: PropTypes.string,
+  };
+
+  static defaultProps = {
+    exitButton: null,
+    submitCaption: null,
   };
 
   constructor(props) {
@@ -52,7 +62,10 @@ class FormPresenterApp extends React.Component {
 
   render = () => (
     <Provider store={this.store}>
-      <FormPresenterContainer />
+      <FormPresenterContainer
+        exitButton={this.props.exitButton}
+        submitCaption={this.props.submitCaption}
+      />
     </Provider>
   )
 }

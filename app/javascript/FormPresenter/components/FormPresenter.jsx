@@ -81,7 +81,13 @@ function renderSection(
 }
 
 const FormPresenter = (props) => {
-  const { form, convention, response } = props;
+  const {
+    form,
+    convention,
+    response,
+    exitButton,
+    submitCaption,
+  } = props;
   if (!form || !convention || !response) {
     return (
       <div>
@@ -115,6 +121,8 @@ const FormPresenter = (props) => {
         currentSectionIndex={currentSectionIndex}
         sectionCount={sections.size}
         disableContinue={disableContinue}
+        exitButton={exitButton}
+        submitCaption={submitCaption}
       />
     </div>
   );
@@ -131,10 +139,17 @@ FormPresenter.propTypes = {
   responseValueChanged: PropTypes.func.isRequired,
   isUpdatingResponse: PropTypes.bool.isRequired,
   currentSectionId: PropTypes.number,
+  exitButton: PropTypes.shape({
+    caption: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }),
+  submitCaption: PropTypes.string,
 };
 
 FormPresenter.defaultProps = {
   currentSectionId: null,
+  exitButton: null,
+  submitCaption: null,
 };
 
 export default FormPresenter;

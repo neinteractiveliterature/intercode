@@ -11,10 +11,17 @@ class FormFooter extends React.Component {
     disableContinue: PropTypes.bool.isRequired,
     isUpdatingResponse: PropTypes.bool.isRequired,
     afterSubmitUrl: PropTypes.string,
+    exitButton: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }),
+    submitCaption: PropTypes.string,
   };
 
   static defaultProps = {
     afterSubmitUrl: null,
+    exitButton: null,
+    submitCaption: 'Submit',
   };
 
   renderBackButton = () => {
@@ -26,6 +33,22 @@ class FormFooter extends React.Component {
       <button className="btn btn-secondary" onClick={this.props.previousSection}>
         <i className="fa fa-chevron-left" /> Back
       </button>
+    );
+  }
+
+  renderExitButton = () => {
+    if (this.props.exitButton == null) {
+      return null;
+    }
+
+    return (
+      <a
+        className="btn btn-outline-secondary mr-2"
+        href={this.props.exitButton.url}
+        disabled={this.props.disableContinue}
+      >
+        {this.props.exitButton.caption}
+      </a>
     );
   }
 
@@ -56,11 +79,11 @@ class FormFooter extends React.Component {
 
     return (
       <button
-        className="btn btn-primary"
+        className="btn btn-success"
         onClick={this.props.submitForm}
         disabled={this.props.isUpdatingResponse || this.disableContinue}
       >
-        Submit
+        {this.props.submitCaption || 'Submit'}
       </button>
     );
   }
@@ -68,18 +91,30 @@ class FormFooter extends React.Component {
   render = () => {
     const backButton = this.renderBackButton();
     const continueButton = this.renderContinueButton();
+    const exitButton = this.renderExitButton();
     const submitButton = this.renderSubmitButton();
 
-    if (backButton == null && continueButton == null && submitButton == null) {
+    if (
+      backButton == null &&
+      continueButton == null &&
+      exitButton == null &&
+      submitButton == null
+    ) {
       return <div />;
     }
 
     return (
-      <div className="card-footer d-flex justify-content-between">
-        <div>{backButton}</div>
-        <div>
-          {continueButton}
-          {submitButton}
+      <div className="card-footer">
+        <div className="d-flex justify-content-between">
+          <div>{backButton}</div>
+          <div>
+            {exitButton}
+            {continueButton}
+            {submitButton}
+          </div>
+        </div>
+        <div className="text-muted text-right">
+          <small>Your responses are automatically saved.</small>
         </div>
       </div>
     );
