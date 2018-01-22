@@ -10,7 +10,13 @@ class MyProfilesController < ApplicationController
   respond_to :json, only: [:show, :update]
 
   def show
-    send_form_response(convention.user_con_profile_form, @user_con_profile)
+    respond_to do |format|
+      format.html { }
+      format.json do
+        no_cache
+        send_form_response(convention.user_con_profile_form, @user_con_profile)
+      end
+    end
   end
 
   def edit
