@@ -15,7 +15,12 @@ module EventProposalsHelper
       responseUrl: event_proposal_url(event_proposal),
       authenticityToken: update_authenticity_token,
       submitAuthenticityToken: submit_authenticity_token,
-      afterSubmitUrl: page_path('new-proposal')
+      afterSubmitUrl: page_path('new-proposal'),
+      submitCaption: 'Submit proposal',
+      exitButton: {
+        caption: 'Return to proposals page',
+        url: page_path('new-proposal')
+      }
     )
   end
 end
