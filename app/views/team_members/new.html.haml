@@ -1,8 +1,8 @@
+= render partial: 'breadcrumbs'
+
 %div{:class => "form.new.team-member"}
   %h1
     Add a #{@event.team_member_name} for
     %span.larp-title= @event.title
 
   = render 'form'
-
-
