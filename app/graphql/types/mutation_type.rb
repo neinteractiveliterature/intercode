@@ -45,6 +45,10 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard(guard_for_convention_associated_model(:events, :drop))
   end
 
+  field :restoreDroppedEvent, Mutations::RestoreDroppedEvent.field do
+    guard(guard_for_convention_associated_model(:events, :restore))
+  end
+
   field :updateEvent, Mutations::UpdateEvent.field do
     guard(guard_for_convention_associated_model(:events, :update))
   end

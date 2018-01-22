@@ -85,7 +85,7 @@ query {
     ...ConventionFields
   }
 
-  events {
+  events(includeDropped: true) {
     ...EventFields
   }
 }

@@ -21,7 +21,7 @@ class EventAdminRunsTable extends React.Component {
     const sortedEvents = [...data.events].sort((a, b) => getNormalizedTitle(a).localeCompare(getNormalizedTitle(b)));
 
     const eventRows = sortedEvents.filter(event => (
-      event.category !== 'filler' && event.category !== 'volunteer_event'
+      event.category !== 'filler' && event.category !== 'volunteer_event' && event.status === 'active'
     )).map(event => (
       <EventAdminRowContainer
         event={event}
