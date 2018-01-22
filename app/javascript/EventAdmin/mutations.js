@@ -36,6 +36,17 @@ mutation($input: DropEventInput!) {
 }
 `;
 
+export const restoreDroppedEventMutation = gql`
+mutation($input: RestoreDroppedEventInput!) {
+  restoreDroppedEvent(input: $input) {
+    event {
+      id
+      status
+    }
+  }
+}
+`;
+
 export const updateEventMutation = gql`
 mutation($input: UpdateEventInput!) {
   updateEvent(input: $input) {

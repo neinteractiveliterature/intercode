@@ -18,7 +18,7 @@ class VolunteerEventAdmin extends React.Component {
   renderVolunteerEventsList = () => {
     const { data } = this.props;
 
-    const volunteerEvents = data.events.filter(event => event.category === 'volunteer_event');
+    const volunteerEvents = data.events.filter(event => event.category === 'volunteer_event' && event.status === 'active');
     volunteerEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
     const eventSections = volunteerEvents.map(event => (
       <VolunteerEventSectionContainer
