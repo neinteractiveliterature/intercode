@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/gively/cadmus
-  revision: 14888751568278af15d0cc29999b190994a39729
+  revision: 4be0bb06adf2ffc60404b0a467c623cf1a58f328
   branch: partials_and_layouts
   specs:
     cadmus (0.6.0)
@@ -371,8 +371,8 @@ GEM
     net-ssh (4.2.0)
     netrc (0.11.0)
     newrelic_rpm (4.7.1.340)
-    nio4r (2.1.0)
-    nio4r (2.1.0-java)
+    nio4r (2.2.0)
+    nio4r (2.2.0-java)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     nokogiri (1.8.1-java)
