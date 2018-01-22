@@ -12,6 +12,7 @@ class EventSignupService < ApplicationService
   validate :signup_count_must_be_allowed
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket
+  validate :require_valid_bucket
 
   include Concerns::ConventionRegistrationFreeze
 
@@ -55,8 +56,13 @@ class EventSignupService < ApplicationService
 
   def signup_count_must_be_allowed
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
-    unless signup_count_allowed?(user_signup_count + 1)
-      errors.add :base, "You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
+
+    case @max_signups_allowed
+    when 'not_now', 'not_yet' then errors.add :base, "Signups are not allowed at this time."
+    else
+      unless signup_count_allowed?(user_signup_count + 1)
+        errors.add :base, "You are already signed up for #{user_signup_count} #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
+      end
     end
   end
 
@@ -71,6 +77,14 @@ class EventSignupService < ApplicationService
   def must_have_ticket
     unless user_con_profile.ticket
       errors.add :base, "You must have a valid ticket to #{convention.name} to sign up for events."
+    end
+  end
+
+  def require_valid_bucket
+    requested_bucket = run.registration_policy.bucket_with_key(requested_bucket_key)
+    if !requested_bucket || requested_bucket.anything?
+      other_buckets = run.registration_policy.buckets.reject(&:anything?)
+      errors.add :base, "Please choose one of the following buckets: #{other_buckets.map(&:name).join(', ')}."
     end
   end
 
@@ -118,8 +132,9 @@ class EventSignupService < ApplicationService
   def signup_count_allowed?(signup_count)
     case max_signups_allowed
     when 'unlimited' then true
-    when Numeric then signup_count <= max_signups_allowed
-    else false
+    when 'not_now', 'not_yet' then false
+    else
+      signup_count <= max_signups_allowed.to_i
     end
   end
 
