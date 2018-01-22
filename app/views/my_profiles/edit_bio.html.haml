@@ -2,6 +2,14 @@
 
 = bootstrap_form_for @user_con_profile, url: update_bio_my_profile_path do |f|
   = f.text_area :bio, rows: 8, help: "Use #{link_to "Markdown syntax", "https://en.support.wordpress.com/markdown-quick-reference/", target: "_blank"} for formatting.".html_safe
-  = f.check_box :show_nickname_in_bio, label: "Show nickname (if any) in bio"
+  .form-group
+    = f.check_box :show_nickname_in_bio, label: "Show nickname (if any) in bio"
+  .form-group
+    = f.check_box :gravatar_enabled, label: "Enable Gravatar for my account"
+    %small.text-muted
+      Gravatar is a service that lets you create a globally-recognized avatar attached to your email address.
+      For more information or to set up a Gravatar,
+      = succeed '.' do
+        = link_to 'visit gravatar.com', 'https://gravatar.com', target: '_blank', rel: 'noopener'
 
   = f.submit "Save bio", class: "btn btn-primary"
