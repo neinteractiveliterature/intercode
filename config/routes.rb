@@ -30,6 +30,10 @@ Intercode::Application.routes.draw do
       resources :team_members, except: [:show]
 
       resources :runs, only: [] do
+        member do
+          get :signup_summary
+        end
+        
         resource :user_signup
         resources :admin_signups
       end
@@ -54,12 +58,17 @@ Intercode::Application.routes.draw do
 
     resources :cms_partials
     resources :cms_files
-    resources :cms_navigation_items
+    resources :cms_navigation_items do
+      collection do
+        patch :sort
+      end
+    end
     resources :cms_layouts
 
     resource :my_profile do
       member do
         get :edit_bio
+        patch :update_bio
       end
     end
 

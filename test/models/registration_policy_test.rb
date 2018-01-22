@@ -29,7 +29,7 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
       )
 
       policy.wont_be :valid?
-      assert policy.errors.full_messages.first =~ /at most 1 anything bucket/
+      assert policy.errors.full_messages.first =~ /at most 1 flex bucket/
     end
 
     it 'validates that the anything bucket is at the end' do

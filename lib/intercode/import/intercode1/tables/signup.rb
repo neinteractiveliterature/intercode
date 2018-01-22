@@ -53,7 +53,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     if run.registration_policy.buckets.size == 1
       run.registration_policy.buckets.first.key
     else
-      'anything'
+      'flex'
     end
   end
 

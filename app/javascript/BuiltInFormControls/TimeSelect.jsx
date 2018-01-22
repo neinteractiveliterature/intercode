@@ -68,8 +68,8 @@ class TimeSelect extends React.Component {
       const selectId = this.nextUniqueId();
 
       return (
-        <label key={name} className="sr-only" htmlFor={selectId}>
-          {label}
+        <label key={name} htmlFor={selectId}>
+          <span className="sr-only">{label}</span>
           <select
             id={selectId}
             className="form-control mr-1"

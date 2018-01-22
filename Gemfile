@@ -11,8 +11,6 @@ gem 'puma'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'sass-rails'
-gem 'bootstrap', '~> 4.0.0.beta3'
-gem 'font-awesome-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
 gem 'haml'
@@ -41,6 +39,7 @@ gem 'activerecord-session_store'
 gem 'cadmus', git: 'https://github.com/gively/cadmus', branch: 'partials_and_layouts'
 gem 'cadmus_files', git: 'https://github.com/nbudin/cadmus_files', branch: 'cadmus_0_6'
 gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
+gem 'liquid-md5'
 
 # Extracted from this app!  Values that change over time based on a schedule
 gem 'scheduled_value', '~> 1.1.3'
@@ -81,7 +80,7 @@ gem 'rails_12factor', group: 'stage'
 gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
-gem 'oj', '~> 2.16.1'
+gem 'oj', '~> 3.3.10'
 
 group :development do
   gem 'rack-mini-profiler'

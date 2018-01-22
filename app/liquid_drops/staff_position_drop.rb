@@ -1,6 +1,6 @@
 class StaffPositionDrop < Liquid::Drop
   attr_reader :staff_position
-  delegate :name, :email, to: :staff_position
+  delegate :id, :name, :email, to: :staff_position
 
   def initialize(staff_position)
     @staff_position = staff_position

@@ -1,6 +1,6 @@
-= bootstrap_form_for @ticket, url: [@user_con_profile, :admin_ticket], layout: :horizontal do |f|
+= bootstrap_form_for @ticket, url: [@ticket_user_con_profile, :admin_ticket], layout: :horizontal do |f|
   = f.collection_select :ticket_type_id, convention.ticket_types, :id, :description
-  = f.number_field :payment_amount, label: "Payment amount", prepend: currency_symbol
+  = f.number_field :payment_amount, label: "Payment amount", prepend: currency_symbol, step: '0.01'
   = f.text_field :payment_note, class: "form-control"
   = f.collection_select :provided_by_event_id, convention.events.order(:title), :id, :title, {prompt: "None"}, class: 'form-control'
 

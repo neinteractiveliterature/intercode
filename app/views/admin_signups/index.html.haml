@@ -1,25 +1,4 @@
-%h1{style: "margin-bottom: 0"}
-  #{@event.title}
-  - if @run.title_suffix.present?
-    \- #{@run.title_suffix}
-
-%h3{style: "margin-top: 0"}
-  %ul.list-inline
-    %li.list-inline-item
-      = @run.starts_at.strftime("%A, %B %d, %Y")
-      - if @run.title_suffix.present?
-        (#{@run.title_suffix})
-    %li.list-inline-item #{@run.starts_at.strftime("%l:%M%P")}-#{@run.ends_at.strftime("%l:%M%P")}
-
-%ul.list-inline
-  %li.list-inline-item Max signups: #{@event.registration_policy.total_slots}
-  - if @event.registration_policy.buckets.size > 1
-    %li.list-inline-item
-      - bucket_max_descriptions = @event.registration_policy.buckets.map do |bucket|
-        - capture do
-          #{bucket.name}: #{bucket.total_slots}
-
-      (#{bucket_max_descriptions.map(&:strip).join(", ")})
+= render partial: 'runs/run_header', locals: { run: @run }
 
 = datagrid_form_for @signups_grid, :url => event_run_admin_signups_path(@event, @run)
 

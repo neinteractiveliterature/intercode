@@ -25,21 +25,30 @@
               - if convention.accepting_proposals
                 = link_to "Propose an Event", page_path('new-proposal'), class: 'dropdown-item'
           = renderer.render_navigation_items
-          - if can? :manage, convention.user_con_profiles.new
+          - if can? :view_reports, convention
             %li.nav-item.dropdown{:role => "presentation"}
               %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
                 Admin
               .dropdown-menu
-                = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
-                = link_to "Convention Settings", edit_convention_path, class: 'dropdown-item'
-                = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
-                = link_to "Event Scheduling", admin_events_path, class: 'dropdown-item'
-                = link_to "Mailing Lists", mailing_lists_path, class: 'dropdown-item'
+                - if can? :read, convention.user_con_profiles.new
+                  = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
+                - if can? :update, convention
+                  = link_to "Convention Settings", edit_convention_path, class: 'dropdown-item'
+                - if can? :read, convention.event_proposals.new(status: 'proposed')
+                  = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
+                - if can? :update, convention.events.new.runs.new
+                  = link_to "Event Scheduling", admin_events_path, class: 'dropdown-item'
+                - if can? :mail_to_any, convention
+                  = link_to "Mailing Lists", mailing_lists_path, class: 'dropdown-item'
                 = link_to "Reports", reports_path, class: 'dropdown-item'
-                = link_to "Site Content", pages_path, class: 'dropdown-item'
-                = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
-                = link_to "Rooms", rooms_path, class: 'dropdown-item'
-                = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'
+                - if can? :update, convention.pages.new
+                  = link_to "Site Content", pages_path, class: 'dropdown-item'
+                - if can? :update, convention.staff_positions.new
+                  = link_to "Staff Positions", staff_positions_path, class: 'dropdown-item'
+                - if can? :update, convention.rooms.new
+                  = link_to "Rooms", rooms_path, class: 'dropdown-item'
+                - if can? :udpate, convention.ticket_types.new
+                  = link_to "Ticket Types", ticket_types_path, class: 'dropdown-item'
       %ul.navbar-nav
         - if user_signed_in?
           %li.nav-item.dropdown{role: "presentation"}

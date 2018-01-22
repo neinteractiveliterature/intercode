@@ -62,7 +62,7 @@ class UserConProfileSelect extends React.Component {
 
     this.setState({
       options: results.options,
-      filterOptions: createFilterOptions(results.options),
+      filterOptions: createFilterOptions({ options: results.options }),
     });
   }
 
