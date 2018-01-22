@@ -1,0 +1,14 @@
+- team_member_name = @event.team_member_name.titleize.pluralize
+
+%nav{"aria-label" => "breadcrumb"}
+  %ol.breadcrumb
+    %li.breadcrumb-item= link_to @event.title, @event
+    - if @team_member
+      %li.breadcrumb-item= link_to team_member_name, [@event, :team_members]
+      %li.breadcrumb-item.active{"aria-current" => "page"}
+        - if @team_member.new_record?
+          Add new
+        - else
+          = @team_member.user_con_profile.name_without_nickname
+    - else
+      %li.breadcrumb-item.active{"aria-current" => "page"}= team_member_name
