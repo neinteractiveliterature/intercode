@@ -50,6 +50,24 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
     end
 
+    it 'allows signups if the user has not yet reached the current signup limit' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(
+          timespans: [
+            {
+              start: nil,
+              finish: nil,
+              value: '1'
+            }
+          ]
+        )
+      )
+
+      result = subject.call
+      result.must_be :success?
+      result.signup.must_be :confirmed?
+    end
+
     it 'disallows signups if the user has reached the current signup limit' do
       convention.update!(
         maximum_event_signups: ScheduledValue::ScheduledValue.new(
@@ -57,7 +75,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
             {
               start: nil,
               finish: nil,
-              value: 1
+              value: '1'
             }
           ]
         )
@@ -71,6 +89,24 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       result = subject.call
       result.must_be :failure?
       result.errors.full_messages.join('\n').must_match %r(\AYou are already signed up for 1 event)
+    end
+
+    it 'disallows signups if signups are not yet open' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(
+          timespans: [
+            {
+              start: nil,
+              finish: nil,
+              value: 'not_yet'
+            }
+          ]
+        )
+      )
+
+      result = subject.call
+      result.must_be :failure?
+      result.errors.full_messages.join('\n').must_match %r(\ASignups are not allowed at this time)
     end
 
     it 'disallows signups to a frozen convention' do
@@ -150,9 +186,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           :event,
           registration_policy: {
             buckets: [
-              { key: 'dogs', slots_limited: true, total_slots: 3 },
-              { key: 'cats', slots_limited: true, total_slots: 2 },
-              { key: 'anything', slots_limited: true, total_slots: 4, anything: true }
+              { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
+              { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 },
+              { key: 'anything', name: 'flex', slots_limited: true, total_slots: 4, anything: true }
             ]
           }
         )
@@ -187,6 +223,26 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result.signup.must_be :waitlisted?
         result.signup.bucket_key.must_be :nil?
         result.signup.requested_bucket_key.must_equal 'cats'
+      end
+
+      describe 'signing up to a nonexistent bucket' do
+        let(:requested_bucket_key) { 'nonexistent' }
+
+        it 'disallows signups to a nonexistent bucket' do
+          result = subject.call
+          result.must_be :failure?
+          result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
+        end
+      end
+
+      describe 'signing up to the anything bucket' do
+        let(:requested_bucket_key) { 'anything' }
+
+        it 'disallows signups to the anything bucket' do
+          result = subject.call
+          result.must_be :failure?
+          result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
+        end
       end
     end
   end

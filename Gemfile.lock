@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/gively/cadmus
-  revision: 14888751568278af15d0cc29999b190994a39729
+  revision: 4be0bb06adf2ffc60404b0a467c623cf1a58f328
   branch: partials_and_layouts
   specs:
     cadmus (0.6.0)
@@ -87,16 +87,12 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     ansi (1.5.0)
     arel (8.0.0)
-    autoprefixer-rails (7.2.4)
+    autoprefixer-rails (7.2.5)
       execjs
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
-    bootstrap (4.0.0.beta3)
-      autoprefixer-rails (>= 6.0.3)
-      popper_js (>= 1.12.3, < 2)
-      sass (>= 3.5.2)
     builder (3.2.3)
-    cancancan (2.1.1)
+    cancancan (2.1.3)
     capistrano (3.10.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -136,9 +132,9 @@ GEM
       dotenv (= 2.2.1)
       railties (>= 3.2, < 5.2)
     erubi (1.7.0)
-    eu_central_bank (1.1.3)
-      money (~> 6.9.0)
-      nokogiri (>= 1.6.3, < 2.0)
+    eu_central_bank (1.2.0)
+      money (~> 6.10.1)
+      nokogiri (~> 1.8.1)
     excon (0.59.0)
     execjs (2.7.0)
     factory_bot (4.8.2)
@@ -306,8 +302,6 @@ GEM
     fog-xml (0.1.3)
       fog-core
       nokogiri (>= 1.5.11, < 2.0.0)
-    font-awesome-sass (4.7.0)
-      sass (>= 3.2)
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -324,7 +318,8 @@ GEM
       tilt
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (0.8.6)
+    i18n (0.9.1)
+      concurrent-ruby (~> 1.0)
     inflecto (0.0.2)
     ipaddress (0.8.3)
     jquery-rails (4.3.1)
@@ -334,6 +329,8 @@ GEM
     json (2.1.0)
     json (2.1.0-java)
     liquid (4.0.0)
+    liquid-md5 (0.0.3)
+      liquid (>= 2.5, < 5.0)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -359,12 +356,12 @@ GEM
       rails (>= 4.1)
     monetize (1.7.0)
       money (~> 6.9)
-    money (6.9.0)
-      i18n (>= 0.6.4, < 0.9)
-    money-rails (1.9.0)
+    money (6.10.1)
+      i18n (>= 0.6.4, < 1.0)
+    money-rails (1.10.0)
       activesupport (>= 3.0)
       monetize (~> 1.7.0)
-      money (~> 6.9.0)
+      money (~> 6.10.0)
       railties (>= 3.0)
     multi_json (1.13.1)
     multipart-post (2.0.0)
@@ -374,16 +371,15 @@ GEM
     net-ssh (4.2.0)
     netrc (0.11.0)
     newrelic_rpm (4.7.1.340)
-    nio4r (2.1.0)
-    nio4r (2.1.0-java)
+    nio4r (2.2.0)
+    nio4r (2.2.0-java)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     nokogiri (1.8.1-java)
-    oj (2.16.1)
+    oj (3.3.10)
     orm_adapter (0.5.0)
     parallel (1.12.1)
     pg (0.21.0)
-    popper_js (1.12.9)
     promise.rb (0.7.4)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -399,8 +395,8 @@ GEM
     pry-remote (0.1.8)
       pry (~> 0.9)
       slop (~> 3.0)
-    puma (3.10.0)
-    puma (3.10.0-java)
+    puma (3.11.2)
+    puma (3.11.2-java)
     rack (2.0.3)
     rack-mini-profiler (0.10.6)
       rack (>= 1.2.0)
@@ -525,7 +521,7 @@ GEM
     unf_ext (0.0.7.4)
     warden (1.2.7)
       rack (>= 1.0)
-    webpacker (3.2.0)
+    webpacker (3.2.1)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -550,7 +546,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   autoprefixer-rails
-  bootstrap (~> 4.0.0.beta3)
   bootstrap_form!
   cadmus!
   cadmus_files!
@@ -570,13 +565,13 @@ DEPENDENCIES
   flamegraph
   fog
   fog-aws
-  font-awesome-sass
   graphiql-rails
   graphql
   graphql-batch
   graphql-guard
   haml
   jquery-rails
+  liquid-md5
   memory_profiler
   minitest-focus
   minitest-reporters
@@ -584,7 +579,7 @@ DEPENDENCIES
   money-rails
   mysql2
   newrelic_rpm
-  oj (~> 2.16.1)
+  oj (~> 3.3.10)
   parallel
   pg
   pry-rails

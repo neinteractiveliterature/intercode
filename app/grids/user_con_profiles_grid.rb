@@ -10,7 +10,9 @@ class UserConProfilesGrid
     joins(:user).where("lower(users.last_name) like :value OR lower(users.first_name) like :value", value: "%#{value.downcase}%")
   end
 
-  filter(:email, :string)
+  filter(:email, :string) do |value|
+    joins(:user).where("lower(users.email) like :value", value: "%#{value.downcase}%")
+  end
 
   filter(:ticket_status, :enum, select: :ticket_types, checkboxes: true) do |value|
     clauses = value.map do |ticket_type_id|

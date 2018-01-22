@@ -2,7 +2,8 @@ class EventProposalDrop < Liquid::Drop
   include Rails.application.routes.url_helpers
 
   attr_reader :event_proposal
-  delegate :owner,
+  delegate :id,
+    :owner,
     :event,
     :status,
     :title,

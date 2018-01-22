@@ -60,6 +60,8 @@
 
                 - if can? :read, run.signups.new
                   - signup_link_or_text = link_to(signup_description, [@event, run, :admin_signups])
+                - elsif can? :signup_summary, run
+                  - signup_link_or_text = link_to(signup_description, [:signup_summary, @event, run])
                 - else
                   - signup_link_or_text = signup_description
 
@@ -72,6 +74,7 @@
                 %p= link_to "Withdraw", [@event, run, :user_signup], method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
               - else
                 - run.registration_policy.buckets.each do |bucket|
+                  - next if bucket.anything?
                   = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-secondary mx-1" do
                     %strong Sign up
                     %br

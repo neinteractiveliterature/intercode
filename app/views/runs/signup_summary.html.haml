@@ -1,0 +1,16 @@
+= render partial: 'run_header', locals: { run: @run }
+
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th State
+  %tbody
+    - @confirmed_signups.each do |signup|
+      %tr
+        %td= signup.user_con_profile.name_inverted
+        %td Confirmed
+    - @waitlisted_signups.each do |signup|
+      %tr.table-warning
+        %td= signup.user_con_profile.name_inverted
+        %td Waitlisted

@@ -27,4 +27,9 @@
   %tfoot
     %tr.font-weight-bold
       %td.text-right{colspan: 2} Total revenue
-      %td.text-right= @count_by_ticket_type_and_payment_amount.map { |(_ticket_type, payment_amount), count| payment_amount * count }.sum.format
+      %td.text-right
+        - total = @count_by_ticket_type_and_payment_amount.map { |(_ticket_type, payment_amount), count| payment_amount * count }.sum
+        - if total.is_a?(Money)
+          = total.format
+        - else
+          = Money.new(total, 'USD').format

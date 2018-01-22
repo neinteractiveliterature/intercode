@@ -1,6 +1,6 @@
 class UserDrop < Liquid::Drop
   attr_reader :user
-  delegate :email, :first_name, :last_name, :name, to: :user
+  delegate :email, :first_name, :id, :last_name, :name, to: :user
 
   def initialize(user)
     @user = user
