@@ -33,4 +33,8 @@ class ConventionDrop < Liquid::Drop
   def ticket_types
     convention.ticket_types.to_a
   end
+
+  def maximum_event_signups
+    ScheduledValueDrop.new(convention.maximum_event_signups)
+  end
 end
