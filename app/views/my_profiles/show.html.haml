@@ -7,12 +7,20 @@
   = link_to "Edit my profile", edit_my_profile_path, class: "btn btn-secondary"
 
 - if @user_con_profile.can_have_bio?
+  %hr
+  
   %section.mt-4
     %h2 My Bio
 
-    = MarkdownPresenter.new("No bio provided").render(@user_con_profile.bio)
+    .media
+      .mr-3
+        %img{src: "#{@user_con_profile.gravatar_url}?s=64&r=pg&d=mm", alt: "#{@user_con_profile.bio_name}'s Gravatar"}
+      .media-body
+        %h5.mt-0= @user_con_profile.bio_name
+        = MarkdownPresenter.new("No bio provided").render(@user_con_profile.bio)
 
-    - if @user_con_profile.bio.present?
-      = link_to "Edit bio", edit_bio_my_profile_path, class: "btn btn-secondary"
-    - else
-      = link_to "Add bio", edit_bio_my_profile_path, class: "btn btn-primary"
+    .mb-4
+      - if @user_con_profile.bio.present?
+        = link_to "Edit bio/avatar settings", edit_bio_my_profile_path, class: "btn btn-secondary"
+      - else
+        = link_to "Add bio/avatar", edit_bio_my_profile_path, class: "btn btn-primary"
