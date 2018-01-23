@@ -307,6 +307,8 @@
         "admin_description": "Can Play Concurrently?",
         "style": "radio_horizontal",
         "caption": "Can players play in your LARP and another event at the same time?",
+        "required": true,
+        "default_value": "false",
         "choices": [
           {
             "caption": "Yes",
@@ -324,6 +326,8 @@
         "admin_description": "Can Do Multiple Runs?",
         "style": "radio_horizontal",
         "caption": "Are you willing to hold this LARP more than once at this convention?",
+        "required": true,
+        "default_value": "false",
         "choices": [
           {
             "caption": "Yes",
