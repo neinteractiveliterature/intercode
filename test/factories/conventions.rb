@@ -7,7 +7,6 @@ FactoryBot.define do
     timezone_name "US/Eastern"
     show_schedule "yes"
     accepting_proposals false
-    precon_bids_allowed false
     updated_by nil
     maximum_event_signups ScheduledValue::ScheduledValue.new(
       timespans: [
