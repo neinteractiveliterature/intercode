@@ -14,14 +14,12 @@ class RegistrationBucketRow extends React.Component {
     lockNameAndDescription: PropTypes.bool,
     lockLimited: PropTypes.bool,
     lockDelete: PropTypes.bool,
-    showKey: PropTypes.bool,
   };
 
   static defaultProps = {
     lockNameAndDescription: false,
     lockLimited: false,
     lockDelete: false,
-    showKey: true,
   };
 
   constructor(props) {
@@ -33,13 +31,25 @@ class RegistrationBucketRow extends React.Component {
     isConfirmingDelete: false,
   };
 
-  bucketPropChanged = (propName, newValue) => {
+  bucketPropsChanged = (newProps) => {
     const originalKey = this.props.registrationBucket.get('key');
-    this.props.onChange(originalKey, this.props.registrationBucket.set(propName, newValue));
+    const newBucket = Object.keys(newProps).reduce(
+      (bucket, propName) => bucket.set(propName, newProps[propName]),
+      this.props.registrationBucket,
+    );
+    this.props.onChange(originalKey, newBucket);
   }
 
-  keyChanged = newKey => this.bucketPropChanged('key', newKey)
-  nameChanged = newName => this.bucketPropChanged('name', newName)
+  bucketPropChanged = (propName, newValue) => {
+    this.bucketPropsChanged({ [propName]: newValue });
+  }
+
+  nameChanged = (newName) => {
+    this.bucketPropsChanged({
+      name: newName,
+      key: newName.replace(/\s/g, '_').replace(/\W/g, ''),
+    });
+  }
   descriptionChanged = newDescription => this.bucketPropChanged('description', newDescription)
 
   slotsChanged = (event, field) => {
@@ -150,23 +160,6 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  renderKey = () => {
-    if (!this.props.showKey) {
-      return null;
-    }
-
-    return (
-      <td>
-        <InPlaceEditor
-          value={this.props.registrationBucket.key}
-          onChange={this.keyChanged}
-        >
-          <code>{this.props.registrationBucket.key}</code>
-        </InPlaceEditor>
-      </td>
-    );
-  }
-
   renderNameAndDescription = () => {
     if (this.props.lockNameAndDescription) {
       return (
@@ -217,7 +210,6 @@ class RegistrationBucketRow extends React.Component {
 
   render = () => (
     <tr className={classNames({ 'anything-bucket': this.props.registrationBucket.get('anything') })}>
-      {this.renderKey()}
       {this.renderNameAndDescription()}
       <td className="d-flex">
         {this.renderLimitedCheckbox()}

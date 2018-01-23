@@ -5,7 +5,7 @@ class RegistrationPolicy
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  validate :validate_anything_bucket
+  validate :validate_anything_bucket, :validate_key_uniqueness
 
   def self.unlimited
     new(buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_unlimited: true)])
@@ -85,6 +85,13 @@ class RegistrationPolicy
 
     unless buckets.last == anything_buckets.last
       errors.add(:buckets, "must have the flex bucket last in the priority list")
+    end
+  end
+
+  def validate_key_uniqueness
+    buckets.group_by(&:key).each do |key, buckets|
+      next unless buckets.size > 1
+      errors.add(:buckets, "has #{buckets.size} buckets with the key #{key.inspect}")
     end
   end
 end

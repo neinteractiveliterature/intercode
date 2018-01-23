@@ -12,7 +12,6 @@ class RegistrationPolicyEditor extends React.Component {
     lockNameAndDescription: PropTypes.bool,
     lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
     lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-    showKey: PropTypes.bool,
     presets: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       policy: RegistrationPolicy.apiRepresentationPropType.isRequired,
@@ -23,7 +22,6 @@ class RegistrationPolicyEditor extends React.Component {
     lockNameAndDescription: false,
     lockLimitedBuckets: null,
     lockDeleteBuckets: null,
-    showKey: true,
     presets: null,
   }
 
@@ -56,7 +54,6 @@ class RegistrationPolicyEditor extends React.Component {
   }
 
   getHeaderLabels = () => [
-    ...(this.props.showKey ? ['Key'] : []),
     'Name',
     ...(this.props.lockNameAndDescription ? [] : ['Description']),
     'Limits',
@@ -68,11 +65,11 @@ class RegistrationPolicyEditor extends React.Component {
     this.props.onChange(this.props.registrationPolicy.addBucket('untitled'));
   }
 
-  addAnythingBucket = (event) => {
+  addFlexBucket = (event) => {
     event.preventDefault();
     this.props.onChange(this.props.registrationPolicy.addBucket(
-      'anything',
-      { anything: true },
+      'flex',
+      { name: 'Flex', anything: true },
     ));
   }
 
@@ -126,7 +123,7 @@ class RegistrationPolicyEditor extends React.Component {
           <button
             className="btn btn-secondary anything-bucket"
             disabled={hasAnythingBucket}
-            onClick={this.addAnythingBucket}
+            onClick={this.addFlexBucket}
           >
               Add flex bucket
           </button>
@@ -157,7 +154,6 @@ class RegistrationPolicyEditor extends React.Component {
         registrationBucket={bucket}
         onChange={this.bucketChanged}
         onDelete={this.deleteBucket}
-        showKey={this.props.showKey && !bucketInPreset}
         lockNameAndDescription={bucketInPreset || this.props.lockNameAndDescription}
         lockLimited={lockLimited}
         lockDelete={lockDelete}
