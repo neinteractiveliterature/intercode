@@ -64,9 +64,9 @@ class CreditCardNumberInput extends React.Component {
             placeholder="•••• •••• •••• ••••"
             {...this.props}
           />
-          <span className="input-group-addon">
-            <i className={this.getIconClass()} />
-          </span>
+          <div className="input-group-append">
+            <span className="input-group-text"><i className={this.getIconClass()} /></span>
+          </div>
         </div>
       </div>
     );
