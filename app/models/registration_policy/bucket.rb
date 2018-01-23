@@ -10,6 +10,12 @@ class RegistrationPolicy::Bucket
     key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
   end
 
+  %w(minimum_slots preferred_slots total_slots).each do |method|
+    define_method method do
+      instance_variable_get(:"@#{method}") || 0
+    end
+  end
+
   def slots_unlimited=(value)
     self.slots_limited = !value
   end
