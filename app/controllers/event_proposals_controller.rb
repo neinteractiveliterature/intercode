@@ -11,6 +11,7 @@ class EventProposalsController < ApplicationController
 
   def create
     @event_proposal.assign_attributes(owner: user_con_profile, status: 'draft')
+    @event_proposal.assign_default_values_from_form_items(convention.event_proposal_form.form_items)
     @event_proposal.save
 
     respond_with @event_proposal do |format|
