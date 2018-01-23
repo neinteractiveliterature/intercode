@@ -87,6 +87,10 @@ export default class FormItem extends Record(defaultProperties) {
       case 'registration_policy':
         if (typeof value === 'object') {
           const policy = RegistrationPolicy.fromAPI(value);
+          if (policy.buckets.size === 0) {
+            return false;
+          }
+
           return policy.buckets.every((bucket) => {
             if (!bucket.name || !bucket.description || !bucket.key) {
               return false;
