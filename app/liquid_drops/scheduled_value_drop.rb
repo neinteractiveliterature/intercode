@@ -1,16 +1,17 @@
 class ScheduledValueDrop < Liquid::Drop
-  attr_reader :scheduled_value, :now
+  attr_reader :scheduled_value, :now, :timezone
   delegate :covers_all_time?, to: :scheduled_value
   alias_method :covers_all_time, :covers_all_time?
 
-  def initialize(scheduled_value)
+  def initialize(scheduled_value, timezone)
     @scheduled_value = scheduled_value
-    @now = Time.now
+    @timezone = timezone
+    @now = Time.now.in_time_zone(timezone)
   end
 
   def timespans
     scheduled_value.timespans.map do |timespan|
-      TimespanWithValueDrop.new(timespan)
+      TimespanWithValueDrop.new(timespan, timezone)
     end
   end
 
@@ -19,7 +20,7 @@ class ScheduledValueDrop < Liquid::Drop
   end
 
   def next_value_change
-    @next_value_change ||= scheduled_value.next_value_change_after(now)
+    @next_value_change ||= scheduled_value.next_value_change_after(now)&.in_time_zone(timezone)
   end
 
   def next_value
