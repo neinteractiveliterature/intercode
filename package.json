@@ -49,7 +49,7 @@
     "popper.js": "^1.12.9",
     "postcss-loader": "^2.0.10",
     "postcss-smart-import": "^0.7.6",
-    "precss": "^3.0.0",
+    "precss": "^3.1.0",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
     "rails-ujs": "^5.1.4",
