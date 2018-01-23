@@ -26,6 +26,25 @@ const presets = [
     },
   },
   {
+    name: 'Limited slots for larps with NPCs',
+    policy: {
+      buckets: [
+        {
+          key: 'pcs',
+          name: 'PCs',
+          description: 'Player characters',
+          slots_limited: true,
+        },
+        {
+          key: 'npcs',
+          name: 'NPCs',
+          description: 'Non-player characters',
+          slots_limited: true,
+        },
+      ],
+    },
+  },
+  {
     name: 'Limited slots for horde larps',
     policy: {
       buckets: [
