@@ -12,7 +12,20 @@ class CreateUserConProfiles < ActiveRecord::Migration[5.1]
       t.string :payment_amount_currency, :length => 3
       t.text :payment_note
 
-      UserConProfile::PRIV_NAMES.each do |priv_name|
+      %w(
+        bid_committee
+        staff
+        bid_chair
+        gm_liaison
+        outreach
+        con_com
+        scheduling
+        mail_to_gms
+        mail_to_attendees
+        mail_to_vendors
+        mail_to_unpaid
+        mail_to_alumni
+      ).each do |priv_name|
         t.boolean priv_name, :null => false, :default => false
       end
 
