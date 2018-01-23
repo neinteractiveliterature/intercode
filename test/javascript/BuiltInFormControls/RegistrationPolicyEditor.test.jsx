@@ -129,19 +129,19 @@ describe('RegistrationPolicyEditor', () => {
 
     test('locks name and description for matching buckets when in a preset', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, presetBuckets);
-      expect(component.find('th').length).toEqual(4);
+      expect(component.find('th').length).toEqual(3);
       expect(component.text()).not.toMatch(new RegExp(presetBuckets[0].description));
     });
 
     test('locks limited for matching buckets when in a preset', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, presetBuckets);
-      expect(component.find('th').length).toEqual(4);
+      expect(component.find('th').length).toEqual(3);
       expect(component.find('input[type="checkbox"]').length).toEqual(0);
     });
 
     test('locks delete for matching buckets when in a preset', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, presetBuckets);
-      expect(component.find('th').length).toEqual(4);
+      expect(component.find('th').length).toEqual(3);
       expect(component.find('i.fa-trash-o').length).toEqual(0);
     });
 
