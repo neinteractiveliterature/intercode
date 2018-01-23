@@ -3,8 +3,8 @@ class AdminSignupsGrid
   include Concerns::SignupsGrid
 
   filter(:state, :enum, select: Signup::STATES, checkboxes: true)
-  filter(:bucket_key, :enum, select: :bucket_keys, checkboxes: true)
-  filter(:requested_bucket_key, :enum, select: :bucket_keys, checkboxes: true)
+  filter(:bucket, :enum, select: :bucket_names_and_keys, checkboxes: true)
+  filter(:requested_bucket, :enum, select: :bucket_names_and_keys, checkboxes: true)
 
   column(:id, header: "Seq")
   column(:state)
@@ -33,7 +33,7 @@ class AdminSignupsGrid
     @registration_policy ||= Run.find(scope.where_values_hash['run_id']).event.registration_policy
   end
 
-  def bucket_keys
-    @bucket_keys ||= registration_policy.buckets.map(&:key)
+  def bucket_names_and_keys
+    @bucket_names_and_keys ||= registration_policy.buckets.map { |bucket| [bucket.name, bucket.key] }
   end
 end
