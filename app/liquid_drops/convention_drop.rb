@@ -37,4 +37,12 @@ class ConventionDrop < Liquid::Drop
   def maximum_event_signups
     ScheduledValueDrop.new(convention.maximum_event_signups, convention.timezone)
   end
+
+  def starts_at
+    @starts_at ||= convention.starts_at&.in_time_zone(convention.timezone)
+  end
+
+  def ends_at
+    @ends_at ||= convention.ends_at&.in_time_zone(convention.timezone)
+  end
 end
