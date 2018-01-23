@@ -1,35 +1,36 @@
 %h1 Admin Event Proposals
 
-%table.table.table-sm.table-striped.table-responsive
-  %thead
-    %tr
-      %th Title
-      %th Submitted by
-      %th.text-right Capacity
-      %th.text-right Duration
-      %th Status
-      %th Submitted
-      %th Updated
-
-  %tbody
-    - @admin_event_proposals.each do |event_proposal|
+.table-responsive
+  %table.table.table-sm.table-striped
+    %thead
       %tr
-        %td= link_to event_proposal.title, admin_event_proposal_path(event_proposal)
-        %td= event_proposal.owner&.name_without_nickname
-        %td.text-right
-          - if event_proposal.registration_policy.slots_limited?
-            - if event_proposal.registration_policy.minimum_slots != event_proposal.registration_policy.total_slots
-              .text-nowrap
-                #{event_proposal.registration_policy.minimum_slots}-#{event_proposal.registration_policy.total_slots}
+        %th Title
+        %th Submitted by
+        %th.text-right Capacity
+        %th.text-right Duration
+        %th Status
+        %th Submitted
+        %th Updated
+
+    %tbody
+      - @admin_event_proposals.each do |event_proposal|
+        %tr
+          %td= link_to event_proposal.title, admin_event_proposal_path(event_proposal)
+          %td= event_proposal.owner&.name_without_nickname
+          %td.text-right
+            - if event_proposal.registration_policy.slots_limited?
+              - if event_proposal.registration_policy.minimum_slots != event_proposal.registration_policy.total_slots
+                .text-nowrap
+                  #{event_proposal.registration_policy.minimum_slots}-#{event_proposal.registration_policy.total_slots}
+              - else
+                = event_proposal.registration_policy.total_slots
             - else
-              = event_proposal.registration_policy.total_slots
-          - else
-            unlimited
-        %td.text-right
-          #{(event_proposal.length_seconds / 1.hour).floor}:#{sprintf('%02d', (event_proposal.length_seconds / 1.minute) % (1.hour / 1.minute))}
-        %td
-          %span{class: "badge #{event_proposal_badge_class(event_proposal)}"}= event_proposal.status
-        %td.text-nowrap
-          %small= event_proposal.created_at.strftime('%Y-%m-%d %H:%M')
-        %td.text-nowrap
-          %small= event_proposal.updated_at.strftime('%Y-%m-%d %H:%M')
+              unlimited
+          %td.text-right
+            #{(event_proposal.length_seconds / 1.hour).floor}:#{sprintf('%02d', (event_proposal.length_seconds / 1.minute) % (1.hour / 1.minute))}
+          %td
+            %span{class: "badge #{event_proposal_badge_class(event_proposal)}"}= event_proposal.status
+          %td.text-nowrap
+            %small= event_proposal.created_at.strftime('%Y-%m-%d %H:%M')
+          %td.text-nowrap
+            %small= event_proposal.updated_at.strftime('%Y-%m-%d %H:%M')
