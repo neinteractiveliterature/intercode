@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
 import { performRequest } from '../HTTPUtils';
+import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 
 class TicketPurchaseForm extends React.Component {
   static propTypes = {
@@ -217,14 +218,17 @@ class TicketPurchaseForm extends React.Component {
           disabled={disabled}
         />
 
-        <button
-          className="btn btn-primary"
-          onClick={this.submitPayment}
-          disabled={disabled}
-        >
-          Submit payment
-          {this.renderSubmittingSpinner()}
-        </button>
+        <div className="d-flex justify-content-end align-items-center">
+          <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
+          <button
+            className="btn btn-primary"
+            onClick={this.submitPayment}
+            disabled={disabled}
+          >
+            Submit payment
+            {this.renderSubmittingSpinner()}
+          </button>
+        </div>
       </div>
     );
   }
