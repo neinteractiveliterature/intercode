@@ -16,9 +16,9 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   }
 
   PRIV_MAP = {
-    bid_committee: "BidCom",
+    proposal_committee: "BidCom",
     staff: "Staff",
-    bid_chair: "BidChair",
+    proposal_chair: "BidChair",
     gm_liaison: "GMLiaison",
     outreach: "Outreach",
     con_com: "ConCom",

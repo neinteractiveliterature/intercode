@@ -67,7 +67,7 @@ class Ability
     can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
     can :manage, TicketType, convention_id: staff_con_ids
-    can :manage, Event, convention_id: con_ids_with_privilege(:bid_chair, :gm_liaison, :scheduling)
+    can :manage, Event, convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach) } }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
@@ -78,8 +78,8 @@ class Ability
   end
 
   def add_event_proposal_abilities
-    can :read, EventProposal, convention_id: con_ids_with_privilege(:bid_committee, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :manage, EventProposal, convention_id: con_ids_with_privilege(:bid_chair), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :read, EventProposal, convention_id: con_ids_with_privilege(:proposal_committee, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :manage, EventProposal, convention_id: con_ids_with_privilege(:proposal_chair), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
     can :update, EventProposal, convention_id: con_ids_with_privilege(:gm_liaison), status: ['accepted', 'withdrawn']
   end
 
