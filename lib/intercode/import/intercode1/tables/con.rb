@@ -64,7 +64,6 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       domain: @con_domain,
       show_schedule: row[:ShowSchedule].underscore,
       accepting_proposals: yesno_to_bool(row[:AcceptingBids]),
-      precon_bids_allowed: yesno_to_bool(row[:PreconBidsAllowed]),
       starts_at: @starts_at,
       ends_at: @ends_at,
       timezone_name: @timezone.name,

@@ -1,7 +1,6 @@
 Types::ConventionType = GraphQL::ObjectType.define do
   name "Convention"
   field :accepting_proposals, types.Boolean
-  field :precon_bids_allowed, types.Boolean
   field :created_at, Types::DateType
   field :updated_at, Types::DateType
   field :starts_at, Types::DateType
