@@ -1,9 +1,20 @@
 class Intercode::Import::Intercode1::RegistrationPolicyFactory
   def registration_policy(row)
     buckets = %w(Male Female Neutral).map { |gender| registration_bucket(row, gender) }
-    buckets.reject! { |bucket| bucket.total_slots == 0 }
 
-    if buckets.size == 1 && buckets.first.key == 'anything'
+    if buckets[0].total_slots == 0 && buckets[1].total_slots == 0
+      # It's ok to drop both the gendered buckets if there are only neutral slots
+      buckets = [buckets[2]]
+    elsif buckets[2].total_slots == 0
+      # It's ok to drop the neutral bucket if there are no neutral slots
+      buckets = [buckets[0], buckets[1]]
+    end
+
+    # Note that it's NOT ok to drop just one of the gendered buckets, because
+    # that would make it impossible to sign up into the flex bucket if you
+    # don't want a character of the gender of the remaining bucket
+
+    if buckets.size == 1 && buckets.first.key == 'flex'
       single_bucket = buckets.first
       single_bucket.assign_attributes(
         key: 'signups',
