@@ -8,7 +8,7 @@ class TicketTypeDrop < Liquid::Drop
   end
 
   def pricing_schedule
-    ScheduledValueDrop.new(ticket_type.pricing_schedule)
+    ScheduledValueDrop.new(ticket_type.pricing_schedule, ticket_type.convention.timezone)
   end
 
   def price

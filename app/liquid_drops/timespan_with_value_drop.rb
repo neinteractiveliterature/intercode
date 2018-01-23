@@ -1,9 +1,17 @@
 class TimespanWithValueDrop < Liquid::Drop
-  attr_reader :timespan_with_value
-  delegate :start, :finish, to: :timespan_with_value
+  attr_reader :timespan_with_value, :timezone
 
-  def initialize(timespan_with_value)
+  def initialize(timespan_with_value, timezone)
     @timespan_with_value = timespan_with_value
+    @timezone = timezone
+  end
+
+  def start
+    @start ||= timespan_with_value.start&.in_time_zone(timezone)
+  end
+
+  def finish
+    @finish ||= timespan_with_value.finish&.in_time_zone(timezone)
   end
 
   def description
