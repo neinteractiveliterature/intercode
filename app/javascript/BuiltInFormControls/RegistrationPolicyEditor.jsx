@@ -5,6 +5,16 @@ import { List } from 'immutable';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 
+function bucketSortCompare(a, b) {
+  if (a.get('anything') && !b.get('anything')) {
+    return 1;
+  } else if (b.get('anything') && !a.get('anything')) {
+    return -1;
+  }
+
+  return a.get('name').localeCompare(b.get('name'), { sensitivity: 'base' });
+}
+
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
     registrationPolicy: RegistrationPolicy.propType.isRequired,
@@ -55,7 +65,7 @@ class RegistrationPolicyEditor extends React.Component {
 
   getHeaderLabels = () => [
     'Name',
-    ...(this.props.lockNameAndDescription ? [] : ['Description']),
+    ...(this.state.preset || this.props.lockNameAndDescription ? [] : ['Description']),
     'Limits',
     '',
   ]
@@ -161,8 +171,29 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
+  renderTotals = () => {
+    if (this.props.registrationPolicy.buckets.some(bucket => !bucket.get('slotsLimited'))) {
+      return 'unlimited';
+    }
+
+    let [minimumSlots, preferredSlots, totalSlots] = [0, 0, 0];
+    this.props.registrationPolicy.buckets.forEach((bucket) => {
+      minimumSlots += bucket.get('minimumSlots') || 0;
+      preferredSlots += bucket.get('preferredSlots') || 0;
+      totalSlots += bucket.get('totalSlots') || 0;
+    });
+
+    return (
+      <ul className="list-inline">
+        <li className="list-inline-item">Minimum: {minimumSlots}</li>
+        <li className="list-inline-item">Preferred: {preferredSlots}</li>
+        <li className="list-inline-item">Total: {totalSlots}</li>
+      </ul>
+    );
+  }
+
   renderTable = () => {
-    const bucketRows = this.props.registrationPolicy.buckets.map(bucket =>
+    const bucketRows = this.props.registrationPolicy.buckets.sort(bucketSortCompare).map(bucket =>
       this.renderBucketRow(bucket));
 
     return (
@@ -175,6 +206,15 @@ class RegistrationPolicyEditor extends React.Component {
         <tbody>
           {bucketRows}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={this.getHeaderLabels().findIndex(label => label === 'Limits')} />
+            <td className="d-flex">
+              <strong className="mr-2">Total capacity:</strong>
+              {this.renderTotals()}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     );
   }
