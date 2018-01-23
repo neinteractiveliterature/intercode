@@ -61,10 +61,10 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
-  slotsLimitedChanged = (event) => {
+  unlimitedCheckboxChanged = (event) => {
     this.props.onChange(
       this.props.registrationBucket.get('key'),
-      this.props.registrationBucket.setSlotsLimited(event.target.checked),
+      this.props.registrationBucket.setSlotsLimited(!event.target.checked),
     );
   }
 
@@ -81,7 +81,7 @@ class RegistrationBucketRow extends React.Component {
     this.setState({ isConfirmingDelete: false });
   }
 
-  renderLimitedCheckbox = () => {
+  renderUnlimitedCheckbox = () => {
     if (this.props.lockLimited) {
       return null;
     }
@@ -95,11 +95,11 @@ class RegistrationBucketRow extends React.Component {
             id={inputId}
             className="form-check-input"
             type="checkbox"
-            checked={this.props.registrationBucket.get('slotsLimited')}
-            onChange={this.slotsLimitedChanged}
+            checked={!this.props.registrationBucket.get('slotsLimited')}
+            onChange={this.unlimitedCheckboxChanged}
           />
           {' '}
-          Limited?
+          Unlimited?
         </label>
       </div>
     );
@@ -212,7 +212,7 @@ class RegistrationBucketRow extends React.Component {
     <tr className={classNames({ 'anything-bucket': this.props.registrationBucket.get('anything') })}>
       {this.renderNameAndDescription()}
       <td className="d-flex">
-        {this.renderLimitedCheckbox()}
+        {this.renderUnlimitedCheckbox()}
         {this.renderLimits()}
       </td>
       {this.renderActions()}
