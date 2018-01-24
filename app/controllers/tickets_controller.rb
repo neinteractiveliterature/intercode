@@ -47,6 +47,8 @@ class TicketsController < ApplicationController
     )
 
     @ticket.save
+    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.name} for #{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
+    TicketsMailer.purchased(@ticket).deliver_now
     respond_with @ticket
 
   rescue Stripe::CardError => e
