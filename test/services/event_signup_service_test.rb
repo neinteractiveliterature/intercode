@@ -244,19 +244,78 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
         end
       end
+
+      describe 'signing up without a requested bucket' do
+        let(:requested_bucket_key) { nil }
+
+        it 'prioritizes the anything bucket' do
+          result = subject.call
+          result.must_be :success?
+          result.signup.must_be :confirmed?
+          result.signup.requested_bucket_key.must_be_nil
+          result.signup.bucket_key.must_equal 'anything'
+        end
+
+        it 'puts you into some other bucket if anything is full' do
+          4.times { create_other_signup 'anything' }
+
+          result = subject.call
+          result.must_be :success?
+          result.signup.must_be :confirmed?
+          result.signup.requested_bucket_key.must_be_nil
+          result.signup.bucket_key.wont_equal 'anything'
+        end
+      end
+
+      describe 'when there are signups without a requested bucket' do
+        it 'moves them if possible' do
+          # we'll assume there used to be 4 in the flex bucket, but one dropped
+          3.times { create_other_signup 'anything' }
+          immovable_signup = create_other_signup 'cats'
+          movable_signup = create_other_signup 'cats', requested_bucket_key: nil
+
+          result = subject.call
+          result.must_be :success?
+          result.signup.must_be :confirmed?
+          result.signup.requested_bucket_key.must_equal 'cats'
+          result.signup.bucket_key.must_equal 'cats'
+
+          movable_signup.reload
+          movable_signup.bucket_key.must_equal 'anything'
+          movable_signup.requested_bucket_key.must_be_nil
+        end
+
+        it 'waitlists you if not possible' do
+          4.times { create_other_signup 'anything' }
+          immovable_signup = create_other_signup 'cats'
+          movable_signup = create_other_signup 'cats', requested_bucket_key: nil
+
+          result = subject.call
+          result.must_be :success?
+          result.signup.must_be :waitlisted?
+          result.signup.requested_bucket_key.must_equal 'cats'
+          result.signup.bucket_key.must_be_nil
+
+          movable_signup.reload
+          movable_signup.bucket_key.must_equal 'cats'
+          movable_signup.requested_bucket_key.must_be_nil
+        end
+      end
     end
   end
 
   private
 
-  def create_other_signup(bucket_key)
+  def create_other_signup(bucket_key, **attributes)
     signup_user_con_profile = FactoryBot.create(:user_con_profile, convention: convention)
     FactoryBot.create(
       :signup,
-      user_con_profile: signup_user_con_profile,
-      run: the_run,
-      bucket_key: bucket_key,
-      requested_bucket_key: bucket_key
+      {
+        user_con_profile: signup_user_con_profile,
+        run: the_run,
+        bucket_key: bucket_key,
+        requested_bucket_key: bucket_key
+      }.merge(attributes)
     )
   end
 end
