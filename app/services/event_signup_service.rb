@@ -37,6 +37,13 @@ class EventSignupService < ApplicationService
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       return failure(errors) unless valid?
 
+      if actual_bucket && actual_bucket.full?(run.signups)
+        # TODO: email the moved person
+        movable_signups_for_bucket(actual_bucket).first.update!(
+          bucket_key: run.registration_policy.anything_bucket.key
+        )
+      end
+
       signup = run.signups.create!(
         run: run,
         bucket_key: actual_bucket.try!(:key),
@@ -81,6 +88,8 @@ class EventSignupService < ApplicationService
   end
 
   def require_valid_bucket
+    return unless requested_bucket_key
+
     requested_bucket = run.registration_policy.bucket_with_key(requested_bucket_key)
     if !requested_bucket || requested_bucket.anything?
       other_buckets = run.registration_policy.buckets.reject(&:anything?)
@@ -107,16 +116,24 @@ class EventSignupService < ApplicationService
   end
 
   def prioritized_buckets
-    @prioritized_buckets ||= [
-      run.bucket_with_key(requested_bucket_key),
-      run.registration_policy.anything_bucket
-    ].compact
+    @prioritized_buckets ||= begin
+      if requested_bucket_key
+        [
+          run.bucket_with_key(requested_bucket_key),
+          run.registration_policy.anything_bucket
+        ].compact
+      else
+        run.registration_policy.buckets.sort_by { |bucket| bucket.anything? ? 0 : 1 }
+      end
+    end
   end
 
   def actual_bucket
     @actual_bucket ||= begin
       signups = run.signups
-      prioritized_buckets.find { |bucket| !bucket.full?(signups) }
+      prioritized_buckets.find do |bucket|
+        !bucket.full?(signups) || movable_signups_for_bucket(bucket).any?
+      end
     end
   end
 
@@ -143,6 +160,18 @@ class EventSignupService < ApplicationService
       other_run = signup.run
       signup.confirmed? && !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
     end
+  end
+
+  def existing_signups_by_bucket_key
+    @existing_signups_by_bucket_key ||= run.signups.group_by(&:bucket_key)
+  end
+
+  def movable_signups_for_bucket(bucket)
+    return [] unless run.registration_policy.anything_bucket
+    return [] if run.registration_policy.anything_bucket.full?(run.signups)
+
+    bucket_signups = existing_signups_by_bucket_key[bucket.key] || []
+    bucket_signups.reject { |signup| signup.requested_bucket_key } # only the ones with no requested bucket key
   end
 
   def withdraw_user_from_conflicting_waitlist_signups
