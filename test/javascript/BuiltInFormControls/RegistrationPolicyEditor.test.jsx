@@ -112,7 +112,7 @@ describe('RegistrationPolicyEditor', () => {
     test('renders the selector by default', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, []);
       expect(component.find('select').length).toEqual(1);
-      expect(component.find('select option').length).toEqual(6); // number of presets + blank + custom
+      expect(component.find('select option').length).toEqual(7); // number of presets + blank + custom
       expect(component.find(RegistrationBucketRow).length).toEqual(0);
       expect(component.find('ul button').length).toEqual(0);
     });
