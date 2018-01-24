@@ -22,7 +22,7 @@ module TicketsHelper
       ticketPriceFormatted: ticket&.ticket_type&.price&.format,
       ticketTypeId: ticket&.ticket_type&.id,
       createChargeUrl: ticket_path,
-      purchaseCompleteUrl: ticket_path,
+      purchaseCompleteUrl: root_path,
       ticketTypes: ticket_types_data
     }
   end
