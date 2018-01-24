@@ -39,8 +39,9 @@ class EventSignupService < ApplicationService
 
       if actual_bucket && actual_bucket.full?(run.signups)
         # TODO: email the moved person
+        destination_bucket = buckets_with_capacity.sort_by { |bucket| bucket.anything? ? 0 : 1 }.first
         movable_signups_for_bucket(actual_bucket).first.update!(
-          bucket_key: run.registration_policy.anything_bucket.key
+          bucket_key: destination_bucket.key
         )
       end
 
@@ -128,6 +129,10 @@ class EventSignupService < ApplicationService
     end
   end
 
+  def buckets_with_capacity
+    @buckets_with_capacity ||= run.registration_policy.buckets.reject { |bucket| bucket.full?(run.signups) }
+  end
+
   def actual_bucket
     @actual_bucket ||= begin
       signups = run.signups
@@ -167,11 +172,10 @@ class EventSignupService < ApplicationService
   end
 
   def movable_signups_for_bucket(bucket)
-    return [] unless run.registration_policy.anything_bucket
-    return [] if run.registration_policy.anything_bucket.full?(run.signups)
+    return [] unless buckets_with_capacity.any?
 
-    bucket_signups = existing_signups_by_bucket_key[bucket.key] || []
-    bucket_signups.reject { |signup| signup.requested_bucket_key } # only the ones with no requested bucket key
+    bucket_signups = existing_signups_by_bucket_key[bucket.key].dup || []
+    bucket_signups.reject! { |signup| signup.requested_bucket_key } # only the ones with no requested bucket key
   end
 
   def withdraw_user_from_conflicting_waitlist_signups

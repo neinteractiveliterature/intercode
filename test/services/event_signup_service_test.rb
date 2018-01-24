@@ -268,7 +268,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
 
       describe 'when there are signups without a requested bucket' do
-        it 'moves them if possible' do
+        it 'moves them into the flex bucket if possible' do
           # we'll assume there used to be 4 in the flex bucket, but one dropped
           3.times { create_other_signup 'anything' }
           immovable_signup = create_other_signup 'cats'
@@ -285,8 +285,25 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           movable_signup.requested_bucket_key.must_be_nil
         end
 
+        it 'moves them into a different bucket if the flex bucket is not possible' do
+          4.times { create_other_signup 'anything' }
+          immovable_signup = create_other_signup 'cats'
+          movable_signup = create_other_signup 'cats', requested_bucket_key: nil
+
+          result = subject.call
+          result.must_be :success?
+          result.signup.must_be :confirmed?
+          result.signup.requested_bucket_key.must_equal 'cats'
+          result.signup.bucket_key.must_equal 'cats'
+
+          movable_signup.reload
+          movable_signup.bucket_key.must_equal 'dogs'
+          movable_signup.requested_bucket_key.must_be_nil
+        end
+
         it 'waitlists you if not possible' do
           4.times { create_other_signup 'anything' }
+          3.times { create_other_signup 'dogs' }
           immovable_signup = create_other_signup 'cats'
           movable_signup = create_other_signup 'cats', requested_bucket_key: nil
 
