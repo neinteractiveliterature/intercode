@@ -38,7 +38,7 @@
     .card-body
       %ul.mb-0
         - ticket_type.pricing_schedule.timespans.each do |timespan|
-          %li= timespan.to_s(:short)
+          %li= timespan.to_s(:short, convention.timezone)
 
 %p
   = link_to "New ticket type", new_ticket_type_path, class: "btn btn-primary"
