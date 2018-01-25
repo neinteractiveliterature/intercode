@@ -24,20 +24,10 @@ module EventSignupMailerHelper
   end
 
   def prev_signup_state_description(move_result)
-    if move_result.prev_state == 'waitlisted'
-      "Waitlisted"
-    else
-      move_result.signup.run.bucket_with_key(move_result.prev_bucket_key).name
-    end
+    move_result.prev_state.humanize
   end
 
   def new_signup_state_description(move_result)
-    new_state_description = move_result.signup.run.bucket_with_key(move_result.bucket_key).name
-
-    if move_result.prev_state == 'waitlisted'
-      "Confirmed (#{new_state_description})"
-    else
-      new_state_description
-    end
+    move_result.state.humanize
   end
 end

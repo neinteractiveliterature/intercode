@@ -38,7 +38,6 @@ class EventSignupService < ApplicationService
       return failure(errors) unless valid?
 
       if actual_bucket && actual_bucket.full?(run.signups)
-        # TODO: email the moved person
         destination_bucket = buckets_with_capacity.sort_by { |bucket| bucket.anything? ? 0 : 1 }.first
         movable_signups_for_bucket(actual_bucket).first.update!(
           bucket_key: destination_bucket.key

@@ -24,6 +24,10 @@ class EventVacancyFillService < ApplicationService
       @signup ||= Signup.find(signup_id)
     end
 
+    def should_notify?
+      state != prev_state
+    end
+
     def self.from_h(hash)
       hash = hash.symbolize_keys
       new(hash[:signup_id], hash[:state], hash[:bucket_key], hash[:prev_state], hash[:prev_bucket_key])
@@ -59,7 +63,9 @@ class EventVacancyFillService < ApplicationService
       move_results = fill_bucket_vacancy(bucket_key)
     end
 
-    move_results.each { |result| notify_moved_signup(result) }
+    move_results.each do |result|
+      notify_moved_signup(result) if result.should_notify?
+    end
     success(move_results: move_results)
   end
 
