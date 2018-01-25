@@ -42,7 +42,7 @@ gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
 gem 'liquid-md5'
 
 # Extracted from this app!  Values that change over time based on a schedule
-gem 'scheduled_value', '~> 1.1.3'
+gem 'scheduled_value', '~> 1.2.0'
 
 # File uploading
 gem 'carrierwave'

@@ -17,8 +17,8 @@ class ScheduledMoneyValue < ScheduledValue::ScheduledValue
       super((options || {}).merge(except: :value)).merge(value: { fractional: value.fractional, currency_code: value.currency.iso_code })
     end
 
-    def to_s(format = nil)
-      "#{value.format} #{start_description(format)} #{finish_description(format)}"
+    def to_s(format = nil, timezone = nil)
+      "#{value.format} #{start_description(format, timezone)} #{finish_description(format, timezone)}"
     end
   end
 
