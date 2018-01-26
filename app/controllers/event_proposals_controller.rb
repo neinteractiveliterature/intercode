@@ -3,6 +3,7 @@ class EventProposalsController < ApplicationController
 
   load_and_authorize_resource through: :convention
   before_action :ensure_accepting_proposals, only: [:create]
+  before_action :ensure_no_event_yet, only: [:edit, :update, :submit]
   respond_to :html, :json
 
   def index
@@ -57,6 +58,12 @@ class EventProposalsController < ApplicationController
   def ensure_accepting_proposals
     unless convention.accepting_proposals
       redirect_to root_path, alert: "#{convention.name} is not currently accepting event proposals."
+    end
+  end
+
+  def ensure_no_event_yet
+    if @event_proposal.event
+      redirect_to [:edit, @event_proposal.event]
     end
   end
 end
