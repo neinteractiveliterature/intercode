@@ -49,7 +49,6 @@
                 %p
                   %strong= run.title_suffix
 
-
               #{run.starts_at.strftime("%a %l:%M%P")}-#{run.ends_at.strftime("%l:%M%P")}
               %br
               = run.rooms.map(&:name).sort.join(", ")

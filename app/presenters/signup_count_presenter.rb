@@ -83,7 +83,7 @@ class SignupCountPresenter
   end
 
   def buckets
-    @buckets ||= registration_policy.buckets.sort_by { |bucket| [bucket.anything? ? 1 : 0, bucket.name.downcase] }
+    @buckets ||= registration_policy.buckets.sort_by { |bucket| [bucket.anything? ? 1 : 0, (bucket.name || '').downcase] }
   end
 
   private
