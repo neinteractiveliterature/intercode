@@ -105,7 +105,7 @@ describe('RegistrationPolicyEditor', () => {
   });
 
   describe('with presets', () => {
-    const preset = defaultPresets.find(aPreset => aPreset.name === 'Limited slots by binary gender');
+    const preset = defaultPresets.find(aPreset => aPreset.name === 'Limited slots by gender (classic Intercon-style)');
     const presetBuckets = preset.policy.buckets.map(presetBucket =>
       ({ ...defaultRegistrationPolicyBucket, ...presetBucket }));
 
