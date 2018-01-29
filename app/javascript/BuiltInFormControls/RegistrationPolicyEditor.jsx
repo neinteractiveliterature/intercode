@@ -72,7 +72,19 @@ class RegistrationPolicyEditor extends React.Component {
 
   addBucket = (event) => {
     event.preventDefault();
-    this.props.onChange(this.props.registrationPolicy.addBucket('untitled'));
+    const customBucketKeyNumbers = this.props.registrationPolicy.buckets
+      .map(bucket => bucket.get('key'))
+      .filter(key => key.match(/^custom-\d+$/))
+      .map(key => Number.parseInt(key.replace('custom-', ''), 10))
+      .toJS();
+    const maxBucketKeyNumber = (
+      customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0
+    );
+    const customBucketNumber = maxBucketKeyNumber + 1;
+    this.props.onChange(this.props.registrationPolicy.addBucket(
+      `custom-${customBucketNumber}`,
+      { name: `Custom ${customBucketNumber}`, slots_limited: true },
+    ));
   }
 
   addFlexBucket = (event) => {
