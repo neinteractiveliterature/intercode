@@ -35,7 +35,7 @@ class Intercode::Import::Intercode1::RegistrationPolicyFactory
 
     name = case gender
     when 'Neutral' then 'Flex'
-    else gender
+    else "#{gender} role"
     end
 
     RegistrationPolicy::Bucket.new(
