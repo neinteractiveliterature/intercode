@@ -40,9 +40,9 @@
   %section.my-4
     %hr
 
-    - @runs.sort_by(&:starts_at).each_slice(4) do |runs|
-      .card-deck
-        - runs.each do |run|
+    .d-flex.flex-wrap.justify-content-center
+      - @runs.sort_by(&:starts_at).each do |run|
+        .col-lg-4.col-md-6.col-sm-12
           .card.mb-3
             .card-header
               - if run.title_suffix.present?
@@ -50,35 +50,58 @@
                   %strong= run.title_suffix
 
 
-              #{run.starts_at.strftime("%a %H:%M")}-#{run.ends_at.strftime("%H:%M")}
+              #{run.starts_at.strftime("%a %l:%M%P")}-#{run.ends_at.strftime("%l:%M%P")}
               %br
               = run.rooms.map(&:name).sort.join(", ")
 
-            .card-body
-              %p
-                - signup_description = simple_format(SignupCountPresenter.new(run).signups_description)
+            .card-body.text-center
+              - count_presenter = SignupCountPresenter.new(run)
+              - signups_by_state_and_bucket_key = count_presenter.signups_by_state_and_bucket_key
+              - progress_classes = ['bg-success', 'bg-danger', 'bg-info', 'bg-primary']
 
-                - if can? :read, run.signups.new
-                  - signup_link_or_text = link_to(signup_description, [@event, run, :admin_signups])
-                - elsif can? :signup_summary, run
-                  - signup_link_or_text = link_to(signup_description, [:signup_summary, @event, run])
-                - else
-                  - signup_link_or_text = signup_description
+              .run-capacity.bg-white.rounded.mb-2{style: 'overflow: hidden'}
+                - count_presenter.buckets.each_with_index do |bucket, index|
+                  - signups = signups_by_state_and_bucket_key['confirmed'][bucket.key]
+                  - capacity = bucket.total_slots
+                  - capacity_fraction = count_presenter.capacity_fraction_for_bucket(bucket.key)
+                  .bucket-capacity
+                    .bucket-capacity-bars
+                      - remaining_capacity = capacity - signups.size
+                      .bucket-capacity-bar{class: "bg-bucket-color-#{(index % 9) + 1}", style: "width: #{capacity_fraction * 100.0}%;"}
+                        - (remaining_capacity - 1).times do |index|
+                          .bucket-capacity-tickmark.bg-white{class: (capacity >= 10 ? 'bucket-capacity-tickmark-thin' : ''), style: "left: #{((index + 1).to_f / remaining_capacity) * 100.0}%;"}
+                      - if signups.size > 0
+                        .bucket-capacity-bar.bg-bucket-color-full{style: "width: #{(1.0 - capacity_fraction) * 100.0}%;"}
+                          - signups.size.times do |index|
+                            .bucket-capacity-tickmark.bg-white{class: (capacity >= 10 ? 'bucket-capacity-tickmark-thin' : ''), style: "left: #{(index.to_f / signups.size) * 100.0}%;"}
+                    #{bucket.name}: #{count_presenter.capacity_description_for_bucket(bucket.key)}
+                - if count_presenter.waitlist_count > 0
+                  .bucket-capacity
+                    Waitlist: #{count_presenter.waitlist_count}
 
-                #{signup_link_or_text}
-
-              - if @user_signup_by_run_id[run.id]
+              - my_signup = @user_signup_by_run_id[run.id]
+              - if my_signup
                 %p
-                  %em You are signed up
+                  - if my_signup.confirmed?
+                    %em You are signed up.
+                  - else
+                    - ahead_of_me = run.signups.select { |signup| signup.waitlisted? && signup.created_at < my_signup.created_at }
+                    %em You are ##{ahead_of_me.size + 1} on the waitlist.
 
-                %p= link_to "Withdraw", [@event, run, :user_signup], method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
+                %p= link_to "Withdraw", [@event, run, :user_signup], class: 'btn btn-outline-danger', method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
               - else
-                - run.registration_policy.buckets.sort_by { |bucket| bucket.name.downcase }.each do |bucket|
+                - count_presenter.buckets.each_with_index do |bucket, index|
                   - next if bucket.anything?
-                  = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-secondary mx-1" do
+                  = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-outline-bucket-color-#{(index % 9) + 1} mx-1" do
                     %strong Sign up
-                    %br
-                    #{bucket.name}
+                    - if count_presenter.buckets.size > 1
+                      %br
+                      #{bucket.name}
+
+              - if can? :read, run.signups.new
+                .mt-2= link_to('View signups', [@event, run, :admin_signups])
+              - elsif can? :signup_summary, run
+                .mt-2= link_to('View signups', [:signup_summary, @event, run])
 
 %section.my-4
   %hr

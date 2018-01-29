@@ -1,0 +1,80 @@
+.run-capacity {
+  border: $card-border-width solid $card-border-color;
+}
+
+.bucket-capacity {
+  text-align: left;
+  font-size: $progress-font-size;
+  padding-top: 3px;
+  padding-left: 2px;
+  padding-bottom: 5px;
+  position: relative;
+
+  // border-bottom: $card-border-width solid $card-border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.bucket-capacity-bars {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 4px;
+  display: flex;
+}
+
+.bucket-capacity-bar {
+  position: relative;
+  height: 3px;
+}
+
+.bucket-capacity-tickmark {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+
+  &.bucket-capacity-tickmark-thin {
+    width: 1px;
+  }
+}
+
+$bucket-color-1: darken($orange, 5%);
+$bucket-color-2: $green;
+$bucket-color-3: $indigo;
+$bucket-color-4: $blue;
+$bucket-color-5: $red;
+$bucket-color-6: $teal;
+$bucket-color-7: $purple;
+$bucket-color-8: $cyan;
+$bucket-color-9: $pink;
+$bucket-color-full: $gray-500;
+
+$bucket-colors: () !default;
+$bucket-colors: map-merge((
+  "bucket-color-1": $bucket-color-1,
+  "bucket-color-2": $bucket-color-2,
+  "bucket-color-3": $bucket-color-3,
+  "bucket-color-4": $bucket-color-4,
+  "bucket-color-5": $bucket-color-5,
+  "bucket-color-6": $bucket-color-6,
+  "bucket-color-7": $bucket-color-7,
+  "bucket-color-8": $bucket-color-8,
+  "bucket-color-9": $bucket-color-9,
+  "bucket-color-full": $bucket-color-full
+), $bucket-colors);
+
+@each $color, $value in $bucket-colors {
+  .bg-#{$color} {
+    background-color: $value;
+  }
+
+  .btn-#{$color} {
+    @include button-variant($value, $value);
+  }
+
+  .btn-outline-#{$color} {
+    @include button-outline-variant($value);
+  }
+}
