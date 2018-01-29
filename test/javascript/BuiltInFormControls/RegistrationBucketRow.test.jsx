@@ -102,7 +102,7 @@ describe('RegistrationBucketRow', () => {
     component.find('td').at(0).find(InPlaceEditor).prop('onChange')('new name');
     expect(onChange.getCall(0).args[0]).toEqual('testBucket');
     expect(onChange.getCall(0).args[1].get('name')).toEqual('new name');
-    expect(onChange.getCall(0).args[1].get('key')).toEqual('new_name');
+    expect(onChange.getCall(0).args[1].get('key')).toEqual('testBucket');
   });
 
   test('changing the description', () => {
