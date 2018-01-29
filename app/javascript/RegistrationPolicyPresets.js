@@ -69,13 +69,13 @@ const presets = [
       buckets: [
         {
           key: 'male',
-          name: 'Male',
+          name: 'Male role',
           description: 'Male characters',
           slots_limited: true,
         },
         {
           key: 'female',
-          name: 'Female',
+          name: 'Female role',
           description: 'Female characters',
           slots_limited: true,
         },
