@@ -3,12 +3,20 @@ class TicketType < ApplicationRecord
   serialize :pricing_schedule, ActiveModelCoder.new('ScheduledMoneyValue')
 
   has_many :tickets
+  has_many :maximum_event_provided_tickets_overrides
 
   # Only allow letters, numbers, and underscores
   validates_format_of :name, with: /\A\w+\z/, allow_blank: true
 
   scope :publicly_available, -> { where(publicly_available: true) }
   scope :event_provided, -> { where('maximum_event_provided_tickets > 0') }
+
+  def maximum_event_provided_tickets_for_event_id(event_id)
+    (
+      maximum_event_provided_tickets_overrides.find_by(event_id: event_id)&.override_value ||
+      maximum_event_provided_tickets
+    )
+  end
 
   def price_at(time)
     pricing_schedule.value_at(time)
