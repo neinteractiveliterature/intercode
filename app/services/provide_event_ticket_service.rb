@@ -55,6 +55,8 @@ class ProvideEventTicketService < ApplicationService
   end
 
   def event_must_have_remaining_tickets_of_type
+    return unless maximum_event_provided_tickets_for_event > 0
+
     already_provided_count = event.provided_tickets.select { |t| t.ticket_type == ticket_type }.size
 
     if already_provided_count >= maximum_event_provided_tickets_for_event
