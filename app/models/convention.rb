@@ -44,6 +44,10 @@ class Convention < ApplicationRecord
     ends_at && ends_at <= Time.now
   end
 
+  def length_seconds
+    ends_at - starts_at
+  end
+
   def load_cms_content_set(name)
     LoadCmsContentSetService.new(convention: self, content_set_name: name).call!
   end

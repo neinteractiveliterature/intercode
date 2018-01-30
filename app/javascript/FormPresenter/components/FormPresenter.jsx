@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ErrorDisplay from '../../ErrorDisplay';
 import Form from '../../Models/Form';
 import FormItem from './FormItem';
 import FormFooterContainer from '../containers/FormFooterContainer';
@@ -19,7 +20,7 @@ function renderProgress(form, section) {
 
   const items = form.getAllItems();
   const sectionItems = form.getItemsInSection(section.id);
-  const itemIndex = items.indexOf(sectionItems.get(0));
+  const itemIndex = items.indexOf(sectionItems.get(sectionItems.size - 1)) + 1;
   const progressPercentValue = Math.round((itemIndex / items.count()) * 100);
   const progressPercent = `${progressPercentValue}%`;
 
@@ -46,16 +47,25 @@ function renderSection(
   response,
   responseValueChanged,
   isUpdatingResponse,
+  errors,
 ) {
-  const items = form.getItemsInSection(section.id).map(item => (
-    <FormItem
-      key={item.id}
-      formItem={item}
-      convention={convention}
-      value={response[item.identifier]}
-      onChange={responseValueChanged}
-    />
-  ));
+  const items = form.getItemsInSection(section.id).map((item) => {
+    const itemErrors = errors[item.identifier] || [];
+    const errorsForDisplay = (itemErrors.length > 0 ? itemErrors.join(', ') : null);
+
+    return (
+      <div>
+        <FormItem
+          key={item.id}
+          formItem={item}
+          convention={convention}
+          value={response[item.identifier]}
+          onChange={responseValueChanged}
+        />
+        <ErrorDisplay stringError={errorsForDisplay} />
+      </div>
+    );
+  });
 
   let loadingIndicator = null;
   if (isUpdatingResponse) {
@@ -87,6 +97,7 @@ const FormPresenter = (props) => {
     response,
     exitButton,
     submitCaption,
+    errors,
   } = props;
   if (!form || !convention || !response) {
     return (
@@ -114,6 +125,7 @@ const FormPresenter = (props) => {
           response,
           props.responseValueChanged,
           props.isUpdatingResponse,
+          errors,
         )
       }
 
@@ -135,6 +147,7 @@ FormPresenter.propTypes = {
     timezone_name: PropTypes.string.isRequired,
   }).isRequired,
   form: Form.propType.isRequired,
+  errors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   responseValueChanged: PropTypes.func.isRequired,
   isUpdatingResponse: PropTypes.bool.isRequired,
