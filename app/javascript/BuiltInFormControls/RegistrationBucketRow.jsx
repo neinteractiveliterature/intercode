@@ -129,6 +129,10 @@ class RegistrationBucketRow extends React.Component {
       min,
     }, i) => {
       const inputId = this.nextUniqueId();
+      let value = bucket.get(field);
+      if (value == null) {
+        value = '';
+      }
 
       return (
         <div className={classNames('d-inline-flex', { 'ml-1': i > 0 })} key={field}>
@@ -140,7 +144,7 @@ class RegistrationBucketRow extends React.Component {
             className="form-control form-control-sm ml-1"
             min={min}
             placeholder="Min"
-            value={bucket.get(field) || ''}
+            value={value}
             onChange={(event) => { this.slotsChanged(event, field); }}
             style={{ width: '4em' }}
           />
