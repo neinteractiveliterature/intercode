@@ -73,7 +73,7 @@ query($eventId: Int!) {
       id
       name
       description
-      maximum_event_provided_tickets
+      maximum_event_provided_tickets(eventId: $eventId)
     }
   }
 
