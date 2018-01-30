@@ -2,7 +2,7 @@ class Ability
   class AssociatedRecordsLoader
     attr_reader :user_ids
 
-    def initialize(users)
+    def initialize(user_ids)
       @user_ids = user_ids
     end
 
@@ -37,7 +37,7 @@ class Ability
 
     def con_ids_by_user_id_and_privilege
       @con_ids_by_user_id_and_privilege ||= begin
-        con_ids_with_privileges = UserConProfile.where(user_id: user_ids).flat_map do |user_con_profile|
+        con_ids_with_privileges = UserConProfile.where(user_id: user_ids).includes(:user).flat_map do |user_con_profile|
           user_con_profile.privileges.map { |privilege| [user_con_profile.user_id, user_con_profile.convention_id, privilege] }
         end
 
@@ -138,6 +138,18 @@ class Ability
     define_method method_name do |*args|
       associated_records_loader.public_send(method_name, user.id, *args)
     end
+  end
+
+  def hash
+    user.hash
+  end
+
+  def eql?(other)
+    other.is_a?(Ability) && other.user == user
+  end
+
+  def ==(other)
+    eql?(other)
   end
 
   private
