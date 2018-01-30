@@ -55,11 +55,9 @@ class ProvideEventTicketService < ApplicationService
   end
 
   def event_must_have_remaining_tickets_of_type
-    return unless maximum_event_provided_tickets_for_event > 0
-
     already_provided_count = event.provided_tickets.select { |t| t.ticket_type == ticket_type }.size
 
-    if already_provided_count >= ticket_type.maximum_event_provided_tickets
+    if already_provided_count >= maximum_event_provided_tickets_for_event
       errors.add :base, "#{event.title} can provide up to #{pluralize maximum_event_provided_tickets_for_event, 'ticket'}, and it has already provided #{already_provided_count}"
     end
   end
