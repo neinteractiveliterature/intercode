@@ -24,6 +24,11 @@ Types::EventType = GraphQL::ObjectType.define do
   field :team_member_name, !types.String
   field :provided_tickets, !types[!Types::TicketType]
   field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
+  field :maximum_event_provided_tickets_overrides, !types[!Types::MaximumEventProvidedTicketsOverrideType] do
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(obj)
+    }
+  end
 
   field :registration_policy, Types::RegistrationPolicyType
 
