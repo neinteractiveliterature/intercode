@@ -24,8 +24,17 @@ class EventProposal < ApplicationRecord
   serialize :timeblock_preferences, JsonArrayCoderWrapper.new(ActiveModelCoder.new('EventProposal::TimeblockPreference'))
 
   validates :status, inclusion: { in: STATUSES }
+  validate :length_fits_in_convention
 
   def to_liquid
     EventProposalDrop.new(self)
+  end
+
+  private
+  def length_fits_in_convention
+    return unless length_seconds
+    if length_seconds > convention.length_seconds
+      errors.add :length_seconds, "Event cannot be longer than #{convention.name}"
+    end
   end
 end
