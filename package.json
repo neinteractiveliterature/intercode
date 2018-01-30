@@ -24,7 +24,7 @@
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
     "clipboard": "^1.7.1",
-    "compression-webpack-plugin": "^1.1.3",
+    "compression-webpack-plugin": "^1.1.6",
     "css-loader": "^0.28.8",
     "exports-loader": "^0.6.4",
     "extract-text-webpack-plugin": "^3.0.2",
