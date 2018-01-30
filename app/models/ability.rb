@@ -25,7 +25,7 @@ class Ability
       can :manage, :all
     else
       can [:read, :create, :update], UserConProfile, user_id: user.id
-      can :create, EventProposal
+      can [:create, :submit], EventProposal
       can [:read, :update], EventProposal, id: own_event_proposal_ids
       can :signup_summary, Run, id: signed_up_run_ids
 
