@@ -48,4 +48,10 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:user_con_profile].signups
     }
   end
+
+  field :current_user_con_profile, Types::UserConProfileType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:user_con_profile]
+    }
+  end
 end

@@ -59,8 +59,20 @@ class CommonEventFormFields extends React.Component {
         }).isRequired).isRequired,
       }),
       can_play_concurrently: PropTypes.bool.isRequired,
+      maximum_event_provided_tickets_overrides: PropTypes.arrayOf(PropTypes.shape({
+        ticket_type: PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired,
+          description: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired).isRequired,
     }).isRequired,
+    canOverrideMaximumEventProvidedTickets: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    canOverrideMaximumEventProvidedTickets: false,
   };
 
   constructor(props) {
