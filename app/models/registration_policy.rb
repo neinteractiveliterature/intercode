@@ -11,7 +11,7 @@ class RegistrationPolicy
     new(buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_unlimited: true)])
   end
 
-  attr_accessor :buckets
+  attr_reader :buckets
 
   def initialize(attributes = {})
     super(attributes)

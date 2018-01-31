@@ -51,8 +51,10 @@ class FormItem < ApplicationRecord
 
   validates_presence_of :item_type
   validates_inclusion_of :item_type, in: PROPERTIES_SCHEMA.keys.map(&:to_s)
-  validates_uniqueness_of :identifier, allow_nil: true,
-    conditions: -> { joins(:form_section) }, scope: 'form_sections.form_id'
+  validates_uniqueness_of :identifier,
+    allow_nil: true,
+    conditions: -> { joins(:form_section) },
+    scope: 'form_sections.form_id'
   validate :ensure_properties_match_schema
 
   private

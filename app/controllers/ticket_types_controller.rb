@@ -38,6 +38,7 @@ class TicketTypesController < ApplicationController
   end
 
   private
+
   def ticket_type_params
     params.require(:ticket_type).permit(
       :name,

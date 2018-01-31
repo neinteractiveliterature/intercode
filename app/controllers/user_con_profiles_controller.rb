@@ -3,13 +3,17 @@ class UserConProfilesController < ApplicationController
   # which is unsafe for us to use because ApplicationController uses it to mean the current user, and we use
   # that for authorization checking.  So instead, we'll call the user con profile we're working on the "subject
   # profile" (as in the subject of our actions).
-  load_and_authorize_resource :subject_profile, id_param: :id, parent: false, class: "UserConProfile",
-    through: :convention, through_association: :user_con_profiles
+  load_and_authorize_resource :subject_profile,
+    id_param: :id,
+    parent: false,
+    class: "UserConProfile",
+    through: :convention,
+    through_association: :user_con_profiles
   before_action :authorize_admin_profiles, except: [:index, :show]
 
   # GET /user_con_profiles
   def index
-    @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid]&.permit! || {order: 'name'}) do |scope|
+    @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid]&.permit! || { order: 'name' }) do |scope|
       scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
       respond_to do |format|
         format.html { scope.paginate(page: params[:page], per_page: params[:per_page]) }
@@ -27,7 +31,7 @@ class UserConProfilesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { }
+      format.html {}
       format.csv do
         send_data @user_con_profiles_grid.to_csv, filename: "#{@convention.name} - Attendees.csv"
       end

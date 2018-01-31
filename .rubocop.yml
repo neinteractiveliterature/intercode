@@ -28,6 +28,7 @@ Layout/AlignParameters:
                  than one line.
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-double-indent'
   Enabled: true
+  EnforcedStyle: with_fixed_indentation
 
 Layout/BlockEndNewline:
   Description: 'Put end statement of multiline block on its own line.'
@@ -37,6 +38,7 @@ Layout/CaseIndentation:
   Description: 'Indentation of when in a case/when/[else/]end.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#indent-when-to-case'
   Enabled: true
+  EnforcedStyle: end
 
 Layout/ClosingParenthesisIndentation:
   Description: 'Checks the indentation of hanging closing parentheses.'
@@ -116,6 +118,7 @@ Layout/IndentArray:
                  Checks the indentation of the first element in an array
                  literal.
   Enabled: true
+  EnforcedStyle: consistent
 
 Layout/IndentHash:
   Description: 'Checks the indentation of the first key in a hash literal.'

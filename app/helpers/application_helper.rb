@@ -59,7 +59,7 @@ module ApplicationHelper
   # prevent the harvesting of email addresses. But this way all of the
   # code to generate mailto links will be gathered in one place so we
   # can easily modify them.
-  def intercode_mail_to(address, name=nil, html_options={})
+  def intercode_mail_to(address, name = nil, html_options = {})
     # If the address is empty, just return the empty string
     return unless address.present?
 

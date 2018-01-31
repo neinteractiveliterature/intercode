@@ -103,6 +103,7 @@ class ReportsController < ApplicationController
   end
 
   private
+
   def ensure_authorized
     authorize! :view_reports, convention
   end

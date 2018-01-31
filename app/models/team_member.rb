@@ -25,6 +25,7 @@ class TeamMember < ApplicationRecord
   end
 
   private
+
   def user_con_profile_and_event_must_belong_to_same_convention
     return unless event && user_con_profile
 

@@ -15,7 +15,7 @@ class AdminEventProposalsController < ApplicationController
   end
 
   def show
-    @form_items = convention.event_proposal_form.form_items.includes(:form_section).sort_by { |item| [item.form_section.position, item.position ] }
+    @form_items = convention.event_proposal_form.form_items.includes(:form_section).sort_by { |item| [item.form_section.position, item.position] }
   end
 
   def update

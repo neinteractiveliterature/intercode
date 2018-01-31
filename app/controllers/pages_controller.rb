@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-
   # Cadmus::PagesController defines index, show, new, create, edit, update, and destroy actions for
   # CMS pages that include the cadmus_page directive.  So we don't need to implement those here;
   # instead we can just rely on the existing implementation, and override the protected methods in

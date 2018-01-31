@@ -20,7 +20,7 @@ class TicketsController < ApplicationController
       @ticket_types = convention.ticket_types.publicly_available
 
       if @ticket_types.size == 1
-        redirect_to new_ticket_path(ticket: {ticket_type_id: @ticket_types.first.id})
+        redirect_to new_ticket_path(ticket: { ticket_type_id: @ticket_types.first.id })
       end
     end
   end
@@ -30,7 +30,7 @@ class TicketsController < ApplicationController
 
     customer = Stripe::Customer.create(
       :email => current_user.email,
-      :source  => params[:stripeToken]
+      :source => params[:stripeToken]
     )
 
     charge = Stripe::Charge.create(
@@ -57,6 +57,7 @@ class TicketsController < ApplicationController
   end
 
   private
+
   def ticket_params
     params.require(:ticket).permit(:ticket_type_id)
   end
