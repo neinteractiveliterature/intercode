@@ -2,6 +2,27 @@ import gql from 'graphql-tag';
 
 const fragments = {};
 
+fragments.ticketType = gql`
+fragment TicketTypeFields on TicketType {
+  id
+  description
+  maximum_event_provided_tickets
+}
+`;
+
+fragments.maximumEventProvidedTicketsOverride = gql`
+fragment MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
+  ticket_type {
+    ...TicketTypeFields
+  }
+
+  id
+  override_value
+}
+
+${fragments.ticketType}
+`;
+
 fragments.room = gql`
 fragment RoomFields on Room {
   id
@@ -18,9 +39,14 @@ fragment ConventionFields on Convention {
   rooms {
     ...RoomFields
   }
+
+  ticket_types {
+    ...TicketTypeFields
+  }
 }
 
 ${fragments.room}
+${fragments.ticketType}
 `;
 
 fragments.run = gql`
@@ -72,15 +98,26 @@ fragment EventFields on Event {
   runs {
     ...RunFields
   }
+
+  maximum_event_provided_tickets_overrides {
+    ...MaximumEventProvidedTicketsOverrideFields
+  }
 }
 
 ${fragments.run}
+${fragments.maximumEventProvidedTicketsOverride}
 `;
 
 export { fragments };
 
 export default gql`
 query {
+  current_user_con_profile {
+    ability {
+      can_override_maximum_event_provided_tickets
+    }
+  }
+
   convention {
     ...ConventionFields
   }
