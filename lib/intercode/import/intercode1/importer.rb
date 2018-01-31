@@ -4,7 +4,7 @@ require 'parallel'
 require 'bcrypt'
 
 class Intercode::Import::Intercode1::Importer
-  attr_reader :connection, :con
+  attr_reader :connection, :con, :constants_file
   attr_accessor :con_domain, :con_name, :friday_date
 
   def initialize(constants_file, con_domain)
@@ -12,15 +12,15 @@ class Intercode::Import::Intercode1::Importer
     @con_domain = con_domain
     @legacy_password_md5s = {}
 
-    setup_from_constants_file(constants_file)
+    setup_from_constants_file
     @connection = Sequel.connect(@database_url)
   end
 
-  def setup_from_constants_file(filename)
-    php = <<-PHP
+  def php_dump_script_for_constants_file
+    <<-PHP
     <?php
       error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
-      require "#{filename}";
+      require "#{constants_file}";
 
       $vars = array(
         "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
@@ -77,11 +77,13 @@ class Intercode::Import::Intercode1::Importer
       echo json_encode($vars);
     ?>
     PHP
+  end
 
+  def setup_from_constants_file
+    php = php_dump_script_for_constants_file
     vars = JSON.parse(Intercode::Import::Intercode1::Php.exec_php(php, 'dump_con_vars.php'))
 
-    text_dir = File.expand_path(vars['text_dir'], File.dirname(filename))
-
+    @text_dir = File.expand_path(vars['text_dir'], File.dirname(constants_file))
     @database_url = vars['database_url']
     @con_name = vars['con_name']
     @con_domain ||= vars['con_domain']
@@ -89,7 +91,6 @@ class Intercode::Import::Intercode1::Importer
     @price_schedule = vars['price_schedule']
     @staff_positions = vars['staff_positions']
     @php_timezone = ActiveSupport::TimeZone[vars['php_timezone']]
-    @text_dir = text_dir
     @show_flyer = vars['show_flyer']
     @show_program = vars['show_program']
     @thursday_enabled = (vars['thursday_enabled'] == 1)

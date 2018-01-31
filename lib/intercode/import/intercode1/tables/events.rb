@@ -62,7 +62,11 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       return 'filler'
     end
 
-    case row[:GameType]
+    event_category_for_game_type(row[:GameType])
+  end
+
+  def event_category_for_game_type(game_type)
+    case game_type
     when 'Board Game' then 'board_game'
     when 'Panel' then 'panel'
     when 'Tabletop RPG' then 'tabletop_rpg'
