@@ -53,7 +53,7 @@ class Ability
     def team_member_event_ids_and_convention_ids
       @team_member_event_ids_and_convention_ids ||= begin
         team_member_events = Event.joins(team_members: :user_con_profile).where(user_con_profiles: { user_id: user_ids })
-        team_member_events.pluck(:user_id, :id, :convention_id).index_by(&:first).transform_values do |rows|
+        team_member_events.pluck(:user_id, :id, :convention_id).group_by(&:first).transform_values do |rows|
           rows.map do |(_, id, convention_id)|
             [id, convention_id]
           end
@@ -66,7 +66,9 @@ class Ability
         .where(user_con_profiles: { user_id: user_ids }, state: %w(confirmed waitlisted))
         .pluck(:run_id, :user_id)
         .group_by { |(_, user_id)| user_id }
-        .transform_values { |(run_id, _)| run_id }
+        .transform_values do |rows|
+          rows.map { |(run_id, _)| run_id }
+        end
     end
 
     def own_event_proposal_ids_by_user_id
@@ -74,7 +76,9 @@ class Ability
         own_event_proposals = EventProposal.joins(:owner).where(user_con_profiles: { user_id: user_ids })
         own_event_proposals.pluck(:id, :user_id)
           .group_by { |(_, user_id)| user_id }
-          .transform_values { |(event_proposal_id, _)| event_proposal_id }
+          .transform_values do |rows|
+            rows.map { |(event_proposal_id, _)| event_proposal_id }
+          end
       end
     end
   end
