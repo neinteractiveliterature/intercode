@@ -464,7 +464,7 @@ Metrics/AbcSize:
                  A calculated magnitude based on number of assignments,
                  branches, and conditions.
   Reference: 'http://c2.com/cgi/wiki?AbcMetric'
-  Enabled: false
+  Enabled: true
   Max: 20
 
 Metrics/BlockNesting:
