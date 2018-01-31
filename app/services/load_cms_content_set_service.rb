@@ -56,9 +56,11 @@ class LoadCmsContentSetService < ApplicationService
       'pages',
       convention.pages.pluck(:name),
       (
-        convention.root_page ?
-        { 'root' => 'root page' } :
-        {}
+        if convention.root_page
+          { 'root' => 'root page' }
+        else
+          {}
+        end
       )
     )
   end
@@ -72,9 +74,11 @@ class LoadCmsContentSetService < ApplicationService
       'layouts',
       convention.cms_layouts.pluck(:name),
       (
-        convention.default_layout ?
-        { 'Default' => 'default layout' } :
-        {}
+        if convention.default_layout
+          { 'Default' => 'default layout' }
+        else
+          {}
+        end
       )
     )
   end

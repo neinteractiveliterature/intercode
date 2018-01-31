@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
   # Only enabled for non-production environments.  To disable, do this in a controller:
   # skip_authorization_check
-  check_authorization :unless => :devise_controller?
+  check_authorization unless: :devise_controller?
 
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -26,10 +26,10 @@ class ApplicationController < ActionController::Base
     Rails.logger.warn(error.message)
 
     if user_signed_in?
-      redirect_to root_url, :alert => error.message
+      redirect_to root_url, alert: error.message
     else
       session[:user_return_to] = request.url
-      redirect_to new_user_session_url, :alert => "Please log in to view this page."
+      redirect_to new_user_session_url, alert: 'Please log in to view this page.'
     end
   end
 
@@ -39,14 +39,13 @@ class ApplicationController < ActionController::Base
   # the Intercode::FindVirtualHost Rack middleware having already run, since it sets the key
   # "intercode.convention" inside the Rack environment.
   def convention
-    @convention ||= request.env["intercode.convention"]
+    @convention ||= request.env['intercode.convention']
   end
   helper_method :convention
 
   def user_con_profile
-    if convention && user_signed_in?
-      @user_con_profile ||= convention.user_con_profiles.find_by(user_id: current_user.id)
-    end
+    return unless convention && user_signed_in?
+    @user_con_profile ||= convention.user_con_profiles.find_by(user_id: current_user.id)
   end
   helper_method :user_con_profile
 
@@ -63,14 +62,14 @@ class ApplicationController < ActionController::Base
   # These variables will automatically be made available to Cadmus CMS content.  For
   # example, you'll be able to do {{ user.name }} in a page template.
   def liquid_assigns
-    { "user" => current_user, "convention" => convention, "user_con_profile" => user_con_profile }
+    { 'user' => current_user, 'convention' => convention, 'user_con_profile' => user_con_profile }
   end
 
   # These variables aren't available from Cadmus CMS templates, but are available to
   # custom Liquid filters and tags via the Liquid::Context object.  Exposing the
   # controller is useful for generating URLs in templates.
   def liquid_registers
-    liquid_assigns.merge("controller" => self)
+    liquid_assigns.merge('controller' => self)
   end
 
   # Devise is going to do some operations in its controllers that require writing to a
@@ -90,9 +89,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if session[:register_via_convention_id]
       convention = Convention.find_by(id: session[:register_via_convention_id])
-      if convention
-        return my_profile_url(host: convention.domain)
-      end
+      return my_profile_url(host: convention.domain) if convention
     end
 
     if convention && convention.user_con_profiles.where(user_id: resource.id).none?
@@ -114,8 +111,8 @@ class ApplicationController < ActionController::Base
   end
 
   def no_cache
-    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
   end
 end

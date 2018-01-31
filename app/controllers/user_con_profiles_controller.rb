@@ -6,7 +6,7 @@ class UserConProfilesController < ApplicationController
   load_and_authorize_resource :subject_profile,
     id_param: :id,
     parent: false,
-    class: "UserConProfile",
+    class: 'UserConProfile',
     through: :convention,
     through_association: :user_con_profiles
   before_action :authorize_admin_profiles, except: [:index, :show]
@@ -23,7 +23,7 @@ class UserConProfilesController < ApplicationController
 
     convention.user_con_profile_form.form_items.each do |form_item|
       next unless form_item.identifier
-      next if %w(first_name last_name).include?(form_item.identifier)
+      next if %w[first_name last_name].include?(form_item.identifier)
 
       @user_con_profiles_grid.column(form_item.identifier) do |user_con_profile|
         user_con_profile.read_form_response_attribute(form_item.identifier)

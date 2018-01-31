@@ -4,7 +4,7 @@ module EventSignupMailerHelper
   end
 
   def prev_state_description(prev_state, prev_bucket)
-    bucket_description = prev_bucket ? " in the #{prev_bucket.name} bucket" : ""
+    bucket_description = prev_bucket ? " in the #{prev_bucket.name} bucket" : ''
     "(Previously, they were #{prev_state}#{bucket_description}.)"
   end
 
@@ -25,7 +25,7 @@ module EventSignupMailerHelper
 
   def prev_signup_state_description(move_result)
     if move_result.prev_state == 'waitlisted'
-      "Waitlisted"
+      'Waitlisted'
     else
       move_result.signup.run.bucket_with_key(move_result.prev_bucket_key).name
     end

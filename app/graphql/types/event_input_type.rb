@@ -1,5 +1,5 @@
 Types::EventInputType = GraphQL::InputObjectType.define do
-  name "EventInput"
+  name 'EventInput'
 
   input_field :title, types.String
   input_field :author, types.String

@@ -18,7 +18,7 @@ module FormResponseHelper
     if bucket.slots_limited?
       "#{bucket.minimum_slots} / #{bucket.preferred_slots} / #{bucket.total_slots}"
     else
-      "unlimited"
+      'unlimited'
     end
   end
 
@@ -75,9 +75,9 @@ module FormResponseHelper
     if value % 1.hour == 0
       pluralize(value / 1.hour, 'hour')
     elsif value % 1.minute == 0
-      sprintf('%d:%02d', value / 1.hour, (value % 1.hour) / 1.minute)
+      format('%d:%02d', value / 1.hour, (value % 1.hour) / 1.minute)
     else
-      sprintf(
+      format(
         '%d:%02d:%02d',
         value / 1.hour,
         (value % 1.hour / 1.minute),

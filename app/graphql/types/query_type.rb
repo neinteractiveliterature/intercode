@@ -1,5 +1,5 @@
 Types::QueryType = GraphQL::ObjectType.define do
-  name "Query"
+  name 'Query'
   # Add root-level fields here.
   # They will be entry points for queries on your schema.
 
@@ -28,7 +28,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :includeDropped, types.Boolean
 
     resolve ->(_obj, args, ctx) {
-      events = ctx[:convention].events.includes(:runs => [:rooms])
+      events = ctx[:convention].events.includes(runs: [:rooms])
       events = events.active unless args['includeDropped']
       signup_scope = Signup.where(run_id: Run.where(event_id: events.map(&:id)).select(:id))
 

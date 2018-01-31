@@ -21,7 +21,7 @@ module Concerns::FormResponse
   def assign_form_response_attributes(attributes)
     form_response_attrs = self.class.form_response_attrs
     new_model_attrs = {}
-    new_additional_info = self.additional_info || {}
+    new_additional_info = additional_info || {}
 
     attributes.stringify_keys.each do |key, value|
       if form_response_attrs.include?(key)

@@ -1,5 +1,5 @@
 Types::UserConProfileType = GraphQL::ObjectType.define do
-  name "UserConProfile"
+  name 'UserConProfile'
 
   field :id, !types.Int
   field :convention, Types::ConventionType

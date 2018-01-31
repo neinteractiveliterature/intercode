@@ -1,5 +1,5 @@
 Mutations::CreateRun = GraphQL::Relay::Mutation.define do
-  name "CreateRun"
+  name 'CreateRun'
   return_field :run, Types::RunType
 
   input_field :event_id, !types.Int

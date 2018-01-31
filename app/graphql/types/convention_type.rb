@@ -1,5 +1,5 @@
 Types::ConventionType = GraphQL::ObjectType.define do
-  name "Convention"
+  name 'Convention'
   field :accepting_proposals, types.Boolean
   field :created_at, Types::DateType
   field :updated_at, Types::DateType

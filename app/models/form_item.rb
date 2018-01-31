@@ -11,34 +11,34 @@ class FormItem < ApplicationRecord
       lines: :required,
       free_text_type: :optional,
       required: :optional,
-      format: :optional,
+      format: :optional
     },
     multiple_choice: {
       identifier: :required,
       caption: :required,
       style: :required,
       choices: :required,
-      required: :optional,
+      required: :optional
     },
     registration_policy: {
       identifier: :required,
-      required: :optional,
+      required: :optional
     },
     static_text: {
       content: :required,
-      style: :required,
+      style: :required
     },
     timeblock_preference: {
       identifier: :required,
       caption: :required,
       timeblocks: :required,
       omit_timeblocks: :optional,
-      required: :optional,
+      required: :optional
     },
     timespan: {
       identifier: :required,
       caption: :required,
-      required: :optional,
+      required: :optional
     }
   }.deep_stringify_keys
 

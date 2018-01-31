@@ -1,5 +1,5 @@
 Types::TeamMemberType = GraphQL::ObjectType.define do
-  name "TeamMember"
+  name 'TeamMember'
 
   field :id, !types.Int
   field :display, !types.Boolean

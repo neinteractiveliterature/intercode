@@ -3,7 +3,7 @@ class TeamMembersController < ApplicationController
   load_and_authorize_resource through: :event
 
   def index
-    @team_members = @team_members.joins(:user).includes(:user).order("users.last_name", "users.first_name")
+    @team_members = @team_members.joins(:user).includes(:user).order('users.last_name', 'users.first_name')
   end
 
   def new

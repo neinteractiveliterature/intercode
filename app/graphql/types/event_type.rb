@@ -1,5 +1,5 @@
 Types::EventType = GraphQL::ObjectType.define do
-  name "Event"
+  name 'Event'
 
   field :id, !types.Int
   field :title, types.String

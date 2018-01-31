@@ -11,8 +11,8 @@ class AdminSignupsController < ApplicationController
     respond_to do |format|
       format.html {}
       format.csv do
-        filename = [@event.title, @run.title_suffix.presence, "Signups"].compact.join(" - ")
-        filename << ".csv"
+        filename = [@event.title, @run.title_suffix.presence, 'Signups'].compact.join(' - ')
+        filename << '.csv'
 
         send_data @signups_grid.to_csv, filename: filename
       end

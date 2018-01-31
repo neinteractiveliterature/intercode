@@ -1,10 +1,6 @@
 def process_scheduled_value_input(input_data)
   timespans_data = input_data[:timespans].map do |timespan|
-    value = if timespan[:string_value]
-      timespan[:string_value]
-    else
-      nil
-    end
+    value = (timespan[:string_value] if timespan[:string_value])
 
     {
       start: timespan[:start],
@@ -19,7 +15,7 @@ def process_scheduled_value_input(input_data)
 end
 
 Mutations::UpdateConvention = GraphQL::Relay::Mutation.define do
-  name "UpdateConvention"
+  name 'UpdateConvention'
   return_field :convention, Types::ConventionType
 
   input_field :id, types.Int

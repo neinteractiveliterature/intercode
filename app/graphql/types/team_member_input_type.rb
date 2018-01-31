@@ -1,5 +1,5 @@
 Types::TeamMemberInputType = GraphQL::InputObjectType.define do
-  name "TeamMemberInput"
+  name 'TeamMemberInput'
 
   input_field :display, types.Boolean
   input_field :show_email, types.Boolean

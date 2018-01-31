@@ -1,5 +1,5 @@
 Mutations::DeleteTeamMember = GraphQL::Relay::Mutation.define do
-  name "DeleteTeamMember"
+  name 'DeleteTeamMember'
   return_field :team_member, Types::TeamMemberType
 
   input_field :id, !types.Int

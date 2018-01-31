@@ -8,7 +8,7 @@ class RegistrationPolicy
   validate :validate_anything_bucket, :validate_key_uniqueness
 
   def self.unlimited
-    new(buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_unlimited: true)])
+    new(buckets: [RegistrationPolicy::Bucket.new(key: 'unlimited', slots_unlimited: true)])
   end
 
   attr_reader :buckets
@@ -23,7 +23,7 @@ class RegistrationPolicy
     buckets_by_key[key]
   end
 
-  %i(total_slots minimum_slots preferred_slots).each do |method|
+  %i[total_slots minimum_slots preferred_slots].each do |method|
     define_method method do
       buckets.map(&method).sum
     end
@@ -63,7 +63,7 @@ class RegistrationPolicy
       end
     end
   end
-  alias_method :assign_attributes, :attributes=
+  alias assign_attributes attributes=
 
   def buckets_by_key
     @buckets_by_key ||= buckets.index_by(&:key)
@@ -77,15 +77,9 @@ class RegistrationPolicy
 
   def validate_anything_bucket
     anything_buckets = buckets.select(&:anything?)
-    return unless anything_buckets.any?
 
-    if anything_buckets.size > 1
-      errors.add(:buckets, "can contain at most 1 flex bucket, but there are #{anything_buckets.size}")
-    end
-
-    unless buckets.last == anything_buckets.last
-      errors.add(:buckets, "must have the flex bucket last in the priority list")
-    end
+    return unless anything_buckets.size > 1
+    errors.add(:buckets, "can contain at most 1 flex bucket, but there are #{anything_buckets.size}")
   end
 
   def validate_key_uniqueness

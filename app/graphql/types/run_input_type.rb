@@ -1,5 +1,5 @@
 Types::RunInputType = GraphQL::InputObjectType.define do
-  name "RunInput"
+  name 'RunInput'
 
   input_field :starts_at, Types::DateType
   input_field :title_suffix, types.String
