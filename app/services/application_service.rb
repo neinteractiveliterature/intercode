@@ -14,7 +14,8 @@ class ApplicationService
   attr_reader :skip_locking
 
   class << self
-    attr_accessor :result_class, :validate_manually
+    attr_accessor :validate_manually
+    attr_writer :result_class
 
     def result_class
       @result_class || ServiceResult

@@ -20,6 +20,7 @@ class Ticket < ApplicationRecord
   end
 
   private
+
   def ticket_type_must_be_valid_for_convention
     return unless ticket_type
 

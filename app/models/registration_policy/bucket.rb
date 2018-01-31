@@ -2,7 +2,8 @@ class RegistrationPolicy::Bucket
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  attr_accessor :key, :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited, :anything
+  attr_reader :key
+  attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited, :anything
   alias_method :slots_limited?, :slots_limited
   alias_method :anything?, :anything
 
@@ -41,7 +42,7 @@ class RegistrationPolicy::Bucket
     [total_slots - signups.size, 0].max
   end
 
-  def errors_for_signup(signup, other_signups)
+  def errors_for_signup(_signup, _other_signups)
     []
   end
 

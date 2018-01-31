@@ -31,6 +31,7 @@ class EventProposal < ApplicationRecord
   end
 
   private
+
   def length_fits_in_convention
     return unless length_seconds
     if length_seconds > convention.length_seconds

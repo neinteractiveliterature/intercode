@@ -1,5 +1,5 @@
 class EventListPresenter
-  class UnknownSortError < StandardError ; end
+  class UnknownSortError < StandardError; end
 
   attr_reader :convention, :sort
 

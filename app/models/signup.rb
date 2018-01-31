@@ -42,6 +42,7 @@ class Signup < ApplicationRecord
   end
 
   private
+
   #
   # def must_be_counted_if_and_only_if_not_team_member
   #   if team_member?

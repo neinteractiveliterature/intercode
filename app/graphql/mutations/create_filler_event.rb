@@ -13,9 +13,11 @@ Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
       )
     )
 
-    event.runs.new(args[:run].to_h.merge(
-      updated_by: ctx[:user_con_profile].user
-    ))
+    event.runs.new(
+      args[:run].to_h.merge(
+        updated_by: ctx[:user_con_profile].user
+      )
+    )
 
     event.save!
 

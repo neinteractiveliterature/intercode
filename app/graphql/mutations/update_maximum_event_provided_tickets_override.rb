@@ -5,7 +5,7 @@ Mutations::UpdateMaximumEventProvidedTicketsOverride = GraphQL::Relay::Mutation.
   input_field :id, !types.Int
   input_field :override_value, !types.Int
 
-  resolve ->(_obj, args, ctx) {
+  resolve ->(_obj, args, _ctx) {
     override = MaximumEventProvidedTicketsOverride.find(args[:id])
     override.update!(override_value: args[:override_value])
 

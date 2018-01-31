@@ -45,7 +45,7 @@ class Ability
         privilege_tuples_by_user_id.transform_values do |privilege_tuples|
           privilege_tuples
             .group_by { |(_, _, privilege)| privilege }
-            .transform_values { |privilege_tuples| privilege_tuples.map { |(_, convention_id, _)| convention_id } }
+            .transform_values { |rows| rows.map { |(_, convention_id, _)| convention_id } }
         end
       end
     end

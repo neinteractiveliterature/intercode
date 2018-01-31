@@ -31,6 +31,7 @@ class AdminTicketsController < ApplicationController
   end
 
   private
+
   def check_existing_ticket
     redirect_to edit_user_con_profile_admin_ticket_path(@ticket_user_con_profile) if @ticket_user_con_profile.ticket
   end

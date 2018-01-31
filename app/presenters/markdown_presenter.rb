@@ -44,6 +44,7 @@ class MarkdownPresenter
   end
 
   private
+
   def sanitize_html(html, sanitize_content: true)
     if sanitize_content
       sanitize(

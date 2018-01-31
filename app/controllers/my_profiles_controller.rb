@@ -11,7 +11,7 @@ class MyProfilesController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html { }
+      format.html {}
       format.json do
         no_cache
         send_form_response(convention.user_con_profile_form, @user_con_profile)
@@ -40,6 +40,7 @@ class MyProfilesController < ApplicationController
   end
 
   private
+
   def ensure_user_con_profile
     unless user_con_profile
       if user_signed_in?

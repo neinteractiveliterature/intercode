@@ -3,6 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :disable_destroy, only: [:destroy]
 
   private
+
   def check_captcha
     unless verify_recaptcha
       self.resource = resource_class.new sign_up_params

@@ -71,9 +71,9 @@ class MailingListsController < ApplicationController
   def waitlists
     authorize! :mail_to_attendees, convention
 
-    @runs = convention.runs.
-      where(id: convention.signups.waitlisted.select(:run_id)
-    ).includes(signups: :user_con_profile).order(:starts_at)
+    @runs = convention.runs
+      .where(id: convention.signups.waitlisted.select(:run_id))
+      .includes(signups: :user_con_profile).order(:starts_at)
 
     @emails_by_run = @runs.map do |run|
       emails = run.signups.waitlisted.map do |signup|
@@ -95,8 +95,8 @@ class MailingListsController < ApplicationController
       busy_user_con_profile_ids = Set.new(signups_during_timespan.map(&:user_con_profile_id))
 
       ticketed_user_con_profiles = convention.user_con_profiles.includes(:user).where(receive_whos_free_emails: true).joins(:ticket)
-      free_user_con_profiles = ticketed_user_con_profiles.
-        reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
+      free_user_con_profiles = ticketed_user_con_profiles
+        .reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
 
       @emails = free_user_con_profiles.map do |user_con_profile|
         ContactEmail.new(user_con_profile.email, user_con_profile.name_without_nickname)

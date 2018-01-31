@@ -19,11 +19,11 @@ class UserConProfilesGrid
       if ticket_type_id == 'none'
         where("user_con_profiles.id NOT IN (?)", Ticket.select(:user_con_profile_id))
       else
-        joins(:ticket).where(tickets: {ticket_type_id: ticket_type_id})
+        joins(:ticket).where(tickets: { ticket_type_id: ticket_type_id })
       end
     end
 
-    where(clauses.map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})"}.join(" OR "))
+    where(clauses.map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})" }.join(" OR "))
   end
 
   filter(:payment_amount, :integer) do |value|
@@ -73,13 +73,12 @@ class UserConProfilesGrid
 
   column_names_filter(header: 'Columns', checkboxes: true, default: [:email, :ticket, :privileges])
 
-
   def self.human_attribute_name(attr)
     attr.to_s.humanize
   end
 
   # work around bootstrap_form_for's expectation that this be model-like
-  def self.validators_on(*attributes)
+  def self.validators_on(*_attributes)
     []
   end
 

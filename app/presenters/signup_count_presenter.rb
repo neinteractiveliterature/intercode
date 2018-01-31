@@ -94,7 +94,7 @@ class SignupCountPresenter
       states_hash[state] = buckets.each_with_object({}) do |bucket, buckets_hash|
         buckets_hash[bucket.key] = []
       end
-      states_hash[state][nil] = []  # Some signups are not in any bucket
+      states_hash[state][nil] = [] # Some signups are not in any bucket
     end
   end
 

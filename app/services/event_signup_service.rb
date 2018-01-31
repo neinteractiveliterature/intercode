@@ -4,7 +4,7 @@ class EventSignupService < ApplicationService
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :prioritized_buckets, :max_signups_allowed, :whodunit
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit
   delegate :event, to: :run
   delegate :convention, to: :event
 
