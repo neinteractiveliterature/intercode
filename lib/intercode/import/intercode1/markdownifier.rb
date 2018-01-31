@@ -19,7 +19,7 @@ class Intercode::Import::Intercode1::Markdownifier
     end
 
     parsed_html.css('object > param[name=movie][value*=youtube]').each do |movie_param|
-      m = /www\.youtube\.com\/v\/([A-Za-z0-9_-]+)/.match(movie_param['value'])
+      m = %r{www\.youtube\.com\/v\/([A-Za-z0-9_-]+)}.match(movie_param['value'])
       movie_param.parent.add_previous_sibling("{% youtube #{m[1]} %}")
       movie_param.parent.remove
     end
