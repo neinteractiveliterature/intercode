@@ -16,7 +16,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       friday_date.day,
       0,
       0,
-      0,
+      0
     )
 
     unless friday_start.friday?
@@ -58,6 +58,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
   end
 
   private
+
   def build_record(row)
     Convention.new(
       name: @con_name,

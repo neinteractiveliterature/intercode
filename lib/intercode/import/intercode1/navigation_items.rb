@@ -13,7 +13,7 @@ class Intercode::Import::Intercode1::NavigationItems
         { type: :link, title: 'Volunteering', page_name: 'volunteering' },
         { type: :link, title: 'ConCom Schedule', page_name: 'ConCom Schedule' },
         { type: :link, title: 'Intercon Flyer', page_name: 'Flyer' },
-        { type: :link, title: 'Intercon Program', page_name: 'Program' },
+        { type: :link, title: 'Intercon Program', page_name: 'Program' }
       ]
     }
   ]
@@ -25,7 +25,7 @@ class Intercode::Import::Intercode1::NavigationItems
   end
 
   def import!
-    logger.info "Importing navigation items"
+    logger.info 'Importing navigation items'
 
     NAVIGATION_STRUCTURE.each do |item|
       import_navigation_item(item)

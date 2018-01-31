@@ -5,6 +5,7 @@ class Intercode::Import::Intercode1::Tables::Rooms < Intercode::Import::Intercod
   end
 
   private
+
   def build_record(row)
     @con.rooms.new(name: row[:RoomName])
   end

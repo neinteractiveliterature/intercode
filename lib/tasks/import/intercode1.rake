@@ -1,6 +1,6 @@
 namespace :import do
-  desc "Import an Intercode 1 database as an event"
-  task :intercode1 => :environment do
+  desc 'Import an Intercode 1 database as an event'
+  task intercode1: :environment do
     def fetch_env_param(name)
       value = ENV[name]
 

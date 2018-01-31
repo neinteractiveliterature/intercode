@@ -5,22 +5,22 @@ module Intercode
         attr_reader :button_text, :button_class
 
         def initialize(tag_name, args, _options)
-           super
+          super
 
-           if args && args =~ /\"([^\"]+)\"(\s+(\w.*))?/
-             @button_text = $1
-             @button_class = $3
-           end
+          if args && args =~ /\"([^\"]+)\"(\s+(\w.*))?/
+            @button_text = Regexp.last_match(1)
+            @button_class = Regexp.last_match(3)
+          end
         end
 
         def partial(_context)
-          "event_proposals/new_event_proposal_button"
+          'event_proposals/new_event_proposal_button'
         end
 
         def locals(_context)
           {
             button_text: button_text,
-            button_class: button_class,
+            button_class: button_class
           }
         end
       end

@@ -18,7 +18,7 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
     GameEMail: { form_field: 'email' },
     Hours: {
       form_field: 'length_seconds',
-      convert: -> (value) { value * 1.hour },
+      convert: -> (value) { value * 1.hour }
     },
     Description: {
       form_field: 'description',
@@ -84,6 +84,7 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
   end
 
   private
+
   def build_record(row)
     record = @convention.event_proposals.new(
       owner: @user_con_profile_id_map[row[:UserId]],
@@ -101,7 +102,7 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
   def form_response_attributes(row)
     attrs = BID_ATTRIBUTES.each_with_object({}) do |(bid_attr, options), form_response_attributes|
       form_field = options[:form_field]
-      next unless row.has_key?(bid_attr)
+      next unless row.key?(bid_attr)
 
       value = process_value(row[bid_attr], options)
       form_response_attributes[form_field] = value

@@ -15,6 +15,7 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
   end
 
   private
+
   def build_record(row)
     event = @event_id_map[row[:EventId]]
     return unless event

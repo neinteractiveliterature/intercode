@@ -1,6 +1,6 @@
 class Intercode::Import::Intercode1::RegistrationPolicyFactory
   def registration_policy(row)
-    buckets = %w(Male Female Neutral).map { |gender| registration_bucket(row, gender) }
+    buckets = %w[Male Female Neutral].map { |gender| registration_bucket(row, gender) }
 
     if buckets[0].total_slots == 0 && buckets[1].total_slots == 0
       # It's ok to drop both the gendered buckets if there are only neutral slots

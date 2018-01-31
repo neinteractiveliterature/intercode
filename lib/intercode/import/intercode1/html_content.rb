@@ -8,7 +8,7 @@ class Intercode::Import::Intercode1::HtmlContent
   end
 
   def import!
-    logger.info "Importing HTML content"
+    logger.info 'Importing HTML content'
 
     html_paths.each do |html_path|
       logger.info "Importing #{html_path}"
@@ -67,7 +67,7 @@ PHP
   end
 
   def intercon_db_inc_path
-    @intercon_db_inc_path ||= File.expand_path("intercon_db.inc", source_path)
+    @intercon_db_inc_path ||= File.expand_path('intercon_db.inc', source_path)
   end
 
   def source_path

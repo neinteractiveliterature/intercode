@@ -1,8 +1,8 @@
 class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Intercode1::Table
   STATE_MAP = {
-    "Confirmed" => 'confirmed',
-    "Waitlisted" => 'waitlisted',
-    "Withdrawn" => 'withdrawn'
+    'Confirmed' => 'confirmed',
+    'Waitlisted' => 'waitlisted',
+    'Withdrawn' => 'withdrawn'
   }
 
   def initialize(connection, con, run_id_map, user_id_map, user_con_profile_id_map)
@@ -18,6 +18,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   end
 
   private
+
   def build_record(row)
     run = @run_id_map[row[:RunId]]
     return unless run

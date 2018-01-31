@@ -16,9 +16,7 @@ class Intercode::Import::Intercode1::HtmlConverter
     doc.css('a[href]').each do |link|
       if link['href'] =~ /\.pdf\z/
         cms_file = upload_url(link['href'])
-        if cms_file
-          link['href'] = "__CMS_FILE_URL_#{cms_file.file.filename}"
-        end
+        link['href'] = "__CMS_FILE_URL_#{cms_file.file.filename}" if cms_file
       else
         link['href'] = intercode2_path_for_link(link['href'])
       end
@@ -32,9 +30,7 @@ class Intercode::Import::Intercode1::HtmlConverter
     # Find and upload images
     doc.css('img').each do |img|
       cms_file = upload_url(img['src'])
-      if cms_file
-        img['src'] = "__CMS_FILE_URL_#{cms_file.file.filename}"
-      end
+      img['src'] = "__CMS_FILE_URL_#{cms_file.file.filename}" if cms_file
     end
 
     # Add spacing classes to emulate old header behavior
@@ -61,16 +57,14 @@ class Intercode::Import::Intercode1::HtmlConverter
     when /\A\\\"(.*)\\\"\z/
       # Some URLs are improperly escaped/quoted in the Intercode 1 content set.  Let's go above and beyond the
       # call of duty and fix them.
-      intercode2_path_for_link($1)
+      intercode2_path_for_link(Regexp.last_match(1))
     when /ConComSchedule\.php/
-      "__PAGE_URL_con_com_schedule"
+      '__PAGE_URL_con_com_schedule'
     when /[Ss]tatic\.php\?page=(\w+)/
-      "__PAGE_URL_#{Cadmus::Slugs.slugify($1)}"
+      "__PAGE_URL_#{Cadmus::Slugs.slugify(Regexp.last_match(1))}"
     else
       parsed_url = URI.parse(url)
-      if parsed_url.scheme.blank? && parsed_url.path.present?
-        logger.warn("Unknown URL: #{url}")
-      end
+      logger.warn("Unknown URL: #{url}") if parsed_url.scheme.blank? && parsed_url.path.present?
       url
     end
   end
