@@ -20,9 +20,14 @@ describe('EventForm', () => {
       description: '',
       participant_communications: '',
       can_play_concurrently: false,
+      maximum_event_provided_tickets_overrides: [],
     },
     onSave: () => {},
     onDrop: () => {},
+    ticketTypes: [],
+    createMaximumEventProvidedTicketsOverride: () => {},
+    deleteMaximumEventProvidedTicketsOverride: () => {},
+    updateMaximumEventProvidedTicketsOverride: () => {},
   };
 
   const buildEventForm = props => ((

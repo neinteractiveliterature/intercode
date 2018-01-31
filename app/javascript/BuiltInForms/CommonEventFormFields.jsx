@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
+import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 import RegistrationPolicyEditor from '../BuiltInFormControls/RegistrationPolicyEditor';
 import TimespanItem from '../FormPresenter/components/TimespanItem';
@@ -42,16 +43,17 @@ class CommonEventFormFields extends React.Component {
 
   static propTypes = {
     event: PropTypes.shape({
+      id: PropTypes.number,
       category: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       author: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
       organization: PropTypes.string.isRequired,
       con_mail_destination: PropTypes.oneOf(['event_email', 'gms']).isRequired,
-      url: PropTypes.string.isRequired,
-      short_blurb: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      participant_communications: PropTypes.string.isRequired,
+      url: PropTypes.string,
+      short_blurb: PropTypes.string,
+      description: PropTypes.string,
+      participant_communications: PropTypes.string,
       length_seconds: PropTypes.number,
       registration_policy: PropTypes.shape({
         buckets: PropTypes.arrayOf(PropTypes.shape({
@@ -59,8 +61,22 @@ class CommonEventFormFields extends React.Component {
         }).isRequired).isRequired,
       }),
       can_play_concurrently: PropTypes.bool.isRequired,
+      maximum_event_provided_tickets_overrides: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     }).isRequired,
+    canOverrideMaximumEventProvidedTickets: PropTypes.bool,
+    ticketTypes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      description: PropTypes.string.isRequired,
+      maximum_event_provided_tickets: PropTypes.number.isRequired,
+    }).isRequired).isRequired,
     onChange: PropTypes.func.isRequired,
+    createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    canOverrideMaximumEventProvidedTickets: false,
   };
 
   constructor(props) {
@@ -216,7 +232,7 @@ class CommonEventFormFields extends React.Component {
     <BootstrapFormTextarea
       name="participant_communications"
       label="Participant communications"
-      value={this.props.event.participant_communications}
+      value={this.props.event.participant_communications || ''}
       onChange={this.formInputDidChange}
       rows={4}
     />
@@ -226,10 +242,27 @@ class CommonEventFormFields extends React.Component {
     <BootstrapFormInput
       name={name}
       label={label}
-      value={this.props.event[name]}
+      value={this.props.event[name] || ''}
       onChange={this.formInputDidChange}
     />
   ))
+
+  renderMaximumEventProvidedTicketsOverrideEditor = () => {
+    if (!this.props.canOverrideMaximumEventProvidedTickets) {
+      return null;
+    }
+
+    return (
+      <MaximumEventProvidedTicketsOverrideEditor
+        eventId={this.props.event.id}
+        ticketTypes={this.props.ticketTypes}
+        overrides={this.props.event.maximum_event_provided_tickets_overrides}
+        createOverride={this.props.createMaximumEventProvidedTicketsOverride}
+        deleteOverride={this.props.deleteMaximumEventProvidedTicketsOverride}
+        updateOverride={this.props.updateMaximumEventProvidedTicketsOverride}
+      />
+    );
+  }
 
   render = () => (
     <div>
@@ -259,18 +292,19 @@ class CommonEventFormFields extends React.Component {
       <BootstrapFormTextarea
         name="short_blurb"
         label="Short blurb"
-        value={this.props.event.short_blurb}
+        value={this.props.event.short_blurb || ''}
         onChange={this.formInputDidChange}
         rows={4}
       />
       <BootstrapFormTextarea
         name="description"
         label="Description"
-        value={this.props.event.description}
+        value={this.props.event.description || ''}
         onChange={this.formInputDidChange}
         rows={10}
       />
       {this.renderParticipantCommunicationsField()}
+      {this.renderMaximumEventProvidedTicketsOverrideEditor()}
     </div>
   )
 }

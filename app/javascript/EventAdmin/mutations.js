@@ -118,3 +118,39 @@ mutation($input: DeleteRunInput!) {
 
 ${fragments.run}
 `;
+
+export const createMaximumEventProvidedTicketsOverrideMutation = gql`
+mutation($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
+  createMaximumEventProvidedTicketsOverride(input: $input) {
+    maximum_event_provided_tickets_override {
+      ...MaximumEventProvidedTicketsOverrideFields
+    }
+  }
+}
+
+${fragments.maximumEventProvidedTicketsOverride}
+`;
+
+export const deleteMaximumEventProvidedTicketsOverrideMutation = gql`
+mutation($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
+  deleteMaximumEventProvidedTicketsOverride(input: $input) {
+    maximum_event_provided_tickets_override {
+      ...MaximumEventProvidedTicketsOverrideFields
+    }
+  }
+}
+
+${fragments.maximumEventProvidedTicketsOverride}
+`;
+
+export const updateMaximumEventProvidedTicketsOverrideMutation = gql`
+mutation($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
+  updateMaximumEventProvidedTicketsOverride(input: $input) {
+    maximum_event_provided_tickets_override {
+      ...MaximumEventProvidedTicketsOverrideFields
+    }
+  }
+}
+
+${fragments.maximumEventProvidedTicketsOverride}
+`;
