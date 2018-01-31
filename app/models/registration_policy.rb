@@ -1,6 +1,6 @@
-# A RegistrationPolicy manages the specific signup requirements for a particular Event.  It consists of one or
-# more "buckets", each of which can accept signups.  Buckets can restrict signups based on particular filters
-# (e.g. age, gender, payment status) and can limit signups to a particular number if they choose to.
+# A RegistrationPolicy manages the specific signup requirements for a particular Event.  It consists
+# of one or more "buckets", each of which can accept signups.  Buckets can limit signups to a
+# particular number if they choose to.
 class RegistrationPolicy
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
@@ -79,7 +79,10 @@ class RegistrationPolicy
     anything_buckets = buckets.select(&:anything?)
 
     return unless anything_buckets.size > 1
-    errors.add(:buckets, "can contain at most 1 flex bucket, but there are #{anything_buckets.size}")
+    errors.add(
+      :buckets,
+      "can contain at most 1 flex bucket, but there are #{anything_buckets.size}"
+    )
   end
 
   def validate_key_uniqueness

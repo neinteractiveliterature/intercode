@@ -18,7 +18,12 @@ class GraphqlController < ApplicationController
       user_con_profile: user_con_profile,
       convention: convention
     }
-    IntercodeSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    IntercodeSchema.execute(
+      query,
+      variables: variables,
+      context: context,
+      operation_name: operation_name
+    )
   end
 
   # Handle form data, JSON body, or a blank value

@@ -6,7 +6,9 @@ class SignupSpyGrid
     signup.user_con_profile.name_inverted
   end
   column(:event, order: 'events.title, runs.id') do |signup|
-    "#{signup.event.title}#{signup.run.title_suffix.present? ? " (#{signup.run.title_suffix})" : ''}, #{signup.run.starts_at.strftime('%A %l:%M%P')}"
+    event_title_with_suffix = signup.event.title.dup
+    event_title_with_suffix << " (#{signup.run.title_suffix})" if signup.run.title_suffix.present?
+    "#{event_title_with_suffix}, #{signup.run.starts_at.strftime('%A %l:%M%P')}"
   end
   column(:state)
   column(:timestamp, order: 'signups.created_at desc') do |signup|

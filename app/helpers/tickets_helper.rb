@@ -1,8 +1,13 @@
 module TicketsHelper
   def stripe_include_tag
-    javascript_include_tag('https://js.stripe.com/v2/') + content_tag('script', type: 'application/javascript') do
-      "Stripe.setPublishableKey(#{Rails.configuration.stripe[:publishable_key].to_json});".html_safe
-    end
+    publishable_key = Rails.configuration.stripe[:publishable_key]
+
+    (
+      javascript_include_tag('https://js.stripe.com/v2/') +
+      content_tag('script', type: 'application/javascript') do
+        "Stripe.setPublishableKey(#{publishable_key.to_json});".html_safe
+      end
+    )
   end
 
   def ticket_purchase_form(ticket)

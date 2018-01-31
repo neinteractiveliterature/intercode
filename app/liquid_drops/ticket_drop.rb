@@ -9,7 +9,8 @@ class TicketDrop < Liquid::Drop
 
   private
 
-  # We want to delegate name and description to the ticket type, but not expose the ticket type itself to Liquid templates
+  # We want to delegate name and description to the ticket type, but not expose the ticket type
+  # itself to Liquid templates
   def ticket_type
     ticket.ticket_type
   end

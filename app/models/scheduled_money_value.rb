@@ -14,11 +14,19 @@ class ScheduledMoneyValue < ScheduledValue::ScheduledValue
 
     def serializable_hash(options = {})
       return nil unless value
-      super((options || {}).merge(except: :value)).merge(value: { fractional: value.fractional, currency_code: value.currency.iso_code })
+      super(
+        (options || {}).merge(except: :value)
+      ).merge(
+        value: { fractional: value.fractional, currency_code: value.currency.iso_code }
+      )
     end
 
     def to_s(format = nil, timezone = nil)
-      "#{value.format} #{start_description(format, timezone)} #{finish_description(format, timezone)}"
+      [
+        value.format,
+        start_description(format, timezone),
+        finish_description(format, timezone)
+      ].join(' ')
     end
   end
 

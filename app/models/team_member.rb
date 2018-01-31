@@ -30,6 +30,8 @@ class TeamMember < ApplicationRecord
     return unless event && user_con_profile
     return if event.convention == user_con_profile.convention
 
-    errors.add(:base, "User con profile and event must belong to the same convention!  User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and event #{event.name} is from #{event.convention.name}.")
+    errors.add(:base, "User con profile and event must belong to the same convention!  \
+User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and \
+event #{event.name} is from #{event.convention.name}.")
   end
 end

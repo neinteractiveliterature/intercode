@@ -27,4 +27,7 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag('new_event_proposal_button', Intercode::Liquid::Tags::NewEventProposalButton)
+Liquid::Template.register_tag(
+  'new_event_proposal_button',
+  Intercode::Liquid::Tags::NewEventProposalButton
+)

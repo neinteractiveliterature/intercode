@@ -11,7 +11,10 @@ class Intercode::Import::Intercode1::UserConProfileForm
   def import!
     logger.info 'Importing user con profile form'
 
-    form = convention.create_user_con_profile_form!(title: 'User con profile form', convention: convention)
+    form = convention.create_user_con_profile_form!(
+      title: 'User con profile form',
+      convention: convention
+    )
     convention.save!
 
     form_importer.import(form)

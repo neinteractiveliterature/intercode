@@ -13,7 +13,8 @@ class Intercode::Import::Intercode1::EmbeddedPdfPage
   def import!
     file_path = File.expand_path(pdf_filename, content_path)
     unless File.exist?(file_path)
-      logger.warn("Not creating embedded PDF page #{page_name} for #{pdf_filename} because the file does not exist")
+      logger.warn("Not creating embedded PDF page #{page_name} for #{pdf_filename} \
+because the file does not exist")
       return
     end
 

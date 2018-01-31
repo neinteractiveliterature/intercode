@@ -3,7 +3,8 @@ class RegistrationPolicy::Bucket
   include ActiveModel::Serializers::JSON
 
   attr_reader :key
-  attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited, :anything
+  attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots,
+    :slots_limited, :anything
   alias slots_limited? slots_limited
   alias anything? anything
 

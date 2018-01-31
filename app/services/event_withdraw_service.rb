@@ -28,7 +28,11 @@ class EventWithdrawService < ApplicationService
       signup.update!(state: 'withdrawn', updated_by: whodunit)
 
       move_results = if signup.counted? && prev_state == 'confirmed'
-        vacancy_fill_result = EventVacancyFillService.new(run, prev_bucket_key, skip_locking: true).call
+        vacancy_fill_result = EventVacancyFillService.new(
+          run,
+          prev_bucket_key,
+          skip_locking: true
+        ).call
         return failure(vacancy_fill_result.error) if vacancy_fill_result.failure?
         vacancy_fill_result.move_results
       else
@@ -42,7 +46,13 @@ class EventWithdrawService < ApplicationService
 
   def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
     event.team_members.where(receive_signup_email: true).find_each do |team_member|
-      EventSignupMailer.withdrawal(signup, prev_state, prev_bucket_key, move_results.map(&:to_h), team_member).deliver_later
+      EventSignupMailer.withdrawal(
+        signup,
+        prev_state,
+        prev_bucket_key,
+        move_results.map(&:to_h),
+        team_member
+      ).deliver_later
     end
   end
 end

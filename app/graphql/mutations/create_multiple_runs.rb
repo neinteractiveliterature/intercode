@@ -5,7 +5,9 @@ Mutations::CreateMultipleRuns = GraphQL::Relay::Mutation.define do
   input_field :runs, !types[!Types::RunInputType]
 
   resolve ->(_obj, args, ctx) {
-    events_by_id = ctx[:convention].events.find(args[:runs].map { |run| run[:event_id] }).index_by(&:id)
+    events_by_id = ctx[:convention].events
+      .find(args[:runs].map { |run| run[:event_id] })
+      .index_by(&:id)
 
     runs = args[:runs].map do |run|
       event = events_by_id[run[:event_id]]

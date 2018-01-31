@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   include Cadmus::Renderable
   helper_method :cadmus_renderer
 
-  # Turn on Rails' built-in CSRF protection (see http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
+  # Turn on Rails' built-in CSRF protection (see
+  # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   protect_from_forgery with: :exception
 
   # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
@@ -107,7 +108,8 @@ class ApplicationController < ActionController::Base
     return unless convention && user_signed_in?
     return if user_con_profile
 
-    redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed into this convention before, so please take a moment to update your profile."
+    redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
+into this convention before, so please take a moment to update your profile."
   end
 
   def no_cache

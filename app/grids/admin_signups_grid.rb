@@ -34,6 +34,8 @@ class AdminSignupsGrid
   end
 
   def bucket_names_and_keys
-    @bucket_names_and_keys ||= registration_policy.buckets.map { |bucket| [bucket.name, bucket.key] }
+    @bucket_names_and_keys ||= registration_policy.buckets.map do |bucket|
+      [bucket.name, bucket.key]
+    end
   end
 end

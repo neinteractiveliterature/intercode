@@ -38,17 +38,17 @@ class PagesController < ApplicationController
 
   protected
 
-  # Set the @page variable if we're looking for the root page.  We expect a root page to exist on the
-  # Convention.  If not, it's an error (which will become a 404).
+  # Set the @page variable if we're looking for the root page.  We expect a root page to exist on
+  # the Convention.  If not, it's an error (which will become a 404).
   def find_root_page
     @page = page_parent.root_page
     raise ActiveRecord::RecordNotFound unless @page
   end
 
-  # Cadmus requires this too.  This method is supposed to return the parent object to look for pages in,
-  # for this particular HTTP request.  We can simply use the convention method defined by this controller's
-  # parent class (ApplicationController) to look up the appropriate Convention object using the
-  # domain name for this HTTP request.
+  # Cadmus requires this too.  This method is supposed to return the parent object to look for pages
+  # in, for this particular HTTP request.  We can simply use the convention method defined by this
+  # controller's parent class (ApplicationController) to look up the appropriate Convention object
+  # using the domain name for this HTTP request.
   def page_parent
     convention
   end

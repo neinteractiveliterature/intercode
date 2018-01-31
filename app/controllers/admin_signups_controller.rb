@@ -4,7 +4,8 @@ class AdminSignupsController < ApplicationController
   load_and_authorize_resource class: Signup
 
   def index
-    @signups_grid = AdminSignupsGrid.new(params.to_unsafe_hash[:admin_signups_grid] || { order: 'id' }) do |scope|
+    grid_params = params.to_unsafe_hash[:admin_signups_grid] || { order: 'id' }
+    @signups_grid = AdminSignupsGrid.new(grid_params) do |scope|
       scope.where(run_id: @run.id)
     end
 

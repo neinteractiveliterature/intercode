@@ -25,13 +25,13 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
 
     # Ugh.  Unfortunately, Intercode 1 makes it possible to have the same user as a GM twice.
     # Intercode 2 doesn't allow it, so if it happens, merge the two records' flags.
-    event.team_members.find_or_initialize_by(user_con_profile_id: user_con_profile.id).tap do |team_member|
-      BOOL_FIELD_MAP.each do |team_member_field, row_field|
-        team_member[team_member_field] ||= row[row_field]
-      end
-
-      team_member.updated_by = @user_id_map[row[:UpdatedById]]
+    team_member = event.team_members.find_or_initialize_by(user_con_profile_id: user_con_profile.id)
+    BOOL_FIELD_MAP.each do |team_member_field, row_field|
+      team_member[team_member_field] ||= row[row_field]
     end
+
+    team_member.updated_by = @user_id_map[row[:UpdatedById]]
+    team_member
   end
 
   def row_id(row)

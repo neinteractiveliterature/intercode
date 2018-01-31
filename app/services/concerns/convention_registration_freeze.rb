@@ -6,6 +6,7 @@ module Concerns::ConventionRegistrationFreeze
   end
 
   def registrations_must_not_be_frozen
-    errors.add :base, "Registrations for #{convention.name} are frozen." if convention.registrations_frozen?
+    return unless convention.registrations_frozen?
+    errors.add :base, "Registrations for #{convention.name} are frozen."
   end
 end

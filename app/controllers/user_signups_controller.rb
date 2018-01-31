@@ -7,7 +7,12 @@ class UserSignupsController < ApplicationController
   skip_authorization_check
 
   def create
-    result = EventSignupService.new(user_con_profile, @run, params[:requested_bucket_key], current_user).call
+    result = EventSignupService.new(
+      user_con_profile,
+      @run,
+      params[:requested_bucket_key],
+      current_user
+    ).call
 
     if result.failure?
       flash.alert = result.errors.full_messages.join("\n")
@@ -21,7 +26,9 @@ class UserSignupsController < ApplicationController
   end
 
   def destroy
-    signup = @run.signups.where(user_con_profile_id: user_con_profile.id).where.not(state: 'withdrawn').first
+    signup = @run.signups.where(user_con_profile_id: user_con_profile.id)
+      .where.not(state: 'withdrawn')
+      .first
     redirect_to @event, alert: "You are not signed up for #{@event.title}." unless signup
 
     result = EventWithdrawService.new(signup, current_user).call

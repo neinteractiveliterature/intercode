@@ -63,7 +63,9 @@ module FormResponseHelper
             safe_join([
               content_tag(:strong, "#{preferences.first.ordinality_description}:"),
               ' ',
-              preferences.sort_by(&:start).map { |preference| "#{preference.start.strftime('%a')} #{preference.label}" }.join(', ')
+              preferences.sort_by(&:start).map do |preference|
+                "#{preference.start.strftime('%a')} #{preference.label}"
+              end.join(', ')
             ])
           end
         end

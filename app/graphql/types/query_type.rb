@@ -35,7 +35,9 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:confirmed_signup_count_by_run_id] = signup_scope.confirmed.counted.group(:run_id).count
 
       if args['extendedCounts']
-        ctx[:waitlisted_signup_count_by_run_id] = signup_scope.waitlisted.counted.group(:run_id).count
+        ctx[:waitlisted_signup_count_by_run_id] = signup_scope.waitlisted.counted
+          .group(:run_id)
+          .count
         ctx[:not_counted_signup_count_by_run_id] = signup_scope.not_counted.group(:run_id).count
       end
 

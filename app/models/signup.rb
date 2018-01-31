@@ -55,12 +55,20 @@ class Signup < ApplicationRecord
   def must_be_in_existing_bucket
     return if can_have_invalid_buckets?
 
-    errors.add(:bucket_key, bucket_validity_error_message) if bucket_key && !bucket
-    errors.add(:requested_bucket_key, bucket_validity_error_message) if requested_bucket_key && !requested_bucket
+    errors.add(:bucket_key, bucket_validity_error_message) if invalid_bucket?
+    errors.add(:requested_bucket_key, bucket_validity_error_message) if invalid_requested_bucket?
   end
 
   def can_have_invalid_buckets?
     !counted? || withdrawn?
+  end
+
+  def invalid_bucket?
+    bucket_key && !bucket
+  end
+
+  def invalid_requested_bucket?
+    requested_bucket_key && !requested_bucket
   end
 
   def bucket_validity_error_message

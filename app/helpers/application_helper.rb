@@ -20,7 +20,11 @@ module ApplicationHelper
       url_for_page: ->(page) { page_url(page) },
       root_items: convention&.cms_navigation_items&.root || []
     )
-    render partial: 'layouts/navigation_bar', locals: { renderer: renderer, navbar_classes: navbar_classes }
+
+    render partial: 'layouts/navigation_bar', locals: {
+      renderer: renderer,
+      navbar_classes: navbar_classes
+    }
   end
 
   def page_title
@@ -36,22 +40,6 @@ module ApplicationHelper
     end
 
     parts.join(' - ')
-  end
-
-  def page_banner
-    banner_image_url = @convention && @convention.banner_image.try(:url)
-
-    if banner_image_url
-      image_tag banner_image_url, class: 'page_banner'
-    else
-      content_tag(
-        :div,
-        class: 'page_banner',
-        style: 'background-color: black; color: white; height: 120px; width: 800px; text-align: center;'
-      ) do
-        content_tag(:h1, @con ? @con.name : 'Welcome to Intercode', style: 'display: inline-block;')
-      end
-    end
   end
 
   # Generate an obfuscated email address if the user is not logged in.
@@ -82,7 +70,11 @@ module ApplicationHelper
 
   def nav_link_to(name, url, html_options = nil, &block)
     html_options = html_options.symbolize_keys
-    classes = [html_options[:class], 'nav-link', (html_options.delete(:active) ? 'active' : '')].compact.join(' ')
+    classes = [
+      html_options[:class],
+      'nav-link',
+      (html_options.delete(:active) ? 'active' : '')
+    ].compact.join(' ')
     link_to(name, url, html_options.merge(class: classes), &block)
   end
 
