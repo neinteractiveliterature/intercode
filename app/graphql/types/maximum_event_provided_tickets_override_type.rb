@@ -1,6 +1,8 @@
 Types::MaximumEventProvidedTicketsOverrideType = GraphQL::ObjectType.define do
   name "MaximumEventProvidedTicketsOverride"
 
+  field :id, !types.Int
+
   field :event, !Types::EventType do
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(MaximumEventProvidedTicketsOverride, :event).load(obj)
