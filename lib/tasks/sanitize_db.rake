@@ -47,7 +47,7 @@ class DatabaseSanitizer
 end
 
 desc 'Sanitize the local copy of the database by anonymizing user data'
-task :sanitize_db => :environment do
+task sanitize_db: :environment do
   require 'faker'
 
   email_blacklist = [

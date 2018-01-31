@@ -1,5 +1,5 @@
 class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Intercode1::Table
-  INTERCON_Q_PRECON_PREFIXES = ['DISCUSSION', 'PANEL', 'RANT', 'WORKSHOP', 'PRESENTATION', 'MEETUP']
+  INTERCON_Q_PRECON_PREFIXES = %w[DISCUSSION PANEL RANT WORKSHOP PRESENTATION MEETUP]
 
   def initialize(connection, con)
     super connection
@@ -9,12 +9,13 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def dataset
-    super.left_outer_join(:Bids, :EventId => :EventId).select_all(:Events).
-      select_append(:Status).
-      where(Status: ['Accepted', 'Dropped']).or(SpecialEvent: 1)
+    super.left_outer_join(:Bids, EventId: :EventId).select_all(:Events)
+      .select_append(:Status)
+      .where(Status: %w[Accepted Dropped]).or(SpecialEvent: 1)
   end
 
   private
+
   def build_record(row)
     category = event_category(row)
 
@@ -53,9 +54,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def event_category(row)
-    if row[:IsOps] == 'Y' || row[:IsConSuite] == 'Y'
-      return 'volunteer_event'
-    end
+    return 'volunteer_event' if row[:IsOps] == 'Y' || row[:IsConSuite] == 'Y'
 
     if row[:SpecialEvent] == 1
       intercon_q_precon_event = parse_intercon_q_precon_event(row)
@@ -79,9 +78,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     return unless row[:SpecialEvent] == 1
 
     INTERCON_Q_PRECON_PREFIXES.each do |prefix|
-      if row[:Title] =~ /\A#{prefix}\s*[:-]\s*(.*)\z/
-        return [prefix, $1]
-      end
+      return [prefix, Regexp.last_match(1)] if row[:Title] =~ /\A#{prefix}\s*[:-]\s*(.*)\z/
     end
 
     nil

@@ -10,14 +10,15 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
   end
 
   def dataset
-    super.
-      left_join(:RunsRooms, :RunId => :RunId).
-      select_all(:Runs).
-      select_append(Sequel.lit("GROUP_CONCAT(RunsRooms.RoomId)").as(:RoomIds)).
-      group_by(:RunId)
+    super
+      .left_join(:RunsRooms, RunId: :RunId)
+      .select_all(:Runs)
+      .select_append(Sequel.lit('GROUP_CONCAT(RunsRooms.RoomId)').as(:RoomIds))
+      .group_by(:RunId)
   end
 
   private
+
   def build_record(row)
     event = @event_id_map[row[:EventId]]
     return unless event
@@ -40,7 +41,7 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
   end
 
   def rooms(row)
-    room_ids = (row[:RoomIds] || '').split(",").map(&:to_i)
+    room_ids = (row[:RoomIds] || '').split(',').map(&:to_i)
     room_ids.map { |id| @room_id_map[id] }
   end
 end

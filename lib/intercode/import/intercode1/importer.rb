@@ -97,7 +97,7 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def build_password_hashes
-    Intercode::Import::Intercode1.logger.info "Hashing legacy MD5 passwords with BCrypt"
+    Intercode::Import::Intercode1.logger.info 'Hashing legacy MD5 passwords with BCrypt'
     rows = connection[:Users].select(:UserId, :HashedPassword).to_a
 
     # build users in parallel because password hashing is expensive
@@ -117,10 +117,10 @@ class Intercode::Import::Intercode1::Importer
     Intercode::Import::Intercode1.logger.info("Imported con as ID #{@con.id}")
 
     @con.load_cms_content_set('standard')
-    Intercode::Import::Intercode1.logger.info("Loaded standard CMS content set")
+    Intercode::Import::Intercode1.logger.info('Loaded standard CMS content set')
 
     con_table.update_cms_content(@con)
-    Intercode::Import::Intercode1.logger.info("Updated CMS content with con data")
+    Intercode::Import::Intercode1.logger.info('Updated CMS content with con data')
 
     root_html_content.import!
     text_dir_html_content.import!
@@ -150,7 +150,7 @@ class Intercode::Import::Intercode1::Importer
       con_domain: @con_domain,
       friday_date: @friday_date,
       constants_file: @constants_file,
-      timezone_name: "US/Eastern",
+      timezone_name: 'US/Eastern',
       thursday_enabled: @thursday_enabled,
       maximum_tickets: @maximum_tickets
     )

@@ -1,5 +1,5 @@
 class Intercode::Import::Intercode1::FormImporter
-  DIRECT_PROPERTY_NAMES = %i(item_type identifier admin_description default_value)
+  DIRECT_PROPERTY_NAMES = %i[item_type identifier admin_description default_value]
 
   attr_reader :data
 
