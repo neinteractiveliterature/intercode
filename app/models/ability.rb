@@ -93,7 +93,8 @@ class Ability
   # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
   def initialize(user, associated_records_loader: nil)
     @user = user
-    @associated_records_loader = associated_records_loader || AssociatedRecordsLoader.new([user.id])
+    @associated_records_loader = associated_records_loader
+    @associated_records_loader ||= AssociatedRecordsLoader.new([user&.id].compact)
 
     # Here's what the general public can do...
     can :read, Convention
