@@ -22,8 +22,8 @@ class CmsContentSet
   def template_content(path)
     raw = File.read(path)
     if raw =~ /\A---$(.*)^---$(.*)/m
-      regular_content = $2
-      frontmatter = $1
+      regular_content = Regexp.last_match(2)
+      frontmatter = Regexp.last_match(1)
       [regular_content.strip, YAML.safe_load(frontmatter).deep_symbolize_keys]
     else
       [raw, {}]
@@ -44,7 +44,7 @@ class CmsContentSet
   end
 
   def own_template_paths(subdir)
-    Dir[content_path(subdir, "**", "*.liquid")]
+    Dir[content_path(subdir, '**', '*.liquid')]
   end
 
   def content_path(*parts)

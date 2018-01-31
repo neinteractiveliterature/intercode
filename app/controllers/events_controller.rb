@@ -8,18 +8,18 @@ class EventsController < ApplicationController
     authorize! :schedule, convention if params[:sort] == 'first_scheduled_run'
 
     @events = EventListPresenter.new(convention, sort: params[:sort]).sorted_events
-    @page_title = "Event List"
+    @page_title = 'Event List'
     respond_with @events
   end
 
   def schedule
     authorize! :schedule, convention
-    @page_title = "Event Schedule"
+    @page_title = 'Event Schedule'
   end
 
   def schedule_with_counts
     authorize! :schedule_with_counts, convention
-    @page_title = "Schedule With Counts"
+    @page_title = 'Schedule With Counts'
   end
 
   # Show information about a LARP. The id is specified as part of the URL
@@ -30,7 +30,7 @@ class EventsController < ApplicationController
       Signup.where(
         user_con_profile_id: user_con_profile.id,
         run_id: @runs.map(&:id),
-        state: ['confirmed', 'waitlisted']
+        state: %w[confirmed waitlisted]
       ).to_a.index_by(&:run_id)
     else
       {}

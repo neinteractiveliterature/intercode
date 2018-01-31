@@ -7,7 +7,7 @@ class AdminEventProposalsController < ApplicationController
   def index
     @admin_event_proposals = @admin_event_proposals.where.not(status: 'draft').includes(:owner).sort_by do |event_proposal|
       [
-        ['proposed', 'reviewing'].include?(event_proposal.status) ? 0 : 1,
+        %w[proposed reviewing].include?(event_proposal.status) ? 0 : 1,
         event_proposal.status,
         event_proposal.created_at
       ]

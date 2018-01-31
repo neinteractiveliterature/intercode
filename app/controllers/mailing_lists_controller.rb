@@ -86,21 +86,20 @@ class MailingListsController < ApplicationController
 
   def whos_free
     authorize! :mail_to_attendees, convention
+    return unless params[:start] && params[:finish]
 
-    if params[:start] && params[:finish]
-      timespan = ScheduledValue::Timespan.new(start: DateTime.iso8601(params[:start]), finish: DateTime.iso8601(params[:finish]))
-      signups_during_timespan = convention.signups.where.not(state: 'withdrawn').includes(run: :event).select do |signup|
-        signup.run.timespan.overlaps?(timespan)
-      end
-      busy_user_con_profile_ids = Set.new(signups_during_timespan.map(&:user_con_profile_id))
+    timespan = ScheduledValue::Timespan.new(start: DateTime.iso8601(params[:start]), finish: DateTime.iso8601(params[:finish]))
+    signups_during_timespan = convention.signups.where.not(state: 'withdrawn').includes(run: :event).select do |signup|
+      signup.run.timespan.overlaps?(timespan)
+    end
+    busy_user_con_profile_ids = Set.new(signups_during_timespan.map(&:user_con_profile_id))
 
-      ticketed_user_con_profiles = convention.user_con_profiles.includes(:user).where(receive_whos_free_emails: true).joins(:ticket)
-      free_user_con_profiles = ticketed_user_con_profiles
-        .reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
+    ticketed_user_con_profiles = convention.user_con_profiles.includes(:user).where(receive_whos_free_emails: true).joins(:ticket)
+    free_user_con_profiles = ticketed_user_con_profiles
+      .reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
 
-      @emails = free_user_con_profiles.map do |user_con_profile|
-        ContactEmail.new(user_con_profile.email, user_con_profile.name_without_nickname)
-      end
+    @emails = free_user_con_profiles.map do |user_con_profile|
+      ContactEmail.new(user_con_profile.email, user_con_profile.name_without_nickname)
     end
   end
 end

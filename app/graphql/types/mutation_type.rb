@@ -24,7 +24,7 @@ GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
 }
 
 Types::MutationType = GraphQL::ObjectType.define do
-  name "Mutation"
+  name 'Mutation'
 
   field :updateConvention, Mutations::UpdateConvention.field do
     guard ->(_obj, args, ctx) {

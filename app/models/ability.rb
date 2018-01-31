@@ -63,7 +63,7 @@ class Ability
 
     def signed_up_run_ids_by_user_id
       @signed_up_run_ids_by_user_id ||= Signup.joins(:user_con_profile)
-        .where(user_con_profiles: { user_id: user_ids }, state: %w(confirmed waitlisted))
+        .where(user_con_profiles: { user_id: user_ids }, state: %w[confirmed waitlisted])
         .pluck(:run_id, :user_id)
         .group_by { |(_, user_id)| user_id }
         .transform_values do |rows|
@@ -132,14 +132,14 @@ class Ability
     end
   end
 
-  %i(
+  %i[
     own_event_proposal_ids
     signed_up_run_ids
     staff_con_ids
     team_member_event_ids
     team_member_convention_ids
     con_ids_with_privilege
-  ).each do |method_name|
+  ].each do |method_name|
     define_method method_name do |*args|
       associated_records_loader.public_send(method_name, user.id, *args)
     end
@@ -172,8 +172,8 @@ class Ability
       can mail_priv_name.to_sym, Convention, id: con_ids_with_privilege(mail_priv_name)
     end
 
-    can [:schedule, :schedule_with_counts], Convention, id: con_ids_with_privilege(:scheduling, :gm_liaison), show_schedule: %w(priv gms yes)
-    can [:schedule, :schedule_with_counts], Convention, id: con_ids_with_privilege(:con_com), show_schedule: %w(gms yes)
+    can [:schedule, :schedule_with_counts], Convention, id: con_ids_with_privilege(:scheduling, :gm_liaison), show_schedule: %w[priv gms yes]
+    can [:schedule, :schedule_with_counts], Convention, id: con_ids_with_privilege(:con_com), show_schedule: %w[gms yes]
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
@@ -191,12 +191,12 @@ class Ability
   def add_event_proposal_abilities
     can :read, EventProposal, convention_id: con_ids_with_privilege(:proposal_committee, :gm_liaison), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
     can :manage, EventProposal, convention_id: con_ids_with_privilege(:proposal_chair), status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :update, EventProposal, convention_id: con_ids_with_privilege(:gm_liaison), status: ['accepted', 'withdrawn']
+    can :update, EventProposal, convention_id: con_ids_with_privilege(:gm_liaison), status: %w[accepted withdrawn]
   end
 
   def add_team_member_abilities
     can :update, Event, id: team_member_event_ids
-    can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w(gms yes)
+    can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
     can :update, EventProposal, event_id: team_member_event_ids
     can :read, Signup, run: { event_id: team_member_event_ids }
     can :manage, TeamMember, event_id: team_member_event_ids

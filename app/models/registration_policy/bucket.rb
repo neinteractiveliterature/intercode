@@ -4,14 +4,14 @@ class RegistrationPolicy::Bucket
 
   attr_reader :key
   attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited, :anything
-  alias_method :slots_limited?, :slots_limited
-  alias_method :anything?, :anything
+  alias slots_limited? slots_limited
+  alias anything? anything
 
   def self.normalize_key(key)
     key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
   end
 
-  %w(minimum_slots preferred_slots total_slots).each do |method|
+  %w[minimum_slots preferred_slots total_slots].each do |method|
     define_method method do
       instance_variable_get(:"@#{method}") || 0
     end
@@ -67,8 +67,8 @@ class RegistrationPolicy::Bucket
     }
   end
 
-  def ==(bucket)
-    attributes == bucket.attributes
+  def ==(other)
+    attributes == other.attributes
   end
 
   def hash

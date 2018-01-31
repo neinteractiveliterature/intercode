@@ -1,5 +1,5 @@
 Mutations::CreateMultipleRuns = GraphQL::Relay::Mutation.define do
-  name "CreateMultipleRuns"
+  name 'CreateMultipleRuns'
   return_field :runs, !types[!Types::RunType]
 
   input_field :runs, !types[!Types::RunInputType]
@@ -15,7 +15,7 @@ Mutations::CreateMultipleRuns = GraphQL::Relay::Mutation.define do
         title_suffix: run[:title_suffix],
         schedule_note: run[:schedule_note],
         room_ids: run[:room_ids],
-        updated_by: ctx[:user_con_profile].user,
+        updated_by: ctx[:user_con_profile].user
       )
     end
 

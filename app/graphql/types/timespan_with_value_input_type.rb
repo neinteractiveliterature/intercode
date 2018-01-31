@@ -1,5 +1,5 @@
 Types::TimespanWithValueInputType = GraphQL::InputObjectType.define do
-  name "TimespanWithValueInput"
+  name 'TimespanWithValueInput'
 
   input_field :start, Types::DateType
   input_field :finish, Types::DateType

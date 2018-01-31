@@ -2,7 +2,7 @@ class SignupSpyGrid
   include Datagrid
   include Concerns::SignupsGrid
 
-  column(:name, order: "users.last_name, users.first_name") do |signup|
+  column(:name, order: 'users.last_name, users.first_name') do |signup|
     signup.user_con_profile.name_inverted
   end
   column(:event, order: 'events.title, runs.id') do |signup|
@@ -16,7 +16,7 @@ class SignupSpyGrid
     if signup.counted?
       signup.user_con_profile.signups.select(&:counted?).sort_by(&:created_at).index(signup) + 1
     else
-      "N/C"
+      'N/C'
     end
   end
 

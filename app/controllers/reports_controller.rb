@@ -1,7 +1,7 @@
 class ReportsController < ApplicationController
   before_action :ensure_authorized
 
-  layout 'print_reports', only: ['events_by_time', 'per_event', 'per_user', 'per_room', 'volunteer_events']
+  layout 'print_reports', only: %w[events_by_time per_event per_user per_room volunteer_events]
 
   def index
   end
@@ -86,8 +86,8 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html {}
       format.csv do
-        filename = [convention.name, "Signups", Date.today.iso8601].compact.join(" - ")
-        filename << ".csv"
+        filename = [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
+        filename << '.csv'
 
         send_data @signups_grid.to_csv, filename: filename
       end

@@ -51,7 +51,7 @@ class ApplicationService
   end
 
   def inner_call
-    raise "Subclasses are expected to override #inner_call"
+    raise 'Subclasses are expected to override #inner_call'
   end
 
   def with_advisory_lock_unless_skip_locking(name, &block)

@@ -34,7 +34,7 @@ class TimespanWithValueDrop < Liquid::Drop
     elsif finish
       "up to #{finish.to_s(:date_only)}"
     else
-      ""
+      ''
     end
   end
 

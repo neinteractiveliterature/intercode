@@ -1,5 +1,5 @@
 Types::MaximumEventProvidedTicketsOverrideType = GraphQL::ObjectType.define do
-  name "MaximumEventProvidedTicketsOverride"
+  name 'MaximumEventProvidedTicketsOverride'
 
   field :id, !types.Int
 

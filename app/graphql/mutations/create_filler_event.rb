@@ -1,5 +1,5 @@
 Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
-  name "CreateFillerEvent"
+  name 'CreateFillerEvent'
   return_field :event, Types::EventType
 
   input_field :event, !Types::EventInputType

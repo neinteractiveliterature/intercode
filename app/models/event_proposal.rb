@@ -1,7 +1,7 @@
 class EventProposal < ApplicationRecord
   include Concerns::FormResponse
 
-  STATUSES = Set.new(%w(draft proposed reviewing accepted rejected withdrawn))
+  STATUSES = Set.new(%w[draft proposed reviewing accepted rejected withdrawn])
 
   register_form_response_attrs :title,
     :email,
@@ -33,9 +33,7 @@ class EventProposal < ApplicationRecord
   private
 
   def length_fits_in_convention
-    return unless length_seconds
-    if length_seconds > convention.length_seconds
-      errors.add :length_seconds, "Event cannot be longer than #{convention.name}"
-    end
+    return unless length_seconds && length_seconds > convention.length_seconds
+    errors.add :length_seconds, "Event cannot be longer than #{convention.name}"
   end
 end

@@ -32,24 +32,24 @@ module ApplicationHelper
     if @convention
       parts << @convention.name
     else
-      parts << "Intercode"
+      parts << 'Intercode'
     end
 
-    parts.join(" - ")
+    parts.join(' - ')
   end
 
   def page_banner
     banner_image_url = @convention && @convention.banner_image.try(:url)
 
     if banner_image_url
-      image_tag banner_image_url, :class => "page_banner"
+      image_tag banner_image_url, class: 'page_banner'
     else
       content_tag(
         :div,
-        :class => "page_banner",
-        :style => "background-color: black; color: white; height: 120px; width: 800px; text-align: center;"
+        class: 'page_banner',
+        style: 'background-color: black; color: white; height: 120px; width: 800px; text-align: center;'
       ) do
-        content_tag(:h1, @con ? @con.name : "Welcome to Intercode", :style => "display: inline-block;")
+        content_tag(:h1, @con ? @con.name : 'Welcome to Intercode', style: 'display: inline-block;')
       end
     end
   end
@@ -75,8 +75,8 @@ module ApplicationHelper
   def check_mark_for(boolean)
     return '' unless boolean
 
-    content_tag(:i, class: "fa fa-check") do
-      content_tag(:span, "✓", class: 'sr-only')
+    content_tag(:i, class: 'fa fa-check') do
+      content_tag(:span, '✓', class: 'sr-only')
     end
   end
 

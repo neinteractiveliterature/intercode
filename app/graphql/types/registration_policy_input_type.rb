@@ -1,5 +1,5 @@
 Types::RegistrationPolicyInputType = GraphQL::InputObjectType.define do
-  name "RegistrationPolicyInput"
+  name 'RegistrationPolicyInput'
 
   input_field :buckets, types[!Types::RegistrationPolicyBucketInputType]
 end

@@ -52,18 +52,15 @@ class EventProposalsController < ApplicationController
   private
 
   def event_proposal_params
-    (params[:event_proposal] || ActionController::Parameters.new).permit()
+    (params[:event_proposal] || ActionController::Parameters.new).permit
   end
 
   def ensure_accepting_proposals
-    unless convention.accepting_proposals
-      redirect_to root_path, alert: "#{convention.name} is not currently accepting event proposals."
-    end
+    return if convention.accepting_proposals
+    redirect_to root_path, alert: "#{convention.name} is not currently accepting event proposals."
   end
 
   def ensure_no_event_yet
-    if @event_proposal.event
-      redirect_to [:edit, @event_proposal.event]
-    end
+    redirect_to [:edit, @event_proposal.event] if @event_proposal.event
   end
 end

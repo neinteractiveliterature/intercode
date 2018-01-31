@@ -13,7 +13,7 @@ class SignupCountPresenter
   end
 
   def bucket_descriptions_text(state)
-    bucket_descriptions(state).map(&:strip).join(", ")
+    bucket_descriptions(state).map(&:strip).join(', ')
   end
 
   def bucket_descriptions(state)
@@ -50,7 +50,7 @@ class SignupCountPresenter
 
   def capacity_description_for_bucket(bucket_key)
     bucket = registration_policy.bucket_with_key(bucket_key)
-    return "unlimited" if bucket.slots_unlimited?
+    return 'unlimited' if bucket.slots_unlimited?
 
     remaining_capacity = bucket.total_slots - confirmed_count_for_bucket(bucket_key)
     "#{remaining_capacity} / #{bucket.total_slots} available"
