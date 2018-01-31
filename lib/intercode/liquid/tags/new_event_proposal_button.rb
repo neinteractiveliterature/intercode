@@ -6,11 +6,10 @@ module Intercode
 
         def initialize(tag_name, args, _options)
           super
+          return unless args && args =~ /\"([^\"]+)\"(\s+(\w.*))?/
 
-          if args && args =~ /\"([^\"]+)\"(\s+(\w.*))?/
-            @button_text = Regexp.last_match(1)
-            @button_class = Regexp.last_match(3)
-          end
+          @button_text = Regexp.last_match(1)
+          @button_class = Regexp.last_match(3)
         end
 
         def partial(_context)

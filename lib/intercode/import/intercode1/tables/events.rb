@@ -58,11 +58,8 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
 
     if row[:SpecialEvent] == 1
       intercon_q_precon_event = parse_intercon_q_precon_event(row)
-      if intercon_q_precon_event
-        return 'panel'
-      else
-        return 'filler'
-      end
+      return 'panel' if intercon_q_precon_event
+      return 'filler'
     end
 
     case row[:GameType]
