@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180123225540) do
+ActiveRecord::Schema.define(version: 20180130040510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,6 +163,16 @@ ActiveRecord::Schema.define(version: 20180123225540) do
     t.datetime "updated_at", null: false
     t.bigint "convention_id"
     t.index ["convention_id"], name: "index_forms_on_convention_id"
+  end
+
+  create_table "maximum_event_provided_tickets_overrides", force: :cascade do |t|
+    t.bigint "event_id"
+    t.bigint "ticket_type_id"
+    t.integer "override_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "idx_max_event_provided_tickets_on_event_id"
+    t.index ["ticket_type_id"], name: "idx_max_event_provided_tickets_on_ticket_type_id"
   end
 
   create_table "pages", id: :serial, force: :cascade do |t|
@@ -364,6 +374,8 @@ ActiveRecord::Schema.define(version: 20180123225540) do
   add_foreign_key "form_items", "form_sections"
   add_foreign_key "form_sections", "forms"
   add_foreign_key "forms", "conventions"
+  add_foreign_key "maximum_event_provided_tickets_overrides", "events"
+  add_foreign_key "maximum_event_provided_tickets_overrides", "ticket_types"
   add_foreign_key "pages", "cms_layouts"
   add_foreign_key "rooms", "conventions"
   add_foreign_key "rooms_runs", "rooms"

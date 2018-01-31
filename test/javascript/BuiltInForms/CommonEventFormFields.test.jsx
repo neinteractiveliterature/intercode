@@ -22,9 +22,14 @@ describe('CommonEventFormFields', () => {
         description: '',
         participant_communications: '',
         can_play_concurrently: false,
+        maximum_event_provided_tickets_overrides: [],
         ...eventProps,
       }}
+      ticketTypes={[]}
       onChange={() => {}}
+      createMaximumEventProvidedTicketsOverride={() => {}}
+      deleteMaximumEventProvidedTicketsOverride={() => {}}
+      updateMaximumEventProvidedTicketsOverride={() => {}}
       {...props}
     />
   ));

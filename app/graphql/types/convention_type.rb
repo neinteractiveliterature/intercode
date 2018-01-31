@@ -26,8 +26,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
   end
 
   connection :user_con_profiles, Types::UserConProfileType.connection_type, max_page_size: 1000 do
-    resolve ->(convention, _args, _ctx) {
-      convention.user_con_profiles.order('last_name', 'first_name')
+    argument :name, types.String
+
+    resolve ->(convention, args, ctx) {
+      grid_args = args.to_h.symbolize_keys.except(:first, :last, :after, :before)
+      grid = UserConProfilesGrid.new(grid_args)
+      grid.assets.accessible_by(ctx[:current_ability]).where(convention_id: convention.id)
     }
   end
 end

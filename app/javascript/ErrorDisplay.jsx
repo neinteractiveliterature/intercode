@@ -5,14 +5,22 @@ const ErrorDisplay = ({ stringError, graphQLError }) => {
   let displayContents = null;
 
   if (graphQLError) {
-    const errorMessages = graphQLError.graphQLErrors.map((error, i) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <li key={i}>{error.message}</li>
-    ));
+    try {
+      const errorMessages = graphQLError.graphQLErrors.map((error, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <li key={i}>{error.message}</li>
+      ));
 
-    displayContents = (
-      <ul className="list-unstyled m-0">{errorMessages}</ul>
-    );
+      displayContents = (
+        <ul className="list-unstyled m-0">{errorMessages}</ul>
+      );
+    } catch (formattingError) {
+      if (graphQLError.message) {
+        displayContents = graphQLError.message;
+      } else {
+        displayContents = JSON.stringify(graphQLError);
+      }
+    }
   } else if (stringError) {
     displayContents = stringError;
   } else {
@@ -29,7 +37,7 @@ ErrorDisplay.propTypes = {
   graphQLError: PropTypes.shape({
     graphQLErrors: PropTypes.arrayOf(PropTypes.shape({
       message: PropTypes.string.isRequired,
-    }).isRequired).isRequired,
+    })),
   }),
 };
 

@@ -26,4 +26,22 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
       AssociationLoader.for(UserConProfile, :ticket).load(obj)
     }
   end
+
+  field :ability, Types::AbilityType do
+    resolve -> (obj, _args, ctx) {
+      if obj == ctx[:current_user_con_profile]
+        ctx[:current_ability]
+      else
+        AbilityLoader.for(UserConProfile).load(obj)
+      end
+    }
+  end
+
+  field :can_override_maximum_event_provided_tickets, !types.Boolean do
+    resolve -> (obj, _args, ctx) {
+      ability = (obj == ctx[:current_user_con_profile] ? ctx[:current_ability] : Ability.new(obj.user))
+      override = ctx[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
+      ability.can?(:create, override)
+    }
+  end
 end
