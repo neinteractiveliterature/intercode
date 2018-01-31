@@ -7284,9 +7284,9 @@ react-bootstrap4-modal@^1.1.0:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-react-bootstrap4-modal@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.2.0.tgz#4a5ba6b21aaa1b4286db87d6d161602b03c8af69"
+react-bootstrap4-modal@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.2.2.tgz#a8c07cf976231a516d1ab89a78ed8cfebe2403dd"
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.5.10"
