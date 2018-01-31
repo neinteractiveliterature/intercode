@@ -1,6 +1,7 @@
 Mutations::CreateMaximumEventProvidedTicketsOverride = GraphQL::Relay::Mutation.define do
   name 'CreateMaximumEventProvidedTicketsOverride'
-  return_field :maximum_event_provided_tickets_override, !Types::MaximumEventProvidedTicketsOverrideType
+  return_field :maximum_event_provided_tickets_override,
+    !Types::MaximumEventProvidedTicketsOverrideType
 
   input_field :event_id, !types.Int
   input_field :ticket_type_id, !types.Int

@@ -107,18 +107,21 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :createMaximumEventProvidedTicketsOverride, Mutations::CreateMaximumEventProvidedTicketsOverride.field do
+  create_override_field = Mutations::CreateMaximumEventProvidedTicketsOverride.field
+  field :createMaximumEventProvidedTicketsOverride, create_override_field do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:create, event.maximum_event_provided_tickets_overrides.new)
     }
   end
 
-  field :updateMaximumEventProvidedTicketsOverride, Mutations::UpdateMaximumEventProvidedTicketsOverride.field do
+  update_override_field = Mutations::UpdateMaximumEventProvidedTicketsOverride.field
+  field :updateMaximumEventProvidedTicketsOverride, update_override_field do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :update))
   end
 
-  field :deleteMaximumEventProvidedTicketsOverride, Mutations::DeleteMaximumEventProvidedTicketsOverride.field do
+  delete_override_field = Mutations::DeleteMaximumEventProvidedTicketsOverride.field
+  field :deleteMaximumEventProvidedTicketsOverride, delete_override_field do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :delete))
   end
 end

@@ -58,9 +58,14 @@ class Intercode::Import::Intercode1::NavigationItems
     page = convention.pages.find_by(name: item[:page_name])
     if page
       logger.info("Creating navigation link #{item[:title]}")
-      convention.cms_navigation_items.create!(title: item[:title], page: page, navigation_section: navigation_section)
+      convention.cms_navigation_items.create!(
+        title: item[:title],
+        page: page,
+        navigation_section: navigation_section
+      )
     else
-      logger.info("Not creating navigation link #{item[:title]} because there is no page called #{item[:page_name]}")
+      logger.info("Not creating navigation link #{item[:title]} because \
+there is no page called #{item[:page_name]}")
     end
   end
 end

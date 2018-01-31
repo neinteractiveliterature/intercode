@@ -41,9 +41,15 @@ class Intercode::Import::Intercode1::HtmlConverter
       header['class'] = [header['class'], 'my-2'].compact.join(' ')
     end
 
-    # Nokogiri will escape "{% page_url something_or_other %}" in a href tag, so we temporarily set the href to
-    # __PAGE_URL_something_or_other and then post-process it to Liquid here.
-    doc.to_s.gsub(/__PAGE_URL_(\w+)/, '{% page_url \1 %}').gsub(/__CMS_FILE_URL_([^\"]+)/, '{% file_url "\1" %}')
+    # Nokogiri will escape "{% page_url something_or_other %}" in a href tag, so we temporarily set
+    # the href to __PAGE_URL_something_or_other and then post-process it to Liquid here.
+    doc.to_s.gsub(
+      /__PAGE_URL_(\w+)/,
+      '{% page_url \1 %}'
+    ).gsub(
+      /__CMS_FILE_URL_([^\"]+)/,
+      '{% file_url "\1" %}'
+    )
   end
 
   private
@@ -55,8 +61,8 @@ class Intercode::Import::Intercode1::HtmlConverter
   def intercode2_path_for_link(url)
     case url
     when /\A\\\"(.*)\\\"\z/
-      # Some URLs are improperly escaped/quoted in the Intercode 1 content set.  Let's go above and beyond the
-      # call of duty and fix them.
+      # Some URLs are improperly escaped/quoted in the Intercode 1 content set.  Let's go above and
+      # beyond the call of duty and fix them.
       intercode2_path_for_link(Regexp.last_match(1))
     when /ConComSchedule\.php/
       '__PAGE_URL_con_com_schedule'
@@ -71,7 +77,8 @@ class Intercode::Import::Intercode1::HtmlConverter
 
   def upload_url(url)
     parsed_url = URI.parse(url)
-    return unless parsed_url.scheme.blank? && parsed_url.path.present? # it's a local file in the source tree
+    # don't change it if it's a local file in the source tree
+    return unless parsed_url.scheme.blank? && parsed_url.path.present?
 
     upload_file(convention, File.expand_path(url, file_root))
   end

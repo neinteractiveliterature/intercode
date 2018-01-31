@@ -32,8 +32,8 @@ class AcceptEventProposalService < ApplicationService
   private
 
   def inner_call
-    event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attribute, form_attribute), hash|
-      hash[event_attribute] = event_proposal.read_form_response_attribute(form_attribute)
+    event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, form_attr), hash|
+      hash[event_attr] = event_proposal.read_form_response_attribute(form_attr)
     end
 
     event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')

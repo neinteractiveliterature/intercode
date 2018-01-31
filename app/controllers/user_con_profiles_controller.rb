@@ -1,8 +1,8 @@
 class UserConProfilesController < ApplicationController
-  # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be @user_con_profile,
-  # which is unsafe for us to use because ApplicationController uses it to mean the current user, and we use
-  # that for authorization checking.  So instead, we'll call the user con profile we're working on the "subject
-  # profile" (as in the subject of our actions).
+  # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be
+  # @user_con_profile, which is unsafe for us to use because ApplicationController uses it to mean
+  # the current user, and we use that for authorization checking.  So instead, we'll call the user
+  # con profile we're working on the "subject profile" (as in the subject of our actions).
   load_and_authorize_resource :subject_profile,
     id_param: :id,
     parent: false,
@@ -13,7 +13,8 @@ class UserConProfilesController < ApplicationController
 
   # GET /user_con_profiles
   def index
-    @user_con_profiles_grid = UserConProfilesGrid.new(params[:user_con_profiles_grid]&.permit! || { order: 'name' }) do |scope|
+    grid_params = params[:user_con_profiles_grid]&.permit! || { order: 'name' }
+    @user_con_profiles_grid = UserConProfilesGrid.new(grid_params) do |scope|
       scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
       respond_to do |format|
         format.html { scope.paginate(page: params[:page], per_page: params[:per_page]) }
@@ -91,9 +92,9 @@ class UserConProfilesController < ApplicationController
     )
   end
 
-  # Only allow people who can update arbitrary user con profiles for this convention to access this controller.
-  # In other words, users shouldn't be able to access even their own profile here (because they could use this
-  # controller to escalate their privileges).
+  # Only allow people who can update arbitrary user con profiles for this convention to access this
+  # controller. In other words, users shouldn't be able to access even their own profile here
+  # (because they could use this controller to escalate their privileges).
   def authorize_admin_profiles
     authorize! :update, convention.user_con_profiles.new
   end

@@ -21,7 +21,9 @@ class EventProposal < ApplicationRecord
   end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
-  serialize :timeblock_preferences, JsonArrayCoderWrapper.new(ActiveModelCoder.new('EventProposal::TimeblockPreference'))
+  serialize :timeblock_preferences, JsonArrayCoderWrapper.new(
+    ActiveModelCoder.new('EventProposal::TimeblockPreference')
+  )
 
   validates :status, inclusion: { in: STATUSES }
   validate :length_fits_in_convention

@@ -18,15 +18,17 @@ class Event < ApplicationRecord
   validates :convention, presence: true
 
   has_many :maximum_event_provided_tickets_overrides
-  has_many :provided_tickets, class_name: 'Ticket', inverse_of: 'provided_by_event', foreign_key: 'provided_by_event_id'
+  has_many :provided_tickets,
+    class_name: 'Ticket',
+    inverse_of: 'provided_by_event',
+    foreign_key: 'provided_by_event_id'
 
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
 
-  # Category is mostly for record-keeping purposes; it shouldn't actually
-  # affect behavior of events.  Nevertheless we do want to make sure it's
-  # in one of the allowed categories.
+  # Category currently does affect behavior of events; in Intercode 2.2 we plan to remove all the
+  # hard-coded behavior around category in favor of making it an adminable model.
   validates :category, inclusion: { in: CATEGORIES }
 
   validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS }

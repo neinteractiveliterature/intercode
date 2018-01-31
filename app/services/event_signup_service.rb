@@ -63,7 +63,7 @@ class EventSignupService < ApplicationService
       unless signup_count_allowed?(user_signup_count + 1)
         errors.add :base,
           "You are already signed up for #{user_signup_count} \
-          #{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
+#{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
       end
     end
   end
@@ -74,7 +74,7 @@ class EventSignupService < ApplicationService
     verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
     errors.add :base,
       "You are already signed up for #{event_titles.to_sentence}, which #{verb} \
-      with #{event.title}."
+with #{event.title}."
   end
 
   def must_have_ticket

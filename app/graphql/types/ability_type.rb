@@ -3,7 +3,9 @@ Types::AbilityType = GraphQL::ObjectType.define do
 
   field :can_override_maximum_event_provided_tickets, !types.Boolean do
     resolve -> (obj, _args, ctx) {
-      override = TicketType.new(convention: ctx[:convention]).maximum_event_provided_tickets_overrides.new
+      override = TicketType.new(convention: ctx[:convention])
+        .maximum_event_provided_tickets_overrides
+        .new
       obj.can?(:create, override)
     }
   end

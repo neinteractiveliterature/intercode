@@ -31,7 +31,9 @@ class CmsContentSet
   end
 
   def all_template_paths(subdir)
-    inherited_template_paths = inherit_content_sets.map { |content_set| content_set.all_template_paths(subdir) }
+    inherited_template_paths = inherit_content_sets.map do |content_set|
+      content_set.all_template_paths(subdir)
+    end
     merge_template_paths(*inherited_template_paths, own_template_paths(subdir))
   end
 

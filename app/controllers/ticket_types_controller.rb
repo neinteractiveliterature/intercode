@@ -30,7 +30,8 @@ class TicketTypesController < ApplicationController
 
   def destroy
     if @ticket_type.tickets.any?
-      return redirect_to ticket_types_path, alert: "#{@ticket_type.name} can't be deleted because tickets have been purchased using this ticket type."
+      return redirect_to ticket_types_path, alert: "#{@ticket_type.name} can't be deleted because \
+tickets have been purchased using this ticket type."
     end
 
     @ticket_type.destroy

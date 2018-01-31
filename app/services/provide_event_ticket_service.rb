@@ -39,7 +39,9 @@ class ProvideEventTicketService < ApplicationService
   end
 
   def maximum_event_provided_tickets_for_event
-    @maximum_event_provided_tickets_for_event ||= ticket_type.maximum_event_provided_tickets_for_event_id(event.id)
+    @maximum_event_provided_tickets_for_event ||= (
+      ticket_type.maximum_event_provided_tickets_for_event_id(event.id)
+    )
   end
 
   def ticket_type_must_be_providable
@@ -58,11 +60,14 @@ class ProvideEventTicketService < ApplicationService
     already_provided_count = event.provided_tickets.select { |t| t.ticket_type == ticket_type }.size
     return unless already_provided_count >= maximum_event_provided_tickets_for_event
 
-    errors.add :base, "#{event.title} can provide up to #{pluralize maximum_event_provided_tickets_for_event, 'ticket'}, and it has already provided #{already_provided_count}"
+    errors.add :base, "#{event.title} can provide up to \
+#{pluralize maximum_event_provided_tickets_for_event, 'ticket'}, and it has already provided \
+#{already_provided_count}"
   end
 
   def user_con_profile_must_not_have_ticket
     return unless user_con_profile.ticket
-    errors.add :base, "#{user_con_profile.name} already has a ticket to #{user_con_profile.convention.name}"
+    errors.add :base, "#{user_con_profile.name} already has a ticket to \
+#{user_con_profile.convention.name}"
   end
 end

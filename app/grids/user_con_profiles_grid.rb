@@ -7,7 +7,10 @@ class UserConProfilesGrid
   end
 
   filter(:name, :string) do |value|
-    joins(:user).where('lower(users.last_name) like :value OR lower(users.first_name) like :value', value: "%#{value.downcase}%")
+    joins(:user).where(
+      'lower(users.last_name) like :value OR lower(users.first_name) like :value',
+      value: "%#{value.downcase}%"
+    )
   end
 
   filter(:email, :string) do |value|
@@ -23,7 +26,11 @@ class UserConProfilesGrid
       end
     end
 
-    where(clauses.map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})" }.join(' OR '))
+    where(
+      clauses
+        .map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})" }
+        .join(' OR ')
+    )
   end
 
   filter(:payment_amount, :integer) do |value|
@@ -81,6 +88,11 @@ class UserConProfilesGrid
   end
 
   def ticket_types
-    [%w[Unpaid none]] + TicketType.where(id: scope.unscope(:limit, :offset).joins(:ticket).select(:ticket_type_id).distinct).pluck(:description, :id)
+    (
+      [%w[Unpaid none]] +
+      TicketType.where(
+        id: scope.unscope(:limit, :offset).joins(:ticket).select(:ticket_type_id).distinct
+      ).pluck(:description, :id)
+    )
   end
 end

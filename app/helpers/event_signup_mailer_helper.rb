@@ -17,10 +17,13 @@ module EventSignupMailerHelper
   end
 
   def move_result_description(move_result)
-    move_result = EventVacancyFillService::SignupMoveResult.from_h(move_result) if move_result.is_a?(Hash)
+    if move_result.is_a?(Hash)
+      move_result = EventVacancyFillService::SignupMoveResult.from_h(move_result)
+    end
     signup = move_result.signup
 
-    "#{signup.user_con_profile.name}: #{prev_signup_state_description(move_result)} → #{new_signup_state_description(move_result)}"
+    "#{signup.user_con_profile.name}: #{prev_signup_state_description(move_result)} → \
+#{new_signup_state_description(move_result)}"
   end
 
   def prev_signup_state_description(move_result)

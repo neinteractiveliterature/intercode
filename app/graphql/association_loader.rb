@@ -11,7 +11,9 @@ class AssociationLoader < GraphQL::Batch::Loader
   end
 
   def load(record)
-    raise TypeError, "#{@model} loader can't load association for #{record.class}" unless record.is_a?(@model)
+    unless record.is_a?(@model)
+      raise TypeError, "#{@model} loader can't load association for #{record.class}"
+    end
     return Promise.resolve(read_association(record)) if association_loaded?(record)
     super
   end

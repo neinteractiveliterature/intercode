@@ -14,9 +14,11 @@ class ReportsController < ApplicationController
     ).count
 
     ticket_types_by_id = convention.ticket_types.find(raw_data.keys.map(&:first)).index_by(&:id)
-    @count_by_ticket_type_and_payment_amount = raw_data.transform_keys do |(ticket_type_id, cents, currency)|
-      [ticket_types_by_id[ticket_type_id], Money.new(cents, currency)]
-    end
+    @count_by_ticket_type_and_payment_amount = (
+      raw_data.transform_keys do |(ticket_type_id, cents, currency)|
+        [ticket_types_by_id[ticket_type_id], Money.new(cents, currency)]
+      end
+    )
   end
 
   def event_provided_tickets
@@ -36,11 +38,22 @@ class ReportsController < ApplicationController
       [event_id, []]
     end.to_h
 
-    raw_data = convention.signups.counted.pluck(:user_con_profile_id, :event_id, :created_at, :state)
-    raw_data.group_by { |(user_con_profile_id, _, _, _)| user_con_profile_id }.transform_values do |user_con_profile_rows|
-      user_con_profile_rows.sort_by { |(_, _, created_at, _)| created_at }.each_with_index do |(_, event_id, _, state), index|
+    raw_data = convention.signups.counted.pluck(
+      :user_con_profile_id,
+      :event_id,
+      :created_at,
+      :state
+    )
+    grouped_data = raw_data.group_by { |(user_con_profile_id, _, _, _)| user_con_profile_id }
+    grouped_data.transform_values do |user_con_profile_rows|
+      sorted_rows = user_con_profile_rows.sort_by { |(_, _, created_at, _)| created_at }
+      sorted_rows.each_with_index do |(_, event_id, _, state), index|
         next unless @choice_data_by_event_id[event_id]
-        @choice_data_by_event_id[event_id][index] ||= { 'confirmed' => 0, 'waitlisted' => 0, 'withdrawn' => 0 }
+        @choice_data_by_event_id[event_id][index] ||= {
+          'confirmed' => 0,
+          'waitlisted' => 0,
+          'withdrawn' => 0
+        }
         @choice_data_by_event_id[event_id][index][state] += 1
       end
     end
@@ -75,10 +88,14 @@ class ReportsController < ApplicationController
 
   def signup_spy
     @signups_grid = SignupSpyGrid.new(params[:signups_grid] || { order: 'timestamp' }) do |scope|
-      signup_spy_scope = scope.joins(run: :event).includes(user_con_profile: :signups).where(events: { convention_id: convention.id })
+      signup_spy_scope = scope.joins(run: :event)
+        .includes(user_con_profile: :signups)
+        .where(events: { convention_id: convention.id })
 
       respond_to do |format|
-        format.html { signup_spy_scope.paginate(page: params[:page], per_page: params[:per_page] || 100) }
+        format.html do
+          signup_spy_scope.paginate(page: params[:page], per_page: params[:per_page] || 100)
+        end
         format.csv { signup_spy_scope }
       end
     end

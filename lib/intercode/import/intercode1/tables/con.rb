@@ -20,7 +20,8 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
     )
 
     unless friday_start.friday?
-      raise "FATAL: The FRI_DATE constant in intercon_constants.inc is not a Friday.  It is set to #{friday_start.strftime('%A, %b %d, %Y')}."
+      raise "FATAL: The FRI_DATE constant in intercon_constants.inc is not a Friday.  It is set \
+to #{friday_start.strftime('%A, %b %d, %Y')}."
     end
 
     if config[:thursday_enabled]

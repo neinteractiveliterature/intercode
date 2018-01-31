@@ -158,7 +158,12 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def price_schedule_table
-    @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(connection, @con, @price_schedule, @php_timezone)
+    @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(
+      connection,
+      @con,
+      @price_schedule,
+      @php_timezone
+    )
   end
 
   def events_table
@@ -171,7 +176,13 @@ class Intercode::Import::Intercode1::Importer
 
   def users_table
     return unless events_id_map
-    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(connection, con, events_id_map, registration_statuses.registration_status_map, @legacy_password_md5s)
+    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(
+      connection,
+      con,
+      events_id_map,
+      registration_statuses.registration_status_map,
+      @legacy_password_md5s
+    )
   end
 
   def users_id_map
@@ -185,19 +196,31 @@ class Intercode::Import::Intercode1::Importer
   def away_table
     return unless user_con_profiles_id_map
 
-    @away_table ||= Intercode::Import::Intercode1::Tables::Away.new(connection, con, user_con_profiles_id_map)
+    @away_table ||= Intercode::Import::Intercode1::Tables::Away.new(
+      connection,
+      con,
+      user_con_profiles_id_map
+    )
   end
 
   def bios_table
     return unless user_con_profiles_id_map
 
-    @bios_table ||= Intercode::Import::Intercode1::Tables::Bios.new(connection, user_con_profiles_id_map)
+    @bios_table ||= Intercode::Import::Intercode1::Tables::Bios.new(
+      connection,
+      user_con_profiles_id_map
+    )
   end
 
   def bids_table
     return unless events_id_map && user_con_profiles_id_map
 
-    @bids_table ||= Intercode::Import::Intercode1::Tables::Bids.new(connection, con, events_id_map, user_con_profiles_id_map)
+    @bids_table ||= Intercode::Import::Intercode1::Tables::Bids.new(
+      connection,
+      con,
+      events_id_map,
+      user_con_profiles_id_map
+    )
   end
 
   def event_proposals_id_map
@@ -207,16 +230,30 @@ class Intercode::Import::Intercode1::Importer
   def bid_times_table
     return unless event_proposals_id_map
 
-    @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(connection, con, event_proposals_id_map)
+    @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(
+      connection,
+      con,
+      event_proposals_id_map
+    )
   end
 
   def bid_info_table
-    @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(connection, con, @constants_file)
+    @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(
+      connection,
+      con,
+      @constants_file
+    )
   end
 
   def runs_table
     return unless events_id_map && users_id_map && rooms_id_map
-    @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
+    @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(
+      connection,
+      con,
+      events_id_map,
+      users_id_map,
+      rooms_id_map
+    )
   end
 
   def run_id_map
@@ -225,7 +262,13 @@ class Intercode::Import::Intercode1::Importer
 
   def gms_table
     return unless events_id_map && users_id_map
-    @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(connection, con, events_id_map, users_id_map, user_con_profiles_id_map)
+    @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(
+      connection,
+      con,
+      events_id_map,
+      users_id_map,
+      user_con_profiles_id_map
+    )
   end
 
   def rooms_table
@@ -237,19 +280,36 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def signup_table
-    @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(connection, con, run_id_map, users_id_map, user_con_profiles_id_map)
+    @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(
+      connection,
+      con,
+      run_id_map,
+      users_id_map,
+      user_con_profiles_id_map
+    )
   end
 
   def staff_position_importer
-    @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(con, @staff_positions)
+    @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(
+      con,
+      @staff_positions
+    )
   end
 
   def root_html_content
-    @root_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, File.dirname(@constants_file), @constants_file)
+    @root_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(
+      con,
+      File.dirname(constants_file),
+      constants_file
+    )
   end
 
   def text_dir_html_content
-    @text_dir_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(con, @text_dir, @constants_file)
+    @text_dir_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(
+      con,
+      @text_dir,
+      constants_file
+    )
   end
 
   def navigation_items
@@ -257,7 +317,10 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def registration_statuses
-    @registration_statuses ||= Intercode::Import::Intercode1::RegistrationStatuses.new(con, price_schedule_table.build_ticket_type)
+    @registration_statuses ||= Intercode::Import::Intercode1::RegistrationStatuses.new(
+      con,
+      price_schedule_table.build_ticket_type
+    )
   end
 
   def embedded_pdf_pages

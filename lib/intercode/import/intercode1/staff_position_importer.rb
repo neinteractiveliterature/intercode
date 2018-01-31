@@ -39,9 +39,13 @@ class Intercode::Import::Intercode1::StaffPositionImporter
       first_name = person_name_parts.first
       last_name = person_name_parts.last
 
-      user_con_profile = con.user_con_profiles.where(first_name: first_name, last_name: last_name).first
+      user_con_profile = con.user_con_profiles
+        .where(first_name: first_name, last_name: last_name)
+        .first
+
       unless user_con_profile
-        # if we can't find them by full name, but there's an unambiguous last name for them, use that person
+        # if we can't find them by full name, but there's an unambiguous last name for them,
+        # use that person
         last_name_matches = con.user_con_profiles.where(last_name: last_name).to_a
         user_con_profile = last_name_matches.first if last_name_matches.size == 1
       end

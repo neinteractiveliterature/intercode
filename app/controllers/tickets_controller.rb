@@ -47,7 +47,8 @@ class TicketsController < ApplicationController
     )
 
     @ticket.save
-    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.name} for #{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
+    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.name} for \
+#{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
     TicketsMailer.purchased(@ticket).deliver_now
     respond_with @ticket
 
@@ -68,7 +69,8 @@ class TicketsController < ApplicationController
 
   def check_convention_maximum
     return unless convention.maximum_tickets
-    return unless convention.tickets.counts_towards_convention_maximum.count >= convention.maximum_tickets
+    ticket_count = convention.tickets.counts_towards_convention_maximum.count
+    return unless ticket_count >= convention.maximum_tickets
 
     flash[:alert] = "We're sorry, but #{convention.name} is currently sold out."
     redirect_to root_path
@@ -77,7 +79,8 @@ class TicketsController < ApplicationController
   def check_publicly_available
     return if @ticket.ticket_type.publicly_available?
 
-    flash[:alert] = "Sorry, but \"#{@ticket.ticket_type.description}\" tickets are not publicly available.  Please choose a different ticket type or contact #{convention.name} staff."
+    flash[:alert] = "Sorry, but \"#{@ticket.ticket_type.description}\" tickets are not publicly \
+available.  Please choose a different ticket type or contact #{convention.name} staff."
     redirect_to new_ticket_path
   end
 end

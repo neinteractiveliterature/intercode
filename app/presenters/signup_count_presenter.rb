@@ -83,12 +83,15 @@ class SignupCountPresenter
   end
 
   def buckets
-    @buckets ||= registration_policy.buckets.sort_by { |bucket| [bucket.anything? ? 1 : 0, (bucket.name || '').downcase] }
+    @buckets ||= registration_policy.buckets.sort_by do |bucket|
+      [bucket.anything? ? 1 : 0, (bucket.name || '').downcase]
+    end
   end
 
   private
 
-  # Initializes the signups-by-state-and-bucket hash with empty arrays for each state/bucket combination
+  # Initializes the signups-by-state-and-bucket hash with empty arrays for each state/bucket
+  # combination
   def empty_signups_hash
     Signup::STATES.each_with_object({}) do |state, states_hash|
       states_hash[state] = buckets.each_with_object({}) do |bucket, buckets_hash|
