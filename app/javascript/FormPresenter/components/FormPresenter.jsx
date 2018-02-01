@@ -13,156 +13,157 @@ function getCurrentSection(form, currentSectionId) {
   return form.getSection(currentSectionId);
 }
 
-function renderProgress(form, section) {
-  if (form.getSections().size < 2) {
-    return null;
+class FormPresenter extends React.Component {
+  static propTypes = {
+    convention: PropTypes.shape({
+      starts_at: PropTypes.string.isRequired,
+      ends_at: PropTypes.string.isRequired,
+      timezone_name: PropTypes.string.isRequired,
+    }).isRequired,
+    form: Form.propType.isRequired,
+    errors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    responseValueChanged: PropTypes.func.isRequired,
+    isUpdatingResponse: PropTypes.bool.isRequired,
+    currentSectionId: PropTypes.number,
+    exitButton: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }),
+    submitCaption: PropTypes.string,
+  };
+
+  static defaultProps = {
+    currentSectionId: null,
+    exitButton: null,
+    submitCaption: null,
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.currentSectionId !== this.props.currentSectionId) {
+      if (this.headerDiv) {
+        this.headerDiv.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   }
 
-  const items = form.getAllItems();
-  const sectionItems = form.getItemsInSection(section.id);
-  const itemIndex = items.indexOf(sectionItems.get(sectionItems.size - 1)) + 1;
-  const progressPercentValue = Math.round((itemIndex / items.count()) * 100);
-  const progressPercent = `${progressPercentValue}%`;
+  renderProgress = (section) => {
+    const { form } = this.props;
+    if (form.getSections().size < 2) {
+      return null;
+    }
 
-  return (
-    <div className="progress card-img-top" style={{ borderRadius: 0 }}>
-      <div
-        className="progress-bar"
-        role="progressbar"
-        style={{ width: progressPercent }}
-        aria-valuenow={progressPercentValue}
-        aria-valuemin="0"
-        aria-valuemax="100"
-      >
-        {progressPercent}
-      </div>
-    </div>
-  );
-}
-
-function renderSection(
-  convention,
-  form,
-  section,
-  response,
-  responseValueChanged,
-  isUpdatingResponse,
-  errors,
-) {
-  const items = form.getItemsInSection(section.id).map((item) => {
-    const itemErrors = errors[item.identifier] || [];
-    const errorsForDisplay = (itemErrors.length > 0 ? itemErrors.join(', ') : null);
+    const items = form.getAllItems();
+    const sectionItems = form.getItemsInSection(section.id);
+    const itemIndex = items.indexOf(sectionItems.get(sectionItems.size - 1)) + 1;
+    const progressPercentValue = Math.round((itemIndex / items.count()) * 100);
+    const progressPercent = `${progressPercentValue}%`;
 
     return (
-      <div>
-        <FormItem
-          key={item.id}
-          formItem={item}
-          convention={convention}
-          value={response[item.identifier]}
-          onChange={responseValueChanged}
-        />
-        <ErrorDisplay stringError={errorsForDisplay} />
-      </div>
-    );
-  });
-
-  let loadingIndicator = null;
-  if (isUpdatingResponse) {
-    loadingIndicator = <LoadingIndicator />;
-  }
-
-  return (
-    <div>
-      <div className="card-header">
-        <div className="d-flex justify-content-between">
-          <h4 className="mb-0">{section.title}</h4>
-          {loadingIndicator}
+      <div className="progress card-img-top" style={{ borderRadius: 0 }}>
+        <div
+          className="progress-bar"
+          role="progressbar"
+          style={{ width: progressPercent }}
+          aria-valuenow={progressPercentValue}
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          {progressPercent}
         </div>
       </div>
+    );
+  }
 
-      {renderProgress(form, section)}
+  renderSection = (section) => {
+    const {
+      convention,
+      form,
+      response,
+      responseValueChanged,
+      isUpdatingResponse,
+      errors,
+    } = this.props;
 
-      <div className="card-body pb-0">
-        {items}
-      </div>
-    </div>
-  );
-}
+    const items = form.getItemsInSection(section.id).map((item) => {
+      const itemErrors = errors[item.identifier] || [];
+      const errorsForDisplay = (itemErrors.length > 0 ? itemErrors.join(', ') : null);
 
-const FormPresenter = (props) => {
-  const {
-    form,
-    convention,
-    response,
-    exitButton,
-    submitCaption,
-    errors,
-  } = props;
-  if (!form || !convention || !response) {
+      return (
+        <div>
+          <FormItem
+            key={item.id}
+            formItem={item}
+            convention={convention}
+            value={response[item.identifier]}
+            onChange={responseValueChanged}
+          />
+          <ErrorDisplay stringError={errorsForDisplay} />
+        </div>
+      );
+    });
+
+    let loadingIndicator = null;
+    if (isUpdatingResponse) {
+      loadingIndicator = <LoadingIndicator />;
+    }
+
     return (
       <div>
-        <LoadingIndicator size={4} />
+        <div className="card-header" ref={(element) => { this.headerDiv = element; }}>
+          <div className="d-flex justify-content-between">
+            <h4 className="mb-0">{section.title}</h4>
+            {loadingIndicator}
+          </div>
+        </div>
+
+        {this.renderProgress(section)}
+
+        <div className="card-body pb-0">
+          {items}
+        </div>
       </div>
     );
   }
 
-  const currentSection = getCurrentSection(form, props.currentSectionId);
-  const sections = form.getSections();
-  const currentSectionIndex = sections.indexOf(currentSection);
+  render = () => {
+    const {
+      form,
+      convention,
+      response,
+      exitButton,
+      submitCaption,
+    } = this.props;
+    if (!form || !convention || !response) {
+      return (
+        <div>
+          <LoadingIndicator size={4} />
+        </div>
+      );
+    }
 
-  const disableContinue = form.getItemsInSection(currentSection.id).some(item => (
-    !item.valueIsComplete(response[item.identifier])
-  ));
+    const currentSection = getCurrentSection(form, this.props.currentSectionId);
+    const sections = form.getSections();
+    const currentSectionIndex = sections.indexOf(currentSection);
 
-  return (
-    <div className="card mb-4">
-      {
-        renderSection(
-          convention,
-          form,
-          currentSection,
-          response,
-          props.responseValueChanged,
-          props.isUpdatingResponse,
-          errors,
-        )
-      }
+    const disableContinue = form.getItemsInSection(currentSection.id).some(item => (
+      !item.valueIsComplete(response[item.identifier])
+    ));
 
-      <FormFooterContainer
-        currentSectionIndex={currentSectionIndex}
-        sectionCount={sections.size}
-        disableContinue={disableContinue}
-        exitButton={exitButton}
-        submitCaption={submitCaption}
-      />
-    </div>
-  );
-};
+    return (
+      <div className="card mb-4">
+        {this.renderSection(currentSection)}
 
-FormPresenter.propTypes = {
-  convention: PropTypes.shape({
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-  form: Form.propType.isRequired,
-  errors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  responseValueChanged: PropTypes.func.isRequired,
-  isUpdatingResponse: PropTypes.bool.isRequired,
-  currentSectionId: PropTypes.number,
-  exitButton: PropTypes.shape({
-    caption: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-  }),
-  submitCaption: PropTypes.string,
-};
-
-FormPresenter.defaultProps = {
-  currentSectionId: null,
-  exitButton: null,
-  submitCaption: null,
-};
+        <FormFooterContainer
+          currentSectionIndex={currentSectionIndex}
+          sectionCount={sections.size}
+          disableContinue={disableContinue}
+          exitButton={exitButton}
+          submitCaption={submitCaption}
+        />
+      </div>
+    );
+  }
+}
 
 export default FormPresenter;
