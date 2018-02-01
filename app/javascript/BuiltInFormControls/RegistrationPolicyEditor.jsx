@@ -253,8 +253,13 @@ class RegistrationPolicyEditor extends React.Component {
       <div className="form-group">
         <label htmlFor={selectId}>
           Registration policy
-          <select id={selectId} className="form-control" value={selectorValue} onChange={this.presetSelected}>
-            <option value="" />
+          <select
+            id={selectId}
+            className="form-control"
+            value={selectorValue || ''}
+            onChange={this.presetSelected}
+          >
+            <option value="" disabled>Select one...</option>
             {presetOptions}
             <option value="_custom">Custom registration policy (advanced)</option>
           </select>
