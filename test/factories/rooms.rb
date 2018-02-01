@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :room do
     convention nil
-    name "MyString"
+    name 'MyString'
   end
 end

@@ -5,8 +5,8 @@ FactoryBot.define do
     convention
 
     sequence(:title) { |n| "Event #{n}" }
-    status "active"
-    category "larp"
+    status 'active'
+    category 'larp'
     registration_policy RegistrationPolicy.unlimited
     length_seconds 4.hours
     con_mail_destination 'event_email'

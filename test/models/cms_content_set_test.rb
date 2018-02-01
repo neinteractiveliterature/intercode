@@ -4,7 +4,7 @@ describe CmsContentSet do
   it 'finds templates in the content set' do
     content_set = CmsContentSet.new(name: 'standard')
     partials = content_set.all_template_paths_with_names('partials')
-    news_partial = partials.find { |(path, name)| name == 'news' }
+    news_partial = partials.find { |(_path, name)| name == 'news' }
 
     assert news_partial
     assert File.exist?(news_partial.first)
