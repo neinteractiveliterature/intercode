@@ -13,6 +13,7 @@ class EventSignupService < ApplicationService
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket
   validate :require_valid_bucket
+  validate :require_no_bucket_for_team_member
 
   include Concerns::ConventionRegistrationFreeze
 
@@ -83,12 +84,21 @@ with #{event.title}."
   end
 
   def require_valid_bucket
+    return if team_member?
+
     requested_bucket = run.registration_policy.bucket_with_key(requested_bucket_key)
     return unless !requested_bucket || requested_bucket.anything?
 
     other_buckets = run.registration_policy.buckets.reject(&:anything?)
     errors.add :base,
       "Please choose one of the following buckets: #{other_buckets.map(&:name).join(', ')}."
+  end
+
+  def require_no_bucket_for_team_member
+    return unless team_member?
+    return unless requested_bucket_key
+
+    errors.add :base, 'Team members must sign up as non-counted'
   end
 
   def counts_towards_total?
@@ -117,6 +127,8 @@ with #{event.title}."
   end
 
   def actual_bucket
+    return nil if team_member?
+
     @actual_bucket ||= begin
       signups = run.signups
       prioritized_buckets.find { |bucket| !bucket.full?(signups) }

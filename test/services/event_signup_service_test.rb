@@ -50,6 +50,21 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
     end
 
+    describe 'as a team member' do
+      let(:requested_bucket_key) { nil }
+
+      it 'signs up a team member as not counted' do
+        FactoryBot.create(:team_member, event: event, user_con_profile: user_con_profile)
+        result = subject.call
+
+        result.must_be :success?
+        result.signup.must_be :confirmed?
+        result.signup.wont_be :counted?
+        result.signup.bucket_key.must_be_nil
+        result.signup.requested_bucket_key.must_be_nil
+      end
+    end
+
     it 'allows signups if the user has not yet reached the current signup limit' do
       convention.update!(
         maximum_event_signups: ScheduledValue::ScheduledValue.new(

@@ -88,6 +88,11 @@
                     %em You are ##{ahead_of_me.size + 1} on the waitlist.
 
                 %p= link_to "Withdraw", [@event, run, :user_signup], class: 'btn btn-outline-danger', method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
+              - elsif @team_members.any? { |team_member| team_member.user_con_profile == user_con_profile }
+                = link_to event_run_user_signup_path(@event, run), method: "POST", class: "btn btn-outline-primary" do
+                  %strong Sign up
+                  %br
+                  Team member
               - else
                 - count_presenter.buckets.each_with_index do |bucket, index|
                   - next if bucket.anything?
