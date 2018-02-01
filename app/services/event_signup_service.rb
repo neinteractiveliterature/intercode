@@ -56,6 +56,7 @@ class EventSignupService < ApplicationService
   end
 
   def signup_count_must_be_allowed
+    return if team_member?
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     case @max_signups_allowed
@@ -116,7 +117,8 @@ with #{event.title}."
   end
 
   def other_signups
-    @other_signups ||= user_con_profile.signups.includes(run: :event).where.not(run_id: run.id).to_a
+    @other_signups ||= user_con_profile.signups.counted.includes(run: :event)
+      .where.not(run_id: run.id).to_a
   end
 
   def prioritized_buckets

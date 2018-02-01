@@ -53,8 +53,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     describe 'as a team member' do
       let(:requested_bucket_key) { nil }
 
-      it 'signs up a team member as not counted' do
+      setup do
         FactoryBot.create(:team_member, event: event, user_con_profile: user_con_profile)
+      end
+
+      it 'signs up a team member as not counted' do
         result = subject.call
 
         result.must_be :success?
@@ -62,6 +65,24 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result.signup.wont_be :counted?
         result.signup.bucket_key.must_be_nil
         result.signup.requested_bucket_key.must_be_nil
+      end
+
+      it 'does not care whether signups are open yet' do
+        convention.update!(
+          maximum_event_signups: ScheduledValue::ScheduledValue.new(
+            timespans: [
+              {
+                start: nil,
+                finish: nil,
+                value: 'not_yet'
+              }
+            ]
+          )
+        )
+
+        result = subject.call
+        result.must_be :success?
+        result.signup.must_be :confirmed?
       end
     end
 
@@ -76,6 +97,32 @@ class EventSignupServiceTest < ActiveSupport::TestCase
             }
           ]
         )
+      )
+
+      result = subject.call
+      result.must_be :success?
+      result.signup.must_be :confirmed?
+    end
+
+    it 'does not count non-counted signups towards the signup limit' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(
+          timespans: [
+            {
+              start: nil,
+              finish: nil,
+              value: '1'
+            }
+          ]
+        )
+      )
+      another_event = FactoryBot.create(:event, convention: convention)
+      another_run = FactoryBot.create(:run, event: another_event)
+      FactoryBot.create(
+        :signup,
+        counted: false,
+        user_con_profile: user_con_profile,
+        run: another_run
       )
 
       result = subject.call
