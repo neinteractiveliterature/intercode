@@ -111,8 +111,7 @@
     "webpack-dev-server": "^2.11.1"
   },
   "resolutions": {
-    "webpack-sources": "1.0.1",
-    "react-virtualized": "9.18.0"
+    "webpack-sources": "1.0.1"
   },
   "scripts": {
     "test": "jest --testPathPattern=test/javascript",
