@@ -31,18 +31,5 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
       policy.wont_be :valid?
       assert policy.errors.full_messages.first =~ /at most 1 flex bucket/
     end
-
-    it 'validates that the anything bucket is at the end' do
-      policy = RegistrationPolicy.new(
-        buckets: [
-          RegistrationPolicy::Bucket.new(key: "pcs"),
-          RegistrationPolicy::Bucket.new(key: "dont_care", anything: true),
-          RegistrationPolicy::Bucket.new(key: "npcs")
-        ]
-      )
-
-      policy.wont_be :valid?
-      assert policy.errors.full_messages.first =~ /last in the priority list/
-    end
   end
 end
