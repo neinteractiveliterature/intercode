@@ -18,7 +18,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     it 'disallows signups' do
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\AYou must have a valid ticket to #{Regexp.escape convention.name})
+      result.errors.full_messages.join('\n').must_match /\AYou must have a valid ticket to #{Regexp.escape convention.name}/
     end
   end
 
@@ -88,7 +88,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\AYou are already signed up for 1 event)
+      result.errors.full_messages.join('\n').must_match /\AYou are already signed up for 1 event/
     end
 
     it 'disallows signups if signups are not yet open' do
@@ -106,7 +106,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\ASignups are not allowed at this time)
+      result.errors.full_messages.join('\n').must_match /\ASignups are not allowed at this time/
     end
 
     it 'disallows signups to a frozen convention' do
@@ -114,7 +114,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\ARegistrations for #{Regexp.escape convention.name} are frozen)
+      result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
     end
 
     describe 'with a conflicting event' do
@@ -231,7 +231,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to a nonexistent bucket' do
           result = subject.call
           result.must_be :failure?
-          result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
+          result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
         end
       end
 
@@ -241,7 +241,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to the anything bucket' do
           result = subject.call
           result.must_be :failure?
-          result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
+          result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
         end
       end
     end

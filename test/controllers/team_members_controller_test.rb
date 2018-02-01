@@ -12,18 +12,18 @@ describe TeamMembersController do
     team_member
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index, params: { event_id: event }
     assert_response :success
     assert_not_nil assigns(:team_members)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get :new, params: { event_id: event }
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get :edit, params: { event_id: event, id: team_member }
     assert_response :success
   end

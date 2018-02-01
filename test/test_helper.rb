@@ -1,11 +1,11 @@
-ENV["RAILS_ENV"] = "test"
-require "simplecov"
+ENV['RAILS_ENV'] = 'test'
+require 'simplecov'
 SimpleCov.start
 
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
-require "minitest/reporters"
+require 'minitest/reporters'
 Minitest::Reporters.use!(
   Minitest::Reporters::SpecReporter.new,
   ENV,
@@ -27,7 +27,7 @@ class ActionController::TestCase
 
   def set_convention(convention)
     @request.host = convention.domain
-    @controller.request.env["intercode.convention"] = convention
+    @controller.request.env['intercode.convention'] = convention
   end
 end
 
@@ -38,4 +38,3 @@ class ActionDispatch::IntegrationTest
     self.default_url_options = { host: convention.domain }
   end
 end
-

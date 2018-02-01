@@ -7,7 +7,7 @@ describe UserConProfileDrop do
   let(:convention) { user_con_profile.convention }
   let(:events) { 5.times.map { FactoryBot.create(:event, convention: convention) } }
 
-  %w(email first_name last_name nickname ticket).each do |field|
+  %w[email first_name last_name nickname ticket].each do |field|
     it "returns the #{field} of the user con profile" do
       user_con_profile_drop.public_send(field).must_equal user_con_profile.public_send(field)
     end
