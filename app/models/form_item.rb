@@ -18,7 +18,9 @@ class FormItem < ApplicationRecord
       caption: :required,
       style: :required,
       choices: :required,
-      required: :optional
+      required: :optional,
+      other: :optional,
+      other_caption: :optional
     },
     registration_policy: {
       identifier: :required,
