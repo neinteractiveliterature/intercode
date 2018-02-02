@@ -47,7 +47,7 @@
     "path-complete-extname": "^0.1.0",
     "payment": "^2.3.0",
     "popper.js": "^1.12.9",
-    "postcss-loader": "^2.0.10",
+    "postcss-loader": "^2.1.0",
     "postcss-smart-import": "^0.7.6",
     "precss": "^3.1.0",
     "prop-types": "^15.6.0",
