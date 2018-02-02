@@ -107,7 +107,7 @@
     "jest": "^22.1.4",
     "react-test-renderer": "^16.2.0",
     "sinon": "^4.2.2",
-    "webpack-bundle-analyzer": "^2.9.2",
+    "webpack-bundle-analyzer": "^2.10.0",
     "webpack-dev-server": "^2.11.1"
   },
   "resolutions": {
