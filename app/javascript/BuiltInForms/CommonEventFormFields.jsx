@@ -54,6 +54,8 @@ class CommonEventFormFields extends React.Component {
       short_blurb: PropTypes.string,
       description: PropTypes.string,
       participant_communications: PropTypes.string,
+      content_warnings: PropTypes.string,
+      age_restrictions: PropTypes.string,
       length_seconds: PropTypes.number,
       registration_policy: PropTypes.shape({
         buckets: PropTypes.arrayOf(PropTypes.shape({
@@ -302,6 +304,20 @@ class CommonEventFormFields extends React.Component {
         value={this.props.event.description || ''}
         onChange={this.formInputDidChange}
         rows={10}
+      />
+      <BootstrapFormTextarea
+        name="content_warnings"
+        label="Content warnings"
+        value={this.props.event.content_warnings || ''}
+        onChange={this.formInputDidChange}
+        rows={4}
+      />
+      <BootstrapFormTextarea
+        name="age_restrictions"
+        label="Age restrictions"
+        value={this.props.event.age_restrictions || ''}
+        onChange={this.formInputDidChange}
+        rows={4}
       />
       {this.renderParticipantCommunicationsField()}
       {this.renderMaximumEventProvidedTicketsOverrideEditor()}

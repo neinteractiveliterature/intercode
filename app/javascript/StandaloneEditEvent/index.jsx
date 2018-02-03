@@ -39,6 +39,8 @@ fragment StandaloneEditEvent_EventFields on Event {
   can_play_concurrently
   short_blurb
   participant_communications
+  age_restrictions
+  content_warnings
   email
   length_seconds
   category
