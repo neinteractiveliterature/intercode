@@ -15,7 +15,9 @@ class AcceptEventProposalService < ApplicationService
     description: 'description',
     short_blurb: 'short_blurb',
     registration_policy: 'registration_policy',
-    participant_communications: 'player_communications'
+    participant_communications: 'player_communications',
+    age_restrictions: 'age_restrictions',
+    content_warnings: 'content_warnings'
   }
 
   DEFAULT_EVENT_ATTRIBUTES = {
