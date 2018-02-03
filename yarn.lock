@@ -2152,9 +2152,17 @@ coa@~1.0.1:
   dependencies:
     q "^1.1.2"
 
+code-mirror-themes@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/code-mirror-themes/-/code-mirror-themes-1.0.0.tgz#7ad8c27aeb1a6279b4b2800722f1599d4e27cc61"
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
+
+codemirror@^5.34.0:
+  version "5.34.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.34.0.tgz#e345dcc09a6149db65cc70dff9d389c1c4b0cd06"
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -7250,6 +7258,10 @@ react-bootstrap4-modal@^1.1.0, react-bootstrap4-modal@^1.2.2:
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.5.10"
+
+react-codemirror2@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-4.0.0.tgz#88a30bb082cb87755a80e057d4c7b577456c38f0"
 
 react-currency-masked-input@^2.2.0:
   version "2.2.0"

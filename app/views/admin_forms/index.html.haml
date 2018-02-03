@@ -1,0 +1,9 @@
+%h1 Forms for #{convention.name}
+
+%ul
+  %li= link_to 'Event proposal form', admin_form_path(convention.event_proposal_form)
+  %li= link_to 'User con profile form', admin_form_path(convention.user_con_profile_form)
+
+.alert.alert-danger
+  Form editing is an advanced feature that requires knowledge of Intercode's form system as well
+  as directly editing JSON data.  Proceed with caution.

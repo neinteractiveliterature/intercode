@@ -124,4 +124,8 @@ Types::MutationType = GraphQL::ObjectType.define do
   field :deleteMaximumEventProvidedTicketsOverride, delete_override_field do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :delete))
   end
+
+  field :updateFormWithJSON, Mutations::UpdateFormWithJSON.field do
+    guard(guard_for_model_with_id(Form, :update))
+  end
 end

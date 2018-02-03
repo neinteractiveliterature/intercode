@@ -13,6 +13,19 @@ import Clipboard from 'clipboard';
 import Rails from 'rails-ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
 
+import 'codemirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/lib/codemirror.css';
+import 'code-mirror-themes/themes/github.css';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/matchtags';
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/markdown-fold';
+import 'codemirror/addon/fold/xml-fold';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/foldgutter.css';
+
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
@@ -22,6 +35,7 @@ import '../inflections';
 import ConventionAdmin from '../ConventionAdmin';
 import EventAdmin from '../EventAdmin';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
+import FormJSONEditor from '../FormJSONEditor';
 import FormPresenter from '../FormPresenter';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
@@ -38,6 +52,7 @@ WebpackerReact.setup({
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   EventAdmin,
   EventListSortDropdown,
+  FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   FormPresenter,
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
