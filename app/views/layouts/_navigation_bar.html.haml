@@ -38,6 +38,8 @@
                   = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
                 - if can? :update, convention.events.new.runs.new
                   = link_to "Event Scheduling", admin_events_path, class: 'dropdown-item'
+                - if can? :update, convention.forms.new
+                  = link_to "Forms", admin_forms_path, class: 'dropdown-item'
                 - if can? :mail_to_any, convention
                   = link_to "Mailing Lists", mailing_lists_path, class: 'dropdown-item'
                 = link_to "Reports", reports_path, class: 'dropdown-item'

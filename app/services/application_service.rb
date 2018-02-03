@@ -12,6 +12,7 @@ class ApplicationService
   include ActiveModel::Validations
 
   attr_reader :skip_locking
+  attr_writer :logger
 
   class << self
     attr_accessor :validate_manually
@@ -38,6 +39,10 @@ class ApplicationService
     result = inner_call
     raise ServiceFailure.new(self, result) if result.failure?
     result
+  end
+
+  def logger
+    @logger || Rails.logger
   end
 
   private

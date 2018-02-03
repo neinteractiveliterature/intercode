@@ -27,3 +27,17 @@ table.no-top-border thead th {
   border: none;
   cursor: pointer;
 }
+
+.CodeMirror {
+  height: auto;
+}
+
+.CodeMirror-scroll {
+  max-height: 80vh;
+}
+
+.cm-s-github {
+	font-size: $code-font-size * 0.9;
+	font-family: $font-family-monospace;
+  line-height: auto;
+}
