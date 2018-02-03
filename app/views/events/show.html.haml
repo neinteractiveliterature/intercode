@@ -112,10 +112,12 @@
 
   = MarkdownPresenter.new('No description provided').render @event.description
 
-- if @event.participant_communications.present?
-  %hr
+- %w[content_warnings age_restrictions participant_communications].each do |field|
+  - value = @event.public_send(field)
+  - if value.present?
+    %hr
 
-  %section.my-4
-    %h4 Participant communications
+    %section.my-4
+      %h4= field.humanize
 
-    = MarkdownPresenter.new('No information provided').render @event.participant_communications
+      = MarkdownPresenter.new('No information provided').render value
