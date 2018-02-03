@@ -8,7 +8,9 @@ class FormExportPresenter
   def as_json
     {
       title: form.title,
-      sections: form.form_sections.includes(:form_items).map { |section| export_section(section) }
+      sections: form.form_sections.order(:position).includes(:form_items).map do |section|
+        export_section(section)
+      end
     }
   end
 
@@ -17,7 +19,7 @@ class FormExportPresenter
   def export_section(section)
     {
       'title' => section.title,
-      'section_items' => section.form_items.map { |item| export_item(item) }
+      'section_items' => section.form_items.sort_by(&:position).map { |item| export_item(item) }
     }
   end
 
