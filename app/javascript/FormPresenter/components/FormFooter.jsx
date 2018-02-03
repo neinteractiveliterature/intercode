@@ -45,7 +45,6 @@ class FormFooter extends React.Component {
       <a
         className="btn btn-outline-secondary mr-2"
         href={this.props.exitButton.url}
-        disabled={this.props.disableContinue}
       >
         {this.props.exitButton.caption}
       </a>
@@ -81,7 +80,7 @@ class FormFooter extends React.Component {
       <button
         className="btn btn-success"
         onClick={this.props.submitForm}
-        disabled={this.props.isUpdatingResponse || this.disableContinue}
+        disabled={this.props.isUpdatingResponse || this.props.disableContinue}
       >
         {this.props.submitCaption || 'Submit'}
       </button>
