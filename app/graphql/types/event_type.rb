@@ -9,6 +9,8 @@ Types::EventType = GraphQL::ObjectType.define do
   field :category, types.String
   field :url, types.String
   field :participant_communications, types.String
+  field :age_restrictions, types.String
+  field :content_warnings, types.String
   field :length_seconds, types.Int
   field :can_play_concurrently, types.Boolean
   field :con_mail_destination, types.String

@@ -54,6 +54,8 @@ class EditEvent extends React.Component {
         short_blurb: event.short_blurb,
         description: event.description,
         participant_communications: event.participant_communications,
+        age_restrictions: event.age_restrictions,
+        content_warnings: event.content_warnings,
         length_seconds: event.length_seconds,
         registration_policy: {
           buckets: event.registration_policy.buckets.map(bucket => ({
