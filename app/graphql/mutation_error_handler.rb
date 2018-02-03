@@ -13,5 +13,7 @@ class MutationErrorHandler
     )
   rescue ApplicationService::ServiceFailure => err
     GraphQL::ExecutionError.new(err.result.errors.full_messages.join(', '))
+  rescue StandardError => err
+    GraphQL::ExecutionError.new(err.message)
   end
 end
