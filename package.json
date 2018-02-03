@@ -117,6 +117,7 @@
     "webpack-sources": "1.0.1"
   },
   "scripts": {
+    "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --config=config/webpack/production.js",
     "test": "jest --testPathPattern=test/javascript",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
