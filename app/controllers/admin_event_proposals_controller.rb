@@ -49,7 +49,7 @@ class AdminEventProposalsController < ApplicationController
   # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
     permission = params[:action] == 'update' ? :manage : :read
-    authorize! permission, convention.event_proposals.new(status: 'proposed')
+    authorize! permission, convention.event_proposals.new(status: 'reviewing')
   end
 
   def admin_event_proposal_params
