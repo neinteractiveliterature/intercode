@@ -49,6 +49,11 @@ class EventProposalsController < ApplicationController
     respond_with @event_proposal
   end
 
+  def destroy
+    @event_proposal.destroy
+    redirect_to root_url, notice: 'Your event proposal has been deleted.'
+  end
+
   private
 
   def event_proposal_params

@@ -118,7 +118,10 @@ class Ability
     else
       can [:read, :create, :update], UserConProfile, user_id: user.id
       can [:create, :submit], EventProposal
-      can [:read, :update], EventProposal, id: own_event_proposal_ids
+      can [:read, :update], EventProposal,
+        id: own_event_proposal_ids,
+        status: %w[draft proposed reviewing]
+      can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
       can :signup_summary, Run, id: signed_up_run_ids
 
       add_con_staff_abilities
