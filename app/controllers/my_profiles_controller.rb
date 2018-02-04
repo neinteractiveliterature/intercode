@@ -49,10 +49,7 @@ class MyProfilesController < ApplicationController
         format.html { redirect_to new_my_profile_path }
       end
     else
-      session[:register_via_convention_id] = convention.id
-      redirect_to new_user_registration_url(
-        host: Rails.application.config.action_mailer.default_url_options[:host]
-      )
+      redirect_to new_user_registration_url
     end
   end
 
