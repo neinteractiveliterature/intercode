@@ -1,3 +1,13 @@
-%h1.mb-4 Propose an event
+- delete_button = capture do
+  = link_to 'Delete proposal', event_proposal_path(@event_proposal), class: 'btn btn-danger', method: 'DELETE', 'data-confirm' => 'Are you sure?  This will erase your proposal along with everything you\'ve written here.'
+
+.row.mb-2
+  .col-md-9
+    %h1 Propose an event
+  .col-md-3
+    - if can? :destroy, @event_proposal
+      .d-md-none= delete_button
+      .d-none.d-md-block
+        .text-right= delete_button
 
 = event_proposal_form @event_proposal
