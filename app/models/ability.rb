@@ -205,7 +205,7 @@ class Ability
   def add_event_proposal_abilities
     can :read, EventProposal,
       convention_id: con_ids_with_privilege(:proposal_committee, :gm_liaison),
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
     can :manage, EventProposal,
       convention_id: con_ids_with_privilege(:proposal_chair),
       status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
