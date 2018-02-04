@@ -18,6 +18,11 @@ module Intercode
           ApplicationHelper.obfuscated_email(input)
         end
       end
+
+      def to_sentence(input)
+        return unless input
+        input.to_sentence
+      end
     end
   end
 end
