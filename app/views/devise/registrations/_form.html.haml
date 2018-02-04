@@ -1,3 +1,7 @@
+- partial = CmsPartial.where(parent: nil, name: 'account_form_text').first
+- if partial
+  = cadmus_renderer.render(Liquid::Template.parse(partial.content), :html)
+
 %fieldset
   = f.text_field :first_name, :placeholder => :first_name, :required => true
   = f.text_field :last_name, :placeholder => :last_name, :required => true
@@ -13,4 +17,4 @@
 - else
   %fieldset
     = f.password_field :current_password, help: "We need your current password to verify your identity"
-= f.submit resource.new_record? ? "Create account" : "Update account"
+= f.submit resource.new_record? ? "Create account" : "Update account", class: 'btn btn-primary'

@@ -88,11 +88,6 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if session[:register_via_convention_id]
-      convention = Convention.find_by(id: session[:register_via_convention_id])
-      return my_profile_url(host: convention.domain) if convention
-    end
-
     if convention && convention.user_con_profiles.where(user_id: resource.id).none?
       return new_my_profile_path
     end

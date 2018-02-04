@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201184633) do
+ActiveRecord::Schema.define(version: 20180204164355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,14 +53,14 @@ ActiveRecord::Schema.define(version: 20180201184633) do
   end
 
   create_table "cms_partials", id: :serial, force: :cascade do |t|
-    t.integer "parent_id", null: false
+    t.integer "parent_id"
     t.string "name", null: false
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "parent_type"
-    t.index ["parent_id", "name"], name: "index_cms_partials_on_parent_id_and_name", unique: true
-    t.index ["parent_id"], name: "index_cms_partials_on_parent_id"
+    t.index ["parent_id", "parent_type", "name"], name: "index_cms_partials_on_parent_id_and_parent_type_and_name", unique: true
+    t.index ["parent_id", "parent_type"], name: "index_cms_partials_on_parent_id_and_parent_type"
   end
 
   create_table "conventions", id: :serial, force: :cascade do |t|
