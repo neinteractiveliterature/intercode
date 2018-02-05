@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import CaptionLegend from './CaptionLegend';
 
 class DateItem extends React.Component {
