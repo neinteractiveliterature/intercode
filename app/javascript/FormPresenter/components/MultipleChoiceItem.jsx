@@ -79,7 +79,7 @@ class MultipleChoiceItem extends React.Component {
     return null;
   }
 
-  isMultiple = () => this.props.formItem.properties.multiple
+  isMultiple = () => ['checkbox_horizontal', 'checkbox_vertical'].includes(this.props.formItem.properties.style)
 
   isOtherSelected = () => {
     if (!this.props.formItem.properties.other) {
