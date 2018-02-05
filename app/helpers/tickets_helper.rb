@@ -28,6 +28,7 @@ module TicketsHelper
       ticketTypeId: ticket&.ticket_type&.id,
       createChargeUrl: ticket_path,
       purchaseCompleteUrl: root_path,
-      ticketTypes: ticket_types_data
+      ticketTypes: ticket_types_data,
+      initialName: user_con_profile.name_without_nickname
   end
 end
