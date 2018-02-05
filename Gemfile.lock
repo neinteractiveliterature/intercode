@@ -373,9 +373,9 @@ GEM
     newrelic_rpm (4.8.0.341)
     nio4r (2.2.0)
     nio4r (2.2.0-java)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
-    nokogiri (1.8.1-java)
+    nokogiri (1.8.2-java)
     oj (3.4.0)
     orm_adapter (0.5.0)
     parallel (1.12.1)
@@ -458,7 +458,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    reverse_markdown (1.0.3)
+    reverse_markdown (1.0.5)
       nokogiri
     rollbar (2.15.5)
       multi_json
