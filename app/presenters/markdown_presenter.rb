@@ -23,10 +23,11 @@ class MarkdownPresenter
     end
   end
 
-  attr_reader :default_content
+  attr_reader :default_content, :cadmus_renderer
 
-  def initialize(default_content)
+  def initialize(default_content, cadmus_renderer: nil)
     @default_content = default_content
+    @cadmus_renderer = cadmus_renderer
   end
 
   def render(markdown, sanitize_content: true, strip_single_p: true, whitelist_liquid_tags: true)
@@ -63,12 +64,18 @@ class MarkdownPresenter
 
   def render_liquid(liquid, whitelist_liquid_tags: true)
     template = Liquid::Template.parse(liquid)
+
     if whitelist_liquid_tags
       template.root.nodelist.select! do |node|
         ALLOWED_LIQUID_NODE_CLASSES.any? { |klass| node.is_a?(klass) }
       end
     end
-    template.render.html_safe
+
+    if cadmus_renderer
+      cadmus_renderer.render(template, :html)
+    else
+      template.render.html_safe
+    end
   rescue StandardError => e
     %(<div class="alert alert-danger">#{e.message}</div>\n#{liquid}).html_safe
   end
