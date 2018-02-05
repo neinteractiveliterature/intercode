@@ -29,6 +29,7 @@ const actions = {
     NEXT_SECTION: undefined,
     RESPONSE_VALUE_CHANGED: (field, value) => ({ field, value }),
     SET_API_CONFIGURATION: apiConfiguration => ({ apiConfiguration }),
+    UPDATE_REQUEST_STARTED: promise => ({ promise }),
   }),
 
   fetchConvention: createActionThunk(
@@ -46,7 +47,14 @@ const actions = {
 
   submitForm: createActionThunk(
     'SUBMIT_FORM',
-    ({ getState }) => {
+    ({ getState, dispatch }) => {
+      const { updatePromise } = getState();
+
+      if (updatePromise) {
+        updatePromise.then(() => { dispatch(actions.submitForm()); });
+        return { deferred: true };
+      }
+
       const { responseUrl, submitAuthenticityToken, afterSubmitUrl } = getState().apiConfiguration;
       return API.submitFormResponse(responseUrl, submitAuthenticityToken).then(() => {
         window.location.href = afterSubmitUrl;
@@ -56,15 +64,19 @@ const actions = {
 
   updateResponse: createActionThunkWithMeta(
     'UPDATE_RESPONSE',
-    ({ getState }) => {
+    ({ getState, dispatch }) => {
       const { response, apiConfiguration } = getState();
       const { responseUrl, authenticityToken } = apiConfiguration;
 
-      return API.updateFormResponse(
+      const promise = API.updateFormResponse(
         responseUrl,
         response,
         authenticityToken,
       );
+
+      dispatch(actions.updateRequestStarted(promise));
+
+      return promise;
     },
     () => ({
       debounce: {

@@ -4,7 +4,7 @@ import FormFooter from '../components/FormFooter';
 
 const mapStateToProps = state => ({
   currentSectionId: state.currentSectionId,
-  isUpdatingResponse: state.isUpdatingResponse,
+  isSubmittingResponse: state.isSubmittingResponse,
   afterSubmitUrl: state.apiConfiguration.afterSubmitUrl,
 });
 
