@@ -24,7 +24,6 @@
     "cadmus-navbar-admin": "^1.0.1",
     "classnames": "^2.2.5",
     "clipboard": "^1.7.1",
-    "code-mirror-themes": "^1.0.0",
     "codemirror": "^5.34.0",
     "compression-webpack-plugin": "^1.1.6",
     "css-loader": "^0.28.8",

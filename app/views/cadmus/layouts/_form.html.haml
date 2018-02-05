@@ -12,6 +12,6 @@
 
 .form-group
   = f.label :content
-  = f.text_area(:content, :style => "font-family: monospace; min-height: 40vh;", class: 'form-control')
+  = react_component 'LiquidHTMLEditor', name: 'cms_layout[content]', initialContent: f.object.content
 
-= f.submit class: 'btn btn-primary'
+= f.submit 'Save changes', class: 'btn btn-primary'

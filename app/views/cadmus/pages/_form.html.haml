@@ -16,6 +16,7 @@
 - else
   = f.collection_select :cms_layout_id, CmsLayout.global.order(:name), :id, :name, include_blank: 'Default layout', label: 'Layout'
 
-= find_and_preserve(f.text_area :content, :style => "font-family: monospace; height: 20em")
+.my-2
+  = react_component 'LiquidHTMLEditor', name: 'page[content]', initialContent: f.object.content
 
 = f.submit class: 'btn btn-primary'

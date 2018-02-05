@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import defaultCodeMirrorOptions from '../defaultCodeMirrorOptions';
 import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
@@ -129,13 +130,8 @@ class FormJSONEditor extends React.Component {
           <CodeMirror
             value={this.state.form.sectionsJSON}
             options={{
+              ...defaultCodeMirrorOptions,
               mode: 'application/json',
-              theme: 'github',
-              lineNumbers: true,
-              foldGutter: true,
-              lineWrapping: true,
-              matchBrackets: true,
-              gutters: ['CodeMirror-foldgutter', 'CodeMirror-linenumbers'],
             }}
             onBeforeChange={this.onBeforeChangeSections}
           />

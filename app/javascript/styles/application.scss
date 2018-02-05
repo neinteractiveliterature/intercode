@@ -1,5 +1,6 @@
 @import "./bootstrap_custom";
 @import "./buckets";
+@import "./codemirror_theme";
 @import "./print";
 @import "./schedule_grid";
 
@@ -34,10 +35,4 @@ table.no-top-border thead th {
 
 .CodeMirror-scroll {
   max-height: 80vh;
-}
-
-.cm-s-github {
-	font-size: $code-font-size * 0.9;
-	font-family: $font-family-monospace;
-  line-height: auto;
 }

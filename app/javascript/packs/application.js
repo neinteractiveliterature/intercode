@@ -14,9 +14,11 @@ import Rails from 'rails-ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
 
 import 'codemirror';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/addon/mode/multiplex';
 import 'codemirror/lib/codemirror.css';
-import 'code-mirror-themes/themes/github.css';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/matchtags';
 import 'codemirror/addon/fold/foldcode';
@@ -31,12 +33,14 @@ import WebpackerReact from 'webpacker-react';
 
 import '../styles/application.scss';
 import '../inflections';
+import '../Codemirror/LiquidMultiplexModes';
 
 import ConventionAdmin from '../ConventionAdmin';
 import EventAdmin from '../EventAdmin';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import FormPresenter from '../FormPresenter';
+import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
@@ -54,6 +58,7 @@ WebpackerReact.setup({
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   FormPresenter,
+  LiquidHTMLEditor,
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
   StaffPositionForm: StandaloneGraphQLComponent(StaffPositionForm),
