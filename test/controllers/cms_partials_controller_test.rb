@@ -28,12 +28,7 @@ class CmsPartialsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to cms_partials_url
   end
-
-  test 'should show cms_partial' do
-    get cms_partial_url(cms_partial)
-    assert_response :success
-  end
-
+  
   test 'should get edit' do
     get edit_cms_partial_url(cms_partial)
     assert_response :success
