@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Datetime from 'react-datetime';
-import moment from 'moment-timezone';
+import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import CaptionLegend from './CaptionLegend';
 
 class DateItem extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
+      identifier: PropTypes.string.isRequired,
       properties: PropTypes.shape({
         caption: PropTypes.string,
       }).isRequired,
@@ -19,19 +19,18 @@ class DateItem extends React.Component {
     value: null,
   };
 
-  onChange = (newValue) => {
-    this.props.onChange(newValue.toISOString());
+  onChange = (event) => {
+    this.props.onChange(event.target.value);
   }
 
   render = () => (
     <fieldset className="form-group">
       <CaptionLegend formItem={this.props.formItem} />
-      <Datetime
-        value={moment(this.props.value)}
+      <input
+        type="date"
+        value={this.props.value}
         onChange={this.onChange}
-        isValidDate={this.isValidDate}
-        dateFormat="MMMM D, YYYY"
-        timeFormat={false}
+        className="form-control"
       />
     </fieldset>
   )
