@@ -64,7 +64,9 @@ class MultipleChoiceItem extends React.Component {
 
   getValueForChoiceSet = () => {
     if (this.isMultiple()) {
-      const typecastValue = (this.props.value || []).map(singleValue => singleValue.toString());
+      const originalValue = this.props.value || [];
+      const typecastValue = (Array.isArray(originalValue) ? originalValue : [originalValue])
+        .map(singleValue => singleValue.toString());
       if (this.isOtherSelected()) {
         typecastValue.push(OTHER_VALUE);
       }
