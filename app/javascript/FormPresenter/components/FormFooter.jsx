@@ -9,7 +9,7 @@ class FormFooter extends React.Component {
     nextSection: PropTypes.func.isRequired,
     submitForm: PropTypes.func.isRequired,
     disableContinue: PropTypes.bool.isRequired,
-    isUpdatingResponse: PropTypes.bool.isRequired,
+    isSubmittingResponse: PropTypes.bool.isRequired,
     afterSubmitUrl: PropTypes.string,
     exitButton: PropTypes.shape({
       caption: PropTypes.string.isRequired,
@@ -80,7 +80,7 @@ class FormFooter extends React.Component {
       <button
         className="btn btn-success"
         onClick={this.props.submitForm}
-        disabled={this.props.isUpdatingResponse || this.props.disableContinue}
+        disabled={this.props.isSubmittingResponse || this.props.disableContinue}
       >
         {this.props.submitCaption || 'Submit'}
       </button>

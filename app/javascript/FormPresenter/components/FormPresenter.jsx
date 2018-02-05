@@ -24,6 +24,7 @@ class FormPresenter extends React.Component {
     errors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     responseValueChanged: PropTypes.func.isRequired,
+    isSubmittingResponse: PropTypes.bool.isRequired,
     isUpdatingResponse: PropTypes.bool.isRequired,
     currentSectionId: PropTypes.number,
     exitButton: PropTypes.shape({
@@ -56,6 +57,7 @@ class FormPresenter extends React.Component {
     const items = form.getAllItems();
     const sectionItems = form.getItemsInSection(section.id);
     const itemIndex = items.indexOf(sectionItems.get(sectionItems.size - 1)) + 1;
+    const sectionIndex = form.getSections().findIndex(formSection => formSection.id === section.id);
     const progressPercentValue = Math.round((itemIndex / items.count()) * 100);
     const progressPercent = `${progressPercentValue}%`;
 
@@ -69,7 +71,7 @@ class FormPresenter extends React.Component {
           aria-valuemin="0"
           aria-valuemax="100"
         >
-          {progressPercent}
+          Page {sectionIndex + 1} of {form.getSections().size}
         </div>
       </div>
     );
@@ -81,6 +83,7 @@ class FormPresenter extends React.Component {
       form,
       response,
       responseValueChanged,
+      isSubmittingResponse,
       isUpdatingResponse,
       errors,
     } = this.props;
@@ -104,7 +107,7 @@ class FormPresenter extends React.Component {
     });
 
     let loadingIndicator = null;
-    if (isUpdatingResponse) {
+    if (isUpdatingResponse || isSubmittingResponse) {
       loadingIndicator = <LoadingIndicator />;
     }
 

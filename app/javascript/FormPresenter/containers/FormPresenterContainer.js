@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
   form: state.form,
   convention: state.convention,
   response: state.response,
+  isSubmittingResponse: state.isSubmittingResponse,
   isUpdatingResponse: state.isUpdatingResponse,
   afterSubmitUrl: state.apiConfiguration.afterSubmitUrl,
 });

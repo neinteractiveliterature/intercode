@@ -3,8 +3,8 @@ import actions from '../actions';
 
 export default handleActions(
   {
-    [actions.updateResponse.START]: () => true,
-    [actions.updateResponse.ENDED]: () => false,
+    [actions.submitForm.START]: () => true,
+    [actions.submitForm.FAILED]: () => false,
   },
   false,
 );
