@@ -195,7 +195,7 @@ with #{event.title}."
     return [] unless buckets_with_capacity.any?
 
     bucket_signups = existing_signups_by_bucket_key[bucket.key].dup || []
-    bucket_signups.reject! { |signup| signup.requested_bucket_key } # only the ones with no requested bucket key
+    bucket_signups.reject!(&:requested_bucket_key) # only the ones with no requested bucket key
   end
 
   def withdraw_user_from_conflicting_waitlist_signups
