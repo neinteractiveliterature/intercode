@@ -5,8 +5,9 @@
   %dd.col-md-9= ticket.provided_by_event.title
 %dt.col-md-3 Paid
 %dd.col-md-9= ticket.payment_amount&.format || '0'
-- if ticket.payment_amount > 0
-  %dt.col-md-3 Transaction ID
-  %dd.col-md-9= ticket.charge_id
+%dt.col-md-3 Transaction ID
+%dd.col-md-9
+  - if ticket.payment_amount && ticket.payment_amount > 0
+    = ticket.charge_id
 %dt.col-md-3 Created
 %dd.col-md-9= ticket.created_at.strftime('%B %e, %Y %l:%M %p %Z')
