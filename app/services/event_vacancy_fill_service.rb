@@ -30,7 +30,13 @@ class EventVacancyFillService < ApplicationService
 
     def self.from_h(hash)
       hash = hash.symbolize_keys
-      new(hash[:signup_id], hash[:state], hash[:bucket_key], hash[:prev_state], hash[:prev_bucket_key])
+      new(
+        hash[:signup_id],
+        hash[:state],
+        hash[:bucket_key],
+        hash[:prev_state],
+        hash[:prev_bucket_key]
+      )
     end
 
     def self.from_signup(signup, prev_state, prev_bucket_key)
@@ -80,7 +86,8 @@ class EventVacancyFillService < ApplicationService
     result = SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
 
     if moving_confirmed_signup
-      # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill that vacancy
+      # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill
+      # that vacancy
       [result] + fill_bucket_vacancy(prev_bucket_key)
     else
       [result]
@@ -94,9 +101,16 @@ class EventVacancyFillService < ApplicationService
     signups_ordered.find do |signup|
       (
         # Confirmed signups that requested this bucket but didn't get it
-        (signup.confirmed? && signup.bucket_key != bucket_key && signup.requested_bucket_key == bucket_key) ||
+        (
+          signup.confirmed? &&
+          signup.bucket_key != bucket_key &&
+          signup.requested_bucket_key == bucket_key
+        ) ||
         # Signups in the waitlist that could be in this bucket
-        (signup.waitlisted? && (is_anything_bucket || signup.requested_bucket_key == bucket_key))
+        (
+          signup.waitlisted? &&
+          (is_anything_bucket || signup.requested_bucket_key == bucket_key)
+        )
       )
     end
   end

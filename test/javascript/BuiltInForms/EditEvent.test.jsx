@@ -18,8 +18,12 @@ describe('EditEvent', () => {
       dropEvent={() => {}}
       onSave={() => {}}
       onDrop={() => {}}
+      createMaximumEventProvidedTicketsOverride={() => {}}
+      deleteMaximumEventProvidedTicketsOverride={() => {}}
+      updateMaximumEventProvidedTicketsOverride={() => {}}
       cancelPath={null}
       showDropButton={false}
+      ticketTypes={[]}
       {...props}
     />
   ));

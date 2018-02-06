@@ -1,154 +1,157 @@
-[
-  {
-    "title": "Your {{ convention.name }} profile",
-    "section_items": [
-      {
-        "item_type": "static_text",
-        "style": "normal",
-        "content": "<div class=\"mb-4\">Your contact information will be made available to {{ convention.name }} staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information, <strong>please do not enter it</strong>. But if you do not provide it, organizers may not be able to send you event-related materials.</div>"
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "first_name",
-        "caption": "First name",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "last_name",
-        "caption": "Last name",
-        "lines": 1
-      },
-      {
-        "item_type": "static_text",
-        "style": "normal",
-        "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email }}</li><li>Password: <em>not shown</em></li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "nickname",
-        "caption": "Nickname",
-        "lines": 1
-      },
-      {
-        "item_type": "date",
-        "identifier": "birth_date",
-        "caption": "<p class=\"m-0\">Birth date<br>\n<small>Note: Specifying your birth date is optional. But if you choose not to, you may not be able to sign up for age-restricted games.</small></p>"
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "address",
-        "caption": "Street address",
-        "lines": 2
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "city",
-        "caption": "City",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "state",
-        "caption": "State/province",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "zipcode",
-        "caption": "ZIP/postal code",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "country",
-        "caption": "Country",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "free_text_type": "tel",
-        "identifier": "day_phone",
-        "caption": "Daytime phone",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "free_text_type": "tel",
-        "identifier": "evening_phone",
-        "caption": "Evening phone",
-        "lines": 1
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "best_call_time",
-        "caption": "Best time to call",
-        "lines": 1
-      },
-      {
-        "item_type": "multiple_choice",
-        "identifier": "preferred_contact",
-        "caption": "Preferred contact method",
-        "style": "radio_vertical",
-        "choices": [
-          {
-            "caption": "Email",
-            "value": "email"
-          },
-          {
-            "caption": "Daytime phone",
-            "value": "day_phone"
-          },
-          {
-            "caption": "Evening phone",
-            "value": "evening_phone"
-          }
-        ]
-      },
-      {
-        "item_type": "free_text",
-        "identifier": "how_heard",
-        "caption": "How did you hear about {{ convention.name }}?",
-        "lines": 1
-      },
-      {
-        "item_type": "multiple_choice",
-        "identifier": "mailing_lists",
-        "caption": "I would like to receive email about:",
-        "style": "checkbox_vertical",
-        "choices": [
-          {
-            "caption": "Intercon",
-            "value": "intercon"
-          },
-          {
-            "caption": "NELCO",
-            "value": "nelco"
-          },
-          {
-            "caption": "Other NEIL initiatives",
-            "value": "neil_other"
-          }
-        ],
-        "default_value": ["intercon"]
-      },
-      {
-        "item_type": "multiple_choice",
-        "identifier": "receive_whos_free_emails",
-        "style": "radio_vertical",
-        "caption": "Closer to the convention, {{ convention.name }} may email attendees who are free in particular time slots, to promote events that need signups in order to run.  These emails are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
-        "choices": [
-          {
-            "caption": "Receive emails about events that need signups",
-            "value": "true"
-          },
-          {
-            "caption": "Opt out of these emails",
-            "value": "false"
-          }
-        ],
-        "default_value": "true"
-      }
-    ]
-  }
-]
+{
+  "title": "User con profile form",
+  "sections": [
+    {
+      "title": "Your {{ convention.name }} profile",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "<div class=\"mb-4\">Your contact information will be made available to {{ convention.name }} staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information, <strong>please do not enter it</strong>. But if you do not provide it, organizers may not be able to send you event-related materials.</div>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "first_name",
+          "caption": "First name",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "last_name",
+          "caption": "Last name",
+          "lines": 1
+        },
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email }}</li><li>Password: <em>not shown</em></li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "nickname",
+          "caption": "Nickname",
+          "lines": 1
+        },
+        {
+          "item_type": "date",
+          "identifier": "birth_date",
+          "caption": "<p class=\"m-0\">Birth date<br>\n<small>Note: Specifying your birth date is optional. But if you choose not to, you may not be able to sign up for age-restricted games.</small></p>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "address",
+          "caption": "Street address",
+          "lines": 2
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "city",
+          "caption": "City",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "state",
+          "caption": "State/province",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "zipcode",
+          "caption": "ZIP/postal code",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "country",
+          "caption": "Country",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "free_text_type": "tel",
+          "identifier": "day_phone",
+          "caption": "Daytime phone",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "free_text_type": "tel",
+          "identifier": "evening_phone",
+          "caption": "Evening phone",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "best_call_time",
+          "caption": "Best time to call",
+          "lines": 1
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "preferred_contact",
+          "caption": "Preferred contact method",
+          "style": "radio_vertical",
+          "choices": [
+            {
+              "caption": "Email",
+              "value": "email"
+            },
+            {
+              "caption": "Daytime phone",
+              "value": "day_phone"
+            },
+            {
+              "caption": "Evening phone",
+              "value": "evening_phone"
+            }
+          ]
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "how_heard",
+          "caption": "How did you hear about {{ convention.name }}?",
+          "lines": 1
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "mailing_lists",
+          "caption": "I would like to receive email about:",
+          "style": "checkbox_vertical",
+          "choices": [
+            {
+              "caption": "Intercon",
+              "value": "intercon"
+            },
+            {
+              "caption": "NELCO",
+              "value": "nelco"
+            },
+            {
+              "caption": "Other NEIL initiatives",
+              "value": "neil_other"
+            }
+          ],
+          "default_value": ["intercon"]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "receive_whos_free_emails",
+          "style": "radio_vertical",
+          "caption": "Closer to the convention, {{ convention.name }} may email attendees who are free in particular time slots, to promote events that need signups in order to run.  These emails are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
+          "choices": [
+            {
+              "caption": "Receive emails about events that need signups",
+              "value": "true"
+            },
+            {
+              "caption": "Opt out of these emails",
+              "value": "false"
+            }
+          ],
+          "default_value": "true"
+        }
+      ]
+    }
+  ]
+}

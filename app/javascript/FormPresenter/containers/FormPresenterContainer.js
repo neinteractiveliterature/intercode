@@ -4,9 +4,11 @@ import FormPresenter from '../components/FormPresenter';
 
 const mapStateToProps = state => ({
   currentSectionId: state.currentSectionId,
+  errors: state.errors,
   form: state.form,
   convention: state.convention,
   response: state.response,
+  isSubmittingResponse: state.isSubmittingResponse,
   isUpdatingResponse: state.isUpdatingResponse,
   afterSubmitUrl: state.apiConfiguration.afterSubmitUrl,
 });

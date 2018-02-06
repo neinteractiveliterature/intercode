@@ -11,9 +11,9 @@ class Intercode::Import::Intercode1::ProposalForm
   end
 
   def import!
-    logger.info "Importing proposal form"
+    logger.info 'Importing proposal form'
 
-    form = convention.create_event_proposal_form!(title: "Proposal form", convention: convention)
+    form = convention.create_event_proposal_form!(title: 'Proposal form', convention: convention)
     convention.save!
 
     form_importer.import(form)
@@ -38,13 +38,12 @@ class Intercode::Import::Intercode1::ProposalForm
   def add_omit_timeblocks_for_convention
     form_importer.data.each do |section_attributes|
       section_attributes[:section_items].each do |section_item|
-        if section_item[:identifier] == 'timeblock_preferences'
-          section_item.merge!(
-            omit_timeblocks: (
-              friday_date ? [{ label: 'Morning', date: friday_date }] : []
-            )
+        next unless section_item[:identifier] == 'timeblock_preferences'
+        section_item.merge!(
+          omit_timeblocks: (
+            friday_date ? [{ label: 'Morning', date: friday_date }] : []
           )
-        end
+        )
       end
     end
   end

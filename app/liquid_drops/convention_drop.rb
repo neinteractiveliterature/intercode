@@ -1,8 +1,8 @@
 class ConventionDrop < Liquid::Drop
   attr_reader :convention
   delegate :id, :name, :started?, :ended?, :accepting_proposals, to: :convention
-  alias_method :started, :started?
-  alias_method :ended, :ended?
+  alias started started?
+  alias ended ended?
 
   def initialize(convention)
     @convention = convention

@@ -13,7 +13,7 @@ class Intercode::Import::Intercode1::NavigationItems
         { type: :link, title: 'Volunteering', page_name: 'volunteering' },
         { type: :link, title: 'ConCom Schedule', page_name: 'ConCom Schedule' },
         { type: :link, title: 'Intercon Flyer', page_name: 'Flyer' },
-        { type: :link, title: 'Intercon Program', page_name: 'Program' },
+        { type: :link, title: 'Intercon Program', page_name: 'Program' }
       ]
     }
   ]
@@ -25,7 +25,7 @@ class Intercode::Import::Intercode1::NavigationItems
   end
 
   def import!
-    logger.info "Importing navigation items"
+    logger.info 'Importing navigation items'
 
     NAVIGATION_STRUCTURE.each do |item|
       import_navigation_item(item)
@@ -58,9 +58,14 @@ class Intercode::Import::Intercode1::NavigationItems
     page = convention.pages.find_by(name: item[:page_name])
     if page
       logger.info("Creating navigation link #{item[:title]}")
-      convention.cms_navigation_items.create!(title: item[:title], page: page, navigation_section: navigation_section)
+      convention.cms_navigation_items.create!(
+        title: item[:title],
+        page: page,
+        navigation_section: navigation_section
+      )
     else
-      logger.info("Not creating navigation link #{item[:title]} because there is no page called #{item[:page_name]}")
+      logger.info("Not creating navigation link #{item[:title]} because \
+there is no page called #{item[:page_name]}")
     end
   end
 end

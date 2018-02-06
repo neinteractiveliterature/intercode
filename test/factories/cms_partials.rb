@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :cms_partial do
     sequence(:name) { |n| "partial_#{n}" }
-    content "Some text"
+    content 'Some text'
     association :parent, factory: :convention
   end
 end

@@ -12,7 +12,10 @@ class EventProposalsMailer < ApplicationMailer
   private
 
   def proposal_mail_destination(convention)
-    convention.staff_positions.find_by(name: 'Game Proposals Chair').user_con_profiles.map do |user_con_profile|
+    proposal_chair_user_con_profiles = convention.staff_positions
+      .find_by(name: 'Game Proposals Chair')
+      .user_con_profiles
+    proposal_chair_user_con_profiles.map do |user_con_profile|
       "#{user_con_profile.name} <#{user_con_profile.email}>"
     end
   end

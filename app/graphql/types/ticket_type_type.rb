@@ -1,11 +1,16 @@
 Types::TicketTypeType = GraphQL::ObjectType.define do
-  name "TicketType"
+  name 'TicketType'
 
   field :id, !types.Int
   field :name, types.String
   field :publicly_available, !types.Boolean
   field :counts_towards_convention_maximum, !types.Boolean
-  field :maximum_event_provided_tickets, !types.Int
+  field :maximum_event_provided_tickets, !types.Int do
+    argument :event_id, types.Int
+    resolve ->(obj, args, _ctx) {
+      obj.maximum_event_provided_tickets_for_event_id(args[:event_id])
+    }
+  end
   field :description, types.String
   field :pricing_schedule, Types::ScheduledMoneyValueType
 

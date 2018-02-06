@@ -11,12 +11,12 @@ class CmsFilesControllerTest < ActionDispatch::IntegrationTest
     sign_in user
   end
 
-  test "should get index" do
+  test 'should get index' do
     get cms_files_url
     assert_response :success
   end
 
-  test "should create cms_file" do
+  test 'should create cms_file' do
     uploaded_file = Rack::Test::UploadedFile.new(File.expand_path('test/files/war_bond.png', Rails.root), 'image/png')
 
     assert_difference('CmsFile.count') do
@@ -26,7 +26,7 @@ class CmsFilesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to cms_files_url
   end
 
-  test "should destroy cms_file" do
+  test 'should destroy cms_file' do
     cms_file
 
     assert_difference('CmsFile.count', -1) do

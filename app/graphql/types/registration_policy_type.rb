@@ -1,5 +1,5 @@
 Types::RegistrationPolicyType = GraphQL::ObjectType.define do
-  name "RegistrationPolicy"
+  name 'RegistrationPolicy'
 
   field :buckets, !types[!Types::RegistrationPolicyBucketType]
   field :slots_limited, types.Boolean, property: :slots_limited?

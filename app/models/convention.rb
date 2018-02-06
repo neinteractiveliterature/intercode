@@ -1,14 +1,14 @@
 require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
-  belongs_to :updated_by, :class_name => "User", optional: true
-  has_many :pages, :as => :parent, dependent: :destroy
+  belongs_to :updated_by, class_name: 'User', optional: true
+  has_many :pages, as: :parent, dependent: :destroy
   has_many :cms_layouts, as: :parent, dependent: :destroy
   has_many :cms_partials, as: :parent, dependent: :destroy
   has_many :cms_files, as: :parent, dependent: :destroy
   has_many :cms_navigation_items, as: :parent, dependent: :destroy
   has_many :user_con_profiles, dependent: :destroy
-  has_many :users, :through => :user_con_profiles
+  has_many :users, through: :user_con_profiles
   has_many :events, dependent: :destroy
   has_many :runs, through: :events
   has_many :signups, through: :runs
@@ -19,17 +19,17 @@ class Convention < ApplicationRecord
   has_many :forms, dependent: :destroy
   has_many :event_proposals, dependent: :destroy
 
-  belongs_to :root_page, :class_name => "Page", optional: true
-  belongs_to :default_layout, :class_name => "CmsLayout", optional: true
-  belongs_to :event_proposal_form, :class_name => "Form", optional: true
-  belongs_to :user_con_profile_form, :class_name => "Form", optional: true
+  belongs_to :root_page, class_name: 'Page', optional: true
+  belongs_to :default_layout, class_name: 'CmsLayout', optional: true
+  belongs_to :event_proposal_form, class_name: 'Form', optional: true
+  belongs_to :user_con_profile_form, class_name: 'Form', optional: true
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
-  validates :name, :presence => true
-  validates :domain, :presence => true, :uniqueness => true
+  validates :name, presence: true
+  validates :domain, presence: true, uniqueness: true
   validates :timezone_name, presence: true
-  validates :show_schedule, :inclusion => { :in => %w(yes gms priv no) }
+  validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
@@ -42,6 +42,10 @@ class Convention < ApplicationRecord
 
   def ended?
     ends_at && ends_at <= Time.now
+  end
+
+  def length_seconds
+    ends_at - starts_at
   end
 
   def load_cms_content_set(name)
@@ -66,12 +70,12 @@ class Convention < ApplicationRecord
   def maximum_event_signups_must_cover_all_time
     return if maximum_event_signups.try!(:covers_all_time?)
 
-    errors.add(:maximum_event_signups, "must cover all time")
+    errors.add(:maximum_event_signups, 'must cover all time')
   end
 
   def timezone_name_must_be_valid
     return unless timezone_name.present?
 
-    errors.add(:timezone_name, "must refer to a valid POSIX timezone") unless timezone
+    errors.add(:timezone_name, 'must refer to a valid POSIX timezone') unless timezone
   end
 end

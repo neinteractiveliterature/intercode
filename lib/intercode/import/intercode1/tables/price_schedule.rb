@@ -11,13 +11,14 @@ class Intercode::Import::Intercode1::Tables::PriceSchedule < Intercode::Import::
 
   def build_ticket_type
     con.ticket_types.new(
-      name: "weekend",
-      description: "Full-weekend ticket",
+      name: 'weekend',
+      description: 'Full-weekend ticket',
       pricing_schedule: price_schedule_converted
     )
   end
 
   private
+
   def price_schedule_converted
     timespans = price_schedule.map do |price_point|
       {

@@ -7,6 +7,7 @@ class Intercode::Import::Intercode1::Tables::Bios < Intercode::Import::Intercode
   end
 
   private
+
   def build_record(row)
     user_con_profile = @user_con_profile_id_map[row[:UserId]]
 

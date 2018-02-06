@@ -1,5 +1,5 @@
 Mutations::DeleteRun = GraphQL::Relay::Mutation.define do
-  name "DeleteRun"
+  name 'DeleteRun'
   return_field :run, Types::RunType
 
   input_field :id, !types.Int

@@ -7,7 +7,7 @@ module FormResponseHelper
   def render_value_of_type(item_type, value, properties = {})
     case item_type
     when 'free_text' then render_free_text_value(value, properties)
-    when 'multiple_choice' then render_multiple_choice_value(value)
+    when 'multiple_choice' then render_multiple_choice_value(value, properties)
     when 'registration_policy' then render_registration_policy_value(value)
     when 'timeblock_preference' then render_timeblock_preference_value(value)
     when 'timespan' then render_timespan_value(value)
@@ -18,7 +18,7 @@ module FormResponseHelper
     if bucket.slots_limited?
       "#{bucket.minimum_slots} / #{bucket.preferred_slots} / #{bucket.total_slots}"
     else
-      "unlimited"
+      'unlimited'
     end
   end
 
@@ -32,11 +32,20 @@ module FormResponseHelper
     end
   end
 
-  def render_multiple_choice_value(value)
-    case value
-    when Array then value.map(&:to_s).join(', ')
-    else value.to_s
+  def render_multiple_choice_value(value, properties)
+    values = case value
+    when Array then value.map(&:to_s)
+    else [value.to_s]
     end
+
+    values.map do |single_value|
+      choice = properties['choices'].find { |c| c['value'] == single_value }
+      if choice
+        choice['caption']
+      else
+        value
+      end
+    end.join(', ')
   end
 
   def render_registration_policy_value(value)
@@ -63,7 +72,9 @@ module FormResponseHelper
             safe_join([
               content_tag(:strong, "#{preferences.first.ordinality_description}:"),
               ' ',
-              preferences.sort_by(&:start).map { |preference| "#{preference.start.strftime('%a')} #{preference.label}" }.join(', ')
+              preferences.sort_by(&:start).map do |preference|
+                "#{preference.start.strftime('%a')} #{preference.label}"
+              end.join(', ')
             ])
           end
         end
@@ -75,9 +86,9 @@ module FormResponseHelper
     if value % 1.hour == 0
       pluralize(value / 1.hour, 'hour')
     elsif value % 1.minute == 0
-      sprintf('%d:%02d', value / 1.hour, (value % 1.hour) / 1.minute)
+      format('%d:%02d', value / 1.hour, (value % 1.hour) / 1.minute)
     else
-      sprintf(
+      format(
         '%d:%02d:%02d',
         value / 1.hour,
         (value % 1.hour / 1.minute),

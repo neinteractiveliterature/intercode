@@ -1,5 +1,5 @@
 Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
-  name "CreateFillerEvent"
+  name 'CreateFillerEvent'
   return_field :event, Types::EventType
 
   input_field :event, !Types::EventInputType
@@ -13,9 +13,11 @@ Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
       )
     )
 
-    event.runs.new(args[:run].to_h.merge(
-      updated_by: ctx[:user_con_profile].user
-    ))
+    event.runs.new(
+      args[:run].to_h.merge(
+        updated_by: ctx[:user_con_profile].user
+      )
+    )
 
     event.save!
 

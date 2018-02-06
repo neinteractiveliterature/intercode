@@ -1,3 +1,4 @@
+const process = require('process')
 const environment = require('./environment')
 
 const BabelMinifyPlugin = require("babel-minify-webpack-plugin")
@@ -9,9 +10,11 @@ environment.plugins.set(
   'BabelMinify',
   new BabelMinifyPlugin(),
 );
-// environment.plugins.set(
-//   'BundleAnalyzer',
-//   new BundleAnalyzerPlugin()
-// )
+if (process.env.ANALYZE_BUNDLE_SIZE) {
+  environment.plugins.set(
+    'BundleAnalyzer',
+    new BundleAnalyzerPlugin()
+  )
+}
 
 module.exports = environment.toWebpackConfig()

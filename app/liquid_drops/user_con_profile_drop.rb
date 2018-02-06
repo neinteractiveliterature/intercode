@@ -35,7 +35,8 @@ class UserConProfileDrop < Liquid::Drop
   end
 
   private
+
   def markdown_presenter
-    @markdown_presenter ||= MarkdownPresenter.new("No bio provided")
+    @markdown_presenter ||= MarkdownPresenter.new('No bio provided')
   end
 end

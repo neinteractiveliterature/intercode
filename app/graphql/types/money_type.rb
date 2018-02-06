@@ -1,5 +1,5 @@
 Types::MoneyType = GraphQL::ObjectType.define do
-  name "Money"
+  name 'Money'
 
   field :cents, !types.Int
   field :currency, !types.String

@@ -6,6 +6,7 @@ class CmsFilesController < ApplicationController
   layout 'cms_admin'
 
   private
+
   def cms_file_scope
     convention.cms_files
   end

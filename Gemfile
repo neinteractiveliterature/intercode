@@ -42,7 +42,7 @@ gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
 gem 'liquid-md5'
 
 # Extracted from this app!  Values that change over time based on a schedule
-gem 'scheduled_value', '~> 1.1.3'
+gem 'scheduled_value', '~> 1.2.1'
 
 # File uploading
 gem 'carrierwave'
@@ -80,7 +80,7 @@ gem 'rails_12factor', group: 'stage'
 gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
-gem 'oj', '~> 3.3.10'
+gem 'oj', '~> 3.4.0'
 
 group :development do
   gem 'rack-mini-profiler'

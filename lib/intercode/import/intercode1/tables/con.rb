@@ -16,11 +16,12 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
       friday_date.day,
       0,
       0,
-      0,
+      0
     )
 
     unless friday_start.friday?
-      raise "FATAL: The FRI_DATE constant in intercon_constants.inc is not a Friday.  It is set to #{friday_start.strftime('%A, %b %d, %Y')}."
+      raise "FATAL: The FRI_DATE constant in intercon_constants.inc is not a Friday.  It is set \
+to #{friday_start.strftime('%A, %b %d, %Y')}."
     end
 
     if config[:thursday_enabled]
@@ -58,6 +59,7 @@ class Intercode::Import::Intercode1::Tables::Con < Intercode::Import::Intercode1
   end
 
   private
+
   def build_record(row)
     Convention.new(
       name: @con_name,

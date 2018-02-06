@@ -1,7 +1,7 @@
 module Intercode
   class VirtualHostConstraint
     def matches?(request)
-      request.env["intercode.convention"]
+      request.env['intercode.convention']
     end
   end
 
@@ -13,7 +13,7 @@ module Intercode
     def call(env)
       request = Rack::Request.new(env)
       unless request.path =~ %r{\A#{Rails.application.config.assets.prefix}/}
-        env["intercode.convention"] ||= Convention.find_by(domain: request.host)
+        env['intercode.convention'] ||= Convention.find_by(domain: request.host)
       end
 
       @app.call env

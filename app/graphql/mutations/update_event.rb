@@ -1,5 +1,5 @@
 Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
-  name "UpdateEvent"
+  name 'UpdateEvent'
   return_field :event, Types::EventType
 
   input_field :id, !types.Int

@@ -38,31 +38,36 @@ class ProvideEventTicketService < ApplicationService
     success(ticket: ticket)
   end
 
+  def maximum_event_provided_tickets_for_event
+    @maximum_event_provided_tickets_for_event ||= (
+      ticket_type.maximum_event_provided_tickets_for_event_id(event.id)
+    )
+  end
+
   def ticket_type_must_be_providable
-    if ticket_type.maximum_event_provided_tickets < 1
-      errors.add :base, "#{ticket_type.name} tickets cannot be provided by events"
-    end
+    return unless maximum_event_provided_tickets_for_event < 1
+    errors.add :base, "#{ticket_type.name} tickets cannot be provided by #{event.title}"
   end
 
   def event_must_be_able_to_provide_tickets
-    unless event.can_provide_tickets?
-      errors.add :base, "#{event.title} cannot provide tickets to attendees"
-    end
+    return if event.can_provide_tickets?
+    errors.add :base, "#{event.title} cannot provide tickets to attendees"
   end
 
   def event_must_have_remaining_tickets_of_type
-    return unless ticket_type.maximum_event_provided_tickets > 0
+    return unless maximum_event_provided_tickets_for_event > 0
 
     already_provided_count = event.provided_tickets.select { |t| t.ticket_type == ticket_type }.size
+    return unless already_provided_count >= maximum_event_provided_tickets_for_event
 
-    if already_provided_count >= ticket_type.maximum_event_provided_tickets
-      errors.add :base, "Events can provide up to #{pluralize ticket_type.maximum_event_provided_tickets, 'ticket'}, and #{event.title} has already provided #{already_provided_count}"
-    end
+    errors.add :base, "#{event.title} can provide up to \
+#{pluralize maximum_event_provided_tickets_for_event, 'ticket'}, and it has already provided \
+#{already_provided_count}"
   end
 
   def user_con_profile_must_not_have_ticket
-    if user_con_profile.ticket
-      errors.add :base, "#{user_con_profile.name} already has a ticket to #{user_con_profile.convention.name}"
-    end
+    return unless user_con_profile.ticket
+    errors.add :base, "#{user_con_profile.name} already has a ticket to \
+#{user_con_profile.convention.name}"
   end
 end

@@ -13,7 +13,7 @@ class FormApiPresenter
       id: form.id,
       title: form.title,
       form_sections: form.form_sections.map { |section| form_section_json(section) },
-      form_items: form.form_items.map { |item| form_item_json(item) },
+      form_items: form.form_items.map { |item| form_item_json(item) }
     }
   end
 
@@ -23,7 +23,7 @@ class FormApiPresenter
     {
       id: section.id,
       title: render_markdown(section.title),
-      position: section.position,
+      position: section.position
     }
   end
 
@@ -35,7 +35,7 @@ class FormApiPresenter
       form_section_id: item.form_section_id,
       item_type: item.item_type,
       identifier: item.identifier,
-      position: item.position,
+      position: item.position
     }.merge(properties)
   end
 end

@@ -15,12 +15,18 @@ module ApplicationHelper
   def navigation_bar(navbar_classes = nil)
     navbar_classes ||= 'navbar-dark bg-intercode-blue'
 
+    root_item_scope = (convention&.cms_navigation_items&.root || CmsNavigationItem.none)
+
     renderer = CadmusNavbar::Renderers::Bootstrap4.new(
       request: request,
       url_for_page: ->(page) { page_url(page) },
-      root_items: convention&.cms_navigation_items&.root || []
+      root_items: root_item_scope.includes(:page, navigation_links: :page)
     )
-    render partial: 'layouts/navigation_bar', locals: { renderer: renderer, navbar_classes: navbar_classes }
+
+    render partial: 'layouts/navigation_bar', locals: {
+      renderer: renderer,
+      navbar_classes: navbar_classes
+    }
   end
 
   def page_title
@@ -32,25 +38,10 @@ module ApplicationHelper
     if @convention
       parts << @convention.name
     else
-      parts << "Intercode"
+      parts << 'Intercode'
     end
 
-    parts.join(" - ")
-  end
-
-  def page_banner
-    banner_image_url = @convention && @convention.banner_image.try(:url)
-
-    if banner_image_url
-      image_tag banner_image_url, :class => "page_banner"
-    else
-      content_tag(:div, :class => "page_banner",
-        :style => "background-color: black; color: white; height: 120px; width: 800px;
-                   text-align: center;") do
-
-        content_tag(:h1, @con ? @con.name : "Welcome to Intercode", :style => "display: inline-block;")
-      end
-    end
+    parts.join(' - ')
   end
 
   # Generate an obfuscated email address if the user is not logged in.
@@ -58,7 +49,7 @@ module ApplicationHelper
   # prevent the harvesting of email addresses. But this way all of the
   # code to generate mailto links will be gathered in one place so we
   # can easily modify them.
-  def intercode_mail_to(address, name=nil, html_options={})
+  def intercode_mail_to(address, name = nil, html_options = {})
     # If the address is empty, just return the empty string
     return unless address.present?
 
@@ -74,14 +65,18 @@ module ApplicationHelper
   def check_mark_for(boolean)
     return '' unless boolean
 
-    content_tag(:i, class: "fa fa-check") do
-      content_tag(:span, "✓", class: 'sr-only')
+    content_tag(:i, class: 'fa fa-check') do
+      content_tag(:span, '✓', class: 'sr-only')
     end
   end
 
   def nav_link_to(name, url, html_options = nil, &block)
     html_options = html_options.symbolize_keys
-    classes = [html_options[:class], 'nav-link', (html_options.delete(:active) ? 'active' : '')].compact.join(' ')
+    classes = [
+      html_options[:class],
+      'nav-link',
+      (html_options.delete(:active) ? 'active' : '')
+    ].compact.join(' ')
     link_to(name, url, html_options.merge(class: classes), &block)
   end
 

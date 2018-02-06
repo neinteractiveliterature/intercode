@@ -24,7 +24,7 @@ GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
 }
 
 Types::MutationType = GraphQL::ObjectType.define do
-  name "Mutation"
+  name 'Mutation'
 
   field :updateConvention, Mutations::UpdateConvention.field do
     guard ->(_obj, args, ctx) {
@@ -105,5 +105,27 @@ Types::MutationType = GraphQL::ObjectType.define do
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:update, event.team_members.new)
     }
+  end
+
+  create_override_field = Mutations::CreateMaximumEventProvidedTicketsOverride.field
+  field :createMaximumEventProvidedTicketsOverride, create_override_field do
+    guard -> (_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:event_id])
+      ctx[:current_ability].can?(:create, event.maximum_event_provided_tickets_overrides.new)
+    }
+  end
+
+  update_override_field = Mutations::UpdateMaximumEventProvidedTicketsOverride.field
+  field :updateMaximumEventProvidedTicketsOverride, update_override_field do
+    guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :update))
+  end
+
+  delete_override_field = Mutations::DeleteMaximumEventProvidedTicketsOverride.field
+  field :deleteMaximumEventProvidedTicketsOverride, delete_override_field do
+    guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :delete))
+  end
+
+  field :updateFormWithJSON, Mutations::UpdateFormWithJSON.field do
+    guard(guard_for_model_with_id(Form, :update))
   end
 end

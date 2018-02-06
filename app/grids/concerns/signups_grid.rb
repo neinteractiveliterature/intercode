@@ -17,12 +17,10 @@ module Concerns::SignupsGrid
           if bucket_name == requested_bucket_name
             bucket_name
           elsif requested_bucket_name
-            "#{bucket_name || "None"} (requested #{requested_bucket_name})"
-          else
-            nil
+            "#{bucket_name || 'None'} (requested #{requested_bucket_name})"
           end
         else
-          "Not counted"
+          'Not counted'
         end
       end
     end

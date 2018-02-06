@@ -10,7 +10,7 @@ class DropEventService < ApplicationService
   def inner_call
     event.runs.destroy_all
     event.update!(status: 'dropped')
-    
+
     success
   end
 end

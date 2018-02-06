@@ -1,7 +1,7 @@
 class EventProposal < ApplicationRecord
   include Concerns::FormResponse
 
-  STATUSES = Set.new(%w(draft proposed reviewing accepted rejected withdrawn))
+  STATUSES = Set.new(%w[draft proposed reviewing accepted rejected withdrawn])
 
   register_form_response_attrs :title,
     :email,
@@ -21,11 +21,21 @@ class EventProposal < ApplicationRecord
   end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
-  serialize :timeblock_preferences, JsonArrayCoderWrapper.new(ActiveModelCoder.new('EventProposal::TimeblockPreference'))
+  serialize :timeblock_preferences, JsonArrayCoderWrapper.new(
+    ActiveModelCoder.new('EventProposal::TimeblockPreference')
+  )
 
   validates :status, inclusion: { in: STATUSES }
+  validate :length_fits_in_convention
 
   def to_liquid
     EventProposalDrop.new(self)
+  end
+
+  private
+
+  def length_fits_in_convention
+    return unless length_seconds && length_seconds > convention.length_seconds
+    errors.add :length_seconds, "Event cannot be longer than #{convention.name}"
   end
 end

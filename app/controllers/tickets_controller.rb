@@ -20,7 +20,7 @@ class TicketsController < ApplicationController
       @ticket_types = convention.ticket_types.publicly_available
 
       if @ticket_types.size == 1
-        redirect_to new_ticket_path(ticket: {ticket_type_id: @ticket_types.first.id})
+        redirect_to new_ticket_path(ticket: { ticket_type_id: @ticket_types.first.id })
       end
     end
   end
@@ -29,15 +29,15 @@ class TicketsController < ApplicationController
     current_price = @ticket.ticket_type.price
 
     customer = Stripe::Customer.create(
-      :email => current_user.email,
-      :source  => params[:stripeToken]
+      email: current_user.email,
+      source: params[:stripeToken]
     )
 
     charge = Stripe::Charge.create(
-      :customer    => customer.id,
-      :amount      => current_price.fractional,
-      :description => "#{@ticket.ticket_type.name} for #{convention.name}",
-      :currency    => current_price.currency.iso_code.downcase
+      customer: customer.id,
+      amount: current_price.fractional,
+      description: "#{@ticket.ticket_type.name} for #{convention.name}",
+      currency: current_price.currency.iso_code.downcase
     )
 
     @ticket.assign_attributes(
@@ -47,7 +47,8 @@ class TicketsController < ApplicationController
     )
 
     @ticket.save
-    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.name} for #{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
+    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.name} for \
+#{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
     TicketsMailer.purchased(@ticket).deliver_now
     respond_with @ticket
 
@@ -57,6 +58,7 @@ class TicketsController < ApplicationController
   end
 
   private
+
   def ticket_params
     params.require(:ticket).permit(:ticket_type_id)
   end
@@ -67,17 +69,18 @@ class TicketsController < ApplicationController
 
   def check_convention_maximum
     return unless convention.maximum_tickets
+    ticket_count = convention.tickets.counts_towards_convention_maximum.count
+    return unless ticket_count >= convention.maximum_tickets
 
-    if convention.tickets.counts_towards_convention_maximum.count >= convention.maximum_tickets
-      flash[:alert] = "We're sorry, but #{convention.name} is currently sold out."
-      redirect_to root_path
-    end
+    flash[:alert] = "We're sorry, but #{convention.name} is currently sold out."
+    redirect_to root_path
   end
 
   def check_publicly_available
-    unless @ticket.ticket_type.publicly_available?
-      flash[:alert] = "Sorry, but \"#{@ticket.ticket_type.description}\" tickets are not publicly available.  Please choose a different ticket type or contact #{convention.name} staff."
-      redirect_to new_ticket_path
-    end
+    return if @ticket.ticket_type.publicly_available?
+
+    flash[:alert] = "Sorry, but \"#{@ticket.ticket_type.description}\" tickets are not publicly \
+available.  Please choose a different ticket type or contact #{convention.name} staff."
+    redirect_to new_ticket_path
   end
 end

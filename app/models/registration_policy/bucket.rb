@@ -2,15 +2,17 @@ class RegistrationPolicy::Bucket
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  attr_accessor :key, :name, :description, :minimum_slots, :preferred_slots, :total_slots, :slots_limited, :anything
-  alias_method :slots_limited?, :slots_limited
-  alias_method :anything?, :anything
+  attr_reader :key
+  attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots,
+    :slots_limited, :anything
+  alias slots_limited? slots_limited
+  alias anything? anything
 
   def self.normalize_key(key)
     key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
   end
 
-  %w(minimum_slots preferred_slots total_slots).each do |method|
+  %w[minimum_slots preferred_slots total_slots].each do |method|
     define_method method do
       instance_variable_get(:"@#{method}") || 0
     end
@@ -42,7 +44,7 @@ class RegistrationPolicy::Bucket
     [total_slots - my_signups_count, 0].max
   end
 
-  def errors_for_signup(signup, other_signups)
+  def errors_for_signup(_signup, _other_signups)
     []
   end
 
@@ -67,8 +69,8 @@ class RegistrationPolicy::Bucket
     }
   end
 
-  def ==(bucket)
-    attributes == bucket.attributes
+  def ==(other)
+    attributes == other.attributes
   end
 
   def hash

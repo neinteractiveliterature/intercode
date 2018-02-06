@@ -1,5 +1,5 @@
 Mutations::DropEvent = GraphQL::Relay::Mutation.define do
-  name "DropEvent"
+  name 'DropEvent'
   return_field :event, Types::EventType
 
   input_field :id, !types.Int

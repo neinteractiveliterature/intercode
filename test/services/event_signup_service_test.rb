@@ -18,7 +18,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     it 'disallows signups' do
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\AYou must have a valid ticket to #{Regexp.escape convention.name})
+      result.errors.full_messages.join('\n').must_match /\AYou must have a valid ticket to #{Regexp.escape convention.name}/
     end
   end
 
@@ -50,6 +50,42 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
     end
 
+    describe 'as a team member' do
+      let(:requested_bucket_key) { nil }
+
+      setup do
+        FactoryBot.create(:team_member, event: event, user_con_profile: user_con_profile)
+      end
+
+      it 'signs up a team member as not counted' do
+        result = subject.call
+
+        result.must_be :success?
+        result.signup.must_be :confirmed?
+        result.signup.wont_be :counted?
+        result.signup.bucket_key.must_be_nil
+        result.signup.requested_bucket_key.must_be_nil
+      end
+
+      it 'does not care whether signups are open yet' do
+        convention.update!(
+          maximum_event_signups: ScheduledValue::ScheduledValue.new(
+            timespans: [
+              {
+                start: nil,
+                finish: nil,
+                value: 'not_yet'
+              }
+            ]
+          )
+        )
+
+        result = subject.call
+        result.must_be :success?
+        result.signup.must_be :confirmed?
+      end
+    end
+
     it 'allows signups if the user has not yet reached the current signup limit' do
       convention.update!(
         maximum_event_signups: ScheduledValue::ScheduledValue.new(
@@ -61,6 +97,32 @@ class EventSignupServiceTest < ActiveSupport::TestCase
             }
           ]
         )
+      )
+
+      result = subject.call
+      result.must_be :success?
+      result.signup.must_be :confirmed?
+    end
+
+    it 'does not count non-counted signups towards the signup limit' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(
+          timespans: [
+            {
+              start: nil,
+              finish: nil,
+              value: '1'
+            }
+          ]
+        )
+      )
+      another_event = FactoryBot.create(:event, convention: convention)
+      another_run = FactoryBot.create(:run, event: another_event)
+      FactoryBot.create(
+        :signup,
+        counted: false,
+        user_con_profile: user_con_profile,
+        run: another_run
       )
 
       result = subject.call
@@ -88,7 +150,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\AYou are already signed up for 1 event)
+      result.errors.full_messages.join('\n').must_match /\AYou are already signed up for 1 event/
     end
 
     it 'disallows signups if signups are not yet open' do
@@ -106,7 +168,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\ASignups are not allowed at this time)
+      result.errors.full_messages.join('\n').must_match /\ASignups are not allowed at this time/
     end
 
     it 'disallows signups to a frozen convention' do
@@ -114,7 +176,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match %r(\ARegistrations for #{Regexp.escape convention.name} are frozen)
+      result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
     end
 
     describe 'with a conflicting event' do
@@ -231,7 +293,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to a nonexistent bucket' do
           result = subject.call
           result.must_be :failure?
-          result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
+          result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
         end
       end
 
@@ -241,7 +303,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to the anything bucket' do
           result = subject.call
           result.must_be :failure?
-          result.errors.full_messages.join('\n').must_match %r(\APlease choose one of the following buckets: dogs, cats.\z)
+          result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
         end
       end
 

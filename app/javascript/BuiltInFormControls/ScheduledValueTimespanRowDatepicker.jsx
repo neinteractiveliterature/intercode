@@ -25,11 +25,13 @@ class ScheduledValueTimespanRowDatepicker extends React.Component {
   isValidDate = date => this.props.validateDate(this.props.fieldName, date)
 
   render = () => (
-    <Datetime
-      value={this.props.value}
-      onChange={this.datetimeValueChanged}
-      isValidDate={this.isValidDate}
-    />
+    <div className="d-flex">
+      <Datetime
+        value={this.props.value}
+        onChange={this.datetimeValueChanged}
+        isValidDate={this.isValidDate}
+      />
+    </div>
   )
 }
 

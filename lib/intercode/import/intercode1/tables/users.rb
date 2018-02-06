@@ -16,24 +16,24 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   }
 
   PRIV_MAP = {
-    proposal_committee: "BidCom",
-    staff: "Staff",
-    proposal_chair: "BidChair",
-    gm_liaison: "GMLiaison",
-    outreach: "Outreach",
-    con_com: "ConCom",
-    scheduling: "Scheduling",
-    mail_to_gms: "MailToGMs",
-    mail_to_attendees: "MailToAttendes",
-    mail_to_vendors: "MailToVendors",
-    mail_to_unpaid: "MailToUnpaid",
-    mail_to_alumni: "MailToAlumni"
+    proposal_committee: 'BidCom',
+    staff: 'Staff',
+    proposal_chair: 'BidChair',
+    gm_liaison: 'GMLiaison',
+    outreach: 'Outreach',
+    con_com: 'ConCom',
+    scheduling: 'Scheduling',
+    mail_to_gms: 'MailToGMs',
+    mail_to_attendees: 'MailToAttendes',
+    mail_to_vendors: 'MailToVendors',
+    mail_to_unpaid: 'MailToUnpaid',
+    mail_to_alumni: 'MailToAlumni'
   }
 
   PREFERRED_CONTACT_MAP = {
-    "EMail" => :email,
-    "DayPhone" => :day_phone,
-    "EvePhone" => :evening_phone
+    'EMail' => :email,
+    'DayPhone' => :day_phone,
+    'EvePhone' => :evening_phone
   }
 
   attr_reader :user_con_profile_id_map
@@ -67,6 +67,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   end
 
   private
+
   def build_user(row, legacy_password_md5)
     User.find_or_initialize_by(email: row[:EMail].downcase).tap do |user|
       user.blank_password! unless user.encrypted_password.present?
