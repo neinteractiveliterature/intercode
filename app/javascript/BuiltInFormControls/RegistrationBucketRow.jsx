@@ -44,12 +44,7 @@ class RegistrationBucketRow extends React.Component {
     this.bucketPropsChanged({ [propName]: newValue });
   }
 
-  nameChanged = (newName) => {
-    this.bucketPropsChanged({
-      name: newName,
-      key: newName.replace(/\s/g, '_').replace(/\W/g, ''),
-    });
-  }
+  nameChanged = newName => this.bucketPropChanged('name', newName)
   descriptionChanged = newDescription => this.bucketPropChanged('description', newDescription)
 
   slotsChanged = (event, field) => {
@@ -134,6 +129,10 @@ class RegistrationBucketRow extends React.Component {
       min,
     }, i) => {
       const inputId = this.nextUniqueId();
+      let value = bucket.get(field);
+      if (value == null) {
+        value = '';
+      }
 
       return (
         <div className={classNames('d-inline-flex', { 'ml-1': i > 0 })} key={field}>
@@ -145,7 +144,7 @@ class RegistrationBucketRow extends React.Component {
             className="form-control form-control-sm ml-1"
             min={min}
             placeholder="Min"
-            value={bucket.get(field) || ''}
+            value={value}
             onChange={(event) => { this.slotsChanged(event, field); }}
             style={{ width: '4em' }}
           />

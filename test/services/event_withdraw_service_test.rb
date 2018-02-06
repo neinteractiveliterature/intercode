@@ -145,5 +145,4 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       end
     end
   end
-
 end

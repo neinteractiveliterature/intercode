@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180123225540) do
+ActiveRecord::Schema.define(version: 20180204164355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,14 +53,14 @@ ActiveRecord::Schema.define(version: 20180123225540) do
   end
 
   create_table "cms_partials", id: :serial, force: :cascade do |t|
-    t.integer "parent_id", null: false
+    t.integer "parent_id"
     t.string "name", null: false
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "parent_type"
-    t.index ["parent_id", "name"], name: "index_cms_partials_on_parent_id_and_name", unique: true
-    t.index ["parent_id"], name: "index_cms_partials_on_parent_id"
+    t.index ["parent_id", "parent_type", "name"], name: "index_cms_partials_on_parent_id_and_parent_type_and_name", unique: true
+    t.index ["parent_id", "parent_type"], name: "index_cms_partials_on_parent_id_and_parent_type"
   end
 
   create_table "conventions", id: :serial, force: :cascade do |t|
@@ -130,6 +130,8 @@ ActiveRecord::Schema.define(version: 20180123225540) do
     t.string "category"
     t.text "registration_policy"
     t.text "participant_communications"
+    t.text "age_restrictions"
+    t.text "content_warnings"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
@@ -163,6 +165,16 @@ ActiveRecord::Schema.define(version: 20180123225540) do
     t.datetime "updated_at", null: false
     t.bigint "convention_id"
     t.index ["convention_id"], name: "index_forms_on_convention_id"
+  end
+
+  create_table "maximum_event_provided_tickets_overrides", force: :cascade do |t|
+    t.bigint "event_id"
+    t.bigint "ticket_type_id"
+    t.integer "override_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "idx_max_event_provided_tickets_on_event_id"
+    t.index ["ticket_type_id"], name: "idx_max_event_provided_tickets_on_ticket_type_id"
   end
 
   create_table "pages", id: :serial, force: :cascade do |t|
@@ -364,6 +376,8 @@ ActiveRecord::Schema.define(version: 20180123225540) do
   add_foreign_key "form_items", "form_sections"
   add_foreign_key "form_sections", "forms"
   add_foreign_key "forms", "conventions"
+  add_foreign_key "maximum_event_provided_tickets_overrides", "events"
+  add_foreign_key "maximum_event_provided_tickets_overrides", "ticket_types"
   add_foreign_key "pages", "cms_layouts"
   add_foreign_key "rooms", "conventions"
   add_foreign_key "rooms_runs", "rooms"

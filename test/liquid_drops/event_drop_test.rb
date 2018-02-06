@@ -4,7 +4,7 @@ describe EventDrop do
   let(:event) { FactoryBot.create(:event) }
   let(:event_drop) { EventDrop.new(event) }
 
-  %w(title team_member_name).each do |field|
+  %w[title team_member_name].each do |field|
     it "returns the #{field} of the event" do
       event_drop.public_send(field).must_equal event.public_send(field)
     end

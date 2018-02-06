@@ -22,9 +22,14 @@ describe('CommonEventFormFields', () => {
         description: '',
         participant_communications: '',
         can_play_concurrently: false,
+        maximum_event_provided_tickets_overrides: [],
         ...eventProps,
       }}
+      ticketTypes={[]}
       onChange={() => {}}
+      createMaximumEventProvidedTicketsOverride={() => {}}
+      deleteMaximumEventProvidedTicketsOverride={() => {}}
+      updateMaximumEventProvidedTicketsOverride={() => {}}
       {...props}
     />
   ));
@@ -122,7 +127,7 @@ describe('CommonEventFormFields', () => {
       const component = renderCommonEventFormFields({ onChange });
       component.find(RegistrationPolicyEditor).find('select').simulate('change', {
         target: {
-          value: 'Limited slots by binary gender',
+          value: 'Limited slots by gender (classic Intercon-style)',
         },
       });
       expect(onChange.mock.calls[0][0].registration_policy.buckets.length).toEqual(3);

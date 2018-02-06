@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :convention do
-    name "TestCon"
+    name 'TestCon'
     sequence(:domain) { |n| "testcon#{n}.example.com" }
-    timezone_name "US/Eastern"
-    show_schedule "yes"
+    timezone_name 'US/Eastern'
+    show_schedule 'yes'
     accepting_proposals false
     updated_by nil
     maximum_event_signups ScheduledValue::ScheduledValue.new(

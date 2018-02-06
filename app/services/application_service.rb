@@ -12,9 +12,11 @@ class ApplicationService
   include ActiveModel::Validations
 
   attr_reader :skip_locking
+  attr_writer :logger
 
   class << self
-    attr_accessor :result_class, :validate_manually
+    attr_accessor :validate_manually
+    attr_writer :result_class
 
     def result_class
       @result_class || ServiceResult
@@ -39,6 +41,10 @@ class ApplicationService
     result
   end
 
+  def logger
+    @logger || Rails.logger
+  end
+
   private
 
   def success(attributes = {})
@@ -50,7 +56,7 @@ class ApplicationService
   end
 
   def inner_call
-    raise "Subclasses are expected to override #inner_call"
+    raise 'Subclasses are expected to override #inner_call'
   end
 
   def with_advisory_lock_unless_skip_locking(name, &block)

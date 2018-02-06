@@ -13,13 +13,23 @@ class EditEvent extends React.Component {
     dropEvent: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired,
     onDrop: PropTypes.func.isRequired,
+    createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     cancelPath: PropTypes.string,
     showDropButton: PropTypes.bool,
+    canOverrideMaximumEventProvidedTickets: PropTypes.bool,
+    ticketTypes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      description: PropTypes.string.isRequired,
+      maximum_event_provided_tickets: PropTypes.number.isRequired,
+    }).isRequired).isRequired,
   };
 
   static defaultProps = {
     cancelPath: null,
     showDropButton: false,
+    canOverrideMaximumEventProvidedTickets: false,
   };
 
   constructor(props) {
@@ -44,6 +54,8 @@ class EditEvent extends React.Component {
         short_blurb: event.short_blurb,
         description: event.description,
         participant_communications: event.participant_communications,
+        age_restrictions: event.age_restrictions,
+        content_warnings: event.content_warnings,
         length_seconds: event.length_seconds,
         registration_policy: {
           buckets: event.registration_policy.buckets.map(bucket => ({
@@ -96,7 +108,18 @@ class EditEvent extends React.Component {
       cancelPath={this.props.cancelPath}
       onSave={this.updateEvent}
       onDrop={this.dropEvent}
+      createMaximumEventProvidedTicketsOverride={
+        this.props.createMaximumEventProvidedTicketsOverride
+      }
+      deleteMaximumEventProvidedTicketsOverride={
+        this.props.deleteMaximumEventProvidedTicketsOverride
+      }
+      updateMaximumEventProvidedTicketsOverride={
+        this.props.updateMaximumEventProvidedTicketsOverride
+      }
       showDropButton={this.props.showDropButton}
+      canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
+      ticketTypes={this.props.ticketTypes}
     />
   )
 }

@@ -40,14 +40,16 @@ class DatabaseSanitizer
       best_call_time: Faker::Lorem.sentence
     }
 
-    sanitized_present_fields = sanitized_fields.select { |key, _| user_con_profile.public_send(key).present? }
+    sanitized_present_fields = sanitized_fields.select do |key, _|
+      user_con_profile.public_send(key).present?
+    end
 
     user_con_profile.update!(sanitized_present_fields)
   end
 end
 
 desc 'Sanitize the local copy of the database by anonymizing user data'
-task :sanitize_db => :environment do
+task sanitize_db: :environment do
   require 'faker'
 
   email_blacklist = [
@@ -67,7 +69,8 @@ task :sanitize_db => :environment do
 
   ActiveRecord::Base.connection.reconnect!
 
-  Parallel.each(UserConProfile.includes(:user).all, in_processes: Parallel.processor_count) do |user_con_profile|
+  scope = UserConProfile.includes(:user).all
+  Parallel.each(scope, in_processes: Parallel.processor_count) do |user_con_profile|
     puts "Sanitizing user con profile #{user_con_profile.id}"
 
     sanitizer.sanitize_user_con_profile(user_con_profile)

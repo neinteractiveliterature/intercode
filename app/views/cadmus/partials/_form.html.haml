@@ -1,0 +1,15 @@
+= bootstrap_form_for(cms_partial) do |f|
+  - if cms_partial.errors.any?
+    #error_explanation
+      %h2 #{pluralize(cms_partial.errors.count, "error")} prohibited this partial from being saved:
+
+      %ul
+        - cms_partial.errors.full_messages.each do |message|
+          %li= message
+
+  = f.text_field :name
+  .my-2
+    = react_component 'LiquidHTMLEditor', name: 'cms_partial[content]', initialContent: f.object.content
+
+  .actions
+    = f.submit 'Save changes', class: 'btn btn-primary'

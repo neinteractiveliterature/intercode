@@ -1,5 +1,5 @@
 Types::RoomType = GraphQL::ObjectType.define do
-  name "Room"
+  name 'Room'
   field :id, types.Int
   field :runs, types[Types::RunType] do
     resolve ->(obj, _args, _ctx) {

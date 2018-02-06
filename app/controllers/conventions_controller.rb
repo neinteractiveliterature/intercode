@@ -1,5 +1,7 @@
 class ConventionsController < ApplicationController
-  before_action :convention # just so that load_and_authorize_resource won't try it if we're in a virtual host
+  # call #convention first just so that load_and_authorize_resource won't try it if we're in a
+  # virtual host
+  before_action :convention
   load_and_authorize_resource
 
   def index

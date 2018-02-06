@@ -1,0 +1,36 @@
+// mostly copied/modified from .cm-s-intercode that ships with codemirror
+
+.cm-s-intercode {
+  font-size: $code-font-size * 0.9;
+	font-family: $font-family-monospace;
+  line-height: auto;
+}
+
+.cm-s-intercode .cm-header {color: $blue;}
+.cm-s-intercode .cm-quote {color: $green;}
+
+.cm-s-intercode .cm-keyword {color: $purple;}
+.cm-s-intercode .cm-atom {color: $indigo;}
+.cm-s-intercode .cm-number {color: $teal;}
+.cm-s-intercode .cm-def {color: $blue;}
+.cm-s-intercode .cm-variable,
+.cm-s-intercode .cm-punctuation,
+.cm-s-intercode .cm-property,
+.cm-s-intercode .cm-operator {}
+.cm-s-intercode .cm-variable-2 {color: $indigo;}
+.cm-s-intercode .cm-variable-3, .cm-s-intercode .cm-type {color: $cyan;}
+.cm-s-intercode .cm-comment {color: $pink;}
+.cm-s-intercode .cm-string {color: $orange;}
+.cm-s-intercode .cm-string-2 {color: $orange;}
+.cm-s-intercode .cm-meta {color: $gray-500;}
+.cm-s-intercode .cm-qualifier {color: $gray-600; font-style: italic;}
+.cm-s-intercode .cm-builtin {color: $indigo;}
+.cm-s-intercode .cm-bracket {color: $yellow;}
+.cm-s-intercode .cm-tag {color: $green;}
+.cm-s-intercode .cm-attribute {color: $cyan;}
+.cm-s-intercode .cm-hr {color: $gray-700;}
+.cm-s-intercode .cm-link {color: $blue;}
+
+.cm-s-intercode .cm-error {color: $red;}
+
+.cm-s-intercode .cm-liquid { background-color: $gray-200; }

@@ -1,7 +1,11 @@
 class AdminTicketsController < ApplicationController
   load_resource :ticket_user_con_profile, class: UserConProfile, id_param: :user_con_profile_id
   before_action :check_existing_ticket, only: [:new, :create]
-  load_and_authorize_resource :ticket, parent: false, through: :ticket_user_con_profile, singleton: true, except: [:new, :create]
+  load_and_authorize_resource :ticket,
+    parent: false,
+    through: :ticket_user_con_profile,
+    singleton: true,
+    except: [:new, :create]
 
   respond_to :html, :json
 
@@ -31,8 +35,10 @@ class AdminTicketsController < ApplicationController
   end
 
   private
+
   def check_existing_ticket
-    redirect_to edit_user_con_profile_admin_ticket_path(@ticket_user_con_profile) if @ticket_user_con_profile.ticket
+    return unless @ticket_user_con_profile.ticket
+    redirect_to edit_user_con_profile_admin_ticket_path(@ticket_user_con_profile)
   end
 
   def ticket_params

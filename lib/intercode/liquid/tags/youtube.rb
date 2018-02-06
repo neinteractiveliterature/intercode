@@ -5,8 +5,8 @@ module Intercode
         attr_reader :video_id
 
         def initialize(tag_name, video_id, _options)
-           super
-           @video_id = video_id.gsub(/[^A-Za-z0-9_-]/, '')
+          super
+          @video_id = video_id.gsub(/[^A-Za-z0-9_-]/, '')
         end
 
         def render(_context)

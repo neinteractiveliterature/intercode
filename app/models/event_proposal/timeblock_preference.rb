@@ -2,7 +2,8 @@ class EventProposal::TimeblockPreference
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  attr_accessor :start, :finish, :label, :ordinality
+  attr_reader :start, :finish
+  attr_accessor :label, :ordinality
 
   def start=(new_start)
     @start = normalize_date_input(new_start)

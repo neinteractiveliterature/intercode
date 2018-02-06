@@ -1,5 +1,5 @@
 Types::RegistrationPolicyBucketType = GraphQL::ObjectType.define do
-  name "RegistrationPolicyBucket"
+  name 'RegistrationPolicyBucket'
 
   field :key, !types.String
   field :name, types.String

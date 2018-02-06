@@ -1,5 +1,5 @@
 Mutations::DeleteRoom = GraphQL::Relay::Mutation.define do
-  name "DeleteRoom"
+  name 'DeleteRoom'
   return_field :room, Types::RoomType
 
   input_field :id, !types.Int

@@ -1,5 +1,5 @@
 Mutations::CreateRoom = GraphQL::Relay::Mutation.define do
-  name "CreateRoom"
+  name 'CreateRoom'
   return_field :room, Types::RoomType
 
   input_field :room, !Types::RoomInputType

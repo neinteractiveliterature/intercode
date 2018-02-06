@@ -28,6 +28,7 @@ class Intercode::Import::Intercode1::Table
   end
 
   private
+
   def build_record(row)
   end
 

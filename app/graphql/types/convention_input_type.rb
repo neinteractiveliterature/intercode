@@ -1,5 +1,5 @@
 Types::ConventionInputType = GraphQL::InputObjectType.define do
-  name "ConventionInput"
+  name 'ConventionInput'
   input_field :accepting_proposals, types.Boolean
   input_field :starts_at, Types::DateType
   input_field :ends_at, Types::DateType

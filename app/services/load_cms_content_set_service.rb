@@ -48,7 +48,8 @@ class LoadCmsContentSetService < ApplicationService
   end
 
   def ensure_content_set_exists
-    errors.add(:base, "No content set found at #{content_set.root_path}") unless Dir.exist?(content_set.root_path)
+    return if Dir.exist?(content_set.root_path)
+    errors.add(:base, "No content set found at #{content_set.root_path}")
   end
 
   def ensure_no_conflicting_pages
@@ -56,9 +57,11 @@ class LoadCmsContentSetService < ApplicationService
       'pages',
       convention.pages.pluck(:name),
       (
-        convention.root_page ?
-        { 'root' => 'root page' } :
-        {}
+        if convention.root_page
+          { 'root' => 'root page' }
+        else
+          {}
+        end
       )
     )
   end
@@ -72,9 +75,11 @@ class LoadCmsContentSetService < ApplicationService
       'layouts',
       convention.cms_layouts.pluck(:name),
       (
-        convention.default_layout ?
-        { 'Default' => 'default layout' } :
-        {}
+        if convention.default_layout
+          { 'Default' => 'default layout' }
+        else
+          {}
+        end
       )
     )
   end
@@ -88,7 +93,8 @@ class LoadCmsContentSetService < ApplicationService
       end
 
       if content_identifiers.include?(name)
-        errors.add(:base, "A #{subdir.singularize} named #{name} already exists in #{convention.name}")
+        errors.add(:base, "A #{subdir.singularize} named #{name} already exists in \
+#{convention.name}")
       end
     end
   end

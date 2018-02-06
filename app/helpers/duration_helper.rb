@@ -3,11 +3,11 @@ module DurationHelper
     hours = duration / 1.hour
     minutes = (duration % 1.hour) / 1.minute
     seconds = (duration % 1.minute)
-    
+
     if seconds > 0
-      '%02d:%02d:%02d' % [hours, minutes, seconds]
+      format('%02d:%02d:%02d', hours, minutes, seconds)
     else
-      '%02d:%02d' % [hours, minutes]
+      format('%02d:%02d', hours, minutes)
     end
   end
 

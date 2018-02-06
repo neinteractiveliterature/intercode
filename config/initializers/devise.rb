@@ -6,12 +6,12 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
+  config.mailer_sender = 'overridden-in-user-mailer@example.com'
 
   config.secret_key = ENV['DEVISE_SECRET_KEY'] || 'ccad6eab004acb9d2c45bd5a5ad385fe101d536b5271f139f59848a349fb144a7b8eddaa19af1fd7ed9a92dd0409781db162d80bf91dd399e414a5611497bc8f'
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = "Devise::Mailer"
+  config.mailer = 'UserMailer'
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
@@ -132,7 +132,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
-  # :failed_attempts = Locks an account after a number of failed attempts to sign in.
+  # :failed_attempts = Locks an account after a number of failed attempts to log in.
   # :none            = No lock strategy. You should handle locking by yourself.
   # config.lock_strategy = :failed_attempts
 
@@ -192,7 +192,7 @@ Devise.setup do |config|
 
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like
-  # :html, should redirect to the sign in page when the user does not have
+  # :html, should redirect to the log in page when the user does not have
   # access, but formats like :xml or :json, should return 401.
   #
   # If you have any extra navigational formats, like :iphone or :mobile, you

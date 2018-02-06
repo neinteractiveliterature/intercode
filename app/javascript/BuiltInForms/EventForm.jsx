@@ -8,14 +8,24 @@ class EventForm extends React.Component {
   static propTypes = {
     initialEvent: PropTypes.shape({
       id: PropTypes.number,
+      maximum_event_provided_tickets_overrides: PropTypes.arrayOf(PropTypes.shape({})),
     }).isRequired,
     disabled: PropTypes.bool,
     error: PropTypes.string,
     showDropButton: PropTypes.bool,
+    canOverrideMaximumEventProvidedTickets: PropTypes.bool,
+    ticketTypes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      description: PropTypes.string.isRequired,
+      maximum_event_provided_tickets: PropTypes.number.isRequired,
+    }).isRequired).isRequired,
 
     cancelPath: PropTypes.string,
     onSave: PropTypes.func.isRequired,
     onDrop: PropTypes.func.isRequired,
+    createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -23,6 +33,7 @@ class EventForm extends React.Component {
     disabled: false,
     error: null,
     showDropButton: false,
+    canOverrideMaximumEventProvidedTickets: false,
   };
 
   constructor(props) {
@@ -32,6 +43,16 @@ class EventForm extends React.Component {
       event: props.initialEvent,
       droppingEvent: false,
     };
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    const nextOverrides = nextProps.initialEvent.maximum_event_provided_tickets_overrides;
+    this.setState({
+      event: {
+        ...this.state.event,
+        maximum_event_provided_tickets_overrides: nextOverrides,
+      },
+    });
   }
 
   beginDrop = (event) => {
@@ -108,11 +129,22 @@ class EventForm extends React.Component {
         <CommonEventFormFields
           event={this.state.event}
           onChange={this.eventFieldChanged}
+          canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
+          createMaximumEventProvidedTicketsOverride={
+            this.props.createMaximumEventProvidedTicketsOverride
+          }
+          deleteMaximumEventProvidedTicketsOverride={
+            this.props.deleteMaximumEventProvidedTicketsOverride
+          }
+          updateMaximumEventProvidedTicketsOverride={
+            this.props.updateMaximumEventProvidedTicketsOverride
+          }
+          ticketTypes={this.props.ticketTypes}
         />
 
         {this.renderErrorDisplay()}
 
-        <button className="btn btn-primary" onClick={this.saveClicked} disabled={disabled}>
+        <button className="btn btn-primary mt-4" onClick={this.saveClicked} disabled={disabled}>
           {saveCaption}
         </button>
         {cancelLink}

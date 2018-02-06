@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :page do
     sequence(:name) { |n| "Page #{n}" }
-    content "MyText"
+    content 'MyText'
     association :parent, factory: :convention
   end
 end

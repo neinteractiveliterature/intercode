@@ -5,7 +5,7 @@ module Intercode::Import::Intercode1::Php
       temp_program.write php
       temp_program.flush
 
-      output, _ = Open3.capture2e('php', temp_program.path)
+      output, = Open3.capture2e('php', temp_program.path)
       output
     ensure
       temp_program.close

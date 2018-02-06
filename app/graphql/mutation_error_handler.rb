@@ -6,14 +6,14 @@ class MutationErrorHandler
   end
 
   def call(obj, args, ctx)
-    begin
-      resolve_func.call(obj, args, ctx)
-    rescue ActiveRecord::RecordInvalid => err
-      GraphQL::ExecutionError.new(
-        "Invalid input for #{err.record.class.name}: #{err.record.errors.full_messages.join(', ')}"
-      )
-    rescue ApplicationService::ServiceFailure => err
-      GraphQL::ExecutionError.new(err.result.errors.full_messages.join(', '))
-    end
+    resolve_func.call(obj, args, ctx)
+  rescue ActiveRecord::RecordInvalid => err
+    GraphQL::ExecutionError.new(
+      "Invalid input for #{err.record.class.name}: #{err.record.errors.full_messages.join(', ')}"
+    )
+  rescue ApplicationService::ServiceFailure => err
+    GraphQL::ExecutionError.new(err.result.errors.full_messages.join(', '))
+  rescue StandardError => err
+    GraphQL::ExecutionError.new(err.message)
   end
 end

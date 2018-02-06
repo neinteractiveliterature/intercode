@@ -1,12 +1,10 @@
 require 'intercode/virtual_host_constraint'
 
 Intercode::Application.routes.draw do
-  if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
-  end
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql' if Rails.env.development?
 
-  post "/graphql", to: "graphql#execute"
-  devise_for :users, controllers: { registrations: "registrations" }
+  post '/graphql', to: 'graphql#execute'
+  devise_for :users, controllers: { passwords: 'passwords', registrations: 'registrations' }
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
@@ -14,7 +12,7 @@ Intercode::Application.routes.draw do
     cadmus_pages
 
     # http://con.domain/ will go to the root page of the con
-    root :to => 'pages#root', :as => 'con_root'
+    root to: 'pages#root', as: 'con_root'
 
     resource :convention
 
@@ -33,7 +31,7 @@ Intercode::Application.routes.draw do
         member do
           get :signup_summary
         end
-        
+
         resource :user_signup
         resources :admin_signups
       end
@@ -98,10 +96,11 @@ Intercode::Application.routes.draw do
 
     resources :staff_positions
     resources :forms, only: [:show]
+    resources :admin_forms
   end
 
   # the following routes apply only when we're not in a virtual host
   resources :conventions
   resources :users
-  root :to => 'conventions#index'
+  root to: 'conventions#index'
 end

@@ -12,7 +12,7 @@ class TeamMember < ApplicationRecord
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
 
-  belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :updated_by, class_name: 'User', optional: true
 
   delegate :name, to: :user_con_profile
 
@@ -25,11 +25,13 @@ class TeamMember < ApplicationRecord
   end
 
   private
+
   def user_con_profile_and_event_must_belong_to_same_convention
     return unless event && user_con_profile
+    return if event.convention == user_con_profile.convention
 
-    unless event.convention == user_con_profile.convention
-      errors.add(:base, "User con profile and event must belong to the same convention!  User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and event #{event.name} is from #{event.convention.name}.")
-    end
+    errors.add(:base, "User con profile and event must belong to the same convention!  \
+User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and \
+event #{event.name} is from #{event.convention.name}.")
   end
 end

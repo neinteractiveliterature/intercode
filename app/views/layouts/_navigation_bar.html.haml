@@ -34,10 +34,12 @@
                   = link_to "Attendees", user_con_profiles_path, class: 'dropdown-item'
                 - if can? :update, convention
                   = link_to "Convention Settings", edit_convention_path, class: 'dropdown-item'
-                - if can? :read, convention.event_proposals.new(status: 'proposed')
+                - if can? :read, convention.event_proposals.new(status: 'reviewing')
                   = link_to "Event Proposals", admin_event_proposals_path, class: 'dropdown-item'
                 - if can? :update, convention.events.new.runs.new
                   = link_to "Event Scheduling", admin_events_path, class: 'dropdown-item'
+                - if can? :update, convention.forms.new
+                  = link_to "Forms", admin_forms_path, class: 'dropdown-item'
                 - if can? :mail_to_any, convention
                   = link_to "Mailing Lists", mailing_lists_path, class: 'dropdown-item'
                 = link_to "Reports", reports_path, class: 'dropdown-item'
@@ -65,4 +67,4 @@
             = link_to "Log In", new_user_session_path, class: 'nav-link'
           %li.nav-item.my-auto
             .nav-link
-              = link_to "Sign Up", (convention ? my_profile_path : new_user_registration_path), class: "btn btn-primary btn-sm"
+              = link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm"

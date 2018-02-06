@@ -1,5 +1,5 @@
 Types::EventType = GraphQL::ObjectType.define do
-  name "Event"
+  name 'Event'
 
   field :id, !types.Int
   field :title, types.String
@@ -9,6 +9,8 @@ Types::EventType = GraphQL::ObjectType.define do
   field :category, types.String
   field :url, types.String
   field :participant_communications, types.String
+  field :age_restrictions, types.String
+  field :content_warnings, types.String
   field :length_seconds, types.Int
   field :can_play_concurrently, types.Boolean
   field :con_mail_destination, types.String
@@ -24,6 +26,12 @@ Types::EventType = GraphQL::ObjectType.define do
   field :team_member_name, !types.String
   field :provided_tickets, !types[!Types::TicketType]
   field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
+  override_type = Types::MaximumEventProvidedTicketsOverrideType
+  field :maximum_event_provided_tickets_overrides, !types[!override_type] do
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(obj)
+    }
+  end
 
   field :registration_policy, Types::RegistrationPolicyType
 

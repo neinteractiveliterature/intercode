@@ -19,10 +19,12 @@ class TicketPurchaseForm extends React.Component {
     createChargeUrl: PropTypes.string.isRequired,
     purchaseCompleteUrl: PropTypes.string.isRequired,
     ticketTypeId: PropTypes.number,
+    initialName: PropTypes.string,
   };
 
   static defaultProps = {
     ticketTypeId: '',
+    initialName: '',
   };
 
   constructor(props) {
@@ -38,9 +40,7 @@ class TicketPurchaseForm extends React.Component {
       expMonth: '',
       expYear: '',
       zip: '',
-      name: '',
-      email: '',
-      phone: '',
+      name: props.initialName || '',
     };
 
     enableUniqueIds(this);
@@ -63,8 +63,6 @@ class TicketPurchaseForm extends React.Component {
       'expYear',
       'zip',
       'name',
-      'email',
-      'phone',
     ].filter(field => !this.state[field]);
 
     if (missingFields.length > 0) {
@@ -105,8 +103,6 @@ class TicketPurchaseForm extends React.Component {
           ticket: {
             ticket_type_id: this.state.ticketTypeId,
             name: this.state.name,
-            email: this.state.email,
-            phone: this.state.phone,
           },
         },
       }).then(() => {
@@ -201,8 +197,6 @@ class TicketPurchaseForm extends React.Component {
         {this.renderPaymentError()}
 
         {this.renderFormGroup('name', 'Name', 'text', this.state.name)}
-        {this.renderFormGroup('email', 'Email', 'email', this.state.email)}
-        {this.renderFormGroup('phone', 'Phone number', 'tel', this.state.phone)}
 
         <PaymentEntry
           ccNumber={this.state.ccNumber}

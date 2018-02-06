@@ -1,31 +1,34 @@
 class Event < ApplicationRecord
-  STATUSES = Set.new(%w(active dropped))
-  CATEGORIES = Set.new(%w(larp panel board_game tabletop_rpg volunteer_event filler))
-  CON_MAIL_DESTINATIONS = Set.new(%w(event_email gms))
+  STATUSES = Set.new(%w[active dropped])
+  CATEGORIES = Set.new(%w[larp panel board_game tabletop_rpg volunteer_event filler])
+  CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
-  belongs_to :owner, class_name: "User", optional: true
+  belongs_to :owner, class_name: 'User', optional: true
 
   # LARPs have GMs and Panels have Members
   has_many :team_members, dependent: :destroy
 
   # The user who last updated the event.  Used for tracking
-  belongs_to :updated_by, :class_name => "User", optional: true
+  belongs_to :updated_by, class_name: 'User', optional: true
 
   # Each event must belong to a convention
   belongs_to :convention
   validates :convention, presence: true
 
-  has_many :provided_tickets, class_name: 'Ticket', inverse_of: 'provided_by_event', foreign_key: 'provided_by_event_id'
+  has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
+  has_many :provided_tickets,
+    class_name: 'Ticket',
+    inverse_of: 'provided_by_event',
+    foreign_key: 'provided_by_event_id'
 
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
 
-  # Category is mostly for record-keeping purposes; it shouldn't actually
-  # affect behavior of events.  Nevertheless we do want to make sure it's
-  # in one of the allowed categories.
+  # Category currently does affect behavior of events; in Intercode 2.2 we plan to remove all the
+  # hard-coded behavior around category in favor of making it an adminable model.
   validates :category, inclusion: { in: CATEGORIES }
 
   validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS }
@@ -51,7 +54,7 @@ class Event < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
-  scope :regular, -> { where.not(category: %w(volunteer_event filler)) }
+  scope :regular, -> { where.not(category: %w[volunteer_event filler]) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
@@ -100,8 +103,6 @@ class Event < ApplicationRecord
   def filler_events_must_have_exactly_one_run
     return unless category == 'filler' && status == 'active'
 
-    if runs.size != 1
-      errors.add(:base, 'Filler events must have exactly one run')
-    end
+    errors.add(:base, 'Filler events must have exactly one run') if runs.size != 1
   end
 end

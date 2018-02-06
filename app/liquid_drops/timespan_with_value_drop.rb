@@ -19,7 +19,10 @@ class TimespanWithValueDrop < Liquid::Drop
   end
 
   def description_without_value
-    "#{timespan_with_value.start_description(:date_only)} #{timespan_with_value.finish_description(:date_only)}"
+    [
+      timespan_with_value.start_description(:date_only),
+      timespan_with_value.finish_description(:date_only)
+    ].join(' ')
   end
 
   def short_description
@@ -34,7 +37,7 @@ class TimespanWithValueDrop < Liquid::Drop
     elsif finish
       "up to #{finish.to_s(:date_only)}"
     else
-      ""
+      ''
     end
   end
 

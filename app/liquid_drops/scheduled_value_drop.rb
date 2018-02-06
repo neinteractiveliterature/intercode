@@ -1,7 +1,7 @@
 class ScheduledValueDrop < Liquid::Drop
   attr_reader :scheduled_value, :now, :timezone
   delegate :covers_all_time?, to: :scheduled_value
-  alias_method :covers_all_time, :covers_all_time?
+  alias covers_all_time covers_all_time?
 
   def initialize(scheduled_value, timezone)
     @scheduled_value = scheduled_value

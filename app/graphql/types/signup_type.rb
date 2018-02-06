@@ -1,5 +1,5 @@
 Types::SignupType = GraphQL::ObjectType.define do
-  name "Signup"
+  name 'Signup'
 
   field :state, Types::SignupStateType
   field :counted, types.Boolean

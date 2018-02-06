@@ -3,13 +3,13 @@ module Intercode
     module Tags
       class LoginForm < RailsPartialRenderer
         def partial(_context)
-          "devise/sessions/login_form"
+          'devise/sessions/login_form'
         end
 
         def locals(context)
           {
-            resource: context.registers["controller"].current_user || User.new,
-            resource_name: "user",
+            resource: context.registers['controller'].current_user || User.new,
+            resource_name: 'user',
             devise_mapping: Devise.mappings[:user]
           }
         end

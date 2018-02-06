@@ -16,11 +16,8 @@ class RestoreDroppedEventService < ApplicationService
     success
   end
 
-  private
-
   def event_must_be_dropped
-    unless event.status == 'dropped'
-      errors.add :base, "Can only restore dropped events; this event is #{event.status}"
-    end
+    return unless event.status == 'dropped'
+    errors.add :base, "Can only restore dropped events; this event is #{event.status}"
   end
 end

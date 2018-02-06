@@ -1,12 +1,12 @@
 class Signup < ApplicationRecord
-  STATES = %w(confirmed waitlisted withdrawn)
+  STATES = %w[confirmed waitlisted withdrawn]
 
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
   belongs_to :run
   has_one :event, through: :run
   has_one :convention, through: :event
-  belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :updated_by, class_name: 'User', optional: true
 
   validates :state, inclusion: { in: STATES }
   validates :bucket_key, presence: { if: -> (signup) { signup.counted? && signup.confirmed? } }
@@ -41,6 +41,7 @@ class Signup < ApplicationRecord
   end
 
   private
+
   #
   # def must_be_counted_if_and_only_if_not_team_member
   #   if team_member?
@@ -51,10 +52,32 @@ class Signup < ApplicationRecord
   # end
 
   def must_be_in_existing_bucket
-    return if !counted? || withdrawn?
+    return if can_have_invalid_buckets?
 
-    bucket_names = run.registration_policy.buckets.map(&:key).to_sentence(last_word_connector: ", or ", two_words_connector: " or ")
-    errors.add(:bucket_key, "must be one of #{bucket_names}") if bucket_key && !bucket
-    errors.add(:requested_bucket_key, "must be one of #{bucket_names}") if requested_bucket_key && !requested_bucket
+    errors.add(:bucket_key, bucket_validity_error_message) if invalid_bucket?
+    errors.add(:requested_bucket_key, bucket_validity_error_message) if invalid_requested_bucket?
+  end
+
+  def can_have_invalid_buckets?
+    !counted? || withdrawn?
+  end
+
+  def invalid_bucket?
+    bucket_key && !bucket
+  end
+
+  def invalid_requested_bucket?
+    requested_bucket_key && !requested_bucket
+  end
+
+  def bucket_validity_error_message
+    @bucket_validity_error_message ||= begin
+      bucket_names = run.registration_policy.buckets.map(&:key).to_sentence(
+        last_word_connector: ', or ',
+        two_words_connector: ' or '
+      )
+
+      "must be one of #{bucket_names}"
+    end
   end
 end

@@ -13,10 +13,15 @@ module Intercode
         return unless input
 
         if @context['user']
-          %{<a href="mailto:#{input}">#{input}</a>}
+          %(<a href="mailto:#{input}">#{input}</a>)
         else
           ApplicationHelper.obfuscated_email(input)
         end
+      end
+
+      def to_sentence(input)
+        return unless input
+        input.to_sentence
       end
     end
   end
