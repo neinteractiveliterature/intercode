@@ -109,7 +109,13 @@ class EventVacancyFillService < ApplicationService
   def signups_ordered
     @signups_ordered ||= begin
       run.signups.reload
-      run.signups.where.not(state: 'withdrawn').order(:created_at).to_a
+      run.signups.where.not(state: 'withdrawn').to_a.sort_by do |signup|
+        [
+          # don't move no-preference signups unless necessary
+          signup.requested_bucket_key.nil? ? 1 : 0,
+          signup.created_at
+        ]
+      end
     end
   end
 
