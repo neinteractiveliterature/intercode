@@ -94,13 +94,20 @@
                   %br
                   Team member
               - else
-                - count_presenter.buckets.each_with_index do |bucket, index|
-                  - next if bucket.anything?
-                  = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-outline-bucket-color-#{(index % 9) + 1} mx-1" do
-                    %strong Sign up
-                    - if count_presenter.buckets.size > 1
+                .d-flex.flex-wrap.justify-content-center
+                  - count_presenter.buckets.each_with_index do |bucket, index|
+                    - next if bucket.anything?
+                    = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-outline-bucket-color-#{(index % 9) + 1} mx-1 mb-2" do
+                      %strong Sign up
+                      - if count_presenter.buckets.size > 1
+                        %br
+                        #{bucket.name}
+
+                  - if count_presenter.buckets.size > 1
+                    = link_to event_run_user_signup_path(@event, run, no_requested_bucket: true), method: "POST", class: "btn btn-outline-primary mb-2" do
+                      %strong Sign up
                       %br
-                      #{bucket.name}
+                      No preference
 
               - if can? :read, run.signups.new
                 .mt-2= link_to('View signups', [@event, run, :admin_signups])
