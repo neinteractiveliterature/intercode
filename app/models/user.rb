@@ -11,6 +11,8 @@ class User < ApplicationRecord
 
   has_many :user_con_profiles
 
+  attr_accessor :reset_password_mail_options
+
   def privileges
     if site_admin?
       ['site_admin']
@@ -28,6 +30,10 @@ class User < ApplicationRecord
   end
 
   protected
+
+  def send_reset_password_instructions_notification(token)
+    send_devise_notification(:reset_password_instructions, token, reset_password_mail_options || {})
+  end
 
   def password_required?
     return false if @password_not_required
