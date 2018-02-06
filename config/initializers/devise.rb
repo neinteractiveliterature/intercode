@@ -1,12 +1,23 @@
 require 'intercode/strategies/legacy_md5'
 
+default_host = Rails.application.config.action_mailer.default_url_options.try(:[], :host)
+
+if default_host
+  just_hostname = URI.parse("http://#{default_host}").host # get rid of port number if it's there
+
+  # Awful awful shenanigans: get the last up-to-two dot-separated parts of the hostname.
+  # So: localhost stays as localhost
+  # www.interconlarp.org becomes interconlarp.org
+  second_level_domain = just_hostname.split(".").reverse.take(2).reverse.join(".")
+end
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
+  config.mailer_sender = "webmaster@#{second_level_domain}"
 
   config.secret_key = ENV['DEVISE_SECRET_KEY'] || 'ccad6eab004acb9d2c45bd5a5ad385fe101d536b5271f139f59848a349fb144a7b8eddaa19af1fd7ed9a92dd0409781db162d80bf91dd399e414a5611497bc8f'
 
