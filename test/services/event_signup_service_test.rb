@@ -327,6 +327,28 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result.signup.requested_bucket_key.must_be_nil
           result.signup.bucket_key.wont_equal 'anything'
         end
+
+        describe 'but the registration policy does not allow it' do
+          let(:event) do
+            FactoryBot.create(
+              :event,
+              registration_policy: {
+                buckets: [
+                  { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
+                  { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 },
+                  { key: 'anything', name: 'flex', slots_limited: true, total_slots: 4, anything: true }
+                ],
+                prevent_no_preference_signups: true
+              }
+            )
+          end
+
+          it 'prevents it' do
+            result = subject.call
+            result.must_be :failure?
+            result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
+          end
+        end
       end
 
       describe 'when there are signups without a requested bucket' do

@@ -103,7 +103,7 @@
                         %br
                         #{bucket.name}
 
-                  - if count_presenter.buckets.size > 1
+                  - if count_presenter.buckets.size > 1 && @event.registration_policy.allow_no_preference_signups?
                     = link_to event_run_user_signup_path(@event, run, no_requested_bucket: true), method: "POST", class: "btn btn-outline-primary mb-2" do
                       %strong Sign up
                       %br
