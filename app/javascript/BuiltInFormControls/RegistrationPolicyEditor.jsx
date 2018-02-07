@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
+import MultipleChoiceInput from './MultipleChoiceInput';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 
@@ -268,6 +269,24 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
+  renderPreventNoPreferenceSignups = () => {
+    if (this.state.preset) {
+      return null;
+    }
+
+    return (
+      <MultipleChoiceInput
+        caption="Show a 'no preference' button for signups?"
+        choices={[
+          { label: 'Yes, show it', value: false },
+          { label: 'No, don\'t show it', value: true },
+        ]}
+        choiceClassName="form-check-inline"
+        value={this.props.registrationPolicy.getPreventNoPreferenceSignups()}
+      />
+    );
+  }
+
   render = () => {
     if (this.props.presets) {
       const selectorRow = this.renderPresetSelector();
@@ -278,6 +297,7 @@ class RegistrationPolicyEditor extends React.Component {
             {selectorRow}
             {this.renderTable()}
             {this.renderAddButtons()}
+            {this.renderPreventNoPreferenceSignups()}
           </div>
         );
       }
@@ -289,6 +309,7 @@ class RegistrationPolicyEditor extends React.Component {
       <div>
         {this.renderTable()}
         {this.renderAddButtons()}
+        {this.renderPreventNoPreferenceSignups()}
       </div>
     );
   }

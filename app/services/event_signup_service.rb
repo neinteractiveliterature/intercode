@@ -92,7 +92,7 @@ with #{event.title}."
   end
 
   def require_valid_bucket
-    return unless requested_bucket_key
+    return if run.registration_policy.allow_no_preference_signups? && !requested_bucket_key
     return if team_member?
 
     requested_bucket = run.registration_policy.bucket_with_key(requested_bucket_key)
