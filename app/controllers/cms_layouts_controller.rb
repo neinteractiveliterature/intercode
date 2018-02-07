@@ -11,6 +11,6 @@ class CmsLayoutsController < ApplicationController
   protected
 
   def cms_layout_params
-    params.require(:cms_layout).permit(:name, :content, :navbar_classes)
+    params.require(:cms_layout).permit(:name, :content, :navbar_classes, :admin_notes)
   end
 end

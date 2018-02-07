@@ -10,7 +10,7 @@ const SORT_ORDERS = [
   { queryParam: 'accepted_desc', caption: 'order added (newest first)' },
 ];
 
-const EventListSortDropdown = ({ showConventionOrder, ...dropdownProps }) => {
+const EventListSortDropdown = ({ showConventionOrder }) => {
   const mySortOrders = [...SORT_ORDERS];
   if (showConventionOrder) {
     mySortOrders.splice(1, 0, { queryParam: 'first_scheduled_run', caption: 'convention order' });
@@ -36,7 +36,7 @@ const EventListSortDropdown = ({ showConventionOrder, ...dropdownProps }) => {
     <PopperDropdown
       caption={`Sorting by ${currentSort.caption}`}
       placement="bottom-end"
-      {...dropdownProps}
+      className="btn btn-outline-primary"
     >
       {sortOptions}
     </PopperDropdown>
