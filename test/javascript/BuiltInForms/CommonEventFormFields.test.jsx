@@ -48,6 +48,7 @@ describe('CommonEventFormFields', () => {
           total_slots: 30,
         },
       ],
+      prevent_no_preference_signups: false,
     };
 
     const component = renderCommonEventFormFields({}, {
