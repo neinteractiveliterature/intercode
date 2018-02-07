@@ -11,7 +11,7 @@ class RegistrationPolicy
     new(buckets: [RegistrationPolicy::Bucket.new(key: 'unlimited', slots_unlimited: true)])
   end
 
-  attr_reader :buckets, :prevent_no_preference_signups
+  attr_reader :buckets
 
   def initialize(attributes = {})
     super(attributes)
@@ -37,9 +37,10 @@ class RegistrationPolicy
     !slots_unlimited?
   end
 
-  def prevent_no_preference_signups?
-    prevent_no_preference_signups
+  def prevent_no_preference_signups
+    !!@prevent_no_preference_signups
   end
+  alias prevent_no_preference_signups? prevent_no_preference_signups
 
   def allow_no_preference_signups?
     !prevent_no_preference_signups

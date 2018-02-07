@@ -40,8 +40,11 @@
   %section.my-4
     %hr
 
+    - signup_options_presenter = SignupOptionsPresenter.new(event: @event, user_con_profile: user_con_profile)
+
     .d-flex.flex-wrap.justify-content-center
       - @runs.sort_by(&:starts_at).each do |run|
+        - my_signup = signup_options_presenter.user_signup_for_run(run)
         .col-lg-4.col-md-6.col-sm-12
           .card.mb-3
             .card-header
@@ -78,7 +81,6 @@
                   .bucket-capacity
                     Waitlist: #{count_presenter.waitlist_count}
 
-              - my_signup = @user_signup_by_run_id[run.id]
               - if my_signup
                 %p
                   - if my_signup.confirmed?
@@ -88,31 +90,23 @@
                     %em You are ##{ahead_of_me.size + 1} on the waitlist.
 
                 %p= link_to "Withdraw", [@event, run, :user_signup], class: 'btn btn-outline-danger', method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
-              - elsif @team_members.any? { |team_member| team_member.user_con_profile == user_con_profile }
-                = link_to event_run_user_signup_path(@event, run), method: "POST", class: "btn btn-outline-primary" do
-                  %strong Sign up
-                  %br
-                  Team member
               - else
                 .d-flex.flex-wrap.justify-content-center
-                  - count_presenter.buckets.each_with_index do |bucket, index|
-                    - next if bucket.anything?
-                    = link_to event_run_user_signup_path(@event, run, requested_bucket_key: bucket.key), method: "POST", class: "btn btn-outline-bucket-color-#{(index % 9) + 1} mx-1 mb-2" do
-                      %strong Sign up
-                      - if count_presenter.buckets.size > 1
-                        %br
-                        #{bucket.name}
+                  - signup_options_presenter.signup_options_for_run(run).each do |signup_option|
+                    = signup_button(@event, run, signup_option)
 
-                  - if count_presenter.buckets.size > 1 && @event.registration_policy.allow_no_preference_signups?
-                    = link_to event_run_user_signup_path(@event, run, no_requested_bucket: true), method: "POST", class: "btn btn-outline-primary mb-2" do
-                      %strong Sign up
-                      %br
-                      No preference
+            - aux_signup_options = signup_options_presenter.auxiliary_signup_options_for_run(run)
+            - if aux_signup_options.any?
+              %ul.list-group.list-group-flush
+                %li.list-group-item.border-bottom-0
+                  .d-flex.flex-wrap.justify-content-center
+                    - aux_signup_options.each do |signup_option|
+                      = signup_button(@event, run, signup_option)
 
-              - if can? :read, run.signups.new
-                .mt-2= link_to('View signups', [@event, run, :admin_signups])
-              - elsif can? :signup_summary, run
-                .mt-2= link_to('View signups', [:signup_summary, @event, run])
+            - if can? :read, run.signups.new
+              .card-footer.text-center= link_to('View signups', [@event, run, :admin_signups])
+            - elsif can? :signup_summary, run
+              .card-footer.text-center= link_to('View signups', [:signup_summary, @event, run])
 
 %section.my-4
   %hr

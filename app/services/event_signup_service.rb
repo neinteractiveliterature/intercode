@@ -137,12 +137,7 @@ with #{event.title}."
           run.registration_policy.anything_bucket
         ].compact
       else
-        run.registration_policy.buckets.sort_by do |bucket|
-          [
-            bucket.anything? ? 0 : 1,
-            bucket.slots_unlimited? ? 0 : 1
-          ]
-        end
+        run.registration_policy.buckets.sort_by { |bucket| bucket.anything? ? 0 : 1 }
       end
     end
   end

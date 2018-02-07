@@ -58,6 +58,7 @@ fragment StandaloneEditEvent_EventFields on Event {
       slots_limited
       anything
     }
+    prevent_no_preference_signups
   }
 
   maximum_event_provided_tickets_overrides {

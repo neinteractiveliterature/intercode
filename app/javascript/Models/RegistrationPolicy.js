@@ -38,7 +38,9 @@ export default class RegistrationPolicy {
       returnRecord = returnRecord.setBuckets(buckets);
     }
 
-    this.preventNoPreferenceSignups = Boolean(json.prevent_no_preference_signups);
+    returnRecord = returnRecord.setPreventNoPreferenceSignups((
+      Boolean(json.prevent_no_preference_signups)
+    ));
 
     return returnRecord;
   }
