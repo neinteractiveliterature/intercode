@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180204164355) do
+ActiveRecord::Schema.define(version: 20180207173614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20180204164355) do
     t.text "navbar_classes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "admin_notes"
     t.index ["parent_type", "parent_id"], name: "index_cms_layouts_on_parent_type_and_parent_id"
   end
 
@@ -59,6 +60,7 @@ ActiveRecord::Schema.define(version: 20180204164355) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "parent_type"
+    t.text "admin_notes"
     t.index ["parent_id", "parent_type", "name"], name: "index_cms_partials_on_parent_id_and_parent_type_and_name", unique: true
     t.index ["parent_id", "parent_type"], name: "index_cms_partials_on_parent_id_and_parent_type"
   end
@@ -186,6 +188,7 @@ ActiveRecord::Schema.define(version: 20180204164355) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint "cms_layout_id"
+    t.text "admin_notes"
     t.index ["cms_layout_id"], name: "index_pages_on_cms_layout_id"
     t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
   end

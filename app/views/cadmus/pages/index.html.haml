@@ -3,6 +3,9 @@
     %tr
       %td
         = link_to page.name, { :action => 'show', :page_glob => page.slug }
+        - if page.admin_notes.present?
+          %br
+          %small= page.admin_notes
       %td.text-right
         = link_to "Edit", edit_page_path(page), class: 'btn btn-secondary btn-sm'
         = link_to "Delete", page_path(page), method: 'DELETE', class: 'btn btn-danger btn-sm', "data-confirm" => "Are you sure you want to delete #{page.name}?"

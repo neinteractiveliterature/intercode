@@ -1,0 +1,13 @@
+%table.table.table-striped
+  - @cms_layouts.each do |cms_layout|
+    %tr
+      %td
+        = cms_layout.public_send(cms_layout.class.name_field)
+        - if cms_layout.admin_notes.present?
+          %br
+          %small= cms_layout.admin_notes
+      %td.text-right
+        = link_to "Edit", url_for(action: 'edit', id: cms_layout), class: 'btn btn-secondary btn-sm'
+        = link_to "Delete", url_for(action: 'destroy', id: cms_layout), method: 'DELETE', "data-confirm" => "Are you sure you want to delete this layout?", class: 'btn btn-danger btn-sm'
+
+= link_to "New layout", url_for(action: 'new'), class: 'btn btn-primary'
