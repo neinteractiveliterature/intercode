@@ -2,19 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Manager, Target, Popper } from 'react-popper';
 import classNames from 'classnames';
+import onClickOutside from 'react-onclickoutside';
 
+@onClickOutside
 class PopperDropdown extends React.Component {
   static propTypes = {
-    caption: PropTypes.string.isRequired,
+    caption: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     children: PropTypes.node,
     placement: PropTypes.string,
     className: PropTypes.string,
+    targetProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
 
   static defaultProps = {
     children: null,
     placement: 'bottom-start',
     className: null,
+    targetProps: null,
   };
 
   constructor(props) {
@@ -23,6 +27,12 @@ class PopperDropdown extends React.Component {
     this.state = {
       visible: false,
     };
+  }
+
+  handleClickOutside = () => {
+    if (this.state.visible) {
+      this.setState({ visible: false });
+    }
   }
 
   targetClicked = () => {
@@ -35,12 +45,12 @@ class PopperDropdown extends React.Component {
       placement,
       children,
       className,
-      ...otherProps
+      targetProps,
     } = this.props;
 
     return (
       <Manager>
-        <Target onClick={this.targetClicked} className={classNames('dropdown-toggle', className)} {...otherProps}>
+        <Target onClick={this.targetClicked} className={classNames('dropdown-toggle', className)} {...targetProps}>
           {caption}
         </Target>
         <Popper placement={placement || 'bottom-start'}>

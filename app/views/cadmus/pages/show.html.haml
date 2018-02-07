@@ -1,12 +1,7 @@
 - admin_bar = capture do
   - if can? :update, @page
-    %nav.navbar.navbar-expand.navbar-dark.bg-dark.mb-4
-      .navbar-brand
-        Admin options
-      .navbar-nav
-        = link_to "Edit page", [:edit, @page], class: 'nav-item nav-link'
-        - if can?(:delete?, @page) && @page.parent.root_page != @page
-          = link_to "Delete page", page_path(@page), :method => :delete, "data-confirm" => "Are you sure you want to delete this page?", class: 'nav-item nav-link'
+    .float-right
+      = react_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id, authenticityToken: graphql_authenticity_token
 
 - page_content = cadmus_renderer.render(@page.liquid_template, :html)
 - flash_messages_content = render(partial: 'layouts/flash_messages')
