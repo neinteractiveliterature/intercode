@@ -30,6 +30,9 @@ class PagesController < ApplicationController
   # authorization filter here.
   before_action :authorize_index, only: [:index]
 
+  # Intercode's layout uses the @page_title instance variable for the <title> tag.
+  before_action :set_page_title, only: :show
+
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
   def root
@@ -68,5 +71,13 @@ class PagesController < ApplicationController
     when 'root', 'show' then 'cms_page'
     else 'cms_admin'
     end
+  end
+
+  def set_page_title
+    @page_title = @page&.name
+  end
+
+  def page_params
+    params.require(:page).permit(:name, :slug, :content, :admin_notes)
   end
 end

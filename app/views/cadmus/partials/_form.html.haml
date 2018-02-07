@@ -8,6 +8,8 @@
           %li= message
 
   = f.text_field :name
+  = f.text_field :admin_notes
+
   .my-2
     = react_component 'LiquidHTMLEditor', name: 'cms_partial[content]', initialContent: f.object.content
 

@@ -3,6 +3,10 @@
   = f.text_field :name, class: 'form-control'
 
 .form-group
+  = f.label :admin_notes
+  = f.text_field :admin_notes, class: 'form-control'
+
+.form-group
   = f.label :navbar_classes
   = f.text_field :navbar_classes, label: "Navigation bar CSS classes", class: 'form-control form-control-monospace'
   %small

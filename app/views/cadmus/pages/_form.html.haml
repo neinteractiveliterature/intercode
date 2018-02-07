@@ -8,6 +8,7 @@
         %li= msg
 
 = f.text_field :name
+= f.text_field :admin_notes
 = f.text_field :slug, style: "font-family: monospace;", label: 'URL', prepend: url_for(:action => 'show', :page_glob => "slug", :only_path => false).sub(/slug$/, '')
 
 - if convention
