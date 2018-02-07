@@ -36,6 +36,7 @@ const EventListSortDropdown = ({ showConventionOrder }) => {
     <PopperDropdown
       caption={`Sorting by ${currentSort.caption}`}
       placement="bottom-end"
+      className="btn btn-outline-primary"
     >
       {sortOptions}
     </PopperDropdown>
