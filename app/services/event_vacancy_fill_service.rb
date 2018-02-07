@@ -100,7 +100,7 @@ class EventVacancyFillService < ApplicationService
 
   def signup_can_fill_bucket_vacancy?(signup, bucket)
     (
-      signup.requested_bucket_key.nil? ||
+      (signup.requested_bucket_key.nil? && bucket.slots_limited?) ||
       signup.requested_bucket_key == bucket.key ||
       bucket.anything?
     )

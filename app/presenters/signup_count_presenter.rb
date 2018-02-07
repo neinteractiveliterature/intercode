@@ -1,4 +1,6 @@
 class SignupCountPresenter
+  include Concerns::SortBuckets
+
   attr_reader :run
 
   def initialize(run)
@@ -83,9 +85,7 @@ class SignupCountPresenter
   end
 
   def buckets
-    @buckets ||= registration_policy.buckets.sort_by do |bucket|
-      [bucket.anything? ? 1 : 0, (bucket.name || '').downcase]
-    end
+    @buckets ||= sort_buckets(registration_policy.buckets)
   end
 
   private

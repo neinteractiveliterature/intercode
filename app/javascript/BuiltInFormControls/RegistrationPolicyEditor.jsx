@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
-import MultipleChoiceInput from './MultipleChoiceInput';
+import ChoiceSet from './ChoiceSet';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 
@@ -50,7 +50,11 @@ class RegistrationPolicyEditor extends React.Component {
         )) &&
         this.props.registrationPolicy.buckets.every(bucket =>
           preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key &&
-            presetBucket.slots_limited === bucket.slotsLimited))
+            presetBucket.slots_limited === bucket.slotsLimited)) &&
+        (
+          this.props.registrationPolicy.getPreventNoPreferenceSignups() ===
+          Boolean(preset.policy.prevent_no_preference_signups)
+        )
       ));
 
       if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
@@ -98,6 +102,10 @@ class RegistrationPolicyEditor extends React.Component {
 
   bucketChanged = (key, newBucket) => {
     this.props.onChange(this.props.registrationPolicy.updateBucket(key, newBucket));
+  }
+
+  preventNoPreferenceSignupsChanged = (newValue) => {
+    this.props.onChange(this.props.registrationPolicy.setPreventNoPreferenceSignups(newValue === 'true'));
   }
 
   deleteBucket = (key) => {
@@ -220,6 +228,7 @@ class RegistrationPolicyEditor extends React.Component {
           {bucketRows}
         </tbody>
         <tfoot>
+          {this.renderPreventNoPreferenceSignupsRow()}
           <tr>
             <td colSpan={this.getHeaderLabels().findIndex(label => label === 'Limits')} />
             <td className="d-flex">
@@ -269,21 +278,26 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
-  renderPreventNoPreferenceSignups = () => {
+  renderPreventNoPreferenceSignupsRow = () => {
     if (this.state.preset) {
       return null;
     }
 
     return (
-      <MultipleChoiceInput
-        caption="Show a 'no preference' button for signups?"
-        choices={[
-          { label: 'Yes, show it', value: false },
-          { label: 'No, don\'t show it', value: true },
-        ]}
-        choiceClassName="form-check-inline"
-        value={this.props.registrationPolicy.getPreventNoPreferenceSignups()}
-      />
+      <tr>
+        <td>No preference</td>
+        <td colSpan={this.getHeaderLabels().length - 1}>
+          <ChoiceSet
+            choices={[
+              { label: 'Show "no preference" option', value: false },
+              { label: 'Don\'t show "no preference" option', value: true },
+            ]}
+            choiceClassName="form-check-inline"
+            value={this.props.registrationPolicy.getPreventNoPreferenceSignups()}
+            onChange={this.preventNoPreferenceSignupsChanged}
+          />
+        </td>
+      </tr>
     );
   }
 
@@ -297,7 +311,6 @@ class RegistrationPolicyEditor extends React.Component {
             {selectorRow}
             {this.renderTable()}
             {this.renderAddButtons()}
-            {this.renderPreventNoPreferenceSignups()}
           </div>
         );
       }
@@ -309,7 +322,6 @@ class RegistrationPolicyEditor extends React.Component {
       <div>
         {this.renderTable()}
         {this.renderAddButtons()}
-        {this.renderPreventNoPreferenceSignups()}
       </div>
     );
   }
