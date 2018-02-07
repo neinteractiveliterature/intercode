@@ -3,7 +3,7 @@
     %h1.text-nowrap
       Events at #{convention.name}
 
-  = react_component 'EventListSortDropdown', showConventionOrder: can?(:schedule, convention), className: 'btn btn-outline-primary'
+  = react_component 'EventListSortDropdown', showConventionOrder: can?(:schedule, convention)
 
 - markdown_presenter = MarkdownPresenter.new('No description provided')
 - previous_first_run = nil

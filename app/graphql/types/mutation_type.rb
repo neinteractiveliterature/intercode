@@ -67,7 +67,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteRun, Mutations::DeleteRun.field do
-    guard(guard_for_convention_associated_model(:runs, :delete))
+    guard(guard_for_convention_associated_model(:runs, :destroy))
   end
 
   field :updateRun, Mutations::UpdateRun.field do
@@ -85,7 +85,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteRoom, Mutations::DeleteRoom.field do
-    guard(guard_for_convention_associated_model(:rooms, :delete))
+    guard(guard_for_convention_associated_model(:rooms, :destroy))
   end
 
   field :createTeamMember, Mutations::CreateTeamMember.field do
@@ -93,11 +93,15 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteTeamMember, Mutations::DeleteTeamMember.field do
-    guard(guard_for_model_with_id(TeamMember, :delete))
+    guard(guard_for_model_with_id(TeamMember, :destroy))
   end
 
   field :updateTeamMember, Mutations::UpdateTeamMember.field do
     guard(guard_for_model_with_id(TeamMember, :update))
+  end
+
+  field :deletePage, Mutations::DeletePage.field do
+    guard(guard_for_convention_associated_model(:pages, :destroy))
   end
 
   field :provideEventTicket, Mutations::ProvideEventTicket.field do
@@ -122,7 +126,7 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   delete_override_field = Mutations::DeleteMaximumEventProvidedTicketsOverride.field
   field :deleteMaximumEventProvidedTicketsOverride, delete_override_field do
-    guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :delete))
+    guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :destroy))
   end
 
   field :updateFormWithJSON, Mutations::UpdateFormWithJSON.field do
