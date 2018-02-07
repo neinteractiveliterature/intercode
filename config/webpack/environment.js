@@ -9,8 +9,16 @@ const webpack = require('webpack')
 //   }),
 // )
 
+// environment.loaders.get('babel').use.unshift({
+//   loader: 'cache-loader'
+// });
+//
+// environment.loaders.get('sass').use.unshift({
+//   loader: 'cache-loader'
+// });
+
 // don't load all of moment's locales
-environment.plugins.set(
+environment.plugins.append(
   'Ignore',
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 )

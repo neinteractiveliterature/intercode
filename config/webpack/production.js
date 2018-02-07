@@ -6,12 +6,12 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 environment.plugins.delete('UglifyJs');
-environment.plugins.set(
+environment.plugins.append(
   'BabelMinify',
   new BabelMinifyPlugin(),
 );
 if (process.env.ANALYZE_BUNDLE_SIZE) {
-  environment.plugins.set(
+  environment.plugins.append(
     'BundleAnalyzer',
     new BundleAnalyzerPlugin()
   )
