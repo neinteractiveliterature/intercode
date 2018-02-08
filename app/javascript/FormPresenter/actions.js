@@ -25,6 +25,7 @@ function createAPIFetchCallback(urlProperty) {
 
 const actions = {
   ...createActions({
+    INTERACTED_WITH_ITEM: itemIdentifier => ({ itemIdentifier }),
     PREVIOUS_SECTION: undefined,
     NEXT_SECTION: undefined,
     RESPONSE_VALUE_CHANGED: (field, value) => ({ field, value }),

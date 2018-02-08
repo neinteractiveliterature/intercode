@@ -9,12 +9,18 @@ import TimeblockPreferenceItem from './TimeblockPreferenceItem';
 import TimespanItem from './TimespanItem';
 
 const FormItem = ({
-  formItem, convention, value, onChange,
+  formItem, convention, value, onChange, valueInvalid, onInteract,
 }) => {
   const valueDidChange = (newValue) => {
     onChange(formItem.identifier, newValue);
   };
-  const commonProps = { formItem, value, onChange: valueDidChange };
+  const commonProps = {
+    formItem,
+    value,
+    onInteract,
+    valueInvalid,
+    onChange: valueDidChange,
+  };
 
   switch (formItem.itemType) {
     case 'date':
@@ -43,6 +49,8 @@ FormItem.propTypes = {
   }).isRequired,
   value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
   onChange: PropTypes.func,
+  onInteract: PropTypes.func,
+  valueInvalid: PropTypes.bool,
   convention: PropTypes.shape({
     starts_at: PropTypes.string.isRequired,
     ends_at: PropTypes.string.isRequired,

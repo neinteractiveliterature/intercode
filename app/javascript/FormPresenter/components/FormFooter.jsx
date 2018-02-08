@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Form from '../../Models/Form';
+import { getCurrentSection, getIncompleteItems } from '../FormPresenterUtils';
 
 class FormFooter extends React.Component {
   static propTypes = {
+    currentSectionId: PropTypes.number.isRequired,
     currentSectionIndex: PropTypes.number.isRequired,
     sectionCount: PropTypes.number.isRequired,
     previousSection: PropTypes.func.isRequired,
     nextSection: PropTypes.func.isRequired,
     submitForm: PropTypes.func.isRequired,
-    disableContinue: PropTypes.bool.isRequired,
     isSubmittingResponse: PropTypes.bool.isRequired,
     afterSubmitUrl: PropTypes.string,
     exitButton: PropTypes.shape({
@@ -16,6 +18,10 @@ class FormFooter extends React.Component {
       url: PropTypes.string.isRequired,
     }),
     submitCaption: PropTypes.string,
+    form: Form.propType.isRequired,
+    response: PropTypes.shape({}).isRequired,
+    onInteract: PropTypes.func.isRequired,
+    scrollToItem: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -23,6 +29,37 @@ class FormFooter extends React.Component {
     exitButton: null,
     submitCaption: 'Submit',
   };
+
+  validateContinue = () => {
+    const { form, currentSectionId, response } = this.props;
+    const currentSection = getCurrentSection(form, currentSectionId);
+    const incompleteItems = getIncompleteItems(form, currentSection, response);
+
+    if (incompleteItems.isEmpty()) {
+      return true;
+    }
+
+    incompleteItems.forEach((item) => {
+      if (item.identifier) {
+        this.props.onInteract(item.identifier);
+      }
+    });
+    this.props.scrollToItem(incompleteItems.get(0));
+
+    return false;
+  }
+
+  tryNextSection = () => {
+    if (this.validateContinue()) {
+      this.props.nextSection();
+    }
+  }
+
+  trySubmitForm = () => {
+    if (this.validateContinue()) {
+      this.props.submitForm();
+    }
+  }
 
   renderBackButton = () => {
     if (this.props.currentSectionIndex < 1) {
@@ -59,8 +96,7 @@ class FormFooter extends React.Component {
     return (
       <button
         className="btn btn-primary"
-        onClick={this.props.nextSection}
-        disabled={this.props.disableContinue}
+        onClick={this.tryNextSection}
       >
         Continue <i className="fa fa-chevron-right" />
       </button>
@@ -79,8 +115,8 @@ class FormFooter extends React.Component {
     return (
       <button
         className="btn btn-success"
-        onClick={this.props.submitForm}
-        disabled={this.props.isSubmittingResponse || this.props.disableContinue}
+        onClick={this.trySubmitForm}
+        disabled={this.props.isSubmittingResponse}
       >
         {this.props.submitCaption || 'Submit'}
       </button>

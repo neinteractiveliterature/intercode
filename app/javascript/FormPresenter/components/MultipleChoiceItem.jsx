@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 
 const OTHER_VALUE = '_OTHER_VALUE';
@@ -23,11 +23,14 @@ class MultipleChoiceItem extends React.Component {
       }).isRequired,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
+    onInteract: PropTypes.func.isRequired,
     value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+    valueInvalid: PropTypes.bool,
   };
 
   static defaultProps = {
     value: null,
+    valueInvalid: false,
   };
 
   constructor(props) {
@@ -49,6 +52,8 @@ class MultipleChoiceItem extends React.Component {
   }
 
   onChange = (newValue) => {
+    this.userDidInteract();
+
     if (this.props.formItem.properties.multiple) {
       const actualValue = newValue.filter(choiceValue => choiceValue !== OTHER_VALUE);
       if (newValue.includes(OTHER_VALUE)) {
@@ -99,7 +104,12 @@ class MultipleChoiceItem extends React.Component {
     return this.props.value != null && !choiceValues.includes(this.props.value);
   }
 
+  userDidInteract = () => {
+    this.props.onInteract(this.props.formItem.identifier);
+  }
+
   otherValueDidChange = (event) => {
+    this.userDidInteract();
     this.setState(
       { otherValue: event.target.value },
       () => this.onChange(this.getValueForChoiceSet()), // recalculate value
@@ -123,12 +133,6 @@ class MultipleChoiceItem extends React.Component {
   }
 
   render = () => {
-    const choiceClassName = (
-      ['radio_horizontal', 'checkbox_horizontal'].includes(this.props.formItem.properties.style) ?
-        'form-check-inline' :
-        null
-    );
-
     const choicesForChoiceSet = this.props.formItem.properties.choices.map(choice => ({
       label: choice.caption,
       value: choice.value,
@@ -151,7 +155,10 @@ class MultipleChoiceItem extends React.Component {
           value={this.getValueForChoiceSet()}
           onChange={this.onChange}
           multiple={this.isMultiple()}
-          choiceClassName={choiceClassName}
+          choiceClassName={classNames({
+            'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(this.props.formItem.properties.style),
+            'is-invalid': this.props.valueInvalid,
+          })}
         />
         {this.renderOtherInput()}
       </fieldset>
