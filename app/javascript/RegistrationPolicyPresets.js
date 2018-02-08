@@ -42,6 +42,7 @@ const presets = [
           slots_limited: true,
         },
       ],
+      prevent_no_preference_signups: true,
     },
   },
   {

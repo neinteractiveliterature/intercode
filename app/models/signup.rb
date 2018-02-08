@@ -10,7 +10,6 @@ class Signup < ApplicationRecord
 
   validates :state, inclusion: { in: STATES }
   validates :bucket_key, presence: { if: -> (signup) { signup.counted? && signup.confirmed? } }
-  validates :requested_bucket_key, presence: { if: :counted? }
   # validate :must_be_counted_if_and_only_if_not_team_member
   validate :must_be_in_existing_bucket
 

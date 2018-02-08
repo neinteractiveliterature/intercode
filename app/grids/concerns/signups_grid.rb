@@ -18,6 +18,8 @@ module Concerns::SignupsGrid
             bucket_name
           elsif requested_bucket_name
             "#{bucket_name || 'None'} (requested #{requested_bucket_name})"
+          elsif bucket_name
+            "#{bucket_name} (no preference)"
           end
         else
           'Not counted'

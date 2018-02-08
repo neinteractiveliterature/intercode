@@ -68,6 +68,7 @@ class EditEvent extends React.Component {
             slots_limited: bucket.slots_limited,
             anything: bucket.anything,
           })),
+          prevent_no_preference_signups: event.registration_policy.prevent_no_preference_signups,
         },
         can_play_concurrently: event.can_play_concurrently,
       },
