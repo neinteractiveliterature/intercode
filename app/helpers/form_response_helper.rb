@@ -59,7 +59,12 @@ module FormResponseHelper
               describe_bucket(bucket)
             ])
           end
-        end
+        end + [
+          content_tag(:li) do
+            "\"No preference\" option #{value.allow_no_preference_signups? ? 'will' : 'will not'} \
+be available"
+          end
+        ]
       )
     end
   end
