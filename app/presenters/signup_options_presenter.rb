@@ -124,6 +124,18 @@ class SignupOptionsPresenter
     partitioned_options_for_event.second
   end
 
+  def no_preference_options
+    @no_preference_options ||= begin
+      if !event.registration_policy.allow_no_preference_signups?
+        []
+      elsif buckets.reject(&:slots_unlimited?).size <= 1
+        []
+      else
+        [NoPreferenceSignupOption.new]
+      end
+    end
+  end
+
   private
 
   def partitioned_options_for_event
@@ -148,18 +160,6 @@ class SignupOptionsPresenter
         next if bucket.anything?
         BucketSignupOption.new(bucket, index, non_anything_buckets_count <= 1)
       end.compact + no_preference_options
-    end
-  end
-
-  def no_preference_options
-    @no_preference_options ||= begin
-      if event.registration_policy.allow_no_preference_signups?
-        []
-      elsif buckets.reject(&:slots_unlimited?).size <= 1
-        []
-      else
-        [NoPreferenceSignupOption.new]
-      end
     end
   end
 
