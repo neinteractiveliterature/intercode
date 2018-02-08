@@ -3,8 +3,13 @@ class AdminSignupsGrid
   include Concerns::SignupsGrid
 
   filter(:state, :enum, select: Signup::STATES, checkboxes: true)
-  filter(:bucket, :enum, select: :bucket_names_and_keys, checkboxes: true)
-  filter(:requested_bucket, :enum, select: :bucket_names_and_keys, checkboxes: true)
+  filter(:bucket_key, :enum, header: 'Bucket', select: :bucket_names_and_keys, checkboxes: true)
+  filter(:requested_bucket_key,
+    :enum,
+    header: 'Requested bucket',
+    select: :bucket_names_and_keys,
+    checkboxes: true
+  )
 
   column(:id, header: 'Seq')
   column(:state)

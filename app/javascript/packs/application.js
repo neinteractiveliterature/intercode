@@ -36,6 +36,7 @@ import '../inflections';
 import '../Codemirror/LiquidMultiplexModes';
 
 import ConventionAdmin from '../ConventionAdmin';
+import DatagridFilters from '../Datagrid/DatagridFilters';
 import EventAdmin from '../EventAdmin';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
@@ -55,6 +56,7 @@ import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
+  DatagridFilters,
   EventAdmin,
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),

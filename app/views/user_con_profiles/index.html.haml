@@ -1,6 +1,6 @@
 %h1 Listing attendees
 
-= datagrid_form_for @user_con_profiles_grid, :url => user_con_profiles_path
+= datagrid_filters @user_con_profiles_grid, show_collapsed: [:name]
 
 = link_to user_con_profiles_path(format: :csv), class: 'btn btn-secondary my-4' do
   %i.fa.fa-file-excel-o

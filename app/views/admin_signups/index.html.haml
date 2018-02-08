@@ -1,6 +1,6 @@
 = render partial: 'runs/run_header', locals: { run: @run }
 
-= datagrid_form_for @signups_grid, :url => event_run_admin_signups_path(@event, @run)
+= datagrid_filters @signups_grid, show_collapsed: [:state, :bucket_key, :requested_bucket_key]
 
 = link_to polymorphic_path([@event, @run, :admin_signups], format: :csv), class: 'btn btn-secondary my-4' do
   %i.fa.fa-file-excel-o
