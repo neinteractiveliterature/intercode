@@ -49,6 +49,8 @@ module FormResponseHelper
   end
 
   def render_registration_policy_value(value)
+    options_presenter = SignupOptionsPresenter.new(event: Event.new(registration_policy: value), user_con_profile: nil)
+
     content_tag(:ul, class: 'list-unstyled m-0') do
       safe_join(
         value.buckets.map do |bucket|
@@ -61,8 +63,13 @@ module FormResponseHelper
           end
         end + [
           content_tag(:li) do
-            "\"No preference\" option #{value.allow_no_preference_signups? ? 'will' : 'will not'} \
-be available"
+            if options_presenter.no_preference_options.any?
+              '"No preference" option will be available'
+            elsif value.allow_no_preference_signups?
+              '"No preference" option is inapplicable'
+            else
+              '"No preference" option will not be available'
+            end
           end
         ]
       )
