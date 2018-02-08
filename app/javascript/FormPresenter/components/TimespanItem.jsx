@@ -1,21 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
+import classNames from 'classnames';
 import RequiredIndicator from './RequiredIndicator';
 
 class TimespanItem extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
+      identifier: PropTypes.string.isRequired,
       properties: PropTypes.shape({
         caption: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     value: PropTypes.number,
+    valueInvalid: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
+    onInteract: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     value: null,
+    valueInvalid: false,
   };
 
   static units = [
@@ -42,6 +47,10 @@ class TimespanItem extends React.Component {
 
   getCurrentUnit = () => TimespanItem.units.find(u => this.state.unit === u.name);
 
+  userDidInteract = () => {
+    this.props.onInteract(this.props.formItem.identifier);
+  }
+
   inputDidChange = (event) => {
     const quantity = parseInt(event.target.value, 10);
 
@@ -50,6 +59,8 @@ class TimespanItem extends React.Component {
     } else {
       this.props.onChange(quantity * this.getCurrentUnit().length_seconds);
     }
+
+    this.userDidInteract();
   }
 
   unitSelectorDidChange = (event) => {
@@ -83,9 +94,10 @@ class TimespanItem extends React.Component {
             id={inputId}
             type="number"
             min="1"
-            className="form-control w-25"
+            className={classNames('form-control', 'w-25', { 'is-invalid': this.props.valueInvalid })}
             value={inputValue}
             onChange={this.inputDidChange}
+            onBlur={this.userDidInteract}
           />
           <select
             className="form-control ml-2"

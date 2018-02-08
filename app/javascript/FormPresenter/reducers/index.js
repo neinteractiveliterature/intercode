@@ -4,6 +4,7 @@ import apiConfigurationReducer from './apiConfigurationReducer';
 import conventionReducer from './conventionReducer';
 import errorsReducer from './errorsReducer';
 import formReducer from './formReducer';
+import interactedItemsReducer from './interactedItemsReducer';
 import isSubmittingResponseReducer from './isSubmittingResponseReducer';
 import isUpdatingResponseReducer from './isUpdatingResponseReducer';
 import responseReducer from './responseReducer';
@@ -17,6 +18,7 @@ export default reduceReducers(
     convention: conventionReducer,
     errors: errorsReducer,
     form: formReducer,
+    interactedItems: interactedItemsReducer,
     isSubmittingResponse: isSubmittingResponseReducer,
     isUpdatingResponse: isUpdatingResponseReducer,
     response: responseReducer,

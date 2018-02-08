@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
   form: state.form,
   convention: state.convention,
   response: state.response,
+  interactedItems: state.interactedItems,
   isSubmittingResponse: state.isSubmittingResponse,
   isUpdatingResponse: state.isUpdatingResponse,
   afterSubmitUrl: state.apiConfiguration.afterSubmitUrl,
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
   previousSection: () => dispatch(actions.previousSection()),
   nextSection: () => dispatch(actions.nextSection()),
   submitForm: () => dispatch(actions.submitForm()),
+  interactedWithItem: itemIdentifier => dispatch(actions.interactedWithItem(itemIdentifier)),
 });
 
 const FormPresenterContainer = connect(

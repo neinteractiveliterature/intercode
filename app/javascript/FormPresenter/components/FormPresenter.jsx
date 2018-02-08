@@ -5,13 +5,7 @@ import Form from '../../Models/Form';
 import FormItem from './FormItem';
 import FormFooterContainer from '../containers/FormFooterContainer';
 import LoadingIndicator from '../../LoadingIndicator';
-
-function getCurrentSection(form, currentSectionId) {
-  if (!currentSectionId) {
-    return form.getSections().get(0);
-  }
-  return form.getSection(currentSectionId);
-}
+import { getCurrentSection } from '../FormPresenterUtils';
 
 class FormPresenter extends React.Component {
   static propTypes = {
@@ -24,6 +18,8 @@ class FormPresenter extends React.Component {
     errors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     responseValueChanged: PropTypes.func.isRequired,
+    interactedItems: PropTypes.shape({}).isRequired,
+    interactedWithItem: PropTypes.func.isRequired,
     isSubmittingResponse: PropTypes.bool.isRequired,
     isUpdatingResponse: PropTypes.bool.isRequired,
     currentSectionId: PropTypes.number,
@@ -40,11 +36,28 @@ class FormPresenter extends React.Component {
     submitCaption: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.itemRefs = {};
+  }
+
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.currentSectionId !== this.props.currentSectionId) {
-      if (this.headerDiv) {
-        this.headerDiv.scrollIntoView({ behavior: 'smooth' });
-      }
+      this.scrollToTop();
+      this.itemRefs = {};
+    }
+  }
+
+  scrollToTop = () => {
+    if (this.headerDiv) {
+      this.headerDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  scrollToItem = (item) => {
+    const itemRef = this.itemRefs[item.identifier];
+    if (itemRef) {
+      itemRef.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -81,6 +94,8 @@ class FormPresenter extends React.Component {
     const {
       convention,
       form,
+      interactedWithItem,
+      interactedItems,
       response,
       responseValueChanged,
       isSubmittingResponse,
@@ -93,13 +108,19 @@ class FormPresenter extends React.Component {
       const errorsForDisplay = (itemErrors.length > 0 ? itemErrors.join(', ') : null);
 
       return (
-        <div>
+        <div ref={(component) => { this.itemRefs[item.identifier] = component; }}>
           <FormItem
             key={item.id}
             formItem={item}
             convention={convention}
+            valueInvalid={
+              item.identifier &&
+              interactedItems[item.identifier] &&
+              !item.valueIsComplete(response[item.identifier])
+            }
             value={response[item.identifier]}
             onChange={responseValueChanged}
+            onInteract={interactedWithItem}
           />
           <ErrorDisplay stringError={errorsForDisplay} />
         </div>
@@ -149,10 +170,6 @@ class FormPresenter extends React.Component {
     const sections = form.getSections();
     const currentSectionIndex = sections.indexOf(currentSection);
 
-    const disableContinue = form.getItemsInSection(currentSection.id).some(item => (
-      !item.valueIsComplete(response[item.identifier])
-    ));
-
     return (
       <div className="card mb-4">
         {this.renderSection(currentSection)}
@@ -160,9 +177,9 @@ class FormPresenter extends React.Component {
         <FormFooterContainer
           currentSectionIndex={currentSectionIndex}
           sectionCount={sections.size}
-          disableContinue={disableContinue}
           exitButton={exitButton}
           submitCaption={submitCaption}
+          scrollToItem={this.scrollToItem}
         />
       </div>
     );

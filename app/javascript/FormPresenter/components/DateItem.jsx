@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
 
 class DateItem extends React.Component {
@@ -11,15 +12,23 @@ class DateItem extends React.Component {
       }).isRequired,
     }).isRequired,
     value: PropTypes.string,
+    valueInvalid: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
+    onInteract: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     value: null,
+    valueInvalid: false,
   };
 
   onChange = (event) => {
     this.props.onChange(event.target.value);
+    this.userDidInteract();
+  }
+
+  userDidInteract = () => {
+    this.props.onInteract(this.props.formItem.identifier);
   }
 
   render = () => (
@@ -29,7 +38,8 @@ class DateItem extends React.Component {
         type="date"
         value={this.props.value}
         onChange={this.onChange}
-        className="form-control"
+        onInteract={this.userDidInteract}
+        className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
       />
     </fieldset>
   )
