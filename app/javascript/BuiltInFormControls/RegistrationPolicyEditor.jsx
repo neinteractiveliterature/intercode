@@ -280,7 +280,16 @@ class RegistrationPolicyEditor extends React.Component {
 
   renderPreventNoPreferenceSignupsRow = () => {
     if (this.state.preset) {
-      return null;
+      return (
+        <tr>
+          <td>No preference</td>
+          <td colSpan={this.getHeaderLabels().length - 1}>
+            &quot;No preference&quot; option
+            {this.props.registrationPolicy.getPreventNoPreferenceSignups() ? ' will not ' : ' will '}
+            be available
+          </td>
+        </tr>
+      );
     }
 
     return (
