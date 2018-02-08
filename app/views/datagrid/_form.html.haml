@@ -1,13 +1,1 @@
-.card
-  .card-header Search
-  .card-body
-    = bootstrap_form_for grid, { layout: :horizontal }.merge(options) do |f|
-      - grid.filters.each do |filter|
-        .datagrid-filter.filter
-          = f.datagrid_filter filter, partials: options[:partials]
-      = f.form_group do
-        %ul.list-inline.datagrid-actions
-          %li.list-inline-item= f.submit I18n.t("datagrid.form.search").html_safe
-
-          - empty_parameter = Rails.version >= "4.1.0" && Rails.version <= '4.1.2' ? nil : {}
-          %li.list-inline-item= link_to I18n.t('datagrid.form.reset').html_safe, url_for(grid.to_param => empty_parameter), :class => "btn btn-unstyled datagrid-reset"
+= react_component 'DatagridFilters', filters: grid.filters.map { |filter| { name: filter.name, form_builder_helper_name: filter.form_builder_helper_name, options: filter.options, select_options: (filter.type == :enum ? grid.select_options(filter) : nil) } }

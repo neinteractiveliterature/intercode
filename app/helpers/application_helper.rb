@@ -91,4 +91,24 @@ module ApplicationHelper
       time.beginning_of_day.change(hour: 6)
     end
   end
+
+  def datagrid_filters(grid, show_collapsed: [])
+    param_key = model_name_from_record_or_class(grid).param_key
+
+    react_component(
+      'DatagridFilters',
+      filters: grid.filters.map do |filter|
+        {
+          name: filter.name,
+          header: filter.header,
+          form_builder_helper_name: filter.form_builder_helper_name,
+          options: filter.options,
+          select_options: (filter.type == :enum ? grid.select_options(filter) : nil)
+        }
+      end,
+      showCollapsed: show_collapsed,
+      paramKey: param_key,
+      initialFilterValues: params[param_key]
+    )
+  end
 end
