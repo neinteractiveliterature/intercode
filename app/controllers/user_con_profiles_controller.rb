@@ -13,6 +13,8 @@ class UserConProfilesController < ApplicationController
 
   # GET /user_con_profiles
   def index
+    @page_title = 'Attendees'
+
     grid_params = params[:user_con_profiles_grid]&.permit! || { order: 'name' }
     @user_con_profiles_grid = UserConProfilesGrid.new(grid_params) do |scope|
       scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
@@ -41,23 +43,11 @@ class UserConProfilesController < ApplicationController
 
   # GET /user_con_profiles/1
   def show
-  end
-
-  # GET /user_con_profiles/new
-  def new
+    @page_title = @subject_profile.name
   end
 
   # GET /user_con_profiles/1/edit
   def edit
-  end
-
-  # POST /user_con_profiles
-  def create
-    if @subject_profile.save
-      redirect_to @subject_profile, notice: 'Profile was successfully created.'
-    else
-      render :new
-    end
   end
 
   # PATCH/PUT /user_con_profiles/1

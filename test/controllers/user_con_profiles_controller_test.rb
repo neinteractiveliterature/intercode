@@ -19,21 +19,6 @@ describe UserConProfilesController do
     assert_not_nil assigns(:user_con_profiles_grid)
   end
 
-  test 'should get new' do
-    get :new
-    assert_response :success
-  end
-
-  test 'should create user_con_profile' do
-    user = FactoryBot.create(:user)
-
-    assert_difference('UserConProfile.count') do
-      post :create, params: { subject_profile: { email: user.email } }
-    end
-
-    assert_redirected_to user_con_profile_path(assigns(:subject_profile))
-  end
-
   test 'should show user_con_profile' do
     get :show, params: { id: user_con_profile }
     assert_response :success
