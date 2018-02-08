@@ -152,10 +152,14 @@ class SignupOptionsPresenter
   end
 
   def no_preference_options
-    @no_preference_options ||= if buckets.size > 1 && event.registration_policy.allow_no_preference_signups?
-      [NoPreferenceSignupOption.new]
-    else
-      []
+    @no_preference_options ||= begin
+      if event.registration_policy.allow_no_preference_signups?
+        []
+      elsif buckets.reject(&:slots_unlimited?).size <= 1
+        []
+      else
+        [NoPreferenceSignupOption.new]
+      end
     end
   end
 
