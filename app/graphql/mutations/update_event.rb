@@ -7,6 +7,7 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
 
   resolve ->(_obj, args, ctx) {
     event = ctx[:convention].events.find(args[:id])
+
     event.update!(
       args[:event].to_h.merge(
         updated_by: ctx[:user_con_profile].user

@@ -37,9 +37,19 @@ class RegistrationPolicy
     !slots_unlimited?
   end
 
+  def prevent_no_preference_signups
+    !!@prevent_no_preference_signups
+  end
+  alias prevent_no_preference_signups? prevent_no_preference_signups
+
+  def allow_no_preference_signups?
+    !prevent_no_preference_signups
+  end
+
   def attributes
     {
-      buckets: buckets
+      buckets: buckets,
+      prevent_no_preference_signups: prevent_no_preference_signups?
     }
   end
 
@@ -55,10 +65,15 @@ class RegistrationPolicy
     @anything_bucket = nil
   end
 
+  def prevent_no_preference_signups=(value)
+    @prevent_no_preference_signups = !!value
+  end
+
   def attributes=(attributes)
     attributes.each do |key, value|
       case key.to_sym
       when :buckets then self.buckets = value
+      when :prevent_no_preference_signups then self.prevent_no_preference_signups = value
       else raise ActiveModel::MissingAttributeError.new("No attribute called #{key.inspect}", key)
       end
     end

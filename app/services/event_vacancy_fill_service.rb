@@ -24,6 +24,10 @@ class EventVacancyFillService < ApplicationService
       @signup ||= Signup.find(signup_id)
     end
 
+    def should_notify?
+      state != prev_state
+    end
+
     def self.from_h(hash)
       hash = hash.symbolize_keys
       new(
@@ -45,7 +49,7 @@ class EventVacancyFillService < ApplicationService
   end
   self.result_class = Result
 
-  attr_reader :run, :bucket_key
+  attr_reader :run, :bucket_key, :move_results
   delegate :event, to: :run
   delegate :convention, to: :event
 
@@ -55,64 +59,63 @@ class EventVacancyFillService < ApplicationService
     @run = run
     @bucket_key = bucket_key
     @skip_locking = skip_locking
+    @move_results = []
   end
 
   private
 
   def inner_call
-    move_results = nil
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
-      move_results = fill_bucket_vacancy(bucket_key)
+      fill_bucket_vacancy(bucket_key)
     end
 
-    move_results.each { |result| notify_moved_signup(result) }
+    move_results.each do |result|
+      notify_moved_signup(result) if result.should_notify?
+    end
     success(move_results: move_results)
   end
 
   def fill_bucket_vacancy(bucket_key)
     signup_to_move = best_signup_to_fill_bucket_vacancy(bucket_key)
-    return [] unless signup_to_move
+    return unless signup_to_move
 
     moving_confirmed_signup = signup_to_move.confirmed?
     prev_bucket_key = signup_to_move.bucket_key
     prev_state = signup_to_move.state
     signup_to_move.update!(state: 'confirmed', bucket_key: bucket_key)
-    result = SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
+    move_results << SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
 
-    if moving_confirmed_signup
-      # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill
-      # that vacancy
-      [result] + fill_bucket_vacancy(prev_bucket_key)
-    else
-      [result]
-    end
+    # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill
+    # that vacancy
+    fill_bucket_vacancy(prev_bucket_key) if moving_confirmed_signup
   end
 
   def best_signup_to_fill_bucket_vacancy(bucket_key)
     bucket = event.registration_policy.bucket_with_key(bucket_key)
-    is_anything_bucket = bucket.anything?
-
     signups_ordered.find do |signup|
-      (
-        # Confirmed signups that requested this bucket but didn't get it
-        (
-          signup.confirmed? &&
-          signup.bucket_key != bucket_key &&
-          signup.requested_bucket_key == bucket_key
-        ) ||
-        # Signups in the waitlist that could be in this bucket
-        (
-          signup.waitlisted? &&
-          (is_anything_bucket || signup.requested_bucket_key == bucket_key)
-        )
-      )
+      next if move_results.any? { |result| result.signup_id == signup.id }
+      signup.bucket_key != bucket.key && signup_can_fill_bucket_vacancy?(signup, bucket)
     end
+  end
+
+  def signup_can_fill_bucket_vacancy?(signup, bucket)
+    (
+      (signup.requested_bucket_key.nil? && bucket.slots_limited?) ||
+      signup.requested_bucket_key == bucket.key ||
+      bucket.anything?
+    )
   end
 
   def signups_ordered
     @signups_ordered ||= begin
       run.signups.reload
-      run.signups.order(:created_at).to_a
+      run.signups.where.not(state: 'withdrawn').to_a.sort_by do |signup|
+        [
+          # don't move no-preference signups unless necessary
+          signup.requested_bucket_key.nil? ? 1 : 0,
+          signup.created_at
+        ]
+      end
     end
   end
 
