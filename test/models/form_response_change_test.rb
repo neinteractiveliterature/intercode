@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class EventProposalChangeTest < ActiveSupport::TestCase
+class FormResponseChangeTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
