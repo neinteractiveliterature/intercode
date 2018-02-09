@@ -40,6 +40,7 @@ const EventAdminEditEvent = (props) => {
       updateMaximumEventProvidedTicketsOverride={updateMaximumEventProvidedTicketsOverride}
       deleteMaximumEventProvidedTicketsOverride={deleteMaximumEventProvidedTicketsOverride}
       ticketTypes={data.convention.ticket_types}
+      ticketName={data.convention.ticket_name}
       canOverrideMaximumEventProvidedTickets={
         data.current_user_con_profile.ability.can_override_maximum_event_provided_tickets
       }

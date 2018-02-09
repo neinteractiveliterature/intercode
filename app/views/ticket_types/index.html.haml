@@ -1,4 +1,4 @@
-%h1 Ticket types for #{@convention.name}
+%h1 #{@convention.ticket_name.capitalize} types for #{@convention.name}
 
 - @ticket_types.each do |ticket_type|
   - card_class = 'bg-dark text-white'
@@ -41,4 +41,4 @@
           %li= timespan.to_s(:short, convention.timezone)
 
 %p
-  = link_to "New ticket type", new_ticket_type_path, class: "btn btn-primary"
+  = link_to "New #{convention.ticket_name} type", new_ticket_type_path, class: "btn btn-primary"

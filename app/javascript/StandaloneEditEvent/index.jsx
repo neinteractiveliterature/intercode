@@ -81,6 +81,8 @@ query($eventId: Int!) {
     ticket_types {
       ...StandaloneEditEvent_TicketTypeFields
     }
+
+    ticket_name
   }
 
   event(id: $eventId) {
@@ -271,6 +273,7 @@ class StandaloneEditEvent extends React.Component {
           data.current_user_con_profile.ability.can_override_maximum_event_provided_tickets
         }
         ticketTypes={data.convention.ticket_types}
+        ticketName={data.convention.ticket_name}
       />
     );
   }

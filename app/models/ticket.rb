@@ -27,7 +27,7 @@ class Ticket < ApplicationRecord
     return unless ticket_type
     return if convention.ticket_types.include?(ticket_type)
 
-    errors.add(:ticket_type, "is not a valid ticket type for #{convention}")
+    errors.add(:ticket_type, "is not a valid #{convention.ticket_name} type for #{convention}")
   end
 
   def provided_by_event_must_be_part_of_convention

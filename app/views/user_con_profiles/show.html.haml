@@ -8,7 +8,7 @@
       %dd.col-md-9= @subject_profile.privileges.sort.map(&:humanize).join(", ").presence || 'none'
 
     %section.card
-      .card-header Ticket
+      .card-header= convention.ticket_name.titleize
       .card-body.pb-0
         - if @subject_profile.ticket
           %dl.row
@@ -19,16 +19,16 @@
           - if can? :edit, @subject_profile.ticket
             %ul.list-inline
               %li.list-inline-item
-                = link_to "Edit ticket", [:edit, @subject_profile, :admin_ticket], class: "btn btn-secondary"
+                = link_to "Edit #{convention.ticket_name}", [:edit, @subject_profile, :admin_ticket], class: "btn btn-secondary"
               - if can? :delete, @subject_profile.ticket
                 %li.list-inline-item
-                  = link_to "Delete ticket", [@subject_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@subject_profile.user.name}'s ticket?"
+                  = link_to "Delete #{convention.ticket_name}", [@subject_profile, :admin_ticket], class: "btn btn-danger", method: "delete", "data-confirm" => "Are you sure you want to delete #{@subject_profile.user.name}'s #{convention.ticket_name}?"
         - else
-          %p No ticket
+          %p No #{convention.ticket_name}
           - if can? :create, @subject_profile.build_ticket
             %ul.list-inline
               %li.list-inline-item
-                = link_to "Create ticket", [:new, @subject_profile, :admin_ticket], class: "btn btn-secondary"
+                = link_to "Create #{convention.ticket_name}", [:new, @subject_profile, :admin_ticket], class: "btn btn-secondary"
 
     / TODO: add event signups and team membership stuff
 

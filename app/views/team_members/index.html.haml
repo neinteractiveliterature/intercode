@@ -16,7 +16,7 @@
           %th Display Email Address
           %th Receive Email from Con
           %th Receive Email on Signup or Withdrawal
-          %th Ticketed By This Event
+          %th #{convention.ticket_name.titleize} From This Event
       %tbody
         - @event.team_members.each do |team_member|
           %tr

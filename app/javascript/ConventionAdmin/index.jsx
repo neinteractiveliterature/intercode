@@ -17,6 +17,7 @@ fragment ConventionAdminConventionFields on Convention {
   registrations_frozen
   show_schedule
   maximum_tickets
+  ticket_name
 
   maximum_event_signups {
     timespans {
@@ -81,6 +82,7 @@ class ConventionAdmin extends React.Component {
         registrations_frozen: convention.registrations_frozen,
         show_schedule: convention.show_schedule,
         maximum_tickets: convention.maximum_tickets,
+        ticket_name: convention.ticket_name,
         maximum_event_signups: {
           timespans: convention.maximum_event_signups.timespans.map(timespan => ({
             start: timespan.start,

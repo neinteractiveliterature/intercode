@@ -14,6 +14,8 @@ class ProvideEventTicketService < ApplicationService
 
   attr_reader :event, :user_con_profile, :ticket_type
 
+  delegate :convention, to: :event
+
   def initialize(event, user_con_profile, ticket_type)
     @event = event
     @user_con_profile = user_con_profile
@@ -46,12 +48,14 @@ class ProvideEventTicketService < ApplicationService
 
   def ticket_type_must_be_providable
     return unless maximum_event_provided_tickets_for_event < 1
-    errors.add :base, "#{ticket_type.name} tickets cannot be provided by #{event.title}"
+    errors.add :base, "#{ticket_type.name} #{convention.ticket_name.pluralize} cannot be provided \
+by #{event.title}"
   end
 
   def event_must_be_able_to_provide_tickets
     return if event.can_provide_tickets?
-    errors.add :base, "#{event.title} cannot provide tickets to attendees"
+    errors.add :base, "#{event.title} cannot provide #{convention.ticket_name.pluralize} to \
+attendees"
   end
 
   def event_must_have_remaining_tickets_of_type
@@ -61,13 +65,13 @@ class ProvideEventTicketService < ApplicationService
     return unless already_provided_count >= maximum_event_provided_tickets_for_event
 
     errors.add :base, "#{event.title} can provide up to \
-#{pluralize maximum_event_provided_tickets_for_event, 'ticket'}, and it has already provided \
-#{already_provided_count}"
+#{pluralize maximum_event_provided_tickets_for_event, convention.ticket_name}, and it has already \
+provided #{already_provided_count}"
   end
 
   def user_con_profile_must_not_have_ticket
     return unless user_con_profile.ticket
-    errors.add :base, "#{user_con_profile.name} already has a ticket to \
+    errors.add :base, "#{user_con_profile.name} already has a #{convention.ticket_name} to \
 #{user_con_profile.convention.name}"
   end
 end

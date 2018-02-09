@@ -3,7 +3,7 @@
 %table.table.table-striped
   %thead
     %tr
-      %th Ticket type
+      %th #{@convention.ticket_name.capitalize} type
       %th.text-right Count
       %th.text-right Revenue
   %tbody
@@ -19,7 +19,7 @@
         - if ticket_type.pricing_schedule.timespans.any? { |timespan| timespan.value == payment_amount }
           %td= ticket_type_description
         - else
-          %td.text-danger{title: "#{payment_amount.format} does not appear in the pricing schedule for #{ticket_type.name}"}
+          %td.text-danger{title: "#{payment_amount.format} does not appear in the pricing schedule for #{ticket_type.description}"}
             %i.fa.fa-exclamation-circle
             = ticket_type_description
         %td.text-right= link_to ticket_count, user_con_profiles_path(user_con_profiles_grid: { ticket_status: [ticket_type.id], payment_amount: payment_amount.cents / 100 })

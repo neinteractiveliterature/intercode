@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import { humanize, underscore } from 'inflected';
+import { humanize, underscore, capitalize, pluralize } from 'inflected';
 import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
@@ -75,6 +75,7 @@ query($eventId: Int!) {
       description
       maximum_event_provided_tickets(event_id: $eventId)
     }
+    ticket_name
   }
 
   event(id: $eventId) {
@@ -173,31 +174,36 @@ const buildTeamMemberInput = teamMember => ({
   receive_signup_email: teamMember.receive_signup_email,
 });
 
-const describeTicketType = ticketType => `${humanize(ticketType.name).toLowerCase()} ticket`;
+const describeTicketType = (ticketType, ticketName) => (
+  `${humanize(ticketType.name).toLowerCase()} ${ticketName}`
+);
 
-const describeTicketTypeProvidability = (ticketType, alreadyProvidedCount) => {
+const describeTicketTypeProvidability = (ticketType, alreadyProvidedCount, ticketName) => {
   const remaining = (
     ticketType.maximum_event_provided_tickets - alreadyProvidedCount
   );
 
-  return pluralizeWithCount(describeTicketType(ticketType), remaining);
+  return pluralizeWithCount(describeTicketType(ticketType, ticketName), remaining);
 };
 
 const describeTicketingStatus = (userConProfile, existingTicket, convention) => {
   const statusDescription = [];
   statusDescription.push(userConProfile.name_without_nickname);
+  const { ticket_name: ticketName } = convention;
 
   if (existingTicket) {
-    statusDescription.push(` has a ${describeTicketType(existingTicket.ticket_type)}`);
+    statusDescription.push((
+      ` has a ${describeTicketType(existingTicket.ticket_type, ticketName)}`
+    ));
     if (existingTicket.provided_by_event) {
       statusDescription.push(` provided by ${existingTicket.provided_by_event.title}`);
     }
   } else {
     statusDescription.push((
       <span key="unticketed-warning">
-        <span className="text-danger"> is unticketed for {convention.name}.</span>
+        <span className="text-danger"> has no {ticketName} for {convention.name}.</span>
         {' '}
-          Without a ticket, users cannot sign up for events at the convention
+        Without a {ticketName}, users cannot sign up for events at the convention.
       </span>
     ));
   }
@@ -503,6 +509,7 @@ class TeamMemberForm extends React.Component {
 
     let ticketingControls = null;
     const existingTicket = this.getExistingTicket();
+    const { ticket_name: ticketName } = this.props.data.convention;
 
     if (this.state.teamMember.id) {
       const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
@@ -516,7 +523,11 @@ class TeamMemberForm extends React.Component {
 
       if (!existingTicket) {
         const providableTicketTypeDescriptions = providableTicketTypes.map(ticketType =>
-          describeTicketTypeProvidability(ticketType, providedTicketCountByType[ticketType.id]));
+          describeTicketTypeProvidability(
+            ticketType,
+            providedTicketCountByType[ticketType.id],
+            ticketName,
+          ));
 
         const providabilityDescription = [
           `${this.props.data.event.title} has`,
@@ -541,7 +552,7 @@ class TeamMemberForm extends React.Component {
               }}
               disabled={this.state.requestInProgress}
             >
-              Provide {describeTicketType(ticketType)}
+              Provide {describeTicketType(ticketType, ticketName)}
             </button>
           </li>
         ));
@@ -574,7 +585,7 @@ class TeamMemberForm extends React.Component {
           );
 
           return {
-            label: `Provide ${describeTicketType(ticketType)} (${remaining} remaining)`,
+            label: `Provide ${describeTicketType(ticketType, ticketName)} (${remaining} remaining)`,
             value: ticketType.id.toString(),
             disabled: remaining < 1,
           };
@@ -585,7 +596,7 @@ class TeamMemberForm extends React.Component {
             name="provideTicketTypeId"
             caption=""
             choices={[
-              { label: 'Don\'t provide a ticket at this time', value: '' },
+              { label: `Don't provide a ${ticketName} at this time`, value: '' },
               ...choices,
             ]}
             value={this.state.provideTicketTypeId == null ? '' : this.state.provideTicketTypeId.toString()}
@@ -598,7 +609,7 @@ class TeamMemberForm extends React.Component {
     return (
       <section className="card bg-light my-4">
         <div className="card-body">
-          <h5 className="mb-3">Ticketing</h5>
+          <h5 className="mb-3">{capitalize(pluralize(this.props.data.convention.ticket_name))}</h5>
 
           <p className="m-0">{statusDescription}</p>
 
@@ -629,10 +640,12 @@ class TeamMemberForm extends React.Component {
         onCancel={this.provideEventTicketForExistingTeamMemberCanceled}
         visible={this.state.confirmingProvideEventTicketTypeId != null}
       >
-        Are you sure you want to provide a ticket to
+        Are you sure you want to provide a {this.props.data.convention.ticket_name} to
         {' '}
         {(this.state.teamMember.user_con_profile || {}).name_without_nickname}?
-        This will use up one of {this.props.data.event.title}&apos;s tickets.
+        This will use up one of {this.props.data.event.title}&apos;s
+        {' '}
+        {pluralize(this.props.data.convention.ticket_name)}.
       </ConfirmModal>
 
       {this.renderSubmitSection()}
