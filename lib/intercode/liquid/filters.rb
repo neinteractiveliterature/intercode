@@ -1,7 +1,9 @@
 module Intercode
   module Liquid
     module Filters
-      def pluralize(input, singular, plural)
+      def pluralize(input, singular = nil, plural = nil)
+        return input.pluralize if input.is_a?(String)
+
         if input.to_i == 1
           "#{input} #{singular}"
         else
@@ -20,8 +22,19 @@ module Intercode
       end
 
       def to_sentence(input)
-        return unless input
-        input.to_sentence
+        input&.to_sentence
+      end
+
+      def humanize(input)
+        input&.humanize
+      end
+
+      def singularize(input)
+        input&.singularize
+      end
+
+      def titleize(input)
+        input&.titleize
       end
     end
   end
