@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209001048) do
+ActiveRecord::Schema.define(version: 20180209005856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,19 +91,6 @@ ActiveRecord::Schema.define(version: 20180209001048) do
     t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
   end
 
-  create_table "event_proposal_changes", force: :cascade do |t|
-    t.bigint "event_proposal_id", null: false
-    t.bigint "user_con_profile_id", null: false
-    t.string "field_identifier", null: false
-    t.text "previous_value"
-    t.text "new_value"
-    t.datetime "notified_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_proposal_id"], name: "index_event_proposal_changes_on_event_proposal_id"
-    t.index ["user_con_profile_id"], name: "index_event_proposal_changes_on_user_con_profile_id"
-  end
-
   create_table "event_proposals", force: :cascade do |t|
     t.bigint "convention_id"
     t.bigint "owner_id"
@@ -163,6 +150,20 @@ ActiveRecord::Schema.define(version: 20180209001048) do
     t.text "admin_description"
     t.text "default_value"
     t.index ["form_section_id"], name: "index_form_items_on_form_section_id"
+  end
+
+  create_table "form_response_changes", force: :cascade do |t|
+    t.bigint "user_con_profile_id", null: false
+    t.string "field_identifier", null: false
+    t.text "previous_value"
+    t.text "new_value"
+    t.datetime "notified_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "response_type"
+    t.bigint "response_id"
+    t.index ["response_type", "response_id"], name: "index_form_response_changes_on_response_type_and_response_id"
+    t.index ["user_con_profile_id"], name: "index_form_response_changes_on_user_con_profile_id"
   end
 
   create_table "form_sections", force: :cascade do |t|
@@ -383,8 +384,6 @@ ActiveRecord::Schema.define(version: 20180209001048) do
   add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
-  add_foreign_key "event_proposal_changes", "event_proposals"
-  add_foreign_key "event_proposal_changes", "user_con_profiles"
   add_foreign_key "event_proposals", "conventions"
   add_foreign_key "event_proposals", "events"
   add_foreign_key "event_proposals", "user_con_profiles", column: "owner_id"
@@ -392,6 +391,7 @@ ActiveRecord::Schema.define(version: 20180209001048) do
   add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "events", "users", column: "updated_by_id"
   add_foreign_key "form_items", "form_sections"
+  add_foreign_key "form_response_changes", "user_con_profiles"
   add_foreign_key "form_sections", "forms"
   add_foreign_key "forms", "conventions"
   add_foreign_key "maximum_event_provided_tickets_overrides", "events"

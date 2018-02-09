@@ -39,8 +39,8 @@ class EventProposalsController < ApplicationController
     return if @event_proposal.status == 'draft'
 
     @event_proposal.form_response_attribute_changes.each do |(key, (previous_value, new_value))|
-      EventProposalChange.create!(
-        event_proposal: @event_proposal,
+      FormResponseChange.create!(
+        response: @event_proposal,
         user_con_profile: user_con_profile,
         field_identifier: key,
         previous_value: previous_value,
