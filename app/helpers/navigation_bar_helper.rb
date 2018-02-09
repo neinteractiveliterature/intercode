@@ -6,13 +6,13 @@ module NavigationBarHelper
       end
     end
 
-    %i[label url visible?].each do |method_name|
+    %i[label url visible? active?].each do |method_name|
       define_singleton_method(method_name) do |value = nil, &implementation|
         if value
           define_method(method_name) { value }
         else
-          define_method(method_name) do
-            @view.instance_eval(&implementation)
+          define_method(method_name) do |*args|
+            @view.instance_exec(*args, &implementation)
           end
         end
       end
@@ -34,9 +34,13 @@ module NavigationBarHelper
       raise 'Navigation items must define #visible?'
     end
 
+    def active?(request)
+      request.path.start_with?(url)
+    end
+
     def item_class(request)
       item_class = 'dropdown-item'
-      item_class << ' active' if request.path.start_with?(url)
+      item_class << ' active' if active?(request)
       item_class
     end
   end
@@ -46,11 +50,13 @@ module NavigationBarHelper
       label 'Con Schedule'
       url { schedule_events_path }
       visible? { can?(:schedule, convention) }
+      active? { |request| request.path == schedule_events_path }
     end,
     NavigationItem.define do
       label 'List of Events'
       url { events_path }
       visible? true
+      active? { |request| request.path == events_path }
     end,
     NavigationItem.define do
       label 'Schedule With Counts'
@@ -104,6 +110,15 @@ module NavigationBarHelper
       label 'Site Content'
       url { pages_path }
       visible? { can?(:update, Page.new(parent: convention)) }
+      active? do |request|
+        [
+          pages_path,
+          cms_partials_path,
+          cms_layouts_path,
+          cms_files_path,
+          cms_navigation_items_path
+        ].include?(request.path)
+      end
     end,
     NavigationItem.define do
       label 'Staff Positions'
