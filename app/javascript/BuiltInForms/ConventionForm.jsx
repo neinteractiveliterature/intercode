@@ -148,7 +148,7 @@ class ConventionForm extends React.Component {
 
         <BootstrapFormInput
           name="ticket_name"
-          label={'Name for "tickets" at this convention'}
+          label={'Name for "ticket" at this convention'}
           type="text"
           value={this.state.convention.ticket_name}
           onChange={this.conventionMutator.onInputChange}
