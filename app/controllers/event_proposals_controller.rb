@@ -36,6 +36,17 @@ class EventProposalsController < ApplicationController
 
   def update
     update_form_response(@event_proposal)
+    return if @event_proposal.status == 'draft'
+
+    @event_proposal.form_response_attribute_changes.each do |(key, (previous_value, new_value))|
+      EventProposalChange.create!(
+        event_proposal: @event_proposal,
+        user_con_profile: user_con_profile,
+        field_identifier: key,
+        previous_value: previous_value,
+        new_value: new_value
+      )
+    end
   end
 
   def submit

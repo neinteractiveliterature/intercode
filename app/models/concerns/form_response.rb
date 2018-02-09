@@ -24,6 +24,9 @@ module Concerns::FormResponse
     new_additional_info = additional_info || {}
 
     attributes.stringify_keys.each do |key, value|
+      old_value = read_form_response_attribute(key)
+      form_response_attribute_changes[key] = [old_value, value] unless old_value == value
+
       if form_response_attrs.include?(key)
         new_model_attrs[key] = value
       else
@@ -52,5 +55,9 @@ module Concerns::FormResponse
     end
 
     assign_form_response_attributes(default_values)
+  end
+
+  def form_response_attribute_changes
+    @form_response_attribute_changes ||= {}
   end
 end

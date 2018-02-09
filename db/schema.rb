@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180207173614) do
+ActiveRecord::Schema.define(version: 20180209001048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,19 @@ ActiveRecord::Schema.define(version: 20180207173614) do
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
     t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
+  end
+
+  create_table "event_proposal_changes", force: :cascade do |t|
+    t.bigint "event_proposal_id", null: false
+    t.bigint "user_con_profile_id", null: false
+    t.string "field_identifier", null: false
+    t.text "previous_value"
+    t.text "new_value"
+    t.datetime "notified_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_proposal_id"], name: "index_event_proposal_changes_on_event_proposal_id"
+    t.index ["user_con_profile_id"], name: "index_event_proposal_changes_on_user_con_profile_id"
   end
 
   create_table "event_proposals", force: :cascade do |t|
@@ -370,6 +383,8 @@ ActiveRecord::Schema.define(version: 20180207173614) do
   add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
+  add_foreign_key "event_proposal_changes", "event_proposals"
+  add_foreign_key "event_proposal_changes", "user_con_profiles"
   add_foreign_key "event_proposals", "conventions"
   add_foreign_key "event_proposals", "events"
   add_foreign_key "event_proposals", "user_con_profiles", column: "owner_id"

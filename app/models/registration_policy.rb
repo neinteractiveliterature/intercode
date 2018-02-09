@@ -88,6 +88,16 @@ class RegistrationPolicy
     @anything_bucket ||= buckets.find(&:anything?)
   end
 
+  def ==(other)
+    return self == RegistrationPolicy.new(other) if other.is_a?(Hash)
+    return self == other.to_unsafe_h if other.is_a?(ActionController::Parameters)
+    return false unless other.is_a?(RegistrationPolicy)
+    return false unless prevent_no_preference_signups == other.prevent_no_preference_signups
+    return false unless buckets.map(&:key).sort == other.buckets.map(&:key).sort
+
+    buckets.all? { |bucket| bucket == other.bucket_with_key(bucket.key) }
+  end
+
   private
 
   def validate_anything_bucket
