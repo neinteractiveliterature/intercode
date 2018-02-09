@@ -2,7 +2,76 @@
 %html
   %head
     %meta{"http-equiv" => "Content-Type", content: "text/html; charset=utf-8"}
-    %style
-      / Email styles need to be inline
+    :css
+      body {
+        font-family: sans-serif;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      thead {
+        border-bottom: 2px black solid;
+      }
+
+      td, th {
+        padding: 6px;
+      }
+
+      td {
+        vertical-align: top;
+      }
+
+      th {
+        vertical-align: bottom;
+      }
+
+      thead th {
+        text-align: left;
+      }
+
+      tbody tr {
+        border-top: 1px #777 solid;
+      }
+
+      tbody tr:first-child {
+        border-bottom: none;
+      }
+
+      .text-right {
+        text-align: right !important;
+      }
+
+      .m-0 {
+        margin: 0 !important;
+      }
+
+      .border-top-0 {
+        border-top: none !important;
+      }
+
+      .list-unstyled {
+        padding: 0;
+      }
+
+      .list-unstyled li {
+        list-style-type: none;
+      }
+
+      del.diffmod {
+        color: #555;
+        text-decoration: line-through;
+      }
+
+      ins.diffins {
+        background-color: #9f9;
+        text-decoration: inherit;
+      }
+
+      ins.diffmod {
+        background-color: #ff9;
+        text-decoration: inherit;
+      }
   %body
     = yield

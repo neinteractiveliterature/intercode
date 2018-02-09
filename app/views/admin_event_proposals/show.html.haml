@@ -31,6 +31,6 @@
     %li.p-3.border.border-left-0.border-right-0.border-bottom-0.border-secondary
       .row
         .col-md-2
-          %strong= form_item.admin_description || form_item.properties['caption'] || form_item.identifier
+          %strong= admin_form_item_label(form_item)
         .col-md-10
           = render_form_response_value(form_item, @admin_event_proposal.read_form_response_attribute(form_item.identifier))

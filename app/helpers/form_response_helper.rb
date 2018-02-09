@@ -1,4 +1,8 @@
 module FormResponseHelper
+  def admin_form_item_label(form_item)
+    form_item.admin_description || form_item.properties['caption'] || form_item.identifier
+  end
+
   def render_form_response_value(form_item, value)
     return '' if value.nil? || value.to_s.strip == ''
     render_value_of_type(form_item.item_type, value, form_item.properties)
@@ -49,7 +53,12 @@ module FormResponseHelper
   end
 
   def render_registration_policy_value(value)
-    options_presenter = SignupOptionsPresenter.new(event: Event.new(registration_policy: value), user_con_profile: nil)
+    return render_registration_policy_value(RegistrationPolicy.new(value)) if value.is_a?(Hash)
+
+    options_presenter = SignupOptionsPresenter.new(
+      event: Event.new(registration_policy: value),
+      user_con_profile: nil
+    )
 
     content_tag(:ul, class: 'list-unstyled m-0') do
       safe_join(
@@ -77,9 +86,17 @@ module FormResponseHelper
   end
 
   def render_timeblock_preference_value(value)
+    cast_value = value.map do |preference|
+      if preference.is_a?(Hash)
+        EventProposal::TimeblockPreference.new(preference)
+      else
+        preference
+      end
+    end
+
     content_tag(:ul, class: 'list-unstyled m-0') do
       safe_join(
-        value.group_by(&:ordinality).sort.map do |_ordinality, preferences|
+        cast_value.group_by(&:ordinality).sort.map do |_ordinality, preferences|
           content_tag(:li) do
             safe_join([
               content_tag(:strong, "#{preferences.first.ordinality_description}:"),
