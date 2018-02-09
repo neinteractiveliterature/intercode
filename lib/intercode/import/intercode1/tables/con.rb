@@ -70,6 +70,7 @@ to #{friday_start.strftime('%A, %b %d, %Y')}."
       ends_at: @ends_at,
       timezone_name: @timezone.name,
       maximum_tickets: @maximum_tickets,
+      ticket_name: 'badge',
       maximum_event_signups: {
         timespans: [
           {

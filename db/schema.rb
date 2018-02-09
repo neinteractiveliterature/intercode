@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209005856) do
+ActiveRecord::Schema.define(version: 20180209153345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20180209005856) do
     t.integer "maximum_tickets"
     t.bigint "default_layout_id"
     t.bigint "user_con_profile_form_id"
+    t.string "ticket_name", default: "ticket", null: false
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
