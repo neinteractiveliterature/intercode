@@ -70,6 +70,9 @@ gem 'graphiql-rails', group: :development
 # Markdown
 gem 'redcarpet'
 
+# Content diffing
+gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
+
 # Miscellany
 gem 'parallel'
 gem 'newrelic_rpm'
@@ -91,6 +94,9 @@ group :development do
   # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
   gem 'flamegraph'
   gem 'stackprof'
+
+  # Email testing/debugging
+  gem 'letter_opener'
 
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'

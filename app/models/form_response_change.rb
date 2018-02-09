@@ -4,4 +4,6 @@ class FormResponseChange < ApplicationRecord
 
   serialize :previous_value, JSON
   serialize :new_value, JSON
+
+  scope :not_notified, -> { where(notified_at: nil) }
 end

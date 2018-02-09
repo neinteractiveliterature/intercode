@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209153345) do
+ActiveRecord::Schema.define(version: 20180209193547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20180209153345) do
     t.datetime "updated_at", null: false
     t.string "response_type"
     t.bigint "response_id"
+    t.index ["notified_at"], name: "index_form_response_changes_on_notified_at"
     t.index ["response_type", "response_id"], name: "index_form_response_changes_on_response_type_and_response_id"
     t.index ["user_con_profile_id"], name: "index_form_response_changes_on_user_con_profile_id"
   end

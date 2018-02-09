@@ -1,22 +1,33 @@
 class EventProposalsMailer < ApplicationMailer
+  helper :form_response
+
   def new_proposal(event_proposal)
     @event_proposal = event_proposal
     event_proposal_mail(event_proposal, 'New')
   end
 
-  def proposal_updated(event_proposal)
+  def proposal_updated(event_proposal, changes)
     @event_proposal = event_proposal
+    @changes = changes
     event_proposal_mail(event_proposal, 'Update')
   end
 
   private
 
   def proposal_mail_destination(convention)
-    proposal_chair_user_con_profiles = convention.staff_positions
-      .find_by(name: 'Game Proposals Chair')
-      .user_con_profiles
-    proposal_chair_user_con_profiles.map do |user_con_profile|
-      "#{user_con_profile.name} <#{user_con_profile.email}>"
+    proposal_chair_staff_position = convention.staff_positions
+      .where(name: 'Game Proposals Chair').first
+
+    if proposal_chair_staff_position.email.present?
+      proposal_chair_staff_position.email
+    elsif proposal_chair_staff_position
+      proposal_chair_staff_position.user_con_profiles.map do |user_con_profile|
+        "#{user_con_profile.name} <#{user_con_profile.email}>"
+      end
+    else
+      convention.user_con_profiles.where(proposal_chair: true).map do |user_con_profile|
+        "#{user_con_profile.name} <#{user_con_profile.email}>"
+      end
     end
   end
 
