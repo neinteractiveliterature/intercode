@@ -13,12 +13,14 @@ class BootstrapFormCheckbox extends React.Component {
     disabled: PropTypes.bool,
     type: PropTypes.oneOf(['radio', 'checkbox']),
     className: PropTypes.string,
+    inputClassName: PropTypes.string,
   };
 
   static defaultProps = {
     disabled: false,
     type: 'checkbox',
     className: '',
+    inputClassName: '',
   };
 
   constructor(props) {
@@ -28,13 +30,18 @@ class BootstrapFormCheckbox extends React.Component {
 
   render = () => {
     const inputId = this.nextUniqueId();
-    const { className, label, ...otherProps } = this.props;
+    const {
+      className,
+      inputClassName,
+      label,
+      ...otherProps
+    } = this.props;
 
     return (
       <div className={`form-check ${className}`}>
         <label className="form-check-label" htmlFor={inputId}>
           <input
-            className="form-check-input"
+            className={`form-check-input ${inputClassName}`}
             id={inputId}
             {...otherProps}
           />

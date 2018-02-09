@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
+import FieldRequiredFeedback from './FieldRequiredFeedback';
 
 const OTHER_VALUE = '_OTHER_VALUE';
 
@@ -148,19 +149,21 @@ class MultipleChoiceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <CaptionLegend formItem={this.props.formItem} />
-        <ChoiceSet
-          name={this.props.formItem.identifier}
-          choices={choicesForChoiceSet}
-          value={this.getValueForChoiceSet()}
-          onChange={this.onChange}
-          multiple={this.isMultiple()}
-          choiceClassName={classNames({
-            'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(this.props.formItem.properties.style),
-            'is-invalid': this.props.valueInvalid,
-          })}
-        />
-        {this.renderOtherInput()}
+        <div className={classNames('form-control', { 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
+          <CaptionLegend formItem={this.props.formItem} />
+          <ChoiceSet
+            name={this.props.formItem.identifier}
+            choices={choicesForChoiceSet}
+            value={this.getValueForChoiceSet()}
+            onChange={this.onChange}
+            multiple={this.isMultiple()}
+            choiceClassName={classNames({
+              'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(this.props.formItem.properties.style),
+            })}
+          />
+          {this.renderOtherInput()}
+        </div>
+        <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
       </fieldset>
     );
   };
