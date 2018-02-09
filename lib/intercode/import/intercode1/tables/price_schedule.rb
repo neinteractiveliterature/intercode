@@ -12,7 +12,7 @@ class Intercode::Import::Intercode1::Tables::PriceSchedule < Intercode::Import::
   def build_ticket_type
     con.ticket_types.new(
       name: 'weekend',
-      description: 'Full-weekend ticket',
+      description: 'Full-weekend badge',
       pricing_schedule: price_schedule_converted
     )
   end

@@ -20,27 +20,27 @@ class Intercode::Import::Intercode1::RegistrationStatuses
       'Paid' => paid_ticket_type,
       'Comp' => con.ticket_types.new(
         name: 'event_comp',
-        description: 'Comp ticket for event',
+        description: 'Comp badge for event',
         pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
         publicly_available: false,
         maximum_event_provided_tickets: 2
       ),
       'Marketing' => con.ticket_types.new(
         name: 'marketing_comp',
-        description: 'Marketing comp ticket',
+        description: 'Marketing comp badge',
         pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
         publicly_available: false
       ),
       'Vendor' => con.ticket_types.new(
         name: 'vendor',
-        description: 'Vendor ticket',
+        description: 'Vendor badge',
         pricing_schedule: ScheduledMoneyValue.always(Money.new(2000, 'USD')),
         publicly_available: false,
         counts_towards_convention_maximum: false
       ),
       'Rollover' => con.ticket_types.new(
         name: 'rollover',
-        description: 'Rollover ticket from previous year',
+        description: 'Rollover badge from previous year',
         pricing_schedule: ScheduledMoneyValue.always(Money.new(0, 'USD')),
         publicly_available: false
       )
