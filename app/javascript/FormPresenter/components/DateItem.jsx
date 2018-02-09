@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
+import FieldRequiredFeedback from './FieldRequiredFeedback';
 
 class DateItem extends React.Component {
   static propTypes = {
@@ -41,6 +42,7 @@ class DateItem extends React.Component {
         onInteract={this.userDidInteract}
         className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
       />
+      <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
     </fieldset>
   )
 }

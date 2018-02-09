@@ -17,12 +17,14 @@ class ChoiceSet extends React.Component {
     onChange: PropTypes.func.isRequired,
     multiple: PropTypes.bool,
     choiceClassName: PropTypes.string,
+    inputClassName: PropTypes.string,
   };
 
   static defaultProps = {
     value: null,
     multiple: false,
     choiceClassName: null,
+    inputClassName: null,
   };
 
   onChange = (event) => {
@@ -46,6 +48,7 @@ class ChoiceSet extends React.Component {
         name={this.props.name}
         type={choiceType}
         className={this.props.choiceClassName}
+        inputClassName={this.props.inputClassName}
         label={label}
         value={value}
         checked={(

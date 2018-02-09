@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
+import FieldRequiredFeedback from './FieldRequiredFeedback';
 import RequiredIndicator from './RequiredIndicator';
 
 class FreeTextItem extends React.Component {
@@ -80,6 +81,7 @@ class FreeTextItem extends React.Component {
       <div className="form-group">
         {this.renderLabel(formItem, domId)}
         {this.renderInput(formItem, domId)}
+        <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
       </div>
     );
   };

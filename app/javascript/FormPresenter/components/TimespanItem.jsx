@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
+import FieldRequiredFeedback from './FieldRequiredFeedback';
 import RequiredIndicator from './RequiredIndicator';
 
 class TimespanItem extends React.Component {
@@ -90,15 +91,18 @@ class TimespanItem extends React.Component {
           <RequiredIndicator formItem={this.props.formItem} />
         </label>
         <div className="d-flex">
-          <input
-            id={inputId}
-            type="number"
-            min="1"
-            className={classNames('form-control', 'w-25', { 'is-invalid': this.props.valueInvalid })}
-            value={inputValue}
-            onChange={this.inputDidChange}
-            onBlur={this.userDidInteract}
-          />
+          <div className="w-25">
+            <input
+              id={inputId}
+              type="number"
+              min="1"
+              className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
+              value={inputValue}
+              onChange={this.inputDidChange}
+              onBlur={this.userDidInteract}
+            />
+            <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
+          </div>
           <select
             className="form-control ml-2"
             value={this.state.unit}
