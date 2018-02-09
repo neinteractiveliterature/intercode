@@ -88,7 +88,8 @@ with #{event.title}."
 
   def must_have_ticket
     return if user_con_profile.ticket
-    errors.add :base, "You must have a valid ticket to #{convention.name} to sign up for events."
+    errors.add :base, "You must have a valid #{convention.ticket_name} to #{convention.name} to \
+sign up for events."
   end
 
   def require_valid_bucket

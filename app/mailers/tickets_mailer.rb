@@ -4,7 +4,8 @@ class TicketsMailer < ApplicationMailer
 
     mail(
       to: ticket.user_con_profile.email,
-      subject: "#{subject_prefix(@ticket)} #{@ticket.ticket_type.name} Purchase Receipt"
+      subject: "#{subject_prefix(@ticket)} #{@ticket.ticket_type.description.titleize} \
+Purchase Receipt"
     )
   end
 

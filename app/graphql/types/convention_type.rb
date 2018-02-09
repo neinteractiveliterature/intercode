@@ -12,6 +12,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :show_schedule, Types::ShowScheduleType
   field :maximum_tickets, types.Int
   field :maximum_event_signups, Types::ScheduledValueType
+  field :ticket_name, !types.String
 
   field :rooms, types[Types::RoomType] do
     resolve -> (convention, _args, _ctx) {

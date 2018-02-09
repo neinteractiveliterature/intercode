@@ -24,12 +24,14 @@ class EditEvent extends React.Component {
       description: PropTypes.string.isRequired,
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
+    ticketName: PropTypes.string,
   };
 
   static defaultProps = {
     cancelPath: null,
     showDropButton: false,
     canOverrideMaximumEventProvidedTickets: false,
+    ticketName: null,
   };
 
   constructor(props) {
@@ -121,6 +123,7 @@ class EditEvent extends React.Component {
       showDropButton={this.props.showDropButton}
       canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
       ticketTypes={this.props.ticketTypes}
+      ticketName={this.props.ticketName}
     />
   )
 }

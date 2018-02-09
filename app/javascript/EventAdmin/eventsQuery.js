@@ -43,6 +43,7 @@ fragment ConventionFields on Convention {
   ticket_types {
     ...TicketTypeFields
   }
+  ticket_name
 }
 
 ${fragments.room}

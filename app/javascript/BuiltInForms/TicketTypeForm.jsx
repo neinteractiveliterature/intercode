@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { pluralize } from 'inflected';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
@@ -48,6 +49,7 @@ class TicketTypeForm extends React.Component {
       publicly_available: PropTypes.bool.isRequired,
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired,
+    ticketName: PropTypes.string.isRequired,
     baseUrl: PropTypes.string.isRequired,
     timezone: PropTypes.string.isRequired,
   }
@@ -83,7 +85,7 @@ class TicketTypeForm extends React.Component {
         baseUrl={this.props.baseUrl}
         resourceId={this.state.ticketType.id}
         getSubmitRequestBody={this.getSubmitRequestBody}
-        submitText="Save ticket type configuration"
+        submitText={`Save ${this.props.ticketName} type configuration`}
         submitDisabled={disableSubmit}
       >
         <BootstrapFormInput
@@ -111,7 +113,7 @@ class TicketTypeForm extends React.Component {
         />
 
         <BootstrapFormInput
-          label="Number of event-provided tickets of this type (per event)"
+          label={`Number of event-provided ${pluralize(this.props.ticketName)} of this type (per event)`}
           name="maximum_event_provided_tickets"
           type="number"
           value={this.state.ticketType.maximum_event_provided_tickets.toString()}

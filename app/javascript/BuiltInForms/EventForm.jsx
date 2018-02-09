@@ -19,6 +19,7 @@ class EventForm extends React.Component {
       description: PropTypes.string.isRequired,
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
+    ticketName: PropTypes.string,
 
     cancelPath: PropTypes.string,
     onSave: PropTypes.func.isRequired,
@@ -34,6 +35,7 @@ class EventForm extends React.Component {
     error: null,
     showDropButton: false,
     canOverrideMaximumEventProvidedTickets: false,
+    ticketName: null,
   };
 
   constructor(props) {
@@ -129,6 +131,7 @@ class EventForm extends React.Component {
         <CommonEventFormFields
           event={this.state.event}
           onChange={this.eventFieldChanged}
+          ticketName={this.props.ticketName}
           canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
           createMaximumEventProvidedTicketsOverride={
             this.props.createMaximumEventProvidedTicketsOverride

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+import { capitalize } from 'inflected';
 import ErrorDisplay from '../ErrorDisplay';
 import InPlaceEditor from './InPlaceEditor';
 
@@ -13,6 +14,7 @@ const TicketTypePropType = PropTypes.shape({
 class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
   static propTypes = {
     eventId: PropTypes.number.isRequired,
+    ticketName: PropTypes.string.isRequired,
     overrides: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       ticket_type: TicketTypePropType.isRequired,
@@ -131,7 +133,7 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
   }
 
   render = () => {
-    const { overrides, ticketTypes } = this.props;
+    const { overrides, ticketTypes, ticketName } = this.props;
 
     const sortedOverrides = [...overrides].sort((
       (a, b) => a.ticket_type.description.localeCompare(b.ticket_type.description, { sensitivity: 'base' })
@@ -173,12 +175,12 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
 
     return (
       <div className="card bg-light">
-        <div className="card-header">Override event-provided ticket quotas</div>
+        <div className="card-header">Override event-provided {ticketName} quotas</div>
         <div className="card-body">
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>Ticket type</th>
+                <th>{capitalize(ticketName)} type</th>
                 <th>Default quota</th>
                 <th>Overridden quota</th>
                 <th />

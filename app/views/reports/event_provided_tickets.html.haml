@@ -1,6 +1,6 @@
-%h1 Event-provided tickets report
+%h1 Event-provided #{convention.ticket_name.pluralize} report
 
-%h3.mt-4 Total: #{pluralize @tickets.size, "event-provided tickets"}
+%h3.mt-4 Total: #{pluralize @tickets.size, "event-provided #{convention.ticket_name.pluralize}"}
 
 %ul.nav.nav-tabs.mt-4{role: 'tablist'}
   %li.nav-item
@@ -26,7 +26,7 @@
         %tr
           %th.border-top-0 User
           %th.border-top-0 Event
-          %th.border-top-0 Ticket type
+          %th.border-top-0 #{convention.ticket_name.capitalize} type
 
       %tbody
         - @tickets.sort_by { |ticket| ticket.user_con_profile.name_inverted }.each do |ticket|

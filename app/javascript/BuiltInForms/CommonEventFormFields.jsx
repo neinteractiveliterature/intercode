@@ -71,6 +71,7 @@ class CommonEventFormFields extends React.Component {
       description: PropTypes.string.isRequired,
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
+    ticketName: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
@@ -79,6 +80,7 @@ class CommonEventFormFields extends React.Component {
 
   static defaultProps = {
     canOverrideMaximumEventProvidedTickets: false,
+    ticketName: null,
   };
 
   constructor(props) {
@@ -258,6 +260,7 @@ class CommonEventFormFields extends React.Component {
       <MaximumEventProvidedTicketsOverrideEditor
         eventId={this.props.event.id}
         ticketTypes={this.props.ticketTypes}
+        ticketName={this.props.ticketName}
         overrides={this.props.event.maximum_event_provided_tickets_overrides}
         createOverride={this.props.createMaximumEventProvidedTicketsOverride}
         deleteOverride={this.props.deleteMaximumEventProvidedTicketsOverride}

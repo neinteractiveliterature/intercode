@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import Datetime from 'react-datetime';
+import { pluralize } from 'inflected';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
@@ -45,6 +46,7 @@ class ConventionForm extends React.Component {
         }).isRequired).isRequired,
       }).isRequired,
       maximum_tickets: PropTypes.number,
+      ticket_name: PropTypes.string.isRequired,
     }).isRequired,
     saveConvention: PropTypes.func.isRequired,
   }
@@ -69,6 +71,7 @@ class ConventionForm extends React.Component {
         show_schedule: FIELD_TYPES.CHECKBOX,
         maximum_event_signups: FIELD_TYPES.OBJECT,
         maximum_tickets: FIELD_TYPES.INTEGER,
+        ticket_name: FIELD_TYPES.STRING,
       },
       () => this.state.convention.timezone_name,
     ).getMutatorForComponent(this);
@@ -144,8 +147,16 @@ class ConventionForm extends React.Component {
         />
 
         <BootstrapFormInput
+          name="ticket_name"
+          label={'Name for "tickets" at this convention'}
+          type="text"
+          value={this.state.convention.ticket_name}
+          onChange={this.conventionMutator.onInputChange}
+        />
+
+        <BootstrapFormInput
           name="maximum_tickets"
-          label="Maximum tickets"
+          label={`Maximum ${pluralize(this.state.convention.ticket_name)}`}
           type="number"
           value={(this.state.convention.maximum_tickets || '').toString()}
           onChange={this.conventionMutator.onInputChange}

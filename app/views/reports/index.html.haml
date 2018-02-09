@@ -6,6 +6,7 @@
   .card-body
     %ul.mb-0
       %li= link_to 'Attendance by payment amount', reports_attendance_by_payment_amount_path
+      %li= link_to "Event-provided #{convention.ticket_name.pluralize}", reports_event_provided_tickets_path
       %li= link_to 'Events by choice', reports_events_by_choice_path
       %li= link_to 'Signup spy', reports_signup_spy_path
 
