@@ -14,6 +14,8 @@ after 'deploy:set_current_revision', 'load_remote_environment'
 set :rollbar_env, Proc.new { fetch :rails_env }
 set :rollbar_role, Proc.new { :app }
 
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
