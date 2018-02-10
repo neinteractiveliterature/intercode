@@ -73,6 +73,10 @@ gem 'redcarpet'
 # Content diffing
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
+# Background workers and scheduling
+gem 'sidekiq'
+gem 'whenever'
+
 # Miscellany
 gem 'parallel'
 gem 'newrelic_rpm'
