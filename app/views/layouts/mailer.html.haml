@@ -4,7 +4,20 @@
     %meta{"http-equiv" => "Content-Type", content: "text/html; charset=utf-8"}
     :css
       body {
+        font-size: 11pt;
         font-family: sans-serif;
+      }
+
+      h1 {
+        font-size: 16pt;
+      }
+
+      h2 {
+        font-size: 14pt;
+      }
+
+      h3 {
+        font-size: 12pt;
       }
 
       table {
@@ -25,6 +38,14 @@
 
       th {
         vertical-align: bottom;
+      }
+
+      td p:first-child {
+        margin-top: 0;
+      }
+
+      td p:last-child {
+        margin-bottom: 0;
       }
 
       thead th {
@@ -51,6 +72,10 @@
         border-top: none !important;
       }
 
+      .text-nowrap {
+        white-space: nowrap !important;
+      }
+
       .list-unstyled {
         padding: 0;
       }
@@ -60,8 +85,11 @@
       }
 
       del.diffmod {
-        color: #555;
+        background-color: #e2e2e2;
+        color: #333;
         text-decoration: line-through;
+        text-decoration-color: #333;
+        text-decoration-color: rgba(0, 0, 0, 0.5);
       }
 
       ins.diffins {
