@@ -1,4 +1,4 @@
-%h1{style: 'font-size: 16pt;'} Proposal updated
+%h1 Proposal updated
 
 %p
   The event proposal for "#{@event_proposal.title}" has been updated
@@ -7,7 +7,7 @@
 
 %hr
 
-%h2{style: 'font-size: 14pt;'} Change log
+%h2 Change log
 
 - timezone = @event_proposal.convention.timezone
 - form_items = @event_proposal.convention.event_proposal_form.form_items.index_by(&:identifier)
@@ -37,9 +37,19 @@
         %td= diff
         %td.text-right
           - change_timestamp = change.created_at.in_time_zone(timezone)
-          - previous_change_timestamp = previous_change&.created_at&.in_time_zone(timezone)
+          - previous_change_timestamp = previous_change&.updated_at&.in_time_zone(timezone)
+          - finish_timestamp = change.updated_at.in_time_zone(timezone)
+
           - if previous_change_timestamp&.day == change_timestamp.day
-            = change_timestamp.strftime('%l:%M%P')
+            %span.text-nowrap= change_timestamp.strftime('%l:%M%P')
           - else
-            = change_timestamp.strftime('%A, %b %e %l:%M%P')
+            %span.text-nowrap= change_timestamp.strftime('%A, %b %e %l:%M%P')
+
+          - if finish_timestamp != change_timestamp
+            = ' - '
+            - if change_timestamp.day == finish_timestamp.day
+              %span.text-nowrap= finish_timestamp.strftime('%l:%M%P')
+            - else
+              %span.text-nowrap= finish_timestamp.strftime('%A, %b %e %l:%M%P')
+
       - previous_change = change
