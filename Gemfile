@@ -104,6 +104,7 @@ group :development do
 
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'
+  gem 'capistrano-sidekiq'
 end
 
 group :development, :test do
