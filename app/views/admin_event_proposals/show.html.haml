@@ -16,7 +16,7 @@
     = link_to "Go to event", @admin_event_proposal.event, class: 'btn btn-outline-primary'
 - elsif can? :update, @admin_event_proposal
   .my-4
-    = link_to "Edit proposal", edit_event_proposal_path(@admin_event_proposal), class: 'btn btn-outline-primary'
+    = link_to "Edit proposal", edit_event_proposal_path(@admin_event_proposal, exit_caption: 'Return to proposal', exit_url: admin_event_proposal_path(@admin_event_proposal)), class: 'btn btn-outline-primary'
 
 %ul.list-unstyled.my-4
   %li.p-3
