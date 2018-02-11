@@ -15,6 +15,11 @@ steps:
       "gcr.io/$PROJECT_ID/intercode:$REVISION_ID",
       "gcr.io/$PROJECT_ID/intercode:latest"
     ]
+  - name: "gcr.io/cloud-builders/kubectl"
+    args: "set image deployment/intercode intercode=intercode:$REVISION_ID"
+    env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-1'
 images:
   - "gcr.io/$PROJECT_ID/intercode:$REVISION_ID"
   - "gcr.io/$PROJECT_ID/intercode:latest"
