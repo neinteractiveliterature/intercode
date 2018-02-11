@@ -292,6 +292,7 @@ class CommonEventFormFields extends React.Component {
         formItem={{ properties: { caption: this.getLengthSecondsCaption() } }}
         value={this.props.event.length_seconds}
         onChange={this.lengthSecondsDidChange}
+        onInteract={() => {}}
       />
       {this.renderRegistrationPolicyInput()}
       <BootstrapFormTextarea
