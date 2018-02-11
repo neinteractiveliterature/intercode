@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require File.expand_path('../../lib/intercode/dynamic_cookie_domain', __FILE__)
 require File.expand_path('../../lib/intercode/virtual_host_constraint', __FILE__)
 
 # Require the gems listed in Gemfile, including any gems
@@ -18,6 +19,7 @@ module Intercode
 
     config.active_job.queue_adapter = :sidekiq
 
+    config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.use Intercode::FindVirtualHost
 
     config.generators do |g|
@@ -31,7 +33,7 @@ module Intercode
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    %w(liquid_drops presenters responders services).each do |subdir|
+    %w[liquid_drops presenters responders services].each do |subdir|
       config.eager_load_paths << Rails.root.join("app/#{subdir}")
     end
   end
