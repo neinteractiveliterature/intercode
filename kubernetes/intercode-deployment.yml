@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: intercode
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: intercode
+    spec:
+      containers:
+      - name: intercode
+        image: gcr.io/intercode-2/intercode:v1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        - name: REDIS_URL
+          value: redis://redis:6379/0
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: password
+        - name: DB_HOST
+          value: cloudsql-proxy
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: aws-access-key-id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: aws-secret-access-key
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,20 @@
+steps:
+  - name: "gcr.io/cloud-builders/git"
+    args: ['clone', 'https://github.com/neninteractiveliterature/intercode']
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+        "build",
+        '--cache-from', 'gcr.io/$PROJECT_ID/intercode:latest',
+        "-t", "gcr.io/$PROJECT_ID/intercode:$REVISION_ID",
+        "-f", "Dockerfile",
+        "."
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+      "tag",
+      "gcr.io/$PROJECT_ID/intercode:$REVISION_ID",
+      "gcr.io/$PROJECT_ID/intercode:latest"
+    ]
+images:
+  - "gcr.io/$PROJECT_ID/intercode:$REVISION_ID"
+  - "gcr.io/$PROJECT_ID/intercode:latest"
