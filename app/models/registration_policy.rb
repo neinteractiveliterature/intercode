@@ -98,6 +98,10 @@ class RegistrationPolicy
     buckets.all? { |bucket| bucket == other.bucket_with_key(bucket.key) }
   end
 
+  def as_json(*args)
+    super.merge(buckets: buckets.as_json(*args))
+  end
+
   private
 
   def validate_anything_bucket

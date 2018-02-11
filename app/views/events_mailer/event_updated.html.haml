@@ -1,0 +1,29 @@
+%h1 Event updated
+
+%p
+  "#{@event.title}" has been updated by #{@user_con_profile.name_without_nickname}.  To view the event, go
+  #{link_to 'here', event_url_for_convention(@event)}.
+
+%hr
+
+%h2 Change log
+
+- form_items = @event.convention.event_proposal_form.form_items.index_by(&:identifier)
+
+%table
+  %thead
+    %tr
+      %th Field
+      %th Changes
+  %tbody
+    - @changes.each do |field_identifier, (previous_value, new_value)|
+      - form_item = form_items[field_identifier.to_s]
+      - previous_value = capture do
+        = render_form_response_value(form_item, previous_value)
+      - new_value = capture do
+        = render_form_response_value(form_item, new_value)
+      - diff = HTMLDiff.diff(previous_value, new_value).html_safe
+
+      %tr.border-top-0
+        %td= admin_form_item_label(form_item)
+        %td= diff
