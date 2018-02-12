@@ -9,8 +9,8 @@ class UserSignupsController < ApplicationController
   def create
     should_have_requested_bucket_key = params[:no_requested_bucket].blank?
     if should_have_requested_bucket_key && !params[:requested_bucket_key]
-      flash.alert = 'Bad request: signups must either request a bucket or specify that no bucket \
-is requested.'
+      flash.alert = "Bad request: signups must either request a bucket or specify that no bucket \
+is requested."
       return redirect_to @event
     end
 
