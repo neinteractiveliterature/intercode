@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Datetime from 'react-datetime';
-import MomentPropTypes from 'react-moment-proptypes';
-
-import 'react-datetime/css/react-datetime.css';
-import '../react-datetime-width-fix.css';
+import DateTimeInput from './DateTimeInput';
 
 class ScheduledValueTimespanRowDatepicker extends React.Component {
   static propTypes = {
     fieldName: PropTypes.string.isRequired,
-    value: MomentPropTypes.momentObj,
+    value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    validateDate: PropTypes.func.isRequired,
+    timezoneName: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -22,14 +18,12 @@ class ScheduledValueTimespanRowDatepicker extends React.Component {
     this.props.onChange(this.props.fieldName, newValue);
   }
 
-  isValidDate = date => this.props.validateDate(this.props.fieldName, date)
-
   render = () => (
     <div className="d-flex">
-      <Datetime
+      <DateTimeInput
         value={this.props.value}
+        timezoneName={this.props.timezoneName}
         onChange={this.datetimeValueChanged}
-        isValidDate={this.isValidDate}
       />
     </div>
   )

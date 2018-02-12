@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import Datetime from 'react-datetime';
 import { pluralize } from 'inflected';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
@@ -95,11 +94,10 @@ class ConventionForm extends React.Component {
     const startEndFields = [['starts_at', 'Convention starts'], ['ends_at', 'Convention ends']].map(([name, label]) => (
       <div className="col-md-6" key={name}>
         {label}
-        <Datetime
-          value={moment.tz(this.state.convention[name], this.state.convention.timezone_name)}
+        <DateTimeInput
+          value={this.state.convention[name]}
+          timezoneName={this.state.convention.timezone_name}
           onChange={this.conventionMutator.valueChangeCallback(name)}
-          dateFormat="dddd, MMMM DD, YYYY"
-          timeFormat="[at] h:mma"
         />
       </div>
     ));

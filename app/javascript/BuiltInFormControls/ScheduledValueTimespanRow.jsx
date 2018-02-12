@@ -81,13 +81,7 @@ class ScheduledValueTimespanRow extends React.Component {
   }
 
   timeChanged = (property, newTime) => {
-    let value = null;
-    if (newTime) {
-      const newTimeInTimezone = moment.tz(newTime.toObject(), this.props.timezone);
-      value = newTimeInTimezone.toISOString();
-    }
-
-    this.props.attributeDidChange(this.props.rowIdentifier, property, value);
+    this.props.attributeDidChange(this.props.rowIdentifier, property, newTime);
   }
 
   valueChanged = (value) => {
@@ -109,14 +103,22 @@ class ScheduledValueTimespanRow extends React.Component {
       return !prospectiveTimespan.overlapsTimespan(otherTimespan);
     });
 
-  renderDatetimePicker = fieldName => (
-    <ScheduledValueTimespanRowDatepicker
-      fieldName={fieldName}
-      value={this.getTimeField(fieldName)}
-      onChange={this.timeChanged}
-      validateDate={this.isValidTimeForField}
-    />
-  )
+  renderDatetimePicker = (fieldName) => {
+    const momentValue = this.getTimeField(fieldName);
+    let stringValue = null;
+    if (momentValue != null && momentValue.isValid()) {
+      stringValue = momentValue.toISOString();
+    }
+
+    return (
+      <ScheduledValueTimespanRowDatepicker
+        fieldName={fieldName}
+        value={stringValue}
+        onChange={this.timeChanged}
+        timezoneName={this.props.timezone}
+      />
+    );
+  }
 
   render = () => (
     <tr>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import moment from 'moment-timezone';
-import Datetime from 'react-datetime';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
 import ConventionForm from '../../../app/javascript/BuiltInForms/ConventionForm';
+import DateTimeInput from '../../../app/javascript/BuiltInFormControls/DateTimeInput';
 import ScheduledValueEditor from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
@@ -54,8 +54,8 @@ describe('ConventionForm', () => {
       maximum_tickets: 100,
     });
 
-    expect(component.find(Datetime).at(0).prop('value').toISOString()).toEqual(now);
-    expect(component.find(Datetime).at(1).prop('value').toISOString()).toEqual(now);
+    expect(component.find(DateTimeInput).at(0).prop('value')).toEqual(now);
+    expect(component.find(DateTimeInput).at(1).prop('value')).toEqual(now);
     expect(component.find(BootstrapFormInput).filter({ name: 'name' }).prop('value')).toEqual('myName');
     expect(component.find(BootstrapFormInput).filter({ name: 'domain' }).prop('value')).toEqual('myDomain');
     expect(component.find(TimezoneSelect).prop('value')).toEqual('UTC');
@@ -65,8 +65,8 @@ describe('ConventionForm', () => {
     expect(component.find(BootstrapFormInput).filter({ name: 'maximum_tickets' }).prop('value')).toEqual('100');
 
     const maximumEventSignups = component.find(ScheduledValueEditor);
-    expect(maximumEventSignups.find(Datetime).at(1).prop('value').toISOString()).toEqual(now);
-    expect(maximumEventSignups.find(Datetime).at(2).prop('value').toISOString()).toEqual(now);
+    expect(maximumEventSignups.find(DateTimeInput).at(1).prop('value')).toEqual(now);
+    expect(maximumEventSignups.find(DateTimeInput).at(2).prop('value')).toEqual(now);
     expect(maximumEventSignups.find('select').at(0).prop('value')).toEqual('not_yet');
     expect(maximumEventSignups.find('select').at(1).prop('value')).toEqual('unlimited');
   });
