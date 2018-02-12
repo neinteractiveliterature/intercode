@@ -28,7 +28,7 @@ class UserConProfilesGrid
 
     where(
       clauses
-        .map { |clause| "user_con_profiles.id IN (#{clause.select(:id).to_sql})" }
+        .map { |clause| "user_con_profiles.id IN (#{clause.unscope(:select, :includes).select(:id).to_sql})" }
         .join(' OR ')
     )
   end
