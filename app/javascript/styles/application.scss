@@ -35,4 +35,9 @@ table.no-top-border thead th {
 
 .CodeMirror-scroll {
   max-height: 80vh;
+  min-height: 10rem;
+
+  .cms-editor & {
+    min-height: 20rem;
+  }
 }
