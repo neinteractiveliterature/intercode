@@ -14,7 +14,7 @@ class SignupOptionsPresenter
     end
 
     def params
-      { requested_bucket_key: nil }
+      { requested_bucket_key: bucket.key }
     end
 
     def button_class
