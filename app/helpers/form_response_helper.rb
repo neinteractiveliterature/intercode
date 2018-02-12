@@ -117,15 +117,16 @@ module FormResponseHelper
   def render_timespan_value(value)
     if value % 1.hour == 0
       pluralize(value / 1.hour, 'hour')
-    elsif value % 1.minute == 0
-      format('%d:%02d', value / 1.hour, (value % 1.hour) / 1.minute)
     else
-      format(
-        '%d:%02d:%02d',
-        value / 1.hour,
-        (value % 1.hour / 1.minute),
-        (value % 1.minute)
-      )
+      hours = value / 1.hour
+      minutes = (value % 1.hour) / 1.minute
+      seconds = value % 1.minute
+
+      if seconds == 0
+        format('%d:%02d', hours, minutes)
+      else
+        format('%d:%02d:%02d', hours, minutes, seconds)
+      end
     end
   end
 end
