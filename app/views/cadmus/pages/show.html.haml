@@ -5,6 +5,6 @@
 
 - page_content = cadmus_renderer.render(@page.liquid_template, :html)
 - flash_messages_content = render(partial: 'layouts/flash_messages')
-- all_content = safe_join([admin_bar, flash_messages_content, page_content].compact, '')
+- all_content = safe_join([flash_messages_content, admin_bar, page_content].compact, '')
 
 = render_in_cadmus_layout(all_content, @page.effective_cms_layout, 'page' => @page)
