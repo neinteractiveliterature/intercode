@@ -26,7 +26,7 @@ class LiquidHTMLEditor extends React.Component {
   }
 
   render = () => (
-    <div className="form-control p-0">
+    <div className="form-control p-0 cms-editor">
       <input type="hidden" name={this.props.name} value={this.state.content} />
       <CodeMirror
         value={this.props.initialContent}
