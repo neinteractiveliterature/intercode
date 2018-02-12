@@ -2329,7 +2329,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.2, create-react-class@^15.6.0:
+create-react-class@^15.6.0:
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   dependencies:
@@ -5833,10 +5833,6 @@ oauth-sign@~0.8.1, oauth-sign@~0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
-object-assign@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-3.0.0.tgz#9bedd5ca0897949bca47e7ff408062d549f587f2"
-
 object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
@@ -6979,7 +6975,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -7189,15 +7185,6 @@ react-currency-masked-input@^2.2.0:
     prop-types "^15.5.10"
     react "^15.4.1"
 
-react-datetime@^2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/react-datetime/-/react-datetime-2.14.0.tgz#c7859c5b765275d7980f1cca27c03a727ff9ccef"
-  dependencies:
-    create-react-class "^15.5.2"
-    object-assign "^3.0.0"
-    prop-types "^15.5.7"
-    react-onclickoutside "^6.5.0"
-
 react-dnd-html5-backend@*, react-dnd-html5-backend@^2.4.1:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-2.5.4.tgz#974ad083f67b12d56977a5b171f5ffeb29d78352"
@@ -7260,7 +7247,7 @@ react-moment-proptypes@^1.5.0:
   dependencies:
     moment ">=1.6.0"
 
-react-onclickoutside@^6.5.0, react-onclickoutside@^6.7.0:
+react-onclickoutside@^6.7.0:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
 

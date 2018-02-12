@@ -26,6 +26,11 @@ export function getStateChangeForCheckboxChange(event, state, modelKey) {
 }
 
 function convertDatetimeValue(value, timezoneName) {
+  if (value == null || typeof value === 'string') {
+    return value;
+  }
+
+  // it's hopefully a moment
   const valueInTimezone = moment.tz(value.toObject(), timezoneName);
   return valueInTimezone.toISOString();
 }
