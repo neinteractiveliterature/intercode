@@ -6,7 +6,9 @@ module Intercode
     end
 
     def call(env)
-      host = env['HTTP_HOST'].split(':').first
+      host = env['HTTP_HOST']&.split(':')&.first
+      return :all unless host
+
       second_level_host = second_level_domain(host)
       env['rack.session.options'][:domain] = if second_level_host.include?('.')
         ".#{second_level_host}"
