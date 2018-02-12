@@ -62,7 +62,7 @@ class SignupOptionsPresenter
     end
 
     def params
-      {}
+      { no_requested_bucket: true }
     end
 
     def button_class
