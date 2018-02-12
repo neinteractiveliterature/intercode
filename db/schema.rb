@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209193547) do
+ActiveRecord::Schema.define(version: 20180212193535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,7 +79,6 @@ ActiveRecord::Schema.define(version: 20180209193547) do
     t.string "domain", null: false
     t.string "timezone_name"
     t.text "maximum_event_signups"
-    t.boolean "registrations_frozen", default: false, null: false
     t.bigint "event_proposal_form_id"
     t.integer "maximum_tickets"
     t.bigint "default_layout_id"

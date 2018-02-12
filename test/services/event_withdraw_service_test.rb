@@ -48,7 +48,17 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   end
 
   it 'disallows withdrawals in a frozen convention' do
-    convention.update!(registrations_frozen: true)
+    convention.update!(
+      maximum_event_signups: ScheduledValue::ScheduledValue.new(
+        timespans: [
+          {
+            start: nil,
+            finish: nil,
+            value: 'not_now'
+          }
+        ]
+      )
+    )
 
     result = subject.call
     result.must_be :failure?

@@ -6,7 +6,6 @@ Types::ConventionInputType = GraphQL::InputObjectType.define do
   input_field :name, types.String
   input_field :domain, types.String
   input_field :timezone_name, types.String
-  input_field :registrations_frozen, types.Boolean
   input_field :show_schedule, Types::ShowScheduleType
   input_field :maximum_tickets, types.Int
   input_field :ticket_name, types.String

@@ -9,13 +9,22 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 
+const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
+  ['not_yet', 'No signups yet'],
+  ['1', 'Up to 1 event'],
+  ['2', 'Up to 2 events'],
+  ['3', 'Up to 3 events'],
+  ['unlimited', 'Signups fully open'],
+  ['not_now', 'Signups frozen'],
+];
+
 const buildMaximumEventSignupsInput = (value, onChange) => {
   const processChangeEvent = (event) => {
     onChange(event.target.value);
   };
 
-  const options = ['not_yet', '1', '2', '3', 'unlimited', 'not_now'].map(choice => (
-    <option key={choice} value={choice}>{choice}</option>
+  const options = MAXIMUM_EVENT_SIGNUPS_OPTIONS.map(([value, label]) => (
+    <option key={value} value={value}>{label}</option>
   ));
 
   return (
@@ -35,7 +44,6 @@ class ConventionForm extends React.Component {
       domain: PropTypes.string.isRequired,
       timezone_name: PropTypes.string.isRequired,
       accepting_proposals: PropTypes.bool.isRequired,
-      registrations_frozen: PropTypes.bool.isRequired,
       show_schedule: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
       maximum_event_signups: PropTypes.shape({
         timespans: PropTypes.arrayOf(PropTypes.shape({
@@ -66,7 +74,6 @@ class ConventionForm extends React.Component {
         starts_at: FIELD_TYPES.DATETIME,
         ends_at: FIELD_TYPES.DATETIME,
         accepting_proposals: FIELD_TYPES.BOOLEAN,
-        registrations_frozen: FIELD_TYPES.BOOLEAN,
         show_schedule: FIELD_TYPES.CHECKBOX,
         maximum_event_signups: FIELD_TYPES.OBJECT,
         maximum_tickets: FIELD_TYPES.INTEGER,
@@ -159,8 +166,6 @@ class ConventionForm extends React.Component {
           value={(this.state.convention.maximum_tickets || '').toString()}
           onChange={this.conventionMutator.onInputChange}
         />
-
-        {this.renderBooleanInput('registrations_frozen', 'Freeze event registrations')}
 
         <fieldset>
           <legend className="col-form-label">Event signup schedule</legend>

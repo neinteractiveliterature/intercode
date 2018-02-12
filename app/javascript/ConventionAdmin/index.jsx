@@ -14,7 +14,6 @@ fragment ConventionAdminConventionFields on Convention {
   name
   domain
   timezone_name
-  registrations_frozen
   show_schedule
   maximum_tickets
   ticket_name
@@ -79,7 +78,6 @@ class ConventionAdmin extends React.Component {
         name: convention.name,
         domain: convention.domain,
         timezone_name: convention.timezone_name,
-        registrations_frozen: convention.registrations_frozen,
         show_schedule: convention.show_schedule,
         maximum_tickets: convention.maximum_tickets,
         ticket_name: convention.ticket_name,

@@ -67,7 +67,8 @@ class EventSignupService < ApplicationService
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     case @max_signups_allowed
-    when 'not_now', 'not_yet' then errors.add :base, 'Signups are not allowed at this time.'
+    when 'not_now' then return # Concerns::ConventionRegistrationFreeze will take care of this
+    when 'not_yet' then errors.add :base, 'Signups are not allowed at this time.'
     else
       unless signup_count_allowed?(user_signup_count + 1)
         errors.add :base,
@@ -170,7 +171,7 @@ sign up for events."
   def signup_count_allowed?(signup_count)
     case max_signups_allowed
     when 'unlimited' then true
-    when 'not_now', 'not_yet' then false
+    when 'not_yet' then false
     else
       signup_count <= max_signups_allowed.to_i
     end
