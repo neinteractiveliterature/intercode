@@ -94,6 +94,8 @@ module FormResponseHelper
       end
     end
 
+    timezone = convention.timezone
+
     content_tag(:ul, class: 'list-unstyled m-0') do
       safe_join(
         cast_value.group_by(&:ordinality).sort.map do |_ordinality, preferences|
@@ -102,7 +104,8 @@ module FormResponseHelper
               content_tag(:strong, "#{preferences.first.ordinality_description}:"),
               ' ',
               preferences.sort_by(&:start).map do |preference|
-                "#{preference.start.strftime('%a')} #{preference.label}"
+                start_time = preference.start.in_time_zone(timezone)
+                "#{start_time.strftime('%a')} #{preference.label}"
               end.join(', ')
             ])
           end
