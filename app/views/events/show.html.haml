@@ -96,7 +96,7 @@
                     = signup_button(@event, run, signup_option)
 
             - aux_signup_options = signup_options_presenter.auxiliary_signup_options_for_run(run)
-            - if aux_signup_options.any?
+            - if aux_signup_options&.any?
               %ul.list-group.list-group-flush
                 %li.list-group-item.border-bottom-0
                   .d-flex.flex-wrap.justify-content-center
