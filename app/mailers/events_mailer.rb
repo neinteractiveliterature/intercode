@@ -1,6 +1,6 @@
 class EventsMailer < ApplicationMailer
   helper :form_response
-  
+
   def event_updated(event, changes, user_con_profile)
     @event = event
     @changes = changes
@@ -38,6 +38,7 @@ class EventsMailer < ApplicationMailer
 
   def event_mail(event, status_change)
     mail(
+      from: from_address_for_convention(event.convention),
       to: event_mail_destination(event.convention),
       subject: "#{subject_prefix(event)} #{status_change}: #{event.title}"
     )

@@ -4,6 +4,7 @@ class EventSignupMailer < ApplicationMailer
     @signup_count_presenter = SignupCountPresenter.new(signup.run)
 
     mail(
+      from: from_address_for_convention(@signup.event.convention),
       to: team_member.user_con_profile.email,
       subject: "#{subject_prefix(signup)} Signup: #{signup.user_con_profile.name}"
     )
@@ -19,6 +20,7 @@ class EventSignupMailer < ApplicationMailer
     @signup_count_presenter = SignupCountPresenter.new(signup.run)
 
     mail(
+      from: from_address_for_convention(@signup.event.convention),
       to: team_member.user_con_profile.email,
       subject: "#{subject_prefix(signup)} #{prev_state.humanize} -> #{signup.state.humanize}: \
 #{signup.user_con_profile.name}"
@@ -39,6 +41,7 @@ class EventSignupMailer < ApplicationMailer
     end
 
     mail(
+      from: from_address_for_convention(@signup.event.convention),
       to: @signup.user_con_profile.email,
       subject: "#{subject_prefix(@signup)} #{subject}"
     )
