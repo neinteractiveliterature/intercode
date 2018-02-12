@@ -44,6 +44,10 @@ class Convention < ApplicationRecord
     ends_at && ends_at <= Time.now
   end
 
+  def registrations_frozen?
+    maximum_event_signups.value_at(Time.now) == 'not_now'
+  end
+
   def length_seconds
     ends_at - starts_at
   end

@@ -16,7 +16,6 @@ describe('ConventionForm', () => {
     domain: '',
     timezone_name: '',
     accepting_proposals: false,
-    registrations_frozen: false,
     show_schedule: 'no',
     maximum_event_signups: {
       timespans: [
@@ -43,7 +42,6 @@ describe('ConventionForm', () => {
       domain: 'myDomain',
       timezone_name: 'UTC',
       accepting_proposals: true,
-      registrations_frozen: true,
       show_schedule: 'gms',
       maximum_event_signups: {
         timespans: [
@@ -60,7 +58,6 @@ describe('ConventionForm', () => {
     expect(component.find(BootstrapFormInput).filter({ name: 'domain' }).prop('value')).toEqual('myDomain');
     expect(component.find(TimezoneSelect).prop('value')).toEqual('UTC');
     expect(component.find(BootstrapFormCheckbox).filter({ name: 'accepting_proposals', value: 'true' }).prop('checked')).toBeTruthy();
-    expect(component.find(BootstrapFormCheckbox).filter({ name: 'registrations_frozen', value: 'true' }).prop('checked')).toBeTruthy();
     expect(component.find(BootstrapFormCheckbox).filter({ name: 'show_schedule', value: 'gms' }).prop('checked')).toBeTruthy();
     expect(component.find(BootstrapFormInput).filter({ name: 'maximum_tickets' }).prop('value')).toEqual('100');
 
@@ -73,9 +70,9 @@ describe('ConventionForm', () => {
 
   test('mutating form fields', () => {
     const component = renderConventionForm();
-    component.find(BootstrapFormCheckbox).filter({ name: 'registrations_frozen', value: 'true' })
-      .find('input').simulate('change', { target: { name: 'registrations_frozen', value: 'true' } });
-    expect(component.instance().state.convention.registrations_frozen).toBeTruthy();
+    component.find(BootstrapFormCheckbox).filter({ name: 'accepting_proposals', value: 'true' })
+      .find('input').simulate('change', { target: { name: 'accepting_proposals', value: 'true' } });
+    expect(component.instance().state.convention.accepting_proposals).toBeTruthy();
   });
 
   test('onClickSave', () => {
