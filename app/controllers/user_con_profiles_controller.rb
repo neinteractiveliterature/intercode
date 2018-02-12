@@ -15,7 +15,10 @@ class UserConProfilesController < ApplicationController
   def index
     @page_title = 'Attendees'
 
-    grid_params = params[:user_con_profiles_grid]&.permit! || { order: 'name' }
+    grid_params = params[:user_con_profiles_grid]&.permit! || {
+      order: 'name',
+      ticket_status: convention.ticket_types.pluck(:id).map(&:to_s).join(',')
+    }
     @user_con_profiles_grid = UserConProfilesGrid.new(grid_params) do |scope|
       scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
       respond_to do |format|

@@ -34,30 +34,22 @@ class DatagridFilters extends React.Component {
     })).isRequired,
     showCollapsed: PropTypes.arrayOf(PropTypes.string).isRequired,
     initialFilterValues: PropTypes.shape({}),
+    initialExpanded: PropTypes.bool,
     paramKey: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     initialFilterValues: {},
+    initialExpanded: false,
   };
 
   constructor(props) {
     super(props);
 
     const filterValues = (this.props.initialFilterValues || {});
-    Object.entries(filterValues).forEach(([key, value]) => {
-      const filter = this.props.filters.find(f => f.name === key);
-      if (filter && filter.form_builder_helper_name === 'datagrid_enum_filter') {
-        filterValues[key] = (value || '').split(',');
-      }
-    });
-
-    const expanded = Object.entries(filterValues).some(([key, value]) => (
-      !this.props.showCollapsed.includes(key) && !isBlank(value)
-    ));
 
     this.state = {
-      collapsed: !expanded,
+      collapsed: !this.props.initialExpanded,
       filterValues,
     };
   }
@@ -89,6 +81,12 @@ class DatagridFilters extends React.Component {
         searchUrl.searchParams.append(`${this.props.paramKey}[${key}]`, value);
       }
     });
+
+    if (!this.state.collapsed) {
+      searchUrl.searchParams.set('expand_filters', 'true');
+    } else {
+      searchUrl.searchParams.delete('expand_filters');
+    }
 
     window.location.href = searchUrl.toString();
   }
@@ -133,6 +131,18 @@ class DatagridFilters extends React.Component {
     </div>
   )
 
+  renderCollapsedFilter = (filter) => {
+    if (this.state.filterValues[filter.name]) {
+      return (
+        <span key={filter.name} className="badge badge-secondary mr-1">
+          {filter.header || humanize(filter.name)}
+        </span>
+      );
+    }
+
+    return null;
+  }
+
   renderCollapseControl = () => {
     if (this.props.filters.every(filter => this.props.showCollapsed.includes(filter.name))) {
       return null;
@@ -170,7 +180,11 @@ class DatagridFilters extends React.Component {
         <div className="card-body">
           {uncollapsibleFilters.map(this.renderFilterRow)}
           {this.renderCollapseControl()}
-          {this.state.collapsed ? null : collapsibleFilters.map(this.renderFilterRow)}
+          {
+            this.state.collapsed ?
+            collapsibleFilters.map(this.renderCollapsedFilter) :
+            collapsibleFilters.map(this.renderFilterRow)
+          }
           <div className="form-group mb-0">
             <input type="submit" className="btn btn-primary" value="Search" />
           </div>

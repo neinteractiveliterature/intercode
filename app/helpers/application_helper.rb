@@ -108,7 +108,8 @@ module ApplicationHelper
       end,
       showCollapsed: show_collapsed,
       paramKey: param_key,
-      initialFilterValues: params[param_key]
+      initialFilterValues: grid.attributes,
+      initialExpanded: params[:expand_filters].present?
     )
   end
 end

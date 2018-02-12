@@ -91,7 +91,7 @@ class UserConProfilesGrid
     (
       [%w[Unpaid none]] +
       TicketType.where(
-        id: scope.unscope(:limit, :offset).joins(:ticket).select(:ticket_type_id).distinct
+        convention_id: scope.unscope(:limit, :offset).select(:convention_id)
       ).pluck(:description, :id)
     )
   end
