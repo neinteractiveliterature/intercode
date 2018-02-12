@@ -101,18 +101,16 @@ class ScheduleGridEventRun extends React.Component {
   renderAvailabilityBar = () => {
     const { event, run } = this.props;
 
-    if (!event.registration_policy.slots_limited) {
-      return null;
+    let unavailableBarWidth = 100.0;
+    if (event.registration_policy.total_slots > 0) {
+      unavailableBarWidth = (
+        (run.confirmed_signup_count / event.registration_policy.total_slots) * 100.0
+      );
     }
 
     return (
-      <div className="availability-bar">
-        <div
-          style={{
-            width: `${(run.confirmed_signup_count / event.registration_policy.total_slots) * 100.0}%`,
-          }}
-          className="unavailable"
-        />
+      <div className={classNames('availability-bar', { unlimited: !event.registration_policy.slots_limited })}>
+        <div style={{ width: `${unavailableBarWidth}%` }} className="unavailable" />
       </div>
     );
   }
