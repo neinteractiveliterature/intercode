@@ -34,6 +34,14 @@ class ConventionDrop < Liquid::Drop
     convention.ticket_types.to_a
   end
 
+  def ticket_counts_by_type
+    ticket_counts_by_type_id = convention.tickets.group(:ticket_type_id).count
+
+    convention.ticket_types.each_with_object({}) do |ticket_type, hash|
+      hash[ticket_type.name] = ticket_counts_by_type_id[ticket_type.id] || 0
+    end.merge('total' => ticket_counts_by_type_id.values.sum)
+  end
+
   def maximum_event_signups
     ScheduledValueDrop.new(convention.maximum_event_signups, convention.timezone)
   end
