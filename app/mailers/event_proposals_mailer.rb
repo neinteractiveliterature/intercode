@@ -42,6 +42,7 @@ class EventProposalsMailer < ApplicationMailer
 
   def event_proposal_mail(event_proposal, status_change)
     mail(
+      from: from_address_for_convention(event_proposal.convention),
       to: proposal_mail_destination(event_proposal.convention),
       subject: "#{subject_prefix(event_proposal)} #{status_change}: #{event_proposal.title}"
     )
