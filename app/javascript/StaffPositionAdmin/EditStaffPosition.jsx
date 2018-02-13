@@ -67,6 +67,7 @@ class EditStaffPosition extends React.Component {
 
   render = () => (
     <div>
+      <h1 className="mb-4">Editing {this.state.staffPosition.name}</h1>
       <StaffPositionForm
         staffPosition={this.state.staffPosition}
         onChange={this.staffPositionChanged}

@@ -109,7 +109,7 @@ class StaffPositionsTable extends React.Component {
 
     return (
       <div>
-        <h1>Staff Positions</h1>
+        <h1 className="mb-4">Staff positions</h1>
 
         <table className="table">
           <thead>
