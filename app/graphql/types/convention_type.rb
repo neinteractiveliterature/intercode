@@ -19,6 +19,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
     }
   end
 
+  field :staff_positions, types[Types::StaffPositionType] do
+    resolve ->(convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :staff_positions).load(convention)
+    }
+  end
+
   field :ticket_types, types[Types::TicketTypeType] do
     resolve ->(convention, _args, _ctx) {
       AssociationLoader.for(Convention, :ticket_types).load(convention)
