@@ -17,14 +17,31 @@ Types::EventType = GraphQL::ObjectType.define do
   field :description, types.String
   field :short_blurb, types.String
   field :status, types.String
-  field :runs, !types[!Types::RunType]
+  field :runs, !types[!Types::RunType] do
+    guard -> (event, _args, ctx) do
+      ctx[:current_ability].can?(:read, Run.new(event: event))
+    end
+    resolve -> (obj, _args, _ctx) do
+      AssociationLoader.for(Event, :runs).load(obj)
+    end
+  end
   field :team_members, !types[!Types::TeamMemberType] do
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(Event, :team_members).load(obj)
     }
   end
   field :team_member_name, !types.String
-  field :provided_tickets, !types[!Types::TicketType]
+  field :provided_tickets, !types[!Types::TicketType] do
+    guard -> (event, _args, ctx) do
+      ctx[:current_ability].can?(
+        :read,
+        Ticket.new(
+          user_con_profile: UserConProfile.new(convention: ctx[:convention]),
+          provided_by_event: event
+        )
+      )
+    end
+  end
   field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
   override_type = Types::MaximumEventProvidedTicketsOverrideType
   field :maximum_event_provided_tickets_overrides, !types[!override_type] do

@@ -18,17 +18,22 @@ class UserConProfilesGrid
   end
 
   filter(:ticket_status, :enum, select: :ticket_types, checkboxes: true) do |value|
-    clauses = value.map do |ticket_type_id|
-      if ticket_type_id == 'none'
-        where('user_con_profiles.id NOT IN (?)', Ticket.select(:user_con_profile_id))
-      else
-        joins(:ticket).where(tickets: { ticket_type_id: ticket_type_id })
-      end
+    clauses = []
+    non_ids, ids = value.partition { |ticket_type_id| ticket_type_id == 'none' }
+
+    clauses << left_joins(:ticket).where(tickets: { ticket_type_id: ids }) if ids.any?
+
+    if non_ids.include?('none')
+      clauses << where('user_con_profiles.id NOT IN (?)', Ticket.select(:user_con_profile_id))
+    end
+
+    clauses_sql = clauses.map do |clause|
+      clause.unscope(:select, :includes, :limit, :offset).select(:id).to_sql
     end
 
     where(
-      clauses
-        .map { |clause| "user_con_profiles.id IN (#{clause.unscope(:select, :includes).select(:id).to_sql})" }
+      clauses_sql
+        .map { |clause_sql| "user_con_profiles.id IN (#{clause_sql})" }
         .join(' OR ')
     )
   end

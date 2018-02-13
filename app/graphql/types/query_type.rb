@@ -19,7 +19,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :id, !types.Int
 
     resolve ->(_obj, args, ctx) {
-      ctx[:convention].events.active.includes(:runs).find(args[:id])
+      ctx[:convention].events.active.find(args[:id])
     }
   end
 
@@ -27,8 +27,18 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :extendedCounts, types.Boolean
     argument :includeDropped, types.Boolean
 
+    guard ->(_obj, args, ctx) do
+      current_ability = ctx[:current_ability]
+      convention = ctx[:convention]
+      if args[:includeDropped]
+        return false unless current_ability.can?(:manage, Event.new(convention: convention))
+      end
+
+      true
+    end
+
     resolve ->(_obj, args, ctx) {
-      events = ctx[:convention].events.includes(runs: [:rooms])
+      events = ctx[:convention].events
       events = events.active unless args['includeDropped']
       signup_scope = Signup.where(run_id: Run.where(event_id: events.map(&:id)).select(:id))
 
@@ -59,6 +69,11 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :form, Types::FormType do
     argument :id, !types.Int
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, ctx[:convention].forms.find(args[:id]))
+    end
+
     resolve ->(_obj, args, ctx) {
       ctx[:convention].forms.find(args[:id])
     }
@@ -66,6 +81,11 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :staffPosition, Types::StaffPositionType do
     argument :id, !types.Int
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, ctx[:convention].staff_positions.find(args[:id]))
+    end
+
     resolve ->(_obj, args, ctx) {
       ctx[:convention].staff_positions.find(args[:id])
     }
