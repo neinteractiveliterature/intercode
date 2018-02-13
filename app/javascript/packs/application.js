@@ -45,7 +45,7 @@ import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
-import StaffPositionForm from '../BuiltInForms/StaffPositionForm';
+import StaffPositionAdmin from '../StaffPositionAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
 import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
@@ -65,7 +65,7 @@ WebpackerReact.setup({
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
-  StaffPositionForm: StandaloneGraphQLComponent(StaffPositionForm),
+  StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketPurchaseForm,

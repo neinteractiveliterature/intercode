@@ -94,7 +94,7 @@ Intercode::Application.routes.draw do
 
     resources :rooms, only: [:index]
 
-    resources :staff_positions
+    get 'staff_positions/(*extra)' => 'staff_positions#index', as: :staff_positions
     resources :forms, only: [:show]
     resources :admin_forms
   end
