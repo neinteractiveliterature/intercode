@@ -21,20 +21,18 @@ Mutations::UpdateConvention = GraphQL::Relay::Mutation.define do
   input_field :id, types.Int
   input_field :convention, !Types::ConventionInputType
 
-  resolve MutationErrorHandler.new(
-    ->(_obj, args, ctx) {
-      convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
+  resolve ->(_obj, args, ctx) {
+    convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
 
-      convention_data = args[:convention].to_h.merge(
-        'maximum_event_signups' => process_scheduled_value_input(
-          args[:convention][:maximum_event_signups]
-        ),
-        'updated_by' => ctx[:user_con_profile].user
-      )
+    convention_data = args[:convention].to_h.merge(
+      'maximum_event_signups' => process_scheduled_value_input(
+        args[:convention][:maximum_event_signups]
+      ),
+      'updated_by' => ctx[:user_con_profile].user
+    )
 
-      convention.update!(convention_data)
+    convention.update!(convention_data)
 
-      { convention: convention }
-    }
-  )
+    { convention: convention }
+  }
 end
