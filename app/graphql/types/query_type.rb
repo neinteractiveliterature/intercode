@@ -63,4 +63,11 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:convention].forms.find(args[:id])
     }
   end
+
+  field :staffPosition, Types::StaffPositionType do
+    argument :id, !types.Int
+    resolve ->(_obj, args, ctx) {
+      ctx[:convention].staff_positions.find(args[:id])
+    }
+  end
 end
