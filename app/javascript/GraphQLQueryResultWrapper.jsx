@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ErrorDisplay from './ErrorDisplay';
 import LoadingIndicator from './LoadingIndicator';
 
 const GraphQLQueryResultWrapper = WrappedComponent => class Wrapper extends React.Component {
@@ -21,7 +22,7 @@ const GraphQLQueryResultWrapper = WrappedComponent => class Wrapper extends Reac
       return <LoadingIndicator />;
     }
     if (data.error) {
-      return <div className="alert alert-danger">{data.error.message}</div>;
+      return <ErrorDisplay graphQLError={data.error} />;
     }
 
     return <WrappedComponent data={data} {...this.props} />;
