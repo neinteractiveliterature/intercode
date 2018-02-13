@@ -1,6 +1,6 @@
 class BetterRescueMiddleware
   attr_reader :rescue_table
-  
+
   def initialize
     @rescue_table = []
   end
@@ -21,6 +21,9 @@ class BetterRescueMiddleware
   def call(*)
     yield
   rescue StandardError => err
+    Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
+    Rails.logger.error err.backtrace.join("\n")
+    Rollbar.error(err)
     attempt_rescue(err)
   end
 
