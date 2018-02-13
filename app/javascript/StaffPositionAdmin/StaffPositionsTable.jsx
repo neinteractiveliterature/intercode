@@ -68,6 +68,7 @@ class StaffPositionsTable extends React.Component {
   renderRow = staffPosition => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
+      <td>{staffPosition.visible ? (<i className="fa fa-check" />) : null}</td>
       <td>{staffPosition.user_con_profiles.map(ucp => ucp.name_without_nickname).join(', ')}</td>
       <td>{staffPosition.email}</td>
       <td>
@@ -115,6 +116,7 @@ class StaffPositionsTable extends React.Component {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Visible</th>
               <th>People</th>
               <th>Email</th>
               <th />

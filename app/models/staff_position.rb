@@ -4,6 +4,8 @@ class StaffPosition < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :visible, -> { where(visible: true) }
+
   def to_liquid
     StaffPositionDrop.new(self)
   end

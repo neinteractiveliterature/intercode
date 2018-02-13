@@ -7,21 +7,12 @@ fragment StaffPositionFields on StaffPosition {
   id
   name
   email
+  visible
   user_con_profiles {
     id
     name_without_nickname
   }
 }
-`;
-
-export const staffPositionQuery = gql`
-query($staffPositionId: Int!) {
-  staffPosition(id: $staffPositionId) {
-    ...StaffPositionFields
-  }
-}
-
-${fragments.staffPosition}
 `;
 
 export const staffPositionsQuery = gql`
