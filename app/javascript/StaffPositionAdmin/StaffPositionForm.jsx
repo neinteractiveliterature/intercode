@@ -21,7 +21,7 @@ class StaffPositionForm extends React.Component {
       {
         name: FIELD_TYPES.STRING,
         email: FIELD_TYPES.STRING,
-        user_con_profile_ids: FIELD_TYPES.SELECT_MULTIPLE,
+        user_con_profiles: FIELD_TYPES.OBJECT,
       },
     );
 
@@ -29,6 +29,13 @@ class StaffPositionForm extends React.Component {
       stateChangeCalculator,
       () => ({ staffPosition: this.props.staffPosition }),
       ({ staffPosition }) => { this.props.onChange(staffPosition); },
+    );
+  }
+
+  userConProfilesChanged = (newValue) => {
+    this.staffPositionMutator.onValueChange(
+      'user_con_profiles',
+      newValue.map(choice => choice.data),
     );
   }
 
@@ -58,7 +65,7 @@ class StaffPositionForm extends React.Component {
             id={userConProfileSelectId}
             multi
             value={this.props.staffPosition.user_con_profiles.map(userConProfile => userConProfile.id)}
-            onChange={this.staffPositionMutator.valueChangeCallback('user_con_profile_ids')}
+            onChange={this.userConProfilesChanged}
           />
         </div>
       </div>
