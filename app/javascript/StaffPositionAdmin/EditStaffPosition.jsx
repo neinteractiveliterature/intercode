@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { withRouter } from 'react-router-dom';
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
 import StaffPositionPropType from './StaffPositionPropType';
@@ -20,10 +21,14 @@ ${fragments.staffPosition}
 `;
 
 @graphql(updateStaffPositionMutation, { name: 'updateStaffPosition' })
+@withRouter
 class EditStaffPosition extends React.Component {
   static propTypes = {
     initialStaffPosition: StaffPositionPropType.isRequired,
     updateStaffPosition: PropTypes.func.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
@@ -54,6 +59,7 @@ class EditStaffPosition extends React.Component {
           },
         },
       });
+      this.props.history.push('/');
     } catch (error) {
       this.setState({ error });
     }
