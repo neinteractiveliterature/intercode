@@ -20,7 +20,25 @@ mutation($input: UpdateStaffPositionInput!) {
 ${fragments.staffPosition}
 `;
 
-@graphql(updateStaffPositionMutation, { name: 'updateStaffPosition' })
+@graphql(updateStaffPositionMutation, {
+  props: ({ mutate }) => ({
+    updateStaffPosition: staffPosition => mutate({
+      variables: {
+        input: {
+          id: staffPosition.id,
+          staff_position: {
+            name: staffPosition.name,
+            email: staffPosition.email,
+            visible: staffPosition.visible,
+            user_con_profile_ids: staffPosition.user_con_profiles.map((
+              userConProfile => userConProfile.id
+            )),
+          },
+        },
+      },
+    }),
+  }),
+})
 @withRouter
 class EditStaffPosition extends React.Component {
   static propTypes = {
@@ -45,20 +63,7 @@ class EditStaffPosition extends React.Component {
 
   saveClicked = async () => {
     try {
-      await this.props.updateStaffPosition({
-        variables: {
-          input: {
-            id: this.state.staffPosition.id,
-            staff_position: {
-              name: this.state.staffPosition.name,
-              email: this.state.staffPosition.email,
-              user_con_profile_ids: this.state.staffPosition.user_con_profiles.map((
-                userConProfile => userConProfile.id
-              )),
-            },
-          },
-        },
-      });
+      await this.props.updateStaffPosition(this.state.staffPosition);
       this.props.history.push('/');
     } catch (error) {
       this.setState({ error });

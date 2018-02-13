@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180212193535) do
+ActiveRecord::Schema.define(version: 20180213195724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,7 +266,9 @@ ActiveRecord::Schema.define(version: 20180212193535) do
     t.text "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "visible"
     t.index ["convention_id"], name: "index_staff_positions_on_convention_id"
+    t.index ["visible"], name: "index_staff_positions_on_visible"
   end
 
   create_table "staff_positions_user_con_profiles", id: false, force: :cascade do |t|
