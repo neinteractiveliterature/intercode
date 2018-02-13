@@ -83,6 +83,7 @@ class NewStaffPosition extends React.Component {
 
   render = () => (
     <div>
+      <h1 className="mb-4">New staff position</h1>
       <StaffPositionForm
         staffPosition={this.state.staffPosition}
         onChange={this.staffPositionChanged}
