@@ -7,7 +7,6 @@ Mutations::UpdateStaffPosition = GraphQL::Relay::Mutation.define do
 
   resolve ->(_obj, args, ctx) {
     staff_position = ctx[:convention].staff_positions.find(args[:id])
-
     staff_position.update!(args[:staff_position].to_h)
 
     { staff_position: staff_position }
