@@ -104,10 +104,14 @@ class Ability
 
     # Here's what the general public can do...
     can :read, Convention
-    can [:read, :root], Page
-    can :read, Form
-    can :read, Event, status: 'active'
     can :schedule, Convention, show_schedule: 'yes'
+    can :read, Event, status: 'active'
+    can :read, Form
+    can [:read, :root], Page
+    can :read, Room
+    can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
+    can :read, StaffPosition
+    can :read, TicketType
 
     # Anonymous user permissions end here.
     return unless user
@@ -184,9 +188,24 @@ class Ability
     can [:schedule, :schedule_with_counts], Convention,
       id: con_ids_with_privilege(:scheduling, :gm_liaison),
       show_schedule: %w[priv gms yes]
+    can :read, Run, event: {
+      status: 'active',
+      convention: {
+        id: con_ids_with_privilege(:scheduling, :gm_liaison),
+        show_schedule: %w[priv gms yes]
+      }
+    }
+
     can [:schedule, :schedule_with_counts], Convention,
       id: con_ids_with_privilege(:con_com),
       show_schedule: %w[gms yes]
+    can :read, Run, event: {
+      status: 'active',
+      convention: {
+        id: con_ids_with_privilege(:con_com),
+        show_schedule: %w[gms yes]
+      }
+    }
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
@@ -217,8 +236,16 @@ class Ability
   def add_team_member_abilities
     can :update, Event, id: team_member_event_ids
     can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
+    can :read, Run, event: {
+      status: 'active',
+      convention: {
+        id: team_member_convention_ids,
+        show_schedule: %w[gms yes]
+      }
+    }
     can :update, EventProposal, event_id: team_member_event_ids
     can :read, Signup, run: { event_id: team_member_event_ids }
+    can :read, Ticket, provided_by_event_id: team_member_event_ids
     can :manage, TeamMember, event_id: team_member_event_ids
   end
 end

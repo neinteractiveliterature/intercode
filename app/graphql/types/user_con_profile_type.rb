@@ -1,3 +1,7 @@
+CAN_UPDATE_USER_CON_PROFILE_GUARD = ->(user_con_profile, _args, ctx) do
+  ctx[:current_ability].can?(:update, user_con_profile)
+end
+
 Types::UserConProfileType = GraphQL::ObjectType.define do
   name 'UserConProfile'
 
@@ -11,16 +15,16 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field :nickname, types.String
   field :bio, types.String
   field :show_nickname_in_bio, types.Boolean
-  field :birth_date, Types::DateType
-  field :address, types.String
-  field :city, types.String
-  field :state, types.String
-  field :zipcode, types.String
-  field :country, types.String
-  field :day_phone, types.String
-  field :evening_phone, types.String
-  field :best_call_time, types.String
-  field :preferred_contact, types.String
+  field(:birth_date, Types::DateType) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:address, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:city, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:state, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:zipcode, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:country, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:day_phone, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:evening_phone, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:best_call_time, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:preferred_contact, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
   field :ticket, Types::TicketType do
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(UserConProfile, :ticket).load(obj)
