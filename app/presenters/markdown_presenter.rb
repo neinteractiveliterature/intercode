@@ -31,21 +31,38 @@ class MarkdownPresenter
   end
 
   def render(markdown, sanitize_content: true, strip_single_p: true, whitelist_liquid_tags: true)
-    rendered_liquid = render_liquid(markdown, whitelist_liquid_tags: whitelist_liquid_tags)
+    pipeline = build_pipeline(
+      sanitize_content: sanitize_content,
+      strip_single_p: strip_single_p,
+      whitelist_liquid_tags: whitelist_liquid_tags
+    )
 
-    rendered_html = MarkdownPresenter.markdown_processor.render(rendered_liquid || '')
-    sanitized_html = sanitize_html(rendered_html, sanitize_content: sanitize_content)
-
-    content = sanitized_html.presence || "<p><em>#{default_content}</em></p>"
-
-    if strip_single_p
-      self.class.strip_single_p(content)
-    else
-      rendered_liquid
-    end
+    pipeline.inject(markdown) { |acc, elem| elem.call(acc) }
   end
 
   private
+
+  def build_pipeline(sanitize_content:, strip_single_p:, whitelist_liquid_tags:)
+    pipeline = []
+    liquid_renderer = (
+      ->(content) { render_liquid(content, whitelist_liquid_tags: whitelist_liquid_tags) }
+    )
+    markdown_renderer = (
+      ->(content) { MarkdownPresenter.markdown_processor.render(content || '') }
+    )
+    sanitizer = (
+      ->(content) { sanitize_html(content, sanitize_content: sanitize_content) }
+    )
+
+    pipeline << liquid_renderer unless sanitize_content
+    pipeline << markdown_renderer
+    pipeline << sanitizer
+    pipeline << liquid_renderer if sanitize_content
+    pipeline << ->(content) { content.presence || "<p><em>#{default_content}</em></p>" }
+    pipeline << ->(content) { MarkdownPresenter.strip_single_p(content) } if strip_single_p
+
+    pipeline
+  end
 
   def sanitize_html(html, sanitize_content: true)
     if sanitize_content

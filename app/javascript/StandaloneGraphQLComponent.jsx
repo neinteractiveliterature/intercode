@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import buildApolloClient from './buildApolloClient';
 
-export default WrappedComponent => class Wrapper extends React.Component {
+export default (WrappedComponent, authenticityTokenProp = 'authenticityToken') => class Wrapper extends React.Component {
   static propTypes = {
-    authenticityToken: PropTypes.string.isRequired,
+    [authenticityTokenProp]: PropTypes.string.isRequired,
   };
 
   static get name() {
@@ -14,7 +14,7 @@ export default WrappedComponent => class Wrapper extends React.Component {
 
   constructor(props) {
     super(props);
-    this.client = buildApolloClient(this.props.authenticityToken);
+    this.client = buildApolloClient(this.props[authenticityTokenProp]);
   }
 
   render = () => (

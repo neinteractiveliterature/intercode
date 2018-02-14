@@ -60,7 +60,7 @@ WebpackerReact.setup({
   EventAdmin,
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
-  FormPresenter,
+  FormPresenter: StandaloneGraphQLComponent(FormPresenter, 'graphqlAuthenticityToken'),
   LiquidHTMLEditor,
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),

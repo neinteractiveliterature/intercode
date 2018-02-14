@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
+import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
 
 class FreeTextItem extends React.Component {
@@ -11,6 +12,7 @@ class FreeTextItem extends React.Component {
       identifier: PropTypes.string.isRequired,
       properties: PropTypes.shape({
         caption: PropTypes.string.isRequired,
+        format: PropTypes.string,
       }).isRequired,
     }).isRequired,
     value: PropTypes.string,
@@ -38,6 +40,11 @@ class FreeTextItem extends React.Component {
     this.userDidInteract();
   }
 
+  markdownDidChange = (newValue) => {
+    this.props.onChange(newValue);
+    this.userDidInteract();
+  }
+
   renderLabel = (formItem, domId) => (
     <label htmlFor={domId} className="form-item-label">
       <span
@@ -49,6 +56,14 @@ class FreeTextItem extends React.Component {
   )
 
   renderInput = (formItem, domId) => {
+    if (formItem.properties.format === 'markdown') {
+      return (
+        <MarkdownInput
+          value={this.props.value || ''}
+          onChange={this.markdownDidChange}
+        />
+      );
+    }
     if (formItem.lines === 1) {
       return (
         <input
