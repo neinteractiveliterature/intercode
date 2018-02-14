@@ -292,17 +292,21 @@ class RegistrationPolicyEditor extends React.Component {
       );
     }
 
+    const boolValue = this.props.registrationPolicy.getPreventNoPreferenceSignups();
+    const choiceSetValue = (boolValue == null ? null : boolValue.toString());
+
     return (
       <tr>
         <td>No preference</td>
         <td colSpan={this.getHeaderLabels().length - 1}>
           <ChoiceSet
+            name="prevent_no_preference_signups"
             choices={[
-              { label: 'Show "no preference" option', value: false },
-              { label: 'Don\'t show "no preference" option', value: true },
+              { label: 'Show "no preference" option', value: 'false' },
+              { label: 'Don\'t show "no preference" option', value: 'true' },
             ]}
             choiceClassName="form-check-inline"
-            value={this.props.registrationPolicy.getPreventNoPreferenceSignups()}
+            value={choiceSetValue}
             onChange={this.preventNoPreferenceSignupsChanged}
           />
         </td>

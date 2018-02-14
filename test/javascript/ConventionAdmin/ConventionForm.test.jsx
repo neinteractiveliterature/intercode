@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import moment from 'moment-timezone';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
-import ConventionForm from '../../../app/javascript/BuiltInForms/ConventionForm';
+import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
 import DateTimeInput from '../../../app/javascript/BuiltInFormControls/DateTimeInput';
 import ScheduledValueEditor from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
@@ -23,6 +23,7 @@ describe('ConventionForm', () => {
       ],
     },
     maximum_tickets: null,
+    ticket_name: 'ticket',
   };
 
   const renderConventionForm = (props, initialConventionProps) => mount((
