@@ -1,0 +1,8 @@
+%nav{"aria-label" => "breadcrumb"}
+  %ol.breadcrumb
+    - if @admin_event_proposal
+      %li.breadcrumb-item= link_to 'Event proposals', admin_event_proposals_path
+      %li.breadcrumb-item.active{"aria-current" => "page"}
+        = @admin_event_proposal.title
+    - else
+      %li.breadcrumb-item.active{"aria-current" => "page"} Event proposals
