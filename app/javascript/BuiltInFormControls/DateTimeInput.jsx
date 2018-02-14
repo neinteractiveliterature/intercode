@@ -70,14 +70,14 @@ class DateTimeInput extends React.Component {
         <input
           type="date"
           className="form-control mr-1"
-          value={this.state.date}
+          value={this.state.date || ''}
           onChange={this.dateChanged}
           pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
         />
         <input
           type="time"
           className="form-control"
-          value={this.state.time}
+          value={this.state.time || ''}
           onChange={this.timeChanged}
           pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
         />

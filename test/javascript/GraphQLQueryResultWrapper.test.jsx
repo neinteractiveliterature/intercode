@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import GraphQLQueryResultWrapper from '../../app/javascript/GraphQLQueryResultWrapper';
 import LoadingIndicator from '../../app/javascript/LoadingIndicator';
 
@@ -13,10 +13,11 @@ test('it renders a loading indicator if loading is true', () => {
 });
 
 test('it renders an error message if error is non-null', () => {
-  const component = shallow(<WrappedComponent
+  const component = mount(<WrappedComponent
     data={{ loading: false, error: { message: 'blah' } }}
   />);
 
+  expect(component.find('ErrorDisplay')).toHaveLength(1);
   expect(component.text()).toEqual('blah');
 });
 

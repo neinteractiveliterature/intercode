@@ -289,7 +289,7 @@ class CommonEventFormFields extends React.Component {
       {this.renderSimpleRegularEventInput('url', 'URL of event homepage')}
       {this.renderConMailDestinationField()}
       <TimespanItem
-        formItem={{ properties: { caption: this.getLengthSecondsCaption() } }}
+        formItem={{ identifier: '', properties: { caption: this.getLengthSecondsCaption() } }}
         value={this.props.event.length_seconds}
         onChange={this.lengthSecondsDidChange}
         onInteract={() => {}}
