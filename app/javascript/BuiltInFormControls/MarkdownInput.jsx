@@ -22,7 +22,12 @@ class MarkdownInput extends React.Component {
     }).isRequired,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    lines: PropTypes.number,
   }
+
+  static defaultProps = {
+    lines: null,
+  };
 
   constructor(props) {
     super(props);
@@ -54,10 +59,7 @@ class MarkdownInput extends React.Component {
       }).then(({ data }) => {
         this.setState({
           previewContent: (
-            <div
-              className="form-control border-0"
-              dangerouslySetInnerHTML={{ __html: data.previewMarkdown }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: data.previewMarkdown }} />
           ),
         });
       }).catch(({ error }) => {
@@ -82,25 +84,23 @@ class MarkdownInput extends React.Component {
     }
 
     return (
-      <div className="form-control border-0">
-        <CodeMirror
-          value={this.props.value}
-          options={{
-            ...defaultCodeMirrorOptions,
-            lineNumbers: false,
-            foldGutter: false,
-            gutters: [],
-            mode: 'liquid-markdown',
-          }}
-          onBeforeChange={this.onBeforeChange}
-        />
-      </div>
+      <CodeMirror
+        value={this.props.value}
+        options={{
+          ...defaultCodeMirrorOptions,
+          lineNumbers: false,
+          foldGutter: false,
+          gutters: [],
+          mode: 'liquid-markdown',
+        }}
+        onBeforeChange={this.onBeforeChange}
+      />
     );
   }
 
   render = () => (
     <div>
-      <div className="form-control p-0">
+      <div className={`form-control p-0 codemirror-height-${this.props.lines || 10}`}>
         <ul className="nav nav-pills bg-light p-1">
           <li className="nav-item">
             <a
@@ -121,7 +121,9 @@ class MarkdownInput extends React.Component {
             </a>
           </li>
         </ul>
-        {this.renderContent()}
+        <div className="form-control border-0">
+          {this.renderContent()}
+        </div>
       </div>
     </div>
   )

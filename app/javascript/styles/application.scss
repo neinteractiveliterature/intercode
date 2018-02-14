@@ -45,3 +45,11 @@ table.no-top-border thead th {
 .markdown-preview {
   min-height: 10rem;
 }
+
+@for $i from 1 to 20 {
+  .codemirror-height-#{$i} {
+    .markdown-preview, .CodeMirror-scroll {
+      min-height: #{$i}rem !important;
+    }
+  }
+}
