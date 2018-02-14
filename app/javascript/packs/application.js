@@ -49,8 +49,8 @@ import StaffPositionAdmin from '../StaffPositionAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
 import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
+import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
-import TicketTypeForm from '../BuiltInForms/TicketTypeForm';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
@@ -68,8 +68,8 @@ WebpackerReact.setup({
   StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
+  TicketTypeAdmin: StandaloneGraphQLComponent(TicketTypeAdmin),
   TicketPurchaseForm,
-  TicketTypeForm,
   WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
 });
 

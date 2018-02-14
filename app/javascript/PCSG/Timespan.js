@@ -89,29 +89,48 @@ class Timespan {
     return this.finish.diff(this.start, unit);
   }
 
-  humanizeStartInTimezone(timezoneName) {
+  humanizeStartInTimezone(timezoneName, format) {
     if (this.start == null) {
       return 'anytime';
     }
 
     const start = this.start.tz(timezoneName);
+    if (format != null) {
+      return start.format(format);
+    }
+
     return humanizeTime(start, true);
   }
 
-  humanizeFinishInTimezone(timezoneName) {
+  humanizeFinishInTimezone(timezoneName, format) {
     if (this.finish == null) {
       return 'indefinitely';
     }
 
-    const start = this.start.tz(timezoneName);
     const finish = this.finish.tz(timezoneName);
+    if (format != null) {
+      return finish.format(format);
+    }
+
+    if (this.start == null) {
+      return humanizeTime(finish, true);
+    }
+
+    const start = this.start.tz(timezoneName);
     const includeDayInFinish = (finish.date() !== start.date());
 
     return humanizeTime(finish, includeDayInFinish);
   }
 
-  humanizeInTimezone(timezoneName) {
-    return `${this.humanizeStartInTimezone(timezoneName)} - ${this.humanizeFinishInTimezone(timezoneName)}`;
+  humanizeInTimezone(timezoneName, format) {
+    if (this.start == null && this.finish == null) {
+      return 'always';
+    }
+
+    const start = this.humanizeStartInTimezone(timezoneName, format);
+    const finish = this.humanizeFinishInTimezone(timezoneName, format);
+
+    return `${start} - ${finish}`;
   }
 
   getTimeHopsWithin(timezoneName, unit, offset) {

@@ -55,6 +55,16 @@ export class StateMutator {
     );
   }
 
+  static forStatelessComponent(stateChangeCalculator, component, onChange) {
+    const { modelKey } = stateChangeCalculator;
+
+    return new StateMutator(
+      stateChangeCalculator,
+      () => ({ [modelKey]: component.props[modelKey] }),
+      ({ [modelKey]: value }) => { onChange(value); },
+    );
+  }
+
   constructor(stateChangeCalculator, getState, setState) {
     this.stateChangeCalculator = stateChangeCalculator;
     this.getState = getState;
@@ -125,4 +135,7 @@ export class ModelStateChangeCalculator {
 
   getMutator = (getState, setState) => new StateMutator(this, getState, setState)
   getMutatorForComponent = component => StateMutator.forComponent(this, component)
+  getMutatorForStatelessComponent = (component, onChange) => (
+    StateMutator.forStatelessComponent(this, component, onChange)
+  )
 }
