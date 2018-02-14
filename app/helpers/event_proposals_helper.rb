@@ -15,6 +15,7 @@ module EventProposalsHelper
       responseUrl: event_proposal_url(event_proposal),
       authenticityToken: update_authenticity_token,
       submitAuthenticityToken: submit_authenticity_token,
+      graphqlAuthenticityToken: graphql_authenticity_token,
       afterSubmitUrl: page_path('new-proposal'),
       submitCaption: 'Submit proposal',
       exitButton: event_proposal_exit_button

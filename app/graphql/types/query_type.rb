@@ -90,4 +90,12 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:convention].staff_positions.find(args[:id])
     }
   end
+
+  field :previewMarkdown, !types.String do
+    argument :markdown, !types.String
+
+    resolve ->(_obj, args, _ctx) do
+      MarkdownPresenter.new('').render(args[:markdown])
+    end
+  end
 end
