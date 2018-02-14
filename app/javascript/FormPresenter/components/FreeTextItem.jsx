@@ -61,6 +61,7 @@ class FreeTextItem extends React.Component {
         <MarkdownInput
           value={this.props.value || ''}
           onChange={this.markdownDidChange}
+          lines={formItem.properties.lines}
         />
       );
     }
