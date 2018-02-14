@@ -8,7 +8,11 @@ Types::TicketTypeType = GraphQL::ObjectType.define do
   field :maximum_event_provided_tickets, !types.Int do
     argument :event_id, types.Int
     resolve ->(obj, args, _ctx) {
-      obj.maximum_event_provided_tickets_for_event_id(args[:event_id])
+      if args[:event_id]
+        obj.maximum_event_provided_tickets_for_event_id(args[:event_id])
+      else
+        obj.maximum_event_provided_tickets
+      end
     }
   end
   field :description, types.String

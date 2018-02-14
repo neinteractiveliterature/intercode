@@ -134,7 +134,7 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
-        StaffPosition.new(args[:room].to_h.merge(convention: ctx[:convention]))
+        StaffPosition.new(args[:staff_position].to_h.merge(convention: ctx[:convention]))
       )
     }
   end
@@ -168,5 +168,24 @@ Types::MutationType = GraphQL::ObjectType.define do
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:update, event.team_members.new)
     }
+  end
+
+  ### TicketType
+
+  field :createTicketType, Mutations::CreateTicketType.field do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(
+        :create,
+        TicketType.new(args[:ticket_type].to_h.merge(convention: ctx[:convention]))
+      )
+    }
+  end
+
+  field :deleteTicketType, Mutations::DeleteTicketType.field do
+    guard(guard_for_convention_associated_model(:ticket_types, :destroy))
+  end
+
+  field :updateTicketType, Mutations::UpdateTicketType.field do
+    guard(guard_for_convention_associated_model(:ticket_types, :update))
   end
 end

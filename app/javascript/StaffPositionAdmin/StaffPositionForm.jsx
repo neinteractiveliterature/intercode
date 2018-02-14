@@ -5,7 +5,7 @@ import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import StaffPositionPropType from './StaffPositionPropType';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { FIELD_TYPES, ModelStateChangeCalculator, StateMutator } from '../FormUtils';
+import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 
 class StaffPositionForm extends React.Component {
   static propTypes = {
@@ -17,7 +17,7 @@ class StaffPositionForm extends React.Component {
     super(props);
     enableUniqueIds(this);
 
-    const stateChangeCalculator = new ModelStateChangeCalculator(
+    this.staffPositionMutator = new ModelStateChangeCalculator(
       'staffPosition',
       {
         name: FIELD_TYPES.STRING,
@@ -25,13 +25,7 @@ class StaffPositionForm extends React.Component {
         visible: FIELD_TYPES.BOOLEAN,
         user_con_profiles: FIELD_TYPES.OBJECT,
       },
-    );
-
-    this.staffPositionMutator = new StateMutator(
-      stateChangeCalculator,
-      () => ({ staffPosition: this.props.staffPosition }),
-      ({ staffPosition }) => { this.props.onChange(staffPosition); },
-    );
+    ).getMutatorForStatelessComponent(this, props.onChange);
   }
 
   userConProfilesChanged = (newValue) => {

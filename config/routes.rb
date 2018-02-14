@@ -17,7 +17,7 @@ Intercode::Application.routes.draw do
     resource :convention
 
     resource :ticket, only: [:new, :show, :create]
-    resources :ticket_types, except: [:show]
+    get 'ticket_types/(*extra)' => 'ticket_types#index', as: :ticket_types
 
     resources :events do
       collection do
