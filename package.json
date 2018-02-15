@@ -53,7 +53,7 @@
     "precss": "^3.1.0",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
-    "rails-ujs": "^5.1.4",
+    "rails-ujs": "^5.1.5",
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
     "react-bootstrap4-modal": "^1.2.2",
