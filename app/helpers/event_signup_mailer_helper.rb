@@ -17,9 +17,7 @@ module EventSignupMailerHelper
   end
 
   def move_result_description(move_result)
-    if move_result.is_a?(Hash)
-      move_result = EventVacancyFillService::SignupMoveResult.from_h(move_result)
-    end
+    move_result = SignupMoveResult.from_h(move_result) if move_result.is_a?(Hash)
     signup = move_result.signup
 
     "#{signup.user_con_profile.name}: #{prev_signup_state_description(move_result)} → \

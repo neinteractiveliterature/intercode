@@ -4,7 +4,7 @@ class EventSignupService < ApplicationService
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit, :bucket_finder
   delegate :event, to: :run
   delegate :convention, to: :event
 
@@ -38,12 +38,13 @@ class EventSignupService < ApplicationService
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       return failure(errors) unless valid?
 
-      if actual_bucket && actual_bucket.full?(run.signups)
-        destination_bucket = buckets_with_capacity.sort_by { |bucket| bucket.anything? ? 0 : 1 }.first
-        movable_signups_for_bucket(actual_bucket).first.update!(
-          bucket_key: destination_bucket.key
-        )
-      end
+      @bucket_finder = SignupBucketFinder.new(
+        run.registration_policy,
+        requested_bucket_key,
+        run.signups.counted.to_a
+      )
+
+      move_signup if actual_bucket && actual_bucket.full?(run.signups)
 
       signup = run.signups.create!(
         run: run,
@@ -117,9 +118,7 @@ sign up for events."
   end
 
   def signup_state
-    signups = run.signups
-
-    if !team_member? && prioritized_buckets.all? { |bucket| bucket.full?(signups) }
+    if !team_member? && !actual_bucket
       'waitlisted'
     else
       'confirmed'
@@ -131,32 +130,9 @@ sign up for events."
       .where.not(run_id: run.id).to_a
   end
 
-  def prioritized_buckets
-    @prioritized_buckets ||= begin
-      if requested_bucket_key
-        [
-          run.bucket_with_key(requested_bucket_key),
-          run.registration_policy.anything_bucket
-        ].compact
-      else
-        run.registration_policy.buckets.sort_by { |bucket| bucket.anything? ? 0 : 1 }
-      end
-    end
-  end
-
-  def buckets_with_capacity
-    @buckets_with_capacity ||= run.registration_policy.buckets.reject { |bucket| bucket.full?(run.signups) }
-  end
-
   def actual_bucket
     return nil if team_member?
-
-    @actual_bucket ||= begin
-      signups = run.signups
-      prioritized_buckets.find do |bucket|
-        !bucket.full?(signups) || movable_signups_for_bucket(bucket).any?
-      end
-    end
+    @actual_bucket ||= bucket_finder.find_bucket
   end
 
   def user_signup_count
@@ -188,11 +164,15 @@ sign up for events."
     @existing_signups_by_bucket_key ||= run.signups.group_by(&:bucket_key)
   end
 
-  def movable_signups_for_bucket(bucket)
-    return [] unless buckets_with_capacity.any?
+  def move_signup
+    movable_signup = bucket_finder.movable_signups_for_bucket(actual_bucket).first
 
-    bucket_signups = existing_signups_by_bucket_key[bucket.key].dup || []
-    bucket_signups.reject!(&:requested_bucket_key) # only the ones with no requested bucket key
+    destination_bucket = bucket_finder.buckets_with_capacity.sort_by do |bucket|
+      bucket.anything? ? 0 : 1
+    end.first
+
+    movable_signup.update!(bucket_key: destination_bucket.key)
+    movable_signup
   end
 
   def withdraw_user_from_conflicting_waitlist_signups
