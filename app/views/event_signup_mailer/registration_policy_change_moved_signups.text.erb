@@ -9,6 +9,6 @@ to move:
 <% @runs.each do |run| -%>
 <%= run_description(run) %>
 <% @move_results_by_run[run].each do |move_result| -%>
-  <%= move_result_description(move_result, show_buckets: true) %>
+  <%= move_result_description(move_result, show_buckets: true, html: false) %>
 <% end -%>
 <% end -%>

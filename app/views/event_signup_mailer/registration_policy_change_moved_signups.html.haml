@@ -12,4 +12,4 @@
       %strong= run_description(run)
       %ul
         - @move_results_by_run[run].each do |move_result|
-          %li= move_result_description(move_result, show_buckets: true)
+          %li= move_result_description(move_result, show_buckets: true, html: true)
