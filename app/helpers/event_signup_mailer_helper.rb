@@ -1,11 +1,13 @@
 module EventSignupMailerHelper
-  def signup_description(signup, action_description)
-    [
-      @signup.user_con_profile.name_without_nickname,
-      "(#{@signup.user_con_profile.email})",
-      action_description,
-      "#{run_description(signup.run)}."
-    ].join(' ')
+  def signup_description(signup, action_description, html: false)
+    safe_join(
+      [
+        user_con_profile_description(signup.user_con_profile, html: html),
+        action_description,
+        "#{run_description(signup.run)}."
+      ],
+      ' '
+    )
   end
 
   def prev_state_description(prev_state, prev_bucket)
@@ -21,13 +23,28 @@ module EventSignupMailerHelper
     end
   end
 
-  def move_result_description(move_result, show_buckets: false)
+  def user_con_profile_description(user_con_profile, html: false)
+    if html
+      mail_to(user_con_profile.email, user_con_profile.name_without_nickname)
+    else
+      "#{user_con_profile.name_without_nickname} (#{user_con_profile.email})"
+    end
+  end
+
+  def move_result_description(move_result, show_buckets: false, html: false)
     move_result = SignupMoveResult.from_h(move_result) if move_result.is_a?(Hash)
     signup = move_result.signup
 
-    "#{signup.user_con_profile.name_without_nickname}: \
-#{prev_signup_state_description(move_result, show_buckets: show_buckets)} → \
-#{new_signup_state_description(move_result, show_buckets: show_buckets)}"
+    safe_join(
+      [
+        user_con_profile_description(signup.user_con_profile, html: html),
+        ': ',
+        prev_signup_state_description(move_result, show_buckets: show_buckets),
+        ' → ',
+        new_signup_state_description(move_result, show_buckets: show_buckets)
+      ],
+      ''
+    )
   end
 
   def prev_signup_state_description(move_result, show_buckets: false)
