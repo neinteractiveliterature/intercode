@@ -3,7 +3,7 @@
     .float-right
       = react_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id, authenticityToken: graphql_authenticity_token
 
-- page_content = cadmus_renderer.render(@page.liquid_template, :html)
+- page_content = cadmus_renderer.render(@page.liquid_template, :html, assigns: { 'page' => @page })
 - flash_messages_content = render(partial: 'layouts/flash_messages')
 - all_content = safe_join([flash_messages_content, admin_bar, page_content].compact, '')
 
