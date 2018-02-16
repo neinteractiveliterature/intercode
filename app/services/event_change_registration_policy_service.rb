@@ -4,11 +4,12 @@ class EventChangeRegistrationPolicyService < ApplicationService
   end
   self.result_class = Result
 
-  attr_reader :event, :new_registration_policy
+  attr_reader :event, :new_registration_policy, :whodunit
 
-  def initialize(event, new_registration_policy)
+  def initialize(event, new_registration_policy, whodunit)
     @event = event
     @new_registration_policy = new_registration_policy
+    @whodunit = whodunit
   end
 
   private
@@ -55,9 +56,11 @@ class EventChangeRegistrationPolicyService < ApplicationService
         end
       end
 
+      @event.allow_registration_policy_change = true
       @event.update!(registration_policy: new_registration_policy)
     end
 
+    notify_team_members(move_results)
     success(move_results: move_results)
   end
 
@@ -101,6 +104,19 @@ class EventChangeRegistrationPolicyService < ApplicationService
 
   def notify_moved_signup(result)
     EventSignupMailer.user_signup_moved(result.to_h).deliver_later
+  end
+
+  def notify_team_members(move_results)
+    return unless move_results.any?
+
+    event.team_members.where(receive_signup_email: true).find_each do |team_member|
+      EventSignupMailer.registration_policy_change_moved_signups(
+        event,
+        move_results.map(&:to_h),
+        team_member,
+        whodunit
+      ).deliver_later
+    end
   end
 
   def lock_all_runs(&block)
