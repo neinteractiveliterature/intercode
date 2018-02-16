@@ -1,6 +1,11 @@
 module EventSignupMailerHelper
   def signup_description(signup, action_description)
-    "#{@signup.user_con_profile.name} #{action_description} #{run_description(signup.run)}."
+    [
+      @signup.user_con_profile.name_without_nickname,
+      "(#{@signup.user_con_profile.email})",
+      action_description,
+      "#{run_description(signup.run)}."
+    ].join(' ')
   end
 
   def prev_state_description(prev_state, prev_bucket)
@@ -16,19 +21,55 @@ module EventSignupMailerHelper
     end
   end
 
-  def move_result_description(move_result)
+  def move_result_description(move_result, show_buckets: false)
     move_result = SignupMoveResult.from_h(move_result) if move_result.is_a?(Hash)
     signup = move_result.signup
 
-    "#{signup.user_con_profile.name}: #{prev_signup_state_description(move_result)} → \
-#{new_signup_state_description(move_result)}"
+    "#{signup.user_con_profile.name_without_nickname}: \
+#{prev_signup_state_description(move_result, show_buckets: show_buckets)} → \
+#{new_signup_state_description(move_result, show_buckets: show_buckets)}"
   end
 
-  def prev_signup_state_description(move_result)
-    move_result.prev_state.humanize
+  def prev_signup_state_description(move_result, show_buckets: false)
+    [
+      move_result.prev_state.humanize,
+      (
+        if show_buckets
+          description = bucket_description(
+            move_result.signup.run.registration_policy,
+            move_result.prev_bucket_key
+          )
+
+          "(#{description})" if description
+        end
+      )
+    ].compact.join(' ')
   end
 
-  def new_signup_state_description(move_result)
-    move_result.state.humanize
+  def new_signup_state_description(move_result, show_buckets: false)
+    [
+      move_result.state.humanize,
+      (
+        if show_buckets
+          description = bucket_description(
+            move_result.signup.run.registration_policy,
+            move_result.bucket_key
+          )
+
+          "(#{description})" if description
+        end
+      )
+    ].compact.join(' ')
+  end
+
+  def bucket_description(registration_policy, bucket_key)
+    return unless bucket_key
+
+    bucket = registration_policy.bucket_with_key(bucket_key)
+    if bucket
+      bucket.name || bucket.key
+    else
+      "deleted bucket #{bucket_key}"
+    end
   end
 end
