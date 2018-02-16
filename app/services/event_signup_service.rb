@@ -41,7 +41,7 @@ class EventSignupService < ApplicationService
       @bucket_finder = SignupBucketFinder.new(
         run.registration_policy,
         requested_bucket_key,
-        run.signups.counted.to_a
+        run.signups.counted.confirmed.to_a
       )
 
       move_signup if actual_bucket && actual_bucket.full?(run.signups)
