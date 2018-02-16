@@ -7,4 +7,8 @@ class Page < ApplicationRecord
   def effective_cms_layout
     cms_layout || parent&.default_layout
   end
+
+  def to_liquid
+    PageDrop.new(self)
+  end
 end
