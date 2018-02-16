@@ -22,6 +22,22 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe 'with a ticket that does not allow signups' do
+    let(:ticket_type) do
+      FactoryBot.create :free_ticket_type, convention: convention, allows_event_signups: false
+    end
+
+    setup do
+      ticket
+    end
+
+    it 'disallows signups' do
+      result = subject.call
+      result.must_be :failure?
+      result.errors.full_messages.join('\n').must_match /\AYou have a #{Regexp.escape ticket_type.description}/
+    end
+  end
+
   describe 'with a valid ticket' do
     setup do
       ticket

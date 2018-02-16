@@ -40,7 +40,7 @@ class RegistrationPolicy::Bucket
 
   def available_slots(signups)
     return nil if slots_unlimited?
-    my_signups_count = signups.count { |signup| signup.bucket_key == key }
+    my_signups_count = signups.count { |signup| signup.confirmed? && signup.bucket_key == key }
     [total_slots - my_signups_count, 0].max
   end
 

@@ -147,6 +147,11 @@ class TicketTypesList extends React.Component {
                 null :
                 [<br key="line-break" />, 'Does not count towards convention maximum']
               }
+              {
+                ticketType.allows_event_signups ?
+                null :
+                [<br key="line-break" />, 'Does not allow event signups']
+              }
             </em>
           </small>
         </p>

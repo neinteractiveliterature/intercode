@@ -5,6 +5,7 @@ Types::TicketTypeType = GraphQL::ObjectType.define do
   field :name, types.String
   field :publicly_available, !types.Boolean
   field :counts_towards_convention_maximum, !types.Boolean
+  field :allows_event_signups, !types.Boolean
   field :maximum_event_provided_tickets, !types.Int do
     argument :event_id, types.Int
     resolve ->(obj, args, _ctx) {
