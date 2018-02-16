@@ -9,6 +9,7 @@ fragment TicketTypeAdmin_TicketTypeFields on TicketType {
   description
   publicly_available
   counts_towards_convention_maximum
+  allows_event_signups
   maximum_event_provided_tickets
 
   pricing_schedule {
