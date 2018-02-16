@@ -15,11 +15,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       ]
     )
   end
+  let(:whodunit) { FactoryBot.create :user_con_profile, convention: convention }
+  let(:team_member) { FactoryBot.create :team_member, event: event, receive_signup_email: true }
 
-  subject { EventChangeRegistrationPolicyService.new(event, new_registration_policy) }
+  subject { EventChangeRegistrationPolicyService.new(event, new_registration_policy, whodunit) }
 
   before do
     the_run
+    team_member
   end
 
   it 'changes the registration policy' do
@@ -27,6 +30,13 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
     result.must_be :success?
     event.reload.registration_policy.must_equal new_registration_policy
+  end
+
+  it 'does not email the team members if nobody moved' do
+    perform_enqueued_jobs do
+      subject.call!
+      ActionMailer::Base.deliveries.size.must_equal 0
+    end
   end
 
   describe 'with existing signups in buckets that will be removed' do
@@ -56,6 +66,16 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       result.move_results.first.state.must_equal 'confirmed'
       result.move_results.first.prev_state.must_equal 'confirmed'
       signup.reload.bucket_key.must_equal 'anything'
+    end
+
+    it 'emails the team members' do
+      perform_enqueued_jobs do
+        subject.call!
+
+        ActionMailer::Base.deliveries.size.must_equal 1
+        recipients = ActionMailer::Base.deliveries.map(&:to)
+        recipients.must_equal [[team_member.user_con_profile.email]]
+      end
     end
   end
 
@@ -115,6 +135,16 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       signup2.reload.bucket_key.must_equal 'anything'
     end
 
+    it 'emails the team members' do
+      perform_enqueued_jobs do
+        subject.call!
+
+        ActionMailer::Base.deliveries.size.must_equal 1
+        recipients = ActionMailer::Base.deliveries.map(&:to)
+        recipients.must_equal [[team_member.user_con_profile.email]]
+      end
+    end
+
     describe 'with no-preference signups' do
       let(:signup2) do
         FactoryBot.create(
@@ -157,6 +187,16 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         signup1.reload.bucket_key.must_equal 'dogs'
         signup2.reload.bucket_key.must_equal 'anything'
         signup3.reload.bucket_key.must_equal 'cats'
+      end
+
+      it 'emails the team members' do
+        perform_enqueued_jobs do
+          subject.call!
+
+          ActionMailer::Base.deliveries.size.must_equal 1
+          recipients = ActionMailer::Base.deliveries.map(&:to)
+          recipients.must_equal [[team_member.user_con_profile.email]]
+        end
       end
     end
 
@@ -241,16 +281,20 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     end
 
     it 'pulls in waitlisted signups' do
+      result = subject.call
+
+      result.must_be :success?
+      signup2.reload.bucket_key.must_equal 'anything'
+      signup2.reload.state.must_equal 'confirmed'
+    end
+
+    it 'emails the team members and the attendees who got pulled in' do
       perform_enqueued_jobs do
-        result = subject.call
+        subject.call!
 
-        result.must_be :success?
-        signup2.reload.bucket_key.must_equal 'anything'
-        signup2.reload.state.must_equal 'confirmed'
-
-        ActionMailer::Base.deliveries.size.must_equal 1
+        ActionMailer::Base.deliveries.size.must_equal 2
         recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_equal [[user_con_profile2.email]]
+        recipients.must_equal [[user_con_profile2.email], [team_member.user_con_profile.email]]
       end
     end
   end

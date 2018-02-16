@@ -19,11 +19,21 @@
     - @changes.each do |field_identifier, (previous_value, new_value)|
       - form_item = form_items[field_identifier.to_s]
       - previous_value = capture do
-        = render_form_response_value(form_item, previous_value)
+        - if form_item
+          = render_form_response_value(form_item, previous_value)
+        - else
+          = previous_value
       - new_value = capture do
-        = render_form_response_value(form_item, new_value)
+        - if form_item
+          = render_form_response_value(form_item, new_value)
+        - else
+          = new_value
       - diff = HTMLDiff.diff(previous_value, new_value).html_safe
 
       %tr.border-top-0
-        %td= admin_form_item_label(form_item)
+        %td
+          - if form_item
+            = admin_form_item_label(form_item)
+          - else
+            = field_identifier
         %td= diff
