@@ -46,6 +46,10 @@ class Event < ApplicationRecord
   # Filler events have to have exactly one run
   validate :filler_events_must_have_exactly_one_run, unless: :bypass_filler_event_run_check
 
+  # Making it slightly harder to change the registration policy unless you really know what
+  # you're doing
+  validate :registration_policy_cannot_change, unless: :allow_registration_policy_change
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
@@ -58,7 +62,7 @@ class Event < ApplicationRecord
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
-  attr_accessor :bypass_filler_event_run_check
+  attr_accessor :bypass_filler_event_run_check, :allow_registration_policy_change
 
   def self.normalize_title_for_sort(title)
     title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '')
@@ -104,5 +108,13 @@ class Event < ApplicationRecord
     return unless category == 'filler' && status == 'active'
 
     errors.add(:base, 'Filler events must have exactly one run') if runs.size != 1
+  end
+
+  def registration_policy_cannot_change
+    return if new_record?
+    return unless registration_policy_changed?
+
+    errors.add :registration_policy, "cannot be changed via ActiveRecord on an existing event.  \
+Use EventChangeRegistrationPolicyService instead."
   end
 end
