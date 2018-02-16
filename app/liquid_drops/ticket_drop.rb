@@ -1,6 +1,7 @@
 class TicketDrop < Liquid::Drop
   attr_reader :ticket
-  delegate :id, :user_con_profile, :provided_by_event, :payment_amount, to: :ticket
+  delegate :id, :user_con_profile, :provided_by_event, :payment_amount, :allows_event_signups,
+    to: :ticket
   delegate :name, :description, to: :ticket_type, prefix: true
 
   def initialize(ticket)
