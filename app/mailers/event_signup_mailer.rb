@@ -6,7 +6,7 @@ class EventSignupMailer < ApplicationMailer
     mail(
       from: from_address_for_convention(@signup.event.convention),
       to: team_member.user_con_profile.email,
-      subject: "#{subject_prefix(signup)} Signup: #{signup.user_con_profile.name}"
+      subject: "#{subject_prefix(signup.event)} Signup: #{signup.user_con_profile.name}"
     )
   end
 
@@ -22,16 +22,32 @@ class EventSignupMailer < ApplicationMailer
     mail(
       from: from_address_for_convention(@signup.event.convention),
       to: team_member.user_con_profile.email,
-      subject: "#{subject_prefix(signup)} #{prev_state.humanize} -> #{signup.state.humanize}: \
+      subject: "#{subject_prefix(signup.event)} #{prev_state.humanize} -> #{signup.state.humanize}: \
 #{signup.user_con_profile.name}"
+    )
+  end
+
+  def registration_policy_change_moved_signups(event, move_results, team_member, whodunit)
+    @event = event
+    @move_results = move_results.map { |hash| SignupMoveResult.from_h(hash) }
+    @whodunit = whodunit
+
+    @signups_by_id = Signup.where(id: @move_results.map(&:signup_id)).includes(:run).index_by(&:id)
+    @move_results_by_run = @move_results.group_by do |move_result|
+      @signups_by_id[move_result.signup_id].run
+    end
+    @runs = @move_results_by_run.keys.sort_by(&:starts_at)
+
+    mail(
+      from: from_address_for_convention(@event.convention),
+      to: team_member.user_con_profile.email,
+      subject: "#{subject_prefix(@event)} Signups moved due to bucket changes"
     )
   end
 
   def user_signup_moved(move_result)
     @move_result = move_result
-    if @move_result.is_a?(Hash)
-      @move_result = EventVacancyFillService::SignupMoveResult.from_h(@move_result)
-    end
+    @move_result = SignupMoveResult.from_h(@move_result) if @move_result.is_a?(Hash)
     @signup = @move_result.signup
 
     if @move_result.prev_state == 'waitlisted'
@@ -43,13 +59,13 @@ class EventSignupMailer < ApplicationMailer
     mail(
       from: from_address_for_convention(@signup.event.convention),
       to: @signup.user_con_profile.email,
-      subject: "#{subject_prefix(@signup)} #{subject}"
+      subject: "#{subject_prefix(@signup.event)} #{subject}"
     )
   end
 
   private
 
-  def subject_prefix(signup)
-    "[#{signup.event.convention.name}: #{signup.event.title}]"
+  def subject_prefix(event)
+    "[#{event.convention.name}: #{event.title}]"
   end
 end
