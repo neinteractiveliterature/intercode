@@ -36,7 +36,8 @@ class Intercode::Import::Intercode1::RegistrationStatuses
         description: 'Vendor badge',
         pricing_schedule: ScheduledMoneyValue.always(Money.new(2000, 'USD')),
         publicly_available: false,
-        counts_towards_convention_maximum: false
+        counts_towards_convention_maximum: false,
+        allows_event_signups: false
       ),
       'Rollover' => con.ticket_types.new(
         name: 'rollover',

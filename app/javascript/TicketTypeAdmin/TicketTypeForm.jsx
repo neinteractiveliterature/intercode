@@ -57,6 +57,7 @@ class TicketTypeForm extends React.Component {
         pricing_schedule: FIELD_TYPES.OBJECT,
         publicly_available: FIELD_TYPES.BOOLEAN,
         counts_towards_convention_maximum: FIELD_TYPES.BOOLEAN,
+        allows_event_signups: FIELD_TYPES.BOOLEAN,
         maximum_event_provided_tickets: FIELD_TYPES.INTEGER,
       },
     ).getMutatorForStatelessComponent(this, props.onChange);
@@ -89,6 +90,13 @@ class TicketTypeForm extends React.Component {
           name="publicly_available"
           value={this.props.ticketType.publicly_available}
           onChange={this.ticketTypeMutator.valueChangeCallback('publicly_available')}
+        />
+
+        <BooleanInput
+          caption="Allows event signups?"
+          name="allows_event_signups"
+          value={this.props.ticketType.allows_event_signups}
+          onChange={this.ticketTypeMutator.valueChangeCallback('allows_event_signups')}
         />
 
         <BooleanInput

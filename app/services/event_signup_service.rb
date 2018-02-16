@@ -41,7 +41,7 @@ class EventSignupService < ApplicationService
       @bucket_finder = SignupBucketFinder.new(
         run.registration_policy,
         requested_bucket_key,
-        run.signups.counted.to_a
+        run.signups.counted.confirmed.to_a
       )
 
       move_signup if actual_bucket && actual_bucket.full?(run.signups)
@@ -89,9 +89,17 @@ with #{event.title}."
   end
 
   def must_have_ticket
-    return if user_con_profile.ticket
-    errors.add :base, "You must have a valid #{convention.ticket_name} to #{convention.name} to \
+    ticket = user_con_profile.ticket
+    return if ticket&.allows_event_signups?
+
+    if ticket
+      errors.add :base, "You have a #{ticket.ticket_type.description}, \
+but these do not allow event signups.  If you want to sign up for events, please contact \
+#{convention.name} staff."
+    else
+      errors.add :base, "You must have a valid #{convention.ticket_name} to #{convention.name} to \
 sign up for events."
+    end
   end
 
   def require_valid_bucket
