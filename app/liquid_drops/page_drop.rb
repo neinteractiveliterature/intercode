@@ -1,4 +1,4 @@
-class Drops::PageDrop < Liquid::Drop
+class PageDrop < Liquid::Drop
   attr_reader :page
   delegate :name, :slug, to: :page
 
