@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
 import ChoiceSet from './ChoiceSet';
+import HelpPopover from '../UIComponents/HelpPopover';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
+
+const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration bucket with ' +
+'limited slots, we can display a "no preference" option for signups. Users who sign up ' +
+' using that option will be placed in whatever limited-slot bucket has availability, and moved ' +
+'between buckets to make space as necessary.';
 
 function bucketSortCompare(a, b) {
   if (a.get('anything') && !b.get('anything')) {
@@ -107,6 +113,12 @@ class RegistrationPolicyEditor extends React.Component {
   preventNoPreferenceSignupsChanged = (newValue) => {
     this.props.onChange(this.props.registrationPolicy.setPreventNoPreferenceSignups(newValue === 'true'));
   }
+
+  isPreventNoPreferenceSignupsApplicable = () => (
+    this.props.registrationPolicy.buckets
+      .filter(bucket => bucket.get('slotsLimited'))
+      .size > 1
+  )
 
   deleteBucket = (key) => {
     this.props.onChange(this.props.registrationPolicy.deleteBucket(key));
@@ -278,15 +290,40 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
+  renderPreventNoPreferenceSignupsDescription = () => {
+    if (!this.isPreventNoPreferenceSignupsApplicable()) {
+      return (
+        <span>
+          &quot;No preference&quot; option is inapplicable
+          <HelpPopover className="ml-1">
+            <p>{NO_PREFERENCE_HELP_TEXT}</p>
+            <p className="mb-0">
+              This event doesn&apos;t have more than one registration bucket with limited slots, so
+              that option doesn&apos;t apply.
+            </p>
+          </HelpPopover>
+        </span>
+      );
+    }
+
+    const helpPopover = (
+      <HelpPopover>{NO_PREFERENCE_HELP_TEXT}</HelpPopover>
+    );
+
+    if (this.props.registrationPolicy.getPreventNoPreferenceSignups()) {
+      return <span>&quot;No preference&quot; option will not be available {helpPopover}</span>;
+    }
+
+    return <span>&quot;No preference&quot; option will be available {helpPopover}</span>;
+  }
+
   renderPreventNoPreferenceSignupsRow = () => {
-    if (this.state.preset) {
+    if (this.state.preset || !this.isPreventNoPreferenceSignupsApplicable()) {
       return (
         <tr>
           <td>No preference</td>
           <td colSpan={this.getHeaderLabels().length - 1}>
-            &quot;No preference&quot; option
-            {this.props.registrationPolicy.getPreventNoPreferenceSignups() ? ' will not ' : ' will '}
-            be available
+            {this.renderPreventNoPreferenceSignupsDescription()}
           </td>
         </tr>
       );
@@ -297,7 +334,15 @@ class RegistrationPolicyEditor extends React.Component {
 
     return (
       <tr>
-        <td>No preference</td>
+        <td className="text-nowrap">
+          No preference
+          <HelpPopover className="ml-1">
+            For events that have more than one registration bucket with limited slots, we can
+            display a &quot;no preference&quot; option for signups. Users who sign up using that
+            option will be placed in whatever limited-slot bucket has availability, and moved
+            between buckets to make space as necessary.
+          </HelpPopover>
+        </td>
         <td colSpan={this.getHeaderLabels().length - 1}>
           <ChoiceSet
             name="prevent_no_preference_signups"
