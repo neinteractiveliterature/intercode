@@ -9,6 +9,11 @@ Rollbar.configure do |config|
     config.enabled = false
   end
 
+  capistrano_revision_path = File.expand_path('REVISION', Rails.root)
+  rollbar_code_version = if File.exist?(capistrano_revision_path)
+    File.read(capistrano_revision_path).strip
+  end
+
   if ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'] && !Rails.env.test?
     config.js_enabled = true
     config.js_options = {
@@ -16,7 +21,14 @@ Rollbar.configure do |config|
       captureUncaught: true,
       captureUnhandledRejections: true,
       payload: {
-        environment: Rails.env.to_s
+        environment: Rails.env.to_s,
+        client: {
+          javascript: {
+            source_map_enabled: true,
+            code_version: rollbar_code_version,
+            guess_uncaught_frames: true
+          }
+        }
       }
     }
   end
