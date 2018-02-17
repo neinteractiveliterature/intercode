@@ -3,5 +3,16 @@
 = stylesheet_pack_tag 'application', media: 'all'
 = stylesheet_link_tag 'application', :media => "all"
 = javascript_pack_tag 'application', defer: true
+:javascript
+  if (typeof(Rollbar) !== 'undefined') {
+    Rollbar.configure({
+      payload: {
+        person: {
+          id: #{current_user&.id.to_json.html_safe},
+          email: #{current_user&.email.to_json.html_safe}
+        }
+      }
+    });
+  }
 = csrf_meta_tags
 %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
