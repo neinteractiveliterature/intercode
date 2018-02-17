@@ -143,7 +143,7 @@ class RegistrationBucketRow extends React.Component {
             size="2"
             className="form-control form-control-sm ml-1"
             min={min}
-            placeholder="Min"
+            placeholder={label}
             value={value}
             onChange={(event) => { this.slotsChanged(event, field); }}
             style={{ width: '4em' }}
