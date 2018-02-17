@@ -41,6 +41,13 @@ GIT
     htmldiff-lcs (0.0.1)
       diff-lcs
 
+GIT
+  remote: https://github.com/rollbar/rollbar-gem
+  revision: f4c1afc9e2b269e9e5298440581e8b76f6cb5ffa
+  specs:
+    rollbar (2.15.5)
+      multi_json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -486,8 +493,6 @@ GEM
       netrc (~> 0.8)
     reverse_markdown (1.0.5)
       nokogiri
-    rollbar (2.15.5)
-      multi_json
     ruby-progressbar (1.9.0)
     sass (3.5.4)
       sass-listen (~> 4.0.0)
@@ -628,7 +633,7 @@ DEPENDENCIES
   recaptcha
   redcarpet
   reverse_markdown
-  rollbar
+  rollbar!
   sass-rails
   scheduled_value (~> 1.2.1)
   sequel

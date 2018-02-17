@@ -86,7 +86,7 @@ gem 'rails_12factor', group: 'stage'
 
 gem 'faker', group: 'development', require: false
 
-gem 'rollbar'
+gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source map upload support
 gem 'oj', '~> 3.4.0'
 
 group :development do
