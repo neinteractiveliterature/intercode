@@ -21,7 +21,10 @@
           %li.nav-item.dropdown{role: "presentation"}
             %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
               %i.fa.fa-user
-              = current_user.name
+              - if user_con_profile
+                = user_con_profile.name
+              - else
+                = current_user.name
             .dropdown-menu
               = link_to "My Account", edit_user_registration_path, class: 'dropdown-item'
               - if convention
