@@ -92,8 +92,12 @@
 
                 %p= link_to "Withdraw", [@event, run, :user_signup], class: 'btn btn-outline-danger', method: "DELETE", "data-confirm" => "Are you sure you want to withdraw from #{@event.title}?"
               - else
+                - no_preference_options, preference_options = signup_options_presenter.signup_options_for_run(run).partition(&:no_preference?)
                 .d-flex.flex-wrap.justify-content-center
-                  - signup_options_presenter.signup_options_for_run(run).each do |signup_option|
+                  - preference_options.each do |signup_option|
+                    = signup_button(@event, run, signup_option)
+                .d-flex.flex-wrap.justify-content-center
+                  - no_preference_options.each do |signup_option|
                     = signup_button(@event, run, signup_option)
 
             - aux_signup_options = signup_options_presenter.auxiliary_signup_options_for_run(run)
