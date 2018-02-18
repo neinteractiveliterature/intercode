@@ -77,6 +77,7 @@ class SignupCountPresenter
           signup.bucket_key
         end
 
+        signups_hash[signup.state][bucket_key] ||= []
         signups_hash[signup.state][bucket_key] << signup
       end
 
