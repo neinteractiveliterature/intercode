@@ -117,15 +117,15 @@ class SignupOptionsPresenter
   end
 
   def signup_options_for_run(run)
-    return unless user_con_profile
-    return if user_signup_by_run_id[run.id]
+    return [] unless user_con_profile
+    return [] if user_signup_by_run_id[run.id]
 
     partitioned_options_for_event.first
   end
 
   def auxiliary_signup_options_for_run(run)
-    return unless user_con_profile
-    return if user_signup_by_run_id[run.id]
+    return [] unless user_con_profile
+    return [] if user_signup_by_run_id[run.id]
 
     partitioned_options_for_event.second
   end
