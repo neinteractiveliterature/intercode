@@ -7,7 +7,7 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
     'Under Review' => 'reviewing',
     'Accepted' => 'accepted',
     'Rejected' => 'rejected',
-    'Dropped' => 'dropped'
+    'Dropped' => 'withdrawn'
   }
 
   BID_ATTRIBUTES = {
