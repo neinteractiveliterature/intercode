@@ -16,15 +16,5 @@
     %ul.list-inline
       - (UserConProfile::MAIL_PRIV_NAMES).sort.each do |priv_name|
         %li.list-inline-item= f.check_box priv_name, label: priv_name.humanize
-  / %fieldset
-  /   %legend
-  /     Payment info for #{@convention.name}
-  /   = f.form_group :payment_status, label: { text: "Status" } do
-  /     %div
-  /       - (UserConProfile::REGISTRATION_STATUSES).each do |registration_status|
-  /         = f.radio_button :registration_status, registration_status, label: registration_status.humanize, inline: true
-  /   = f.text_field :payment_amount_cents, label: "Payment amount", prepend: currency_symbol, append: ".00"
-  /   = f.text_field :payment_note, class: "form-control"
-  /   = f.collection_select :comp_event_id, @convention.events, :id, :title, {prompt: "None"}, class: 'form-control'
   .actions
     = f.submit
