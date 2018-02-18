@@ -57,8 +57,14 @@ class SignupOptionsPresenter
   end
 
   class TeamMemberSignupOption
+    attr_reader :team_member_name
+
+    def initialize(team_member_name)
+      @team_member_name = team_member_name
+    end
+
     def label
-      'Team member'
+      team_member_name
     end
 
     def params
@@ -153,7 +159,7 @@ class SignupOptionsPresenter
 
   def signup_options_for_event
     @signup_options_for_event ||= if team_member?
-      [TeamMemberSignupOption.new]
+      [TeamMemberSignupOption.new(event.team_member_name)]
     else
       non_anything_buckets_count = buckets.reject(&:anything?).size
       buckets.each_with_index.map do |bucket, index|
