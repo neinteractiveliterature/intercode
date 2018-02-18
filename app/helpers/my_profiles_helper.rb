@@ -10,7 +10,8 @@ module MyProfilesHelper
       conventionUrl: convention_url,
       responseUrl: my_profile_path,
       authenticityToken: update_authenticity_token,
-      graphqlAuthenticityToken: graphql_authenticity_token
+      graphqlAuthenticityToken: graphql_authenticity_token,
+      autosave: 'change'
     )
   end
 end

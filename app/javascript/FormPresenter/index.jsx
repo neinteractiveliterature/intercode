@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import buildReduxStore from '../buildReduxStore';
 import reducer from './reducers';
 import actions from './actions';
+import FormPresenter from './components/FormPresenter';
 import FormPresenterContainer from './containers/FormPresenterContainer';
 
 class FormPresenterApp extends React.Component {
@@ -19,6 +20,7 @@ class FormPresenterApp extends React.Component {
       url: PropTypes.string.isRequired,
     }),
     submitCaption: PropTypes.string,
+    autosave: FormPresenter.propTypes.autosave.isRequired,
   };
 
   static defaultProps = {
@@ -65,6 +67,7 @@ class FormPresenterApp extends React.Component {
       <FormPresenterContainer
         exitButton={this.props.exitButton}
         submitCaption={this.props.submitCaption}
+        autosave={this.props.autosave}
       />
     </Provider>
   )

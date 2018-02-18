@@ -18,7 +18,8 @@ module EventProposalsHelper
       graphqlAuthenticityToken: graphql_authenticity_token,
       afterSubmitUrl: page_path('new-proposal'),
       submitCaption: 'Submit proposal',
-      exitButton: event_proposal_exit_button
+      exitButton: event_proposal_exit_button,
+      autosave: 'change'
     )
   end
 
