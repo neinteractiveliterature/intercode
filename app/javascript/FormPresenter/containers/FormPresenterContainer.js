@@ -15,10 +15,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  responseValueChanged: (field, value) => {
-    dispatch(actions.responseValueChanged(field, value));
-    dispatch(actions.updateResponse());
-  },
+  responseValueChanged: (field, value) => dispatch(actions.responseValueChanged(field, value)),
+  updateResponse: () => dispatch(actions.updateResponse()),
   previousSection: () => dispatch(actions.previousSection()),
   nextSection: () => dispatch(actions.nextSection()),
   submitForm: () => dispatch(actions.submitForm()),

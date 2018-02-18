@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch => ({
   previousSection: () => dispatch(actions.previousSection()),
   nextSection: () => dispatch(actions.nextSection()),
   submitForm: () => dispatch(actions.submitForm()),
+  updateResponse: () => dispatch(actions.updateResponse()),
   onInteract: itemIdentifier => dispatch(actions.interactedWithItem(itemIdentifier)),
 });
 

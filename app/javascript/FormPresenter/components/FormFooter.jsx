@@ -22,6 +22,8 @@ class FormFooter extends React.Component {
     response: PropTypes.shape({}).isRequired,
     onInteract: PropTypes.func.isRequired,
     scrollToItem: PropTypes.func.isRequired,
+    updateResponse: PropTypes.func.isRequired,
+    autosave: PropTypes.oneOf(['change', 'nextSection', 'off']).isRequired,
   };
 
   static defaultProps = {
@@ -49,14 +51,20 @@ class FormFooter extends React.Component {
     return false;
   }
 
-  tryNextSection = () => {
+  tryNextSection = async () => {
     if (this.validateContinue()) {
+      if (this.props.autosave === 'nextSection') {
+        await this.props.updateResponse();
+      }
       this.props.nextSection();
     }
   }
 
-  trySubmitForm = () => {
+  trySubmitForm = async () => {
     if (this.validateContinue()) {
+      if (this.props.autosave === 'nextSection' || this.props.autosave === 'off') {
+        await this.props.updateResponse();
+      }
       this.props.submitForm();
     }
   }
@@ -65,6 +73,8 @@ class FormFooter extends React.Component {
     if (this.props.currentSectionIndex < 1) {
       return null;
     }
+
+    this.props.updateResponse();
 
     return (
       <button className="btn btn-secondary" onClick={this.props.previousSection}>

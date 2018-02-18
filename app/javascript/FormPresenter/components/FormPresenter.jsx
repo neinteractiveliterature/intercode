@@ -18,6 +18,7 @@ class FormPresenter extends React.Component {
     errors: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     response: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     responseValueChanged: PropTypes.func.isRequired,
+    updateResponse: PropTypes.func.isRequired,
     interactedItems: PropTypes.shape({}).isRequired,
     interactedWithItem: PropTypes.func.isRequired,
     isSubmittingResponse: PropTypes.bool.isRequired,
@@ -28,6 +29,7 @@ class FormPresenter extends React.Component {
       url: PropTypes.string.isRequired,
     }),
     submitCaption: PropTypes.string,
+    autosave: PropTypes.oneOf(['change', 'nextSection', 'off']).isRequired,
   };
 
   static defaultProps = {
@@ -58,6 +60,13 @@ class FormPresenter extends React.Component {
     const itemRef = this.itemRefs[item.identifier];
     if (itemRef) {
       itemRef.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  responseValueChanged = (field, value) => {
+    this.props.responseValueChanged(field, value);
+    if (this.props.autosave === 'change') {
+      this.props.updateResponse();
     }
   }
 
@@ -97,7 +106,6 @@ class FormPresenter extends React.Component {
       interactedWithItem,
       interactedItems,
       response,
-      responseValueChanged,
       isSubmittingResponse,
       isUpdatingResponse,
       errors,
@@ -119,7 +127,7 @@ class FormPresenter extends React.Component {
               !item.valueIsComplete(response[item.identifier])
             }
             value={response[item.identifier]}
-            onChange={responseValueChanged}
+            onChange={this.responseValueChanged}
             onInteract={interactedWithItem}
           />
           <ErrorDisplay stringError={errorsForDisplay} />
@@ -180,6 +188,7 @@ class FormPresenter extends React.Component {
           exitButton={exitButton}
           submitCaption={submitCaption}
           scrollToItem={this.scrollToItem}
+          autosave={this.props.autosave}
         />
       </div>
     );
