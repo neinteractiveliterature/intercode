@@ -36,12 +36,12 @@ class Intercode::Import::Intercode1::ProposalForm
   end
 
   def add_omit_timeblocks_for_convention
-    form_importer.data.each do |section_attributes|
-      section_attributes[:section_items].each do |section_item|
-        next unless section_item[:identifier] == 'timeblock_preferences'
+    form_importer.data['sections'].each do |section_attributes|
+      section_attributes['section_items'].each do |section_item|
+        next unless section_item['identifier'] == 'timeblock_preferences'
         section_item.merge!(
-          omit_timeblocks: (
-            friday_date ? [{ label: 'Morning', date: friday_date }] : []
+          'omit_timeblocks' => (
+            friday_date ? [{ 'label' => 'Morning', 'date' => friday_date }] : []
           )
         )
       end
