@@ -14,7 +14,7 @@ const formQuery = gql`
 query($formId: Int!) {
   form(id: $formId) {
     id
-    form_json
+    export_json
   }
 }
 `;
@@ -69,7 +69,7 @@ class FormJSONEditor extends React.Component {
     super(props);
 
     this.state = {
-      form: formDataFromJSON(this.props.data.form.form_json),
+      form: formDataFromJSON(this.props.data.form.export_json),
     };
 
     this.formMutator = new ModelStateChangeCalculator(
@@ -82,7 +82,7 @@ class FormJSONEditor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextFormData = formDataFromJSON(nextProps.data.form.form_json);
+    const nextFormData = formDataFromJSON(nextProps.data.form.export_json);
 
     this.setState({
       form: nextFormData,

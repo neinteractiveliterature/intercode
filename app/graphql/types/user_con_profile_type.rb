@@ -15,6 +15,11 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field :nickname, types.String
   field :bio, types.String
   field :show_nickname_in_bio, types.Boolean
+  field :form_response_attrs_json, types.String do
+    resolve -> (obj, _args, ctx) do
+      FormResponsePresenter.new(ctx[:convention].user_con_profile_form, obj).as_json.to_json
+    end
+  end
   field(:birth_date, Types::DateType) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
   field(:address, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
   field(:city, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }

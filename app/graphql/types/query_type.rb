@@ -67,6 +67,18 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :userConProfile, Types::UserConProfileType do
+    argument :id, !types.Int
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, ctx[:convention].user_con_profiles.find(args[:id]))
+    end
+
+    resolve ->(_obj, args, ctx) {
+      ctx[:convention].user_con_profiles.find(args[:id])
+    }
+  end
+
   field :form, Types::FormType do
     argument :id, !types.Int
 

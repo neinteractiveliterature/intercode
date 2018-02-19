@@ -12,24 +12,24 @@ class FormFooter extends React.Component {
     nextSection: PropTypes.func.isRequired,
     submitForm: PropTypes.func.isRequired,
     isSubmittingResponse: PropTypes.bool.isRequired,
-    afterSubmitUrl: PropTypes.string,
     exitButton: PropTypes.shape({
       caption: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
     }),
-    submitCaption: PropTypes.string,
+    submitButton: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+    }),
     form: Form.propType.isRequired,
     response: PropTypes.shape({}).isRequired,
     onInteract: PropTypes.func.isRequired,
     scrollToItem: PropTypes.func.isRequired,
-    updateResponse: PropTypes.func.isRequired,
-    autosave: PropTypes.oneOf(['change', 'nextSection', 'off']).isRequired,
+    children: PropTypes.node,
   };
 
   static defaultProps = {
-    afterSubmitUrl: null,
     exitButton: null,
-    submitCaption: 'Submit',
+    submitButton: null,
+    children: null,
   };
 
   validateContinue = () => {
@@ -51,18 +51,22 @@ class FormFooter extends React.Component {
     return false;
   }
 
+  previousSection = () => {
+    this.props.previousSection(this.props.form);
+  }
+
   tryNextSection = async () => {
     if (this.validateContinue()) {
-      if (this.props.autosave === 'nextSection') {
+      if (this.props.autocommit === 'nextSection') {
         await this.props.updateResponse();
       }
-      this.props.nextSection();
+      this.props.nextSection(this.props.form);
     }
   }
 
   trySubmitForm = async () => {
     if (this.validateContinue()) {
-      if (this.props.autosave === 'nextSection' || this.props.autosave === 'off') {
+      if (this.props.autocommit === 'nextSection' || this.props.autocommit === 'off') {
         await this.props.updateResponse();
       }
       this.props.submitForm();
@@ -74,10 +78,8 @@ class FormFooter extends React.Component {
       return null;
     }
 
-    this.props.updateResponse();
-
     return (
-      <button className="btn btn-secondary" onClick={this.props.previousSection}>
+      <button className="btn btn-secondary" onClick={this.previousSection}>
         <i className="fa fa-chevron-left" /> Back
       </button>
     );
@@ -114,7 +116,7 @@ class FormFooter extends React.Component {
   }
 
   renderSubmitButton = () => {
-    if (this.props.afterSubmitUrl == null) {
+    if (!this.props.submitButton) {
       return null;
     }
 
@@ -128,7 +130,7 @@ class FormFooter extends React.Component {
         onClick={this.trySubmitForm}
         disabled={this.props.isSubmittingResponse}
       >
-        {this.props.submitCaption || 'Submit'}
+        {this.props.submitButton.caption}
       </button>
     );
   }
@@ -158,9 +160,7 @@ class FormFooter extends React.Component {
             {submitButton}
           </div>
         </div>
-        <div className="text-muted text-right">
-          <small>Your responses are automatically saved.</small>
-        </div>
+        {this.props.children}
       </div>
     );
   }

@@ -1,14 +1,9 @@
-import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import createDebounce from 'redux-debounced';
 import { createStore, applyMiddleware, compose } from 'redux';
 
 const loggerMiddleware = createLogger();
-const debounceMiddleware = createDebounce();
 
 export const defaultMiddleware = [
-  debounceMiddleware,
-  thunkMiddleware,
   loggerMiddleware,
 ];
 
