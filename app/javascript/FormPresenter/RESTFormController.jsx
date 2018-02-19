@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
+import debounce from 'debounce-promise';
 import API from '../API';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
@@ -60,6 +60,17 @@ class RESTFormController extends React.Component {
     }, callback);
   }
 
+  currentSectionChanged = (currentSectionId, newSectionId) => {
+    if (this.props.autocommit === 'nextSection') {
+      const currentSectionIndex = this.state.form.getSectionIndex(currentSectionId);
+      const newSectionIndex = this.state.form.getSectionIndex(newSectionId);
+
+      if (newSectionIndex > currentSectionIndex) {
+        this.updateFormResponse();
+      }
+    }
+  }
+
   updateFormResponse = debounce(() => {
     const updatePromise = API.updateFormResponse(
       this.props.responseUrl,
@@ -70,22 +81,29 @@ class RESTFormController extends React.Component {
       .catch((error) => { this.setState({ responseErrors: error.response.body.errors }); });
 
     this.setState({ updatePromise });
+    return updatePromise;
   }, 300, { leading: true })
 
-  submitForm = () => {
+  submitForm = async () => {
     const { updatePromise } = this.state;
 
     if (updatePromise) {
       updatePromise.then(() => { this.submitForm(); });
-      return { deferred: true };
+      return;
     }
 
     const { responseUrl, submitAuthenticityToken, formSubmitted } = this.props;
-    return API.submitFormResponse(responseUrl, submitAuthenticityToken).then(() => {
+    try {
+      if (this.props.autocommit === 'nextSection') {
+        await this.updateFormResponse();
+      }
+      await API.submitFormResponse(responseUrl, submitAuthenticityToken);
       if (formSubmitted) {
         formSubmitted();
       }
-    }).catch((error) => { this.setState({ responseErrors: error.response.body.errors }); });
+    } catch (error) {
+      this.setState({ responseErrors: error.response.body.errors });
+    }
   }
 
   render = () => {
@@ -113,6 +131,7 @@ class RESTFormController extends React.Component {
       isSubmittingResponse: this.state.submitPromise != null,
       isUpdatingResponse: this.state.updatePromise != null,
       responseValuesChanged: this.responseValuesChanged,
+      currentSectionChanged: this.currentSectionChanged,
       submitForm: this.submitForm,
     });
   }

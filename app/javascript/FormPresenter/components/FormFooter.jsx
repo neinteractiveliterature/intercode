@@ -11,6 +11,7 @@ class FormFooter extends React.Component {
     previousSection: PropTypes.func.isRequired,
     nextSection: PropTypes.func.isRequired,
     submitForm: PropTypes.func.isRequired,
+    currentSectionChanged: PropTypes.func,
     isSubmittingResponse: PropTypes.bool.isRequired,
     exitButton: PropTypes.shape({
       caption: PropTypes.string.isRequired,
@@ -30,6 +31,7 @@ class FormFooter extends React.Component {
     exitButton: null,
     submitButton: null,
     children: null,
+    currentSectionChanged: null,
   };
 
   validateContinue = () => {
@@ -52,23 +54,17 @@ class FormFooter extends React.Component {
   }
 
   previousSection = () => {
-    this.props.previousSection(this.props.form);
+    this.props.previousSection(this.props.form, this.props.currentSectionChanged);
   }
 
-  tryNextSection = async () => {
+  tryNextSection = () => {
     if (this.validateContinue()) {
-      if (this.props.autocommit === 'nextSection') {
-        await this.props.updateResponse();
-      }
-      this.props.nextSection(this.props.form);
+      this.props.nextSection(this.props.form, this.props.currentSectionChanged);
     }
   }
 
-  trySubmitForm = async () => {
+  trySubmitForm = () => {
     if (this.validateContinue()) {
-      if (this.props.autocommit === 'nextSection' || this.props.autocommit === 'off') {
-        await this.props.updateResponse();
-      }
       this.props.submitForm();
     }
   }

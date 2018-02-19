@@ -28,6 +28,7 @@ class FormPresenter extends React.Component {
       caption: PropTypes.string.isRequired,
     }),
     submitForm: PropTypes.func.isRequired,
+    currentSectionChanged: PropTypes.func,
     footerContent: PropTypes.node,
   };
 
@@ -36,6 +37,7 @@ class FormPresenter extends React.Component {
     exitButton: null,
     submitButton: null,
     footerContent: null,
+    currentSectionChanged: null,
   };
 
   componentWillReceiveProps = (nextProps) => {
@@ -146,6 +148,7 @@ class FormPresenter extends React.Component {
           submitButton={submitButton}
           submitForm={this.props.submitForm}
           isSubmittingResponse={this.props.isSubmittingResponse}
+          currentSectionChanged={this.props.currentSectionChanged}
           scrollToItem={this.section ? this.section.scrollToItem : () => {}}
         >
           {this.props.footerContent}
