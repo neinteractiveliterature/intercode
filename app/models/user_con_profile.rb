@@ -106,6 +106,12 @@ class UserConProfile < ApplicationRecord
     user.privileges + PRIV_NAMES.select { |priv| send(priv) }
   end
 
+  def privileges=(privileges)
+    PRIV_NAMES.each do |priv|
+      send("#{priv}=", privileges.include?(priv))
+    end
+  end
+
   %w[has_any_privileges is_team_member can_have_bio].each do |scope_name|
     define_method "#{scope_name}?" do
       self.class.public_send(scope_name).where(id: id).any?
