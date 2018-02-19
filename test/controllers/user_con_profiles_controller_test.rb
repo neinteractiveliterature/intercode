@@ -29,15 +29,6 @@ describe UserConProfilesController do
     assert_response :success
   end
 
-  test 'should update user_con_profile' do
-    user_con_profile.staff.must_equal false
-
-    patch :update, params: { id: user_con_profile, subject_profile: { staff: true } }
-    user_con_profile.reload.staff.must_equal true
-
-    assert_redirected_to user_con_profile_path(assigns(:subject_profile))
-  end
-
   test 'should destroy user_con_profile' do
     assert_difference('UserConProfile.count', -1) do
       delete :destroy, params: { id: user_con_profile }
