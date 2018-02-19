@@ -7,8 +7,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  previousSection: form => dispatch(actions.previousSection(form)),
-  nextSection: form => dispatch(actions.nextSection(form)),
+  previousSection: (form, currentSectionChanged) => {
+    dispatch(actions.previousSection(form, currentSectionChanged));
+  },
+  nextSection: (form, currentSectionChanged) => {
+    dispatch(actions.nextSection(form, currentSectionChanged));
+  },
   onInteract: itemIdentifier => dispatch(actions.interactedWithItem(itemIdentifier)),
 });
 

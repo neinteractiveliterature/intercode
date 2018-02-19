@@ -18,26 +18,44 @@ function addToSectionIndex(state, form, offset, limiter) {
   return updateSectionId(state, form, newSectionIndex);
 }
 
+function performChangeCallback(state, action, newState) {
+  if (
+    action.payload.currentSectionChanged &&
+    state.currentSectionId !== newState.currentSectionId
+  ) {
+    action.payload.currentSectionChanged(state.currentSectionId, newState.currentSectionId);
+  }
+}
+
 export default function (state, action) {
   let maxSectionIndex;
+  let newState;
 
   switch (action.type) {
     case actions.previousSection.toString():
-      return addToSectionIndex(
+      newState = addToSectionIndex(
         state,
         action.payload.form,
         -1,
         newSectionIndex => Math.max(newSectionIndex, 0),
       );
 
+      performChangeCallback(state, action, newState);
+
+      return newState;
+
     case actions.nextSection.toString():
       maxSectionIndex = action.payload.form.getSections().size - 1;
-      return addToSectionIndex(
+      newState = addToSectionIndex(
         state,
         action.payload.form,
         1,
         newSectionIndex => Math.min(newSectionIndex, maxSectionIndex),
       );
+
+      performChangeCallback(state, action, newState);
+
+      return newState;
 
     default:
       return state;
