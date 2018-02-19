@@ -39,7 +39,7 @@ class DateItem extends React.Component {
         type="date"
         value={this.props.value}
         onChange={this.onChange}
-        onInteract={this.userDidInteract}
+        onBlur={this.userDidInteract}
         className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
       />
       <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
