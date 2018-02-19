@@ -53,15 +53,6 @@ class UserConProfilesController < ApplicationController
   def edit
   end
 
-  # PATCH/PUT /user_con_profiles/1
-  def update
-    if @subject_profile.update(subject_profile_params)
-      redirect_to @subject_profile, notice: 'Profile was successfully updated.'
-    else
-      render :edit
-    end
-  end
-
   # DELETE /user_con_profiles/1
   def destroy
     @subject_profile.destroy
