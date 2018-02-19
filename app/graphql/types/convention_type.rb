@@ -12,6 +12,8 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :maximum_tickets, types.Int
   field :maximum_event_signups, Types::ScheduledValueType
   field :ticket_name, !types.String
+  field :user_con_profile_form, !Types::FormType
+  field :event_proposal_form, !Types::FormType
 
   field :rooms, types[Types::RoomType] do
     guard ->(convention, _args, ctx) do
