@@ -1,13 +1,11 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user!
-  before_action :check_existing_ticket, only: [:new, :create]
+  before_action :check_existing_ticket, only: [:new]
 
   load_resource through: :user_con_profile, singleton: true
-  before_action :check_convention_maximum, only: [:new, :create]
-  before_action :check_publicly_available, only: [:create]
+  before_action :check_convention_maximum, only: [:new]
+  
   skip_authorization_check
-
-  respond_to :json, only: [:create]
 
   def show
     redirect_to new_ticket_path unless @ticket
@@ -23,38 +21,6 @@ class TicketsController < ApplicationController
         redirect_to new_ticket_path(ticket: { ticket_type_id: @ticket_types.first.id })
       end
     end
-  end
-
-  def create
-    current_price = @ticket.ticket_type.price
-
-    customer = Stripe::Customer.create(
-      email: current_user.email,
-      source: params[:stripeToken]
-    )
-
-    charge = Stripe::Charge.create(
-      customer: customer.id,
-      amount: current_price.fractional,
-      description: "#{@ticket.ticket_type.name} for #{convention.name}",
-      currency: current_price.currency.iso_code.downcase
-    )
-
-    @ticket.assign_attributes(
-      payment_amount: current_price,
-      payment_note: "Paid via Stripe on #{Time.at(charge.created)} (Charge ID #{charge.id})",
-      charge_id: charge.id
-    )
-
-    @ticket.save
-    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.description} for \
-#{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
-    TicketsMailer.purchased(@ticket).deliver_now
-    respond_with @ticket
-
-  rescue Stripe::CardError => e
-    @ticket.errors.add(:base, e.message)
-    respond_with @ticket
   end
 
   private
