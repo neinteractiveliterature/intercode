@@ -4959,7 +4959,7 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
 
-json-fetch@^7.2.0, json-fetch@^7.4.0:
+json-fetch@^7.2.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/json-fetch/-/json-fetch-7.4.0.tgz#43ae603f94b36cf89d191a033ccee38621ebd768"
   dependencies:
