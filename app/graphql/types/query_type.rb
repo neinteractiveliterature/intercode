@@ -55,13 +55,25 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :eventProposal, Types::EventProposalType do
+    argument :id, !types.Int
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, ctx[:convention].event_proposals.find(args[:id]))
+    end
+
+    resolve ->(_obj, args, ctx) do
+      ctx[:convention].event_proposals.find(args[:id])
+    end
+  end
+
   field :my_signups, types[Types::SignupType] do
     resolve ->(_obj, _args, ctx) {
       ctx[:user_con_profile].signups
     }
   end
 
-  field :current_user_con_profile, Types::UserConProfileType do
+  field :myProfile, Types::UserConProfileType do
     resolve ->(_obj, _args, ctx) {
       ctx[:user_con_profile]
     }

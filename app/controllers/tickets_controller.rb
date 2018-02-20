@@ -1,60 +1,16 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user!
-  before_action :check_existing_ticket, only: [:new, :create]
+  before_action :check_existing_ticket, only: [:new]
+  before_action :check_purchase_validity, only: [:new]
+  before_action :check_single_ticket_type_available, only: [:new]
 
-  load_resource through: :user_con_profile, singleton: true
-  before_action :check_convention_maximum, only: [:new, :create]
-  before_action :check_publicly_available, only: [:create]
   skip_authorization_check
 
-  respond_to :json, only: [:create]
-
   def show
-    redirect_to new_ticket_path unless @ticket
+    redirect_to new_ticket_path unless user_con_profile.ticket
   end
 
   def new
-    if @ticket.ticket_type
-      check_publicly_available
-    else
-      @ticket_types = convention.ticket_types.publicly_available
-
-      if @ticket_types.size == 1
-        redirect_to new_ticket_path(ticket: { ticket_type_id: @ticket_types.first.id })
-      end
-    end
-  end
-
-  def create
-    current_price = @ticket.ticket_type.price
-
-    customer = Stripe::Customer.create(
-      email: current_user.email,
-      source: params[:stripeToken]
-    )
-
-    charge = Stripe::Charge.create(
-      customer: customer.id,
-      amount: current_price.fractional,
-      description: "#{@ticket.ticket_type.name} for #{convention.name}",
-      currency: current_price.currency.iso_code.downcase
-    )
-
-    @ticket.assign_attributes(
-      payment_amount: current_price,
-      payment_note: "Paid via Stripe on #{Time.at(charge.created)} (Charge ID #{charge.id})",
-      charge_id: charge.id
-    )
-
-    @ticket.save
-    flash[:notice] = "Thank you!  Your purchase of a #{@ticket.ticket_type.description} for \
-#{@ticket.payment_amount.format} was successful.  We've emailed you a receipt."
-    TicketsMailer.purchased(@ticket).deliver_now
-    respond_with @ticket
-
-  rescue Stripe::CardError => e
-    @ticket.errors.add(:base, e.message)
-    respond_with @ticket
   end
 
   private
@@ -67,21 +23,33 @@ class TicketsController < ApplicationController
     redirect_to ticket_path if user_con_profile.ticket
   end
 
-  def check_convention_maximum
-    return unless convention.maximum_tickets
-    ticket_count = convention.tickets.counts_towards_convention_maximum.count
-    return unless ticket_count >= convention.maximum_tickets
+  def check_purchase_validity
+    return if new_ticket_service.valid?
+    flash[:alert] = new_ticket_service.errors.full_messages.join("\n")
 
-    flash[:alert] = "We're sorry, but #{convention.name} is currently sold out."
-    redirect_to root_path
+    return redirect_to root_path if new_ticket_service.ticket_type.publicly_available?
+    redirect_to new_ticket_path
   end
 
-  def check_publicly_available
-    return if @ticket.ticket_type.publicly_available?
+  def check_single_ticket_type_available
+    return if params[:ticket] && params[:ticket][:ticket_type_id]
 
-    flash[:alert] = "Sorry, but \"#{@ticket.ticket_type.description}\" \
-#{convention.ticket_name.pluralize} are not publicly available.  Please choose a different
-#{convention.ticket_name} type or contact #{convention.name} staff."
-    redirect_to new_ticket_path
+    ticket_types = convention.ticket_types.publicly_available
+    return unless ticket_types.size == 1
+    redirect_to new_ticket_path(ticket: { ticket_type_id: ticket_types.first.id })
+  end
+
+  def new_ticket_service
+    @new_ticket_service ||= PurchaseTicketService.new(
+      user_con_profile,
+      (
+        if params[:ticket] && params[:ticket][:ticket_type_id]
+          convention.ticket_types.find(params[:ticket][:ticket_type_id])
+        else
+          convention.ticket_types.publicly_available.first
+        end
+      ),
+      nil
+    )
   end
 end

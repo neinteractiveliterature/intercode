@@ -33,8 +33,12 @@ class BetterRescueMiddleware
     handler = find_handler(err)
     return GraphQL::ExecutionError.new(err.message) unless handler
 
-    message = handler.call(err)
-    GraphQL::ExecutionError.new(message)
+    return_error = handler.call(err)
+    if return_error.is_a?(String)
+      GraphQL::ExecutionError.new(return_error)
+    else
+      return_error
+    end
   end
 
   def find_handler(err)

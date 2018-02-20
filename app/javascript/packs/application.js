@@ -37,13 +37,13 @@ import '../Codemirror/LiquidMultiplexModes';
 
 import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
-import EditUserConProfile from '../UserConProfileAdmin/EditUserConProfile';
+import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
-import EventProposalForm from '../FormPresenter/RESTForms/EventProposalForm';
+import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
-import MyProfileForm from '../FormPresenter/RESTForms/MyProfileForm';
+import MyProfileForm from '../UserConProfiles/MyProfileForm';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
@@ -59,13 +59,13 @@ WebpackerReact.setup({
   CadmusNavbarAdminApp,
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
-  EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile, 'graphqlAuthenticityToken'),
+  EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
   EventAdmin,
-  EventProposalForm: StandaloneGraphQLComponent(EventProposalForm, 'graphqlAuthenticityToken'),
+  EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   LiquidHTMLEditor,
-  MyProfileForm: StandaloneGraphQLComponent(MyProfileForm, 'graphqlAuthenticityToken'),
+  MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
@@ -73,7 +73,7 @@ WebpackerReact.setup({
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketTypeAdmin: StandaloneGraphQLComponent(TicketTypeAdmin),
-  TicketPurchaseForm,
+  TicketPurchaseForm: StandaloneGraphQLComponent(TicketPurchaseForm),
   WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
 });
 
