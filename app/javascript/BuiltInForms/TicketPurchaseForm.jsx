@@ -3,12 +3,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+import Modal from 'react-bootstrap4-modal';
+import ErrorDisplay from '../ErrorDisplay';
 import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
-import { performRequest } from '../HTTPUtils';
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 
+const purchaseTicketMutation = gql`
+mutation($input: PurchaseTicketInput!) {
+  purchaseTicket(input: $input) {
+    ticket {
+      id
+
+      ticket_type {
+        description
+      }
+
+      payment_amount {
+        fractional
+      }
+    }
+  }
+}
+`;
+
+@graphql(purchaseTicketMutation, {
+  props: ({ mutate }) => ({
+    purchaseTicket: (ticketTypeId, stripeToken) => mutate({
+      variables: {
+        input: {
+          ticket_type_id: ticketTypeId,
+          stripe_token: stripeToken,
+        },
+      },
+    }),
+  }),
+})
 class TicketPurchaseForm extends React.Component {
   static propTypes = {
+    purchaseTicket: PropTypes.func.isRequired,
     ticketTypes: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
@@ -87,7 +121,7 @@ class TicketPurchaseForm extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleStripeResponse = (status, response) => {
+  handleStripeResponse = async (status, response) => {
     if (response.error) {
       this.setState({
         paymentError: response.error.message,
@@ -96,41 +130,28 @@ class TicketPurchaseForm extends React.Component {
     } else {
       this.setState({ stripeToken: response.id });
 
-      performRequest(this.props.createChargeUrl, {
-        method: 'POST',
-        body: {
-          stripeToken: this.state.stripeToken,
-          ticket: {
-            ticket_type_id: this.state.ticketTypeId,
-            name: this.state.name,
-          },
-        },
-      }).then(() => {
-        window.location.href = this.props.purchaseCompleteUrl;
-      }).catch((error) => {
-        error.response.json().then((json) => {
-          this.setState({
-            paymentError: json.errors.base.join(', '),
-            submitting: false,
-          });
+      try {
+        const purchaseResponse = await this.props.purchaseTicket(
+          Number.parseInt(this.state.ticketTypeId, 10),
+          this.state.stripeToken,
+        );
+        this.setState({
+          ticket: purchaseResponse.data.purchaseTicket.ticket,
         });
-      });
+      } catch (error) {
+        this.setState({
+          graphQLError: error,
+          submitting: false,
+        });
+      }
     }
+  }
+
+  purchaseAcknowledged = () => {
+    window.location.href = this.props.purchaseCompleteUrl;
   }
 
   isDisabled = () => ((!this.state.ticketTypeId) || this.state.submitting);
-
-  renderPaymentError = () => {
-    if (!this.state.paymentError) {
-      return null;
-    }
-
-    return (
-      <div className="alert alert-danger">
-        {this.state.paymentError}
-      </div>
-    );
-  }
 
   renderTicketTypeSelect = () => {
     const options = this.props.ticketTypes.map((ticketType) => {
@@ -194,7 +215,10 @@ class TicketPurchaseForm extends React.Component {
     return (
       <div>
         <hr />
-        {this.renderPaymentError()}
+        <ErrorDisplay
+          stringError={this.state.paymentError}
+          graphQLError={this.state.graphQLError}
+        />
 
         {this.renderFormGroup('name', 'Name', 'text', this.state.name)}
 
@@ -239,6 +263,27 @@ class TicketPurchaseForm extends React.Component {
     <form>
       {this.renderTicketTypeSelect()}
       {this.renderPaymentSection()}
+      <Modal visible={this.state.ticket}>
+        <div className="modal-header"><h3>Thank you!</h3></div>
+        <div className="modal-body">
+          {
+            this.state.ticket ?
+            (
+              <div>
+                Your purchase of a {this.state.ticket.ticket_type.description} for
+                {' '}
+                ${(this.state.ticket.payment_amount.fractional / 100.0).toFixed(2)}
+                {' '}
+                was successful.  We&apos;ve emailed you a receipt.
+              </div>
+            ) :
+            null
+          }
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-primary" onClick={this.purchaseAcknowledged}>OK</button>
+        </div>
+      </Modal>
     </form>
   );
 }

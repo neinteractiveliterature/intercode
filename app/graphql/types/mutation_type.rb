@@ -173,6 +173,12 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### Ticket
 
+  field :purchaseTicket, Mutations::PurchaseTicket.field do
+    guard -> (_obj, _args, ctx) do
+      ctx[:user_con_profile] && !ctx[:user_con_profile].ticket
+    end
+  end
+
   field :provideEventTicket, Mutations::ProvideEventTicket.field do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])

@@ -73,7 +73,7 @@ WebpackerReact.setup({
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketTypeAdmin: StandaloneGraphQLComponent(TicketTypeAdmin),
-  TicketPurchaseForm,
+  TicketPurchaseForm: StandaloneGraphQLComponent(TicketPurchaseForm),
   WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
 });
 

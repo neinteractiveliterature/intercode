@@ -29,6 +29,7 @@ module TicketsHelper
       createChargeUrl: ticket_path,
       purchaseCompleteUrl: root_path,
       ticketTypes: ticket_types_data,
-      initialName: user_con_profile.name_without_nickname
+      initialName: user_con_profile.name_without_nickname,
+      authenticityToken: graphql_authenticity_token
   end
 end
