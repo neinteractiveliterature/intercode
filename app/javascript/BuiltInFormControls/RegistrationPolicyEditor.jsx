@@ -102,7 +102,12 @@ class RegistrationPolicyEditor extends React.Component {
     event.preventDefault();
     this.props.onChange(this.props.registrationPolicy.addBucket(
       'flex',
-      { name: 'Flex', anything: true },
+      {
+        name: 'Flex',
+        description: 'Characters that can be in any other limited bucket',
+        slots_limited: true,
+        anything: true,
+      },
     ));
   }
 
