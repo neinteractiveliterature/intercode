@@ -11,16 +11,22 @@ fragment UserConProfileFields on UserConProfile {
 }
 `;
 
+fragments.userConProfileFormData = gql`
+fragment UserConProfileFormData on Convention {
+  starts_at
+  ends_at
+  timezone_name
+
+  user_con_profile_form {
+    form_api_json
+  }
+}
+`;
+
 export const userConProfileQuery = gql`
 query($id: Int!) {
   convention {
-    starts_at
-    ends_at
-    timezone_name
-    
-    user_con_profile_form {
-      form_api_json
-    }
+    ...UserConProfileFormData
   }
 
   userConProfile(id: $id) {
@@ -29,6 +35,22 @@ query($id: Int!) {
 }
 
 ${fragments.userConProfile}
+${fragments.userConProfileFormData}
+`;
+
+export const myProfileQuery = gql`
+query {
+  convention {
+    ...UserConProfileFormData
+  }
+
+  myProfile {
+    ...UserConProfileFields
+  }
+}
+
+${fragments.userConProfile}
+${fragments.userConProfileFormData}
 `;
 
 export { fragments };

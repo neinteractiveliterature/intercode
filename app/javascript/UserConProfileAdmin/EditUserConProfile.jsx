@@ -1,43 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-import deserializeUserConProfile from './deserializeUserConProfile';
+import { graphql, compose } from 'react-apollo';
+import buildFormStateFromData from './buildFormStateFromData';
 import ErrorDisplay from '../ErrorDisplay';
-import Form from '../Models/Form';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import UserConProfileForm from './UserConProfileForm';
-import { userConProfileQuery, fragments } from './queries';
+import { userConProfileQuery } from './queries';
+import { updateUserConProfileMutation } from './mutations';
 
-const updateUserConProfileMutation = gql`
-mutation($input: UpdateUserConProfileInput!) {
-  updateUserConProfile(input: $input) {
-    user_con_profile {
-      ...UserConProfileFields
-    }
-  }
-}
-
-${fragments.userConProfile}
-`;
-
-@graphql(updateUserConProfileMutation, {
-  props: ({ mutate }) => ({
-    updateUserConProfile: userConProfile => mutate({
-      variables: {
-        input: {
-          id: userConProfile.id,
-          user_con_profile: {
-            privileges: userConProfile.privileges,
-            form_response_attrs_json: JSON.stringify(userConProfile.formResponseAttrs),
+@compose(
+  graphql(userConProfileQuery),
+  graphql(updateUserConProfileMutation, {
+    props: ({ mutate }) => ({
+      updateUserConProfile: userConProfile => mutate({
+        variables: {
+          input: {
+            id: userConProfile.id,
+            user_con_profile: {
+              privileges: userConProfile.privileges,
+              form_response_attrs_json: JSON.stringify(userConProfile.formResponseAttrs),
+            },
           },
         },
-      },
+      }),
     }),
   }),
-})
-@graphql(userConProfileQuery)
+)
 @GraphQLQueryResultWrapper
 class EditUserConProfile extends React.Component {
   static propTypes = {
@@ -49,24 +38,11 @@ class EditUserConProfile extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = this.buildStateFromData(props.data);
+    this.state = buildFormStateFromData(props.data.userConProfile, props.data.convention);
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.setState(this.buildStateFromData(nextProps.data));
-  }
-
-  buildStateFromData = (data) => {
-    const {
-      user_con_profile_form: userConProfileForm,
-      ...conventionProps
-    } = data.convention;
-
-    return {
-      userConProfile: deserializeUserConProfile(data.userConProfile),
-      convention: conventionProps,
-      form: Form.fromApiResponse(JSON.parse(userConProfileForm.form_api_json)),
-    };
+    this.setState(buildFormStateFromData(nextProps.data.userConProfile, nextProps.data.convention));
   }
 
   userConProfileChanged = (userConProfile) => {
