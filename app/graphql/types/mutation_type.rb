@@ -188,4 +188,17 @@ Types::MutationType = GraphQL::ObjectType.define do
   field :updateTicketType, Mutations::UpdateTicketType.field do
     guard(guard_for_convention_associated_model(:ticket_types, :update))
   end
+
+  ### UserConProfile
+
+  field :updateUserConProfile, Mutations::UpdateUserConProfile.field do
+    guard ->(_obj, args, ctx) {
+      user_con_profile = ctx[:convention].user_con_profiles.find(args[:id])
+      if args[:user_con_profile][:privileges]
+        return false unless ctx[:current_ability].can?(:update_privileges, user_con_profile)
+      end
+
+      ctx[:current_ability].can?(:update, user_con_profile)
+    }
+  end
 end

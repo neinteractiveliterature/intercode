@@ -44,7 +44,7 @@ const FormItem = ({
 
 FormItem.propTypes = {
   formItem: PropTypes.shape({
-    item_type: PropTypes.string.isRequired,
+    itemType: PropTypes.string.isRequired,
     identifier: PropTypes.string,
   }).isRequired,
   value: PropTypes.any, // eslint-disable-line react/forbid-prop-types

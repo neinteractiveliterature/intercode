@@ -61,8 +61,12 @@ class FreeTextItem extends React.Component {
         <MarkdownInput
           value={this.props.value || ''}
           onChange={this.markdownDidChange}
+          onBlur={this.userDidInteract}
           lines={formItem.properties.lines}
-        />
+          formControlClassName={classNames({ 'is-invalid': this.props.valueInvalid })}
+        >
+          <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
+        </MarkdownInput>
       );
     }
     if (formItem.lines === 1) {

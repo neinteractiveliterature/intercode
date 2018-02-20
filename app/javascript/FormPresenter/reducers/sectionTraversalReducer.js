@@ -5,37 +5,57 @@ function getCurrentSectionIndex(form, currentSectionId) {
   return form.getSectionIndex(currentEffectiveSectionId);
 }
 
-function updateSectionId(state, newSectionIndex) {
+function updateSectionId(state, form, newSectionIndex) {
   return {
     ...state,
-    currentSectionId: state.form.getSections().get(newSectionIndex).id,
+    currentSectionId: form.getSections().get(newSectionIndex).id,
   };
 }
 
-function addToSectionIndex(state, offset, limiter) {
-  const currentSectionIndex = getCurrentSectionIndex(state.form, state.currentSectionId);
+function addToSectionIndex(state, form, offset, limiter) {
+  const currentSectionIndex = getCurrentSectionIndex(form, state.currentSectionId);
   const newSectionIndex = limiter(currentSectionIndex + offset);
-  return updateSectionId(state, newSectionIndex);
+  return updateSectionId(state, form, newSectionIndex);
+}
+
+function performChangeCallback(state, action, newState) {
+  if (
+    action.payload.currentSectionChanged &&
+    state.currentSectionId !== newState.currentSectionId
+  ) {
+    action.payload.currentSectionChanged(state.currentSectionId, newState.currentSectionId);
+  }
 }
 
 export default function (state, action) {
   let maxSectionIndex;
+  let newState;
 
   switch (action.type) {
     case actions.previousSection.toString():
-      return addToSectionIndex(
+      newState = addToSectionIndex(
         state,
+        action.payload.form,
         -1,
         newSectionIndex => Math.max(newSectionIndex, 0),
       );
 
+      performChangeCallback(state, action, newState);
+
+      return newState;
+
     case actions.nextSection.toString():
-      maxSectionIndex = state.form.getSections().size - 1;
-      return addToSectionIndex(
+      maxSectionIndex = action.payload.form.getSections().size - 1;
+      newState = addToSectionIndex(
         state,
+        action.payload.form,
         1,
         newSectionIndex => Math.min(newSectionIndex, maxSectionIndex),
       );
+
+      performChangeCallback(state, action, newState);
+
+      return newState;
 
     default:
       return state;
