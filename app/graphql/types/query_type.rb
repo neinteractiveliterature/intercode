@@ -67,6 +67,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :myProfile, Types::UserConProfileType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:user_con_profile]
+    }
+  end
+
   field :userConProfile, Types::UserConProfileType do
     argument :id, !types.Int
 

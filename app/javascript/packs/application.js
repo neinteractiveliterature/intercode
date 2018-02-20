@@ -43,7 +43,7 @@ import EventProposalForm from '../FormPresenter/RESTForms/EventProposalForm';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
-import MyProfileForm from '../FormPresenter/RESTForms/MyProfileForm';
+import MyProfileForm from '../UserConProfileAdmin/MyProfileForm';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
@@ -65,7 +65,7 @@ WebpackerReact.setup({
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   LiquidHTMLEditor,
-  MyProfileForm: StandaloneGraphQLComponent(MyProfileForm, 'graphqlAuthenticityToken'),
+  MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
