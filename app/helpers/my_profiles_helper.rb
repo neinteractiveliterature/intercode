@@ -5,13 +5,12 @@ module MyProfilesHelper
     )
 
     react_component(
-      'FormPresenter',
+      'MyProfileForm',
       formUrl: form_url(convention.user_con_profile_form),
       conventionUrl: convention_url,
       responseUrl: my_profile_path,
-      authenticityToken: update_authenticity_token,
-      graphqlAuthenticityToken: graphql_authenticity_token,
-      autosave: 'change'
+      responseAuthenticityToken: update_authenticity_token,
+      graphqlAuthenticityToken: graphql_authenticity_token
     )
   end
 end

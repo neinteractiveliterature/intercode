@@ -9,17 +9,15 @@ module EventProposalsHelper
     )
 
     react_component(
-      'FormPresenter',
+      'EventProposalForm',
       formUrl: form_url(convention.event_proposal_form),
       conventionUrl: convention_url,
       responseUrl: event_proposal_url(event_proposal),
-      authenticityToken: update_authenticity_token,
+      responseAuthenticityToken: update_authenticity_token,
       submitAuthenticityToken: submit_authenticity_token,
       graphqlAuthenticityToken: graphql_authenticity_token,
       afterSubmitUrl: page_path('new-proposal'),
-      submitCaption: 'Submit proposal',
-      exitButton: event_proposal_exit_button,
-      autosave: 'change'
+      exitButton: event_proposal_exit_button
     )
   end
 

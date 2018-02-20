@@ -16,7 +16,8 @@ class GraphqlController < ApplicationController
       current_user: current_user,
       current_ability: current_ability,
       user_con_profile: user_con_profile,
-      convention: convention
+      convention: convention,
+      cadmus_renderer: cadmus_renderer
     }
     IntercodeSchema.execute(
       query,

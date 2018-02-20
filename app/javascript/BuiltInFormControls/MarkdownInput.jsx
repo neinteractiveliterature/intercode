@@ -22,11 +22,17 @@ class MarkdownInput extends React.Component {
     }).isRequired,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func,
+    formControlClassName: PropTypes.string,
     lines: PropTypes.number,
+    children: PropTypes.node,
   }
 
   static defaultProps = {
+    formControlClassName: null,
     lines: null,
+    children: null,
+    onBlur: null,
   };
 
   constructor(props) {
@@ -93,6 +99,7 @@ class MarkdownInput extends React.Component {
           gutters: [],
           mode: 'liquid-markdown',
         }}
+        onBlur={this.props.onBlur}
         onBeforeChange={this.onBeforeChange}
       />
     );
@@ -100,7 +107,13 @@ class MarkdownInput extends React.Component {
 
   render = () => (
     <div>
-      <div className={`form-control p-0 codemirror-height-${this.props.lines || 10}`}>
+      <div
+        className={classNames(
+          `form-control p-0 codemirror-height-${this.props.lines || 10}`,
+          this.props.formControlClassName,
+        )}
+        style={{ overflow: 'hidden' }}
+      >
         <ul className="nav nav-pills bg-light p-1">
           <li className="nav-item">
             <a
@@ -125,6 +138,7 @@ class MarkdownInput extends React.Component {
           {this.renderContent()}
         </div>
       </div>
+      {this.props.children}
     </div>
   )
 }

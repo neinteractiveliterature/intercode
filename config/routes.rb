@@ -46,7 +46,7 @@ Intercode::Application.routes.draw do
     end
     resources :admin_event_proposals
 
-    resources :user_con_profiles do
+    resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do
       member do
         post :become
       end
