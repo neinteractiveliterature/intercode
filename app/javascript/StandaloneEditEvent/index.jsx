@@ -71,7 +71,7 @@ ${maximumEventProvidedTicketsOverrideFragment}
 
 const eventQuery = gql`
 query($eventId: Int!) {
-  current_user_con_profile {
+  myProfile {
     ability {
       can_override_maximum_event_provided_tickets
     }
@@ -270,7 +270,7 @@ class StandaloneEditEvent extends React.Component {
         updateMaximumEventProvidedTicketsOverride={updateMaximumEventProvidedTicketsOverride}
         showDropButton={showDropButton}
         canOverrideMaximumEventProvidedTickets={
-          data.current_user_con_profile.ability.can_override_maximum_event_provided_tickets
+          data.myProfile.ability.can_override_maximum_event_provided_tickets
         }
         ticketTypes={data.convention.ticket_types}
         ticketName={data.convention.ticket_name}

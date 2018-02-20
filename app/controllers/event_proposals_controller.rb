@@ -3,7 +3,7 @@ class EventProposalsController < ApplicationController
 
   load_and_authorize_resource through: :convention
   before_action :ensure_accepting_proposals, only: [:create]
-  before_action :ensure_no_event_yet, only: [:edit, :update, :submit]
+  before_action :ensure_no_event_yet, only: [:edit]
   respond_to :html, :json
 
   def index
@@ -34,42 +34,12 @@ class EventProposalsController < ApplicationController
   def edit
   end
 
-  def update
-    update_form_response(@event_proposal)
-    return if @event_proposal.status == 'draft'
-
-    @event_proposal.form_response_attribute_changes.each do |(key, (previous_value, new_value))|
-      FormResponseChange.create!(
-        response: @event_proposal,
-        user_con_profile: user_con_profile,
-        field_identifier: key,
-        previous_value: previous_value,
-        new_value: new_value
-      )
-    end
-  end
-
-  def submit
-    if @event_proposal.status == 'draft'
-      @event_proposal.update!(status: 'proposed')
-      EventProposalsMailer.new_proposal(@event_proposal).deliver_later
-    else
-      EventProposalsMailer.proposal_updated(@event_proposal).deliver_later
-    end
-
-    respond_with @event_proposal
-  end
-
   def destroy
     @event_proposal.destroy
     redirect_to root_url, notice: 'Your event proposal has been deleted.'
   end
 
   private
-
-  def event_proposal_params
-    (params[:event_proposal] || ActionController::Parameters.new).permit
-  end
 
   def ensure_accepting_proposals
     return if convention.accepting_proposals

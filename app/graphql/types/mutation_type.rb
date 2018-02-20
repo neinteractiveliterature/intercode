@@ -57,6 +57,16 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard(guard_for_convention_associated_model(:events, :update))
   end
 
+  ### EventProposal
+
+  field :updateEventProposal, Mutations::UpdateEventProposal.field do
+    guard(guard_for_convention_associated_model(:event_proposals, :update))
+  end
+
+  field :submitEventProposal, Mutations::SubmitEventProposal.field do
+    guard(guard_for_convention_associated_model(:event_proposals, :submit))
+  end
+
   ### Form
 
   field :updateFormWithJSON, Mutations::UpdateFormWithJSON.field do

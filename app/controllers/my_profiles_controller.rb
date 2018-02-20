@@ -6,8 +6,8 @@ class MyProfilesController < ApplicationController
   before_action :build_user_con_profile, only: [:new]
   authorize_resource :user_con_profile
 
-  respond_to :html, except: [:update]
-  respond_to :json, only: [:show, :update]
+  respond_to :html
+  respond_to :json, only: [:show]
 
   def show
     respond_to do |format|
@@ -23,10 +23,6 @@ class MyProfilesController < ApplicationController
   end
 
   def edit_bio
-  end
-
-  def update
-    update_form_response(@user_con_profile)
   end
 
   def update_bio

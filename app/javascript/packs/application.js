@@ -39,7 +39,7 @@ import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
-import EventProposalForm from '../FormPresenter/RESTForms/EventProposalForm';
+import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
@@ -59,9 +59,9 @@ WebpackerReact.setup({
   CadmusNavbarAdminApp,
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
-  EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile, 'graphqlAuthenticityToken'),
+  EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
   EventAdmin,
-  EventProposalForm: StandaloneGraphQLComponent(EventProposalForm, 'graphqlAuthenticityToken'),
+  EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   LiquidHTMLEditor,
