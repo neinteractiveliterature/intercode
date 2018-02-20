@@ -55,10 +55,11 @@ class FormController extends React.Component {
       const updatePromise = this.props.updateResponse();
       this.setState({ updatePromise });
       await updatePromise;
-      this.setState({ updatePromise: null, responseErrors: {} });
+      this.setState({ updatePromise: null, error: null, responseErrors: {} });
     } catch (error) {
       this.setState({
         updatePromise: null,
+        error,
         responseErrors: this.props.parseResponseErrors(error) || {},
       });
     }
@@ -81,19 +82,20 @@ class FormController extends React.Component {
         this.props.formSubmitted();
       }
     } catch (error) {
-      this.setState({ responseErrors: this.props.parseResponseErrors(error) || {} });
+      this.setState({ error, responseErrors: this.props.parseResponseErrors(error) || {} });
     }
   }
 
   render = () => {
     const { form, convention, response } = this.props;
-    const { responseErrors } = this.state;
+    const { responseErrors, error } = this.state;
 
     return this.props.renderContent({
       form,
       convention,
       response,
       responseErrors,
+      error,
       isSubmittingResponse: this.state.submitPromise != null,
       isUpdatingResponse: this.state.updatePromise != null,
       responseValuesChanged: this.responseValuesChanged,

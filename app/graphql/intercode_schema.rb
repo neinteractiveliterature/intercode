@@ -10,7 +10,7 @@ IntercodeSchema = GraphQL::Schema.define do
     GraphQL::ExecutionError.new(
       "Invalid input for #{err.record.class.name}: #{err.record.errors.full_messages.join(', ')}",
       options: {
-        validationErrors: err.record.errors.as_json(full_messages: true)
+        validationErrors: err.record.errors.as_json
       }
     )
   end

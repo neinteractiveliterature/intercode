@@ -3,7 +3,7 @@ module UserConProfilesHelper
     react_component(
       'EditUserConProfile',
       id: subject_profile.id,
-      graphqlAuthenticityToken: graphql_authenticity_token,
+      authenticityToken: graphql_authenticity_token,
       regularPrivilegeNames: (UserConProfile::PRIV_NAMES - UserConProfile::MAIL_PRIV_NAMES),
       mailPrivilegeNames: UserConProfile::MAIL_PRIV_NAMES
     )

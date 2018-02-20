@@ -39,11 +39,7 @@ Intercode::Application.routes.draw do
 
     get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
 
-    resources :event_proposals do
-      member do
-        patch :submit
-      end
-    end
+    resources :event_proposals, except: [:update]
     resources :admin_event_proposals
 
     resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do

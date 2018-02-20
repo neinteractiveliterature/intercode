@@ -116,7 +116,7 @@ export { fragments };
 
 export default gql`
 query {
-  current_user_con_profile {
+  myProfile {
     ability {
       can_override_maximum_event_provided_tickets
     }
