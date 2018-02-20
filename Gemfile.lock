@@ -43,7 +43,7 @@ GIT
 
 GIT
   remote: https://github.com/rollbar/rollbar-gem
-  revision: f4c1afc9e2b269e9e5298440581e8b76f6cb5ffa
+  revision: 51b637167c26015571ecc154dac96dcadb4efe04
   specs:
     rollbar (2.15.5)
       multi_json
