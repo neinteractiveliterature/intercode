@@ -3,6 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
+import Form from '../Models/Form';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 
@@ -69,6 +70,26 @@ fragment StandaloneEditEvent_EventFields on Event {
 ${maximumEventProvidedTicketsOverrideFragment}
 `;
 
+const eventFormDataFragment = gql`
+fragment StandaloneEditEvent_EventFormData on Convention {
+  starts_at
+  ends_at
+  timezone_name
+
+  regular_event_form {
+    form_api_json
+  }
+
+  volunteer_event_form {
+    form_api_json
+  }
+
+  filler_event_form {
+    form_api_json
+  }
+}
+`;
+
 const eventQuery = gql`
 query($eventId: Int!) {
   myProfile {
@@ -83,6 +104,8 @@ query($eventId: Int!) {
     }
 
     ticket_name
+
+    ...StandaloneEditEvent_EventFormData
   }
 
   event(id: $eventId) {
@@ -91,6 +114,7 @@ query($eventId: Int!) {
 }
 
 ${eventFragment}
+${eventFormDataFragment}
 `;
 
 export const dropEventMutation = gql`
@@ -247,6 +271,24 @@ class StandaloneEditEvent extends React.Component {
     deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
   };
 
+  getFormDataForEventCategory = () => {
+    const { event, convention } = this.props.data;
+
+    if (event.category === 'volunteer_event') {
+      return convention.volunteer_event_form;
+    }
+
+    if (event.category === 'filler') {
+      return convention.filler_event_form;
+    }
+
+    return convention.regular_event_form;
+  }
+
+  getFormForEventCategory = () => (
+    Form.fromApiResponse(JSON.parse(this.getFormDataForEventCategory().form_api_json))
+  )
+
   render = () => {
     const {
       data,
@@ -274,6 +316,8 @@ class StandaloneEditEvent extends React.Component {
         }
         ticketTypes={data.convention.ticket_types}
         ticketName={data.convention.ticket_name}
+        convention={data.convention}
+        form={this.getFormForEventCategory()}
       />
     );
   }

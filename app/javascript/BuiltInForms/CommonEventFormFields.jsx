@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
+import Form from '../Models/Form';
+import FormPresenterApp from '../FormPresenter';
+import FormSectionContainer from '../FormPresenter/containers/FormSectionContainer';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 import RegistrationPolicyEditor from '../BuiltInFormControls/RegistrationPolicyEditor';
-import TimespanItem from '../FormPresenter/components/TimespanItem';
 import presets from '../RegistrationPolicyPresets';
 
 const isRegularEvent = event => (
@@ -73,6 +75,8 @@ class CommonEventFormFields extends React.Component {
     }).isRequired).isRequired,
     ticketName: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    form: Form.propType.isRequired,
+    convention: PropTypes.shape({}).isRequired,
     createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
@@ -271,59 +275,17 @@ class CommonEventFormFields extends React.Component {
 
   render = () => (
     <div>
-      <BootstrapFormInput
-        name="title"
-        label="Title"
-        value={this.props.event.title}
-        onChange={this.formInputDidChange}
-      />
-      {this.renderSimpleRegularEventInput('author', 'Author(s)')}
-      <BootstrapFormInput
-        type="email"
-        name="email"
-        label="Contact email"
-        value={this.props.event.email}
-        onChange={this.formInputDidChange}
-      />
-      {this.renderSimpleRegularEventInput('organization', 'Organization')}
-      {this.renderSimpleRegularEventInput('url', 'URL of event homepage')}
-      {this.renderConMailDestinationField()}
-      <TimespanItem
-        formItem={{ identifier: '', properties: { caption: this.getLengthSecondsCaption() } }}
-        value={this.props.event.length_seconds}
-        onChange={this.lengthSecondsDidChange}
-        onInteract={() => {}}
-      />
-      {this.renderRegistrationPolicyInput()}
-      <BootstrapFormTextarea
-        name="short_blurb"
-        label="Short blurb"
-        value={this.props.event.short_blurb || ''}
-        onChange={this.formInputDidChange}
-        rows={4}
-      />
-      <BootstrapFormTextarea
-        name="description"
-        label="Description"
-        value={this.props.event.description || ''}
-        onChange={this.formInputDidChange}
-        rows={10}
-      />
-      <BootstrapFormTextarea
-        name="content_warnings"
-        label="Content warnings"
-        value={this.props.event.content_warnings || ''}
-        onChange={this.formInputDidChange}
-        rows={4}
-      />
-      <BootstrapFormTextarea
-        name="age_restrictions"
-        label="Age restrictions"
-        value={this.props.event.age_restrictions || ''}
-        onChange={this.formInputDidChange}
-        rows={4}
-      />
-      {this.renderParticipantCommunicationsField()}
+      <FormPresenterApp form={this.props.form}>
+        <FormSectionContainer
+          convention={this.props.convention}
+          form={this.props.form}
+          section={this.props.form.getSections().get(0)}
+          errors={{}}
+          response={this.props.event}
+          responseValuesChanged={this.formResponseValuesChanged}
+        />
+      </FormPresenterApp>
+
       {this.renderMaximumEventProvidedTicketsOverrideEditor()}
     </div>
   )

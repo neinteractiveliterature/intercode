@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EventForm from './EventForm';
+import Form from '../Models/Form';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 
 class EditEvent extends React.Component {
@@ -25,6 +26,8 @@ class EditEvent extends React.Component {
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
     ticketName: PropTypes.string,
+    convention: PropTypes.shape({}).isRequired,
+    form: Form.propType.isRequired,
   };
 
   static defaultProps = {
@@ -124,6 +127,8 @@ class EditEvent extends React.Component {
       canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
       ticketTypes={this.props.ticketTypes}
       ticketName={this.props.ticketName}
+      convention={this.props.convention}
+      form={this.props.form}
     />
   )
 }
