@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import CommonEventFormFields from './CommonEventFormFields';
+import Form from '../Models/Form';
 
 class EventForm extends React.Component {
   static propTypes = {
@@ -20,6 +21,8 @@ class EventForm extends React.Component {
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
     ticketName: PropTypes.string,
+    form: Form.propType.isRequired,
+    convention: PropTypes.shape({}).isRequired,
 
     cancelPath: PropTypes.string,
     onSave: PropTypes.func.isRequired,
@@ -143,6 +146,8 @@ class EventForm extends React.Component {
             this.props.updateMaximumEventProvidedTicketsOverride
           }
           ticketTypes={this.props.ticketTypes}
+          form={this.props.form}
+          convention={this.props.convention}
         />
 
         {this.renderErrorDisplay()}

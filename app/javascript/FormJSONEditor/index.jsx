@@ -24,7 +24,7 @@ mutation($input: UpdateFormWithJSONInput!) {
   updateFormWithJSON(input: $input) {
     form {
       id
-      form_json
+      export_json
     }
   }
 }

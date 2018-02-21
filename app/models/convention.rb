@@ -23,6 +23,9 @@ class Convention < ApplicationRecord
   belongs_to :default_layout, class_name: 'CmsLayout', optional: true
   belongs_to :event_proposal_form, class_name: 'Form', optional: true
   belongs_to :user_con_profile_form, class_name: 'Form', optional: true
+  belongs_to :regular_event_form, class_name: 'Form', optional: true
+  belongs_to :volunteer_event_form, class_name: 'Form', optional: true
+  belongs_to :filler_event_form, class_name: 'Form', optional: true
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 

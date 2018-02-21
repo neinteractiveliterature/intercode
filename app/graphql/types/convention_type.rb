@@ -14,6 +14,9 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :ticket_name, !types.String
   field :user_con_profile_form, !Types::FormType
   field :event_proposal_form, !Types::FormType
+  field :regular_event_form, !Types::FormType
+  field :volunteer_event_form, !Types::FormType
+  field :filler_event_form, !Types::FormType
 
   field :rooms, types[Types::RoomType] do
     guard ->(convention, _args, ctx) do
