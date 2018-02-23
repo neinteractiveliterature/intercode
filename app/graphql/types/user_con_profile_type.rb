@@ -31,6 +31,9 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
   field(:best_call_time, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
   field(:preferred_contact, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
   field :ticket, Types::TicketType do
+    guard -> (ticket, _args, ctx) {
+      ctx[:current_ability].can?(:read, ticket)
+    }
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(UserConProfile, :ticket).load(obj)
     }

@@ -175,7 +175,7 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   field :purchaseTicket, Mutations::PurchaseTicket.field do
     guard -> (_obj, _args, ctx) do
-      ctx[:user_con_profile] && !ctx[:user_con_profile].ticket
+      ctx[:user_con_profile]
     end
   end
 
