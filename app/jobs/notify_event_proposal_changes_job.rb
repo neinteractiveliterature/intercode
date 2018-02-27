@@ -1,6 +1,4 @@
 class NotifyEventProposalChangesJob < ApplicationJob
-  queue_as :default
-
   def perform
     scope = FormResponseChange.not_notified.where(response_type: 'EventProposal')
 

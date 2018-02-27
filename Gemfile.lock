@@ -105,6 +105,15 @@ GEM
     arel (8.0.0)
     autoprefixer-rails (8.0.0)
       execjs
+    aws-partitions (1.67.0)
+    aws-sdk-core (3.17.0)
+      aws-partitions (~> 1.0)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-sqs (1.3.0)
+      aws-sdk-core (~> 3)
+      aws-sigv4 (~> 1.0)
+    aws-sigv4 (1.0.2)
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
     builder (3.2.3)
@@ -344,6 +353,7 @@ GEM
       concurrent-ruby (~> 1.0)
     inflecto (0.0.2)
     ipaddress (0.8.3)
+    jmespath (1.3.1)
     jquery-rails (4.3.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -507,6 +517,10 @@ GEM
       tilt (>= 1.1, < 3)
     scheduled_value (1.2.1)
     sequel (5.5.0)
+    shoryuken (3.2.2)
+      aws-sdk-core (>= 2)
+      concurrent-ruby
+      thor
     sidekiq (5.1.1)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -584,6 +598,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   autoprefixer-rails
+  aws-sdk-sqs
   bootstrap_form!
   cadmus!
   cadmus_files!
@@ -637,7 +652,7 @@ DEPENDENCIES
   sass-rails
   scheduled_value (~> 1.2.1)
   sequel
-  sidekiq
+  shoryuken
   simplecov
   sqlite3
   stackprof
