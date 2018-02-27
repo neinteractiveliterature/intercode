@@ -74,7 +74,8 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # Background workers and scheduling
-gem 'sidekiq'
+gem 'shoryuken'
+gem 'aws-sdk-sqs'
 gem 'whenever'
 
 # Miscellany
