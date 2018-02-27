@@ -78,7 +78,7 @@
     "resolve-url-loader": "^2.2.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
-    "webpack": "^3.11.0",
+    "webpack": "^4.0.1",
     "webpack-manifest-plugin": "^1.3.2",
     "webpack-merge": "^4.1.2",
     "webpacker-react": "^0.3.2"
