@@ -74,7 +74,8 @@ gem 'redcarpet'
 gem 'htmldiff-lcs', git: 'https://github.com/nbudin/htmldiff-lcs', require: 'htmldiff'
 
 # Background workers and scheduling
-gem 'sidekiq'
+gem 'shoryuken'
+gem 'aws-sdk-sqs'
 gem 'whenever'
 
 # Miscellany
@@ -104,7 +105,7 @@ group :development do
 
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'
-  gem 'capistrano-sidekiq'
+  gem 'capistrano-shoryuken'
 end
 
 group :development, :test do
