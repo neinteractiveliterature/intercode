@@ -3,20 +3,9 @@ import PropTypes from 'prop-types';
 import ErrorDisplay from './ErrorDisplay';
 import LoadingIndicator from './LoadingIndicator';
 
-const GraphQLQueryResultWrapper = WrappedComponent => class Wrapper extends React.Component {
-  static propTypes = {
-    data: PropTypes.shape({
-      loading: PropTypes.bool.isRequired,
-      error: PropTypes.shape({
-        message: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-  };
-
-  static get name() { return `GraphQLQueryResultWrapper(${WrappedComponent.name})`; }
-
-  render = () => {
-    const { data } = this.props;
+const GraphQLQueryResultWrapper = (WrappedComponent) => {
+  const wrapper = (props) => {
+    const { data } = props;
 
     if (data.loading) {
       return <LoadingIndicator />;
@@ -25,8 +14,25 @@ const GraphQLQueryResultWrapper = WrappedComponent => class Wrapper extends Reac
       return <ErrorDisplay graphQLError={data.error} />;
     }
 
-    return <WrappedComponent data={data} {...this.props} />;
+    return <WrappedComponent data={data} {...props} />;
   };
+
+  wrapper.propTypes = {
+    data: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+      error: PropTypes.shape({
+        message: PropTypes.string.isRequired,
+      }),
+    }).isRequired,
+  };
+
+  const wrappedComponentDisplayName = (
+    WrappedComponent.displayName || WrappedComponent.name || 'Component'
+  );
+
+  wrapper.displayName = `GraphQLQueryResultWrapper(${wrappedComponentDisplayName})`;
+
+  return wrapper;
 };
 
 export default GraphQLQueryResultWrapper;

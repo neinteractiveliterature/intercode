@@ -136,6 +136,7 @@
   "browserslist": [
     "> 5%",
     "Last 2 versions",
-    "IE >= 11"
+    "IE >= 11",
+    "Safari >= 9"
   ]
 }
