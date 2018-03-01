@@ -32,35 +32,7 @@ const eventFragment = gql`
 fragment StandaloneEditEvent_EventFields on Event {
   id
   title
-  author
-  description
-  organization
-  url
-  con_mail_destination
-  can_play_concurrently
-  short_blurb
-  participant_communications
-  age_restrictions
-  content_warnings
-  email
-  length_seconds
-  category
-  status
-  description_html
-
-  registration_policy {
-    buckets {
-      key
-      name
-      description
-      minimum_slots
-      preferred_slots
-      total_slots
-      slots_limited
-      anything
-    }
-    prevent_no_preference_signups
-  }
+  form_response_attrs_json
 
   maximum_event_provided_tickets_overrides {
     ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
@@ -175,6 +147,13 @@ mutation($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
 
 ${maximumEventProvidedTicketsOverrideFragment}
 `;
+
+function deserializeEvent(event) {
+  return {
+    ...event,
+    form_response_attrs: JSON.parse(event.form_response_attrs_json),
+  };
+}
 
 @compose(
   graphql(eventQuery),
@@ -302,7 +281,7 @@ class StandaloneEditEvent extends React.Component {
 
     return (
       <EditEvent
-        event={data.event}
+        event={deserializeEvent(data.event)}
         onSave={() => { window.location.href = `/events/${data.event.id}`; }}
         onDrop={() => { window.location.href = '/events'; }}
         updateEvent={updateEvent}
