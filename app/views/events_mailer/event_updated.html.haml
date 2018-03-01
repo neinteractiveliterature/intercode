@@ -8,32 +8,7 @@
 
 %h2 Change log
 
-- form_items = @event.convention.event_proposal_form.form_items.index_by(&:identifier)
+- timezone = @event.convention.timezone
+- form_items = @event.convention.form_for_event_category(@event.category).form_items.index_by(&:identifier)
 
-%table
-  %thead
-    %tr
-      %th Field
-      %th Changes
-  %tbody
-    - @changes.each do |field_identifier, (previous_value, new_value)|
-      - form_item = form_items[field_identifier.to_s]
-      - previous_value = capture do
-        - if form_item
-          = render_form_response_value(form_item, previous_value)
-        - else
-          = previous_value
-      - new_value = capture do
-        - if form_item
-          = render_form_response_value(form_item, new_value)
-        - else
-          = new_value
-      - diff = HTMLDiff.diff(previous_value, new_value).html_safe
-
-      %tr.border-top-0
-        %td
-          - if form_item
-            = admin_form_item_label(form_item)
-          - else
-            = field_identifier
-        %td= diff
+= render partial: 'form_response_changes/table', locals: { timezone: timezone, form_items: form_items, changes: @changes }

@@ -1,10 +1,9 @@
 class EventsMailer < ApplicationMailer
   helper :form_response
 
-  def event_updated(event, changes, user_con_profile)
+  def event_updated(event, changes)
     @event = event
     @changes = changes
-    @user_con_profile = user_con_profile
     event_mail(event, 'Update')
   end
 
