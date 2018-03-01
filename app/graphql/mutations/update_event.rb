@@ -30,7 +30,7 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
 
     event.reload
     event.assign_form_response_attributes(form_response_attrs)
-    event.assign_attributes(event_attributes)
+    event.assign_attributes(event_attrs)
     event.save!
 
     changes.update(event.form_response_attribute_changes)
