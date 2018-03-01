@@ -24,9 +24,9 @@
     - @changes.each do |change|
       - form_item = form_items[change.field_identifier]
       - previous_value = capture do
-        = render_form_response_value(form_item, change.previous_value)
+        = render_form_response_value(form_item, change.previous_value, timezone)
       - new_value = capture do
-        = render_form_response_value(form_item, change.new_value)
+        = render_form_response_value(form_item, change.new_value, timezone)
       - diff = HTMLDiff.diff(previous_value, new_value).html_safe
 
       %tr{class: previous_change&.user_con_profile == change.user_con_profile ? 'border-top-0' : '' }
