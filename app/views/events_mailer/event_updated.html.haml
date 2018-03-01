@@ -20,12 +20,12 @@
       - form_item = form_items[field_identifier.to_s]
       - previous_value = capture do
         - if form_item
-          = render_form_response_value(form_item, previous_value)
+          = render_form_response_value(form_item, previous_value, @event.convention.timezone)
         - else
           = previous_value
       - new_value = capture do
         - if form_item
-          = render_form_response_value(form_item, new_value)
+          = render_form_response_value(form_item, new_value, @event.convention.timezone)
         - else
           = new_value
       - diff = HTMLDiff.diff(previous_value, new_value).html_safe
