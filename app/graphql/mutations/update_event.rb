@@ -10,15 +10,9 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
     event_attrs = args[:event].to_h.merge(
       updated_by: ctx[:user_con_profile].user
     )
-    event.assign_form_response_attributes(
-      JSON.parse(event_attrs.delete('form_response_attrs_json'))
-    )
-    event.assign_attributes(event_attrs)
-
-    registration_policy_attributes = event_attributes.delete('registration_policy')
-
-    event.assign_attributes(event_attributes)
-    changes = event.changes.as_json
+    form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
+    registration_policy_attributes = form_response_attrs.delete('registration_policy')
+    changes = {}
 
     new_registration_policy = RegistrationPolicy.new(registration_policy_attributes)
     if event.registration_policy != new_registration_policy
@@ -35,9 +29,20 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
     end
 
     event.reload
+    event.assign_form_response_attributes(form_response_attrs)
     event.assign_attributes(event_attributes)
     event.save!
-    EventsMailer.event_updated(event, changes, ctx[:user_con_profile]).deliver_later if changes.any?
+
+    changes.update(event.form_response_attribute_changes)
+    changes.each do |(key, (previous_value, new_value))|
+      FormResponseChange.create!(
+        response: event,
+        user_con_profile: ctx[:user_con_profile],
+        field_identifier: key,
+        previous_value: previous_value,
+        new_value: new_value
+      )
+    end
 
     { event: event }
   }
