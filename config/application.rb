@@ -17,7 +17,8 @@ module Intercode
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :shoryuken
+    config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
 
     config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.use Intercode::FindVirtualHost

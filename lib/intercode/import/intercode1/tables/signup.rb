@@ -30,6 +30,9 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
       requested_bucket_key = anything_bucket_key(run)
     end
 
+    # TODO: implement "force user into run"
+    return if row[:Counted] == 'Y' && row[:State] == 'Confirmed' && !row_bucket_key
+
     run.signups.new(
       user_con_profile: @user_con_profile_id_map[row[:UserId]],
       bucket_key: row_bucket_key,

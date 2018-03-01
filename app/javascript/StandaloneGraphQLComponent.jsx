@@ -3,23 +3,30 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import buildApolloClient from './buildApolloClient';
 
-export default (WrappedComponent, authenticityTokenProp = 'authenticityToken') => class Wrapper extends React.Component {
-  static propTypes = {
-    [authenticityTokenProp]: PropTypes.string.isRequired,
+export default (WrappedComponent, authenticityTokenProp = 'authenticityToken') => {
+  const wrapper = class Wrapper extends React.Component {
+    static propTypes = {
+      [authenticityTokenProp]: PropTypes.string.isRequired,
+    };
+
+    constructor(props) {
+      super(props);
+      this.client = buildApolloClient(this.props[authenticityTokenProp]);
+    }
+
+
+    render = () => (
+      <ApolloProvider client={this.client}>
+        <WrappedComponent {...this.props} />
+      </ApolloProvider>
+    )
   };
 
-  static get name() {
-    return `StandaloneGraphQLComponent(${WrappedComponent.name})`;
-  }
+  const wrappedComponentDisplayName = (
+    WrappedComponent.displayName || WrappedComponent.name || 'Component'
+  );
 
-  constructor(props) {
-    super(props);
-    this.client = buildApolloClient(this.props[authenticityTokenProp]);
-  }
+  wrapper.displayName = `StandaloneGraphQLComponent(${wrappedComponentDisplayName})`;
 
-  render = () => (
-    <ApolloProvider client={this.client}>
-      <WrappedComponent {...this.props} />
-    </ApolloProvider>
-  )
+  return wrapper;
 };

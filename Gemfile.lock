@@ -105,6 +105,15 @@ GEM
     arel (8.0.0)
     autoprefixer-rails (8.0.0)
       execjs
+    aws-partitions (1.67.0)
+    aws-sdk-core (3.17.0)
+      aws-partitions (~> 1.0)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-sqs (1.3.0)
+      aws-sdk-core (~> 3)
+      aws-sigv4 (~> 1.0)
+    aws-sigv4 (1.0.2)
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
     builder (3.2.3)
@@ -122,9 +131,8 @@ GEM
     capistrano-rails (1.3.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    capistrano-sidekiq (1.0.0)
-      capistrano (>= 3.9.0)
-      sidekiq (>= 3.4)
+    capistrano-shoryuken (0.1.5)
+      capistrano
     carrierwave (1.2.2)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -133,7 +141,6 @@ GEM
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
     concurrent-ruby (1.0.5-java)
-    connection_pool (2.2.1)
     crass (1.0.3)
     dante (0.2.0)
     database_cleaner (1.6.2)
@@ -327,7 +334,7 @@ GEM
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    graphiql-rails (1.4.7)
+    graphiql-rails (1.4.9)
       rails
     graphql (1.7.12)
     graphql-batch (0.3.9)
@@ -344,6 +351,7 @@ GEM
       concurrent-ruby (~> 1.0)
     inflecto (0.0.2)
     ipaddress (0.8.3)
+    jmespath (1.3.1)
     jquery-rails (4.3.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -430,8 +438,6 @@ GEM
     rack (2.0.4)
     rack-mini-profiler (0.10.6)
       rack (>= 1.2.0)
-    rack-protection (2.0.0)
-      rack
     rack-proxy (0.6.3)
       rack
     rack-test (0.8.2)
@@ -480,10 +486,9 @@ GEM
       json (>= 1.8)
       nokogiri (~> 1.5)
       trollop (~> 2.1)
-    recaptcha (4.6.4)
+    recaptcha (4.6.5)
       json
     redcarpet (3.4.0)
-    redis (4.0.1)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -507,11 +512,10 @@ GEM
       tilt (>= 1.1, < 3)
     scheduled_value (1.2.1)
     sequel (5.5.0)
-    sidekiq (5.1.1)
-      concurrent-ruby (~> 1.0)
-      connection_pool (~> 2.2, >= 2.2.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+    shoryuken (3.2.2)
+      aws-sdk-core (>= 2)
+      concurrent-ruby
+      thor
     simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -532,9 +536,9 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stackprof (0.2.10)
-    stripe (3.9.2)
+    stripe (3.11.0)
       faraday (~> 0.10)
-    stripe-ruby-mock (2.5.2)
+    stripe-ruby-mock (2.5.3)
       dante (>= 0.2.0)
       multi_json (~> 1.0)
       stripe (>= 2.0.3)
@@ -584,6 +588,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   autoprefixer-rails
+  aws-sdk-sqs
   bootstrap_form!
   cadmus!
   cadmus_files!
@@ -591,7 +596,7 @@ DEPENDENCIES
   cancancan
   capistrano-passenger
   capistrano-rails (~> 1.1)
-  capistrano-sidekiq
+  capistrano-shoryuken
   carrierwave
   database_cleaner
   datagrid
@@ -637,7 +642,7 @@ DEPENDENCIES
   sass-rails
   scheduled_value (~> 1.2.1)
   sequel
-  sidekiq
+  shoryuken
   simplecov
   sqlite3
   stackprof

@@ -127,6 +127,7 @@ class Ability
         status: %w[draft proposed reviewing]
       can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
       can :signup_summary, Run, id: signed_up_run_ids
+      can :read, Ticket, user_con_profile: { user_id: user.id }
 
       add_con_staff_abilities
       add_event_proposal_abilities
@@ -208,6 +209,7 @@ class Ability
     }
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
+    can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
     can :manage, TicketType, convention_id: staff_con_ids
     can :manage, Event,
@@ -243,9 +245,10 @@ class Ability
         show_schedule: %w[gms yes]
       }
     }
+    can :read, UserConProfile, convention_id: team_member_convention_ids
     can :update, EventProposal, event_id: team_member_event_ids
     can :read, Signup, run: { event_id: team_member_event_ids }
-    can :read, Ticket, provided_by_event_id: team_member_event_ids
+    can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
     can :manage, TeamMember, event_id: team_member_event_ids
   end
 end
