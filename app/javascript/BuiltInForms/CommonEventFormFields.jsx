@@ -67,7 +67,10 @@ class CommonEventFormFields extends React.Component {
 
     this.props.onChange({
       ...this.props.event,
-      ...processedResponseValues,
+      form_response_attrs: {
+        ...this.props.event.form_response_attrs,
+        ...processedResponseValues,
+      },
     });
   }
 

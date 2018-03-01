@@ -75,13 +75,17 @@ class EventForm extends React.Component {
     this.setState({ droppingEvent: false });
   }
 
-  isDataComplete = () => (
-    this.state.event.title != null && this.state.event.title !== '' &&
-    this.state.event.length_seconds
-  );
+  isDataComplete = () => {
+    const attrs = this.state.event.form_response_attrs;
 
-  eventFieldChanged = (eventData) => {
-    this.setState({ event: { ...this.state.event, ...eventData } });
+    return (
+      attrs.title != null && attrs.title !== '' &&
+      attrs.length_seconds
+    );
+  };
+
+  eventChanged = (eventData) => {
+    this.setState({ event: eventData });
   }
 
   saveClicked = (event) => {
@@ -133,7 +137,7 @@ class EventForm extends React.Component {
 
         <CommonEventFormFields
           event={this.state.event}
-          onChange={this.eventFieldChanged}
+          onChange={this.eventChanged}
           ticketName={this.props.ticketName}
           canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
           createMaximumEventProvidedTicketsOverride={

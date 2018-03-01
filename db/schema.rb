@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180220182000) do
+ActiveRecord::Schema.define(version: 20180301162045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 20180220182000) do
     t.text "participant_communications"
     t.text "age_restrictions"
     t.text "content_warnings"
+    t.text "additional_info"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
@@ -426,4 +427,5 @@ ActiveRecord::Schema.define(version: 20180220182000) do
   add_foreign_key "tickets", "ticket_types"
   add_foreign_key "tickets", "user_con_profiles"
   add_foreign_key "user_con_profiles", "conventions"
+  add_foreign_key "user_con_profiles", "users"
 end
