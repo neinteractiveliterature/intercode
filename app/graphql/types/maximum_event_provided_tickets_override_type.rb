@@ -1,6 +1,6 @@
 Types::MaximumEventProvidedTicketsOverrideType = GraphQL::ObjectType.define do
   name 'MaximumEventProvidedTicketsOverride'
-  guard ->(obj, _args, _ctx) { ctx[:current_ability].can?(:read, obj) }
+  guard ->(obj, _args, ctx) { ctx[:current_ability].can?(:read, obj) }
 
   field :id, !types.Int
 

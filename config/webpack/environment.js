@@ -10,9 +10,9 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 //   }),
 // )
 
-// environment.loaders.get('babel').use.unshift({
-//   loader: 'cache-loader'
-// });
+// memoized-class-decorator uses let in its source :(
+environment.loaders.get('babel').exclude = /node_modules\/(?!(memoized-class-decorator)\/).*/;
+
 //
 // environment.loaders.get('sass').use.unshift({
 //   loader: 'cache-loader'
