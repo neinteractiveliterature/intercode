@@ -7,9 +7,14 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
 
   resolve ->(_obj, args, ctx) {
     event = ctx[:convention].events.find(args[:id])
-    event_attributes = args[:event].to_h.merge(
+    event_attrs = args[:event].to_h.merge(
       updated_by: ctx[:user_con_profile].user
     )
+    event.assign_form_response_attributes(
+      JSON.parse(event_attrs.delete('form_response_attrs_json'))
+    )
+    event.assign_attributes(event_attrs)
+
     registration_policy_attributes = event_attributes.delete('registration_policy')
 
     event.assign_attributes(event_attributes)

@@ -72,6 +72,14 @@ class Convention < ApplicationRecord
     ConventionDrop.new(self)
   end
 
+  def form_for_event_category(event_category)
+    case event_category
+    when 'volunteer_event' then volunteer_event_form
+    when 'filler' then filler_event_form
+    else regular_event_form
+    end
+  end
+
   private
 
   def maximum_event_signups_must_cover_all_time
