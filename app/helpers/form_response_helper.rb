@@ -3,17 +3,22 @@ module FormResponseHelper
     form_item.admin_description || form_item.properties['caption'] || form_item.identifier
   end
 
-  def render_form_response_value(form_item, value)
+  def render_form_response_value(form_item, value, timezone)
     return '' if value.nil? || value.to_s.strip == ''
-    render_value_of_type(form_item.item_type, value, form_item.properties)
+    render_value_of_type(
+      form_item.item_type,
+      value,
+      form_item.properties,
+      timezone
+    )
   end
 
-  def render_value_of_type(item_type, value, properties = {})
+  def render_value_of_type(item_type, value, properties = {}, timezone = nil)
     case item_type
     when 'free_text' then render_free_text_value(value, properties)
     when 'multiple_choice' then render_multiple_choice_value(value, properties)
     when 'registration_policy' then render_registration_policy_value(value)
-    when 'timeblock_preference' then render_timeblock_preference_value(value)
+    when 'timeblock_preference' then render_timeblock_preference_value(value, timezone)
     when 'timespan' then render_timespan_value(value)
     end
   end
@@ -85,7 +90,7 @@ module FormResponseHelper
     end
   end
 
-  def render_timeblock_preference_value(value)
+  def render_timeblock_preference_value(value, timezone)
     cast_value = value.map do |preference|
       if preference.is_a?(Hash)
         EventProposal::TimeblockPreference.new(preference)
@@ -93,8 +98,6 @@ module FormResponseHelper
         preference
       end
     end
-
-    timezone = convention.timezone
 
     content_tag(:ul, class: 'list-unstyled m-0') do
       safe_join(
