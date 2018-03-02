@@ -36,6 +36,18 @@ fragment ConventionFields on Convention {
   ends_at
   timezone_name
 
+  regular_event_form {
+    form_api_json
+  }
+
+  volunteer_event_form {
+    form_api_json
+  }
+
+  filler_event_form {
+    form_api_json
+  }
+
   rooms {
     ...RoomFields
   }
@@ -84,6 +96,7 @@ fragment EventFields on Event {
   category
   status
   description_html
+  form_response_attrs_json
 
   registration_policy {
     buckets {

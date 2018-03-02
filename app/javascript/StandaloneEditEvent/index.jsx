@@ -3,9 +3,10 @@ import { compose, graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
-import Form from '../Models/Form';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import deserializeEvent from '../EventAdmin/deserializeEvent';
+import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
 
 const ticketTypeFragment = gql`
 fragment StandaloneEditEvent_TicketTypeFields on TicketType {
@@ -148,13 +149,6 @@ mutation($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
 ${maximumEventProvidedTicketsOverrideFragment}
 `;
 
-function deserializeEvent(event) {
-  return {
-    ...event,
-    form_response_attrs: JSON.parse(event.form_response_attrs_json),
-  };
-}
-
 @compose(
   graphql(eventQuery),
   graphql(updateEventMutation, { name: 'updateEvent' }),
@@ -250,24 +244,6 @@ class StandaloneEditEvent extends React.Component {
     deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
   };
 
-  getFormDataForEventCategory = () => {
-    const { event, convention } = this.props.data;
-
-    if (event.category === 'volunteer_event') {
-      return convention.volunteer_event_form;
-    }
-
-    if (event.category === 'filler') {
-      return convention.filler_event_form;
-    }
-
-    return convention.regular_event_form;
-  }
-
-  getFormForEventCategory = () => (
-    Form.fromApiResponse(JSON.parse(this.getFormDataForEventCategory().form_api_json))
-  )
-
   render = () => {
     const {
       data,
@@ -296,7 +272,7 @@ class StandaloneEditEvent extends React.Component {
         ticketTypes={data.convention.ticket_types}
         ticketName={data.convention.ticket_name}
         convention={data.convention}
-        form={this.getFormForEventCategory()}
+        form={getFormForEventCategory(data.event, data.convention)}
       />
     );
   }

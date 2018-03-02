@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import EditEvent from '../../BuiltInForms/EditEvent';
 import GraphQLResultPropType from '../../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
+import deserializeEvent from '../deserializeEvent';
 import eventsQuery from '../eventsQuery';
+import getFormForEventCategory from '../getFormForEventCategory';
 import {
   updateEventMutation,
   dropEventMutation,
@@ -30,7 +32,9 @@ const EventAdminEditEvent = (props) => {
 
   return (
     <EditEvent
-      event={event}
+      event={deserializeEvent(event)}
+      form={getFormForEventCategory(event, data.convention)}
+      convention={data.convention}
       cancelPath="/runs"
       onSave={() => { history.push('/runs'); }}
       onDrop={() => { history.push('/runs'); }}
