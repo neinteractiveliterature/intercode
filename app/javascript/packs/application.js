@@ -8,6 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import 'babel-polyfill';
+import 'custom-event-polyfill';
 
 import Clipboard from 'clipboard';
 import Rails from 'rails-ujs';

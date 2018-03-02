@@ -35,4 +35,4 @@
         .col-md-2
           %strong= admin_form_item_label(form_item)
         .col-md-10
-          = render_form_response_value(form_item, @admin_event_proposal.read_form_response_attribute(form_item.identifier))
+          = render_form_response_value(form_item, @admin_event_proposal.read_form_response_attribute(form_item.identifier), convention.timezone)
