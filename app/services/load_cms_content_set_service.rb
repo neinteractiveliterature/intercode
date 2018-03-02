@@ -1,4 +1,12 @@
 class LoadCmsContentSetService < ApplicationService
+  FORM_NAMES = %w[
+    event_proposal_form
+    filler_event_form
+    regular_event_form
+    user_con_profile_form
+    volunteer_event_form
+  ]
+
   attr_reader :convention, :content_set, :content_set_name
 
   validates_presence_of :convention, :content_set_name
@@ -6,6 +14,7 @@ class LoadCmsContentSetService < ApplicationService
   validate :ensure_no_conflicting_pages
   validate :ensure_no_conflicting_partials
   validate :ensure_no_conflicting_layouts
+  validate :ensure_no_conflicting_forms
 
   def initialize(convention:, content_set_name:)
     @convention = convention
@@ -17,16 +26,33 @@ class LoadCmsContentSetService < ApplicationService
 
   def inner_call
     load_content_for_subdir('layouts') do |cms_layout|
-      @convention.update!(default_layout: cms_layout) if cms_layout.name == 'Default'
+      convention.update!(default_layout: cms_layout) if cms_layout.name == 'Default'
     end
 
     load_content_for_subdir('pages') do |page|
-      @convention.update!(root_page: page) if page.name == 'root'
+      convention.update!(root_page: page) if page.name == 'root'
     end
 
     load_content_for_subdir('partials')
 
+    load_form_content
+
     success
+  end
+
+  def load_form_content
+    content_set.all_form_paths_with_names.each do |path, name|
+      form = case name
+      when *FORM_NAMES
+        create_form(name)
+      else
+        raise "Invalid form name: #{name}"
+      end
+
+      ImportFormContentService.new(form: form, content: JSON.parse(File.read(path))).call!
+    end
+
+    convention.save!
   end
 
   def load_content_for_subdir(subdir, &block)
@@ -38,11 +64,15 @@ class LoadCmsContentSetService < ApplicationService
     end
   end
 
+  def create_form(association_name)
+    convention.public_send("create_#{association_name}!", convention: convention)
+  end
+
   def association_for_subdir(subdir)
     case subdir
-    when 'layouts' then @convention.cms_layouts
-    when 'pages' then @convention.pages
-    when 'partials' then @convention.cms_partials
+    when 'layouts' then convention.cms_layouts
+    when 'pages' then convention.pages
+    when 'partials' then convention.cms_partials
     else raise "Unknown content type: #{subdir}"
     end
   end
@@ -95,6 +125,15 @@ class LoadCmsContentSetService < ApplicationService
       if content_identifiers.include?(name)
         errors.add(:base, "A #{subdir.singularize} named #{name} already exists in \
 #{convention.name}")
+      end
+    end
+  end
+
+  def ensure_no_conflicting_forms
+    existing_form_names = Set.new(FORM_NAMES.select { |name| convention.public_send(name) })
+    content_set.all_form_names.each do |name|
+      if existing_form_names.include?(name)
+        errors.add(:base, "#{convention.name} already has a form for #{name}")
       end
     end
   end
