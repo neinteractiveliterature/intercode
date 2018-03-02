@@ -2,8 +2,12 @@ class GraphqlController < ApplicationController
   skip_authorization_check
 
   def execute
-    result = execute_from_params(params)
-    render json: result
+    ActiveRecord::Base.transaction do
+      result = execute_from_params(params)
+      render json: result
+
+      raise ActiveRecord::Rollback if result['errors'].present?
+    end
   end
 
   private
@@ -19,6 +23,7 @@ class GraphqlController < ApplicationController
       convention: convention,
       cadmus_renderer: cadmus_renderer
     }
+
     IntercodeSchema.execute(
       query,
       variables: variables,
