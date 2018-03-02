@@ -69,7 +69,7 @@ class FreeTextItem extends React.Component {
         </MarkdownInput>
       );
     }
-    if (formItem.lines === 1) {
+    if (formItem.properties.lines === 1) {
       return (
         <input
           id={domId}
