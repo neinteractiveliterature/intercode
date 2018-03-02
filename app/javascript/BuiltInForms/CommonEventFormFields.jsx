@@ -50,9 +50,15 @@ class CommonEventFormFields extends React.Component {
   processFormResponseValue = (key, value) => {
     switch (key) {
       case 'can_play_concurrently':
-        return (value === 'true');
+        return { can_play_concurrently: (value === 'true') };
+      case 'total_slots':
+        return {
+          total_slots: value,
+          registration_policy: CommonEventFormFields
+            .buildRegistrationPolicyForVolunteerEvent(Number.parseInt(value, 10)),
+        };
       default:
-        return value;
+        return { [key]: value };
     }
   }
 
@@ -60,7 +66,7 @@ class CommonEventFormFields extends React.Component {
     const processedResponseValues = Object.entries(newResponseValues).reduce(
       (processed, [key, value]) => ({
         ...processed,
-        [key]: this.processFormResponseValue(key, value),
+        ...this.processFormResponseValue(key, value),
       }),
       {},
     );
