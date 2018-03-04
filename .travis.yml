@@ -27,6 +27,11 @@ jobs:
   include:
   - stage: Coverage processing
     language: generic
+    before_script:
+      - pip install --user awscli
+      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+        > ./cc-test-reporter
+      - chmod +x ./cc-test-reporter
     script:
       - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
       - ./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | cc-test-reporter upload-coverage --input -
