@@ -59,6 +59,7 @@ class FreeTextItem extends React.Component {
     if (formItem.properties.format === 'markdown') {
       return (
         <MarkdownInput
+          name={formItem.identifier}
           value={this.props.value || ''}
           onChange={this.markdownDidChange}
           onBlur={this.userDidInteract}
@@ -73,6 +74,7 @@ class FreeTextItem extends React.Component {
       return (
         <input
           id={domId}
+          name={formItem.identifier}
           type={formItem.properties.free_text_type || 'text'}
           className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
           value={this.props.value || ''}
@@ -84,6 +86,7 @@ class FreeTextItem extends React.Component {
     return (
       <textarea
         id={domId}
+        name={formItem.identifier}
         rows={formItem.properties.lines}
         className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
         value={this.props.value || ''}
