@@ -1,6 +1,9 @@
 %h1 Forms for #{convention.name}
 
 %ul
+  %li= link_to 'Event form for regular events', admin_form_path(convention.regular_event_form)
+  %li= link_to 'Event form for volunteer events', admin_form_path(convention.volunteer_event_form)
+  %li= link_to 'Event form for filler events', admin_form_path(convention.filler_event_form)
   %li= link_to 'Event proposal form', admin_form_path(convention.event_proposal_form)
   %li= link_to 'User con profile form', admin_form_path(convention.user_con_profile_form)
 

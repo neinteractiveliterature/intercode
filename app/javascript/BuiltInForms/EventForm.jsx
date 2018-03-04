@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import CommonEventFormFields from './CommonEventFormFields';
+import Form from '../Models/Form';
 
 class EventForm extends React.Component {
   static propTypes = {
@@ -20,6 +21,8 @@ class EventForm extends React.Component {
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
     ticketName: PropTypes.string,
+    form: Form.propType.isRequired,
+    convention: PropTypes.shape({}).isRequired,
 
     cancelPath: PropTypes.string,
     onSave: PropTypes.func.isRequired,
@@ -72,13 +75,17 @@ class EventForm extends React.Component {
     this.setState({ droppingEvent: false });
   }
 
-  isDataComplete = () => (
-    this.state.event.title != null && this.state.event.title !== '' &&
-    this.state.event.length_seconds
-  );
+  isDataComplete = () => {
+    const attrs = this.state.event.form_response_attrs;
 
-  eventFieldChanged = (eventData) => {
-    this.setState({ event: { ...this.state.event, ...eventData } });
+    return (
+      attrs.title != null && attrs.title !== '' &&
+      attrs.length_seconds
+    );
+  };
+
+  eventChanged = (eventData) => {
+    this.setState({ event: eventData });
   }
 
   saveClicked = (event) => {
@@ -130,7 +137,7 @@ class EventForm extends React.Component {
 
         <CommonEventFormFields
           event={this.state.event}
-          onChange={this.eventFieldChanged}
+          onChange={this.eventChanged}
           ticketName={this.props.ticketName}
           canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
           createMaximumEventProvidedTicketsOverride={
@@ -143,6 +150,8 @@ class EventForm extends React.Component {
             this.props.updateMaximumEventProvidedTicketsOverride
           }
           ticketTypes={this.props.ticketTypes}
+          form={this.props.form}
+          convention={this.props.convention}
         />
 
         {this.renderErrorDisplay()}

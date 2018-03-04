@@ -2,39 +2,56 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import { BrowserRouter, Link } from 'react-router-dom';
+import { ApolloProvider } from 'react-apollo';
 import CommonEventFormFields from '../../../app/javascript/BuiltInForms/CommonEventFormFields';
 import EventForm from '../../../app/javascript/BuiltInForms/EventForm';
+import formFromExportJSON from '../formFromExportJSON';
+
+import RegularEventForm from '../../../cms_content_sets/standard/forms/regular_event_form.json';
 
 describe('EventForm', () => {
   const defaultProps = {
     initialEvent: {
       id: 123,
       category: 'larp',
-      title: '',
-      author: '',
-      email: '',
-      organization: '',
-      con_mail_destination: 'gms',
-      url: '',
-      short_blurb: '',
-      description: '',
-      participant_communications: '',
-      can_play_concurrently: false,
+      form_response_attrs: {
+        title: '',
+        author: '',
+        email: '',
+        organization: '',
+        con_mail_destination: 'gms',
+        url: '',
+        short_blurb: '',
+        description: '',
+        participant_communications: '',
+        can_play_concurrently: false,
+        registration_policy: {
+          buckets: [],
+        },
+      },
       maximum_event_provided_tickets_overrides: [],
     },
     onSave: () => {},
     onDrop: () => {},
     ticketTypes: [],
+    form: formFromExportJSON(RegularEventForm),
+    convention: {
+      starts_at: '2017-01-01T00:00:00Z',
+      ends_at: '2017-01-03T00:00:00Z',
+      timezone_name: 'UTC',
+    },
     createMaximumEventProvidedTicketsOverride: () => {},
     deleteMaximumEventProvidedTicketsOverride: () => {},
     updateMaximumEventProvidedTicketsOverride: () => {},
   };
 
   const buildEventForm = props => ((
-    <EventForm
-      {...defaultProps}
-      {...props}
-    />
+    <ApolloProvider client={{ query: () => {} }}>
+      <EventForm
+        {...defaultProps}
+        {...props}
+      />
+    </ApolloProvider>
   ));
 
   const renderEventForm = props => mount(buildEventForm(props));
@@ -73,14 +90,6 @@ describe('EventForm', () => {
     expect(component.find('.alert-danger').text()).toEqual('blah');
   });
 
-  test('field changes', () => {
-    const component = renderEventForm();
-    component.find('input').filter({ name: 'title' }).simulate('change', {
-      target: { name: 'title', value: 'something' },
-    });
-    expect(component.instance().state.event.title).toEqual('something');
-  });
-
   describe('saving', () => {
     test('enabling the save button requires a title and lengthSeconds', () => {
       const incompleteComponent = renderEventForm();
@@ -91,7 +100,12 @@ describe('EventForm', () => {
 
       const completeComponent = renderEventForm({
         initialEvent: {
-          ...defaultProps.initialEvent, title: 'something', length_seconds: 60,
+          ...defaultProps.initialEvent,
+          form_response_attrs: {
+            ...defaultProps.initialEvent.form_response_attrs,
+            title: 'something',
+            length_seconds: 60,
+          },
         },
       });
       expect((
@@ -105,11 +119,16 @@ describe('EventForm', () => {
       const component = renderEventForm({
         onSave,
         initialEvent: {
-          ...defaultProps.initialEvent, title: 'something', length_seconds: 60,
+          ...defaultProps.initialEvent,
+          form_response_attrs: {
+            ...defaultProps.initialEvent.form_response_attrs,
+            title: 'something',
+            length_seconds: 60,
+          },
         },
       });
       component.find('.btn-primary').filterWhere(button => button.text() === 'Save event').simulate('click');
-      expect(onSave.mock.calls[0][0].length_seconds).toEqual(60);
+      expect(onSave.mock.calls[0][0].form_response_attrs.length_seconds).toEqual(60);
     });
   });
 

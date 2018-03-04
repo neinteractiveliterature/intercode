@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EventForm from './EventForm';
-import RegistrationPolicy from '../Models/RegistrationPolicy';
+import Form from '../Models/Form';
 
 class EditEvent extends React.Component {
   static propTypes = {
     event: PropTypes.shape({
       id: PropTypes.number.isRequired,
-      registration_policy: RegistrationPolicy.apiRepresentationPropType.isRequired,
     }).isRequired,
     updateEvent: PropTypes.func.isRequired,
     dropEvent: PropTypes.func.isRequired,
@@ -25,6 +24,8 @@ class EditEvent extends React.Component {
       maximum_event_provided_tickets: PropTypes.number.isRequired,
     }).isRequired).isRequired,
     ticketName: PropTypes.string,
+    convention: PropTypes.shape({}).isRequired,
+    form: Form.propType.isRequired,
   };
 
   static defaultProps = {
@@ -46,33 +47,7 @@ class EditEvent extends React.Component {
     const eventInput = {
       id: event.id,
       event: {
-        category: event.category,
-        title: event.title,
-        author: event.author,
-        email: event.email,
-        organization: event.organization,
-        con_mail_destination: event.con_mail_destination,
-        url: event.url,
-        short_blurb: event.short_blurb,
-        description: event.description,
-        participant_communications: event.participant_communications,
-        age_restrictions: event.age_restrictions,
-        content_warnings: event.content_warnings,
-        length_seconds: event.length_seconds,
-        registration_policy: {
-          buckets: event.registration_policy.buckets.map(bucket => ({
-            key: bucket.key,
-            name: bucket.name,
-            description: bucket.description,
-            minimum_slots: bucket.minimum_slots,
-            preferred_slots: bucket.preferred_slots,
-            total_slots: bucket.total_slots,
-            slots_limited: bucket.slots_limited,
-            anything: bucket.anything,
-          })),
-          prevent_no_preference_signups: event.registration_policy.prevent_no_preference_signups,
-        },
-        can_play_concurrently: event.can_play_concurrently,
+        form_response_attrs_json: JSON.stringify(event.form_response_attrs),
       },
     };
 
@@ -124,6 +99,8 @@ class EditEvent extends React.Component {
       canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
       ticketTypes={this.props.ticketTypes}
       ticketName={this.props.ticketName}
+      convention={this.props.convention}
+      form={this.props.form}
     />
   )
 }

@@ -22,7 +22,7 @@ class BetterRescueMiddleware
     yield
   rescue StandardError => err
     Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
-    Rails.logger.error err.backtrace.join("\n")
+    Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).join("\n")
     Rollbar.error(err)
     attempt_rescue(err)
   end

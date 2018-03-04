@@ -1,7 +1,24 @@
 class Event < ApplicationRecord
+  include Concerns::FormResponse
+
   STATUSES = Set.new(%w[active dropped])
   CATEGORIES = Set.new(%w[larp panel board_game tabletop_rpg volunteer_event filler])
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
+
+  register_form_response_attrs :title,
+    :author,
+    :email,
+    :organization,
+    :url,
+    :length_seconds,
+    :can_play_concurrently,
+    :con_mail_destination,
+    :description,
+    :short_blurb,
+    :registration_policy,
+    :participant_communications,
+    :age_restrictions,
+    :content_warnings
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head

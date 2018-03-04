@@ -14,15 +14,11 @@ import {
   updateEventMutation,
   updateRunMutation,
 } from '../mutations';
+import deserializeEvent from '../deserializeEvent';
 
 const buildEventInput = event => ({
   event: {
-    title: event.title,
-    description: event.description,
-    short_blurb: event.short_blurb,
-    email: event.email,
-    length_seconds: event.length_seconds,
-    category: event.category,
+    form_response_attrs: event.form_response_attrs,
   },
 });
 
@@ -71,12 +67,15 @@ class FillerEventAdmin extends React.Component {
   }
 
   createFillerEvent = ({ event, run }) => {
+    const eventInput = buildEventInput(event).event;
     const input = {
       event: {
-        ...buildEventInput(event).event,
-        can_play_concurrently: false,
-        con_mail_destination: 'event_email',
-        author: `${this.props.data.convention.name} Staff`,
+        form_response_attrs_json: JSON.stringify({
+          ...eventInput.form_response_attrs,
+          can_play_concurrently: false,
+          con_mail_destination: 'event_email',
+          author: `${this.props.data.convention.name} Staff`,
+        }),
       },
       ...buildRunInput(run),
     };
@@ -103,8 +102,10 @@ class FillerEventAdmin extends React.Component {
 
   updateFillerEvent = ({ event, run }) => {
     const eventInput = {
-      ...buildEventInput(event),
       id: event.id,
+      event: {
+        form_response_attrs_json: JSON.stringify(buildEventInput(event).event.form_response_attrs),
+      },
     };
 
     const runInput = {
@@ -210,8 +211,16 @@ class FillerEventAdmin extends React.Component {
         disabled={this.state.requestInProgress}
         error={this.state.error ? this.state.error.message : null}
         initialEvent={{
- category: 'filler', email: '', short_blurb: '', description: '', title: '', runs: [{ rooms: [] }],
-}}
+          form_response_attrs: {
+            category: 'filler',
+            email: '',
+            short_blurb: '',
+            description: '',
+            title: '',
+            registration_policy: { buckets: [] },
+          },
+          runs: [{ rooms: [] }],
+        }}
         convention={this.props.data.convention}
         cancelPath="/filler_events"
         onSave={this.createFillerEvent}
@@ -227,7 +236,7 @@ class FillerEventAdmin extends React.Component {
         <FillerEventForm
           disabled={this.state.requestInProgress}
           error={this.state.error ? this.state.error.message : null}
-          initialEvent={event}
+          initialEvent={deserializeEvent(event)}
           convention={this.props.data.convention}
           cancelPath="/filler_events"
           onSave={this.updateFillerEvent}

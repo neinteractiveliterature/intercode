@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import CommonEventFormFields from './CommonEventFormFields';
 import RunFormFields from './RunFormFields';
+import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
 
 class FillerEventForm extends React.Component {
   static propTypes = {
@@ -42,13 +43,18 @@ class FillerEventForm extends React.Component {
   }
 
   isDataComplete = () => (
-    this.state.event.title != null &&
-    this.state.event.length_seconds &&
+    this.state.event.form_response_attrs.title != null &&
+    this.state.event.form_response_attrs.length_seconds &&
     this.state.run.starts_at != null
-  );
+  )
 
   eventFieldChanged = (eventData) => {
-    this.setState({ event: { ...this.state.event, ...eventData } });
+    this.setState({
+      event: {
+        ...this.state.event,
+        ...eventData,
+      },
+    });
   }
 
   runChanged = (runData) => {
@@ -57,18 +63,21 @@ class FillerEventForm extends React.Component {
 
   saveClicked = (event) => {
     event.preventDefault();
-    this.props.onSave({ event: this.state.event, run: this.state.run });
+    this.props.onSave({
+      event: this.state.event,
+      run: this.state.run
+    });
   }
 
   renderRunFormFields = () => {
-    if (!this.state.event.length_seconds) {
+    if (!this.state.event.form_response_attrs.length_seconds) {
       return null;
     }
 
     return (
       <RunFormFields
         run={this.state.run}
-        event={this.state.event}
+        event={{ length_seconds: this.state.event.form_response_attrs.length_seconds }}
         convention={this.props.convention}
         onChange={this.runChanged}
       />
@@ -100,6 +109,8 @@ class FillerEventForm extends React.Component {
 
         <CommonEventFormFields
           event={this.state.event}
+          convention={this.props.convention}
+          form={getFormForEventCategory(this.state.event, this.props.convention)}
           onChange={this.eventFieldChanged}
         />
 

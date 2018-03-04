@@ -19,8 +19,8 @@ def guard_for_model_with_id(model_class, action)
   }
 end
 
-GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
-  ctx[:current_ability].can?(:create, ctx[:convention].events.new(args[:event].to_h))
+GUARD_FOR_CREATE_EVENT = ->(_obj, _args, ctx) {
+  ctx[:current_ability].can?(:create, ctx[:convention].events.new)
 }
 
 Types::MutationType = GraphQL::ObjectType.define do
