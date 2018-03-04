@@ -48,10 +48,10 @@ env:
     - DATABASE=postgresql
 matrix:
   exclude:
-    - name: Javascript
+    - language: javascript
       env:
         - DATABASE=mysql
-    - name: Javascript
+    - language: javascript
       env:
         - DATABASE=postgresql
 addons:
