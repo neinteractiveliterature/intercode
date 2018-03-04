@@ -11,18 +11,14 @@ cache:
     - node_modules
     - public/packs-test
   yarn: true
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-  - nvm install
-  - npm install --global yarn
-  - yarn install
 jobs:
   include:
     - name: Ruby
       language: ruby
       before_script:
+      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - chmod +x ./cc-test-reporter
+      - ./cc-test-reporter before-build
       - cp config/database.yml.ci config/database.yml
       - bin/rake db:create db:migrate RAILS_ENV=test
       script:
@@ -30,6 +26,13 @@ jobs:
       - ./cc-test-reporter format-coverage --output coverage/codeclimate.ruby.json
     - name: Javascript
       language: javascript
+      before_script:
+      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - chmod +x ./cc-test-reporter
+      - ./cc-test-reporter before-build
+      - nvm install
+      - npm install --global yarn
+      - yarn install
       script:
       - yarn run test
       - ./cc-test-reporter format-coverage --output coverage/codeclimate.js.json
