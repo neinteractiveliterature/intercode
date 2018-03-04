@@ -51,13 +51,19 @@ env:
     - DATABASE=mysql
     - DATABASE=postgresql
 matrix:
-  exclude:
-    - language: javascript
+  include:
+    - language: ruby
       env:
-        - DATABASE=mysql
-    - language: javascript
+        - DATABASE=sqlite
+    - language: ruby
+      env:
+        - DATABASE=sqlite
+    - language: ruby
       env:
         - DATABASE=postgresql
+    - language: javascript
+      env:
+        - DATABASE=sqlite
 addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
