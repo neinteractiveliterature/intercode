@@ -1,10 +1,7 @@
-language: ruby
 sudo: false
 branches:
   only:
     - master
-rvm:
-- 2.4.2
 bundler_args: "--without development:production:intercode1_import"
 cache:
   bundler: true
@@ -22,6 +19,9 @@ before_script:
 jobs:
   include:
     - name: Ruby
+      language: ruby
+      rvm:
+      - 2.4.2
       before_script:
       - cp config/database.yml.ci config/database.yml
       - bin/rake db:create db:migrate RAILS_ENV=test
@@ -29,6 +29,7 @@ jobs:
       - bin/rake test
       - ./cc-test-reporter format-coverage --output coverage/codeclimate.ruby.json
     - name: Javascript
+      language: javascript
       script:
       - yarn run test
       - ./cc-test-reporter format-coverage --output coverage/codeclimate.js.json
@@ -38,18 +39,18 @@ notifications:
 env:
   global:
     - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
+  matrix:
+    - DATABASE=sqlite
+    - DATABASE=mysql
+    - DATABASE=postgresql
 matrix:
-  include:
-    - name: Ruby
-      env:
-        - DATABASE=sqlite
-    - name: Ruby
+  exclude:
+    - name: Javascript
       env:
         - DATABASE=mysql
-    - name: Ruby
+    - name: Javascript
       env:
         - DATABASE=postgresql
-    - name: Javascript
 addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
