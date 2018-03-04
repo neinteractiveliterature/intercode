@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../Models/Form';
-import FormPresenterApp from '../FormPresenter';
-import FormSectionContainer from '../FormPresenter/containers/FormSectionContainer';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
+import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 
 class CommonEventFormFields extends React.Component {
   static buildRegistrationPolicyForVolunteerEvent = totalSlots => ({
@@ -100,16 +99,12 @@ class CommonEventFormFields extends React.Component {
 
   render = () => (
     <div>
-      <FormPresenterApp form={this.props.form}>
-        <FormSectionContainer
-          convention={this.props.convention}
-          form={this.props.form}
-          section={this.props.form.getSections().get(0)}
-          errors={{}}
-          response={this.props.event.form_response_attrs}
-          responseValuesChanged={this.formResponseValuesChanged}
-        />
-      </FormPresenterApp>
+      <SinglePageFormPresenter
+        form={this.props.form}
+        convention={this.props.convention}
+        response={this.props.event.form_response_attrs}
+        responseValuesChanged={this.formResponseValuesChanged}
+      />
 
       {this.renderMaximumEventProvidedTicketsOverrideEditor()}
     </div>
