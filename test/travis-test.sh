@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ "${LANGUAGE}" = "ruby" ]; then
-  bin/rake test
+  exec bin/rake test
 fi
 
 if [ "${LANGUAGE}" = "javascript" ]; then
-  yarn run test
+  exec yarn run test
 fi
