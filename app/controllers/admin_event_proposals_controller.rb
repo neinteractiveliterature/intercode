@@ -10,11 +10,12 @@ class AdminEventProposalsController < ApplicationController
 
   def index
     scope = @admin_event_proposals.where.not(status: 'draft').includes(:owner)
+    now = Time.now
     @admin_event_proposals = scope.sort_by do |event_proposal|
       [
         %w[proposed reviewing].include?(event_proposal.status) ? 0 : 1,
         event_proposal.status,
-        event_proposal.created_at
+        now - (event_proposal.submitted_at || 0)
       ]
     end
   end
