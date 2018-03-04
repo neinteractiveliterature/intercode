@@ -12,6 +12,7 @@ cache:
   - public/packs-test
   yarn: true
 before_script:
+- pip install --user awscli
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
   > ./cc-test-reporter
 - chmod +x ./cc-test-reporter
@@ -39,12 +40,13 @@ jobs:
     - aws s3 sync coverage/ "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER"
 after_script:
   - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
-  - cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | cc-test-reporter upload-coverage --input -
+  - ./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | cc-test-reporter upload-coverage --input -
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
 env:
   global:
+  - PATH=$HOME/.local/bin:$PATH
   - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
   - secure: FOqb5pEOm+aHRz10TYFnGWPw5q7lY+SPrRWiy3HHvq3UK1vpPzUG2bHI+XPShF/JyCyxdqbyOEgC4DLwLXGebG7wWDolf0yE5iHtUmUuPK68EePulltyG00LM361DkniVhu2cHwXFloH30e3BwSPbgcgQfypZA+ITJ3LGhwZ5+E=
   - secure: PNEoXEJTlUd0fLMJBg2mvusuOqFXH24ZWK3JBwtVt2nW8fco2ePw+ZPe+W5ajs3fHrrfTfY5yB484ZA2f91NvC8bxHHfrZ0sN2CgLepxkn4Ox67NbTIPPBPrAmjBdjF2nwMf3CQ//Yp4g+IXBqA4sPp/spW+b+BIyodqBQMRQ8U=
