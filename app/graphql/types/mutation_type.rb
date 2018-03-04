@@ -19,7 +19,7 @@ def guard_for_model_with_id(model_class, action)
   }
 end
 
-GUARD_FOR_CREATE_EVENT = ->(_obj, args, ctx) {
+GUARD_FOR_CREATE_EVENT = ->(_obj, _args, ctx) {
   ctx[:current_ability].can?(:create, ctx[:convention].events.new)
 }
 
