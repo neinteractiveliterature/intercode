@@ -2,18 +2,25 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import EventForm from '../../../app/javascript/BuiltInForms/EventForm';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
+import formFromExportJSON from '../formFromExportJSON';
+
+import RegularEventForm from '../../../cms_content_sets/standard/forms/regular_event_form.json';
 
 describe('EditEvent', () => {
   const renderEditEvent = props => shallow((
     <EditEvent
       event={{
         id: 123,
-        registration_policy: {
-          buckets: [
-            { total_slots: 1 },
-          ],
+        form_response_attrs: {
+          registration_policy: {
+            buckets: [
+              { total_slots: 1 },
+            ],
+          },
         },
       }}
+      form={formFromExportJSON(RegularEventForm)}
+      convention={{}}
       updateEvent={() => {}}
       dropEvent={() => {}}
       onSave={() => {}}

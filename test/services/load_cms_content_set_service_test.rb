@@ -4,6 +4,11 @@ describe LoadCmsContentSetService do
   let(:convention) { FactoryBot.create(:convention) }
   let(:service) { LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard') }
 
+  before do
+    convention.forms.destroy_all
+    convention.reload
+  end
+
   describe 'successfully loading content' do
     before do
       @result = service.call
@@ -27,6 +32,12 @@ describe LoadCmsContentSetService do
       default_layout = convention.cms_layouts.find_by(name: 'Default')
       assert default_layout
       assert_equal default_layout, convention.default_layout
+    end
+
+    it 'loads forms' do
+      LoadCmsContentSetService::FORM_NAMES.each do |form_name|
+        assert convention.public_send(form_name), "#{form_name} is missing"
+      end
     end
   end
 
@@ -75,5 +86,16 @@ describe LoadCmsContentSetService do
 
     assert result.failure?
     result.errors.full_messages.join("\n").must_match /layout named Default already exists/
+  end
+
+  LoadCmsContentSetService::FORM_NAMES.each do |form_name|
+    it "is invalid if #{form_name} already exists" do
+      convention.public_send("create_#{form_name}!", title: form_name, convention: convention)
+
+      result = service.call
+
+      assert result.failure?
+      result.errors.full_messages.join("\n").must_match /already has a form for #{form_name}/
+    end
   end
 end

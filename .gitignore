@@ -44,3 +44,6 @@ cookbooks
 /public/packs
 /public/packs-test
 /node_modules
+
+# If the dev is keeping pgdumps around for debugging, ignore those
+/*.pgdump

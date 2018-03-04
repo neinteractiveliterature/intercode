@@ -2,6 +2,15 @@ Types::EventType = GraphQL::ObjectType.define do
   name 'Event'
 
   field :id, !types.Int
+  field :form_response_attrs_json, types.String do
+    resolve -> (obj, _args, ctx) do
+      FormResponsePresenter.new(
+        ctx[:convention].form_for_event_category(obj.category),
+        obj
+      ).as_json.to_json
+    end
+  end
+
   field :title, types.String
   field :author, types.String
   field :email, types.String

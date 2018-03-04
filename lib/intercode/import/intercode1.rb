@@ -34,14 +34,13 @@ module Intercode
       autoload :Markdownifier
       autoload :NavigationItems
       autoload :Php
-      autoload :ProposalForm
+      autoload :ProposalFormCustomizer
       autoload :RegistrationPolicyFactory
       autoload :RegistrationStatuses
       autoload :StaffPositionImporter
       autoload :Table
       autoload :Tables
       autoload :UploadFile
-      autoload :UserConProfileForm
     end
   end
 end

@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import deserializeEvent from '../EventAdmin/deserializeEvent';
+import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
 
 const ticketTypeFragment = gql`
 fragment StandaloneEditEvent_TicketTypeFields on TicketType {
@@ -31,35 +33,7 @@ const eventFragment = gql`
 fragment StandaloneEditEvent_EventFields on Event {
   id
   title
-  author
-  description
-  organization
-  url
-  con_mail_destination
-  can_play_concurrently
-  short_blurb
-  participant_communications
-  age_restrictions
-  content_warnings
-  email
-  length_seconds
-  category
-  status
-  description_html
-
-  registration_policy {
-    buckets {
-      key
-      name
-      description
-      minimum_slots
-      preferred_slots
-      total_slots
-      slots_limited
-      anything
-    }
-    prevent_no_preference_signups
-  }
+  form_response_attrs_json
 
   maximum_event_provided_tickets_overrides {
     ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
@@ -67,6 +41,26 @@ fragment StandaloneEditEvent_EventFields on Event {
 }
 
 ${maximumEventProvidedTicketsOverrideFragment}
+`;
+
+const eventFormDataFragment = gql`
+fragment StandaloneEditEvent_EventFormData on Convention {
+  starts_at
+  ends_at
+  timezone_name
+
+  regular_event_form {
+    form_api_json
+  }
+
+  volunteer_event_form {
+    form_api_json
+  }
+
+  filler_event_form {
+    form_api_json
+  }
+}
 `;
 
 const eventQuery = gql`
@@ -83,6 +77,8 @@ query($eventId: Int!) {
     }
 
     ticket_name
+
+    ...StandaloneEditEvent_EventFormData
   }
 
   event(id: $eventId) {
@@ -91,6 +87,7 @@ query($eventId: Int!) {
 }
 
 ${eventFragment}
+${eventFormDataFragment}
 `;
 
 export const dropEventMutation = gql`
@@ -260,7 +257,7 @@ class StandaloneEditEvent extends React.Component {
 
     return (
       <EditEvent
-        event={data.event}
+        event={deserializeEvent(data.event)}
         onSave={() => { window.location.href = `/events/${data.event.id}`; }}
         onDrop={() => { window.location.href = '/events'; }}
         updateEvent={updateEvent}
@@ -274,6 +271,8 @@ class StandaloneEditEvent extends React.Component {
         }
         ticketTypes={data.convention.ticket_types}
         ticketName={data.convention.ticket_name}
+        convention={data.convention}
+        form={getFormForEventCategory(data.event, data.convention)}
       />
     );
   }

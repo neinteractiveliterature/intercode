@@ -84,11 +84,17 @@ ActiveRecord::Schema.define(version: 20180304162934) do
     t.bigint "default_layout_id"
     t.bigint "user_con_profile_form_id"
     t.string "ticket_name", default: "ticket", null: false
+    t.bigint "regular_event_form_id"
+    t.bigint "volunteer_event_form_id"
+    t.bigint "filler_event_form_id"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
+    t.index ["filler_event_form_id"], name: "index_conventions_on_filler_event_form_id"
+    t.index ["regular_event_form_id"], name: "index_conventions_on_regular_event_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
     t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
+    t.index ["volunteer_event_form_id"], name: "index_conventions_on_volunteer_event_form_id"
   end
 
   create_table "event_proposals", force: :cascade do |t|
@@ -135,6 +141,7 @@ ActiveRecord::Schema.define(version: 20180304162934) do
     t.text "participant_communications"
     t.text "age_restrictions"
     t.text "content_warnings"
+    t.text "additional_info"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
@@ -386,7 +393,10 @@ ActiveRecord::Schema.define(version: 20180304162934) do
   add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
   add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
+  add_foreign_key "conventions", "forms", column: "filler_event_form_id"
+  add_foreign_key "conventions", "forms", column: "regular_event_form_id"
   add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
+  add_foreign_key "conventions", "forms", column: "volunteer_event_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "event_proposals", "conventions"

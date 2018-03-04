@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { humanize } from 'inflected';
 import Form from '../Models/Form';
-import FormPresenterApp from '../FormPresenter';
-import FormSectionContainer from '../FormPresenter/containers/FormSectionContainer';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
+import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 import UserConProfilePropType from './UserConProfilePropType';
 
 class UserConProfileForm extends React.Component {
@@ -98,16 +97,12 @@ class UserConProfileForm extends React.Component {
   renderContent = () => {
     if (this.state.tab === 'profile') {
       return (
-        <FormPresenterApp form={this.props.form}>
-          <FormSectionContainer
-            convention={this.props.convention}
-            form={this.props.form}
-            section={this.props.form.getSections().get(0)}
-            errors={{}}
-            response={this.props.userConProfile.formResponseAttrs}
-            responseValuesChanged={this.formResponseValuesChanged}
-          />
-        </FormPresenterApp>
+        <SinglePageFormPresenter
+          form={this.props.form}
+          convention={this.props.convention}
+          response={this.props.userConProfile.form_response_attrs}
+          responseValuesChanged={this.formResponseValuesChanged}
+        />
       );
     }
 
