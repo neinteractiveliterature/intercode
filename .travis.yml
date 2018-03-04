@@ -34,7 +34,7 @@ jobs:
       - chmod +x ./cc-test-reporter
     script:
       - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
-      - ./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | cc-test-reporter upload-coverage --input -
+      - ./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
