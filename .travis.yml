@@ -25,7 +25,8 @@ after_script:
   - aws s3 sync coverage/ "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER"
 jobs:
   include:
-  - stage: Coverage upload
+  - stage: Coverage processing
+    language: generic
     script:
       - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
       - ./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | cc-test-reporter upload-coverage --input -
