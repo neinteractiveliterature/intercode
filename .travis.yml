@@ -19,23 +19,37 @@ before_script:
   - nvm install
   - npm install --global yarn
   - yarn install
-  - cp config/database.yml.ci config/database.yml
-  - bin/rake db:create db:migrate RAILS_ENV=test
-script:
-  - bin/rake test
-  - ./cc-test-reporter format-coverage --output coverage/codeclimate.ruby.json
-  - yarn run test
-  - ./cc-test-reporter format-coverage --output coverage/codeclimate.js.json
+jobs:
+  include:
+    - name: Ruby
+      before_script:
+      - cp config/database.yml.ci config/database.yml
+      - bin/rake db:create db:migrate RAILS_ENV=test
+      script:
+      - bin/rake test
+      - ./cc-test-reporter format-coverage --output coverage/codeclimate.ruby.json
+    - name: Javascript
+      script:
+      - yarn run test
+      - ./cc-test-reporter format-coverage --output coverage/codeclimate.js.json
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
 env:
   global:
     - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
-  matrix:
-    - DATABASE=sqlite
-    - DATABASE=mysql
-    - DATABASE=postgresql
+matrix:
+  include:
+    - name: Ruby
+      env:
+        - DATABASE=sqlite
+    - name: Ruby
+      env:
+        - DATABASE=mysql
+    - name: Ruby
+      env:
+        - DATABASE=postgresql
+    - name: Javascript
 addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
