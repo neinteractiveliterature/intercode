@@ -15,7 +15,7 @@ class AddEventFormToConventions < ActiveRecord::Migration[5.1]
             )
             convention.assign_attributes("#{event_form_type}_event_form" => form)
             content_path = File.expand_path(
-              "cms_content_sets/default/forms/#{event_form_type}_event_form.json",
+              "cms_content_sets/standard/forms/#{event_form_type}_event_form.json",
               Rails.root
             )
             ImportFormContentService.new(
