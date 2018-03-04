@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180301162045) do
+ActiveRecord::Schema.define(version: 20180304162934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20180301162045) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "timeblock_preferences"
+    t.datetime "submitted_at"
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
