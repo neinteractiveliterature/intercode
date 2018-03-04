@@ -33,6 +33,6 @@
           %td
             %span{class: "badge #{event_proposal_badge_class(event_proposal)}"}= event_proposal.status
           %td.text-nowrap
-            %small= event_proposal.created_at.strftime('%Y-%m-%d %H:%M')
+            %small= event_proposal.submitted_at.strftime('%Y-%m-%d %H:%M')
           %td.text-nowrap
             %small= event_proposal.updated_at.strftime('%Y-%m-%d %H:%M')
