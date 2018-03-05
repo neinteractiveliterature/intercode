@@ -1,4 +1,6 @@
 = bootstrap_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
+  - if params[:user_return_to].present?
+    = hidden_field_tag :user_return_to, params[:user_return_to]
   .form-group
     = f.email_field :email, :required => true
   .form-group

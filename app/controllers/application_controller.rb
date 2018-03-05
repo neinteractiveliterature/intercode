@@ -50,6 +50,26 @@ class ApplicationController < ActionController::Base
   end
   helper_method :user_con_profile
 
+  def current_pending_order
+    return unless user_con_profile
+
+    @current_pending_order ||= begin
+      pending_orders = user_con_profile.orders.pending.to_a
+      return unless pending_orders.any?
+
+      if pending_orders.size > 1
+        # combine orders into one cart
+        first_order = pending_orders.pop
+        OrderEntry.where(order_id: pending_orders.map(&:id)).update_all(order_id: first_order.id)
+        pending_orders.destroy_all
+        first_order.reload
+      else
+        pending_orders.first
+      end
+    end
+  end
+  helper_method :current_pending_order
+
   def use_convention_timezone(&block)
     timezone = convention&.timezone
 
