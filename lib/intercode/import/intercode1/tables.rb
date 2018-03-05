@@ -13,5 +13,8 @@ module Intercode::Import::Intercode1::Tables
   autoload :Runs
   autoload :Rooms
   autoload :Signup
+  autoload :StoreItems
+  autoload :StoreOrderEntries
+  autoload :StoreOrders
   autoload :Users
 end

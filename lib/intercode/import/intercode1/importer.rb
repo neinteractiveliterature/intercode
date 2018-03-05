@@ -130,6 +130,7 @@ class Intercode::Import::Intercode1::Importer
     embedded_pdf_pages.each(&:import!)
 
     %i[
+      store_items_table
       navigation_items
       proposal_form_customizer
       registration_statuses
@@ -143,6 +144,8 @@ class Intercode::Import::Intercode1::Importer
       bios_table
       rooms_table
       runs_table
+      store_orders_table
+      store_order_entries_table
       gms_table
       signup_table
     ].each do |importer|
@@ -299,6 +302,30 @@ class Intercode::Import::Intercode1::Importer
     @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(
       con,
       @staff_positions
+    )
+  end
+
+  def store_items_table
+    @store_items_table ||= Intercode::Import::Intercode1::Tables::StoreItems.new(
+      connection,
+      con,
+      File.expand_path('img', File.dirname(constants_file))
+    )
+  end
+
+  def store_order_entries_table
+    @store_order_entries_table ||= Intercode::Import::Intercode1::Tables::StoreOrderEntries.new(
+      connection,
+      store_orders_table.id_map,
+      store_items_table.id_map
+    )
+  end
+
+  def store_orders_table
+    @store_orders_table ||= Intercode::Import::Intercode1::Tables::StoreOrders.new(
+      connection,
+      con,
+      user_con_profiles_id_map
     )
   end
 
