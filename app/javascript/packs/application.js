@@ -10,7 +10,7 @@
 import 'babel-polyfill';
 import 'custom-event-polyfill';
 
-import Clipboard from 'clipboard';
+import ClipboardJS from 'clipboard';
 import Rails from 'rails-ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
 
@@ -81,4 +81,4 @@ WebpackerReact.setup({
 Rails.start();
 
 // eslint-disable-next-line no-new
-new Clipboard('[data-clipboard-target], [data-clipboard-text]');
+new ClipboardJS('[data-clipboard-target], [data-clipboard-text]');
