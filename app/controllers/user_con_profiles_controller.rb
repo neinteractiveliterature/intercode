@@ -9,7 +9,7 @@ class UserConProfilesController < ApplicationController
     class: 'UserConProfile',
     through: :convention,
     through_association: :user_con_profiles
-  before_action :authorize_admin_profiles, except: [:index, :show]
+  before_action :authorize_admin_profiles
 
   # GET /user_con_profiles
   def index
