@@ -103,7 +103,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     ansi (1.5.0)
     arel (8.0.0)
-    autoprefixer-rails (8.0.0)
+    autoprefixer-rails (8.1.0)
       execjs
     aws-partitions (1.67.0)
     aws-sdk-core (3.17.0)
