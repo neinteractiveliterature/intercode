@@ -14,6 +14,7 @@ class Intercode::Import::Intercode1::Tables::StoreItems < Intercode::Import::Int
       product = con.products.new(
         available: yn_to_bool(row[:Available]),
         name: product_name(row),
+        description: "A #{product_name(row).downcase} with the #{con.name} logo.",
         image: image,
         price_cents: row[:PriceCents],
         price_currency: 'USD'

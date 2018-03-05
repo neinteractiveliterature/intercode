@@ -1,0 +1,18 @@
+- if @product.image
+  .float-right.d-none.d-lg-block.ml-4{style: 'max-width: 50%'}
+    %img{style: 'max-width: 100%', src: @product.image.url, alt: "#{@product.name} image"}
+
+.mb-4
+  %h1= @product.name
+  .lead= @product.price.format
+
+%img.d-lg-none.w-100{src: @product.image.url, alt: "#{@product.name} image"}
+
+- if @product.description_template
+  .mb-4
+    = cadmus_renderer.render(@product.description_template, :html)
+
+- if user_signed_in?
+  = react_component 'ProductOrderForm', productId: @product.id, authenticityToken: graphql_authenticity_token
+- else
+  = link_to 'Log in to order', new_user_session_path(user_return_to: product_path(@product)), class: 'btn btn-primary'

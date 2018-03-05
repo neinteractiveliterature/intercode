@@ -1,9 +1,12 @@
 class Order < ApplicationRecord
-  STATUSES = %w[paid unpaid cancelled]
+  STATUSES = %w[pending unpaid paid cancelled]
 
   belongs_to :user_con_profile
   has_many :order_entries
   validates :status, inclusion: { in: STATUSES }
+
+  scope :pending, -> { where(status: 'pending') }
+  scope :completed, -> { where(status: %w[unpaid paid]) }
 
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 

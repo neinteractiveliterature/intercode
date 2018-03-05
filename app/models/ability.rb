@@ -108,6 +108,7 @@ class Ability
     can :read, Event, status: 'active'
     can :read, Form
     can [:read, :root], Page
+    can :read, Product
     can :read, Room
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
     can :read, StaffPosition

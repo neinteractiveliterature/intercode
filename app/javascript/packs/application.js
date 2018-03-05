@@ -46,6 +46,7 @@ import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
+import ProductOrderForm from '../ProductOrders/ProductOrderForm';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionAdmin from '../StaffPositionAdmin';
@@ -68,6 +69,7 @@ WebpackerReact.setup({
   LiquidHTMLEditor,
   MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
+  ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
   StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
