@@ -50,7 +50,7 @@ class UserConProfileForm extends React.Component {
   formResponseValuesChanged = (newResponseValues) => {
     this.props.onChange({
       ...this.props.userConProfile,
-      formResponseAttrs: { ...this.props.userConProfile.formResponseAttrs, ...newResponseValues },
+      form_response_attrs: { ...this.props.userConProfile.form_response_attrs, ...newResponseValues },
     });
   }
 

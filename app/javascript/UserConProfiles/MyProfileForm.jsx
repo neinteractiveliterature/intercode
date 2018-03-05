@@ -27,7 +27,7 @@ function parseResponseErrors(error) {
           input: {
             id: userConProfile.id,
             user_con_profile: {
-              form_response_attrs_json: JSON.stringify(userConProfile.formResponseAttrs),
+              form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
             },
           },
         },
@@ -53,8 +53,8 @@ class MyProfileForm extends React.Component {
     this.setState({
       userConProfile: {
         ...this.state.userConProfile,
-        formResponseAttrs: {
-          ...this.state.userConProfile.formResponseAttrs,
+        form_response_attrs: {
+          ...this.state.userConProfile.form_response_attrs,
           ...newResponseValues,
         },
       },
@@ -67,7 +67,7 @@ class MyProfileForm extends React.Component {
     <FormController
       form={this.state.form}
       convention={this.state.convention}
-      response={this.state.userConProfile.formResponseAttrs}
+      response={this.state.userConProfile.form_response_attrs}
       responseValuesChanged={this.responseValuesChanged}
       updateResponse={this.updateUserConProfile}
       parseResponseErrors={parseResponseErrors}

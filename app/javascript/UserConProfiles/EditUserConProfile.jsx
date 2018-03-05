@@ -19,7 +19,7 @@ import { updateUserConProfileMutation } from './mutations';
             id: userConProfile.id,
             user_con_profile: {
               privileges: userConProfile.privileges,
-              form_response_attrs_json: JSON.stringify(userConProfile.formResponseAttrs),
+              form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
             },
           },
         },
