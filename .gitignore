@@ -21,6 +21,7 @@ config/database.yml
 /tmp
 
 public/uploads
+public/product_images
 .rbenv-version
 .idea
 
