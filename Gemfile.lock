@@ -486,7 +486,7 @@ GEM
       json (>= 1.8)
       nokogiri (~> 1.5)
       trollop (~> 2.1)
-    recaptcha (4.6.5)
+    recaptcha (4.6.6)
       json
     redcarpet (3.4.0)
     responders (2.4.0)
