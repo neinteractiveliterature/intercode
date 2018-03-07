@@ -47,6 +47,7 @@ Intercode::Application.routes.draw do
     resources :admin_event_proposals
 
     resources :products, only: [:show]
+    resource :cart, only: [:show]
 
     resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do
       member do

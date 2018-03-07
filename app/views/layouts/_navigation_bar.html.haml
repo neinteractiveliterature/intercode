@@ -16,8 +16,15 @@
           = events_navigation_menu
           = renderer.render_navigation_items
           = admin_navigation_menu
-      %ul.navbar-nav
+      %ul.navbar-nav.align-items-md-center
         - if user_signed_in?
+          - if current_pending_order
+            %li.nav-item
+              = link_to cart_path, class: 'btn btn-light mr-2', style: 'position: relative' do
+                %i.fa.fa-shopping-cart{title: 'My shopping cart'}
+                .badge.badge-pill.badge-danger{style: 'position: absolute; right: -9px; top: -9px;'}
+                  = current_pending_order.order_entries.sum(:quantity)
+
           %li.nav-item.dropdown{role: "presentation"}
             %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
               %i.fa.fa-user
