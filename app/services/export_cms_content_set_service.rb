@@ -28,7 +28,7 @@ class ExportCmsContentSetService < ApplicationService
   def export_metadata
     File.open(File.expand_path('metadata.yml', content_set.root_path), 'w') do |f|
       metadata = {
-        inherit: inherit
+        'inherit' => inherit
       }
 
       f.write(YAML.dump(metadata))
