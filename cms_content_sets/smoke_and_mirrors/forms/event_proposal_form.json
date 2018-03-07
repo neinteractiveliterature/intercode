@@ -1,0 +1,383 @@
+{
+  "title": "Proposal form",
+  "sections": [
+    {
+      "title": "Larp Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "caption": "Event Title",
+          "lines": 1,
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "authors",
+          "caption": "Author(s)",
+          "lines": 1,
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "organization",
+          "caption": "Organization",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "url",
+          "caption": "Event or Organization Homepage URL",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "email",
+          "caption": "Email for Event Inquiries",
+          "lines": 1,
+          "free_text_type": "email",
+          "required": true
+        },
+        {
+          "item_type": "timespan",
+          "identifier": "length_seconds",
+          "caption": "Event Length",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "lines": 15,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the event. The description should be at least a couple of paragraphs, but can be as long as you like.<br>This description is used to promote your larp and attract players who will enjoy it. Be reasonably clear on where and when the larp is set, and what the larp is about. Let your players know what can they expect to be doing during the larp, and make them excited to play your larp! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_blurb",
+          "admin_description": "Short Blurb",
+          "lines": 4,
+          "required": true,
+          "format": "markdown",
+          "caption": "A **Short Blurb** (50 words or less) for the event to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "content_warnings",
+          "admin_description": "Player Visible Content Warnings",
+          "lines": 4,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Content Warnings**<br>Per NEIL policy, larp descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='fa fa-external-link' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page.<br>Please provide a content warning for your larp."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "age_restrictions",
+          "admin_description": "Player Visible Age Restrictions",
+          "lines": 1,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Age Restrictions**<br>Please include the preferred ages of players for your larp. Examples are \"Players must be 18 or older\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age] years old are welcome in this larp\"."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "player_communications",
+          "admin_description": "Player Communications",
+          "lines": 4,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Player Communications**<br>How will you distribute larp information to your players? Will you be using a casting form? Will character roles be cast and distributed before the convention or on site, or will characters be developed as part of the larp?<br>Please use this space to let your players know what to expect."
+        }
+      ]
+    },
+    {
+      "title": "Character Counts",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "{% include \"proposal_form_registration_policy_instructions\" %}"
+        },
+        {
+          "item_type": "registration_policy",
+          "identifier": "registration_policy",
+          "admin_description": "Character Slots",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Other Game Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "subhead",
+          "content": "This information will only be used by the Proposals Committee."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "genre",
+          "admin_description": "Larp Genre",
+          "lines": 1,
+          "caption": "What is the **Genre** of your larp:",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "run_before",
+          "admin_description": "Has this larp run before?",
+          "lines": 1,
+          "caption": "{{ convention.name }} is looking for larps that are new and larps that have run before, either at a\nconvention, or elsewhere.<br>If this larp has run before, where was that?\n"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "game_system",
+          "admin_description": "What game system will be used? ",
+          "lines": 1,
+          "caption": "**Game System** that will be used, if any:"
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "ongoing_campaign",
+          "admin_description": "Is part of an ongoing campaign?",
+          "style": "radio_horizontal",
+          "caption": "Is this event part of an ongoing campaign?",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "combat_resolution",
+          "admin_description": "Combat Resolution",
+          "style": "radio_vertical",
+          "caption": "How will combat be resolved:",
+          "choices": [
+            {
+              "caption": "Physical Methods (such as boffer weapons)",
+              "value": "Physical"
+            },
+            {
+              "caption": "Non-Physical Methods (cards, dice, etc.)",
+              "value": "NonPhysical"
+            },
+            {
+              "caption": "There will be no combat",
+              "value": "NoCombat"
+            },
+            {
+              "caption": "Other (describe in Additional Background Information, below)",
+              "value": "Other"
+            }
+          ]
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "other_committee_info",
+          "admin_description": "Other Info for the Committee",
+          "lines": 4,
+          "caption": "Please enter any additional background information here, or any other information you wish to tell the Proposals Committee. <br>This information will be shown only to the Proposals Committee."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "setup_teardown",
+          "admin_description": "Setup/Teardown requirements",
+          "lines": 4,
+          "caption": "Are there any special setup or teardown requirements for this event? For example, do you need extra time to set up or tear down a complex set? (Requests for standard furniture will be handled separately closer to the convention. Intercon can not provide unusual setup materials for your event. Please reference [the GM Policies <i class='fa fa-external-link' aria-hidden='true'></i>]({% page_url gmpolicies %}#FurnitureService) for available items )"
+        }
+      ]
+    },
+    {
+      "title": "GM/Author Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "subhead",
+          "content": "This information will only be used by the Proposals Committee."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "gms",
+          "admin_description": "GMs for the larp",
+          "lines": 2,
+          "caption": "**GMs for your larp.**<br>Note that the GMs listed here are only for the purpose of evaluating your proposal. If your proposal is accepted, you'll be able to select GMs from the users registered for  {{ convention.name }}."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "other_games",
+          "admin_description": "Other larps from the team",
+          "lines": 4,
+          "caption": "What other larps have you written or run? Where and when were they run?"
+        }
+      ]
+    },
+    {
+      "title": "Restrictions",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "subhead",
+          "content": "This information will only be used by the Proposals Committee."
+        },
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "{{convention.name}} appeals to a diverse group of players of all ages, ethnicities, belief systems, sexual orientations, physical capabilities, experience, etc. Authors can write interesting larps that might not be suitable for all audiences. In order for the con staff to balance these potentially opposing requirements, please answer the following questions.<br><br>Note that answering yes to any or all of these questions does not disqualify your proposal.<br><br>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "offensive",
+          "admin_description": "Offensive Elements",
+          "lines": 4,
+          "caption": "Are there any components of your larp that might offend or upset some group of attendees? For example, adult themes, potentially offensive story arcs, etc. If so, please explain and consider if this needs to be mentioned in the event descriptions."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "age_appropriate",
+          "admin_description": "Appropriate for Under 18?",
+          "lines": 4,
+          "caption": "Is your larp appropriate for players under the age of 18? If you specified any age restictions earlier, please elaborate here. If there are any components of your larp that might be illegal for attendees under the age of 18 (props or items that are illegal for a minor to possess, alcohol, etc.) please explain."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "physical_restrictions",
+          "admin_description": "Physical Restrictions",
+          "lines": 4,
+          "caption": "Are there any physical restrictions imposed by your larp? For example, live boffer combat, confined sets, etc. If so, please explain and consider if this needs to be mentioned in the event descriptions."
+        }
+      ]
+    },
+    {
+      "title": "Scheduling Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "subhead",
+          "content": "This information will only be used by the Proposals Committee."
+        },
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "The con can schedule your event into one (or more) of the time slots available over the weekend. The con has to put together a balanced schedule so we can satisfy the most players in the most time slots. Your flexibility in scheduling your event is vital."
+        },
+        {
+          "item_type": "timeblock_preference",
+          "identifier": "timeblock_preferences",
+          "admin_description": "Timeblock Preferences",
+          "caption": "Please pick your top three preferences for when you'd like to run your larp. Please also mark all times when you will not be available to run your larp",
+          "timeblocks": [
+            {
+              "label": "Morning",
+              "start": {
+                "hour": 9
+              },
+              "finish": {
+                "hour": 13
+              }
+            },
+            {
+              "label": "Afternoon",
+              "start": {
+                "hour": 14
+              },
+              "finish": {
+                "hour": 18
+              }
+            },
+            {
+              "label": "Evening",
+              "start": {
+                "hour": 20
+              },
+              "finish": {
+                "hour": 24
+              }
+            },
+            {
+              "label": "After Midnight",
+              "start": {
+                "hour": 24
+              },
+              "finish": {
+                "hour": 28
+              }
+            }
+          ],
+          "omit_timeblocks": [
+
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "multiple_runs",
+          "admin_description": "Can Do Multiple Runs?",
+          "default_value": "false",
+          "style": "radio_horizontal",
+          "caption": "Are you willing to hold this event more than once at this convention?",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "can_play_concurrently",
+          "admin_description": "Can Play Concurrently?",
+          "default_value": "false",
+          "style": "radio_horizontal",
+          "caption": "Can players play in your larp and another event at the same time?",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "scheduling_constraints",
+          "admin_description": "Scheduling Constraints",
+          "lines": 4,
+          "caption": "If you are willing to hold the larp more than once, please discuss your preferences below.<br>In addition, if there are scheduling constraints on your larp (for example, if are you proposing another event), or there are times your larp cannot be scheduled, please discuss them as well."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "space_requirements",
+          "admin_description": "Space Requirements",
+          "lines": 2,
+          "caption": "Please list any **Space Requirements** for your event."
+        }
+      ]
+    }
+  ]
+}
