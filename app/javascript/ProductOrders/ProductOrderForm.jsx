@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
+import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
+import LoadingIndicator from '../LoadingIndicator';
 
 const productQuery = gql`
 query($productId: Int!) {
@@ -24,12 +26,40 @@ query($productId: Int!) {
 }
 `;
 
-@graphql(productQuery)
+const addOrderEntryToCurrentPendingOrderMutation = gql`
+mutation($input: AddOrderEntryToCurrentPendingOrderInput!) {
+  addOrderEntryToCurrentPendingOrder(input: $input) {
+    order_entry {
+      id
+    }
+  }
+}
+`;
+
+@compose(
+  graphql(productQuery),
+  graphql(addOrderEntryToCurrentPendingOrderMutation, {
+    props: ({ mutate }) => ({
+      addOrderEntryToCurrentPendingOrder: (productId, productVariantId, quantity) => mutate({
+        variables: {
+          input: {
+            order_entry: {
+              product_id: productId,
+              product_variant_id: productVariantId,
+              quantity,
+            },
+          },
+        },
+      }),
+    }),
+  }),
+)
 @GraphQLQueryResultWrapper
 class ProductOrderForm extends React.Component {
   static propTypes = {
     productId: PropTypes.number.isRequired,
     data: GraphQLResultPropType(productQuery).isRequired,
+    addOrderEntryToCurrentPendingOrder: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -39,6 +69,8 @@ class ProductOrderForm extends React.Component {
     this.state = {
       productVariantId: null,
       quantity: 1,
+      error: null,
+      submitting: false,
     };
   }
 
@@ -58,6 +90,23 @@ class ProductOrderForm extends React.Component {
   quantityChanged = (event) => {
     const quantity = Number.parseInt(event.target.value, 10);
     this.setState({ quantity: (Number.isNaN(quantity) ? null : quantity) });
+  }
+
+  addToCartClicked = async () => {
+    try {
+      this.setState({ error: null, submitting: true });
+      await this.props.addOrderEntryToCurrentPendingOrder(
+        this.props.productId,
+        this.state.productVariantId,
+        this.state.quantity,
+      );
+
+      alert('success!');
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ submitting: false });
+    }
   }
 
   renderVariantSelect = () => {
@@ -141,14 +190,23 @@ class ProductOrderForm extends React.Component {
           <div className="col-6">
             {this.renderTotalAmount()}
           </div>
-          <div className="col-6">
-            <button className="w-100 btn btn-primary" disabled={!this.isDataComplete()}>
-              <i className="fa fa-shopping-cart" />
+          <div className="col-6 mb-2">
+            <button
+              className="w-100 btn btn-primary"
+              disabled={!this.isDataComplete() || this.state.submitting}
+              onClick={this.addToCartClicked}
+            >
+              {
+                this.state.submitting ?
+                (<LoadingIndicator />) :
+                (<i className="fa fa-shopping-cart" />)
+              }
               {' '}
               Add to cart
             </button>
           </div>
         </div>
+        <ErrorDisplay graphQLError={this.state.error} />
       </div>
     </div>
   )

@@ -7,6 +7,10 @@ class Intercode::Import::Intercode1::Tables::StoreOrderEntries < Intercode::Impo
     @product_id_map = product_id_map
   end
 
+  def dataset
+    super.where(Sequel.lit('Quantity > 0'))
+  end
+
   private
 
   def build_record(row)

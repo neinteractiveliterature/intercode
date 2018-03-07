@@ -93,6 +93,12 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :destroy))
   end
 
+  ### Order / OrderEntry
+
+  field :addOrderEntryToCurrentPendingOrder, Mutations::AddOrderEntryToCurrentPendingOrder.field do
+    guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
+  end
+
   ### Page
 
   field :deletePage, Mutations::DeletePage.field do
