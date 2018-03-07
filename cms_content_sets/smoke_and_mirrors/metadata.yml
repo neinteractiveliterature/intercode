@@ -1,2 +1,3 @@
-inherit:
-  - standard
+---
+:inherit:
+- standard
