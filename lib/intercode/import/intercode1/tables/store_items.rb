@@ -33,7 +33,7 @@ class Intercode::Import::Intercode1::Tables::StoreItems < Intercode::Import::Int
   end
 
   def product_name(row)
-    [row[:Color], row[:Gender], row[:Style], row[:Singular]].select(&:present?).join(' ')
+    [row[:Gender], row[:Color], row[:Style], row[:Singular]].select(&:present?).join(' ')
   end
 
   def sizes(row)
