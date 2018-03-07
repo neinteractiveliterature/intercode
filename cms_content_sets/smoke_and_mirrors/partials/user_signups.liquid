@@ -1,0 +1,30 @@
+{% assign signups = user_con_profile.signups | sort: "starts_at" %}
+
+{% if signups.size > 0 %}
+  <section class="card bg-info text-white my-4">
+    <div class="card-header">My Schedule</div>
+
+    <ul class="list-group list-group-flush text-dark">
+      {% for signup in signups %}
+        <li class="list-group-item d-flex align-items-baseline">
+          <div style="width: 11em">
+            {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}
+          </div>
+          <div class="col">
+            <a href="{{ signup.event_url }}">{{ signup.event.title }}</a>
+            {% if signup.state != 'confirmed' %}
+              [{{ signup.state | capitalize }}]
+            {% endif %}
+            {% if signup.team_member? %}
+              [{{ signup.event.team_member_name }}]
+            {% endif %}
+          </div>
+
+          <div>
+            <a class="btn btn-sm btn-outline-danger" href="{{ signup.withdraw_url }}" data-method="DELETE" data-confirm="Are you sure you want to withdraw from {{ signup.event.title }}?">Withdraw</a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

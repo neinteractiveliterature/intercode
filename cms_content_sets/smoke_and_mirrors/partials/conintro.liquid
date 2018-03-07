@@ -1,0 +1,21 @@
+<div>
+  <h1 class='display-4'>
+    {{convention.name}}:  <small class="theme-title"><a class="text-secondary" href="{% page_url theme %}">Smoke&nbsp;and&nbsp;Mirrors</a></small>
+  </h1>
+  <p class="lead">
+    Welcome to {{convention.name}}, the premiere multi-genre <a href="{% page_url aboutlarp %}">Live Action Role Playing</a> (LARP) convention in the world.  
+  </p>
+  <p>
+    {{convention.name}} is the  <a href="http://www.interactiveliterature.org/NEIL/interconConventions.html" target="_blank">twenty-second</a> Intercon in the greater Boston area, and we're planning on making it the best ever. If you love to LARP, then {{convention.name}} is the place you want to be. If you've always wanted to try LARPing, then come join us! You won't regret it!
+  </p>
+  <hr class="my-3">
+  <p>
+    {{convention.name}} will be running at the <a href="{% page_url hotel %}">Crowne Plaza</a> in Warwick, RI from {{ convention.starts_at | date: "%A, %B %d" }} to {{convention.ends_at|date: "%A, %B %d, %Y"}}.
+  </p>
+
+  {% unless user_con_profile %}
+    <p class="lead">
+      <a class='btn btn-primary' href='/users/sign_in'>Log In</a>
+    </p>
+  {% endunless %}
+</div>
