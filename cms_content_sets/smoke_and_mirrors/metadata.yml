@@ -1,8 +1,6 @@
 ---
 inherit:
 - standard
-default_layout_name: Intercon S Layout
-root_page_slug: root
 navigation_items:
 - item_type: section
   title: Programming
@@ -49,3 +47,5 @@ navigation_items:
   - item_type: link
     title: Intercon Flyer
     page_slug: flyer
+root_page_slug: root
+default_layout_name: Intercon S Layout
