@@ -1,0 +1,15 @@
+default_layout_name: Default
+root_page_slug: root
+navigation_items:
+  - item_type: section
+    title: About
+    navigation_links:
+    - item_type: link
+      title: Contacts
+      page_slug: contacts
+    - item_type: link
+      title: What Does It Cost?
+      page_slug: cost
+    - item_type: link
+      title: Who's Who
+      page_slug: whos-who

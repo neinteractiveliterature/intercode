@@ -1,3 +1,51 @@
 ---
 inherit:
 - standard
+default_layout_name: Intercon S Layout
+root_page_slug: root
+navigation_items:
+- item_type: section
+  title: Programming
+  navigation_links:
+  - item_type: link
+    title: Panels
+    page_slug: panels
+  - item_type: link
+    title: Iron GM
+    page_slug: irongm
+  - item_type: link
+    title: Social Events
+    page_slug: social
+- item_type: section
+  title: About
+  navigation_links:
+  - item_type: link
+    title: Convention Rules
+    page_slug: rules
+  - item_type: link
+    title: What Does It Cost?
+    page_slug: pricing
+  - item_type: link
+    title: Hotel Info
+    page_slug: hotel
+  - item_type: link
+    title: Signing Up for Games
+    page_slug: signupfaq
+  - item_type: link
+    title: Convention Contacts
+    page_slug: contacts
+  - item_type: link
+    title: Staff Role Descriptions
+    page_slug: role-descriptions
+  - item_type: link
+    title: Staff and GM Bios
+    page_slug: bios
+  - item_type: link
+    title: Volunteering
+    page_slug: volunteering
+  - item_type: link
+    title: Intercon Calendar
+    page_slug: calendar
+  - item_type: link
+    title: Intercon Flyer
+    page_slug: flyer
