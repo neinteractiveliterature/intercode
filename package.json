@@ -74,7 +74,7 @@
     "react-virtualized-select": "^3.1.0",
     "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
-    "redux-actions": "^2.2.1",
+    "redux-actions": "^2.3.0",
     "redux-logger": "^3.0.6",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "^6.0.7",
