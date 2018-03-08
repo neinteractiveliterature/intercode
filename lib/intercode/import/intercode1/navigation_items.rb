@@ -27,6 +27,7 @@ class Intercode::Import::Intercode1::NavigationItems
   def import!
     logger.info 'Importing navigation items'
 
+    convention.cms_navigation_items.destroy_all
     NAVIGATION_STRUCTURE.each do |item|
       import_navigation_item(item)
     end

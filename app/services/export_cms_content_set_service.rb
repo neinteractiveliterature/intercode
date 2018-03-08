@@ -17,9 +17,9 @@ class ExportCmsContentSetService < ApplicationService
     Dir.mkdir(content_set.root_path)
 
     export_metadata
-    export_content_for_subdir('layouts', convention.cms_layouts)
-    export_content_for_subdir('pages', convention.pages)
-    export_content_for_subdir('partials', convention.cms_partials)
+    export_content_for_subdir('layouts', convention.cms_layouts, 'name')
+    export_content_for_subdir('pages', convention.pages, 'slug')
+    export_content_for_subdir('partials', convention.cms_partials, 'name')
     export_form_content
 
     success
@@ -28,8 +28,13 @@ class ExportCmsContentSetService < ApplicationService
   def export_metadata
     File.open(File.expand_path('metadata.yml', content_set.root_path), 'w') do |f|
       metadata = {
-        'inherit' => inherit
-      }
+        'inherit' => inherit,
+        'navigation_items' => serialize_navigation_items(
+          convention.cms_navigation_items.root.order(:position)
+        ),
+        'root_page_slug' => convention.root_page&.slug,
+        'default_layout_name' => convention.default_layout&.name
+      }.compact
 
       f.write(YAML.dump(metadata))
     end
@@ -53,11 +58,12 @@ class ExportCmsContentSetService < ApplicationService
     end
   end
 
-  def export_content_for_subdir(subdir, content)
+  def export_content_for_subdir(subdir, content, filename_attribute)
     Dir.mkdir(File.expand_path(subdir, content_set.root_path))
 
     content.each do |model|
-      path = File.expand_path("#{subdir}/#{model.name}.liquid", content_set.root_path)
+      filename = model.public_send(filename_attribute)
+      path = File.expand_path("#{subdir}/#{filename}.liquid", content_set.root_path)
       frontmatter_attrs = frontmatter_for_content(model)
       inherited_content = inherited_template_content_for(subdir, model.name)
       next if [model.content, frontmatter_attrs] == inherited_content
@@ -81,7 +87,7 @@ class ExportCmsContentSetService < ApplicationService
     frontmatter_attrs = model.attributes.except(
       'content',
       'id',
-      'name',
+      'slug',
       'parent_id',
       'parent_type',
       'cms_layout_id',
@@ -89,11 +95,20 @@ class ExportCmsContentSetService < ApplicationService
       'updated_at'
     ).compact
 
-    if Cadmus::Slugs.slugify(model.name) == frontmatter_attrs['slug']
-      frontmatter_attrs.delete('slug')
-    end
-
     frontmatter_attrs
+  end
+
+  def serialize_navigation_items(items)
+    items.map do |item|
+      {
+        'item_type' => item.item_type,
+        'title' => item.title,
+        'page_slug' => item.page&.slug,
+        'navigation_links' => serialize_navigation_items(
+          item.navigation_links.order(:position)
+        ).presence
+      }.compact
+    end
   end
 
   def inherited_content_sets

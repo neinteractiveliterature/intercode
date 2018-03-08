@@ -25,17 +25,13 @@ class LoadCmsContentSetService < ApplicationService
   private
 
   def inner_call
-    load_content_for_subdir('layouts') do |cms_layout|
-      convention.update!(default_layout: cms_layout) if cms_layout.name == 'Default'
-    end
-
-    load_content_for_subdir('pages') do |page|
-      convention.update!(root_page: page) if page.name == 'root'
-    end
-
-    load_content_for_subdir('partials')
-
+    load_content_for_subdir('layouts', 'name')
+    load_content_for_subdir('pages', 'slug')
+    load_content_for_subdir('partials', 'name')
     load_form_content
+    load_navigation_items
+    set_default_layout
+    set_root_page
 
     success
   end
@@ -55,13 +51,54 @@ class LoadCmsContentSetService < ApplicationService
     convention.save!
   end
 
-  def load_content_for_subdir(subdir, &block)
+  def load_content_for_subdir(subdir, filename_attribute, &block)
     content_set.all_template_paths_with_names(subdir).each do |path, name|
       content, attrs = content_set.template_content(path)
-      model = association_for_subdir(subdir).create!(name: name, content: content, **attrs)
+      model = association_for_subdir(subdir).create!(
+        filename_attribute => name,
+        content: content,
+        **attrs
+      )
 
       block.call(model) if block
     end
+  end
+
+  def load_navigation_items
+    return unless content_set.metadata[:navigation_items]
+    content_set.metadata[:navigation_items].each_with_index do |navigation_item, i|
+      root_item = convention.cms_navigation_items.new(position: i + 1)
+      populate_navigation_item(root_item, navigation_item)
+      root_item.save!
+    end
+  end
+
+  def populate_navigation_item(item, data)
+    item.title = data[:title]
+
+    if data[:item_type] == 'section'
+      data[:navigation_links].each_with_index do |link_data, i|
+        link = item.navigation_links.new(position: i + 1)
+        populate_navigation_item(link, link_data)
+      end
+    elsif data[:item_type] == 'link'
+      item.page = convention.pages.find_by(slug: data[:page_slug])
+    end
+  end
+
+  def set_default_layout
+    return unless content_set.metadata[:default_layout_name]
+    default_layout = convention.cms_layouts.find_by(
+      name: content_set.metadata[:default_layout_name]
+    )
+    convention.update!(default_layout: default_layout)
+  end
+
+  def set_root_page
+    return unless content_set.metadata[:root_page_slug]
+    convention.update!(
+      root_page: convention.pages.find_by(slug: content_set.metadata[:root_page_slug])
+    )
   end
 
   def create_form(association_name)
@@ -85,7 +122,7 @@ class LoadCmsContentSetService < ApplicationService
   def ensure_no_conflicting_pages
     ensure_no_conflicting_content(
       'pages',
-      convention.pages.pluck(:name),
+      convention.pages.pluck(:slug),
       (
         if convention.root_page
           { 'root' => 'root page' }
