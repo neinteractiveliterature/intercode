@@ -58,14 +58,14 @@ class ConventionForm extends React.Component {
       default_layout_id: PropTypes.number,
       root_page_id: PropTypes.number,
     }).isRequired,
-    cmsLayouts: PropTypes.arrayOf({
+    cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-    }).isRequired,
-    pages: PropTypes.arrayOf({
+    }).isRequired).isRequired,
+    pages: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-    }).isRequired,
+    }).isRequired).isRequired,
     saveConvention: PropTypes.func.isRequired,
   }
 
