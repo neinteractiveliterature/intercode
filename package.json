@@ -45,7 +45,7 @@
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.14",
     "node-sass": "^4.7.2",
-    "path-complete-extname": "^0.1.0",
+    "path-complete-extname": "^1.0.0",
     "payment": "^2.3.0",
     "popper.js": "^1.12.9",
     "postcss-loader": "^2.1.1",
