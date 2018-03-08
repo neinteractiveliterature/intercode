@@ -25,6 +25,24 @@ fragment ConventionAdminConventionFields on Convention {
       value
     }
   }
+
+  default_layout {
+    id
+  }
+
+  cms_layouts {
+    id
+    name
+  }
+
+  root_page {
+    id
+  }
+
+  pages {
+    id
+    name
+  }
 }
 `;
 
@@ -88,6 +106,8 @@ class ConventionAdmin extends React.Component {
             string_value: timespan.value,
           })),
         },
+        default_layout_id: convention.default_layout_id,
+        root_page_id: convention.root_page_id,
       },
     };
 
@@ -111,8 +131,14 @@ class ConventionAdmin extends React.Component {
   render = () => (
     <div className="mb-4">
       <ConventionForm
-        initialConvention={this.props.data.convention}
+        initialConvention={{
+          ...this.props.data.convention,
+          default_layout_id: (this.props.data.convention.default_layout || {}).id,
+          root_page_id: (this.props.data.convention.root_page || {}).id,
+        }}
         saveConvention={this.saveConvention}
+        cmsLayouts={this.props.data.convention.cms_layouts}
+        pages={this.props.data.convention.pages}
       />
 
       {this.renderError()}
