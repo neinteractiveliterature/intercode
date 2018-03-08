@@ -80,6 +80,6 @@ class UserConProfilesController < ApplicationController
   # controller. In other words, users shouldn't be able to access even their own profile here
   # (because they could use this controller to escalate their privileges).
   def authorize_admin_profiles
-    authorize! :update, convention.user_con_profiles.new
+    authorize! :view_attendees, convention
   end
 end

@@ -209,6 +209,7 @@ class Ability
     }
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
+    can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
     can :manage, TicketType, convention_id: staff_con_ids
