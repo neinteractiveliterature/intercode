@@ -17,12 +17,22 @@ class CmsContentSet
     end
   end
 
+  def all_file_paths_with_names
+    all_file_paths do |file_path|
+      [file_path, File.basename(file_path)]
+    end
+  end
+
   def all_form_names
     all_form_paths_with_names.map(&:last)
   end
 
   def all_template_names(subdir)
     all_template_paths_with_names(subdir).map(&:last)
+  end
+
+  def all_file_names
+    all_file_paths_with_names.map(&:last)
   end
 
   def basename_without_extension(path, extension)
@@ -52,6 +62,15 @@ class CmsContentSet
     merge_paths('.json', *inherited_form_paths, own_form_paths)
   end
 
+  def all_file_paths
+    inherited_file_paths = inherit_content_sets.map(&:all_file_paths)
+
+    file_lists_by_name = (inherited_file_paths + [own_file_paths]).map do |path_list|
+      path_list.index_by { |path| File.basename(path) }
+    end
+    file_lists_by_name.inject(&:merge).values
+  end
+
   def merge_paths(extension, *path_lists)
     path_lists_by_name = path_lists.map do |path_list|
       path_list.index_by { |path| basename_without_extension(path, extension) }
@@ -66,6 +85,10 @@ class CmsContentSet
 
   def own_template_paths(subdir)
     Dir[content_path(subdir, '**', '*.liquid')]
+  end
+
+  def own_file_paths
+    Dir[content_path('files', '**', '*')]
   end
 
   def content_path(*parts)

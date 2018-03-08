@@ -20,6 +20,7 @@ class ExportCmsContentSetService < ApplicationService
     export_content_for_subdir('layouts', convention.cms_layouts, 'name')
     export_content_for_subdir('pages', convention.pages, 'slug')
     export_content_for_subdir('partials', convention.cms_partials, 'name')
+    export_files
     export_form_content
 
     success
@@ -96,6 +97,16 @@ class ExportCmsContentSetService < ApplicationService
     ).compact
 
     frontmatter_attrs
+  end
+
+  def export_files
+    Dir.mkdir(File.expand_path('files', content_set.root_path))
+
+    convention.cms_files.find_each do |cms_file|
+      File.open(File.expand_path("files/#{cms_file.filename}", content_set.root_path), 'wb') do |f|
+        f.write(cms_file.file.read)
+      end
+    end
   end
 
   def serialize_navigation_items(items)

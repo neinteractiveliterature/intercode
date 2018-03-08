@@ -30,6 +30,7 @@ class LoadCmsContentSetService < ApplicationService
     load_content_for_subdir('partials', 'name')
     load_form_content
     load_navigation_items
+    load_files
     set_default_layout
     set_root_page
 
@@ -61,6 +62,16 @@ class LoadCmsContentSetService < ApplicationService
       )
 
       block.call(model) if block
+    end
+  end
+
+  def load_files
+    content_set.all_file_paths.each do |path|
+      File.open(path, 'rb') do |file|
+        convention.cms_files.create!(
+          file: file
+        )
+      end
     end
   end
 
