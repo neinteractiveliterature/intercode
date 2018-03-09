@@ -247,6 +247,7 @@ class Ability
       }
     }
     can :read, UserConProfile, convention_id: team_member_convention_ids
+    can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
     can :update, EventProposal, event_id: team_member_event_ids
     can :read, Signup, run: { event_id: team_member_event_ids }
     can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
