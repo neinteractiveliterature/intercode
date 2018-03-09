@@ -92,6 +92,7 @@ class EventAdminRow extends React.Component {
 
   render = () => {
     const { event } = this.props;
+    const length = moment.duration(event.length_seconds, 'seconds');
 
     return (
       <tr>
@@ -105,7 +106,9 @@ class EventAdminRow extends React.Component {
           {' '}
           <small>({event.category})</small>
         </td>
-        <td>{moment.duration(event.length_seconds, 'seconds').humanize()}</td>
+        <td>
+          {length.hours()}:{length.minutes().toString().padStart(2, '0')}
+        </td>
         <td>{this.renderRuns(event)}</td>
       </tr>
     );

@@ -305,7 +305,7 @@ class ScheduleGrid extends React.Component {
   renderGridWithEventRuns = (eventRuns, gridTimespan) => {
     const maxTimespan = eventRuns.reduce(
       (timespan, eventRun) => timespan.expandedToFit(eventRun.timespan),
-      eventRuns.length > 0 ? eventRuns[0].timespan : gridTimespan,
+      gridTimespan,
     );
 
     const eventRunsByCategory = this.groupEventRunsByCategory(eventRuns);
@@ -362,9 +362,12 @@ class ScheduleGrid extends React.Component {
     const conventionDayGrids = this.conventionDays.map((conventionDay) => {
       const conventionDayTimespan = new Timespan(conventionDay, conventionDay.clone().add(1, 'day'));
       const conventionDayEvents = eventRuns.filter(eventRun => conventionDayTimespan.overlapsTimespan(eventRun.timespan));
+      const gridTimespan = conventionDayTimespan.clone();
+      gridTimespan.start.add(3, 'hours'); // start grid at 9am unless something is earlier
+      gridTimespan.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
       const renderer = () => this.renderGridWithEventRuns(
         conventionDayEvents,
-        conventionDayTimespan,
+        gridTimespan.intersection(this.conventionTimespan),
       );
 
       return (
