@@ -21,6 +21,7 @@ class ClearCmsContentService < ApplicationService
     convention.pages.destroy_all
     convention.cms_partials.destroy_all
     convention.cms_layouts.destroy_all
+    convention.cms_files.destroy_all
     convention.forms.destroy_all
 
     success

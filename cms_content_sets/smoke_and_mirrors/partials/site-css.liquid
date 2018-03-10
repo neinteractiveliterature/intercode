@@ -1,0 +1,67 @@
+---
+name: site-css
+admin_notes: ''
+---
+ <style type="text/css">
+      body, .popover {
+        font-family: 'Lato', sans-serif;
+      }
+      
+      .lead, h1, h2, h3, h4, h5, .blockquote {
+        font-family: 'Montserrat', sans-serif;
+      }
+      
+      .s-menubar {
+        font-family: 'Montserrat', sans-serif;
+        background:  #C33764;
+        background: -webkit-linear-gradient(to right, #1D2671, #C33764);
+        background: linear-gradient(to bottom right, #1D2671, #C33764);
+        -webkit-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+        -moz-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+        box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+      }
+      
+      .theme-title {
+        font-weight:300;
+        font-size:80;
+      }
+      
+      .bg-medium-gray {
+        background-color:#eee;
+      }
+      .section-nav {
+        padding-left: 0;
+        font-size:90%;
+      }
+      .toc-entry {
+        display: block;
+      }
+      .section-nav ul {
+        padding-left: 1rem;
+      }
+      .toc-entry a {
+        display: block;
+        padding: .125rem 1.5rem;
+        color: #99979c;
+      }
+    @media only screen and (min-width: 576px){
+        .overall {
+          min-height:100vh
+        }
+        .section-nav {
+          border-right: 1px solid #eee;
+          max-height: 90vh; 
+          overflow-y: auto;
+          border-bottom: none;
+        }
+      }
+      
+      @media only screen and (max-width: 575px){
+        .section-nav {
+          border-bottom: 1px solid #eee;
+        }
+        .theme-title {
+          font-size:60%;
+        }
+      }
+</style>

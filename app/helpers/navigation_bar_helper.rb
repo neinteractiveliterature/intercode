@@ -74,7 +74,7 @@ module NavigationBarHelper
     NavigationItem.define do
       label 'Attendees'
       url { user_con_profiles_path }
-      visible? { can?(:read, UserConProfile.new(convention: convention)) }
+      visible? { can?(:view_attendees, convention) }
     end,
     NavigationItem.define do
       label 'Convention Settings'

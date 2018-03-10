@@ -18,6 +18,24 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :volunteer_event_form, !Types::FormType
   field :filler_event_form, !Types::FormType
 
+  field :cms_layouts, types[Types::CmsLayoutType] do
+    resolve -> (convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :cms_layouts).load(convention)
+    }
+  end
+
+  field :default_layout, Types::CmsLayoutType do
+    resolve -> (convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :default_layout).load(convention)
+    }
+  end
+
+  field :pages, types[Types::PageType] do
+    resolve -> (convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :pages).load(convention)
+    }
+  end
+
   field :rooms, types[Types::RoomType] do
     guard ->(convention, _args, ctx) do
       ctx[:current_ability].can?(:read, Room.new(convention: convention))
@@ -25,6 +43,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
 
     resolve -> (convention, _args, _ctx) {
       AssociationLoader.for(Convention, :rooms).load(convention)
+    }
+  end
+
+  field :root_page, Types::PageType do
+    resolve -> (convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :root_page).load(convention)
     }
   end
 

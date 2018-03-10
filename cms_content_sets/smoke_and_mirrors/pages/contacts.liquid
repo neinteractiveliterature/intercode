@@ -1,4 +1,8 @@
-<h1>Contacts</h1>
+---
+name: Convention Contacts
+admin_notes: ''
+---
+<h1 class="my-3">Convention Contacts</h1>
 
 <p>The following people are in charge of various aspects of {{ convention.name }}:</p>
 
@@ -14,8 +18,9 @@
   <tbody>
     {% for staff_position in staff_positions %}
       {% assign user_con_profiles = staff_position.user_con_profiles | sort_natural:'name_inverted' %}
+      {% assign user_con_profiles_size = user_con_profiles|size %}
       <tr>
-        <td>{{ staff_position.name }}</td>
+        <td><a href="{% page_url role-descriptions %}/#{{ staff_position.name | downcase | remove: " "}}">{{ staff_position.name }}</a></td>
         <td>
           <ul class="list-unstyled">
             {% for user_con_profile in user_con_profiles %}
@@ -23,7 +28,7 @@
             {% endfor %}
           </ul>
         </td>
-        <td>{{ staff_position.email | email_link }}</td>
+        <td>{{staff_position.email_link}}</a></td>
       </tr>
     {% endfor %}
   </tbody>

@@ -7,6 +7,7 @@ import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
+import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 
 const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
@@ -54,7 +55,17 @@ class ConventionForm extends React.Component {
       }).isRequired,
       maximum_tickets: PropTypes.number,
       ticket_name: PropTypes.string.isRequired,
+      default_layout_id: PropTypes.number,
+      root_page_id: PropTypes.number,
     }).isRequired,
+    cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired).isRequired,
+    pages: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired).isRequired,
     saveConvention: PropTypes.func.isRequired,
   }
 
@@ -78,6 +89,8 @@ class ConventionForm extends React.Component {
         maximum_event_signups: FIELD_TYPES.OBJECT,
         maximum_tickets: FIELD_TYPES.INTEGER,
         ticket_name: FIELD_TYPES.STRING,
+        default_layout_id: FIELD_TYPES.SELECT,
+        root_page_id: FIELD_TYPES.SELECT,
       },
       () => this.state.convention.timezone_name,
     ).getMutatorForComponent(this);
@@ -135,6 +148,22 @@ class ConventionForm extends React.Component {
         <div className="row form-group">
           {startEndFields}
         </div>
+
+        <SelectWithLabel
+          name="default_layout_id"
+          label="Default layout for pages"
+          value={this.state.convention.default_layout_id}
+          options={this.props.cmsLayouts.map(layout => ({ value: layout.id, label: layout.name }))}
+          onChange={this.conventionMutator.valueChangeCallback('default_layout_id')}
+        />
+
+        <SelectWithLabel
+          name="root_page_id"
+          label="Root page"
+          value={this.state.convention.root_page_id}
+          options={this.props.pages.map(page => ({ value: page.id, label: page.name }))}
+          onChange={this.conventionMutator.valueChangeCallback('root_page_id')}
+        />
 
         {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
 

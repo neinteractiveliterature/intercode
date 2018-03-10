@@ -1,0 +1,68 @@
+---
+name: Staff and GM Bios
+---
+<h1 class='my-3'>Staff and GM Bios</h1>
+{% assign user_con_profiles = convention.bio_eligible_user_con_profiles | sort_natural:'name_inverted' %}
+<div class="row">
+  <div class="col-md-3">
+    <ul class="section-nav sticky-top" >
+      <li class="toc-entry"><a href="#concom">Intercon Staff</a>
+        <ul>
+          {% for display_user_con_profile in user_con_profiles %}
+            {% assign position_count = display_user_con_profile.staff_positions | size %}
+            {% if display_user_con_profile.privileges contains 'Proposal Committee' or position_count > 0 %}
+              <li class="toc-entry"><a href="#user-{{ display_user_con_profile.id }}">{{ display_user_con_profile.first_name }} {{ display_user_con_profile.last_name }}</a>
+            {% endif %}
+
+          {% endfor %}
+        </ul></li>
+        <li class="toc-entry"><a href="#gms">Game GMs</a>
+        <ul>
+          {% for display_user_con_profile in user_con_profiles %}
+            {% unless display_user_con_profile.privileges contains 'Con Com' %}
+              <li class="toc-entry"><a href="#user-{{ display_user_con_profile.id }}">{{ display_user_con_profile.bio_name }}</a>
+            {% endunless %}
+          {% endfor %}
+        </ul></li>
+        <li class="toc-entry"><a href="#volunteers">Volunteers</a>
+        <ul>
+          {% for display_user_con_profile in user_con_profiles %}
+            {% if display_user_con_profile.privileges contains 'Con Com' %}
+{% assign position_count = display_user_con_profile.staff_positions | size %}
+              {% unless display_user_con_profile.privileges contains 'Proposal Committee' or position_count  > 0  %}
+              <li class="toc-entry"><a href="#user-{{ display_user_con_profile.id }}">{{ display_user_con_profile.bio_name }}</a>
+            {% endunless %}
+{% endif %}
+          {% endfor %}
+        </ul></li>
+
+    </ul>
+  </div>
+  <div class="col">
+    <p class="lead">
+Intercon can only happen because of all of the work done by many, many people.  The people listed here are the Con Staff, GMs, and Volunteers who make Intercon happen!
+    </p>
+    <h2 class="my-3"><a name='concom'>Intercon Staff</a></h2>
+    {% for display_user_con_profile in user_con_profiles %}
+      {% assign position_count = display_user_con_profile.staff_positions | size %}
+      {% if display_user_con_profile.privileges contains 'Proposal Committee' or position_count > 0 %}
+        {% include 'bio' %}
+      {% endif %}
+    {% endfor %}
+    <h2 class="my-3"><a name='gms'>Game GMs</a></h2>
+    {% for display_user_con_profile in user_con_profiles %}
+      {% unless display_user_con_profile.privileges contains 'Con Com' %}
+        {% include 'bio' %}
+      {% endunless %}
+    {% endfor %}
+    <h2 class="my-3"><a name='volunteers'>Volunteers</a></h2>
+    {% for display_user_con_profile in user_con_profiles %}
+      {% if display_user_con_profile.privileges contains 'Con Com' %}
+        {% assign position_count = display_user_con_profile.staff_positions | size %}
+          {% unless display_user_con_profile.privileges contains 'Proposal Committee' or position_count > 0 %}
+            {% include 'bio' %}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+  </div>
+</div>

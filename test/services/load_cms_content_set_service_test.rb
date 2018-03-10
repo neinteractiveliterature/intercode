@@ -19,7 +19,7 @@ describe LoadCmsContentSetService do
     end
 
     it 'loads pages' do
-      root = convention.pages.find_by(name: 'root')
+      root = convention.pages.find_by(slug: 'root')
       assert root
       convention.root_page.must_equal root
     end

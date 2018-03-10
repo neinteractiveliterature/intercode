@@ -1,0 +1,25 @@
+---
+name: badgecheck
+admin_notes: ''
+---
+{% if user_con_profile %}
+  {% if user_con_profile.ticket %}
+    {% if user_con_profile.ticket.allows_event_signups %}
+      <div class="alert alert-info" role="alert">
+        <p>You have a {{convention.ticket_name}} for {{convention.name}} and can sign up for games when signups open.</p>
+        <p class='mb-0'>{% include 'signup_text'%}</p>
+      </div>
+    {% else %}
+      <div class="alert alert-warning" role="alert">
+        <p>You have a {{convention.ticket_name}} for {{convention.name}} that does not allow event signups.  You will not be able to sign up for games until you have arranged for a full {{convention.ticket_name}}.</p>
+        <p class='mb-0'>{% include 'signup_text'%}</p>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      <p>You do not have a {{convention.ticket_name}} for {{convention.name}}.  You will not be able to sign up for games until you have purchased a {{convention.ticket_name}}.</p>
+      <p>{% include 'signup_text'%}</p>
+      <p class='mb-0'><a class="alert-link" href=/ticket/new>Purchase your {{convention.ticket_name}} now!</a></p>
+    </div>
+  {% endif %}
+{% endif %}

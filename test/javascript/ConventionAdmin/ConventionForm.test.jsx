@@ -24,12 +24,16 @@ describe('ConventionForm', () => {
     },
     maximum_tickets: null,
     ticket_name: 'ticket',
+    default_layout_id: null,
+    root_page_id: null,
   };
 
   const renderConventionForm = (props, initialConventionProps) => mount((
     <ConventionForm
       initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
       saveConvention={() => {}}
+      cmsLayouts={[]}
+      pages={[]}
       {...props}
     />
   ));

@@ -1,0 +1,56 @@
+---
+name: New Proposal
+admin_notes: ''
+---
+<div class="row">
+  <div class="col-md-7">
+    {% assign show_all_proposals = true %}
+    {% include 'user_event_proposals' %}
+
+    <h3 class='my-2'>Proposing an Event for {{ convention.name }}</h3>
+    {% include 'proposals_intro' %}
+
+    <h3 class='my-2'><a name=\"deadlines\">Proposal Deadlines</a></h3>
+    {% include 'proposal_date_info' %}
+
+    <p>{{ convention.name }} actively solicits proposals in the months leading up to the convention. 
+
+    {% if convention.accepting_proposals %}
+      <div class="text-center my-4">
+        {% new_event_proposal_button "Propose an event!" btn btn-primary %}
+      </div>
+
+      <p>Please fill out the proposal form with <i>as much information as possible</i>. This is the <i>best</i> way to help us evaluate your proposal quickly!</p>
+    {% else %}
+      <p>{{ convention.name }} is not currently accepting event proposals.</p>
+    {% endif %}
+
+    {% assign proposal_chair = convention.staff_positions_by_name.game_proposals_chair %}
+
+    <p>If you have <i>any</i> questions, please contact our {{proposal_chair.name_with_email_link}}, {{ proposal_chair.user_con_profiles[0].name }}.</p>
+  </div>
+  <div class="col-md-5">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h3>Questions?</h3>
+        <ul class="list-unstyled">
+          <li><a href="{% page_url proposalfaq %}#gamekind">What kind of games are you looking for?</a></li>
+          <li><a href="{% page_url proposalfaq %}#audience">What kind of players come to Intercon?</li>
+          <li><a href="#deadlines">When do I have to get my proposal in?</a></li>
+          <li><a href="{% page_url proposalfollowup %}">What happens when I submit my proposal?</a></li>
+          <li><a href="{% page_url proposalfaq %}">Other Frequently Asked Questions About Proposals</a></li>
+        </ul>
+
+        <h4>What do I have to know if I become a GM at the con?</h4>
+
+        <p><a href="{% page_url gmpolicies %}">Con GM Policies and Services</a></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        {% include 'propose_early' %}
+      </div>
+    </div>
+  </div>
+</div>
