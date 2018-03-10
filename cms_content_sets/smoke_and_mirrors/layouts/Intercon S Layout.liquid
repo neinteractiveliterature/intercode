@@ -1,0 +1,35 @@
+---
+name: Intercon S Layout
+navbar_classes: s-menubar navbar-dark
+admin_notes: ''
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ content_for_head }}
+    <meta property="og:image" content="{% file_url "InterconSFacebook.jpg" %}"/>
+    {% if page.slug == 'root' %}
+      <meta property="og:title" content="{{convention.name}}"/>
+    {% else %}
+      <meta property="og:title" content="{{page.name}}"/>
+    {% endif %}
+    <meta property="og:type" content="website"/>
+    <link rel="icon" 
+      type="image/png" 
+      href="{% file_url "neilSquare.png" %}">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Montserrat:400,700" rel="stylesheet">
+    {% include "site-css" %}
+  </head>
+  <body>
+    <div class="overall d-flex flex-column">
+      {{ content_for_navbar }}
+
+      <div class="container" style="flex-grow: 1">
+        {{ content_for_layout }}
+      </div>
+      <div class="bg-medium-gray d-none d-sm-block d-xs-block p-2 mt-4">
+        {% include 'copyright' %}
+      </div>
+    </div>
+  </body>
+</html>

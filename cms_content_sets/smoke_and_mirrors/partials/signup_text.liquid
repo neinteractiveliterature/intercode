@@ -1,0 +1,51 @@
+---
+name: signup_text
+admin_notes: ''
+---
+{% assign next_val = convention.maximum_event_signups.next_value | plus: 0 %}
+{% assign current_val = convention.maximum_event_signups.current_value | plus: 0 %}
+{% assign show_next = false %}
+{% if next_val and convention.maximum_event_signups.current_value != 'unlimited' %}
+  {% assign show_next = true %}
+{% endif %}
+
+{% unless convention.maximum_event_signups.current_value == 'not_yet' %}
+  {% if convention.maximum_event_signups.current_value == 'unlimited' %}
+    {% if user_con_profile.ticket %} 
+      {% if user_con_profile.ticket.allows_event_signups %}
+        Signups are open. You may sign up for as many games as you like.{% if show_next %}<br><br>{% endif %}
+      {% else %}
+      Signups are open. If you had a full {{convention.ticket_name}}, you would be able to sign up for as many games as you like.{% if show_next %}<br><br>{% endif %}
+      {% endif %}
+    {% else %}
+      Signups are open. If you had a {{convention.ticket_name}}, you would be able to sign up for as many games as you like.{% if show_next %}<br><br>{% endif %}
+    {% endif %}
+  {% elsif convention.maximum_event_signups.current_value == 'not_now' %}
+    The site is now frozen, and you may no longer sign up or drop larps.  Please email GMs directly or come to the Operations desk at the con to adjust your signups.
+  {% else %}
+    {% if user_con_profile.ticket %}
+      {% if user_con_profile.ticket.allows_event_signups %}
+        Signups are open. You may sign up for 
+      {% else %}
+        Signups are open.  If you had a full {{convention.ticket_name}}, you would be able to sign up for
+      {% endif %}
+    {% else %}
+      Signups are open.  If you had a {{convention.ticket_name}}, you would be able to sign up for
+    {% endif %}
+    <strong>{{ current_val }}</strong> game{% unless current_val == 1 %}s{% endunless %}.{% if show_next %}<br><br>{% endif %}
+  {% endif %}
+{% endunless %}
+
+{% if show_next %}
+    The next round of signups will be on {{ convention.maximum_event_signups.next_value_change  | date: "%b %d, %Y at %l:%M %p %Z" }}.
+      {% if user_con_profile.ticket %}
+        {% if user_con_profile.ticket.allows_event_signups %}
+          You will be able to sign up for
+        {% else %}
+          If you had a full {{convention.ticket_name}}, you would be able to sign up for
+        {% endif %}
+      {% else %}
+        If you had a {{convention.ticket_name}}, you would be able to sign up for
+      {% endif %}
+      <strong>{{ next_val }}</strong> game{% unless next_val == 1 %}s{% endunless %} at that time.
+{% endif %}

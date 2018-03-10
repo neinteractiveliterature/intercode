@@ -1,0 +1,40 @@
+---
+name: Main Landing Page
+admin_notes: This is the root page of the website
+---
+{% include 'conintro' %}
+ 
+{% if user_con_profile.privileges contains 'Con Com' %}
+      <section class="my-2">
+        Total attending {{ convention.name}}: <strong>{{ convention.ticket_counts_by_type.total }}</strong>
+      </section>
+    {% endif %}
+{% include 'badgecheck' %}
+
+{% capture sidebar_content %}
+  {% include 'user_resources' %}
+  {% include 'user_signups' %}
+  {% include 'user_team_member_events' %}
+  {% include 'user_event_proposals' %}
+{% endcapture %}
+{% assign sidebar_content_stripped = (sidebar_content | strip) %}
+
+<div class="row">
+  
+  {% if sidebar_content_stripped != '' %}
+    <div class="col-lg-6 order-lg-1">
+      {{ sidebar_content_stripped }}
+    </div>
+  {% endif %}
+  
+  <div class="{% if sidebar_content_stripped != '' %}col-lg-6{% else %}col-md-12{% endif %}">
+    <section class="my-4">
+      <h3>Convention News</h3>
+      {% include '0-news' %}
+    </section>
+    {% unless convention.maximum_event_signups.current_value == 'not_yet' %}
+      {% include 'runs_with_openings' %}
+    {% endunless %}
+  </div>
+  
+</div>

@@ -1,0 +1,77 @@
+---
+name: Game Signup FAQ
+admin_notes: REVIEW
+---
+{% assign gm_coordinator = convention.staff_positions_by_name.gm_coordinator %}
+{% assign web_team = convention.staff_positions_by_name.website_team %}
+<h1 class="my-3">Game Signup FAQ</h1>
+
+<div class="row">
+  <div class="col-md-3">
+    <ul class="section-nav sticky-top">
+      <li class="toc-entry"><a href="#overview">Overview</a></li>
+      <li class="toc-entry"><a href="#dates">Signup Dates</a></li>
+      <li class="toc-entry"><a href="#tips">Tips for Signup</a>
+        <ul>
+          <li class="toc-entry"><a href="#pay">Pay in Advance</a></li>
+          <li class="toc-entry"><a href="#plan">Make a Plan</a></li>
+          <li class="toc-entry"><a href="#bucket">Know Which Bucket You Want</a></li>
+          <li class="toc-entry"><a href="#signin">Stay Signed In</a></li>
+          <li class="toc-entry"><a href="#stickaround">Stick Around</a></li>
+        </ul>
+      </li>
+      <li class="toc-entry"><a href="#problems">Having Problems?</a></li>
+    </ul>
+  </div>
+<div class='col'>
+<h2 class='my-3'><a name='overview'>Overview</a></h2>
+<p>Intercon lets you sign up for games before the convention.  Since games have limited space, our goal with this process is to allow as many people as possible to play in the games they prefer.</p>
+
+<p>Game signup is separate from convention registration. By registering and paying for Intercon, you are entitled to sign up for as many games as you like, provided they are not running concurrently.</p>
+
+<p>Individual game signups usually begin in November, but will be announced in the email newsletter which is sent to everyone who has registered. You must be paid up in order to sign up for a game.</p>
+
+<p>There are usually four rounds of signups. Signups usually open at 7pm Eastern; each round is six days later than the last.</p>
+
+<ul>
+	<li>In the first round, you may sign up for one game</li>
+	<li>In the second round, you may sign up for a second game</li>
+	<li>In the third round, you may sign up for a third game</li>
+	<li>In the final round, you may sign up for as many games as you like</li>
+</ul>
+
+<h2 class='my-3'><a name='dates'>Signup Dates</a></h2>
+<p>
+  For {{convention.name}}, these are the likely signup dates:
+</p>
+{% include 'signup_schedule'%}
+
+<h2 class='my-3'><a name='tips'>Tips for Signup</a></h2>
+
+<h3 class="my-2"><a name='pay'>Pay In Advance</a></h3>
+
+<p>Have you paid for Intercon?  If not, you won't be able to sign up for games, so please make sure to log in and pay for the con before signups open!  (Or if you're a GM, make sure you've set yourself up to be comped for your game.  You can email the {{gm_coordinator.name_with_email_link}} if you're not sure how.)</p>
+
+
+<h3 class="my-2"><a name='plan'>Make a Plan</a></h3>
+
+<p>Signups tend to go pretty fast once we open the floodgates!  It pays to plan ahead, not only for which game you'd like to sign up for, but for one or two backup options in case your first choice fills too fast.</p>
+
+<h3 class="my-2"><a name='bucket'>Know Which Bucket You Want</a></h3>
+
+<p>Game registration at Intercon uses a new system, which allows GMs to specify "buckets" of character types.  These may be the traditional "Female Role" and "Male Role" buckets, or may be "Cast" and "Horde", or could be anything else that the GM likes. 
+ You will be presented with a signup button for each bucket in the game, and can simply make the selection as you sign up. If there is only one bucket, because the GMs would prefer to differentiate at casing time, you will have a single signup button.  We expect GMs to honor your signup bucket selection when it comes to casting.</p>
+
+<h3 class="my-2"><a name='signin'>Stay Signed In</a></h3>
+
+<p>Years ago, you had to sign out of the web site and sign back in once signups opened.  Those days are long gone!  You can just stay signed in on any page of the site you like.</p>
+
+<h3 class="my-2"><a name='stickaround'>Stick around</a></h3>
+
+<p>The best place to be on the Intercon site when signups open is on the page of your first choice game.  Reload the page frequently.  (It's ok, our mighty web server can handle it.)  Once signups open, the signup bucket buttons will turn blue.  Click the bucket you want to sign up!</p>
+
+<h2 class="my-3"><a name='problems'>Having Problems?</a></h2>
+
+<p>If you have any trouble signing up, please email the {{ web_team.name_with_email_link }}.  We'll be on the lookout for emails during the signup rush and will try to get things fixed up as quickly as possible.</p>
+</div>
+</div>

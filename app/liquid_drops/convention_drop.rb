@@ -33,7 +33,7 @@ class ConventionDrop < Liquid::Drop
   end
 
   def staff_positions_by_name
-    convention.staff_positions.visible.index_by do |staff_position|
+    convention.staff_positions.index_by do |staff_position|
       staff_position.name.gsub(/\W/, '_').downcase
     end
   end

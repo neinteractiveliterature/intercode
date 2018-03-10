@@ -1,0 +1,36 @@
+---
+name: user_resources
+admin_notes: ''
+---
+{% assign gm = false %}
+{% assign propcom = false %}
+
+{% if user_con_profile %}
+  {% if user_con_profile.event_proposals != empty or 
+      user_con_profile.team_member_events != empty or 
+      user_con_profile.privileges contains 'Con Com') %}
+    {% assign gm = true %}
+  {% endif %}
+
+  {% if user_con_profile.privileges contains 'Proposal Committee' or 
+      user_con_profile.privileges contains 'Staff' or 
+      user_con_profile.privileges contains 'GM Liaison' %}
+    {% assign propcom = true %}
+  {% endif %}
+{% endif %}
+
+{% if gm or propcom %}
+  <div class="card border-info my-4">
+    <div class="card-header bg-info text-white">Convention Resources</div>
+    <div class='card-body'>
+      <ul class="list-unstyled">
+        {% if gm %}
+          <li><i class="fa fa-file-text" aria-hidden="true"></i> <a href="{% page_url gmpolicies %}">GM Benefits, Policies and Services</a></li>
+        {% endif %}
+        {% if propcom %}
+          <li><i class="fa fa-file-text" aria-hidden="true"></i> <a href="{% page_url propcom %}">Proposal Committee Procedures</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
