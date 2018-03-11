@@ -13,6 +13,6 @@
     = cadmus_renderer.render(@product.description_template, :html)
 
 - if user_signed_in?
-  = react_component 'ProductOrderForm', productId: @product.id, authenticityToken: graphql_authenticity_token
+  = react_component 'ProductOrderForm', productId: @product.id, cartUrl: cart_path, authenticityToken: graphql_authenticity_token
 - else
   = link_to 'Log in to order', new_user_session_path(user_return_to: product_path(@product)), class: 'btn btn-primary'

@@ -134,4 +134,10 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:convention].products.find(args[:id])
     }
   end
+
+  field :currentPendingOrder, Types::OrderType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:current_pending_order]
+    }
+  end
 end

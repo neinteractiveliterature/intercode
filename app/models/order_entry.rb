@@ -26,6 +26,14 @@ class OrderEntry < ApplicationRecord
     price_per_item * quantity
   end
 
+  def describe_products
+    [
+      quantity > 1 ? quantity : nil,
+      quantity > 1 ? product.name.pluralize : product.name,
+      product_variant ? "(#{product_variant.name})" : nil
+    ].compact.join(' ')
+  end
+
   private
 
   def product_variant_must_belong_to_product

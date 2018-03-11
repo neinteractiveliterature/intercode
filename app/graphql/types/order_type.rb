@@ -9,7 +9,7 @@ Types::OrderType = GraphQL::ObjectType.define do
   field :status, !types.String
   field :payment_amount, Types::MoneyType
   field :charge_id, types.String
-  field :order_entries, !Types::OrderEntryType do
+  field :order_entries, !types[Types::OrderEntryType] do
     resolve ->(obj, _args, _ctx) {
       AssociationLoader.for(Order, :order_entries).load(obj)
     }
