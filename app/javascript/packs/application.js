@@ -36,6 +36,7 @@ import '../styles/application.scss';
 import '../inflections';
 import '../Codemirror/LiquidMultiplexModes';
 
+import Cart from '../ProductOrders/Cart';
 import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
@@ -59,6 +60,7 @@ import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
   CadmusNavbarAdminApp,
+  Cart: StandaloneGraphQLComponent(Cart),
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
   EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),

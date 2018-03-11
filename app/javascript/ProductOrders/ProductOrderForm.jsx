@@ -58,6 +58,7 @@ mutation($input: AddOrderEntryToCurrentPendingOrderInput!) {
 class ProductOrderForm extends React.Component {
   static propTypes = {
     productId: PropTypes.number.isRequired,
+    cartUrl: PropTypes.string.isRequired,
     data: GraphQLResultPropType(productQuery).isRequired,
     addOrderEntryToCurrentPendingOrder: PropTypes.func.isRequired,
   };
@@ -101,11 +102,9 @@ class ProductOrderForm extends React.Component {
         this.state.quantity,
       );
 
-      alert('success!');
+      window.location.href = this.props.cartUrl;
     } catch (error) {
-      this.setState({ error });
-    } finally {
-      this.setState({ submitting: false });
+      this.setState({ error, submitting: false });
     }
   }
 
@@ -132,10 +131,10 @@ class ProductOrderForm extends React.Component {
     return (
       <select
         className="form-control mb-3"
-        value={this.state.productVariantId}
+        value={this.state.productVariantId || ''}
         onChange={this.productVariantSelectorChanged}
       >
-        <option disabled selected={this.state.productVariantId == null}>Select...</option>
+        <option disabled value="">Select...</option>
         {options}
       </select>
     );
