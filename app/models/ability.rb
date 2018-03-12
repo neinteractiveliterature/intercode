@@ -216,7 +216,7 @@ class Ability
     can :manage, Event,
       convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
     can :manage, MaximumEventProvidedTicketsOverride,
-      event_id: {
+      event: {
         convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
       }
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
