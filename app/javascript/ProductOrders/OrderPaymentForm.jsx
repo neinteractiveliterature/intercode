@@ -25,12 +25,12 @@ class OrderPaymentForm extends React.Component {
     super(props);
 
     this.mutator = new ModelStateChangeCalculator('paymentDetails', {
-      name: FIELD_TYPES.string,
-      ccNumber: FIELD_TYPES.string,
-      cvc: FIELD_TYPES.string,
-      expMonth: FIELD_TYPES.string,
-      expYear: FIELD_TYPES.string,
-      zip: FIELD_TYPES.string,
+      name: FIELD_TYPES.STRING,
+      ccNumber: FIELD_TYPES.STRING,
+      cvc: FIELD_TYPES.STRING,
+      expMonth: FIELD_TYPES.STRING,
+      expYear: FIELD_TYPES.STRING,
+      zip: FIELD_TYPES.STRING,
     }).getMutatorForStatelessComponent(this, this.props.onChange);
   }
 
@@ -109,11 +109,11 @@ class OrderPaymentForm extends React.Component {
           expYear={this.props.paymentDetails.expYear}
           cvc={this.props.paymentDetails.cvc}
           zip={this.props.paymentDetails.zip}
-          onCcNumberChanged={this.mutator.valueChangeCallback('ccNumber')}
-          onExpMonthChanged={this.mutator.valueChangeCallback('expMonth')}
-          onExpYearChanged={this.mutator.valueChangeCallback('expYear')}
-          onCvcChanged={this.mutator.valueChangeCallback('cvc')}
-          onZipChanged={this.mutator.valueChangeCallback('zip')}
+          onCcNumberChanged={this.mutator.onInputChange}
+          onExpMonthChanged={this.mutator.onInputChange}
+          onExpYearChanged={this.mutator.onInputChange}
+          onCvcChanged={this.mutator.onInputChange}
+          onZipChanged={this.mutator.onInputChange}
           disabled={disabled}
         />
       </div>
