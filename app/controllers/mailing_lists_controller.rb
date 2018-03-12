@@ -33,7 +33,7 @@ class MailingListsController < ApplicationController
     )
     @emails = event_proposals.map do |event_proposal|
       ContactEmail.new(
-        event_proposal.email,
+        event_proposal.owner.email,
         event_proposal.owner.name_without_nickname,
         title: event_proposal.title
       )
