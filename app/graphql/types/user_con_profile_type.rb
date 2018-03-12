@@ -49,6 +49,15 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
     }
   end
 
+  field :orders, !types[Types::OrderType] do
+    guard -> (obj, _args, ctx) {
+      ctx[:current_ability].can?(:read, Order.new(user_con_profile: obj))
+    }
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(UserConProfile, :orders).load(obj)
+    }
+  end
+
   field :can_override_maximum_event_provided_tickets, !types.Boolean do
     resolve -> (obj, _args, ctx) {
       ability = if obj == ctx[:user_con_profile]

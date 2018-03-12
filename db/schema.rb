@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305014112) do
+ActiveRecord::Schema.define(version: 20180312150839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,6 +225,8 @@ ActiveRecord::Schema.define(version: 20180305014112) do
     t.text "payment_note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "submitted_at"
+    t.datetime "paid_at"
     t.index ["user_con_profile_id"], name: "index_orders_on_user_con_profile_id"
   end
 
@@ -475,15 +477,12 @@ ActiveRecord::Schema.define(version: 20180305014112) do
   add_foreign_key "runs", "events"
   add_foreign_key "runs", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
-  add_foreign_key "signups", "user_con_profiles"
   add_foreign_key "signups", "users", column: "updated_by_id"
   add_foreign_key "staff_positions", "conventions"
   add_foreign_key "team_members", "events"
-  add_foreign_key "team_members", "user_con_profiles"
   add_foreign_key "ticket_types", "conventions"
   add_foreign_key "tickets", "events", column: "provided_by_event_id"
   add_foreign_key "tickets", "ticket_types"
-  add_foreign_key "tickets", "user_con_profiles"
   add_foreign_key "user_con_profiles", "conventions"
   add_foreign_key "user_con_profiles", "users"
 end

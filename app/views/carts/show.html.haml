@@ -1,4 +1,4 @@
 %h1.mb-4 My shopping cart
 
 = stripe_include_tag
-= react_component 'Cart', authenticityToken: graphql_authenticity_token
+= react_component 'Cart', authenticityToken: graphql_authenticity_token, afterCompleteUrl: order_history_path

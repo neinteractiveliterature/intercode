@@ -10,12 +10,13 @@ Mutations::SubmitOrder = GraphQL::Relay::Mutation.define do
     order = Order.find(args[:id])
 
     if args[:payment_mode] == 'now'
+      order.update!(submitted_at: Time.now)
       PayOrderService.new(
         order,
         args[:stripe_token]
       ).call!
     else
-      order.update!(status: 'unpaid')
+      order.update!(status: 'unpaid', submitted_at: Time.now)
     end
 
     { order: order.reload }
