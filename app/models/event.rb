@@ -82,6 +82,7 @@ class Event < ApplicationRecord
   attr_accessor :bypass_filler_event_run_check, :allow_registration_policy_change
 
   def self.normalize_title_for_sort(title)
+    return '' unless title
     title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '')
   end
 
