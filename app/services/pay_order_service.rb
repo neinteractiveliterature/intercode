@@ -31,16 +31,16 @@ class PayOrderService < ApplicationService
 
     Stripe::Charge.create(
       customer: customer.id,
-      amount: order.price.fractional,
+      amount: order.total_price.fractional,
       description: "#{description} for #{convention.name}",
-      currency: order.price.currency.iso_code.downcase
+      currency: order.total_price.currency.iso_code.downcase
     )
   end
 
   def update_order(charge)
     order.update!(
       status: 'paid',
-      payment_amount: order.price,
+      payment_amount: order.total_price,
       payment_note: "Paid via Stripe on \
 #{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
       charge_id: charge.id
@@ -55,7 +55,7 @@ class PayOrderService < ApplicationService
     @convention ||= order.user_con_profile.convention
   end
 
-  def check_order_pending
+  def check_order_status
     return if order.status == 'pending' || order.status == 'unpaid'
 
     errors.add(:base, "This order is already #{order.status}.")
