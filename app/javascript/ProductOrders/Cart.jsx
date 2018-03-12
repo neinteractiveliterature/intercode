@@ -101,6 +101,7 @@ mutation($input: DeleteOrderEntryInput!) {
 class Cart extends React.Component {
   static propTypes = {
     data: GraphQLResultPropType(cartQuery).isRequired,
+    afterCompleteUrl: PropTypes.string.isRequired,
     updateOrderEntry: PropTypes.func.isRequired,
     deleteOrderEntry: PropTypes.func.isRequired,
   }
@@ -155,6 +156,10 @@ class Cart extends React.Component {
 
   checkOutCanceled = () => {
     this.setState({ checkingOut: false });
+  }
+
+  checkOutComplete = () => {
+    window.location.href = this.props.afterCompleteUrl;
   }
 
   renderConfirmDeleteModalContent = () => {
@@ -254,6 +259,7 @@ class Cart extends React.Component {
         onCancel={this.checkOutCanceled}
         initialName={this.props.data.myProfile.name_without_nickname}
         orderId={(this.props.data.currentPendingOrder || {}).id}
+        onComplete={this.checkOutComplete}
       />
 
       <ConfirmModal

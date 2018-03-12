@@ -128,6 +128,7 @@ class Ability
         status: %w[draft proposed reviewing]
       can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
       can :signup_summary, Run, id: signed_up_run_ids
+      can :read, Order, user_con_profile: { user_id: user.id }
       can :submit, Order, user_con_profile: { user_id: user.id }, status: %w[pending unpaid]
       can :manage, OrderEntry, order: { user_con_profile: { user_id: user.id }, status: 'pending' }
       can :read, Ticket, user_con_profile: { user_id: user.id }
