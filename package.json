@@ -52,7 +52,7 @@
     "postcss-smart-import": "^0.7.6",
     "precss": "^3.1.2",
     "prop-types": "^15.6.1",
-    "query-string": "^5.0.1",
+    "query-string": "^6.0.0",
     "rails-ujs": "^5.1.5",
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
