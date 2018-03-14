@@ -28,12 +28,12 @@ class MailingListsController < ApplicationController
 
     event_proposals = Event.title_sort(
       convention.event_proposals
-        .where.not(status: [:rejected, :dropped])
+        .where.not(status: [:draft, :rejected, :dropped])
         .includes(:owner)
     )
     @emails = event_proposals.map do |event_proposal|
       ContactEmail.new(
-        event_proposal.email,
+        event_proposal.owner.email,
         event_proposal.owner.name_without_nickname,
         title: event_proposal.title
       )
