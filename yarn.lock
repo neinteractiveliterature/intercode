@@ -7252,9 +7252,9 @@ react-bootstrap4-modal@^1.1.0, react-bootstrap4-modal@^1.2.2:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-react-codemirror2@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-4.1.0.tgz#f56f5c2a481fded181a55777e066178d194b9709"
+react-codemirror2@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-4.2.0.tgz#8336e9f5e042f8a59470f3d3ad43fc053da1872c"
 
 react-currency-masked-input@^2.2.0:
   version "2.2.0"
