@@ -360,7 +360,7 @@ GEM
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
-    simplecov (0.16.0)
+    simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
