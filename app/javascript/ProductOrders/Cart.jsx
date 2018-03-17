@@ -260,6 +260,7 @@ class Cart extends React.Component {
         initialName={this.props.data.myProfile.name_without_nickname}
         orderId={(this.props.data.currentPendingOrder || {}).id}
         onComplete={this.checkOutComplete}
+        allowPayLater
       />
 
       <ConfirmModal

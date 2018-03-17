@@ -42,6 +42,7 @@ class OrderPaymentModal extends React.Component {
     initialName: PropTypes.string,
     submitOrder: PropTypes.func.isRequired,
     orderId: PropTypes.number.isRequired,
+    allowPayLater: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
@@ -53,7 +54,7 @@ class OrderPaymentModal extends React.Component {
     this.state = {
       paymentError: null,
       submitting: false,
-      paymentMode: null,
+      paymentMode: props.allowPayLater ? null : 'now',
       paymentDetails: {
         ccNumber: '',
         cvc: '',
@@ -107,8 +108,10 @@ class OrderPaymentModal extends React.Component {
       return null;
     }
 
-    return (
-      <div className="modal-body">
+    let paymentModeSelect = null;
+
+    if (this.props.allowPayLater) {
+      paymentModeSelect = (
         <MultipleChoiceInput
           name="paymentMode"
           caption="How would you like to pay for your order?"
@@ -119,6 +122,12 @@ class OrderPaymentModal extends React.Component {
             { value: 'later', label: 'Pay at the convention' },
           ]}
         />
+      );
+    }
+
+    return (
+      <div className="modal-body">
+        {paymentModeSelect}
         {
           this.state.paymentMode === 'now' ?
           (

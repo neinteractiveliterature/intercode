@@ -1,5 +1,3 @@
-/* global Stripe */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
@@ -9,7 +7,6 @@ import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
 class OrderPaymentForm extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
-    payOrder: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired,
     paymentDetails: PropTypes.shape({
       name: PropTypes.string.isRequired,
@@ -32,64 +29,6 @@ class OrderPaymentForm extends React.Component {
       expYear: FIELD_TYPES.STRING,
       zip: FIELD_TYPES.STRING,
     }).getMutatorForStatelessComponent(this, this.props.onChange);
-  }
-
-  submitPayment = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const missingFields = [
-      'ccNumber',
-      'cvc',
-      'expMonth',
-      'expYear',
-      'zip',
-      'name',
-    ].filter(field => !this.state[field]);
-
-    if (missingFields.length > 0) {
-      this.setState({ paymentError: 'Please fill out all the fields in this form.' });
-      return;
-    }
-
-    this.setState({ submitting: true });
-
-    Stripe.card.createToken({
-      number: this.state.ccNumber,
-      cvc: this.state.cvc,
-      exp_month: this.state.expMonth,
-      exp_year: this.state.expYear,
-      name: this.state.name,
-      address_zip: this.state.zip,
-    }, this.handleStripeResponse);
-  }
-
-  handleStripeResponse = async (status, response) => {
-    if (response.error) {
-      this.setState({
-        paymentError: response.error.message,
-        submitting: false,
-      });
-    } else {
-      this.setState({ stripeToken: response.id });
-
-      try {
-        await this.props.payOrder(this.state.stripeToken);
-      } catch (error) {
-        this.setState({
-          graphQLError: error,
-          submitting: false,
-        });
-      }
-    }
-  }
-
-  renderSubmittingSpinner = () => {
-    if (!this.state.submitting) {
-      return null;
-    }
-
-    return <i className="fa fa-spinner fa-spin" />;
   }
 
   render = () => {
