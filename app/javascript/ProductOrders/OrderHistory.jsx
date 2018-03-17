@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import OrderPaymentModal from './OrderPaymentModal';
-import formatMoney from './formatMoney';
+import formatMoney from '../formatMoney';
 
 const orderHistoryQuery = gql`
 query {
