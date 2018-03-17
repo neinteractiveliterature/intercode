@@ -200,7 +200,7 @@ class Cart extends React.Component {
             onChange={(newValue) => { this.changeQuantity(entry.id, newValue); }}
           />
         </td>
-        <td>${(entry.price.fractional / 100.0).toFixed(2)}</td>
+        <td>{formatMoney(entry.price)}</td>
         <td>
           <button
             className="btn btn-outline-danger"
@@ -234,7 +234,7 @@ class Cart extends React.Component {
               <strong>Total</strong>
             </td>
             <td colSpan="2">
-              <strong>${(totalPrice / 100.0).toFixed(2)}</strong>
+              <strong>{formatMoney(totalPrice)}</strong>
               <br />
               <button className="btn btn-primary mt-2" onClick={this.checkOutClicked}>
                 <i className="fa fa-shopping-cart" />

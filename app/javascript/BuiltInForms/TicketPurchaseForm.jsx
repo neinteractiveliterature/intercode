@@ -9,6 +9,7 @@ import Modal from 'react-bootstrap4-modal';
 import ErrorDisplay from '../ErrorDisplay';
 import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
+import formatMoney from '../formatMoney';
 
 const purchaseTicketMutation = gql`
 mutation($input: PurchaseTicketInput!) {
@@ -272,7 +273,7 @@ class TicketPurchaseForm extends React.Component {
               <div>
                 Your purchase of a {this.state.ticket.ticket_type.description} for
                 {' '}
-                ${(this.state.ticket.payment_amount.fractional / 100.0).toFixed(2)}
+                {formatMoney(this.state.ticket.payment_amount)}
                 {' '}
                 was successful.  We&apos;ve emailed you a receipt.
               </div>

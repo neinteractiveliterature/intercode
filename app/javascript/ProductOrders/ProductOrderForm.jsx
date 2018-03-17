@@ -7,6 +7,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import LoadingIndicator from '../LoadingIndicator';
+import formatMoney from '../formatMoney';
 
 const productQuery = gql`
 query($productId: Int!) {
@@ -120,7 +121,7 @@ class ProductOrderForm extends React.Component {
       if (overridePrice && overridePrice.fractional !== this.props.data.product.price.fractional) {
         const diff = overridePrice.fractional - this.props.data.product.price.fractional;
         const sign = Math.sign(diff) < 0 ? '-' : '+';
-        overridePriceDescription = ` (${sign}$${(diff / 100.0).toFixed(2)})`;
+        overridePriceDescription = ` (${sign}${formatMoney(diff)})`;
       }
 
       return (
@@ -176,7 +177,7 @@ class ProductOrderForm extends React.Component {
     const totalPrice = pricePerItem * this.state.quantity;
 
     return (
-      <strong>Total: ${(totalPrice / 100.0).toFixed(2)}</strong>
+      <strong>Total: {formatMoney(totalPrice)}</strong>
     );
   }
 
