@@ -230,6 +230,7 @@ class Ability
     can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
+    can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
   end
 
   def add_event_proposal_abilities

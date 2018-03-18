@@ -19,4 +19,5 @@ Types::OrderEntryType = GraphQL::ObjectType.define do
   field :quantity, !types.Int
   field :price_per_item, !Types::MoneyType
   field :price, !Types::MoneyType
+  field :describe_products, !types.String
 end

@@ -11,6 +11,7 @@ class Order < ApplicationRecord
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 
   def total_price
+    return Money.new(0, 'USD') unless order_entries.any?
     order_entries.sum(&:price)
   end
 end

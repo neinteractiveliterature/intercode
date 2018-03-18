@@ -49,6 +49,7 @@ Intercode::Application.routes.draw do
     resources :products, only: [:show]
     resource :cart, only: [:show]
     resource :order_history, only: [:show]
+    resources :admin_orders, only: [:index]
 
     resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do
       member do
