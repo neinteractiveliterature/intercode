@@ -46,6 +46,7 @@ import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
+import OrderAdmin from '../ProductOrders/OrderAdmin';
 import OrderHistory from '../ProductOrders/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../ProductOrders/ProductOrderForm';
@@ -71,6 +72,7 @@ WebpackerReact.setup({
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   LiquidHTMLEditor,
   MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
+  OrderAdmin: StandaloneGraphQLComponent(OrderAdmin),
   OrderHistory: StandaloneGraphQLComponent(OrderHistory),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),

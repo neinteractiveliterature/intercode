@@ -72,6 +72,43 @@ Types::ConventionType = GraphQL::ObjectType.define do
     }
   end
 
+  connection :orders, Types::OrdersConnectionType, max_page_size: 1000 do
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(
+        :read,
+        Order.new(user_con_profile: UserConProfile.new(convention: convention))
+      )
+    end
+
+    resolve ->(convention, _args, _ctx) do
+      convention.orders.where.not(status: 'pending')
+        .includes(order_entries: [:product, :product_variant])
+    end
+  end
+
+  field :orders_paginated, !Types::OrdersPaginationType do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::OrderFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(
+        :read,
+        Order.new(user_con_profile: UserConProfile.new(convention: convention))
+      )
+    end
+
+    resolve ->(convention, args, _ctx) do
+      scope = convention.orders.where.not(status: 'pending')
+        .includes(order_entries: [:product, :product_variant])
+
+      Tables::OrdersTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
+        .scoped
+        .paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+    end
+  end
+
   connection :user_con_profiles, Types::UserConProfileType.connection_type, max_page_size: 1000 do
     argument :name, types.String
 
