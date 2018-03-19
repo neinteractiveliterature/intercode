@@ -89,7 +89,7 @@ class LoadCmsContentSetService < ApplicationService
 
     if data[:item_type] == 'section'
       data[:navigation_links].each_with_index do |link_data, i|
-        link = item.navigation_links.new(position: i + 1)
+        link = item.navigation_links.new(position: i + 1, parent: convention)
         populate_navigation_item(link, link_data)
       end
     elsif data[:item_type] == 'link'
