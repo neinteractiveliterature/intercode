@@ -57,7 +57,6 @@
     "react-apollo": "^2.0.4",
     "react-bootstrap4-modal": "^1.2.2",
     "react-codemirror2": "^4.2.1",
-    "react-currency-masked-input": "^2.2.0",
     "react-dom": "^16.2.0",
     "react-html-id": "^0.1.1",
     "react-immutable-proptypes": "^2.1.0",
