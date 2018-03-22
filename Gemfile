@@ -87,6 +87,7 @@ gem 'rails_12factor', group: 'stage'
 gem 'faker', group: 'development', require: false
 
 gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source map upload support
+gem 'rollbar-shoryuken'
 gem 'oj', '~> 3.5.0'
 
 group :development do
