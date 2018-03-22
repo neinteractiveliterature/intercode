@@ -20,7 +20,7 @@ module Intercode
     end
 
     def app_level_domain(host)
-      levels = if host ~= /herokuapp\.com\z/
+      levels = if host =~ /herokuapp\.com\z/
         3
       else
         2
