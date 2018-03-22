@@ -125,6 +125,8 @@ GEM
     capistrano-bundler (1.3.0)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-maintenance (1.2.0)
+      capistrano (>= 3.0)
     capistrano-passenger (0.2.0)
       capistrano (~> 3.0)
     capistrano-rails (1.3.1)
@@ -436,6 +438,7 @@ DEPENDENCIES
   cadmus_files!
   cadmus_navbar!
   cancancan
+  capistrano-maintenance
   capistrano-passenger
   capistrano-rails (~> 1.1)
   capistrano-shoryuken

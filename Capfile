@@ -8,6 +8,7 @@ install_plugin Capistrano::SCM::Git
 require 'capistrano/rails'
 require 'capistrano/passenger'
 require 'capistrano/shoryuken'
+require 'capistrano/maintenance'
 require 'whenever/capistrano'
 require 'rollbar/capistrano3'
 
