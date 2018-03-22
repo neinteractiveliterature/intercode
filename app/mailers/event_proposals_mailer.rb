@@ -18,7 +18,7 @@ class EventProposalsMailer < ApplicationMailer
     proposal_chair_staff_position = convention.staff_positions
       .where(name: 'Game Proposals Chair').first
 
-    if proposal_chair_staff_position.email.present?
+    if proposal_chair_staff_position&.email.present?
       proposal_chair_staff_position.email
     elsif proposal_chair_staff_position
       proposal_chair_staff_position.user_con_profiles.map do |user_con_profile|
