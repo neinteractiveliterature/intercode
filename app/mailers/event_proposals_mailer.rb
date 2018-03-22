@@ -25,7 +25,12 @@ class EventProposalsMailer < ApplicationMailer
         "#{user_con_profile.name} <#{user_con_profile.email}>"
       end
     else
-      convention.user_con_profiles.where(proposal_chair: true).map do |user_con_profile|
+      users_with_priv = convention.user_con_profiles.where(proposal_chair: true).to_a
+      if users_with_priv.none?
+        users_with_priv = convention.user_con_profiles.where(staff: true).to_a
+      end
+
+      users_with_priv.map do |user_con_profile|
         "#{user_con_profile.name} <#{user_con_profile.email}>"
       end
     end
