@@ -2,6 +2,7 @@ import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import fetch from 'unfetch';
 
 function buildApolloClient(authenticityToken) {
   const AuthLink = (operation, next) => {
@@ -20,7 +21,7 @@ function buildApolloClient(authenticityToken) {
   return new ApolloClient({
     link: ApolloLink.from([
       AuthLink,
-      new HttpLink({ uri: '/graphql' }),
+      new HttpLink({ uri: '/graphql', fetch }),
     ]),
     cache: new InMemoryCache(),
   });
