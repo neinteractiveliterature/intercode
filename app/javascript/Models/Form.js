@@ -1,6 +1,5 @@
 import { Map } from 'immutable';
 import PropTypes from 'prop-types';
-import memoize from 'memoized-class-decorator';
 import FormItem from './FormItem';
 
 export default class Form {
@@ -24,9 +23,12 @@ export default class Form {
     this.formItems = formItems;
   }
 
-  @memoize
   getSections() {
-    return this.formSections.valueSeq().sortBy(section => section.position);
+    if (!this.memoizedFormSections) {
+      this.memoizedFormSections = this.formSections.valueSeq().sortBy(section => section.position);
+    }
+
+    return this.memoizedFormSections;
   }
 
   getSection(sectionId) {
