@@ -5444,10 +5444,6 @@ mem@^1.1.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-memoized-class-decorator@^1.5.0:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/memoized-class-decorator/-/memoized-class-decorator-1.6.1.tgz#0abece76cb95996d23bf894807a22a1dab286c41"
-
 memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.4.1.tgz#3a9a20b8462523e447cfbc7e8bb80ed667bfc552"
