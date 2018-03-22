@@ -9,9 +9,9 @@ module Intercode
       host = env['HTTP_HOST']&.split(':')&.first
       return :all unless host
 
-      second_level_host = second_level_domain(host)
-      env['rack.session.options'][:domain] = if second_level_host.include?('.')
-        ".#{second_level_host}"
+      app_level_host = app_level_domain(host)
+      env['rack.session.options'][:domain] = if app_level_host.include?('.')
+        app_level_host
       else
         :all
       end
@@ -19,8 +19,14 @@ module Intercode
       @app.call(env)
     end
 
-    def second_level_domain(host)
-      host.split('.').reverse.take(2).reverse.join('.')
+    def app_level_domain(host)
+      levels = if host ~= /herokuapp\.com\z/
+        3
+      else
+        2
+      end
+
+      host.split('.').reverse.take(levels).reverse.join('.')
     end
   end
 end
