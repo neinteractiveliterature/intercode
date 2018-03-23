@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import FillerEventForm from '../../BuiltInForms/FillerEventForm';
@@ -32,13 +33,13 @@ const buildRunInput = run => ({
 });
 
 @withRouter
-@compose(
+@flowRight([
   graphql(eventsQuery),
   graphql(createFillerEventMutation, { name: 'createFillerEvent' }),
   graphql(dropEventMutation, { name: 'dropEvent' }),
   graphql(updateEventMutation, { name: 'updateEvent' }),
   graphql(updateRunMutation, { name: 'updateRun' }),
-)
+])
 @GraphQLQueryResultWrapper
 class FillerEventAdmin extends React.Component {
   static propTypes = {

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import ErrorDisplay from '../../ErrorDisplay';
 import eventsQuery from '../eventsQuery';
@@ -8,10 +9,10 @@ import GraphQLResultPropType from '../../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
 import { restoreDroppedEventMutation } from '../mutations';
 
-@compose(
+@flowRight([
   graphql(eventsQuery),
   graphql(restoreDroppedEventMutation, { name: 'restoreDroppedEvent' }),
-)
+])
 @GraphQLQueryResultWrapper
 class DroppedEventAdmin extends React.Component {
   static propTypes = {

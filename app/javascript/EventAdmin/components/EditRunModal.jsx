@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import { propType } from 'graphql-anywhere';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
 import eventsQuery, { fragments } from '../eventsQuery';
 import { createRunMutation, updateRunMutation, deleteRunMutation } from '../mutations';
 import RunFormFields from '../../BuiltInForms/RunFormFields';
 
-@compose(
+@flowRight([
   graphql(createRunMutation, { name: 'createRun' }),
   graphql(updateRunMutation, { name: 'updateRun' }),
   graphql(deleteRunMutation, { name: 'deleteRun' }),
-)
+])
 class EditRunModal extends React.Component {
   static propTypes = {
     run: propType(fragments.runFragment),
