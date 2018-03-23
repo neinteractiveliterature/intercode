@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import { ConfirmModal } from 'react-bootstrap4-modal';
@@ -213,7 +214,7 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
   return statusDescription;
 };
 
-@compose(
+@flowRight([
   graphql(teamMemberQuery),
   graphql(createTeamMemberMutation, {
     props: ({ mutate }) => ({
@@ -264,7 +265,7 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
       }),
     }),
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class TeamMemberForm extends React.Component {
   static propTypes = {

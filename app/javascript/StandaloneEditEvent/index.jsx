@@ -1,5 +1,6 @@
 import React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -149,7 +150,7 @@ mutation($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
 ${maximumEventProvidedTicketsOverrideFragment}
 `;
 
-@compose(
+@flowRight([
   graphql(eventQuery),
   graphql(updateEventMutation, { name: 'updateEvent' }),
   graphql(dropEventMutation, { name: 'dropEvent' }),
@@ -230,7 +231,7 @@ ${maximumEventProvidedTicketsOverrideFragment}
       };
     },
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class StandaloneEditEvent extends React.Component {
   static propTypes = {

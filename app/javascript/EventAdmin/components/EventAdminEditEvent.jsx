@@ -1,5 +1,6 @@
 import React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -70,7 +71,7 @@ EventAdminEditEvent.propTypes = {
   deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
 };
 
-export default withRouter(compose(
+export default withRouter(flowRight([
   graphql(eventsQuery),
   graphql(updateEventMutation, { name: 'updateEvent' }),
   graphql(dropEventMutation, { name: 'dropEvent' }),
@@ -148,4 +149,4 @@ export default withRouter(compose(
       };
     },
   }),
-)(GraphQLQueryResultWrapper(EventAdminEditEvent)));
+])(GraphQLQueryResultWrapper(EventAdminEditEvent)));
