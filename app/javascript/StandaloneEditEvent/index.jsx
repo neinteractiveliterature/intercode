@@ -33,6 +33,7 @@ ${ticketTypeFragment}
 const eventFragment = gql`
 fragment StandaloneEditEvent_EventFields on Event {
   id
+  category
   title
   form_response_attrs_json
 
