@@ -5,7 +5,7 @@ describe EventListPresenter do
 
   it 'should return events in title order' do
     ['The Deadening', 'A Garden of Spooning Paths', 'Final Voyage of the Mary Celeste'].each do |title|
-      FactoryBot.create(:event, convention: convention, title: title)
+      FactoryBot.create(:event, convention: convention, title: title, short_blurb: title)
     end
 
     assert_equal(
@@ -15,8 +15,8 @@ describe EventListPresenter do
   end
 
   describe 'accepted order sorts' do
-    let(:event1) { FactoryBot.create(:event, convention: convention) }
-    let(:event2) { FactoryBot.create(:event, convention: convention) }
+    let(:event1) { FactoryBot.create(:event, convention: convention, short_blurb: 'event1') }
+    let(:event2) { FactoryBot.create(:event, convention: convention, short_blurb: 'event2') }
 
     before do
       event1
@@ -34,9 +34,9 @@ describe EventListPresenter do
   end
 
   it 'should sort by first run start order' do
-    event1 = FactoryBot.create(:event, convention: convention)
+    event1 = FactoryBot.create(:event, convention: convention, short_blurb: 'event1')
     travel 1.hour
-    event2 = FactoryBot.create(:event, convention: convention)
+    event2 = FactoryBot.create(:event, convention: convention, short_blurb: 'event2')
 
     event1_run1 = FactoryBot.create(:run, event: event1, starts_at: convention.starts_at + 6.hours)
     event2_run1 = FactoryBot.create(:run, event: event2, starts_at: convention.starts_at + 5.hours)
