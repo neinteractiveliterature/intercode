@@ -212,8 +212,8 @@ class FillerEventAdmin extends React.Component {
         disabled={this.state.requestInProgress}
         error={this.state.error ? this.state.error.message : null}
         initialEvent={{
+          category: 'filler',
           form_response_attrs: {
-            category: 'filler',
             email: '',
             short_blurb: '',
             description: '',
