@@ -57,7 +57,7 @@
     "react-apollo": "^2.1.1",
     "react-bootstrap4-modal": "^1.2.2",
     "react-codemirror2": "^4.2.1",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.3.0",
     "react-html-id": "^0.1.1",
     "react-immutable-proptypes": "^2.1.0",
     "react-moment-proptypes": "^1.5.0",
