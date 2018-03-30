@@ -18,7 +18,8 @@
     .card-header
       %h4.m-0
         = link_to event.title, event
-        %small.text-muted &mdash; #{event.category.humanize}
+        - unless event.category == 'filler'
+          %small.text-muted &mdash; #{event.category.humanize}
       %p.m-0
         - author_or_org = event.author.presence || event.organization
         - if author_or_org.present?
