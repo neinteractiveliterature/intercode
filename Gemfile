@@ -79,7 +79,7 @@ gem 'whenever'
 
 # Miscellany
 gem 'parallel'
-gem 'newrelic_rpm'
+gem 'skylight'
 
 # Heroku prod fix
 gem 'rails_12factor', group: 'stage'

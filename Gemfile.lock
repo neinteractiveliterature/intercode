@@ -265,7 +265,6 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
-    newrelic_rpm (5.0.0.342)
     nio4r (2.3.0)
     nio4r (2.3.0-java)
     nokogiri (1.8.2)
@@ -370,6 +369,8 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    skylight (1.6.0)
+      activesupport (>= 3.0.0)
     slop (3.6.0)
     spoon (0.0.6)
       ffi
@@ -471,7 +472,6 @@ DEPENDENCIES
   minitest-spec-rails
   money-rails
   mysql2 (~> 0.4.10)
-  newrelic_rpm
   oj (~> 3.5.0)
   parallel
   pg
@@ -492,6 +492,7 @@ DEPENDENCIES
   sequel
   shoryuken
   simplecov
+  skylight
   sqlite3
   stackprof
   stripe
