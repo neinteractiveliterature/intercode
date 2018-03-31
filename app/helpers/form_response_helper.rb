@@ -6,9 +6,9 @@ module FormResponseHelper
   def render_form_response_value(form_item, value, timezone)
     return '' if value.nil? || value.to_s.strip == ''
     render_value_of_type(
-      form_item.item_type,
+      form_item&.item_type || 'free_text',
       value,
-      form_item.properties,
+      form_item&.properties || nil,
       timezone
     )
   end
