@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import ConventionForm from './ConventionForm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -68,10 +69,10 @@ mutation($input: UpdateConventionInput!) {
 ${conventionFragment}
 `;
 
-@compose(
+@flowRight([
   graphql(conventionQuery),
   graphql(updateConventionMutation, { name: 'updateConvention' }),
-)
+])
 @GraphQLQueryResultWrapper
 class ConventionAdmin extends React.Component {
   static propTypes = {

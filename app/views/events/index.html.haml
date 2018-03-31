@@ -7,7 +7,10 @@
 
 - markdown_presenter = MarkdownPresenter.new('No description provided')
 - previous_first_run = nil
+- form_identifiers_by_event_category = {}
 - @events.each do |event|
+  - form_identifiers_by_event_category[event.category] ||= Set.new(event.form.form_items.pluck(:identifier))
+  - form_identifiers = form_identifiers_by_event_category[event.category]
   - first_run = nil
   - if params[:sort] == 'first_scheduled_run'
     - first_run = event.runs.sort_by(&:starts_at).first
@@ -18,9 +21,10 @@
     .card-header
       %h4.m-0
         = link_to event.title, event
-        %small.text-muted &mdash; #{event.category.humanize}
+        - unless event.category == 'filler'
+          %small.text-muted &mdash; #{event.category.humanize}
       %p.m-0
-        - author_or_org = event.author.presence || event.organization
+        - author_or_org = (form_identifiers.include?('author') && event.author.presence) || (form_identifiers.include?('organization') && event.organization)
         - if author_or_org.present?
           %em by #{author_or_org}
 

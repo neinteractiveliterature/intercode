@@ -111,6 +111,10 @@ class Event < ApplicationRecord
     EventDrop.new(self)
   end
 
+  def form
+    convention.form_for_event_category(category)
+  end
+
   private
 
   def validate_registration_policy

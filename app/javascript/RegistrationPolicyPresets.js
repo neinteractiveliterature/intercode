@@ -31,13 +31,13 @@ const presets = [
       buckets: [
         {
           key: 'pcs',
-          name: 'PCs',
+          name: 'PC',
           description: 'Player characters',
           slots_limited: true,
         },
         {
           key: 'npcs',
-          name: 'NPCs',
+          name: 'NPC',
           description: 'Non-player characters',
           slots_limited: true,
         },
