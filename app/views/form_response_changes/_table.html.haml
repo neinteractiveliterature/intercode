@@ -19,7 +19,11 @@
         %td
           - if previous_change&.user_con_profile != change.user_con_profile
             = change.user_con_profile.name_without_nickname
-        %td= admin_form_item_label(form_item)
+        %td
+          - if form_item
+            = admin_form_item_label(form_item)
+          - else
+            = change.field_identifier
         %td= diff
         %td.text-right
           - change_timestamp = change.created_at.in_time_zone(timezone)
