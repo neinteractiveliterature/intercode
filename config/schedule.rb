@@ -22,3 +22,7 @@
 every 1.hour do
   runner 'NotifyEventProposalChangesJob.perform_later'
 end
+
+every 1.hour do
+  runner 'NotifyEventChangesJob.perform_later'
+end
