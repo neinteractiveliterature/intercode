@@ -8,7 +8,7 @@ module FormResponseHelper
     render_value_of_type(
       form_item&.item_type || 'free_text',
       value,
-      form_item&.properties || nil,
+      form_item&.properties || {},
       timezone
     )
   end
@@ -34,7 +34,7 @@ module FormResponseHelper
   def render_free_text_value(value, properties)
     if properties['format'] == 'markdown'
       MarkdownPresenter.new('').render(value)
-    elsif properties['lines'] > 1
+    elsif (properties['lines'] || 0) > 1
       MarkdownPresenter.strip_single_p(simple_format(value))
     else
       value
