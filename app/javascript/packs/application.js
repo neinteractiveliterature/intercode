@@ -29,7 +29,6 @@ import 'codemirror/addon/fold/xml-fold';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/foldgutter.css';
 
-import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
 import WebpackerReact from 'webpacker-react';
 
 import '../styles/application.scss';
@@ -46,6 +45,7 @@ import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
+import NavigationItemsAdmin from '../NavigationItemsAdmin';
 import OrderAdmin from '../ProductOrders/OrderAdmin';
 import OrderHistory from '../ProductOrders/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
@@ -61,7 +61,6 @@ import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
-  CadmusNavbarAdminApp,
   Cart: StandaloneGraphQLComponent(Cart),
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
@@ -72,6 +71,7 @@ WebpackerReact.setup({
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   LiquidHTMLEditor,
   MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
+  NavigationItemsAdmin,
   OrderAdmin: StandaloneGraphQLComponent(OrderAdmin),
   OrderHistory: StandaloneGraphQLComponent(OrderHistory),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),

@@ -2,17 +2,19 @@
   .col-md-9
     %h1.larp-title= @event.title
 
+    - form_item_identifiers = Set.new(@event.form.form_items.pluck(:identifier))
+
     %dl.row
-      - if @event.author.present?
+      - if @event.author.present? && form_item_identifiers.include?('author')
         %dt.col-md-3 Author(s)
         %dd.col-md-9= @event.author
-      - if @event.organization.present?
+      - if @event.organization.present? && form_item_identifiers.include?('organization')
         %dt.col-md-3 Organization
         %dd.col-md-9= @event.organization
-      - if @event.url.present?
+      - if @event.url.present? && form_item_identifiers.include?('url')
         %dt.col-md-3 Home Page
         %dd.col-md-9= link_to @event.url, @event.url, :target => '_blank'
-      - if @event.email.present?
+      - if @event.email.present? && form_item_identifiers.include?('email')
         %dt.col-md-3 Contact Email
         %dd.col-md-9= intercode_mail_to @event.email
       - if @team_members.any?
@@ -36,7 +38,7 @@
           %li.list-group-item
             = link_to("Edit #{@event.team_member_name.titleize.pluralize}", [@event, :team_members])
 
-- if @runs.any? && can?(:schedule, convention)
+- if @runs.any? && can?(:schedule, convention) && @event.registration_policy&.accepts_signups?
   %section.my-4
     %hr
 

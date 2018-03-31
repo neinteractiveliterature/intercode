@@ -90,7 +90,10 @@ class ApplicationController < ActionController::Base
   # custom Liquid filters and tags via the Liquid::Context object.  Exposing the
   # controller is useful for generating URLs in templates.
   def liquid_registers
-    liquid_assigns.merge('controller' => self)
+    liquid_assigns.merge(
+      'controller' => self,
+      :file_system => Cadmus::PartialFileSystem.new(convention)
+    )
   end
 
   # Devise is going to do some operations in its controllers that require writing to a

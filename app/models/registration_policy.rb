@@ -29,6 +29,10 @@ class RegistrationPolicy
     end
   end
 
+  def accepts_signups?
+    slots_unlimited? || total_slots > 0
+  end
+
   def slots_unlimited?
     buckets.any?(&:slots_unlimited?)
   end

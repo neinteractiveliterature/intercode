@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
@@ -38,7 +39,7 @@ function formDataFromJSON(json) {
   };
 }
 
-@compose(
+@flowRight([
   graphql(formQuery),
   graphql(updateFormMutation, {
     props({ mutate }) {
@@ -56,7 +57,7 @@ function formDataFromJSON(json) {
       };
     },
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class FormJSONEditor extends React.Component {
   static propTypes = {

@@ -9,9 +9,9 @@ class EventListPresenter
   end
 
   def sorted_events
-    events = convention.events.active.where.not(category: 'filler')
+    events = convention.events.active
 
-    case sort
+    sorted_events = case sort
     when 'first_scheduled_run'
       run_time_by_event_id = Run.group(:event_id).minimum(:starts_at)
 
@@ -30,5 +30,7 @@ class EventListPresenter
     else
       raise UnknownSortError, "Unknown sort for events: #{sort}"
     end
+
+    sorted_events.select { |event| event.short_blurb.present? }
   end
 end

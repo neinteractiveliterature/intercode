@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
-import { isEqual } from 'lodash';
+import { graphql } from 'react-apollo';
+import { isEqual, flowRight } from 'lodash';
 import buildFormStateFromData from './buildFormStateFromData';
 import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
@@ -18,7 +18,7 @@ function parseResponseErrors(error) {
   return validationErrors;
 }
 
-@compose(
+@flowRight([
   graphql(myProfileQuery),
   graphql(updateUserConProfileMutation, {
     props: ({ mutate }) => ({
@@ -34,7 +34,7 @@ function parseResponseErrors(error) {
       }),
     }),
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class MyProfileForm extends React.Component {
   static propTypes = {

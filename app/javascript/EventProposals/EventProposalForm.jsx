@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
-import { isEqual } from 'lodash';
+import { graphql } from 'react-apollo';
+import { flowRight, isEqual } from 'lodash';
 import ErrorDisplay from '../ErrorDisplay';
 import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
@@ -19,7 +19,7 @@ function parseResponseErrors(error) {
   return validationErrors;
 }
 
-@compose(
+@flowRight([
   graphql(eventProposalQuery),
   graphql(updateEventProposalMutation, {
     props: ({ mutate }) => ({
@@ -46,7 +46,7 @@ function parseResponseErrors(error) {
       }),
     }),
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class EventProposalForm extends React.Component {
   static propTypes = {

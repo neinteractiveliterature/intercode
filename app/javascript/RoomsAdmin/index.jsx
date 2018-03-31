@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import { pluralize } from 'inflected';
 import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
@@ -64,12 +65,12 @@ mutation($input: DeleteRoomInput!) {
 }
 `;
 
-@compose(
+@flowRight([
   graphql(roomsQuery),
   graphql(createRoomMutation, { name: 'createRoom' }),
   graphql(updateRoomMutation, { name: 'updateRoom' }),
   graphql(deleteRoomMutation, { name: 'deleteRoom' }),
-)
+])
 @GraphQLQueryResultWrapper
 class RoomsAdmin extends React.Component {
   static propTypes = {

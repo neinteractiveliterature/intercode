@@ -32,6 +32,9 @@ export default class RegistrationPolicy {
 
   setAttributesFromAPI(json) {
     let returnRecord = this;
+    if (json == null) {
+      return returnRecord;
+    }
 
     if (json.buckets !== undefined) {
       const buckets = json.buckets.map(bucket => RegistrationPolicyBucket.fromAPI(bucket));

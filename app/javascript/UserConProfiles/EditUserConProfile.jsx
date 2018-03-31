@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import buildFormStateFromData from './buildFormStateFromData';
 import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -9,7 +10,7 @@ import UserConProfileForm from './UserConProfileForm';
 import { userConProfileQuery } from './queries';
 import { updateUserConProfileMutation } from './mutations';
 
-@compose(
+@flowRight([
   graphql(userConProfileQuery),
   graphql(updateUserConProfileMutation, {
     props: ({ mutate }) => ({
@@ -26,7 +27,7 @@ import { updateUserConProfileMutation } from './mutations';
       }),
     }),
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class EditUserConProfile extends React.Component {
   static propTypes = {

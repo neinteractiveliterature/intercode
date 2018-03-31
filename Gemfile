@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 ruby '2.4.2'
-gem 'rails', '5.1.5'
+gem 'rails', '5.1.6'
 
 gem 'sqlite3', groups: [:development, :test]
-gem 'mysql2'
+gem 'mysql2', '~> 0.4.10'
 gem 'pg'
 gem 'puma'
 
@@ -79,7 +79,7 @@ gem 'whenever'
 
 # Miscellany
 gem 'parallel'
-gem 'newrelic_rpm'
+gem 'skylight'
 
 # Heroku prod fix
 gem 'rails_12factor', group: 'stage'
@@ -87,6 +87,7 @@ gem 'rails_12factor', group: 'stage'
 gem 'faker', group: 'development', require: false
 
 gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source map upload support
+gem 'rollbar-shoryuken'
 gem 'oj', '~> 3.5.0'
 
 group :development do
@@ -105,6 +106,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'
   gem 'capistrano-shoryuken'
+  gem 'capistrano-maintenance', require: false
 end
 
 group :development, :test do

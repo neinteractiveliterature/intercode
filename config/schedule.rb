@@ -20,5 +20,5 @@
 # Learn more: http://github.com/javan/whenever
 
 every 1.hour do
-  runner 'NotifyEventProposalChangesJob.perform_later'
+  rake 'run_notifications'
 end
