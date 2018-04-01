@@ -9,6 +9,7 @@ Types::OrderType = GraphQL::ObjectType.define do
   field :status, !types.String
   field :total_price, !Types::MoneyType
   field :payment_amount, Types::MoneyType
+  field :payment_note, types.String
   field :charge_id, types.String
   field :order_entries, !types[Types::OrderEntryType] do
     resolve ->(obj, _args, _ctx) {

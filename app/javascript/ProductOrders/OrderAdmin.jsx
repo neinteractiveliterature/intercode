@@ -1,46 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, withApollo } from 'react-apollo';
-import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
 import arrayToSentence from 'array-to-sentence';
 import QueryString from 'query-string';
-import GraphQLResultPropType from '../GraphQLResultPropType';
+import AdminOrderModal from './AdminOrderModal';
+import { adminOrdersQuery } from './queries';
 import formatMoney from '../formatMoney';
-
-const ordersQuery = gql`
-query($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput]) {
-  convention {
-    timezone_name
-
-    orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-      current_page
-      per_page
-      total_pages
-
-      entries {
-        id
-        status
-        submitted_at
-
-        user_con_profile {
-          name_without_nickname
-        }
-
-        total_price {
-          fractional
-          currency_code
-        }
-
-        order_entries {
-          describe_products
-        }
-      }
-    }
-  }
-}
-`;
 
 function dataToKeyPathValuePairs(data, prependKeys = []) {
   return Object.entries(data).map(([key, value]) => {
@@ -82,12 +49,8 @@ function reactTableSortToTableResultsSort(sort) {
   return sort.map(({ id, desc }) => ({ field: id, desc }));
 }
 
-@withApollo
 class OrderAdmin extends React.Component {
   static propTypes = {
-    client: PropTypes.shape({
-      query: PropTypes.func.isRequired,
-    }).isRequired,
     exportUrl: PropTypes.string.isRequired,
   };
 
@@ -95,37 +58,13 @@ class OrderAdmin extends React.Component {
     super(props);
 
     this.state = {
-      orders: [],
       sorted: [],
       filtered: [],
-      pages: 1,
-      loading: true,
+      editingOrderId: null,
     };
   }
 
-  fetchData = async (state) => {
-    this.setState({ loading: true });
-
-    const response = await this.props.client.query({
-      query: ordersQuery,
-      variables: {
-        page: state.page + 1,
-        perPage: state.pageSize,
-        filters: reactTableFiltersToTableResultsFilters(state.filtered),
-        sort: reactTableSortToTableResultsSort(state.sorted),
-      },
-    });
-
-    this.setState({
-      data: response.data,
-      orders: response.data.convention.orders_paginated.entries,
-      pages: response.data.convention.orders_paginated.total_pages,
-      loading: false,
-    });
-  }
-
-  sortedChanged = (sorted) => { this.setState({ sorted }); }
-  filteredChanged = (filtered) => { this.setState({ filtered }); }
+  closeOrderModal = () => { this.setState({ editingOrderId: null }); }
 
   renderExportButton = () => {
     const queryParams = {
@@ -144,68 +83,107 @@ class OrderAdmin extends React.Component {
         {' '}
         Export CSV
       </a>
-    )
+    );
+  }
+
+  renderEditModal = (data) => {
+    if (!data.convention) {
+      return null;
+    }
+
+    const editingOrder = data.convention.orders_paginated.entries
+      .find(order => order.id === this.state.editingOrderId);
+
+    return (
+      <AdminOrderModal
+        order={editingOrder}
+        closeModal={this.closeOrderModal}
+        timezoneName={data.convention.timezone_name}
+      />
+    );
   }
 
   render = () => {
-    const {
-      orders,
-      pages,
-      loading,
-      sorted,
-      filtered,
-    } = this.state;
+    const { sorted, filtered } = this.state;
 
     return (
       <div>
         <div className="mb-2">
           {this.renderExportButton()}
         </div>
-        <ReactTable
-          className="-striped"
-          manual
-          filterable
-          data={orders}
-          pages={pages}
-          sorted={sorted}
-          filtered={filtered}
-          loading={loading}
-          onFetchData={this.fetchData}
-          onSortedChange={this.sortedChanged}
-          onFilteredChange={this.filteredChanged}
-          columns={[
-            {
-              Header: 'User',
-              id: 'user_name',
-              accessor: order => order.user_con_profile.name_without_nickname,
-            },
-            { Header: 'Status', accessor: 'status' },
-            {
-              Header: 'Submitted',
-              accessor: 'submitted_at',
-              filterable: false,
-              Cell: props => (
-                moment(props.value).tz(this.state.data.convention.timezone_name)
-                  .format('MMM D, YYYY h:mma')
-              ),
-            },
-            {
-              Header: 'Products',
-              id: 'describe_products',
-              filterable: false,
-              sortable: false,
-              accessor: order => order.order_entries.map(entry => entry.describe_products),
-              Cell: props => arrayToSentence(props.value),
-            },
-            {
-              Header: 'Price',
-              accessor: 'total_price',
-              filterable: false,
-              sortable: false,
-              Cell: props => formatMoney(props.value),
-            },
-          ]}
-        />
+        <Query query={adminOrdersQuery}>
+          {({ data, refetch }) => (
+            <div>
+              <ReactTable
+                className="-striped -highlight"
+                manual
+                filterable
+                data={(data.convention || { orders_paginated: {} }).orders_paginated.entries}
+                pages={(data.convention || { orders_paginated: {} }).orders_paginated.total_pages}
+                sorted={sorted}
+                filtered={filtered}
+                loading={data.loading}
+                onFetchData={(tableState) => {
+                  refetch({
+                    page: tableState.page + 1,
+                    perPage: tableState.pageSize,
+                    filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
+                    sort: reactTableSortToTableResultsSort(tableState.sorted),
+                  });
+                }}
+                onSortedChange={(newSorted) => {
+                  this.setState({ sorted: newSorted });
+                }}
+                onFilteredChange={(newFiltered) => {
+                  this.setState({ filtered: newFiltered });
+                }}
+                columns={[
+                  {
+                    Header: 'User',
+                    id: 'user_name',
+                    accessor: order => order.user_con_profile.name_without_nickname,
+                  },
+                  { Header: 'Status', accessor: 'status' },
+                  {
+                    Header: 'Submitted',
+                    accessor: 'submitted_at',
+                    filterable: false,
+                    Cell: props => (
+                      moment(props.value).tz(data.convention.timezone_name)
+                        .format('MMM D, YYYY h:mma')
+                    ),
+                  },
+                  {
+                    Header: 'Products',
+                    id: 'describe_products',
+                    filterable: false,
+                    sortable: false,
+                    accessor: order => order.order_entries.map(entry => entry.describe_products),
+                    Cell: props => arrayToSentence(props.value),
+                  },
+                  {
+                    Header: 'Price',
+                    accessor: 'total_price',
+                    filterable: false,
+                    sortable: false,
+                    Cell: props => formatMoney(props.value),
+                  },
+                ]}
+                getTrProps={(state, rowInfo) => ({
+                  style: { cursor: 'pointer' },
+                  onClick: (event, handleOriginal) => {
+                    if (handleOriginal) {
+                      handleOriginal();
+                    }
+
+                    this.setState({ editingOrderId: rowInfo.original.id });
+                  },
+                })}
+              />
+              {this.renderEditModal(data)}
+            </div>
+          )}
+        </Query>
       </div>
     );
   }

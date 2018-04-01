@@ -111,6 +111,18 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard(guard_for_model_with_id(Order, :submit))
   end
 
+  field :markOrderPaid, Mutations::MarkOrderPaid.field do
+    guard(guard_for_model_with_id(Order, :update))
+  end
+
+  field :updateOrder, Mutations::UpdateOrder.field do
+    guard(guard_for_model_with_id(Order, :update))
+  end
+
+  field :cancelOrder, Mutations::CancelOrder.field do
+    guard(guard_for_model_with_id(Order, :cancel))
+  end
+
   ### Page
 
   field :deletePage, Mutations::DeletePage.field do
