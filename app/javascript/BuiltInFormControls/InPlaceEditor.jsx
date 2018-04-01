@@ -6,10 +6,12 @@ class InPlaceEditor extends React.Component {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     children: PropTypes.node,
+    renderInput: PropTypes.func,
   };
 
   static defaultProps = {
     children: null,
+    renderInput: null,
   }
 
   constructor(props) {
@@ -60,18 +62,32 @@ class InPlaceEditor extends React.Component {
     }
   }
 
+  renderInput = () => {
+    const inputProps = {
+      value: this.state.editingValue,
+      onChange: this.inputChanged,
+      onKeyDown: this.keyDownInInput,
+      ref: (input) => { this.input = input; },
+    };
+
+    if (this.props.renderInput) {
+      return this.props.renderInput(inputProps);
+    }
+
+    return (
+      <input
+        type="text"
+        className="form-control form-control-sm mr-1"
+        {...inputProps}
+      />
+    );
+  }
+
   render = () => {
     if (this.state.editing) {
       return (
-        <div className="form-inline">
-          <input
-            type="text"
-            value={this.state.editingValue}
-            onChange={this.inputChanged}
-            onKeyDown={this.keyDownInInput}
-            className="form-control form-control-sm mr-1"
-            ref={(input) => { this.input = input; }}
-          />
+        <div className="form-inline align-items-start">
+          {this.renderInput()}
           <button className="btn btn-secondary btn-sm mr-1" onClick={this.cancelEditing}>
             <i className="fa fa-times" />
           </button>

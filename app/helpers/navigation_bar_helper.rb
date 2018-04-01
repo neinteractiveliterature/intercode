@@ -102,6 +102,11 @@ module NavigationBarHelper
       visible? { can?(:mail_to_any, convention) }
     end,
     NavigationItem.define do
+      label 'Orders'
+      url { admin_orders_path }
+      visible? { can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention))) }
+    end,
+    NavigationItem.define do
       label 'Reports'
       url { reports_path }
       visible? { can?(:view_reports, convention) }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import ErrorDisplay from '../ErrorDisplay';
@@ -37,7 +38,7 @@ mutation($input: AddOrderEntryToCurrentPendingOrderInput!) {
 }
 `;
 
-@compose(
+@flowRight([
   graphql(productQuery),
   graphql(addOrderEntryToCurrentPendingOrderMutation, {
     props: ({ mutate }) => ({
@@ -54,7 +55,7 @@ mutation($input: AddOrderEntryToCurrentPendingOrderInput!) {
       }),
     }),
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class ProductOrderForm extends React.Component {
   static propTypes = {

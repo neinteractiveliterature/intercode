@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import ErrorDisplay from '../ErrorDisplay';
@@ -74,7 +75,7 @@ mutation($input: DeleteOrderEntryInput!) {
 }
 `;
 
-@compose(
+@flowRight([
   graphql(cartQuery),
   graphql(updateOrderEntryMutation, {
     props: ({ mutate }) => ({
@@ -96,7 +97,7 @@ mutation($input: DeleteOrderEntryInput!) {
       }),
     }),
   }),
-)
+])
 @GraphQLQueryResultWrapper
 class Cart extends React.Component {
   static propTypes = {
