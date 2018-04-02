@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180304162934) do
+ActiveRecord::Schema.define(version: 20180312150839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,34 @@ ActiveRecord::Schema.define(version: 20180304162934) do
     t.index ["ticket_type_id"], name: "idx_max_event_provided_tickets_on_ticket_type_id"
   end
 
+  create_table "order_entries", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "product_variant_id"
+    t.integer "quantity"
+    t.integer "price_per_item_cents"
+    t.string "price_per_item_currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_entries_on_order_id"
+    t.index ["product_id"], name: "index_order_entries_on_product_id"
+    t.index ["product_variant_id"], name: "index_order_entries_on_product_variant_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_con_profile_id", null: false
+    t.string "status", null: false
+    t.string "charge_id"
+    t.integer "payment_amount_cents"
+    t.string "payment_amount_currency"
+    t.text "payment_note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "submitted_at"
+    t.datetime "paid_at"
+    t.index ["user_con_profile_id"], name: "index_orders_on_user_con_profile_id"
+  end
+
   create_table "pages", id: :serial, force: :cascade do |t|
     t.text "name"
     t.string "slug"
@@ -214,6 +242,31 @@ ActiveRecord::Schema.define(version: 20180304162934) do
     t.text "admin_notes"
     t.index ["cms_layout_id"], name: "index_pages_on_cms_layout_id"
     t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
+  end
+
+  create_table "product_variants", force: :cascade do |t|
+    t.bigint "product_id"
+    t.text "name"
+    t.text "description"
+    t.string "image"
+    t.integer "override_price_cents"
+    t.string "override_price_currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_variants_on_product_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.bigint "convention_id"
+    t.boolean "available"
+    t.text "name"
+    t.text "description"
+    t.string "image"
+    t.integer "price_cents"
+    t.string "price_currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["convention_id"], name: "index_products_on_convention_id"
   end
 
   create_table "rooms", id: :serial, force: :cascade do |t|
@@ -411,22 +464,25 @@ ActiveRecord::Schema.define(version: 20180304162934) do
   add_foreign_key "forms", "conventions"
   add_foreign_key "maximum_event_provided_tickets_overrides", "events"
   add_foreign_key "maximum_event_provided_tickets_overrides", "ticket_types"
+  add_foreign_key "order_entries", "orders"
+  add_foreign_key "order_entries", "product_variants"
+  add_foreign_key "order_entries", "products"
+  add_foreign_key "orders", "user_con_profiles"
   add_foreign_key "pages", "cms_layouts"
+  add_foreign_key "product_variants", "products"
+  add_foreign_key "products", "conventions"
   add_foreign_key "rooms", "conventions"
   add_foreign_key "rooms_runs", "rooms"
   add_foreign_key "rooms_runs", "runs"
   add_foreign_key "runs", "events"
   add_foreign_key "runs", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
-  add_foreign_key "signups", "user_con_profiles"
   add_foreign_key "signups", "users", column: "updated_by_id"
   add_foreign_key "staff_positions", "conventions"
   add_foreign_key "team_members", "events"
-  add_foreign_key "team_members", "user_con_profiles"
   add_foreign_key "ticket_types", "conventions"
   add_foreign_key "tickets", "events", column: "provided_by_event_id"
   add_foreign_key "tickets", "ticket_types"
-  add_foreign_key "tickets", "user_con_profiles"
   add_foreign_key "user_con_profiles", "conventions"
   add_foreign_key "user_con_profiles", "users"
 end

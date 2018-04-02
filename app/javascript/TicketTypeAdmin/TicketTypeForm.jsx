@@ -7,6 +7,7 @@ import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import TicketTypePropType from './TicketTypePropType';
+import formatMoney from '../formatMoney';
 
 const buildScheduledMoneyValueInput = (value, onChange) => {
   const processNumberInputChangeEvent = (newValue) => {
@@ -23,7 +24,7 @@ const buildScheduledMoneyValueInput = (value, onChange) => {
   let dollarValue = null;
 
   if (value && value.fractional !== null) {
-    dollarValue = (value.fractional / 100.0).toFixed(2).toString();
+    dollarValue = formatMoney(value);
   }
 
   return (
@@ -32,7 +33,7 @@ const buildScheduledMoneyValueInput = (value, onChange) => {
         value={dollarValue}
         onChange={processNumberInputChangeEvent}
       >
-        ${dollarValue}
+        {dollarValue}
       </InPlaceEditor>
     </div>
   );

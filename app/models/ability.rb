@@ -108,6 +108,7 @@ class Ability
     can :read, Event, status: 'active'
     can :read, Form
     can [:read, :root], Page
+    can :read, Product
     can :read, Room
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
     can :read, StaffPosition
@@ -127,6 +128,9 @@ class Ability
         status: %w[draft proposed reviewing]
       can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
       can :signup_summary, Run, id: signed_up_run_ids
+      can :read, Order, user_con_profile: { user_id: user.id }
+      can :submit, Order, user_con_profile: { user_id: user.id }, status: %w[pending unpaid]
+      can :manage, OrderEntry, order: { user_con_profile: { user_id: user.id }, status: 'pending' }
       can :read, Ticket, user_con_profile: { user_id: user.id }
 
       add_con_staff_abilities
@@ -226,6 +230,7 @@ class Ability
     can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
+    can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
   end
 
   def add_event_proposal_abilities

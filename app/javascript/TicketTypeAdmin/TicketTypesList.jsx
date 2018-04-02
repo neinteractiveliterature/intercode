@@ -8,6 +8,7 @@ import { capitalize } from 'inflected';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypePropType from './TicketTypePropType';
 import Timespan from '../PCSG/Timespan';
+import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { ticketTypesQuery } from './queries';
 
@@ -46,13 +47,13 @@ function describeTicketTypeOptions(ticketType, ticketName) {
 
 function renderPricingSchedule(ticketType, timezoneName) {
   const timespanItems = ticketType.pricing_schedule.timespans.map((timespan, i) => {
-    const dollarValue = (timespan.value.fractional / 100.0).toFixed(2).toString();
+    const dollarValue = formatMoney(timespan.value);
     const timespanDescription = Timespan.fromStrings(timespan.start, timespan.finish)
       .humanizeInTimezone(timezoneName, 'MMMM D, YYYY');
 
     return (
       // eslint-disable-next-line react/no-array-index-key
-      <li key={i}>${dollarValue} {timespanDescription}</li>
+      <li key={i}>{dollarValue} {timespanDescription}</li>
     );
   });
 

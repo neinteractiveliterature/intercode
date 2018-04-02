@@ -35,6 +35,7 @@ import '../styles/application.scss';
 import '../inflections';
 import '../Codemirror/LiquidMultiplexModes';
 
+import Cart from '../ProductOrders/Cart';
 import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
@@ -45,7 +46,10 @@ import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
 import NavigationItemsAdmin from '../NavigationItemsAdmin';
+import OrderAdmin from '../ProductOrders/OrderAdmin';
+import OrderHistory from '../ProductOrders/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
+import ProductOrderForm from '../ProductOrders/ProductOrderForm';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionAdmin from '../StaffPositionAdmin';
@@ -57,6 +61,7 @@ import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
+  Cart: StandaloneGraphQLComponent(Cart),
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
   EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
@@ -67,7 +72,10 @@ WebpackerReact.setup({
   LiquidHTMLEditor,
   MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
   NavigationItemsAdmin,
+  OrderAdmin: StandaloneGraphQLComponent(OrderAdmin),
+  OrderHistory: StandaloneGraphQLComponent(OrderHistory),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
+  ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
   StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
