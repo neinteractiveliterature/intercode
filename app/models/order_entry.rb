@@ -28,8 +28,7 @@ class OrderEntry < ApplicationRecord
 
   def describe_products
     [
-      quantity > 1 ? quantity : nil,
-      quantity > 1 ? product.name.pluralize : product.name,
+      quantity > 1 ? "#{quantity} #{product.name.pluralize}" : product.name,
       product_variant ? "(#{product_variant.name})" : nil
     ].compact.join(' ')
   end
