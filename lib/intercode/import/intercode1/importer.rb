@@ -49,7 +49,6 @@ class Intercode::Import::Intercode1::Importer
     embedded_pdf_pages.each(&:import!)
 
     %i[
-      store_items_table
       navigation_items
       proposal_form_customizer
       registration_statuses
@@ -63,12 +62,26 @@ class Intercode::Import::Intercode1::Importer
       bios_table
       rooms_table
       runs_table
-      store_orders_table
-      store_order_entries_table
       gms_table
       signup_table
     ].each do |importer|
       send(importer).import!
+    end
+
+    import_store_content!
+  end
+
+  def import_store_content!
+    if @connection.table_exists?('StoreItems')
+      %i[
+        store_items_table
+        store_orders_table
+        store_order_entries_table
+      ].each do |importer|
+        send(importer).import!
+      end
+    else
+      legacy_t_shirt_importer.import!
     end
   end
 
@@ -199,8 +212,17 @@ class Intercode::Import::Intercode1::Importer
     )
   end
 
+  def legacy_t_shirt_importer
+    @legacy_t_shirt_importer ||= Intercode::Import::Intercode1::LegacyTShirtImporter.new(
+      connection,
+      con,
+      config,
+      user_con_profiles_id_map
+    )
+  end
+
   def rooms_table
-    @rooms_table ||= Intercode::Import::Intercode1::Tables::Rooms.new(connection, con)
+    @rooms_table ||= Intercode::Import::Intercode1::Tables::Rooms.new(connection, con, config)
   end
 
   def rooms_id_map

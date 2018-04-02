@@ -69,9 +69,13 @@ class Intercode::Import::Intercode1::HtmlConverter
     when /[Ss]tatic\.php\?page=(\w+)/
       "__PAGE_URL_#{Cadmus::Slugs.slugify(Regexp.last_match(1))}"
     else
-      parsed_url = URI.parse(url)
-      logger.warn("Unknown URL: #{url}") if parsed_url.scheme.blank? && parsed_url.path.present?
-      url
+      begin
+        parsed_url = URI.parse(url)
+        logger.warn("Unknown URL: #{url}") if parsed_url.scheme.blank? && parsed_url.path.present?
+        url
+      rescue URI::InvalidURIError
+        url
+      end
     end
   end
 
