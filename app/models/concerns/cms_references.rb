@@ -19,7 +19,7 @@ module Concerns::CmsReferences
       .map do |include_node|
         regexp = /\A#{Regexp.escape include_node.tag_name}\s+#{Liquid::Include::Syntax}/
         next unless include_node.raw =~ regexp
-        Liquid::Expression.parse($1)
+        Liquid::Expression.parse(Regexp.last_match(1))
       end
       .compact
   end

@@ -23,7 +23,8 @@ class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
     when :user_name
       scope.joins(:user_con_profile)
         .where(
-          'lower(user_con_profiles.last_name) like :value OR lower(user_con_profiles.first_name) like :value',
+          "lower(user_con_profiles.last_name) like :value \
+OR lower(user_con_profiles.first_name) like :value",
           value: "%#{value.downcase}%"
         )
     when :status

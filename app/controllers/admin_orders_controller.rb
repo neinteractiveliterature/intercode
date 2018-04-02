@@ -1,4 +1,5 @@
 class AdminOrdersController < ApplicationController
+  include Concerns::SendCsv
   before_action :authorize_read_orders
 
   def index
@@ -18,13 +19,8 @@ class AdminOrdersController < ApplicationController
         else
           ''
         end
-        csv_filename = "#{convention.name} Orders#{name_suffix}.csv"
 
-        headers["X-Accel-Buffering"] = "no"
-        headers["Cache-Control"] = "no-cache"
-        headers["Content-Type"] = "text/csv; charset=utf-8"
-        headers["Content-Disposition"] = %(attachment; filename="#{csv_filename}")
-        headers["Last-Modified"] = Time.zone.now.ctime.to_s
+        configure_csv_headers("#{convention.name} Orders#{name_suffix}.csv")
         self.response_body = table.csv_enumerator
       end
     end

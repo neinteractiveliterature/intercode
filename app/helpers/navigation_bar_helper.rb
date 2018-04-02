@@ -104,7 +104,9 @@ module NavigationBarHelper
     NavigationItem.define do
       label 'Orders'
       url { admin_orders_path }
-      visible? { can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention))) }
+      visible? do
+        can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
+      end
     end,
     NavigationItem.define do
       label 'Reports'
