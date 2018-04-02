@@ -149,8 +149,10 @@ class OrderAdmin extends React.Component {
                     accessor: 'submitted_at',
                     filterable: false,
                     Cell: props => (
+                      props.value ?
                       moment(props.value).tz(data.convention.timezone_name)
-                        .format('MMM D, YYYY h:mma')
+                        .format('MMM D, YYYY h:mma') :
+                      ''
                     ),
                   },
                   {
