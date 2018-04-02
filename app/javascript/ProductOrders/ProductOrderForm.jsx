@@ -9,6 +9,7 @@ import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import LoadingIndicator from '../LoadingIndicator';
 import formatMoney from '../formatMoney';
+import { parseIntOrNull } from '../FormUtils';
 
 const productQuery = gql`
 query($productId: Int!) {
@@ -86,13 +87,11 @@ class ProductOrderForm extends React.Component {
   )
 
   productVariantSelectorChanged = (event) => {
-    const id = Number.parseInt(event.target.value, 10);
-    this.setState({ productVariantId: (Number.isNaN(id) ? null : id) });
+    this.setState({ productVariantId: parseIntOrNull(event.target.value) });
   }
 
   quantityChanged = (event) => {
-    const quantity = Number.parseInt(event.target.value, 10);
-    this.setState({ quantity: (Number.isNaN(quantity) ? null : quantity) });
+    this.setState({ quantity: parseIntOrNull(event.target.value) });
   }
 
   addToCartClicked = async () => {
