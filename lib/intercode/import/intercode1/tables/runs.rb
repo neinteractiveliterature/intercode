@@ -10,11 +10,15 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
   end
 
   def dataset
-    super
-      .left_join(:RunsRooms, RunId: :RunId)
-      .select_all(:Runs)
-      .select_append(Sequel.lit('GROUP_CONCAT(RunsRooms.RoomId)').as(:RoomIds))
-      .group_by(:RunId)
+    if connection.table_exists?(:RunsRooms)
+      super
+        .left_join(:RunsRooms, RunId: :RunId)
+        .select_all(:Runs)
+        .select_append(Sequel.lit('GROUP_CONCAT(RunsRooms.RoomId)').as(:RoomIds))
+        .group_by(:RunId)
+    else
+      super
+    end
   end
 
   private
@@ -41,7 +45,11 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
   end
 
   def rooms(row)
-    room_ids = (row[:RoomIds] || '').split(',').map(&:to_i)
-    room_ids.map { |id| @room_id_map[id] }
+    if connection.table_exists?(:RunsRooms)
+      (row[:RoomIds] || '').split(',').map(&:to_i)
+      room_ids.map { |id| @room_id_map[id] }
+    else
+      (row[:Rooms] || '').split(',').map { |room_name| @room_id_map[room_name] }
+    end
   end
 end

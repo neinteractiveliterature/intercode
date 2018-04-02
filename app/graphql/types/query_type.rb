@@ -122,4 +122,22 @@ Types::QueryType = GraphQL::ObjectType.define do
       MarkdownPresenter.new('').render(args[:markdown])
     end
   end
+
+  field :product, !Types::ProductType do
+    argument :id, !types.Int
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, ctx[:convention].products.find(args[:id]))
+    end
+
+    resolve ->(_obj, args, ctx) {
+      ctx[:convention].products.find(args[:id])
+    }
+  end
+
+  field :currentPendingOrder, Types::OrderType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:current_pending_order]
+    }
+  end
 end

@@ -6,8 +6,12 @@ class Intercode::Import::Intercode1::Table
     @id_map = {}
   end
 
+  def table_name
+    self.class.name.demodulize.to_sym
+  end
+
   def dataset
-    connection[self.class.name.demodulize.to_sym]
+    connection[table_name]
   end
 
   def object_name

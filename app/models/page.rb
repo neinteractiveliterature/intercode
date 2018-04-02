@@ -1,5 +1,6 @@
 class Page < ApplicationRecord
   include Cadmus::Page
+  include Concerns::CmsReferences
 
   cadmus_page
   belongs_to :cms_layout, optional: true
@@ -10,5 +11,9 @@ class Page < ApplicationRecord
 
   def to_liquid
     PageDrop.new(self)
+  end
+
+  def referenced_partials_recursive(blacklist = [])
+    (super + effective_cms_layout.referenced_partials_recursive(blacklist)).uniq
   end
 end

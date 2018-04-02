@@ -20,6 +20,14 @@ class ConventionDrop < Liquid::Drop
     convention.user_con_profiles.can_have_bio.to_a
   end
 
+  def products
+    convention.products.to_a
+  end
+
+  def available_products
+    convention.products.available.to_a
+  end
+
   def staff_positions
     convention.staff_positions.visible.to_a
   end

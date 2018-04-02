@@ -7,6 +7,8 @@
 $fa-font-path: '~font-awesome/fonts';
 @import "~font-awesome/scss/font-awesome";
 
+@import "~react-table/react-table";
+
 .form-item-label p:last-child, legend p:last-child {
   margin-bottom: 0;
 }

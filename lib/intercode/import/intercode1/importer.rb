@@ -4,7 +4,7 @@ require 'parallel'
 require 'bcrypt'
 
 class Intercode::Import::Intercode1::Importer
-  attr_reader :connection, :con, :constants_file
+  attr_reader :connection, :con, :constants_file, :config
   attr_accessor :con_domain, :con_name, :friday_date
 
   def initialize(constants_file, con_domain)
@@ -12,89 +12,8 @@ class Intercode::Import::Intercode1::Importer
     @con_domain = con_domain
     @legacy_password_md5s = {}
 
-    setup_from_constants_file
-    @connection = Sequel.connect(@database_url)
-  end
-
-  def php_dump_script_for_constants_file
-    <<-PHP
-    <?php
-      error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
-      require "#{constants_file}";
-
-      $vars = array(
-        "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
-        "con_name" => CON_NAME,
-        "con_domain" => CON_DOMAIN,
-        "friday_date" => FRI_DATE,
-        "text_dir" => TEXT_DIR,
-        "php_timezone" => date_default_timezone_get(),
-        "show_flyer" => NAV_SHOW_FLYER,
-        "show_program" => NAV_SHOW_PROGRAM,
-        "thursday_enabled" => THURSDAY_ENABLED,
-        "maximum_tickets" => CON_MAX
-      );
-
-      $price_schedule = array();
-      $i = 0;
-      while (get_con_price ($i++, $price, $start_date, $end_date)) {
-        array_push($price_schedule, array("price" => $price, "start_date" => $start_date, "end_date" => $end_date));
-      }
-
-      $vars["price_schedule"] = $price_schedule;
-
-      $possible_position_names = array(
-        "ADVERTISING",
-        "ATTENDEE_COORDINATOR",
-        "BID_CHAIR",
-        "CON_CHAIR",
-        "CON_SUITE",
-        "GM_COORDINATOR",
-        "HOTEL_LIAISON",
-        "IRON_GM",
-        "OPS",
-        "OPS2",
-        "OUTREACH",
-        "REGISTRAR",
-        "SAFETY_COORDINATOR",
-        "STAFF_COORDINATOR",
-        "THURSDAY",
-        "TREASURER",
-        "VENDOR_LIAISON"
-      );
-      $staff_positions = array();
-      foreach($possible_position_names as $position_name) {
-        if (defined("NAME_" . $position_name) || defined("EMAIL_" . $position_name)) {
-          $staff_positions[$position_name] = array(
-            "name" => constant("NAME_" . $position_name),
-            "email" => constant("EMAIL_" . $position_name)
-          );
-        }
-      }
-
-      $vars["staff_positions"] = $staff_positions;
-
-      echo json_encode($vars);
-    ?>
-    PHP
-  end
-
-  def setup_from_constants_file
-    php = php_dump_script_for_constants_file
-    vars = JSON.parse(Intercode::Import::Intercode1::Php.exec_php(php, 'dump_con_vars.php'))
-
-    @text_dir = File.expand_path(vars['text_dir'], File.dirname(constants_file))
-    @database_url = vars['database_url']
-    @con_name = vars['con_name']
-    @con_domain ||= vars['con_domain']
-    @friday_date = Date.parse(vars['friday_date'])
-    @price_schedule = vars['price_schedule']
-    @staff_positions = vars['staff_positions']
-    @php_timezone = ActiveSupport::TimeZone[vars['php_timezone']]
-    @show_flyer = vars['show_flyer']
-    @show_program = vars['show_program']
-    @thursday_enabled = (vars['thursday_enabled'] == 1)
-    @maximum_tickets = vars['maximum_tickets']
+    @config = Intercode::Import::Intercode1::Configuration.new(constants_file)
+    @connection = Sequel.connect(config.var(:database_url))
   end
 
   def build_password_hashes
@@ -107,7 +26,7 @@ class Intercode::Import::Intercode1::Importer
       [row[:UserId], BCrypt::Password.create(row[:HashedPassword])]
     end
 
-    @connection = Sequel.connect(@database_url)
+    @connection = Sequel.connect(config.var(:database_url))
 
     @legacy_password_md5s = Hash[legacy_password_md5s]
   end
@@ -148,18 +67,34 @@ class Intercode::Import::Intercode1::Importer
     ].each do |importer|
       send(importer).import!
     end
+
+    import_store_content!
+  end
+
+  def import_store_content!
+    if @connection.table_exists?('StoreItems')
+      %i[
+        store_items_table
+        store_orders_table
+        store_order_entries_table
+      ].each do |importer|
+        send(importer).import!
+      end
+    else
+      legacy_t_shirt_importer.import!
+    end
   end
 
   def con_table
     @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(
       connection,
-      con_name: @con_name,
+      con_name: config.var(:con_name),
       con_domain: @con_domain,
-      friday_date: @friday_date,
-      constants_file: @constants_file,
+      friday_date: config.var(:friday_date),
+      constants_file: constants_file,
       timezone_name: 'US/Eastern',
-      thursday_enabled: @thursday_enabled,
-      maximum_tickets: @maximum_tickets
+      thursday_enabled: config.var(:thursday_enabled),
+      maximum_tickets: config.var(:maximum_tickets)
     )
   end
 
@@ -167,8 +102,8 @@ class Intercode::Import::Intercode1::Importer
     @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(
       connection,
       @con,
-      @price_schedule,
-      @php_timezone
+      config.var(:price_schedule),
+      config.var(:php_timezone)
     )
   end
 
@@ -247,7 +182,7 @@ class Intercode::Import::Intercode1::Importer
     @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(
       connection,
       con,
-      @constants_file
+      config.constants_file
     )
   end
 
@@ -277,8 +212,17 @@ class Intercode::Import::Intercode1::Importer
     )
   end
 
+  def legacy_t_shirt_importer
+    @legacy_t_shirt_importer ||= Intercode::Import::Intercode1::LegacyTShirtImporter.new(
+      connection,
+      con,
+      config,
+      user_con_profiles_id_map
+    )
+  end
+
   def rooms_table
-    @rooms_table ||= Intercode::Import::Intercode1::Tables::Rooms.new(connection, con)
+    @rooms_table ||= Intercode::Import::Intercode1::Tables::Rooms.new(connection, con, config)
   end
 
   def rooms_id_map
@@ -298,7 +242,31 @@ class Intercode::Import::Intercode1::Importer
   def staff_position_importer
     @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(
       con,
-      @staff_positions
+      config.var(:staff_positions)
+    )
+  end
+
+  def store_items_table
+    @store_items_table ||= Intercode::Import::Intercode1::Tables::StoreItems.new(
+      connection,
+      con,
+      File.expand_path('img', File.dirname(constants_file))
+    )
+  end
+
+  def store_order_entries_table
+    @store_order_entries_table ||= Intercode::Import::Intercode1::Tables::StoreOrderEntries.new(
+      connection,
+      store_orders_table.id_map,
+      store_items_table.id_map
+    )
+  end
+
+  def store_orders_table
+    @store_orders_table ||= Intercode::Import::Intercode1::Tables::StoreOrders.new(
+      connection,
+      con,
+      user_con_profiles_id_map
     )
   end
 
@@ -313,7 +281,7 @@ class Intercode::Import::Intercode1::Importer
   def text_dir_html_content
     @text_dir_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(
       con,
-      @text_dir,
+      config.var(:text_dir),
       constants_file
     )
   end
@@ -333,13 +301,13 @@ class Intercode::Import::Intercode1::Importer
     embedded_pdf_pages = []
     src_dir = File.dirname(@constants_file)
 
-    if @show_flyer
+    if config.var(:show_flyer)
       embedded_pdf_pages << Intercode::Import::Intercode1::EmbeddedPdfPage.new(
         con, src_dir, 'InterconFlyer.pdf', 'Flyer'
       )
     end
 
-    if @show_program
+    if config.var(:show_program)
       embedded_pdf_pages << Intercode::Import::Intercode1::EmbeddedPdfPage.new(
         con, src_dir, 'program-page-order.pdf', 'Program'
       )

@@ -16,8 +16,17 @@
           = events_navigation_menu
           = renderer.render_navigation_items
           = admin_navigation_menu
-      %ul.navbar-nav
+      %ul.navbar-nav.align-items-md-center
         - if user_signed_in?
+          - if current_pending_order
+            - total_entries = current_pending_order.order_entries.sum(:quantity)
+            - if total_entries > 0
+              %li.nav-item
+                = link_to cart_path, class: 'btn btn-light mr-2', style: 'position: relative' do
+                  %i.fa.fa-shopping-cart{title: 'My shopping cart'}
+                  .badge.badge-pill.badge-danger{style: 'position: absolute; right: -9px; top: -9px;'}
+                    = total_entries
+
           %li.nav-item.dropdown{role: "presentation"}
             %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
               %i.fa.fa-user
@@ -29,6 +38,7 @@
               = link_to "My Account", edit_user_registration_path, class: 'dropdown-item'
               - if convention
                 = link_to "My Profile", my_profile_path, class: 'dropdown-item'
+                = link_to "My Order History", order_history_path, class: 'dropdown-item'
               = link_to "Log Out", destroy_user_session_path, class: 'dropdown-item', :method => "delete"
         - else
           %li.nav-item.login

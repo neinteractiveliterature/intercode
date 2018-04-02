@@ -10,14 +10,20 @@ export function getStateChangeForInputChange(event, state, modelKey) {
   return getStateChangeForValueChange(state, modelKey, event.target.name, event.target.value);
 }
 
-export function getStateChangeForIntegerInputChange(event, state, modelKey) {
-  const intValue = parseInt(event.target.value, 10);
+export function parseIntOrNull(stringValue) {
+  const intValue = parseInt(stringValue, 10);
+  if (Number.isNaN(intValue)) {
+    return null;
+  }
+  return intValue;
+}
 
+export function getStateChangeForIntegerInputChange(event, state, modelKey) {
   return getStateChangeForValueChange(
     state,
     modelKey,
     event.target.name,
-    Number.isNaN(intValue) ? null : intValue,
+    parseIntOrNull(event.target.value),
   );
 }
 

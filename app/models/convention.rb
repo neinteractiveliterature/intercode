@@ -18,6 +18,8 @@ class Convention < ApplicationRecord
   has_many :staff_positions, dependent: :destroy
   has_many :forms, dependent: :destroy
   has_many :event_proposals, dependent: :destroy
+  has_many :products, dependent: :destroy
+  has_many :orders, through: :user_con_profiles
 
   belongs_to :root_page, class_name: 'Page', optional: true
   belongs_to :default_layout, class_name: 'CmsLayout', optional: true

@@ -21,7 +21,8 @@ class GraphqlController < ApplicationController
       current_ability: current_ability,
       user_con_profile: user_con_profile,
       convention: convention,
-      cadmus_renderer: cadmus_renderer
+      cadmus_renderer: cadmus_renderer,
+      current_pending_order: current_pending_order
     }
 
     IntercodeSchema.execute(

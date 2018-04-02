@@ -1,0 +1,4 @@
+%h1.mb-4 My order history
+
+= stripe_include_tag
+= react_component 'OrderHistory', authenticityToken: graphql_authenticity_token
