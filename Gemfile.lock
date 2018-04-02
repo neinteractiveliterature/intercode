@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/nbudin/cadmus_files
-  revision: 3bf74e76b536543eb4bbddb7f2d3a041a38ff31d
+  revision: 990df4054c50e0f07339595a72b0fa79f82de650
   branch: cadmus_0_6
   specs:
     cadmus_files (0.2.0)
