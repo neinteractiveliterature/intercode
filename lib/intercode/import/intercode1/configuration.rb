@@ -10,12 +10,15 @@ class Intercode::Import::Intercode1::Configuration
     @vars[identifier.to_sym]
   end
 
+  def basedir
+    File.dirname(constants_file)
+  end
+
   private
 
   def php_dump_script_for_constants_file
     <<-PHP
     <?php
-      error_reporting(E_ERROR); // suppress all the warnings Intercode 1 generates
       require "#{constants_file}";
 
       $vars = array(
@@ -30,7 +33,9 @@ class Intercode::Import::Intercode1::Configuration
         "maximum_tickets" => CON_MAX,
         "shirt_name" => SHIRT_NAME,
         "shirt_2_name" => SHIRT_2_NAME,
-        "shirt_two_shirts" => SHIRT_TWO_SHIRTS
+        "shirt_img_available" => SHIRT_IMG_AVAILABLE,
+        "shirt_two_shirts" => SHIRT_TWO_SHIRTS,
+        "tshirt_dollars" => TSHIRT_DOLLARS
       );
 
       $price_schedule = array();
@@ -88,9 +93,13 @@ class Intercode::Import::Intercode1::Configuration
     raw_vars.symbolize_keys.merge(
       text_dir: File.expand_path(raw_vars['text_dir'], File.dirname(constants_file)),
       friday_date: Date.parse(raw_vars['friday_date']),
-      php_timezone: ActiveSupport::TimeZone[raw_vars['php_timezone']],
-      thursday_enabled: raw_vars['thursday_enabled'] == 1,
-      shirt_two_shirts: raw_vars['shirt_two_shirts'] == 1
-    )
+      php_timezone: ActiveSupport::TimeZone[raw_vars['php_timezone']]
+    ).merge(processed_booleans)
+  end
+
+  def processed_booleans
+    %w[thursday_enabled shirt_two_shirts shirt_img_available].each_with_object({}) do |key, hash|
+      hash[key.to_sym] = (raw_vars[key] == 1)
+    end
   end
 end

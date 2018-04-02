@@ -32,6 +32,7 @@ module Intercode
       autoload :HtmlContent
       autoload :HtmlConverter
       autoload :Importer
+      autoload :LegacyTShirtImporter
       autoload :Markdownifier
       autoload :NavigationItems
       autoload :Php
