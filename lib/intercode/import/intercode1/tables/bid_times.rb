@@ -53,34 +53,42 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
 
   def import!
     if connection.table_exists?(:BidTimes)
-      logger.info "Importing #{object_name.pluralize}"
-      dataset.each do |row|
-        logger.debug "Importing #{object_name} #{row_id(row)}"
-        event_proposal = @event_proposals_id_map[row[:BidId]]
-        next unless row[:Pref].present?
-
-        timeblock_preference = build_timeblock_preference(row[:Day], row[:Slot], row[:Pref])
-        add_timeblock_preference_to_proposal(timeblock_preference, event_proposal)
-      end
+      import_from_table!
     else
-      logger.info "Importing legacy column-based bid times since table doesn't exist"
-
-      connection[:Bids].each do |row|
-        event_proposal = @event_proposals_id_map[row[:BidId]]
-        LEGACY_BID_TIME_COLUMNS.each do |column_name, time_data|
-          next unless row[column_name].present?
-          timeblock_preference = build_timeblock_preference(
-            time_data[:day],
-            time_data[:slot],
-            row[column_name]
-          )
-          add_timeblock_preference_to_proposal(timeblock_preference, event_proposal)
-        end
-      end
+      import_from_legacy_columns!
     end
   end
 
   private
+
+  def import_from_table!
+    logger.info "Importing #{object_name.pluralize}"
+    dataset.each do |row|
+      logger.debug "Importing #{object_name} #{row_id(row)}"
+      event_proposal = @event_proposals_id_map[row[:BidId]]
+      next unless row[:Pref].present?
+
+      timeblock_preference = build_timeblock_preference(row[:Day], row[:Slot], row[:Pref])
+      add_timeblock_preference_to_proposal(timeblock_preference, event_proposal)
+    end
+  end
+
+  def import_from_legacy_columns!
+    logger.info "Importing legacy column-based bid times since table doesn't exist"
+
+    connection[:Bids].each do |row|
+      event_proposal = @event_proposals_id_map[row[:BidId]]
+      LEGACY_BID_TIME_COLUMNS.each do |column_name, time_data|
+        next unless row[column_name].present?
+        timeblock_preference = build_timeblock_preference(
+          time_data[:day],
+          time_data[:slot],
+          row[column_name]
+        )
+        add_timeblock_preference_to_proposal(timeblock_preference, event_proposal)
+      end
+    end
+  end
 
   def row_id(row)
     row[:BidTimeId]
