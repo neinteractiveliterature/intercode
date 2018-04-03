@@ -4,6 +4,7 @@ IntercodeSchema = GraphQL::Schema.define do
 
   use GraphQL::Guard.new
   use GraphQL::Batch
+  use GraphQL::Tracing::SkylightTracing
 
   better_rescue_middleware = BetterRescueMiddleware.new
   better_rescue_middleware.rescue_from ActiveRecord::RecordInvalid do |err|
