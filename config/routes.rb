@@ -54,6 +54,7 @@ Intercode::Application.routes.draw do
         get :export
       end
     end
+    resources :admin_products, only: [:index]
 
     resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do
       member do

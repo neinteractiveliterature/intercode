@@ -49,6 +49,7 @@ import NavigationItemsAdmin from '../NavigationItemsAdmin';
 import OrderAdmin from '../ProductOrders/OrderAdmin';
 import OrderHistory from '../ProductOrders/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
+import ProductAdmin from '../ProductOrders/ProductAdmin';
 import ProductOrderForm from '../ProductOrders/ProductOrderForm';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
@@ -75,6 +76,7 @@ WebpackerReact.setup({
   OrderAdmin: StandaloneGraphQLComponent(OrderAdmin),
   OrderHistory: StandaloneGraphQLComponent(OrderHistory),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
+  ProductAdmin: StandaloneGraphQLComponent(ProductAdmin),
   ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
