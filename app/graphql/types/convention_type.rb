@@ -72,6 +72,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
     }
   end
 
+  field :products, types[Types::ProductType] do
+    resolve ->(convention, _args, _ctx) do
+      AssociationLoader.for(Convention, :products).load(convention)
+    end
+  end
+
   connection :orders, Types::OrdersConnectionType, max_page_size: 1000 do
     guard ->(convention, _args, ctx) do
       ctx[:current_ability].can?(
