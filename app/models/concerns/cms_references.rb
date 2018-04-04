@@ -9,7 +9,10 @@ module Concerns::CmsReferences
     liquid_block.nodelist.each do |node|
       yield node
 
-      each_node_in_liquid_block(node, &block) if node.is_a?(Liquid::Block)
+      case node
+      when Liquid::Block, Liquid::BlockBody
+        each_node_in_liquid_block(node, &block)
+      end
     end
   end
 
