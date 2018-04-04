@@ -9,7 +9,10 @@ module Concerns::CmsReferences
     liquid_block.nodelist.each do |node|
       yield node
 
-      each_node_in_liquid_block(node, &block) if node.is_a?(Liquid::Block)
+      case node
+      when Liquid::Block, Liquid::BlockBody
+        each_node_in_liquid_block(node, &block)
+      end
     end
   end
 
@@ -26,9 +29,10 @@ module Concerns::CmsReferences
 
   def referenced_partials_direct(blacklist = [])
     names = referenced_partial_names - blacklist
+    return [] if names.none?
 
-    if parent
-      parent.cms_partials.where(name: names)
+    if parent_id && parent_type
+      CmsPartial.where(parent_id: parent_id, parent_type: parent_type, name: names)
     else
       CmsPartial.global.where(name: names)
     end
@@ -48,8 +52,8 @@ module Concerns::CmsReferences
   end
 
   def referenced_files_recursive
-    CmsFile.where(name: (
-      referenced_file_names + referenced_partials_recursive.map(&:referenced_file_names)
+    CmsFile.where(file: (
+      referenced_file_names + referenced_partials_recursive.flat_map(&:referenced_file_names)
     ))
   end
 end
