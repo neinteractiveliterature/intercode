@@ -29,9 +29,10 @@ module Concerns::CmsReferences
 
   def referenced_partials_direct(blacklist = [])
     names = referenced_partial_names - blacklist
+    return [] if names.none?
 
-    if parent
-      parent.cms_partials.where(name: names)
+    if parent_id && parent_type
+      CmsPartial.where(parent_id: parent_id, parent_type: parent_type, name: names)
     else
       CmsPartial.global.where(name: names)
     end
