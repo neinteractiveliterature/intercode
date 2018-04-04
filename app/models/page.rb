@@ -18,11 +18,11 @@ class Page < ApplicationRecord
   end
 
   def referenced_partials_recursive(blacklist = [])
-    (super + effective_cms_layout.referenced_partials_recursive(blacklist)).uniq
+    (super + (effective_cms_layout&.referenced_partials_recursive(blacklist) || [])).uniq
   end
 
   def referenced_files_recursive
-    (super + effective_cms_layout.referenced_files_recursive).uniq
+    (super + (effective_cms_layout&.referenced_files_recursive || [])).uniq
   end
 
   private
