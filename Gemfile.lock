@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/nbudin/cadmus_files
-  revision: 990df4054c50e0f07339595a72b0fa79f82de650
+  revision: dcb282317beefde6a23aa218371a48d9164e5bec
   branch: cadmus_0_6
   specs:
     cadmus_files (0.2.0)
@@ -27,7 +27,7 @@ GIT
 
 GIT
   remote: https://github.com/nbudin/cadmus_navbar
-  revision: 93abd8ffa3821a95bec884c549300f0e4b61644d
+  revision: 266d7feda1972fb6a1bce1fca838e2d11a56aab6
   specs:
     cadmus_navbar (0.1.0)
       acts_as_list
@@ -94,7 +94,7 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    acts_as_list (0.9.10)
+    acts_as_list (0.9.11)
       activerecord (>= 3.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
