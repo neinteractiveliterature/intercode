@@ -31,4 +31,10 @@ class EventsController < ApplicationController
 
   def edit
   end
+
+  protected
+
+  def liquid_assigns
+    super.merge('event' => @event)
+  end
 end
