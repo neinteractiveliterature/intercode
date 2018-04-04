@@ -27,7 +27,7 @@ GIT
 
 GIT
   remote: https://github.com/nbudin/cadmus_navbar
-  revision: 266d7feda1972fb6a1bce1fca838e2d11a56aab6
+  revision: 1c8a8e66d90fd95bdfb0a367b57fbd3fc09ac1cc
   specs:
     cadmus_navbar (0.1.0)
       acts_as_list
