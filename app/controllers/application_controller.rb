@@ -92,6 +92,8 @@ class ApplicationController < ActionController::Base
   def liquid_registers
     liquid_assigns.merge(
       'controller' => self,
+      :cached_partials => @cached_partials,
+      :cached_files => @cached_files,
       :file_system => Cadmus::PartialFileSystem.new(convention)
     )
   end

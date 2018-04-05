@@ -15,12 +15,12 @@ module ApplicationHelper
   def navigation_bar(navbar_classes = nil)
     navbar_classes ||= 'navbar-dark bg-intercode-blue'
 
-    root_item_scope = (convention&.cms_navigation_items&.root || CmsNavigationItem.none)
+    item_scope = (convention&.cms_navigation_items || CmsNavigationItem.global)
 
     renderer = CadmusNavbar::Renderers::Bootstrap4.new(
       request: request,
       url_for_page: ->(page) { page_url(page) },
-      root_items: root_item_scope.includes(:page, navigation_links: :page)
+      items_by_section_id: item_scope.includes(:page).group_by(&:navigation_section_id)
     )
 
     render partial: 'layouts/navigation_bar', locals: {
