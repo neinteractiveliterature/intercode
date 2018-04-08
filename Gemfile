@@ -64,6 +64,7 @@ gem 'will_paginate-bootstrap4'
 gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
+gem 'apollo_upload_server', '2.0.0.alpha.5'
 gem 'graphiql-rails', group: :development
 
 # Markdown

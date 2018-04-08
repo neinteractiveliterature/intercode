@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'unfetch';
 
@@ -21,7 +21,7 @@ function buildApolloClient(authenticityToken) {
   return new ApolloClient({
     link: ApolloLink.from([
       AuthLink,
-      new HttpLink({ uri: '/graphql', fetch }),
+      createUploadLink({ uri: '/graphql', fetch }),
     ]),
     cache: new InMemoryCache(),
   });
