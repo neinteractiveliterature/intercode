@@ -100,6 +100,26 @@ class AdminProductVariantsTable extends React.Component {
     this.props.onChange(newVariants);
   }
 
+  generatePreview = (type, { productVariant, index }, style) => {
+    if (type === 'PRODUCT_VARIANT') {
+      return (
+        <table style={{ ...style, width: `${this.table.offsetWidth}px` }}>
+          <AdminProductVariantEditRow
+            productId={this.props.product.id}
+            index={index}
+            variant={productVariant}
+            deleteVariant={() => {}}
+            updater={{}}
+            moveVariant={() => {}}
+            isDragging={false}
+          />
+        </table>
+      );
+    }
+
+    return null;
+  }
+
   render = () => {
     const addVariantButton = (
       this.props.editing ?
@@ -166,7 +186,7 @@ class AdminProductVariantsTable extends React.Component {
 
     return (
       <div className="mt-2">
-        <table className="table table-sm">
+        <table className="table table-sm" ref={(table) => { this.table = table; }}>
           <thead>
             <tr>
               <th />
@@ -181,6 +201,8 @@ class AdminProductVariantsTable extends React.Component {
           </tbody>
         </table>
         {addVariantButton}
+
+        <Preview generator={this.generatePreview} />
       </div>
     );
   }
