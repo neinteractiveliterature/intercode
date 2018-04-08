@@ -20,4 +20,5 @@ Types::ProductVariantType = GraphQL::ObjectType.define do
     }
   end
   field :override_price, Types::MoneyType
+  field :position, types.Int
 end

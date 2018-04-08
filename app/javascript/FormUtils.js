@@ -18,6 +18,14 @@ export function parseIntOrNull(stringValue) {
   return intValue;
 }
 
+export function parseFloatOrNull(stringValue) {
+  const floatValue = parseFloat(stringValue, 10);
+  if (Number.isNaN(floatValue)) {
+    return null;
+  }
+  return floatValue;
+}
+
 export function getStateChangeForIntegerInputChange(event, state, modelKey) {
   return getStateChangeForValueChange(
     state,

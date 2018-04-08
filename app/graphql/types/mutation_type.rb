@@ -129,6 +129,12 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard(guard_for_convention_associated_model(:pages, :destroy))
   end
 
+  ### Product
+
+  field :updateProduct, Mutations::UpdateProduct.field do
+    guard(guard_for_convention_associated_model(:products, :update))
+  end
+
   ### Room
 
   field :createRoom, Mutations::CreateRoom.field do

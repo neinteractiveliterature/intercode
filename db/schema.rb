@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403214703) do
+ActiveRecord::Schema.define(version: 20180408151722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(version: 20180403214703) do
     t.string "override_price_currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position"
     t.index ["product_id"], name: "index_product_variants_on_product_id"
   end
 
@@ -487,15 +488,12 @@ ActiveRecord::Schema.define(version: 20180403214703) do
   add_foreign_key "runs", "events"
   add_foreign_key "runs", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
-  add_foreign_key "signups", "user_con_profiles"
   add_foreign_key "signups", "users", column: "updated_by_id"
   add_foreign_key "staff_positions", "conventions"
   add_foreign_key "team_members", "events"
-  add_foreign_key "team_members", "user_con_profiles"
   add_foreign_key "ticket_types", "conventions"
   add_foreign_key "tickets", "events", column: "provided_by_event_id"
   add_foreign_key "tickets", "ticket_types"
-  add_foreign_key "tickets", "user_con_profiles"
   add_foreign_key "user_con_profiles", "conventions"
   add_foreign_key "user_con_profiles", "users"
 end

@@ -63,8 +63,8 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
       price_currency: 'USD'
     )
 
-    LEGACY_SHIRT_SIZES.each do |size|
-      product.product_variants.new(name: size)
+    LEGACY_SHIRT_SIZES.each_with_index do |size, i|
+      product.product_variants.new(name: size, position: i + 1)
     end
 
     product

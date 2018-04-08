@@ -1,39 +1,9 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import AdminProductCard from './AdminProductCard';
+import { productsQuery } from './queries';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
-
-const productsQuery = gql`
-query {
-  convention {
-    products {
-      id
-      name
-      description
-      image_url
-      available
-
-      price {
-        fractional
-        currency_code
-      }
-
-      product_variants {
-        id
-        name
-        description
-        image_url
-
-        override_price {
-          fractional
-          currency_code
-        }
-      }
-    }
-  }
-}
-`;
 
 @graphql(productsQuery)
 @GraphQLQueryResultWrapper
@@ -43,14 +13,12 @@ class ProductAdmin extends React.Component {
   }
 
   renderProduct = product => (
-    <div key={product.id}>
-      <h2>{product.name}</h2>
-      
-    </div>
+    <AdminProductCard key={product.id} product={product} />
   )
 
   render = () => {
-    const products = this.props.data.convention.products
+    const products = [...this.props.data.convention.products]
+      .sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }))
       .map(product => this.renderProduct(product));
 
     return (

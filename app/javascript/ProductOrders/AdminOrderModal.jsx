@@ -221,8 +221,12 @@ class AdminOrderModal extends React.Component {
               {updateOrder => (
                 <InPlaceEditor
                   value={order.payment_note}
-                  renderInput={inputProps => (
-                    <textarea className="form-control col mr-1" {...inputProps} />
+                  renderInput={({ onChange, ...inputProps }) => (
+                    <textarea
+                      className="form-control col mr-1"
+                      onChange={(event) => { onChange(event.target.value); }}
+                      {...inputProps}
+                    />
                   )}
                   onChange={value => updateOrder({
                     variables: {

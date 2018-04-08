@@ -9,6 +9,7 @@
     "apollo-client": "^2.2.8",
     "apollo-link": "^1.2.1",
     "apollo-link-http": "^1.5.3",
+    "apollo-upload-client": "^8.0.0",
     "array-to-sentence": "^2.0.0",
     "autoprefixer": "^8.2.0",
     "babel-core": "^6.26.0",
