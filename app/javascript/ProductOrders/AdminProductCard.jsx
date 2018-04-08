@@ -315,7 +315,7 @@ class AdminProductCard extends React.Component {
       <div className="card-body">
         <ErrorDisplay graphQLError={this.state.error} />
 
-        <div className="media">
+        <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
           {
             this.props.product.image_url ?
               (
@@ -328,7 +328,7 @@ class AdminProductCard extends React.Component {
               null
           }
 
-          <div className="media-body ml-4">
+          <div className="ml-lg-4 col-lg">
             {this.renderPrice()}
             {this.renderDescription()}
             {this.renderVariantsTable()}
