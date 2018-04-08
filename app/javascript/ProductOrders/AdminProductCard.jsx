@@ -4,62 +4,19 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import classNames from 'classnames';
 import { adminProductFragment, productsQuery } from './queries';
+import AdminProductVariantsTable from './AdminProductVariantsTable';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
+import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
 import {
   Transforms,
   composeStateChangeCalculators,
   componentStateFieldUpdater,
-  stateUpdater,
 } from '../ComposableFormUtils';
-
-const parseMoneyOrNull = (value) => {
-  const newPrice = Transforms.float(value);
-
-  if (newPrice == null) {
-    return null;
-  }
-
-  return {
-    fractional: Math.floor(newPrice * 100),
-    currency_code: 'USD',
-  };
-};
-
-const variantMatches = (a, b) => (
-  (a.generatedId && b.generatedId === a.generatedId) ||
-  (a.id && b.id === a.id)
-);
-
-const productVariantUpdaterForComponent = (component, variant, stateChangeCalculators) => (
-  stateUpdater(
-    () => component.state.editingProduct.product_variants
-      .find(existingVariant => variantMatches(variant, existingVariant)),
-
-    (state) => {
-      const newVariants = component.state.editingProduct.product_variants.map((existingVariant) => {
-        if (variantMatches(variant, existingVariant)) {
-          return { ...existingVariant, ...state };
-        }
-
-        return existingVariant;
-      });
-
-      component.setState({
-        editingProduct: {
-          ...component.state.editingProduct,
-          product_variants: newVariants,
-        },
-      });
-    },
-
-    stateChangeCalculators,
-  )
-);
 
 const createProductMutation = gql`
 mutation($product: ProductInput!) {
@@ -129,6 +86,7 @@ class AdminProductCard extends React.Component {
         description: Transforms.identity,
         name: Transforms.textInputChange,
         price: parseMoneyOrNull,
+        product_variants: Transforms.identity,
       }),
     );
   }
@@ -156,47 +114,16 @@ class AdminProductCard extends React.Component {
     this.setState({ editing: false, editingProduct: null, error: null });
   }
 
-  addVariantClicked = () => {
-    const position = Math.max(0, ...this.state.editingProduct.product_variants
-      .map(variant => variant.position)) + 1;
-
+  deleteVariant = (variantId) => {
     this.setState({
       editingProduct: {
         ...this.state.editingProduct,
-        product_variants: [
-          ...this.state.editingProduct.product_variants,
-          {
-            generatedId: new Date().getTime(),
-            name: null,
-            description: null,
-            override_price: null,
-            position,
-          },
+        delete_variant_ids: [
+          ...this.state.editingProduct.delete_variant_ids,
+          variantId,
         ],
       },
     });
-  }
-
-  deleteVariantClicked = (variant) => {
-    if (variant.id) {
-      this.setState({
-        editingProduct: {
-          ...this.state.editingProduct,
-          delete_variant_ids: [
-            ...this.state.editingProduct.delete_variant_ids,
-            variant.id,
-          ],
-        },
-      });
-    } else if (variant.generatedId) {
-      this.setState({
-        editingProduct: {
-          ...this.state.editingProduct,
-          product_variants: this.state.editingProduct.product_variants
-            .filter(existingVariant => existingVariant.generatedId !== variant.generatedId),
-        },
-      });
-    }
   }
 
   saveClicked = async (createProduct, updateProduct) => {
@@ -209,7 +136,7 @@ class AdminProductCard extends React.Component {
         fractional: editingProduct.price.fractional,
         currency_code: editingProduct.price.currency_code,
       },
-      product_variants: editingProduct.product_variants.map(variant => ({
+      product_variants: sortProductVariants(editingProduct.product_variants).map(variant => ({
         id: variant.id,
         name: variant.name,
         description: variant.description,
@@ -249,115 +176,14 @@ class AdminProductCard extends React.Component {
     }
   }
 
-  renderVariantsTable = () => {
-    const addVariantButton = (
-      this.state.editing ?
-        (
-          <button className="btn btn-primary btn-sm" onClick={this.addVariantClicked}>
-            Add variant
-          </button>
-        ) :
-        null
-    );
-
-    if (this.props.product.product_variants.length === 0) {
-      return (
-        <div>
-          <p>This product does not have any variants.</p>
-          {addVariantButton}
-        </div>
-      );
-    }
-
-    let variants;
-    if (this.state.editing) {
-      variants = this.state.editingProduct.product_variants
-        .filter(variant => !this.state.editingProduct.delete_variant_ids.includes(variant.id));
-    } else {
-      variants = this.props.product.product_variants;
-    }
-
-    const rows = sortProductVariants(variants).map((variant) => {
-      if (this.state.editing) {
-        const variantUpdater = productVariantUpdaterForComponent(
-          this,
-          variant,
-          composeStateChangeCalculators({
-            name: Transforms.identity,
-            description: Transforms.identity,
-            override_price: parseMoneyOrNull,
-          }),
-        );
-
-        return (
-          <tr key={variant.id || variant.generatedId}>
-            <td>
-              <InPlaceEditor
-                value={variant.name}
-                onChange={variantUpdater.name || ''}
-              />
-            </td>
-            <td>
-              <InPlaceEditor
-                className="d-flex align-items-start"
-                value={variant.description || ''}
-                onChange={variantUpdater.description}
-                renderInput={({ value, onChange }) => (
-                  <LiquidInput value={value} onChange={onChange} className="col" />
-                )}
-              />
-            </td>
-            <td>
-              <InPlaceEditor
-                value={variant.override_price ? `${formatMoney(variant.override_price, false)}` : ''}
-                onChange={variantUpdater.override_price}
-              >
-                {variant.override_price ? formatMoney(variant.override_price) : null}
-              </InPlaceEditor>
-            </td>
-            <td>
-              <button
-                className="btn btn-sm btn-danger"
-                onClick={() => { this.deleteVariantClicked(variant); }}
-              >
-                <i className="fa fa-trash-o">
-                  <span className="sr-only">Delete {variant.name}</span>
-                </i>
-              </button>
-            </td>
-          </tr>
-        );
-      }
-
-      return (
-        <tr key={variant.id}>
-          <td>{variant.name}</td>
-          <td>{variant.description}</td>
-          <td>{variant.override_price ? formatMoney(variant.override_price) : null}</td>
-          <td />
-        </tr>
-      );
-    });
-
-    return (
-      <div className="mt-2">
-        <table className="table table-sm">
-          <thead>
-            <tr>
-              <th>Variant name</th>
-              <th>Description</th>
-              <th>Override price</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-        {addVariantButton}
-      </div>
-    );
-  }
+  renderVariantsTable = () => (
+    <AdminProductVariantsTable
+      product={this.state.editing ? this.state.editingProduct : this.props.product}
+      editing={this.state.editing}
+      onChange={this.editingProductUpdater.product_variants}
+      deleteVariant={this.deleteVariant}
+    />
+  )
 
   renderActions = () => {
     if (this.state.editing) {

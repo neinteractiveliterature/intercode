@@ -49,6 +49,14 @@ table.no-top-border thead th {
   min-height: 10rem;
 }
 
+.cursor-grab {
+  cursor: grab;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
 @for $i from 1 to 20 {
   .codemirror-height-#{$i} {
     .markdown-preview, .CodeMirror-scroll {

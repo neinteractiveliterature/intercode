@@ -26,6 +26,19 @@ export function parseFloatOrNull(stringValue) {
   return floatValue;
 }
 
+export function parseMoneyOrNull(value) {
+  const newPrice = parseFloatOrNull(value);
+
+  if (newPrice == null) {
+    return null;
+  }
+
+  return {
+    fractional: Math.floor(newPrice * 100),
+    currency_code: 'USD',
+  };
+}
+
 export function getStateChangeForIntegerInputChange(event, state, modelKey) {
   return getStateChangeForValueChange(
     state,
