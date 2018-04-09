@@ -282,10 +282,17 @@ class AdminProductCard extends React.Component {
   renderImageSection = () => {
     if (this.state.editing) {
       return (
-        <div className="text-center">
+        <div className="d-flex flex-column align-items-center">
           {this.renderImage(this.state.editingProduct.image_url)}
-          <br />
-          <input type="file" accept="image/*" onChange={this.imageChanged} />
+          <div className="custom-file mt-2" style={{ width: '220px' }}>
+            <label className="custom-file-label">Choose image...</label>
+            <input
+              className="custom-file-input"
+              type="file"
+              accept="image/*"
+              onChange={this.imageChanged}
+            />
+          </div>
         </div>
       );
     }
