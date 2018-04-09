@@ -114,6 +114,27 @@ class AdminProductCard extends React.Component {
     this.setState({ editing: false, editingProduct: null, error: null });
   }
 
+  imageChanged = (event) => {
+    const file = event.target.files[0];
+    this.setState({
+      editingProduct: {
+        ...this.state.editingProduct,
+        image: file,
+      },
+    });
+
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      this.setState({
+        editingProduct: {
+          ...this.state.editingProduct,
+          image_url: reader.result,
+        },
+      });
+    });
+    reader.readAsDataURL(file);
+  }
+
   deleteVariant = (variantId) => {
     this.setState({
       editingProduct: {
@@ -128,6 +149,7 @@ class AdminProductCard extends React.Component {
 
   saveClicked = async (createProduct, updateProduct) => {
     const { editingProduct } = this.state;
+    const imageInput = editingProduct.image ? { image: editingProduct.image } : {};
     const productInput = {
       name: editingProduct.name,
       available: editingProduct.available,
@@ -150,6 +172,7 @@ class AdminProductCard extends React.Component {
         ),
       })),
       delete_variant_ids: editingProduct.delete_variant_ids,
+      ...imageInput,
     };
 
     this.setState({ error: null });
@@ -242,6 +265,34 @@ class AdminProductCard extends React.Component {
     );
   }
 
+  renderImage = (url) => {
+    if (!url) {
+      return null;
+    }
+
+    return (
+      <img
+        src={url}
+        style={{ maxWidth: '200px' }}
+        alt={this.props.product.name}
+      />
+    );
+  }
+
+  renderImageSection = () => {
+    if (this.state.editing) {
+      return (
+        <div className="text-center">
+          {this.renderImage(this.state.editingProduct.image_url)}
+          <br />
+          <input type="file" accept="image/*" onChange={this.imageChanged} />
+        </div>
+      );
+    }
+
+    return this.renderImage(this.props.product.image_url);
+  }
+
   renderName = () => {
     if (this.state.editing) {
       return (
@@ -316,17 +367,7 @@ class AdminProductCard extends React.Component {
         <ErrorDisplay graphQLError={this.state.error} />
 
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
-          {
-            this.props.product.image_url ?
-              (
-                <img
-                  src={this.props.product.image_url}
-                  style={{ maxWidth: '200px' }}
-                  alt={this.props.product.name}
-                />
-              ) :
-              null
-          }
+          {this.renderImageSection()}
 
           <div className="ml-lg-4 col-lg">
             {this.renderPrice()}
