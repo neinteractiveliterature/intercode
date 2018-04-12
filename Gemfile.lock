@@ -115,7 +115,7 @@ GEM
     apollo_upload_server (2.0.0.alpha.5)
       graphql (~> 1.7)
       rails (~> 5.0)
-    arel (8.0.0)
+    arel (9.0.0)
     autoprefixer-rails (8.2.0)
       execjs
     aws-partitions (1.72.0)
