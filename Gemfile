@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.4.2'
-gem 'rails', '5.1.6'
+gem 'rails', '5.2.0'
 
 gem 'sqlite3', groups: [:development, :test]
 gem 'mysql2', '~> 0.4.10'
@@ -20,22 +20,15 @@ gem 'uglifier', '>= 1.0.3'
 
 gem 'with_advisory_lock'
 
-# Upload assets to Amazon S3 during compilation phase
-#gem 'asset_sync'
-gem 'unf'
-
-gem 'jquery-rails'
-
 # Devise for authentication, cancancan for authorization
 gem 'devise'
-gem 'cancancan'
+gem 'cancancan', github: 'CanCanCommunity/cancancan', branch: 'feature/2.2.0'
 gem 'recaptcha', require: 'recaptcha/rails'
 
 # Let's store sessions in the database, shall we?
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-#gem 'cadmus', '~> 0.5.3'
 gem 'cadmus', git: 'https://github.com/gively/cadmus', branch: 'partials_and_layouts'
 gem 'cadmus_files', git: 'https://github.com/nbudin/cadmus_files', branch: 'cadmus_0_6'
 gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
@@ -89,6 +82,9 @@ gem 'faker', group: 'development', require: false
 gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source map upload support
 gem 'rollbar-shoryuken'
 gem 'oj', '~> 3.5.0'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development do
   gem 'rack-mini-profiler'

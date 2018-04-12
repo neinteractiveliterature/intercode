@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 require File.expand_path('../../lib/intercode/dynamic_cookie_domain', __FILE__)
@@ -14,8 +14,9 @@ module Intercode
     config.load_defaults 5.1
 
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
 
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
