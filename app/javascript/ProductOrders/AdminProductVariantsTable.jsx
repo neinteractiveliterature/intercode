@@ -7,7 +7,7 @@ import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import formatMoney from '../formatMoney';
 import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
-import { stateUpdater, composeStateChangeCalculators, Transforms } from '../ComposableFormUtils';
+import { stateUpdater, combineStateChangeCalculators, Transforms } from '../ComposableFormUtils';
 
 const variantMatches = (a, b) => (
   (a.generatedId && b.generatedId === a.generatedId) ||
@@ -153,7 +153,7 @@ class AdminProductVariantsTable extends React.Component {
         const variantUpdater = productVariantUpdaterForComponent(
           this,
           variant,
-          composeStateChangeCalculators({
+          combineStateChangeCalculators({
             name: Transforms.identity,
             description: Transforms.identity,
             override_price: parseMoneyOrNull,
