@@ -276,7 +276,7 @@ GEM
     msgpack (1.2.4-java)
     multi_json (1.13.1)
     multipart-post (2.0.0)
-    mysql2 (0.4.10)
+    mysql2 (0.5.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
@@ -483,7 +483,7 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   money-rails
-  mysql2 (~> 0.4.10)
+  mysql2 (~> 0.5.1)
   oj (~> 3.5.0)
   parallel
   pg
