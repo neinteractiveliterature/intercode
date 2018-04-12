@@ -1,12 +1,11 @@
-Mutations::UpdateProduct = GraphQL::Relay::Mutation.define do
-  name 'UpdateProduct'
+Mutations::CreateProduct = GraphQL::Relay::Mutation.define do
+  name 'CreateProduct'
   return_field :product, Types::ProductType
 
-  input_field :id, !types.Int
   input_field :product, !Types::ProductInputType
 
   resolve ->(_obj, args, ctx) {
-    product = ctx[:convention].products.includes(:product_variants).find(args[:id])
+    product = ctx[:convention].products.new
     product_fields = args[:product].to_h.deep_symbolize_keys
 
     product_fields[:price] = MoneyHelper.coerce_money_input(product_fields[:price])
@@ -15,11 +14,9 @@ Mutations::UpdateProduct = GraphQL::Relay::Mutation.define do
       product,
       product_fields.delete(:product_variants)
     )
-
-    (product_fields.delete(:delete_variant_ids) || []).each do |variant_id|
-      product.product_variants.find { |v| v.id == variant_id }.destroy!
-    end
     product.product_variants.reload
+
+    product_fields.delete(:delete_variant_ids) # no point even trying to process this on a create
 
     product.update!(product_fields)
 

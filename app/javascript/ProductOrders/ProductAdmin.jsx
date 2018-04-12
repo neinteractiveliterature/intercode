@@ -37,11 +37,20 @@ class ProductAdmin extends React.Component {
     });
   }
 
+  removeNewProduct = (product) => {
+    const newProducts = this.state.newProducts
+      .filter(newProduct => newProduct.generatedId !== product.generatedId);
+
+    this.setState({ newProducts });
+  }
+
   renderProduct = product => (
     <AdminProductCard
       key={product.id || product.generatedId}
       product={product}
       initialEditing={product.id == null}
+      onSaveNewProduct={this.removeNewProduct}
+      onCancelNewProduct={this.removeNewProduct}
     />
   )
 
