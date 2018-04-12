@@ -20,12 +20,6 @@ gem 'uglifier', '>= 1.0.3'
 
 gem 'with_advisory_lock'
 
-# Upload assets to Amazon S3 during compilation phase
-#gem 'asset_sync'
-gem 'unf'
-
-gem 'jquery-rails'
-
 # Devise for authentication, cancancan for authorization
 gem 'devise'
 gem 'cancancan'
@@ -35,7 +29,6 @@ gem 'recaptcha', require: 'recaptcha/rails'
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-#gem 'cadmus', '~> 0.5.3'
 gem 'cadmus', git: 'https://github.com/gively/cadmus', branch: 'partials_and_layouts'
 gem 'cadmus_files', git: 'https://github.com/nbudin/cadmus_files', branch: 'cadmus_0_6'
 gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
