@@ -22,7 +22,7 @@ gem 'with_advisory_lock'
 
 # Devise for authentication, cancancan for authorization
 gem 'devise'
-gem 'cancancan'
+gem 'cancancan', github: 'CanCanCommunity/cancancan', branch: 'feature/2.2.0'
 gem 'recaptcha', require: 'recaptcha/rails'
 
 # Let's store sessions in the database, shall we?
