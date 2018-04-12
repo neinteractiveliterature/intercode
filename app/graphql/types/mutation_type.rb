@@ -131,15 +131,28 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### Product
 
+  field :createProduct, Mutations::CreateProduct.field do
+    guard ->(_obj, _args, ctx) {
+      ctx[:current_ability].can?(:create, Product.new(convention: ctx[:convention]))
+    }
+  end
+
   field :updateProduct, Mutations::UpdateProduct.field do
     guard(guard_for_convention_associated_model(:products, :update))
+  end
+
+  field :deleteProduct, Mutations::DeleteProduct.field do
+    guard(guard_for_convention_associated_model(:products, :destroy))
   end
 
   ### Room
 
   field :createRoom, Mutations::CreateRoom.field do
     guard ->(_obj, args, ctx) {
-      ctx[:current_ability].can?(:create, ctx[:convention].rooms.new(args[:room].to_h))
+      ctx[:current_ability].can?(
+        :create,
+        Room.new({ convention: ctx[:convention] }.merge(args[:room].to_h))
+      )
     }
   end
 

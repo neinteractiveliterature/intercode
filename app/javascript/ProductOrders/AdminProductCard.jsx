@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import classNames from 'classnames';
+import { ConfirmModal } from 'react-bootstrap4-modal';
 import { adminProductFragment, productsQuery } from './queries';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
@@ -42,9 +43,22 @@ mutation($id: Int!, $product: ProductInput!) {
 ${adminProductFragment}
 `;
 
+const deleteProductMutation = gql`
+mutation($id: Int!) {
+  deleteProduct(input: { id: $id }) {
+    product {
+      ...AdminProductFields
+    }
+  }
+}
+
+${adminProductFragment}
+`;
+
 class AdminProductCard extends React.Component {
   static propTypes = {
     product: PropTypes.shape({
+      id: PropTypes.number,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       image_url: PropTypes.string,
@@ -64,6 +78,8 @@ class AdminProductCard extends React.Component {
       available: PropTypes.bool.isRequired,
     }).isRequired,
     initialEditing: PropTypes.bool,
+    onCancelNewProduct: PropTypes.func.isRequired,
+    onSaveNewProduct: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -118,7 +134,11 @@ class AdminProductCard extends React.Component {
   }
 
   cancelClicked = () => {
-    this.setState({ editing: false, editingProduct: null, error: null });
+    if (this.props.product.id) {
+      this.setState({ editing: false, editingProduct: null, error: null });
+    } else {
+      this.props.onCancelNewProduct(this.props.product);
+    }
   }
 
   imageChanged = (event) => {
@@ -152,6 +172,21 @@ class AdminProductCard extends React.Component {
         ],
       },
     });
+  }
+
+  beginConfirm = (prompt, action) => {
+    this.setState({
+      confirm: { prompt, action },
+    });
+  }
+
+  performConfirm = async () => {
+    await this.state.confirm.action();
+    this.setState({ confirm: null });
+  }
+
+  cancelConfirm = () => {
+    this.setState({ confirm: null });
   }
 
   saveClicked = async (createProduct, updateProduct) => {
@@ -189,21 +224,44 @@ class AdminProductCard extends React.Component {
         await updateProduct({
           variables: { id: this.state.editingProduct.id, product: productInput },
         });
+
+        this.setState({ editing: false, editingProduct: null });
       } else {
         await createProduct({
           variables: { product: productInput },
           update: (cache, { data: { createProduct: { product } } }) => {
-            const data = cache.readQuery(productsQuery);
+            const data = cache.readQuery({ query: productsQuery });
             data.convention.products.push(product);
             cache.writeQuery({ query: productsQuery, data });
           },
         });
-      }
 
-      this.setState({ editing: false, editingProduct: null });
+        this.props.onSaveNewProduct(this.state.editingProduct);
+      }
     } catch (error) {
       this.setState({ error });
     }
+  }
+
+  deleteClicked = (deleteProduct) => {
+    this.beginConfirm(
+      `Are you sure you want to delete the product ${this.props.product.name}?`,
+      async () => {
+        try {
+          await deleteProduct({
+            variables: { id: this.props.product.id },
+            update: (cache) => {
+              const data = cache.readQuery({ query: productsQuery });
+              data.convention.products = data.convention.products
+                .filter(product => product.id !== this.props.product.id);
+              cache.writeQuery({ query: productsQuery, data });
+            },
+          });
+        } catch (error) {
+          this.setState({ error });
+        }
+      },
+    );
   }
 
   renderVariantsTable = () => (
@@ -242,8 +300,33 @@ class AdminProductCard extends React.Component {
       );
     }
 
+    let deleteButton = null;
+    if (this.props.product.id != null) {
+      deleteButton = (
+        <li className="list-inline-item">
+          <Mutation mutation={deleteProductMutation}>
+            {deleteProduct => (
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={() => { this.deleteClicked(deleteProduct); }}
+              >
+                <i className="fa fa-trash-o">
+                  <span className="sr-only">Delete product</span>
+                </i>
+              </button>
+            )}
+          </Mutation>
+        </li>
+      );
+    }
+
     return (
-      <button className="btn btn-sm btn-secondary" onClick={this.editClicked}>Edit</button>
+      <ul className="list-inline m-0">
+        {deleteButton}
+        <li className="list-inline-item">
+          <button className="btn btn-sm btn-secondary" onClick={this.editClicked}>Edit</button>
+        </li>
+      </ul>
     );
   }
 
@@ -389,6 +472,14 @@ class AdminProductCard extends React.Component {
             {this.renderVariantsTable()}
           </div>
         </div>
+
+        <ConfirmModal
+          visible={this.state.confirm != null}
+          onOK={this.performConfirm}
+          onCancel={this.cancelConfirm}
+        >
+          {(this.state.confirm || {}).prompt}
+        </ConfirmModal>
       </div>
     </div>
   )
