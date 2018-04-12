@@ -90,6 +90,9 @@ gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source m
 gem 'rollbar-shoryuken'
 gem 'oj', '~> 3.5.0'
 
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
+
 group :development do
   gem 'rack-mini-profiler'
 
