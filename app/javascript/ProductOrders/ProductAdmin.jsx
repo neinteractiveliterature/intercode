@@ -12,18 +12,51 @@ class ProductAdmin extends React.Component {
     data: GraphQLResultPropType(productsQuery).isRequired,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      newProducts: [],
+    };
+  }
+
+  newProductClicked = () => {
+    this.setState({
+      newProducts: [
+        ...this.state.newProducts,
+        {
+          generatedId: new Date().getTime(),
+          name: '',
+          description: '',
+          image_url: null,
+          price: null,
+          product_variants: [],
+          available: true,
+        },
+      ],
+    });
+  }
+
   renderProduct = product => (
-    <AdminProductCard key={product.id} product={product} />
+    <AdminProductCard
+      key={product.id || product.generatedId}
+      product={product}
+      initialEditing={product.id == null}
+    />
   )
 
   render = () => {
     const products = [...this.props.data.convention.products]
       .sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }))
+      .concat(this.state.newProducts)
       .map(product => this.renderProduct(product));
 
     return (
       <div>
         {products}
+        <div className="my-4">
+          <button className="btn btn-primary" onClick={this.newProductClicked}>New product</button>
+        </div>
       </div>
     );
   }

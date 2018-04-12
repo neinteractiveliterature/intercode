@@ -1,57 +1,111 @@
 import { parseIntOrNull, parseFloatOrNull, convertDatetimeValue } from './FormUtils';
 
+function namedFunction(func, name) {
+  Object.defineProperty(func, 'name', { value: name });
+  return func;
+}
+
 export const Transforms = {
-  identity: value => value,
-  integer: parseIntOrNull,
-  float: parseFloatOrNull,
-  datetime: timezoneName => (value => convertDatetimeValue(value, timezoneName)),
-  booleanString: value => value === 'true',
-  multiValue: choices => choices.map(choice => choice.value),
-  eventTargetValue: event => event.target.value,
-  eventTargetChecked: event => event.target.checked,
+  identity(value) { return value; },
+  integer(value) { return parseIntOrNull(value); },
+  float(value) { return parseFloatOrNull(value); },
+  datetime(timezoneName) {
+    return namedFunction(
+      value => convertDatetimeValue(value, timezoneName),
+      `datetime('${timezoneName}')`,
+    );
+  },
+  booleanString(value) { return value === 'true'; },
+  multiValue(choices) { return choices.map(choice => choice.value); },
+  eventTargetValue(event) { return event.target.value; },
+  eventTargetChecked(event) { return event.target.checked; },
 };
 
-Transforms.inputChange = transform => transform(Transforms.eventTargetValue);
-Transforms.checkboxChange = Transforms.eventTargetChecked;
-Transforms.textInputChange = Transforms.eventTargetValue;
+Transforms.inputChange = function inputChange(wrappedTransform) {
+  return namedFunction(
+    event => wrappedTransform(Transforms.eventTargetValue(event)),
+    `inputChange('${wrappedTransform.name}')`,
+  );
+};
+Transforms.checkboxChange = function checkboxChange(event) {
+  return Transforms.eventTargetChecked(event);
+};
+Transforms.textInputChange = function textInputChange(event) {
+  return Transforms.eventTargetValue(event);
+};
 
-export function stateMerger(getState) {
-  return newState => ({ ...getState(), ...newState });
+export function stateChangeCalculator(
+  name,
+  transform,
+  preprocessState = Transforms.identity,
+  postprocessState = Transforms.identity,
+) {
+  return namedFunction(
+    (state, value) => postprocessState({ ...preprocessState(state), [name]: transform(value) }),
+    `stateChangeCalculator('${name}')`,
+  );
 }
 
-export function subkeyStateMerger(getState, subkey) {
-  return (newState) => {
-    const state = getState();
-    const subMerger = stateMerger(() => state[subkey]);
-    return { ...state, [subkey]: subMerger(newState[subkey]) };
-  };
-}
-
-export function stateChangeCalculator(name, transform) {
-  return (state, value) => ({ ...state, [name]: transform(value) });
-}
-
-export function composeStateChangeCalculators(transformsByName) {
+export function combineStateChangeCalculators(
+  transformsByName,
+  preprocessState = Transforms.identity,
+  postprocessState = Transforms.identity,
+) {
   return Object.keys(transformsByName).reduce(
-    (acc, name) => ({ ...acc, [name]: stateChangeCalculator(name, transformsByName[name]) }),
+    (acc, name) => {
+      if (typeof transformsByName[name] === 'function') {
+        return {
+          ...acc,
+          [name]: stateChangeCalculator(
+            name,
+            transformsByName[name],
+            preprocessState,
+            postprocessState,
+          ),
+        };
+      }
+
+      return {
+        ...acc,
+        [name]: combineStateChangeCalculators(
+          transformsByName[name],
+          namedFunction(state => preprocessState(state)[name], `dig('${name}')`),
+          namedFunction(state => postprocessState({ [name]: state }), `bury('${name}')`),
+        ),
+      };
+    },
     {},
   );
 }
 
 export function stateUpdater(getState, setState, stateChangeCalculators) {
   return Object.keys(stateChangeCalculators).reduce(
-    (acc, name) => ({
-      ...acc,
-      [name]: (value) => { setState(stateChangeCalculators[name](getState(), value)); },
-    }),
+    (acc, name) => {
+      if (typeof stateChangeCalculators[name] === 'function') {
+        return {
+          ...acc,
+          [name]: namedFunction(
+            (value) => {
+              setState(stateChangeCalculators[name](getState(), value));
+            },
+            `stateFieldUpdater('${name}')`,
+          ),
+        };
+      }
+
+      return {
+        ...acc,
+        [name]: stateUpdater(getState, setState, stateChangeCalculators[name]),
+      };
+    },
     {},
   );
 }
 
-export function componentStateFieldUpdater(component, stateField, stateChangeCalculators) {
+export function componentLocalStateUpdater(component, stateChangeCalculators) {
   return stateUpdater(
-    () => component.state[stateField],
-    (newState) => { component.setState({ [stateField]: newState }); },
+    () => component.state,
+    state => component.setState(state),
     stateChangeCalculators,
   );
 }

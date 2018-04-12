@@ -14,8 +14,8 @@ import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
 import {
   Transforms,
-  composeStateChangeCalculators,
-  componentStateFieldUpdater,
+  combineStateChangeCalculators,
+  componentLocalStateUpdater,
 } from '../ComposableFormUtils';
 
 const createProductMutation = gql`
@@ -51,7 +51,7 @@ class AdminProductCard extends React.Component {
       price: PropTypes.shape({
         fractional: PropTypes.number.isRequired,
         currency_code: PropTypes.string.isRequired,
-      }).isRequired,
+      }),
       product_variants: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
@@ -73,20 +73,25 @@ class AdminProductCard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      editing: props.initialEditing,
-      editingProduct: null,
-    };
+    this.state = (
+      props.initialEditing ?
+        this.getEditState() :
+        {
+          editing: props.initialEditing,
+          editingProduct: null,
+        }
+    );
 
-    this.editingProductUpdater = componentStateFieldUpdater(
+    this.stateUpdater = componentLocalStateUpdater(
       this,
-      'editingProduct',
-      composeStateChangeCalculators({
-        available: Transforms.checkboxChange,
-        description: Transforms.identity,
-        name: Transforms.textInputChange,
-        price: parseMoneyOrNull,
-        product_variants: Transforms.identity,
+      combineStateChangeCalculators({
+        editingProduct: {
+          available: Transforms.checkboxChange,
+          description: Transforms.identity,
+          name: Transforms.textInputChange,
+          price: parseMoneyOrNull,
+          product_variants: Transforms.identity,
+        },
       }),
     );
   }
@@ -98,16 +103,18 @@ class AdminProductCard extends React.Component {
     })
   )
 
+  getEditState = () => ({
+    error: null,
+    editing: true,
+    editingProduct: {
+      ...this.props.product,
+      product_variants: this.props.product.product_variants.map(variant => ({ ...variant })),
+      delete_variant_ids: [],
+    },
+  });
+
   editClicked = () => {
-    this.setState({
-      error: null,
-      editing: true,
-      editingProduct: {
-        ...this.props.product,
-        product_variants: this.props.product.product_variants.map(variant => ({ ...variant })),
-        delete_variant_ids: [],
-      },
-    });
+    this.setState(this.getEditState());
   }
 
   cancelClicked = () => {
@@ -203,7 +210,7 @@ class AdminProductCard extends React.Component {
     <AdminProductVariantsTable
       product={this.state.editing ? this.state.editingProduct : this.props.product}
       editing={this.state.editing}
-      onChange={this.editingProductUpdater.product_variants}
+      onChange={this.stateUpdater.editingProduct.product_variants}
       deleteVariant={this.deleteVariant}
     />
   )
@@ -247,7 +254,7 @@ class AdminProductCard extends React.Component {
           name="available"
           label="Available for purchase"
           checked={this.state.editingProduct.available}
-          onChange={this.editingProductUpdater.available}
+          onChange={this.stateUpdater.editingProduct.available}
         />
       );
     }
@@ -309,7 +316,7 @@ class AdminProductCard extends React.Component {
           placeholder="Product name"
           name="name"
           value={this.state.editingProduct.name}
-          onChange={this.editingProductUpdater.name}
+          onChange={this.stateUpdater.editingProduct.name}
         />
       );
     }
@@ -328,7 +335,7 @@ class AdminProductCard extends React.Component {
             name="price"
             label="Base price"
             value={`${formatMoney(this.state.editingProduct.price, false)}`}
-            onChange={this.editingProductUpdater.price}
+            onChange={this.stateUpdater.editingProduct.price}
           >
             {formatMoney(this.state.editingProduct.price)}
           </InPlaceEditor>
@@ -346,7 +353,7 @@ class AdminProductCard extends React.Component {
       return (
         <LiquidInput
           value={this.state.editingProduct.description}
-          onChange={this.editingProductUpdater.description}
+          onChange={this.stateUpdater.editingProduct.description}
         />
       );
     }
