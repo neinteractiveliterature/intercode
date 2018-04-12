@@ -4,7 +4,7 @@ ruby '2.4.2'
 gem 'rails', '5.2.0'
 
 gem 'sqlite3', groups: [:development, :test]
-gem 'mysql2', '~> 0.4.10'
+gem 'mysql2', '~> 0.5.1'
 gem 'pg'
 gem 'puma'
 
