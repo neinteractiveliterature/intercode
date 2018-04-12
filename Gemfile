@@ -100,6 +100,9 @@ group :development do
   # Email testing/debugging
   gem 'letter_opener'
 
+  # Reloader support
+  gem 'listen'
+
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'
   gem 'capistrano-shoryuken'
