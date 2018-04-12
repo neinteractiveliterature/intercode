@@ -240,6 +240,10 @@ GEM
     liquid (4.0.0)
     liquid-md5 (0.0.3)
       liquid (>= 2.5, < 5.0)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -366,6 +370,7 @@ GEM
       rollbar
       shoryuken
     ruby-progressbar (1.9.0)
+    ruby_dep (1.5.0)
     sass (3.5.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -482,6 +487,7 @@ DEPENDENCIES
   htmldiff-lcs!
   letter_opener
   liquid-md5
+  listen
   memory_profiler
   minitest-focus
   minitest-reporters
