@@ -386,7 +386,7 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stackprof (0.2.10)
-    stripe (3.12.1)
+    stripe (3.13.0)
       faraday (~> 0.10)
     stripe-ruby-mock (2.5.3)
       dante (>= 0.2.0)
