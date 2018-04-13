@@ -17,6 +17,19 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
     end
   end
 
+  describe '#total_slots' do
+    it 'only counts counted buckets' do
+      policy = RegistrationPolicy.new(
+        buckets: [
+          RegistrationPolicy::Bucket.new(key: 'pcs', total_slots: 2),
+          RegistrationPolicy::Bucket.new(key: 'npcs', total_slots: 5, not_counted: true)
+        ]
+      )
+
+      assert_equal 2, policy.total_slots
+    end
+  end
+
   describe 'validations' do
     it 'validates that there is only one anything bucket' do
       policy = RegistrationPolicy.new(

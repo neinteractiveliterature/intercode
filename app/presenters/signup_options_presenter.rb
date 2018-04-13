@@ -152,9 +152,9 @@ class SignupOptionsPresenter
 
   def main_option?(option)
     return false if option.bucket&.anything?
-    return true if no_preference_options.none?
+    return true if no_preference_options.none? && not_counted_options.none?
 
-    option.no_preference? || option.bucket&.slots_limited?
+    option.no_preference? || (option.bucket&.slots_limited? && option.bucket&.counted?)
   end
 
   def signup_options_for_event
