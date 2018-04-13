@@ -223,6 +223,7 @@ class Ability
       event: {
         convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
       }
+    can :manage, Product, convention_id: staff_con_ids
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach) } }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }

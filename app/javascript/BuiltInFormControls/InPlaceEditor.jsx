@@ -7,11 +7,13 @@ class InPlaceEditor extends React.Component {
     onChange: PropTypes.func.isRequired,
     children: PropTypes.node,
     renderInput: PropTypes.func,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
     children: null,
     renderInput: null,
+    className: null,
   }
 
   constructor(props) {
@@ -23,15 +25,15 @@ class InPlaceEditor extends React.Component {
     };
   }
 
-  inputChanged = (event) => {
-    this.setState({ editingValue: event.target.value });
+  editingValueChanged = (editingValue) => {
+    this.setState({ editingValue });
   }
 
   beginEditing = (event) => {
     event.preventDefault();
     this.setState(
       { editing: true, editingValue: this.props.value },
-      () => { this.input.focus(); },
+      () => { if (this.input) { this.input.focus(); } },
     );
   }
 
@@ -65,7 +67,7 @@ class InPlaceEditor extends React.Component {
   renderInput = () => {
     const inputProps = {
       value: this.state.editingValue,
-      onChange: this.inputChanged,
+      onChange: this.editingValueChanged,
       onKeyDown: this.keyDownInInput,
       ref: (input) => { this.input = input; },
     };
@@ -79,6 +81,7 @@ class InPlaceEditor extends React.Component {
         type="text"
         className="form-control form-control-sm mr-1"
         {...inputProps}
+        onChange={(event) => { inputProps.onChange(event.target.value); }}
       />
     );
   }
@@ -86,7 +89,7 @@ class InPlaceEditor extends React.Component {
   render = () => {
     if (this.state.editing) {
       return (
-        <div className="form-inline align-items-start">
+        <div className={this.props.className || 'form-inline align-items-start'}>
           {this.renderInput()}
           <button className="btn btn-secondary btn-sm mr-1" onClick={this.cancelEditing}>
             <i className="fa fa-times" />

@@ -20,8 +20,8 @@ class Intercode::Import::Intercode1::Tables::StoreItems < Intercode::Import::Int
         price_currency: 'USD'
       )
 
-      sizes(row).each do |size|
-        product.product_variants.new(name: size)
+      sizes(row).each_with_index do |size, i|
+        product.product_variants.new(name: size, position: i + 1)
       end
 
       product

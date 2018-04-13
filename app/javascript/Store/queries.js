@@ -43,3 +43,43 @@ query($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput]
 
 ${adminOrderFragment}
 `;
+
+export const adminProductFragment = gql`
+fragment AdminProductFields on Product {
+  id
+  name
+  description
+  image_url
+  available
+
+  price {
+    fractional
+    currency_code
+  }
+
+  product_variants {
+    id
+    name
+    description
+    image_url
+    position
+
+    override_price {
+      fractional
+      currency_code
+    }
+  }
+}
+`;
+
+export const productsQuery = gql`
+query {
+  convention {
+    products {
+      ...AdminProductFields
+    }
+  }
+}
+
+${adminProductFragment}
+`;

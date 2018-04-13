@@ -123,6 +123,21 @@ Types::QueryType = GraphQL::ObjectType.define do
     end
   end
 
+  field :previewLiquid, !types.String do
+    argument :content, !types.String
+
+    guard ->(_obj, _args, ctx) do
+      # TODO maybe better permission for this?  Not sure, but for now I'm using con_com as a proxy
+      # for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary Liquid
+      # drop data)"
+      ctx[:current_ability].can?(:view_reports, ctx[:convention])
+    end
+
+    resolve ->(_obj, args, ctx) do
+      ctx[:cadmus_renderer].render(Liquid::Template.parse(args['content']), :html)
+    end
+  end
+
   field :product, !Types::ProductType do
     argument :id, !types.Int
 
