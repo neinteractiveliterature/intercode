@@ -426,8 +426,6 @@ GEM
     tins (1.15.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.9)
-      execjs (>= 0.3.0, < 3)
     warden (1.2.7)
       rack (>= 1.0)
     webpacker (3.4.3)
@@ -520,7 +518,6 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock
   term-ansicolor
-  uglifier (>= 1.0.3)
   webpacker
   webpacker-react (~> 0.3.2)
   whenever
