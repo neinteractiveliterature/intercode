@@ -123,6 +123,13 @@ GEM
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
+    aws-sdk-kms (1.5.0)
+      aws-sdk-core (~> 3)
+      aws-sigv4 (~> 1.0)
+    aws-sdk-s3 (1.9.0)
+      aws-sdk-core (~> 3)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.0)
     aws-sdk-sqs (1.3.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
@@ -455,6 +462,7 @@ DEPENDENCIES
   activerecord-session_store
   apollo_upload_server (= 2.0.0.alpha.5)
   autoprefixer-rails
+  aws-sdk-s3
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
   bootstrap_form!
