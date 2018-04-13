@@ -14,7 +14,7 @@
     "autoprefixer": "^8.2.0",
     "babel-core": "^6.26.0",
     "babel-loader": "7.x",
-    "babel-minify": "^0.3.0",
+    "babel-minify": "^0.4.0",
     "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-graphql-tag": "^1.5.0",
     "babel-plugin-lodash": "^3.3.2",
