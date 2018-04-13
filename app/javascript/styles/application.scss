@@ -1,6 +1,7 @@
 @import "./bootstrap_custom";
 @import "./buckets";
 @import "./codemirror_theme";
+@import "./glow";
 @import "./print";
 @import "./schedule_grid";
 
@@ -46,6 +47,14 @@ table.no-top-border thead th {
 
 .markdown-preview {
   min-height: 10rem;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.opacity-50 {
+  opacity: 0.5;
 }
 
 @for $i from 1 to 20 {

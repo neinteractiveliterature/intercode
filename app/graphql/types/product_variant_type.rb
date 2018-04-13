@@ -20,4 +20,11 @@ Types::ProductVariantType = GraphQL::ObjectType.define do
     }
   end
   field :override_price, Types::MoneyType
+  field :position, types.Int
+
+  field :order_quantities_by_status, !types[Types::OrderQuantityByStatusType] do
+    resolve -> (obj, _args, _ctx) {
+      OrderQuantityByStatusLoader.for(ProductVariant).load(obj)
+    }
+  end
 end

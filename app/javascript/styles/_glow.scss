@@ -1,0 +1,5 @@
+@each $color, $value in $theme-colors {
+  .glow-#{$color} {
+    box-shadow: 0 0 5px $value;
+  }
+}

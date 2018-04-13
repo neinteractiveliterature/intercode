@@ -107,12 +107,12 @@ class OrderAdmin extends React.Component {
     const { sorted, filtered } = this.state;
 
     return (
-      <div>
+      <div className="mb-4">
         <div className="mb-2">
           {this.renderExportButton()}
         </div>
         <Query query={adminOrdersQuery}>
-          {({ data, refetch }) => (
+          {({ loading, data, refetch }) => (
             <div>
               <ReactTable
                 className="-striped -highlight"
@@ -122,7 +122,7 @@ class OrderAdmin extends React.Component {
                 pages={(data.convention || { orders_paginated: {} }).orders_paginated.total_pages}
                 sorted={sorted}
                 filtered={filtered}
-                loading={data.loading}
+                loading={loading}
                 onFetchData={(tableState) => {
                   refetch({
                     page: tableState.page + 1,

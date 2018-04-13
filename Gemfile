@@ -16,7 +16,6 @@ gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-fo
 gem 'haml'
 gem 'webpacker'
 gem 'webpacker-react', "~> 0.3.2"
-gem 'uglifier', '>= 1.0.3'
 
 gem 'with_advisory_lock'
 
@@ -57,6 +56,7 @@ gem 'will_paginate-bootstrap4'
 gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
+gem 'apollo_upload_server', '2.0.0.alpha.5'
 gem 'graphiql-rails', group: :development
 
 # Markdown
@@ -98,6 +98,9 @@ group :development do
 
   # Email testing/debugging
   gem 'letter_opener'
+
+  # Reloader support
+  gem 'listen'
 
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-passenger'

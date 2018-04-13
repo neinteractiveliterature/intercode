@@ -39,7 +39,7 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
 
     return unless two_shirts?
     logger.info 'Creating shirt 2'
-    @shirt2 = build_product_with_image_if_available(config.var(:shirt2_name), 'shirt2.gif')
+    @shirt2 = build_product_with_image_if_available(config.var(:shirt_2_name), 'shirt2.gif')
     @shirt2.save!
   end
 
@@ -63,8 +63,8 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
       price_currency: 'USD'
     )
 
-    LEGACY_SHIRT_SIZES.each do |size|
-      product.product_variants.new(name: size)
+    LEGACY_SHIRT_SIZES.each_with_index do |size, i|
+      product.product_variants.new(name: size, position: i + 1)
     end
 
     product
@@ -95,7 +95,7 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
       create_order_entry(order, @shirt1, size, row[size.to_sym]) if row[size.to_sym].to_i > 0
 
       if two_shirts? && row[:"#{size}_2"].to_i > 0
-        create_order_entry(order, @shirt1, size, row[:"#{size}_2"])
+        create_order_entry(order, @shirt2, size, row[:"#{size}_2"])
       end
     end
   end

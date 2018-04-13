@@ -10,6 +10,7 @@ import GraphQLResultPropType from '../GraphQLResultPropType';
 import LoadingIndicator from '../LoadingIndicator';
 import formatMoney from '../formatMoney';
 import { parseIntOrNull } from '../FormUtils';
+import sortProductVariants from './sortProductVariants';
 
 const productQuery = gql`
 query($productId: Int!) {
@@ -21,6 +22,7 @@ query($productId: Int!) {
     product_variants {
       id
       name
+      position
       override_price {
         fractional
       }
@@ -114,7 +116,8 @@ class ProductOrderForm extends React.Component {
       return null;
     }
 
-    const options = this.props.data.product.product_variants.map((variant) => {
+    const variants = sortProductVariants(this.props.data.product.product_variants);
+    const options = variants.map((variant) => {
       const { id, name, override_price: overridePrice } = variant;
 
       let overridePriceDescription = '';
@@ -174,7 +177,10 @@ class ProductOrderForm extends React.Component {
       }
     }
 
-    const totalPrice = pricePerItem * this.state.quantity;
+    const totalPrice = {
+      fractional: pricePerItem * this.state.quantity,
+      currency_code: this.props.data.product.price.currency_code,
+    };
 
     return (
       <strong>Total: {formatMoney(totalPrice)}</strong>
