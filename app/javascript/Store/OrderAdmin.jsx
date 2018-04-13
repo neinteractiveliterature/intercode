@@ -107,7 +107,7 @@ class OrderAdmin extends React.Component {
     const { sorted, filtered } = this.state;
 
     return (
-      <div>
+      <div className="mb-4">
         <div className="mb-2">
           {this.renderExportButton()}
         </div>

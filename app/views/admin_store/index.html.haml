@@ -1,0 +1,5 @@
+%h1.mb-4 Store administration
+
+= react_component 'StoreAdmin', authenticityToken: graphql_authenticity_token,
+  exportOrdersUrl: export_admin_orders_path(format: 'csv'),
+  basename: admin_store_path

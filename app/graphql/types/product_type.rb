@@ -21,4 +21,10 @@ Types::ProductType = GraphQL::ObjectType.define do
     }
   end
   field :price, !Types::MoneyType
+
+  field :order_quantities_by_status, !types[Types::OrderQuantityByStatusType] do
+    resolve -> (obj, _args, _ctx) {
+      OrderQuantityByStatusLoader.for(Product).load(obj)
+    }
+  end
 end
