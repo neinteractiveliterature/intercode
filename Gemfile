@@ -16,7 +16,6 @@ gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-fo
 gem 'haml'
 gem 'webpacker'
 gem 'webpacker-react', "~> 0.3.2"
-gem 'uglifier', '>= 1.0.3'
 
 gem 'with_advisory_lock'
 
