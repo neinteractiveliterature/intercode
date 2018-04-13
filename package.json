@@ -29,7 +29,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.0",
     "bootstrap.native": "^2.0.22",
     "cadmus-navbar-admin": "^2.0.0",
     "classnames": "^2.2.5",
