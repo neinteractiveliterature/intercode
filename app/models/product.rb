@@ -1,6 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :convention
-  has_many :product_variants
+  has_many :product_variants, dependent: :destroy
   has_many :order_entries, dependent: :destroy
 
   mount_uploader :image, ProductImageUploader
