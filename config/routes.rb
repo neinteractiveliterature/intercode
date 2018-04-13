@@ -49,12 +49,8 @@ Intercode::Application.routes.draw do
     resources :products, only: [:show]
     resource :cart, only: [:show]
     resource :order_history, only: [:show]
-    resources :admin_orders, only: [:index] do
-      collection do
-        get :export
-      end
-    end
-    resources :admin_products, only: [:index]
+    get 'admin_store/orders/export' => 'admin_orders#export', as: :export_admin_orders
+    get 'admin_store/(*extra)' => 'admin_store#index', as: :admin_store
 
     resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do
       member do

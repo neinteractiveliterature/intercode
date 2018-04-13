@@ -35,7 +35,7 @@ import '../styles/application.scss';
 import '../inflections';
 import '../Codemirror/LiquidMultiplexModes';
 
-import Cart from '../ProductOrders/Cart';
+import Cart from '../Store/Cart';
 import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
@@ -46,14 +46,13 @@ import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
 import NavigationItemsAdmin from '../NavigationItemsAdmin';
-import OrderAdmin from '../ProductOrders/OrderAdmin';
-import OrderHistory from '../ProductOrders/OrderHistory';
+import OrderHistory from '../Store/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
-import ProductAdmin from '../ProductOrders/ProductAdmin';
-import ProductOrderForm from '../ProductOrders/ProductOrderForm';
+import ProductOrderForm from '../Store/ProductOrderForm';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
 import StaffPositionAdmin from '../StaffPositionAdmin';
+import StoreAdmin from '../Store/StoreAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
 import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
@@ -73,15 +72,14 @@ WebpackerReact.setup({
   LiquidHTMLEditor,
   MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
   NavigationItemsAdmin,
-  OrderAdmin: StandaloneGraphQLComponent(OrderAdmin),
   OrderHistory: StandaloneGraphQLComponent(OrderHistory),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
-  ProductAdmin: StandaloneGraphQLComponent(ProductAdmin),
   ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
   StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
+  StoreAdmin: StandaloneGraphQLComponent(StoreAdmin),
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketTypeAdmin: StandaloneGraphQLComponent(TicketTypeAdmin),
   TicketPurchaseForm: StandaloneGraphQLComponent(TicketPurchaseForm),

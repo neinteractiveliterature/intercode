@@ -102,16 +102,14 @@ module NavigationBarHelper
       visible? { can?(:mail_to_any, convention) }
     end,
     NavigationItem.define do
-      label 'Orders'
-      url { admin_orders_path }
-      visible? do
-        can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
-      end
-    end,
-    NavigationItem.define do
       label 'Reports'
       url { reports_path }
       visible? { can?(:view_reports, convention) }
+    end,
+    NavigationItem.define do
+      label 'Rooms'
+      url { rooms_path }
+      visible? { can?(:update, Room.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Site Content'
@@ -133,9 +131,11 @@ module NavigationBarHelper
       visible? { can?(:update, StaffPosition.new(convention: convention)) }
     end,
     NavigationItem.define do
-      label 'Rooms'
-      url { rooms_path }
-      visible? { can?(:update, Room.new(convention: convention)) }
+      label 'Store'
+      url { admin_store_path }
+      visible? do
+        can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
+      end
     end,
     NavigationItem.define do
       label { "#{convention.ticket_name.titleize} Types" }
