@@ -177,7 +177,10 @@ class ProductOrderForm extends React.Component {
       }
     }
 
-    const totalPrice = pricePerItem * this.state.quantity;
+    const totalPrice = {
+      fractional: pricePerItem * this.state.quantity,
+      currency_code: this.props.data.product.price.currency_code,
+    };
 
     return (
       <strong>Total: {formatMoney(totalPrice)}</strong>
