@@ -18,7 +18,6 @@
     "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-graphql-tag": "^1.5.0",
     "babel-plugin-lodash": "^3.3.2",
-    "babel-preset-minify": "^0.3.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators": "^6.24.1",
@@ -27,11 +26,13 @@
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-minify": "^0.3.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "bootstrap": "^4.0.0",
     "bootstrap.native": "^2.0.22",
     "cadmus-navbar-admin": "^2.0.0",
+    "caniuse-lite": "^1.0.30000828",
     "classnames": "^2.2.5",
     "clipboard": "^2.0.0",
     "codemirror": "^5.36.0",
@@ -113,9 +114,6 @@
     "react-test-renderer": "^16.3.1",
     "sinon": "^4.4.10",
     "webpack-dev-server": "^2.11.1"
-  },
-  "resolutions": {
-    "webpack-sources": "1.0.1"
   },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
