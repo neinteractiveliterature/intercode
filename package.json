@@ -93,6 +93,7 @@
     "style-loader": "^0.20.3",
     "unfetch": "^3.0.0",
     "webpack": "^3.11.0",
+    "webpack-bundle-analyzer": "^2.11.1",
     "webpack-manifest-plugin": "^2.0.0",
     "webpack-merge": "^4.1.2",
     "webpacker-react": "^0.3.2"
@@ -111,7 +112,6 @@
     "jest": "^22.4.3",
     "react-test-renderer": "^16.3.1",
     "sinon": "^4.4.10",
-    "webpack-bundle-analyzer": "^2.11.1",
     "webpack-dev-server": "^2.11.1"
   },
   "resolutions": {
