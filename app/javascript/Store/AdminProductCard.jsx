@@ -143,6 +143,10 @@ class AdminProductCard extends React.Component {
 
   imageChanged = (event) => {
     const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
     this.setState({
       editingProduct: {
         ...this.state.editingProduct,
