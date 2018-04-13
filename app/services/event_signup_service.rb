@@ -122,7 +122,7 @@ sign up for events."
   end
 
   def counts_towards_total?
-    !team_member?
+    !team_member? && actual_bucket&.counted?
   end
 
   def signup_state
@@ -133,9 +133,13 @@ sign up for events."
     end
   end
 
-  def other_signups
-    @other_signups ||= user_con_profile.signups.counted.includes(run: :event)
+  def other_signups_including_not_counted
+    @other_signups_including_not_counted ||= user_con_profile.signups.includes(run: :event)
       .where.not(run_id: run.id).to_a
+  end
+
+  def other_signups
+    @other_signups ||= other_signups_including_not_counted.select(&:counted?)
   end
 
   def actual_bucket
@@ -162,7 +166,7 @@ sign up for events."
   end
 
   def concurrent_signups
-    @concurrent_signups ||= other_signups.select do |signup|
+    @concurrent_signups ||= other_signups_including_not_counted.select do |signup|
       other_run = signup.run
       signup.confirmed? && !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
     end
