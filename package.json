@@ -76,7 +76,7 @@
     "redux-actions": "^2.3.0",
     "redux-logger": "^3.0.6",
     "resolve-url-loader": "^2.3.0",
-    "sass-loader": "^6.0.7",
+    "sass-loader": "^7.0.0",
     "style-loader": "^0.20.3",
     "unfetch": "^3.0.0",
     "webpack": "^3.11.0",
