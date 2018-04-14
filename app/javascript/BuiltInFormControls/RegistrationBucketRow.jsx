@@ -63,6 +63,13 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
+  countedCheckboxChanged = (event) => {
+    this.props.onChange(
+      this.props.registrationBucket.get('key'),
+      this.props.registrationBucket.set('notCounted', !event.target.checked),
+    );
+  }
+
   beginDelete = (event) => {
     event.preventDefault();
     this.setState({ isConfirmingDelete: true });
@@ -76,26 +83,43 @@ class RegistrationBucketRow extends React.Component {
     this.setState({ isConfirmingDelete: false });
   }
 
-  renderUnlimitedCheckbox = () => {
+  renderBucketFlags = () => {
     if (this.props.lockLimited) {
       return null;
     }
 
-    const inputId = this.nextUniqueId();
+    const unlimitedId = this.nextUniqueId();
+    const countedId = this.nextUniqueId();
 
     return (
-      <div className="form-check form-check-inline mr-2">
-        <label className="form-check-label text-nowrap" htmlFor={inputId}>
-          <input
-            id={inputId}
-            className="form-check-input"
-            type="checkbox"
-            checked={!this.props.registrationBucket.get('slotsLimited')}
-            onChange={this.unlimitedCheckboxChanged}
-          />
-          {' '}
-          Unlimited?
-        </label>
+      <div className="mr-2">
+        <div className="form-check">
+          <label className="form-check-label text-nowrap" htmlFor={unlimitedId}>
+            <input
+              id={unlimitedId}
+              className="form-check-input"
+              type="checkbox"
+              checked={!this.props.registrationBucket.get('slotsLimited')}
+              onChange={this.unlimitedCheckboxChanged}
+            />
+            {' '}
+            Unlimited?
+          </label>
+        </div>
+
+        <div className="form-check">
+          <label className="form-check-label text-nowrap" htmlFor={countedId}>
+            <input
+              id={countedId}
+              className="form-check-input"
+              type="checkbox"
+              checked={!this.props.registrationBucket.get('notCounted')}
+              onChange={this.countedCheckboxChanged}
+            />
+            {' '}
+            Counted?
+          </label>
+        </div>
       </div>
     );
   }
@@ -211,7 +235,7 @@ class RegistrationBucketRow extends React.Component {
     <tr className={classNames({ 'anything-bucket': this.props.registrationBucket.get('anything') })}>
       {this.renderNameAndDescription()}
       <td className="d-flex">
-        {this.renderUnlimitedCheckbox()}
+        {this.renderBucketFlags()}
         {this.renderLimits()}
       </td>
       {this.renderActions()}

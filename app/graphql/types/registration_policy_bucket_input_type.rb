@@ -9,4 +9,5 @@ Types::RegistrationPolicyBucketInputType = GraphQL::InputObjectType.define do
   input_field :total_slots, types.Int
   input_field :slots_limited, types.Boolean
   input_field :anything, types.Boolean
+  input_field :not_counted, types.Boolean
 end

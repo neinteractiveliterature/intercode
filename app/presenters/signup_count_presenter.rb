@@ -63,14 +63,14 @@ class SignupCountPresenter
   end
 
   def counted_signups_by_state(state)
-    signups_by_state_and_bucket_key[state].values.flatten
+    signups_by_state_and_bucket_key[state].values.flatten.select(&:counted?)
   end
 
   def signups_by_state_and_bucket_key
     @signups_by_state_and_bucket_key ||= begin
       signups_hash = empty_signups_hash
 
-      run.signups.select(&:counted?).each do |signup|
+      run.signups.each do |signup|
         bucket_key = if signup.waitlisted?
           signup.requested_bucket_key
         else

@@ -11,6 +11,7 @@ const defaultProperties = {
   preferredSlots: null,
   slotsLimited: false,
   anything: false,
+  notCounted: false,
 };
 
 const fieldPropTypes = {
@@ -22,6 +23,7 @@ const fieldPropTypes = {
   preferredSlots: PropTypes.number,
   slotsLimited: PropTypes.bool,
   anything: PropTypes.bool,
+  notCounted: PropTypes.bool,
 };
 
 export default class RegistrationPolicyBucket extends Record(defaultProperties) {
@@ -67,6 +69,10 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
       returnRecord = returnRecord.set('anything', json.anything);
     }
 
+    if (json.not_counted !== undefined) {
+      returnRecord = returnRecord.set('notCounted', json.not_counted);
+    }
+
     return returnRecord;
   }
 
@@ -80,6 +86,7 @@ export default class RegistrationPolicyBucket extends Record(defaultProperties) 
       preferred_slots: this.get('preferredSlots'),
       slots_limited: this.get('slotsLimited'),
       anything: this.get('anything'),
+      not_counted: this.get('notCounted'),
     };
   }
 
