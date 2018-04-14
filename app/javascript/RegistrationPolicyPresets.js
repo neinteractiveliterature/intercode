@@ -40,6 +40,7 @@ const presets = [
           name: 'NPC',
           description: 'Non-player characters',
           slots_limited: true,
+          not_counted: true,
         },
       ],
       prevent_no_preference_signups: true,
