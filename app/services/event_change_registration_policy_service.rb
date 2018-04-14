@@ -20,7 +20,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
     lock_all_runs do
       immovable_signups = []
 
-      all_signups = Signup.where.not(state: 'withdrawn').counted
+      all_signups = Signup.where.not(state: 'withdrawn')
         .joins(:run).where(runs: { event_id: event.id }).to_a
 
       signups_by_run_id = all_signups.group_by(&:run_id)
@@ -70,6 +70,11 @@ class EventChangeRegistrationPolicyService < ApplicationService
     new_signups = []
 
     run_signups.each do |signup|
+      if signup.confirmed? && !signup.bucket_key
+        new_signups << signup
+        next
+      end
+
       destination_bucket = SignupBucketFinder.new(
         new_registration_policy,
         signup.requested_bucket_key,
@@ -80,7 +85,9 @@ class EventChangeRegistrationPolicyService < ApplicationService
       if !destination_bucket && signup.confirmed?
         immovable_signups << signup
       elsif destination_bucket.key == signup.bucket_key
-        new_signups << signup
+        new_signup = signup.dup
+        new_signup.assign_attributes(counted: destination_bucket.counted?)
+        new_signups << new_signup
       else
         move_results << SignupMoveResult.new(
           signup.id,
@@ -93,7 +100,8 @@ class EventChangeRegistrationPolicyService < ApplicationService
         new_signup = signup.dup
         new_signup.assign_attributes(
           bucket_key: destination_bucket.key,
-          state: 'confirmed'
+          state: 'confirmed',
+          counted: destination_bucket.counted?
         )
         new_signups << new_signup
       end

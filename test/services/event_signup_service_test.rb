@@ -133,7 +133,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
       )
       another_event = FactoryBot.create(:event, convention: convention)
-      another_run = FactoryBot.create(:run, event: another_event)
+      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
       FactoryBot.create(
         :signup,
         counted: false,
