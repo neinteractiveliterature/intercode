@@ -38,7 +38,7 @@ class SignupBucketFinder
         requested_bucket = registration_policy.bucket_with_key(requested_bucket_key)
         [
           requested_bucket,
-          (requested_bucket.counted? ? registration_policy.anything_bucket : nil)
+          (requested_bucket&.not_counted? ? nil : registration_policy.anything_bucket)
         ].compact
       else
         registration_policy.buckets.select(&:counted?).sort_by { |bucket| bucket.anything? ? 0 : 1 }
