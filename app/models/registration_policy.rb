@@ -25,7 +25,7 @@ class RegistrationPolicy
 
   %i[total_slots minimum_slots preferred_slots].each do |method|
     define_method method do
-      buckets.map(&method).sum
+      buckets.select(&:counted?).map(&method).sum
     end
   end
 
@@ -34,7 +34,7 @@ class RegistrationPolicy
   end
 
   def slots_unlimited?
-    buckets.any?(&:slots_unlimited?)
+    buckets.any? { |bucket| bucket.slots_unlimited? && bucket.counted? }
   end
 
   def slots_limited?

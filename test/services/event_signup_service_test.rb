@@ -133,7 +133,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
       )
       another_event = FactoryBot.create(:event, convention: convention)
-      another_run = FactoryBot.create(:run, event: another_event)
+      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
       FactoryBot.create(
         :signup,
         counted: false,
@@ -426,6 +426,54 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           movable_signup.reload
           movable_signup.bucket_key.must_equal 'cats'
           movable_signup.requested_bucket_key.must_be_nil
+        end
+      end
+    end
+
+    describe 'with not-counted buckets' do
+      let(:event) do
+        FactoryBot.create(
+          :event,
+          registration_policy: {
+            buckets: [
+              { key: 'pc', name: 'PC', slots_limited: true, total_slots: 1 },
+              { key: 'npc', name: 'NPC', slots_limited: true, total_slots: 1, not_counted: true },
+              { key: 'anything', name: 'Flex', slots_limited: true, total_slots: 4, anything: true }
+            ]
+          }
+        )
+      end
+
+      let(:requested_bucket_key) { :npc }
+
+      it 'will sign the user up into that bucket' do
+        result = subject.call
+        result.must_be :success?
+        result.signup.must_be :confirmed?
+        result.signup.wont_be :counted?
+        result.signup.bucket_key.must_equal 'npc'
+        result.signup.requested_bucket_key.must_equal 'npc'
+      end
+
+      it 'will not use anything buckets' do
+        create_other_signup('npc')
+        result = subject.call
+        result.must_be :success?
+        result.signup.must_be :waitlisted?
+        result.signup.bucket_key.must_be_nil
+        result.signup.requested_bucket_key.must_equal 'npc'
+      end
+
+      describe 'no-preference signups' do
+        let(:requested_bucket_key) { nil }
+        it 'will not put no-preference signups into the not-counted bucket' do
+          create_other_signup('pc')
+          4.times { create_other_signup('anything') }
+          result = subject.call
+          result.must_be :success?
+          result.signup.must_be :waitlisted?
+          result.signup.bucket_key.must_be_nil
+          result.signup.requested_bucket_key.must_be_nil
         end
       end
     end

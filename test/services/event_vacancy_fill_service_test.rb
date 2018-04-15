@@ -180,4 +180,53 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     result.must_be :failure?
     result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
   end
+
+  describe 'with not-counted buckets' do
+    let(:event) do
+      FactoryBot.create(
+        :event,
+        registration_policy: {
+          buckets: [
+            { key: 'pc', slots_limited: true, total_slots: 1 },
+            { key: 'npc', slots_limited: true, total_slots: 1, not_counted: true },
+            { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
+          ]
+        }
+      )
+    end
+
+    describe 'drops in the not-counted bucket' do
+      let(:bucket_key) { 'npc' }
+
+      it 'fills drops with people who requested it' do
+        waitlist_signup
+        result = subject.call
+        result.must_be :success?
+
+        result.move_results.size.must_equal 1
+        move_result = result.move_results.first
+        move_result.signup_id.must_equal waitlist_signup.id
+        move_result.prev_state.must_equal 'waitlisted'
+        move_result.prev_bucket_key.must_be_nil
+
+        waitlist_signup.reload.bucket_key.must_equal bucket_key
+      end
+
+      it 'will not fill in drops with no-preference signups' do
+        FactoryBot.create(
+          :signup,
+          user_con_profile: no_pref_user_con_profile,
+          run: the_run,
+          state: 'waitlisted',
+          bucket_key: bucket_key,
+          requested_bucket_key: nil
+        )
+
+        result = subject.call
+        result.must_be :success?
+
+        result.move_results.size.must_equal 0
+      end
+    end
+  end
 end
