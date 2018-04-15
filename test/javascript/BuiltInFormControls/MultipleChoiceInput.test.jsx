@@ -1,14 +1,12 @@
 import React from 'react';
-import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import ChoiceSet from '../../../app/javascript/BuiltInFormControls/ChoiceSet';
 import MultipleChoiceInput from '../../../app/javascript/BuiltInFormControls/MultipleChoiceInput';
 
 describe('MultipleChoiceInput', () => {
-  const onChange = sinon.spy();
   const renderMultipleChoiceInput = props => shallow(<MultipleChoiceInput
     name="pickSomething"
-    onChange={onChange}
+    onChange={() => {}}
     choices={[
       { label: 'a', value: '1' },
       { label: 'b', value: '2' },

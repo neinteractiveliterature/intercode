@@ -1,10 +1,11 @@
 import React from 'react';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
 import ChoiceSet from '../../../app/javascript/BuiltInFormControls/ChoiceSet';
 
 describe('ChoiceSet', () => {
-  const onChange = sinon.spy();
+  const onChange = jest.fn();
+  beforeEach(onChange.mockReset);
+
   const renderChoiceSet = props => mount(<ChoiceSet
     name="pickSomething"
     onChange={onChange}
@@ -34,7 +35,7 @@ describe('ChoiceSet', () => {
   test('it calls onChange when a new value is selected', () => {
     const component = renderChoiceSet();
     component.find('input').filter({ value: '3' }).simulate('change');
-    expect(onChange.calledWith('3')).toBeTruthy();
+    expect(onChange.mock.calls[0][0]).toEqual('3');
   });
 
   describe('multiple', () => {
@@ -51,13 +52,13 @@ describe('ChoiceSet', () => {
     test('it calls onChange when a new value is selected', () => {
       const component = renderChoiceSet({ multiple: true, value: ['1'] });
       component.find('input').filter({ value: '3' }).simulate('change', { target: { checked: true, value: '3' } });
-      expect(onChange.calledWith(['1', '3'])).toBeTruthy();
+      expect(onChange.mock.calls[0][0]).toEqual(['1', '3']);
     });
 
     test('it calls onChange when an old value is deselected', () => {
       const component = renderChoiceSet({ multiple: true, value: ['1'] });
       component.find('input').filter({ value: '1' }).simulate('change', { target: { checked: false, value: '1' } });
-      expect(onChange.calledWith([])).toBeTruthy();
+      expect(onChange.mock.calls[0][0]).toEqual([]);
     });
   });
 });

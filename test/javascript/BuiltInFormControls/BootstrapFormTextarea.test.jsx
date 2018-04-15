@@ -1,10 +1,10 @@
 import React from 'react';
-import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import BootstrapFormTextarea from '../../../app/javascript/BuiltInFormControls/BootstrapFormTextarea';
 
 describe('BootstrapFormTextarea', () => {
-  const onChange = sinon.spy();
+  const onChange = jest.fn();
+  beforeEach(onChange.mockReset);
 
   const component = shallow(<BootstrapFormTextarea
     name="my_checkbox"
@@ -15,6 +15,6 @@ describe('BootstrapFormTextarea', () => {
 
   test('it passes change events', () => {
     component.find('textarea').simulate('change', { value: 'asdf' });
-    expect(onChange.calledWith({ value: 'asdf' })).toBeTruthy();
+    expect(onChange.mock.calls[0][0]).toEqual({ value: 'asdf' });
   });
 });

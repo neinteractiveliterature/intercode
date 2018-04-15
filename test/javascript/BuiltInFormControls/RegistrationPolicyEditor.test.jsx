@@ -1,5 +1,4 @@
 import React from 'react';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
 import { List } from 'immutable';
 import { ConfirmModal } from 'react-bootstrap4-modal';
@@ -10,7 +9,8 @@ import RegistrationPolicyEditor from '../../../app/javascript/BuiltInFormControl
 import RegistrationBucketRow from '../../../app/javascript/BuiltInFormControls/RegistrationBucketRow';
 
 describe('RegistrationPolicyEditor', () => {
-  let onChange;
+  const onChange = jest.fn();
+  beforeEach(onChange.mockReset);
 
   const defaultRegistrationPolicyBucket = {
     key: 'testBucket',
@@ -22,10 +22,6 @@ describe('RegistrationPolicyEditor', () => {
     slotsLimited: true,
     anything: false,
   };
-
-  beforeEach(() => {
-    onChange = sinon.spy();
-  });
 
   const renderRegistrationPolicyEditor = (
     props,
@@ -72,7 +68,7 @@ describe('RegistrationPolicyEditor', () => {
   test('add regular bucket', () => {
     const component = renderRegistrationPolicyEditor();
     component.find('ul button').at(0).simulate('click');
-    const newPolicy = onChange.getCall(0).args[0];
+    const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.size).toEqual(2);
     expect(newPolicy.buckets.map(bucket => bucket.anything).toJS()).toEqual([false, false]);
   });
@@ -80,7 +76,7 @@ describe('RegistrationPolicyEditor', () => {
   test('add flex bucket', () => {
     const component = renderRegistrationPolicyEditor();
     component.find('ul button').at(1).simulate('click');
-    const newPolicy = onChange.getCall(0).args[0];
+    const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.size).toEqual(2);
     expect(newPolicy.buckets.map(bucket => bucket.anything).toJS()).toEqual([false, true]);
   });
@@ -91,7 +87,7 @@ describe('RegistrationPolicyEditor', () => {
     const trashIcon = component.find('i.fa-trash-o').get(0);
     row.find('button').filterWhere(button => button.contains(trashIcon)).simulate('click');
     row.find(ConfirmModal).find('button').at(1).simulate('click');
-    const newPolicy = onChange.getCall(0).args[0];
+    const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.size).toEqual(0);
   });
 
@@ -100,7 +96,7 @@ describe('RegistrationPolicyEditor', () => {
     const row = component.find(RegistrationBucketRow);
     const minimumSlotsInput = row.find('input[type="number"]').at(0);
     minimumSlotsInput.simulate('change', { target: { value: 1 } });
-    const newPolicy = onChange.getCall(0).args[0];
+    const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.get(0).get('minimumSlots')).toEqual(1);
   });
 
@@ -153,7 +149,7 @@ describe('RegistrationPolicyEditor', () => {
     test('switching to a preset', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets });
       component.find('select').simulate('change', { target: { value: preset.name } });
-      const newPolicy = onChange.getCall(0).args[0];
+      const newPolicy = onChange.mock.calls[0][0];
       expect(newPolicy.buckets.map(bucket => bucket.get('name')).toJS()).toEqual(presetBuckets.map(bucket => bucket.name));
     });
   });
