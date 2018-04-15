@@ -1,21 +1,18 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import sinon from 'sinon';
-import moment from 'moment';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueTimespanRow from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
-import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRowDatepicker';
 
 describe('ScheduledValueTimespanRow', () => {
-  let attributeDidChange;
-  let deleteClicked;
+  const attributeDidChange = jest.fn();
+  const deleteClicked = jest.fn();
 
   const timespanStart = '2017-01-01T00:00:00Z';
   const timespanFinish = '2017-01-02T00:00:00Z';
 
   beforeEach(() => {
-    attributeDidChange = sinon.spy();
-    deleteClicked = sinon.spy();
+    attributeDidChange.mockReset();
+    deleteClicked.mockReset();
   });
 
   const renderScheduledValueTimespanRow = (props, timespanProps) => {
@@ -53,33 +50,7 @@ describe('ScheduledValueTimespanRow', () => {
   test('changing value', () => {
     const component = renderScheduledValueTimespanRow();
     component.find('input.testInput').simulate('change', { target: { value: 'newvalue' } });
-    expect(attributeDidChange.getCall(0).args).toEqual([42, 'value', 'newvalue']);
-  });
-
-  test.skip('overlap checking', () => {
-    const otherTimespans = [
-      {
-        start: timespanFinish,
-        finish: '2017-01-03T00:00:00Z',
-        value: 'afteryou',
-      },
-    ];
-    const component = renderScheduledValueTimespanRow({ otherTimespans });
-    expect(component.find('Datetime').at(1).prop('isValidDate')(moment(otherTimespans[0].finish))).toBeFalsy();
-  });
-
-  test.skip('range orientation checking', () => {
-    const onlyStartSet = renderScheduledValueTimespanRow({}, {
-      start: timespanFinish,
-      finish: null,
-    });
-    const onlyFinishSet = renderScheduledValueTimespanRow({}, {
-      start: null,
-      finish: timespanStart,
-    });
-
-    expect(onlyStartSet.find('Datetime').at(1).prop('isValidDate')(moment(timespanStart))).toBeFalsy();
-    expect(onlyFinishSet.find('Datetime').at(0).prop('isValidDate')(moment(timespanFinish))).toBeFalsy();
+    expect(attributeDidChange).toHaveBeenCalledWith(42, 'value', 'newvalue');
   });
 
   describe('isValid', () => {

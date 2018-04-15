@@ -1,14 +1,13 @@
 import React from 'react';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
 import PaymentEntry from '../../../app/javascript/BuiltInFormControls/PaymentEntry';
 
 describe('PaymentEntry', () => {
   const FIELDS = ['ccNumber', 'expMonth', 'expYear', 'cvc', 'zip'];
-  let callbacks;
+  const callbacks = Object.assign({}, ...FIELDS.map(field => ({ [field]: jest.fn() })));
 
   beforeEach(() => {
-    callbacks = Object.assign({}, ...FIELDS.map(field => ({ [field]: sinon.spy() })));
+    Object.values(callbacks).forEach(callback => callback.mockReset);
   });
 
   const renderPaymentEntry = props => mount(<PaymentEntry
@@ -46,7 +45,8 @@ describe('PaymentEntry', () => {
     test(`${field} change callback`, () => {
       const component = renderPaymentEntry();
       component.find(`input[name="${field}"]`).simulate('change', { target: { value: '123' } });
-      expect(callbacks[field].getCall(0).args[0].target.value).toEqual('123');
+      expect(callbacks[field]).toHaveBeenCalledTimes(1);
+      expect(callbacks[field].mock.calls[0][0].target.value).toEqual('123');
     });
   });
 

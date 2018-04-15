@@ -1,11 +1,10 @@
 import React from 'react';
-import sinon from 'sinon';
 import { mount } from 'enzyme';
 import InPlaceEditor from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
 
 describe('InPlaceEditor', () => {
-  let onChange;
-  beforeEach(() => { onChange = sinon.spy(); });
+  const onChange = jest.fn();
+  beforeEach(onChange.mockReset);
 
   const renderEditor = props => mount(<InPlaceEditor
     value="someValue"
@@ -37,7 +36,8 @@ describe('InPlaceEditor', () => {
     component.find('button').simulate('click');
     component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
     component.find('button.btn-primary').simulate('click');
-    expect(onChange.calledWith('someOtherValue')).toBeTruthy();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('someOtherValue');
   });
 
   test('reverting the changes works', () => {
@@ -45,7 +45,7 @@ describe('InPlaceEditor', () => {
     component.find('button').simulate('click');
     component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
     component.find('button.btn-secondary').simulate('click');
-    expect(onChange.calledOnce).toBeFalsy();
+    expect(onChange).not.toHaveBeenCalled();
     expect(component.find('input').length).toEqual(0);
   });
 
@@ -54,7 +54,8 @@ describe('InPlaceEditor', () => {
     component.find('button').simulate('click');
     component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
     component.find('input').simulate('keyDown', { key: 'Enter' });
-    expect(onChange.calledWith('someOtherValue')).toBeTruthy();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('someOtherValue');
   });
 
   test('pressing escape reverts the changes', () => {
@@ -62,7 +63,7 @@ describe('InPlaceEditor', () => {
     component.find('button').simulate('click');
     component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
     component.find('input').simulate('keyDown', { key: 'Escape' });
-    expect(onChange.calledOnce).toBeFalsy();
+    expect(onChange).not.toHaveBeenCalled();
     expect(component.find('input').length).toEqual(0);
   });
 });

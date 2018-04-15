@@ -1,11 +1,11 @@
 import React from 'react';
-import sinon from 'sinon';
 import moment from 'moment';
 import { mount } from 'enzyme';
 import ConventionDaySelect from '../../../app/javascript/BuiltInFormControls/ConventionDaySelect';
 
 describe('ConventionDaySelect', () => {
-  const onChange = sinon.spy();
+  const onChange = jest.fn();
+  beforeEach(onChange.mockReset);
 
   const renderConventionDaySelect = props => mount(<ConventionDaySelect
     convention={{
@@ -36,7 +36,7 @@ describe('ConventionDaySelect', () => {
   test('it calls onChange when a value is selected', () => {
     const component = renderConventionDaySelect();
     component.find('input').filter({ value: '2017-01-03T00:00:00.000Z' }).simulate('change');
-    expect(onChange.calledOnce).toBeTruthy();
-    expect(onChange.getCall(0).args[0].date()).toEqual(3);
+    expect(onChange.mock.calls).toHaveLength(1);
+    expect(onChange.mock.calls[0][0].date()).toEqual(3);
   });
 });

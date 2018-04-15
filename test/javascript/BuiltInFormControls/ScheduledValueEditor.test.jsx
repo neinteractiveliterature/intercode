@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import sinon from 'sinon';
 import moment from 'moment';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueEditor from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
@@ -33,19 +32,19 @@ describe('ScheduledValueEditor', () => {
   });
 
   test('adding a row', () => {
-    const setScheduledValue = sinon.spy();
+    const setScheduledValue = jest.fn();
     const component = renderScheduledValueEditor({ setScheduledValue });
     const button = component.find('button').filterWhere(b => b.text() === 'Add row');
     button.simulate('click');
-    expect(setScheduledValue.getCall(0).args).toEqual([{
+    expect(setScheduledValue).toHaveBeenCalledWith({
       timespans: [
         { value: null, start: null, finish: null },
       ],
-    }]);
+    });
   });
 
   test('deleting a row', () => {
-    const setScheduledValue = sinon.spy();
+    const setScheduledValue = jest.fn();
     const component = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
@@ -55,13 +54,11 @@ describe('ScheduledValueEditor', () => {
       setScheduledValue,
     });
     component.find('.btn-danger').simulate('click');
-    expect(setScheduledValue.getCall(0).args).toEqual([{
-      timespans: [],
-    }]);
+    expect(setScheduledValue).toHaveBeenCalledWith({ timespans: [] });
   });
 
   test('changing something in a row', () => {
-    const setScheduledValue = sinon.spy();
+    const setScheduledValue = jest.fn();
     const component = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
@@ -71,11 +68,11 @@ describe('ScheduledValueEditor', () => {
       setScheduledValue,
     });
     component.find('input.testInput').simulate('change', { target: { value: 'something else' } });
-    expect(setScheduledValue.getCall(0).args).toEqual([{
+    expect(setScheduledValue).toHaveBeenCalledWith({
       timespans: [
         { value: 'something else', start: null, finish: null },
       ],
-    }]);
+    });
   });
 
   describe('isValid', () => {

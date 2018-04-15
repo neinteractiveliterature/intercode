@@ -1,13 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import sinon from 'sinon';
 import CreditCardNumberInput from '../../../app/javascript/BuiltInFormControls/CreditCardNumberInput';
 
 describe('CreditCardNumberInput', () => {
-  const onChange = sinon.spy();
   const renderCreditCardNumberInput = props => mount(<CreditCardNumberInput
     id="ccNumber"
-    onChange={onChange}
+    onChange={() => {}}
     {...props}
   />);
 

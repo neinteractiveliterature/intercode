@@ -1,16 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import moment from 'moment';
-import sinon from 'sinon';
 import DateTimeInput from '../../../app/javascript/BuiltInFormControls/DateTimeInput';
 import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRowDatepicker';
 
 describe('ScheduledValueTimespanRowDatepicker', () => {
-  let onChange;
-
-  beforeEach(() => {
-    onChange = sinon.spy();
-  });
+  const onChange = jest.fn();
+  beforeEach(onChange.mockReset);
 
   const renderScheduledValueTimespanRowDatepicker = props =>
     (shallow(<ScheduledValueTimespanRowDatepicker
@@ -32,6 +28,6 @@ describe('ScheduledValueTimespanRowDatepicker', () => {
     const newValue = moment().toISOString();
     const component = renderScheduledValueTimespanRowDatepicker();
     component.find(DateTimeInput).prop('onChange')(newValue);
-    expect(onChange.getCall(0).args).toEqual(['nonsense', newValue]);
+    expect(onChange).toHaveBeenCalledWith('nonsense', newValue);
   });
 });

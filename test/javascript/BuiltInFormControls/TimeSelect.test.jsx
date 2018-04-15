@@ -1,5 +1,4 @@
 import React from 'react';
-import sinon from 'sinon';
 import moment from 'moment-timezone';
 import { shallow } from 'enzyme';
 import TimeSelect from '../../../app/javascript/BuiltInFormControls/TimeSelect';
@@ -51,19 +50,19 @@ describe('TimeSelect', () => {
 
   describe('onChange', () => {
     test('it changes a field', () => {
-      const onChange = sinon.spy();
+      const onChange = jest.fn();
       const component = renderTimeSelect({ onChange });
       const hourSelect = component.find('select').at(0);
       hourSelect.simulate('change', { target: { value: '3', name: hourSelect.prop('name') } });
-      expect(onChange.getCall(0).args).toEqual([{ hour: 3 }]);
+      expect(onChange).toHaveBeenCalledWith({ hour: 3 });
     });
 
     test('it clears a field', () => {
-      const onChange = sinon.spy();
+      const onChange = jest.fn();
       const component = renderTimeSelect({ value: { hour: 3, minute: 45 }, onChange });
       const hourSelect = component.find('select').at(0);
       hourSelect.simulate('change', { target: { value: '', name: hourSelect.prop('name') } });
-      expect(onChange.getCall(0).args).toEqual([{ hour: null, minute: 45 }]);
+      expect(onChange).toHaveBeenCalledWith({ hour: null, minute: 45 });
     });
   });
 });

@@ -1,10 +1,9 @@
 import React from 'react';
-import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 
 describe('BootstrapFormCheckbox', () => {
-  const onChange = sinon.spy();
+  const onChange = jest.fn();
 
   const component = shallow(<BootstrapFormCheckbox
     name="my_checkbox"
@@ -13,9 +12,11 @@ describe('BootstrapFormCheckbox', () => {
     onChange={onChange}
   />);
 
+  beforeEach(onChange.mockReset);
+
   test('it passes change events', () => {
     component.find('input').simulate('change', { checked: true });
-    expect(onChange.calledWith({ checked: true })).toBeTruthy();
+    expect(onChange.mock.calls[0][0]).toEqual({ checked: true });
   });
 
   test('it defaults to rendering as a checkbox', () => {
