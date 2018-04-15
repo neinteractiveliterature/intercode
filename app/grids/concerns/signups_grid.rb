@@ -22,7 +22,11 @@ module Concerns::SignupsGrid
             "#{bucket_name} (no preference)"
           end
         else
-          'Not counted'
+          if signup.bucket
+            "#{signup.bucket.name} (not counted)"
+          else
+            'Not counted'
+          end
         end
       end
     end

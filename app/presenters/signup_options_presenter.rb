@@ -28,6 +28,10 @@ class SignupOptionsPresenter
     def team_member?
       false
     end
+
+    def counted?
+      bucket.counted?
+    end
   end
 
   class NoPreferenceSignupOption
@@ -53,6 +57,10 @@ class SignupOptionsPresenter
 
     def team_member?
       false
+    end
+
+    def counted?
+      true # no preference signups only go to counted buckets
     end
   end
 
@@ -85,6 +93,10 @@ class SignupOptionsPresenter
 
     def team_member?
       true
+    end
+
+    def counted?
+      false
     end
   end
 
@@ -134,12 +146,16 @@ class SignupOptionsPresenter
     @no_preference_options ||= begin
       if !event.registration_policy.allow_no_preference_signups?
         []
-      elsif buckets.reject(&:slots_unlimited?).size <= 1
+      elsif buckets.reject(&:slots_unlimited?).select(&:counted?).size <= 1
         []
       else
         [NoPreferenceSignupOption.new]
       end
     end
+  end
+
+  def not_counted_options
+    @not_counted_options ||= signup_options_for_event.reject(&:counted?)
   end
 
   private
@@ -152,9 +168,9 @@ class SignupOptionsPresenter
 
   def main_option?(option)
     return false if option.bucket&.anything?
-    return true if no_preference_options.none?
+    return true if no_preference_options.none? && not_counted_options.none?
 
-    option.no_preference? || option.bucket&.slots_limited?
+    option.no_preference? || (option.bucket&.slots_limited? && option.counted?)
   end
 
   def signup_options_for_event

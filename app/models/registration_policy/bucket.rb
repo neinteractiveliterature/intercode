@@ -4,9 +4,10 @@ class RegistrationPolicy::Bucket
 
   attr_reader :key
   attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots,
-    :slots_limited, :anything
+    :slots_limited, :anything, :not_counted
   alias slots_limited? slots_limited
   alias anything? anything
+  alias not_counted? not_counted
 
   def self.normalize_key(key)
     key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
@@ -24,6 +25,10 @@ class RegistrationPolicy::Bucket
 
   def slots_unlimited?
     !slots_limited?
+  end
+
+  def counted?
+    !not_counted?
   end
 
   def key=(key)
@@ -57,7 +62,8 @@ class RegistrationPolicy::Bucket
       minimum_slots: minimum_slots,
       preferred_slots: preferred_slots,
       slots_limited: slots_limited,
-      anything: anything
+      anything: anything,
+      not_counted: not_counted
     }
   end
 
