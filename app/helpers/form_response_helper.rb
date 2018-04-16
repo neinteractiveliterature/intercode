@@ -23,7 +23,11 @@ module FormResponseHelper
     end
   end
 
-  def describe_bucket(bucket)
+  def describe_bucket_name(bucket)
+    "#{bucket.name}#{bucket.not_counted? ? ' (not counted)' : ''}:"
+  end
+
+  def describe_bucket_capacity(bucket)
     if bucket.slots_limited?
       "#{bucket.minimum_slots} / #{bucket.preferred_slots} / #{bucket.total_slots}"
     else
@@ -70,9 +74,9 @@ module FormResponseHelper
         value.buckets.map do |bucket|
           content_tag(:li) do
             safe_join([
-              content_tag(:strong, "#{bucket.name}:"),
+              content_tag(:strong, describe_bucket_name(bucket)),
               ' ',
-              describe_bucket(bucket)
+              describe_bucket_capacity(bucket)
             ])
           end
         end + [
