@@ -1,4 +1,4 @@
-IntercodeSchema = GraphQL::Schema.define do
+class IntercodeSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
 
@@ -22,5 +22,5 @@ IntercodeSchema = GraphQL::Schema.define do
   better_rescue_middleware.rescue_from GraphQL::Guard::NotAuthorizedError do |err|
     "Unauthorized access: #{err.message}"
   end
-  middleware better_rescue_middleware
+  middleware << better_rescue_middleware
 end

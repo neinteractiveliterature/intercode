@@ -54,7 +54,7 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
 # GraphQL server
-gem 'graphql'
+gem 'graphql', '1.8.0.pre10'
 gem 'graphql-guard'
 gem 'graphql-batch'
 gem 'apollo_upload_server', '2.0.0.alpha.5'
@@ -107,6 +107,8 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-shoryuken'
   gem 'capistrano-maintenance', require: false
+
+  gem 'parser' # temp for graphql upgrade
 end
 
 group :development, :test do

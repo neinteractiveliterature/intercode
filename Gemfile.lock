@@ -109,6 +109,7 @@ GEM
       graphql (~> 1.7)
       rails (~> 5.0)
     arel (9.0.0)
+    ast (2.4.0)
     autoprefixer-rails (8.3.0)
       execjs
     aws-partitions (1.72.0)
@@ -216,7 +217,7 @@ GEM
     graphiql-rails (1.4.10)
       railties
       sprockets-rails
-    graphql (1.7.14)
+    graphql (1.8.0.pre10)
     graphql-batch (0.3.9)
       graphql (>= 0.8, < 2)
       promise.rb (~> 0.7.2)
@@ -296,6 +297,8 @@ GEM
     oj (3.5.1)
     orm_adapter (0.5.0)
     parallel (1.12.1)
+    parser (2.4.0.2)
+      ast (~> 2.3)
     pg (0.21.0)
     promise.rb (0.7.4)
     pry (0.10.4)
@@ -480,7 +483,7 @@ DEPENDENCIES
   flamegraph
   fog-aws
   graphiql-rails
-  graphql
+  graphql (= 1.8.0.pre10)
   graphql-batch
   graphql-guard
   haml
@@ -496,6 +499,7 @@ DEPENDENCIES
   mysql2 (~> 0.5.1)
   oj (~> 3.5.1)
   parallel
+  parser
   pg
   pry-rails
   pry-remote
