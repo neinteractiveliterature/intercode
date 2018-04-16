@@ -82,7 +82,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source map upload support
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.5.0'
+gem 'oj', '~> 3.5.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
