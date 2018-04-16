@@ -1,13 +1,12 @@
-Types::OrdersPaginationType = GraphQL::ObjectType.define do
-  name 'OrdersPagination'
+class Types::OrdersPaginationType < Types::BaseObject
 
-  field :total_entries, !types.Int
-  field :total_pages, !types.Int
-  field :current_page, !types.Int
-  field :per_page, !types.Int
-  field :entries, !types[Types::OrderType] do
-    resolve ->(obj, _args, _ctx) do
-      obj.to_a
-    end
+  field :total_entries, Integer, null: false
+  field :total_pages, Integer, null: false
+  field :current_page, Integer, null: false
+  field :per_page, Integer, null: false
+  field :entries, [Types::OrderType, null: true], null: false
+
+  def entries
+    @object.to_a
   end
 end

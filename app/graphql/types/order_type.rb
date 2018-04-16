@@ -1,21 +1,22 @@
-Types::OrderType = GraphQL::ObjectType.define do
-  name 'Order'
-  field :id, types.Int
-  field :user_con_profile, !Types::UserConProfileType do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(Order, :user_con_profile).load(obj)
-    }
+class Types::OrderType < Types::BaseObject
+  field :id, Integer, null: true
+  field :user_con_profile, Types::UserConProfileType, null: false
+
+  field :status, String, null: false
+  field :total_price, Types::MoneyType, null: false
+  field :payment_amount, Types::MoneyType, null: true
+  field :payment_note, String, null: true
+  field :charge_id, String, null: true
+  field :order_entries, [Types::OrderEntryType, null: true], null: false
+
+  field :submitted_at, Types::DateType, null: true
+  field :paid_at, Types::DateType, null: true
+
+  def user_con_profile
+    AssociationLoader.for(Order, :user_con_profile).load(@object)
   end
-  field :status, !types.String
-  field :total_price, !Types::MoneyType
-  field :payment_amount, Types::MoneyType
-  field :payment_note, types.String
-  field :charge_id, types.String
-  field :order_entries, !types[Types::OrderEntryType] do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(Order, :order_entries).load(obj)
-    }
+
+  def order_entries
+    AssociationLoader.for(Order, :order_entries).load(@object)
   end
-  field :submitted_at, Types::DateType
-  field :paid_at, Types::DateType
 end

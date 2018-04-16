@@ -1,5 +1,4 @@
-Types::ShowScheduleType = GraphQL::EnumType.define do
-  name 'ShowSchedule'
+class Types::ShowScheduleType < Types::BaseEnum
 
   value('no')
   value('priv')

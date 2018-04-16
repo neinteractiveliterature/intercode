@@ -1,21 +1,20 @@
-Types::TeamMemberType = GraphQL::ObjectType.define do
-  name 'TeamMember'
+class Types::TeamMemberType < Types::BaseObject
 
-  field :id, !types.Int
-  field :display, !types.Boolean
-  field :show_email, !types.Boolean
-  field :receive_con_email, !types.Boolean
-  field :receive_signup_email, !types.Boolean
+  field :id, Integer, null: false
+  field :display, Boolean, null: false
+  field :show_email, Boolean, null: false
+  field :receive_con_email, Boolean, null: false
+  field :receive_signup_email, Boolean, null: false
 
-  field :event, !Types::EventType do
-    resolve ->(obj, _args, _ctx) {
-      RecordLoader.for(Event).load(obj.event_id)
-    }
+  field :event, Types::EventType, null: false
+
+  def event
+    RecordLoader.for(Event).load(@object.event_id)
   end
 
-  field :user_con_profile, !Types::UserConProfileType do
-    resolve ->(obj, _args, _ctx) {
-      RecordLoader.for(UserConProfile).load(obj.user_con_profile_id)
-    }
+  field :user_con_profile, Types::UserConProfileType, null: false
+
+  def user_con_profile
+    RecordLoader.for(UserConProfile).load(@object.user_con_profile_id)
   end
 end

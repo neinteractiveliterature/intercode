@@ -1,26 +1,27 @@
-Types::AbilityType = GraphQL::ObjectType.define do
-  name 'Ability'
+class Types::AbilityType < Types::BaseObject
 
-  field :can_override_maximum_event_provided_tickets, !types.Boolean do
-    resolve -> (obj, _args, ctx) {
-      override = TicketType.new(convention: ctx[:convention])
-        .maximum_event_provided_tickets_overrides
-        .new
-      obj.can?(:create, override)
-    }
+  field :can_override_maximum_event_provided_tickets, Boolean, null: false
+
+  def can_override_maximum_event_provided_tickets
+    override = TicketType.new(convention: @context[:convention])
+      .maximum_event_provided_tickets_overrides
+      .new
+    @object.can?(:create, override)
   end
 
-  field :can_update_event, !types.Boolean do
-    argument :event_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Event).load([obj, :update, args[:event_id]])
-    end
+  field :can_update_event, Boolean, null: false do
+    argument :event_id, Integer, required: true
   end
 
-  field :can_delete_event, !types.Boolean do
-    argument :event_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Event).load([obj, :delete, args[:event_id]])
-    end
+  def can_update_event(**args)
+    ModelPermissionLoader.for(Event).load([@object, :update, args[:event_id]])
+  end
+
+  field :can_delete_event, Boolean, null: false do
+    argument :event_id, Integer, required: true
+  end
+
+  def can_delete_event(**args)
+    ModelPermissionLoader.for(Event).load([@object, :delete, args[:event_id]])
   end
 end

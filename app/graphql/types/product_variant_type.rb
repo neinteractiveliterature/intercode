@@ -1,30 +1,29 @@
-Types::ProductVariantType = GraphQL::ObjectType.define do
-  name 'ProductVariant'
-  field :id, types.Int
-  field :product, !Types::ProductType do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(ProductVariant, :product).load(obj)
-    }
-  end
-  field :name, !types.String
-  field :description, types.String
-  field :description_html, types.String do
-    resolve -> (obj, _args, ctx) {
-      return unless obj.description
-      ctx[:cadmus_renderer].render(obj.description, :html)
-    }
-  end
-  field :image_url, types.String do
-    resolve -> (obj, _args, _ctx) {
-      obj.image&.url
-    }
-  end
-  field :override_price, Types::MoneyType
-  field :position, types.Int
+class Types::ProductVariantType < Types::BaseObject
+  field :id, Integer, null: true
+  field :product, Types::ProductType, null: false
 
-  field :order_quantities_by_status, !types[Types::OrderQuantityByStatusType] do
-    resolve -> (obj, _args, _ctx) {
-      OrderQuantityByStatusLoader.for(ProductVariant).load(obj)
-    }
+  def product
+    AssociationLoader.for(ProductVariant, :product).load(@object)
+  end
+  field :name, String, null: false
+  field :description, String, null: true
+  field :description_html, String, null: true
+
+  def description_html
+    return unless @object.description
+    @context[:cadmus_renderer].render(@object.description, :html)
+  end
+  field :image_url, String, null: true
+
+  def image_url
+    @object.image&.url
+  end
+  field :override_price, Types::MoneyType, null: true
+  field :position, Integer, null: true
+
+  field :order_quantities_by_status, [Types::OrderQuantityByStatusType, null: true], null: false
+
+  def order_quantities_by_status
+    OrderQuantityByStatusLoader.for(ProductVariant).load(@object)
   end
 end

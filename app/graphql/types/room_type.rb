@@ -1,10 +1,9 @@
-Types::RoomType = GraphQL::ObjectType.define do
-  name 'Room'
-  field :id, types.Int
-  field :runs, types[Types::RunType] do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(Room, :runs).load(obj)
-    }
+class Types::RoomType < Types::BaseObject
+  field :id, Integer, null: true
+  field :runs, [Types::RunType, null: true], null: true
+
+  def runs
+    AssociationLoader.for(Room, :runs).load(@object)
   end
-  field :name, types.String
+  field :name, String, null: true
 end

@@ -1,23 +1,22 @@
-Types::OrderEntryType = GraphQL::ObjectType.define do
-  name 'OrderEntry'
-  field :id, types.Int
-  field :order, !Types::OrderType do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(OrderEntry, :order).load(obj)
-    }
+class Types::OrderEntryType < Types::BaseObject
+  field :id, Integer, null: true
+  field :order, Types::OrderType, null: false
+
+  def order
+    AssociationLoader.for(OrderEntry, :order).load(@object)
   end
-  field :product, !Types::ProductType do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(OrderEntry, :product).load(obj)
-    }
+  field :product, Types::ProductType, null: false
+
+  def product
+    AssociationLoader.for(OrderEntry, :product).load(@object)
   end
-  field :product_variant, !Types::ProductVariantType do
-    resolve ->(obj, _args, _ctx) {
-      AssociationLoader.for(OrderEntry, :product_variant).load(obj)
-    }
+  field :product_variant, Types::ProductVariantType, null: false
+
+  def product_variant
+    AssociationLoader.for(OrderEntry, :product_variant).load(@object)
   end
-  field :quantity, !types.Int
-  field :price_per_item, !Types::MoneyType
-  field :price, !Types::MoneyType
-  field :describe_products, !types.String
+  field :quantity, Integer, null: false
+  field :price_per_item, Types::MoneyType, null: false
+  field :price, Types::MoneyType, null: false
+  field :describe_products, String, null: false
 end

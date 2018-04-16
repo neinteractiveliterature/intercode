@@ -1,7 +1,9 @@
 Types::OrdersConnectionType = Types::OrderType.define_connection do
   name 'OrdersConnection'
 
-  field :totalCount, !types.Int do
-    resolve ->(obj, _args, _ctx) { obj.nodes.count }
+  field :total_count, Integer, null: false
+
+  def total_count
+    @object.nodes.count
   end
 end

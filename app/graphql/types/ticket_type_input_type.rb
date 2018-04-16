@@ -1,11 +1,10 @@
-Types::TicketTypeInputType = GraphQL::InputObjectType.define do
-  name 'TicketTypeInput'
+class Types::TicketTypeInputType < Types::BaseInputObject
 
-  input_field :name, types.String
-  input_field :publicly_available, types.Boolean
-  input_field :maximum_event_provided_tickets, types.Int
-  input_field :counts_towards_convention_maximum, types.Boolean
-  input_field :allows_event_signups, types.Boolean
-  input_field :description, types.String
-  input_field :pricing_schedule, Types::ScheduledMoneyValueInputType
+  argument :name, String, required: false
+  argument :publicly_available, Boolean, required: false
+  argument :maximum_event_provided_tickets, Integer, required: false
+  argument :counts_towards_convention_maximum, Boolean, required: false
+  argument :allows_event_signups, Boolean, required: false
+  argument :description, String, required: false
+  argument :pricing_schedule, Types::ScheduledMoneyValueInputType, required: false
 end

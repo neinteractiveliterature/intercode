@@ -1,5 +1,4 @@
-Types::ScheduledMoneyValueType = GraphQL::ObjectType.define do
-  name 'ScheduledMoneyValue'
+class Types::ScheduledMoneyValueType < Types::BaseObject
 
-  field :timespans, !types[!Types::TimespanWithMoneyValueType]
+  field :timespans, [Types::TimespanWithMoneyValueType], null: false
 end

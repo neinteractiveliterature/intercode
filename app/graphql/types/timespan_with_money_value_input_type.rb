@@ -1,7 +1,6 @@
-Types::TimespanWithMoneyValueInputType = GraphQL::InputObjectType.define do
-  name 'TimespanWithMoneyValueInput'
+class Types::TimespanWithMoneyValueInputType < Types::BaseInputObject
 
-  input_field :start, Types::DateType
-  input_field :finish, Types::DateType
-  input_field :value, !Types::MoneyInputType
+  argument :start, Types::DateType, required: false
+  argument :finish, Types::DateType, required: false
+  argument :value, Types::MoneyInputType, required: true
 end

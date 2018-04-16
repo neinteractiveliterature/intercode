@@ -1,47 +1,40 @@
-Types::EventType = GraphQL::ObjectType.define do
-  name 'Event'
+class Types::EventType < Types::BaseObject
+  field :id, Integer, null: false
 
-  field :id, !types.Int
-  field :form_response_attrs_json, types.String do
-    resolve -> (obj, _args, ctx) do
-      FormResponsePresenter.new(
-        ctx[:convention].form_for_event_category(obj.category),
-        obj
-      ).as_json.to_json
-    end
-  end
+  field :title, String, null: true
+  field :author, String, null: true
+  field :email, String, null: true
+  field :organization, String, null: true
+  field :category, String, null: true
+  field :url, String, null: true
+  field :participant_communications, String, null: true
+  field :age_restrictions, String, null: true
+  field :content_warnings, String, null: true
+  field :length_seconds, Integer, null: true
+  field :can_play_concurrently, Boolean, null: true
+  field :con_mail_destination, String, null: true
+  field :description, String, null: true
+  field :short_blurb, String, null: true
+  field :status, String, null: true
 
-  field :title, types.String
-  field :author, types.String
-  field :email, types.String
-  field :organization, types.String
-  field :category, types.String
-  field :url, types.String
-  field :participant_communications, types.String
-  field :age_restrictions, types.String
-  field :content_warnings, types.String
-  field :length_seconds, types.Int
-  field :can_play_concurrently, types.Boolean
-  field :con_mail_destination, types.String
-  field :description, types.String
-  field :short_blurb, types.String
-  field :status, types.String
-  field :runs, !types[!Types::RunType] do
-    guard -> (event, _args, ctx) do
+  field :runs, [Types::RunType],
+    null: false,
+    guard: -> (event, _args, ctx) do
       ctx[:current_ability].can?(:read, Run.new(event: event))
     end
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(Event, :runs).load(obj)
-    end
+  def runs
+    AssociationLoader.for(Event, :runs).load(@object)
   end
-  field :team_members, !types[!Types::TeamMemberType] do
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(Event, :team_members).load(obj)
-    }
+
+  field :team_members, [Types::TeamMemberType], null: false
+  def team_members
+    AssociationLoader.for(Event, :team_members).load(@object)
   end
-  field :team_member_name, !types.String
-  field :provided_tickets, !types[!Types::TicketType] do
-    guard -> (event, _args, ctx) do
+
+  field :team_member_name, String, null: false
+  field :provided_tickets, [Types::TicketType],
+    null: false,
+    guard: -> (event, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
         Ticket.new(
@@ -50,44 +43,46 @@ Types::EventType = GraphQL::ObjectType.define do
         )
       )
     end
-  end
-  field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
-  override_type = Types::MaximumEventProvidedTicketsOverrideType
-  field :maximum_event_provided_tickets_overrides, !types[!override_type] do
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(obj)
-    }
+
+  field :can_provide_tickets, Boolean, null: false, property: :can_provide_tickets?
+  field :maximum_event_provided_tickets_overrides, [Types::MaximumEventProvidedTicketsOverrideType],
+    null: false
+  def maximum_event_provided_tickets_overrides
+    AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(@object)
   end
 
   field :registration_policy, Types::RegistrationPolicyType
 
-  field :slots_limited, types.Boolean do
-    resolve -> (obj, _args, _ctx) {
-      obj.registration_policy.slots_limited?
-    }
+  field :slots_limited, Boolean, null: false
+  def slots_limited
+    @object.registration_policy.slots_limited?
   end
 
-  field :total_slots, types.Int do
-    resolve -> (obj, _args, _ctx) {
-      obj.registration_policy.total_slots
-    }
+  field :total_slots, Integer, null: true
+  def total_slots
+    @object.registration_policy.total_slots
   end
 
-  field :short_blurb_html, types.String do
-    resolve ->(obj, _args, _ctx) {
-      MarkdownPresenter.new('No blurb provided').render obj.short_blurb
-    }
+  field :short_blurb_html, String, null: true
+  def short_blurb_html
+    MarkdownPresenter.new('No blurb provided').render @object.short_blurb
   end
 
-  field :description_html, types.String do
-    resolve ->(obj, _args, _ctx) {
-      MarkdownPresenter.new('No description provided').render obj.description
-    }
+  field :description_html, String, null: true
+  def description_html
+    MarkdownPresenter.new('No description provided').render @object.description
   end
 
-  field :event_page_url, types.String do
-    resolve ->(obj, _args, _ctx) {
-      Rails.application.routes.url_helpers.event_path(obj)
-    }
+  field :event_page_url, String, null: false
+  def event_page_url
+    Rails.application.routes.url_helpers.event_path(@object)
+  end
+
+  field :form_response_attrs_json, String, null: false
+  def form_response_attrs_json
+    FormResponsePresenter.new(
+      @context[:convention].form_for_event_category(@object.category),
+      @object
+    ).as_json.to_json
   end
 end

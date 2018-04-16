@@ -1,4 +1,3 @@
-Types::RoomInputType = GraphQL::InputObjectType.define do
-  name 'RoomInput'
-  input_field :name, types.String
+class Types::RoomInputType < Types::BaseInputObject
+  argument :name, String, required: false
 end

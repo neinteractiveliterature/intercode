@@ -1,7 +1,10 @@
-Types::DateType = GraphQL::ScalarType.define do
-  name 'Date'
+class Types::DateType < Types::BaseScalar
   description 'Date in ISO8601 format'
 
-  coerce_input ->(value, _ctx) { DateTime.iso8601(value) }
-  coerce_result ->(value, _ctx) { value.iso8601 }
+  def self.coerce_input(value, _ctx)
+    DateTime.iso8601(value)
+  end
+  def self.coerce_result(value, _ctx)
+    value.iso8601
+  end
 end

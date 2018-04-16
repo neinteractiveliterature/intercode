@@ -1,20 +1,19 @@
-Types::SignupType = GraphQL::ObjectType.define do
-  name 'Signup'
+class Types::SignupType < Types::BaseObject
 
-  field :state, Types::SignupStateType
-  field :counted, types.Boolean
-  field :bucket_key, types.String
-  field :requested_bucket_key, types.String
+  field :state, Types::SignupStateType, null: true
+  field :counted, Boolean, null: true
+  field :bucket_key, String, null: true
+  field :requested_bucket_key, String, null: true
 
-  field :run, Types::RunType do
-    resolve ->(obj, _args, _ctx) {
-      RecordLoader.for(Run).load(obj.run_id)
-    }
+  field :run, Types::RunType, null: true
+
+  def run
+    RecordLoader.for(Run).load(@object.run_id)
   end
 
-  field :user_con_profile, Types::UserConProfileType do
-    resolve ->(obj, _args, _ctx) {
-      RecordLoader.for(UserConProfile).load(obj.user_con_profile_id)
-    }
+  field :user_con_profile, Types::UserConProfileType, null: true
+
+  def user_con_profile
+    RecordLoader.for(UserConProfile).load(@object.user_con_profile_id)
   end
 end
