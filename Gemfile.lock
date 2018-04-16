@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/CanCanCommunity/cancancan.git
-  revision: bba63bb269cd935e21d70b8b7c2dbedd2cae52de
-  branch: feature/2.2.0
-  specs:
-    cancancan (2.1.3)
-
-GIT
   remote: https://github.com/bootstrap-ruby/rails-bootstrap-forms.git
   revision: a68a2425336851fe781549cb48957df4458fefe5
   branch: bootstrap-v4
@@ -141,6 +134,7 @@ GEM
     bootsnap (1.3.0-java)
       msgpack (~> 1.0)
     builder (3.2.3)
+    cancancan (2.2.0)
     capistrano (3.10.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -469,7 +463,7 @@ DEPENDENCIES
   cadmus!
   cadmus_files!
   cadmus_navbar!
-  cancancan!
+  cancancan
   capistrano-maintenance
   capistrano-passenger
   capistrano-rails (~> 1.1)
