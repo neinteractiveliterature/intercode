@@ -38,6 +38,7 @@ import '../Codemirror/LiquidMultiplexModes';
 import Cart from '../Store/Cart';
 import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
+import EditSignup from '../SignupAdmin/EditSignup';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
 import EventProposalForm from '../EventProposals/EventProposalForm';
@@ -64,6 +65,7 @@ WebpackerReact.setup({
   Cart: StandaloneGraphQLComponent(Cart),
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
+  EditSignup: StandaloneGraphQLComponent(EditSignup),
   EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
   EventAdmin,
   EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
