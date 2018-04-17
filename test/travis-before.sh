@@ -8,7 +8,7 @@ yarn install
 
 if [ "${LANGUAGE}" = "ruby" ]; then
   cp config/database.yml.ci config/database.yml
-  gem uninstall bundler
+  gem uninstall -i /home/travis/.rvm/gems/ruby-2.5.1@global bundler
   gem install bundler -v 1.16.0 --no-ri --no-rdoc
   bin/rake db:create db:migrate RAILS_ENV=test
 fi
