@@ -4,6 +4,7 @@ Types::RunType = GraphQL::ObjectType.define do
   field :id, !types.Int
   field :event, Types::EventType
   field :starts_at, Types::DateType
+  field :ends_at, Types::DateType
   field :title_suffix, types.String
   field :schedule_note, types.String
 
