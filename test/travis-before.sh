@@ -8,5 +8,7 @@ yarn install
 
 if [ "${LANGUAGE}" = "ruby" ]; then
   cp config/database.yml.ci config/database.yml
+  gem uninstall bundler
+  gem install bundler -v 1.16.0 --no-ri --no-rdoc
   bin/rake db:create db:migrate RAILS_ENV=test
 fi
