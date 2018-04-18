@@ -105,9 +105,9 @@ GEM
     airbrussh (1.3.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ansi (1.5.0)
-    apollo_upload_server (2.0.0.alpha.5)
+    apollo_upload_server (2.0.0.beta.1)
       graphql (~> 1.7)
-      rails (~> 5.0)
+      rails (>= 4.2)
     arel (9.0.0)
     autoprefixer-rails (8.3.0)
       execjs
@@ -454,7 +454,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
-  apollo_upload_server (= 2.0.0.alpha.5)
+  apollo_upload_server (= 2.0.0.beta.1)
   autoprefixer-rails
   aws-sdk-s3
   aws-sdk-sqs
