@@ -49,7 +49,7 @@
     "inflected": "^2.0.3",
     "js-yaml": "^3.10.0",
     "lodash": "^4.17.5",
-    "lodash-webpack-plugin": "^0.11.4",
+    "lodash-webpack-plugin": "^0.11.5",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
     "node-sass": "^4.8.1",
