@@ -41,13 +41,6 @@ GIT
     htmldiff-lcs (0.0.1)
       diff-lcs
 
-GIT
-  remote: https://github.com/rollbar/rollbar-gem
-  revision: f4c1afc9e2b269e9e5298440581e8b76f6cb5ffa
-  specs:
-    rollbar (2.15.5)
-      multi_json
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -102,8 +95,6 @@ GEM
       activerecord (>= 3.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    airbrussh (1.3.0)
-      sshkit (>= 1.6.1, != 1.7.0)
     ansi (1.5.0)
     apollo_upload_server (2.0.0.beta.1)
       graphql (~> 1.7)
@@ -135,23 +126,6 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.3)
     cancancan (2.2.0)
-    capistrano (3.10.1)
-      airbrussh (>= 1.0.0)
-      i18n
-      rake (>= 10.0.0)
-      sshkit (>= 1.9.0)
-    capistrano-bundler (1.3.0)
-      capistrano (~> 3.1)
-      sshkit (~> 1.2)
-    capistrano-maintenance (1.2.0)
-      capistrano (>= 3.0)
-    capistrano-passenger (0.2.0)
-      capistrano (~> 3.0)
-    capistrano-rails (1.3.1)
-      capistrano (~> 3.1)
-      capistrano-bundler (~> 1.1)
-    capistrano-shoryuken (0.1.5)
-      capistrano
     carrierwave (1.2.2)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -285,9 +259,6 @@ GEM
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mysql2 (0.5.1)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-ssh (4.2.0)
     nio4r (2.3.0)
     nio4r (2.3.0-java)
     nokogiri (1.8.2)
@@ -367,6 +338,8 @@ GEM
       railties (>= 4.2.0, < 5.3)
     reverse_markdown (1.0.5)
       nokogiri
+    rollbar (2.15.6)
+      multi_json
     rollbar-shoryuken (0.1.2)
       rollbar
       shoryuken
@@ -407,9 +380,6 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
-    sshkit (1.15.1)
-      net-scp (>= 1.1.2)
-      net-ssh (>= 2.8.0)
     stackprof (0.2.10)
     stripe (3.13.0)
       faraday (~> 0.10)
@@ -464,10 +434,6 @@ DEPENDENCIES
   cadmus_files!
   cadmus_navbar!
   cancancan
-  capistrano-maintenance
-  capistrano-passenger
-  capistrano-rails (~> 1.1)
-  capistrano-shoryuken
   carrierwave
   database_cleaner
   datagrid
@@ -507,7 +473,7 @@ DEPENDENCIES
   recaptcha
   redcarpet
   reverse_markdown
-  rollbar!
+  rollbar
   rollbar-shoryuken
   sass-rails
   scheduled_value (~> 1.2.1)
