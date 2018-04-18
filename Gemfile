@@ -57,7 +57,7 @@ gem 'will_paginate-bootstrap4'
 gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
-gem 'apollo_upload_server', '2.0.0.alpha.5'
+gem 'apollo_upload_server', '2.0.0.beta.1'
 gem 'graphiql-rails', group: :development
 
 # Markdown
@@ -80,7 +80,7 @@ gem 'rails_12factor', group: 'stage'
 
 gem 'faker', group: 'development', require: false
 
-gem 'rollbar', git: 'https://github.com/rollbar/rollbar-gem' # temp for source map upload support
+gem 'rollbar'
 gem 'rollbar-shoryuken'
 gem 'oj', '~> 3.5.1'
 
@@ -102,11 +102,6 @@ group :development do
 
   # Reloader support
   gem 'listen'
-
-  gem 'capistrano-rails', '~> 1.1'
-  gem 'capistrano-passenger'
-  gem 'capistrano-shoryuken'
-  gem 'capistrano-maintenance', require: false
 end
 
 group :development, :test do
