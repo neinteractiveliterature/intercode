@@ -136,7 +136,7 @@ GEM
     concurrent-ruby (1.0.5-java)
     crass (1.0.4)
     dante (0.2.0)
-    database_cleaner (1.6.2)
+    database_cleaner (1.7.0)
     datagrid (1.5.8)
       rails (>= 4.0)
     devise (4.4.3)
