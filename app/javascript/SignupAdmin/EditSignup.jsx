@@ -163,10 +163,20 @@ class EditSignup extends React.Component {
   renderRunSection = () => {
     const { signup } = this.props.data;
     const { run } = signup;
+    const { event } = run;
+    const { registration_policy: registrationPolicy } = event;
     const timespan = Timespan.fromStrings(run.starts_at, run.ends_at);
     const teamMember = run.event.team_members
       .find(tm => tm.user_con_profile.id === signup.user_con_profile.id);
     const { user_con_profile: userConProfile } = signup;
+    const bucket = (signup.bucket_key ?
+      registrationPolicy.buckets.find(b => b.key === signup.bucket_key) :
+      null
+    );
+    const requestedBucket = (signup.requested_bucket_key ?
+      registrationPolicy.buckets.find(b => b.key === signup.requested_bucket_key) :
+      null
+    );
 
     return (
       <div className="card ml-2">
@@ -185,6 +195,28 @@ class EditSignup extends React.Component {
                 <div className="flex-fill">
                   Signup state:
                   <strong> {signup.state}</strong>
+                </div>
+                <button className="btn btn-link">
+                  <i className="fa fa-pencil"><span className="sr-only">Change</span></i>
+                </button>
+              </li>
+              <li className="list-group-item d-flex align-items-center">
+                <div className="flex-fill">
+                  Signup bucket:
+                  {' '}
+                  <strong>
+                    {(bucket || { name: 'none' }).name}
+                    {(
+                      (bucket && requestedBucket && bucket.key !== requestedBucket.key) ?
+                      ` (requested ${requestedBucket.name})` :
+                      ''
+                    )}
+                    {(
+                      (bucket && !requestedBucket) ?
+                      ' (no preference)' :
+                      ''
+                    )}
+                  </strong>
                 </div>
                 <button className="btn btn-link">
                   <i className="fa fa-pencil"><span className="sr-only">Change</span></i>
