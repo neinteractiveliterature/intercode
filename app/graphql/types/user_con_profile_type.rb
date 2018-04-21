@@ -1,5 +1,5 @@
-CAN_UPDATE_USER_CON_PROFILE_GUARD = ->(user_con_profile, _args, ctx) do
-  ctx[:current_ability].can?(:update, user_con_profile)
+CAN_READ_PERSONAL_INFO_GUARD = ->(user_con_profile, _args, ctx) do
+  ctx[:current_ability].can?(:read_personal_info, user_con_profile)
 end
 
 Types::UserConProfileType = GraphQL::ObjectType.define do
@@ -20,16 +20,17 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
       FormResponsePresenter.new(ctx[:convention].user_con_profile_form, obj).as_json.to_json
     end
   end
-  field(:birth_date, Types::DateType) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:address, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:city, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:state, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:zipcode, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:country, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:day_phone, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:evening_phone, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:best_call_time, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
-  field(:preferred_contact, types.String) { guard CAN_UPDATE_USER_CON_PROFILE_GUARD }
+  field(:email, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:birth_date, Types::DateType) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:address, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:city, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:state, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:zipcode, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:country, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:day_phone, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:evening_phone, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:best_call_time, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:preferred_contact, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
   field :ticket, Types::TicketType do
     guard -> (ticket, _args, ctx) {
       ctx[:current_ability].can?(:read, ticket)

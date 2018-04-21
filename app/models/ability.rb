@@ -14,6 +14,10 @@ class Ability
       (team_member_event_ids_and_convention_ids[user_id] || []).map(&:second)
     end
 
+    def team_member_signed_up_user_con_profile_ids(user_id)
+      team_member_signed_up_user_con_profile_ids_by_user_id[user_id] || []
+    end
+
     def con_ids_with_privilege(user_id, *privileges)
       (privileges + ['staff']).uniq.flat_map do |privilege|
         user_con_ids_by_privilege = con_ids_by_user_id_and_privilege[user_id] || {}
@@ -62,6 +66,31 @@ class Ability
           rows.map do |(_, id, convention_id)|
             [id, convention_id]
           end
+        end
+      end
+    end
+
+    def team_member_signed_up_user_con_profile_ids_by_user_id
+      @team_member_signed_up_user_con_profile_ids ||= begin
+        team_member_run_ids_by_event_id = Run
+          .where(event_id: team_member_event_ids_and_convention_ids.values.flat_map { |pairs| pairs.map(&:first) })
+          .pluck(:event_id, :id)
+          .group_by(&:first)
+          .transform_values { |pairs| pairs.map(&:second) }
+
+        team_member_run_ids_by_user_id = team_member_event_ids_and_convention_ids.each_with_object({}) do |(user_id, pairs), hash|
+          event_ids = pairs.map(&:first)
+          run_ids = event_ids.flat_map { |event_id| team_member_run_ids_by_event_id[event_id] }
+          hash[user_id] = run_ids
+        end
+
+        signed_up_user_con_profile_ids_by_run_id = Signup.where(run_id: team_member_run_ids_by_user_id.values.flatten)
+          .pluck(:run_id, :user_con_profile_id)
+          .group_by(&:first)
+          .transform_values { |pairs| pairs.map(&:second) }
+
+        team_member_run_ids_by_user_id.transform_values do |run_ids|
+          run_ids.flat_map { |run_id| signed_up_user_con_profile_ids_by_run_id[run_id] }
         end
       end
     end
@@ -121,7 +150,7 @@ class Ability
       # Site admins can do any action whatsoever.
       can :manage, :all
     else
-      can [:read, :create, :update], UserConProfile, user_id: user.id
+      can [:read, :read_personal_info, :create, :update], UserConProfile, user_id: user.id
       can [:create, :submit], EventProposal
       can [:read, :update], EventProposal,
         id: own_event_proposal_ids,
@@ -156,6 +185,7 @@ class Ability
     staff_con_ids
     team_member_event_ids
     team_member_convention_ids
+    team_member_signed_up_user_con_profile_ids
     con_ids_with_privilege
   ].each do |method_name|
     define_method method_name do |*args|
@@ -212,7 +242,7 @@ class Ability
       }
     }
     can :manage, UserConProfile, convention_id: staff_con_ids
-    can :read, UserConProfile, convention_id: con_ids_with_privilege(:con_com)
+    can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
@@ -257,6 +287,7 @@ class Ability
       }
     }
     can :read, UserConProfile, convention_id: team_member_convention_ids
+    can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
     can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
     can :update, EventProposal, event_id: team_member_event_ids
     can :read, Signup, run: { event_id: team_member_event_ids }
