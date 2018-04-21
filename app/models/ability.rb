@@ -290,7 +290,7 @@ class Ability
     can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
     can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
     can :update, EventProposal, event_id: team_member_event_ids
-    can :read, Signup, run: { event_id: team_member_event_ids }
+    can [:read, :update_counted, :update_bucket], Signup, run: { event_id: team_member_event_ids }
     can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
     can :manage, TeamMember, event_id: team_member_event_ids
   end
