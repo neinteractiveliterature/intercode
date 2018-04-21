@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { pluralize } from 'inflected';
+import { pluralize, humanize } from 'inflected';
+import moment from 'moment';
+import classNames from 'classnames';
 import { ConfirmProvider, ConfirmConsumer } from '../ModalDialogs/Confirm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
@@ -52,10 +54,51 @@ query($id: Int!) {
     user_con_profile {
       id
       name_without_nickname
+      nickname
+      birth_date
+      email
+      address
+      city
+      state
+      zipcode
+      country
+      day_phone
+      evening_phone
+      best_call_time
+      preferred_contact
     }
   }
 }
 `;
+
+function ageAsOf(birthDate, date) {
+  if (!birthDate || !date) {
+    return null;
+  }
+
+  const onOrAfterBirthday = (
+    date.month() > birthDate.month() || (
+      date.month() === birthDate.month() &&
+      date.date() >= birthDate.date()
+    )
+  );
+
+  return (date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1));
+}
+
+function cityState(userConProfile) {
+  return [
+    userConProfile.city,
+    userConProfile.state,
+  ].filter(item => item && item.trim() !== '').join(', ');
+}
+
+function cityStateZip(userConProfile) {
+  return [
+    cityState(userConProfile),
+    userConProfile.zipcode,
+  ].filter(item => item && item.trim() !== '').join(' ');
+}
 
 @graphql(adminSignupQuery)
 @GraphQLQueryResultWrapper
@@ -67,6 +110,18 @@ class EditSignup extends React.Component {
 
   toggleCounted = () => {}
 
+  renderAddressItem = (userConProfile) => {
+    const elements = [
+      ['header', 'Address:'],
+      ['address', userConProfile.address],
+      ['cityStateZip', cityStateZip(userConProfile)],
+      ['country', userConProfile.country],
+    ].filter(pair => pair[1] && pair[1].trim() !== '');
+
+    const listItems = elements.map(([key, element]) => <li key={key}>{element}</li>);
+    return <ul className="list-unstyled">{listItems}</ul>;
+  }
+
   renderUserSection = () => {
     const { signup } = this.props.data;
     const { user_con_profile: userConProfile } = signup;
@@ -76,9 +131,31 @@ class EditSignup extends React.Component {
         <div className="card-header">
           {userConProfile.name_without_nickname}
         </div>
-        <div className="card-body">
-          stuff
-        </div>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            Nickname: {userConProfile.nickname}
+          </li>
+          <li className="list-group-item">
+            Age at {signup.run.event.title}:
+            {' '}
+            {ageAsOf(moment(userConProfile.birth_date), moment(signup.run.starts_at))}
+          </li>
+          <li className="list-group-item">
+            Preferred contact method: {humanize(userConProfile.preferred_contact || '')}
+          </li>
+          <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'email' })}>
+            Email: <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
+          </li>
+          <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'day_phone' })}>
+            Daytime phone: {userConProfile.day_phone}
+          </li>
+          <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'evening_phone' })}>
+            Evening phone: {userConProfile.evening_phone}
+          </li>
+          <li className="list-group-item">
+            {this.renderAddressItem(userConProfile)}
+          </li>
+        </ul>
       </div>
     );
   }
@@ -154,7 +231,7 @@ class EditSignup extends React.Component {
 
   render = () => (
     <ConfirmProvider>
-      <h1>Edit signup for {this.props.data.signup.run.event.title}</h1>
+      <h1 className="mb-4">Edit signup for {this.props.data.signup.run.event.title}</h1>
 
       <div className="row">
         <div className="col col-md-6">
