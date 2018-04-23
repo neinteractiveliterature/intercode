@@ -27,7 +27,7 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 7. Install Bundler: `gem install bundler`
 8. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode`
 9. From the Intercode source folder:
-  1. Modify the database configuration (`config/database.yml` as appropriate for your computer).
+  1. Copy the basic developer database configuration: `cp config/database.yml.dev config/database.yml`
   2. Install all the dependencies of Intercode:
     1. Install MySQL and PostgreSQL. With Homebrew: `brew install mysql postgres `
     2. Make sure you have Node JS installed. `brew install node`
