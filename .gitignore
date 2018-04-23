@@ -13,9 +13,6 @@
 # Ignore SQLite journals
 *.sqlite3-journal
 
-# Ignore the user's database.yml
-config/database.yml
-
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
