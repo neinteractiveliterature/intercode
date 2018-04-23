@@ -71,7 +71,7 @@ WebpackerReact.setup({
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
   LiquidHTMLEditor,
   MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
-  NavigationItemsAdmin,
+  NavigationItemsAdmin: StandaloneGraphQLComponent(NavigationItemsAdmin),
   OrderHistory: StandaloneGraphQLComponent(OrderHistory),
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
