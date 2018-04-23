@@ -6,7 +6,7 @@ def guard_for_convention_associated_model(association, action)
 end
 
 def guard_for_create_convention_associated_model(association)
-  ->(_obj, args, ctx) {
+  ->(_obj, _args, ctx) {
     model = ctx[:convention].public_send(association).new
     ctx[:current_ability].can?(:create, model)
   }
@@ -44,7 +44,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :sortCmsNavigationItems, Mutations::SortCmsNavigationItems.field do
-    guard ->(_obj, args, ctx) {
+    guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:sort, ctx[:convention].cms_navigation_items.new)
     }
   end
