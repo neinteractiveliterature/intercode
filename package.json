@@ -82,7 +82,7 @@
     "react-table": "^6.8.2",
     "react-virtualized": "^9.18.0",
     "react-virtualized-select": "^3.1.0",
-    "reduce-reducers": "^0.1.5",
+    "reduce-reducers": "^0.2.0",
     "redux": "^4.0.0",
     "redux-actions": "^2.3.0",
     "redux-logger": "^3.0.6",
