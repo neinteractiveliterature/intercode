@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { pluralize, humanize } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
-import { ConfirmProvider, ConfirmConsumer } from '../ModalDialogs/Confirm';
+import Confirm from '../ModalDialogs/Confirm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import Timespan from '../PCSG/Timespan';
@@ -188,7 +188,7 @@ class EditSignup extends React.Component {
           {run.rooms.map(room => room.name).sort().join(', ')}
         </div>
 
-        <ConfirmConsumer>
+        <Confirm.Trigger>
           {confirm => (
             <ul className="list-group list-group-flush">
               <li className="list-group-item d-flex align-items-center">
@@ -256,13 +256,13 @@ class EditSignup extends React.Component {
               </li>
             </ul>
           )}
-        </ConfirmConsumer>
+        </Confirm.Trigger>
       </div>
     );
   }
 
   render = () => (
-    <ConfirmProvider>
+    <Confirm>
       <h1 className="mb-4">Edit signup for {this.props.data.signup.run.event.title}</h1>
 
       <div className="row">
@@ -274,7 +274,7 @@ class EditSignup extends React.Component {
           {this.renderRunSection()}
         </div>
       </div>
-    </ConfirmProvider>
+    </Confirm>
   )
 }
 
