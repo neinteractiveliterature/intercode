@@ -4,7 +4,9 @@ import { ConfirmModal } from 'react-bootstrap4-modal';
 
 const ConfirmContext = React.createContext(() => {});
 
-export class ConfirmProvider extends React.Component {
+export default class Confirm extends React.Component {
+  static Trigger = ConfirmContext.Consumer;
+
   static propTypes = {
     children: PropTypes.node.isRequired,
   };
@@ -43,5 +45,3 @@ export class ConfirmProvider extends React.Component {
     </ConfirmContext.Provider>
   );
 }
-
-export const ConfirmConsumer = ConfirmContext.Consumer;
