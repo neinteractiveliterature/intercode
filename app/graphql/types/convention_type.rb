@@ -30,6 +30,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
     }
   end
 
+  field :cms_navigation_items, types[Types::CmsNavigationItemType] do
+    resolve -> (convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :cms_navigation_items).load(convention)
+    }
+  end
+
   field :pages, types[Types::PageType] do
     resolve -> (convention, _args, _ctx) {
       AssociationLoader.for(Convention, :pages).load(convention)

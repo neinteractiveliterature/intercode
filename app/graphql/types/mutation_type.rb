@@ -5,6 +5,13 @@ def guard_for_convention_associated_model(association, action)
   }
 end
 
+def guard_for_create_convention_associated_model(association)
+  ->(_obj, _args, ctx) {
+    model = ctx[:convention].public_send(association).new
+    ctx[:current_ability].can?(:create, model)
+  }
+end
+
 def guard_for_create_event_associated_model(association, arg_name)
   guard ->(_obj, args, ctx) {
     event = ctx[:convention].events.find(args[:event_id])
@@ -19,12 +26,28 @@ def guard_for_model_with_id(model_class, action)
   }
 end
 
-GUARD_FOR_CREATE_EVENT = ->(_obj, _args, ctx) {
-  ctx[:current_ability].can?(:create, ctx[:convention].events.new)
-}
-
 Types::MutationType = GraphQL::ObjectType.define do
   name 'Mutation'
+
+  ### CmsNavigationItems
+
+  field :createCmsNavigationItem, Mutations::CreateCmsNavigationItem.field do
+    guard(guard_for_create_convention_associated_model(:cms_navigation_items))
+  end
+
+  field :updateCmsNavigationItem, Mutations::UpdateCmsNavigationItem.field do
+    guard(guard_for_convention_associated_model(:cms_navigation_items, :update))
+  end
+
+  field :deleteCmsNavigationItem, Mutations::DeleteCmsNavigationItem.field do
+    guard(guard_for_convention_associated_model(:cms_navigation_items, :destroy))
+  end
+
+  field :sortCmsNavigationItems, Mutations::SortCmsNavigationItems.field do
+    guard ->(_obj, _args, ctx) {
+      ctx[:current_ability].can?(:sort, ctx[:convention].cms_navigation_items.new)
+    }
+  end
 
   ### Convention
 
@@ -38,11 +61,11 @@ Types::MutationType = GraphQL::ObjectType.define do
   ### Event
 
   field :createEvent, Mutations::CreateEvent.field do
-    guard(GUARD_FOR_CREATE_EVENT)
+    guard(guard_for_create_convention_associated_model(:events))
   end
 
   field :createFillerEvent, Mutations::CreateFillerEvent.field do
-    guard(GUARD_FOR_CREATE_EVENT)
+    guard(guard_for_create_convention_associated_model(:events))
   end
 
   field :dropEvent, Mutations::DropEvent.field do
