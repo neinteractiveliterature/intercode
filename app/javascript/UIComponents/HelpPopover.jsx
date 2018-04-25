@@ -35,11 +35,7 @@ class HelpPopover extends React.Component {
   }
 
   render = () => {
-    const {
-      children,
-      className,
-      ...otherProps,
-    } = this.props;
+    const { children, className } = this.props;
 
     return (
       <Manager tag="span">
