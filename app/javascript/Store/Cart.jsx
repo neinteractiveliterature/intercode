@@ -5,6 +5,7 @@ import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import ErrorDisplay from '../ErrorDisplay';
+import formatMoney from '../formatMoney';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
