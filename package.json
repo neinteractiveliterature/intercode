@@ -115,6 +115,7 @@
   },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
+    "lint": "eslint app/javascript --ext .js,.jsx",
     "test": "jest --testPathPattern=test/javascript",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
