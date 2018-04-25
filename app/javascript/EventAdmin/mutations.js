@@ -59,18 +59,6 @@ mutation($input: UpdateEventInput!) {
 ${fragments.event}
 `;
 
-export const createVolunteerEventMutation = gql`
-mutation($input: CreateVolunteerEventInput!) {
-  createVolunteerEvent(input: $input) {
-    event {
-      ...EventFields
-    }
-  }
-}
-
-${fragments.event}
-`;
-
 export const createRunMutation = gql`
 mutation($input: CreateRunInput!) {
   createRun(input: $input) {
