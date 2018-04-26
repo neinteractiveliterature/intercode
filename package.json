@@ -52,7 +52,7 @@
     "lodash-webpack-plugin": "^0.11.5",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
-    "node-sass": "^4.8.1",
+    "node-sass": "^4.9.0",
     "path-complete-extname": "^1.0.0",
     "payment": "^2.3.0",
     "popper.js": "^1.14.3",
