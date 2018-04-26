@@ -100,7 +100,7 @@ GEM
       graphql (~> 1.7)
       rails (>= 4.2)
     arel (9.0.0)
-    autoprefixer-rails (8.3.0)
+    autoprefixer-rails (8.3.0.1)
       execjs
     aws-partitions (1.80.0)
     aws-sdk-core (3.19.0)
