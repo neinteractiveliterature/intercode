@@ -155,4 +155,16 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:current_pending_order]
     }
   end
+
+  field :signup, !Types::SignupType do
+    argument :id, !types.Int
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, ctx[:convention].signups.find(args[:id]))
+    end
+
+    resolve ->(_obj, args, ctx) {
+      ctx[:convention].signups.find(args[:id])
+    }
+  end
 end
