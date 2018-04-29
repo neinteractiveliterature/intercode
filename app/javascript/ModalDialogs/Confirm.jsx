@@ -16,20 +16,40 @@ export default class Confirm extends React.Component {
     this.state = {
       action: null,
       prompt: null,
+      onError: null,
+      actionInProgress: false,
     };
+
+    this.startConfirm.setPrompt = prompt => this.setState({ prompt });
   }
 
-  startConfirm = ({ action, prompt }) => {
-    this.setState({ action, prompt });
+  startConfirm = ({ action, prompt, onError }) => {
+    this.setState({
+      action,
+      prompt,
+      onError,
+      actionInProgress: false,
+    });
   }
 
   cancelClicked = () => {
-    this.setState({ action: null, prompt: null });
+    this.setState({ action: null, prompt: null, onError: null });
   }
 
   okClicked = async () => {
-    await this.state.action();
-    this.setState({ action: null, prompt: null });
+    this.setState({ actionInProgress: true });
+    try {
+      await this.state.action();
+      this.setState({ action: null, prompt: null, onError: null });
+    } catch (error) {
+      if (this.state.onError) {
+        this.state.onError(error);
+      } else {
+        throw error;
+      }
+    } finally {
+      this.setState({ actionInProgress: false });
+    }
   }
 
   render = () => (
@@ -39,6 +59,7 @@ export default class Confirm extends React.Component {
         visible={this.state.action != null}
         onOK={this.okClicked}
         onCancel={this.cancelClicked}
+        disableButtons={this.state.actionInProgress}
       >
         {this.state.prompt || <div />}
       </ConfirmModal>

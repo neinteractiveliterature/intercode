@@ -10,6 +10,13 @@ Types::AbilityType = GraphQL::ObjectType.define do
     }
   end
 
+  field :can_update_signup, !types.Boolean do
+    argument :signup_id, !types.Int
+    resolve -> (obj, args, _ctx) do
+      ModelPermissionLoader.for(Signup).load([obj, :update, args[:signup_id]])
+    end
+  end
+
   field :can_update_event, !types.Boolean do
     argument :event_id, !types.Int
     resolve -> (obj, args, _ctx) do
