@@ -18,7 +18,10 @@ engines:
     enabled: true
     config:
       config: .eslintrc.js
+    channel: "eslint-4"
     checks:
+      graphql/template-strings:
+        enabled: false
       import/extensions:
         enabled: false
   fixme:
@@ -50,4 +53,3 @@ exclude_patterns:
 - script/
 - test/
 - vendor/
-
