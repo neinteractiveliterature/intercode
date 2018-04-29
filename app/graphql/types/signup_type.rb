@@ -1,6 +1,7 @@
 Types::SignupType = GraphQL::ObjectType.define do
   name 'Signup'
 
+  field :id, !types.Int
   field :state, Types::SignupStateType
   field :counted, types.Boolean
   field :bucket_key, types.String
