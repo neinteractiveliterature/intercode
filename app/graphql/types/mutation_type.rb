@@ -210,6 +210,20 @@ Types::MutationType = GraphQL::ObjectType.define do
     guard(guard_for_convention_associated_model(:runs, :update))
   end
 
+  ### Signup
+
+  field :forceConfirmSignup, Mutations::ForceConfirmSignup.field do
+    guard(guard_for_convention_associated_model(:signups, :update))
+  end
+
+  field :updateSignupBucket, Mutations::UpdateSignupBucket.field do
+    guard(guard_for_convention_associated_model(:signups, :update_bucket))
+  end
+
+  field :updateSignupCounted, Mutations::UpdateSignupCounted.field do
+    guard(guard_for_convention_associated_model(:signups, :update))
+  end
+
   ### StaffPosition
 
   field :createStaffPosition, Mutations::CreateStaffPosition.field do
