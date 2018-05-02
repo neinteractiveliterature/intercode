@@ -60,7 +60,7 @@
                 - if event.registration_policy.buckets.size > 0
                   (#{event.registration_policy.bucket_with_key(signup.requested_bucket_key).name})
 
-      - available_slots = run.available_slots_by_bucket_key.values.sum
+      - available_slots = run.available_slots_by_bucket_key.values.compact.sum
       - if available_slots > 0
         %section
           %p.font-weight-bold
