@@ -146,6 +146,32 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       result.signup.must_be :confirmed?
     end
 
+    it 'does not count withdrawn signups towards the signup limit' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(
+          timespans: [
+            {
+              start: nil,
+              finish: nil,
+              value: '1'
+            }
+          ]
+        )
+      )
+      another_event = FactoryBot.create(:event, convention: convention)
+      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
+      FactoryBot.create(
+        :signup,
+        state: 'withdrawn',
+        user_con_profile: user_con_profile,
+        run: another_run
+      )
+
+      result = subject.call
+      result.must_be :success?
+      result.signup.must_be :confirmed?
+    end
+
     it 'disallows signups if the user has reached the current signup limit' do
       convention.update!(
         maximum_event_signups: ScheduledValue::ScheduledValue.new(
