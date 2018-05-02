@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_08_151722) do
+ActiveRecord::Schema.define(version: 2018_05_02_160657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 2018_04_08_151722) do
     t.string "organization"
     t.text "url"
     t.integer "length_seconds"
-    t.boolean "can_play_concurrently"
+    t.boolean "can_play_concurrently", default: false, null: false
     t.string "con_mail_destination"
     t.text "description"
     t.text "short_blurb"

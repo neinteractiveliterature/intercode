@@ -4,11 +4,16 @@ class AdminEventProposalsControllerTest < ActionDispatch::IntegrationTest
   let(:convention) { FactoryBot.create(:convention) }
   let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile, convention: convention) }
   let(:user) { user_con_profile.user }
-  let(:event_proposal) { FactoryBot.create(:event_proposal, convention: convention) }
+  let(:event_proposal) do
+    FactoryBot.build(:event_proposal, convention: convention).tap do |proposal|
+      proposal.assign_default_values_from_form_items(convention.event_proposal_form.form_items)
+      proposal.save!
+    end
+  end
 
   before do
-    proposal_form = Form.create!(convention: convention)
-    convention.update!(event_proposal_form: proposal_form)
+    ClearCmsContentService.new(convention: convention).call!
+    LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
 
     set_convention convention
     sign_in user
