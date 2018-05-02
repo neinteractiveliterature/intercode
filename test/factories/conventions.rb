@@ -23,6 +23,9 @@ FactoryBot.define do
     after(:build) do |convention|
       convention.event_proposal_form ||= convention.build_event_proposal_form
       convention.user_con_profile_form ||= convention.build_user_con_profile_form
+      convention.regular_event_form ||= convention.build_regular_event_form
+      convention.volunteer_event_form ||= convention.build_volunteer_event_form
+      convention.filler_event_form ||= convention.build_filler_event_form
     end
   end
 end

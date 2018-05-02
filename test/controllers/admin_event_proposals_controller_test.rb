@@ -8,7 +8,8 @@ class AdminEventProposalsControllerTest < ActionDispatch::IntegrationTest
 
   before do
     proposal_form = Form.create!(convention: convention)
-    convention.update!(event_proposal_form: proposal_form)
+    regular_event_form = Form.create!(convention: convention)
+    convention.update!(event_proposal_form: proposal_form, regular_event_form: regular_event_form)
 
     set_convention convention
     sign_in user
