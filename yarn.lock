@@ -1761,10 +1761,6 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000792, caniuse-lite@^1.0.30000805, can
   version "1.0.30000832"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000832.tgz#22a277f1d623774cc9aea2f7c1a65cb1603c63b8"
 
-caniuse-lite@^1.0.30000832:
-  version "1.0.30000832"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000832.tgz#22a277f1d623774cc9aea2f7c1a65cb1603c63b8"
-
 case-sensitive-paths-webpack-plugin@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/case-sensitive-paths-webpack-plugin/-/case-sensitive-paths-webpack-plugin-2.1.2.tgz#c899b52175763689224571dad778742e133f0192"
@@ -7415,9 +7411,9 @@ reduce-reducers@^0.1.0:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.1.5.tgz#ff77ca8068ff41007319b8b4b91533c7e0e54576"
 
-reduce-reducers@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.2.0.tgz#e9c7c988a045087357a8781c0175258eb6eb92b8"
+reduce-reducers@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.3.0.tgz#ed6122072676eb8d84d41d74bba31e5e3f7ce977"
 
 redux-actions@^2.3.0:
   version "2.3.0"
