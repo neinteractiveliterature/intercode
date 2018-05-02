@@ -35,6 +35,7 @@ class AcceptEventProposalService < ApplicationService
 
   def inner_call
     event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, form_attr), hash|
+      next unless form_item_identifiers.include?(form_attr)
       hash[event_attr] = event_proposal.read_form_response_attribute(form_attr)
     end
 
@@ -57,6 +58,14 @@ class AcceptEventProposalService < ApplicationService
     end
 
     success(event: event)
+  end
+
+  def form
+    @form ||= convention.regular_event_form
+  end
+
+  def form_item_identifiers
+    @form_item_identifiers ||= form.form_items.pluck(:identifier)
   end
 
   def convention
