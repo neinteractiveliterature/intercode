@@ -135,7 +135,7 @@ sign up for events."
 
   def other_signups_including_not_counted
     @other_signups_including_not_counted ||= user_con_profile.signups.includes(run: :event)
-      .where.not(run_id: run.id).to_a
+      .where.not(run_id: run.id).where.not(state: 'withdrawn').to_a
   end
 
   def other_signups
