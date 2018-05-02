@@ -66,6 +66,22 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
     end
 
+    it 'disallows signups when the user is already signed up' do
+      FactoryBot.create(
+        :signup,
+        run: the_run,
+        user_con_profile: user_con_profile,
+        requested_bucket_key: requested_bucket_key,
+        bucket_key: requested_bucket_key,
+        state: 'confirmed',
+        counted: true
+      )
+
+      result = subject.call
+      result.must_be :failure?
+      result.errors.full_messages.join('\n').must_match /already signed up/
+    end
+
     describe 'as a team member' do
       let(:requested_bucket_key) { nil }
 

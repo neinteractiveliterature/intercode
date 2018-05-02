@@ -10,6 +10,7 @@ class EventSignupService < ApplicationService
 
   self.validate_manually = true
   validate :signup_count_must_be_allowed
+  validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket
   validate :require_valid_bucket
@@ -102,6 +103,16 @@ sign up for events."
     end
   end
 
+  def must_not_already_be_signed_up
+    already_signed_up = existing_signups.reject(&:withdrawn?).any? do |signup|
+      signup.user_con_profile == user_con_profile
+    end
+
+    return unless already_signed_up
+
+    errors.add :base, "You are already signed up for this run of #{event.title}."
+  end
+
   def require_valid_bucket
     return if run.registration_policy.allow_no_preference_signups? && !requested_bucket_key
     return if team_member?
@@ -172,8 +183,12 @@ sign up for events."
     end
   end
 
+  def existing_signups
+    @existing_signups ||= run.signups
+  end
+
   def existing_signups_by_bucket_key
-    @existing_signups_by_bucket_key ||= run.signups.group_by(&:bucket_key)
+    @existing_signups_by_bucket_key ||= existing_signups.group_by(&:bucket_key)
   end
 
   def move_signup
