@@ -34,17 +34,7 @@ class AcceptEventProposalService < ApplicationService
   private
 
   def inner_call
-    event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, form_attr), hash|
-      next unless form_item_identifiers.include?(form_attr)
-      hash[event_attr] = event_proposal.read_form_response_attribute(form_attr)
-    end
-
-    event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
-
-    event = convention.events.create!(
-      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes)
-    )
-
+    event = convention.events.create!(event_attributes)
     event_proposal.update!(event: event)
 
     if event_proposal.owner
@@ -58,6 +48,19 @@ class AcceptEventProposalService < ApplicationService
     end
 
     success(event: event)
+  end
+
+  def event_attributes
+    @event_attributes ||= begin
+      event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, form_attr), hash|
+        next unless form_item_identifiers.include?(form_attr)
+        hash[event_attr] = event_proposal.read_form_response_attribute(form_attr)
+      end
+
+      event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
+
+      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes)
+    end
   end
 
   def form
