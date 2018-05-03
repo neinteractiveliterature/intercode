@@ -40,17 +40,6 @@ Types::QueryType = GraphQL::ObjectType.define do
     resolve ->(_obj, args, ctx) {
       events = ctx[:convention].events
       events = events.active unless args['includeDropped']
-      signup_scope = Signup.where(run_id: Run.where(event_id: events.map(&:id)).select(:id))
-
-      ctx[:confirmed_signup_count_by_run_id] = signup_scope.confirmed.counted.group(:run_id).count
-
-      if args['extendedCounts']
-        ctx[:waitlisted_signup_count_by_run_id] = signup_scope.waitlisted.counted
-          .group(:run_id)
-          .count
-        ctx[:not_counted_signup_count_by_run_id] = signup_scope.not_counted.group(:run_id).count
-      end
-
       events
     }
   end

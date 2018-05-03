@@ -42,7 +42,8 @@ query($extendedCounts: Boolean!) {
       schedule_note
       title_suffix
 
-      confirmed_signup_count
+      confirmed_limited_signup_count
+      confirmed_signup_count @include(if: $extendedCounts)
       waitlisted_signup_count @include(if: $extendedCounts)
       not_counted_signup_count @include(if: $extendedCounts)
 
@@ -183,11 +184,11 @@ class ScheduleGrid extends React.Component {
       } else if (this.props.config.classifyEventsBy === 'fullness') {
         if (!event.registration_policy.slots_limited) {
           className = 'event-fullness-unlimited';
-        } else if (run.confirmed_signup_count >= event.registration_policy.total_slots) {
+        } else if (run.confirmed_limited_signup_count >= event.registration_policy.total_slots) {
           className = 'event-fullness-full';
-        } else if (run.confirmed_signup_count >= event.registration_policy.preferred_slots) {
+        } else if (run.confirmed_limited_signup_count >= event.registration_policy.preferred_slots) {
           className = 'event-fullness-preferred';
-        } else if (run.confirmed_signup_count >= event.registration_policy.minimum_slots) {
+        } else if (run.confirmed_limited_signup_count >= event.registration_policy.minimum_slots) {
           className = 'event-fullness-minimum';
         } else {
           className = 'event-fullness-below-minimum';
@@ -271,12 +272,14 @@ class ScheduleGrid extends React.Component {
         );
       }
 
-      hourDivs.push(<div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
-        <div className="small text-muted ml-1">
-          {formatTime(now, this.props.data.convention.timezone_name)}
-          {extendedCounts}
+      hourDivs.push((
+        <div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
+          <div className="small text-muted ml-1">
+            {formatTime(now, this.props.data.convention.timezone_name)}
+            {extendedCounts}
+          </div>
         </div>
-                    </div>);
+      ));
 
       now.add(1, 'hour');
     }

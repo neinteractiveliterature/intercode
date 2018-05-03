@@ -34,6 +34,12 @@ class SignupCountPresenter
     @confirmed_count ||= signups_by_state_and_bucket_key['confirmed'].values.map(&:size).sum
   end
 
+  def confirmed_limited_count
+    @confirmed_limited_count ||= buckets.select(&:slots_limited?).map do |bucket|
+      signups_by_state_and_bucket_key['confirmed'][bucket.key].select(&:counted?).size
+    end.sum
+  end
+
   def waitlist_count
     @waitlist_count ||= signups_by_state_and_bucket_key['waitlisted'].values.map(&:size).sum
   end
@@ -64,6 +70,10 @@ class SignupCountPresenter
 
   def counted_signups_by_state(state)
     signups_by_state_and_bucket_key[state].values.flatten.select(&:counted?)
+  end
+
+  def not_counted_signups_by_state(state)
+    signups_by_state_and_bucket_key[state].values.flatten.reject(&:counted?)
   end
 
   def signups_by_state_and_bucket_key
