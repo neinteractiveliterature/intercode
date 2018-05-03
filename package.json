@@ -60,7 +60,7 @@
     "postcss-smart-import": "^0.7.6",
     "precss": "^3.1.2",
     "prop-types": "^15.6.1",
-    "query-string": "^6.0.0",
+    "query-string": "^6.1.0",
     "rails-ujs": "^5.2.0",
     "react": "^16.3.2",
     "react-apollo": "^2.1.3",
