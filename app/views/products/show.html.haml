@@ -1,4 +1,4 @@
-- if @product.image
+- if @product.image.url.present?
   .float-right.d-none.d-lg-block.ml-4{style: 'max-width: 50%'}
     %img{style: 'max-width: 100%', src: @product.image.url, alt: "#{@product.name} image"}
 
