@@ -104,7 +104,7 @@ class ScheduleGridEventRun extends React.Component {
     let unavailableBarWidth = 100.0;
     if (event.registration_policy.total_slots > 0) {
       unavailableBarWidth = (
-        (run.confirmed_signup_count / event.registration_policy.total_slots) * 100.0
+        (run.confirmed_limited_signup_count / event.registration_policy.total_slots) * 100.0
       );
     }
 
@@ -163,7 +163,10 @@ class ScheduleGridEventRun extends React.Component {
     };
 
     const signupStatus = userSignupStatus(run);
-    const eventFull = (event.registration_policy.slots_limited && run.confirmed_signup_count === event.registration_policy.total_slots);
+    const eventFull = (
+      event.registration_policy.slots_limited &&
+      run.confirmed_limited_signup_count === event.registration_policy.total_slots
+    );
     const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
 
     const eventRunClasses = classNames(
