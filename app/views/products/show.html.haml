@@ -6,7 +6,8 @@
   %h1= @product.name
   .lead= @product.price.format
 
-%img.d-lg-none.w-100{src: @product.image.url, alt: "#{@product.name} image"}
+- if @product.image
+  %img.d-lg-none.w-100{src: @product.image.url, alt: "#{@product.name} image"}
 
 - if @product.description_template
   .mb-4
