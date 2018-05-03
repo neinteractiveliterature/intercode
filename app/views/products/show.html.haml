@@ -6,7 +6,7 @@
   %h1= @product.name
   .lead= @product.price.format
 
-- if @product.image
+- if @product.image.url.present?
   %img.d-lg-none.w-100{src: @product.image.url, alt: "#{@product.name} image"}
 
 - if @product.description_template
