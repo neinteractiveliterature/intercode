@@ -82,8 +82,8 @@ class EventChangeRegistrationPolicyService < ApplicationService
         allow_movement: false
       ).find_bucket
 
-      if !destination_bucket && signup.confirmed?
-        immovable_signups << signup
+      if !destination_bucket
+        immovable_signups << signup if signup.confirmed?
       elsif destination_bucket.key == signup.bucket_key
         new_signup = signup.dup
         new_signup.assign_attributes(counted: destination_bucket.counted?)
