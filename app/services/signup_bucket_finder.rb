@@ -13,15 +13,13 @@ class SignupBucketFinder
     @actual_bucket ||= begin
       # try not to bump people out of their signup buckets...
       prioritized_buckets_with_capacity.first ||
-      # but do it if you have to
-      prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
+        # but do it if you have to
+        prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
     end
   end
 
   def movable_signups_for_bucket(bucket)
     return [] unless allow_movement
-
-    no_preference_bucket_finder = SignupBucketFinder.new(registration_policy, nil, other_signups, allow_movement: true)
     return [] unless no_preference_bucket_finder.prioritized_buckets_with_capacity.any?
 
     other_signups.select do |signup|
