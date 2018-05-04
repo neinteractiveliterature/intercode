@@ -40,7 +40,6 @@ class EventChangeRegistrationPolicyService < ApplicationService
       ).find_bucket
 
       if !destination_bucket
-        binding.pry if signup.confirmed?
         if signup.confirmed?
           immovable_signups << signup
           puts "Signup for #{signup.user_con_profile.name_without_nickname} (#{signup.requested_bucket_key}) is immovable"
