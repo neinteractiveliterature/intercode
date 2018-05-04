@@ -15,22 +15,16 @@ class SignupBucketFinder
     end
   end
 
-  def buckets_with_capacity
-    @buckets_with_capacity ||= registration_policy.buckets.reject do |bucket|
-      bucket.not_counted? || bucket.slots_unlimited? || bucket.full?(other_signups)
-    end
-  end
-
   def movable_signups_for_bucket(bucket)
     return [] unless allow_movement
-    return [] unless buckets_with_capacity.any?
+
+    no_preference_bucket_finder = SignupBucketFinder.new(registration_policy, nil, other_signups, allow_movement: true)
+    return [] unless no_preference_bucket_finder.prioritized_buckets_with_capacity.any?
 
     other_signups.select do |signup|
       signup.bucket_key == bucket.key && !signup.requested_bucket_key
     end
   end
-
-  private
 
   def prioritized_buckets
     @prioritized_buckets ||= begin
@@ -44,5 +38,14 @@ class SignupBucketFinder
         registration_policy.buckets.select(&:counted?).select(&:slots_limited?).sort_by { |bucket| bucket.anything? ? 0 : 1 }
       end
     end
+  end
+
+  def prioritized_buckets_with_capacity
+    @prioritized_buckets_with_capacity ||= prioritized_buckets.reject { |bucket| bucket.full?(other_signups) }
+  end
+
+  def prioritized_buckets_with_capacity_except(*buckets)
+    bucket_keys = buckets.map(&:key)
+    prioritized_buckets_with_capacity.reject { |bucket| bucket_keys.include?(bucket.key) }
   end
 end
