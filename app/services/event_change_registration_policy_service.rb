@@ -149,7 +149,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
         simulator = SignupSimulator.new(new_registration_policy)
         simulator.simulate_signups(signups_by_run_id[run.id] || [])
 
-        new_signups_by_signup_id.merge(simulator.new_signups_by_signup_id)
+        new_signups_by_signup_id.update(simulator.new_signups_by_signup_id)
         immovable_signups.concat(simulator.immovable_signups)
       end
 
@@ -164,20 +164,24 @@ class EventChangeRegistrationPolicyService < ApplicationService
         return failure(errors)
       else
         signups_by_id = all_signups.index_by(&:id)
-        new_signups_by_signup_id.each do |new_signup, signup_id|
+        new_signups_by_signup_id.each do |signup_id, new_signup|
           signup = signups_by_id[signup_id]
           next if new_signup.state == signup.state && new_signup.bucket_key == signup.bucket_key && new_signup.counted == signup.counted
 
-          move_result = SignupMoveResult.new(
-            signup.id,
-            new_signup.state,
-            new_signup.bucket_key,
-            signup.state,
-            signup.bucket_key
-          )
-          move_results << move_results
+          if new_signup.state != signup.state || new_signup.bucket_key != signup.bucket_key
+            move_result = SignupMoveResult.new(
+              signup.id,
+              new_signup.state,
+              new_signup.bucket_key,
+              signup.state,
+              signup.bucket_key
+            )
+            move_results << move_result
+          end
 
-          signup.update!(
+          # Do a direct SQL update, bypassing validations, since we haven't updated
+          # the registration policy yet
+          signup.update_columns(
             state: new_signup.state,
             bucket_key: new_signup.bucket_key,
             counted: new_signup.counted
