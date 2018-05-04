@@ -196,11 +196,11 @@ sign up for events."
     movable_signup_bucket_finder = SignupBucketFinder.new(
       run.registration_policy,
       nil,
-      new_signups,
+      bucket_finder.other_signups,
       allow_movement: true
     )
 
-    destination_bucket = movable_signup_bucket_finder.prioritized_buckets_with_capacity_except(from_bucket).first
+    destination_bucket = movable_signup_bucket_finder.prioritized_buckets_with_capacity_except(actual_bucket).first
 
     movable_signup.update!(bucket_key: destination_bucket.key)
     movable_signup
