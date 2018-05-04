@@ -187,7 +187,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
             counted: new_signup.counted
           )
 
-          notify_moved_signup(move_result) if move_result.should_notify?
+          notify_moved_signup(move_result) if move_result&.should_notify?
         end
       end
 
