@@ -33,12 +33,13 @@ class EventChangeRegistrationPolicyService < ApplicationService
         return
       end
 
-      destination_bucket = SignupBucketFinder.new(
+      bucket_finder = SignupBucketFinder.new(
         registration_policy,
         signup.requested_bucket_key,
         new_signups_by_signup_id.values,
         allow_movement: true
-      ).find_bucket
+      )
+      destination_bucket = bucket_finder.find_bucket
 
       if !destination_bucket
         if signup.confirmed?
@@ -47,7 +48,9 @@ class EventChangeRegistrationPolicyService < ApplicationService
         end
       else
         build_move_result(signup, destination_bucket) unless destination_bucket.key == signup.bucket_key
-        move_signup(destination_bucket) if destination_bucket && destination_bucket.full?(new_signups_by_signup_id.values)
+        if destination_bucket && destination_bucket.full?(new_signups_by_signup_id.values)
+          move_signup(bucket_finder.no_preference_bucket_finder, destination_bucket)
+        end
 
         new_signup = signup.dup
         new_signup.assign_attributes(
@@ -59,7 +62,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
         log_signup_placement(signup, destination_bucket)
       end
 
-      log_bucket_counts(signup)
+      log_bucket_counts
     end
 
     private
@@ -74,16 +77,11 @@ class EventChangeRegistrationPolicyService < ApplicationService
       )
     end
 
-    def move_signup(from_bucket)
-      bucket_finder = SignupBucketFinder.new(
-        registration_policy,
-        nil,
-        new_signups_by_signup_id.values,
-        allow_movement: true
-      )
-
-      movable_signup = bucket_finder.movable_signups_for_bucket(from_bucket).first
-      destination_bucket = bucket_finder.prioritized_buckets_with_capacity_except(from_bucket).first
+    def move_signup(no_preference_bucket_finder, from_bucket)
+      movable_signup = no_preference_bucket_finder.movable_signups_for_bucket(from_bucket).first
+      destination_bucket = no_preference_bucket_finder
+        .prioritized_buckets_with_capacity_except(from_bucket)
+        .first
 
       build_move_result(movable_signup, destination_bucket)
       puts "Moving signup for #{movable_signup.user_con_profile.name_without_nickname} to #{destination_bucket.key}"
@@ -111,7 +109,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
       end
     end
 
-    def log_bucket_counts(signup)
+    def log_bucket_counts
       return unless logger
 
       bucket_counts = registration_policy.buckets.map do |bucket|

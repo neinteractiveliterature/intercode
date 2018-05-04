@@ -49,4 +49,13 @@ class SignupBucketFinder
     bucket_keys = buckets.map(&:key)
     prioritized_buckets_with_capacity.reject { |bucket| bucket_keys.include?(bucket.key) }
   end
+
+  def no_preference_bucket_finder
+    SignupBucketFinder.new(
+      registration_policy,
+      nil,
+      other_signups,
+      allow_movement: allow_movement
+    )
+  end
 end
