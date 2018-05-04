@@ -6,6 +6,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
 
   class SignupSimulator
     attr_reader :registration_policy, :move_results_by_signup_id, :immovable_signups, :new_signups_by_signup_id
+    attr_accessor :logger
 
     def initialize(registration_policy)
       @registration_policy = registration_policy
@@ -42,7 +43,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
       if !destination_bucket
         if signup.confirmed?
           immovable_signups << signup
-          puts "Signup for #{signup.user_con_profile.name_without_nickname} (#{signup.requested_bucket_key}) is immovable"
+          log_immovable_signup(signup)
         end
       else
         build_move_result(signup, destination_bucket) unless destination_bucket.key == signup.bucket_key
@@ -55,18 +56,10 @@ class EventChangeRegistrationPolicyService < ApplicationService
           counted: destination_bucket.counted?
         )
         new_signups_by_signup_id[signup.id] = new_signup
-        if destination_bucket.key == signup.bucket_key
-          puts "Signup for #{signup.user_con_profile.name_without_nickname} remains in #{destination_bucket.key}"
-        else
-          puts "Signup for #{signup.user_con_profile.name_without_nickname} placed in #{destination_bucket.key} (was #{signup.bucket_key})"
-        end
+        log_signup_placement(signup, destination_bucket)
       end
 
-      bucket_counts = registration_policy.buckets.map do |bucket|
-        "#{bucket.key}: #{new_signups_by_signup_id.values.select { |signup| signup.bucket_key == bucket.key && signup.counted? }.size}/#{bucket.total_slots}"
-      end
-      puts "Counts: [#{bucket_counts.join(' | ')}]"
-      puts
+      log_bucket_counts(signup)
     end
 
     private
@@ -97,6 +90,35 @@ class EventChangeRegistrationPolicyService < ApplicationService
 
       movable_signup.bucket_key = destination_bucket.key
       movable_signup
+    end
+
+    def log(message)
+      logger.debug(message) if logger
+    end
+
+    def log_immovable_signup(signup)
+      return unless logger
+      log "Signup for #{signup.user_con_profile.name_without_nickname} (#{signup.requested_bucket_key}) is immovable"
+    end
+
+    def log_signup_placement(signup, destination_bucket)
+      return unless logger
+
+      if destination_bucket.key == signup.bucket_key
+        log "Signup for #{signup.user_con_profile.name_without_nickname} remains in #{destination_bucket.key}"
+      else
+        log "Signup for #{signup.user_con_profile.name_without_nickname} placed in #{destination_bucket.key} (was #{signup.bucket_key})"
+      end
+    end
+
+    def log_bucket_counts(signup)
+      return unless logger
+
+      bucket_counts = registration_policy.buckets.map do |bucket|
+        "#{bucket.key}: #{new_signups_by_signup_id.values.select { |signup| signup.bucket_key == bucket.key && signup.counted? }.size}/#{bucket.total_slots}"
+      end
+      log "Counts: [#{bucket_counts.join(' | ')}]"
+      log
     end
   end
 
