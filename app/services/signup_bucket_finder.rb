@@ -17,7 +17,7 @@ class SignupBucketFinder
 
   def buckets_with_capacity
     @buckets_with_capacity ||= registration_policy.buckets.reject do |bucket|
-      bucket.not_counted? || bucket.full?(other_signups)
+      bucket.not_counted? || bucket.slots_unlimited? || bucket.full?(other_signups)
     end
   end
 
@@ -41,7 +41,7 @@ class SignupBucketFinder
           (requested_bucket&.not_counted? ? nil : registration_policy.anything_bucket)
         ].compact
       else
-        registration_policy.buckets.select(&:counted?).sort_by { |bucket| bucket.anything? ? 0 : 1 }
+        registration_policy.buckets.select(&:counted?).select(&:slots_limited?).sort_by { |bucket| bucket.anything? ? 0 : 1 }
       end
     end
   end
