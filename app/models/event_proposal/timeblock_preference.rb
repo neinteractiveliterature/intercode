@@ -35,7 +35,7 @@ class EventProposal::TimeblockPreference
     return self == EventProposal::TimeblockPreference.new(other) if other.is_a?(Hash)
     return self == other.to_unsafe_h if other.is_a?(ActionController::Parameters)
     return false unless other.is_a?(EventProposal::TimeblockPreference)
-    
+
     attributes == other.attributes
   end
 
