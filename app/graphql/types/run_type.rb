@@ -15,7 +15,7 @@ Types::RunType = GraphQL::ObjectType.define do
   end
 
   field :confirmed_signup_count, types.Int do
-    resolve ->(obj, _args, ctx) {
+    resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
         presenter.counted_signups_by_state('confirmed').size
       end
@@ -23,13 +23,13 @@ Types::RunType = GraphQL::ObjectType.define do
   end
 
   field :confirmed_limited_signup_count, types.Int do
-    resolve ->(obj, _args, ctx) {
+    resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then(&:confirmed_limited_count)
     }
   end
 
   field :waitlisted_signup_count, types.Int do
-    resolve ->(obj, _args, ctx) {
+    resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
         presenter.counted_signups_by_state('waitlisted').size
       end
@@ -37,7 +37,7 @@ Types::RunType = GraphQL::ObjectType.define do
   end
 
   field :not_counted_signup_count, types.Int do
-    resolve ->(obj, _args, ctx) {
+    resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
         (
           presenter.not_counted_signups_by_state('confirmed').size +
