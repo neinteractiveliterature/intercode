@@ -1,4 +1,4 @@
-class OverwriteCmsContentService < ApplicationService
+class OverwriteCmsContentService < CivilService::Service
   def initialize(convention:, content_set_name:)
     @convention = convention
     @content_set_name = content_set_name
@@ -16,7 +16,7 @@ class OverwriteCmsContentService < ApplicationService
 
       success
     end
-  rescue ApplicationService::ServiceFailure => e
+  rescue CivilService::ServiceFailure => e
     e.result
   end
 end

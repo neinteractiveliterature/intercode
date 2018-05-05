@@ -1,4 +1,4 @@
-class ExportCmsContentSetService < ApplicationService
+class ExportCmsContentSetService < CivilService::Service
   attr_reader :convention, :content_set, :content_set_name, :inherit
 
   validates_presence_of :convention, :content_set_name
