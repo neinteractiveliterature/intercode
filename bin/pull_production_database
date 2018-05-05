@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo 'Getting database URL from Heroku'
+DATABASE_URL=$(heroku config:get DATABASE_URL)
+
+echo 'Pulling database contents'
+docker run -i -t postgres:10.3 pg_dump -Fp "$DATABASE_URL" >intercode_production_tmp.sql
+
+echo 'Loading database into local Postgres'
+createdb -U postgres intercode_production_tmp
+cat intercode_production_tmp.sql | psql -U postgres intercode_production_tmp
+
+echo 'Changing convention domains for development'
+echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test';" | psql -U postgres intercode_production_tmp
+
+echo 'Dropping intercode_development database'
+dropdb -U postgres intercode_development
+
+echo 'Recreating intercode_development from production data'
+createdb -U postgres -T intercode_production_tmp intercode_development
+
+echo 'Dropping tmp database and erasing production sql dump'
+dropdb -U postgres intercode_production_tmp
+rm intercode_production_tmp.sql
