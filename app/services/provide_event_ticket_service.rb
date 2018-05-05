@@ -1,7 +1,8 @@
-class ProvideEventTicketService < ApplicationService
+class ProvideEventTicketService < CivilService::Service
+  include Concerns::SkippableAdvisoryLock
   include ActionView::Helpers::TextHelper
 
-  class Result < ServiceResult
+  class Result < CivilService::Result
     attr_accessor :ticket
   end
   self.result_class = Result

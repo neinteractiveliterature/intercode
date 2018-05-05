@@ -1,4 +1,4 @@
-class NotifyFormResponseChangesService < ApplicationService
+class NotifyFormResponseChangesService < CivilService::Service
   attr_reader :scope, :send_mail
 
   def initialize(scope:, send_mail:)

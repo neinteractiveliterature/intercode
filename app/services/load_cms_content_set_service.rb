@@ -1,4 +1,4 @@
-class LoadCmsContentSetService < ApplicationService
+class LoadCmsContentSetService < CivilService::Service
   FORM_NAMES = %w[
     event_proposal_form
     filler_event_form

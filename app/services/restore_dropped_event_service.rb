@@ -1,4 +1,4 @@
-class RestoreDroppedEventService < ApplicationService
+class RestoreDroppedEventService < CivilService::Service
   attr_reader :event
 
   validate :event_must_be_dropped
