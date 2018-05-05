@@ -172,6 +172,10 @@ class Cart extends React.Component {
     const orderEntry = this.props.data.currentPendingOrder.order_entries
       .find(entry => entry.id === this.state.confirmingDeleteOrderEntryId);
 
+    if (!orderEntry) {
+      return '';
+    }
+
     let { name } = orderEntry.product;
     if (orderEntry.product_variant) {
       name += ` (${orderEntry.product_variant.name})`;
