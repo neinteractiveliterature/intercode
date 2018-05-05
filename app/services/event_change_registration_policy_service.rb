@@ -1,5 +1,5 @@
-class EventChangeRegistrationPolicyService < ApplicationService
-  class Result < ServiceResult
+class EventChangeRegistrationPolicyService < CivilService::Service
+  class Result < CivilService::Result
     attr_accessor :move_results
   end
   self.result_class = Result
@@ -139,6 +139,8 @@ class EventChangeRegistrationPolicyService < ApplicationService
       log
     end
   end
+
+  include Concerns::SkippableAdvisoryLock
 
   attr_reader :event, :new_registration_policy, :whodunit, :move_results
 

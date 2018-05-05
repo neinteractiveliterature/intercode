@@ -1,5 +1,5 @@
-class EventWithdrawService < ApplicationService
-  class Result < ServiceResult
+class EventWithdrawService < CivilService::Service
+  class Result < CivilService::Result
     attr_accessor :move_results, :prev_bucket_key, :prev_state
   end
   self.result_class = Result
@@ -9,6 +9,7 @@ class EventWithdrawService < ApplicationService
   delegate :event, to: :run
   delegate :convention, to: :event
 
+  include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
   def initialize(signup, whodunit, skip_locking: false)

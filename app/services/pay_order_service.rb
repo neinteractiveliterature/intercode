@@ -1,4 +1,4 @@
-class PayOrderService < ApplicationService
+class PayOrderService < CivilService::Service
   validate :check_order_status
 
   attr_reader :order, :stripe_token

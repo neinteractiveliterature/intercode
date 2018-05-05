@@ -1,5 +1,5 @@
-class EventSignupService < ApplicationService
-  class Result < ServiceResult
+class EventSignupService < CivilService::Service
+  class Result < CivilService::Result
     attr_accessor :signup
   end
   self.result_class = Result
@@ -16,6 +16,7 @@ class EventSignupService < ApplicationService
   validate :require_valid_bucket
   validate :require_no_bucket_for_team_member
 
+  include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
   def initialize(user_con_profile, run, requested_bucket_key, whodunit, skip_locking: false)

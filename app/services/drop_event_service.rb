@@ -1,4 +1,4 @@
-class DropEventService < ApplicationService
+class DropEventService < CivilService::Service
   attr_reader :event
 
   def initialize(event:)
