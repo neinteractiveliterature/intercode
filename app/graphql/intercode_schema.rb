@@ -16,7 +16,7 @@ IntercodeSchema = GraphQL::Schema.define do
       }
     )
   end
-  better_rescue_middleware.rescue_from ApplicationService::ServiceFailure do |err|
+  better_rescue_middleware.rescue_from CivilService::ServiceFailure do |err|
     err.result.errors.full_messages.join(', ')
   end
   better_rescue_middleware.rescue_from GraphQL::Guard::NotAuthorizedError do |err|

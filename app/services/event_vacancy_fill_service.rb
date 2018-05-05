@@ -1,5 +1,5 @@
-class EventVacancyFillService < ApplicationService
-  class Result < ServiceResult
+class EventVacancyFillService < CivilService::Service
+  class Result < CivilService::Result
     attr_accessor :move_results
   end
   self.result_class = Result
@@ -8,6 +8,7 @@ class EventVacancyFillService < ApplicationService
   delegate :event, to: :run
   delegate :convention, to: :event
 
+  include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
   def initialize(run, bucket_key, skip_locking: false)

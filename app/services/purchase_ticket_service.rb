@@ -1,5 +1,5 @@
-class PurchaseTicketService < ApplicationService
-  class Result < ServiceResult
+class PurchaseTicketService < CivilService::Service
+  class Result < CivilService::Result
     attr_accessor :ticket
   end
   self.result_class = Result

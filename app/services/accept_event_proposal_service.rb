@@ -1,5 +1,5 @@
-class AcceptEventProposalService < ApplicationService
-  class Result < ServiceResult
+class AcceptEventProposalService < CivilService::Service
+  class Result < CivilService::Result
     attr_accessor :event
   end
   self.result_class = Result
