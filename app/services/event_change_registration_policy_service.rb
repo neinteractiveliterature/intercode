@@ -25,15 +25,20 @@ class EventChangeRegistrationPolicyService < ApplicationService
     end
 
     def simulate_signups(signups)
-      signups.each { |signup| simulate_signup signup }
+      # Signups that are confirmed with no bucket can't possibly be affected by a registration
+      # policy change; just put them right into the signup list without simulating anything
+      to_keep, to_place = signups.partition do |signup|
+        signup.confirmed? && !signup.bucket_key
+      end
+
+      to_keep.each do |signup|
+        new_signups_by_signup_id[signup.id] = signup
+      end
+
+      to_place.each { |signup| simulate_signup signup }
     end
 
     def simulate_signup(signup)
-      if signup.confirmed? && !signup.bucket_key
-        new_signups_by_signup_id[signup.id] = signup
-        return
-      end
-
       bucket_finder = SignupBucketFinder.new(
         registration_policy,
         signup.requested_bucket_key,
@@ -229,7 +234,7 @@ class EventChangeRegistrationPolicyService < ApplicationService
     move_results.each do |move_result|
       notify_moved_signup(move_result) if move_result.should_notify?
     end
-    
+
     notify_team_members(move_results)
   end
 
