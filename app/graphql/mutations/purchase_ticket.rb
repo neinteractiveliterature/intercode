@@ -8,11 +8,14 @@ Mutations::PurchaseTicket = GraphQL::Relay::Mutation.define do
   resolve ->(_obj, args, ctx) do
     ticket_type = ctx[:convention].ticket_types.find(args[:ticket_type_id])
 
-    result = PurchaseTicketService.new(
-      ctx[:user_con_profile],
-      ticket_type,
-      args[:stripe_token]
-    ).call!
+    service = PurchaseTicketService.new(ctx[:user_con_profile], ticket_type, args[:stripe_token])
+    result = service.call
+
+    if result.failure?
+      err = CivilService::ServiceFailure.new(service, result)
+      raise BetterRescueMiddleware::UnloggedError, err.message if result.card_error
+      raise err
+    end
 
     { ticket: result.ticket }
   end

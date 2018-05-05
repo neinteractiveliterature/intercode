@@ -172,6 +172,10 @@ class Cart extends React.Component {
     const orderEntry = this.props.data.currentPendingOrder.order_entries
       .find(entry => entry.id === this.state.confirmingDeleteOrderEntryId);
 
+    if (!orderEntry) {
+      return '';
+    }
+
     let { name } = orderEntry.product;
     if (orderEntry.product_variant) {
       name += ` (${orderEntry.product_variant.name})`;
@@ -219,6 +223,10 @@ class Cart extends React.Component {
       .map(entry => entry.price.fractional)
       .reduce((total, entryPrice) => total + entryPrice, 0);
 
+    const currencyCode = (
+      this.props.data.currentPendingOrder.order_entries[0] || { currency_code: 'USD' }
+    ).currency_code;
+
     return (
       <table className="table">
         <thead>
@@ -236,7 +244,7 @@ class Cart extends React.Component {
               <strong>Total</strong>
             </td>
             <td colSpan="2">
-              <strong>{formatMoney(totalPrice)}</strong>
+              <strong>{formatMoney({ fractional: totalPrice, currency_code: currencyCode })}</strong>
               <br />
               <button className="btn btn-primary mt-2" onClick={this.checkOutClicked}>
                 <i className="fa fa-shopping-cart" />
