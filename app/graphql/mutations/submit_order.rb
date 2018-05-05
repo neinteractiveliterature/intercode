@@ -11,10 +11,15 @@ Mutations::SubmitOrder = GraphQL::Relay::Mutation.define do
 
     if args[:payment_mode] == 'now'
       order.update!(submitted_at: Time.now)
-      PayOrderService.new(
-        order,
-        args[:stripe_token]
-      ).call!
+
+      service = PayOrderService.new(order, args[:stripe_token])
+      result = service.call
+
+      if result.failure?
+        err = CivilService::ServiceFailure.new(service, result)
+        raise BetterRescueMiddleware::UnloggedError, err.message if result.card_error
+        raise err
+      end
     else
       order.update!(status: 'unpaid', submitted_at: Time.now)
     end
