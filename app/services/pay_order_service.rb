@@ -1,4 +1,9 @@
 class PayOrderService < CivilService::Service
+  class Result < CivilService::Result
+    attr_accessor :card_error
+  end
+  self.result_class = Result
+
   validate :check_order_status
 
   attr_reader :order, :stripe_token
@@ -15,7 +20,7 @@ class PayOrderService < CivilService::Service
       create_charge
     rescue Stripe::CardError => e
       errors.add :base, e.message
-      return failure(errors)
+      return failure(errors, card_error: true)
     end
 
     update_order(charge)
