@@ -1,4 +1,6 @@
 class BetterRescueMiddleware
+  class UnloggedError < StandardError; end
+
   attr_reader :rescue_table
 
   def initialize
@@ -20,6 +22,8 @@ class BetterRescueMiddleware
 
   def call(*)
     yield
+  rescue UnloggedError => err
+    GraphQL::ExecutionError.new(err.message)
   rescue StandardError => err
     Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
     Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")

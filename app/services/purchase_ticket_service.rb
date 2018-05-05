@@ -1,6 +1,6 @@
 class PurchaseTicketService < CivilService::Service
   class Result < CivilService::Result
-    attr_accessor :ticket
+    attr_accessor :ticket, :card_error
   end
   self.result_class = Result
 
@@ -25,7 +25,7 @@ class PurchaseTicketService < CivilService::Service
       create_charge
     rescue Stripe::CardError => e
       errors.add :base, e.message
-      return failure(errors)
+      return failure(errors, card_error: true)
     end
 
     ticket = create_ticket(charge)

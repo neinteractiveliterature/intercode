@@ -11,7 +11,7 @@ Types::OrderEntryType = GraphQL::ObjectType.define do
       AssociationLoader.for(OrderEntry, :product).load(obj)
     }
   end
-  field :product_variant, !Types::ProductVariantType do
+  field :product_variant, Types::ProductVariantType do
     resolve ->(obj, _args, _ctx) {
       AssociationLoader.for(OrderEntry, :product_variant).load(obj)
     }
