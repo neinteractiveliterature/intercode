@@ -32,6 +32,10 @@ Layout/AlignParameters:
   Enabled: true
   EnforcedStyle: with_fixed_indentation
 
+Layout/BlockAlignment:
+  Description: 'Align block ends correctly.'
+  Enabled: true
+
 Layout/BlockEndNewline:
   Description: 'Put end statement of multiline block on its own line.'
   Enabled: true
@@ -48,6 +52,17 @@ Layout/ClosingParenthesisIndentation:
 
 Layout/CommentIndentation:
   Description: 'Indentation of comments.'
+  Enabled: true
+
+Layout/ConditionPosition:
+  Description: >-
+                 Checks for condition placed in a confusing position relative to
+                 the keyword.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#same-line-condition'
+  Enabled: true
+
+Layout/DefEndAlignment:
+  Description: 'Align ends corresponding to defs correctly.'
   Enabled: true
 
 Layout/DotPosition:
@@ -87,6 +102,11 @@ Layout/EmptyLinesAroundModuleBody:
 Layout/EmptyLinesAroundMethodBody:
   Description: "Keeps track of empty lines around method bodies."
   Enabled: true
+
+Lint/EndAlignment:
+  Description: 'Align ends correctly.'
+  Enabled: true
+  EnforcedStyleAlignWith: variable
 
 Layout/EndOfLine:
   Description: 'Use Unix-style line endings.'
@@ -286,27 +306,12 @@ Lint/AssignmentInCondition:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#safe-assignment-in-condition'
   Enabled: true
 
-Lint/BlockAlignment:
-  Description: 'Align block ends correctly.'
-  Enabled: true
-
 Lint/CircularArgumentReference:
   Description: "Don't refer to the keyword argument in the default value."
   Enabled: true
 
-Lint/ConditionPosition:
-  Description: >-
-                 Checks for condition placed in a confusing position relative to
-                 the keyword.
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#same-line-condition'
-  Enabled: true
-
 Lint/Debugger:
   Description: 'Check for debugger calls.'
-  Enabled: true
-
-Lint/DefEndAlignment:
-  Description: 'Align ends corresponding to defs correctly.'
   Enabled: true
 
 Lint/DeprecatedClassMethods:
@@ -332,11 +337,6 @@ Lint/EmptyEnsure:
 Lint/EmptyInterpolation:
   Description: 'Checks for empty string interpolation.'
   Enabled: true
-
-Lint/EndAlignment:
-  Description: 'Align ends correctly.'
-  Enabled: true
-  EnforcedStyleAlignWith: variable
 
 Lint/EndInMethod:
   Description: 'END blocks should not be placed inside method definitions.'
@@ -1105,8 +1105,13 @@ Style/TrailingCommaInArguments:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-params-comma'
   Enabled: true
 
-Style/TrailingCommaInLiteral:
-  Description: 'Checks for trailing comma in literals.'
+Style/TrailingCommaInArrayLiteral:
+  Description: 'Checks for trailing comma in array literals.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas'
+  Enabled: true
+
+Style/TrailingCommaInHashLiteral:
+  Description: 'Checks for trailing comma in hash literals.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas'
   Enabled: true
 

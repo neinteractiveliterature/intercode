@@ -7,7 +7,7 @@ Mutations::UpdateSignupBucket = GraphQL::Relay::Mutation.define do
 
   resolve ->(_obj, args, ctx) do
     signup = ctx[:convention].signups.find(args[:id])
-    raise "The selected bucket is full." if signup.run.bucket_full?(args[:bucket_key]) && signup.counted?
+    raise 'The selected bucket is full.' if signup.run.bucket_full?(args[:bucket_key]) && signup.counted?
 
     original_bucket_key = signup.bucket_key
     signup.update!(bucket_key: args[:bucket_key])

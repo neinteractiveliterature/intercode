@@ -194,9 +194,10 @@ sign up for events."
   def move_signup
     movable_signup = bucket_finder.movable_signups_for_bucket(actual_bucket).first
 
-    destination_bucket = bucket_finder.buckets_with_capacity.sort_by do |bucket|
-      bucket.anything? ? 0 : 1
-    end.first
+    destination_bucket = bucket_finder
+      .no_preference_bucket_finder
+      .prioritized_buckets_with_capacity_except(actual_bucket)
+      .first
 
     movable_signup.update!(bucket_key: destination_bucket.key)
     movable_signup
