@@ -71,6 +71,10 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.action_controller.asset_host = "//#{config.action_mailer.default_url_options[:host]}/packs"
 
+  config.public_file_server.headers = {
+    'Access-Control-Allow-Origin': '*'
+  }
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
