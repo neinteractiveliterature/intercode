@@ -72,7 +72,7 @@ Rails.application.configure do
   config.action_controller.asset_host = "//#{config.action_mailer.default_url_options[:host]}"
 
   config.public_file_server.headers = {
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin' => '*'
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
