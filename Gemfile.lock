@@ -100,11 +100,6 @@ GEM
       graphql (~> 1.7)
       rails (>= 4.2)
     arel (9.0.0)
-    asset_sync (2.4.0)
-      activemodel (>= 4.1.0)
-      fog-core
-      mime-types (>= 2.99)
-      unf
     autoprefixer-rails (8.4.1)
       execjs
     aws-partitions (1.80.0)
@@ -407,10 +402,6 @@ GEM
     tins (1.15.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    unf (0.1.4)
-      unf_ext
-    unf (0.1.4-java)
-    unf_ext (0.0.7.5)
     warden (1.2.7)
       rack (>= 1.0)
     webpacker (3.5.3)
@@ -439,7 +430,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   apollo_upload_server (= 2.0.0.beta.1)
-  asset_sync
   autoprefixer-rails
   aws-sdk-s3
   aws-sdk-sqs
