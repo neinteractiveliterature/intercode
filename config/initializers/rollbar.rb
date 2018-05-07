@@ -12,7 +12,8 @@ Rollbar.configure do |config|
   end
 
   capistrano_revision_path = File.expand_path('REVISION', Rails.root)
-  rollbar_code_version = if File.exist?(capistrano_revision_path)
+  rollbar_code_version = ENV['HEROKU_SLUG_COMMIT']
+  rollbar_code_version ||= if File.exist?(capistrano_revision_path)
     File.read(capistrano_revision_path).strip
   end
 
