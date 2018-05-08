@@ -79,6 +79,12 @@ class CodeInput extends React.Component {
       return this.renderPreviewContent();
     }
 
+    // react-codemirror2 doesn't want event handlers to be passed undefined
+    const eventHandlers = {};
+    if (this.props.onBlur) {
+      eventHandlers.onBlur = this.props.onBlur;
+    }
+
     return (
       <CodeMirror
         value={this.props.value}
@@ -89,7 +95,7 @@ class CodeInput extends React.Component {
           gutters: [],
           mode: this.props.mode,
         }}
-        onBlur={this.props.onBlur}
+        {...eventHandlers}
         onBeforeChange={this.onBeforeChange}
       />
     );
