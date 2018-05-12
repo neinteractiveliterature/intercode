@@ -25,8 +25,8 @@ class BetterRescueMiddleware
   rescue UnloggedError => err
     GraphQL::ExecutionError.new(err.message)
   rescue StandardError => err
-    Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
     Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")
+    Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
     Rollbar.error(err)
     attempt_rescue(err)
   end
