@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { propType } from 'graphql-anywhere';
+import { Link } from 'react-router-dom';
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { fragments } from '../eventsQuery';
 import { timespanFromConvention } from '../../TimespanUtils';
@@ -10,7 +10,6 @@ class VolunteerEventSection extends React.Component {
   static propTypes = {
     event: propType(fragments.eventFragment).isRequired,
     convention: propType(fragments.conventionFragment).isRequired,
-    editRun: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -61,9 +60,9 @@ class VolunteerEventSection extends React.Component {
 
       return (
         <li key={run.id} className="my-2">
-          <button className="btn btn-secondary" onClick={() => this.props.editRun(this.props.event, run)}>
+          <Link className="btn btn-secondary" to={`/volunteer_events/${this.props.event.id}/runs/${run.id}/edit`}>
             {runStart.format(format)}
-          </button>
+          </Link>
         </li>
       );
     });

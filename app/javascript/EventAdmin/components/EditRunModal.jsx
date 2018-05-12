@@ -161,7 +161,7 @@ class EditRunModal extends React.Component {
 
   render = () => (
     <div>
-      <Modal visible={this.props.run != null && !this.state.isConfirmingDelete}>
+      <Modal visible={this.props.run != null && !this.state.isConfirmingDelete} dialogClassName="modal-lg">
         <div className="modal-header">
           <h5 className="modal-title">{this.renderTitle()}</h5>
         </div>

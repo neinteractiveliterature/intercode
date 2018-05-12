@@ -99,13 +99,13 @@ class ScheduleMultipleRunsModal extends React.Component {
 
   scheduleRuns = () => {
     const runs = this.getNonConflictingTimespansWithinRange().map(timespan => ({
-      event_id: this.props.event.id,
       starts_at: timespan.start.toISOString(),
     }));
 
     return this.props.createMultipleRuns({
       variables: {
         input: {
+          event_id: this.props.event.id,
           runs,
         },
       },
