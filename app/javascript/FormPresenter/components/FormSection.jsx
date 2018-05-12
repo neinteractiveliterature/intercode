@@ -1,8 +1,11 @@
+/* eslint-disable react/no-multi-comp */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import ErrorDisplay from '../../ErrorDisplay';
 import Form from '../../Models/Form';
 import FormItem from './FormItem';
+import ItemInteractionTracker from '../ItemInteractionTracker';
 
 class FormSection extends React.Component {
   static propTypes = {
@@ -15,8 +18,8 @@ class FormSection extends React.Component {
     section: PropTypes.shape({
       id: PropTypes.number.isRequired,
     }).isRequired,
-    interactedWithItem: PropTypes.func.isRequired,
-    interactedItems: PropTypes.shape({}).isRequired,
+    interactWithItem: PropTypes.func.isRequired,
+    hasInteractedWithItem: PropTypes.func.isRequired,
     response: PropTypes.shape({}).isRequired,
     responseValuesChanged: PropTypes.func.isRequired,
     errors: PropTypes.shape({}).isRequired,
@@ -49,8 +52,8 @@ class FormSection extends React.Component {
       convention,
       form,
       section,
-      interactedWithItem,
-      interactedItems,
+      interactWithItem,
+      hasInteractedWithItem,
       response,
       errors,
     } = this.props;
@@ -66,12 +69,12 @@ class FormSection extends React.Component {
             convention={convention}
             valueInvalid={
               item.identifier &&
-              interactedItems[item.identifier] &&
+              hasInteractedWithItem(item.identifier) &&
               !item.valueIsComplete(response[item.identifier])
             }
             value={item.identifier ? response[item.identifier] : null}
             onChange={this.responseValueChanged}
-            onInteract={interactedWithItem}
+            onInteract={interactWithItem}
           />
           <ErrorDisplay stringError={errorsForDisplay} />
         </div>
@@ -86,4 +89,22 @@ class FormSection extends React.Component {
   }
 }
 
-export default FormSection;
+const FormSectionInteractionWrapper = WrappedComponent => class Wrapper extends React.Component {
+  getWrappedInstance = () => this.wrappedInstance
+
+  render = () => (
+    <ItemInteractionTracker.Interactor>
+      {({ interactWithItem, hasInteractedWithItem }) => (
+        <WrappedComponent
+          interactWithItem={interactWithItem}
+          hasInteractedWithItem={hasInteractedWithItem}
+          ref={(instance) => { this.wrappedInstance = instance; }}
+          {...this.props}
+        />
+      )}
+    </ItemInteractionTracker.Interactor>
+  )
+};
+
+export default FormSectionInteractionWrapper(FormSection);
+export { FormSection as PureFormSection };
