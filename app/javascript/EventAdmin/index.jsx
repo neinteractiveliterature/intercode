@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, NavLink, Route, Switch, Redirect } from 'react-router-dom';
-import DroppedEventAdmin from './components/DroppedEventAdmin';
-import EventAdminEditEvent from './components/EventAdminEditEvent';
-import EventAdminRunsTable from './components/EventAdminRunsTable';
-import FillerEventAdmin from './components/FillerEventAdmin';
-import VolunteerEventAdmin from './components/VolunteerEventAdmin';
+import DroppedEventAdmin from './DroppedEventAdmin';
+import EventAdminEditEvent from './EventAdminEditEvent';
+import EventAdminRunsTable from './EventAdminRunsTable';
+import FillerEventAdmin from './FillerEventAdmin';
+import VolunteerEventAdmin from './VolunteerEventAdmin';
 
 const EventAdminApp = ({ basename }) => (
   <BrowserRouter basename={basename}>

@@ -3,8 +3,8 @@ import moment from 'moment-timezone';
 import { propType } from 'graphql-anywhere';
 import { Link } from 'react-router-dom';
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
-import { fragments } from '../eventsQuery';
-import { timespanFromConvention } from '../../TimespanUtils';
+import { fragments } from './eventsQuery';
+import { timespanFromConvention } from '../TimespanUtils';
 
 class VolunteerEventSection extends React.Component {
   static propTypes = {

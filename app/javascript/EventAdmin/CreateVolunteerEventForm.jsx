@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { Link, withRouter } from 'react-router-dom';
 import { enableUniqueIds } from 'react-html-id';
-import CommonEventFormFields from '../../BuiltInForms/CommonEventFormFields';
-import ErrorDisplay from '../../ErrorDisplay';
-import eventsQuery from '../eventsQuery';
-import { createEventMutation } from '../mutations';
-import getFormForEventCategory from '../getFormForEventCategory';
+import CommonEventFormFields from '../BuiltInForms/CommonEventFormFields';
+import ErrorDisplay from '../ErrorDisplay';
+import eventsQuery from './eventsQuery';
+import { createEventMutation } from './mutations';
+import getFormForEventCategory from './getFormForEventCategory';
 
 @withRouter
 @graphql(createEventMutation, { name: 'createEvent' })
