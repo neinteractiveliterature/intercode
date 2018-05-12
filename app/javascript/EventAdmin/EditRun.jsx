@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import EditRunModal from './EditRunModal';
-import { fragments } from '../eventsQuery';
+import { fragments } from './eventsQuery';
 
 class EditRun extends React.Component {
   static propTypes = {

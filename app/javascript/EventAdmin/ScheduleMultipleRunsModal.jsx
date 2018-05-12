@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import { graphql } from 'react-apollo';
 import Modal from 'react-bootstrap4-modal';
-import ConventionDaySelect from '../../BuiltInFormControls/ConventionDaySelect';
-import TimeSelect from '../../BuiltInFormControls/TimeSelect';
-import Timespan from '../../PCSG/Timespan';
-import { timespanFromConvention, timespanFromRun } from '../../TimespanUtils';
-import eventsQuery, { fragments } from '../eventsQuery';
-import { createMultipleRunsMutation } from '../mutations';
+import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
+import TimeSelect from '../BuiltInFormControls/TimeSelect';
+import Timespan from '../PCSG/Timespan';
+import { timespanFromConvention, timespanFromRun } from '../TimespanUtils';
+import eventsQuery, { fragments } from './eventsQuery';
+import { createMultipleRunsMutation } from './mutations';
 
 @graphql(createMultipleRunsMutation, { name: 'createMultipleRuns' })
 class ScheduleMultipleRunsModal extends React.Component {

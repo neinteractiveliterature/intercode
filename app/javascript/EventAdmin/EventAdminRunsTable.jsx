@@ -3,9 +3,9 @@ import { graphql } from 'react-apollo';
 import { Route } from 'react-router-dom';
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import eventsQuery from '../eventsQuery';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import eventsQuery from './eventsQuery';
 
 @graphql(eventsQuery)
 @GraphQLQueryResultWrapper

@@ -3,10 +3,10 @@ import { graphql } from 'react-apollo';
 import { Link, Switch, Route } from 'react-router-dom';
 import CreateVolunteerEventForm from './CreateVolunteerEventForm';
 import EditRun from './EditRun';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import VolunteerEventSection from './VolunteerEventSection';
-import eventsQuery from '../eventsQuery';
+import eventsQuery from './eventsQuery';
 
 @graphql(eventsQuery)
 @GraphQLQueryResultWrapper
