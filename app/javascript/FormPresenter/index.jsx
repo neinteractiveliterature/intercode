@@ -1,33 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
-import buildReduxStore from '../buildReduxStore';
 import Form from '../Models/Form';
-import reducer from './reducers';
+import SectionTraversalController from './SectionTraversalController';
 
-class FormPresenterApp extends React.Component {
-  static propTypes = {
-    form: Form.propType.isRequired,
-    children: PropTypes.node.isRequired,
-  };
+const FormPresenterApp = ({ form, children }) => (
+  <SectionTraversalController form={form}>
+    {children}
+  </SectionTraversalController>
+);
 
-  constructor(props) {
-    super(props);
-
-    this.store = buildReduxStore(
-      'FormPresenterApp',
-      reducer,
-      {
-        currentSectionId: props.form.getSections().get(0).id,
-      },
-    );
-  }
-
-  render = () => (
-    <Provider store={this.store}>
-      {this.props.children}
-    </Provider>
-  )
-}
+FormPresenterApp.propTypes = {
+  form: Form.propType.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 export default FormPresenterApp;
