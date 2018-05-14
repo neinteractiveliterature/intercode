@@ -5,7 +5,7 @@ import { isEqual, flowRight } from 'lodash';
 import buildFormStateFromData from './buildFormStateFromData';
 import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
-import FormPresenterContainer from '../FormPresenter/containers/FormPresenterContainer';
+import FormPresenter from '../FormPresenter/components/FormPresenter';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import { myProfileQuery } from './queries';
@@ -76,7 +76,7 @@ class MyProfileForm extends React.Component {
 
       renderContent={formPresenterProps => (
         <FormPresenterApp form={this.state.form}>
-          <FormPresenterContainer {...formPresenterProps} />
+          <FormPresenter {...formPresenterProps} />
         </FormPresenterApp>
       )}
     />

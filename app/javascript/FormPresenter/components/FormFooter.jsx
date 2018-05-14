@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Models/Form';
 import { getCurrentSection, getIncompleteItems } from '../FormPresenterUtils';
+import ItemInteractionTracker from '../ItemInteractionTracker';
+import SectionTraversalController from '../SectionTraversalController';
 
 class FormFooter extends React.Component {
   static propTypes = {
@@ -54,12 +56,12 @@ class FormFooter extends React.Component {
   }
 
   previousSection = () => {
-    this.props.previousSection(this.props.form, this.props.currentSectionChanged);
+    this.props.previousSection(this.props.currentSectionChanged);
   }
 
   tryNextSection = () => {
     if (this.validateContinue()) {
-      this.props.nextSection(this.props.form, this.props.currentSectionChanged);
+      this.props.nextSection(this.props.currentSectionChanged);
     }
   }
 
@@ -162,4 +164,34 @@ class FormFooter extends React.Component {
   }
 }
 
-export default FormFooter;
+const FormFooterTraversalWrapper = WrappedComponent => props => (
+  <SectionTraversalController.Traverser>
+    {({
+      currentSectionId,
+      currentSectionIndex,
+      previousSection,
+      nextSection,
+      sectionCount,
+    }) => (
+      <WrappedComponent
+        currentSectionId={currentSectionId}
+        currentSectionIndex={currentSectionIndex}
+        previousSection={previousSection}
+        nextSection={nextSection}
+        sectionCount={sectionCount}
+        {...props}
+      />
+    )}
+  </SectionTraversalController.Traverser>
+);
+
+const FormFooterInteractionWrapper = WrappedComponent => props => (
+  <ItemInteractionTracker.Interactor>
+    {({ interactWithItem }) => (
+      <WrappedComponent onInteract={interactWithItem} {...props} />
+    )}
+  </ItemInteractionTracker.Interactor>
+);
+
+export default FormFooterTraversalWrapper(FormFooterInteractionWrapper(FormFooter));
+export { FormFooter as PureFormFooter };

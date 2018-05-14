@@ -1,62 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApolloProvider } from 'react-apollo';
-import { Provider } from 'react-redux';
 import { BrowserRouter, NavLink, Route, Switch, Redirect } from 'react-router-dom';
-import DroppedEventAdmin from './components/DroppedEventAdmin';
-import EventAdminEditEvent from './components/EventAdminEditEvent';
-import EventAdminRunsTable from './components/EventAdminRunsTable';
-import FillerEventAdmin from './components/FillerEventAdmin';
-import VolunteerEventAdmin from './components/VolunteerEventAdmin';
-import buildApolloClient from '../buildApolloClient';
-import buildReduxStore from '../buildReduxStore';
-import rootReducer from './reducers';
+import DroppedEventAdmin from './DroppedEventAdmin';
+import EventAdminEditEvent from './EventAdminEditEvent';
+import EventAdminRunsTable from './EventAdminRunsTable';
+import FillerEventAdmin from './FillerEventAdmin';
+import VolunteerEventAdmin from './VolunteerEventAdmin';
 
-class EventAdminApp extends React.Component {
-  static propTypes = {
-    authenticityToken: PropTypes.string.isRequired,
-    basename: PropTypes.string.isRequired,
-  };
+const EventAdminApp = ({ basename }) => (
+  <BrowserRouter basename={basename}>
+    <div>
+      <ul className="nav nav-tabs">
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/runs">Regular events</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/volunteer_events">Volunteer events</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/filler_events">Filler events</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/dropped_events">Dropped events</NavLink>
+        </li>
+      </ul>
 
-  constructor(props) {
-    super(props);
-    this.client = buildApolloClient(this.props.authenticityToken);
-    this.store = buildReduxStore('EventAdmin', rootReducer);
-  }
+      <Switch>
+        <Route path="/runs" component={EventAdminRunsTable} />
+        <Route path="/:eventId/runs" component={EventAdminRunsTable} />
+        <Route path="/volunteer_events" component={VolunteerEventAdmin} />
+        <Route path="/filler_events" component={FillerEventAdmin} />
+        <Route path="/dropped_events" component={DroppedEventAdmin} />
+        <Route path="/:id/edit" component={EventAdminEditEvent} />
+        <Redirect to="/runs" />
+      </Switch>
+    </div>
+  </BrowserRouter>
+);
 
-  render = () => (
-    <ApolloProvider client={this.client}>
-      <Provider store={this.store}>
-        <BrowserRouter basename={this.props.basename}>
-          <div>
-            <ul className="nav nav-tabs">
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/runs">Regular events</NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/volunteer_events">Volunteer events</NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/filler_events">Filler events</NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/dropped_events">Dropped events</NavLink>
-              </li>
-            </ul>
-
-            <Switch>
-              <Route path="/runs" component={EventAdminRunsTable} />
-              <Route path="/volunteer_events" component={VolunteerEventAdmin} />
-              <Route path="/filler_events" component={FillerEventAdmin} />
-              <Route path="/dropped_events" component={DroppedEventAdmin} />
-              <Route path="/:id/edit" component={EventAdminEditEvent} />
-              <Redirect to="/runs" />
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </Provider>
-    </ApolloProvider>
-  );
-}
+EventAdminApp.propTypes = {
+  basename: PropTypes.string.isRequired,
+};
 
 export default EventAdminApp;

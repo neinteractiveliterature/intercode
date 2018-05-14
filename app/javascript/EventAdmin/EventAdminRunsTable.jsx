@@ -1,10 +1,11 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import EditRunModalContainer from '../containers/EditRunModalContainer';
-import EventAdminRowContainer from '../containers/EventAdminRowContainer';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import eventsQuery from '../eventsQuery';
+import { Route } from 'react-router-dom';
+import EditRun from './EditRun';
+import EventAdminRow from './EventAdminRow';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import eventsQuery from './eventsQuery';
 
 @graphql(eventsQuery)
 @GraphQLQueryResultWrapper
@@ -23,9 +24,9 @@ class EventAdminRunsTable extends React.Component {
     const eventRows = sortedEvents.filter(event => (
       event.category !== 'filler' && event.category !== 'volunteer_event' && event.status === 'active'
     )).map(event => (
-      <EventAdminRowContainer
+      <EventAdminRow
         event={event}
-        convention={this.props.data.convention}
+        convention={data.convention}
         key={event.id}
       />
     ));
@@ -45,7 +46,16 @@ class EventAdminRunsTable extends React.Component {
           </tbody>
         </table>
 
-        <EditRunModalContainer convention={this.props.data.convention} />
+        <Route path="/:eventId/runs/:runId/edit">
+          {props => (
+            <EditRun {...props} events={data.events} convention={data.convention} />
+          )}
+        </Route>
+        <Route path="/:eventId/runs/new">
+          {props => (
+            <EditRun {...props} events={data.events} convention={data.convention} />
+          )}
+        </Route>
       </div>
     );
   }

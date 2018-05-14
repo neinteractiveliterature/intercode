@@ -3,19 +3,19 @@ import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import EditEvent from '../../BuiltInForms/EditEvent';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import deserializeEvent from '../deserializeEvent';
-import eventsQuery from '../eventsQuery';
-import getFormForEventCategory from '../getFormForEventCategory';
+import EditEvent from '../BuiltInForms/EditEvent';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import deserializeEvent from './deserializeEvent';
+import eventsQuery from './eventsQuery';
+import getFormForEventCategory from './getFormForEventCategory';
 import {
   updateEventMutation,
   dropEventMutation,
   createMaximumEventProvidedTicketsOverrideMutation,
   deleteMaximumEventProvidedTicketsOverrideMutation,
   updateMaximumEventProvidedTicketsOverrideMutation,
-} from '../mutations';
+} from './mutations';
 
 const EventAdminEditEvent = (props) => {
   const {
