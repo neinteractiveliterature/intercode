@@ -27,7 +27,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "bootstrap": "^4.1.1",
-    "bootstrap.native": "^2.0.22",
+    "bootstrap.native": "^2.0.23",
     "cadmus-navbar-admin": "^2.0.0",
     "caniuse-lite": "^1.0.30000839",
     "classnames": "^2.2.5",

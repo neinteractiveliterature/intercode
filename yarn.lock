@@ -1491,9 +1491,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap.native@^2.0.22:
-  version "2.0.22"
-  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.22.tgz#50751a09ccc81c8c0853f3f4b81f49c8e942fdf4"
+bootstrap.native@^2.0.23:
+  version "2.0.23"
+  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.23.tgz#e505c93740db9d94994fdf075834f992512e72c1"
 
 bootstrap@^4.1.1:
   version "4.1.1"
