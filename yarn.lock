@@ -7220,6 +7220,10 @@ react-is@^16.3.2:
   version "16.3.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.2.tgz#f4d3d0e2f5fbb6ac46450641eb2e25bf05d36b22"
 
+react-lifecycles-compat@^1.0.2:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-1.1.4.tgz#fc005c72849b7ed364de20a0f64ff58ebdc2009a"
+
 react-moment-proptypes@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-moment-proptypes/-/react-moment-proptypes-1.5.0.tgz#4a448cd6479efc5dd509283f361f3753c3abe60e"
@@ -7307,15 +7311,16 @@ react-virtualized-select@^3.1.0:
     react-select "^1.0.0-rc.2"
     react-virtualized "^9.0.0"
 
-react-virtualized@^9.0.0, react-virtualized@^9.18.0:
-  version "9.18.5"
-  resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.18.5.tgz#42dd390ebaa7ea809bfcaf775d39872641679b89"
+react-virtualized@^9.0.0, react-virtualized@^9.19.0:
+  version "9.19.0"
+  resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.19.0.tgz#f329997be53e3af74427d03062517ddb3b9c8ab7"
   dependencies:
     babel-runtime "^6.26.0"
     classnames "^2.2.3"
     dom-helpers "^2.4.0 || ^3.0.0"
     loose-envify "^1.3.0"
     prop-types "^15.6.0"
+    react-lifecycles-compat "^1.0.2"
 
 react@*, react@^16.3.2:
   version "16.3.2"
