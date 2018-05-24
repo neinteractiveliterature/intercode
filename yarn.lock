@@ -7137,9 +7137,9 @@ react-bootstrap4-modal@^1.3.0:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-react-codemirror2@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.0.1.tgz#81eb8e17bfe859633a6855a9ce40307914d42891"
+react-codemirror2@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.0.2.tgz#f4fce815487fc9d29aa123994c185570520bf54b"
 
 react-dnd-html5-backend@*, react-dnd-html5-backend@^2.4.1, react-dnd-html5-backend@^2.6.0:
   version "2.6.0"
