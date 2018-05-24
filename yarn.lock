@@ -7216,9 +7216,9 @@ react-input-autosize@^2.1.2:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.3.2:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.2.tgz#f4d3d0e2f5fbb6ac46450641eb2e25bf05d36b22"
+react-is@^16.4.0:
+  version "16.4.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.0.tgz#cc9fdc855ac34d2e7d9d2eb7059bbc240d35ffcf"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
@@ -7293,14 +7293,14 @@ react-table@^6.8.6:
   dependencies:
     classnames "^2.2.5"
 
-react-test-renderer@^16.0.0-0, react-test-renderer@^16.3.2:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.3.2.tgz#3d1ed74fda8db42521fdf03328e933312214749a"
+react-test-renderer@^16.0.0-0, react-test-renderer@^16.4.0:
+  version "16.4.0"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.4.0.tgz#0dbe0e24263e94e1830c7afb1f403707fad313a3"
   dependencies:
     fbjs "^0.8.16"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
-    react-is "^16.3.2"
+    react-is "^16.4.0"
 
 react-virtualized-select@^3.1.0:
   version "3.1.3"
