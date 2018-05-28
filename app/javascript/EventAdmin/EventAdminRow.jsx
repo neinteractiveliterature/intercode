@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
-import Timespan from '../../PCSG/Timespan';
+import Timespan from '../PCSG/Timespan';
 
 class EventAdminRow extends React.Component {
   static propTypes = {
@@ -24,9 +24,6 @@ class EventAdminRow extends React.Component {
     convention: PropTypes.shape({
       timezone_name: PropTypes.string.isRequired,
     }).isRequired,
-
-    newRun: PropTypes.func.isRequired,
-    editRun: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -61,11 +58,15 @@ class EventAdminRow extends React.Component {
     ];
 
     return (
-      <button className="btn btn-secondary m-1 p-2 text-left" key={run.id} onClick={() => this.props.editRun(event, run)}>
+      <Link
+        to={`/${event.id}/runs/${run.id}/edit`}
+        className="btn btn-secondary m-1 p-2 text-left"
+        key={run.id}
+      >
         <ul className="list-unstyled m-0">
           {runMetadata}
         </ul>
-      </button>
+      </Link>
     );
   }
 
@@ -76,9 +77,9 @@ class EventAdminRow extends React.Component {
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
           {sortedRuns.map(run => this.renderRun(event, run))}
-          <button className="btn btn-primary btn-sm m-1" onClick={() => { this.props.newRun(event); }}>
+          <Link className="btn btn-primary btn-sm m-1" to={`/${event.id}/runs/new`}>
             <i className="fa fa-plus" />
-          </button>
+          </Link>
         </div>
       );
     }

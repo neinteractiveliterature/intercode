@@ -5,7 +5,7 @@ import { flowRight, isEqual } from 'lodash';
 import ErrorDisplay from '../ErrorDisplay';
 import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
-import FormPresenterContainer from '../FormPresenter/containers/FormPresenterContainer';
+import FormPresenter from '../FormPresenter/components/FormPresenter';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
@@ -107,7 +107,7 @@ class EventProposalForm extends React.Component {
       renderContent={({ error, ...formPresenterProps }) => (
         <FormPresenterApp form={this.state.form}>
           <div>
-            <FormPresenterContainer
+            <FormPresenter
               {...formPresenterProps}
               exitButton={this.props.exitButton}
               submitButton={{ caption: 'Submit proposal' }}
