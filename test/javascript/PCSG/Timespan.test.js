@@ -306,9 +306,68 @@ describe('Timespan', () => {
     });
   });
 
-  describe('humanizeInTimezone', () => {});
-  describe('getTimeHopsWithin', () => {});
-  describe('getTimespansWithin', () => {});
+  describe('humanizeInTimezone', () => {
+    it('formats the times correctly for the given time zone', () => {
+      expect(defaultTimespan.humanizeInTimezone('UTC', 'h:mma')).toEqual('12:00am - 12:00am');
+      expect(defaultTimespan.humanizeInTimezone('America/New_York', 'h:mma')).toEqual('7:00pm - 7:00pm');
+    });
+
+    it('handles open ends', () => {
+      expect(beginningOfTime.humanizeInTimezone('UTC', 'h:mma')).toEqual('anytime - 12:00am');
+      expect(endOfTime.humanizeInTimezone('UTC', 'h:mma')).toEqual('12:00am - indefinitely');
+      expect(infiniteTimespan.humanizeInTimezone('UTC', 'h:mma')).toEqual('always');
+    });
+  });
+
+  describe('getTimeHopsWithin', () => {
+    it('errors on infinite timespans', () => {
+      [beginningOfTime, endOfTime, infiniteTimespan].forEach((timespan) => {
+        expect(() => timespan.getTimeHopsWithin('UTC', 'hour', 0)).toThrow('infinite');
+      });
+    });
+
+    it('handles different units', () => {
+      expect(defaultTimespan.getTimeHopsWithin('UTC', 'day', 0)).toHaveLength(1);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', 'hour', 0)).toHaveLength(24);
+      expect(defaultTimespan.getTimeHopsWithin('UTC', 'minute', 0)).toHaveLength(24 * 60);
+    });
+
+    it('returns moment objects with the correct time zone', () => {
+      expect(defaultTimespan.getTimeHopsWithin('UTC', 'day', 0)[0].utcOffset()).toEqual(0);
+      expect(defaultTimespan.getTimeHopsWithin('America/New_York', 'day', 0)[0].utcOffset()).toEqual(-5 * 60);
+    });
+
+    it('handles offset', () => {
+      const hopsWithOffset = defaultTimespan.getTimeHopsWithin('UTC', 'hour', moment.duration(2, 'hours'));
+      expect(hopsWithOffset).toHaveLength(24);
+      expect(hopsWithOffset[0].hour()).toEqual(2);
+    });
+  });
+
+  describe('getTimespansWithin', () => {
+    it('errors on infinite timespans', () => {
+      [beginningOfTime, endOfTime, infiniteTimespan].forEach((timespan) => {
+        expect(() => timespan.getTimespansWithin('UTC', 'hour', 0)).toThrow('infinite');
+      });
+    });
+
+    it('handles different units', () => {
+      expect(defaultTimespan.getTimespansWithin('UTC', 'day', 0)).toHaveLength(1);
+      expect(defaultTimespan.getTimespansWithin('UTC', 'hour', 0)).toHaveLength(24);
+      expect(defaultTimespan.getTimespansWithin('UTC', 'minute', 0)).toHaveLength(24 * 60);
+    });
+
+    it('returns timespans with the correct time zone', () => {
+      expect(defaultTimespan.getTimespansWithin('UTC', 'day', 0)[0].start.utcOffset()).toEqual(0);
+      expect(defaultTimespan.getTimespansWithin('America/New_York', 'day', 0)[0].start.utcOffset()).toEqual(-5 * 60);
+    });
+
+    it('handles offset', () => {
+      const hopsWithOffset = defaultTimespan.getTimespansWithin('UTC', 'hour', moment.duration(2, 'hours'));
+      expect(hopsWithOffset).toHaveLength(24);
+      expect(hopsWithOffset[0].start.hour()).toEqual(2);
+    });
+  });
 
   describe('clone', () => {
     it('returns a new instance that isSame as the existing instance', () => {
