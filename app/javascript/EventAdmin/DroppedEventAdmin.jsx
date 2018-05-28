@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import ErrorDisplay from '../../ErrorDisplay';
-import eventsQuery from '../eventsQuery';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import { restoreDroppedEventMutation } from '../mutations';
+import ErrorDisplay from '../ErrorDisplay';
+import eventsQuery from './eventsQuery';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import { restoreDroppedEventMutation } from './mutations';
 
 @flowRight([
   graphql(eventsQuery),

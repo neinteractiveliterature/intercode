@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Models/Form';
-import FormSectionContainer from '../containers/FormSectionContainer';
-import FormFooterContainer from '../containers/FormFooterContainer';
+import FormSection from './FormSection';
+import FormFooter from './FormFooter';
+import ItemInteractionTracker from '../ItemInteractionTracker';
 import LoadingIndicator from '../../LoadingIndicator';
-import { getCurrentSection } from '../FormPresenterUtils';
+import SectionTraversalController from '../SectionTraversalController';
 
 class FormPresenter extends React.Component {
   static propTypes = {
@@ -20,6 +21,7 @@ class FormPresenter extends React.Component {
     isSubmittingResponse: PropTypes.bool.isRequired,
     isUpdatingResponse: PropTypes.bool.isRequired,
     currentSectionId: PropTypes.number,
+    currentSection: PropTypes.shape({}).isRequired,
     exitButton: PropTypes.shape({
       caption: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
@@ -99,7 +101,7 @@ class FormPresenter extends React.Component {
         {this.renderProgress(section)}
 
         <div className="card-body pb-0">
-          <FormSectionContainer
+          <FormSection
             ref={
               (component) => { this.section = component ? component.getWrappedInstance() : null; }
             }
@@ -131,31 +133,40 @@ class FormPresenter extends React.Component {
       );
     }
 
-    const currentSection = getCurrentSection(form, this.props.currentSectionId);
-    const sections = form.getSections();
-    const currentSectionIndex = sections.indexOf(currentSection);
-
     return (
-      <div className="card mb-4">
-        {this.renderSection(currentSection)}
+      <ItemInteractionTracker>
+        <div className="card mb-4">
+          {this.renderSection(this.props.currentSection)}
 
-        <FormFooterContainer
-          form={form}
-          response={response}
-          currentSectionIndex={currentSectionIndex}
-          sectionCount={sections.size}
-          exitButton={exitButton}
-          submitButton={submitButton}
-          submitForm={this.props.submitForm}
-          isSubmittingResponse={this.props.isSubmittingResponse}
-          currentSectionChanged={this.props.currentSectionChanged}
-          scrollToItem={this.section ? this.section.scrollToItem : () => {}}
-        >
-          {this.props.footerContent}
-        </FormFooterContainer>
-      </div>
+          <FormFooter
+            form={form}
+            response={response}
+            exitButton={exitButton}
+            submitButton={submitButton}
+            submitForm={this.props.submitForm}
+            isSubmittingResponse={this.props.isSubmittingResponse}
+            currentSectionChanged={this.props.currentSectionChanged}
+            scrollToItem={this.section ? this.section.scrollToItem : () => {}}
+          >
+            {this.props.footerContent}
+          </FormFooter>
+        </div>
+      </ItemInteractionTracker>
     );
   }
 }
 
-export default FormPresenter;
+const FormPresenterTraversalWrapper = WrappedComponent => props => (
+  <SectionTraversalController.Traverser>
+    {({ currentSectionId, currentSection }) => (
+      <WrappedComponent
+        currentSectionId={currentSectionId}
+        currentSection={currentSection}
+        {...props}
+      />
+    )}
+  </SectionTraversalController.Traverser>
+);
+
+export default FormPresenterTraversalWrapper(FormPresenter);
+export { FormPresenter as PureFormPresenter };

@@ -2,11 +2,11 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import { Link, Switch, Route } from 'react-router-dom';
 import CreateVolunteerEventForm from './CreateVolunteerEventForm';
-import EditRunModalContainer from '../containers/EditRunModalContainer';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import VolunteerEventSectionContainer from '../containers/VolunteerEventSectionContainer';
-import eventsQuery from '../eventsQuery';
+import EditRun from './EditRun';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import VolunteerEventSection from './VolunteerEventSection';
+import eventsQuery from './eventsQuery';
 
 @graphql(eventsQuery)
 @GraphQLQueryResultWrapper
@@ -21,7 +21,7 @@ class VolunteerEventAdmin extends React.Component {
     const volunteerEvents = data.events.filter(event => event.category === 'volunteer_event' && event.status === 'active');
     volunteerEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
     const eventSections = volunteerEvents.map(event => (
-      <VolunteerEventSectionContainer
+      <VolunteerEventSection
         convention={data.convention}
         event={event}
         key={event.id}
@@ -35,7 +35,11 @@ class VolunteerEventAdmin extends React.Component {
         </Link>
         <hr className="my-4" />
         {eventSections}
-        <EditRunModalContainer convention={data.convention} />
+        <Route path="/volunteer_events/:eventId/runs/:runId/edit">
+          {props => (
+            <EditRun {...props} events={data.events} convention={data.convention} />
+          )}
+        </Route>
       </div>
     );
   }

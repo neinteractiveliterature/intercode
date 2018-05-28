@@ -5,7 +5,7 @@ import {
   humanizeTime,
   timesAreSameOrBothNull,
 } from '../TimeUtils';
-import { chooseAmong } from '../ValueUtils';
+import { chooseAmong, preferNull } from '../ValueUtils';
 
 class Timespan {
   static fromStrings(start, finish) {
@@ -44,8 +44,8 @@ class Timespan {
 
   includesTimespan(other) {
     return (
-      (this.start == null || other.start == null || this.start.isSameOrBefore(other.start)) &&
-      (this.finish == null || other.finish == null || this.finish.isSameOrAfter(other.finish))
+      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start))) &&
+      (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
     );
   }
 
@@ -64,6 +64,10 @@ class Timespan {
   }
 
   intersection(other) {
+    if (!this.overlapsTimespan(other)) {
+      return null;
+    }
+
     return new Timespan(
       chooseAmong([this.start, other.start], compareTimesDescending),
       chooseAmong([this.finish, other.finish], compareTimesAscending),
@@ -72,14 +76,12 @@ class Timespan {
 
   union(other) {
     return new Timespan(
-      chooseAmong([this.start, other.start], compareTimesAscending),
-      chooseAmong([this.finish, other.finish], compareTimesDescending),
+      chooseAmong([this.start, other.start], preferNull(compareTimesAscending), true),
+      chooseAmong([this.finish, other.finish], preferNull(compareTimesDescending), true),
     );
   }
 
-  expandedToFit(other) {
-    return this.union(other);
-  }
+  expandedToFit = this.union
 
   getLength(unit = 'millisecond') {
     if (!this.isFinite()) {

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../Models/Form';
 import FormPresenterApp from '.';
-import FormSectionContainer from './containers/FormSectionContainer';
+import FormSection from './components/FormSection';
 
 const SinglePageFormPresenter = (props) => {
   const sectionContainers = props.form.getSections().map(section => (
-    <FormSectionContainer
+    <FormSection
       key={section.id}
       convention={props.convention}
       form={props.form}

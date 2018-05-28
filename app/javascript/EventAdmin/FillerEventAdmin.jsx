@@ -4,18 +4,18 @@ import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import FillerEventForm from '../../BuiltInForms/FillerEventForm';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import eventsQuery from '../eventsQuery';
-import { timespanFromRun } from '../../TimespanUtils';
+import FillerEventForm from '../BuiltInForms/FillerEventForm';
+import GraphQLResultPropType from '../GraphQLResultPropType';
+import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import eventsQuery from './eventsQuery';
+import { timespanFromRun } from '../TimespanUtils';
 import {
   createFillerEventMutation,
   dropEventMutation,
   updateEventMutation,
   updateRunMutation,
-} from '../mutations';
-import deserializeEvent from '../deserializeEvent';
+} from './mutations';
+import deserializeEvent from './deserializeEvent';
 
 const buildEventInput = event => ({
   event: {

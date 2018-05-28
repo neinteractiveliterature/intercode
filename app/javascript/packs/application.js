@@ -67,7 +67,7 @@ WebpackerReact.setup({
   DatagridFilters,
   EditSignup: StandaloneGraphQLComponent(EditSignup),
   EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
-  EventAdmin,
+  EventAdmin: StandaloneGraphQLComponent(EventAdmin),
   EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),

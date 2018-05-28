@@ -4,9 +4,9 @@ import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { propType } from 'graphql-anywhere';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
-import eventsQuery, { fragments } from '../eventsQuery';
-import { createRunMutation, updateRunMutation, deleteRunMutation } from '../mutations';
-import RunFormFields from '../../BuiltInForms/RunFormFields';
+import eventsQuery, { fragments } from './eventsQuery';
+import { createRunMutation, updateRunMutation, deleteRunMutation } from './mutations';
+import RunFormFields from '../BuiltInForms/RunFormFields';
 
 @flowRight([
   graphql(createRunMutation, { name: 'createRun' }),
@@ -161,7 +161,7 @@ class EditRunModal extends React.Component {
 
   render = () => (
     <div>
-      <Modal visible={this.props.run != null && !this.state.isConfirmingDelete}>
+      <Modal visible={this.props.run != null && !this.state.isConfirmingDelete} dialogClassName="modal-lg">
         <div className="modal-header">
           <h5 className="modal-title">{this.renderTitle()}</h5>
         </div>

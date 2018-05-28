@@ -195,9 +195,9 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   field :createMultipleRuns, Mutations::CreateMultipleRuns.field do
     guard ->(_obj, args, ctx) {
-      events = ctx[:convention].events.find(args[:runs].map { |run| run[:event_id] })
-      events.all? do |event|
-        ctx[:current_ability].can?(:create, event.runs.new(args))
+      event = ctx[:convention].events.find(args[:event_id])
+      args.to_h['runs'].all? do |run_args|
+        ctx[:current_ability].can?(:create, event.runs.new(run_args))
       end
     }
   end
