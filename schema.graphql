@@ -194,6 +194,7 @@ type CreateMaximumEventProvidedTicketsOverridePayload {
 input CreateMultipleRunsInput {
   # A unique identifier for the client performing the mutation.
   clientMutationId: String
+  event_id: Int!
   runs: [RunInput!]!
 }
 
@@ -629,7 +630,7 @@ type OrderEntry {
   price: Money!
   price_per_item: Money!
   product: Product!
-  product_variant: ProductVariant!
+  product_variant: ProductVariant
   quantity: Int!
 }
 
@@ -834,6 +835,7 @@ input RoomInput {
 }
 
 type Run {
+  confirmed_limited_signup_count: Int
   confirmed_signup_count: Int
   ends_at: Date
   event: Event
