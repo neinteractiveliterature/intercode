@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import moment from 'moment-timezone';
+import { enableUniqueIds } from 'react-html-id';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
@@ -19,7 +20,7 @@ class RunFormFields extends React.Component {
       starts_at: PropTypes.string,
       title_suffix: PropTypes.string,
       schedule_note: PropTypes.string,
-      rooms: PropTypes.arrayOf(roomPropType).isRequired,
+      rooms: PropTypes.arrayOf(roomPropType),
     }).isRequired,
     event: PropTypes.shape({
       length_seconds: PropTypes.number.isRequired,
@@ -35,6 +36,7 @@ class RunFormFields extends React.Component {
 
   constructor(props) {
     super(props);
+    enableUniqueIds(this);
 
     this.state = {
       day: null,
@@ -134,42 +136,50 @@ class RunFormFields extends React.Component {
     );
   }
 
-  render = () => (
-    <div>
-      <ConventionDaySelect
-        convention={this.props.convention}
-        value={this.state.day}
-        onChange={this.dayInputChanged}
-      />
-      {this.renderTimeSelect()}
+  render = () => {
+    const roomIdsSelectId = this.nextUniqueId();
 
-      <BootstrapFormInput
-        name="title_suffix"
-        label="Title suffix"
-        value={this.props.run.title_suffix || ''}
-        onChange={this.textInputChanged}
-      />
-      <BootstrapFormInput
-        name="schedule_note"
-        label="Schedule note"
-        value={this.props.run.schedule_note || ''}
-        onChange={this.textInputChanged}
-      />
-
-      <div className="form-group">
-        <label>Room(s)</label>
-        <Select
-          name="room_ids"
-          options={
-            this.props.convention.rooms.map(room => ({ label: room.name, value: room.id }))
-          }
-          multi
-          value={this.props.run.rooms.map(room => room.id)}
-          onChange={this.roomsInputChanged}
+    return (
+      <div>
+        <ConventionDaySelect
+          convention={this.props.convention}
+          value={this.state.day}
+          onChange={this.dayInputChanged}
         />
+        {this.renderTimeSelect()}
+
+        <BootstrapFormInput
+          name="title_suffix"
+          label="Title suffix"
+          value={this.props.run.title_suffix || ''}
+          onChange={this.textInputChanged}
+        />
+        <BootstrapFormInput
+          name="schedule_note"
+          label="Schedule note"
+          value={this.props.run.schedule_note || ''}
+          onChange={this.textInputChanged}
+        />
+
+        <div className="form-group">
+          <label htmlFor={roomIdsSelectId}>
+            Room(s)
+
+            <Select
+              id={roomIdsSelectId}
+              name="room_ids"
+              options={
+                this.props.convention.rooms.map(room => ({ label: room.name, value: room.id }))
+              }
+              multi
+              value={(this.props.run.rooms || []).map(room => room.id)}
+              onChange={this.roomsInputChanged}
+            />
+          </label>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default RunFormFields;

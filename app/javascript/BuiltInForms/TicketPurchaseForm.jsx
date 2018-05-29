@@ -170,18 +170,18 @@ class TicketPurchaseForm extends React.Component {
 
       return (
         <div className={formCheckClass} key={ticketType.id}>
+          <input
+            type="radio"
+            className="form-check-input"
+            value={ticketType.id}
+            id={radioId}
+            name="ticketTypeId"
+            disabled={!ticketType.available}
+            checked={this.state.ticketTypeId === ticketType.id.toString()}
+            onChange={this.fieldChanged}
+          />
+          &nbsp;
           <label className="form-check-label" htmlFor={radioId}>
-            <input
-              type="radio"
-              className="form-check-input"
-              value={ticketType.id}
-              id={radioId}
-              name="ticketTypeId"
-              disabled={!ticketType.available}
-              checked={this.state.ticketTypeId === ticketType.id.toString()}
-              onChange={this.fieldChanged}
-            />
-            &nbsp;
             {description}
           </label>
         </div>
