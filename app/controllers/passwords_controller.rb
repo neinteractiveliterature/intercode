@@ -1,12 +1,13 @@
 class PasswordsController < Devise::PasswordsController
   def create
-    resource = resource_class.find_by(email: resource_params[:email])
-    resource.reset_password_mail_options = {
-      host: request.host,
-      port: request.port,
-      protocol: request.protocol
-    }
-    resource.send_reset_password_instructions
+    self.resource = resource_class.find_or_initialize_with_errors(
+      resource_class.reset_password_keys,
+      resource_params,
+      :not_found
+    )
+
+    actually_do_reset
+
     yield resource if block_given?
 
     if successfully_sent?(resource)
@@ -14,5 +15,19 @@ class PasswordsController < Devise::PasswordsController
     else
       respond_with(resource)
     end
+  end
+
+  private
+
+  def actually_do_reset
+    return unless resource.persisted?
+
+    resource.reset_password_mail_options = {
+      host: request.host,
+      port: request.port,
+      protocol: request.protocol
+    }
+
+    resource.send_reset_password_instructions
   end
 end
