@@ -522,7 +522,7 @@ apollo-upload-client@^8.0.0:
     apollo-link-http-common "^0.2.3"
     extract-files "^3.1.0"
 
-apollo-utilities@^1.0.0, apollo-utilities@^1.0.12:
+apollo-utilities@^1.0.0:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.12.tgz#9e2b2a34cf89f3bf0d73a664effd8c1bb5d1b7f7"
 
@@ -710,6 +710,10 @@ asynckit@^0.4.0:
 atob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
+
+autobind-decorator@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/autobind-decorator/-/autobind-decorator-2.1.0.tgz#4451240dbfeff46361c506575a63ed40f0e5bc68"
 
 autoprefixer@^6.3.1:
   version "6.7.7"
@@ -7956,7 +7960,16 @@ react-codemirror2@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.0.4.tgz#d44a2d7a63a96509ba65db9b771bd61a781b8a0d"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^2.4.1, react-dnd-html5-backend@^2.6.0:
+react-dnd-html5-backend@*, react-dnd-html5-backend@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-3.0.2.tgz#87172fd4be90e45353119b40e10f591ddf8661ed"
+  dependencies:
+    autobind-decorator "^2.1.0"
+    dnd-core "^3.0.2"
+    lodash "^4.2.0"
+    shallowequal "^1.0.2"
+
+react-dnd-html5-backend@^2.4.1:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-2.6.0.tgz#590cd1cca78441bb274edd571fef4c0b16ddcf8e"
   dependencies:
