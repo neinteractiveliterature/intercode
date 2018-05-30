@@ -173,9 +173,27 @@
   version "0.12.6"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.12.6.tgz#3d619198585fcabe5f4e1adfb5cf5f3388c66c13"
 
+"@types/invariant@^2.2.29":
+  version "2.2.29"
+  resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.29.tgz#aa845204cd0a289f65d47e0de63a6a815e30cc66"
+
+"@types/lodash@^4.14.107":
+  version "4.14.109"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.109.tgz#b1c4442239730bf35cabaf493c772b18c045886d"
+
 "@types/node@*":
   version "10.1.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.3.tgz#5c16980936c4e3c83ce64e8ed71fb37bd7aea135"
+
+"@types/node@^8.10.11":
+  version "8.10.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.17.tgz#d48cf10f0dc6dcf59f827f5a3fc7a4a6004318d3"
+
+"@types/redux@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
+  dependencies:
+    redux "*"
 
 "@types/zen-observable@^0.5.3":
   version "0.5.3"
@@ -2908,6 +2926,19 @@ dnd-core@^2.6.0:
     invariant "^2.0.0"
     lodash "^4.2.0"
     redux "^3.7.1"
+
+dnd-core@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-3.0.2.tgz#e947577620531c7ee37a518cd5dde17d0efdf0f3"
+  dependencies:
+    "@types/invariant" "^2.2.29"
+    "@types/lodash" "^4.14.107"
+    "@types/node" "^8.10.11"
+    "@types/redux" "^3.6.0"
+    asap "^2.0.6"
+    invariant "^2.0.0"
+    lodash "^4.2.0"
+    redux "^4.0.0"
 
 dnd-multi-backend@^3.1.0:
   version "3.1.0"
@@ -7972,7 +8003,19 @@ react-dnd-touch-backend@^0.3.13:
     invariant "^2.2.2"
     react-dnd "^2.5.4"
 
-react-dnd@*, react-dnd@^2.4.0, react-dnd@^2.5.4, react-dnd@^2.6.0:
+react-dnd@*, react-dnd@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-3.0.2.tgz#b0c23d8d82969f5b7be34cbc4f84fa1ffc5c7ddc"
+  dependencies:
+    disposables "^1.0.1"
+    dnd-core "^3.0.2"
+    hoist-non-react-statics "^2.5.0"
+    invariant "^2.1.0"
+    lodash "^4.2.0"
+    prop-types "^15.5.10"
+    shallowequal "^1.0.2"
+
+react-dnd@^2.4.0, react-dnd@^2.5.4:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-2.6.0.tgz#7fa25676cf827d58a891293e3c1ab59da002545a"
   dependencies:
@@ -8262,6 +8305,13 @@ reduce-function-call@^1.0.1, reduce-function-call@^1.0.2:
 reduce-reducers@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.3.0.tgz#ed6122072676eb8d84d41d74bba31e5e3f7ce977"
+
+redux@*, redux@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.0.tgz#aa698a92b729315d22b34a0553d7e6533555cc03"
+  dependencies:
+    loose-envify "^1.1.0"
+    symbol-observable "^1.2.0"
 
 redux@^3.7.1:
   version "3.7.2"
@@ -8834,6 +8884,10 @@ shallow-clone@^1.0.0:
     kind-of "^5.0.0"
     mixin-object "^2.0.1"
 
+shallowequal@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.0.2.tgz#1561dbdefb8c01408100319085764da3fcf83f8f"
+
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
@@ -9277,7 +9331,7 @@ symbol-observable@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.1.tgz#8340fc4702c3122df5d22288f88283f513d3fdd4"
 
-symbol-observable@^1.0.2, symbol-observable@^1.0.3, symbol-observable@^1.1.0:
+symbol-observable@^1.0.2, symbol-observable@^1.0.3, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
 
