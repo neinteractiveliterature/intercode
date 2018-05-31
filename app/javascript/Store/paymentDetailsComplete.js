@@ -6,7 +6,7 @@ export default function paymentDetailsComplete(paymentDetails) {
     'expYear',
     'zip',
     'name',
-  ].filter(field => !paymentDetails[field] || paymentDetails[field].trim() === '');
+  ].filter(field => !paymentDetails[field] || paymentDetails[field].toString().trim() === '');
 
   return (missingFields.length === 0);
 }
