@@ -42,9 +42,12 @@
             &mdash;
             = signup_counts.bucket_descriptions_text('confirmed')
         %ul.list-unstyled{style: 'columns: 2 auto'}
-          - confirmed_signups = signup_counts.counted_signups_by_state('confirmed')
+          - confirmed_signups = signup_counts.signups_by_state_and_bucket_key['confirmed'].values.flatten
           - confirmed_signups.sort_by { |signup| signup.user_con_profile.name_inverted.downcase }.each do |signup|
-            %li= signup.user_con_profile.name_inverted
+            %li
+              = signup.user_con_profile.name_inverted
+              - unless signup.counted?
+                (not counted)
 
       - if signup_counts.waitlist_count > 0
         %section
@@ -53,7 +56,7 @@
             = '- In signup order'
 
           %ol
-            - waitlist_signups = signup_counts.counted_signups_by_state('waitlisted')
+            - waitlist_signups = signup_counts.signups_by_state_and_bucket_key['waitlisted'].values.flatten
             - waitlist_signups.sort_by(&:created_at).each do |signup|
               %li
                 = signup.user_con_profile.name_inverted
