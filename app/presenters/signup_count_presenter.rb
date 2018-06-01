@@ -40,8 +40,9 @@ class SignupCountPresenter
     end.sum
   end
 
+  # Waitlisted signups are never counted, so count them all here
   def waitlist_count
-    @waitlist_count ||= counted_signups_by_state('waitlisted').size
+    @waitlist_count ||= signups_by_state_and_bucket_key['waitlisted'].values.map(&:size).sum
   end
 
   def confirmed_count_for_bucket(bucket_key)
