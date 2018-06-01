@@ -22,7 +22,7 @@ class EventVacancyFillService < CivilService::Service
 
   def inner_call
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
-      fill_bucket_vacancy
+      fill_bucket_vacancy(bucket_key)
     end
 
     move_results.each do |result|
@@ -31,10 +31,11 @@ class EventVacancyFillService < CivilService::Service
     success(move_results: move_results)
   end
 
-  def fill_bucket_vacancy
-    signup_to_move = best_signup_to_fill_bucket_vacancy
+  def fill_bucket_vacancy(bucket_key)
+    signup_to_move = best_signup_to_fill_bucket_vacancy(bucket_key)
     return unless signup_to_move
 
+    bucket = event.registration_policy.bucket_with_key(bucket_key)
     moving_confirmed_signup = signup_to_move.confirmed?
     prev_bucket_key = signup_to_move.bucket_key
     prev_state = signup_to_move.state
@@ -46,15 +47,12 @@ class EventVacancyFillService < CivilService::Service
     fill_bucket_vacancy(prev_bucket_key) if moving_confirmed_signup
   end
 
-  def best_signup_to_fill_bucket_vacancy
+  def best_signup_to_fill_bucket_vacancy(bucket_key)
+    bucket = event.registration_policy.bucket_with_key(bucket_key)
     signups_ordered.find do |signup|
       next if move_results.any? { |result| result.signup_id == signup.id }
       signup.bucket_key != bucket.key && signup_can_fill_bucket_vacancy?(signup, bucket)
     end
-  end
-
-  def bucket
-    @bucket ||= event.registration_policy.bucket_with_key(bucket_key)
   end
 
   def signup_can_fill_bucket_vacancy?(signup, bucket)
