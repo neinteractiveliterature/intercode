@@ -8,7 +8,16 @@ Mutations::CancelOrder = GraphQL::Relay::Mutation.define do
     order = ctx[:convention].orders.find(args[:id])
     raise 'Order is already cancelled' if order.status == 'cancelled'
 
-    refund = Stripe::Refund.create(charge: order.charge_id) if order.charge_id
+    refund = false
+    if order.charge_id
+      charge = Stripe::Charge.retrieve(order.charge_id)
+
+      if charge.refunded
+        refund = true
+      else
+        refund = Stripe::Refund.create(charge: order.charge_id)
+      end
+    end
 
     action = 'Cancelled '
     if order.status == 'paid'
