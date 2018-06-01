@@ -49,7 +49,7 @@
     "js-yaml": "^3.10.0",
     "lodash": "^4.17.10",
     "lodash-webpack-plugin": "^0.11.5",
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "moment-timezone": "^0.5.17",
     "node-sass": "^4.9.0",
     "path-complete-extname": "^1.0.0",
