@@ -31,7 +31,7 @@ class SignupCountPresenter
   end
 
   def confirmed_count
-    @confirmed_count ||= signups_by_state_and_bucket_key['confirmed'].values.map(&:size).sum
+    @confirmed_count ||= counted_signups_by_state('confirmed').size
   end
 
   def confirmed_limited_count
@@ -41,11 +41,11 @@ class SignupCountPresenter
   end
 
   def waitlist_count
-    @waitlist_count ||= signups_by_state_and_bucket_key['waitlisted'].values.map(&:size).sum
+    @waitlist_count ||= counted_signups_by_state('waitlisted').size
   end
 
   def confirmed_count_for_bucket(bucket_key)
-    signups_by_state_and_bucket_key['confirmed'][bucket_key]&.size || 0
+    (signups_by_state_and_bucket_key['confirmed'][bucket_key] || []).select(&:counted).size
   end
 
   def capacity_fraction_for_bucket(bucket_key)
