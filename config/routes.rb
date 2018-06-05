@@ -93,6 +93,7 @@ Intercode::Application.routes.draw do
     namespace :mailing_lists do
       get :event_proposers
       get :team_members
+      get :ticketed_attendees
       get :users_with_pending_bio
       get :waitlists
       get :whos_free
