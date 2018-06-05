@@ -2,17 +2,30 @@ require 'mail'
 
 class MailingListsController < ApplicationController
   class ContactEmail
-    attr_reader :email, :name, :metadata
+    def self.from_user_con_profiles(user_con_profiles)
+      user_con_profiles.map { |user_con_profile| from_user_con_profile(user_con_profile) }
+    end
 
-    def initialize(email, name, **metadata)
+    def self.from_user_con_profile(user_con_profile)
+      new(
+        user_con_profile.email,
+        user_con_profile.name_inverted,
+        address_name: user_con_profile.name_without_nickname
+      )
+    end
+
+    attr_reader :email, :name, :address_name, :metadata
+
+    def initialize(email, name, address_name: nil, **metadata)
       @email = email
       @name = name
+      @address_name = address_name || name
       @metadata = metadata || {}
     end
 
     def formatted_address
       address = Mail::Address.new(email)
-      address.display_name = name
+      address.display_name = address_name
       address.format
     rescue
       email
@@ -71,15 +84,24 @@ class MailingListsController < ApplicationController
     render action: 'single_mailing_list'
   end
 
+  def ticketed_attendees
+    authorize! :mail_to_any, convention
+
+    user_con_profiles = convention.user_con_profiles.joins(:ticket)
+      .sort_by { |ucp| ucp.name_inverted.downcase }
+
+    @emails = ContactEmail.from_user_con_profiles(user_con_profiles)
+
+    render action: 'single_mailing_list'
+  end
+
   def users_with_pending_bio
     authorize! :mail_to_gms, convention
 
     pending_bio_users = convention.user_con_profiles.can_have_bio.reject do |user_con_profile|
       user_con_profile.bio.present?
     end
-    @emails = pending_bio_users.sort_by(&:name_inverted).map do |user_con_profile|
-      ContactEmail.new(user_con_profile.email, user_con_profile.name_inverted)
-    end
+    @emails = ContactEmail.from_user_con_profiles(pending_bio_users.sort_by(&:name_inverted))
 
     render action: 'single_mailing_list'
   end
@@ -93,10 +115,7 @@ class MailingListsController < ApplicationController
 
     @emails_by_run = @runs.map do |run|
       emails = run.signups.waitlisted.map do |signup|
-        ContactEmail.new(
-          signup.user_con_profile.email,
-          signup.user_con_profile.name_without_nickname
-        )
+        ContactEmail.from_user_con_profile(signup.user_con_profile)
       end
 
       [run, emails]
@@ -124,8 +143,6 @@ class MailingListsController < ApplicationController
     free_user_con_profiles = ticketed_user_con_profiles
       .reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
 
-    @emails = free_user_con_profiles.map do |user_con_profile|
-      ContactEmail.new(user_con_profile.email, user_con_profile.name_without_nickname)
-    end
+    @emails = ContactEmail.from_user_con_profiles(free_user_con_profiles)
   end
 end
