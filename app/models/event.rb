@@ -136,6 +136,9 @@ class Event < ApplicationRecord
     return if new_record?
     return unless registration_policy_changed?
 
+    before, after = changes['registration_policy']
+    return if before == after # ActiveRecord is being overzealous about change detection
+
     errors.add :registration_policy, "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
   end
