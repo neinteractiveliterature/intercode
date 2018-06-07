@@ -2950,17 +2950,6 @@ dnd-core@^2.6.0:
     lodash "^4.2.0"
     redux "^3.7.1"
 
-dnd-core@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-4.0.2.tgz#ad947626e5773f41906eadad9808f8ebd33c19bd"
-  dependencies:
-    "@types/invariant" "^2.2.29"
-    "@types/lodash" "^4.14.109"
-    asap "^2.0.6"
-    invariant "^2.2.4"
-    lodash "^4.17.10"
-    redux "^4.0.0"
-
 dnd-core@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-4.0.4.tgz#c0fbb5cb3b806c146bbcdffee733fbaf341da1cb"
@@ -8057,9 +8046,9 @@ react-dnd-touch-backend@^0.3.13:
     invariant "^2.2.2"
     react-dnd "^2.5.4"
 
-react-dnd@*, react-dnd@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-4.0.2.tgz#e0c539c95b1ccc76763c098c8e3d5d9ca60df1ba"
+react-dnd@*, react-dnd@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-4.0.4.tgz#a204cbbe2172e15560179bdbf2e2b8bf57e8a1af"
   dependencies:
     "@types/invariant" "^2.2.29"
     "@types/lodash" "^4.14.109"
@@ -8068,7 +8057,7 @@ react-dnd@*, react-dnd@^4.0.2:
     "@types/react" "^16.3.14"
     "@types/react-dom" "^16.0.5"
     "@types/shallowequal" "^0.2.2"
-    dnd-core "^4.0.2"
+    dnd-core "^4.0.4"
     hoist-non-react-statics "^2.5.0"
     invariant "^2.1.0"
     lodash "^4.17.10"
