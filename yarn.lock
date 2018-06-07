@@ -2961,6 +2961,17 @@ dnd-core@^4.0.2:
     lodash "^4.17.10"
     redux "^4.0.0"
 
+dnd-core@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-4.0.4.tgz#c0fbb5cb3b806c146bbcdffee733fbaf341da1cb"
+  dependencies:
+    "@types/invariant" "^2.2.29"
+    "@types/lodash" "^4.14.109"
+    asap "^2.0.6"
+    invariant "^2.2.4"
+    lodash "^4.17.10"
+    redux "^4.0.0"
+
 dnd-multi-backend@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-3.1.0.tgz#595fef292a47634da52014f8f0c70e06dcf1c76b"
@@ -7993,15 +8004,15 @@ react-codemirror2@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.0.4.tgz#d44a2d7a63a96509ba65db9b771bd61a781b8a0d"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-4.0.2.tgz#bc58f4f4771de8ad0cf6a5d29d4e11664f2e017e"
+react-dnd-html5-backend@*, react-dnd-html5-backend@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-4.0.4.tgz#d828f8ee5deb5c09c24eaf7a40963bd1e45b5730"
   dependencies:
     "@types/lodash" "^4.14.109"
     "@types/react" "^16.3.16"
     "@types/shallowequal" "^0.2.2"
     autobind-decorator "^2.1.0"
-    dnd-core "^4.0.2"
+    dnd-core "^4.0.4"
     lodash "^4.17.10"
     shallowequal "^1.0.2"
 
