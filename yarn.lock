@@ -1035,9 +1035,9 @@ babel-plugin-jest-hoist@^23.0.1:
   version "23.0.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-23.0.1.tgz#eaa11c964563aea9c21becef2bdf7853f7f3c148"
 
-babel-plugin-lodash@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/babel-plugin-lodash/-/babel-plugin-lodash-3.3.3.tgz#d33436438dcc871f3481a3c3148e5b24e6b80676"
+babel-plugin-lodash@^3.3.4:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/babel-plugin-lodash/-/babel-plugin-lodash-3.3.4.tgz#4f6844358a1340baed182adbeffa8df9967bc196"
   dependencies:
     "@babel/helper-module-imports" "^7.0.0-beta.49"
     "@babel/types" "^7.0.0-beta.49"

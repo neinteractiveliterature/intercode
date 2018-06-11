@@ -15,7 +15,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "7.x",
     "babel-plugin-graphql-tag": "^1.6.0",
-    "babel-plugin-lodash": "^3.3.3",
+    "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators": "^6.24.1",
