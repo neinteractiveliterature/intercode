@@ -71,7 +71,7 @@
     "react-dom": "^16.4.0",
     "react-html-id": "^0.1.4",
     "react-immutable-proptypes": "^2.1.0",
-    "react-moment-proptypes": "^1.5.0",
+    "react-moment-proptypes": "^1.6.0",
     "react-onclickoutside": "^6.7.0",
     "react-popper": "^0.10.4",
     "react-router-dom": "^4.3.1",
