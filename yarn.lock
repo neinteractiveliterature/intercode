@@ -188,27 +188,9 @@
   version "0.12.6"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.12.6.tgz#3d619198585fcabe5f4e1adfb5cf5f3388c66c13"
 
-"@types/invariant@^2.2.29":
-  version "2.2.29"
-  resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.29.tgz#aa845204cd0a289f65d47e0de63a6a815e30cc66"
-
-"@types/lodash@^4.14.109":
-  version "4.14.109"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.109.tgz#b1c4442239730bf35cabaf493c772b18c045886d"
-
 "@types/node@*":
   version "10.1.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.3.tgz#5c16980936c4e3c83ce64e8ed71fb37bd7aea135"
-
-"@types/react@^16.3.16":
-  version "16.3.16"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.3.16.tgz#78fc44a90b45701f50c8a7008f733680ba51fc86"
-  dependencies:
-    csstype "^2.2.0"
-
-"@types/shallowequal@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@types/shallowequal/-/shallowequal-0.2.2.tgz#71918d93f1e9c242790c31b456969ff9f6028005"
 
 "@types/zen-observable@^0.5.3":
   version "0.5.3"
@@ -2695,10 +2677,6 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   dependencies:
     cssom "0.3.x"
 
-csstype@^2.2.0:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.3.tgz#2504152e6e1cc59b32098b7f5d6a63f16294c1f7"
-
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
@@ -2946,17 +2924,6 @@ dnd-core@^2.6.0:
     invariant "^2.0.0"
     lodash "^4.2.0"
     redux "^3.7.1"
-
-dnd-core@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-4.0.4.tgz#c0fbb5cb3b806c146bbcdffee733fbaf341da1cb"
-  dependencies:
-    "@types/invariant" "^2.2.29"
-    "@types/lodash" "^4.14.109"
-    asap "^2.0.6"
-    invariant "^2.2.4"
-    lodash "^4.17.10"
-    redux "^4.0.0"
 
 dnd-core@^4.0.5:
   version "4.0.5"
@@ -7999,15 +7966,12 @@ react-codemirror2@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.0.4.tgz#d44a2d7a63a96509ba65db9b771bd61a781b8a0d"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-4.0.4.tgz#d828f8ee5deb5c09c24eaf7a40963bd1e45b5730"
+react-dnd-html5-backend@*, react-dnd-html5-backend@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-4.0.5.tgz#36632a2d5cfaf8a5d43c586685f6dd696b50ccde"
   dependencies:
-    "@types/lodash" "^4.14.109"
-    "@types/react" "^16.3.16"
-    "@types/shallowequal" "^0.2.2"
     autobind-decorator "^2.1.0"
-    dnd-core "^4.0.4"
+    dnd-core "^4.0.5"
     lodash "^4.17.10"
     shallowequal "^1.0.2"
 
