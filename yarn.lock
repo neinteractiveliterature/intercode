@@ -7977,9 +7977,9 @@ react-codemirror2@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-5.0.4.tgz#d44a2d7a63a96509ba65db9b771bd61a781b8a0d"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-5.0.0.tgz#fd08d6f47a9dccedbde4bff6fbb7ad8549fc8cfe"
+react-dnd-html5-backend@*, react-dnd-html5-backend@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-5.0.1.tgz#0b578d79c5c01317c70414c8d717f632b919d4f1"
   dependencies:
     autobind-decorator "^2.1.0"
     dnd-core "^4.0.5"
