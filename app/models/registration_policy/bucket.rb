@@ -82,4 +82,8 @@ class RegistrationPolicy::Bucket
   def hash
     attributes.hash
   end
+
+  def to_liquid
+    RegistrationPolicy::BucketDrop.new(self)
+  end
 end
