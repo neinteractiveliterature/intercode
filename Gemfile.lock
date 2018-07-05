@@ -422,8 +422,8 @@ GEM
     will_paginate (3.1.6)
     will_paginate-bootstrap4 (0.2.2)
       will_paginate (~> 3.0, >= 3.0.0)
-    with_advisory_lock (3.2.0)
-      activerecord (>= 3.2)
+    with_advisory_lock (4.0.0)
+      activerecord (>= 4.2)
 
 PLATFORMS
   java
