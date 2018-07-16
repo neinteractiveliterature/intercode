@@ -62,11 +62,12 @@ class DatagridFilters extends React.Component {
 
   searchClicked = (event) => {
     event.preventDefault();
-    const searchUrl = new URL(window.location.href);
+    const { location } = window;
+    const searchParams = new URLSearchParams(location.search);
 
-    [...searchUrl.searchParams.entries()].forEach(([key]) => {
-      if (key.startsWith(`${this.props.paramKey}[`)) {
-        searchUrl.searchParams.delete(key);
+    [...searchParams.entries()].forEach(([key]) => {
+      if (key.startsWith(`${this.props.paramKey}[`) || key === 'page') {
+        searchParams.delete(key);
       }
     });
 
@@ -76,19 +77,19 @@ class DatagridFilters extends React.Component {
       }
 
       if (Array.isArray(value)) {
-        searchUrl.searchParams.append(`${this.props.paramKey}[${key}]`, value.join(','));
+        searchParams.append(`${this.props.paramKey}[${key}]`, value.join(','));
       } else {
-        searchUrl.searchParams.append(`${this.props.paramKey}[${key}]`, value);
+        searchParams.append(`${this.props.paramKey}[${key}]`, value);
       }
     });
 
     if (!this.state.collapsed) {
-      searchUrl.searchParams.set('expand_filters', 'true');
+      searchParams.set('expand_filters', 'true');
     } else {
-      searchUrl.searchParams.delete('expand_filters');
+      searchParams.delete('expand_filters');
     }
 
-    window.location.href = searchUrl.toString();
+    window.location.href = `${location.protocol}//${location.host}${location.pathname}?${searchParams.toString()}`;
   }
 
   renderFilterControl = (filter) => {

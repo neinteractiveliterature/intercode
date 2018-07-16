@@ -9,6 +9,7 @@
 
 import 'babel-polyfill';
 import 'custom-event-polyfill';
+import 'url-search-params-polyfill';
 
 import ClipboardJS from 'clipboard';
 import Rails from 'rails-ujs';
