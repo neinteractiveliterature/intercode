@@ -11,5 +11,4 @@ if [ "${LANGUAGE}" = "ruby" ]; then
   echo | gem uninstall -i /home/travis/.rvm/gems/ruby-2.5.1@global bundler
   gem install bundler -v 1.16.0 --no-ri --no-rdoc
   bin/rake db:create db:migrate RAILS_ENV=test
-  RAILS_ENV=test bin/webpack
 fi
