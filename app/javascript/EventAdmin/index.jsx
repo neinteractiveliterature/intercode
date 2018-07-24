@@ -18,7 +18,7 @@ const EventAdminApp = ({ basename }) => (
           <NavLink className="nav-link" to="/volunteer_events">Volunteer events</NavLink>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/filler_events">Filler events</NavLink>
+          <NavLink className="nav-link" to="/filler_events">Single-run events</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/dropped_events">Dropped events</NavLink>

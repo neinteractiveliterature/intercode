@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
-import { Link, Switch, Route, withRouter } from 'react-router-dom';
+import {
+  Link,
+  Switch,
+  Route,
+  withRouter,
+} from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import FillerEventForm from '../BuiltInForms/FillerEventForm';
 import GraphQLResultPropType from '../GraphQLResultPropType';
@@ -17,9 +22,13 @@ import {
 } from './mutations';
 import deserializeEvent from './deserializeEvent';
 
-const buildEventInput = event => ({
+const buildEventInput = (event, defaultFormResponseAttrs = {}) => ({
   event: {
-    form_response_attrs: event.form_response_attrs,
+    category: event.category,
+    form_response_attrs_json: JSON.stringify({
+      ...defaultFormResponseAttrs,
+      ...event.form_response_attrs,
+    }),
   },
 });
 
@@ -68,16 +77,15 @@ class FillerEventAdmin extends React.Component {
   }
 
   createFillerEvent = ({ event, run }) => {
-    const eventInput = buildEventInput(event).event;
     const input = {
-      event: {
-        form_response_attrs_json: JSON.stringify({
-          ...eventInput.form_response_attrs,
+      ...buildEventInput(
+        event,
+        {
           can_play_concurrently: false,
           con_mail_destination: 'event_email',
-          author: `${this.props.data.convention.name} Staff`,
-        }),
-      },
+          author: '{{ convention.name }} Staff',
+        },
+      ),
       ...buildRunInput(run),
     };
 
@@ -103,10 +111,8 @@ class FillerEventAdmin extends React.Component {
 
   updateFillerEvent = ({ event, run }) => {
     const eventInput = {
+      ...buildEventInput(event),
       id: event.id,
-      event: {
-        form_response_attrs_json: JSON.stringify(buildEventInput(event).event.form_response_attrs),
-      },
     };
 
     const runInput = {
@@ -155,7 +161,9 @@ class FillerEventAdmin extends React.Component {
   renderFillerEventsList = () => {
     const { data } = this.props;
 
-    const fillerEvents = data.events.filter(event => event.category === 'filler' && event.status === 'active');
+    const fillerEvents = data.events.filter(event => (
+      ['filler', 'board_game', 'tabletop_rpg', 'panel'].includes(event.category) && event.status === 'active'
+    ));
     fillerEvents.sort((a, b) => {
       const timespanA = timespanFromRun(this.props.data.convention, a, a.runs[0]);
       const timespanB = timespanFromRun(this.props.data.convention, b, b.runs[0]);
@@ -188,7 +196,7 @@ class FillerEventAdmin extends React.Component {
     return (
       <div>
         <Link className="btn btn-primary my-4" to="/filler_events/new">
-          Create new filler event
+          Create new single-run event
         </Link>
         <table className="table table-striped">
           <tbody>
@@ -200,7 +208,7 @@ class FillerEventAdmin extends React.Component {
           onCancel={this.dropCanceled}
           onOK={this.dropConfirmed}
         >
-          Are you sure you want to drop this filler event?
+          Are you sure you want to drop this event?
         </ConfirmModal>
       </div>
     );

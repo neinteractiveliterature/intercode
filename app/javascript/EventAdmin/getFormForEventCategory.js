@@ -5,7 +5,7 @@ function getFormDataForEventCategory(event, convention) {
     return convention.volunteer_event_form;
   }
 
-  if (event.category === 'filler') {
+  if (event.category === 'filler' || event.category === 'tabletop_rpg' || event.category === 'panel' || event.category === 'board_game') {
     return convention.filler_event_form;
   }
 

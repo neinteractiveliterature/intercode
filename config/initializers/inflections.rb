@@ -13,4 +13,6 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'GM'
   inflect.acronym 'GMs'
+  inflect.acronym 'RPG'
+  inflect.acronym 'RPGs'
 end
