@@ -263,7 +263,7 @@ GEM
     msgpack (1.2.4-java)
     multi_json (1.13.1)
     multipart-post (2.0.0)
-    mysql2 (0.5.1)
+    mysql2 (0.5.2)
     nio4r (2.3.0)
     nio4r (2.3.0-java)
     nokogiri (1.8.3)
@@ -467,7 +467,7 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   money-rails
-  mysql2 (~> 0.5.1)
+  mysql2 (~> 0.5.2)
   oj (~> 3.6.3)
   parallel
   pg
