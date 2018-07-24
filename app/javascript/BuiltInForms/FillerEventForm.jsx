@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { humanize } from 'inflected';
+
+import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
 import RunFormFields from './RunFormFields';
 import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
@@ -93,19 +96,32 @@ class FillerEventForm extends React.Component {
   }
 
   render = () => {
-    const saveCaption = (this.state.event.id ? 'Save filler event' : 'Create filler event');
+    const saveCaption = (this.state.event.id ? 'Save single-run event' : 'Create single-run event');
     let cancelLink = null;
     if (this.props.cancelPath) {
       cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
     }
+
+    const categoryOptions = ['panel', 'board_game', 'tabletop_rpg', 'filler'].map(category => (
+      <option value={category} key={category}>{humanize(category)}</option>
+    ));
 
     const disabled = this.props.disabled || !this.isDataComplete();
 
     return (
       <form className="my-4">
         <h3 className="mb-4">
-          {this.state.event.id ? 'Edit filler event' : 'New filler event'}
+          {this.state.event.id ? 'Edit single-run event' : 'New single-run event'}
         </h3>
+
+        <BootstrapFormSelect
+          label="Category"
+          name="cagegory"
+          value={this.state.event.category}
+          onChange={event => this.eventFieldChanged({ category: event.target.value })}
+        >
+          {categoryOptions}
+        </BootstrapFormSelect>
 
         <CommonEventFormFields
           event={this.state.event}

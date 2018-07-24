@@ -9,6 +9,7 @@ class EventsController < ApplicationController
 
     @events = EventListPresenter.new(convention, sort: params[:sort]).sorted_events
     @page_title = 'Event List'
+
     respond_with @events
   end
 

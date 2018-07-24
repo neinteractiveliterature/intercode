@@ -7,7 +7,6 @@ Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
 
   resolve ->(_obj, args, ctx) {
     event_attrs = args[:event].to_h.merge(
-      category: 'filler',
       updated_by: ctx[:user_con_profile].user
     )
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
