@@ -1,11 +1,14 @@
+import EventCategory from './EventCategory';
 import Form from '../Models/Form';
 
 function getFormDataForEventCategory(event, convention) {
-  if (event.category === 'volunteer_event') {
+  const category = EventCategory.get(event.category);
+
+  if (category.isRecurring()) {
     return convention.volunteer_event_form;
   }
 
-  if (event.category === 'filler') {
+  if (category.isSingleRun()) {
     return convention.filler_event_form;
   }
 

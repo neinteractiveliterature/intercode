@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+
 import ErrorDisplay from '../ErrorDisplay';
+import EventCategory from './EventCategory';
 import eventsQuery from './eventsQuery';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -51,13 +53,13 @@ class DroppedEventAdmin extends React.Component {
   render = () => {
     const { data } = this.props;
 
-    const droppedEvents = data.events.filter(event => event.status === 'dropped' && event.category !== 'filler');
+    const droppedEvents = data.events.filter(event => event.status === 'dropped' && !EventCategory.get(event.category).isSingleRun());
     droppedEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
 
     if (droppedEvents.length === 0) {
       return (
         <p className="mt-2">
-          There are no dropped events to display.  (Filler events that are
+          There are no dropped events to display.  (Single-run events that are
           dropped cannot be restored.)
         </p>
       );
