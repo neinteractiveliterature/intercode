@@ -15,23 +15,23 @@ class EventCategory {
 }
 
 EventCategory.allCategories = categoryData.map(category => new EventCategory(category));
-EventCategory.singleRunCategories = EventCategory.allCategories.filter(
-  category => category.isSingleRun(),
-);
-EventCategory.recurringCategories = EventCategory.allCategories.filter(
-  category => category.isRecurring(),
-);
-EventCategory.regularCategories = EventCategory.allCategories.filter(
-  category => category.isRegular(),
-);
+EventCategory.singleRunCategories = EventCategory.allCategories.filter(category => (
+  category.isSingleRun()
+));
+EventCategory.recurringCategories = EventCategory.allCategories.filter(category => (
+  category.isRecurring()
+));
+EventCategory.regularCategories = EventCategory.allCategories.filter(category => (
+  category.isRegular()
+));
 
 EventCategory.allCategoryKeys = EventCategory.allCategories.map(category => category.key);
-EventCategory.singleRunCategoryKeys = EventCategory.singleRunCategories.map(
-  category => category.key,
-);
-EventCategory.recurringCategoryKeys = EventCategory.recurringCategories.map(
-  category => category.key,
-);
+EventCategory.singleRunCategoryKeys = EventCategory.singleRunCategories.map(category => (
+  category.key
+));
+EventCategory.recurringCategoryKeys = EventCategory.recurringCategories.map(category => (
+  category.key
+));
 EventCategory.regularCategoryKeys = EventCategory.regularCategories.map(category => category.key);
 EventCategory.get = key => EventCategory.allCategories.find(category => category.key === key);
 
