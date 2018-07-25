@@ -1,10 +1,12 @@
 #!/bin/bash
 
 source ~/.nvm/nvm.sh
-set -x
 
 # We need Javascript for Ruby tests because some tests need assets, so do this unconditionally
+echo "Installing node"
 nvm install
+
+set -x
 npm install --global yarn
 yarn install
 
