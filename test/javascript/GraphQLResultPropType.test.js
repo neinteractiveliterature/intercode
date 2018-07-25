@@ -18,13 +18,13 @@ describe('GraphQLResultPropType', () => {
   });
 
   test('it fails if the required field is missing', () => {
-    expect(checkFieldProp({ loading: false }))
-      .toEqual(new Error('something missing on [object Object]'));
+    expect(checkFieldProp({ loading: false }).message)
+      .toMatch(/^something missing on /);
   });
 
   test('it fails if the field is missing data', () => {
-    expect(checkFieldProp({ loading: false, something: {} }))
-      .toEqual(new Error('subField missing on [object Object]'));
+    expect(checkFieldProp({ loading: false, something: {} }).message)
+      .toMatch(/^subField missing on /);
   });
 
   test('it passes if the data is there', () => {
@@ -40,13 +40,13 @@ describe('GraphQLResultPropType', () => {
     });
 
     test('it fails if the required field is missing', () => {
-      expect(checkRequiredFieldProp({ loading: false }))
-        .toEqual(new Error('something missing on [object Object]'));
+      expect(checkRequiredFieldProp({ loading: false }).message)
+        .toMatch(/^something missing on /);
     });
 
     test('it fails if the field is missing data', () => {
-      expect(checkRequiredFieldProp({ loading: false, something: {} }))
-        .toEqual(new Error('subField missing on [object Object]'));
+      expect(checkRequiredFieldProp({ loading: false, something: {} }).message)
+        .toMatch(/^subField missing on /);
     });
 
     test('it passes if the data is there', () => {

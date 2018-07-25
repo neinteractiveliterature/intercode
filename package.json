@@ -42,7 +42,7 @@
     "font-awesome": "^4.7.0",
     "glob": "^7.1.2",
     "graphql": "^0.13.2",
-    "graphql-anywhere": "^4.1.14",
+    "graphql-anywhere": "^4.1.15",
     "graphql-tag": "^2.9.2",
     "immutable": "^3.8.2",
     "inflected": "^2.0.3",
