@@ -1,7 +1,7 @@
 #!/bin/bash
-set -x
 
 source ~/.nvm/nvm.sh
+set -x
 
 # We need Javascript for Ruby tests because some tests need assets, so do this unconditionally
 nvm install
