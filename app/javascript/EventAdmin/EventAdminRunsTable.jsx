@@ -1,8 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { Route } from 'react-router-dom';
+
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
+import EventCategory from './EventCategory';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import eventsQuery from './eventsQuery';
@@ -22,7 +24,7 @@ class EventAdminRunsTable extends React.Component {
     const sortedEvents = [...data.events].sort((a, b) => getNormalizedTitle(a).localeCompare(getNormalizedTitle(b)));
 
     const eventRows = sortedEvents.filter(event => (
-      event.category !== 'filler' && event.category !== 'volunteer_event' && event.status === 'active'
+      EventCategory.get(event.category).isRegular() && event.status === 'active'
     )).map(event => (
       <EventAdminRow
         event={event}

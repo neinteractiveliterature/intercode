@@ -2,7 +2,7 @@ class Event < ApplicationRecord
   include Concerns::FormResponse
 
   STATUSES = Set.new(%w[active dropped])
-  CATEGORIES = Set.new(%w[larp panel board_game tabletop_rpg volunteer_event filler])
+  CATEGORIES = Set.new(EventCategory::CATEGORIES_BY_KEY.keys)
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
 
   register_form_response_attrs :title,
@@ -60,8 +60,8 @@ class Event < ApplicationRecord
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
 
-  # Filler events have to have exactly one run
-  validate :filler_events_must_have_exactly_one_run, unless: :bypass_filler_event_run_check
+  # Single-run events have to have exactly one run
+  validate :single_run_events_must_have_exactly_one_run, unless: :bypass_single_event_run_check
 
   # Making it slightly harder to change the registration policy unless you really know what
   # you're doing
@@ -75,11 +75,11 @@ class Event < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
-  scope :regular, -> { where.not(category: %w[volunteer_event filler]) }
+  scope :regular, -> { where(category: EventCategory.regular_categories.map(&:key)) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
-  attr_accessor :bypass_filler_event_run_check, :allow_registration_policy_change
+  attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
 
   def self.normalize_title_for_sort(title)
     return '' unless title
@@ -126,10 +126,12 @@ class Event < ApplicationRecord
     end
   end
 
-  def filler_events_must_have_exactly_one_run
-    return unless category == 'filler' && status == 'active'
+  def single_run_events_must_have_exactly_one_run
+    category_obj = EventCategory.find(category)
+    return unless category_obj.single_run? && status == 'active'
+    return if runs.size == 1
 
-    errors.add(:base, 'Filler events must have exactly one run') if runs.size != 1
+    errors.add(:base, "#{category_obj.key.humanize} events must have exactly one run")
   end
 
   def registration_policy_cannot_change

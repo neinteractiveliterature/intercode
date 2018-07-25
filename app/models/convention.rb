@@ -74,12 +74,12 @@ class Convention < ApplicationRecord
     ConventionDrop.new(self)
   end
 
-  def form_for_event_category(event_category)
-    case event_category
-    when 'volunteer_event' then volunteer_event_form
-    when 'filler' then filler_event_form
-    else regular_event_form
-    end
+  def form_for_event_category(key)
+    category = EventCategory.find(key)
+
+    return volunteer_event_form if category.recurring?
+    return filler_event_form if category.single_run?
+    regular_event_form
   end
 
   private
