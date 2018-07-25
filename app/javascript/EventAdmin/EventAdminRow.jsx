@@ -100,7 +100,7 @@ class EventAdminRow extends React.Component {
         <td>
           <Link
             to={`/${event.id}/edit`}
-            className={`rounded p-1 event-category-${event.category} text-dark`}
+            className={`rounded p-1 event-category-${event.category.replace(/_/, '-')} text-dark`}
           >
             {event.title}
           </Link>

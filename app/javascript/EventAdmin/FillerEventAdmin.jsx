@@ -178,7 +178,11 @@ class FillerEventAdmin extends React.Component {
 
       return (
         <tr className={event.id}>
-          <th scope="row">{event.title}</th>
+          <th scope="row">
+            <span className={`rounded p-1 event-category-${event.category.replace(/_/, '-')} text-dark`}>
+              {event.title}
+            </span>
+          </th>
           <td>
             {timespan.humanizeInTimezone(this.props.data.convention.timezone_name)}
           </td>
