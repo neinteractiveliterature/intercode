@@ -128,7 +128,7 @@ class Event < ApplicationRecord
 
   def single_run_events_must_have_exactly_one_run
     category_obj = EventCategory.find(category)
-    return unless EventCategory.find(category_obj).single_run? && status == 'active'
+    return unless category_obj.single_run? && status == 'active'
     return if runs.size == 1
 
     errors.add(:base, "#{category_obj.key.humanize} events must have exactly one run")
