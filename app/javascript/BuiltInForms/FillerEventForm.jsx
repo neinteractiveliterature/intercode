@@ -5,6 +5,7 @@ import { humanize } from 'inflected';
 
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
+import EventCategory from '../EventAdmin/EventCategory';
 import RunFormFields from './RunFormFields';
 import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
 

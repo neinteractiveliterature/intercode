@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+import { humanize } from 'inflected';
+
+import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
+import EventCategory from '../EventAdmin/EventCategory';
 import Form from '../Models/Form';
 
 class EventForm extends React.Component {
@@ -129,11 +133,24 @@ class EventForm extends React.Component {
       cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
     }
 
+    const categoryOptions = EventCategory.regularCategoryKeys.map(category => (
+      <option value={category} key={category}>{humanize(category)}</option>
+    ));
+
     const disabled = this.props.disabled || !this.isDataComplete();
 
     return (
       <form className="my-4">
         {this.renderHeader()}
+
+        <BootstrapFormSelect
+          label="Category"
+          name="cagegory"
+          value={this.state.event.category}
+          onChange={event => this.eventChanged({ ...this.state.event, category: event.target.value })}
+        >
+          {categoryOptions}
+        </BootstrapFormSelect>
 
         <CommonEventFormFields
           event={this.state.event}

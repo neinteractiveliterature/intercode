@@ -47,6 +47,7 @@ class EditEvent extends React.Component {
     const eventInput = {
       id: event.id,
       event: {
+        category: event.category,
         form_response_attrs_json: JSON.stringify(event.form_response_attrs),
       },
     };
