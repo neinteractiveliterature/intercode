@@ -9,6 +9,8 @@ import {
   withRouter,
 } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+
+import EventCategory from './EventCategory';
 import FillerEventForm from '../BuiltInForms/FillerEventForm';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -162,7 +164,7 @@ class FillerEventAdmin extends React.Component {
     const { data } = this.props;
 
     const fillerEvents = data.events.filter(event => (
-      ['filler', 'board_game', 'tabletop_rpg', 'panel'].includes(event.category) && event.status === 'active'
+      EventCategory.get(event.category).isSingleRun() && event.status === 'active'
     ));
     fillerEvents.sort((a, b) => {
       const timespanA = timespanFromRun(this.props.data.convention, a, a.runs[0]);

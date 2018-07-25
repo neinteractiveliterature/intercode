@@ -102,7 +102,7 @@ class FillerEventForm extends React.Component {
       cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
     }
 
-    const categoryOptions = ['panel', 'board_game', 'tabletop_rpg', 'filler'].map(category => (
+    const categoryOptions = EventCategory.singleRunCategoryKeys.map(category => (
       <option value={category} key={category}>{humanize(category)}</option>
     ));
 

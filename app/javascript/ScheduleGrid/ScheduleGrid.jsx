@@ -3,7 +3,9 @@ import moment from 'moment-timezone';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
+import EventCategory from '../EventAdmin/EventCategory';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import LoadingIndicator from '../LoadingIndicator';
@@ -149,15 +151,26 @@ class ScheduleGrid extends React.Component {
         const { runId } = eventRun;
         const run = this.runsById.get(runId);
         const event = this.eventsById.get(run.event_id);
-        const { category } = event;
+        const { category: categoryKey } = event;
 
-        if (!eventRunsByCategory.has(category)) {
-          eventRunsByCategory.set(category, []);
+        const category = EventCategory.get(categoryKey);
+        let groupName = 'regular';
+
+        if (category.isSingleRun()) {
+          groupName = 'singleRun';
+        }
+
+        if (category.isRecurring()) {
+          groupName = 'recurring';
+        }
+
+        if (!eventRunsByCategory.has(groupName)) {
+          eventRunsByCategory.set(groupName, []);
         }
 
         return eventRunsByCategory.set(
-          category,
-          eventRunsByCategory.get(category).concat(eventRun),
+          groupName,
+          eventRunsByCategory.get(groupName).concat(eventRun),
         );
       },
       new Map(),
@@ -313,20 +326,14 @@ class ScheduleGrid extends React.Component {
 
     const eventRunsByCategory = this.groupEventRunsByCategory(eventRuns);
 
-    const volunteerEventRuns = eventRunsByCategory.get('volunteer_event') || [];
-    const panelEventRuns = eventRunsByCategory.get('panel') || [];
-    const otherEventRuns = [...eventRunsByCategory.entries()].map(([category, eventRunsInCategory]) => {
-      if (category === 'volunteer_event' || category === 'panel') {
-        return [];
-      }
-
-      return eventRunsInCategory;
-    }).reduce((eventRunList, categoryEventRuns) => [...eventRunList, ...categoryEventRuns], []);
+    const recurringRuns = eventRunsByCategory.get('recurring') || [];
+    const singleRuns = eventRunsByCategory.get('singleRun') || [];
+    const regularRuns = eventRunsByCategory.get('regular') || [];
 
     const scheduleBlocks = [
-      [new ScheduleBlock(maxTimespan, panelEventRuns)],
-      [new ScheduleBlock(maxTimespan, otherEventRuns), { flexGrow: 1 }],
-      [new ScheduleBlock(maxTimespan, volunteerEventRuns)],
+      [new ScheduleBlock(maxTimespan, singleRuns)],
+      [new ScheduleBlock(maxTimespan, regularRuns), { flexGrow: 1 }],
+      [new ScheduleBlock(maxTimespan, recurringRuns)],
     ].filter(scheduleBlock => scheduleBlock[0].eventRuns.length > 0);
 
     const hourDivs = this.renderHours(maxTimespan, eventRuns);
