@@ -192,7 +192,7 @@ GEM
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    graphiql-rails (1.4.10)
+    graphiql-rails (1.4.11)
       railties
       sprockets-rails
     graphql (1.8.5)
@@ -266,9 +266,9 @@ GEM
     mysql2 (0.5.2)
     nio4r (2.3.0)
     nio4r (2.3.0-java)
-    nokogiri (1.8.3)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
-    nokogiri (1.8.3-java)
+    nokogiri (1.8.4-java)
     oj (3.6.3)
     orm_adapter (0.5.0)
     parallel (1.12.1)
@@ -296,7 +296,7 @@ GEM
       rack (>= 1.2.0)
     rack-proxy (0.6.4)
       rack
-    rack-test (1.0.0)
+    rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.0)
       actioncable (= 5.2.0)
