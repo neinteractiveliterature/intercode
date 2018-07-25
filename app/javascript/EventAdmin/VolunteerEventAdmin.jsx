@@ -1,8 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { Link, Switch, Route } from 'react-router-dom';
+
 import CreateVolunteerEventForm from './CreateVolunteerEventForm';
 import EditRun from './EditRun';
+import EventCategory from './EventCategory';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import VolunteerEventSection from './VolunteerEventSection';
@@ -18,7 +20,7 @@ class VolunteerEventAdmin extends React.Component {
   renderVolunteerEventsList = () => {
     const { data } = this.props;
 
-    const volunteerEvents = data.events.filter(event => event.category === 'volunteer_event' && event.status === 'active');
+    const volunteerEvents = data.events.filter(event => EventCategory.get(event.category).isRecurring() && event.status === 'active');
     volunteerEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
     const eventSections = volunteerEvents.map(event => (
       <VolunteerEventSection

@@ -1,0 +1,11 @@
+[
+  { "key": "board_game" },
+  { "key": "filler", "single_run": true },
+  { "key": "larp" },
+  { "key": "moderated_discussion", "single_run": true },
+  { "key": "panel", "single_run": true },
+  { "key": "presentation", "single_run": true },
+  { "key": "tabletop_rpg" },
+  { "key": "workshop", "single_run": true },
+  { "key": "volunteer_event", "recurring": true }
+]
