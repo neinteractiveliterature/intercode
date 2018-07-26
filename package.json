@@ -35,7 +35,7 @@
     "codemirror": "^5.39.2",
     "compression-webpack-plugin": "^1.1.11",
     "css-loader": "^0.28.11",
-    "custom-event-polyfill": "^0.3.0",
+    "custom-event-polyfill": "^1.0.2",
     "debounce-promise": "^3.1.0",
     "exports-loader": "^0.7.0",
     "file-loader": "^1.1.7",
