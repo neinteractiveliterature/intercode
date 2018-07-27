@@ -100,9 +100,9 @@ ${teamMemberFragment}
 `;
 
 const userConProfilesQuery = gql`
-query($cursor: String) {
+query($name: String) {
   convention {
-    user_con_profiles(first: 1000, after: $cursor) {
+    user_con_profiles(name: $name, first: 50) {
       pageInfo {
         endCursor
         hasNextPage
@@ -330,7 +330,7 @@ class TeamMemberForm extends React.Component {
 
   userConProfileIdChanged = (selection) => {
     this.setState({
-      teamMember: { ...this.state.teamMember, user_con_profile: selection.data },
+      teamMember: { ...this.state.teamMember, user_con_profile: selection },
     });
   }
 
@@ -459,7 +459,7 @@ class TeamMemberForm extends React.Component {
         </label>
         <UserConProfileSelect
           id={userConProfileSelectId}
-          value={(this.state.teamMember.user_con_profile || {}).id}
+          value={this.state.teamMember.user_con_profile}
           onChange={this.userConProfileIdChanged}
           userConProfilesQuery={userConProfilesQuery}
         />
