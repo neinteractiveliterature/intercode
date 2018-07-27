@@ -5,6 +5,12 @@
 %fieldset
   = f.text_field :first_name, :placeholder => :first_name, :required => true
   = f.text_field :last_name, :placeholder => :last_name, :required => true
+  - unless resource.new_record?
+    .alert.alert-warning
+      Please note that each convention keeps a separate record of your name.  Changing your name
+      here will apply to new conventions you sign up for in the future.  To change your name on
+      existing conventions, please go to each convention's web site and choose "my profile" from
+      the menu.
   = f.email_field :email, :placeholder => :email, :required => true
 %fieldset
   = f.password_field :password, :autocomplete => "off", help: (resource.new_record? ? nil : "Leave blank if you don't want to change it")
