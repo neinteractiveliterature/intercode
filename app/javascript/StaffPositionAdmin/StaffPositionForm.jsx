@@ -31,7 +31,7 @@ class StaffPositionForm extends React.Component {
   userConProfilesChanged = (newValue) => {
     this.staffPositionMutator.onValueChange(
       'user_con_profiles',
-      newValue.map(choice => choice.data),
+      newValue,
     );
   }
 
@@ -66,8 +66,8 @@ class StaffPositionForm extends React.Component {
           <label htmlFor={userConProfileSelectId}>People</label>
           <UserConProfileSelect
             id={userConProfileSelectId}
-            multi
-            value={this.props.staffPosition.user_con_profiles.map(userConProfile => userConProfile.id)}
+            isMulti
+            value={this.props.staffPosition.user_con_profiles}
             onChange={this.userConProfilesChanged}
           />
         </div>

@@ -1,22 +1,25 @@
 import React from 'react';
-import Select from 'react-select';
 import { shallow } from 'enzyme';
-import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
+import TimezoneSelect, { loadOptions } from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
 describe('TimezoneSelect', () => {
   const component = shallow((
     <TimezoneSelect label="Timezone" />
   ));
 
-  const options = component.find(Select).prop('options');
+  test('it renders', () => {
+    expect(component.text()).toMatch(/Timezone/);
+  });
 
-  test('timezone options', () => {
-    expect(options.length > 500).toBeTruthy();
+  test('option filtering', () => {
+    const options = loadOptions('');
+    expect(options.length).toEqual(50);
 
-    const utcOption = options.find(option => option.value === 'UTC');
-    expect(utcOption.label).toEqual('[UTC+00:00] UTC');
+    const utcOptions = loadOptions('UTC');
+    // we also get Etc/UTC back in the list and can't necessarily expect UTC first
+    expect(utcOptions.map(option => option.label)).toContain('[UTC+00:00] UTC');
 
-    const kolkataOption = options.find(option => option.value === 'Asia/Kolkata');
-    expect(kolkataOption.label).toEqual('[UTC-05:30] Asia/Kolkata');
+    const kolkataOptions = loadOptions('Asia/Kolkata');
+    expect(kolkataOptions[0].label).toEqual('[UTC-05:30] Asia/Kolkata');
   });
 });
