@@ -35,40 +35,7 @@ describe('UserConProfileSelect', () => {
   test('loads options', async () => {
     const component = renderUserConProfileSelect();
     const componentInstance = component.instance();
-    await componentInstance.componentDidMount();
-
-    expect(componentInstance.state.options[0].label).toEqual('Gabriel Knight');
-  });
-
-  test('loads paginated options', async () => {
-    const query = async ({ variables: { cursor } }) => {
-      const hasNextPage = (cursor !== '12345');
-      const edges = (
-        hasNextPage ?
-          [{ node: { id: 1, name_without_nickname: 'Gabriel Knight' } }] :
-          [{ node: { id: 2, name_without_nickname: 'Grace Nakamura' } }]
-      );
-
-      return {
-        data: {
-          convention: {
-            user_con_profiles: {
-              edges,
-              pageInfo: {
-                endCursor: (hasNextPage ? '12345' : null),
-                hasNextPage,
-              },
-            },
-          },
-        },
-      };
-    };
-
-    const component = renderUserConProfileSelect({}, query);
-    const componentInstance = component.instance();
-    await componentInstance.componentDidMount();
-
-    expect(componentInstance.state.options[0].label).toEqual('Gabriel Knight');
-    expect(componentInstance.state.options[1].label).toEqual('Grace Nakamura');
+    const options = await componentInstance.loadOptions('gab');
+    expect(options).toEqual([{ id: 1, name_without_nickname: 'Gabriel Knight' }]);
   });
 });
