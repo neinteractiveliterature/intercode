@@ -38,7 +38,7 @@ class OrderPaymentForm extends React.Component {
         <BootstrapFormInput
           name="name"
           label="Name"
-          onChange={this.mutator.valueChangeCallback('name')}
+          onChange={this.mutator.onInputChange}
           value={this.props.paymentDetails.name}
         />
 
