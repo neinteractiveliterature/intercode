@@ -9713,9 +9713,9 @@ underscore@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
 
-unfetch@^3.0.0, unfetch@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-3.1.0.tgz#d622b23a49e6fa93a5a6e99e18e073a83b78d3a8"
+unfetch@^3.0.0, unfetch@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-3.1.1.tgz#4ef20a4f3c86b5e1d306b9de091ab6e5e8cd9069"
 
 union-value@^1.0.0:
   version "1.0.0"

@@ -84,7 +84,7 @@
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "uglify-js": "^3.4.6",
-    "unfetch": "^3.1.0",
+    "unfetch": "^3.1.1",
     "url-search-params-polyfill": "^4.0.1",
     "webpack": "^4.8.1",
     "webpack-bundle-analyzer": "^2.13.1",
