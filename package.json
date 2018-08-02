@@ -89,7 +89,7 @@
     "webpack": "^4.8.1",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-manifest-plugin": "^2.0.3",
-    "webpack-merge": "^4.1.3",
+    "webpack-merge": "^4.1.4",
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
