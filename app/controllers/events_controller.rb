@@ -11,6 +11,8 @@ class EventsController < ApplicationController
     @page_title = 'Event List'
 
     respond_with @events
+  rescue EventListPresenter::UnknownSortError => e
+    render body: e.message, status: :not_acceptable
   end
 
   def schedule
