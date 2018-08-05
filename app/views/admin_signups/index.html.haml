@@ -1,9 +1,11 @@
 = render partial: 'runs/run_header', locals: { run: @run }
 
-= datagrid_filters @signups_grid, show_collapsed: [:state, :bucket_key, :requested_bucket_key]
+= react_component 'RunSignupsTable', authenticityToken: graphql_authenticity_token, eventId: @event.id, runId: @run.id, exportUrl: export_event_run_admin_signups_path(@run)
 
-= link_to polymorphic_path([@event, @run, :admin_signups], format: :csv), class: 'btn btn-secondary my-4' do
-  %i.fa.fa-file-excel-o
-  Download CSV
-
-= datagrid_table @signups_grid
+-# = datagrid_filters @signups_grid, show_collapsed: [:state, :bucket_key, :requested_bucket_key]
+-#
+-# = link_to polymorphic_path([@event, @run, :admin_signups], format: :csv), class: 'btn btn-secondary my-4' do
+-#   %i.fa.fa-file-excel-o
+-#   Download CSV
+-#
+-# = datagrid_table @signups_grid

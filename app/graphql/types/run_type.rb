@@ -53,4 +53,23 @@ Types::RunType = GraphQL::ObjectType.define do
       ctx[:user_con_profile].signups.select { |signup| signup.run_id == obj.id }
     }
   end
+
+  field :signups_paginated, !Types::SignupsPaginationType do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::SignupFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    guard ->(run, _args, ctx) do
+      ctx[:current_ability].can?(:read, Signup.new(run: run))
+    end
+
+    resolve ->(run, args, _ctx) do
+      scope = run.signups
+
+      Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
+        .scoped
+        .paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+    end
+  end
 end

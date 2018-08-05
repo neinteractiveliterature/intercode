@@ -14,23 +14,29 @@ class GraphQLReactTable extends React.Component {
     children: PropTypes.node,
     exportUrl: PropTypes.string,
     getReactTableProps: PropTypes.func,
+    initialFiltered: PropTypes.arrayOf(PropTypes.shape({})),
+    initialSorted: PropTypes.arrayOf(PropTypes.shape({})),
     query: PropTypes.shape({}).isRequired,
     renderAdditionalContent: PropTypes.func,
+    variables: PropTypes.shape({}),
   };
 
   static defaultProps = {
     children: null,
     exportUrl: null,
     getReactTableProps: null,
+    initialFiltered: null,
+    initialSorted: null,
     renderAdditionalContent: null,
+    variables: null,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      sorted: [],
-      filtered: [],
+      sorted: this.props.initialSorted || [],
+      filtered: this.props.initialFiltered || [],
     };
   }
 
@@ -67,13 +73,14 @@ class GraphQLReactTable extends React.Component {
       getReactTableProps,
       query,
       renderAdditionalContent,
+      variables,
       ...staticTableProps
     } = this.props;
 
     return (
       <div>
         {this.renderExportButton()}
-        <Query query={query}>
+        <Query query={query} variables={variables}>
           {({
             loading, data, refetch, ...otherArgs
           }) => (
@@ -86,6 +93,7 @@ class GraphQLReactTable extends React.Component {
                 loading={loading}
                 onFetchData={(tableState) => {
                   refetch({
+                    ...variables,
                     page: tableState.page + 1,
                     perPage: tableState.pageSize,
                     filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
