@@ -37,7 +37,11 @@ Intercode::Application.routes.draw do
         end
 
         resource :user_signup
-        resources :admin_signups
+        resources :admin_signups do
+          collection do
+            get :export
+          end
+        end
       end
     end
 

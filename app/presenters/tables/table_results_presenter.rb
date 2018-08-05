@@ -75,6 +75,13 @@ class Tables::TableResultsPresenter
     )
   end
 
+  def invert_sort_direction(direction)
+    case direction.to_s.upcase
+    when 'DESC' then 'ASC'
+    else 'DESC'
+    end
+  end
+
   def apply_filter(_scope, _filter, _value)
     raise 'Subclasses must implement #apply_filter!'
   end
