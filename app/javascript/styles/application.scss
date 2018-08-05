@@ -59,6 +59,12 @@ table.no-top-border thead th {
 
 @for $i from 1 to 20 {
   .codemirror-height-#{$i} {
+    height: auto;
+
+    .form-control {
+      height: auto;
+    }
+
     .markdown-preview, .CodeMirror-scroll {
       min-height: #{$i}rem !important;
     }
