@@ -55,6 +55,8 @@ OR lower(user_con_profiles.first_name) like :value",
       "user_con_profiles.email #{direction}"
     when :age
       "user_con_profiles.birth_date #{invert_sort_direction direction}"
+    when :bucket
+      "bucket_key #{direction}"
     else
       super
     end
