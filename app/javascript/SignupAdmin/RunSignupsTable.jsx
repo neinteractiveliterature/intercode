@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import moment from 'moment-timezone';
-import Select from 'react-select';
 
 import { ageAsOf } from '../TimeUtils';
+import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import GraphQLReactTable from '../GraphQLReactTable';
 
 const signupsQuery = gql`
@@ -77,6 +77,12 @@ function formatBucket({ value: bucketKey, original: signup }, event) {
   return 'None';
 }
 
+const STATE_OPTIONS = [
+  { value: 'confirmed', label: 'Confirmed' },
+  { value: 'waitlisted', label: 'Waitlisted' },
+  { value: 'withdrawn', label: 'Withdrawn' },
+];
+
 class RunSignupsTable extends React.Component {
   static propTypes = {
     eventId: PropTypes.number.isRequired,
@@ -90,7 +96,9 @@ class RunSignupsTable extends React.Component {
         query={signupsQuery}
         variables={{ eventId: this.props.eventId, runId: this.props.runId }}
         exportUrl={this.props.exportUrl}
-        className="-striped -highlight"
+        initialFiltered={[{ id: 'state', value: ['confirmed', 'waitlisted'] }]}
+        initialSorted={[{ id: 'id', desc: false }]}
+        openMenuOnFocus
         getReactTableProps={({ data }) => ({
           data: (data.event || { run: { signups_paginated: {} } }).run.signups_paginated.entries,
           pages: (data.event || { run: { signups_paginated: {} } })
@@ -107,15 +115,11 @@ class RunSignupsTable extends React.Component {
               accessor: 'state',
               width: 130,
               Filter: ({ filter, onChange }) => (
-                <Select
-                  options={[
-                    { value: 'confirmed', label: 'Confirmed' },
-                    { value: 'waitlisted', label: 'Waitlisted' },
-                    { value: 'withdrawn', label: 'Withdrawn' },
-                  ]}
-                  isMulti
-                  value={(filter || {}).value}
-                  onChange={value => onChange(value)}
+                <ChoiceSet
+                  choices={STATE_OPTIONS}
+                  value={(filter || {}).value || []}
+                  onChange={newValue => onChange(newValue)}
+                  multiple
                 />
               ),
             },
@@ -129,6 +133,18 @@ class RunSignupsTable extends React.Component {
               id: 'bucket',
               accessor: signup => signup.bucket_key,
               Cell: props => formatBucket(props, data.event),
+              Filter: ({ filter, onChange }) => (
+                <ChoiceSet
+                  choices={(
+                    data.event
+                      ? data.event.registration_policy.buckets.map(bucket => ({ label: bucket.name, value: bucket.key }))
+                      : []
+                    )}
+                  value={(filter || {}).value || []}
+                  onChange={newValue => onChange(newValue)}
+                  multiple
+                />
+              ),
             },
             {
               Header: 'Age',
@@ -153,6 +169,11 @@ class RunSignupsTable extends React.Component {
           ],
         })}
         getTrProps={(state, rowInfo) => ({
+          ...(
+            rowInfo
+              ? { className: `bg-signup-state-color-${rowInfo.row.state}` }
+              : {}
+          ),
           style: { cursor: 'pointer' },
           onClick: (event, handleOriginal) => {
             if (handleOriginal) {
@@ -162,6 +183,7 @@ class RunSignupsTable extends React.Component {
             this.setState({ editingOrderId: rowInfo.original.id });
           },
         })}
+        getTheadFilterThProps={() => ({ className: 'text-left' })}
       />
     </div>
   )

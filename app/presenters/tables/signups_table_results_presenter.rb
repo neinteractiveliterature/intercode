@@ -17,22 +17,27 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
 
   private
 
-#   def apply_filter(scope, filter, value)
-#     case filter
-#     when :user_name
-#       scope.joins(:user_con_profile)
-#         .where(
-#           "lower(user_con_profiles.last_name) like :value \
-# OR lower(user_con_profiles.first_name) like :value",
-#           value: "%#{value.downcase}%"
-#         )
-#     when :status
-#       scope.where(status: value)
-#     else
-#       scope
-#     end
-#   end
-#
+  def apply_filter(scope, filter, value)
+    case filter
+    when :name
+      scope.joins(:user_con_profile)
+        .where(
+          "lower(user_con_profiles.last_name) like :value \
+OR lower(user_con_profiles.first_name) like :value",
+          value: "%#{value.downcase}%"
+        )
+    when :email
+      scope.joins(user_con_profile: :user)
+        .where('lower(users.email) like :value', value: "%#{value.downcase}%")
+    when :state
+      value.present? ? scope.where(state: value) : scope
+    when :bucket
+      value.present? ? scope.where(bucket_key: value) : scope
+    else
+      scope
+    end
+  end
+
   def expand_scope_for_sort(scope, sort_field)
     case sort_field
     when :name, :email, :age
