@@ -82,7 +82,7 @@
     "resolve-url-loader": "^2.3.0",
     "rollbar-sourcemap-webpack-plugin": "^2.3.0",
     "sass-loader": "^7.1.0",
-    "style-loader": "^0.21.0",
+    "style-loader": "^0.22.0",
     "uglify-js": "^3.4.6",
     "unfetch": "^3.1.1",
     "url-search-params-polyfill": "^4.0.1",
