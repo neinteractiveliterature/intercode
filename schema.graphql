@@ -471,7 +471,7 @@ type Event {
   participant_communications: String
   provided_tickets: [Ticket!]!
   registration_policy: RegistrationPolicy
-  run: Run!
+  run(id: Int!): Run!
   runs: [Run!]!
   short_blurb: String
   short_blurb_html: String
@@ -905,7 +905,7 @@ type Signup {
 }
 
 input SignupFiltersInput {
-  status: String
+  status: [String]
   user_name: String
 }
 
@@ -1334,6 +1334,7 @@ type UserConProfile {
   id: Int!
   last_name: String
   name: String
+  name_inverted: String
   name_without_nickname: String
   nickname: String
   orders: [Order]!
