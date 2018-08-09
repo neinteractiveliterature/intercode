@@ -37,11 +37,8 @@ Intercode::Application.routes.draw do
         end
 
         resource :user_signup
-        resources :admin_signups do
-          collection do
-            get :export
-          end
-        end
+        get 'admin_signups/export' => 'admin_signups#export', as: :export_admin_signups
+        get 'admin_signups/(*extra)' => 'admin_signups#index', as: :admin_signups
       end
     end
 

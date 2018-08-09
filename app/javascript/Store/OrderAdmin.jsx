@@ -17,6 +17,8 @@ class OrderAdmin extends React.Component {
 
     this.state = {
       editingOrderId: null,
+      filtered: [],
+      sorted: [],
     };
   }
 
@@ -45,6 +47,10 @@ class OrderAdmin extends React.Component {
         query={adminOrdersQuery}
         exportUrl={this.props.exportUrl}
         className="-striped -highlight"
+        filtered={this.state.filtered}
+        sorted={this.state.sorted}
+        onSortedChange={(sorted) => { this.setState({ sorted }); }}
+        onFilteredChange={(filtered) => { this.setState({ filtered }); }}
         getReactTableProps={({ data }) => ({
           data: (data.convention || { orders_paginated: {} }).orders_paginated.entries,
           pages: (data.convention || { orders_paginated: {} }).orders_paginated.total_pages,
