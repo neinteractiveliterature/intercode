@@ -62,16 +62,28 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-#   def csv_scope
-#     scoped.includes(:user_con_profile)
-#   end
-#
-#   def generate_csv_cell(field, order)
-#     case field.id
-#     when :user_name then order.user_con_profile.name_without_nickname
-#     when :describe_products then order.order_entries.map(&:describe_products).join(', ')
-#     when :total_price then order.total_price.format
-#     else order.public_send(field.id)
-#     end
-#   end
+  def csv_scope
+    scoped.includes(user_con_profile: :user)
+  end
+
+  def generate_csv_cell(field, signup)
+    case field.id
+    when :name then signup.user_con_profile.name_inverted
+    when :bucket then describe_bucket(signup)
+    when :age then signup.user_con_profile.age_as_of(signup.run.starts_at)
+    when :email then signup.user_con_profile.email
+    else signup.public_send(field.id)
+    end
+  end
+
+  def describe_bucket(signup)
+    bucket = signup.bucket
+    requested_bucket = signup.requested_bucket
+
+    return bucket.name if bucket && requested_bucket && bucket.name == requested_bucket.name
+    return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})" if requested_bucket
+    return "#{bucket.name} (no preference)" if bucket
+
+    ''
+  end
 end
