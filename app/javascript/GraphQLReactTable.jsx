@@ -13,11 +13,12 @@ class GraphQLReactTable extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     exportUrl: PropTypes.string,
+    filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     getReactTableProps: PropTypes.func,
-    initialFiltered: PropTypes.arrayOf(PropTypes.shape({})),
-    initialSorted: PropTypes.arrayOf(PropTypes.shape({})),
+    onFetchData: PropTypes.func,
     query: PropTypes.shape({}).isRequired,
     renderAdditionalContent: PropTypes.func,
+    sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     variables: PropTypes.shape({}),
   };
 
@@ -25,20 +26,10 @@ class GraphQLReactTable extends React.Component {
     children: null,
     exportUrl: null,
     getReactTableProps: null,
-    initialFiltered: null,
-    initialSorted: null,
+    onFetchData: null,
     renderAdditionalContent: null,
     variables: null,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      sorted: this.props.initialSorted || [],
-      filtered: this.props.initialFiltered || [],
-    };
-  }
 
   renderExportButton = () => {
     if (!this.props.exportUrl) {
@@ -53,8 +44,8 @@ class GraphQLReactTable extends React.Component {
             getExportUrl(
               this.props.exportUrl,
               {
-                filtered: this.state.filtered,
-                sorted: this.state.sorted,
+                filtered: this.props.filtered,
+                sorted: this.props.sorted,
               },
             )
           }
@@ -71,6 +62,7 @@ class GraphQLReactTable extends React.Component {
     const {
       children,
       getReactTableProps,
+      onFetchData,
       query,
       renderAdditionalContent,
       variables,
@@ -88,8 +80,6 @@ class GraphQLReactTable extends React.Component {
               <ReactTable
                 manual
                 filterable
-                sorted={this.state.sorted}
-                filtered={this.state.filtered}
                 loading={loading}
                 onFetchData={(tableState) => {
                   refetch({
@@ -99,12 +89,10 @@ class GraphQLReactTable extends React.Component {
                     filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
                     sort: reactTableSortToTableResultsSort(tableState.sorted),
                   });
-                }}
-                onSortedChange={(newSorted) => {
-                  this.setState({ sorted: newSorted });
-                }}
-                onFilteredChange={(newFiltered) => {
-                  this.setState({ filtered: newFiltered });
+
+                  if (this.props.onFetchData) {
+                    this.props.onFetchData(tableState);
+                  }
                 }}
                 {...staticTableProps}
                 {...(
