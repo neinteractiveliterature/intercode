@@ -83,7 +83,7 @@
     "rollbar-sourcemap-webpack-plugin": "^2.3.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.22.1",
-    "uglify-js": "^3.4.6",
+    "uglify-js": "^3.4.7",
     "unfetch": "^3.1.1",
     "url-search-params-polyfill": "^4.0.1",
     "webpack": "^4.8.1",
