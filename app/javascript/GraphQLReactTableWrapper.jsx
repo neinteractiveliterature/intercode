@@ -27,22 +27,24 @@ class GraphQLReactTableWrapper extends React.PureComponent {
 
     return (
       <Query query={query} variables={variables}>
-        {queryResult => (
-          children({
+        {(queryResult) => {
+          const refetchFromTableState = tableState => queryResult.refetch({
+            ...variables,
+            page: tableState.page + 1,
+            perPage: tableState.pageSize,
+            filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
+            sort: reactTableSortToTableResultsSort(tableState.sorted),
+          });
+
+          const reactTableProps = {
             manual: true,
             filterable: true,
             loading: queryResult.loading,
-            onFetchData: (tableState) => {
-              queryResult.refetch({
-                ...variables,
-                page: tableState.page + 1,
-                perPage: tableState.pageSize,
-                filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
-                sort: reactTableSortToTableResultsSort(tableState.sorted),
-              });
-            },
-          }, queryResult)
-        )}
+            onFetchData: (tableState) => { refetchFromTableState(tableState); },
+          };
+
+          return children(reactTableProps, queryResult, refetchFromTableState);
+        }}
       </Query>
     );
   }
