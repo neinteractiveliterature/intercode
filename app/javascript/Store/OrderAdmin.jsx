@@ -7,9 +7,9 @@ import ReactTable from 'react-table';
 import AdminOrderModal from './AdminOrderModal';
 import { adminOrdersQuery } from './queries';
 import formatMoney from '../formatMoney';
-import GraphQLReactTableWrapper from '../GraphQLReactTableWrapper';
-import ReactRouterReactTableWrapper from '../ReactRouterReactTableWrapper';
-import ReactTableExportButton from '../ReactTableExportButton';
+import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
+import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
+import ExportButton from '../Tables/ExportButton';
 
 class OrderAdmin extends React.Component {
   static propTypes = {
@@ -50,7 +50,7 @@ class OrderAdmin extends React.Component {
           <GraphQLReactTableWrapper query={adminOrdersQuery}>
             {(reactTableProps, { data }) => (
               <div>
-                <ReactTableExportButton
+                <ExportButton
                   exportUrl={this.props.exportUrl}
                   filtered={tableStateProps.filtered}
                   sorted={tableStateProps.sorted}
