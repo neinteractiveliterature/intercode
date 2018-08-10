@@ -8,6 +8,7 @@ import AdminOrderModal from './AdminOrderModal';
 import { adminOrdersQuery } from './queries';
 import formatMoney from '../formatMoney';
 import GraphQLReactTableWrapper from '../GraphQLReactTableWrapper';
+import InternalStateReactTableWrapper from '../InternalStateReactTableWrapper';
 
 class OrderAdmin extends React.Component {
   static propTypes = {
@@ -19,8 +20,6 @@ class OrderAdmin extends React.Component {
 
     this.state = {
       editingOrderId: null,
-      filtered: [],
-      sorted: [],
     };
   }
 
@@ -45,69 +44,71 @@ class OrderAdmin extends React.Component {
 
   render = () => (
     <div className="mb-4">
-      <GraphQLReactTableWrapper
-        query={adminOrdersQuery}
-        exportUrl={this.props.exportUrl}
-      >
-        {(reactTableProps, { data }) => (
-          <div>
-            <ReactTable
-              className="-striped -highlight"
-              filtered={this.state.filtered}
-              sorted={this.state.sorted}
-              onSortedChange={(sorted) => { this.setState({ sorted }); }}
-              onFilteredChange={(filtered) => { this.setState({ filtered }); }}
-              data={(data.convention || { orders_paginated: {} }).orders_paginated.entries}
-              pages={(data.convention || { orders_paginated: {} }).orders_paginated.total_pages}
-              columns={[
-                {
-                  Header: 'User',
-                  id: 'user_name',
-                  accessor: order => order.user_con_profile.name_without_nickname,
-                },
-                { Header: 'Status', accessor: 'status' },
-                {
-                  Header: 'Submitted',
-                  accessor: 'submitted_at',
-                  filterable: false,
-                  Cell: props => (
-                    props.value
-                      ? moment(props.value).tz(data.convention.timezone_name)
-                        .format('MMM D, YYYY h:mma')
-                      : ''
-                  ),
-                },
-                {
-                  Header: 'Products',
-                  id: 'describe_products',
-                  filterable: false,
-                  sortable: false,
-                  accessor: order => order.order_entries.map(entry => entry.describe_products),
-                  Cell: props => arrayToSentence(props.value),
-                },
-                {
-                  Header: 'Price',
-                  accessor: 'total_price',
-                  filterable: false,
-                  sortable: false,
-                  Cell: props => formatMoney(props.value),
-                },
-              ]}
-              getTrProps={(state, rowInfo) => ({
-                style: { cursor: 'pointer' },
-                onClick: (event, handleOriginal) => {
-                  if (handleOriginal) {
-                    handleOriginal();
-                  }
+      <InternalStateReactTableWrapper>
+        {tableStateProps => (
+          <GraphQLReactTableWrapper
+            query={adminOrdersQuery}
+            exportUrl={this.props.exportUrl}
+          >
+            {(reactTableProps, { data }) => (
+              <div>
+                <ReactTable
+                  {...tableStateProps}
+                  {...reactTableProps}
+                  className="-striped -highlight"
+                  data={(data.convention || { orders_paginated: {} }).orders_paginated.entries}
+                  pages={(data.convention || { orders_paginated: {} }).orders_paginated.total_pages}
+                  columns={[
+                    {
+                      Header: 'User',
+                      id: 'user_name',
+                      accessor: order => order.user_con_profile.name_without_nickname,
+                    },
+                    { Header: 'Status', accessor: 'status' },
+                    {
+                      Header: 'Submitted',
+                      accessor: 'submitted_at',
+                      filterable: false,
+                      Cell: props => (
+                        props.value
+                          ? moment(props.value).tz(data.convention.timezone_name)
+                            .format('MMM D, YYYY h:mma')
+                          : ''
+                      ),
+                    },
+                    {
+                      Header: 'Products',
+                      id: 'describe_products',
+                      filterable: false,
+                      sortable: false,
+                      accessor: order => order.order_entries.map(entry => entry.describe_products),
+                      Cell: props => arrayToSentence(props.value),
+                    },
+                    {
+                      Header: 'Price',
+                      accessor: 'total_price',
+                      filterable: false,
+                      sortable: false,
+                      Cell: props => formatMoney(props.value),
+                    },
+                  ]}
+                  getTrProps={(state, rowInfo) => ({
+                    style: { cursor: 'pointer' },
+                    onClick: (event, handleOriginal) => {
+                      if (handleOriginal) {
+                        handleOriginal();
+                      }
 
-                  this.setState({ editingOrderId: rowInfo.original.id });
-                },
-              })}
-            />
-            {this.renderEditModal(data)}
-          </div>
+                      this.setState({ editingOrderId: rowInfo.original.id });
+                    },
+                  })}
+                />
+                {this.renderEditModal(data)}
+              </div>
+            )}
+          </GraphQLReactTableWrapper>
         )}
-      </GraphQLReactTableWrapper>
+      </InternalStateReactTableWrapper>
     </div>
   )
 }
