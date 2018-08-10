@@ -8,7 +8,8 @@ import AdminOrderModal from './AdminOrderModal';
 import { adminOrdersQuery } from './queries';
 import formatMoney from '../formatMoney';
 import GraphQLReactTableWrapper from '../GraphQLReactTableWrapper';
-import InternalStateReactTableWrapper from '../InternalStateReactTableWrapper';
+import ReactRouterReactTableWrapper from '../ReactRouterReactTableWrapper';
+import ReactTableExportButton from '../ReactTableExportButton';
 
 class OrderAdmin extends React.Component {
   static propTypes = {
@@ -44,14 +45,16 @@ class OrderAdmin extends React.Component {
 
   render = () => (
     <div className="mb-4">
-      <InternalStateReactTableWrapper>
+      <ReactRouterReactTableWrapper>
         {tableStateProps => (
-          <GraphQLReactTableWrapper
-            query={adminOrdersQuery}
-            exportUrl={this.props.exportUrl}
-          >
+          <GraphQLReactTableWrapper query={adminOrdersQuery}>
             {(reactTableProps, { data }) => (
               <div>
+                <ReactTableExportButton
+                  exportUrl={this.props.exportUrl}
+                  filtered={tableStateProps.filtered}
+                  sorted={tableStateProps.sorted}
+                />
                 <ReactTable
                   {...tableStateProps}
                   {...reactTableProps}
@@ -108,7 +111,7 @@ class OrderAdmin extends React.Component {
             )}
           </GraphQLReactTableWrapper>
         )}
-      </InternalStateReactTableWrapper>
+      </ReactRouterReactTableWrapper>
     </div>
   )
 }
