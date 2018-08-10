@@ -7,9 +7,9 @@ import ReactTable from 'react-table';
 
 import { ageAsOf } from '../TimeUtils';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
-import GraphQLReactTableWrapper from '../GraphQLReactTableWrapper';
-import ReactRouterReactTableWrapper from '../ReactRouterReactTableWrapper';
-import ReactTableExportButton from '../ReactTableExportButton';
+import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
+import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
+import ExportButton from '../Tables/ExportButton';
 
 const signupsQuery = gql`
 query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
@@ -119,17 +119,13 @@ class RunSignupsTable extends React.Component {
     }).isRequired,
   };
 
-
-  // initialFiltered={[{ id: 'state', value: ['confirmed', 'waitlisted'] }]}
-  // initialSorted={[{ id: 'id', desc: false }]}
-
   render = () => (
     <div className="mb-4">
       <ReactRouterReactTableWrapper
         decodeFilterValue={decodeFilterValue}
         encodeFilterValue={encodeFilterValue}
       >
-        {reactRouterProps => (
+        {tableStateProps => (
           <GraphQLReactTableWrapper
             query={signupsQuery}
             variables={{ eventId: this.props.eventId, runId: this.props.runId }}
@@ -137,13 +133,13 @@ class RunSignupsTable extends React.Component {
           >
             {(graphQLProps, { data }) => (
               <div>
-                <ReactTableExportButton
+                <ExportButton
                   exportUrl={this.props.exportUrl}
-                  filtered={reactRouterProps.filtered}
-                  sorted={reactRouterProps.sorted}
+                  filtered={tableStateProps.filtered}
+                  sorted={tableStateProps.sorted}
                 />
                 <ReactTable
-                  {...reactRouterProps}
+                  {...tableStateProps}
                   {...graphQLProps}
                   className="-striped -highlight"
                   data={
