@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Manager, Target, Popper, Arrow } from 'react-popper';
+import {
+  Manager,
+  Target,
+  Popper,
+  Arrow,
+} from 'react-popper';
 import classNames from 'classnames';
 import onClickOutside from 'react-onclickoutside';
 

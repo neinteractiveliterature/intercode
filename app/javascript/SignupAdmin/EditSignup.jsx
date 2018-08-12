@@ -5,7 +5,9 @@ import gql from 'graphql-tag';
 import { pluralize, humanize } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
+
 import { adminSignupQuery, signupFields } from './queries';
+import { ageAsOf } from '../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
 import Confirm from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
@@ -25,21 +27,6 @@ mutation($signupId: Int!, $counted: Boolean!) {
 
 ${signupFields}
 `;
-
-function ageAsOf(birthDate, date) {
-  if (!birthDate || !date) {
-    return null;
-  }
-
-  const onOrAfterBirthday = (
-    date.month() > birthDate.month() || (
-      date.month() === birthDate.month() &&
-      date.date() >= birthDate.date()
-    )
-  );
-
-  return (date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1));
-}
 
 function cityState(userConProfile) {
   return [

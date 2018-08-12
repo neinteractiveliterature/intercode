@@ -39,7 +39,6 @@ import '../Codemirror/LiquidMultiplexModes';
 import Cart from '../Store/Cart';
 import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
-import EditSignup from '../SignupAdmin/EditSignup';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
 import EventProposalForm from '../EventProposals/EventProposalForm';
@@ -53,6 +52,7 @@ import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import RoomsAdmin from '../RoomsAdmin';
 import ScheduleGrid from '../ScheduleGrid';
+import SignupAdmin from '../SignupAdmin';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
@@ -66,7 +66,6 @@ WebpackerReact.setup({
   Cart: StandaloneGraphQLComponent(Cart),
   ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
   DatagridFilters,
-  EditSignup: StandaloneGraphQLComponent(EditSignup),
   EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
   EventAdmin: StandaloneGraphQLComponent(EventAdmin),
   EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
@@ -80,6 +79,7 @@ WebpackerReact.setup({
   ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
+  SignupAdmin: StandaloneGraphQLComponent(SignupAdmin),
   StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
   StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
   StoreAdmin: StandaloneGraphQLComponent(StoreAdmin),

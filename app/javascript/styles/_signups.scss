@@ -1,0 +1,16 @@
+$signup-state-color-confirmed: lighten($green, 45%);
+$signup-state-color-waitlisted: lighten($yellow, 25%);
+$signup-state-color-withdrawn: lighten($red, 35%);
+
+$signup-state-colors: () !default;
+$signup-state-colors: map-merge((
+  "signup-state-color-confirmed": $signup-state-color-confirmed,
+  "signup-state-color-waitlisted": $signup-state-color-waitlisted,
+  "signup-state-color-withdrawn": $signup-state-color-withdrawn,
+), $signup-state-colors);
+
+@each $color, $value in $signup-state-colors {
+  .bg-#{$color} {
+    background-color: $value;
+  }
+}
