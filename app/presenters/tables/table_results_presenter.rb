@@ -12,7 +12,7 @@ class Tables::TableResultsPresenter
 
   attr_reader :base_scope, :filters, :sort, :visible_field_ids
 
-  def initialize(base_scope, filters, sort, visible_field_ids)
+  def initialize(base_scope, filters, sort, visible_field_ids = nil)
     @base_scope = base_scope
     @filters = filters || {}
     @sort = sort || []
