@@ -39,10 +39,15 @@ function dataToQueryString(data) {
   return queryStringItems.join('&');
 }
 
-function getExportUrl(baseUrl, { filtered, sorted }) {
+function getExportUrl(baseUrl, { filtered, sorted, columns }) {
   const queryParams = {
     filters: reactTableFiltersToTableResultsFilters(filtered),
     sort: reactTableSortToTableResultsSort(sorted),
+    ...(
+      columns
+        ? { columns }
+        : {}
+    ),
   };
 
   const queryString = dataToQueryString(queryParams);
@@ -55,7 +60,12 @@ class ReactTableExportButton extends React.PureComponent {
     exportUrl: PropTypes.string.isRequired,
     filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    columns: PropTypes.arrayOf(PropTypes.string),
   }
+
+  static defaultProps = {
+    columns: null,
+  };
 
   render = () => (
     <div className="mb-2">
@@ -67,6 +77,7 @@ class ReactTableExportButton extends React.PureComponent {
             {
               filtered: this.props.filtered,
               sorted: this.props.sorted,
+              columns: this.props.columns,
             },
           )
         }

@@ -28,7 +28,8 @@ class AdminSignupsController < ApplicationController
         table = Tables::SignupsTableResultsPresenter.for_run(
           @run,
           params[:filters]&.to_unsafe_h,
-          params[:sort]
+          params[:sort],
+          params[:columns]
         )
         filter_descriptions = table.filter_descriptions
         name_suffix = if filter_descriptions.any?
