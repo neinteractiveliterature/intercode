@@ -11,6 +11,7 @@ class PopperDropdown extends React.Component {
     children: PropTypes.node,
     placement: PropTypes.string,
     className: PropTypes.string,
+    suppressDropdownToggleClass: PropTypes.bool,
     targetProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
 
@@ -18,6 +19,7 @@ class PopperDropdown extends React.Component {
     children: null,
     placement: 'bottom-start',
     className: null,
+    suppressDropdownToggleClass: false,
     targetProps: null,
   };
 
@@ -45,12 +47,13 @@ class PopperDropdown extends React.Component {
       placement,
       children,
       className,
+      suppressDropdownToggleClass,
       targetProps,
     } = this.props;
 
     return (
       <Manager>
-        <Target onClick={this.targetClicked} className={classNames('dropdown-toggle', className)} {...targetProps}>
+        <Target onClick={this.targetClicked} className={classNames({ 'dropdown-toggle': !suppressDropdownToggleClass }, className)} {...targetProps}>
           {caption}
         </Target>
         <Popper placement={placement || 'bottom-start'}>

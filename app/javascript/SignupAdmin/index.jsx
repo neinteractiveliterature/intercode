@@ -78,7 +78,12 @@ const EventAdminApp = ({
           render={() => (
             <div>
               <RunHeader runId={runId} eventId={eventId} />
-              <RunSignupsTable runId={runId} eventId={eventId} exportUrl={exportSignupsUrl} />
+              <RunSignupsTable
+                runId={runId}
+                eventId={eventId}
+                exportUrl={exportSignupsUrl}
+                defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age', 'email']}
+              />
             </div>
           )}
         />

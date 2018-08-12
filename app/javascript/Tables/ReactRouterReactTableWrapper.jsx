@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 @withRouter
 class ReactRouterReactTableWrapper extends React.PureComponent {
   static propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.func.isRequired,
     decodeFilterValue: PropTypes.func,
     encodeFilterValue: PropTypes.func,
     history: PropTypes.shape({
@@ -69,25 +69,25 @@ class ReactRouterReactTableWrapper extends React.PureComponent {
     pageSize,
     filtered,
     sorted,
-  }) => {
-    const params = new URLSearchParams();
+  }, existingQuery) => {
+    const params = new URLSearchParams(existingQuery);
 
     const encodeFilterValue = this.props.encodeFilterValue || ((field, value) => value);
 
     if (page != null && page > 0) {
-      params.append('page', page);
+      params.set('page', page);
     }
 
     if (pageSize != null && pageSize !== 20) {
-      params.append('pageSize', pageSize);
+      params.set('pageSize', pageSize);
     }
 
     filtered.forEach(({ id, value }) => {
-      params.append(`filters.${id}`, encodeFilterValue(id, value));
+      params.set(`filters.${id}`, encodeFilterValue(id, value));
     });
 
     sorted.forEach(({ id, desc }) => {
-      params.append(`sort.${id}`, desc ? 'desc' : 'asc');
+      params.set(`sort.${id}`, desc ? 'desc' : 'asc');
     });
 
     return params.toString();
@@ -95,7 +95,10 @@ class ReactRouterReactTableWrapper extends React.PureComponent {
 
   updateSearch = (newState) => {
     const oldState = this.decodeSearchParams(this.props.history.location.search);
-    const newSearch = this.encodeSearchParams({ ...oldState, ...newState });
+    const newSearch = this.encodeSearchParams(
+      { ...oldState, ...newState },
+      this.props.history.location.search,
+    );
     this.props.history.replace(`${this.props.history.location.pathname}?${newSearch}`);
   }
 

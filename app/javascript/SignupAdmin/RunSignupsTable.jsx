@@ -7,9 +7,10 @@ import ReactTable from 'react-table';
 
 import { ageAsOf } from '../TimeUtils';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
+import ExportButton from '../Tables/ExportButton';
+import PopperDropdown from '../UIComponents/PopperDropdown';
 import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
 import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
-import ExportButton from '../Tables/ExportButton';
 
 const signupsQuery = gql`
 query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
@@ -111,13 +112,135 @@ const STATE_OPTIONS = [
 @withRouter
 class RunSignupsTable extends React.Component {
   static propTypes = {
+    defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     eventId: PropTypes.number.isRequired,
     exportUrl: PropTypes.string.isRequired,
     runId: PropTypes.number.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
+      replace: PropTypes.func.isRequired,
     }).isRequired,
   };
+
+  getPossibleColumns = data => [
+    {
+      Header: 'Seq',
+      id: 'id',
+      accessor: 'id',
+      filterable: false,
+      width: 40,
+    },
+    {
+      Header: 'State',
+      id: 'state',
+      accessor: 'state',
+      width: 130,
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSet
+          name="state"
+          choices={STATE_OPTIONS}
+          value={(filter || {}).value || []}
+          onChange={newValue => onChange(newValue)}
+          multiple
+        />
+      ),
+      Cell: props => (
+        <div className={`badge bg-signup-state-color-${props.value}`}>
+          {props.value}
+        </div>
+      ),
+    },
+    {
+      Header: 'Name',
+      id: 'name',
+      accessor: signup => signup.user_con_profile.name_inverted,
+    },
+    {
+      Header: 'Bucket',
+      id: 'bucket',
+      accessor: signup => signup.bucket_key,
+      Cell: props => formatBucket(props, data.event),
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSet
+          name="bucket"
+          choices={(
+            (data || {}).event
+              ? data.event.registration_policy.buckets
+                .map(bucket => ({ label: bucket.name, value: bucket.key }))
+              : []
+            )}
+          value={(filter || {}).value || []}
+          onChange={newValue => onChange(newValue)}
+          multiple
+        />
+      ),
+    },
+    {
+      Header: 'Age',
+      id: 'age',
+      width: 40,
+      accessor: signup => ageAsOf(
+        moment(signup.user_con_profile.birth_date),
+        moment(signup.run.starts_at),
+      ),
+      filterable: false,
+    },
+    {
+      Header: 'Email',
+      id: 'email',
+      accessor: signup => signup.user_con_profile.email,
+      Cell: ({ value }) => (
+        <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
+          {value}
+        </a>
+      ),
+    },
+  ];
+
+  getVisibleColumnIds = () => {
+    const params = new URLSearchParams(this.props.history.location.search);
+    if (params.get('columns')) {
+      return params.get('columns').split(',');
+    }
+    return this.props.defaultVisibleColumns;
+  }
+
+  getVisibleColumns = (data) => {
+    const visibleColumnIds = this.getVisibleColumnIds();
+    return this.getPossibleColumns(data)
+      .filter(column => visibleColumnIds.includes(column.id));
+  }
+
+  setColumnVisibility = (columns) => {
+    const params = new URLSearchParams(this.props.history.location.search);
+    params.set('columns', columns.join(','));
+    this.props.history.replace(`${this.props.history.location.pathname}?${params.toString()}`)
+  }
+
+  renderColumnSelector = () => (
+    <PopperDropdown
+      placement="bottom-end"
+      suppressDropdownToggleClass
+      caption={(
+        <button type="button" className="btn btn-outline-primary dropdown-toggle">
+          Columns
+        </button>
+      )}
+    >
+      <div className="px-2">
+        <ChoiceSet
+          name="columns"
+          multiple
+          choices={
+            this.getPossibleColumns()
+              .map(column => ({ label: column.Header, value: column.id }))
+          }
+          value={this.getVisibleColumnIds()}
+          onChange={this.setColumnVisibility}
+        />
+      </div>
+    </PopperDropdown>
+  )
 
   render = () => (
     <div className="mb-4">
@@ -133,11 +256,16 @@ class RunSignupsTable extends React.Component {
           >
             {(graphQLProps, { data }) => (
               <div>
-                <ExportButton
-                  exportUrl={this.props.exportUrl}
-                  filtered={tableStateProps.filtered}
-                  sorted={tableStateProps.sorted}
-                />
+                <div className="d-flex">
+                  <div className="flex-grow-1">
+                    <ExportButton
+                      exportUrl={this.props.exportUrl}
+                      filtered={tableStateProps.filtered}
+                      sorted={tableStateProps.sorted}
+                    />
+                  </div>
+                  {this.renderColumnSelector()}
+                </div>
                 <ReactTable
                   {...tableStateProps}
                   {...graphQLProps}
@@ -148,78 +276,7 @@ class RunSignupsTable extends React.Component {
                   pages={
                     ((data || {}).event || { run: { signups_paginated: {} } }).run.signups_paginated.total_pages
                   }
-                  columns={[
-                    {
-                      Header: 'Seq',
-                      accessor: 'id',
-                      filterable: false,
-                      width: 40,
-                    },
-                    {
-                      Header: 'State',
-                      accessor: 'state',
-                      width: 130,
-                      Filter: ({ filter, onChange }) => (
-                        <ChoiceSet
-                          name="state"
-                          choices={STATE_OPTIONS}
-                          value={(filter || {}).value || []}
-                          onChange={newValue => onChange(newValue)}
-                          multiple
-                        />
-                      ),
-                      Cell: props => (
-                        <div className={`badge bg-signup-state-color-${props.value}`}>
-                          {props.value}
-                        </div>
-                      ),
-                    },
-                    {
-                      Header: 'Name',
-                      id: 'name',
-                      accessor: signup => signup.user_con_profile.name_inverted,
-                    },
-                    {
-                      Header: 'Bucket',
-                      id: 'bucket',
-                      accessor: signup => signup.bucket_key,
-                      Cell: props => formatBucket(props, data.event),
-                      Filter: ({ filter, onChange }) => (
-                        <ChoiceSet
-                          name="bucket"
-                          choices={(
-                            (data || {}).event
-                              ? data.event.registration_policy.buckets
-                                .map(bucket => ({ label: bucket.name, value: bucket.key }))
-                              : []
-                            )}
-                          value={(filter || {}).value || []}
-                          onChange={newValue => onChange(newValue)}
-                          multiple
-                        />
-                      ),
-                    },
-                    {
-                      Header: 'Age',
-                      id: 'age',
-                      width: 40,
-                      accessor: signup => ageAsOf(
-                        moment(signup.user_con_profile.birth_date),
-                        moment(signup.run.starts_at),
-                      ),
-                      filterable: false,
-                    },
-                    {
-                      Header: 'Email',
-                      id: 'email',
-                      accessor: signup => signup.user_con_profile.email,
-                      Cell: ({ value }) => (
-                        <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
-                          {value}
-                        </a>
-                      ),
-                    },
-                  ]}
+                  columns={this.getVisibleColumns(data)}
                   getTrProps={(state, rowInfo) => ({
                     style: { cursor: 'pointer' },
                     onClick: () => {
