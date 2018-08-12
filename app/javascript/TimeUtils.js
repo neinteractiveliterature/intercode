@@ -48,3 +48,18 @@ export const compareTimesAscending = (a, b) => {
 };
 
 export const compareTimesDescending = (a, b) => compareTimesAscending(b, a);
+
+export function ageAsOf(birthDate, date) {
+  if (!birthDate || !date || !birthDate.isValid() || !date.isValid()) {
+    return null;
+  }
+
+  const onOrAfterBirthday = (
+    date.month() > birthDate.month() || (
+      date.month() === birthDate.month()
+      && date.date() >= birthDate.date()
+    )
+  );
+
+  return (date.year() - birthDate.year() - (onOrAfterBirthday ? 0 : 1));
+}

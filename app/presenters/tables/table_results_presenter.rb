@@ -10,12 +10,13 @@ class Tables::TableResultsPresenter
     end
   end
 
-  attr_reader :base_scope, :filters, :sort
+  attr_reader :base_scope, :filters, :sort, :visible_field_ids
 
-  def initialize(base_scope, filters, sort)
+  def initialize(base_scope, filters, sort, visible_field_ids = nil)
     @base_scope = base_scope
     @filters = filters || {}
     @sort = sort || []
+    @visible_field_ids = (visible_field_ids || fields.map(&:id)).map(&:to_s)
   end
 
   def scoped
@@ -33,10 +34,14 @@ class Tables::TableResultsPresenter
     end
   end
 
+  def visible_fields
+    fields.select { |field| visible_field_ids.include?(field.id.to_s) }
+  end
+
   def csv_enumerator
     return to_enum(:csv_enumerator) unless block_given?
 
-    the_fields = fields
+    the_fields = visible_fields
     yield CSV.generate_line(the_fields.map(&:csv_header))
 
     # I'm gonna make my own find_each, with limits and offsets!
@@ -73,6 +78,13 @@ class Tables::TableResultsPresenter
         sql_order_for_sort_field(entry[:field].to_sym, direction)
       end
     )
+  end
+
+  def invert_sort_direction(direction)
+    case direction.to_s.upcase
+    when 'DESC' then 'ASC'
+    else 'DESC'
+    end
   end
 
   def apply_filter(_scope, _filter, _value)

@@ -35,5 +35,6 @@ module.exports = {
       env: 'apollo',
       schemaJsonFilepath: './schema.json',
     }],
+    'react/destructuring-assignment': 'off',
   }
 };

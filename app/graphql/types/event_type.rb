@@ -34,6 +34,15 @@ Types::EventType = GraphQL::ObjectType.define do
       AssociationLoader.for(Event, :runs).load(obj)
     end
   end
+  field :run, !Types::RunType do
+    argument :id, !types.Int
+    guard -> (event, args, ctx) do
+      ctx[:current_ability].can?(:read, event.runs.find(args[:id]))
+    end
+    resolve -> (event, args, _ctx) do
+      event.runs.find(args[:id])
+    end
+  end
   field :team_members, !types[!Types::TeamMemberType] do
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(Event, :team_members).load(obj)
