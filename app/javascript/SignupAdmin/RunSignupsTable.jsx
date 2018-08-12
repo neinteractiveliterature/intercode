@@ -262,6 +262,7 @@ class RunSignupsTable extends React.Component {
                       exportUrl={this.props.exportUrl}
                       filtered={tableStateProps.filtered}
                       sorted={tableStateProps.sorted}
+                      columns={this.getVisibleColumnIds()}
                     />
                   </div>
                   {this.renderColumnSelector()}
