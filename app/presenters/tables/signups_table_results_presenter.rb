@@ -1,5 +1,5 @@
 class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_run(run, filters, sort, visible_field_ids)
+  def self.for_run(run, filters, sort, visible_field_ids = nil)
     scope = run.signups
     new(scope, filters, sort, visible_field_ids)
   end
