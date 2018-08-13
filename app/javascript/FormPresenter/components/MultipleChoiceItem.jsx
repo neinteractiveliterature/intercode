@@ -149,7 +149,7 @@ class MultipleChoiceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <div className={classNames({ 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
+        <div className={classNames({ 'border-0': !this.props.valueInvalid, 'border rounded border-danger': this.props.valueInvalid })}>
           <CaptionLegend formItem={this.props.formItem} />
           <ChoiceSet
             name={this.props.formItem.identifier}
@@ -162,8 +162,16 @@ class MultipleChoiceItem extends React.Component {
             })}
           />
           {this.renderOtherInput()}
+          {
+            this.props.valueInvalid
+              ? (
+                <span className="text-danger">
+                  This field is required.
+                </span>
+              )
+              : null
+          }
         </div>
-        <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
       </fieldset>
     );
   };
