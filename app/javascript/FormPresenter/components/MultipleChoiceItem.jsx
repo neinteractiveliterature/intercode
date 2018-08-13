@@ -149,7 +149,7 @@ class MultipleChoiceItem extends React.Component {
 
     return (
       <fieldset className="form-group">
-        <div className={classNames('form-control', { 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
+        <div className={classNames({ 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
           <CaptionLegend formItem={this.props.formItem} />
           <ChoiceSet
             name={this.props.formItem.identifier}

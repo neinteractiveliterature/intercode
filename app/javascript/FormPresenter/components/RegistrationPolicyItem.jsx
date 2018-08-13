@@ -37,7 +37,7 @@ class RegistrationPolicyItem extends React.Component {
 
   render = () => (
     <fieldset className="form-group">
-      <div className={classNames('form-control', { 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
+      <div className={classNames({ 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
         <RegistrationPolicyEditor
           registrationPolicy={this.state.registrationPolicy}
           onChange={this.registrationPolicyChanged}
