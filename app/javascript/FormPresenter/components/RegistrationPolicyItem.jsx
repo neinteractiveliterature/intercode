@@ -37,14 +37,22 @@ class RegistrationPolicyItem extends React.Component {
 
   render = () => (
     <fieldset className="form-group">
-      <div className={classNames({ 'border-0': !this.props.valueInvalid, 'is-invalid': this.props.valueInvalid })}>
+      <div className={classNames({ 'border-0': !this.props.valueInvalid, 'border rounded border-danger': this.props.valueInvalid })}>
         <RegistrationPolicyEditor
           registrationPolicy={this.state.registrationPolicy}
           onChange={this.registrationPolicyChanged}
           presets={presets}
         />
+        {
+          this.props.valueInvalid
+            ? (
+              <span className="text-danger">
+                This field is required.
+              </span>
+            )
+            : null
+        }
       </div>
-      <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
     </fieldset>
   )
 }
