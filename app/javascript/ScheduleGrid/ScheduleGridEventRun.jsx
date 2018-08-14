@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Manager, Target, Popper, Arrow } from 'react-popper';
+import { Manager, Reference, Popper } from 'react-popper';
 import classNames from 'classnames';
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 
 function userSignupStatus(run) {
   if (run.my_signups.some(signup => signup.state === 'confirmed')) {
     return 'confirmed';
-  } else if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
+  }
+
+  if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
     return 'waitlisted';
   }
 
@@ -54,29 +56,47 @@ class ScheduleGridEventRun extends React.Component {
     const {
       event, run, runDimensions, convention,
     } = this.props;
-    const timespan = runDimensions.eventRun.timespan;
+    const { timespan } = runDimensions.eventRun;
 
     return (
-      <Popper placement="bottom">
-        {({ popperProps }) => (
-          <div className={`popover bs-popover-${popperProps['data-placement']} show`} role="tooltip" {...popperProps}>
-            <Arrow className="arrow" />
+      <Popper placement={this.state.popperVisible ? 'bottom' : undefined}>
+        {({
+          ref,
+          placement,
+          arrowProps,
+          style,
+        }) => (
+          <div className={`popover bs-popover-${placement} show`} role="tooltip" ref={ref} style={style}>
+            <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
             <div className="popover-header">
               <div className="row align-items-center">
                 <div className="col">
-                  <strong>{event.title}</strong>
+                  <strong>
+                    {event.title}
+                  </strong>
                   {
-                    run.title_suffix ? [<span key="mdash">&mdash;</span>, <em key="title-suffix">{run.title_suffix}</em>] : []
+                    run.title_suffix
+                      ? [
+                        <span key="mdash">
+                          &mdash;
+                        </span>,
+                        <em key="title-suffix">
+                          {run.title_suffix}
+                        </em>,
+                      ]
+                      : []
                   }
                 </div>
-                <button className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={this.hidePopover}>
+                <button type="button" className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={this.hidePopover}>
                   <i className="fa fa-close" title="Close" />
                 </button>
               </div>
             </div>
             <div className="popover-body">
               <ul className="list-unstyled mb-2">
-                <li>{timespan.humanizeInTimezone(convention.timezone_name)}</li>
+                <li>
+                  {timespan.humanizeInTimezone(convention.timezone_name)}
+                </li>
                 <li>
                   {run.rooms.map(room => room.name).sort().join(', ')}
                 </li>
@@ -124,11 +144,17 @@ class ScheduleGridEventRun extends React.Component {
 
     return (
       <div className="event-extended-counts p-1">
-        <span className="text-success">{run.confirmed_signup_count}</span>
+        <span className="text-success">
+          {run.confirmed_signup_count}
+        </span>
         {'/'}
-        <span className="text-info">{run.not_counted_signup_count}</span>
+        <span className="text-info">
+          {run.not_counted_signup_count}
+        </span>
         {'/'}
-        <span className="text-danger">{run.waitlisted_signup_count}</span>
+        <span className="text-danger">
+          {run.waitlisted_signup_count}
+        </span>
       </div>
     );
   }
@@ -140,7 +166,9 @@ class ScheduleGridEventRun extends React.Component {
 
     if (signupStatus === 'confirmed') {
       return <i className="fa fa-check-square" title="Confirmed signup" />;
-    } else if (signupStatus === 'waitlisted') {
+    }
+
+    if (signupStatus === 'waitlisted') {
       return <i className="fa fa-hourglass-half" title="Waitlisted" />;
     }
 
@@ -164,8 +192,8 @@ class ScheduleGridEventRun extends React.Component {
 
     const signupStatus = userSignupStatus(run);
     const eventFull = (
-      event.registration_policy.slots_limited &&
-      run.confirmed_limited_signup_count === event.registration_policy.total_slots
+      event.registration_policy.slots_limited
+      && run.confirmed_limited_signup_count === event.registration_policy.total_slots
     );
     const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
 
@@ -181,17 +209,34 @@ class ScheduleGridEventRun extends React.Component {
 
     return (
       <Manager>
-        <Target style={style} className={eventRunClasses} role="button" onClick={this.showPopover}>
-          {this.renderAvailabilityBar()}
-          <div className="d-flex">
-            {this.renderExtendedCounts()}
-            <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {signupStatusBadge}
-              {signupStatusBadge ? ' ' : ''}
-              {event.title}
+        <Reference>
+          {({ ref }) => (
+            <div
+              style={style}
+              tabIndex={0}
+              className={eventRunClasses}
+              role="button"
+              onClick={this.showPopover}
+              onKeyDown={(keyEvent) => {
+                if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
+                  keyEvent.preventDefault();
+                  this.showPopover();
+                }
+              }}
+              ref={ref}
+            >
+              {this.renderAvailabilityBar()}
+              <div className="d-flex">
+                {this.renderExtendedCounts()}
+                <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {signupStatusBadge}
+                  {signupStatusBadge ? ' ' : ''}
+                  {event.title}
+                </div>
+              </div>
             </div>
-          </div>
-        </Target>
+          )}
+        </Reference>
         {this.renderPopover()}
       </Manager>
     );

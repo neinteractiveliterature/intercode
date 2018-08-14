@@ -52,9 +52,16 @@ class PageAdminDropdown extends React.Component {
     return (
       <div>
         <PopperDropdown
-          caption={<i className="fa fa-pencil-square-o"><span className="sr-only">Admin options</span></i>}
+          renderReference={({ ref, toggle }) => (
+            <button type="button" className="btn btn-dark dropdown-toggle" ref={ref} onClick={toggle}>
+              <i className="fa fa-pencil-square-o">
+                <span className="sr-only">
+                  Admin options
+                </span>
+              </i>
+            </button>
+          )}
           placement="bottom-end"
-          className="btn btn-dark"
         >
           <a href={editUrl} className="dropdown-item">Edit page</a>
           <a href={pageListUrl} className="dropdown-item">View all pages</a>

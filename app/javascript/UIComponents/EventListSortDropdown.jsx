@@ -34,9 +34,14 @@ const EventListSortDropdown = ({ showConventionOrder }) => {
 
   return (
     <PopperDropdown
-      caption={`Sorting by ${currentSort.caption}`}
+      renderReference={({ ref, toggle }) => (
+        <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
+          Sorting by
+          {' '}
+          {currentSort.caption}
+        </button>
+      )}
       placement="bottom-end"
-      className="btn btn-outline-primary"
     >
       {sortOptions}
     </PopperDropdown>

@@ -220,9 +220,8 @@ class RunSignupsTable extends React.Component {
   renderColumnSelector = () => (
     <PopperDropdown
       placement="bottom-end"
-      suppressDropdownToggleClass
-      caption={(
-        <button type="button" className="btn btn-outline-primary dropdown-toggle">
+      renderReference={({ ref, toggle }) => (
+        <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
           Columns
         </button>
       )}
@@ -265,7 +264,9 @@ class RunSignupsTable extends React.Component {
                       columns={this.getVisibleColumnIds()}
                     />
                   </div>
-                  {this.renderColumnSelector()}
+                  <div>
+                    {this.renderColumnSelector()}
+                  </div>
                 </div>
                 <ReactTable
                   {...tableStateProps}
