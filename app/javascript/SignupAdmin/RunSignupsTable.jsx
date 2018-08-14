@@ -89,7 +89,11 @@ function formatBucket({ value: bucketKey, original: signup }, event) {
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
-    return value.join(',');
+    const encoded = value.join(',');
+    if (encoded.length === 0) {
+      return null;
+    }
+    return encoded;
   }
 
   return value;
@@ -97,7 +101,11 @@ function encodeFilterValue(field, value) {
 
 function decodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
-    return value.split(',');
+    const decoded = value.split(',').filter(decodedValue => decodedValue.length > 0);
+    if (decoded.length === 0) {
+      return null;
+    }
+    return decoded;
   }
 
   return value;

@@ -48,10 +48,13 @@ class ReactRouterReactTableWrapper extends React.PureComponent {
 
       const filterMatch = key.match(/^filters\.(.*)$/);
       if (filterMatch) {
-        state.filtered.push({
-          id: filterMatch[1],
-          value: decodeFilterValue(filterMatch[1], value),
-        });
+        const filterValue = decodeFilterValue(filterMatch[1], value);
+        if (filterValue != null) {
+          state.filtered.push({
+            id: filterMatch[1],
+            value: filterValue,
+          });
+        }
         return;
       }
 
@@ -83,7 +86,12 @@ class ReactRouterReactTableWrapper extends React.PureComponent {
     }
 
     filtered.forEach(({ id, value }) => {
-      params.set(`filters.${id}`, encodeFilterValue(id, value));
+      const encoded = encodeFilterValue(id, value);
+      if (encoded != null) {
+        params.set(`filters.${id}`, encoded);
+      } else {
+        params.delete(`filters.${id}`);
+      }
     });
 
     sorted.forEach(({ id, desc }) => {
