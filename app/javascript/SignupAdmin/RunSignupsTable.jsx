@@ -251,7 +251,6 @@ class RunSignupsTable extends React.Component {
           <GraphQLReactTableWrapper
             query={signupsQuery}
             variables={{ eventId: this.props.eventId, runId: this.props.runId }}
-            exportUrl={this.props.exportUrl}
           >
             {(graphQLProps, { data }) => (
               <div>
