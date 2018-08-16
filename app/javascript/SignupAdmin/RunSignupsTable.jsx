@@ -8,6 +8,7 @@ import ReactTable from 'react-table';
 import { ageAsOf } from '../TimeUtils';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import ExportButton from '../Tables/ExportButton';
+import { findBucket } from './SignupUtils';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
 import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
@@ -57,20 +58,16 @@ query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupF
 }
 `;
 
-function findBucket(bucketKey, event) {
-  return event.registration_policy.buckets.find(bucket => bucket.key === bucketKey);
-}
-
 function formatBucket({ value: bucketKey, original: signup }, event) {
   if (!signup.counted) {
     if (bucketKey) {
-      return `${findBucket(bucketKey, event).name} (not counted)`;
+      return `${findBucket(bucketKey, event.registration_policy).name} (not counted)`;
     }
     return 'Not counted';
   }
 
-  const bucket = findBucket(bucketKey, event);
-  const requestedBucket = findBucket(signup.requested_bucket_key, event);
+  const bucket = findBucket(bucketKey, event.registration_policy);
+  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy);
 
   if (bucket && requestedBucket && bucket.name === requestedBucket.name) {
     return bucket.name;

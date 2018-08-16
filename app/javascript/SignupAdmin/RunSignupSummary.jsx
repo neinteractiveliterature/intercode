@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import { humanize } from 'inflected';
 import classNames from 'classnames';
 
+import { findBucket } from './SignupUtils';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RunHeader from './RunHeader';
 
@@ -44,14 +45,24 @@ query($eventId: Int!, $runId: Int!) {
 `;
 
 class RunSignupSummary extends React.Component {
-  renderSignupRow = (signup, registrationPolicy) => (
-    <tr key={signup.id} className={classNames({ 'table-warning': signup.state === 'waitlisted' })}>
-      <td>{signup.user_con_profile.name_inverted}</td>
-      <td>
-        {humanize(signup.state)}
-      </td>
-    </tr>
-  )
+  renderSignupRow = (signup, registrationPolicy) => {
+    const bucket = findBucket(signup.bucket_key, registrationPolicy);
+    const suffix = (
+      signup.bucket_key && bucket && bucket.expose_attendees
+        ? ` (${bucket.name})`
+        : null
+    );
+
+    return (
+      <tr key={signup.id} className={classNames({ 'table-warning': signup.state === 'waitlisted' })}>
+        <td>{signup.user_con_profile.name_inverted}</td>
+        <td>
+          {humanize(signup.state)}
+          {suffix}
+        </td>
+      </tr>
+    );
+  }
 
   render = () => (
     <div>
