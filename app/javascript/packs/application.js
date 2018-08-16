@@ -51,6 +51,7 @@ import OrderHistory from '../Store/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import RoomsAdmin from '../RoomsAdmin';
+import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
 import ScheduleGrid from '../ScheduleGrid';
 import SignupAdmin from '../SignupAdmin';
 import StaffPositionAdmin from '../StaffPositionAdmin';
@@ -78,6 +79,7 @@ WebpackerReact.setup({
   PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
   ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
   RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
+  RunSignupSummary: StandaloneGraphQLComponent(RunSignupSummary),
   ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
   SignupAdmin: StandaloneGraphQLComponent(SignupAdmin),
   StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),

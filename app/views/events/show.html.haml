@@ -113,6 +113,9 @@
             - if can? :read, run.signups.new
               .card-footer.text-center
                 = link_to('View signups', event_run_admin_signups_path(@event, run, 'filters.state' => 'confirmed,waitlisted', 'sort.id' => 'asc'))
+                - if can? :signup_summary, run
+                  %br
+                  = link_to('Attendee-facing signup summary', [:signup_summary, @event, run])
             - elsif can? :signup_summary, run
               .card-footer.text-center= link_to('View signups', [:signup_summary, @event, run])
 
