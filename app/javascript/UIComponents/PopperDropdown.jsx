@@ -41,7 +41,7 @@ const PopperDropdownContentWithOnClickOutside = onClickOutside(PopperDropdownCon
 // eslint-disable-next-line react/no-multi-comp
 class PopperDropdown extends React.Component {
   static propTypes = {
-    children: PropTypes.node,
+    children: PropTypes.oneOfType(PropTypes.node, PropTypes.func).isRequired,
     placement: PropTypes.string,
     renderReference: PropTypes.func.isRequired,
   };

@@ -57,7 +57,9 @@ class RegistrationPolicyEditor extends React.Component {
         this.props.registrationPolicy.buckets.every(bucket =>
           preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key &&
             !!presetBucket.slots_limited === !!bucket.slotsLimited &&
-            !!presetBucket.not_counted === !!bucket.notCounted)) &&
+            !!presetBucket.not_counted === !!bucket.notCounted &&
+            !!presetBucket.expose_attendees === !!bucket.exposeAttendees
+          )) &&
         (
           this.props.registrationPolicy.getPreventNoPreferenceSignups() ===
           Boolean(preset.policy.prevent_no_preference_signups)

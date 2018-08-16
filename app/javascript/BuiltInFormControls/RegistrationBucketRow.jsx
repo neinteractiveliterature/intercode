@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
+
+import HelpPopover from '../UIComponents/HelpPopover';
 import InPlaceEditor from './InPlaceEditor';
 import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
 
@@ -70,6 +72,13 @@ class RegistrationBucketRow extends React.Component {
     );
   }
 
+  exposeAttendeesCheckboxChanged = (event) => {
+    this.props.onChange(
+      this.props.registrationBucket.get('key'),
+      this.props.registrationBucket.set('exposeAttendees', event.target.checked),
+    );
+  }
+
   beginDelete = (event) => {
     event.preventDefault();
     this.setState({ isConfirmingDelete: true });
@@ -90,6 +99,7 @@ class RegistrationBucketRow extends React.Component {
 
     const unlimitedId = this.nextUniqueId();
     const countedId = this.nextUniqueId();
+    const exposeAttendeesId = this.nextUniqueId();
 
     return (
       <div className="mr-2">
@@ -119,6 +129,27 @@ class RegistrationBucketRow extends React.Component {
             {' '}
             Counted?
           </label>
+        </div>
+
+        <div className="form-check">
+          <div className="d-flex">
+            <label className="form-check-label text-nowrap mr-1" htmlFor={exposeAttendeesId}>
+              <input
+                id={exposeAttendeesId}
+                className="form-check-input"
+                type="checkbox"
+                checked={this.props.registrationBucket.get('exposeAttendees')}
+                onChange={this.exposeAttendeesCheckboxChanged}
+              />
+              {' '}
+              Expose attendees?
+            </label>
+            <HelpPopover>
+              If checked, attendees will be able to see which of their fellow attendees are in this
+              bucket via the signup summary page.  (The signup summary always lists fellow attendees'
+              names, but normally doesn't show which bucket they're in.)
+            </HelpPopover>
+          </div>
         </div>
       </div>
     );
