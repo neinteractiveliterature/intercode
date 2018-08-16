@@ -15,4 +15,12 @@ Types::RegistrationPolicyBucketType = GraphQL::ObjectType.define do
   field :anything, !types.Boolean do
     resolve ->(obj, _args, _ctx) { !!obj.anything? }
   end
+
+  field :not_counted, !types.Boolean do
+    resolve ->(obj, _args, _ctx) { !!obj.not_counted? }
+  end
+
+  field :expose_attendees, !types.Boolean do
+    resolve ->(obj, _args, _ctx) { !!obj.expose_attendees? }
+  end
 end

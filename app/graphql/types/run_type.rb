@@ -61,7 +61,10 @@ Types::RunType = GraphQL::ObjectType.define do
     argument :sort, types[Types::SortInputType]
 
     guard ->(run, _args, ctx) do
-      ctx[:current_ability].can?(:read, Signup.new(run: run))
+      (
+        ctx[:current_ability].can?(:read, Signup.new(run: run)) ||
+        ctx[:current_ability].can?(:signup_summary, Signup.new(run: run))
+      )
     end
 
     resolve ->(run, args, _ctx) do

@@ -7,12 +7,12 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import classNames from 'classnames';
 
 import EditSignup from './EditSignup';
 import LoadingIndicator from '../LoadingIndicator';
+import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
 
@@ -35,40 +35,36 @@ const EventAdminApp = ({
 }) => (
   <BrowserRouter basename={basename}>
     <div>
-      <Query query={eventQuery} variables={{ eventId }}>
-        {({ data, isLoading }) => (
-          (isLoading || !data.event)
-            ? <LoadingIndicator />
-            : (
-              <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <a href={eventUrl}>
-                      {data.event.title}
-                    </a>
+      <QueryWithStateDisplay query={eventQuery} variables={{ eventId }}>
+        {({ data }) => (
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href={eventUrl}>
+                  {data.event.title}
+                </a>
+              </li>
+              <Route path="/" exact>
+                {({ match }) => (
+                  <li className={classNames('breadcrumb-item', { active: match })}>
+                    <Link to="/?filters.state=confirmed%2Cwaitlisted&sort.id=asc">
+                      Signups
+                    </Link>
                   </li>
-                  <Route path="/" exact>
-                    {({ match }) => (
-                      <li className={classNames('breadcrumb-item', { active: match })}>
-                        <Link to="/?filters.state=confirmed%2Cwaitlisted&sort.id=asc">
-                          Signups
-                        </Link>
-                      </li>
-                    )}
-                  </Route>
-                  <Route
-                    path="/:id/edit"
-                    render={() => (
-                      <li className="breadcrumb-item active">
-                        Edit signup
-                      </li>
-                    )}
-                  />
-                </ol>
-              </nav>
-            )
+                )}
+              </Route>
+              <Route
+                path="/:id/edit"
+                render={() => (
+                  <li className="breadcrumb-item active">
+                    Edit signup
+                  </li>
+                )}
+              />
+            </ol>
+          </nav>
         )}
-      </Query>
+      </QueryWithStateDisplay>
 
       <Switch>
         <Route path="/:id/edit" render={({ match }) => <EditSignup id={Number.parseInt(match.params.id, 10)} teamMembersUrl={teamMembersUrl} />} />
