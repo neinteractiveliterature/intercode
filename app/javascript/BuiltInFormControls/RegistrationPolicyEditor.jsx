@@ -49,22 +49,34 @@ class RegistrationPolicyEditor extends React.Component {
     let initialPreset;
     let initiallyCustom = false;
     if (Array.isArray(this.props.presets)) {
-      initialPreset = this.props.presets.find(preset => (
-        preset.policy.buckets.every(bucket => (
+      initialPreset = this.props.presets.find(preset => {
+        if (
+          this.props.registrationPolicy.getPreventNoPreferenceSignups() !==
+          Boolean(preset.policy.prevent_no_preference_signups)
+        ) {
+          return false;
+        }
+
+        const allKeysMatch = preset.policy.buckets.every(bucket => (
           typeof bucket.key === 'string' &&
             this.props.registrationPolicy.getBucket(bucket.key)
-        )) &&
-        this.props.registrationPolicy.buckets.every(bucket =>
+        ));
+        if (!allKeysMatch) {
+          return false;
+        }
+
+        const allBucketOptionsMatch = this.props.registrationPolicy.buckets.every(bucket =>
           preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key &&
             !!presetBucket.slots_limited === !!bucket.slotsLimited &&
             !!presetBucket.not_counted === !!bucket.notCounted &&
             !!presetBucket.expose_attendees === !!bucket.exposeAttendees
-          )) &&
-        (
-          this.props.registrationPolicy.getPreventNoPreferenceSignups() ===
-          Boolean(preset.policy.prevent_no_preference_signups)
-        )
-      ));
+          ));
+        if (!allBucketOptionsMatch) {
+          return false;
+        }
+
+        return true;
+      });
 
       if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
         initiallyCustom = true;

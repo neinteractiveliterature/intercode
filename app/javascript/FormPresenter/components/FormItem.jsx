@@ -25,6 +25,11 @@ class FormItem extends React.Component {
     }).isRequired,
   };
 
+  static defaultProps = {
+    value: null,
+    onChange: null,
+  };
+
   shouldComponentUpdate = (nextProps, nextState) => {
     return (
       nextProps.value !== this.props.value
@@ -75,26 +80,5 @@ class FormItem extends React.Component {
     }
   }
 }
-
-FormItem.propTypes = {
-  formItem: PropTypes.shape({
-    itemType: PropTypes.string.isRequired,
-    identifier: PropTypes.string,
-  }).isRequired,
-  value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-  onChange: PropTypes.func,
-  onInteract: PropTypes.func,
-  valueInvalid: PropTypes.bool,
-  convention: PropTypes.shape({
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-FormItem.defaultProps = {
-  value: null,
-  onChange: null,
-};
 
 export default FormItem;
