@@ -34,6 +34,7 @@ const presets = [
           name: 'PC',
           description: 'Player characters',
           slots_limited: true,
+          expose_attendees: true,
         },
         {
           key: 'npcs',
@@ -41,6 +42,7 @@ const presets = [
           description: 'Non-player characters',
           slots_limited: true,
           not_counted: true,
+          expose_attendees: true,
         },
       ],
       prevent_no_preference_signups: true,
