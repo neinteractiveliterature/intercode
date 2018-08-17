@@ -4,6 +4,8 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import classNames from 'classnames';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+import { humanize } from 'inflected';
+
 import { adminProductFragment, productsQuery } from './queries';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
@@ -11,6 +13,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
 import {
@@ -62,6 +65,7 @@ class AdminProductCard extends React.Component {
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       image_url: PropTypes.string,
+      payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
       price: PropTypes.shape({
         fractional: PropTypes.number.isRequired,
         currency_code: PropTypes.string.isRequired,
@@ -105,6 +109,7 @@ class AdminProductCard extends React.Component {
           available: Transforms.checkboxChange,
           description: Transforms.identity,
           name: Transforms.textInputChange,
+          payment_options: Transforms.identity,
           price: parseMoneyOrNull,
           product_variants: Transforms.identity,
         },
@@ -200,6 +205,7 @@ class AdminProductCard extends React.Component {
       name: editingProduct.name,
       available: editingProduct.available,
       description: editingProduct.description,
+      payment_options: editingProduct.payment_options,
       price: {
         fractional: editingProduct.price.fractional,
         currency_code: editingProduct.price.currency_code,
@@ -337,24 +343,55 @@ class AdminProductCard extends React.Component {
   renderAvailableForPurchase = () => {
     if (this.state.editing) {
       return (
-        <BootstrapFormCheckbox
-          name="available"
-          label="Available for purchase"
-          checked={this.state.editingProduct.available}
-          onChange={this.stateUpdater.editingProduct.available}
-        />
+        <div>
+          <BootstrapFormCheckbox
+            name="available"
+            label="Available for purchase"
+            checked={this.state.editingProduct.available}
+            onChange={this.stateUpdater.editingProduct.available}
+          />
+          <MultipleChoiceInput
+            name="payment_options"
+            caption="Payment options"
+            choices={[
+              { label: (<span><i className="fa fa-cc-stripe" /> Stripe</span>), value: 'stripe' },
+              { label: (<span><i className="fa fa-suitcase" /> Pay at convention</span>), value: 'pay_at_convention' },
+            ]}
+            multiple
+            value={this.state.editingProduct.payment_options}
+            onChange={this.stateUpdater.editingProduct.payment_options}
+          />
+        </div>
       );
     }
 
     return (
-      <div
-        className={classNames('badge', this.props.product.available ? 'badge-success' : 'badge-danger')}
-      >
-        {
-          this.props.product.available
-            ? 'Available for purchase'
-            : 'Not available for purchase'
-        }
+      <div>
+        <span
+          className={classNames('badge', this.props.product.available ? 'badge-success' : 'badge-danger')}
+        >
+          {
+            this.props.product.available
+              ? 'Available for purchase'
+              : 'Not available for purchase'
+          }
+        </span>
+        {this.props.product.payment_options.map(paymentOption => (
+          <i
+            key={paymentOption}
+            className={
+              classNames(
+                'ml-2',
+                'fa',
+                {
+                  'fa-cc-stripe': paymentOption === 'stripe',
+                  'fa-suitcase': paymentOption === 'pay_at_convention',
+                }
+              )
+            }
+            title={humanize(paymentOption)}
+          />
+        ))}
       </div>
     );
   }
