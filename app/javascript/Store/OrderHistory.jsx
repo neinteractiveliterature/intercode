@@ -2,6 +2,8 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment-timezone';
+import { intersection } from 'lodash';
+
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import OrderPaymentModal from './OrderPaymentModal';
@@ -44,6 +46,7 @@ query {
         product {
           name
           image_url
+          payment_options
         }
 
         product_variant {
@@ -216,7 +219,14 @@ Order #
             initialName={this.props.data.myProfile.name_without_nickname}
             orderId={(this.state.payingForOrder || { id: 0 }).id}
             onComplete={this.payNowComplete}
-            allowPayLater={false}
+            paymentOptions={
+              this.state.payingForOrder
+                ? intersection(
+                  ...this.state.payingForOrder.order_entries
+                    .map(entry => entry.product.payment_options),
+                ).filter(paymentOption => paymentOption !== 'pay_at_convention')
+                : []
+            }
           />
         </ul>
       );

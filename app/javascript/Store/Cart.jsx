@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import { flowRight } from 'lodash';
+import { flowRight, intersection } from 'lodash';
 import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -18,6 +19,7 @@ fragment OrderEntryFields on OrderEntry {
 
   product {
     name
+    payment_options
   }
 
   product_variant {
@@ -270,7 +272,12 @@ class Cart extends React.Component {
         initialName={this.props.data.myProfile.name_without_nickname}
         orderId={(this.props.data.currentPendingOrder || {}).id}
         onComplete={this.checkOutComplete}
-        allowPayLater
+        paymentOptions={
+          intersection(
+            ...this.props.data.currentPendingOrder.order_entries
+              .map(entry => entry.product.payment_options)
+          )
+        }
       />
 
       <ConfirmModal
