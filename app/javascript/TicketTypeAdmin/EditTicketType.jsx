@@ -69,7 +69,13 @@ class EditTicketType extends React.Component {
   render = () => (
     <div>
       <h1 className="mb-4">
-        Editing {this.props.ticketName} type &quot;{this.state.ticketType.name}&quot;
+        Editing
+        {' '}
+        {this.props.ticketName}
+        {' '}
+type &quot;
+        {this.state.ticketType.name}
+&quot;
       </h1>
       <TicketTypeForm
         ticketType={this.state.ticketType}

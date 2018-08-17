@@ -36,8 +36,8 @@ class TimespanItem extends React.Component {
     let initialUnit = TimespanItem.units[0];
     if (typeof this.props.value === 'number') {
       initialUnit = (
-        TimespanItem.units.find(unit => this.props.value % unit.length_seconds === 0) ||
-        TimespanItem.units[TimespanItem.units.length - 1]
+        TimespanItem.units.find(unit => this.props.value % unit.length_seconds === 0)
+        || TimespanItem.units[TimespanItem.units.length - 1]
       );
     }
 

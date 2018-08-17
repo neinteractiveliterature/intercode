@@ -93,15 +93,14 @@ class ScheduledValueTimespanRow extends React.Component {
     this.props.deleteClicked(this.props.rowIdentifier);
   }
 
-  doesNotOverlapOtherTimespans = prospectiveTimespan =>
-    this.props.otherTimespans.every((otherTimespanProps) => {
-      const otherTimespan = new Timespan({
-        start: moment(otherTimespanProps.start),
-        finish: moment(otherTimespanProps.finish),
-      });
-
-      return !prospectiveTimespan.overlapsTimespan(otherTimespan);
+  doesNotOverlapOtherTimespans = prospectiveTimespan => this.props.otherTimespans.every((otherTimespanProps) => {
+    const otherTimespan = new Timespan({
+      start: moment(otherTimespanProps.start),
+      finish: moment(otherTimespanProps.finish),
     });
+
+    return !prospectiveTimespan.overlapsTimespan(otherTimespan);
+  });
 
   renderDatetimePicker = (fieldName) => {
     const momentValue = this.getTimeField(fieldName);

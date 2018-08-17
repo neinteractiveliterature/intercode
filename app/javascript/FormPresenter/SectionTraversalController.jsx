@@ -30,6 +30,7 @@ export default class SectionTraversalController extends React.Component {
   }
 
   getCurrentSectionIndex = () => this.props.form.getSectionIndex(this.state.currentSectionId)
+
   getCurrentSection = () => this.props.form.getSection(this.state.currentSectionId)
 
   setCurrentSectionIndex = (newSectionIndex, callback) => {

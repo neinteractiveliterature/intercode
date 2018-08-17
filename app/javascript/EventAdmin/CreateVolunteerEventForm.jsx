@@ -47,10 +47,10 @@ class CreateVolunteerEventForm extends React.Component {
     const { form_response_attrs: formResponseAttrs } = this.state.event;
 
     return (
-      formResponseAttrs.title &&
-      formResponseAttrs.short_blurb && formResponseAttrs.description &&
-      formResponseAttrs.length_seconds > 0 &&
-      formResponseAttrs.registration_policy.buckets[0].total_slots > 0
+      formResponseAttrs.title
+      && formResponseAttrs.short_blurb && formResponseAttrs.description
+      && formResponseAttrs.length_seconds > 0
+      && formResponseAttrs.registration_policy.buckets[0].total_slots > 0
     );
   }
 

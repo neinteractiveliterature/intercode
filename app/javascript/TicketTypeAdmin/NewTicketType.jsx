@@ -85,7 +85,12 @@ class NewTicketType extends React.Component {
 
   render = () => (
     <div>
-      <h1 className="mb-4">New {this.props.ticketName} type</h1>
+      <h1 className="mb-4">
+New
+        {this.props.ticketName}
+        {' '}
+type
+      </h1>
       <TicketTypeForm
         ticketType={this.state.ticketType}
         ticketName={this.props.ticketName}

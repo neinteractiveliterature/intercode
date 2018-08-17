@@ -68,9 +68,9 @@ class FormSection extends React.Component {
             formItem={item}
             convention={convention}
             valueInvalid={
-              item.identifier &&
-              hasInteractedWithItem(item.identifier) &&
-              !item.valueIsComplete(response[item.identifier])
+              item.identifier
+              && hasInteractedWithItem(item.identifier)
+              && !item.valueIsComplete(response[item.identifier])
             }
             value={item.identifier ? response[item.identifier] : null}
             onChange={this.responseValueChanged}

@@ -18,8 +18,8 @@ const EventListSortDropdown = ({ showConventionOrder }) => {
 
   const parsedQueryString = queryString.parse(window.location.search);
   const currentSort = (
-    mySortOrders.find(order => order.queryParam === parsedQueryString.sort) ||
-    mySortOrders[0]
+    mySortOrders.find(order => order.queryParam === parsedQueryString.sort)
+    || mySortOrders[0]
   );
 
   const sortOptions = mySortOrders.map(order => (

@@ -7,15 +7,17 @@ import HelpPopover from '../UIComponents/HelpPopover';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
 
-const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration bucket with ' +
-'limited slots, we can display a "no preference" option for signups. Users who sign up ' +
-' using that option will be placed in whatever limited-slot bucket has availability, and moved ' +
-'between buckets to make space as necessary.';
+const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration bucket with '
++ 'limited slots, we can display a "no preference" option for signups. Users who sign up '
++ ' using that option will be placed in whatever limited-slot bucket has availability, and moved '
++ 'between buckets to make space as necessary.';
 
 function bucketSortCompare(a, b) {
   if (a.get('anything') && !b.get('anything')) {
     return 1;
-  } else if (b.get('anything') && !a.get('anything')) {
+  }
+
+  if (b.get('anything') && !a.get('anything')) {
     return -1;
   }
 
@@ -49,28 +51,26 @@ class RegistrationPolicyEditor extends React.Component {
     let initialPreset;
     let initiallyCustom = false;
     if (Array.isArray(this.props.presets)) {
-      initialPreset = this.props.presets.find(preset => {
+      initialPreset = this.props.presets.find((preset) => {
         if (
-          this.props.registrationPolicy.getPreventNoPreferenceSignups() !==
-          Boolean(preset.policy.prevent_no_preference_signups)
+          this.props.registrationPolicy.getPreventNoPreferenceSignups()
+          !== Boolean(preset.policy.prevent_no_preference_signups)
         ) {
           return false;
         }
 
         const allKeysMatch = preset.policy.buckets.every(bucket => (
-          typeof bucket.key === 'string' &&
-            this.props.registrationPolicy.getBucket(bucket.key)
+          typeof bucket.key === 'string'
+            && this.props.registrationPolicy.getBucket(bucket.key)
         ));
         if (!allKeysMatch) {
           return false;
         }
 
-        const allBucketOptionsMatch = this.props.registrationPolicy.buckets.every(bucket =>
-          preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key &&
-            !!presetBucket.slots_limited === !!bucket.slotsLimited &&
-            !!presetBucket.not_counted === !!bucket.notCounted &&
-            !!presetBucket.expose_attendees === !!bucket.exposeAttendees
-          ));
+        const allBucketOptionsMatch = this.props.registrationPolicy.buckets.every(bucket => preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key
+            && !!presetBucket.slots_limited === !!bucket.slotsLimited
+            && !!presetBucket.not_counted === !!bucket.notCounted
+            && !!presetBucket.expose_attendees === !!bucket.exposeAttendees));
         if (!allBucketOptionsMatch) {
           return false;
         }
@@ -197,18 +197,17 @@ class RegistrationPolicyEditor extends React.Component {
 
   renderBucketRow = (bucket) => {
     const bucketInPreset = (
-      this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket =>
-        presetBucket.key === bucket.key)
+      this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key)
     );
 
     const lockDelete = (
-      bucketInPreset ||
-      (this.props.lockDeleteBuckets && this.props.lockDeleteBuckets.includes(bucket.key))
+      bucketInPreset
+      || (this.props.lockDeleteBuckets && this.props.lockDeleteBuckets.includes(bucket.key))
     );
 
     const lockLimited = (
-      bucketInPreset ||
-      (this.props.lockLimitedBuckets && this.props.lockLimitedBuckets.includes(bucket.key))
+      bucketInPreset
+      || (this.props.lockLimitedBuckets && this.props.lockLimitedBuckets.includes(bucket.key))
     );
 
     return (
@@ -238,16 +237,24 @@ class RegistrationPolicyEditor extends React.Component {
 
     return (
       <ul className="list-inline">
-        <li className="list-inline-item">Minimum: {minimumSlots}</li>
-        <li className="list-inline-item">Preferred: {preferredSlots}</li>
-        <li className="list-inline-item">Total: {totalSlots}</li>
+        <li className="list-inline-item">
+Minimum:
+          {minimumSlots}
+        </li>
+        <li className="list-inline-item">
+Preferred:
+          {preferredSlots}
+        </li>
+        <li className="list-inline-item">
+Total:
+          {totalSlots}
+        </li>
       </ul>
     );
   }
 
   renderTable = () => {
-    const bucketRows = this.props.registrationPolicy.buckets.sort(bucketSortCompare).map(bucket =>
-      this.renderBucketRow(bucket));
+    const bucketRows = this.props.registrationPolicy.buckets.sort(bucketSortCompare).map(bucket => this.renderBucketRow(bucket));
 
     return (
       <table className="table">
@@ -331,10 +338,20 @@ class RegistrationPolicyEditor extends React.Component {
     );
 
     if (this.props.registrationPolicy.getPreventNoPreferenceSignups()) {
-      return <span>&quot;No preference&quot; option will not be available {helpPopover}</span>;
+      return (
+        <span>
+&quot;No preference&quot; option will not be available
+          {helpPopover}
+        </span>
+      );
     }
 
-    return <span>&quot;No preference&quot; option will be available {helpPopover}</span>;
+    return (
+      <span>
+&quot;No preference&quot; option will be available
+        {helpPopover}
+      </span>
+    );
   }
 
   renderPreventNoPreferenceSignupsRow = () => {

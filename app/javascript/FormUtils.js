@@ -161,7 +161,9 @@ export class ModelStateChangeCalculator {
   }
 
   getMutator = (getState, setState) => new StateMutator(this, getState, setState)
+
   getMutatorForComponent = component => StateMutator.forComponent(this, component)
+
   getMutatorForStatelessComponent = (component, onChange) => (
     StateMutator.forStatelessComponent(this, component, onChange)
   )

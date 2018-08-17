@@ -133,7 +133,10 @@ class AdminProductVariantEditRow extends React.Component {
             onClick={deleteVariant}
           >
             <i className="fa fa-trash-o">
-              <span className="sr-only">Delete {variant.name}</span>
+              <span className="sr-only">
+Delete
+                {variant.name}
+              </span>
             </i>
           </button>
         </td>

@@ -82,10 +82,10 @@ class ProductOrderForm extends React.Component {
 
   isDataComplete = () => (
     (
-      this.props.data.product.product_variants.length < 1 ||
-      this.state.productVariantId != null
-    ) &&
-    this.state.quantity > 0
+      this.props.data.product.product_variants.length < 1
+      || this.state.productVariantId != null
+    )
+    && this.state.quantity > 0
   )
 
   productVariantSelectorChanged = (event) => {
@@ -128,7 +128,10 @@ class ProductOrderForm extends React.Component {
       }
 
       return (
-        <option key={id} value={id}>{name}{overridePriceDescription}</option>
+        <option key={id} value={id}>
+          {name}
+          {overridePriceDescription}
+        </option>
       );
     });
 
@@ -183,7 +186,10 @@ class ProductOrderForm extends React.Component {
     };
 
     return (
-      <strong>Total: {formatMoney(totalPrice)}</strong>
+      <strong>
+Total:
+        {formatMoney(totalPrice)}
+      </strong>
     );
   }
 
@@ -203,9 +209,9 @@ class ProductOrderForm extends React.Component {
               onClick={this.addToCartClicked}
             >
               {
-                this.state.submitting ?
-                (<LoadingIndicator />) :
-                (<i className="fa fa-shopping-cart" />)
+                this.state.submitting
+                  ? (<LoadingIndicator />)
+                  : (<i className="fa fa-shopping-cart" />)
               }
               {' '}
               Add to cart

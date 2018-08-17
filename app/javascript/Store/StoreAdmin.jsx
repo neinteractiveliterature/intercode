@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter, NavLink, Redirect, Route, Switch,
+} from 'react-router-dom';
 import OrderAdmin from './OrderAdmin';
 import OrderSummary from './OrderSummary';
 import ProductAdmin from './ProductAdmin';

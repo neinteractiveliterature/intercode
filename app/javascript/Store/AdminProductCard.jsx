@@ -90,9 +90,9 @@ class AdminProductCard extends React.Component {
     super(props);
 
     this.state = (
-      props.initialEditing ?
-        this.getEditState() :
-        {
+      props.initialEditing
+        ? this.getEditState()
+        : {
           editing: props.initialEditing,
           editingProduct: null,
         }
@@ -209,12 +209,12 @@ class AdminProductCard extends React.Component {
         name: variant.name,
         description: variant.description,
         override_price: (
-          variant.override_price ?
-            {
+          variant.override_price
+            ? {
               fractional: variant.override_price.fractional,
               currency_code: variant.override_price.currency_code,
-            } :
-            null
+            }
+            : null
         ),
       })),
       delete_variant_ids: editingProduct.delete_variant_ids,
@@ -351,9 +351,9 @@ class AdminProductCard extends React.Component {
         className={classNames('badge', this.props.product.available ? 'badge-success' : 'badge-danger')}
       >
         {
-          this.props.product.available ?
-          'Available for purchase' :
-          'Not available for purchase'
+          this.props.product.available
+            ? 'Available for purchase'
+            : 'Not available for purchase'
         }
       </div>
     );
@@ -431,7 +431,12 @@ class AdminProductCard extends React.Component {
     }
 
     return (
-      <p><strong>Base price: {formatMoney(this.props.product.price)}</strong></p>
+      <p>
+        <strong>
+Base price:
+          {formatMoney(this.props.product.price)}
+        </strong>
+      </p>
     );
   }
 

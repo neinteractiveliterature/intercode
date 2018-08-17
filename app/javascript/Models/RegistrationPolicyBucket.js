@@ -30,6 +30,7 @@ const fieldPropTypes = {
 
 export default class RegistrationPolicyBucket extends Record(defaultProperties) {
   static propType = ImmutablePropTypes.recordOf(fieldPropTypes);
+
   static apiRepresentationPropType = PropTypes.shape(fieldPropTypes);
 
   static fromAPI(json) {

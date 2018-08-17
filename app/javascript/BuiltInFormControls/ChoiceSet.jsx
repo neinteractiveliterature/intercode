@@ -52,9 +52,9 @@ class ChoiceSet extends React.Component {
         label={label}
         value={value}
         checked={(
-          this.props.multiple ?
-          ((this.props.value || []).includes(value)) :
-          this.props.value === value
+          this.props.multiple
+            ? ((this.props.value || []).includes(value))
+            : this.props.value === value
         )}
         onChange={this.onChange}
         disabled={disabled}

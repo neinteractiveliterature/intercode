@@ -6,7 +6,9 @@ import LoadingIndicator from './LoadingIndicator';
 
 const QueryWithStateDisplay = ({ children, ...props }) => (
   <Query {...props}>
-    {({ data, loading, error, ...otherArgs }) => {
+    {({
+      data, loading, error, ...otherArgs
+    }) => {
       if (loading) {
         return <LoadingIndicator />;
       }
@@ -14,7 +16,9 @@ const QueryWithStateDisplay = ({ children, ...props }) => (
         return <ErrorDisplay graphQLError={error} />;
       }
 
-      return children({ data, loading, error, ...otherArgs });
+      return children({
+        data, loading, error, ...otherArgs,
+      });
     }}
   </Query>
 );

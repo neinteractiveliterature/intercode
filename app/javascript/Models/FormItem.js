@@ -78,7 +78,9 @@ export default class FormItem extends Record(defaultProperties) {
       case 'multiple_choice':
         if (typeof value === 'string') {
           return value.trim() !== '';
-        } else if (typeof value === 'boolean') {
+        }
+
+        if (typeof value === 'boolean') {
           return true;
         }
 
@@ -98,9 +100,9 @@ export default class FormItem extends Record(defaultProperties) {
 
             if (
               bucket.slotsLimited && !(
-                typeof bucket.minimumSlots === 'number' && bucket.minimumSlots >= 0 &&
-                typeof bucket.preferredSlots === 'number' && bucket.preferredSlots >= 0 &&
-                typeof bucket.totalSlots === 'number' && bucket.totalSlots >= 0
+                typeof bucket.minimumSlots === 'number' && bucket.minimumSlots >= 0
+                && typeof bucket.preferredSlots === 'number' && bucket.preferredSlots >= 0
+                && typeof bucket.totalSlots === 'number' && bucket.totalSlots >= 0
               )
             ) {
               return false;

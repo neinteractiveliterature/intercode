@@ -93,11 +93,16 @@ class AdminOrderModal extends React.Component {
     if (this.props.order.charge_id) {
       prompt = (
         <div>
-          <p>Are you sure you want to cancel order #{this.props.order.id}?</p>
+          <p>
+Are you sure you want to cancel order #
+            {this.props.order.id}
+?
+          </p>
           <p>
             This will issue a refund back to
             {' '}
-            {this.props.order.user_con_profile.name_without_nickname}&apos;s payment card.
+            {this.props.order.user_con_profile.name_without_nickname}
+&apos;s payment card.
           </p>
         </div>
       );
@@ -105,12 +110,18 @@ class AdminOrderModal extends React.Component {
     } else if (this.props.order.status === 'paid') {
       prompt = (
         <div>
-          <p>Are you sure you want to cancel order #{this.props.order.id}?</p>
+          <p>
+Are you sure you want to cancel order #
+            {this.props.order.id}
+?
+          </p>
           <p>
             Because there is
             no Stripe charge associated with this order,
             {' '}
-            {this.props.order.user_con_profile.name_without_nickname} will not automatically
+            {this.props.order.user_con_profile.name_without_nickname}
+            {' '}
+will not automatically
             receive a refund, so they will have to be refunded manually.
           </p>
         </div>
@@ -119,7 +130,11 @@ class AdminOrderModal extends React.Component {
     } else {
       prompt = (
         <div>
-          <p>Are you sure you want to cancel order #{this.props.order.id}?</p>
+          <p>
+Are you sure you want to cancel order #
+            {this.props.order.id}
+?
+          </p>
         </div>
       );
       buttonCaption = 'Cancel';
@@ -166,7 +181,9 @@ class AdminOrderModal extends React.Component {
           {this.renderCancelButton()}
         </div>
       );
-    } else if (this.props.order.status === 'paid') {
+    }
+
+    if (this.props.order.status === 'paid') {
       return this.renderCancelButton();
     }
 
@@ -206,9 +223,9 @@ class AdminOrderModal extends React.Component {
               <li className="list-inline-item">
                 {humanize(order.status)}
                 {(
-                  order.paid_at ?
-                  `on ${moment(order.paid_at).tz(this.props.timezoneName).format('ddd, MMM D, YYYY {at} h:mma')}` :
-                  null
+                  order.paid_at
+                    ? `on ${moment(order.paid_at).tz(this.props.timezoneName).format('ddd, MMM D, YYYY {at} h:mma')}`
+                    : null
                 )}
               </li>
               <li className="list-inline-item">{this.renderOrderActions()}</li>
@@ -250,7 +267,8 @@ class AdminOrderModal extends React.Component {
         dialogClassName="modal-lg"
       >
         <div className="modal-header">
-          Order #{(this.props.order || {}).id}
+          Order #
+          {(this.props.order || {}).id}
         </div>
         <div className="modal-body">
           {this.renderBody()}

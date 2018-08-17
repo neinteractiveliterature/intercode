@@ -155,7 +155,11 @@ class RoomsAdmin extends React.Component {
           <div className="col">
             { room.runs.length > 0 ? (
               <span className="text-muted">
-                ({room.runs.length} {pluralize('event run', room.runs.length)})
+                (
+                {room.runs.length}
+                {' '}
+                {pluralize('event run', room.runs.length)}
+)
               </span>
             ) : null }
           </div>

@@ -126,8 +126,8 @@ class RunFormFields extends React.Component {
           timespan={timespan}
         >
           {
-            startTime &&
-            `- ${startTime.clone().add(this.props.event.length_seconds, 'seconds').format('H:mm')}`
+            startTime
+            && `- ${startTime.clone().add(this.props.event.length_seconds, 'seconds').format('H:mm')}`
           }
         </TimeSelect>
       </fieldset>

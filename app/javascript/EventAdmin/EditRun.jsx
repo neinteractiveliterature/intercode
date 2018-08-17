@@ -31,10 +31,10 @@ class EditRun extends React.Component {
     }
 
     if (
-      prevState &&
-      prevState.run &&
-      prevState.run.id &&
-      match.params.runId === prevState.run.id.toString()
+      prevState
+      && prevState.run
+      && prevState.run.id
+      && match.params.runId === prevState.run.id.toString()
     ) {
       return null;
     }
@@ -66,6 +66,7 @@ class EditRun extends React.Component {
       this.props.history.replace('/runs');
     }
   }
+
   runChanged = (run) => { this.setState({ run }); }
 
   render = () => (

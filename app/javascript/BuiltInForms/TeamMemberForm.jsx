@@ -5,7 +5,9 @@ import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import { humanize, underscore, capitalize, pluralize } from 'inflected';
+import {
+  humanize, underscore, capitalize, pluralize,
+} from 'inflected';
 import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
@@ -202,9 +204,20 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
   } else {
     statusDescription.push((
       <span key="unticketed-warning">
-        <span className="text-danger"> has no {ticketName} for {convention.name}.</span>
+        <span className="text-danger">
+          {' '}
+has no
+          {ticketName}
+          {' '}
+for
+          {convention.name}
+.
+        </span>
         {' '}
-        Without a {ticketName}, users cannot sign up for events at the convention.
+        Without a
+        {' '}
+        {ticketName}
+, users cannot sign up for events at the convention.
       </span>
     ));
   }
@@ -256,8 +269,7 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
         update: (proxy, { data: { provideEventTicket: { ticket } } }) => {
           const data = proxy.readQuery({ query: teamMemberQuery, variables: { eventId } });
           data.event.provided_tickets.push(ticket);
-          const teamMemberToUpdate = data.event.team_members.find(teamMember =>
-            teamMember.user_con_profile.id === ticket.user_con_profile.id);
+          const teamMemberToUpdate = data.event.team_members.find(teamMember => teamMember.user_con_profile.id === ticket.user_con_profile.id);
           teamMemberToUpdate.user_con_profile.ticket = ticket;
 
           proxy.writeQuery({ query: teamMemberQuery, variables: { eventId }, data });
@@ -310,10 +322,11 @@ class TeamMemberForm extends React.Component {
 
   getExistingTicket = () => {
     if (this.state.teamMember.id) {
-      const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
-        teamMember.id === this.state.teamMember.id);
+      const teamMemberFromData = this.props.data.event.team_members.find(teamMember => teamMember.id === this.state.teamMember.id);
       return teamMemberFromData.user_con_profile.ticket;
-    } else if (this.state.teamMember.user_con_profile) {
+    }
+
+    if (this.state.teamMember.user_con_profile) {
       return this.state.teamMember.user_con_profile.ticket;
     }
 
@@ -513,8 +526,7 @@ class TeamMemberForm extends React.Component {
     const { ticket_name: ticketName } = this.props.data.convention;
 
     if (this.state.teamMember.id) {
-      const teamMemberFromData = this.props.data.event.team_members.find(teamMember =>
-        teamMember.id === this.state.teamMember.id);
+      const teamMemberFromData = this.props.data.event.team_members.find(teamMember => teamMember.id === this.state.teamMember.id);
 
       statusDescription = describeTicketingStatus(
         teamMemberFromData.user_con_profile,
@@ -523,26 +535,23 @@ class TeamMemberForm extends React.Component {
       );
 
       if (!existingTicket) {
-        const providableTicketTypeDescriptions = providableTicketTypes.map(ticketType =>
-          describeTicketTypeProvidability(
-            ticketType,
-            providedTicketCountByType[ticketType.id],
-            ticketName,
-          ));
+        const providableTicketTypeDescriptions = providableTicketTypes.map(ticketType => describeTicketTypeProvidability(
+          ticketType,
+          providedTicketCountByType[ticketType.id],
+          ticketName,
+        ));
 
         const providabilityDescription = [
           `${this.props.data.event.title} has`,
           (
-            providableTicketTypeDescriptions.length > 0 ?
-              arrayToSentence(providableTicketTypeDescriptions) :
-              'no tickets'
+            providableTicketTypeDescriptions.length > 0
+              ? arrayToSentence(providableTicketTypeDescriptions)
+              : 'no tickets'
           ),
           'remaining to provide',
         ].join(' ');
 
-        const providableTicketTypesWithRemainingTickets =
-          providableTicketTypes.filter(ticketType =>
-            ticketType.maximum_event_provided_tickets > providedTicketCountByType[ticketType.id]);
+        const providableTicketTypesWithRemainingTickets = providableTicketTypes.filter(ticketType => ticketType.maximum_event_provided_tickets > providedTicketCountByType[ticketType.id]);
 
         const provideButtons = providableTicketTypesWithRemainingTickets.map(ticketType => (
           <li className="list-inline-item" key={ticketType.id}>
@@ -553,7 +562,9 @@ class TeamMemberForm extends React.Component {
               }}
               disabled={this.state.requestInProgress}
             >
-              Provide {describeTicketType(ticketType, ticketName)}
+              Provide
+              {' '}
+              {describeTicketType(ticketType, ticketName)}
             </button>
           </li>
         ));
@@ -561,7 +572,8 @@ class TeamMemberForm extends React.Component {
         ticketingControls = (
           <div className="mt-3">
             <div>
-              {providabilityDescription}.
+              {providabilityDescription}
+.
             </div>
 
             <ul className="list-inline mt-2 mb-0">{provideButtons}</ul>
@@ -641,12 +653,20 @@ class TeamMemberForm extends React.Component {
         onCancel={this.provideEventTicketForExistingTeamMemberCanceled}
         visible={this.state.confirmingProvideEventTicketTypeId != null}
       >
-        Are you sure you want to provide a {this.props.data.convention.ticket_name} to
+        Are you sure you want to provide a
         {' '}
-        {(this.state.teamMember.user_con_profile || {}).name_without_nickname}?
-        This will use up one of {this.props.data.event.title}&apos;s
+        {this.props.data.convention.ticket_name}
         {' '}
-        {pluralize(this.props.data.convention.ticket_name)}.
+to
+        {' '}
+        {(this.state.teamMember.user_con_profile || {}).name_without_nickname}
+?
+        This will use up one of
+        {this.props.data.event.title}
+&apos;s
+        {' '}
+        {pluralize(this.props.data.convention.ticket_name)}
+.
       </ConfirmModal>
 
       {this.renderSubmitSection()}

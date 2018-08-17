@@ -42,8 +42,8 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
   }
 
   addingOverrideDataComplete = () => (
-    this.state.addingOverride.ticket_type.id &&
-    this.state.addingOverride.override_value != null
+    this.state.addingOverride.ticket_type.id
+    && this.state.addingOverride.override_value != null
   )
 
   addingTicketTypeIdDidChange = (event) => {
@@ -160,7 +160,10 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
             onClick={() => { this.deleteOverrideWasClicked(override); }}
           >
             <i className="fa fa-trash-o" />
-            <span className="sr-only">Delete override for {override.ticket_type.description}</span>
+            <span className="sr-only">
+Delete override for
+              {override.ticket_type.description}
+            </span>
           </button>
         </td>
       </tr>
@@ -175,12 +178,21 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
 
     return (
       <div className="card bg-light">
-        <div className="card-header">Override event-provided {ticketName} quotas</div>
+        <div className="card-header">
+Override event-provided
+          {ticketName}
+          {' '}
+quotas
+        </div>
         <div className="card-body">
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>{capitalize(ticketName)} type</th>
+                <th>
+                  {capitalize(ticketName)}
+                  {' '}
+type
+                </th>
                 <th>Default quota</th>
                 <th>Overridden quota</th>
                 <th />
@@ -236,9 +248,9 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
         >
           {
             (
-              this.state.deletingOverride != null ?
-              `Are you sure you want to remove the override for "${this.state.deletingOverride.ticket_type.description}" tickets?` :
-              ''
+              this.state.deletingOverride != null
+                ? `Are you sure you want to remove the override for "${this.state.deletingOverride.ticket_type.description}" tickets?`
+                : ''
             )
           }
         </ConfirmModal>

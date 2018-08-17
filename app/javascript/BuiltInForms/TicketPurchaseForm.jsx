@@ -268,17 +268,21 @@ class TicketPurchaseForm extends React.Component {
         <div className="modal-header"><h3>Thank you!</h3></div>
         <div className="modal-body">
           {
-            this.state.ticket ?
-            (
-              <div>
-                Your purchase of a {this.state.ticket.ticket_type.description} for
-                {' '}
-                {formatMoney(this.state.ticket.payment_amount)}
-                {' '}
+            this.state.ticket
+              ? (
+                <div>
+                Your purchase of a
+                  {' '}
+                  {this.state.ticket.ticket_type.description}
+                  {' '}
+for
+                  {' '}
+                  {formatMoney(this.state.ticket.payment_amount)}
+                  {' '}
                 was successful.  We&apos;ve emailed you a receipt.
-              </div>
-            ) :
-            null
+                </div>
+              )
+              : null
           }
         </div>
         <div className="modal-footer">

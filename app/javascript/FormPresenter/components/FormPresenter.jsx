@@ -77,7 +77,13 @@ class FormPresenter extends React.Component {
           aria-valuemin="0"
           aria-valuemax="100"
         >
-          Page {sectionIndex + 1} of {form.getSections().size}
+          Page
+          {' '}
+          {sectionIndex + 1}
+          {' '}
+of
+          {' '}
+          {form.getSections().size}
         </div>
       </div>
     );

@@ -47,6 +47,7 @@ class RegistrationBucketRow extends React.Component {
   }
 
   nameChanged = newName => this.bucketPropChanged('name', newName)
+
   descriptionChanged = newDescription => this.bucketPropChanged('description', newDescription)
 
   slotsChanged = (event, field) => {

@@ -60,6 +60,7 @@ class WhosFreeForm extends React.Component {
   }
 
   dayChanged = (day) => { this.setState({ day }); }
+
   timeChanged = (field, newTime) => {
     const oldTime = this.state[field] || this.state.day;
 

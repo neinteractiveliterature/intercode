@@ -97,9 +97,14 @@ class VolunteerEventSection extends React.Component {
         {this.props.event.title}
         {' '}
         <small>
-          ({this.props.event.runs.length} runs;
+          (
+          {this.props.event.runs.length}
           {' '}
-          {moment.duration(this.props.event.length_seconds, 'seconds').humanize()} per run)
+runs;
+          {' '}
+          {moment.duration(this.props.event.length_seconds, 'seconds').humanize()}
+          {' '}
+per run)
         </small>
       </h4>
     </button>
