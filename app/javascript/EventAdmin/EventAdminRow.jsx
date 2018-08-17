@@ -86,7 +86,11 @@ class EventAdminRow extends React.Component {
 
     return (
       <button className="btn btn-outline-secondary" onClick={this.expand}>
-        Show {event.runs.length} runs
+        Show
+        {' '}
+        {event.runs.length}
+        {' '}
+runs
       </button>
     );
   }
@@ -105,10 +109,16 @@ class EventAdminRow extends React.Component {
             {event.title}
           </Link>
           {' '}
-          <small>({event.category})</small>
+          <small>
+(
+            {event.category}
+)
+          </small>
         </td>
         <td>
-          {length.hours()}:{length.minutes().toString().padStart(2, '0')}
+          {length.hours()}
+:
+          {length.minutes().toString().padStart(2, '0')}
         </td>
         <td>{this.renderRuns(event)}</td>
       </tr>

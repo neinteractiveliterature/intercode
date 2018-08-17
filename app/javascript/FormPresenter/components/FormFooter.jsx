@@ -78,7 +78,9 @@ class FormFooter extends React.Component {
 
     return (
       <button className="btn btn-secondary" onClick={this.previousSection}>
-        <i className="fa fa-chevron-left" /> Back
+        <i className="fa fa-chevron-left" />
+        {' '}
+Back
       </button>
     );
   }
@@ -108,7 +110,9 @@ class FormFooter extends React.Component {
         className="btn btn-primary"
         onClick={this.tryNextSection}
       >
-        Continue <i className="fa fa-chevron-right" />
+        Continue
+        {' '}
+        <i className="fa fa-chevron-right" />
       </button>
     );
   }
@@ -140,10 +144,10 @@ class FormFooter extends React.Component {
     const submitButton = this.renderSubmitButton();
 
     if (
-      backButton == null &&
-      continueButton == null &&
-      exitButton == null &&
-      submitButton == null
+      backButton == null
+      && continueButton == null
+      && exitButton == null
+      && submitButton == null
     ) {
       return <div />;
     }

@@ -121,7 +121,12 @@ class DatagridFilters extends React.Component {
           />
         );
       default:
-        return <span className="text-danger">Unknown filter type: #{filter.form_builder_helper_name}</span>;
+        return (
+          <span className="text-danger">
+Unknown filter type: #
+            {filter.form_builder_helper_name}
+          </span>
+        );
     }
   }
 
@@ -159,7 +164,9 @@ class DatagridFilters extends React.Component {
 
     return (
       <button type="button" className="btn mb-2" onClick={this.toggleCollapsed}>
-        {caret} Advanced search options
+        {caret}
+        {' '}
+Advanced search options
       </button>
     );
   }
@@ -182,9 +189,9 @@ class DatagridFilters extends React.Component {
           {uncollapsibleFilters.map(this.renderFilterRow)}
           {this.renderCollapseControl()}
           {
-            this.state.collapsed ?
-            collapsibleFilters.map(this.renderCollapsedFilter) :
-            collapsibleFilters.map(this.renderFilterRow)
+            this.state.collapsed
+              ? collapsibleFilters.map(this.renderCollapsedFilter)
+              : collapsibleFilters.map(this.renderFilterRow)
           }
           <div className="form-group mb-0">
             <input type="submit" className="btn btn-primary" value="Search" />

@@ -95,7 +95,10 @@ class StaffPositionsTable extends React.Component {
         onOK={this.deleteConfirmed}
         onCancel={this.deleteCanceled}
       >
-        Are you sure you want to delete the staff position {staffPositionName}?
+        Are you sure you want to delete the staff position
+        {' '}
+        {staffPositionName}
+?
 
         <ErrorDisplay graphQLError={this.state.error} />
       </ConfirmModal>

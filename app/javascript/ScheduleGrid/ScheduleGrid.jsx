@@ -2,7 +2,9 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import {
+  NavLink, Redirect, Route, Switch,
+} from 'react-router-dom';
 
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 import EventCategory from '../EventAdmin/EventCategory';
@@ -272,7 +274,13 @@ class ScheduleGrid extends React.Component {
 
         extendedCounts = (
           <div className="schedule-grid-hour-extended-counts">
-            <div>{minimumSlots}/{preferredSlots}/{totalSlots}</div>
+            <div>
+              {minimumSlots}
+/
+              {preferredSlots}
+/
+              {totalSlots}
+            </div>
             <div>
               <span className="text-success">{confirmedSignups}</span>
               {'/'}
@@ -280,7 +288,10 @@ class ScheduleGrid extends React.Component {
               {'/'}
               <span className="text-danger">{waitlistedSignups}</span>
             </div>
-            <div>Players: {playerCount}</div>
+            <div>
+Players:
+              {playerCount}
+            </div>
           </div>
         );
       }

@@ -83,8 +83,8 @@ class EventForm extends React.Component {
     const attrs = this.state.event.form_response_attrs;
 
     return (
-      attrs.title != null && attrs.title !== '' &&
-      attrs.length_seconds
+      attrs.title != null && attrs.title !== ''
+      && attrs.length_seconds
     );
   };
 
@@ -183,7 +183,10 @@ class EventForm extends React.Component {
           onCancel={this.cancelDrop}
           onOK={this.confirmDrop}
         >
-          Are you sure you want to drop {this.state.event.title}?  Doing so will
+          Are you sure you want to drop
+          {' '}
+          {this.state.event.title}
+?  Doing so will
           also delete any runs of this event and remove any participants signed up
           for those runs.
         </ConfirmModal>

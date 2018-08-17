@@ -78,9 +78,13 @@ class MultipleChoiceItem extends React.Component {
       }
 
       return typecastValue;
-    } else if (this.isOtherSelected()) {
+    }
+
+    if (this.isOtherSelected()) {
       return OTHER_VALUE;
-    } else if (this.props.value != null) {
+    }
+
+    if (this.props.value != null) {
       return this.props.value.toString();
     }
 

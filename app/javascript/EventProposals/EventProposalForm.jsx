@@ -86,6 +86,7 @@ class EventProposalForm extends React.Component {
   }
 
   updateEventProposal = () => this.props.updateEventProposal(this.state.eventProposal)
+
   submitEventProposal = () => this.props.submitEventProposal(this.state.eventProposal)
 
   formSubmitted = () => {

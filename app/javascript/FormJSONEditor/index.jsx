@@ -116,7 +116,10 @@ class FormJSONEditor extends React.Component {
 
   render = () => (
     <div>
-      <h1 className="mb-4">Editing {this.state.form.title}</h1>
+      <h1 className="mb-4">
+Editing
+        {this.state.form.title}
+      </h1>
 
       <BootstrapFormInput
         label="Title"

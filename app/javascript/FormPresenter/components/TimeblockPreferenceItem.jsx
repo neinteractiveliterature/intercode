@@ -57,13 +57,11 @@ class TimeblockPreferenceItem extends React.Component {
   }
 
   preferenceDidChange = (newOrdinality, hypotheticalPreference) => {
-    const existingPreference = this.state.preferences.find(p =>
-      preferencesMatch(p, hypotheticalPreference));
+    const existingPreference = this.state.preferences.find(p => preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
       this.setState({
-        preferences: this.state.preferences.filter(p =>
-          (!(preferencesMatch(p, hypotheticalPreference)))),
+        preferences: this.state.preferences.filter(p => (!(preferencesMatch(p, hypotheticalPreference)))),
       }, this.preferencesDidChange);
     } else if (existingPreference) {
       this.setState({

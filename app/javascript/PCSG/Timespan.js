@@ -37,29 +37,29 @@ class Timespan {
 
   includesTime(time) {
     return (
-      (this.start == null || this.start.isSameOrBefore(time)) &&
-      (this.finish == null || this.finish.isAfter(time))
+      (this.start == null || this.start.isSameOrBefore(time))
+      && (this.finish == null || this.finish.isAfter(time))
     );
   }
 
   includesTimespan(other) {
     return (
-      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start))) &&
-      (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
+      (this.start == null || (other.start != null && this.start.isSameOrBefore(other.start)))
+      && (this.finish == null || (other.finish != null && this.finish.isSameOrAfter(other.finish)))
     );
   }
 
   overlapsTimespan(other) {
     return (
-      (this.start == null || other.finish == null || this.start.isBefore(other.finish)) &&
-      (this.finish == null || other.start == null || other.start.isBefore(this.finish))
+      (this.start == null || other.finish == null || this.start.isBefore(other.finish))
+      && (this.finish == null || other.start == null || other.start.isBefore(this.finish))
     );
   }
 
   isSame(other) {
     return (
-      timesAreSameOrBothNull(this.start, other.start) &&
-      timesAreSameOrBothNull(this.finish, other.finish)
+      timesAreSameOrBothNull(this.start, other.start)
+      && timesAreSameOrBothNull(this.finish, other.finish)
     );
   }
 

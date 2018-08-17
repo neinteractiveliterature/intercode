@@ -166,9 +166,9 @@ class Client {
 
       const { data } = await this.apolloClient.mutate({ mutation, variables, update });
       const mutationResponse = (
-        mutation === updateNavigationItemMutation ?
-          data.updateCmsNavigationItem :
-          data.createCmsNavigationItem
+        mutation === updateNavigationItemMutation
+          ? data.updateCmsNavigationItem
+          : data.createCmsNavigationItem
       );
 
       return graphqlNavigationItemToCadmusNavbarAdminObject(mutationResponse.cms_navigation_item);

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, NavLink, Route, Switch, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter, NavLink, Route, Switch, Redirect,
+} from 'react-router-dom';
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
 import EventAdminRunsTable from './EventAdminRunsTable';

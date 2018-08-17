@@ -10,8 +10,8 @@ import sortProductVariants from './sortProductVariants';
 import { stateUpdater, combineStateChangeCalculators, Transforms } from '../ComposableFormUtils';
 
 const variantMatches = (a, b) => (
-  (a.generatedId && b.generatedId === a.generatedId) ||
-  (a.id && b.id === a.id)
+  (a.generatedId && b.generatedId === a.generatedId)
+  || (a.id && b.id === a.id)
 );
 
 const productVariantUpdaterForComponent = (component, variant, stateChangeCalculators) => (
@@ -90,7 +90,9 @@ class AdminProductVariantsTable extends React.Component {
     const newVariants = variants.map((variant, index) => {
       if (index === dragIndex) {
         return { ...variant, position: hoverVariant.position };
-      } else if (index === hoverIndex) {
+      }
+
+      if (index === hoverIndex) {
         return { ...variant, position: dragVariant.position };
       }
 
@@ -122,13 +124,13 @@ class AdminProductVariantsTable extends React.Component {
 
   render = () => {
     const addVariantButton = (
-      this.props.editing ?
-        (
+      this.props.editing
+        ? (
           <button className="btn btn-primary btn-sm" onClick={this.addVariantClicked}>
             Add variant
           </button>
-        ) :
-        null
+        )
+        : null
     );
 
     if (this.props.product.product_variants.length === 0) {

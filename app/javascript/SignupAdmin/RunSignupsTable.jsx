@@ -219,7 +219,7 @@ class RunSignupsTable extends React.Component {
   setColumnVisibility = (columns) => {
     const params = new URLSearchParams(this.props.history.location.search);
     params.set('columns', columns.join(','));
-    this.props.history.replace(`${this.props.history.location.pathname}?${params.toString()}`)
+    this.props.history.replace(`${this.props.history.location.pathname}?${params.toString()}`);
   }
 
   renderColumnSelector = () => (

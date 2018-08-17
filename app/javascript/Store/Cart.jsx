@@ -186,8 +186,8 @@ class Cart extends React.Component {
 
   renderOrderEntriesTable = () => {
     if (
-      !this.props.data.currentPendingOrder ||
-      this.props.data.currentPendingOrder.order_entries.length === 0
+      !this.props.data.currentPendingOrder
+      || this.props.data.currentPendingOrder.order_entries.length === 0
     ) {
       return 'Your cart is empty.';
     }

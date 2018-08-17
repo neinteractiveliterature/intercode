@@ -59,7 +59,9 @@ class TimezoneSelect extends React.Component {
   }
 
   render = () => {
-    const { label, value, onChange, ...otherProps } = this.props;
+    const {
+      label, value, onChange, ...otherProps
+    } = this.props;
     const selectId = this.nextUniqueId();
 
     return (

@@ -104,9 +104,9 @@ class OrderHistory extends React.Component {
       <div key={orderEntry.id}>
         <div className="media mt-2">
           {
-            imageUrl ?
-            (<img className="mr-4" src={imageUrl} alt={name} style={{ width: '100px' }} />) :
-            <div style={{ width: '100px' }} />
+            imageUrl
+              ? (<img className="mr-4" src={imageUrl} alt={name} style={{ width: '100px' }} />)
+              : <div style={{ width: '100px' }} />
           }
           <div className="media-body mt-2">
             <div className="row align-items-center">
@@ -141,7 +141,9 @@ class OrderHistory extends React.Component {
           </a>
         ) : null,
       ];
-    } else if (order.status === 'cancelled') {
+    }
+
+    if (order.status === 'cancelled') {
       return (
         <div key="status">
           <div className="badge badge-danger">
@@ -175,7 +177,10 @@ class OrderHistory extends React.Component {
       <li key={order.id} className="card mb-4">
         <div className="d-flex card-header">
           <div className="col">
-            <h3>Order #{order.id}</h3>
+            <h3>
+Order #
+              {order.id}
+            </h3>
             <small>{submittedTime.format('dddd, MMMM D, YYYY, h:mma')}</small>
           </div>
           <div className="text-right">
@@ -186,7 +191,9 @@ class OrderHistory extends React.Component {
           {renderedOrderEntries}
           <div className="text-right">
             <strong>
-              Total: {formatMoney(order.total_price)}
+              Total:
+              {' '}
+              {formatMoney(order.total_price)}
             </strong>
           </div>
         </div>

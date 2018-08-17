@@ -48,9 +48,20 @@ function getMakeCountedConfirmPrompt(signup, error) {
   return (
     <div>
       <p>
-        Are you sure?  This will make {userConProfile.name_without_nickname}&apos;s signup count
-        towards attendee totals for {run.event.title}.  {run.event.title} will also count towards
-        {userConProfile.name_without_nickname}&apos;s signup limit if there is a signup cap in
+        Are you sure?  This will make
+        {' '}
+        {userConProfile.name_without_nickname}
+&apos;s signup count
+        towards attendee totals for
+        {' '}
+        {run.event.title}
+.
+        {' '}
+        {run.event.title}
+        {' '}
+will also count towards
+        {userConProfile.name_without_nickname}
+&apos;s signup limit if there is a signup cap in
         place.
       </p>
       <p className="text-danger">
@@ -68,9 +79,17 @@ function getMakeNotCountedConfirmPrompt(signup, error) {
   return (
     <div>
       <p>
-        Are you sure?  This will make {userConProfile.name_without_nickname}&apos;s signup not count
-        towards attendee totals for {run.event.title}.  It will also allow
-        {userConProfile.name_without_nickname} to sign up for an additional event if there is a
+        Are you sure?  This will make
+        {' '}
+        {userConProfile.name_without_nickname}
+&apos;s signup not count
+        towards attendee totals for
+        {' '}
+        {run.event.title}
+.  It will also allow
+        {userConProfile.name_without_nickname}
+        {' '}
+to sign up for an additional event if there is a
         signup cap in place.
       </p>
       <p className="text-danger">
@@ -131,24 +150,37 @@ class EditSignup extends React.Component {
         </div>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            Nickname: {userConProfile.nickname}
+            Nickname:
+            {' '}
+            {userConProfile.nickname}
           </li>
           <li className="list-group-item">
-            Age at {signup.run.event.title}:
+            Age at
+            {' '}
+            {signup.run.event.title}
+:
             {' '}
             {ageAsOf(moment(userConProfile.birth_date), moment(signup.run.starts_at))}
           </li>
           <li className="list-group-item">
-            Preferred contact method: {humanize(userConProfile.preferred_contact || '')}
+            Preferred contact method:
+            {' '}
+            {humanize(userConProfile.preferred_contact || '')}
           </li>
           <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'email' })}>
-            Email: <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
+            Email:
+            {' '}
+            <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
           </li>
           <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'day_phone' })}>
-            Daytime phone: {userConProfile.day_phone}
+            Daytime phone:
+            {' '}
+            {userConProfile.day_phone}
           </li>
           <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'evening_phone' })}>
-            Evening phone: {userConProfile.evening_phone}
+            Evening phone:
+            {' '}
+            {userConProfile.evening_phone}
           </li>
           <li className="list-group-item">
             {this.renderAddressItem(userConProfile)}
@@ -207,9 +239,9 @@ class EditSignup extends React.Component {
                 })}
               >
                 {
-                  signup.counted ?
-                    <i className="fa fa-toggle-on"><span className="sr-only">Make not counted</span></i> :
-                    <i className="fa fa-toggle-off"><span className="sr-only">Make counted</span></i>
+                  signup.counted
+                    ? <i className="fa fa-toggle-on"><span className="sr-only">Make not counted</span></i>
+                    : <i className="fa fa-toggle-off"><span className="sr-only">Make counted</span></i>
                 }
               </button>
             )}
@@ -227,13 +259,13 @@ class EditSignup extends React.Component {
     const timespan = Timespan.fromStrings(run.starts_at, run.ends_at);
     const teamMember = run.event.team_members
       .find(tm => tm.user_con_profile.id === signup.user_con_profile.id);
-    const bucket = (signup.bucket_key ?
-      registrationPolicy.buckets.find(b => b.key === signup.bucket_key) :
-      null
+    const bucket = (signup.bucket_key
+      ? registrationPolicy.buckets.find(b => b.key === signup.bucket_key)
+      : null
     );
-    const requestedBucket = (signup.requested_bucket_key ?
-      registrationPolicy.buckets.find(b => b.key === signup.requested_bucket_key) :
-      null
+    const requestedBucket = (signup.requested_bucket_key
+      ? registrationPolicy.buckets.find(b => b.key === signup.requested_bucket_key)
+      : null
     );
 
     return (
@@ -250,7 +282,10 @@ class EditSignup extends React.Component {
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
               Signup state:
-              <strong> {signup.state}</strong>
+              <strong>
+                {' '}
+                {signup.state}
+              </strong>
             </div>
             {this.renderForceConfirmButton()}
           </li>
@@ -261,25 +296,25 @@ class EditSignup extends React.Component {
               <strong>
                 {(bucket || { name: 'none' }).name}
                 {(
-                  (bucket && requestedBucket && bucket.key !== requestedBucket.key) ?
-                  ` (requested ${requestedBucket.name})` :
-                  ''
+                  (bucket && requestedBucket && bucket.key !== requestedBucket.key)
+                    ? ` (requested ${requestedBucket.name})`
+                    : ''
                 )}
                 {(
-                  (bucket && !requestedBucket) ?
-                  ' (no preference)' :
-                  ''
+                  (bucket && !requestedBucket)
+                    ? ' (no preference)'
+                    : ''
                 )}
               </strong>
             </div>
             {(
-              signup.state === 'confirmed' ?
-              (
-                <button className="btn btn-link" onClick={() => this.setState({ changingSignupBucket: true })}>
-                  <i className="fa fa-pencil"><span className="sr-only">Change</span></i>
-                </button>
-              ) :
-              null
+              signup.state === 'confirmed'
+                ? (
+                  <button className="btn btn-link" onClick={() => this.setState({ changingSignupBucket: true })}>
+                    <i className="fa fa-pencil"><span className="sr-only">Change</span></i>
+                  </button>
+                )
+                : null
             )}
           </li>
           <li className="list-group-item d-flex align-items-center">
@@ -291,11 +326,14 @@ class EditSignup extends React.Component {
           </li>
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
-              {run.event.team_member_name}:
+              {run.event.team_member_name}
+:
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
             <a href={this.props.teamMembersUrl} className="btn btn-link">
-              Go to {pluralize(run.event.team_member_name)}
+              Go to
+              {' '}
+              {pluralize(run.event.team_member_name)}
             </a>
           </li>
         </ul>
@@ -305,7 +343,10 @@ class EditSignup extends React.Component {
 
   render = () => (
     <Confirm>
-      <h1 className="mb-4">Edit signup for {this.props.data.signup.run.event.title}</h1>
+      <h1 className="mb-4">
+Edit signup for
+        {this.props.data.signup.run.event.title}
+      </h1>
 
       <div className="row">
         <div className="col col-md-6">

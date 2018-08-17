@@ -17,8 +17,8 @@ function getLabelForBucketChoice(signup, bucket) {
 
 function shouldBucketChoiceBeDisabled(signup, bucket) {
   return (
-    bucket.key === signup.bucket_key ||
-    (bucket.anything && signup.bucket_key)
+    bucket.key === signup.bucket_key
+    || (bucket.anything && signup.bucket_key)
   );
 }
 

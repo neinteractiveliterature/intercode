@@ -67,6 +67,7 @@ class OrderPaymentModal extends React.Component {
   }
 
   paymentDetailsChanged = (paymentDetails) => { this.setState({ paymentDetails }); }
+
   paymentModeChanged = (paymentMode) => { this.setState({ paymentMode }); }
 
   submitCheckOutViaStripe = async () => {
@@ -129,15 +130,15 @@ class OrderPaymentModal extends React.Component {
       <div className="modal-body">
         {paymentModeSelect}
         {
-          this.state.paymentMode === 'now' ?
-          (
-            <OrderPaymentForm
-              paymentDetails={this.state.paymentDetails}
-              onChange={this.paymentDetailsChanged}
-              disabled={this.state.submitting}
-            />
-          ) :
-          null
+          this.state.paymentMode === 'now'
+            ? (
+              <OrderPaymentForm
+                paymentDetails={this.state.paymentDetails}
+                onChange={this.paymentDetailsChanged}
+                disabled={this.state.submitting}
+              />
+            )
+            : null
         }
         <ErrorDisplay
           stringError={this.state.paymentError}
@@ -160,10 +161,10 @@ class OrderPaymentModal extends React.Component {
           <div className="d-flex align-items-center">
             <div className="col">
               {
-                this.state.paymentMode === 'now' ?
-                (
-                  <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
-                ) : null
+                this.state.paymentMode === 'now'
+                  ? (
+                    <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
+                  ) : null
               }
             </div>
             <button

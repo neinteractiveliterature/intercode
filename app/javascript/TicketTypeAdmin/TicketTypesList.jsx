@@ -53,7 +53,11 @@ function renderPricingSchedule(ticketType, timezoneName) {
 
     return (
       // eslint-disable-next-line react/no-array-index-key
-      <li key={i}>{dollarValue} {timespanDescription}</li>
+      <li key={i}>
+        {dollarValue}
+        {' '}
+        {timespanDescription}
+      </li>
     );
   });
 
@@ -125,7 +129,12 @@ class TicketTypesList extends React.Component {
         <div className="row">
           <div className="col-md-8">
             <strong>{ticketType.description}</strong>
-            <tt> ({ticketType.name})</tt>
+            <tt>
+              {' '}
+(
+              {ticketType.name}
+)
+            </tt>
           </div>
           <div className="col-md-4 text-right">
             <Link to={`/${ticketType.id}/delete`} className="btn btn-danger btn-sm mx-1">
@@ -144,14 +153,14 @@ class TicketTypesList extends React.Component {
             <em>
               {describeTicketTypeOptions(ticketType, this.props.ticketName)}
               {
-                ticketType.counts_towards_convention_maximum ?
-                null :
-                [<br key="line-break" />, 'Does not count towards convention maximum']
+                ticketType.counts_towards_convention_maximum
+                  ? null
+                  : [<br key="line-break" />, 'Does not count towards convention maximum']
               }
               {
-                ticketType.allows_event_signups ?
-                null :
-                [<br key="line-break" />, 'Does not allow event signups']
+                ticketType.allows_event_signups
+                  ? null
+                  : [<br key="line-break" />, 'Does not allow event signups']
               }
             </em>
           </small>
@@ -181,7 +190,9 @@ class TicketTypesList extends React.Component {
         onOK={this.deleteConfirmed}
         onCancel={this.deleteCanceled}
       >
-        Are you sure you want to delete the ticket type &quot;{ticketTypeDescription}&quot;?
+        Are you sure you want to delete the ticket type &quot;
+        {ticketTypeDescription}
+&quot;?
 
         <ErrorDisplay graphQLError={this.state.error} />
       </ConfirmModal>
@@ -214,11 +225,20 @@ class TicketTypesList extends React.Component {
 
     return (
       <div>
-        <h1 className="mb-4">{capitalize(this.props.ticketName)} types</h1>
+        <h1 className="mb-4">
+          {capitalize(this.props.ticketName)}
+          {' '}
+types
+        </h1>
 
         {ticketTypeDisplays}
 
-        <Link to="/new" className="btn btn-primary">New {this.props.ticketName} type</Link>
+        <Link to="/new" className="btn btn-primary">
+New
+          {this.props.ticketName}
+          {' '}
+type
+        </Link>
 
         {this.renderDeleteConfirmation()}
       </div>

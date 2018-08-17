@@ -32,7 +32,9 @@ class PageAdminDropdown extends React.Component {
   }
 
   deletePageClicked = () => { this.setState({ confirmingDelete: true }); }
+
   deleteCanceled = () => { this.setState({ confirmingDelete: false }); }
+
   deleteConfirmed = async () => {
     try {
       await this.props.deletePage({ variables: { input: { id: this.props.pageId } } });

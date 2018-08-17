@@ -194,7 +194,10 @@ class EditRunModal extends React.Component {
         onCancel={this.deleteCanceled}
         onOK={this.deleteConfirmed}
       >
-        Are you sure you want to delete this run of {this.props.event && this.props.event.title}?
+        Are you sure you want to delete this run of
+        {' '}
+        {this.props.event && this.props.event.title}
+?
       </ConfirmModal>
     </div>
   )

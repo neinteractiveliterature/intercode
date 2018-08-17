@@ -80,9 +80,9 @@ class ScheduleMultipleRunsModal extends React.Component {
   }
 
   isDataComplete = () => (
-    this.state.day &&
-    this.state.startHour != null && this.state.startMinute != null &&
-    this.state.finishHour != null && this.state.finishMinute != null
+    this.state.day
+    && this.state.startHour != null && this.state.startMinute != null
+    && this.state.finishHour != null && this.state.finishMinute != null
   )
 
   dayInputChanged = (newDay) => {
@@ -212,7 +212,10 @@ class ScheduleMultipleRunsModal extends React.Component {
     <div>
       <Modal visible={this.props.visible}>
         <div className="modal-header">
-          <h5 className="modal-title">Schedule runs of {this.props.event.title}</h5>
+          <h5 className="modal-title">
+Schedule runs of
+            {this.props.event.title}
+          </h5>
         </div>
         {this.renderFormBody()}
         <div className="modal-footer">

@@ -8,6 +8,7 @@ export default class RegistrationPolicy {
     buckets: ImmutablePropTypes.listOf(RegistrationPolicyBucket.propType.isRequired).isRequired,
     preventNoPreferenceSignups: PropTypes.bool.isRequired,
   });
+
   static apiRepresentationPropType = PropTypes.shape({
     buckets:
       PropTypes.arrayOf(RegistrationPolicyBucket.apiRepresentationPropType.isRequired).isRequired,
@@ -53,8 +54,11 @@ export default class RegistrationPolicy {
   )
 
   getTotalSlots = () => this.sumBucketProperty(bucket => bucket.totalSlots)
+
   getMinimumSlots = () => this.sumBucketProperty(bucket => bucket.minimumSlots)
+
   getPreferredSlots = () => this.sumBucketProperty(bucket => bucket.preferredSlots)
+
   slotsLimited = () => this.buckets.every(bucket => bucket.slotsLimited)
 
   addBucket(key, props) {

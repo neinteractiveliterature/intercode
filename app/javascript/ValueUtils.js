@@ -1,6 +1,6 @@
 export const onlyOneIsNull = (a, b) => (
-  (a == null && b != null) ||
-  (a != null && b == null)
+  (a == null && b != null)
+  || (a != null && b == null)
 );
 
 export const chooseAmong = (values, sortFunction, allowNull) => {

@@ -47,9 +47,9 @@ class FillerEventForm extends React.Component {
   }
 
   isDataComplete = () => (
-    this.state.event.form_response_attrs.title != null &&
-    this.state.event.form_response_attrs.length_seconds &&
-    this.state.run.starts_at != null
+    this.state.event.form_response_attrs.title != null
+    && this.state.event.form_response_attrs.length_seconds
+    && this.state.run.starts_at != null
   )
 
   eventFieldChanged = (eventData) => {
@@ -69,7 +69,7 @@ class FillerEventForm extends React.Component {
     event.preventDefault();
     this.props.onSave({
       event: this.state.event,
-      run: this.state.run
+      run: this.state.run,
     });
   }
 

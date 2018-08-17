@@ -30,27 +30,25 @@ class FormItem extends React.Component {
     onChange: null,
   };
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    return (
-      nextProps.value !== this.props.value
+  shouldComponentUpdate = (nextProps, nextState) => (
+    nextProps.value !== this.props.value
       || nextProps.convention !== this.props.convention
       || nextProps.valueInvalid !== this.props.valueInvalid
       || nextProps.formItem !== this.props.formItem
-    );
-  }
+  )
 
   valueDidChange = (newValue) => {
     this.props.onChange(this.props.formItem.identifier, newValue);
   }
 
   render = () => {
-     const {
-       formItem,
-       convention,
-       value,
-       valueInvalid,
-       onInteract,
-     } = this.props;
+    const {
+      formItem,
+      convention,
+      value,
+      valueInvalid,
+      onInteract,
+    } = this.props;
 
     const commonProps = {
       formItem,
