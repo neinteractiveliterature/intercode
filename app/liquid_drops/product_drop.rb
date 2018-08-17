@@ -2,7 +2,7 @@ class ProductDrop < Liquid::Drop
   include Rails.application.routes.url_helpers
 
   attr_reader :product
-  delegate :available, :name, to: :product
+  delegate :available, :name, :payment_options, to: :product
 
   def initialize(product)
     @product = product
