@@ -722,6 +722,7 @@ type Product {
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus]!
+  payment_options: [String]!
   price: Money!
   product_variants: [ProductVariant]!
 }
@@ -732,6 +733,7 @@ input ProductInput {
   description: String
   image: Upload
   name: String
+  payment_options: [String]
   price: MoneyInput
   product_variants: [ProductVariantInput]
 }
@@ -816,9 +818,11 @@ type RegistrationPolicy {
 type RegistrationPolicyBucket {
   anything: Boolean!
   description: String
+  expose_attendees: Boolean!
   key: String!
   minimum_slots: Int
   name: String
+  not_counted: Boolean!
   preferred_slots: Int
   slots_limited: Boolean!
   total_slots: Int
@@ -905,8 +909,10 @@ type Signup {
 }
 
 input SignupFiltersInput {
-  status: [String]
-  user_name: String
+  bucket: [String]
+  email: String
+  name: String
+  state: [String]
 }
 
 enum SignupState {

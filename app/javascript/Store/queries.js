@@ -51,6 +51,7 @@ fragment AdminProductFields on Product {
   description
   image_url
   available
+  payment_options
 
   price {
     fractional
