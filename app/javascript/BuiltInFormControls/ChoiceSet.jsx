@@ -6,7 +6,7 @@ class ChoiceSet extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     choices: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
       value: PropTypes.string.isRequired,
       disabled: PropTypes.bool,
     }).isRequired).isRequired,

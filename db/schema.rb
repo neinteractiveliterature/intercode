@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_02_160657) do
+ActiveRecord::Schema.define(version: 2018_08_17_153813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,7 @@ ActiveRecord::Schema.define(version: 2018_05_02_160657) do
     t.string "price_currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "payment_options"
     t.index ["convention_id"], name: "index_products_on_convention_id"
   end
 

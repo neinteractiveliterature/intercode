@@ -7,7 +7,7 @@ import { enableUniqueIds } from 'react-html-id';
 class BootstrapFormCheckbox extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,

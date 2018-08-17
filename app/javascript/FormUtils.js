@@ -52,7 +52,7 @@ export function getStateChangeForCheckboxChange(event, state, modelKey) {
   return getStateChangeForValueChange(state, modelKey, event.target.name, event.target.checked);
 }
 
-function convertDatetimeValue(value, timezoneName) {
+export function convertDatetimeValue(value, timezoneName) {
   if (value == null || typeof value === 'string') {
     return value;
   }
