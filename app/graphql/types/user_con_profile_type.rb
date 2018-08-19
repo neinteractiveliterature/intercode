@@ -60,6 +60,24 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
     }
   end
 
+  field :signups, !types[Types::SignupType] do
+    guard -> (obj, _args, ctx) {
+      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: obj, run: obj.convention.events.new.runs.new))
+    }
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(UserConProfile, :signups).load(obj)
+    }
+  end
+
+  field :team_members, !types[Types::TeamMemberType] do
+    guard -> (obj, _args, ctx) {
+      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: obj, event: obj.convention.events.new))
+    }
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(UserConProfile, :team_members).load(obj)
+    }
+  end
+
   field :can_override_maximum_event_provided_tickets, !types.Boolean do
     resolve -> (obj, _args, ctx) {
       ability = if obj == ctx[:user_con_profile]

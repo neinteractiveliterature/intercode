@@ -8,7 +8,7 @@ import ReactTable from 'react-table';
 import { ageAsOf } from '../TimeUtils';
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import ExportButton from '../Tables/ExportButton';
-import { findBucket } from './SignupUtils';
+import { formatBucket } from './SignupUtils';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
 import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
@@ -17,6 +17,15 @@ const signupsQuery = gql`
 query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
   event(id: $eventId) {
     id
+    team_member_name
+
+    team_members {
+      id
+
+      user_con_profile {
+        id
+      }
+    }
 
     registration_policy {
       buckets {
@@ -57,32 +66,6 @@ query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupF
   }
 }
 `;
-
-function formatBucket({ value: bucketKey, original: signup }, event) {
-  if (!signup.counted) {
-    if (bucketKey) {
-      return `${findBucket(bucketKey, event.registration_policy).name} (not counted)`;
-    }
-    return 'Not counted';
-  }
-
-  const bucket = findBucket(bucketKey, event.registration_policy);
-  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy);
-
-  if (bucket && requestedBucket && bucket.name === requestedBucket.name) {
-    return bucket.name;
-  }
-
-  if (requestedBucket) {
-    return `${(bucket || {}).name || 'None'} (requested ${requestedBucket.name})`;
-  }
-
-  if (bucket) {
-    return `${bucket.name} (no preference)`;
-  }
-
-  return 'None';
-}
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
@@ -164,7 +147,7 @@ class RunSignupsTable extends React.Component {
       Header: 'Bucket',
       id: 'bucket',
       accessor: signup => signup.bucket_key,
-      Cell: props => formatBucket(props, data.event),
+      Cell: ({ original }) => formatBucket(original, data.event),
       Filter: ({ filter, onChange }) => (
         <ChoiceSet
           name="bucket"
