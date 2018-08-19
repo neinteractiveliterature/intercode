@@ -1,5 +1,5 @@
 .row
-  .col-md-9
+  .col-lg-9
     %h1= @subject_profile.name
     %dl.row
       = render 'user_con_profiles/common_profile_data', user_con_profile: @subject_profile
@@ -30,11 +30,9 @@
               %li.list-inline-item
                 = link_to "Create #{convention.ticket_name}", [:new, @subject_profile, :admin_ticket], class: "btn btn-secondary"
 
-    / TODO: add event signups and team membership stuff
-
-  .col-md-3
+  .col-lg-3
     - if can? :edit, @subject_profile
-      .card
+      .card.mb-4.mt-4.mt-lg-0
         .card-header User administration
         %ul.list-group.list-group-flush
           %li.list-group-item
@@ -45,3 +43,6 @@
           - if can? :delete, @subject_profile
             %li.list-group-item
               = link_to 'Delete', user_con_profile_path(@subject_profile), method: "delete", "data-confirm" => "Are you sure you want to remove #{@subject_profile.user.name} from #{@convention.name}?"
+
+      - if can? :read, @subject_profile.signups.new(run: convention.events.new.runs.new)
+        = react_component 'UserConProfileSignupsCard', authenticityToken: graphql_authenticity_token, userConProfileId: @subject_profile.id
