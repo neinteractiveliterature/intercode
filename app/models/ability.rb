@@ -160,6 +160,8 @@ class Ability
       can :read, Order, user_con_profile: { user_id: user.id }
       can :submit, Order, user_con_profile: { user_id: user.id }, status: %w[pending unpaid]
       can :manage, OrderEntry, order: { user_con_profile: { user_id: user.id }, status: 'pending' }
+      can :read, Signup, user_con_profile: { user_id: user.id }
+      can :read, TeamMember, user_con_profile: { user_id: user.id }
       can :read, Ticket, user_con_profile: { user_id: user.id }
 
       add_con_staff_abilities
