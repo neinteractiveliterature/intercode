@@ -34,6 +34,9 @@ en:
     applications:
       index:
         title: OAuth2 applications
+    authorized_applications:
+      index:
+        title: Authorized applications
     scopes:
       public: 'Access your public data, and public data about conventions you are signed up for'
       read_profile: 'Access your personal profile data'
