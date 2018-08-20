@@ -4,7 +4,7 @@ tool 'update_schema' do
 
   def run
     sh 'bin/rake graphql:schema:dump'
-    FileUtils.rm_r('./docs/schema', secure: true)
+    FileUtils.rm_r('./docs/schema', secure: true) if File.exist?('./docs/schema')
     sh 'yarn run graphdoc:generate'
   end
 end
