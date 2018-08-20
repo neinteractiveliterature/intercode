@@ -19,10 +19,12 @@ gem 'webpacker-react', "~> 0.3.2"
 
 gem 'with_advisory_lock'
 
-# Devise for authentication, cancancan for authorization
+# Devise for authentication, cancancan for authorization, doorkeeper for OAuth providership
 gem 'devise'
 gem 'cancancan'
 gem 'recaptcha', require: 'recaptcha/rails'
+gem 'doorkeeper', '5.0.0.rc2'
+gem 'devise-doorkeeper'
 
 # Let's store sessions in the database, shall we?
 gem 'activerecord-session_store'
