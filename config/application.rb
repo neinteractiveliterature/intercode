@@ -38,5 +38,16 @@ module Intercode
     %w[liquid_drops presenters responders services].each do |subdir|
       config.eager_load_paths << Rails.root.join("app/#{subdir}")
     end
+
+    config.to_prepare do
+      # Only Applications list
+      Doorkeeper::ApplicationsController.layout 'application'
+
+      # Only Authorization endpoint
+      Doorkeeper::AuthorizationsController.layout 'application'
+
+      # Only Authorized Applications
+      Doorkeeper::AuthorizedApplicationsController.layout 'application'
+    end
   end
 end

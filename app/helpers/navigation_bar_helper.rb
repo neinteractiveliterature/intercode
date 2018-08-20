@@ -102,6 +102,11 @@ module NavigationBarHelper
       visible? { can?(:mail_to_any, convention) }
     end,
     NavigationItem.define do
+      label 'OAuth2 Applications'
+      url { oauth_applications_path }
+      visible? { can?(:manage, Doorkeeper::Application) }
+    end,
+    NavigationItem.define do
       label 'Reports'
       url { reports_path }
       visible? { can?(:view_reports, convention) }

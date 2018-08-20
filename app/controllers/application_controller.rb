@@ -4,12 +4,12 @@ class ApplicationController < ActionController::Base
 
   # Turn on Rails' built-in CSRF protection (see
   # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
-  protect_from_forgery with: :exception
+  skip_forgery_protection if: :doorkeeper_token unless Rails.env.test?
 
   # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
   # Only enabled for non-production environments.  To disable, do this in a controller:
   # skip_authorization_check
-  check_authorization unless: :devise_controller?
+  check_authorization unless: :devise_or_doorkeeper_controller?
 
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def current_ability
+    @current_ability ||= Ability.new(current_user, doorkeeper_token)
+  end
 
   # Returns the appropriate Convention object for the domain name of the request.  This relies on
   # the Intercode::FindVirtualHost Rack middleware having already run, since it sets the key
@@ -139,5 +143,11 @@ into this convention before, so please take a moment to update your profile."
     response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+  end
+
+  def devise_or_doorkeeper_controller?
+    return true if devise_controller?
+    return true if self.class.name =~ /\ADoorkeeper::/
+    false
   end
 end
