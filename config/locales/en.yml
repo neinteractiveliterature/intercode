@@ -31,6 +31,9 @@
 
 en:
   doorkeeper:
+    applications:
+      index:
+        title: OAuth2 applications
     scopes:
       public: 'Access your public data, and public data about conventions you are signed up for'
       read_profile: 'Access your personal profile data'
