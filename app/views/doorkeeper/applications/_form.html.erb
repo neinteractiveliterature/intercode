@@ -47,6 +47,17 @@
       <span class="form-text text-secondary">
         <%= t('doorkeeper.applications.help.scopes') %>
       </span>
+
+      <div class="card mb-4 mt-1">
+        <div class="card-header">Valid scopes</div>
+        <div class="card-body">
+          <ul class="m-0">
+            <% Doorkeeper.configuration.scopes.each do |scope| -%>
+              <li><tt><%= scope %></tt> &mdash; <%= t scope, scope: [:doorkeeper, :scopes] %></li>
+            <% end -%>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
