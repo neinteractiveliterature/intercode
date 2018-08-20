@@ -9,7 +9,7 @@ class AbilityLoader < GraphQL::Batch::Loader
   def perform(keys)
     associated_records_loader = associated_records_loader(keys)
     users_with_keys(keys).each do |(key, user)|
-      fulfill(key, Ability.new(user, associated_records_loader: associated_records_loader))
+      fulfill(key, Ability.new(user, nil, associated_records_loader: associated_records_loader))
     end
     keys.each { |key| fulfill(key, nil) unless fulfilled?(key) }
   end
