@@ -93,6 +93,7 @@
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
+    "@2fd/graphdoc": "^2.4.0",
     "babel-eslint": "^8.2.6",
     "babel-jest": "^23.4.2",
     "enzyme": "^3.4.4",
@@ -111,6 +112,7 @@
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
+    "graphdoc:generate": "graphdoc -s ./schema.graphql -o ./docs/schema",
     "lint": "eslint app/javascript --ext .js,.jsx",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
