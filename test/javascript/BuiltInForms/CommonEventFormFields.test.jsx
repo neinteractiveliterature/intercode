@@ -4,10 +4,10 @@ import { ApolloProvider } from 'react-apollo';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 import CommonEventFormFields from '../../../app/javascript/BuiltInForms/CommonEventFormFields';
 import formFromExportJSON from '../formFromExportJSON';
-import FreeTextItem from '../../../app/javascript/FormPresenter/components/FreeTextItem';
-import MultipleChoiceItem from '../../../app/javascript/FormPresenter/components/MultipleChoiceItem';
-import RegistrationPolicyEditor from '../../../app/javascript/BuiltInFormControls/RegistrationPolicyEditor';
-import TimespanItem from '../../../app/javascript/FormPresenter/components/TimespanItem';
+import FreeTextItemInput from '../../../app/javascript/FormPresenter/ItemInputs/FreeTextItemInput';
+import MultipleChoiceItemInput from '../../../app/javascript/FormPresenter/ItemInputs/MultipleChoiceItemInput';
+import RegistrationPolicyEditor from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
+import TimespanItemInput from '../../../app/javascript/FormPresenter/ItemInputs/TimespanItemInput';
 
 import RegularEventForm from '../../../cms_content_sets/standard/forms/regular_event_form.json';
 
@@ -82,16 +82,16 @@ describe.skip('CommonEventFormFields', () => {
       can_play_concurrently: true,
     });
 
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'title').prop('value')).toEqual('myTitle');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'author').prop('value')).toEqual('myAuthor');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'email').prop('value')).toEqual('myEmail');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'organization').prop('value')).toEqual('myOrganization');
-    expect(component.find(MultipleChoiceItem).filterWhere(node => node.prop('formItem').identifier === 'con_mail_destination').prop('value')).toEqual('event_email');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'url').prop('value')).toEqual('myUrl');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'short_blurb').prop('value')).toEqual('myShortBlurb');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'description').prop('value')).toEqual('myDescription');
-    expect(component.find(FreeTextItem).filterWhere(node => node.prop('formItem').identifier === 'participant_communications').prop('value')).toEqual('myParticipantCommunications');
-    expect(component.find(TimespanItem).prop('value')).toEqual(3600);
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'title').prop('value')).toEqual('myTitle');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'author').prop('value')).toEqual('myAuthor');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'email').prop('value')).toEqual('myEmail');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'organization').prop('value')).toEqual('myOrganization');
+    expect(component.find(MultipleChoiceItemInput).filterWhere(node => node.prop('formItem').identifier === 'con_mail_destination').prop('value')).toEqual('event_email');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'url').prop('value')).toEqual('myUrl');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'short_blurb').prop('value')).toEqual('myShortBlurb');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'description').prop('value')).toEqual('myDescription');
+    expect(component.find(FreeTextItemInput).filterWhere(node => node.prop('formItem').identifier === 'participant_communications').prop('value')).toEqual('myParticipantCommunications');
+    expect(component.find(TimespanItemInput).prop('value')).toEqual(3600);
     expect(component.find(RegistrationPolicyEditor).prop('registrationPolicy').getAPIRepresentation()).toEqual(registrationPolicy);
     expect(component.find(BootstrapFormCheckbox).filter({ name: 'can_play_concurrently', value: 'true' }).prop('checked')).toBeTruthy();
   });

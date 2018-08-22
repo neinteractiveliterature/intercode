@@ -2,8 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import InPlaceEditor from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
-import RegistrationPolicyBucket from '../../../app/javascript/Models/RegistrationPolicyBucket';
-import RegistrationBucketRow from '../../../app/javascript/BuiltInFormControls/RegistrationBucketRow';
+import RegistrationPolicyBucket from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyBucket';
+import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 
 describe('RegistrationBucketRow', () => {
   let onChange;

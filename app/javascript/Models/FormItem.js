@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import PropTypes from 'prop-types';
-import RegistrationPolicy from './RegistrationPolicy';
+import RegistrationPolicy from '../RegistrationPolicy/RegistrationPolicy';
 
 const defaultProperties = {
   id: null,
@@ -8,6 +8,7 @@ const defaultProperties = {
   position: null,
   itemType: null,
   identifier: null,
+  adminDescription: null,
   properties: {},
 };
 
@@ -18,6 +19,7 @@ export default class FormItem extends Record(defaultProperties) {
     position: PropTypes.number.isRequired,
     item_type: PropTypes.string.isRequired,
     identifier: PropTypes.string.isRequired,
+    adminDescription: PropTypes.string,
   });
 
   static fromAPI(body) {
@@ -31,6 +33,7 @@ export default class FormItem extends Record(defaultProperties) {
       position,
       item_type: itemType,
       identifier,
+      admin_description: adminDescription,
       ...properties
     } = json;
 
@@ -57,6 +60,10 @@ export default class FormItem extends Record(defaultProperties) {
 
     if (json.identifier !== undefined) {
       returnRecord = returnRecord.set('identifier', json.identifier);
+    }
+
+    if (json.admin_description !== undefined) {
+      returnRecord = returnRecord.set('adminDescription', json.admin_description);
     }
 
     return returnRecord;

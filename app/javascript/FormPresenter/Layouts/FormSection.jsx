@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ErrorDisplay from '../../ErrorDisplay';
 import Form from '../../Models/Form';
-import FormItem from './FormItem';
+import FormItemInput from '../ItemInputs/FormItemInput';
 import ItemInteractionTracker from '../ItemInteractionTracker';
 
 class FormSection extends React.Component {
@@ -64,7 +64,7 @@ class FormSection extends React.Component {
 
       return (
         <div key={item.id} ref={(component) => { this.itemRefs[item.identifier] = component; }}>
-          <FormItem
+          <FormItemInput
             formItem={item}
             convention={convention}
             valueInvalid={
