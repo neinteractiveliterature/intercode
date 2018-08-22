@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
+import moment from 'moment-timezone';
 
 export const FuzzyTimePropType = PropTypes.shape({
   hour: PropTypes.number,
@@ -35,8 +36,6 @@ export const TimeblockPreferenceAPIRepresentationPropType = PropTypes.shape({
   ...timeblockPreferenceCommonProps,
 });
 
-export default {
-  preferencesMatch(a, b) {
-    return a.start.isSame(b.start) && a.finish.isSame(b.finish);
-  },
-};
+export function preferencesMatch(a, b) {
+  return moment(a.start).isSame(moment(b.start)) && moment(a.finish).isSame(moment(b.finish));
+}

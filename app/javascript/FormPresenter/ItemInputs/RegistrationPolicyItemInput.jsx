@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
-import FieldRequiredFeedback from './FieldRequiredFeedback';
 import RegistrationPolicy from '../../Models/RegistrationPolicy';
 import RegistrationPolicyEditor from '../../BuiltInFormControls/RegistrationPolicyEditor';
 import presets from '../../RegistrationPolicyPresets';
 
-class RegistrationPolicyItem extends React.Component {
+class RegistrationPolicyItemInput extends React.Component {
   static propTypes = {
     value: RegistrationPolicy.apiRepresentationPropType,
     valueInvalid: PropTypes.bool,
@@ -57,4 +56,4 @@ class RegistrationPolicyItem extends React.Component {
   )
 }
 
-export default RegistrationPolicyItem;
+export default RegistrationPolicyItemInput;

@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DateItem from './DateItem';
-import FreeTextItem from './FreeTextItem';
-import MultipleChoiceItem from './MultipleChoiceItem';
-import RegistrationPolicyItem from './RegistrationPolicyItem';
-import StaticTextItem from './StaticTextItem';
-import TimeblockPreferenceItem from './TimeblockPreferenceItem';
-import TimespanItem from './TimespanItem';
 
-class FormItem extends React.Component {
+import DateItemInput from './DateItemInput';
+import FreeTextItemInput from './FreeTextItemInput';
+import MultipleChoiceItemInput from './MultipleChoiceItemInput';
+import RegistrationPolicyItemInput from './RegistrationPolicyItemInput';
+import StaticTextItem from '../StaticTextItem';
+import TimeblockPreferenceItemInput from './TimeblockPreferenceItemInput';
+import TimespanItemInput from './TimespanItemInput';
+
+class FormItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
       itemType: PropTypes.string.isRequired,
@@ -27,10 +28,12 @@ class FormItem extends React.Component {
 
   static defaultProps = {
     value: null,
+    valueInvalid: false,
     onChange: null,
+    onInteract: null,
   };
 
-  shouldComponentUpdate = (nextProps, nextState) => (
+  shouldComponentUpdate = nextProps => (
     nextProps.value !== this.props.value
       || nextProps.convention !== this.props.convention
       || nextProps.valueInvalid !== this.props.valueInvalid
@@ -60,23 +63,23 @@ class FormItem extends React.Component {
 
     switch (formItem.itemType) {
       case 'date':
-        return <DateItem {...commonProps} />;
+        return <DateItemInput {...commonProps} />;
       case 'free_text':
-        return <FreeTextItem {...commonProps} />;
+        return <FreeTextItemInput {...commonProps} />;
       case 'multiple_choice':
-        return <MultipleChoiceItem {...commonProps} />;
+        return <MultipleChoiceItemInput {...commonProps} />;
       case 'registration_policy':
-        return <RegistrationPolicyItem {...commonProps} />;
+        return <RegistrationPolicyItemInput {...commonProps} />;
       case 'static_text':
         return <StaticTextItem {...commonProps} />;
       case 'timeblock_preference':
-        return <TimeblockPreferenceItem {...commonProps} convention={convention} />;
+        return <TimeblockPreferenceItemInput {...commonProps} convention={convention} />;
       case 'timespan':
-        return <TimespanItem {...commonProps} />;
+        return <TimespanItemInput {...commonProps} />;
       default:
         return <div><code>{formItem.identifier}</code></div>;
     }
   }
 }
 
-export default FormItem;
+export default FormItemInput;

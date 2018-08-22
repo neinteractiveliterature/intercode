@@ -36,4 +36,24 @@ ${fragments.eventProposal}
 ${fragments.eventProposalFormData}
 `;
 
+export const eventProposalQueryWithOwner = gql`
+query($eventProposalId: Int!) {
+  convention {
+    ...EventProposalFormData
+  }
+
+  eventProposal(id: $eventProposalId) {
+    ...EventProposalFields
+
+    owner {
+      id
+      name
+    }
+  }
+}
+
+${fragments.eventProposal}
+${fragments.eventProposalFormData}
+`;
+
 export { fragments };

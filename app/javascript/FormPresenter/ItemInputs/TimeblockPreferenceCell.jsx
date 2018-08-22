@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
-import TimeblockTypes, { TimeblockPropType, TimeblockPreferencePropType } from '../TimeblockTypes';
-
-const { preferencesMatch } = TimeblockTypes;
+import { preferencesMatch, TimeblockPropType, TimeblockPreferencePropType } from '../TimeblockTypes';
 
 class TimeblockPreferenceCell extends React.Component {
   static propTypes = {
     dayStart: MomentPropTypes.momentObj.isRequired,
     timeblock: TimeblockPropType.isRequired,
-    render: PropTypes.bool.isRequired,
     start: MomentPropTypes.momentObj.isRequired,
     finish: MomentPropTypes.momentObj.isRequired,
     existingPreferences: PropTypes.arrayOf(TimeblockPreferencePropType.isRequired).isRequired,
@@ -27,10 +24,6 @@ class TimeblockPreferenceCell extends React.Component {
   }
 
   render = () => {
-    if (!this.props.render) {
-      return <td key={this.props.dayStart.format('dddd')} />;
-    }
-
     const hypotheticalPreference = this.getHypotheticalPreference();
 
     const existingPreference = this.props.existingPreferences.find(p => preferencesMatch(p, hypotheticalPreference));
