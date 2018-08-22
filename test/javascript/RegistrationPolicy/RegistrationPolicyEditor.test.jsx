@@ -2,11 +2,11 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { List } from 'immutable';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import defaultPresets from '../../../app/javascript/RegistrationPolicyPresets';
-import RegistrationPolicy from '../../../app/javascript/Models/RegistrationPolicy';
-import RegistrationPolicyBucket from '../../../app/javascript/Models/RegistrationPolicyBucket';
-import RegistrationPolicyEditor from '../../../app/javascript/BuiltInFormControls/RegistrationPolicyEditor';
-import RegistrationBucketRow from '../../../app/javascript/BuiltInFormControls/RegistrationBucketRow';
+import defaultPresets from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyPresets';
+import RegistrationPolicy from '../../../app/javascript/RegistrationPolicy/RegistrationPolicy';
+import RegistrationPolicyBucket from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyBucket';
+import RegistrationPolicyEditor from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
+import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 
 describe('RegistrationPolicyEditor', () => {
   const onChange = jest.fn();
