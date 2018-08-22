@@ -2,27 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
+
 import ChoiceSet from './ChoiceSet';
-import HelpPopover from '../UIComponents/HelpPopover';
+import { bucketSortCompare, findPreset, isPreventNoPreferenceSignupsApplicable } from '../RegistrationPolicyUtils';
+import NoPreferenceHelpPopover from '../RegistrationPolicy/NoPreferenceHelpPopover';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from '../Models/RegistrationPolicy';
-
-const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration bucket with '
-+ 'limited slots, we can display a "no preference" option for signups. Users who sign up '
-+ ' using that option will be placed in whatever limited-slot bucket has availability, and moved '
-+ 'between buckets to make space as necessary.';
-
-function bucketSortCompare(a, b) {
-  if (a.get('anything') && !b.get('anything')) {
-    return 1;
-  }
-
-  if (b.get('anything') && !a.get('anything')) {
-    return -1;
-  }
-
-  return a.get('name').localeCompare(b.get('name'), { sensitivity: 'base' });
-}
 
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
@@ -48,40 +33,12 @@ class RegistrationPolicyEditor extends React.Component {
     super(props);
     enableUniqueIds(this);
 
-    let initialPreset;
-    let initiallyCustom = false;
-    if (Array.isArray(this.props.presets)) {
-      initialPreset = this.props.presets.find((preset) => {
-        if (
-          this.props.registrationPolicy.getPreventNoPreferenceSignups()
-          !== Boolean(preset.policy.prevent_no_preference_signups)
-        ) {
-          return false;
-        }
-
-        const allKeysMatch = preset.policy.buckets.every(bucket => (
-          typeof bucket.key === 'string'
-            && this.props.registrationPolicy.getBucket(bucket.key)
-        ));
-        if (!allKeysMatch) {
-          return false;
-        }
-
-        const allBucketOptionsMatch = this.props.registrationPolicy.buckets.every(bucket => preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key
-            && !!presetBucket.slots_limited === !!bucket.slotsLimited
-            && !!presetBucket.not_counted === !!bucket.notCounted
-            && !!presetBucket.expose_attendees === !!bucket.exposeAttendees));
-        if (!allBucketOptionsMatch) {
-          return false;
-        }
-
-        return true;
-      });
-
-      if (!initialPreset && (this.props.registrationPolicy.buckets || new List()).size > 0) {
-        initiallyCustom = true;
-      }
-    }
+    const initialPreset = findPreset(this.props.registrationPolicy, this.props.presets);
+    const initiallyCustom = (
+      this.props.presets
+      && !initialPreset
+      && (this.props.registrationPolicy.buckets || new List()).size > 0
+    );
 
     this.state = {
       custom: initiallyCustom,
@@ -90,7 +47,7 @@ class RegistrationPolicyEditor extends React.Component {
   }
 
   getHeaderLabels = () => [
-    'Name',
+    'Bucket name',
     ...(this.state.preset || this.props.lockNameAndDescription ? [] : ['Description']),
     'Limits',
     '',
@@ -134,12 +91,6 @@ class RegistrationPolicyEditor extends React.Component {
     this.props.onChange(this.props.registrationPolicy.setPreventNoPreferenceSignups(newValue === 'true'));
   }
 
-  isPreventNoPreferenceSignupsApplicable = () => (
-    this.props.registrationPolicy.buckets
-      .filter(bucket => bucket.get('slotsLimited'))
-      .size > 1
-  )
-
   deleteBucket = (key) => {
     this.props.onChange(this.props.registrationPolicy.deleteBucket(key));
   }
@@ -180,15 +131,18 @@ class RegistrationPolicyEditor extends React.Component {
     return (
       <ul className="list-inline">
         <li className="list-inline-item">
-          <button className="btn btn-secondary" onClick={this.addBucket}>Add regular bucket</button>
+          <button type="button" className="btn btn-secondary" onClick={this.addBucket}>
+            Add regular bucket
+          </button>
         </li>
         <li className="list-inline-item">
           <button
+            type="button"
             className="btn btn-secondary anything-bucket"
             disabled={hasAnythingBucket}
             onClick={this.addFlexBucket}
           >
-              Add flex bucket
+            Add flex bucket
           </button>
         </li>
       </ul>
@@ -197,7 +151,8 @@ class RegistrationPolicyEditor extends React.Component {
 
   renderBucketRow = (bucket) => {
     const bucketInPreset = (
-      this.state.preset && !!this.state.preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key)
+      this.state.preset
+      && !!this.state.preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key)
     );
 
     const lockDelete = (
@@ -224,37 +179,32 @@ class RegistrationPolicyEditor extends React.Component {
   }
 
   renderTotals = () => {
-    if (this.props.registrationPolicy.buckets.some(bucket => !bucket.get('slotsLimited'))) {
+    if (!this.props.registrationPolicy.slotsLimited()) {
       return 'unlimited';
     }
-
-    let [minimumSlots, preferredSlots, totalSlots] = [0, 0, 0];
-    this.props.registrationPolicy.buckets.forEach((bucket) => {
-      minimumSlots += bucket.get('minimumSlots') || 0;
-      preferredSlots += bucket.get('preferredSlots') || 0;
-      totalSlots += bucket.get('totalSlots') || 0;
-    });
 
     return (
       <ul className="list-inline">
         <li className="list-inline-item">
-Minimum:
-          {minimumSlots}
+          Min:
+          {this.props.registrationPolicy.getMinimumSlots()}
         </li>
         <li className="list-inline-item">
-Preferred:
-          {preferredSlots}
+          Pref:
+          {this.props.registrationPolicy.getPreferredSlots()}
         </li>
         <li className="list-inline-item">
-Total:
-          {totalSlots}
+          Max:
+          {this.props.registrationPolicy.getTotalSlots()}
         </li>
       </ul>
     );
   }
 
   renderTable = () => {
-    const bucketRows = this.props.registrationPolicy.buckets.sort(bucketSortCompare).map(bucket => this.renderBucketRow(bucket));
+    const bucketRows = this.props.registrationPolicy.buckets
+      .sort(bucketSortCompare)
+      .map(bucket => this.renderBucketRow(bucket));
 
     return (
       <table className="table">
@@ -318,30 +268,21 @@ Total:
   }
 
   renderPreventNoPreferenceSignupsDescription = () => {
-    if (!this.isPreventNoPreferenceSignupsApplicable()) {
+    if (!isPreventNoPreferenceSignupsApplicable(this.props.registrationPolicy)) {
       return (
         <span>
           &quot;No preference&quot; option is inapplicable
-          <HelpPopover className="ml-1">
-            <p>{NO_PREFERENCE_HELP_TEXT}</p>
-            <p className="mb-0">
-              This event doesn&apos;t have more than one registration bucket with limited slots, so
-              that option doesn&apos;t apply.
-            </p>
-          </HelpPopover>
+          {' '}
+          <NoPreferenceHelpPopover registrationPolicy={this.props.registrationPolicy} />
         </span>
       );
     }
-
-    const helpPopover = (
-      <HelpPopover>{NO_PREFERENCE_HELP_TEXT}</HelpPopover>
-    );
 
     if (this.props.registrationPolicy.getPreventNoPreferenceSignups()) {
       return (
         <span>
 &quot;No preference&quot; option will not be available
-          {helpPopover}
+          <NoPreferenceHelpPopover registrationPolicy={this.props.registrationPolicy} />
         </span>
       );
     }
@@ -349,13 +290,16 @@ Total:
     return (
       <span>
 &quot;No preference&quot; option will be available
-        {helpPopover}
+        <NoPreferenceHelpPopover registrationPolicy={this.props.registrationPolicy} />
       </span>
     );
   }
 
   renderPreventNoPreferenceSignupsRow = () => {
-    if (this.state.preset || !this.isPreventNoPreferenceSignupsApplicable()) {
+    if (
+      this.state.preset
+      || !isPreventNoPreferenceSignupsApplicable(this.props.registrationPolicy)
+    ) {
       return (
         <tr>
           <td>No preference</td>
@@ -373,12 +317,8 @@ Total:
       <tr>
         <td className="text-nowrap">
           No preference
-          <HelpPopover className="ml-1">
-            For events that have more than one registration bucket with limited slots, we can
-            display a &quot;no preference&quot; option for signups. Users who sign up using that
-            option will be placed in whatever limited-slot bucket has availability, and moved
-            between buckets to make space as necessary.
-          </HelpPopover>
+          {' '}
+          <NoPreferenceHelpPopover registrationPolicy={this.props.registrationPolicy} />
         </td>
         <td colSpan={this.getHeaderLabels().length - 1}>
           <ChoiceSet

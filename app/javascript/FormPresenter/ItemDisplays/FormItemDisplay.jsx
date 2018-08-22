@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import DateItemDisplay from './DateItemDisplay';
 import FreeTextItemDisplay from './FreeTextItemDisplay';
+import MultipleChoiceItemDisplay from './MultipleChoiceItemDisplay';
+import RegistrationPolicyItemDisplay from './RegistrationPolicyItemDisplay';
 import StaticTextItem from '../StaticTextItem';
 import TimeblockPreferenceItemDisplay from './TimeblockPreferenceItemDisplay';
+import TimespanItemDisplay from './TimespanItemDisplay';
 
-class FormItemDisplay extends React.Component {
+class FormItemDisplay extends React.PureComponent {
   static propTypes = {
     formItem: PropTypes.shape({
       itemType: PropTypes.string.isRequired,
@@ -22,13 +26,6 @@ class FormItemDisplay extends React.Component {
   static defaultProps = {
     value: null,
   };
-
-  shouldComponentUpdate = nextProps => (
-    nextProps.value !== this.props.value
-      || nextProps.convention !== this.props.convention
-      || nextProps.valueInvalid !== this.props.valueInvalid
-      || nextProps.formItem !== this.props.formItem
-  )
 
   render = () => {
     const {
@@ -47,20 +44,20 @@ class FormItemDisplay extends React.Component {
     }
 
     switch (formItem.itemType) {
-      // case 'date':
-      //   return <DateItemInput {...commonProps} />;
+      case 'date':
+        return <DateItemDisplay {...commonProps} convention={convention} />;
       case 'free_text':
         return <FreeTextItemDisplay {...commonProps} />;
-      // case 'multiple_choice':
-      //   return <MultipleChoiceItemInput {...commonProps} />;
-      // case 'registration_policy':
-      //   return <RegistrationPolicyItemInput {...commonProps} />;
+      case 'multiple_choice':
+        return <MultipleChoiceItemDisplay {...commonProps} />;
+      case 'registration_policy':
+        return <RegistrationPolicyItemDisplay {...commonProps} />;
       case 'static_text':
         return <StaticTextItem {...commonProps} />;
       case 'timeblock_preference':
         return <TimeblockPreferenceItemDisplay {...commonProps} convention={convention} />;
-      // case 'timespan':
-      //   return <TimespanItemInput {...commonProps} />;
+      case 'timespan':
+        return <TimespanItemDisplay {...commonProps} />;
       default:
         return <div><code>{formItem.identifier}</code></div>;
     }
