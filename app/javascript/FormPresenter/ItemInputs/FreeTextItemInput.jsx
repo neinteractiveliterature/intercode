@@ -6,7 +6,7 @@ import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
 
-class FreeTextItem extends React.Component {
+class FreeTextItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -110,4 +110,4 @@ class FreeTextItem extends React.Component {
   };
 }
 
-export default FreeTextItem;
+export default FreeTextItemInput;

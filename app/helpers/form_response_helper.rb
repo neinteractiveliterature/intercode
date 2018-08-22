@@ -20,6 +20,7 @@ module FormResponseHelper
     when 'registration_policy' then render_registration_policy_value(value)
     when 'timeblock_preference' then render_timeblock_preference_value(value, timezone)
     when 'timespan' then render_timespan_value(value)
+    else render_free_text_value(value, {})
     end
   end
 
