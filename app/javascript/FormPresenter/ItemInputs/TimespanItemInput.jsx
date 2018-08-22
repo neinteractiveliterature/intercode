@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import RequiredIndicator from './RequiredIndicator';
 
-class TimespanItem extends React.Component {
+class TimespanItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -33,11 +33,11 @@ class TimespanItem extends React.Component {
     super(props);
     enableUniqueIds(this);
 
-    let initialUnit = TimespanItem.units[0];
+    let initialUnit = TimespanItemInput.units[0];
     if (typeof this.props.value === 'number') {
       initialUnit = (
-        TimespanItem.units.find(unit => this.props.value % unit.length_seconds === 0)
-        || TimespanItem.units[TimespanItem.units.length - 1]
+        TimespanItemInput.units.find(unit => this.props.value % unit.length_seconds === 0)
+        || TimespanItemInput.units[TimespanItemInput.units.length - 1]
       );
     }
 
@@ -46,7 +46,7 @@ class TimespanItem extends React.Component {
     };
   }
 
-  getCurrentUnit = () => TimespanItem.units.find(u => this.state.unit === u.name);
+  getCurrentUnit = () => TimespanItemInput.units.find(u => this.state.unit === u.name);
 
   userDidInteract = () => {
     this.props.onInteract(this.props.formItem.identifier);
@@ -70,7 +70,7 @@ class TimespanItem extends React.Component {
 
   render = () => {
     const inputId = this.nextUniqueId();
-    const options = TimespanItem.units.map(unit => (
+    const options = TimespanItemInput.units.map(unit => (
       <option key={unit.name} value={unit.name}>{unit.name}</option>
     ));
 
@@ -116,4 +116,4 @@ class TimespanItem extends React.Component {
   };
 }
 
-export default TimespanItem;
+export default TimespanItemInput;

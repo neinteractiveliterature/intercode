@@ -41,6 +41,7 @@ import ConventionAdmin from '../ConventionAdmin';
 import DatagridFilters from '../Datagrid/DatagridFilters';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
+import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
@@ -70,6 +71,7 @@ WebpackerReact.setup({
   DatagridFilters,
   EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
   EventAdmin: StandaloneGraphQLComponent(EventAdmin),
+  EventProposalDisplay: StandaloneGraphQLComponent(EventProposalDisplay),
   EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
   EventListSortDropdown,
   FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 
-class DateItem extends React.Component {
+class DateItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -47,4 +47,4 @@ class DateItem extends React.Component {
   )
 }
 
-export default DateItem;
+export default DateItemInput;

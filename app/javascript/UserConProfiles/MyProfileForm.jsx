@@ -5,7 +5,7 @@ import { isEqual, flowRight } from 'lodash';
 import buildFormStateFromData from './buildFormStateFromData';
 import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
-import FormPresenter from '../FormPresenter/components/FormPresenter';
+import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import { myProfileQuery } from './queries';

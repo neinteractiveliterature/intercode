@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import FieldRequiredFeedback from './FieldRequiredFeedback';
 
 const OTHER_VALUE = '_OTHER_VALUE';
 
-class MultipleChoiceItem extends React.Component {
+class MultipleChoiceItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -181,4 +180,4 @@ class MultipleChoiceItem extends React.Component {
   };
 }
 
-export default MultipleChoiceItem;
+export default MultipleChoiceItemInput;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../Models/Form';
 import FormPresenterApp from '.';
-import FormSection from './components/FormSection';
+import FormSection from './Layouts/FormSection';
 
 const SinglePageFormPresenter = (props) => {
   const sectionContainers = props.form.getSections().map(section => (

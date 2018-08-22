@@ -5,7 +5,7 @@ import { flowRight, isEqual } from 'lodash';
 import ErrorDisplay from '../ErrorDisplay';
 import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
-import FormPresenter from '../FormPresenter/components/FormPresenter';
+import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
@@ -74,15 +74,15 @@ class EventProposalForm extends React.Component {
   }
 
   responseValuesChanged = (newResponseValues, callback) => {
-    this.setState({
+    this.setState(prevState => ({
       eventProposal: {
-        ...this.state.eventProposal,
+        ...prevState.eventProposal,
         formResponseAttrs: {
-          ...this.state.eventProposal.formResponseAttrs,
+          ...prevState.eventProposal.formResponseAttrs,
           ...newResponseValues,
         },
       },
-    }, callback);
+    }), callback);
   }
 
   updateEventProposal = () => this.props.updateEventProposal(this.state.eventProposal)

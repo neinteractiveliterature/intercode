@@ -35,7 +35,8 @@ class FormApiPresenter
       form_section_id: item.form_section_id,
       item_type: item.item_type,
       identifier: item.identifier,
-      position: item.position
+      position: item.position,
+      admin_description: item.admin_description
     }.merge(properties)
   end
 end
