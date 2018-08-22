@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
 
-import ChoiceSet from './ChoiceSet';
-import { bucketSortCompare, findPreset, isPreventNoPreferenceSignupsApplicable } from '../RegistrationPolicyUtils';
-import NoPreferenceHelpPopover from '../RegistrationPolicy/NoPreferenceHelpPopover';
+import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
+import {
+  bucketSortCompare,
+  findPreset,
+  isPreventNoPreferenceSignupsApplicable,
+} from './RegistrationPolicyUtils';
+import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import RegistrationBucketRow from './RegistrationBucketRow';
-import RegistrationPolicy from '../Models/RegistrationPolicy';
+import RegistrationPolicy from './RegistrationPolicy';
 
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
@@ -281,7 +285,8 @@ class RegistrationPolicyEditor extends React.Component {
     if (this.props.registrationPolicy.getPreventNoPreferenceSignups()) {
       return (
         <span>
-&quot;No preference&quot; option will not be available
+          &quot;No preference&quot; option will not be available
+          {' '}
           <NoPreferenceHelpPopover registrationPolicy={this.props.registrationPolicy} />
         </span>
       );
@@ -289,7 +294,8 @@ class RegistrationPolicyEditor extends React.Component {
 
     return (
       <span>
-&quot;No preference&quot; option will be available
+        &quot;No preference&quot; option will be available
+        {' '}
         <NoPreferenceHelpPopover registrationPolicy={this.props.registrationPolicy} />
       </span>
     );

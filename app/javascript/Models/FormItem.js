@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import PropTypes from 'prop-types';
-import RegistrationPolicy from './RegistrationPolicy';
+import RegistrationPolicy from '../RegistrationPolicy/RegistrationPolicy';
 
 const defaultProperties = {
   id: null,
