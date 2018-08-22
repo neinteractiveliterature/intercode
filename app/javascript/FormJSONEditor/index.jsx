@@ -130,7 +130,7 @@ Editing
 
       <fieldset className="mb-4">
         <legend className="col-form-label">Content</legend>
-        <div className="form-control p-0">
+        <div className="border p-0">
           <CodeMirror
             value={this.state.form.sectionsJSON}
             options={{
