@@ -1,8 +1,8 @@
 import React from 'react';
 
 import HelpPopover from '../UIComponents/HelpPopover';
-import { isPreventNoPreferenceSignupsApplicable } from '../RegistrationPolicyUtils';
-import RegistrationPolicy from '../Models/RegistrationPolicy';
+import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
+import RegistrationPolicy from './RegistrationPolicy';
 
 const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration bucket with '
 + 'limited slots, we can display a "no preference" option for signups. Users who sign up '

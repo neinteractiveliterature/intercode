@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
 
 import HelpPopover from '../UIComponents/HelpPopover';
-import InPlaceEditor from './InPlaceEditor';
-import RegistrationPolicyBucket from '../Models/RegistrationPolicyBucket';
+import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
+import RegistrationPolicyBucket from './RegistrationPolicyBucket';
 
 class RegistrationBucketRow extends React.Component {
   static propTypes = {

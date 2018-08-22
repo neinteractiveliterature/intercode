@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
-import RegistrationPolicy from '../../Models/RegistrationPolicy';
-import RegistrationPolicyEditor from '../../BuiltInFormControls/RegistrationPolicyEditor';
-import presets from '../../RegistrationPolicyPresets';
+import RegistrationPolicy from '../../RegistrationPolicy/RegistrationPolicy';
+import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
+import presets from '../../RegistrationPolicy/RegistrationPolicyPresets';
 
 class RegistrationPolicyItemInput extends React.Component {
   static propTypes = {
