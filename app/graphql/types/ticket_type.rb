@@ -15,4 +15,6 @@ Types::TicketType = GraphQL::ObjectType.define do
       RecordLoader.for(Event).load(obj.provided_by_event_id)
     }
   end
+  field :created_at, !Types::DateType
+  field :updated_at, !Types::DateType
 end
