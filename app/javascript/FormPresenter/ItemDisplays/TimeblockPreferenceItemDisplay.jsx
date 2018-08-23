@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import {
   preferencesMatch,
@@ -18,7 +19,6 @@ import {
 class TimeblockPreferenceItemDisplay extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
       properties: PropTypes.shape({
         caption: PropTypes.string.isRequired,
         timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
@@ -33,9 +33,10 @@ class TimeblockPreferenceItemDisplay extends React.Component {
     value: PropTypes.arrayOf(TimeblockPreferenceAPIRepresentationPropType.isRequired).isRequired,
   };
 
-  renderCell = (cell) => {
-    if (!cell) {
-      return null;
+  renderCell = (cell, column) => {
+    const key = column.dayStart.format('dddd');
+    if (cell == null) {
+      return <td key={key} className="table-secondary" />;
     }
 
     const existingPreference = this.props.value
@@ -45,8 +46,30 @@ class TimeblockPreferenceItemDisplay extends React.Component {
         label: cell.timeblock.label,
       }));
     const { ordinality } = (existingPreference || {});
+    const ordinalityString = (ordinality || '').toString();
 
-    return <span>{describeOrdinality(ordinality)}</span>;
+    return (
+      <td
+        key={key}
+        className={classNames(
+          'align-middle',
+          'text-center',
+          {
+            'bg-success text-white': ordinalityString === '1',
+            'table-success': ['2', '3'].includes(ordinalityString),
+            'bg-danger text-white': ordinalityString === 'X',
+          },
+        )}
+      >
+        <span
+          className={classNames({
+            'font-weight-bold': ['1', '2'].includes(ordinalityString),
+          })}
+        >
+          {describeOrdinality(ordinality)}
+        </span>
+      </td>
+    );
   }
 
   render = () => {
@@ -54,12 +77,12 @@ class TimeblockPreferenceItemDisplay extends React.Component {
     const rows = rotateTimeblockColumnsToRows(this.props.formItem, columns);
 
     return (
-      <table className="table">
+      <table className="table table-sm">
         <thead>
           <tr>
             <th />
             {columns.map(column => (
-              <th key={column.dayStart.toString()}>
+              <th key={column.dayStart.toString()} className="text-center">
                 {getColumnHeader(column)}
               </th>
             ))}
@@ -73,11 +96,7 @@ class TimeblockPreferenceItemDisplay extends React.Component {
                 <br />
                 <small>{describeTimeblock(row.timeblock)}</small>
               </td>
-              {row.cells.map((cell, x) => (
-                <td key={columns[x].dayStart.format('dddd')}>
-                  {this.renderCell(cell)}
-                </td>
-              ))}
+              {row.cells.map((cell, x) => this.renderCell(cell, columns[x]))}
             </tr>
           ))}
         </tbody>

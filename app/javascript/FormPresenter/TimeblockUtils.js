@@ -12,21 +12,17 @@ export function describeTimeblock(timeblock) {
 }
 
 export function describeOrdinality(ordinality) {
-  if (ordinality == null) {
-    return null;
-  }
-
-  switch (ordinality.toString()) {
+  switch ((ordinality || '').toString()) {
     case '1':
-      return '1st Choice';
+      return '1st choice';
     case '2':
-      return '2nd Choice';
+      return '2nd choice';
     case '3':
-      return '3rd Choice';
+      return '3rd choice';
     case 'X':
-      return 'Not Available';
+      return 'Prefer not';
     default:
-      return null;
+      return "Don't care";
   }
 }
 
