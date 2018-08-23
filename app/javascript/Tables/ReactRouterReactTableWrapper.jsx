@@ -85,6 +85,13 @@ class ReactRouterReactTableWrapper extends React.PureComponent {
       params.set('pageSize', pageSize);
     }
 
+    // remove existing filters and sorts rather than just adding on
+    [...params.keys()].forEach((key) => {
+      if (key.startsWith('filters.') || key.startsWith('sort.')) {
+        params.delete(key);
+      }
+    });
+
     filtered.forEach(({ id, value }) => {
       const encoded = encodeFilterValue(id, value);
       if (encoded != null) {
