@@ -55,6 +55,10 @@ Intercode::Application.routes.draw do
     get 'admin_store/(*extra)' => 'admin_store#index', as: :admin_store
 
     resources :user_con_profiles, only: [:index, :show, :edit, :destroy] do
+      collection do
+        get :export
+      end
+
       member do
         post :become
       end

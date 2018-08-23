@@ -134,4 +134,24 @@ Types::ConventionType = GraphQL::ObjectType.define do
       grid.assets.accessible_by(ctx[:current_ability]).where(convention_id: convention.id)
     }
   end
+
+  field :user_con_profiles_paginated, !Types::UserConProfilesPaginationType do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::UserConProfileFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(:read, UserConProfile.new(convention: convention))
+    end
+
+    resolve ->(convention, args, ctx) do
+      Tables::UserConProfilesTableResultsPresenter.for_convention(
+        convention,
+        ctx[:current_ability],
+        args[:filters].to_h,
+        args[:sort]
+      ).scoped.paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+    end
+  end
 end
