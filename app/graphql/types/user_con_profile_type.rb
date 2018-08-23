@@ -21,7 +21,12 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
       FormResponsePresenter.new(ctx[:convention].user_con_profile_form, obj).as_json.to_json
     end
   end
-  field(:email, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
+  field(:email, types.String) do
+    guard CAN_READ_PERSONAL_INFO_GUARD
+    resolve -> (obj, _args, _ctx) do
+      AssociationLoader.for(UserConProfile, :user).load(obj).then(&:email)
+    end
+  end
   field(:birth_date, Types::DateType) { guard CAN_READ_PERSONAL_INFO_GUARD }
   field(:address, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
   field(:city, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
