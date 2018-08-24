@@ -2,10 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
+const ReactRouterReactTableContext = React.createContext({
+  getReactTableProps: () => ({}),
+});
+
+export const ReactRouterReactTableConsumer = ReactRouterReactTableContext.Consumer;
+
 @withRouter
-class ReactRouterReactTableWrapper extends React.PureComponent {
+export class ReactRouterReactTableProvider extends React.PureComponent {
   static propTypes = {
-    children: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
     decodeFilterValue: PropTypes.func,
     encodeFilterValue: PropTypes.func,
     history: PropTypes.shape({
@@ -120,17 +126,23 @@ class ReactRouterReactTableWrapper extends React.PureComponent {
   render = () => {
     const tableState = this.decodeSearchParams(this.props.history.location.search);
 
-    return this.props.children({
-      page: tableState.page,
-      pageSize: tableState.pageSize,
-      filtered: tableState.filtered,
-      sorted: tableState.sorted,
-      onPageChange: (page) => { this.updateSearch({ page }); },
-      onPageSizeChange: (pageSize) => { this.updateSearch({ pageSize }); },
-      onFilteredChange: (filtered) => { this.updateSearch({ filtered }); },
-      onSortedChange: (sorted) => { this.updateSearch({ sorted }); },
-    });
+    return (
+      <ReactRouterReactTableContext.Provider
+        value={{
+          getReactTableProps: () => ({
+            page: tableState.page,
+            pageSize: tableState.pageSize,
+            filtered: tableState.filtered,
+            sorted: tableState.sorted,
+            onPageChange: (page) => { this.updateSearch({ page }); },
+            onPageSizeChange: (pageSize) => { this.updateSearch({ pageSize }); },
+            onFilteredChange: (filtered) => { this.updateSearch({ filtered }); },
+            onSortedChange: (sorted) => { this.updateSearch({ sorted }); },
+          }),
+        }}
+      >
+        {this.props.children}
+      </ReactRouterReactTableContext.Provider>
+    );
   }
 }
-
-export default ReactRouterReactTableWrapper;

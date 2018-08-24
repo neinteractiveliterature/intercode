@@ -9,6 +9,7 @@ fragment AdminOrderFieldsFragment on Order {
   payment_note
 
   user_con_profile {
+    id
     name_without_nickname
   }
 

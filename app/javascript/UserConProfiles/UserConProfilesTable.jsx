@@ -2,13 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
-import ReactTable from 'react-table';
 
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
-import ExportButton from '../Tables/ExportButton';
-import PopperDropdown from '../UIComponents/PopperDropdown';
-import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
-import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
+import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 const userConProfilesQuery = gql`
 query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
@@ -133,97 +128,27 @@ class UserConProfilesTable extends React.Component {
     // },
   ];
 
-  getVisibleColumnIds = () => {
-    const params = new URLSearchParams(this.props.history.location.search);
-    if (params.get('columns')) {
-      return params.get('columns').split(',');
-    }
-    return this.props.defaultVisibleColumns;
-  }
-
-  getVisibleColumns = (data) => {
-    const visibleColumnIds = this.getVisibleColumnIds();
-    return this.getPossibleColumns(data)
-      .filter(column => visibleColumnIds.includes(column.id));
-  }
-
-  setColumnVisibility = (columns) => {
-    const params = new URLSearchParams(this.props.history.location.search);
-    params.set('columns', columns.join(','));
-    this.props.history.replace(`${this.props.history.location.pathname}?${params.toString()}`);
-  }
-
-  renderColumnSelector = () => (
-    <PopperDropdown
-      placement="bottom-end"
-      renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
-          Columns
-        </button>
-      )}
-    >
-      <div className="px-2">
-        <ChoiceSet
-          name="columns"
-          multiple
-          choices={
-            this.getPossibleColumns()
-              .map(column => ({ label: column.Header, value: column.id }))
-          }
-          value={this.getVisibleColumnIds()}
-          onChange={this.setColumnVisibility}
-        />
-      </div>
-    </PopperDropdown>
-  )
-
   render = () => (
     <div className="mb-4">
-      <ReactRouterReactTableWrapper
+      <ReactTableWithTheWorks
         decodeFilterValue={decodeFilterValue}
+        defaultVisibleColumns={this.props.defaultVisibleColumns}
         encodeFilterValue={encodeFilterValue}
-      >
-        {tableStateProps => (
-          <GraphQLReactTableWrapper query={userConProfilesQuery}>
-            {(graphQLProps, { data }) => (
-              <div>
-                <div className="d-flex">
-                  <div className="flex-grow-1">
-                    <ExportButton
-                      exportUrl={this.props.exportUrl}
-                      filtered={tableStateProps.filtered}
-                      sorted={tableStateProps.sorted}
-                      columns={this.getVisibleColumnIds()}
-                    />
-                  </div>
-                  <div>
-                    {this.renderColumnSelector()}
-                  </div>
-                </div>
-                <ReactTable
-                  {...tableStateProps}
-                  {...graphQLProps}
-                  className="-striped -highlight"
-                  data={
-                    ((data || {}).convention || { user_con_profiles_paginated: {} }).user_con_profiles_paginated.entries
-                  }
-                  pages={
-                    ((data || {}).convention || { user_con_profiles_paginated: {} }).user_con_profiles_paginated.total_pages
-                  }
-                  columns={this.getVisibleColumns(data)}
-                  getTrProps={(state, rowInfo) => ({
-                    style: { cursor: 'pointer' },
-                    onClick: () => {
-                      this.props.history.push(`${rowInfo.original.id}/edit`);
-                    },
-                  })}
-                  getTheadFilterThProps={() => ({ className: 'text-left' })}
-                />
-              </div>
-            )}
-          </GraphQLReactTableWrapper>
-        )}
-      </ReactRouterReactTableWrapper>
+        exportUrl={this.props.exportUrl}
+        getData={({ data }) => data.convention.user_con_profiles_paginated.entries}
+        getPages={({ data }) => data.convention.user_con_profiles_paginated.total_pages}
+        getPossibleColumns={this.getPossibleColumns}
+        query={userConProfilesQuery}
+
+        className="-striped -highlight"
+        getTrProps={(state, rowInfo) => ({
+          style: { cursor: 'pointer' },
+          onClick: () => {
+            this.props.history.push(`${rowInfo.original.id}/edit`);
+          },
+        })}
+        getTheadFilterThProps={() => ({ className: 'text-left' })}
+      />
     </div>
   )
 }
