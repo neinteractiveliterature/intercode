@@ -18,6 +18,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :volunteer_event_form, !Types::FormType
   field :filler_event_form, !Types::FormType
 
+  field :privilege_names, !types[!types.String] do
+    resolve -> (_convention, _args, _ctx) do
+      ['site_admin'] + UserConProfile::PRIV_NAMES.to_a
+    end
+  end
+
   field :cms_layouts, types[Types::CmsLayoutType] do
     resolve -> (convention, _args, _ctx) {
       AssociationLoader.for(Convention, :cms_layouts).load(convention)

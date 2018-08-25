@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 
+import ErrorDisplay from '../ErrorDisplay';
+
 import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
@@ -44,6 +46,7 @@ export class GraphQLReactTableProvider extends React.Component {
     this.state = {
       queryResult: null,
       loading: true,
+      error: null,
     };
   }
 
@@ -57,7 +60,7 @@ export class GraphQLReactTableProvider extends React.Component {
       const queryResult = await this.props.client.query({ query: this.props.query, variables });
       this.setState({ queryResult, loading: false });
     } catch (error) {
-      this.setState({ loading: false });
+      this.setState({ loading: false, error });
     }
   }
 
@@ -70,7 +73,7 @@ export class GraphQLReactTableProvider extends React.Component {
   });
 
   render = () => {
-    const { queryResult, loading } = this.state;
+    const { queryResult, loading, error } = this.state;
     if (!queryResult) {
       return null;
     }
@@ -94,6 +97,7 @@ export class GraphQLReactTableProvider extends React.Component {
           refetchFromTableState: this.refetchFromTableState,
         }}
       >
+        <ErrorDisplay graphQLError={error} />
         {this.props.children}
       </GraphQLReactTableContext.Provider>
     );
