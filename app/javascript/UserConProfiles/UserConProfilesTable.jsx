@@ -6,19 +6,27 @@ import { humanize, titleize } from 'inflected';
 import moment from 'moment-timezone';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
+import Form from '../Models/Form';
 import formatMoney from '../formatMoney';
+import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 const userConProfilesQuery = gql`
 query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
   convention {
     privilege_names
-
+    starts_at
+    ends_at
+    timezone_name
     ticket_name
 
     ticket_types {
       id
       name
+    }
+
+    user_con_profile_form {
+      form_api_json
     }
 
     user_con_profiles_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -32,6 +40,7 @@ query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [S
         name_inverted
         email
         privileges
+        form_response_attrs_json
 
         ticket {
           id
@@ -102,72 +111,94 @@ class UserConProfilesTable extends React.Component {
     }).isRequired,
   };
 
-  getPossibleColumns = data => [
-    {
-      Header: 'Name',
-      id: 'name',
-      accessor: userConProfile => userConProfile.name_inverted,
-    },
-    {
-      Header: 'Email',
-      id: 'email',
-      accessor: 'email',
-      Cell: ({ value }) => (
-        <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
-          {value}
-        </a>
-      ),
-    },
-    {
-      Header: humanize(data.convention.ticket_name || 'ticket'),
-      id: 'ticket',
-      accessor: 'ticket',
-      width: 150,
-      Cell: ({ value }) => formatTicketStatus(value),
-      Filter: ({ filter, onChange }) => (
-        <ChoiceSetFilter
-          name="ticketType"
-          choices={[
-            { label: 'Unpaid', value: 'none' },
-            ...(data.convention.ticket_types
-              .map(ticketType => ({
-                label: humanize(ticketType.name),
-                value: ticketType.id.toString(),
-              }))),
-          ]}
-          onChange={onChange}
-          filter={filter}
-        />
-      ),
-    },
-    {
-      Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
-      id: 'ticket_updated_at',
-      accessor: userConProfile => (userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null),
-      filterable: false,
-      Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
-    },
-    {
-      Header: 'Privileges',
-      id: 'privileges',
-      accessor: 'privileges',
-      Cell: ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', '),
-      Filter: ({ filter, onChange }) => (
-        <ChoiceSetFilter
-          name="privileges"
-          choices={[
-            ...(data.convention.privilege_names
-              .map(privilegeName => ({
-                label: humanize(privilegeName),
-                value: privilegeName,
-              }))),
-          ]}
-          onChange={onChange}
-          filter={filter}
-        />
-      ),
-    }
-  ];
+  getPossibleColumns = (data) => {
+    const form = Form.fromApiResponse(JSON.parse(data.convention.user_con_profile_form.form_api_json));
+
+    const columns = [
+      {
+        Header: 'Name',
+        id: 'name',
+        accessor: userConProfile => userConProfile.name_inverted,
+      },
+      {
+        Header: 'Email',
+        id: 'email',
+        accessor: 'email',
+        Cell: ({ value }) => (
+          <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
+            {value}
+          </a>
+        ),
+      },
+      {
+        Header: humanize(data.convention.ticket_name || 'ticket'),
+        id: 'ticket',
+        accessor: 'ticket',
+        width: 150,
+        Cell: ({ value }) => formatTicketStatus(value),
+        Filter: ({ filter, onChange }) => (
+          <ChoiceSetFilter
+            name="ticketType"
+            choices={[
+              { label: 'Unpaid', value: 'none' },
+              ...(data.convention.ticket_types
+                .map(ticketType => ({
+                  label: humanize(ticketType.name),
+                  value: ticketType.id.toString(),
+                }))),
+            ]}
+            onChange={onChange}
+            filter={filter}
+          />
+        ),
+      },
+      {
+        Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
+        id: 'ticket_updated_at',
+        accessor: userConProfile => (userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null),
+        filterable: false,
+        Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
+      },
+      {
+        Header: 'Privileges',
+        id: 'privileges',
+        accessor: 'privileges',
+        Cell: ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', '),
+        Filter: ({ filter, onChange }) => (
+          <ChoiceSetFilter
+            name="privileges"
+            choices={[
+              ...(data.convention.privilege_names
+                .map(privilegeName => ({
+                  label: humanize(privilegeName),
+                  value: privilegeName,
+                }))),
+            ]}
+            onChange={onChange}
+            filter={filter}
+          />
+        ),
+      },
+    ];
+
+    form.getAllItems().forEach((formItem) => {
+      const identifier = formItem.get('identifier');
+      if (!identifier || identifier === 'first_name' || identifier === 'last_name' || columns.some(column => column.id === identifier)) {
+        return;
+      }
+
+      columns.push({
+        Header: formItem.get('admin_description') || humanize(identifier),
+        id: identifier,
+        accessor: userConProfile => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
+        Cell: ({ value }) => <FormItemDisplay formItem={formItem} value={value} convention={data.convention} />,
+        sortable: false,
+        filterable: false,
+      });
+    });
+
+    return columns;
+  }
 
   render = () => (
     <div className="mb-4">

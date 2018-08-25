@@ -68,9 +68,9 @@ OR lower(user_con_profiles.first_name) like :value",
   def sql_order_for_sort_field(sort_field, direction)
     case sort_field
     when :name
-      "last_name #{direction}, first_name #{direction}"
+      "lower(last_name) #{direction}, lower(first_name) #{direction}"
     when :email
-      "users.email #{direction}"
+      "lower(users.email) #{direction}"
     when :ticket
       "ticket_types.name #{direction}, tickets.payment_amount_cents #{direction}"
     when :ticket_updated_at

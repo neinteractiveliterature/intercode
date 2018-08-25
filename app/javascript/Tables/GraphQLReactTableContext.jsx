@@ -84,7 +84,7 @@ export class GraphQLReactTableProvider extends React.Component {
   render = () => {
     const { queryResult, loading, error } = this.state;
     if (!queryResult) {
-      return null;
+      return <ErrorDisplay graphQLError={error} />;
     }
 
     const dataAvailable = !(loading || queryResult.error);
