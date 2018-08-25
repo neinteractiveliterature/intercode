@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
+import { debounce } from 'lodash';
 
 import ErrorDisplay from '../ErrorDisplay';
 
@@ -46,11 +47,12 @@ export class GraphQLReactTableProvider extends React.Component {
     this.state = {
       queryResult: null,
       loading: true,
+      pages: 0,
       error: null,
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     this.fetchData(this.props.variables);
   }
 
@@ -58,19 +60,26 @@ export class GraphQLReactTableProvider extends React.Component {
     this.setState({ loading: true });
     try {
       const queryResult = await this.props.client.query({ query: this.props.query, variables });
-      this.setState({ queryResult, loading: false });
+      this.setState({ queryResult, pages: this.props.getPages(queryResult), loading: false });
     } catch (error) {
       this.setState({ loading: false, error });
     }
   }
 
-  fetchFromTableState = tableState => this.fetchData({
+  // eslint-disable-next-line react/sort-comp
+  fetchDataDebounced = debounce(
+    this.fetchData,
+    100,
+    { maxWait: 1000, leading: true, trailing: true },
+  )
+
+  fetchFromTableState = tableState => this.fetchDataDebounced({
     ...this.props.variables,
     page: tableState.page + 1,
     perPage: tableState.pageSize,
     filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
     sort: reactTableSortToTableResultsSort(tableState.sorted),
-  });
+  })
 
   render = () => {
     const { queryResult, loading, error } = this.state;
@@ -82,7 +91,7 @@ export class GraphQLReactTableProvider extends React.Component {
 
     const reactTableProps = {
       data: dataAvailable ? this.props.getData(queryResult) : [],
-      pages: dataAvailable ? this.props.getPages(queryResult) : 0,
+      pages: this.state.pages, // avoid flash of 0 during page transitions
       manual: true,
       filterable: true,
       loading,

@@ -43,7 +43,7 @@ export class ReactRouterReactTableProvider extends React.PureComponent {
 
     Array.from(params.entries()).forEach(([key, value]) => {
       if (key === 'page') {
-        state.page = Number.parseInt(value, 10);
+        state.page = Number.parseInt(value, 10) - 1;
         return;
       }
 
@@ -83,8 +83,8 @@ export class ReactRouterReactTableProvider extends React.PureComponent {
 
     const encodeFilterValue = this.props.encodeFilterValue || ((field, value) => value);
 
-    if (page != null && page > 0) {
-      params.set('page', page);
+    if (page != null) {
+      params.set('page', page + 1);
     }
 
     if (pageSize != null && pageSize !== 20) {
@@ -136,8 +136,8 @@ export class ReactRouterReactTableProvider extends React.PureComponent {
             sorted: tableState.sorted,
             onPageChange: (page) => { this.updateSearch({ page }); },
             onPageSizeChange: (pageSize) => { this.updateSearch({ pageSize }); },
-            onFilteredChange: (filtered) => { this.updateSearch({ filtered }); },
-            onSortedChange: (sorted) => { this.updateSearch({ sorted }); },
+            onFilteredChange: (filtered) => { this.updateSearch({ filtered, page: 0 }); },
+            onSortedChange: (sorted) => { this.updateSearch({ sorted, page: 0 }); },
           }),
         }}
       >
