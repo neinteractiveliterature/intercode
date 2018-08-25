@@ -16,34 +16,6 @@ class UserConProfilesController < ApplicationController
   # GET /user_con_profiles
   def index
     @page_title = 'Attendees'
-
-    grid_params = params[:user_con_profiles_grid]&.permit! || {
-      order: 'name',
-      ticket_status: convention.ticket_types.pluck(:id).map(&:to_s).join(',')
-    }
-    @user_con_profiles_grid = UserConProfilesGrid.new(grid_params) do |scope|
-      scope = scope.accessible_by(current_ability).where(convention_id: convention.id)
-      respond_to do |format|
-        format.html { scope.paginate(page: params[:page], per_page: params[:per_page]) }
-        format.csv { scope }
-      end
-    end
-
-    convention.user_con_profile_form.form_items.each do |form_item|
-      next unless form_item.identifier
-      next if %w[first_name last_name].include?(form_item.identifier)
-
-      @user_con_profiles_grid.column(form_item.identifier) do |user_con_profile|
-        user_con_profile.read_form_response_attribute(form_item.identifier)
-      end
-    end
-
-    respond_to do |format|
-      format.html {}
-      format.csv do
-        send_data @user_con_profiles_grid.to_csv, filename: "#{@convention.name} - Attendees.csv"
-      end
-    end
   end
 
   # GET /user_con_profiles/1

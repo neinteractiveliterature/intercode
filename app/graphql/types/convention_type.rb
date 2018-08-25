@@ -122,23 +122,8 @@ Types::ConventionType = GraphQL::ObjectType.define do
         .includes(order_entries: [:product, :product_variant])
 
       Tables::OrdersTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
-        .scoped
-        .paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+        .paginate(page: args[:page], per_page: args[:per_page])
     end
-  end
-
-  connection :user_con_profiles, Types::UserConProfileType.connection_type, max_page_size: 1000 do
-    argument :name, types.String
-
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserConProfile.new(convention: convention))
-    end
-
-    resolve ->(convention, args, ctx) {
-      grid_args = args.to_h.symbolize_keys.except(:first, :last, :after, :before)
-      grid = UserConProfilesGrid.new(grid_args)
-      grid.assets.accessible_by(ctx[:current_ability]).where(convention_id: convention.id)
-    }
   end
 
   field :user_con_profiles_paginated, !Types::UserConProfilesPaginationType do
@@ -157,7 +142,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
         ctx[:current_ability],
         args[:filters].to_h,
         args[:sort]
-      ).scoped.paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+      ).paginate(page: args[:page], per_page: args[:per_page])
     end
   end
 end

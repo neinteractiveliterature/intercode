@@ -23,6 +23,10 @@ class Tables::TableResultsPresenter
     apply_sort(apply_filters(base_scope))
   end
 
+  def paginate(page: nil, per_page: nil)
+    scoped.paginate(page: page || 1, per_page: [per_page || 20, 100].min)
+  end
+
   def fields
     raise 'Subclasses must implement #fields!'
   end
