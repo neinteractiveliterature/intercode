@@ -1,9 +1,11 @@
 class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresenter
+  include MoneyRails::ActionViewExtension
+
+  attr_reader :convention
+
   def self.for_convention(convention, current_ability, *args)
     new(convention, convention.user_con_profiles.accessible_by(current_ability), *args)
   end
-
-  attr_reader :convention
 
   def initialize(convention, *args)
     @convention = convention
@@ -16,8 +18,8 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
       Tables::TableResultsPresenter::Field.new(
-        :ticket_status_changed_at,
-        "#{convention.ticket_name.humanize} status change"
+        :ticket_updated_at,
+        "#{convention.ticket_name.humanize} status changed"
       ),
       Tables::TableResultsPresenter::Field.new(:privileges, 'Privileges')
     ]
@@ -35,8 +37,18 @@ OR lower(user_con_profiles.first_name) like :value",
       )
     when :email
       scope.joins(:user).where('lower(users.email) like :value', value: "%#{value.downcase}%")
-    when :ticket_type_id
-      scope.joins(:ticket).where(tickets: { ticket_type_id: value })
+    when :ticket
+      ticket_type_ids = value.map do |id_value|
+        if id_value == 'none'
+          nil
+        else
+          id_value.to_i
+        end
+      end
+
+      scope.left_joins(:ticket).where(tickets: { ticket_type_id: ticket_type_ids })
+    when :privileges
+      apply_privileges_filter(scope, value)
     else
       scope
     end
@@ -46,6 +58,8 @@ OR lower(user_con_profiles.first_name) like :value",
     case sort_field
     when :email
       scope.joins(:user)
+    when :ticket
+      scope.joins(ticket: :ticket_type)
     else
       scope
     end
@@ -57,33 +71,64 @@ OR lower(user_con_profiles.first_name) like :value",
       "last_name #{direction}, first_name #{direction}"
     when :email
       "users.email #{direction}"
+    when :ticket
+      "ticket_types.name #{direction}, tickets.payment_amount_cents #{direction}"
+    when :ticket_updated_at
+    when :privileges
+      clauses = UserConProfile::PRIV_NAMES.map do |priv_name|
+        "#{priv_name} #{invert_sort_direction direction}"
+      end
+
+      clauses.join(', ')
     else
       super
     end
   end
-#
-#   def csv_scope
-#     scoped.includes(user_con_profile: :user)
-#   end
-#
-#   def generate_csv_cell(field, signup)
-#     case field.id
-#     when :name then signup.user_con_profile.name_inverted
-#     when :bucket then describe_bucket(signup)
-#     when :age then signup.user_con_profile.age_as_of(signup.run.starts_at)
-#     when :email then signup.user_con_profile.email
-#     else signup.public_send(field.id)
-#     end
-#   end
-#
-#   def describe_bucket(signup)
-#     bucket = signup.bucket
-#     requested_bucket = signup.requested_bucket
-#
-#     return bucket.name if bucket && requested_bucket && bucket.name == requested_bucket.name
-#     return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})" if requested_bucket
-#     return "#{bucket.name} (no preference)" if bucket
-#
-#     ''
-#   end
+
+  def apply_privileges_filter(scope, value)
+    user_con_profile_privileges = value.select { |priv| UserConProfile::PRIV_NAMES.include?(priv) }
+
+    if user_con_profile_privileges.any?
+      priv_scopes = user_con_profile_privileges.map do |priv|
+        UserConProfile.joins(:user).where(priv => true)
+      end
+      if value.include?('site_admin')
+        priv_scopes << UserConProfile.joins(:user).where(users: { site_admin: true })
+      end
+      complete_clause = priv_scopes.reduce do |working_scope, priv_scope|
+        working_scope.or(priv_scope)
+      end
+      scope.where(id: complete_clause.select(:id))
+    elsif value.include?('site_admin')
+      scope.joins(:user).where(users: { site_admin: true })
+    else
+      scope
+    end
+  end
+
+  def csv_scope
+    scoped.includes(:user, ticket: :ticket_type)
+  end
+
+  def generate_csv_cell(field, user_con_profile)
+    case field.id
+    when :name then user_con_profile.name_inverted
+    when :ticket then describe_ticket(user_con_profile.ticket)
+    when :ticket_updated_at then user_con_profile.ticket&.updated_at&.iso8601
+    when :privileges then user_con_profile.privileges.map(&:titleize).sort.join(', ')
+    else user_con_profile.public_send(field.id)
+    end
+  end
+
+  def describe_ticket(ticket)
+    return 'Unpaid' unless ticket
+
+    status_parts = []
+    status_parts << ticket.ticket_type.name.humanize
+
+    payment_amount = ticket.payment_amount
+    status_parts << humanized_money_with_symbol(payment_amount) if payment_amount.try(:>, 0)
+
+    status_parts.compact.join(' ')
+  end
 end

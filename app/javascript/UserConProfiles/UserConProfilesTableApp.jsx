@@ -9,7 +9,10 @@ const UserConProfilesTableApp = ({
   exportUrl,
 }) => (
   <BrowserRouter basename={basename}>
-    <UserConProfilesTable exportUrl={exportUrl} defaultVisibleColumns={['name', 'email']} />
+    <UserConProfilesTable
+      exportUrl={exportUrl}
+      defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']}
+    />
   </BrowserRouter>
 );
 

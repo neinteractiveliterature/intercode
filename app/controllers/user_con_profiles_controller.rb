@@ -1,4 +1,6 @@
 class UserConProfilesController < ApplicationController
+  include Concerns::SendCsv
+
   # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be
   # @user_con_profile, which is unsafe for us to use because ApplicationController uses it to mean
   # the current user, and we use that for authorization checking.  So instead, we'll call the user
@@ -62,6 +64,29 @@ class UserConProfilesController < ApplicationController
   def become
     sign_in @subject_profile.user
     redirect_to root_url, notice: "You are now signed in as #{@subject_profile.user.name}."
+  end
+
+  def export
+    respond_to do |format|
+      format.csv do
+        table = Tables::UserConProfilesTableResultsPresenter.for_convention(
+          convention,
+          current_ability,
+          params[:filters]&.to_unsafe_h,
+          params[:sort],
+          params[:columns]
+        )
+        filter_descriptions = table.filter_descriptions
+        name_suffix = if filter_descriptions.any?
+          " (#{filter_descriptions.map { |desc| desc.gsub(':', ' -') }.join(', ')})"
+        else
+          ''
+        end
+
+        configure_csv_headers("#{convention.name} Attendees#{name_suffix}.csv")
+        self.response_body = table.csv_enumerator
+      end
+    end
   end
 
   private
