@@ -69,22 +69,16 @@ class UserConProfilesController < ApplicationController
   def export
     respond_to do |format|
       format.csv do
-        table = Tables::UserConProfilesTableResultsPresenter.for_convention(
-          convention,
-          current_ability,
-          params[:filters]&.to_unsafe_h,
-          params[:sort],
-          params[:columns]
+        send_table_presenter_csv(
+          Tables::UserConProfilesTableResultsPresenter.for_convention(
+            convention,
+            current_ability,
+            params[:filters]&.to_unsafe_h,
+            params[:sort],
+            params[:columns]
+          ),
+          "#{convention.name} Attendees"
         )
-        filter_descriptions = table.filter_descriptions
-        name_suffix = if filter_descriptions.any?
-          " (#{filter_descriptions.map { |desc| desc.gsub(':', ' -') }.join(', ')})"
-        else
-          ''
-        end
-
-        configure_csv_headers("#{convention.name} Attendees#{name_suffix}.csv")
-        self.response_body = table.csv_enumerator
       end
     end
   end
