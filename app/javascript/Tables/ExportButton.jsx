@@ -8,6 +8,10 @@ import {
 } from './TableUtils';
 
 function dataToKeyPathValuePairs(data, prependKeys = []) {
+  if (data == null) {
+    return [];
+  }
+
   if (typeof data === 'string' || typeof data === 'number') {
     return [[prependKeys, data]];
   }

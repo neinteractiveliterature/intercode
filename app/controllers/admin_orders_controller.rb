@@ -5,20 +5,14 @@ class AdminOrdersController < ApplicationController
   def export
     respond_to do |format|
       format.csv do
-        table = Tables::OrdersTableResultsPresenter.for_convention(
-          convention,
-          params[:filters]&.to_unsafe_h,
-          params[:sort]
+        send_table_presenter_csv(
+          Tables::OrdersTableResultsPresenter.for_convention(
+            convention,
+            params[:filters]&.to_unsafe_h,
+            params[:sort]
+          ),
+          "#{convention.name} Orders"
         )
-        filter_descriptions = table.filter_descriptions
-        name_suffix = if filter_descriptions.any?
-          " (#{filter_descriptions.map { |desc| desc.gsub(':', ' -') }.join(', ')})"
-        else
-          ''
-        end
-
-        configure_csv_headers("#{convention.name} Orders#{name_suffix}.csv")
-        self.response_body = table.csv_enumerator
       end
     end
   end

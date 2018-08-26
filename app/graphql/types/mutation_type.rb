@@ -259,6 +259,10 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### Ticket
 
+  field :deleteTicket, Mutations::DeleteTicket.field do
+    guard(guard_for_model_with_id(Ticket, :destroy))
+  end
+
   field :purchaseTicket, Mutations::PurchaseTicket.field do
     guard -> (_obj, _args, ctx) do
       ctx[:user_con_profile]
@@ -302,5 +306,9 @@ Types::MutationType = GraphQL::ObjectType.define do
 
       ctx[:current_ability].can?(:update, user_con_profile)
     }
+  end
+
+  field :deleteUserConProfile, Mutations::DeleteUserConProfile.field do
+    guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
 end

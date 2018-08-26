@@ -19,7 +19,7 @@ class DateItemDisplay extends React.PureComponent {
 
   render = () => (
     <React.Fragment>
-      {moment.tz(this.props.value, this.props.convention.timezone_name).format('dddd, MMMM D YYYY')}
+      {moment.tz(this.props.value, this.props.convention.timezone_name).format('dddd, MMMM D, YYYY')}
     </React.Fragment>
   )
 }

@@ -18,6 +18,18 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :volunteer_event_form, !Types::FormType
   field :filler_event_form, !Types::FormType
 
+  field :privilege_names, !types[!types.String] do
+    resolve -> (_convention, _args, _ctx) do
+      ['site_admin'] + UserConProfile::PRIV_NAMES.to_a
+    end
+  end
+
+  field :mail_privilege_names, !types[!types.String] do
+    resolve -> (_convention, _args, _ctx) do
+      UserConProfile::MAIL_PRIV_NAMES
+    end
+  end
+
   field :cms_layouts, types[Types::CmsLayoutType] do
     resolve -> (convention, _args, _ctx) {
       AssociationLoader.for(Convention, :cms_layouts).load(convention)
@@ -116,22 +128,27 @@ Types::ConventionType = GraphQL::ObjectType.define do
         .includes(order_entries: [:product, :product_variant])
 
       Tables::OrdersTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
-        .scoped
-        .paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+        .paginate(page: args[:page], per_page: args[:per_page])
     end
   end
 
-  connection :user_con_profiles, Types::UserConProfileType.connection_type, max_page_size: 1000 do
-    argument :name, types.String
+  field :user_con_profiles_paginated, !Types::UserConProfilesPaginationType do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::UserConProfileFiltersInputType
+    argument :sort, types[Types::SortInputType]
 
     guard ->(convention, _args, ctx) do
       ctx[:current_ability].can?(:read, UserConProfile.new(convention: convention))
     end
 
-    resolve ->(convention, args, ctx) {
-      grid_args = args.to_h.symbolize_keys.except(:first, :last, :after, :before)
-      grid = UserConProfilesGrid.new(grid_args)
-      grid.assets.accessible_by(ctx[:current_ability]).where(convention_id: convention.id)
-    }
+    resolve ->(convention, args, ctx) do
+      Tables::UserConProfilesTableResultsPresenter.for_convention(
+        convention,
+        ctx[:current_ability],
+        args[:filters].to_h,
+        args[:sort]
+      ).paginate(page: args[:page], per_page: args[:per_page])
+    end
   end
 end

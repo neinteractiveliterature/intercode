@@ -71,8 +71,7 @@ Types::RunType = GraphQL::ObjectType.define do
       scope = run.signups
 
       Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
-        .scoped
-        .paginate(page: args[:page] || 1, per_page: args[:per_page] || 20)
+        .paginate(page: args[:page], per_page: args[:per_page])
     end
   end
 end

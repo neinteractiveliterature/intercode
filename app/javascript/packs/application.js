@@ -62,7 +62,9 @@ import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
+import UserConProfileAdminDisplay from '../UserConProfiles/UserConProfileAdminDisplay';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
+import UserConProfilesAdmin from '../UserConProfiles/UserConProfilesAdmin';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
@@ -91,7 +93,9 @@ WebpackerReact.setup({
   TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
   TicketTypeAdmin: StandaloneGraphQLComponent(TicketTypeAdmin),
   TicketPurchaseForm: StandaloneGraphQLComponent(TicketPurchaseForm),
+  UserConProfileAdminDisplay: StandaloneGraphQLComponent(UserConProfileAdminDisplay),
   UserConProfileSignupsCard: StandaloneGraphQLComponent(UserConProfileSignupsCard),
+  UserConProfilesAdmin: StandaloneGraphQLComponent(UserConProfilesAdmin),
   WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
 });
 

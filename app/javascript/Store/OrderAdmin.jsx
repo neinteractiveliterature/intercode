@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
-import ReactTable from 'react-table';
 
 import AdminOrderModal from './AdminOrderModal';
 import { adminOrdersQuery } from './queries';
 import formatMoney from '../formatMoney';
-import GraphQLReactTableWrapper from '../Tables/GraphQLReactTableWrapper';
-import ReactRouterReactTableWrapper from '../Tables/ReactRouterReactTableWrapper';
-import ExportButton from '../Tables/ExportButton';
+import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 class OrderAdmin extends React.Component {
   static propTypes = {
@@ -43,75 +40,52 @@ class OrderAdmin extends React.Component {
     );
   }
 
+  getPossibleColumns = data => [
+    {
+      Header: 'User',
+      id: 'user_name',
+      accessor: order => order.user_con_profile.name_without_nickname,
+    },
+    { Header: 'Status', id: 'status', accessor: 'status' },
+    {
+      Header: 'Submitted',
+      id: 'submitted_at',
+      accessor: 'submitted_at',
+      filterable: false,
+      Cell: props => (
+        props.value
+          ? moment(props.value).tz(data.convention.timezone_name)
+            .format('MMM D, YYYY h:mma')
+          : ''
+      ),
+    },
+    {
+      Header: 'Products',
+      id: 'describe_products',
+      filterable: false,
+      sortable: false,
+      accessor: order => order.order_entries.map(entry => entry.describe_products),
+      Cell: props => arrayToSentence(props.value),
+    },
+    {
+      Header: 'Price',
+      id: 'total_price',
+      accessor: 'total_price',
+      filterable: false,
+      sortable: false,
+      Cell: props => formatMoney(props.value),
+    },
+  ]
+
   render = () => (
     <div className="mb-4">
-      <ReactRouterReactTableWrapper>
-        {tableStateProps => (
-          <GraphQLReactTableWrapper query={adminOrdersQuery}>
-            {(reactTableProps, { data }) => (
-              <div>
-                <ExportButton
-                  exportUrl={this.props.exportUrl}
-                  filtered={tableStateProps.filtered}
-                  sorted={tableStateProps.sorted}
-                />
-                <ReactTable
-                  {...tableStateProps}
-                  {...reactTableProps}
-                  className="-striped -highlight"
-                  data={(data.convention || { orders_paginated: {} }).orders_paginated.entries}
-                  pages={(data.convention || { orders_paginated: {} }).orders_paginated.total_pages}
-                  columns={[
-                    {
-                      Header: 'User',
-                      id: 'user_name',
-                      accessor: order => order.user_con_profile.name_without_nickname,
-                    },
-                    { Header: 'Status', accessor: 'status' },
-                    {
-                      Header: 'Submitted',
-                      accessor: 'submitted_at',
-                      filterable: false,
-                      Cell: props => (
-                        props.value
-                          ? moment(props.value).tz(data.convention.timezone_name)
-                            .format('MMM D, YYYY h:mma')
-                          : ''
-                      ),
-                    },
-                    {
-                      Header: 'Products',
-                      id: 'describe_products',
-                      filterable: false,
-                      sortable: false,
-                      accessor: order => order.order_entries.map(entry => entry.describe_products),
-                      Cell: props => arrayToSentence(props.value),
-                    },
-                    {
-                      Header: 'Price',
-                      accessor: 'total_price',
-                      filterable: false,
-                      sortable: false,
-                      Cell: props => formatMoney(props.value),
-                    },
-                  ]}
-                  getTrProps={(state, rowInfo) => ({
-                    style: { cursor: 'pointer' },
-                    onClick: (event, handleOriginal) => {
-                      if (handleOriginal) {
-                        handleOriginal();
-                      }
-
-                      this.setState({ editingOrderId: rowInfo.original.id });
-                    },
-                  })}
-                />
-                {this.renderEditModal(data)}
-              </div>
-            )}
-          </GraphQLReactTableWrapper>
-        )}
-      </ReactRouterReactTableWrapper>
+      <ReactTableWithTheWorks
+        exportUrl={this.props.exportUrl}
+        getData={({ data }) => data.convention.orders_paginated.entries}
+        getPages={({ data }) => data.convention.orders_paginated.total_pages}
+        getPossibleColumns={this.getPossibleColumns}
+        query={adminOrdersQuery}
+      />
     </div>
   )
 }
