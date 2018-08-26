@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class MultipleChoiceItemInput extends React.PureComponent {
+class MultipleChoiceItemDisplay extends React.PureComponent {
   static propTypes = {
     formItem: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -15,8 +15,10 @@ class MultipleChoiceItemInput extends React.PureComponent {
     value: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  isValueOther = value => this.props.formItem.properties.choices
-    .none(choice => choice.value === value)
+  isValueOther = value => !(
+    this.props.formItem.properties.choices
+      .some(choice => choice.value === value)
+  )
 
   render = () => {
     if (Array.isArray(this.props.value)) {
@@ -44,4 +46,4 @@ class MultipleChoiceItemInput extends React.PureComponent {
   }
 }
 
-export default MultipleChoiceItemInput;
+export default MultipleChoiceItemDisplay;

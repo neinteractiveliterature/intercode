@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import moment from 'moment-timezone';
-import { dasherize, underscore } from 'inflected';
 
 import { formatSignupStatus } from './SignupUtils';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';

@@ -23,4 +23,8 @@ const QueryWithStateDisplay = ({ children, ...props }) => (
   </Query>
 );
 
+QueryWithStateDisplay.propTypes = {
+  children: PropTypes.func.isRequired,
+};
+
 export default QueryWithStateDisplay;

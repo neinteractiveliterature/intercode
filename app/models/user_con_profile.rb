@@ -103,8 +103,12 @@ class UserConProfile < ApplicationRecord
     [city, state].reject(&:blank?).join(', ')
   end
 
+  def user_con_profile_privileges
+    PRIV_NAMES.select { |priv| send(priv) }
+  end
+
   def privileges
-    user.privileges + PRIV_NAMES.select { |priv| send(priv) }
+    user.privileges + user_con_profile_privileges
   end
 
   def privileges=(privileges)

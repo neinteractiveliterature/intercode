@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
+import Confirm from './ModalDialogs/Confirm';
+
 import buildApolloClient from './buildApolloClient';
 
 export default (WrappedComponent, authenticityTokenProp = 'authenticityToken') => {
@@ -17,7 +19,9 @@ export default (WrappedComponent, authenticityTokenProp = 'authenticityToken') =
 
     render = () => (
       <ApolloProvider client={this.client}>
-        <WrappedComponent {...this.props} />
+        <Confirm>
+          <WrappedComponent {...this.props} />
+        </Confirm>
       </ApolloProvider>
     )
   };

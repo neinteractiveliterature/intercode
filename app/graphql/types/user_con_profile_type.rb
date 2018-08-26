@@ -7,7 +7,13 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
 
   field :id, !types.Int
   field :convention, Types::ConventionType
-  field :privileges, types[types.String]
+  field :privileges, types[types.String] do
+    resolve -> (obj, _args, _ctx) do
+      AssociationLoader.for(UserConProfile, :user).load(obj).then do |user|
+        user.privileges + obj.user_con_profile_privileges
+      end
+    end
+  end
   field :name, types.String
   field :name_without_nickname, types.String
   field :name_inverted, types.String

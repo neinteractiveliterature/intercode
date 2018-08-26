@@ -6,17 +6,21 @@ const ErrorDisplay = ({ stringError, graphQLError }) => {
 
   if (graphQLError) {
     try {
-      const errorMessages = graphQLError.graphQLErrors.map((error, i) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <li key={i}>{error.message}</li>
-      ));
+      if (graphQLError.graphQLErrors.length > 0) {
+        const errorMessages = graphQLError.graphQLErrors.map((error, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <li key={i}>{error.message}</li>
+        ));
 
-      displayContents = (
-        <ul className="list-unstyled m-0">{errorMessages}</ul>
-      );
+        displayContents = (
+          <ul className="list-unstyled m-0">{errorMessages}</ul>
+        );
+      } else {
+        displayContents = <pre>{graphQLError.message}</pre>;
+      }
     } catch (formattingError) {
       if (graphQLError.message) {
-        displayContents = graphQLError.message;
+        displayContents = <pre>{graphQLError.message}</pre>;
       } else {
         displayContents = JSON.stringify(graphQLError);
       }

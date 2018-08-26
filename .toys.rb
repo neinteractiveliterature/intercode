@@ -33,3 +33,13 @@ tool 'pull_production_db' do
     sh 'bin/pull_production_database'
   end
 end
+
+tool 'cleanup_branches' do
+  desc 'Clean up local branches that were deleted or merged in origin'
+  include :exec, exit_on_nonzero_status: true
+
+  def run
+    sh 'git fetch origin --prune'
+    sh 'git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d'
+  end
+end

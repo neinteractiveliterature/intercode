@@ -40,8 +40,10 @@ OR lower(user_con_profiles.first_name) like :value",
 
   def expand_scope_for_sort(scope, sort_field)
     case sort_field
-    when :name, :email, :age
+    when :name, :age
       scope.joins(:user_con_profile)
+    when :email
+      scope.joins(user_con_profile: :user)
     else
       scope
     end
@@ -52,7 +54,7 @@ OR lower(user_con_profiles.first_name) like :value",
     when :name
       "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
     when :email
-      "user_con_profiles.email #{direction}"
+      "users.email #{direction}"
     when :age
       "user_con_profiles.birth_date #{invert_sort_direction direction}"
     when :bucket
