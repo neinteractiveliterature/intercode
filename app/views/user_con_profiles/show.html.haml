@@ -1,7 +1,0 @@
-= react_component 'UserConProfileAdminDisplay', authenticityToken: graphql_authenticity_token,
-  userConProfileId: @subject_profile.id,
-  editUserConProfileUrl: edit_user_con_profile_path(@subject_profile),
-  becomeUserConProfileUrl: become_user_con_profile_path(@subject_profile),
-  becomeUserConProfileAuthenticityToken: form_authenticity_token(form_options: { action: become_user_con_profile_path(@subject_profile), method: 'POST' }),
-  editTicketUrl: edit_user_con_profile_admin_ticket_path(@subject_profile),
-  newTicketUrl: new_user_con_profile_admin_ticket_path(@subject_profile)
