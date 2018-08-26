@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
 
 import { ageAsOf } from '../TimeUtils';
-import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
+import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { formatBucket } from './SignupUtils';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
@@ -120,12 +120,11 @@ class RunSignupsTable extends React.Component {
       accessor: 'state',
       width: 130,
       Filter: ({ filter, onChange }) => (
-        <ChoiceSet
+        <ChoiceSetFilter
           name="state"
           choices={STATE_OPTIONS}
-          value={(filter || {}).value || []}
-          onChange={newValue => onChange(newValue)}
-          multiple
+          onChange={onChange}
+          filter={filter}
         />
       ),
       Cell: props => (
@@ -145,7 +144,7 @@ class RunSignupsTable extends React.Component {
       accessor: signup => signup.bucket_key,
       Cell: ({ original }) => formatBucket(original, data.event),
       Filter: ({ filter, onChange }) => (
-        <ChoiceSet
+        <ChoiceSetFilter
           name="bucket"
           choices={(
             (data || {}).event
@@ -153,9 +152,8 @@ class RunSignupsTable extends React.Component {
                 .map(bucket => ({ label: bucket.name, value: bucket.key }))
               : []
             )}
-          value={(filter || {}).value || []}
-          onChange={newValue => onChange(newValue)}
-          multiple
+          onChange={onChange}
+          filter={filter}
         />
       ),
     },
@@ -201,7 +199,7 @@ class RunSignupsTable extends React.Component {
             this.props.history.push(`${rowInfo.original.id}/edit`);
           },
         })}
-        getTheadFilterThProps={() => ({ className: 'text-left' })}
+        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
     </div>
   )
