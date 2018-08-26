@@ -12,25 +12,10 @@ class UserConProfilesController < ApplicationController
     through: :convention,
     through_association: :user_con_profiles
   before_action :authorize_admin_profiles
+  skip_before_action :verify_authenticity_token, only: [:become]
 
-  # GET /user_con_profiles
   def index
     @page_title = 'Attendees'
-  end
-
-  # GET /user_con_profiles/1
-  def show
-    @page_title = @subject_profile.name
-  end
-
-  # GET /user_con_profiles/1/edit
-  def edit
-  end
-
-  # DELETE /user_con_profiles/1
-  def destroy
-    @subject_profile.destroy
-    redirect_to user_con_profiles_url, notice: 'Profile was successfully destroyed.'
   end
 
   def become
@@ -56,16 +41,6 @@ class UserConProfilesController < ApplicationController
   end
 
   private
-
-  # Only allow a trusted parameter "white list" through.
-  def subject_profile_params
-    params.require(:subject_profile).permit(
-      :email,
-      :first_name,
-      :last_name,
-      *UserConProfile::PRIV_NAMES
-    )
-  end
 
   # Only allow people who can update arbitrary user con profiles for this convention to access this
   # controller. In other words, users shouldn't be able to access even their own profile here
