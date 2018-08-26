@@ -39,8 +39,6 @@ class Convention < ApplicationRecord
   validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
 
-  mount_uploader :banner_image, BannerImageUploader
-
   def started?
     starts_at && starts_at <= Time.now
   end
