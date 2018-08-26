@@ -216,10 +216,10 @@ class UserConProfilesTable extends React.Component {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            this.props.history.push(`${rowInfo.original.id}/edit`);
+            this.props.history.push(`${rowInfo.original.id}`);
           },
         })}
-        getTheadFilterThProps={() => ({ className: 'text-left' })}
+        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
     </div>
   )
