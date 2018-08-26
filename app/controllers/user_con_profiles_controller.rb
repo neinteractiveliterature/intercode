@@ -12,7 +12,7 @@ class UserConProfilesController < ApplicationController
     through: :convention,
     through_association: :user_con_profiles
   before_action :authorize_admin_profiles
-  skip_before_action :verify_authenticity_token, only: [:become]
+  skip_before_action :verify_authenticity_token, only: [:become] unless Rails.env.test?
 
   def index
     @page_title = 'Attendees'
