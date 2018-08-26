@@ -10,6 +10,8 @@ Types::TicketType = GraphQL::ObjectType.define do
     }
   end
   field :payment_amount, Types::MoneyType
+  field :payment_note, types.String
+  field :charge_id, types.String
   field :provided_by_event, Types::EventType do
     resolve -> (obj, _args, _ctx) {
       RecordLoader.for(Event).load(obj.provided_by_event_id)

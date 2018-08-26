@@ -342,7 +342,7 @@ class EditSignup extends React.Component {
   }
 
   render = () => (
-    <Confirm>
+    <React.Fragment>
       <h1 className="mb-4">
 Edit signup for
         {this.props.data.signup.run.event.title}
@@ -369,7 +369,7 @@ Edit signup for
         onComplete={() => this.setState({ changingSignupBucket: false })}
         onCancel={() => this.setState({ changingSignupBucket: false })}
       />
-    </Confirm>
+    </React.Fragment>
   )
 }
 
