@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { Manager, Reference, Popper } from 'react-popper';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 
@@ -38,51 +40,88 @@ class ChoiceSetFilter extends React.Component {
 
   collapse = () => { this.setState({ collapsed: true }); }
 
+  renderHeaderCaption = () => {
+    if (!this.state.collapsed) {
+      return null;
+    }
+
+    const filterValue = (this.props.filter || {}).value || [];
+
+    if (filterValue.length > 0) {
+      return sortChoices(filterValue.map(
+        item => (
+          this.props.choices.find(choice => choice.value === item)
+          || { label: item }
+        ),
+      )).map(({ label }) => <span className="mr-2">{label}</span>);
+    }
+
+    return <span>Any</span>;
+  }
+
+  renderHeader = () => (
+    <div className="card-header p-1 d-flex">
+      <div className="flex-grow-1 d-flex flex-wrap" style={{ overflow: 'hidden' }}>
+        {this.renderHeaderCaption()}
+      </div>
+      <button type="button" className="btn btn-outline-secondary btn-sm py-0 align-self-start" onClick={this.state.collapsed ? this.uncollapse : this.collapse}>
+        <i className={classNames('fa', { 'fa-caret-down': this.state.collapsed, 'fa-caret-up': !this.state.collapsed })} />
+      </button>
+    </div>
+  )
+
   render = () => {
     const { filter, choices, ...otherProps } = this.props;
 
     const filterValue = (filter || {}).value || [];
 
-    if (this.state.collapsed) {
-      return (
-        <div className="card">
-          <div className="card-header p-1 d-flex">
-            <div className="flex-grow-1 d-flex flex-wrap" style={{ overflow: 'hidden' }}>
-              {
-                (filterValue.length > 0)
-                  ? sortChoices(filterValue.map(
-                    item => (
-                      choices.find(choice => choice.value === item)
-                      || { label: item }
-                    ),
-                  )).map(({ label }) => <span className="mr-2">{label}</span>)
-                  : <span>Any</span>
-              }
-            </div>
-            <button type="button" className="btn btn-outline-secondary btn-sm py-0 align-self-start" onClick={this.uncollapse}>
-              <i className="fa fa-plus" />
-            </button>
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <div className="card">
-        <div className="card-header p-1 text-right">
-          <button type="button" className="btn btn-outline-secondary btn-sm py-0" onClick={this.collapse}>
-            <i className="fa fa-minus" />
-          </button>
-        </div>
-        <div className="card-body p-1">
-          <ChoiceSet
-            value={filterValue}
-            choices={sortChoices(choices)}
-            multiple
-            {...otherProps}
-          />
-        </div>
-      </div>
+      <Manager>
+        <Reference>
+          {({ ref }) => (
+            <div className="card" ref={ref}>
+              {this.renderHeader()}
+            </div>
+          )}
+        </Reference>
+        <Popper
+          placement="top-start"
+          modifiers={{
+            inner: { enabled: true, order: 700 },
+            matchWidth: {
+              enabled: true,
+              order: 750,
+              fn: (data) => {
+                const { popper, reference } = data.offsets;
+                popper.width = reference.width;
+                return data;
+              },
+            },
+            addWidthStyle: {
+              enabled: true,
+              order: 875,
+              fn: data => ({
+                ...data,
+                styles: { ...data.styles, width: `${data.offsets.popper.width}px` },
+              }),
+            },
+          }}
+        >
+          {({ ref, style, placement }) => (
+            <div className={classNames('card', { 'd-none': this.state.collapsed })} ref={ref} style={style} data-placement={placement}>
+              {this.renderHeader()}
+              <div className="card-body p-1">
+                <ChoiceSet
+                  value={filterValue}
+                  choices={sortChoices(choices)}
+                  multiple
+                  {...otherProps}
+                />
+              </div>
+            </div>
+          )}
+        </Popper>
+      </Manager>
     );
   }
 }
