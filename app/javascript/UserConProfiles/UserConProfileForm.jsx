@@ -70,7 +70,7 @@ class UserConProfileForm extends React.Component {
         name="regular_privileges"
         caption="Privileges"
         choices={
-          this.props.regularPrivilegeNames.sort()
+          [...this.props.regularPrivilegeNames].sort()
             .map(choice => ({ label: humanize(choice), value: choice }))
         }
         choiceClassName="form-check-inline"
@@ -83,7 +83,7 @@ class UserConProfileForm extends React.Component {
         name="mail_privileges"
         caption="Mail privileges"
         choices={
-          this.props.mailPrivilegeNames.sort()
+          [...this.props.mailPrivilegeNames].sort()
             .map(choice => ({ label: humanize(choice), value: choice }))
         }
         choiceClassName="form-check-inline"

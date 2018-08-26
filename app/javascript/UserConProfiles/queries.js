@@ -27,6 +27,9 @@ export const userConProfileQuery = gql`
 query($id: Int!) {
   convention {
     ...UserConProfileFormData
+
+    privilege_names
+    mail_privilege_names
   }
 
   userConProfile(id: $id) {
@@ -56,6 +59,7 @@ ${fragments.userConProfileFormData}
 export const userConProfileAdminQuery = gql`
 query($id: Int!) {
   myProfile {
+    id
     ability {
       can_read_signups
       can_update_user_con_profile(user_con_profile_id: $id)

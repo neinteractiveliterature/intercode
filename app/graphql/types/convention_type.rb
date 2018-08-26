@@ -24,6 +24,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
+  field :mail_privilege_names, !types[!types.String] do
+    resolve -> (_convention, _args, _ctx) do
+      UserConProfile::MAIL_PRIV_NAMES
+    end
+  end
+
   field :cms_layouts, types[Types::CmsLayoutType] do
     resolve -> (convention, _args, _ctx) {
       AssociationLoader.for(Convention, :cms_layouts).load(convention)

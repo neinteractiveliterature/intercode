@@ -13,6 +13,7 @@ import { userConProfileAdminQuery } from './queries';
 const noTicketAbilityQuery = gql`
 query {
   myProfile {
+    id
     ability {
       can_create_tickets
     }
@@ -23,6 +24,7 @@ query {
 const ticketAbilityQuery = gql`
 query($ticketId: Int!) {
   myProfile {
+    id
     ability {
       can_create_tickets
       can_update_ticket(ticket_id: $ticketId)
@@ -55,8 +57,6 @@ class TicketAdminSection extends React.Component {
         id: PropTypes.number.isRequired,
       }),
     }).isRequired,
-    editTicketUrl: PropTypes.string.isRequired,
-    newTicketUrl: PropTypes.string.isRequired,
   }
 
   renderTicketControls = (ticketAbilityData) => {
@@ -65,7 +65,7 @@ class TicketAdminSection extends React.Component {
 
     if (this.props.userConProfile.ticket && ability.can_update_ticket) {
       buttons.push(
-        <a href={this.props.editTicketUrl} className="btn btn-secondary">
+        <a href={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
           Edit
           {' '}
           {this.props.convention.ticket_name}
@@ -114,7 +114,7 @@ class TicketAdminSection extends React.Component {
       }
     } else if (ability.can_create_tickets) {
       buttons.push(
-        <a href={this.props.newTicketUrl} className="btn btn-secondary">
+        <a href={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
           Create
           {' '}
           {this.props.convention.ticket_name}

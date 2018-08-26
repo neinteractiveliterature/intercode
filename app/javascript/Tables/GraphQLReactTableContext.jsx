@@ -59,7 +59,7 @@ export class GraphQLReactTableProvider extends React.Component {
   fetchData = async (variables) => {
     this.setState({ loading: true });
     try {
-      const queryResult = await this.props.client.query({ query: this.props.query, variables });
+      const queryResult = await this.props.client.query({ query: this.props.query, variables, fetchPolicy: 'network-only' });
       this.setState({ queryResult, pages: this.props.getPages(queryResult), loading: false });
     } catch (error) {
       this.setState({ loading: false, error });

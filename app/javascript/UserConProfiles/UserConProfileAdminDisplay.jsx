@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
 import fetch from 'unfetch';
-import { ApolloConsumer, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Link, withRouter } from 'react-router-dom';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
@@ -23,23 +24,19 @@ mutation($userConProfileId: Int!) {
 }
 `;
 
+@withRouter
 class UserConProfileAdminDisplay extends React.Component {
   static propTypes = {
     userConProfileId: PropTypes.number.isRequired,
-    editUserConProfileUrl: PropTypes.string.isRequired,
-    becomeUserConProfileUrl: PropTypes.string.isRequired,
-    becomeUserConProfileAuthenticityToken: PropTypes.string.isRequired,
-    editTicketUrl: PropTypes.string.isRequired,
-    newTicketUrl: PropTypes.string.isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
   }
 
   becomeUser = async () => {
-    await fetch(this.props.becomeUserConProfileUrl, {
+    await fetch(`/user_con_profiles/${this.props.userConProfileId}/become`, {
       method: 'POST',
       credentials: 'same-origin',
-      headers: {
-        'X-CSRF-Token': this.props.becomeUserConProfileAuthenticityToken,
-      },
     });
 
     window.location.href = '/';
@@ -82,7 +79,9 @@ class UserConProfileAdminDisplay extends React.Component {
         <div className="card-header">User administration</div>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <a href={this.props.editUserConProfileUrl}>Edit profile/privileges</a>
+            <Link to={`/${this.props.userConProfileId}/edit`}>
+              Edit profile/privileges
+            </Link>
           </li>
           {ability.can_become_user_con_profile
             ? (
@@ -107,37 +106,30 @@ class UserConProfileAdminDisplay extends React.Component {
           {ability.can_delete_user_con_profile
             ? (
               <li className="list-group-item">
-                <ApolloConsumer>
-                  {client => (
-                    <Mutation
-                      mutation={deleteUserConProfileMutation}
-                      variables={{ userConProfileId: data.userConProfile.id }}
-                    >
-                      {deleteUserConProfile => (
-                        <Confirm.Trigger>
-                          {confirm => (
-                            <button
-                              type="button"
-                              className="btn btn-link p-0 text-danger"
-                              onClick={() => confirm({
-                                prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
-                                action: async () => {
-                                  await deleteUserConProfile();
-
-                                  // we can't possibly know what permutations of the
-                                  // UserConProfilesTable query are in the cache, so clear them all
-                                  client.resetStore();
-                                },
-                              })}
-                            >
-                              Delete
-                            </button>
-                          )}
-                        </Confirm.Trigger>
+                <Mutation
+                  mutation={deleteUserConProfileMutation}
+                  variables={{ userConProfileId: data.userConProfile.id }}
+                >
+                  {deleteUserConProfile => (
+                    <Confirm.Trigger>
+                      {confirm => (
+                        <button
+                          type="button"
+                          className="btn btn-link p-0 text-danger"
+                          onClick={() => confirm({
+                            prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
+                            action: async () => {
+                              await deleteUserConProfile();
+                              this.props.history.replace('/');
+                            },
+                          })}
+                        >
+                          Delete
+                        </button>
                       )}
-                    </Mutation>
+                    </Confirm.Trigger>
                   )}
-                </ApolloConsumer>
+                </Mutation>
               </li>
             )
             : null}
@@ -181,8 +173,6 @@ class UserConProfileAdminDisplay extends React.Component {
             <TicketAdminSection
               userConProfile={data.userConProfile}
               convention={data.convention}
-              newTicketUrl={this.props.newTicketUrl}
-              editTicketUrl={this.props.editTicketUrl}
             />
           </div>
 
