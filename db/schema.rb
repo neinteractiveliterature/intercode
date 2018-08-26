@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_20_151612) do
+ActiveRecord::Schema.define(version: 2018_08_26_212515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,7 +85,6 @@ ActiveRecord::Schema.define(version: 2018_08_20_151612) do
     t.datetime "ends_at"
     t.integer "root_page_id"
     t.string "name"
-    t.string "banner_image"
     t.string "domain", null: false
     t.string "timezone_name"
     t.text "maximum_event_signups"
