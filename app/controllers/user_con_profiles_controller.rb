@@ -11,16 +11,33 @@ class UserConProfilesController < ApplicationController
     class: 'UserConProfile',
     through: :convention,
     through_association: :user_con_profiles
-  before_action :authorize_admin_profiles
-  skip_before_action :verify_authenticity_token, only: [:become] unless Rails.env.test?
+  before_action :authorize_admin_profiles, except: [:revert_become]
+
+  unless Rails.env.test?
+    skip_before_action :verify_authenticity_token, only: [:become, :revert_become]
+  end
 
   def index
     @page_title = 'Attendees'
   end
 
   def become
+    identity_assumer = user_con_profile
     sign_in @subject_profile.user
+    session[:assumed_identity_from_profile_id] = identity_assumer.id
     redirect_to root_url, notice: "You are now signed in as #{@subject_profile.user.name}."
+  end
+
+  def revert_become
+    unless assumed_identity_from_profile
+      return redirect_to(root_url, alert: "You haven't assumed an identity, so you can't revert \
+back to your normal identity (since you already are your normal identity).")
+    end
+
+    regular_user_con_profile = assumed_identity_from_profile
+    sign_in regular_user_con_profile.user
+    session.delete(:assumed_identity_from_profile_id)
+    redirect_to root_url, notice: "Reverted to #{regular_user_con_profile.name}."
   end
 
   def export

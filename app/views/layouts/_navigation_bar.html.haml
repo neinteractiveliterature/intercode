@@ -12,7 +12,11 @@
         - if convention
           - if user_con_profile && !user_con_profile.ticket && convention.ticket_types.publicly_available.any?
             %li.nav-item.my-auto
-              = link_to "Buy a #{convention.ticket_name}!", new_ticket_path, class: "btn btn-sm btn-primary"
+              = link_to new_ticket_path, class: "btn btn-sm btn-primary" do
+                %span.d-inline.d-md-none.d-lg-inline
+                  Buy a #{convention.ticket_name}!
+                %span.d-none.d-md-inline.d-lg-none
+                  #{convention.ticket_name.humanize}!
           = events_navigation_menu
           = renderer.render_navigation_items
           = admin_navigation_menu
@@ -27,20 +31,34 @@
                   .badge.badge-pill.badge-danger{style: 'position: absolute; right: -9px; top: -9px;'}
                     = total_entries
 
-          %li.nav-item.dropdown{role: "presentation"}
-            %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
-              %i.fa.fa-user
-              - if user_con_profile
-                = user_con_profile.name
-              - else
-                = current_user.name
-            .dropdown-menu
-              = link_to "My Account", edit_user_registration_path, class: 'dropdown-item'
-              - if convention
-                = link_to "My Profile", my_profile_path, class: 'dropdown-item'
-                = link_to "My Order History", order_history_path, class: 'dropdown-item'
-              = link_to "Authorized Applications", oauth_authorized_applications_path, class: 'dropdown-item'
-              = link_to "Log Out", destroy_user_session_path, class: 'dropdown-item', :method => "delete"
+          %li.nav-item
+            .btn-group{role: 'group'}
+              .btn-group{role: 'group'}
+                - if assumed_identity_from_profile
+                  %a.btn.btn-warning.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
+                    %i.fa.fa-user-secret
+                    %span.d-inline.d-md-none.d-lg-inline
+                      = user_con_profile.name
+                    %span.d-none.d-md-inline.d-lg-none
+                      = "#{user_con_profile.first_name.slice(0, 1)}#{user_con_profile.last_name.slice(0, 1)}"
+                - else
+                  %a.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => true, "data-toggle" => "dropdown", href: "#", role: "button"}
+                    %i.fa.fa-user
+                    - if user_con_profile
+                      = user_con_profile.name
+                    - else
+                      = current_user.name
+                .dropdown-menu
+                  = link_to "My Account", edit_user_registration_path, class: 'dropdown-item'
+                  - if convention
+                    = link_to "My Profile", my_profile_path, class: 'dropdown-item'
+                    = link_to "My Order History", order_history_path, class: 'dropdown-item'
+                  = link_to "Authorized Applications", oauth_authorized_applications_path, class: 'dropdown-item'
+                  = link_to "Log Out", destroy_user_session_path, class: 'dropdown-item', :method => "delete"
+              - if assumed_identity_from_profile
+                = link_to revert_become_user_con_profiles_path, method: 'POST', class: 'btn btn-secondary' do
+                  Revert
+                  %span.d-inline.d-md-none.d-lg-inline to #{assumed_identity_from_profile.name}
         - else
           %li.nav-item.login
             = link_to "Log In", new_user_session_path, class: 'nav-link'

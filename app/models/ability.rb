@@ -269,6 +269,7 @@ class Ability
 
   def add_authenticated_user_abilities
     can :read, UserConProfile, user_id: user.id
+    can :revert_become, UserConProfile
 
     if has_scope?(:read_profile)
       can :read_personal_info, UserConProfile, user_id: user.id

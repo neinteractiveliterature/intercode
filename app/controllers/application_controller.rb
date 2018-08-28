@@ -17,6 +17,9 @@ class ApplicationController < ActionController::Base
   # If we're in a convention, use the convention's timezone.
   around_action :use_convention_timezone
 
+  # Make sure assumed identities stay on the domain they're supposed to be on
+  before_action :ensure_assumed_identity_matches_convention
+
   # Make the user create their profile for this con if they haven't got one
   before_action :ensure_user_con_profile_exists, unless: :devise_controller?
 
@@ -53,6 +56,14 @@ class ApplicationController < ActionController::Base
     @user_con_profile ||= convention.user_con_profiles.find_by(user_id: current_user.id)
   end
   helper_method :user_con_profile
+
+  def assumed_identity_from_profile
+    return unless session[:assumed_identity_from_profile_id]
+    @assumed_identity_from_profile ||= UserConProfile.find(
+      session[:assumed_identity_from_profile_id]
+    )
+  end
+  helper_method :assumed_identity_from_profile
 
   def current_pending_order
     return unless user_con_profile
@@ -137,6 +148,19 @@ class ApplicationController < ActionController::Base
 
     redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
+  end
+
+  def ensure_assumed_identity_matches_convention
+    return unless assumed_identity_from_profile
+    return if assumed_identity_from_profile.convention == convention
+
+    domain = assumed_identity_from_profile.convention.domain
+    domain << ":#{request.port}"
+
+    redirect_to "#{request.protocol}#{domain}#{request.path}", alert: "You used \"become user\" \
+on the #{assumed_identity_from_profile.convention.name} site to assume the identity of \
+#{current_user.name} for this session.  In order to visit other conventions' \
+sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option above."
   end
 
   def no_cache
