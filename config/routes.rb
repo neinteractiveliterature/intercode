@@ -57,6 +57,7 @@ Intercode::Application.routes.draw do
     resources :user_con_profiles, only: [:index] do
       collection do
         get :export
+        post :revert_become
       end
 
       member do
