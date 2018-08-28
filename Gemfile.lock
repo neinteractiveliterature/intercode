@@ -349,7 +349,7 @@ GEM
       railties (>= 4.2.0, < 5.3)
     reverse_markdown (1.1.0)
       nokogiri
-    rollbar (2.16.4)
+    rollbar (2.17.0)
       multi_json
     rollbar-shoryuken (0.1.2)
       rollbar
