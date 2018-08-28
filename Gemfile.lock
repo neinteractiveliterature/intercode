@@ -394,7 +394,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
     stackprof (0.2.12)
-    stripe (3.23.0)
+    stripe (3.24.0)
       faraday (~> 0.10)
     stripe-ruby-mock (2.5.4)
       dante (>= 0.2.0)
