@@ -86,7 +86,7 @@ class PopperDropdown extends React.Component {
         <Reference>
           {({ ref }) => renderReference({ ref, toggle: this.targetClicked })}
         </Reference>
-        <Popper placement={this.state.visible ? (placement || 'bottom-start') : undefined}>
+        <Popper placement={this.state.visible ? (placement || 'bottom-start') : 'invalid'}>
           {({ ref, style, ...otherProps }) => (
             <PopperDropdownContentWithOnClickOutside
               getPopperRef={ref}
