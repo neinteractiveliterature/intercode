@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Manager, Reference, Popper } from 'react-popper';
 import classNames from 'classnames';
+
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
+import PopperDropdown from '../UIComponents/PopperDropdown';
+import { ScheduleGridConsumer } from './ScheduleGridContext';
 
 function userSignupStatus(run) {
   if (run.my_signups.some(signup => signup.state === 'confirmed')) {
@@ -46,76 +48,6 @@ class ScheduleGridEventRun extends React.Component {
 
   hidePopover = () => {
     this.setState({ popoverVisible: false });
-  }
-
-  renderPopover = () => {
-    if (!this.state.popoverVisible) {
-      return null;
-    }
-
-    const {
-      event, run, runDimensions, convention,
-    } = this.props;
-    const { timespan } = runDimensions.eventRun;
-
-    return (
-      <Popper placement={this.state.popperVisible ? 'bottom' : undefined}>
-        {({
-          ref,
-          placement,
-          arrowProps,
-          style,
-        }) => (
-          <div className={`popover bs-popover-${placement} show`} role="tooltip" ref={ref} style={style}>
-            <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
-            <div className="popover-header">
-              <div className="row align-items-center">
-                <div className="col">
-                  <strong>
-                    {event.title}
-                  </strong>
-                  {
-                    run.title_suffix
-                      ? [
-                        <span key="mdash">
-                          &mdash;
-                        </span>,
-                        <em key="title-suffix">
-                          {run.title_suffix}
-                        </em>,
-                      ]
-                      : []
-                  }
-                </div>
-                <button type="button" className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={this.hidePopover}>
-                  <i className="fa fa-close" title="Close" />
-                </button>
-              </div>
-            </div>
-            <div className="popover-body">
-              <ul className="list-unstyled mb-2">
-                <li>
-                  {timespan.humanizeInTimezone(convention.timezone_name)}
-                </li>
-                <li>
-                  {run.rooms.map(room => room.name).sort().join(', ')}
-                </li>
-              </ul>
-
-              <a href={event.event_page_url} className="btn btn-primary btn-sm mb-2">
-                Go to event &raquo;
-              </a>
-
-              <div
-                className="small"
-                style={{ overflowY: 'auto', maxHeight: '200px' }}
-                dangerouslySetInnerHTML={{ __html: event.short_blurb_html }}
-              />
-            </div>
-          </div>
-        )}
-      </Popper>
-    );
   }
 
   renderAvailabilityBar = () => {
@@ -177,8 +109,9 @@ class ScheduleGridEventRun extends React.Component {
 
   render = () => {
     const {
-      layoutResult, runDimensions, event, run, className,
+      layoutResult, runDimensions, event, run, className, convention,
     } = this.props;
+    const { timespan } = runDimensions.eventRun;
 
     const style = {
       top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
@@ -208,37 +141,104 @@ class ScheduleGridEventRun extends React.Component {
     );
 
     return (
-      <Manager>
-        <Reference>
-          {({ ref }) => (
-            <div
-              style={style}
-              tabIndex={0}
-              className={eventRunClasses}
-              role="button"
-              onClick={this.showPopover}
-              onKeyDown={(keyEvent) => {
-                if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
-                  keyEvent.preventDefault();
-                  this.showPopover();
-                }
-              }}
-              ref={ref}
-            >
-              {this.renderAvailabilityBar()}
-              <div className="d-flex">
-                {this.renderExtendedCounts()}
-                <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {signupStatusBadge}
-                  {signupStatusBadge ? ' ' : ''}
-                  {event.title}
+      <ScheduleGridConsumer>
+        {({ schedule, isRunDetailsVisible, toggleRunDetailsVisibility }) => (
+          <PopperDropdown
+            placement="bottom"
+            visible={isRunDetailsVisible(run.id)}
+            onToggle={() => toggleRunDetailsVisibility(schedule, run.id)}
+            renderReference={({ ref, toggle }) => (
+              <div
+                style={style}
+                tabIndex={0}
+                className={eventRunClasses}
+                role="button"
+                onClick={toggle}
+                onKeyDown={(keyEvent) => {
+                  if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
+                    keyEvent.preventDefault();
+                    toggle();
+                  }
+                }}
+                ref={ref}
+              >
+                {this.renderAvailabilityBar()}
+                <div className="d-flex">
+                  {this.renderExtendedCounts()}
+                  <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {signupStatusBadge}
+                    {signupStatusBadge ? ' ' : ''}
+                    {event.title}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </Reference>
-        {this.renderPopover()}
-      </Manager>
+            )}
+          >
+            {({
+              ref,
+              placement,
+              arrowProps,
+              style: popperStyle,
+              toggle,
+              visible,
+            }) => {
+              if (!visible) {
+                return <React.Fragment />;
+              }
+
+              return (
+                <div className={`popover bs-popover-${placement} show`} ref={ref} style={popperStyle} role="tooltip">
+                  <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
+                  <div className="popover-header">
+                    <div className="row align-items-center">
+                      <div className="col">
+                        <strong>
+                          {event.title}
+                        </strong>
+                        {
+                          run.title_suffix
+                            ? [
+                              <span key="mdash">
+                                &mdash;
+                              </span>,
+                              <em key="title-suffix">
+                                {run.title_suffix}
+                              </em>,
+                            ]
+                            : []
+                        }
+                      </div>
+                      <button type="button" className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={toggle}>
+                        <i className="fa fa-close" title="Close" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="popover-body">
+                    <ul className="list-unstyled mb-2">
+                      <li>
+                        {timespan.humanizeInTimezone(convention.timezone_name)}
+                      </li>
+                      <li>
+                        {run.rooms.map(room => room.name).sort().join(', ')}
+                      </li>
+                    </ul>
+
+                    <a href={event.event_page_url} className="btn btn-primary btn-sm mb-2">
+                      Go to event &raquo;
+                    </a>
+
+                    <div
+                      className="small"
+                      style={{ overflowY: 'auto', maxHeight: '200px' }}
+                      dangerouslySetInnerHTML={{ __html: event.short_blurb_html }}
+                    />
+                  </div>
+                </div>
+              );
+            }}
+          </PopperDropdown>
+        )}
+      </ScheduleGridConsumer>
     );
   }
 }

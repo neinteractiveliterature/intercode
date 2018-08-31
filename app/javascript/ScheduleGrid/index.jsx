@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter } from 'react-router-dom';
-import ScheduleGrid from './ScheduleGrid';
 
-const ScheduleGridApp = ({ basename, ...otherProps }) => (
+import ScheduleGrid from './ScheduleGrid';
+import { ScheduleGridConsumer, ScheduleGridProvider } from './ScheduleGridContext';
+
+const ScheduleGridApp = ({ basename, config, ...otherProps }) => (
   <BrowserRouter basename={basename}>
-    <ScheduleGrid {...otherProps} />
+    <ScheduleGridProvider config={config}>
+      <ScheduleGridConsumer>
+        {({ schedule }) => (
+          <ScheduleGrid config={config} schedule={schedule} {...otherProps} />
+        )}
+      </ScheduleGridConsumer>
+    </ScheduleGridProvider>
   </BrowserRouter>
 );
 
