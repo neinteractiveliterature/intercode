@@ -27,9 +27,8 @@ export default class Schedule {
     );
 
     this.eventRuns = EventRun.buildEventRunsFromApi(data.events);
-    this.runTimespansById = new Map(
-      this.eventRuns.map(eventRun => [eventRun.runId, eventRun.timespan]),
-    );
+    this.runTimespansById = new Map(this.eventRuns
+      .map(eventRun => [eventRun.runId, eventRun.timespan]));
   }
 
   getRun = runId => this.runsById.get(runId)
