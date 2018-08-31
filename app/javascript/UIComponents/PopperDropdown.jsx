@@ -42,20 +42,30 @@ const PopperDropdownContentWithOnClickOutside = onClickOutside(PopperDropdownCon
 class PopperDropdown extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+    onToggle: PropTypes.func,
     placement: PropTypes.string,
     renderReference: PropTypes.func.isRequired,
+    visible: PropTypes.bool,
   };
 
   static defaultProps = {
-    children: null,
     placement: 'bottom-start',
+    visible: null,
   };
+
+  static getDerivedStateFromProps = (nextProps) => {
+    if (nextProps.visible != null) {
+      return { visible: nextProps.visible };
+    }
+
+    return {};
+  }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      visible: false,
+      visible: props.visible,
     };
   }
 
@@ -71,7 +81,11 @@ class PopperDropdown extends React.Component {
   }
 
   targetClicked = () => {
-    this.setState(prevState => ({ visible: !prevState.visible }));
+    if (this.props.onToggle) {
+      this.setState(prevState => ({ visible: this.props.onToggle(prevState.visible) }));
+    } else {
+      this.setState(prevState => ({ visible: !prevState.visible }));
+    }
   }
 
   render = () => {
@@ -86,7 +100,7 @@ class PopperDropdown extends React.Component {
         <Reference>
           {({ ref }) => renderReference({ ref, toggle: this.targetClicked })}
         </Reference>
-        <Popper placement={this.state.visible ? (placement || 'bottom-start') : undefined}>
+        <Popper placement={this.state.visible ? (placement || 'bottom-start') : 'invalid'}>
           {({ ref, style, ...otherProps }) => (
             <PopperDropdownContentWithOnClickOutside
               getPopperRef={ref}
@@ -102,6 +116,7 @@ class PopperDropdown extends React.Component {
                     ref,
                     style,
                     visible: this.state.visible,
+                    toggle: this.targetClicked,
                     ...otherProps,
                   })
                   : children

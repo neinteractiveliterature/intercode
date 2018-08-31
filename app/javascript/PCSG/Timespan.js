@@ -162,14 +162,17 @@ class Timespan {
     const timeHops = this.getTimeHopsWithin(timezoneName, unit, offset);
     return timeHops.map((timeHop, i) => {
       if (i < timeHops.length - 1) {
-        return new Timespan(timeHop, timeHops[i + 1]);
+        return new Timespan(timeHop, timeHops[i + 1]).intersection(this);
       }
 
       if (offset) {
-        return new Timespan(timeHop, timeHop.clone().subtract(offset).add(1, unit).add(offset));
+        return new Timespan(
+          timeHop,
+          timeHop.clone().subtract(offset).add(1, unit).add(offset),
+        ).intersection(this);
       }
 
-      return new Timespan(timeHop, timeHop.clone().add(1, unit));
+      return new Timespan(timeHop, timeHop.clone().add(1, unit)).intersection(this);
     });
   }
 
