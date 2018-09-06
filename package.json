@@ -85,7 +85,7 @@
     "style-loader": "^0.23.0",
     "uglify-js": "^3.4.8",
     "unfetch": "^3.1.1",
-    "url-search-params-polyfill": "^4.0.1",
+    "url-search-params-polyfill": "^5.0.0",
     "webpack": "^4.8.1",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-manifest-plugin": "^2.0.3",
