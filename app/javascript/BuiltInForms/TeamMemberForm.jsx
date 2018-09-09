@@ -104,16 +104,9 @@ ${teamMemberFragment}
 const userConProfilesQuery = gql`
 query($name: String) {
   convention {
-    user_con_profiles(name: $name, first: 50) {
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-
-      edges {
-        node {
-          ...TeamMemberUserConProfileFields
-        }
+    user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
+      entries {
+        ...TeamMemberUserConProfileFields
       }
     }
   }
