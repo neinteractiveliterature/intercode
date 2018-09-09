@@ -72,25 +72,23 @@ class ReactTableExportButton extends React.PureComponent {
   };
 
   render = () => (
-    <div className="mb-2">
-      <a
-        className="btn btn-outline-primary"
-        href={
-          getExportUrl(
-            this.props.exportUrl,
-            {
-              filtered: this.props.filtered,
-              sorted: this.props.sorted,
-              columns: this.props.columns,
-            },
-          )
-        }
-      >
-        <i className="fa fa-file-excel-o" />
-        {' '}
-        Export CSV
-      </a>
-    </div>
+    <a
+      className="btn btn-outline-primary mb-2"
+      href={
+        getExportUrl(
+          this.props.exportUrl,
+          {
+            filtered: this.props.filtered,
+            sorted: this.props.sorted,
+            columns: this.props.columns,
+          },
+        )
+      }
+    >
+      <i className="fa fa-file-excel-o" />
+      {' '}
+      Export CSV
+    </a>
   )
 }
 
