@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
-import { withRouter } from 'react-router-dom';
+import { Link, Route, withRouter } from 'react-router-dom';
 import { humanize, titleize } from 'inflected';
 import moment from 'moment-timezone';
 
+import AddAttendeeModal from './AddAttendeeModal';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import Form from '../Models/Form';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import { GraphQLReactTableConsumer } from '../Tables/GraphQLReactTableContext';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import TableHeader from '../Tables/TableHeader';
 
 const userConProfilesQuery = gql`
 query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
   convention {
+    name
     privilege_names
     starts_at
     ends_at
@@ -211,6 +215,30 @@ class UserConProfilesTable extends React.Component {
         getPages={({ data }) => data.convention.user_con_profiles_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
         query={userConProfilesQuery}
+        renderHeader={headerProps => (
+          <TableHeader
+            {...headerProps}
+            renderLeftContent={() => (
+              <Link to="/new" className="btn btn-primary ml-2 mb-2">
+                Add attendee
+              </Link>
+            )}
+          />
+        )}
+        renderFooter={() => (
+          <GraphQLReactTableConsumer>
+            {({ queryResult: { data } }) => (
+              <Route path="/new">
+                {({ match }) => (
+                  <AddAttendeeModal
+                    conventionName={data.convention.name}
+                    visible={match != null}
+                  />
+                )}
+              </Route>
+            )}
+          </GraphQLReactTableConsumer>
+        )}
 
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({
