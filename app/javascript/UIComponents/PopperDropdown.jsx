@@ -49,6 +49,7 @@ class PopperDropdown extends React.Component {
   };
 
   static defaultProps = {
+    onToggle: null,
     placement: 'bottom-start',
     visible: null,
   };
@@ -106,7 +107,7 @@ class PopperDropdown extends React.Component {
               getPopperRef={ref}
               style={style}
               placement={placement}
-              visible={this.state.visible}
+              visible={this.state.visible || false}
               handleClickOutside={this.handleClickOutside}
               suppressWrapperDiv={typeof children === 'function'}
             >
@@ -115,7 +116,7 @@ class PopperDropdown extends React.Component {
                   ? children({
                     ref,
                     style,
-                    visible: this.state.visible,
+                    visible: this.state.visible || false,
                     toggle: this.targetClicked,
                     ...otherProps,
                   })

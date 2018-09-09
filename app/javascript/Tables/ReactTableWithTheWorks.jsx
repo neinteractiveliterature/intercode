@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { ColumnSelectionConsumer, ColumnSelectionProvider } from './ColumnSelectionContext';
-import ColumnSelector from './ColumnSelector';
-import CombinedReactTableConsumer from './CombinedReactTableConsumer';
-import ExportButton from './ExportButton';
 import { GraphQLReactTableConsumer, GraphQLReactTableProvider } from './GraphQLReactTableContext';
 import { ReactRouterReactTableConsumer, ReactRouterReactTableProvider } from './ReactRouterReactTableContext';
 import ReactTableWithContexts from './ReactTableWithContexts';
+import TableHeader from './TableHeader';
 
 class ReactTableWithTheWorks extends React.PureComponent {
   static propTypes = {
@@ -18,7 +16,9 @@ class ReactTableWithTheWorks extends React.PureComponent {
     getData: PropTypes.func.isRequired,
     getPages: PropTypes.func.isRequired,
     getPossibleColumns: PropTypes.func.isRequired,
-    query: PropTypes.any.isRequired,
+    query: PropTypes.shape({}).isRequired,
+    renderHeader: PropTypes.func,
+    renderFooter: PropTypes.func,
     variables: PropTypes.shape({}),
   };
 
@@ -26,6 +26,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
     decodeFilterValue: null,
     defaultVisibleColumns: null,
     encodeFilterValue: null,
+    renderHeader: null,
     variables: null,
   };
 
@@ -39,9 +40,23 @@ class ReactTableWithTheWorks extends React.PureComponent {
       getPages,
       getPossibleColumns,
       query,
+      renderFooter: propRenderFooter,
+      renderHeader: propRenderHeader,
       variables,
       ...otherProps
     } = this.props;
+
+    const consumers = [
+      ReactRouterReactTableConsumer,
+      GraphQLReactTableConsumer,
+      ColumnSelectionConsumer,
+    ];
+
+    const renderHeader = propRenderHeader || (headerProps => (
+      <TableHeader {...headerProps} />
+    ));
+
+    const renderFooter = propRenderFooter || (() => null);
 
     return (
       <ReactRouterReactTableProvider
@@ -55,35 +70,13 @@ class ReactTableWithTheWorks extends React.PureComponent {
           variables={variables}
         >
           <GraphQLReactTableConsumer>
-            {({ queryResult: { data, loading } }) => (
+            {({ queryResult: { data } }) => (
               <ColumnSelectionProvider
                 getPossibleColumns={() => getPossibleColumns(data)}
                 defaultVisibleColumns={defaultVisibleColumns}
               >
                 <div>
-                  <div className="d-flex">
-                    <div className="flex-grow-1">
-                      <CombinedReactTableConsumer
-                        consumers={[ReactRouterReactTableConsumer]}
-                      >
-                        {({ filtered, sorted }) => (
-                          <ColumnSelectionConsumer>
-                            {({ getVisibleColumnIds }) => (
-                              <ExportButton
-                                exportUrl={exportUrl}
-                                filtered={filtered}
-                                sorted={sorted}
-                                columns={getVisibleColumnIds()}
-                              />
-                            )}
-                          </ColumnSelectionConsumer>
-                        )}
-                      </CombinedReactTableConsumer>
-                    </div>
-                    <div>
-                      <ColumnSelector getPossibleColumns={() => (loading ? [] : getPossibleColumns(data))} />
-                    </div>
-                  </div>
+                  {renderHeader({ consumers, exportUrl, getPossibleColumns })}
                   <ReactTableWithContexts
                     consumers={[
                       ReactRouterReactTableConsumer,
@@ -92,6 +85,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
                     ]}
                     {...otherProps}
                   />
+                  {renderFooter()}
                 </div>
               </ColumnSelectionProvider>
             )}

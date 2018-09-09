@@ -2,7 +2,6 @@ import React from 'react';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { ColumnSelectionConsumer } from './ColumnSelectionContext';
-import pluralizeWithCount from '../pluralizeWithCount';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 
 class ColumnSelector extends React.PureComponent {
