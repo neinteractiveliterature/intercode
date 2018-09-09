@@ -7,17 +7,10 @@ import AsyncSelect from 'react-select/lib/Async';
 export const DEFAULT_USER_CON_PROFILES_QUERY = gql`
 query($name: String) {
   convention {
-    user_con_profiles(name: $name, first: 50) {
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-
-      edges {
-        node {
-          id
-          name_without_nickname
-        }
+    user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
+      entries {
+        id
+        name_without_nickname
       }
     }
   }
@@ -47,8 +40,8 @@ class UserConProfileSelect extends React.Component {
       variables,
     });
 
-    const userConProfiles = results.data.convention.user_con_profiles;
-    return userConProfiles.edges.map(edge => edge.node);
+    const userConProfiles = results.data.convention.user_con_profiles_paginated;
+    return userConProfiles.entries;
   }
 
   render = () => (
