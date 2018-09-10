@@ -79,7 +79,7 @@
     "react-select-fast-filter-options": "^0.2.3",
     "react-table": "^6.8.6",
     "reduce-reducers": "^0.4.3",
-    "resolve-url-loader": "^2.3.0",
+    "resolve-url-loader": "^2.3.1",
     "rollbar-sourcemap-webpack-plugin": "^2.3.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
