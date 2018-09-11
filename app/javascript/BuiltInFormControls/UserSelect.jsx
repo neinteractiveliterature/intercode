@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import AsyncSelect from 'react-select/lib/Async';
+
+import GraphQLAsyncSelect from './GraphQLAsyncSelect';
 
 export const DEFAULT_USERS_QUERY = gql`
 query($name: String) {
@@ -15,11 +15,8 @@ query($name: String) {
 }
 `;
 
-class UserSelect extends React.Component {
+class UserSelect extends React.PureComponent {
   static propTypes = {
-    client: PropTypes.shape({
-      query: PropTypes.func.isRequired,
-    }).isRequired,
     usersQuery: PropTypes.shape({
       kind: PropTypes.string.isRequired,
       definitions: PropTypes.array.isRequired,
@@ -30,28 +27,15 @@ class UserSelect extends React.Component {
     usersQuery: null,
   };
 
-  loadOptions = async (inputValue) => {
-    const variables = { name: inputValue };
-
-    const results = await this.props.client.query({
-      query: this.props.usersQuery || DEFAULT_USERS_QUERY,
-      variables,
-    });
-
-    const users = results.data.users_paginated;
-    return users.entries;
-  }
-
   render = () => (
-    <AsyncSelect
-      handleInputChange={input => input.toLowerCase().trim()}
-      loadOptions={this.loadOptions}
+    <GraphQLAsyncSelect
+      getOptions={data => data.users_paginated.entries}
       getOptionValue={option => option.id}
       getOptionLabel={option => option.name}
+      query={this.props.usersQuery || DEFAULT_USERS_QUERY}
       {...this.props}
     />
   )
 }
 
-export default withApollo(UserSelect);
-export { UserSelect as PureUserSelect };
+export default UserSelect;
