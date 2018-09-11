@@ -6,14 +6,10 @@ describe('UserConProfileSelect', () => {
   const defaultQuery = async () => ({
     data: {
       convention: {
-        user_con_profiles: {
-          edges: [
-            { node: { id: 1, name_without_nickname: 'Gabriel Knight' } },
+        user_con_profiles_paginated: {
+          entries: [
+            { id: 1, name_without_nickname: 'Gabriel Knight' },
           ],
-          pageInfo: {
-            endCursor: null,
-            hasNextPage: false,
-          },
         },
       },
     },
