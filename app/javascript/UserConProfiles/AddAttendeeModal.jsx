@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { withRouter } from 'react-router-dom';
+import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import ErrorDisplay from '../ErrorDisplay';
 import Form from '../Models/Form';
+import LoadingIndicator from '../LoadingIndicator';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import UserConProfileForm from './UserConProfileForm';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 
-export const usersQuery = gql`
+const usersQuery = gql`
 query($name: String) {
   users_paginated(filters: { name: $name }, per_page: 50) {
     entries {
@@ -35,6 +38,16 @@ query {
 }
 `;
 
+const createUserConProfileMutation = gql`
+mutation($user_id: Int!, $user_con_profile: UserConProfileInput!) {
+  createUserConProfile(input: { user_id: $user_id, user_con_profile: $user_con_profile }) {
+    user_con_profile {
+      id
+    }
+  }
+}
+`;
+
 @withRouter
 class AddAttendeeModal extends React.Component {
   static propTypes = {
@@ -54,14 +67,14 @@ class AddAttendeeModal extends React.Component {
     };
   }
 
-  cancel = () => { this.props.history.replace('/'); }
-
-  submit = () => {
-
+  cancel = () => {
+    this.setState({ user: null, userId: null, userConProfile: null });
+    this.props.history.replace('/');
   }
 
   userSelected = (user) => {
     this.setState({
+      user,
       userId: user.id,
       userConProfile: {
         form_response_attrs: {
@@ -85,7 +98,9 @@ class AddAttendeeModal extends React.Component {
               .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
             mailPrivilegeNames={data.convention.mail_privilege_names}
             onChange={this.userConProfileChanged}
-            form={Form.fromApiResponse(JSON.parse(data.convention.user_con_profile_form.form_api_json))}
+            form={
+              Form.fromApiResponse(JSON.parse(data.convention.user_con_profile_form.form_api_json))
+            }
             convention={data.convention}
           />
         )}
@@ -107,30 +122,61 @@ class AddAttendeeModal extends React.Component {
           already be a user in the site database in order to be added.
         </p>
 
-        <UserSelect onChange={this.userSelected} usersQuery={usersQuery} />
+        <UserSelect value={this.state.user} onChange={this.userSelected} usersQuery={usersQuery} />
 
         {
           this.state.userId
             ? this.renderForm()
             : null
         }
+
+        <ErrorDisplay graphQLError={this.state.error} />
       </div>
       <div className="modal-footer">
         <button
           className="btn btn-secondary"
           type="button"
           onClick={this.cancel}
+          disabled={this.state.mutationInProgress}
         >
           Cancel
         </button>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={this.submit}
-          disabled={this.state.userId == null}
-        >
-          Add
-        </button>
+        <Mutation mutation={createUserConProfileMutation}>
+          {mutate => (
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={async () => {
+                this.setState({ mutationInProgress: true });
+                try {
+                  await mutate({
+                    variables: {
+                      user_id: this.state.userId,
+                      user_con_profile: {
+                        form_response_attrs_json: JSON.stringify(
+                          this.state.userConProfile.form_response_attrs,
+                        ),
+                        privileges: this.state.userConProfile.privileges,
+                      },
+                    },
+                  });
+                  this.setState({
+                    mutationInProgress: false,
+                    user: null,
+                    userId: null,
+                    userConProfile: null,
+                  });
+                  this.props.history.replace('/');
+                } catch (error) {
+                  this.setState({ error, mutationInProgress: false });
+                }
+              }}
+              disabled={this.state.userId == null || this.state.mutationInProgress}
+            >
+              { this.state.mutationInProgress ? <LoadingIndicator /> : 'Add' }
+            </button>
+          )}
+        </Mutation>
       </div>
     </Modal>
   )
