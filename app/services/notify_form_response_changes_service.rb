@@ -30,7 +30,7 @@ class NotifyFormResponseChangesService < CivilService::Service
 
   def notify_changes(response_id, raw_changes)
     compacted_changes = CompactingFormResponseChangesPresenter.new(raw_changes).compacted_changes
-    send_mail.call(response_id, compacted_changes)
+    send_mail.call(response_id, compacted_changes) if compacted_changes.any?
     FormResponseChange.where(id: raw_changes.map(&:id)).update_all(notified_at: Time.now)
   end
 end
