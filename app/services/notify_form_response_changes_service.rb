@@ -10,12 +10,12 @@ class NotifyFormResponseChangesService < CivilService::Service
 
   def inner_call
     convention_ids_with_pending_changes = scope.joins(:user_con_profile)
-      .pluck('distinct user_con_profiles.convention_id')
+      .pluck(Arel.sql('distinct user_con_profiles.convention_id'))
 
     convention_ids_with_pending_changes.each do |convention_id|
       all_pending_changes = scope.joins(:user_con_profile)
         .where(user_con_profiles: { convention_id: convention_id })
-      response_ids = all_pending_changes.pluck('distinct response_id')
+      response_ids = all_pending_changes.pluck(Arel.sql('distinct response_id'))
 
       response_ids.each do |response_id|
         ActiveRecord::Base.transaction do
