@@ -1,19 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { PureUserConProfileSelect as UserConProfileSelect } from '../../../app/javascript/BuiltInFormControls/UserConProfileSelect';
+import { PureGraphQLAsyncSelect as GraphQLAsyncSelect } from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
 
-describe('UserConProfileSelect', () => {
+describe('GraphQLAsyncSelect', () => {
   const defaultQuery = async () => ({
     data: {
       convention: {
-        user_con_profiles: {
-          edges: [
-            { node: { id: 1, name_without_nickname: 'Gabriel Knight' } },
+        user_con_profiles_paginated: {
+          entries: [
+            { id: 1, name_without_nickname: 'Gabriel Knight' },
           ],
-          pageInfo: {
-            endCursor: null,
-            hasNextPage: false,
-          },
         },
       },
     },
@@ -25,8 +21,12 @@ describe('UserConProfileSelect', () => {
     };
 
     return shallow((
-      <UserConProfileSelect
+      <GraphQLAsyncSelect
         client={fakeClient}
+        query={{}}
+        getOptions={data => data.convention.user_con_profiles_paginated.entries}
+        getOptionLabel={option => option.name_without_nickname}
+        getOptionValue={option => option.id}
         {...props}
       />
     ));

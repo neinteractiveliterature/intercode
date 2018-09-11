@@ -156,4 +156,23 @@ Types::QueryType = GraphQL::ObjectType.define do
       ctx[:convention].signups.find(args[:id])
     }
   end
+
+  field :users_paginated, Types::UsersPaginationType.to_non_null_type do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::UserFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    guard ->(_obj, _args, ctx) do
+      ctx[:current_ability].can?(:read, User)
+    end
+
+    resolve ->(_obj, args, _ctx) do
+      Tables::UsersTableResultsPresenter.new(
+        User,
+        args[:filters].to_h,
+        args[:sort]
+      ).paginate(page: args[:page], per_page: args[:per_page])
+    end
+  end
 end

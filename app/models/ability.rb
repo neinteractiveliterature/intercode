@@ -231,7 +231,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Order, OrderEntry, Ticket, UserConProfile]
+      can :read, [Order, OrderEntry, Ticket, UserConProfile, User]
       can :read_personal_info, UserConProfile
     end
 
@@ -328,6 +328,7 @@ class Ability
       }
     }
     can :read, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
+    can :read, User if staff_con_ids.any?
 
     can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
