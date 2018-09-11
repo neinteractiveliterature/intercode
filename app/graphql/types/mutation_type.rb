@@ -297,6 +297,12 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### UserConProfile
 
+  field :createUserConProfile, Mutations::CreateUserConProfile.field do
+    guard ->(_obj, _args, ctx) {
+      ctx[:current_ability].can?(:create, UserConProfile.new(convention: ctx[:convention]))
+    }
+  end
+
   field :updateUserConProfile, Mutations::UpdateUserConProfile.field do
     guard ->(_obj, args, ctx) {
       user_con_profile = ctx[:convention].user_con_profiles.find(args[:id])
