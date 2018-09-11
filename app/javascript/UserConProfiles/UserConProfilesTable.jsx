@@ -10,6 +10,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import Form from '../Models/Form';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import FreeTextFilter from '../Tables/FreeTextFilter';
 import { GraphQLReactTableConsumer } from '../Tables/GraphQLReactTableContext';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
@@ -123,6 +124,9 @@ class UserConProfilesTable extends React.Component {
         Header: 'Name',
         id: 'name',
         accessor: userConProfile => userConProfile.name_inverted,
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
+        ),
       },
       {
         Header: 'Email',
@@ -132,6 +136,9 @@ class UserConProfilesTable extends React.Component {
           <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
             {value}
           </a>
+        ),
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
         ),
       },
       {
