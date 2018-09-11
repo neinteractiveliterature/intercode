@@ -54,7 +54,7 @@ Types::RunType = GraphQL::ObjectType.define do
     }
   end
 
-  field :signups_paginated, !Types::SignupsPaginationType do
+  field :signups_paginated, Types::SignupsPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int
     argument :filters, Types::SignupFiltersInputType

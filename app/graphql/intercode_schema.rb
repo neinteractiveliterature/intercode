@@ -1,4 +1,4 @@
-IntercodeSchema = GraphQL::Schema.define do
+class IntercodeSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
 
@@ -23,4 +23,13 @@ IntercodeSchema = GraphQL::Schema.define do
     "Unauthorized access: #{err.message}"
   end
   middleware better_rescue_middleware
+
+  def self.resolve_type(type, obj, ctx)
+  end
+
+  def self.object_from_id(node_id, ctx)
+  end
+
+  def self.id_from_object(object, type, ctx)
+  end
 end
