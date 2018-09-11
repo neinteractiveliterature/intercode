@@ -722,9 +722,9 @@ type OrdersConnection {
   totalCount: Int!
 }
 
-type OrdersPagination {
+type OrdersPagination implements PaginationInterface {
   current_page: Int!
-  entries: [Order]!
+  entries: [Order!]!
   per_page: Int!
   total_entries: Int!
   total_pages: Int!
@@ -751,6 +751,13 @@ type PageInfo {
 
   # When paginating backwards, the cursor to continue.
   startCursor: String
+}
+
+interface PaginationInterface {
+  current_page: Int!
+  per_page: Int!
+  total_entries: Int!
+  total_pages: Int!
 }
 
 enum PaymentMode {
@@ -966,9 +973,9 @@ enum SignupState {
   withdrawn
 }
 
-type SignupsPagination {
+type SignupsPagination implements PaginationInterface {
   current_page: Int!
-  entries: [Signup]!
+  entries: [Signup!]!
   per_page: Int!
   total_entries: Int!
   total_pages: Int!
@@ -1440,9 +1447,9 @@ input UserConProfileInput {
   zipcode: String
 }
 
-type UserConProfilesPagination {
+type UserConProfilesPagination implements PaginationInterface {
   current_page: Int!
-  entries: [UserConProfile]!
+  entries: [UserConProfile!]!
   per_page: Int!
   total_entries: Int!
   total_pages: Int!
@@ -1454,9 +1461,9 @@ input UserFiltersInput {
   privileges: [String]
 }
 
-type UsersPagination {
+type UsersPagination implements PaginationInterface {
   current_page: Int!
-  entries: [User]!
+  entries: [User!]!
   per_page: Int!
   total_entries: Int!
   total_pages: Int!

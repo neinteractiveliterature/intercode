@@ -157,7 +157,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
-  field :users_paginated, !Types::UsersPaginationType do
+  field :users_paginated, Types::UsersPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int
     argument :filters, Types::UserFiltersInputType
