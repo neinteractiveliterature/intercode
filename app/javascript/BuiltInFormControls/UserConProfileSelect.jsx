@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import AsyncSelect from 'react-select/lib/Async';
+
+import GraphQLAsyncSelect from './GraphQLAsyncSelect';
 
 export const DEFAULT_USER_CON_PROFILES_QUERY = gql`
 query($name: String) {
@@ -17,11 +17,8 @@ query($name: String) {
 }
 `;
 
-class UserConProfileSelect extends React.Component {
+class UserConProfileSelect extends React.PureComponent {
   static propTypes = {
-    client: PropTypes.shape({
-      query: PropTypes.func.isRequired,
-    }).isRequired,
     userConProfilesQuery: PropTypes.shape({
       kind: PropTypes.string.isRequired,
       definitions: PropTypes.array.isRequired,
@@ -32,28 +29,15 @@ class UserConProfileSelect extends React.Component {
     userConProfilesQuery: null,
   };
 
-  loadOptions = async (inputValue) => {
-    const variables = { name: inputValue };
-
-    const results = await this.props.client.query({
-      query: this.props.userConProfilesQuery || DEFAULT_USER_CON_PROFILES_QUERY,
-      variables,
-    });
-
-    const userConProfiles = results.data.convention.user_con_profiles_paginated;
-    return userConProfiles.entries;
-  }
-
   render = () => (
-    <AsyncSelect
-      handleInputChange={input => input.toLowerCase().trim()}
-      loadOptions={this.loadOptions}
+    <GraphQLAsyncSelect
+      getOptions={data => data.convention.user_con_profiles_paginated.entries}
       getOptionValue={option => option.id}
       getOptionLabel={option => option.name_without_nickname}
+      query={this.props.userConProfilesQuery || DEFAULT_USER_CON_PROFILES_QUERY}
       {...this.props}
     />
   )
 }
 
-export default withApollo(UserConProfileSelect);
-export { UserConProfileSelect as PureUserConProfileSelect };
+export default UserConProfileSelect;
