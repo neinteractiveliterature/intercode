@@ -110,7 +110,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
-  field :orders_paginated, !Types::OrdersPaginationType do
+  field :orders_paginated, Types::OrdersPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int
     argument :filters, Types::OrderFiltersInputType
@@ -132,7 +132,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
-  field :user_con_profiles_paginated, !Types::UserConProfilesPaginationType do
+  field :user_con_profiles_paginated, Types::UserConProfilesPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int
     argument :filters, Types::UserConProfileFiltersInputType

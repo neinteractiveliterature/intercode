@@ -5117,9 +5117,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Signup",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Signup",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -5183,10 +5187,118 @@
           ],
           "inputFields": null,
           "interfaces": [
-
+            {
+              "kind": "INTERFACE",
+              "name": "PaginationInterface",
+              "ofType": null
+            }
           ],
           "enumValues": null,
           "possibleTypes": null
+        },
+        {
+          "kind": "INTERFACE",
+          "name": "PaginationInterface",
+          "description": null,
+          "fields": [
+            {
+              "name": "current_page",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "per_page",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "total_entries",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "total_pages",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "OrdersPagination",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "SignupsPagination",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "UserConProfilesPagination",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "UsersPagination",
+              "ofType": null
+            }
+          ]
         },
         {
           "kind": "INPUT_OBJECT",
@@ -5602,9 +5714,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Order",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Order",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -5668,7 +5784,11 @@
           ],
           "inputFields": null,
           "interfaces": [
-
+            {
+              "kind": "INTERFACE",
+              "name": "PaginationInterface",
+              "ofType": null
+            }
           ],
           "enumValues": null,
           "possibleTypes": null
@@ -5740,9 +5860,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "UserConProfile",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "UserConProfile",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -5806,7 +5930,11 @@
           ],
           "inputFields": null,
           "interfaces": [
-
+            {
+              "kind": "INTERFACE",
+              "name": "PaginationInterface",
+              "ofType": null
+            }
           ],
           "enumValues": null,
           "possibleTypes": null
@@ -5983,9 +6111,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "User",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "User",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -6049,7 +6181,11 @@
           ],
           "inputFields": null,
           "interfaces": [
-
+            {
+              "kind": "INTERFACE",
+              "name": "PaginationInterface",
+              "ofType": null
+            }
           ],
           "enumValues": null,
           "possibleTypes": null
