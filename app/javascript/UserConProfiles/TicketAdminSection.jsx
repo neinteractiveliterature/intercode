@@ -6,6 +6,7 @@ import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 
 import Confirm from '../ModalDialogs/Confirm';
+import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { userConProfileAdminQuery } from './queries';
@@ -35,8 +36,8 @@ query($ticketId: Int!) {
 `;
 
 const deleteTicketMutation = gql`
-mutation($ticketId: Int!) {
-  deleteTicket(input: { id: $ticketId }) {
+mutation($ticketId: Int!, $refund: Boolean!) {
+  deleteTicket(input: { id: $ticketId, refund: $refund }) {
     ticket {
       id
     }
@@ -55,8 +56,17 @@ class TicketAdminSection extends React.Component {
       name: PropTypes.string.isRequired,
       ticket: PropTypes.shape({
         id: PropTypes.number.isRequired,
+        charge_id: PropTypes.string,
       }),
     }).isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      error: null,
+    };
   }
 
   renderTicketControls = (ticketAbilityData) => {
@@ -96,16 +106,62 @@ class TicketAdminSection extends React.Component {
                 }}
               >
                 {deleteTicket => (
-                  <button
-                    className="btn btn-danger"
-                    type="button"
-                    onClick={() => confirm({
-                      action: () => deleteTicket({ variables: { ticketId: this.props.userConProfile.ticket.id } }),
-                      prompt: `Are you sure you want to delete ${this.props.userConProfile.name}'s ${this.props.convention.ticket_name}?`,
-                    })}
-                  >
-                    Delete
-                  </button>
+                  <React.Fragment>
+                    {
+                      this.props.userConProfile.ticket.charge_id
+                        ? (
+                          <button
+                            className="btn btn-warning mr-2"
+                            type="button"
+                            onClick={() => confirm({
+                              action: () => deleteTicket({ variables: { ticketId: this.props.userConProfile.ticket.id, refund: true } }),
+                              prompt: (
+                                <React.Fragment>
+                                  <p>
+                                    Are you sure you want to delete
+                                    {' '}
+                                    {this.props.userConProfile.name}
+                                    &apos;s
+                                    {' '}
+                                    {this.props.convention.ticket_name}
+                                    {' '}
+                                    and refund their money?
+                                  </p>
+                                </React.Fragment>
+                              ),
+                              displayError: (error) => <ErrorDisplay graphQLError={error} />,
+                            })}
+                          >
+                          Delete with refund
+                          </button>
+                        )
+                        : null
+                    }
+                    <button
+                      className="btn btn-danger"
+                      type="button"
+                      onClick={() => confirm({
+                        action: () => deleteTicket({ variables: { ticketId: this.props.userConProfile.ticket.id, refund: false } }),
+                        prompt: (
+                          <React.Fragment>
+                            <p>
+                              Are you sure you want to delete
+                              {' '}
+                              {this.props.userConProfile.name}
+                              &apos;s
+                              {' '}
+                              {this.props.convention.ticket_name}
+                              {' '}
+                              without a refund?
+                            </p>
+                          </React.Fragment>
+                        ),
+                        displayError: (error) => <ErrorDisplay graphQLError={error} />,
+                      })}
+                    >
+                      Delete without refund
+                    </button>
+                  </React.Fragment>
                 )}
               </Mutation>
             )}

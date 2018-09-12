@@ -5,7 +5,9 @@ import arrayToSentence from 'array-to-sentence';
 
 import AdminOrderModal from './AdminOrderModal';
 import { adminOrdersQuery } from './queries';
+import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import formatMoney from '../formatMoney';
+import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 class OrderAdmin extends React.Component {
@@ -45,8 +47,29 @@ class OrderAdmin extends React.Component {
       Header: 'User',
       id: 'user_name',
       accessor: order => order.user_con_profile.name_without_nickname,
+      Filter: ({ filter, onChange }) => (
+        <FreeTextFilter filter={filter} onChange={onChange} />
+      ),
     },
-    { Header: 'Status', id: 'status', accessor: 'status' },
+    {
+      Header: 'Status',
+      id: 'status',
+      accessor: 'status',
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSetFilter
+          name="status"
+          choices={[
+            { label: 'Paid', value: 'paid' },
+            { label: 'Unpaid', value: 'unpaid' },
+            { label: 'Cancelled', value: 'cancelled' },
+            { label: 'Any', value: '' },
+          ]}
+          onChange={onChange}
+          filter={filter}
+          multiple={false}
+        />
+      )
+    },
     {
       Header: 'Submitted',
       id: 'submitted_at',
@@ -85,6 +108,7 @@ class OrderAdmin extends React.Component {
         getPages={({ data }) => data.convention.orders_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
         query={adminOrdersQuery}
+        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
     </div>
   )

@@ -70,7 +70,7 @@ export class GraphQLReactTableProvider extends React.Component {
   fetchDataDebounced = debounce(
     this.fetchData,
     100,
-    { maxWait: 1000, leading: true, trailing: true },
+    { maxWait: 1000, leading: false, trailing: true },
   )
 
   fetchFromTableState = tableState => this.fetchDataDebounced({
