@@ -64,6 +64,12 @@ query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [S
       }
     }
   }
+
+  myProfile {
+    ability {
+      can_create_user_con_profiles
+    }
+  }
 }
 `;
 
@@ -226,9 +232,19 @@ class UserConProfilesTable extends React.Component {
           <TableHeader
             {...headerProps}
             renderLeftContent={() => (
-              <Link to="/new" className="btn btn-primary ml-2 mb-2">
-                Add attendee
-              </Link>
+              <GraphQLReactTableConsumer>
+                {({ queryResult: { data } }) => (
+                  data.myProfile.ability.can_create_user_con_profiles
+                    ? (
+                      <Link to="/new" className="btn btn-primary ml-2 mb-2">
+                        <i className="fa fa-plus" />
+                        {' '}
+                        Add attendee
+                      </Link>
+                    )
+                    : null
+                )}
+              </GraphQLReactTableConsumer>
             )}
           />
         )}
