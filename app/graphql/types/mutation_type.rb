@@ -26,24 +26,24 @@ def guard_for_model_with_id(model_class, action)
   }
 end
 
-Types::MutationType = GraphQL::ObjectType.define do
-  name 'Mutation'
+class Types::MutationType < Types::BaseObject
+  graphql_name 'Mutation'
 
   ### CmsNavigationItems
 
-  field :createCmsNavigationItem, Mutations::CreateCmsNavigationItem.field do
+  field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do
     guard(guard_for_create_convention_associated_model(:cms_navigation_items))
   end
 
-  field :updateCmsNavigationItem, Mutations::UpdateCmsNavigationItem.field do
+  field :updateCmsNavigationItem, field: Mutations::UpdateCmsNavigationItem.field do
     guard(guard_for_convention_associated_model(:cms_navigation_items, :update))
   end
 
-  field :deleteCmsNavigationItem, Mutations::DeleteCmsNavigationItem.field do
+  field :deleteCmsNavigationItem, field: Mutations::DeleteCmsNavigationItem.field do
     guard(guard_for_convention_associated_model(:cms_navigation_items, :destroy))
   end
 
-  field :sortCmsNavigationItems, Mutations::SortCmsNavigationItems.field do
+  field :sortCmsNavigationItems, field: Mutations::SortCmsNavigationItems.field do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:sort, ctx[:convention].cms_navigation_items.new)
     }
@@ -51,7 +51,7 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### Convention
 
-  field :updateConvention, Mutations::UpdateConvention.field do
+  field :updateConvention, field: Mutations::UpdateConvention.field do
     guard ->(_obj, args, ctx) {
       convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
       ctx[:current_ability].can?(:update, convention)
@@ -60,46 +60,46 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### Event
 
-  field :createEvent, Mutations::CreateEvent.field do
+  field :createEvent, field: Mutations::CreateEvent.field do
     guard(guard_for_create_convention_associated_model(:events))
   end
 
-  field :createFillerEvent, Mutations::CreateFillerEvent.field do
+  field :createFillerEvent, field: Mutations::CreateFillerEvent.field do
     guard(guard_for_create_convention_associated_model(:events))
   end
 
-  field :dropEvent, Mutations::DropEvent.field do
+  field :dropEvent, field: Mutations::DropEvent.field do
     guard(guard_for_convention_associated_model(:events, :drop))
   end
 
-  field :restoreDroppedEvent, Mutations::RestoreDroppedEvent.field do
+  field :restoreDroppedEvent, field: Mutations::RestoreDroppedEvent.field do
     guard(guard_for_convention_associated_model(:events, :restore))
   end
 
-  field :updateEvent, Mutations::UpdateEvent.field do
+  field :updateEvent, field: Mutations::UpdateEvent.field do
     guard(guard_for_convention_associated_model(:events, :update))
   end
 
   ### EventProposal
 
-  field :updateEventProposal, Mutations::UpdateEventProposal.field do
+  field :updateEventProposal, field: Mutations::UpdateEventProposal.field do
     guard(guard_for_convention_associated_model(:event_proposals, :update))
   end
 
-  field :submitEventProposal, Mutations::SubmitEventProposal.field do
+  field :submitEventProposal, field: Mutations::SubmitEventProposal.field do
     guard(guard_for_convention_associated_model(:event_proposals, :submit))
   end
 
   ### Form
 
-  field :updateFormWithJSON, Mutations::UpdateFormWithJSON.field do
+  field :updateFormWithJSON, field: Mutations::UpdateFormWithJSON.field do
     guard(guard_for_model_with_id(Form, :update))
   end
 
   ### MaximumEventProvidedTicketsOverride
 
   create_override_field = Mutations::CreateMaximumEventProvidedTicketsOverride.field
-  field :createMaximumEventProvidedTicketsOverride, create_override_field do
+  field :createMaximumEventProvidedTicketsOverride, field: create_override_field do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:create, event.maximum_event_provided_tickets_overrides.new)
@@ -107,70 +107,70 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   update_override_field = Mutations::UpdateMaximumEventProvidedTicketsOverride.field
-  field :updateMaximumEventProvidedTicketsOverride, update_override_field do
+  field :updateMaximumEventProvidedTicketsOverride, field: update_override_field do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :update))
   end
 
   delete_override_field = Mutations::DeleteMaximumEventProvidedTicketsOverride.field
-  field :deleteMaximumEventProvidedTicketsOverride, delete_override_field do
+  field :deleteMaximumEventProvidedTicketsOverride, field: delete_override_field do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :destroy))
   end
 
   ### Order / OrderEntry
 
-  field :addOrderEntryToCurrentPendingOrder, Mutations::AddOrderEntryToCurrentPendingOrder.field do
+  field :addOrderEntryToCurrentPendingOrder, field: Mutations::AddOrderEntryToCurrentPendingOrder.field do
     guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
-  field :updateOrderEntry, Mutations::UpdateOrderEntry.field do
+  field :updateOrderEntry, field: Mutations::UpdateOrderEntry.field do
     guard(guard_for_model_with_id(OrderEntry, :update))
   end
 
-  field :deleteOrderEntry, Mutations::DeleteOrderEntry.field do
+  field :deleteOrderEntry, field: Mutations::DeleteOrderEntry.field do
     guard(guard_for_model_with_id(OrderEntry, :destroy))
   end
 
-  field :submitOrder, Mutations::SubmitOrder.field do
+  field :submitOrder, field: Mutations::SubmitOrder.field do
     guard(guard_for_model_with_id(Order, :submit))
   end
 
-  field :markOrderPaid, Mutations::MarkOrderPaid.field do
+  field :markOrderPaid, field: Mutations::MarkOrderPaid.field do
     guard(guard_for_model_with_id(Order, :update))
   end
 
-  field :updateOrder, Mutations::UpdateOrder.field do
+  field :updateOrder, field: Mutations::UpdateOrder.field do
     guard(guard_for_model_with_id(Order, :update))
   end
 
-  field :cancelOrder, Mutations::CancelOrder.field do
+  field :cancelOrder, field: Mutations::CancelOrder.field do
     guard(guard_for_model_with_id(Order, :cancel))
   end
 
   ### Page
 
-  field :deletePage, Mutations::DeletePage.field do
+  field :deletePage, field: Mutations::DeletePage.field do
     guard(guard_for_convention_associated_model(:pages, :destroy))
   end
 
   ### Product
 
-  field :createProduct, Mutations::CreateProduct.field do
+  field :createProduct, field: Mutations::CreateProduct.field do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:create, Product.new(convention: ctx[:convention]))
     }
   end
 
-  field :updateProduct, Mutations::UpdateProduct.field do
+  field :updateProduct, field: Mutations::UpdateProduct.field do
     guard(guard_for_convention_associated_model(:products, :update))
   end
 
-  field :deleteProduct, Mutations::DeleteProduct.field do
+  field :deleteProduct, field: Mutations::DeleteProduct.field do
     guard(guard_for_convention_associated_model(:products, :destroy))
   end
 
   ### Room
 
-  field :createRoom, Mutations::CreateRoom.field do
+  field :createRoom, field: Mutations::CreateRoom.field do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -179,21 +179,21 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :updateRoom, Mutations::UpdateRoom.field do
+  field :updateRoom, field: Mutations::UpdateRoom.field do
     guard(guard_for_convention_associated_model(:rooms, :update))
   end
 
-  field :deleteRoom, Mutations::DeleteRoom.field do
+  field :deleteRoom, field: Mutations::DeleteRoom.field do
     guard(guard_for_convention_associated_model(:rooms, :destroy))
   end
 
   ### Run
 
-  field :createRun, Mutations::CreateRun.field do
+  field :createRun, field: Mutations::CreateRun.field do
     guard(guard_for_create_event_associated_model(:runs, :run))
   end
 
-  field :createMultipleRuns, Mutations::CreateMultipleRuns.field do
+  field :createMultipleRuns, field: Mutations::CreateMultipleRuns.field do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       args.to_h['runs'].all? do |run_args|
@@ -202,31 +202,43 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :deleteRun, Mutations::DeleteRun.field do
+  field :deleteRun, field: Mutations::DeleteRun.field do
     guard(guard_for_convention_associated_model(:runs, :destroy))
   end
 
-  field :updateRun, Mutations::UpdateRun.field do
+  field :updateRun, field: Mutations::UpdateRun.field do
     guard(guard_for_convention_associated_model(:runs, :update))
   end
 
   ### Signup
 
-  field :forceConfirmSignup, Mutations::ForceConfirmSignup.field do
+  field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups do
+    guard ->(_obj, args, ctx) {
+      ctx[:current_ability].can?(
+        :update,
+        Signup.new(
+          user_con_profile: ctx[:convention].user_con_profiles.find(args[:user_con_profile_id]),
+          run: Run.new(event: Event.new(convention: ctx[:convention]))
+        )
+      )
+    }
+  end
+
+  field :forceConfirmSignup, field: Mutations::ForceConfirmSignup.field do
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
-  field :updateSignupBucket, Mutations::UpdateSignupBucket.field do
+  field :updateSignupBucket, field: Mutations::UpdateSignupBucket.field do
     guard(guard_for_convention_associated_model(:signups, :update_bucket))
   end
 
-  field :updateSignupCounted, Mutations::UpdateSignupCounted.field do
+  field :updateSignupCounted, field: Mutations::UpdateSignupCounted.field do
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
   ### StaffPosition
 
-  field :createStaffPosition, Mutations::CreateStaffPosition.field do
+  field :createStaffPosition, field: Mutations::CreateStaffPosition.field do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -235,41 +247,41 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :updateStaffPosition, Mutations::UpdateStaffPosition.field do
+  field :updateStaffPosition, field: Mutations::UpdateStaffPosition.field do
     guard(guard_for_convention_associated_model(:staff_positions, :update))
   end
 
-  field :deleteStaffPosition, Mutations::DeleteStaffPosition.field do
+  field :deleteStaffPosition, field: Mutations::DeleteStaffPosition.field do
     guard(guard_for_convention_associated_model(:staff_positions, :destroy))
   end
 
   ### TeamMember
 
-  field :createTeamMember, Mutations::CreateTeamMember.field do
+  field :createTeamMember, field: Mutations::CreateTeamMember.field do
     guard(guard_for_create_event_associated_model(:team_members, :team_member))
   end
 
-  field :deleteTeamMember, Mutations::DeleteTeamMember.field do
+  field :deleteTeamMember, field: Mutations::DeleteTeamMember.field do
     guard(guard_for_model_with_id(TeamMember, :destroy))
   end
 
-  field :updateTeamMember, Mutations::UpdateTeamMember.field do
+  field :updateTeamMember, field: Mutations::UpdateTeamMember.field do
     guard(guard_for_model_with_id(TeamMember, :update))
   end
 
   ### Ticket
 
-  field :deleteTicket, Mutations::DeleteTicket.field do
+  field :deleteTicket, field: Mutations::DeleteTicket.field do
     guard(guard_for_model_with_id(Ticket, :destroy))
   end
 
-  field :purchaseTicket, Mutations::PurchaseTicket.field do
+  field :purchaseTicket, field: Mutations::PurchaseTicket.field do
     guard -> (_obj, _args, ctx) do
       ctx[:user_con_profile]
     end
   end
 
-  field :provideEventTicket, Mutations::ProvideEventTicket.field do
+  field :provideEventTicket, field: Mutations::ProvideEventTicket.field do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:update, event.team_members.new)
@@ -278,7 +290,7 @@ Types::MutationType = GraphQL::ObjectType.define do
 
   ### TicketType
 
-  field :createTicketType, Mutations::CreateTicketType.field do
+  field :createTicketType, field: Mutations::CreateTicketType.field do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -287,23 +299,23 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :deleteTicketType, Mutations::DeleteTicketType.field do
+  field :deleteTicketType, field: Mutations::DeleteTicketType.field do
     guard(guard_for_convention_associated_model(:ticket_types, :destroy))
   end
 
-  field :updateTicketType, Mutations::UpdateTicketType.field do
+  field :updateTicketType, field: Mutations::UpdateTicketType.field do
     guard(guard_for_convention_associated_model(:ticket_types, :update))
   end
 
   ### UserConProfile
 
-  field :createUserConProfile, Mutations::CreateUserConProfile.field do
+  field :createUserConProfile, field: Mutations::CreateUserConProfile.field do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:create, UserConProfile.new(convention: ctx[:convention]))
     }
   end
 
-  field :updateUserConProfile, Mutations::UpdateUserConProfile.field do
+  field :updateUserConProfile, field: Mutations::UpdateUserConProfile.field do
     guard ->(_obj, args, ctx) {
       user_con_profile = ctx[:convention].user_con_profiles.find(args[:id])
       if args[:user_con_profile][:privileges]
@@ -314,7 +326,7 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
-  field :deleteUserConProfile, Mutations::DeleteUserConProfile.field do
+  field :deleteUserConProfile, field: Mutations::DeleteUserConProfile.field do
     guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
 end
