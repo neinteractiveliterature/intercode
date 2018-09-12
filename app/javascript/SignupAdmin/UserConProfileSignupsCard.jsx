@@ -55,7 +55,7 @@ fragment UserConProfileSignupsFragment on UserConProfile {
     }
   }
 }
-`
+`;
 
 const userConProfileSignupsQuery = gql`
 query($id: Int!) {
@@ -176,50 +176,51 @@ class UserConProfileSignupsCard extends React.Component {
       query={userConProfileSignupsQuery}
       variables={{ id: this.props.userConProfileId }}
     >
-      {({ data }) => (
-        <div className="card">
-          <div className="card-header">Signups</div>
-          <ul className="list-group list-group-flush">
+      {({ data }) => {
+        const signups = filterAndSortSignups(data.userConProfile.signups);
+
+        return (
+          <div className="card">
+            <div className="card-header">Signups</div>
+            <ul className="list-group list-group-flush">
+              {
+                signups.length === 0
+                  ? <li className="list-group-item"><em>No signups</em></li>
+                  : null
+              }
+              {signups.map(signup => this.renderSignup(signup, data.convention))}
+              {this.renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
+            </ul>
             {
-              data.userConProfile.signups.length === 0
-                ? <li className="list-group-item"><em>No signups</em></li>
-                : null
-            }
-            {
-              filterAndSortSignups(data.userConProfile.signups)
-                .map(signup => this.renderSignup(signup, data.convention))
-            }
-            {this.renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
-          </ul>
-          {
-            data.myProfile.ability.can_update_signups
-            ? (
-              <div className="card-footer border-top-0">
-                <Mutation mutation={withdrawFromAllMutation}>
-                  {mutate => (
-                    <Confirm.Trigger>
-                      {confirm => (
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => confirm({
-                            prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from all their events at ${data.convention.name}?`,
-                            action: () => mutate({
-                              variables: { userConProfileId: this.props.userConProfileId },
-                            }),
-                          })}
-                        >
-                          Withdraw from all
-                        </button>
+              data.myProfile.ability.can_update_signups && signups.length > 0
+                ? (
+                  <div className="card-footer border-top-0">
+                    <Mutation mutation={withdrawFromAllMutation}>
+                      {mutate => (
+                        <Confirm.Trigger>
+                          {confirm => (
+                            <button
+                              type="button"
+                              className="btn btn-danger btn-sm"
+                              onClick={() => confirm({
+                                prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from all their events at ${data.convention.name}?`,
+                                action: () => mutate({
+                                  variables: { userConProfileId: this.props.userConProfileId },
+                                }),
+                              })}
+                            >
+                            Withdraw from all
+                            </button>
+                          )}
+                        </Confirm.Trigger>
                       )}
-                    </Confirm.Trigger>
-                  )}
-                </Mutation>
-              </div>
-            ) : null
-          }
-        </div>
-      )}
+                    </Mutation>
+                  </div>
+                ) : null
+            }
+          </div>
+        );
+      }}
     </QueryWithStateDisplay>
   );
 }
