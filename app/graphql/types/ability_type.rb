@@ -57,6 +57,12 @@ Types::AbilityType = GraphQL::ObjectType.define do
     end
   end
 
+  field :can_update_signups, !types.Boolean do
+    resolve -> (obj, _args, ctx) do
+      obj.can?(:update, Signup.new(run: Run.new(event: Event.new(convention: ctx[:convention]))))
+    end
+  end
+
   field :can_create_user_con_profiles, !types.Boolean do
     resolve -> (obj, _args, ctx) do
       obj.can?(:create, UserConProfile.new(convention: ctx[:convention]))
