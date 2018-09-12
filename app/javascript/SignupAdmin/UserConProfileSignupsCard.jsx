@@ -2,19 +2,74 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import moment from 'moment-timezone';
+import { Mutation } from 'react-apollo';
 
+import Confirm from '../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { timespanFromRun } from '../TimespanUtils';
 
+const userConProfileSignupsFragment = gql`
+fragment UserConProfileSignupsFragment on UserConProfile {
+  signups {
+    id
+    state
+    counted
+    bucket_key
+    requested_bucket_key
+
+    user_con_profile {
+      id
+    }
+
+    run {
+      id
+      starts_at
+
+      event {
+        id
+        title
+        length_seconds
+        team_member_name
+
+        registration_policy {
+          buckets {
+            key
+            name
+          }
+        }
+
+        team_members {
+          id
+
+          user_con_profile {
+            id
+          }
+        }
+      }
+
+      rooms {
+        id
+        name
+      }
+    }
+  }
+}
+`
+
 const userConProfileSignupsQuery = gql`
 query($id: Int!) {
   convention {
+    name
     timezone_name
   }
 
   myProfile {
     id
+
+    ability {
+      can_update_signups
+    }
   }
 
   userConProfile(id: $id) {
@@ -30,51 +85,25 @@ query($id: Int!) {
       }
     }
 
-    signups {
+    ...UserConProfileSignupsFragment
+  }
+}
+
+${userConProfileSignupsFragment}
+`;
+
+const withdrawFromAllMutation = gql`
+mutation($userConProfileId: Int!) {
+  withdrawAllUserConProfileSignups(input: { user_con_profile_id: $userConProfileId }) {
+    user_con_profile {
       id
-      state
-      counted
-      bucket_key
-      requested_bucket_key
 
-      user_con_profile {
-        id
-      }
-
-      run {
-        id
-        starts_at
-
-        event {
-          id
-          title
-          length_seconds
-          team_member_name
-
-          registration_policy {
-            buckets {
-              key
-              name
-            }
-          }
-
-          team_members {
-            id
-
-            user_con_profile {
-              id
-            }
-          }
-        }
-
-        rooms {
-          id
-          name
-        }
-      }
+      ...UserConProfileSignupsFragment
     }
   }
 }
+
+${userConProfileSignupsFragment}
 `;
 
 function filterAndSortSignups(signups) {
@@ -162,6 +191,33 @@ class UserConProfileSignupsCard extends React.Component {
             }
             {this.renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
           </ul>
+          {
+            data.myProfile.ability.can_update_signups
+            ? (
+              <div className="card-footer border-top-0">
+                <Mutation mutation={withdrawFromAllMutation}>
+                  {mutate => (
+                    <Confirm.Trigger>
+                      {confirm => (
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => confirm({
+                            prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from all their events at ${data.convention.name}?`,
+                            action: () => mutate({
+                              variables: { userConProfileId: this.props.userConProfileId },
+                            }),
+                          })}
+                        >
+                          Withdraw from all
+                        </button>
+                      )}
+                    </Confirm.Trigger>
+                  )}
+                </Mutation>
+              </div>
+            ) : null
+          }
         </div>
       )}
     </QueryWithStateDisplay>
