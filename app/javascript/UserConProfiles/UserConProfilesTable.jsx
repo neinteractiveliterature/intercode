@@ -10,6 +10,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import Form from '../Models/Form';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import FreeTextFilter from '../Tables/FreeTextFilter';
 import { GraphQLReactTableConsumer } from '../Tables/GraphQLReactTableContext';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
@@ -61,6 +62,12 @@ query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [S
           }
         }
       }
+    }
+  }
+
+  myProfile {
+    ability {
+      can_create_user_con_profiles
     }
   }
 }
@@ -123,6 +130,9 @@ class UserConProfilesTable extends React.Component {
         Header: 'Name',
         id: 'name',
         accessor: userConProfile => userConProfile.name_inverted,
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
+        ),
       },
       {
         Header: 'Email',
@@ -132,6 +142,9 @@ class UserConProfilesTable extends React.Component {
           <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
             {value}
           </a>
+        ),
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
         ),
       },
       {
@@ -219,9 +232,19 @@ class UserConProfilesTable extends React.Component {
           <TableHeader
             {...headerProps}
             renderLeftContent={() => (
-              <Link to="/new" className="btn btn-primary ml-2 mb-2">
-                Add attendee
-              </Link>
+              <GraphQLReactTableConsumer>
+                {({ queryResult: { data } }) => (
+                  data.myProfile.ability.can_create_user_con_profiles
+                    ? (
+                      <Link to="/new" className="btn btn-primary ml-2 mb-2">
+                        <i className="fa fa-plus" />
+                        {' '}
+                        Add attendee
+                      </Link>
+                    )
+                    : null
+                )}
+              </GraphQLReactTableConsumer>
             )}
           />
         )}

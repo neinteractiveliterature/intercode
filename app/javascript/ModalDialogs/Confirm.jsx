@@ -17,34 +17,50 @@ export default class Confirm extends React.Component {
       action: null,
       prompt: null,
       onError: null,
+      displayError: null,
+      error: null,
       actionInProgress: false,
     };
 
     this.startConfirm.setPrompt = prompt => this.setState({ prompt });
   }
 
-  startConfirm = ({ action, prompt, onError }) => {
+  startConfirm = ({
+    action, prompt, onError, displayError,
+  }) => {
     this.setState({
       action,
       prompt,
       onError,
+      displayError,
+      error: null,
       actionInProgress: false,
     });
   }
 
   cancelClicked = () => {
-    this.setState({ action: null, prompt: null, onError: null });
+    this.setState({
+      action: null, prompt: null, onError: null, error: null, displayError: null,
+    });
   }
 
   okClicked = async () => {
     this.setState({ actionInProgress: true });
     try {
       await this.state.action();
-      this.setState({ action: null, prompt: null, onError: null });
+      this.setState({
+        action: null, prompt: null, onError: null, error: null, displayError: null,
+      });
     } catch (error) {
       if (this.state.onError) {
         this.state.onError(error);
-      } else {
+      }
+
+      if (this.state.displayError) {
+        this.setState({ error });
+      }
+
+      if (!this.state.onError && !this.state.displayError) {
         throw error;
       }
     } finally {
@@ -62,6 +78,11 @@ export default class Confirm extends React.Component {
         disableButtons={this.state.actionInProgress}
       >
         {this.state.prompt || <div />}
+        {
+          (this.state.displayError && this.state.error)
+            ? this.state.displayError(this.state.error)
+            : null
+        }
       </ConfirmModal>
     </ConfirmContext.Provider>
   );

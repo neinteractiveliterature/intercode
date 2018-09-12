@@ -91,10 +91,10 @@ class InPlaceEditor extends React.Component {
       return (
         <div className={this.props.className || 'form-inline align-items-start'}>
           {this.renderInput()}
-          <button className="btn btn-secondary btn-sm mr-1" onClick={this.cancelEditing}>
+          <button type="button" className="btn btn-secondary btn-sm mr-1" onClick={this.cancelEditing}>
             <i className="fa fa-times" />
           </button>
-          <button className="btn btn-primary btn-sm" onClick={this.commitEditing}>
+          <button type="button" className="btn btn-primary btn-sm" onClick={this.commitEditing}>
             <i className="fa fa-check" />
           </button>
         </div>
@@ -104,7 +104,7 @@ class InPlaceEditor extends React.Component {
     return (
       <div className="d-flex">
         <div>{this.props.children || this.props.value}</div>
-        <button className="btn btn-link btn-sm" onClick={this.beginEditing}>
+        <button type="button" className="btn btn-link btn-sm" onClick={this.beginEditing}>
           <i className="fa fa-pencil" />
         </button>
       </div>
