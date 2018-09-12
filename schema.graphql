@@ -1,6 +1,7 @@
 type Ability {
   can_become_user_con_profile(user_con_profile_id: Int!): Boolean!
   can_create_tickets: Boolean!
+  can_create_user_con_profiles: Boolean!
   can_delete_event(event_id: Int!): Boolean!
   can_delete_ticket(ticket_id: Int!): Boolean!
   can_delete_user_con_profile(user_con_profile_id: Int!): Boolean!
