@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { ageAsOf } from '../TimeUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { formatBucket } from './SignupUtils';
+import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 const signupsQuery = gql`
@@ -137,6 +138,9 @@ class RunSignupsTable extends React.Component {
       Header: 'Name',
       id: 'name',
       accessor: signup => signup.user_con_profile.name_inverted,
+      Filter: ({ filter, onChange }) => (
+        <FreeTextFilter filter={filter} onChange={onChange} />
+      ),
     },
     {
       Header: 'Bucket',
@@ -175,6 +179,9 @@ class RunSignupsTable extends React.Component {
         <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
           {value}
         </a>
+      ),
+      Filter: ({ filter, onChange }) => (
+        <FreeTextFilter filter={filter} onChange={onChange} />
       ),
     },
   ];
