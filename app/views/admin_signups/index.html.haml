@@ -1,4 +1,4 @@
-= react_component 'SignupAdmin', authenticityToken: graphql_authenticity_token, eventId: @event.id,
+= app_component 'SignupAdmin', eventId: @event.id,
   runId: @run.id,
   eventUrl: event_path(@event),
   exportSignupsUrl: event_run_export_admin_signups_path(@event, @run, format: 'csv'),

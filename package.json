@@ -77,6 +77,7 @@
     "react-router-dom": "^4.3.1",
     "react-select": "^2.0.0",
     "react-select-fast-filter-options": "^0.2.3",
+    "react-stripe-elements": "^2.0.1",
     "react-table": "^6.8.6",
     "reduce-reducers": "^0.4.3",
     "resolve-url-loader": "^2.3.1",

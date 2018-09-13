@@ -1,7 +1,7 @@
 - admin_bar = capture do
   - if can? :update, @page
     .float-right
-      = react_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id, authenticityToken: graphql_authenticity_token
+      = app_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id
 
 - page_content = cadmus_renderer.render(@page.liquid_template, :html, assigns: { 'page' => @page })
 - flash_messages_content = render(partial: 'layouts/flash_messages')
