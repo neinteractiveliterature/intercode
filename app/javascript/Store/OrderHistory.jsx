@@ -3,6 +3,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment-timezone';
 import { intersection } from 'lodash';
+import { Elements } from 'react-stripe-elements';
 
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
@@ -213,21 +214,23 @@ Order #
         <ul className="list-unstyled">
           {renderedOrders}
 
-          <OrderPaymentModal
-            visible={this.state.payingForOrder != null}
-            onCancel={this.payNowCanceled}
-            initialName={this.props.data.myProfile.name_without_nickname}
-            orderId={(this.state.payingForOrder || { id: 0 }).id}
-            onComplete={this.payNowComplete}
-            paymentOptions={
-              this.state.payingForOrder
-                ? intersection(
-                  ...this.state.payingForOrder.order_entries
-                    .map(entry => entry.product.payment_options),
-                ).filter(paymentOption => paymentOption !== 'pay_at_convention')
-                : []
-            }
-          />
+          <Elements>
+            <OrderPaymentModal
+              visible={this.state.payingForOrder != null}
+              onCancel={this.payNowCanceled}
+              initialName={this.props.data.myProfile.name_without_nickname}
+              orderId={(this.state.payingForOrder || { id: 0 }).id}
+              onComplete={this.payNowComplete}
+              paymentOptions={
+                this.state.payingForOrder
+                  ? intersection(
+                    ...this.state.payingForOrder.order_entries
+                      .map(entry => entry.product.payment_options),
+                  ).filter(paymentOption => paymentOption !== 'pay_at_convention')
+                  : []
+              }
+            />
+          </Elements>
         </ul>
       );
     }

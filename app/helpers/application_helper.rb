@@ -112,4 +112,14 @@ module ApplicationHelper
       initialExpanded: params[:expand_filters].present?
     )
   end
+
+  def app_component(name, props = {})
+    react_component(
+      name,
+      props.merge(
+        authenticityToken: graphql_authenticity_token,
+        stripePublishableKey: Rails.configuration.stripe[:publishable_key]
+      )
+    )
+  end
 end

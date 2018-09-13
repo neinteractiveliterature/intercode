@@ -13,7 +13,7 @@ def guard_for_create_convention_associated_model(association)
 end
 
 def guard_for_create_event_associated_model(association, arg_name)
-  guard ->(_obj, args, ctx) {
+  ->(_obj, args, ctx) {
     event = ctx[:convention].events.find(args[:event_id])
     model = event.public_send(association).new(args[arg_name].to_h)
     ctx[:current_ability].can?(:create, model)
@@ -21,7 +21,7 @@ def guard_for_create_event_associated_model(association, arg_name)
 end
 
 def guard_for_model_with_id(model_class, action)
-  guard ->(_obj, args, ctx) {
+  ->(_obj, args, ctx) {
     ctx[:current_ability].can?(action, model_class.find(args[:id]))
   }
 end
