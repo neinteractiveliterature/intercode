@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CardElement } from 'react-stripe-elements';
+
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { ModelStateChangeCalculator, FIELD_TYPES } from '../FormUtils';
-import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
 
 class OrderPaymentForm extends React.Component {
   static propTypes = {
@@ -23,11 +24,6 @@ class OrderPaymentForm extends React.Component {
 
     this.mutator = new ModelStateChangeCalculator('paymentDetails', {
       name: FIELD_TYPES.STRING,
-      ccNumber: FIELD_TYPES.STRING,
-      cvc: FIELD_TYPES.STRING,
-      expMonth: FIELD_TYPES.STRING,
-      expYear: FIELD_TYPES.STRING,
-      zip: FIELD_TYPES.STRING,
     }).getMutatorForStatelessComponent(this, this.props.onChange);
   }
 
@@ -42,18 +38,15 @@ class OrderPaymentForm extends React.Component {
           value={this.props.paymentDetails.name}
         />
 
-        <PaymentEntry
-          ccNumber={this.props.paymentDetails.ccNumber}
-          expMonth={this.props.paymentDetails.expMonth}
-          expYear={this.props.paymentDetails.expYear}
-          cvc={this.props.paymentDetails.cvc}
-          zip={this.props.paymentDetails.zip}
-          onCcNumberChanged={this.mutator.onInputChange}
-          onExpMonthChanged={this.mutator.onInputChange}
-          onExpYearChanged={this.mutator.onInputChange}
-          onCvcChanged={this.mutator.onInputChange}
-          onZipChanged={this.mutator.onInputChange}
+        <CardElement
+          className="form-control mb-4"
           disabled={disabled}
+          style={{
+            base: {
+              lineHeight: 1.5,
+              fontSize: '16px',
+            },
+          }}
         />
       </div>
     );
