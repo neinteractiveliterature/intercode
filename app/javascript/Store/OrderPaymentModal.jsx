@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Modal from 'react-bootstrap4-modal';
-import createStripeToken from './createStripeToken';
+import { injectStripe } from 'react-stripe-elements';
+
 import ErrorDisplay from '../ErrorDisplay';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import OrderPaymentForm from './OrderPaymentForm';
@@ -43,6 +44,9 @@ class OrderPaymentModal extends React.Component {
     submitOrder: PropTypes.func.isRequired,
     orderId: PropTypes.number.isRequired,
     paymentOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+    stripe: PropTypes.shape({
+      createToken: PropTypes.func.isRequired,
+    }).isRequired,
   }
 
   static defaultProps = {
@@ -56,11 +60,6 @@ class OrderPaymentModal extends React.Component {
       submitting: false,
       paymentMode: props.paymentOptions.includes('pay_at_convention') ? null : 'now',
       paymentDetails: {
-        ccNumber: '',
-        cvc: '',
-        expMonth: '',
-        expYear: '',
-        zip: '',
         name: props.initialName || '',
       },
     };
@@ -73,10 +72,16 @@ class OrderPaymentModal extends React.Component {
   submitCheckOutViaStripe = async () => {
     try {
       this.setState({ submitting: true });
-      const stripeToken = await createStripeToken(this.state.paymentDetails);
+      const {
+        token,
+        error: tokenError,
+      } = await this.props.stripe.createToken(this.state.paymentDetails);
+      if (tokenError) {
+        throw tokenError;
+      }
 
       try {
-        await this.props.submitOrder(this.props.orderId, this.state.paymentMode, stripeToken);
+        await this.props.submitOrder(this.props.orderId, this.state.paymentMode, token.id);
         this.props.onComplete();
       } catch (error) {
         this.setState({ graphQLError: error, submitting: false });
@@ -188,4 +193,4 @@ class OrderPaymentModal extends React.Component {
   }
 }
 
-export default OrderPaymentModal;
+export default injectStripe(OrderPaymentModal);

@@ -6,10 +6,11 @@ import { enableUniqueIds } from 'react-html-id';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Modal from 'react-bootstrap4-modal';
+import { Elements } from 'react-stripe-elements';
+
 import ErrorDisplay from '../ErrorDisplay';
-import PaymentEntry from '../BuiltInFormControls/PaymentEntry';
-import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import formatMoney from '../formatMoney';
+import TicketPurchasePaymentSection from './TicketPurchasePaymentSection';
 
 const purchaseTicketMutation = gql`
 mutation($input: PurchaseTicketInput!) {
@@ -68,13 +69,7 @@ class TicketPurchaseForm extends React.Component {
     this.state = {
       paymentError: null,
       submitting: false,
-      stripeToken: null,
       ticketTypeId: (this.props.ticketTypeId || '').toString(),
-      ccNumber: '',
-      cvc: '',
-      expMonth: '',
-      expYear: '',
-      zip: '',
       name: props.initialName || '',
     };
 
@@ -87,64 +82,27 @@ class TicketPurchaseForm extends React.Component {
     return this.props.ticketTypes.find(ticketType => ticketType.id === ticketTypeId);
   }
 
-  submitPayment = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const missingFields = [
-      'ccNumber',
-      'cvc',
-      'expMonth',
-      'expYear',
-      'zip',
-      'name',
-    ].filter(field => !this.state[field]);
-
-    if (missingFields.length > 0) {
-      this.setState({ paymentError: 'Please fill out all the fields in this form.' });
-      return;
-    }
-
-    this.setState({ submitting: true });
-
-    Stripe.card.createToken({
-      number: this.state.ccNumber,
-      cvc: this.state.cvc,
-      exp_month: this.state.expMonth,
-      exp_year: this.state.expYear,
-      name: this.state.name,
-      address_zip: this.state.zip,
-    }, this.handleStripeResponse);
-  }
-
   fieldChanged = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   }
 
-  handleStripeResponse = async (status, response) => {
-    if (response.error) {
+  handleStripeResponse = async (token) => {
+    this.setState({ paymentError: null, submitting: true });
+    try {
+      const purchaseResponse = await this.props.purchaseTicket(
+        Number.parseInt(this.state.ticketTypeId, 10),
+        token.id,
+      );
       this.setState({
-        paymentError: response.error.message,
+        ticket: purchaseResponse.data.purchaseTicket.ticket,
         submitting: false,
       });
-    } else {
-      this.setState({ stripeToken: response.id });
-
-      try {
-        const purchaseResponse = await this.props.purchaseTicket(
-          Number.parseInt(this.state.ticketTypeId, 10),
-          this.state.stripeToken,
-        );
-        this.setState({
-          ticket: purchaseResponse.data.purchaseTicket.ticket,
-        });
-      } catch (error) {
-        this.setState({
-          graphQLError: error,
-          submitting: false,
-        });
-      }
+    } catch (error) {
+      this.setState({
+        graphQLError: error,
+        submitting: false,
+      });
     }
   }
 
@@ -210,86 +168,58 @@ class TicketPurchaseForm extends React.Component {
     );
   }
 
-  renderPaymentSection = () => {
-    const disabled = this.isDisabled();
+  renderPaymentSection = () => (
+    <div>
+      <hr />
+      <ErrorDisplay
+        stringError={this.state.paymentError}
+        graphQLError={this.state.graphQLError}
+      />
 
-    return (
-      <div>
-        <hr />
-        <ErrorDisplay
-          stringError={this.state.paymentError}
-          graphQLError={this.state.graphQLError}
-        />
+      {this.renderFormGroup('name', 'Name', 'text', this.state.name)}
 
-        {this.renderFormGroup('name', 'Name', 'text', this.state.name)}
-
-        <PaymentEntry
-          ccNumber={this.state.ccNumber}
-          expMonth={this.state.expMonth}
-          expYear={this.state.expYear}
-          cvc={this.state.cvc}
-          zip={this.state.zip}
-          onCcNumberChanged={this.fieldChanged}
-          onExpMonthChanged={this.fieldChanged}
-          onExpYearChanged={this.fieldChanged}
-          onCvcChanged={this.fieldChanged}
-          onZipChanged={this.fieldChanged}
-          disabled={disabled}
-        />
-
-        <div className="d-flex justify-content-end align-items-center">
-          <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
-          <button
-            className="btn btn-primary"
-            onClick={this.submitPayment}
-            disabled={disabled}
-          >
-            Submit payment
-            {this.renderSubmittingSpinner()}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  renderSubmittingSpinner = () => {
-    if (!this.state.submitting) {
-      return null;
-    }
-
-    return <i className="fa fa-spinner fa-spin" />;
-  }
+      <TicketPurchasePaymentSection
+        disabled={this.isDisabled()}
+        name={this.state.name}
+        onError={error => this.setState({ paymentError: error.message })}
+        onReceiveToken={this.handleStripeResponse}
+        submitting={this.state.submitting}
+      />
+    </div>
+  )
 
   render = () => (
-    <form>
-      {this.renderTicketTypeSelect()}
-      {this.renderPaymentSection()}
-      <Modal visible={this.state.ticket}>
-        <div className="modal-header"><h3>Thank you!</h3></div>
-        <div className="modal-body">
-          {
-            this.state.ticket
-              ? (
-                <div>
-                Your purchase of a
-                  {' '}
-                  {this.state.ticket.ticket_type.description}
-                  {' '}
-for
-                  {' '}
-                  {formatMoney(this.state.ticket.payment_amount)}
-                  {' '}
-                was successful.  We&apos;ve emailed you a receipt.
-                </div>
-              )
-              : null
-          }
-        </div>
-        <div className="modal-footer">
-          <button className="btn btn-primary" onClick={this.purchaseAcknowledged}>OK</button>
-        </div>
-      </Modal>
-    </form>
+    <Elements>
+      <React.Fragment>
+        {this.renderTicketTypeSelect()}
+        {this.renderPaymentSection()}
+        <Modal visible={this.state.ticket != null}>
+          <div className="modal-header"><h3>Thank you!</h3></div>
+          <div className="modal-body">
+            {
+              this.state.ticket
+                ? (
+                  <div>
+                  Your purchase of a
+                    {' '}
+                    {this.state.ticket.ticket_type.description}
+                    {' '}
+  for
+                    {' '}
+                    {formatMoney(this.state.ticket.payment_amount)}
+                    {' '}
+                  was successful.  We&apos;ve emailed you a receipt.
+                  </div>
+                )
+                : null
+            }
+          </div>
+          <div className="modal-footer">
+            <button className="btn btn-primary" onClick={this.purchaseAcknowledged}>OK</button>
+          </div>
+        </Modal>
+      </React.Fragment>
+    </Elements>
   );
 }
 

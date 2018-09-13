@@ -58,7 +58,7 @@ import SignupAdmin from '../SignupAdmin';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
-import StandaloneGraphQLComponent from '../StandaloneGraphQLComponent';
+import AppWrapper from '../AppWrapper';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
@@ -68,35 +68,35 @@ import UserConProfilesAdmin from '../UserConProfiles/UserConProfilesAdmin';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 WebpackerReact.setup({
-  Cart: StandaloneGraphQLComponent(Cart),
-  ConventionAdmin: StandaloneGraphQLComponent(ConventionAdmin),
+  Cart: AppWrapper(Cart),
+  ConventionAdmin: AppWrapper(ConventionAdmin),
   DatagridFilters,
-  EditUserConProfile: StandaloneGraphQLComponent(EditUserConProfile),
-  EventAdmin: StandaloneGraphQLComponent(EventAdmin),
-  EventProposalDisplay: StandaloneGraphQLComponent(EventProposalDisplay),
-  EventProposalForm: StandaloneGraphQLComponent(EventProposalForm),
+  EditUserConProfile: AppWrapper(EditUserConProfile),
+  EventAdmin: AppWrapper(EventAdmin),
+  EventProposalDisplay: AppWrapper(EventProposalDisplay),
+  EventProposalForm: AppWrapper(EventProposalForm),
   EventListSortDropdown,
-  FormJSONEditor: StandaloneGraphQLComponent(FormJSONEditor),
+  FormJSONEditor: AppWrapper(FormJSONEditor),
   LiquidHTMLEditor,
-  MyProfileForm: StandaloneGraphQLComponent(MyProfileForm),
-  NavigationItemsAdmin: StandaloneGraphQLComponent(NavigationItemsAdmin),
-  OrderHistory: StandaloneGraphQLComponent(OrderHistory),
-  PageAdminDropdown: StandaloneGraphQLComponent(PageAdminDropdown),
-  ProductOrderForm: StandaloneGraphQLComponent(ProductOrderForm),
-  RoomsAdmin: StandaloneGraphQLComponent(RoomsAdmin),
-  RunSignupSummary: StandaloneGraphQLComponent(RunSignupSummary),
-  ScheduleGrid: StandaloneGraphQLComponent(ScheduleGrid),
-  SignupAdmin: StandaloneGraphQLComponent(SignupAdmin),
-  StaffPositionAdmin: StandaloneGraphQLComponent(StaffPositionAdmin),
-  StandaloneEditEvent: StandaloneGraphQLComponent(StandaloneEditEvent),
-  StoreAdmin: StandaloneGraphQLComponent(StoreAdmin),
-  TeamMemberForm: StandaloneGraphQLComponent(TeamMemberForm),
-  TicketTypeAdmin: StandaloneGraphQLComponent(TicketTypeAdmin),
-  TicketPurchaseForm: StandaloneGraphQLComponent(TicketPurchaseForm),
-  UserConProfileAdminDisplay: StandaloneGraphQLComponent(UserConProfileAdminDisplay),
-  UserConProfileSignupsCard: StandaloneGraphQLComponent(UserConProfileSignupsCard),
-  UserConProfilesAdmin: StandaloneGraphQLComponent(UserConProfilesAdmin),
-  WhosFreeForm: StandaloneGraphQLComponent(WhosFreeForm),
+  MyProfileForm: AppWrapper(MyProfileForm),
+  NavigationItemsAdmin: AppWrapper(NavigationItemsAdmin),
+  OrderHistory: AppWrapper(OrderHistory),
+  PageAdminDropdown: AppWrapper(PageAdminDropdown),
+  ProductOrderForm: AppWrapper(ProductOrderForm),
+  RoomsAdmin: AppWrapper(RoomsAdmin),
+  RunSignupSummary: AppWrapper(RunSignupSummary),
+  ScheduleGrid: AppWrapper(ScheduleGrid),
+  SignupAdmin: AppWrapper(SignupAdmin),
+  StaffPositionAdmin: AppWrapper(StaffPositionAdmin),
+  StandaloneEditEvent: AppWrapper(StandaloneEditEvent),
+  StoreAdmin: AppWrapper(StoreAdmin),
+  TeamMemberForm: AppWrapper(TeamMemberForm),
+  TicketTypeAdmin: AppWrapper(TicketTypeAdmin),
+  TicketPurchaseForm: AppWrapper(TicketPurchaseForm),
+  UserConProfileAdminDisplay: AppWrapper(UserConProfileAdminDisplay),
+  UserConProfileSignupsCard: AppWrapper(UserConProfileSignupsCard),
+  UserConProfilesAdmin: AppWrapper(UserConProfilesAdmin),
+  WhosFreeForm: AppWrapper(WhosFreeForm),
 });
 
 Rails.start();
