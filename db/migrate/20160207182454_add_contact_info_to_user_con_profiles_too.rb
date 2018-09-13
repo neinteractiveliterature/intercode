@@ -1,10 +1,10 @@
 class AddContactInfoToUserConProfilesToo < ActiveRecord::Migration[5.1]
   class User < ApplicationRecord
-    has_many :user_con_profiles, class_name: "AddContactInfoToUserConProfilesToo::UserConProfile"
+    has_many :user_con_profiles, class_name: 'AddContactInfoToUserConProfilesToo::UserConProfile'
   end
 
   class UserConProfile < ApplicationRecord
-    belongs_to :user, class_name: "AddContactInfoToUserConProfilesToo::User"
+    belongs_to :user, class_name: 'AddContactInfoToUserConProfilesToo::User'
   end
 
   def change
@@ -17,8 +17,8 @@ class AddContactInfoToUserConProfilesToo < ActiveRecord::Migration[5.1]
       t.string :address1
       t.string :address2
       t.string :city
-      t.string :state,              :length => 30
-      t.string :zipcode,            :length => 10
+      t.string :state,              length: 30
+      t.string :zipcode,            length: 10
       t.string :country
       t.string :day_phone
       t.string :evening_phone
