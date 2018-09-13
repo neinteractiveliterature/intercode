@@ -1,9 +1,8 @@
 module EventProposalsHelper
   def event_proposal_form(event_proposal)
-    react_component(
+    app_component(
       'EventProposalForm',
       eventProposalId: event_proposal.id,
-      authenticityToken: graphql_authenticity_token,
       afterSubmitUrl: page_path('new-proposal'),
       exitButton: event_proposal_exit_button
     )
