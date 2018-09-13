@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import { flowRight, intersection } from 'lodash';
 import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+import { Elements } from 'react-stripe-elements';
 
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
@@ -266,19 +267,21 @@ class Cart extends React.Component {
       <ErrorDisplay graphQLError={this.state.error} />
       {this.renderOrderEntriesTable()}
 
-      <OrderPaymentModal
-        visible={this.state.checkingOut}
-        onCancel={this.checkOutCanceled}
-        initialName={this.props.data.myProfile.name_without_nickname}
-        orderId={(this.props.data.currentPendingOrder || {}).id}
-        onComplete={this.checkOutComplete}
-        paymentOptions={
-          intersection(
-            ...this.props.data.currentPendingOrder.order_entries
-              .map(entry => entry.product.payment_options)
-          )
-        }
-      />
+      <Elements>
+        <OrderPaymentModal
+          visible={this.state.checkingOut}
+          onCancel={this.checkOutCanceled}
+          initialName={this.props.data.myProfile.name_without_nickname}
+          orderId={(this.props.data.currentPendingOrder || {}).id}
+          onComplete={this.checkOutComplete}
+          paymentOptions={
+            intersection(
+              ...this.props.data.currentPendingOrder.order_entries
+                .map(entry => entry.product.payment_options)
+            )
+          }
+        />
+      </Elements>
 
       <ConfirmModal
         visible={this.state.confirmingDeleteOrderEntryId != null}
