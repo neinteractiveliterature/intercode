@@ -1,18 +1,17 @@
 class DeviseCreateUsers < ActiveRecord::Migration[5.1]
   def change
     create_table(:users) do |t|
-
       ## Intercode profile
-      t.string :first_name,         :null => false
-      t.string :last_name,          :null => false
+      t.string :first_name,         null: false
+      t.string :last_name,          null: false
       t.string :nickname
       t.date   :birth_date
       t.string :gender
       t.string :address1
       t.string :address2
       t.string :city
-      t.string :state,              :length => 30
-      t.string :zipcode,            :length => 10
+      t.string :state,              length: 30
+      t.string :zipcode,            length: 10
       t.string :country
       t.string :day_phone
       t.string :evening_phone
@@ -23,8 +22,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.boolean :site_admin
 
       ## Database authenticatable
-      t.string :email,              :null => false, :default => ""
-      t.string :encrypted_password, :null => false, :default => ""
+      t.string :email,              null: false, default: ''
+      t.string :encrypted_password, null: false, default: ''
 
       ## Recoverable
       t.string   :reset_password_token
@@ -34,7 +33,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.datetime :remember_created_at
 
       ## Trackable
-      t.integer  :sign_in_count, :default => 0
+      t.integer  :sign_in_count, default: 0
       t.datetime :current_sign_in_at
       t.datetime :last_sign_in_at
       t.string   :current_sign_in_ip
@@ -54,12 +53,11 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       ## Token authenticatable
       # t.string :authentication_token
 
-
       t.timestamps
     end
 
-    add_index :users, :email,                :unique => true
-    add_index :users, :reset_password_token, :unique => true
+    add_index :users, :email,                unique: true
+    add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   :unique => true
     # add_index :users, :unlock_token,         :unique => true
     # add_index :users, :authentication_token, :unique => true

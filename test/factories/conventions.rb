@@ -8,15 +8,17 @@ FactoryBot.define do
     show_schedule { 'yes' }
     accepting_proposals { false }
     updated_by { nil }
-    maximum_event_signups { ScheduledValue::ScheduledValue.new(
-      timespans: [
-        {
-          start: nil,
-          finish: nil,
-          value: 'unlimited'
-        }
-      ]
-    ) }
+    maximum_event_signups do
+      ScheduledValue::ScheduledValue.new(
+        timespans: [
+          {
+            start: nil,
+            finish: nil,
+            value: 'unlimited'
+          }
+        ]
+      )
+    end
     starts_at { Time.new(2016, 10, 28, 18, 0, 0) }
     ends_at { Time.new(2016, 10, 30, 18, 0, 0) }
 

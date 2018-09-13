@@ -7,9 +7,7 @@ Rollbar.configure do |config|
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
 
   # Here we'll disable in 'test':
-  if Rails.env.test?
-    config.enabled = false
-  end
+  config.enabled = false if Rails.env.test?
 
   capistrano_revision_path = File.expand_path('REVISION', Rails.root)
   rollbar_code_version = ENV['HEROKU_SLUG_COMMIT']
