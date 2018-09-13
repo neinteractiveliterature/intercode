@@ -9,9 +9,7 @@ module LogQuerySource
       !caller_line.include?('/initializers/')
     end
 
-    if relevant_caller_line
-      logger.debug("  ↳ #{ relevant_caller_line.sub("#{ Rails.root }/", '') }")
-    end
+    logger.debug("  ↳ #{relevant_caller_line.sub("#{Rails.root}/", '')}") if relevant_caller_line
   end
 end
 

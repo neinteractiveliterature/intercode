@@ -1,16 +1,16 @@
 class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration[5.1]
   class TeamMember < ApplicationRecord
-    belongs_to :user_con_profile, class_name: "LinkTeamMembersToUserConProfiles::UserConProfile"
-    belongs_to :user, class_name: "LinkTeamMembersToUserConProfiles::User"
-    belongs_to :event, class_name: "LinkTeamMembersToUserConProfiles::Event"
+    belongs_to :user_con_profile, class_name: 'LinkTeamMembersToUserConProfiles::UserConProfile'
+    belongs_to :user, class_name: 'LinkTeamMembersToUserConProfiles::User'
+    belongs_to :event, class_name: 'LinkTeamMembersToUserConProfiles::Event'
   end
 
   class Event < ApplicationRecord
-    belongs_to :convention, class_name: "LinkTeamMembersToUserConProfiles::Convention"
+    belongs_to :convention, class_name: 'LinkTeamMembersToUserConProfiles::Convention'
   end
 
   class Convention < ApplicationRecord
-    has_many :user_con_profiles, class_name: "LinkTeamMembersToUserConProfiles::UserConProfile"
+    has_many :user_con_profiles, class_name: 'LinkTeamMembersToUserConProfiles::UserConProfile'
   end
 
   class User < ApplicationRecord
@@ -22,7 +22,7 @@ class LinkTeamMembersToUserConProfiles < ActiveRecord::Migration[5.1]
   def up
     add_reference :team_members, :user_con_profile, index: true
 
-    LinkTeamMembersToUserConProfiles::TeamMember.includes(:event => :convention).find_each do |team_member|
+    LinkTeamMembersToUserConProfiles::TeamMember.includes(event: :convention).find_each do |team_member|
       team_member.update!(user_con_profile: team_member.event.convention.user_con_profiles.find_by!(user_id: team_member.user_id))
     end
 

@@ -1,1 +1,1 @@
-#GraphiQL::Rails.config.csrf = :per_form
+# GraphiQL::Rails.config.csrf = :per_form

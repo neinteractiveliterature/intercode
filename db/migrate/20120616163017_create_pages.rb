@@ -10,6 +10,6 @@ class CreatePages < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_index :pages, [:parent_type, :parent_id, :slug], :unique => true
+    add_index :pages, [:parent_type, :parent_id, :slug], unique: true
   end
 end
