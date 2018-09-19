@@ -30,9 +30,9 @@ gem 'devise-doorkeeper'
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem 'cadmus', git: 'https://github.com/gively/cadmus', branch: 'partials_and_layouts'
-gem 'cadmus_files', git: 'https://github.com/nbudin/cadmus_files', branch: 'cadmus_0_6'
-gem 'cadmus_navbar', git: 'https://github.com/nbudin/cadmus_navbar'
+gem 'cadmus', '~> 0.7.0'
+gem 'cadmus_files', '~> 0.2.0'
+gem 'cadmus_navbar', '~> 0.1.0'
 gem 'liquid-md5'
 
 # Extracted from this app!  Values that change over time based on a schedule

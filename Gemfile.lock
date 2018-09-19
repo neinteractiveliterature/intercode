@@ -6,35 +6,6 @@ GIT
     bootstrap_form (4.0.0.dev)
 
 GIT
-  remote: https://github.com/gively/cadmus
-  revision: f4d3ac4b13c0090765363feb5fe91910a5d731c3
-  branch: partials_and_layouts
-  specs:
-    cadmus (0.6.0)
-      liquid
-      rails (>= 5.0.0)
-
-GIT
-  remote: https://github.com/nbudin/cadmus_files
-  revision: dcb282317beefde6a23aa218371a48d9164e5bec
-  branch: cadmus_0_6
-  specs:
-    cadmus_files (0.2.0)
-      cadmus
-      carrierwave
-      liquid
-      rails (>= 4.0.0)
-
-GIT
-  remote: https://github.com/nbudin/cadmus_navbar
-  revision: 1c8a8e66d90fd95bdfb0a367b57fbd3fc09ac1cc
-  specs:
-    cadmus_navbar (0.1.0)
-      acts_as_list
-      cadmus
-      rails (>= 5.0.0)
-
-GIT
   remote: https://github.com/nbudin/htmldiff-lcs
   revision: efeec72cdedadfb310dbb6474395289287d0fcdc
   specs:
@@ -91,7 +62,7 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    acts_as_list (0.9.11)
+    acts_as_list (0.9.16)
       activerecord (>= 3.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
@@ -127,6 +98,18 @@ GEM
     bootsnap (1.3.2-java)
       msgpack (~> 1.0)
     builder (3.2.3)
+    cadmus (0.7.0)
+      liquid
+      rails (>= 5.0.0)
+    cadmus_files (0.2.0)
+      cadmus
+      carrierwave
+      liquid
+      rails (>= 4.0.0)
+    cadmus_navbar (0.1.0)
+      acts_as_list
+      cadmus
+      rails (>= 5.0.0)
     cancancan (2.3.0)
     carrierwave (1.2.3)
       activemodel (>= 4.0.0)
@@ -443,9 +426,9 @@ DEPENDENCIES
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
   bootstrap_form!
-  cadmus!
-  cadmus_files!
-  cadmus_navbar!
+  cadmus (~> 0.7.0)
+  cadmus_files (~> 0.2.0)
+  cadmus_navbar (~> 0.1.0)
   cancancan
   carrierwave
   civil_service
