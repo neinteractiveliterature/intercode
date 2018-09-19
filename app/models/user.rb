@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   has_many :user_con_profiles
+  has_many :event_proposals, through: :user_con_profiles
 
   attr_accessor :reset_password_mail_options
 

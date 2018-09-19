@@ -57,6 +57,13 @@ module Concerns::FormResponse
     assign_form_response_attributes(default_values)
   end
 
+  def read_form_response_attributes_for_form_items(form_items)
+    form_items.each_with_object({}) do |form_item, attributes|
+      next unless form_item.identifier
+      attributes[form_item.identifier] = read_form_response_attribute(form_item.identifier)
+    end
+  end
+
   def form_response_attribute_changes
     @form_response_attribute_changes ||= {}
   end
