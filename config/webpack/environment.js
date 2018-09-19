@@ -10,9 +10,6 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 //   }),
 // )
 
-// Explicitly include modules that use ES6 syntax
-environment.loaders.get('babel').exclude = /node_modules\/(?!(query-string|strict-uri-encode)\/).*/;
-
 //
 // environment.loaders.get('sass').use.unshift({
 //   loader: 'cache-loader'
