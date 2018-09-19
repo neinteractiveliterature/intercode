@@ -71,6 +71,8 @@ class Event < ApplicationRecord
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
 
+  has_one :event_proposal, required: false
+
   STATUSES.each do |status|
     scope status, -> { where(status: status) }
   end
