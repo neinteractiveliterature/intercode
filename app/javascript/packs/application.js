@@ -51,6 +51,7 @@ import NavigationItemsAdmin from '../NavigationItemsAdmin';
 import OrderHistory from '../Store/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
+import ProposeEventButton from '../EventProposals/ProposeEventButton';
 import RoomsAdmin from '../RoomsAdmin';
 import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
 import ScheduleGrid from '../ScheduleGrid';
@@ -83,6 +84,7 @@ WebpackerReact.setup({
   OrderHistory: AppWrapper(OrderHistory),
   PageAdminDropdown: AppWrapper(PageAdminDropdown),
   ProductOrderForm: AppWrapper(ProductOrderForm),
+  ProposeEventButton: AppWrapper(ProposeEventButton),
   RoomsAdmin: AppWrapper(RoomsAdmin),
   RunSignupSummary: AppWrapper(RunSignupSummary),
   ScheduleGrid: AppWrapper(ScheduleGrid),
