@@ -1,6 +1,6 @@
 - admin_bar = capture do
   - if can? :update, @page
-    .float-right
+    .page-admin-dropdown
       = app_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id
 
 - page_content = cadmus_renderer.render(@page.liquid_template, :html, assigns: { 'page' => @page })
