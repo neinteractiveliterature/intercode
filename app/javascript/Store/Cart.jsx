@@ -42,6 +42,7 @@ fragment OrderEntryFields on OrderEntry {
 const cartQuery = gql`
 query {
   myProfile {
+    id
     name_without_nickname
   }
 

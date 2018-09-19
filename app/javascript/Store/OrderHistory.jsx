@@ -23,6 +23,7 @@ query {
   }
 
   myProfile {
+    id
     name_without_nickname
 
     orders {

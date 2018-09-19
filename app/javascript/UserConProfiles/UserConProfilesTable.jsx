@@ -66,6 +66,7 @@ query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [S
   }
 
   myProfile {
+    id
     ability {
       can_create_user_con_profiles
     }
