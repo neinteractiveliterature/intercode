@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Modal from 'react-bootstrap4-modal';
+import { enableUniqueIds } from 'react-html-id';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import { combineStateChangeCalculators, componentLocalStateUpdater, Transforms } from '../ComposableFormUtils';
@@ -63,6 +64,8 @@ class ProposeEventButton extends React.Component {
     this.stateUpdater = componentLocalStateUpdater(this, combineStateChangeCalculators({
       cloneEventProposalId: Transforms.integer,
     }));
+
+    enableUniqueIds(this);
   }
 
   showModal = () => { this.setState({ modalVisible: true, cloneEventProposalId: null }); }
@@ -79,77 +82,84 @@ class ProposeEventButton extends React.Component {
     }
   }
 
-  render = () => (
-    <QueryWithStateDisplay query={previousProposalsQuery}>
-      {({ data }) => (
-        <Mutation mutation={createEventProposal}>
-          {mutate => (
-            <React.Fragment>
-              <button
-                className={this.props.className}
-                type="button"
-                onClick={(
-                  data.myProfile.user.event_proposals.length > 0
-                    ? this.showModal
-                    : () => this.createNewProposal(mutate, null)
-                )}
-              >
-                {this.props.caption}
-              </button>
+  render = () => {
+    const buttonId = this.nextUniqueId();
 
-              <Modal visible={this.state.modalVisible} dialogClassName="modal-lg" className="text-body">
-                <div className="modal-header">
-                  New event proposal
-                </div>
-                <div className="modal-body">
-                  <p>
-                    If you&apos;d like to propose an event you&apos;ve proposed sometime in the
-                    past, please select it here.  Otherwise, choose &quot;start from scratch.&quot;
-                  </p>
-                  <ChoiceSet
-                    choices={[
-                      { value: null, label: 'Start from scratch' },
-                      ...(data.myProfile.user.event_proposals || [])
-                        .filter(eventProposal => eventProposal.status !== 'draft')
-                        .sort((a, b) => b.created_at.localeCompare(a.created_at))
-                        .map(eventProposal => ({
-                          value: eventProposal.id,
-                          label: `${eventProposal.title} (${eventProposal.convention.name})`,
-                        })),
-                    ]}
-                    disabled={this.state.mutationInProgress}
-                    value={this.state.cloneEventProposalId}
-                    onChange={this.stateUpdater.cloneEventProposalId}
-                  />
-                  <ErrorDisplay graphQLError={this.state.error} />
-                </div>
-                <div className="modal-footer">
-                  <button
-                    className="btn btn-secondary"
-                    type="button"
-                    disabled={this.state.mutationInProgress}
-                    onClick={this.hideModal}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    type="button"
-                    disabled={this.state.mutationInProgress}
-                    onClick={() => {
-                      this.createNewProposal(mutate, this.state.cloneEventProposalId);
-                    }}
-                  >
-                    Create proposal
-                  </button>
-                </div>
-              </Modal>
-            </React.Fragment>
-          )}
-        </Mutation>
-      )}
-    </QueryWithStateDisplay>
-  )
+    return (
+      <QueryWithStateDisplay query={previousProposalsQuery}>
+        {({ data }) => (
+          <Mutation mutation={createEventProposal}>
+            {mutate => (
+              <React.Fragment>
+                <button
+                  id={buttonId}
+                  className={this.props.className}
+                  type="button"
+                  onClick={(
+                    data.myProfile.user.event_proposals.length > 0
+                      ? this.showModal
+                      : () => this.createNewProposal(mutate, null)
+                  )}
+                >
+                  {this.props.caption}
+                </button>
+
+                <Modal visible={this.state.modalVisible} dialogClassName="modal-lg" className="text-body">
+                  <div className="modal-header">
+                    New event proposal
+                  </div>
+                  <div className="modal-body text-left">
+                    <p>
+                      If you&apos;d like to propose an event you&apos;ve proposed sometime in the
+                      past, please select it here.  Otherwise, choose &quot;start from
+                      scratch.&quot;
+                    </p>
+                    <ChoiceSet
+                      name={`cloneEventProposalId-${buttonId}`}
+                      choices={[
+                        { value: '', label: 'Start from scratch' },
+                        ...(data.myProfile.user.event_proposals || [])
+                          .filter(eventProposal => eventProposal.status !== 'draft')
+                          .sort((a, b) => b.created_at.localeCompare(a.created_at))
+                          .map(eventProposal => ({
+                            value: eventProposal.id.toString(),
+                            label: `${eventProposal.title} (${eventProposal.convention.name})`,
+                          })),
+                      ]}
+                      disabled={this.state.mutationInProgress}
+                      value={(this.state.cloneEventProposalId || '').toString()}
+                      onChange={this.stateUpdater.cloneEventProposalId}
+                    />
+                    <ErrorDisplay graphQLError={this.state.error} />
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      disabled={this.state.mutationInProgress}
+                      onClick={this.hideModal}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      disabled={this.state.mutationInProgress}
+                      onClick={() => {
+                        this.createNewProposal(mutate, this.state.cloneEventProposalId);
+                      }}
+                    >
+                      Create proposal
+                    </button>
+                  </div>
+                </Modal>
+              </React.Fragment>
+            )}
+          </Mutation>
+        )}
+      </QueryWithStateDisplay>
+    );
+  }
 }
 
 export default ProposeEventButton;
