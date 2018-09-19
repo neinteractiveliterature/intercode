@@ -6,19 +6,25 @@ import Select from 'react-select';
 import moment from 'moment-timezone';
 import { enableUniqueIds } from 'react-html-id';
 import createFilterOptions from 'react-select-fast-filter-options';
+import { memoize } from 'lodash';
 
 const NOW = new Date().getTime();
-const TIMEZONE_OPTIONS = moment.tz.names()
-  .map(name => moment.tz.zone(name))
-  .sort((a, b) => ((b.offsets[0] - a.offsets[0]) || a.name.localeCompare(b.name)))
-  .map((zone) => {
-    let offsetIndex = zone.untils.findIndex(until => until > NOW);
-    if (offsetIndex === -1) {
-      offsetIndex = zone.untils.length - 1;
-    }
 
-    const offset = zone.offsets[offsetIndex];
-    const offsetSign = offset < 0 ? '-' : '+';
+const getOffset = (zone) => {
+  let offsetIndex = zone.untils.findIndex(until => until > NOW);
+  if (offsetIndex === -1) {
+    offsetIndex = zone.untils.length - 1;
+  }
+
+  return zone.offsets[offsetIndex];
+};
+
+const buildTimezoneOptions = () => moment.tz.names()
+  .map(name => moment.tz.zone(name))
+  .sort((a, b) => ((getOffset(b) - getOffset(a)) || a.name.localeCompare(b.name)))
+  .map((zone) => {
+    const offset = getOffset(zone);
+    const offsetSign = offset < 0 ? '+' : '-'; // POSIX offsets are inverted
     const offsetHours = Math.floor(Math.abs(offset / 60));
     const offsetMinutes = Math.round(Math.abs(offset % 60));
     const formattedOffset = `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`;
@@ -30,14 +36,26 @@ const TIMEZONE_OPTIONS = moment.tz.names()
     };
   });
 
-const TIMEZONE_OPTIONS_BY_NAME = {};
-TIMEZONE_OPTIONS.forEach((zone) => { TIMEZONE_OPTIONS_BY_NAME[zone.value] = zone; });
+const getTimezoneOptions = memoize(buildTimezoneOptions);
 
-const fastFilterOptions = createFilterOptions({ options: TIMEZONE_OPTIONS, indexes: ['value'] });
+const buildTimezoneOptionsByName = () => {
+  const timezoneOptionsByName = {};
+  getTimezoneOptions().forEach((zone) => { timezoneOptionsByName[zone.value] = zone; });
+  return timezoneOptionsByName;
+};
+
+const getTimezoneOptionsByName = memoize(buildTimezoneOptionsByName);
+
+const buildFastFilterOptions = () => createFilterOptions({ options: getTimezoneOptions(), indexes: ['value'] });
+const getFastFilterOptions = memoize(buildFastFilterOptions);
+
 export const loadOptions = (inputValue) => {
-  const filtered = fastFilterOptions(TIMEZONE_OPTIONS, inputValue);
-  const populationSorted = filtered.sort((a, b) => b.population - a.population);
-  return populationSorted.slice(0, 50);
+  const filtered = getFastFilterOptions()(getTimezoneOptions(), inputValue);
+  if (inputValue) {
+    const populationSorted = filtered.sort((a, b) => b.population - a.population);
+    return populationSorted.slice(0, 50);
+  }
+  return filtered;
 };
 
 class TimezoneSelect extends React.Component {
@@ -72,7 +90,7 @@ class TimezoneSelect extends React.Component {
         <Select
           id={selectId}
           options={this.state.options}
-          value={TIMEZONE_OPTIONS_BY_NAME[value]}
+          value={getTimezoneOptionsByName()[value]}
           onInputChange={input => this.filterOptions(input)}
           onChange={(newValue) => { onChange(newValue.value); }}
           {...otherProps}
