@@ -7,7 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'babel-polyfill';
 import 'custom-event-polyfill';
 import 'url-search-params-polyfill';
 
@@ -33,6 +32,7 @@ import 'codemirror/addon/fold/foldgutter.css';
 import WebpackerReact from 'webpacker-react';
 
 import '../styles/application.scss';
+import 'react-table/react-table.css';
 import '../inflections';
 import '../Codemirror/LiquidMultiplexModes';
 
