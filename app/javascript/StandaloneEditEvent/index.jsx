@@ -68,6 +68,7 @@ fragment StandaloneEditEvent_EventFormData on Convention {
 const eventQuery = gql`
 query($eventId: Int!) {
   myProfile {
+    id
     ability {
       can_override_maximum_event_provided_tickets
     }
