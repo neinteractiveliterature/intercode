@@ -24,6 +24,7 @@ query($page: Int, $perPage: Int) {
         state
         counted
         choice
+        created_at
 
         run {
           id
@@ -84,8 +85,9 @@ class SignupSpyTable extends React.Component {
       Header: 'Timestamp',
       id: 'created_at',
       accessor: 'created_at',
+      sortable: false,
       filterable: false,
-      Cell: props => moment.tz(props.value, data.convention.timezone_name).format('MMM DD YYYY, h:mm:ssa'),
+      Cell: props => moment.tz(props.value, data.convention.timezone_name).format('MMM D, YYYY [at] h:mm:ssa'),
     },
     {
       Header: 'Choice',

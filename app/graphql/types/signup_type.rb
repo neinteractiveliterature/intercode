@@ -34,4 +34,7 @@ Types::SignupType = GraphQL::ObjectType.define do
       ctx[:current_ability].can?(:view_reports, ctx[:convention])
     end
   end
+
+  field :created_at, !Types::DateType
+  field :updated_at, !Types::DateType
 end
