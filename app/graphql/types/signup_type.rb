@@ -33,6 +33,10 @@ Types::SignupType = GraphQL::ObjectType.define do
     guard ->(_signup, _args, ctx) do
       ctx[:current_ability].can?(:view_reports, ctx[:convention])
     end
+
+    resolve ->(obj, _args, _ctx) do
+      SignupChoiceLoader.for.load(obj)
+    end
   end
 
   field :created_at, !Types::DateType

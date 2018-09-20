@@ -2,7 +2,11 @@ Types::RunType = GraphQL::ObjectType.define do
   name 'Run'
 
   field :id, !types.Int
-  field :event, Types::EventType
+  field :event, Types::EventType do
+    resolve ->(obj, _args, _ctx) do
+      RecordLoader.for(Event).load(obj.event_id)
+    end
+  end
   field :starts_at, Types::DateType
   field :ends_at, Types::DateType
   field :title_suffix, types.String
