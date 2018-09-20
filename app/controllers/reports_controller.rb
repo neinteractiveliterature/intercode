@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  include Concerns::SendCsv
+
   before_action :ensure_authorized
 
   layout 'print_reports', only: %w[events_by_time per_event per_user per_room volunteer_events]
@@ -87,26 +89,13 @@ class ReportsController < ApplicationController
   end
 
   def signup_spy
-    @signups_grid = SignupSpyGrid.new(params[:signups_grid] || { order: 'timestamp' }) do |scope|
-      signup_spy_scope = scope.joins(run: :event)
-        .includes(user_con_profile: :signups)
-        .where(events: { convention_id: convention.id })
-
-      respond_to do |format|
-        format.html do
-          signup_spy_scope.paginate(page: params[:page], per_page: params[:per_page] || 100)
-        end
-        format.csv { signup_spy_scope }
-      end
-    end
-
     respond_to do |format|
       format.html {}
       format.csv do
-        filename = [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
-        filename << '.csv'
-
-        send_data @signups_grid.to_csv, filename: filename
+        send_table_presenter_csv(
+          Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention),
+          [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
+        )
       end
     end
   end

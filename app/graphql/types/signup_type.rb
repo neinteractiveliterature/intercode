@@ -28,4 +28,10 @@ Types::SignupType = GraphQL::ObjectType.define do
       RecordLoader.for(UserConProfile).load(obj.user_con_profile_id)
     }
   end
+
+  field :choice, types.Int do
+    guard ->(_signup, _args, ctx) do
+      ctx[:current_ability].can?(:view_reports, ctx[:convention])
+    end
+  end
 end

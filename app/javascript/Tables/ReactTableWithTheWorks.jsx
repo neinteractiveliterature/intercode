@@ -9,6 +9,7 @@ import TableHeader from './TableHeader';
 
 class ReactTableWithTheWorks extends React.PureComponent {
   static propTypes = {
+    children: PropTypes.func,
     decodeFilterValue: PropTypes.func,
     defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string.isRequired),
     encodeFilterValue: PropTypes.func,
@@ -23,15 +24,18 @@ class ReactTableWithTheWorks extends React.PureComponent {
   };
 
   static defaultProps = {
+    children: null,
     decodeFilterValue: null,
     defaultVisibleColumns: null,
     encodeFilterValue: null,
+    renderFooter: null,
     renderHeader: null,
     variables: null,
   };
 
   render = () => {
     const {
+      children,
       decodeFilterValue,
       defaultVisibleColumns,
       encodeFilterValue,
@@ -75,18 +79,34 @@ class ReactTableWithTheWorks extends React.PureComponent {
                 getPossibleColumns={() => getPossibleColumns(data)}
                 defaultVisibleColumns={defaultVisibleColumns}
               >
-                <div>
-                  {renderHeader({ consumers, exportUrl, getPossibleColumns })}
-                  <ReactTableWithContexts
-                    consumers={[
-                      ReactRouterReactTableConsumer,
-                      GraphQLReactTableConsumer,
-                      ColumnSelectionConsumer,
-                    ]}
-                    {...otherProps}
-                  />
-                  {renderFooter()}
-                </div>
+                <ReactTableWithContexts
+                  consumers={[
+                    ReactRouterReactTableConsumer,
+                    GraphQLReactTableConsumer,
+                    ColumnSelectionConsumer,
+                  ]}
+                  {...otherProps}
+                >
+                  {(state, makeTable, instance) => (
+                    children
+                      ? children({
+                        tableState: state,
+                        makeTable,
+                        instance,
+                        renderFooter,
+                        renderHeader: () => (
+                          renderHeader({ consumers, exportUrl, getPossibleColumns })
+                        ),
+                      })
+                      : (
+                        <React.Fragment>
+                          {renderHeader({ consumers, exportUrl, getPossibleColumns })}
+                          {makeTable()}
+                          {renderFooter()}
+                        </React.Fragment>
+                      )
+                  )}
+                </ReactTableWithContexts>
               </ColumnSelectionProvider>
             )}
           </GraphQLReactTableConsumer>
