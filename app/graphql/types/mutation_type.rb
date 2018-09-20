@@ -82,6 +82,10 @@ class Types::MutationType < Types::BaseObject
 
   ### EventProposal
 
+  field :createEventProposal, mutation: Mutations::CreateEventProposal do
+    guard(guard_for_create_convention_associated_model(:event_proposals))
+  end
+
   field :updateEventProposal, field: Mutations::UpdateEventProposal.field do
     guard(guard_for_convention_associated_model(:event_proposals, :update))
   end
