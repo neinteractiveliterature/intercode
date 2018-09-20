@@ -51,6 +51,9 @@ gem 'money-rails'
 gem 'eu_central_bank'
 gem 'stripe'
 
+# Pagination
+gem 'will_paginate'
+
 # GraphQL server
 gem 'graphql'
 gem 'graphql-guard'
