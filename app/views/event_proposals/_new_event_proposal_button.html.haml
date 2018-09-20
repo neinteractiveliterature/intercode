@@ -1,2 +1,1 @@
-= bootstrap_form_for EventProposal.new do |f|
-  = f.submit button_text.presence || "Propose an event", class: button_class || 'btn btn-secondary'
+= app_component 'ProposeEventButton', caption: button_text.presence || "Propose an event", className: button_class || 'btn btn-secondary'

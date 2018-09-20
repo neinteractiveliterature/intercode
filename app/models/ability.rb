@@ -284,9 +284,8 @@ class Ability
     end
 
     if has_scope?(:read_events)
-      can :read, EventProposal,
-        id: own_event_proposal_ids,
-        status: %w[draft proposed reviewing]
+      can :read, EventProposal, id: own_event_proposal_ids
+      can :read, EventProposal, owner: { user_id: user.id }
       can :signup_summary, Run, id: signed_up_run_ids
       can :read, TeamMember, user_con_profile: { user_id: user.id }
     end

@@ -20,6 +20,8 @@ class EventProposal < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
+  scope :submitted, -> { where.not(status: 'draft') }
+
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
   serialize :timeblock_preferences, JsonArrayCoderWrapper.new(
     ActiveModelCoder.new('EventProposal::TimeblockPreference')
