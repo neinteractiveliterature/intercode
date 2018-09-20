@@ -56,6 +56,7 @@ import RoomsAdmin from '../RoomsAdmin';
 import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
 import ScheduleGrid from '../ScheduleGrid';
 import SignupAdmin from '../SignupAdmin';
+import SignupSpyTable from '../Reports/SignupSpyTable';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
@@ -89,6 +90,7 @@ WebpackerReact.setup({
   RunSignupSummary: AppWrapper(RunSignupSummary),
   ScheduleGrid: AppWrapper(ScheduleGrid),
   SignupAdmin: AppWrapper(SignupAdmin),
+  SignupSpyTable: AppWrapper(SignupSpyTable),
   StaffPositionAdmin: AppWrapper(StaffPositionAdmin),
   StandaloneEditEvent: AppWrapper(StandaloneEditEvent),
   StoreAdmin: AppWrapper(StoreAdmin),

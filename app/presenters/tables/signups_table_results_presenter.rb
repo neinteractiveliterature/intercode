@@ -4,14 +4,30 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
     new(scope, filters, sort, visible_field_ids)
   end
 
+  def self.signup_spy_for_convention(convention)
+    scope = convention.signups.joins(run: :event)
+      .includes(user_con_profile: :signups, run: :event)
+      .where(events: { convention_id: convention.id })
+
+    new(
+      scope,
+      {},
+      [{ field: 'created_at', desc: true }],
+      %w[name event_title state created_at choice]
+    )
+  end
+
   def fields
     [
       Tables::TableResultsPresenter::Field.new(:id, 'Seq'),
       Tables::TableResultsPresenter::Field.new(:state, 'State'),
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
+      Tables::TableResultsPresenter::Field.new(:event_title, 'Event'),
       Tables::TableResultsPresenter::Field.new(:bucket, 'Bucket'),
       Tables::TableResultsPresenter::Field.new(:age, 'Age'),
-      Tables::TableResultsPresenter::Field.new(:email, 'Email')
+      Tables::TableResultsPresenter::Field.new(:email, 'Email'),
+      Tables::TableResultsPresenter::Field.new(:created_at, 'Timestamp'),
+      Tables::TableResultsPresenter::Field.new(:choice, 'Choice')
     ]
   end
 
@@ -74,6 +90,8 @@ OR lower(user_con_profiles.first_name) like :value",
     when :bucket then describe_bucket(signup)
     when :age then signup.user_con_profile.age_as_of(signup.run.starts_at)
     when :email then signup.user_con_profile.email
+    when :event_title then signup.run.event.title
+    when :choice then signup.counted? ? signup.choice : 'N/C'
     else signup.public_send(field.id)
     end
   end
