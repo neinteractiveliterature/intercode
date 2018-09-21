@@ -18,10 +18,4 @@
         %strong Withdrawn:
         = signup_counts_by_state['withdrawn'] || 0
 
-= link_to reports_signup_spy_path(format: :csv, signups_grid: params[:signups_grid]), class: 'btn btn-secondary my-4' do
-  %i.fa.fa-file-excel-o
-  Download CSV
-
-= will_paginate @signups_grid.assets, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
-= datagrid_table @signups_grid
-= will_paginate @signups_grid.assets, renderer: WillPaginate::ActionView::BootstrapLinkRenderer
+= app_component 'SignupSpyTable', basename: reports_signup_spy_path, exportUrl: reports_signup_spy_path(format: 'csv')

@@ -133,6 +133,22 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
+  field :signup_spy_paginated, Types::SignupsPaginationType.to_non_null_type do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::UserConProfileFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(:view_reports, convention)
+    end
+
+    resolve ->(convention, args, _ctx) do
+      Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention)
+        .paginate(page: args[:page], per_page: args[:per_page])
+    end
+  end
+
   field :user_con_profiles_paginated, Types::UserConProfilesPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int

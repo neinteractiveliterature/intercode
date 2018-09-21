@@ -102,6 +102,7 @@ type Convention {
   rooms: [Room]
   root_page: Page
   show_schedule: ShowSchedule
+  signup_spy_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!
   staff_positions: [StaffPosition]
   starts_at: Date
   ticket_name: String!
@@ -977,6 +978,7 @@ enum ShowSchedule {
 
 type Signup {
   bucket_key: String
+  choice: Int
   counted: Boolean
   id: Int!
   requested_bucket_key: String

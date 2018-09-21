@@ -15,7 +15,7 @@ const GraphQLReactTableContext = React.createContext({
   getPages: () => 0,
   getReactTableProps: () => ({}),
   queryResult: {},
-  refetchFromTableState: () => {},
+  fetchFromTableState: () => {},
 });
 
 export const GraphQLReactTableConsumer = GraphQLReactTableContext.Consumer;
@@ -103,7 +103,7 @@ export class GraphQLReactTableProvider extends React.Component {
         value={{
           getReactTableProps: () => reactTableProps,
           queryResult,
-          refetchFromTableState: this.refetchFromTableState,
+          fetchFromTableState: this.fetchFromTableState,
         }}
       >
         <ErrorDisplay graphQLError={error} />
