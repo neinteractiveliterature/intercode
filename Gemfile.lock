@@ -124,8 +124,6 @@ GEM
     crass (1.0.4)
     dante (0.2.0)
     database_cleaner (1.7.0)
-    datagrid (1.5.8)
-      rails (>= 4.0)
     devise (4.5.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -409,8 +407,6 @@ GEM
     whenever (0.10.0)
       chronic (>= 0.6.3)
     will_paginate (3.1.6)
-    will_paginate-bootstrap4 (0.2.2)
-      will_paginate (~> 3.0, >= 3.0.0)
     with_advisory_lock (4.0.0)
       activerecord (>= 4.2)
 
@@ -433,7 +429,6 @@ DEPENDENCIES
   carrierwave
   civil_service
   database_cleaner
-  datagrid
   devise
   devise-doorkeeper
   doorkeeper (= 5.0.0)
@@ -489,7 +484,6 @@ DEPENDENCIES
   webpacker-react (~> 0.3.2)
   whenever
   will_paginate
-  will_paginate-bootstrap4
   with_advisory_lock
 
 RUBY VERSION

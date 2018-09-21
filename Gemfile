@@ -51,12 +51,8 @@ gem 'money-rails'
 gem 'eu_central_bank'
 gem 'stripe'
 
-# Helpers for sortable, filterable and exportable tables
-gem 'datagrid'
-
 # Pagination
 gem 'will_paginate'
-gem 'will_paginate-bootstrap4'
 
 # GraphQL server
 gem 'graphql'
