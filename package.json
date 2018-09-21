@@ -44,7 +44,7 @@
     "caniuse-lite": "^1.0.30000886",
     "classnames": "^2.2.6",
     "clipboard": "^2.0.1",
-    "codemirror": "^5.40.0",
+    "codemirror": "^5.40.2",
     "compression-webpack-plugin": "^2.0.0",
     "css-loader": "^1.0.0",
     "custom-event-polyfill": "^1.0.6",
