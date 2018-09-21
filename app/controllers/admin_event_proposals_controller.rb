@@ -1,4 +1,6 @@
 class AdminEventProposalsController < ApplicationController
+  include Concerns::SendCsv
+
   load_and_authorize_resource(
     class: EventProposal,
     through: :convention,
@@ -6,23 +8,27 @@ class AdminEventProposalsController < ApplicationController
   )
   before_action :authorize_admin
 
-  helper :form_response
-
   def index
-    scope = @admin_event_proposals.where.not(status: 'draft').includes(:owner)
-    now = Time.now
-    @admin_event_proposals = scope.sort_by do |event_proposal|
-      [
-        %w[proposed reviewing].include?(event_proposal.status) ? 0 : 1,
-        event_proposal.status,
-        now - (event_proposal.submitted_at || 0)
-      ]
+  end
+
+  def export
+    respond_to do |format|
+      format.csv do
+        send_table_presenter_csv(
+          Tables::EventProposalsTableResultsPresenter.for_convention(
+            convention,
+            current_ability,
+            params[:filters]&.to_unsafe_h,
+            params[:sort],
+            params[:columns]
+          ),
+          "Event proposals - #{convention.name}"
+        )
+      end
     end
   end
 
   def show
-    @form_items = convention.event_proposal_form.form_items.includes(:form_section)
-      .sort_by { |item| [item.form_section.position, item.position] }
   end
 
   def update

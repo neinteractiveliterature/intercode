@@ -127,6 +127,8 @@ class Ability
   # This class defines access controls.
   # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
   def initialize(user, doorkeeper_token, associated_records_loader: nil)
+    alias_action :export, to: :read
+
     @user = user
     @doorkeeper_token = doorkeeper_token
     @associated_records_loader = associated_records_loader

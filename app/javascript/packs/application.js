@@ -43,6 +43,7 @@ import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
+import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
@@ -77,6 +78,7 @@ WebpackerReact.setup({
   EventAdmin: AppWrapper(EventAdmin),
   EventProposalDisplay: AppWrapper(EventProposalDisplay),
   EventProposalForm: AppWrapper(EventProposalForm),
+  EventProposalsAdmin: AppWrapper(EventProposalsAdmin),
   EventListSortDropdown,
   FormJSONEditor: AppWrapper(FormJSONEditor),
   LiquidHTMLEditor,

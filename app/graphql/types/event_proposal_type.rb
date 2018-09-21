@@ -10,8 +10,12 @@ Types::EventProposalType = GraphQL::ObjectType.define do
   field :title, types.String
   field :status, !types.String
   field :convention, !Types::ConventionType
+  field :submitted_at, !Types::DateType
   field :created_at, !Types::DateType
   field :updated_at, !Types::DateType
+
+  field :registration_policy, Types::RegistrationPolicyType
+  field :length_seconds, types.Int
 
   field :owner, !Types::UserConProfileType do
     resolve -> (obj, _args, _ctx) do
