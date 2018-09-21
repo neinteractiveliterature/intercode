@@ -83,7 +83,7 @@ module NavigationBarHelper
     end,
     NavigationItem.define do
       label 'Event Proposals'
-      url { admin_event_proposals_path }
+      url { admin_event_proposals_path('sort.status' => 'asc', 'sort.submitted_at' => 'desc') }
       visible? { can?(:read, EventProposal.new(convention: convention, status: 'reviewing')) }
     end,
     NavigationItem.define do
