@@ -28,38 +28,11 @@ class AdminEventProposalsController < ApplicationController
     end
   end
 
-  def show
-  end
-
-  def update
-    if admin_event_proposal_params[:status] == 'accepted' && !@admin_event_proposal.event
-      result = AcceptEventProposalService.new(event_proposal: @admin_event_proposal).call
-
-      if result.success?
-        flash[:notice] = "Event successfully accepted for #{@convention.name}!"
-      else
-        flash.now[:alert] = result.errors.join(', ')
-        return render :edit
-      end
-    end
-
-    if @admin_event_proposal.update(admin_event_proposal_params)
-      redirect_to [:admin, @admin_event_proposal]
-    else
-      render :edit
-    end
-  end
-
   private
 
   # Even if the user can manage some event proposals (i.e. their own), only
   # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
-    permission = params[:action] == 'update' ? :update : :read
-    authorize! permission, EventProposal.new(convention: convention, status: 'reviewing')
-  end
-
-  def admin_event_proposal_params
-    params.require(:event_proposal).permit(:status)
+    authorize! :read, EventProposal.new(convention: convention, status: 'reviewing')
   end
 end
