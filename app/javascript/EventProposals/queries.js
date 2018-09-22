@@ -5,7 +5,13 @@ const fragments = {};
 fragments.eventProposal = gql`
 fragment EventProposalFields on EventProposal {
   id
+  title
+  status
   form_response_attrs_json
+
+  event {
+    id
+  }
 }
 `;
 
@@ -24,6 +30,7 @@ fragment EventProposalFormData on Convention {
 export const eventProposalQuery = gql`
 query($eventProposalId: Int!) {
   convention {
+    id
     ...EventProposalFormData
   }
 
@@ -39,6 +46,7 @@ ${fragments.eventProposalFormData}
 export const eventProposalQueryWithOwner = gql`
 query($eventProposalId: Int!) {
   convention {
+    id
     ...EventProposalFormData
   }
 
@@ -48,6 +56,13 @@ query($eventProposalId: Int!) {
     owner {
       id
       name
+    }
+  }
+
+  myProfile {
+    id
+    ability {
+      can_update_event_proposal(event_proposal_id: $eventProposalId)
     }
   }
 }

@@ -94,6 +94,10 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:event_proposals, :submit))
   end
 
+  field :transitionEventProposal, mutation: Mutations::TransitionEventProposal do
+    guard(guard_for_convention_associated_model(:event_proposals, :update))
+  end
+
   ### Form
 
   field :updateFormWithJSON, field: Mutations::UpdateFormWithJSON.field do

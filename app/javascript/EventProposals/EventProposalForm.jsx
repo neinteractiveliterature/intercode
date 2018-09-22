@@ -53,14 +53,20 @@ class EventProposalForm extends React.Component {
     data: GraphQLResultPropType(eventProposalQuery).isRequired,
     updateEventProposal: PropTypes.func.isRequired,
     submitEventProposal: PropTypes.func.isRequired,
-    afterSubmitUrl: PropTypes.string.isRequired,
-    exitButton: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }),
+    afterSubmitUrl: PropTypes.string,
+    afterSubmit: PropTypes.func,
+    exitButton: PropTypes.oneOfType([
+      PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+      }),
+      PropTypes.node,
+    ]),
   };
 
   static defaultProps = {
+    afterSubmit: null,
+    afterSubmitUrl: null,
     exitButton: null,
   };
 
@@ -90,7 +96,30 @@ class EventProposalForm extends React.Component {
   submitEventProposal = () => this.props.submitEventProposal(this.state.eventProposal)
 
   formSubmitted = () => {
-    window.location.href = this.props.afterSubmitUrl;
+    if (this.props.afterSubmitUrl) {
+      window.location.href = this.props.afterSubmitUrl;
+    } else if (this.props.afterSubmit) {
+      this.props.afterSubmit();
+    }
+  }
+
+  renderExitButton = () => {
+    if (!this.props.exitButton) {
+      return null;
+    }
+
+    if (this.props.exitButton.caption && this.props.exitButton.url) {
+      return (
+        <a
+          className="btn btn-outline-secondary mr-2"
+          href={this.props.exitButton.url}
+        >
+          {this.props.exitButton.caption}
+        </a>
+      );
+    }
+
+    return this.props.exitButton;
   }
 
   render = () => (
@@ -110,7 +139,7 @@ class EventProposalForm extends React.Component {
           <div>
             <FormPresenter
               {...formPresenterProps}
-              exitButton={this.props.exitButton}
+              exitButton={this.renderExitButton()}
               submitButton={{ caption: 'Submit proposal' }}
               footerContent={(
                 <div className="text-right">

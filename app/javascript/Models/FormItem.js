@@ -15,9 +15,9 @@ const defaultProperties = {
 export default class FormItem extends Record(defaultProperties) {
   static propType = PropTypes.shape({
     id: PropTypes.number.isRequired,
-    form_section_id: PropTypes.number.isRequired,
+    formSectionId: PropTypes.number.isRequired,
     position: PropTypes.number.isRequired,
-    item_type: PropTypes.string.isRequired,
+    itemType: PropTypes.string.isRequired,
     identifier: PropTypes.string.isRequired,
     adminDescription: PropTypes.string,
   });

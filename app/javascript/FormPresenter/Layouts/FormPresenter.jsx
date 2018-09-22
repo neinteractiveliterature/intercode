@@ -22,10 +22,7 @@ class FormPresenter extends React.Component {
     isUpdatingResponse: PropTypes.bool.isRequired,
     currentSectionId: PropTypes.number,
     currentSection: PropTypes.shape({}).isRequired,
-    exitButton: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }),
+    exitButton: PropTypes.node,
     submitButton: PropTypes.shape({
       caption: PropTypes.string.isRequired,
     }),
