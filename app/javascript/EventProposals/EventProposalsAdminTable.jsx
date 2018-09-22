@@ -110,13 +110,14 @@ class EventProposalsAdminTable extends React.Component {
     {
       Header: 'Capacity',
       id: 'capacity',
+      width: 80,
       accessor: eventProposal => eventProposal.registration_policy,
       filterable: false,
       sortable: false,
       Cell: ({ value }) => (
-        <span className="text-nowrap">
+        <div className="text-nowrap text-right">
           {formatCapacity(value)}
-        </span>
+        </div>
       ),
     },
     {
@@ -136,7 +137,7 @@ class EventProposalsAdminTable extends React.Component {
       Header: 'Status',
       id: 'status',
       accessor: 'status',
-      width: 130,
+      width: 80,
       Filter: ({ filter, onChange }) => (
         <ChoiceSetFilter
           name="state"
@@ -155,6 +156,7 @@ class EventProposalsAdminTable extends React.Component {
       Header: 'Submitted',
       id: 'submitted_at',
       accessor: 'submitted_at',
+      width: 150,
       filterable: false,
       Cell: ({ value }) => (
         moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
@@ -164,6 +166,7 @@ class EventProposalsAdminTable extends React.Component {
       Header: 'Updated',
       id: 'updated_at',
       accessor: 'updated_at',
+      width: 150,
       filterable: false,
       Cell: ({ value }) => (
         moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
@@ -187,7 +190,7 @@ class EventProposalsAdminTable extends React.Component {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            this.props.history.push(`${rowInfo.original.id}/edit`);
+            this.props.history.push(`${rowInfo.original.id}`);
           },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
