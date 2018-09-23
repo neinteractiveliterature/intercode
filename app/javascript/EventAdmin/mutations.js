@@ -142,3 +142,15 @@ mutation($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
 
 ${fragments.maximumEventProvidedTicketsOverride}
 `;
+
+export const updateEventAdminNotesMutation = gql`
+mutation($eventId: Int!, $adminNotes: String!) {
+  updateEventAdminNotes(input: { id: $eventId, admin_notes: $adminNotes }) {
+    event {
+      ...EventFields
+    }
+  }
+}
+
+${fragments.event}
+`;

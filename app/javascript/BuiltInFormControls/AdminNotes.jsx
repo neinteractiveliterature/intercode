@@ -48,64 +48,63 @@ class AdminNotes extends React.Component {
     }
   }
 
-  render = () => (
-    <div className="card bg-warning-light w-100" style={{ maxWidth: '40em' }}>
-      <div className="card-body">
-        <h5 className="card-title">Admin notes</h5>
-        {(
-          this.state.editingValue == null
-            ? (
-              <React.Fragment>
-                <PlainTextDisplay value={this.props.value} />
-              </React.Fragment>
-            )
-            : (
-              <textarea
-                className="form-control"
-                value={this.state.editingValue}
-                onChange={this.stateUpdater.editingValue}
-                ref={(element) => { this.textareaElement = element; }}
-              />
-            )
-        )}
-        <ErrorDisplay graphQLError={this.state.error} />
+  render = () => {
+    if (this.state.editingValue == null) {
+      return (
+        <div className="input-group bg-warning-light border-warning border-1 w-100" style={{ maxWidth: '40em' }}>
+          <div className="flex-grow-1 p-1">
+            {
+              this.props.value
+                ? <PlainTextDisplay value={this.props.value} />
+                : <small className="text-muted">Admin notes</small>
+            }
+          </div>
+          <div className="input-group-append">
+            <button
+              className="btn btn-secondary btn-sm"
+              type="button"
+              onClick={this.startEditing}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="card bg-warning-light w-100" style={{ maxWidth: '40em' }}>
+        <div className="card-body">
+          <h5 className="card-title">Admin notes</h5>
+          <textarea
+            className="form-control"
+            value={this.state.editingValue}
+            onChange={this.stateUpdater.editingValue}
+            ref={(element) => { this.textareaElement = element; }}
+          />
+          <ErrorDisplay graphQLError={this.state.error} />
+        </div>
+        <div className="card-footer text-right">
+          <button
+            className="btn btn-secondary btn-sm"
+            type="button"
+            onClick={this.cancelEditing}
+            disabled={this.state.mutationInProgress}
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-primary btn-sm ml-2"
+            type="button"
+            onClick={this.save}
+            disabled={this.state.mutationInProgress}
+          >
+            Save
+          </button>
+        </div>
       </div>
-      <div className="card-footer text-right">
-        {(
-          this.state.editingValue == null
-            ? (
-              <button
-                className="btn btn-secondary btn-sm"
-                type="button"
-                onClick={this.startEditing}
-              >
-                Edit
-              </button>
-            )
-            : (
-              <React.Fragment>
-                <button
-                  className="btn btn-secondary btn-sm"
-                  type="button"
-                  onClick={this.cancelEditing}
-                  disabled={this.state.mutationInProgress}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-primary btn-sm ml-2"
-                  type="button"
-                  onClick={this.save}
-                  disabled={this.state.mutationInProgress}
-                >
-                  Save
-                </button>
-              </React.Fragment>
-            )
-        )}
-      </div>
-    </div>
-  )
+    );
+  }
 }
 
 export default AdminNotes;
