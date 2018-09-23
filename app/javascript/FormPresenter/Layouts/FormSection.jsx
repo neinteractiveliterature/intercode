@@ -83,7 +83,7 @@ class FormSection extends React.Component {
 
     return (
       <div>
-        {items}
+        {items.toJS()}
       </div>
     );
   }
