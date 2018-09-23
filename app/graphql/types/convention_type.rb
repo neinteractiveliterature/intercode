@@ -111,6 +111,29 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
+  field :event_proposals_paginated, Types::EventProposalsPaginationType.to_non_null_type do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::EventProposalFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(
+        :read,
+        EventProposal.new(convention: convention, status: 'reviewing')
+      )
+    end
+
+    resolve ->(convention, args, ctx) do
+      Tables::EventProposalsTableResultsPresenter.for_convention(
+        convention,
+        ctx[:current_ability],
+        args[:filters].to_h,
+        args[:sort]
+      ).paginate(page: args[:page], per_page: args[:per_page])
+    end
+  end
+
   field :orders_paginated, Types::OrdersPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int

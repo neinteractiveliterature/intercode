@@ -15,10 +15,7 @@ class FormFooter extends React.Component {
     submitForm: PropTypes.func.isRequired,
     currentSectionChanged: PropTypes.func,
     isSubmittingResponse: PropTypes.bool.isRequired,
-    exitButton: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }),
+    exitButton: PropTypes.node,
     submitButton: PropTypes.shape({
       caption: PropTypes.string.isRequired,
     }),
@@ -85,21 +82,6 @@ Back
     );
   }
 
-  renderExitButton = () => {
-    if (this.props.exitButton == null) {
-      return null;
-    }
-
-    return (
-      <a
-        className="btn btn-outline-secondary mr-2"
-        href={this.props.exitButton.url}
-      >
-        {this.props.exitButton.caption}
-      </a>
-    );
-  }
-
   renderContinueButton = () => {
     if (this.props.currentSectionIndex >= this.props.sectionCount - 1) {
       return null;
@@ -109,6 +91,7 @@ Back
       <button
         className="btn btn-primary"
         onClick={this.tryNextSection}
+        type="button"
       >
         Continue
         {' '}
@@ -131,6 +114,7 @@ Back
         className="btn btn-success"
         onClick={this.trySubmitForm}
         disabled={this.props.isSubmittingResponse}
+        type="button"
       >
         {this.props.submitButton.caption}
       </button>
@@ -140,7 +124,7 @@ Back
   render = () => {
     const backButton = this.renderBackButton();
     const continueButton = this.renderContinueButton();
-    const exitButton = this.renderExitButton();
+    const { exitButton } = this.props;
     const submitButton = this.renderSubmitButton();
 
     if (

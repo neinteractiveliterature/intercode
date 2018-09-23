@@ -97,6 +97,7 @@ fragment EventFields on Event {
   status
   description_html
   form_response_attrs_json
+  admin_notes
 
   registration_policy {
     buckets {
@@ -131,7 +132,7 @@ export default gql`
 query {
   myProfile {
     id
-    
+
     ability {
       can_override_maximum_event_provided_tickets
     }

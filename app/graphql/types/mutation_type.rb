@@ -80,6 +80,10 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:events, :update))
   end
 
+  field :updateEventAdminNotes, mutation: Mutations::UpdateEventAdminNotes do
+    guard(guard_for_convention_associated_model(:events, :update_admin_notes))
+  end
+
   ### EventProposal
 
   field :createEventProposal, mutation: Mutations::CreateEventProposal do
@@ -92,6 +96,14 @@ class Types::MutationType < Types::BaseObject
 
   field :submitEventProposal, field: Mutations::SubmitEventProposal.field do
     guard(guard_for_convention_associated_model(:event_proposals, :submit))
+  end
+
+  field :transitionEventProposal, mutation: Mutations::TransitionEventProposal do
+    guard(guard_for_convention_associated_model(:event_proposals, :update))
+  end
+
+  field :updateEventProposalAdminNotes, mutation: Mutations::UpdateEventProposalAdminNotes do
+    guard(guard_for_convention_associated_model(:event_proposals, :update_admin_notes))
   end
 
   ### Form

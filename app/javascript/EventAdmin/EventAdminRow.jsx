@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import { Mutation } from 'react-apollo';
+
+import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import Timespan from '../PCSG/Timespan';
+import { updateEventAdminNotesMutation } from './mutations';
 
 class EventAdminRow extends React.Component {
   static propTypes = {
@@ -110,14 +114,26 @@ runs
           </Link>
           {' '}
           <small>
-(
+            (
             {event.category}
-)
+            )
           </small>
+          <div className="mt-2">
+            <Mutation mutation={updateEventAdminNotesMutation}>
+              {mutate => (
+                <AdminNotes
+                  value={event.admin_notes}
+                  mutate={(adminNotes) => {
+                    mutate({ variables: { eventId: event.id, adminNotes } });
+                  }}
+                />
+              )}
+            </Mutation>
+          </div>
         </td>
         <td>
           {length.hours()}
-:
+          :
           {length.minutes().toString().padStart(2, '0')}
         </td>
         <td>{this.renderRuns(event)}</td>

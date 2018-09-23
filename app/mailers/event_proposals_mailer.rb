@@ -41,7 +41,7 @@ class EventProposalsMailer < ApplicationMailer
   end
 
   def event_proposal_url_for_convention(event_proposal)
-    admin_event_proposal_url(event_proposal, host: event_proposal.convention.domain)
+    "#{admin_event_proposals_url(host: event_proposal.convention.domain)}/#{event_proposal.id}"
   end
   helper_method :event_proposal_url_for_convention
 

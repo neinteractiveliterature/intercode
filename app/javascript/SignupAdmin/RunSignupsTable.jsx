@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { ageAsOf } from '../TimeUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
+import { encodeStringArray, decodeStringArray } from '../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
@@ -66,11 +67,7 @@ query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupF
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
-    const encoded = value.join(',');
-    if (encoded.length === 0) {
-      return null;
-    }
-    return encoded;
+    return encodeStringArray(value);
   }
 
   return value;
@@ -78,11 +75,7 @@ function encodeFilterValue(field, value) {
 
 function decodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
-    const decoded = value.split(',').filter(decodedValue => decodedValue.length > 0);
-    if (decoded.length === 0) {
-      return null;
-    }
-    return decoded;
+    return decodeStringArray(value);
   }
 
   return value;
