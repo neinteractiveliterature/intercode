@@ -8,7 +8,11 @@ import PlainTextDisplay from '../PlainTextDisplay';
 class AdminNotes extends React.Component {
   static propTypes = {
     mutate: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
+  }
+
+  static defaultProps = {
+    value: null,
   }
 
   constructor(props) {
