@@ -10,4 +10,6 @@
       .d-none.d-md-block
         .text-right= delete_button
 
-= event_proposal_form @event_proposal
+= app_component 'EventProposalForm', eventProposalId: @event_proposal.id,
+  afterSubmitUrl: page_path('new-proposal'),
+  exitButton: { caption: 'Return to proposals page', url: page_path('new-proposal') }

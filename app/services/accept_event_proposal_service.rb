@@ -59,7 +59,9 @@ class AcceptEventProposalService < CivilService::Service
 
       event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
 
-      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes)
+      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes).merge(
+        admin_notes: event_proposal.admin_notes
+      )
     end
   end
 

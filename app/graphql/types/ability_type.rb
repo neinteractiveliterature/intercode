@@ -31,6 +31,35 @@ Types::AbilityType = GraphQL::ObjectType.define do
     end
   end
 
+  field :can_read_admin_notes_on_event_proposal, !types.Boolean do
+    argument :event_proposal_id, !types.Int
+    resolve -> (obj, args, _ctx) do
+      ModelPermissionLoader.for(EventProposal).load([
+        obj,
+        :read_admin_notes,
+        args[:event_proposal_id]
+      ])
+    end
+  end
+
+  field :can_update_admin_notes_on_event_proposal, !types.Boolean do
+    argument :event_proposal_id, !types.Int
+    resolve -> (obj, args, _ctx) do
+      ModelPermissionLoader.for(EventProposal).load([
+        obj,
+        :update_admin_notes,
+        args[:event_proposal_id]
+      ])
+    end
+  end
+
+  field :can_update_event_proposal, !types.Boolean do
+    argument :event_proposal_id, !types.Int
+    resolve -> (obj, args, _ctx) do
+      ModelPermissionLoader.for(EventProposal).load([obj, :update, args[:event_proposal_id]])
+    end
+  end
+
   field :can_create_tickets, !types.Boolean do
     resolve -> (obj, _args, ctx) do
       obj.can?(:create, Ticket.new(user_con_profile: UserConProfile.new(convention: ctx[:convention])))

@@ -1,4 +1,6 @@
 class AdminEventProposalsController < ApplicationController
+  include Concerns::SendCsv
+
   load_and_authorize_resource(
     class: EventProposal,
     through: :convention,
@@ -6,41 +8,23 @@ class AdminEventProposalsController < ApplicationController
   )
   before_action :authorize_admin
 
-  helper :form_response
-
   def index
-    scope = @admin_event_proposals.where.not(status: 'draft').includes(:owner)
-    now = Time.now
-    @admin_event_proposals = scope.sort_by do |event_proposal|
-      [
-        %w[proposed reviewing].include?(event_proposal.status) ? 0 : 1,
-        event_proposal.status,
-        now - (event_proposal.submitted_at || 0)
-      ]
-    end
   end
 
-  def show
-    @form_items = convention.event_proposal_form.form_items.includes(:form_section)
-      .sort_by { |item| [item.form_section.position, item.position] }
-  end
-
-  def update
-    if admin_event_proposal_params[:status] == 'accepted' && !@admin_event_proposal.event
-      result = AcceptEventProposalService.new(event_proposal: @admin_event_proposal).call
-
-      if result.success?
-        flash[:notice] = "Event successfully accepted for #{@convention.name}!"
-      else
-        flash.now[:alert] = result.errors.join(', ')
-        return render :edit
+  def export
+    respond_to do |format|
+      format.csv do
+        send_table_presenter_csv(
+          Tables::EventProposalsTableResultsPresenter.for_convention(
+            convention,
+            current_ability,
+            params[:filters]&.to_unsafe_h,
+            params[:sort],
+            params[:columns]
+          ),
+          "Event proposals - #{convention.name}"
+        )
       end
-    end
-
-    if @admin_event_proposal.update(admin_event_proposal_params)
-      redirect_to [:admin, @admin_event_proposal]
-    else
-      render :edit
     end
   end
 
@@ -49,11 +33,6 @@ class AdminEventProposalsController < ApplicationController
   # Even if the user can manage some event proposals (i.e. their own), only
   # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
-    permission = params[:action] == 'update' ? :update : :read
-    authorize! permission, EventProposal.new(convention: convention, status: 'reviewing')
-  end
-
-  def admin_event_proposal_params
-    params.require(:event_proposal).permit(:status)
+    authorize! :read, EventProposal.new(convention: convention, status: 'reviewing')
   end
 end

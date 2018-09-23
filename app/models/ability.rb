@@ -127,6 +127,8 @@ class Ability
   # This class defines access controls.
   # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
   def initialize(user, doorkeeper_token, associated_records_loader: nil)
+    alias_action :export, to: :read
+
     @user = user
     @doorkeeper_token = doorkeeper_token
     @associated_records_loader = associated_records_loader
@@ -329,6 +331,8 @@ class Ability
     can :read, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
     can :read, User if staff_con_ids.any?
 
+    can :read_admin_notes, Event,
+      convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
     can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Order, user_con_profile: { convention_id: staff_con_ids }
@@ -380,6 +384,8 @@ class Ability
     can :read, EventProposal,
       convention_id: con_ids_with_privilege(:proposal_chair),
       status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :read_admin_notes, EventProposal,
+      convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
 
     return unless has_scope?(:manage_events)
 
@@ -389,6 +395,8 @@ class Ability
     can :update, EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison),
       status: %w[accepted withdrawn]
+    can :update_admin_notes, EventProposal,
+      convention_id: con_ids_with_privilege(:scheduling)
   end
 
   def add_team_member_abilities

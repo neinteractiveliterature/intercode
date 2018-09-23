@@ -24,3 +24,27 @@ mutation($input: SubmitEventProposalInput!) {
 
 ${fragments.eventProposal}
 `;
+
+export const transitionEventProposalMutation = gql`
+mutation($eventProposalId: Int!, $status: String!) {
+  transitionEventProposal(input: { id: $eventProposalId, status: $status}) {
+    event_proposal {
+      ...EventProposalFields
+    }
+  }
+}
+
+${fragments.eventProposal}
+`;
+
+export const updateEventProposalAdminNotesMutation = gql`
+mutation($eventProposalId: Int!, $adminNotes: String!) {
+  updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
+    event_proposal {
+      ...EventProposalFields
+    }
+  }
+}
+
+${fragments.eventProposal}
+`;

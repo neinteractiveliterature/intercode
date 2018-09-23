@@ -1,0 +1,12 @@
+$warning-light: lighten($warning, 35%);
+
+$color-variants: () !default;
+$color-variants: map-merge((
+  "warning-light": $warning-light,
+), $color-variants);
+
+@each $color, $value in $color-variants {
+  .bg-#{$color} {
+    background-color: $value;
+  }
+}
