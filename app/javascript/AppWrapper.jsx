@@ -1,11 +1,13 @@
+/* global Rollbar */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
-import Confirm from './ModalDialogs/Confirm';
-
 import buildApolloClient from './buildApolloClient';
+import Confirm from './ModalDialogs/Confirm';
+import ErrorDisplay from './ErrorDisplay';
 
 export default (WrappedComponent) => {
   const wrapper = class Wrapper extends React.Component {
@@ -18,10 +20,10 @@ export default (WrappedComponent) => {
       super(props);
       this.client = buildApolloClient(this.props.authenticityToken);
       this.state = {
+        error: null,
         stripe: null,
       };
     }
-
 
     componentDidMount() {
       if (window.Stripe) {
@@ -34,11 +36,28 @@ export default (WrappedComponent) => {
       }
     }
 
+    componentDidCatch(error, info) {
+      this.setState({ error });
+
+      if (typeof Rollbar !== 'undefined') {
+        Rollbar.error(error, { errorInfo: info });
+      }
+
+      if (typeof console !== 'undefined') {
+        console.log(error);
+        console.log(info);
+      }
+    }
+
     render = () => (
       <ApolloProvider client={this.client}>
         <StripeProvider stripe={this.state.stripe}>
           <Confirm>
-            <WrappedComponent {...this.props} />
+            {
+              this.state.error
+                ? <ErrorDisplay stringError={this.state.error.message} />
+                : <WrappedComponent {...this.props} />
+            }
           </Confirm>
         </StripeProvider>
       </ApolloProvider>
