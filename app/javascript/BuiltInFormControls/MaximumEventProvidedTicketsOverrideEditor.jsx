@@ -179,10 +179,11 @@ Delete override for
     return (
       <div className="card bg-light">
         <div className="card-header">
-Override event-provided
+          Override event-provided
+          {' '}
           {ticketName}
           {' '}
-quotas
+          quotas
         </div>
         <div className="card-body">
           <table className="table table-striped">
@@ -191,7 +192,7 @@ quotas
                 <th>
                   {capitalize(ticketName)}
                   {' '}
-type
+                  type
                 </th>
                 <th>Default quota</th>
                 <th>Overridden quota</th>

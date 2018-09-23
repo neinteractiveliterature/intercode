@@ -110,14 +110,14 @@ runs
           </Link>
           {' '}
           <small>
-(
+            (
             {event.category}
-)
+            )
           </small>
         </td>
         <td>
           {length.hours()}
-:
+          :
           {length.minutes().toString().padStart(2, '0')}
         </td>
         <td>{this.renderRuns(event)}</td>

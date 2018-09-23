@@ -99,4 +99,10 @@ Types::EventType = GraphQL::ObjectType.define do
       Rails.application.routes.url_helpers.event_path(obj)
     }
   end
+
+  field :admin_notes, types.String do
+    guard -> (obj, _args, ctx) do
+      ctx[:current_ability].can?(:read_admin_notes, obj)
+    end
+  end
 end

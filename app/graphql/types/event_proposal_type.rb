@@ -23,4 +23,10 @@ Types::EventProposalType = GraphQL::ObjectType.define do
     end
   end
   field :event, Types::EventType
+
+  field :admin_notes, types.String do
+    guard -> (obj, _args, ctx) do
+      ctx[:current_ability].can?(:read_admin_notes, obj)
+    end
+  end
 end

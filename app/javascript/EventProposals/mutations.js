@@ -36,3 +36,15 @@ mutation($eventProposalId: Int!, $status: String!) {
 
 ${fragments.eventProposal}
 `;
+
+export const updateEventProposalAdminNotesMutation = gql`
+mutation($eventProposalId: Int!, $adminNotes: String!) {
+  updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
+    event_proposal {
+      ...EventProposalFields
+    }
+  }
+}
+
+${fragments.eventProposal}
+`;

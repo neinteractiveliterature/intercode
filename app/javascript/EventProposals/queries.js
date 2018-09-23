@@ -63,12 +63,22 @@ query($eventProposalId: Int!) {
     id
     ability {
       can_update_event_proposal(event_proposal_id: $eventProposalId)
+      can_read_admin_notes_on_event_proposal(event_proposal_id: $eventProposalId)
     }
   }
 }
 
 ${fragments.eventProposal}
 ${fragments.eventProposalFormData}
+`;
+
+export const eventProposalAdminNotesQuery = gql`
+query($eventProposalId: Int!) {
+  eventProposal(id: $eventProposalId) {
+    id
+    admin_notes
+  }
+}
 `;
 
 export { fragments };
