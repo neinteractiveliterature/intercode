@@ -17,8 +17,7 @@ class AcceptEventProposalService < CivilService::Service
     registration_policy: 'registration_policy',
     participant_communications: 'player_communications',
     age_restrictions: 'age_restrictions',
-    content_warnings: 'content_warnings',
-    admin_notes: 'admin_notes'
+    content_warnings: 'content_warnings'
   }
 
   DEFAULT_EVENT_ATTRIBUTES = {
@@ -60,7 +59,9 @@ class AcceptEventProposalService < CivilService::Service
 
       event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
 
-      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes)
+      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes).merge(
+        admin_notes: event_proposal.admin_notes
+      )
     end
   end
 
