@@ -17,7 +17,8 @@ class AcceptEventProposalService < CivilService::Service
     registration_policy: 'registration_policy',
     participant_communications: 'player_communications',
     age_restrictions: 'age_restrictions',
-    content_warnings: 'content_warnings'
+    content_warnings: 'content_warnings',
+    admin_notes: 'admin_notes'
   }
 
   DEFAULT_EVENT_ATTRIBUTES = {

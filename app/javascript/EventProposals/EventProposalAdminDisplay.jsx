@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Mutation } from 'react-apollo';
 
+import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
-import { eventProposalQueryWithOwner } from './queries';
+import { eventProposalQueryWithOwner, eventProposalAdminNotesQuery } from './queries';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
+import { updateEventProposalAdminNotesMutation } from './mutations';
 
 class EventProposalAdminDisplay extends React.PureComponent {
   static propTypes = {
@@ -41,7 +44,7 @@ class EventProposalAdminDisplay extends React.PureComponent {
             }
           </div>
 
-          <div className="my-4">
+          <div className="my-4 d-flex align-items-end">
             {
               data.eventProposal.event
                 ? (
@@ -58,6 +61,50 @@ class EventProposalAdminDisplay extends React.PureComponent {
                   </Link>
                 )
             }
+            <div className="flex-grow-1 d-flex justify-content-end">
+              {
+                data.myProfile.ability.can_read_admin_notes_on_event_proposal
+                  ? (
+                    <QueryWithStateDisplay
+                      query={eventProposalAdminNotesQuery}
+                      variables={{ eventProposalId: this.props.eventProposalId }}
+                    >
+                      {({ data: adminNotesData }) => (
+                        <Mutation mutation={updateEventProposalAdminNotesMutation}>
+                          {mutate => (
+                            <AdminNotes
+                              value={adminNotesData.eventProposal.admin_notes}
+                              mutate={adminNotes => mutate({
+                                variables: {
+                                  eventProposalId: this.props.eventProposalId,
+                                  adminNotes,
+                                },
+                                update: (cache) => {
+                                  const { eventProposal } = cache.readQuery({
+                                    query: eventProposalAdminNotesQuery,
+                                    variables: { eventProposalId: this.props.eventProposalId },
+                                  });
+                                  cache.writeQuery({
+                                    query: eventProposalAdminNotesQuery,
+                                    variables: { eventProposalId: this.props.eventProposalId },
+                                    data: {
+                                      eventProposal: {
+                                        ...eventProposal,
+                                        admin_notes: adminNotes,
+                                      },
+                                    },
+                                  });
+                                },
+                              })}
+                            />
+                          )}
+                        </Mutation>
+                      )}
+                    </QueryWithStateDisplay>
+                  )
+                  : null
+              }
+            </div>
           </div>
 
           <EventProposalDisplay eventProposalId={this.props.eventProposalId} />
@@ -65,29 +112,6 @@ class EventProposalAdminDisplay extends React.PureComponent {
       )}
     </QueryWithStateDisplay>
   )
-
-  // .d-flex.justify-space-between.align-items-baseline
-  //   .col
-  //     %h1= @admin_event_proposal.title
-  //   - if can? :update, @admin_event_proposal
-  //     %div
-  //       = bootstrap_form_for @admin_event_proposal, url: admin_event_proposal_path(@admin_event_proposal), layout: :inline do |f|
-  //         = f.select :status, ['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'], { label: 'Status:' }, class: 'form-control-sm ml-1 mr-2'
-  //         = f.submit "Update", class: 'btn btn-sm btn-primary'
-  //   - else
-  //     %div
-  //       %strong Status:
-  //       = @admin_event_proposal.status
-  //
-  // - if @admin_event_proposal.event
-  //   .my-4
-  //     = link_to "Go to event", @admin_event_proposal.event, class: 'btn btn-outline-primary'
-  // - elsif can? :update, @admin_event_proposal
-  //   .my-4
-  //     = link_to "Edit proposal", edit_event_proposal_path(@admin_event_proposal, exit_caption: 'Return to proposal', exit_url: admin_event_proposal_path(@admin_event_proposal)), class: 'btn btn-outline-primary'
-  //
-  // = app_component 'EventProposalDisplay', eventProposalId: @admin_event_proposal.id
-  //
 }
 
 export default EventProposalAdminDisplay;

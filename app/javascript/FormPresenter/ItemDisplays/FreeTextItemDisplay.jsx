@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 
+import PlainTextDisplay from '../../PlainTextDisplay';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 
 const previewMarkdownQuery = gql`
@@ -39,13 +40,7 @@ class FreeTextItemDisplay extends React.PureComponent {
       );
     }
 
-    return value.split(/\r?\n/).map((line, i) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <React.Fragment key={i}>
-        {i > 0 ? <br /> : null}
-        {line}
-      </React.Fragment>
-    ));
+    return <PlainTextDisplay value={value} />;
   };
 }
 
