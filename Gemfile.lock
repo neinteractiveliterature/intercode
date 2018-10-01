@@ -75,7 +75,7 @@ GEM
       execjs
     aws-eventstream (1.0.1)
     aws-partitions (1.105.0)
-    aws-sdk-core (3.28.0)
+    aws-sdk-core (3.29.0)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
@@ -350,7 +350,7 @@ GEM
       tilt (>= 1.1, < 3)
     scheduled_value (1.2.1)
     sequel (5.12.0)
-    shoryuken (3.2.3)
+    shoryuken (3.3.0)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
