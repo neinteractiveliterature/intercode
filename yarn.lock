@@ -8936,9 +8936,9 @@ react-apollo@^2.2.4:
     lodash.isequal "^4.5.0"
     prop-types "^15.6.0"
 
-react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.6.0.tgz#6e0de132c94056a5c4cc984a545d1456be2e8317"
+react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-1.6.1.tgz#d6f7723b11b3ce38cecc8f03fa8b082276545058"
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.5.10"
