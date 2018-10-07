@@ -16,6 +16,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     [
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
+      Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
       Tables::TableResultsPresenter::Field.new(
         :ticket_updated_at,
@@ -37,6 +38,12 @@ OR lower(user_con_profiles.first_name) like :value",
       )
     when :email
       scope.joins(:user).where('lower(users.email) like :value', value: "%#{value.downcase}%")
+    when :attending
+      if value
+        scope.left_joins(:ticket).where.not(tickets: { id: nil })
+      else
+        scope.left_joins(:ticket).where(tickets: { id: nil })
+      end
     when :ticket
       ticket_type_ids = value.map do |id_value|
         if id_value == 'none'
@@ -114,6 +121,7 @@ OR lower(user_con_profiles.first_name) like :value",
     case field.id
     when :name then user_con_profile.name_inverted
     when :ticket then describe_ticket(user_con_profile.ticket)
+    when :attending then user_con_profile.ticket ? 'yes' : 'no'
     when :ticket_updated_at then user_con_profile.ticket&.updated_at&.iso8601
     when :privileges then user_con_profile.privileges.map(&:titleize).sort.join(', ')
     else user_con_profile.public_send(field.id)
