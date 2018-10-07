@@ -83,6 +83,14 @@ function encodeFilterValue(field, value) {
     return encoded;
   }
 
+  if (field === 'attending') {
+    if (value == null) {
+      return null;
+    }
+
+    return value ? 'true' : 'false';
+  }
+
   return value;
 }
 
@@ -93,6 +101,10 @@ function decodeFilterValue(field, value) {
       return null;
     }
     return decoded;
+  }
+
+  if (field === 'attending') {
+    return (value === 'true');
   }
 
   return value;
@@ -166,6 +178,28 @@ class UserConProfilesTable extends React.Component {
                 }))),
             ]}
             onChange={onChange}
+            filter={filter}
+          />
+        ),
+      },
+      {
+        Header: 'Attending?',
+        id: 'attending',
+        accessor: 'ticket',
+        width: 150,
+        sortable: false,
+        Cell: ({ value }) => (value ? 'yes' : 'no'),
+        Filter: ({ filter, onChange }) => (
+          <ChoiceSetFilter
+            name="attending"
+            choices={[
+              { label: 'any', value: 'any' },
+              { label: 'yes', value: 'yes' },
+              { label: 'no', value: 'no' },
+            ]}
+            multiple={false}
+            onChange={(value) => { onChange(value === 'any' ? null : value === 'yes'); }}
+            value={(filter == null || filter.value == null ? 'any' : (filter.value ? 'yes' : 'no'))}
             filter={filter}
           />
         ),
