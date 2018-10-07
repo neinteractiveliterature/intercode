@@ -91,7 +91,7 @@ const EventProposalsAdmin = ({
               <h1>Event Proposals</h1>
               <EventProposalsAdminTable
                 exportUrl={exportUrl}
-                defaultVisibleColumns={['title', 'owner', 'capacity', 'length_seconds', 'status', 'submitted_at', 'updated_at']}
+                defaultVisibleColumns={['title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at']}
               />
             </React.Fragment>
           )}

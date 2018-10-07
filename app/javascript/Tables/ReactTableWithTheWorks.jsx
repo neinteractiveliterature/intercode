@@ -9,6 +9,7 @@ import TableHeader from './TableHeader';
 
 class ReactTableWithTheWorks extends React.PureComponent {
   static propTypes = {
+    alwaysVisibleColumns: PropTypes.arrayOf(PropTypes.string.isRequired),
     children: PropTypes.func,
     decodeFilterValue: PropTypes.func,
     defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string.isRequired),
@@ -24,6 +25,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
   };
 
   static defaultProps = {
+    alwaysVisibleColumns: null,
     children: null,
     decodeFilterValue: null,
     defaultVisibleColumns: null,
@@ -35,6 +37,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
 
   render = () => {
     const {
+      alwaysVisibleColumns,
       children,
       decodeFilterValue,
       defaultVisibleColumns,
@@ -76,6 +79,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
           <GraphQLReactTableConsumer>
             {({ queryResult: { data } }) => (
               <ColumnSelectionProvider
+                alwaysVisibleColumns={alwaysVisibleColumns}
                 getPossibleColumns={() => getPossibleColumns(data)}
                 defaultVisibleColumns={defaultVisibleColumns}
               >
