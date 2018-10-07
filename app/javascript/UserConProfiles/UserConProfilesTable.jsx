@@ -43,6 +43,8 @@ query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [S
       entries {
         id
         name_inverted
+        first_name
+        last_name
         email
         privileges
         form_response_attrs_json
@@ -143,6 +145,22 @@ class UserConProfilesTable extends React.Component {
         Header: 'Name',
         id: 'name',
         accessor: userConProfile => userConProfile.name_inverted,
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
+        ),
+      },
+      {
+        Header: 'First name',
+        id: 'first_name',
+        accessor: 'first_name',
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
+        ),
+      },
+      {
+        Header: 'Last name',
+        id: 'last_name',
+        accessor: 'last_name',
         Filter: ({ filter, onChange }) => (
           <FreeTextFilter filter={filter} onChange={onChange} />
         ),

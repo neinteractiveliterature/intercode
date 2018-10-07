@@ -15,6 +15,8 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   def fields
     [
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
+      Tables::TableResultsPresenter::Field.new(:first_name, 'First name'),
+      Tables::TableResultsPresenter::Field.new(:last_name, 'Last name'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
@@ -34,6 +36,16 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       scope.where(
         "lower(user_con_profiles.last_name) like :value \
 OR lower(user_con_profiles.first_name) like :value",
+        value: "%#{value.downcase}%"
+      )
+    when :first_name
+      scope.where(
+        'lower(user_con_profiles.first_name) like :value',
+        value: "%#{value.downcase}%"
+      )
+    when :last_name
+      scope.where(
+        'lower(user_con_profiles.last_name) like :value',
         value: "%#{value.downcase}%"
       )
     when :email
@@ -76,6 +88,10 @@ OR lower(user_con_profiles.first_name) like :value",
     case sort_field
     when :name
       "lower(last_name) #{direction}, lower(first_name) #{direction}"
+    when :first_name
+      "lower(first_name) #{direction}"
+    when :last_name
+      "lower(last_name) #{direction}"
     when :email
       "lower(users.email) #{direction}"
     when :ticket
