@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { uniq } from 'lodash';
 
 const ColumnSelectionContext = React.createContext({
   getPossibleColumns: () => [],
@@ -16,6 +17,7 @@ export const ColumnSelectionConsumer = ColumnSelectionContext.Consumer;
 export class ColumnSelectionProvider extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    alwaysVisibleColumns: PropTypes.arrayOf(PropTypes.string),
     defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string),
     getPossibleColumns: PropTypes.func.isRequired,
     history: PropTypes.shape({
@@ -29,17 +31,20 @@ export class ColumnSelectionProvider extends React.PureComponent {
   };
 
   static defaultProps = {
+    alwaysVisibleColumns: null,
     defaultVisibleColumns: null,
   }
 
   getVisibleColumnIds = () => {
+    const alwaysVisibleColumns = this.props.alwaysVisibleColumns || [];
+
     const params = new URLSearchParams(this.props.history.location.search);
     if (params.get('columns')) {
-      return params.get('columns').split(',');
+      return uniq([...alwaysVisibleColumns, ...params.get('columns').split(',')]);
     }
 
     if (this.props.defaultVisibleColumns != null) {
-      return this.props.defaultVisibleColumns;
+      return uniq([...alwaysVisibleColumns, ...this.props.defaultVisibleColumns]);
     }
 
     return this.props.getPossibleColumns().map(column => column.id);
@@ -64,6 +69,7 @@ export class ColumnSelectionProvider extends React.PureComponent {
   render = () => (
     <ColumnSelectionContext.Provider
       value={{
+        alwaysVisibleColumns: this.props.alwaysVisibleColumns || [],
         getPossibleColumns: this.props.getPossibleColumns,
         getReactTableProps: this.getReactTableProps,
         getVisibleColumnIds: this.getVisibleColumnIds,

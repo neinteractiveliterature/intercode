@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import moment from 'moment-timezone';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -124,13 +124,18 @@ class EventProposalsAdminTable extends React.Component {
       Header: 'Duration',
       id: 'duration',
       accessor: 'length_seconds',
+      width: 80,
       filterable: false,
       Cell: ({ value }) => {
         const unitQuantities = breakValueIntoUnitQuantities(value);
         const hours = (unitQuantities.find(({ unit }) => unit.name === 'hour') || {}).quantity || 0;
         const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;
 
-        return `${hours}:${minutes.toString().padStart(2, '0')}`;
+        return (
+          <div className="text-nowrap text-right">
+            {`${hours}:${minutes.toString().padStart(2, '0')}`}
+          </div>
+        );
       },
     },
     {
@@ -172,6 +177,21 @@ class EventProposalsAdminTable extends React.Component {
         moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
       ),
     },
+    {
+      Header: '',
+      id: '_extra',
+      accessor: () => {},
+      width: 30,
+      filterable: false,
+      sortable: false,
+      Cell: ({ original }) => (
+        <Link to={`${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
+          <i className="fa fa-external-link">
+            <span className="sr-only">Open in new window</span>
+          </i>
+        </Link>
+      ),
+    },
   ];
 
   render = () => (
@@ -179,6 +199,7 @@ class EventProposalsAdminTable extends React.Component {
       <ReactTableWithTheWorks
         decodeFilterValue={decodeFilterValue}
         defaultVisibleColumns={this.props.defaultVisibleColumns}
+        alwaysVisibleColumns={['_extra']}
         encodeFilterValue={encodeFilterValue}
         exportUrl={this.props.exportUrl}
         getData={({ data }) => data.convention.event_proposals_paginated.entries}
