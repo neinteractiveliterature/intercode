@@ -278,7 +278,7 @@ class Cart extends React.Component {
           paymentOptions={
             intersection(
               ...this.props.data.currentPendingOrder.order_entries
-                .map(entry => entry.product.payment_options)
+                .map(entry => entry.product.payment_options),
             )
           }
         />
