@@ -6,7 +6,7 @@ module NavigationBarHelper
       end
     end
 
-    %i[label url visible? active?].each do |method_name|
+    %i[label url visible? active? http_method].each do |method_name|
       define_singleton_method(method_name) do |value = nil, &implementation|
         if value
           define_method(method_name) { value }
@@ -30,8 +30,12 @@ module NavigationBarHelper
       raise 'Navigation items must define #url'
     end
 
+    def http_method
+      'GET'
+    end
+
     def visible?
-      raise 'Navigation items must define #visible?'
+      true
     end
 
     def active?(request)
@@ -149,8 +153,22 @@ module NavigationBarHelper
     end
   ]
 
+  DROPDOWN_TARGET_ATTRS = {
+    class: 'nav-link dropdown-toggle',
+    href: '#',
+    role: 'button',
+    'aria-expanded' => 'false',
+    'aria-haspopup' => 'true',
+    'data-toggle' => 'dropdown'
+  }
+
   def render_navigation_item(item)
-    link_to item.label, item.url, class: item.item_class(request)
+    link_to item.label, item.url, class: item.item_class(request), method: item.http_method
+  end
+
+  def render_navigation_items(items, sort: true)
+    ordered_items = sort ? items.sort_by(&:label) : items
+    safe_join(ordered_items.map { |item| render_navigation_item(item) })
   end
 
   def render_navigation_menu(label, items)
@@ -160,18 +178,9 @@ module NavigationBarHelper
 
     content_tag(:li, class: 'nav-item dropdown', role: 'presentation') do
       safe_join([
-        content_tag(
-          :a,
-          label,
-          class: 'nav-link dropdown-toggle',
-          href: '#',
-          role: 'button',
-          'aria-expanded' => 'false',
-          'aria-haspopup' => 'true',
-          'data-toggle' => 'dropdown'
-        ),
+        content_tag(:a, label, DROPDOWN_TARGET_ATTRS),
         content_tag(:div, class: 'dropdown-menu') do
-          safe_join(visible_items.sort_by(&:label).map { |item| render_navigation_item(item) })
+          render_navigation_items(visible_items)
         end
       ])
     end
@@ -183,5 +192,143 @@ module NavigationBarHelper
 
   def admin_navigation_menu
     render_navigation_menu('Admin', ADMIN_NAVIGATION_ITEMS)
+  end
+
+  def user_con_profile_navigation_items
+    return [] unless user_con_profile
+
+    [
+      NavigationItem.define do
+        label { "My #{convention.name} Profile" }
+        url { my_profile_path }
+      end,
+      NavigationItem.define do
+        label 'My Order History'
+        url { order_history_path }
+      end
+    ]
+  end
+
+  def user_navigation_items
+    return [] unless user_signed_in?
+
+    [
+      NavigationItem.define do
+        label 'My Account'
+        url { edit_user_registration_path }
+      end,
+      *user_con_profile_navigation_items,
+      NavigationItem.define do
+        label 'Authorized Applications'
+        url { oauth_authorized_applications_path }
+      end,
+      NavigationItem.define do
+        label 'Log Out'
+        url { destroy_user_session_path }
+        http_method 'DELETE'
+      end
+    ]
+  end
+
+  def current_pending_order_navigation_item
+    return unless user_signed_in? && current_pending_order
+
+    total_entries = current_pending_order.order_entries.sum(:quantity)
+    return unless total_entries > 0
+
+    content_tag(:li, class: 'nav-item') do
+      link_to cart_path, class: 'btn btn-light mr-2', style: 'position: relative' do
+        content_tag(:i, '', class: 'fa fa-shopping-cart', title: 'My shopping cart') +
+          content_tag(
+            :badge,
+            total_entries,
+            class: 'badge-pill badge-danger',
+            style: 'position: absolute; right: -9px; top: -9px;'
+          )
+      end
+    end
+  end
+
+  def revert_assumed_identity_navigation_item
+    return unless assumed_identity_from_profile
+
+    link_to revert_become_user_con_profiles_path, method: 'POST', class: 'btn btn-secondary' do
+      safe_join([
+        'Revert ',
+        content_tag(
+          :span,
+          "to #{assumed_identity_from_profile.name}",
+          class: 'd-inline.d-md-none.d-lg-inline'
+        )
+      ])
+    end
+  end
+
+  def logged_out_user_navigation_section
+    safe_join([
+      content_tag(:li, class: 'nav-item login') do
+        link_to 'Log In', new_user_session_path, class: 'nav-link'
+      end,
+      content_tag(:li, class: 'nav-item my-auto') do
+        content_tag(:div, class: 'nav-link') do
+          link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary btn-sm'
+        end
+      end
+    ])
+  end
+
+  def user_navigation_dropdown_target
+    if assumed_identity_from_profile
+      content_tag(:a, DROPDOWN_TARGET_ATTRS.merge(class: 'btn btn-warning dropdown-toggle')) do
+        safe_join([
+          content_tag(:i, '', class: 'fa fa-user-secret'),
+          ' ',
+          content_tag(:span, class: 'd-inline d-md-none d-lg-inline') do
+            user_con_profile.name_without_nickname
+          end,
+          content_tag(:span, class: 'd-none d-md-inline d-lg-none') do
+            "#{user_con_profile.first_name.slice(0, 1)}#{user_con_profile.last_name.slice(0, 1)}"
+          end
+        ])
+      end
+    else
+      content_tag(:a, DROPDOWN_TARGET_ATTRS) do
+        safe_join([
+          content_tag(:i, '', class: 'fa fa-user'),
+          ' ',
+          if user_con_profile
+            user_con_profile.name
+          else
+            current_user.name
+          end
+        ])
+      end
+    end
+  end
+
+  def user_navigation_section
+    return logged_out_user_navigation_section unless user_signed_in?
+
+    safe_join([
+      current_pending_order_navigation_item,
+      content_tag(:li, class: 'nav-item') do
+        content_tag(:div, class: 'btn-group', role: 'group') do
+          safe_join([
+            content_tag(:div, class: 'btn-group', role: 'group') do
+              safe_join([
+                user_navigation_dropdown_target,
+                content_tag(:div, class: 'dropdown-menu') do
+                  render_navigation_items(
+                    user_navigation_items.map { |item_class| item_class.new(self) },
+                    sort: false
+                  )
+                end
+              ])
+            end,
+            revert_assumed_identity_navigation_item
+          ])
+        end
+      end
+    ])
   end
 end
