@@ -95,7 +95,7 @@
     "resolve-url-loader": "^3.0.0",
     "rollbar-sourcemap-webpack-plugin": "^2.4.0",
     "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.0",
+    "style-loader": "^0.23.1",
     "uglify-js": "^3.4.9",
     "unfetch": "^4.0.1",
     "url-search-params-polyfill": "^5.0.0",
