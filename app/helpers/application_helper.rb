@@ -8,25 +8,123 @@ module ApplicationHelper
     head_content = render(partial: 'layouts/head')
     {
       'content_for_head' => head_content,
-      'content_for_navbar' => navigation_bar(cms_layout.navbar_classes)
+      'content_for_navbar' => navigation_bar(cms_layout)
     }
   end
 
-  def navigation_bar(navbar_classes = nil)
-    navbar_classes ||= 'navbar-dark bg-intercode-blue'
+  def navigation_bar(cms_layout)
+    render partial: 'layouts/navigation_bar', locals: {
+      navbar_classes: cms_layout&.navbar_classes || 'navbar-dark bg-intercode-blue'
+    }
+  end
 
-    item_scope = (convention&.cms_navigation_items || CmsNavigationItem.global)
+  def react_navigation_bar(cms_layout = nil)
+    context = {
+      assumed_identity_from_profile: assumed_identity_from_profile,
+      current_user: current_user,
+      current_ability: current_ability,
+      user_con_profile: user_con_profile,
+      convention: convention,
+      cadmus_renderer: cadmus_renderer,
+      current_pending_order: current_pending_order
+    }
 
-    renderer = CadmusNavbar::Renderers::Bootstrap4.new(
-      request: request,
-      url_for_page: ->(page) { page_url(page) },
-      items_by_section_id: item_scope.includes(:page).group_by(&:navigation_section_id)
+    result = IntercodeSchema.execute(
+      navigation_bar_query,
+      variables: { cms_layout_id: cms_layout&.id },
+      context: context
     )
 
-    render partial: 'layouts/navigation_bar', locals: {
-      renderer: renderer,
-      navbar_classes: navbar_classes
+    raise result['errors'].to_json if result['errors'].present?
+
+    app_component 'NavigationBar',
+      navigationBar: result['data']['navigationBar'],
+      assumedIdentityFromProfile: result['data']['assumedIdentityFromProfile'],
+      myProfile: result['data']['myProfile'],
+      convention: result['data']['convention'],
+      currentUser: result['data']['currentUser'],
+      currentPendingOrder: result['data']['currentPendingOrder']
+  end
+
+  def navigation_bar_query
+    <<~GRAPHQL
+    fragment NavigationItemFields on NavigationItem {
+      label
+      url
+      visible
+      http_method
     }
+
+    query($cms_layout_id: Int) {
+      convention {
+        ticket_name
+        ticket_types {
+          publicly_available
+        }
+      }
+
+      assumedIdentityFromProfile {
+        name_without_nickname
+      }
+
+      currentUser {
+        id
+      }
+
+      currentPendingOrder {
+        order_entries {
+          quantity
+        }
+      }
+
+      myProfile {
+        name
+        name_without_nickname
+        first_name
+        last_name
+        ticket {
+          id
+        }
+      }
+
+      navigationBar(cms_layout_id: $cms_layout_id) {
+        classes
+        items {
+          __typename
+
+          ...on NavigationBrand {
+            label
+          }
+
+          ...on NavigationCollapse {
+            groups {
+              expand
+              items {
+                __typename
+
+                ...on NavigationItem {
+                  ...NavigationItemFields
+                }
+
+                ...on UserNavigationSection {
+                  items {
+                    ...NavigationItemFields
+                  }
+                }
+
+                ...on NavigationSection {
+                  label
+                  items {
+                    ...NavigationItemFields
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    GRAPHQL
   end
 
   def page_title
