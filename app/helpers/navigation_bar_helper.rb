@@ -1,158 +1,4 @@
 module NavigationBarHelper
-  class NavigationItem
-    def self.define(&definition)
-      Class.new(NavigationBarHelper::NavigationItem) do
-        instance_eval(&definition)
-      end
-    end
-
-    %i[label url visible? active? http_method].each do |method_name|
-      define_singleton_method(method_name) do |value = nil, &implementation|
-        if value
-          define_method(method_name) { value }
-        else
-          define_method(method_name) do |*args|
-            @view.instance_exec(*args, &implementation)
-          end
-        end
-      end
-    end
-
-    def initialize(view)
-      @view = view
-    end
-
-    def label
-      raise 'Navigation items must define #label'
-    end
-
-    def url
-      raise 'Navigation items must define #url'
-    end
-
-    def http_method
-      'GET'
-    end
-
-    def visible?
-      true
-    end
-
-    def active?(request)
-      request.path.start_with?(url)
-    end
-
-    def item_class(request)
-      item_class = 'dropdown-item'
-      item_class << ' active' if active?(request)
-      item_class
-    end
-  end
-
-  EVENTS_NAVIGATION_ITEMS = [
-    NavigationItem.define do
-      label 'Con Schedule'
-      url { schedule_events_path }
-      visible? { can?(:schedule, convention) }
-      active? { |request| request.path == schedule_events_path }
-    end,
-    NavigationItem.define do
-      label 'List of Events'
-      url { events_path }
-      visible? true
-      active? { |request| request.path == events_path }
-    end,
-    NavigationItem.define do
-      label 'Schedule With Counts'
-      url { schedule_with_counts_events_path }
-      visible? { can?(:schedule_with_counts, convention) }
-    end,
-    NavigationItem.define do
-      label 'Propose an Event'
-      url { page_path('new-proposal') }
-      visible? { convention.accepting_proposals }
-    end
-  ]
-
-  ADMIN_NAVIGATION_ITEMS = [
-    NavigationItem.define do
-      label 'Attendees'
-      url { user_con_profiles_path }
-      visible? { can?(:view_attendees, convention) }
-    end,
-    NavigationItem.define do
-      label 'Convention Settings'
-      url { edit_convention_path }
-      visible? { can?(:update, convention) }
-    end,
-    NavigationItem.define do
-      label 'Event Proposals'
-      url { admin_event_proposals_path('sort.status' => 'asc', 'sort.submitted_at' => 'desc') }
-      visible? { can?(:read, EventProposal.new(convention: convention, status: 'reviewing')) }
-    end,
-    NavigationItem.define do
-      label 'Event Scheduling'
-      url { admin_events_path }
-      visible? { can?(:update, Run.new(event: Event.new(convention: convention))) }
-    end,
-    NavigationItem.define do
-      label 'Forms'
-      url { admin_forms_path }
-      visible? { can?(:update, Form.new(convention: convention)) }
-    end,
-    NavigationItem.define do
-      label 'Mailing Lists'
-      url { mailing_lists_path }
-      visible? { can?(:mail_to_any, convention) }
-    end,
-    NavigationItem.define do
-      label 'OAuth2 Applications'
-      url { oauth_applications_path }
-      visible? { can?(:manage, Doorkeeper::Application) }
-    end,
-    NavigationItem.define do
-      label 'Reports'
-      url { reports_path }
-      visible? { can?(:view_reports, convention) }
-    end,
-    NavigationItem.define do
-      label 'Rooms'
-      url { rooms_path }
-      visible? { can?(:update, Room.new(convention: convention)) }
-    end,
-    NavigationItem.define do
-      label 'Site Content'
-      url { pages_path }
-      visible? { can?(:update, Page.new(parent: convention)) }
-      active? do |request|
-        [
-          pages_path,
-          cms_partials_path,
-          cms_layouts_path,
-          cms_files_path,
-          cms_navigation_items_path
-        ].include?(request.path)
-      end
-    end,
-    NavigationItem.define do
-      label 'Staff Positions'
-      url { staff_positions_path }
-      visible? { can?(:update, StaffPosition.new(convention: convention)) }
-    end,
-    NavigationItem.define do
-      label 'Store'
-      url { admin_store_path }
-      visible? do
-        can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
-      end
-    end,
-    NavigationItem.define do
-      label { "#{convention.ticket_name.titleize} Types" }
-      url { ticket_types_path }
-      visible? { can?(:update, TicketType.new(convention: convention)) }
-    end
-  ]
-
   DROPDOWN_TARGET_ATTRS = {
     class: 'nav-link dropdown-toggle',
     href: '#',
@@ -166,68 +12,101 @@ module NavigationBarHelper
     link_to item.label, item.url, class: item.item_class(request), method: item.http_method
   end
 
-  def render_navigation_items(items, sort: true)
-    ordered_items = sort ? items.sort_by(&:label) : items
-    safe_join(ordered_items.map { |item| render_navigation_item(item) })
+  def render_navigation_items(items)
+    safe_join(items.map { |item| render_navigation_item(item) })
   end
 
   def render_navigation_menu(label, items)
-    visible_items = items.map { |item_class| item_class.new(self) }
-    visible_items.select!(&:visible?)
-    return unless visible_items.any?
+    return unless items.any?
 
     content_tag(:li, class: 'nav-item dropdown', role: 'presentation') do
       safe_join([
         content_tag(:a, label, DROPDOWN_TARGET_ATTRS),
         content_tag(:div, class: 'dropdown-menu') do
-          render_navigation_items(visible_items)
+          render_navigation_items(items)
         end
       ])
     end
   end
 
-  def events_navigation_menu
-    render_navigation_menu('Events', EVENTS_NAVIGATION_ITEMS)
+  def render_navigation_collapse(items)
+    content_tag(:div, id: 'navbarSupportedContent', class: 'collapse navbar-collapse') do
+      safe_join(items.map { |item| render_root_navigation_item(item) })
+    end
   end
 
-  def admin_navigation_menu
-    render_navigation_menu('Admin', ADMIN_NAVIGATION_ITEMS)
+  def render_root_navigation_group(root_navigation_group)
+    content_tag(:ul, class: 'navbar-nav' + (root_navigation_group.expand ? ' mr-auto' : '')) do
+      safe_join(root_navigation_group.items.map { |item| render_root_navigation_item(item) })
+    end
   end
 
-  def user_con_profile_navigation_items
-    return [] unless user_con_profile
+  def render_navigation_brand(item)
+    link_to(item.label, root_url, class: 'navbar-brand')
+  end
 
-    [
-      NavigationItem.define do
-        label { "My #{convention.name} Profile" }
-        url { my_profile_path }
-      end,
-      NavigationItem.define do
-        label 'My Order History'
-        url { order_history_path }
+  def render_ticket_purchase_navigation_item
+    return unless convention
+    return unless user_con_profile && !user_con_profile.ticket
+    return unless convention.ticket_types.publicly_available.any?
+
+    content_tag(:li, class: 'nav-item my-auto') do
+      link_to new_ticket_path, class: 'btn btn-sm btn-primary' do
+        safe_join([
+          content_tag(
+            :span,
+            "Buy a #{convention.ticket_name}!",
+            class: 'd-inline d-md-none d-lg-inline'
+          ),
+          content_tag(
+            :span,
+            "#{convention.ticket_name.humanize}!",
+            class: 'd-none d-md-inline d-lg-none'
+          )
+        ])
       end
-    ]
+    end
   end
 
-  def user_navigation_items
-    return [] unless user_signed_in?
-
-    [
-      NavigationItem.define do
-        label 'My Account'
-        url { edit_user_registration_path }
-      end,
-      *user_con_profile_navigation_items,
-      NavigationItem.define do
-        label 'Authorized Applications'
-        url { oauth_authorized_applications_path }
-      end,
-      NavigationItem.define do
-        label 'Log Out'
-        url { destroy_user_session_path }
-        http_method 'DELETE'
+  def render_root_navigation_item(item)
+    case item
+    when NavigationBarPresenter::NavigationItem
+      content_tag(:li, class: 'navigation-item my-auto') do
+        render_navigation_item(item)
       end
-    ]
+    when NavigationBarPresenter::NavigationCollapse
+      render_navigation_collapse(item.groups)
+    when NavigationBarPresenter::NavigationBrand
+      render_navigation_brand(item)
+    when NavigationBarPresenter::RootNavigationGroup
+      render_root_navigation_group(item)
+    when NavigationBarPresenter::TicketPurchaseNavigationItem
+      render_ticket_purchase_navigation_item
+    when NavigationBarPresenter::UserNavigationSection
+      user_navigation_section(item.items)
+    when NavigationBarPresenter::NavigationSection
+      render_navigation_menu(item.label, item.items)
+    else item
+    end
+  end
+
+  def root_navigation_menus
+    safe_join(
+      navigation_bar_presenter.root_navigation_items.map do |root_item|
+        render_root_navigation_item(root_item)
+      end
+    )
+  end
+
+  def navigation_bar_presenter
+    @navigation_bar_presenter ||= NavigationBarPresenter.new(
+      'navbar-dark bg-intercode-blue',
+      request,
+      current_ability,
+      user_con_profile,
+      user_signed_in?,
+      convention
+    )
   end
 
   def current_pending_order_navigation_item
@@ -306,7 +185,7 @@ module NavigationBarHelper
     end
   end
 
-  def user_navigation_section
+  def user_navigation_section(items)
     return logged_out_user_navigation_section unless user_signed_in?
 
     safe_join([
@@ -318,10 +197,7 @@ module NavigationBarHelper
               safe_join([
                 user_navigation_dropdown_target,
                 content_tag(:div, class: 'dropdown-menu') do
-                  render_navigation_items(
-                    user_navigation_items.map { |item_class| item_class.new(self) },
-                    sort: false
-                  )
+                  render_navigation_items(items)
                 end
               ])
             end,

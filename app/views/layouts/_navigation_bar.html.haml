@@ -2,23 +2,4 @@
   .container
     %button.navbar-toggler.navbar-toggler-right{type: "button", "data-toggle" => "collapse", "data-target" => "#navbarSupportedContent", "aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
       %span.navbar-toggler-icon
-    %a.navbar-brand{:href => root_url}
-      - if @convention
-        = @convention.name
-      - else
-        Welcome to Intercode
-    #navbarSupportedContent.collapse.navbar-collapse
-      %ul.navbar-nav.mr-auto
-        - if convention
-          - if user_con_profile && !user_con_profile.ticket && convention.ticket_types.publicly_available.any?
-            %li.nav-item.my-auto
-              = link_to new_ticket_path, class: "btn btn-sm btn-primary" do
-                %span.d-inline.d-md-none.d-lg-inline
-                  Buy a #{convention.ticket_name}!
-                %span.d-none.d-md-inline.d-lg-none
-                  #{convention.ticket_name.humanize}!
-          = events_navigation_menu
-          = renderer.render_navigation_items
-          = admin_navigation_menu
-      %ul.navbar-nav.align-items-md-center
-        = user_navigation_section
+    = root_navigation_menus

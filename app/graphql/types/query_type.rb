@@ -68,6 +68,18 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :currentUser, Types::UserType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:current_user]
+    }
+  end
+
+  field :assumedIdentityFromProfile, Types::UserConProfileType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:assumed_identity_from_profile]
+    }
+  end
+
   field :userConProfile, Types::UserConProfileType do
     argument :id, !types.Int
 
@@ -90,6 +102,23 @@ Types::QueryType = GraphQL::ObjectType.define do
     resolve ->(_obj, args, ctx) {
       ctx[:convention].forms.find(args[:id])
     }
+  end
+
+  field :navigationBar, Types::NavigationBar.to_non_null_type do
+    argument :cms_layout_id, types.Int
+
+    resolve ->(_obj, args, ctx) do
+      cms_layout = args[:cms_layout_id] ? CmsLayout.find(args[:cms_layout_id]) : nil
+
+      NavigationBarPresenter.new(
+        cms_layout&.navbar_classes || 'navbar-dark bg-intercode-blue',
+        nil, # request
+        ctx[:current_ability],
+        ctx[:user_con_profile],
+        !ctx[:current_user].nil?,
+        ctx[:convention]
+      ).navigation_bar
+    end
   end
 
   field :staffPosition, Types::StaffPositionType do
