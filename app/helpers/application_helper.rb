@@ -12,7 +12,7 @@ module ApplicationHelper
     }
   end
 
-  def navigation_bar(cms_layout)
+  def navigation_bar(cms_layout = nil)
     render partial: 'layouts/navigation_bar', locals: {
       navbar_classes: cms_layout&.navbar_classes || 'navbar-dark bg-intercode-blue'
     }
