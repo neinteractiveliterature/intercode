@@ -35,6 +35,7 @@ module.exports = {
       env: 'apollo',
       schemaJsonFilepath: './schema.json',
     }],
+    'no-underscore-dangle': ['error', { allow: ['__typename'] } ],
     'react/destructuring-assignment': 'off',
   }
 };
