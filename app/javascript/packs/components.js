@@ -10,7 +10,7 @@ import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
-import NavigationBar from '../NavigationBar';
+// import NavigationBar from '../NavigationBar';
 import NavigationItemsAdmin from '../NavigationItemsAdmin';
 import OrderHistory from '../Store/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
@@ -46,7 +46,7 @@ const components = {
   FormJSONEditor: AppWrapper(FormJSONEditor),
   LiquidHTMLEditor,
   MyProfileForm: AppWrapper(MyProfileForm),
-  NavigationBar: AppWrapper(NavigationBar),
+  // NavigationBar: AppWrapper(NavigationBar),
   NavigationItemsAdmin: AppWrapper(NavigationItemsAdmin),
   OrderHistory: AppWrapper(OrderHistory),
   PageAdminDropdown: AppWrapper(PageAdminDropdown),
