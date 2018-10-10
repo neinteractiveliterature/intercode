@@ -38,7 +38,7 @@ cookbooks
 /coverage
 
 # Don't check in secrets
-/.env.development
+/.env.*.local
 
 # Dear god, don't look at node_modules
 /node_modules
@@ -48,3 +48,4 @@ cookbooks
 
 # If the dev is keeping pgdumps around for debugging, ignore those
 /*.pgdump
+
