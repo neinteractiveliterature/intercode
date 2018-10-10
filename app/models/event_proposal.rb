@@ -21,6 +21,8 @@ class EventProposal < ApplicationRecord
   end
 
   scope :submitted, -> { where.not(status: 'draft') }
+  scope :reminded, -> { where.not(reminded_at: nil) }
+  scope :not_reminded, -> { where(reminded_at: nil) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
   serialize :timeblock_preferences, JsonArrayCoderWrapper.new(

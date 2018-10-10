@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_22_221147) do
+ActiveRecord::Schema.define(version: 2018_10_10_144914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 2018_09_22_221147) do
     t.text "timeblock_preferences"
     t.datetime "submitted_at"
     t.text "admin_notes"
+    t.datetime "reminded_at"
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
