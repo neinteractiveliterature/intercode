@@ -20,12 +20,23 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
+      Tables::TableResultsPresenter::Field.new(:payment_amount, 'Payment amount'),
       Tables::TableResultsPresenter::Field.new(
         :ticket_updated_at,
         "#{convention.ticket_name.humanize} status changed"
       ),
-      Tables::TableResultsPresenter::Field.new(:privileges, 'Privileges')
-    ]
+      Tables::TableResultsPresenter::Field.new(:privileges, 'Privileges'),
+      *form_fields
+    ].uniq(&:id)
+  end
+
+  def form_fields
+    convention.user_con_profile_form.form_items.select(&:identifier).map do |form_item|
+      Tables::TableResultsPresenter::Field.new(
+        form_item.identifier.to_sym,
+        form_item.properties['admin_description'] || form_item.identifier.humanize
+      )
+    end
   end
 
   private
@@ -56,6 +67,8 @@ OR lower(user_con_profiles.first_name) like :value",
       else
         scope.left_joins(:ticket).where(tickets: { id: nil })
       end
+    when :payment_amount
+      scope.left_joins(:ticket).where(tickets: { payment_amount_cents: (value.to_f * 100.0).to_i })
     when :ticket
       ticket_type_ids = value.map do |id_value|
         if id_value == 'none'
@@ -137,6 +150,7 @@ OR lower(user_con_profiles.first_name) like :value",
     case field.id
     when :name then user_con_profile.name_inverted
     when :ticket then describe_ticket(user_con_profile.ticket)
+    when :payment_amount then user_con_profile.ticket.payment_amount_cents / 100.0
     when :attending then user_con_profile.ticket ? 'yes' : 'no'
     when :ticket_updated_at then user_con_profile.ticket&.updated_at&.iso8601
     when :privileges then user_con_profile.privileges.map(&:titleize).sort.join(', ')

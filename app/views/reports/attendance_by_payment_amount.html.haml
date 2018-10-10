@@ -22,7 +22,7 @@
           %td.text-danger{title: "#{payment_amount.format} does not appear in the pricing schedule for #{ticket_type.description}"}
             %i.fa.fa-exclamation-circle
             = ticket_type_description
-        %td.text-right= link_to ticket_count, user_con_profiles_path(user_con_profiles_grid: { ticket_status: [ticket_type.id], payment_amount: payment_amount.cents / 100 })
+        %td.text-right= link_to ticket_count, user_con_profiles_path(columns: 'name,email,ticket,privileges,payment_amount', 'filters.ticket' => ticket_type.id, 'filters.payment_amount' => payment_amount.cents / 100)
         %td.text-right= (payment_amount * ticket_count).format
   %tfoot
     %tr.font-weight-bold

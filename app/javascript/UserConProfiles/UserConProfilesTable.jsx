@@ -93,6 +93,14 @@ function encodeFilterValue(field, value) {
     return value ? 'true' : 'false';
   }
 
+  if (field === 'payment_amount') {
+    if (value == null) {
+      return null;
+    }
+
+    return value.toString();
+  }
+
   return value;
 }
 
@@ -107,6 +115,14 @@ function decodeFilterValue(field, value) {
 
   if (field === 'attending') {
     return (value === 'true');
+  }
+
+  if (field === 'payment_amount') {
+    const floatValue = Number.parseFloat(value);
+    if (Number.isNaN(floatValue)) {
+      return null;
+    }
+    return floatValue;
   }
 
   return value;
@@ -198,6 +214,16 @@ class UserConProfilesTable extends React.Component {
             onChange={onChange}
             filter={filter}
           />
+        ),
+      },
+      {
+        Header: 'Payment amount',
+        id: 'payment_amount',
+        accessor: 'ticket',
+        width: 150,
+        Cell: ({ value }) => formatMoney((value || {}).payment_amount),
+        Filter: ({ filter, onChange }) => (
+          <FreeTextFilter filter={filter} onChange={onChange} />
         ),
       },
       {
