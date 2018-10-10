@@ -106,6 +106,10 @@ class RegistrationPolicy
     super.merge(buckets: buckets.as_json(*args))
   end
 
+  def blank?
+    buckets.none?
+  end
+
   private
 
   def validate_anything_bucket

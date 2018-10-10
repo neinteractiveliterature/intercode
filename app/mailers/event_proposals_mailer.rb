@@ -12,6 +12,16 @@ class EventProposalsMailer < ApplicationMailer
     event_proposal_mail(event_proposal, 'Update')
   end
 
+  def unfinished_draft_reminder(event_proposal)
+    @event_proposal = event_proposal
+
+    mail(
+      from: from_address_for_convention(event_proposal.convention),
+      to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
+      subject: "#{subject_prefix(event_proposal)} Reminder: #{event_proposal.title}"
+    )
+  end
+
   private
 
   def proposal_mail_destination(convention)
