@@ -23,7 +23,7 @@ gem 'with_advisory_lock'
 gem 'devise'
 gem 'cancancan'
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'doorkeeper', '5.0.0'
+gem 'doorkeeper', '5.0.1'
 gem 'devise-doorkeeper'
 
 # Let's store sessions in the database, shall we?
