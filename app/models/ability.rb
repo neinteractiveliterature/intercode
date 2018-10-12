@@ -233,7 +233,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Order, OrderEntry, Ticket, UserConProfile, User]
+      can :read, [Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
       can :read_personal_info, UserConProfile
     end
 
@@ -265,6 +265,7 @@ class Ability
       StaffPosition,
       Ticket,
       TicketType,
+      UserActivityAlert,
       UserConProfile
     ]
   end
@@ -342,6 +343,7 @@ class Ability
       event: {
         convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
       }
+    can :read, UserActivityAlert, convention_id: staff_con_ids
 
     # Mail privileges (smash the patriarchy)
     can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
@@ -373,6 +375,7 @@ class Ability
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
+    can :manage, UserActivityAlert, convention_id: staff_con_ids
   end
 
   def add_event_proposal_abilities
