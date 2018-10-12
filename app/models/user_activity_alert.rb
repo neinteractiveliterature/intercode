@@ -1,7 +1,7 @@
 class UserActivityAlert < ApplicationRecord
   belongs_to :convention
   belongs_to :user, optional: true
-  has_many :alert_destinations, as: :alert
+  has_many :alert_destinations, as: :alert, dependent: :destroy
 
   def trigger?(event, user_con_profile)
     trigger_on_event?(event) && matches?(user_con_profile)
