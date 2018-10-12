@@ -33,6 +33,10 @@ class UserActivityAlert < ApplicationRecord
     emails.any? { |email| trigger_email == normalize_email(email) }
   end
 
+  def destination_user_con_profiles
+    alert_destinations.flat_map(&:user_con_profiles).compact.uniq
+  end
+
   private
 
   def normalize_email(email)
