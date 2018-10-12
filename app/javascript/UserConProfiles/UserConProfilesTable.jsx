@@ -135,7 +135,7 @@ function formatTicketStatus(ticket) {
 
   const ticketTypeName = humanize(ticket.ticket_type.name);
 
-  if (ticket.payment_amount.fractional > 0) {
+  if (ticket.payment_amount && ticket.payment_amount.fractional > 0) {
     return `${ticketTypeName} ${formatMoney(ticket.payment_amount)}`;
   }
 
