@@ -25,6 +25,13 @@ fragment UserConProfileFormData on Convention {
 
 export const userConProfileQuery = gql`
 query($id: Int!) {
+  myProfile {
+    id
+    ability {
+      can_update_privileges_user_con_profile(user_con_profile_id: $id)
+    }
+  }
+
   convention {
     ...UserConProfileFormData
 
@@ -63,6 +70,7 @@ query($id: Int!) {
     ability {
       can_read_signups
       can_update_user_con_profile(user_con_profile_id: $id)
+      can_update_privileges_user_con_profile(user_con_profile_id: $id)
       can_delete_user_con_profile(user_con_profile_id: $id)
       can_become_user_con_profile(user_con_profile_id: $id)
     }

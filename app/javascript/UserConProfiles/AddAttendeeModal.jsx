@@ -93,6 +93,7 @@ class AddAttendeeModal extends React.Component {
       <QueryWithStateDisplay query={userConProfileFormQuery}>
         {({ data }) => (
           <UserConProfileForm
+            canUpdatePrivileges
             userConProfile={this.state.userConProfile}
             regularPrivilegeNames={data.convention.privilege_names
               .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
