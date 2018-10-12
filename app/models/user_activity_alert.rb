@@ -3,6 +3,18 @@ class UserActivityAlert < ApplicationRecord
   belongs_to :user, optional: true
   has_many :alert_destinations, as: :alert
 
+  def trigger?(event, user_con_profile)
+    trigger_on_event?(event) && matches?(user_con_profile)
+  end
+
+  def trigger_on_event?(event)
+    case event.to_sym
+    when :user_con_profile_create then trigger_on_user_con_profile_create?
+    when :ticket_create then trigger_on_ticket_create?
+    else false
+    end
+  end
+
   def matches?(user_con_profile)
     matches_user?(user_con_profile) ||
       matches_name?(user_con_profile) ||
@@ -28,9 +40,8 @@ class UserActivityAlert < ApplicationRecord
   def matches_email?(user_con_profile)
     return unless email.present?
 
-    emails = [user_con_profile.email, user.email].map { |email| normalize_email(email) }
-    trigger_email = normalize_email(email)
-    emails.any? { |email| trigger_email == normalize_email(email) }
+    # UserConProfile doesn't have its own email field; it delegates to User
+    normalize_email(user_con_profile.email) == normalize_email(email)
   end
 
   def destination_user_con_profiles
