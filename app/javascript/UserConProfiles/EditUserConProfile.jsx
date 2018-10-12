@@ -44,7 +44,11 @@ class EditUserConProfile extends React.Component {
           input: {
             id: userConProfile.id,
             user_con_profile: {
-              privileges: userConProfile.privileges,
+              ...(
+                this.props.data.myProfile.can_update_privileges_user_con_profile
+                  ? { privileges: userConProfile.privileges }
+                  : {}
+              ),
               form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
             },
           },
@@ -80,6 +84,9 @@ class EditUserConProfile extends React.Component {
         {this.state.userConProfile.name}
       </h1>
       <UserConProfileForm
+        canUpdatePrivileges={
+          this.props.data.myProfile.ability.can_update_privileges_user_con_profile
+        }
         userConProfile={this.state.userConProfile}
         regularPrivilegeNames={this.props.data.convention.privilege_names
           .filter(priv => priv !== 'site_admin' && !this.props.data.convention.mail_privilege_names.includes(priv))}

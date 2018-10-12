@@ -9,6 +9,7 @@ import UserConProfilePropType from './UserConProfilePropType';
 
 class UserConProfileForm extends React.Component {
   static propTypes = {
+    canUpdatePrivileges: PropTypes.bool.isRequired,
     userConProfile: UserConProfilePropType.isRequired,
     regularPrivilegeNames: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     mailPrivilegeNames: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -95,7 +96,7 @@ class UserConProfileForm extends React.Component {
   )
 
   renderContent = () => {
-    if (this.state.tab === 'profile') {
+    if (this.state.tab === 'profile' || !this.props.canUpdatePrivileges) {
       return (
         <SinglePageFormPresenter
           form={this.props.form}
@@ -121,15 +122,21 @@ class UserConProfileForm extends React.Component {
             Profile
           </a>
         </li>
-        <li className="nav-item">
-          <a
-            href="#"
-            className={classNames('nav-link', { active: this.state.tab === 'privileges' })}
-            onClick={this.privilegesTabClicked}
-          >
-            Privileges
-          </a>
-        </li>
+        {
+          this.props.canUpdatePrivileges
+            ? (
+              <li className="nav-item">
+                <a
+                  href="#"
+                  className={classNames('nav-link', { active: this.state.tab === 'privileges' })}
+                  onClick={this.privilegesTabClicked}
+                >
+                  Privileges
+                </a>
+              </li>
+            )
+            : null
+        }
       </ul>
       <div className="card border-top-0">
         <div className="card-body">

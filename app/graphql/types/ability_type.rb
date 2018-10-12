@@ -105,6 +105,13 @@ Types::AbilityType = GraphQL::ObjectType.define do
     end
   end
 
+  field :can_update_privileges_user_con_profile, !types.Boolean do
+    argument :user_con_profile_id, !types.Int
+    resolve -> (obj, args, _ctx) do
+      ModelPermissionLoader.for(UserConProfile).load([obj, :update_privileges, args[:user_con_profile_id]])
+    end
+  end
+
   field :can_delete_user_con_profile, !types.Boolean do
     argument :user_con_profile_id, !types.Int
     resolve -> (obj, args, _ctx) do
