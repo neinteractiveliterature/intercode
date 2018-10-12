@@ -20,6 +20,7 @@ class Convention < ApplicationRecord
   has_many :event_proposals, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :orders, through: :user_con_profiles
+  has_many :user_activity_alerts, dependent: :destroy
 
   belongs_to :root_page, class_name: 'Page', optional: true
   belongs_to :default_layout, class_name: 'CmsLayout', optional: true

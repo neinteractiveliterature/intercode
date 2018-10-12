@@ -18,6 +18,8 @@ class Ticket < ApplicationRecord
     joins(:ticket_type).where(ticket_types: { counts_towards_convention_maximum: true })
   }
 
+  after_commit :send_user_activity_alerts, on: :create
+
   def to_liquid
     TicketDrop.new(self)
   end
@@ -36,5 +38,9 @@ class Ticket < ApplicationRecord
     return if convention.events.include?(provided_by_event)
 
     errors.add(:provided_by_event, "is not part of #{convention}")
+  end
+
+  def send_user_activity_alerts
+    SendUserActivityAlertsJob.perform_later(user_con_profile, 'ticket_create')
   end
 end

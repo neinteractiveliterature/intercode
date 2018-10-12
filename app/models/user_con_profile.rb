@@ -25,6 +25,8 @@ class UserConProfile < ApplicationRecord
   validates :preferred_contact,
     inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
 
+  after_commit :send_user_activity_alerts, on: :create
+
   scope :has_any_privileges, -> {
     sql_clauses = PRIV_NAMES.map { |priv_name| "#{priv_name} = ?" }
     where(sql_clauses.join(' OR '), *sql_clauses.map { |_clause| true })
@@ -168,5 +170,11 @@ class UserConProfile < ApplicationRecord
     else
       "https://gravatar.com/avatar/#{Digest::MD5.hexdigest('badrequest')}"
     end
+  end
+
+  private
+
+  def send_user_activity_alerts
+    SendUserActivityAlertsJob.perform_later(self, 'user_con_profile_create')
   end
 end
