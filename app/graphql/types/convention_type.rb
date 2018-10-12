@@ -97,6 +97,16 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
+  field :user_activity_alerts, types[Types::UserActivityAlert] do
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: convention))
+    end
+
+    resolve ->(convention, _args, _ctx) {
+      AssociationLoader.for(Convention, :user_activity_alerts).load(convention)
+    }
+  end
+
   connection :orders, Types::OrdersConnectionType, max_page_size: 1000 do
     guard ->(convention, _args, ctx) do
       ctx[:current_ability].can?(
