@@ -18,7 +18,7 @@ class AdminTicketsController < ApplicationController
     @ticket = @ticket_user_con_profile.build_ticket(ticket_params)
     authorize! :create, @ticket
     @ticket.save
-    respond_with @ticket, location: @ticket_user_con_profile
+    respond_with @ticket, location: "/user_con_profiles/#{@ticket_user_con_profile.id}"
   end
 
   def edit
@@ -26,12 +26,12 @@ class AdminTicketsController < ApplicationController
 
   def update
     @ticket.update(ticket_params)
-    respond_with @ticket, location: @ticket_user_con_profile
+    respond_with @ticket, location: "/user_con_profiles/#{@ticket_user_con_profile.id}"
   end
 
   def destroy
     @ticket.destroy
-    respond_with @ticket, location: @ticket_user_con_profile
+    respond_with @ticket, location: "/user_con_profiles/#{@ticket_user_con_profile.id}"
   end
 
   private
