@@ -97,6 +97,18 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
+  field :user_activity_alert, Types::UserActivityAlert.to_non_null_type do
+    argument :id, !types.Int
+
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: convention))
+    end
+
+    resolve ->(convention, args, _ctx) {
+      RecordLoader.for(UserActivityAlert, where: { convention_id: convention.id }).load(args[:id])
+    }
+  end
+
   field :user_activity_alerts, types[Types::UserActivityAlert] do
     guard ->(convention, _args, ctx) do
       ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: convention))
