@@ -210,6 +210,11 @@ class NavigationBarPresenter
       label { "#{convention.ticket_name.titleize} Types" }
       url { ticket_types_path }
       visible? { can?(:update, TicketType.new(convention: convention)) }
+    end,
+    NavigationItem.define do
+      label 'User Activity Alerts'
+      url { user_activity_alerts_path }
+      visible? { can?(:read, UserActivityAlert.new(convention: convention)) }
     end
   ]
 

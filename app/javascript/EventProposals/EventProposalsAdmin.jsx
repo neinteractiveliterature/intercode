@@ -60,7 +60,6 @@ const EventProposalsAdmin = ({
         </ol>
       </nav>
 
-
       <Switch>
         <Route
           path="/:id/edit"

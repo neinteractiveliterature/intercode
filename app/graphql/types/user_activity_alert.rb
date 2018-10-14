@@ -4,6 +4,8 @@ class Types::UserActivityAlert < Types::BaseObject
   field :user, Types::UserType, null: true
   field :partial_name, String, null: true, camelize: false
   field :email, String, null: true
+  field :trigger_on_user_con_profile_create, Boolean, null: false, camelize: false
+  field :trigger_on_ticket_create, Boolean, null: false, camelize: false
   field :alert_destinations, [Types::AlertDestination], null: false, camelize: false
 
   def alert_destinations
