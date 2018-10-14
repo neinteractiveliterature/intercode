@@ -4,39 +4,7 @@ import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-
-const userActivityAlertsQuery = gql`
-query {
-  convention {
-    id
-    ticket_name
-
-    user_activity_alerts {
-      id
-      email
-      partial_name
-      trigger_on_user_con_profile_create
-      trigger_on_ticket_create
-      user {
-        id
-        name
-      }
-
-      alert_destinations {
-        staff_position {
-          id
-          name
-        }
-
-        user_con_profile {
-          id
-          name_without_nickname
-        }
-      }
-    }
-  }
-}
-`;
+import { UserActivityAlertsAdminQuery } from './queries.gql';
 
 class UserActivityAlertsList extends React.PureComponent {
   renderCriteriaList = (criteria, defaultText) => {
@@ -116,7 +84,7 @@ class UserActivityAlertsList extends React.PureComponent {
   }
 
   render = () => (
-    <QueryWithStateDisplay query={userActivityAlertsQuery}>
+    <QueryWithStateDisplay query={UserActivityAlertsAdminQuery}>
       {({ data }) => (
         <React.Fragment>
           <table className="table table-striped">

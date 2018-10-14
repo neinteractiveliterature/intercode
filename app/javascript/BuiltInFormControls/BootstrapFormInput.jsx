@@ -11,12 +11,14 @@ class BootstrapFormInput extends React.Component {
     type: PropTypes.string,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    helpText: PropTypes.string,
     disabled: PropTypes.bool,
   };
 
   static defaultProps = {
     type: 'text',
     disabled: false,
+    helpText: null,
   };
 
   constructor(props) {
@@ -35,6 +37,11 @@ class BootstrapFormInput extends React.Component {
           id={inputId}
           {...this.props}
         />
+        {
+          this.props.helpText
+            ? <small className="form-text text-muted">{this.props.helpText}</small>
+            : null
+        }
       </div>
     );
   }

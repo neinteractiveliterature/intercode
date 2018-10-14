@@ -1,0 +1,45 @@
+fragment UserActivityAlertFields on UserActivityAlert {
+  id
+  email
+  partial_name
+  trigger_on_user_con_profile_create
+  trigger_on_ticket_create
+  user {
+    id
+    name
+  }
+
+  alert_destinations {
+    staff_position {
+      id
+      name
+    }
+
+    user_con_profile {
+      id
+      name_without_nickname
+    }
+  }
+}
+
+query UserActivityAlertQuery($id: Int!) {
+  convention {
+    id
+    ticket_name
+
+    user_activity_alert(id: $id) {
+      ...UserActivityAlertFields
+    }
+  }
+}
+
+query UserActivityAlertsAdminQuery {
+  convention {
+    id
+    ticket_name
+
+    user_activity_alerts {
+      ...UserActivityAlertFields
+    }
+  }
+}
