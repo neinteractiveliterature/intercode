@@ -127,16 +127,14 @@ class UserActivityAlertForm extends React.Component {
     }));
   }
 
-  addDestination = () => {
-    if (this.state.addDestination.type === 'staff_position') {
-      this.props.onAddAlertDestination({ staff_position: this.state.addDestination.staffPosition });
-      this.setState({ addDestination: BLANK_ADD_DESTINATION });
-    } else if (this.state.addDestination.type === 'user_con_profile') {
-      this.props.onAddAlertDestination({
-        user_con_profile: this.state.addDestination.userConProfile,
-      });
-      this.setState({ addDestination: BLANK_ADD_DESTINATION });
-    }
+  addStaffPositionDestination = (staffPosition) => {
+    this.props.onAddAlertDestination({ staff_position: staffPosition });
+    this.setState({ addDestination: BLANK_ADD_DESTINATION });
+  }
+
+  addUserConProfileDestination = (userConProfile) => {
+    this.props.onAddAlertDestination({ user_con_profile: userConProfile });
+    this.setState({ addDestination: BLANK_ADD_DESTINATION });
   }
 
   render = () => (
@@ -272,7 +270,7 @@ class UserActivityAlertForm extends React.Component {
                       getOptionValue={option => option.id}
                       getOptionLabel={option => option.name}
                       value={this.state.addDestination.staffPosition}
-                      onChange={this.localStateUpdater.addDestination.staffPosition}
+                      onChange={value => this.addStaffPositionDestination(value)}
                       disabled={this.props.disabled}
                     />
                     <button className="btn btn-primary mt-2" type="button" onClick={this.addDestination} disabled={this.props.disabled}>
@@ -289,7 +287,7 @@ class UserActivityAlertForm extends React.Component {
                   <React.Fragment>
                     <UserConProfileSelect
                       value={this.state.addDestination.userConProfile}
-                      onChange={this.localStateUpdater.addDestination.userConProfile}
+                      onChange={value => this.addUserConProfileDestination(value)}
                       disabled={this.props.disabled}
                     />
                     <button className="btn btn-primary mt-2" type="button" onClick={this.addDestination} disabled={this.props.disabled}>

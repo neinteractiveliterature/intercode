@@ -4,11 +4,11 @@ import {
   BrowserRouter, Switch, Redirect, Route,
 } from 'react-router-dom';
 
-import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditUserActivityAlert from './EditUserActivityAlert';
+import NewUserActivityAlert from './NewUserActivityAlert';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import { UserActivityAlertQuery } from './queries.gql';
+import { ConventionTicketNameQuery, UserActivityAlertQuery } from './queries.gql';
 import UserActivityAlertsList from './UserActivityAlertsList';
 
 const UserActivityAlertsAdmin = ({ basename }) => (
@@ -25,6 +25,18 @@ const UserActivityAlertsAdmin = ({ basename }) => (
           </BreadcrumbItemWithRoute>
 
           <Route
+            path="/new"
+            render={({ location }) => (
+              <BreadcrumbItemWithRoute
+                path="/new"
+                to={location.pathname}
+              >
+                Create
+              </BreadcrumbItemWithRoute>
+            )}
+          />
+
+          <Route
             path="/:id/edit"
             render={({ location }) => (
               <BreadcrumbItemWithRoute
@@ -39,6 +51,16 @@ const UserActivityAlertsAdmin = ({ basename }) => (
       </nav>
 
       <Switch>
+        <Route
+          path="/new"
+          render={() => (
+            <QueryWithStateDisplay query={ConventionTicketNameQuery}>
+              {({ data }) => (
+                <NewUserActivityAlert convention={data.convention} />
+              )}
+            </QueryWithStateDisplay>
+          )}
+        />
         <Route
           path="/:id/edit"
           render={({ match }) => (
