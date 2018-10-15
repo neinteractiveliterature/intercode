@@ -41,6 +41,9 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Run jobs inline in test mode
+  config.active_job.queue_adapter = :inline
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
