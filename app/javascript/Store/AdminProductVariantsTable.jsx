@@ -5,9 +5,8 @@ import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'; // or any o
 import { DragDropContext } from 'react-dnd';
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import formatMoney from '../formatMoney';
-import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
-import { mutator, Transforms } from '../ComposableFormUtils';
+import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
 
 const variantMatches = (a, b) => (
   (a.generatedId && b.generatedId === a.generatedId)

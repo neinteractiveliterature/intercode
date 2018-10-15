@@ -5,7 +5,7 @@ import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import StaffPositionPropType from './StaffPositionPropType';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 
 class StaffPositionForm extends React.Component {
   static propTypes = {
@@ -17,22 +17,16 @@ class StaffPositionForm extends React.Component {
     super(props);
     enableUniqueIds(this);
 
-    this.staffPositionMutator = new ModelStateChangeCalculator(
-      'staffPosition',
-      {
-        name: FIELD_TYPES.STRING,
-        email: FIELD_TYPES.STRING,
-        visible: FIELD_TYPES.BOOLEAN,
-        user_con_profiles: FIELD_TYPES.OBJECT,
+    this.mutator = mutator({
+      getState: () => this.props.staffPosition,
+      setState: this.props.onChange,
+      transforms: {
+        name: Transforms.textInputChange,
+        email: Transforms.textInputChange,
+        visible: Transforms.identity,
+        user_con_profiles: Transforms.identity,
       },
-    ).getMutatorForStatelessComponent(this, props.onChange);
-  }
-
-  userConProfilesChanged = (newValue) => {
-    this.staffPositionMutator.onValueChange(
-      'user_con_profiles',
-      newValue,
-    );
+    });
   }
 
   render = () => {
@@ -44,7 +38,7 @@ class StaffPositionForm extends React.Component {
           name="name"
           label="Position name"
           value={this.props.staffPosition.name || ''}
-          onChange={this.staffPositionMutator.onInputChange}
+          onChange={this.mutator.name}
         />
 
         <BootstrapFormInput
@@ -52,14 +46,14 @@ class StaffPositionForm extends React.Component {
           type="email"
           label="Contact email"
           value={this.props.staffPosition.email || ''}
-          onChange={this.staffPositionMutator.onInputChange}
+          onChange={this.mutator.email}
         />
 
         <BooleanInput
           name="visible"
           caption="Visible in CMS content?"
           value={this.props.staffPosition.visible}
-          onChange={this.staffPositionMutator.valueChangeCallback('visible')}
+          onChange={this.mutator.visible}
         />
 
         <div className="form-group">
@@ -68,7 +62,7 @@ class StaffPositionForm extends React.Component {
             id={userConProfileSelectId}
             isMulti
             value={this.props.staffPosition.user_con_profiles}
-            onChange={this.userConProfilesChanged}
+            onChange={this.mutator.user_con_profiles}
           />
         </div>
       </div>
