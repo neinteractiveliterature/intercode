@@ -50,9 +50,11 @@ class SyncTeamMailingListService < CivilService::Service
 
   def applicable_routes
     @applicable_routes ||= begin
-      all_routes.select do |route|
+      matching_routes = all_routes.select do |route|
         route['expression'] == route_expression
       end
+
+      matching_routes.sort_by { |route| route['id'] }
     end
   end
 
