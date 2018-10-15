@@ -16,48 +16,6 @@ import {
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 
-function addToChangeSet(changeSet, value) {
-  return [
-    ...changeSet,
-    {
-      changeType: 'add',
-      generatedId: new Date().getTime(),
-      value,
-    },
-  ];
-}
-
-function removeFromChangeSet(changeSet, id) {
-  if (changeSet.some(change => change.generatedId === id)) {
-    return changeSet.filter(change => change.generatedId !== id);
-  }
-
-  return [
-    ...changeSet,
-    { changeType: 'remove', id },
-  ];
-}
-
-function applyChangeSet(array, changeSet) {
-  return changeSet.reduce((currentValue, change) => {
-    if (change.changeType === 'add') {
-      return [...currentValue, { ...change.value, id: change.generatedId }];
-    }
-
-    if (change.changeType === 'remove') {
-      return currentValue.filter(value => value.id !== change.id);
-    }
-
-    return currentValue;
-  }, array);
-}
-
-const BLANK_ADD_DESTINATION = {
-  type: null,
-  userConProfile: null,
-  staffPosition: null,
-};
-
 class UserActivityAlertForm extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
@@ -93,7 +51,7 @@ class UserActivityAlertForm extends React.Component {
     disabled: PropTypes.bool,
   }
 
-  defaultProps = {
+  static defaultProps = {
     disabled: false,
   }
 
@@ -103,7 +61,7 @@ class UserActivityAlertForm extends React.Component {
     enableUniqueIds(this);
 
     this.state = {
-      addDestination: BLANK_ADD_DESTINATION,
+      addDestinationType: null,
     };
 
     this.stateUpdater = stateUpdater(
@@ -119,22 +77,18 @@ class UserActivityAlertForm extends React.Component {
     );
 
     this.localStateUpdater = componentLocalStateUpdater(this, combineStateChangeCalculators({
-      addDestination: {
-        type: Transforms.identity,
-        userConProfile: Transforms.identity,
-        staffPosition: Transforms.identity,
-      },
+      addDestinationType: Transforms.identity,
     }));
   }
 
   addStaffPositionDestination = (staffPosition) => {
     this.props.onAddAlertDestination({ staff_position: staffPosition });
-    this.setState({ addDestination: BLANK_ADD_DESTINATION });
+    this.setState({ addDestinationType: null });
   }
 
   addUserConProfileDestination = (userConProfile) => {
     this.props.onAddAlertDestination({ user_con_profile: userConProfile });
-    this.setState({ addDestination: BLANK_ADD_DESTINATION });
+    this.setState({ addDestinationType: null });
   }
 
   render = () => (
@@ -255,21 +209,21 @@ class UserActivityAlertForm extends React.Component {
               caption="Add destination"
               name="addDestinationType"
               choices={[{ label: 'Staff position', value: 'staff_position' }, { label: 'User', value: 'user_con_profile' }]}
-              value={this.state.addDestination.type}
-              onChange={this.localStateUpdater.addDestination.type}
+              value={this.state.addDestinationType}
+              onChange={this.localStateUpdater.addDestinationType}
               choiceClassName="form-check-inline"
               disabled={this.props.disabled}
             />
 
             {
-              this.state.addDestination.type === 'staff_position'
+              this.state.addDestinationType === 'staff_position'
                 ? (
                   <React.Fragment>
                     <Select
                       options={this.props.convention.staff_positions}
                       getOptionValue={option => option.id}
                       getOptionLabel={option => option.name}
-                      value={this.state.addDestination.staffPosition}
+                      value={null}
                       onChange={value => this.addStaffPositionDestination(value)}
                       disabled={this.props.disabled}
                     />
@@ -282,11 +236,11 @@ class UserActivityAlertForm extends React.Component {
             }
 
             {
-              this.state.addDestination.type === 'user_con_profile'
+              this.state.addDestinationType === 'user_con_profile'
                 ? (
                   <React.Fragment>
                     <UserConProfileSelect
-                      value={this.state.addDestination.userConProfile}
+                      value={null}
                       onChange={value => this.addUserConProfileDestination(value)}
                       disabled={this.props.disabled}
                     />

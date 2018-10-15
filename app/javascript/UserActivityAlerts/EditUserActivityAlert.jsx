@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApolloConsumer } from 'react-apollo';
+import { ApolloConsumer, Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import ChangeSet from '../ChangeSet';
+import Confirm from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateUserActivityAlert } from './queries.gql';
+import { DeleteUserActivityAlert, UpdateUserActivityAlert, UserActivityAlertsAdminQuery } from './queries.gql';
 import UserActivityAlertForm from './UserActivityAlertForm';
 
 @withRouter
@@ -73,7 +74,53 @@ class EditUserActivityAlert extends React.Component {
 
   render = () => (
     <React.Fragment>
-      <h1>Edit user activity alert</h1>
+      <div className="d-flex align-items-start">
+        <h1 className="flex-grow-1">Edit user activity alert</h1>
+        <Mutation mutation={DeleteUserActivityAlert}>
+          {mutate => (
+            <Confirm.Trigger>
+              {confirm => (
+                <button
+                  className="btn btn-danger"
+                  type="button"
+                  onClick={() => {
+                    confirm({
+                      action: async () => {
+                        await mutate({
+                          variables: { id: this.state.userActivityAlert.id },
+                          update: (cache) => {
+                            const data = cache.readQuery({ query: UserActivityAlertsAdminQuery });
+                            cache.writeQuery({
+                              query: UserActivityAlertsAdminQuery,
+                              data: {
+                                ...data,
+                                convention: {
+                                  ...data.convention,
+                                  user_activity_alerts: data.convention.user_activity_alerts
+                                    .filter(userActivityAlert => (
+                                      userActivityAlert.id !== this.state.userActivityAlert.id
+                                    )),
+                                },
+                              },
+                            });
+                          },
+                        });
+
+                        this.props.history.push('/');
+                      },
+                      prompt: 'Are you sure you want to delete this alert?',
+                    });
+                  }}
+                >
+                  <i className="fa fa-trash-o" />
+                  {' '}
+                  Delete
+                </button>
+              )}
+            </Confirm.Trigger>
+          )}
+        </Mutation>
+      </div>
 
       <UserActivityAlertForm
         userActivityAlert={{
