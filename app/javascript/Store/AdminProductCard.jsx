@@ -16,11 +16,7 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
-import {
-  Transforms,
-  combineStateChangeCalculators,
-  componentLocalStateUpdater,
-} from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 
 const createProductMutation = gql`
 mutation($product: ProductInput!) {
@@ -102,9 +98,9 @@ class AdminProductCard extends React.Component {
         }
     );
 
-    this.stateUpdater = componentLocalStateUpdater(
-      this,
-      combineStateChangeCalculators({
+    this.mutator = mutator({
+      component: this,
+      transforms: {
         editingProduct: {
           available: Transforms.checkboxChange,
           description: Transforms.identity,
@@ -113,8 +109,8 @@ class AdminProductCard extends React.Component {
           price: parseMoneyOrNull,
           product_variants: Transforms.identity,
         },
-      }),
-    );
+      },
+    });
   }
 
   getCardClass = () => (
@@ -278,7 +274,7 @@ class AdminProductCard extends React.Component {
     <AdminProductVariantsTable
       product={this.state.editing ? this.state.editingProduct : this.props.product}
       editing={this.state.editing}
-      onChange={this.stateUpdater.editingProduct.product_variants}
+      onChange={this.mutator.editingProduct.product_variants}
       deleteVariant={this.deleteVariant}
     />
   )
@@ -348,7 +344,7 @@ class AdminProductCard extends React.Component {
             name="available"
             label="Available for purchase"
             checked={this.state.editingProduct.available}
-            onChange={this.stateUpdater.editingProduct.available}
+            onChange={this.mutator.editingProduct.available}
           />
           <MultipleChoiceInput
             name="payment_options"
@@ -359,7 +355,7 @@ class AdminProductCard extends React.Component {
             ]}
             multiple
             value={this.state.editingProduct.payment_options}
-            onChange={this.stateUpdater.editingProduct.payment_options}
+            onChange={this.mutator.editingProduct.payment_options}
           />
         </div>
       );
@@ -440,7 +436,7 @@ class AdminProductCard extends React.Component {
           placeholder="Product name"
           name="name"
           value={this.state.editingProduct.name}
-          onChange={this.stateUpdater.editingProduct.name}
+          onChange={this.mutator.editingProduct.name}
         />
       );
     }
@@ -459,7 +455,7 @@ class AdminProductCard extends React.Component {
             name="price"
             label="Base price"
             value={`${formatMoney(this.state.editingProduct.price, false)}`}
-            onChange={this.stateUpdater.editingProduct.price}
+            onChange={this.mutator.editingProduct.price}
           >
             {formatMoney(this.state.editingProduct.price)}
           </InPlaceEditor>
@@ -482,7 +478,7 @@ Base price:
       return (
         <LiquidInput
           value={this.state.editingProduct.description}
-          onChange={this.stateUpdater.editingProduct.description}
+          onChange={this.mutator.editingProduct.description}
         />
       );
     }
