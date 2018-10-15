@@ -11,12 +11,14 @@ class BootstrapFormInput extends React.Component {
     type: PropTypes.string,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    helpText: PropTypes.string,
     disabled: PropTypes.bool,
   };
 
   static defaultProps = {
     type: 'text',
     disabled: false,
+    helpText: null,
   };
 
   constructor(props) {
@@ -27,14 +29,21 @@ class BootstrapFormInput extends React.Component {
   render = () => {
     const inputId = this.nextUniqueId();
 
+    const { helpText, label, ...otherProps } = this.props;
+
     return (
       <div className="form-group">
-        <label htmlFor={inputId}>{this.props.label}</label>
+        <label htmlFor={inputId}>{label}</label>
         <input
           className="form-control"
           id={inputId}
-          {...this.props}
+          {...otherProps}
         />
+        {
+          helpText
+            ? <small className="form-text text-muted">{helpText}</small>
+            : null
+        }
       </div>
     );
   }

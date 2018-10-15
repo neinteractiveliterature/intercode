@@ -28,6 +28,7 @@ import AppWrapper from '../AppWrapper';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
+import UserActivityAlertsAdmin from '../UserActivityAlerts/UserActivityAlertsAdmin';
 import UserConProfileAdminDisplay from '../UserConProfiles/UserConProfileAdminDisplay';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import UserConProfilesAdmin from '../UserConProfiles/UserConProfilesAdmin';
@@ -63,6 +64,7 @@ const components = {
   TeamMemberForm: AppWrapper(TeamMemberForm),
   TicketTypeAdmin: AppWrapper(TicketTypeAdmin),
   TicketPurchaseForm: AppWrapper(TicketPurchaseForm),
+  UserActivityAlertsAdmin: AppWrapper(UserActivityAlertsAdmin),
   UserConProfileAdminDisplay: AppWrapper(UserConProfileAdminDisplay),
   UserConProfileSignupsCard: AppWrapper(UserConProfileSignupsCard),
   UserConProfilesAdmin: AppWrapper(UserConProfilesAdmin),

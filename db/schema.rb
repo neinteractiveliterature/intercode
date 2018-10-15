@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_10_144914) do
+ActiveRecord::Schema.define(version: 2018_10_11_174357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "alert_destinations", force: :cascade do |t|
+    t.string "alert_type", null: false
+    t.bigint "alert_id", null: false
+    t.bigint "staff_position_id"
+    t.bigint "user_con_profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alert_type", "alert_id"], name: "index_alert_destinations_on_alert_type_and_alert_id"
+    t.index ["staff_position_id"], name: "index_alert_destinations_on_staff_position_id"
+    t.index ["user_con_profile_id"], name: "index_alert_destinations_on_user_con_profile_id"
+  end
 
   create_table "cms_files", id: :serial, force: :cascade do |t|
     t.integer "parent_id"
@@ -435,6 +447,19 @@ ActiveRecord::Schema.define(version: 2018_10_10_144914) do
     t.index ["user_con_profile_id"], name: "index_tickets_on_user_con_profile_id"
   end
 
+  create_table "user_activity_alerts", force: :cascade do |t|
+    t.bigint "convention_id", null: false
+    t.bigint "user_id"
+    t.text "partial_name"
+    t.text "email"
+    t.boolean "trigger_on_user_con_profile_create"
+    t.boolean "trigger_on_ticket_create"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["convention_id"], name: "index_user_activity_alerts_on_convention_id"
+    t.index ["user_id"], name: "index_user_activity_alerts_on_user_id"
+  end
+
   create_table "user_con_profiles", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "convention_id", null: false
@@ -496,6 +521,8 @@ ActiveRecord::Schema.define(version: 2018_10_10_144914) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "alert_destinations", "staff_positions"
+  add_foreign_key "alert_destinations", "user_con_profiles"
   add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
@@ -543,6 +570,8 @@ ActiveRecord::Schema.define(version: 2018_10_10_144914) do
   add_foreign_key "tickets", "events", column: "provided_by_event_id"
   add_foreign_key "tickets", "ticket_types"
   add_foreign_key "tickets", "user_con_profiles"
+  add_foreign_key "user_activity_alerts", "conventions"
+  add_foreign_key "user_activity_alerts", "users"
   add_foreign_key "user_con_profiles", "conventions"
   add_foreign_key "user_con_profiles", "users"
 end

@@ -116,6 +116,8 @@ Intercode::Application.routes.draw do
 
     resources :rooms, only: [:index]
 
+    get 'user_activity_alerts/(*extra)' => 'user_activity_alerts#index', as: :user_activity_alerts
+
     get 'staff_positions/(*extra)' => 'staff_positions#index', as: :staff_positions
     resources :forms, only: [:show]
     resources :admin_forms
