@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CardElement } from 'react-stripe-elements';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import { ModelStateChangeCalculator, FIELD_TYPES } from '../FormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 
 class OrderPaymentForm extends React.Component {
   static propTypes = {
@@ -22,9 +22,13 @@ class OrderPaymentForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.mutator = new ModelStateChangeCalculator('paymentDetails', {
-      name: FIELD_TYPES.STRING,
-    }).getMutatorForStatelessComponent(this, this.props.onChange);
+    this.mutator = mutator({
+      getState: () => this.props.paymentDetails,
+      setState: this.props.onChange,
+      transforms: {
+        name: Transforms.textInputChange,
+      },
+    });
   }
 
   render = () => {
@@ -34,8 +38,8 @@ class OrderPaymentForm extends React.Component {
         <BootstrapFormInput
           name="name"
           label="Name"
-          onChange={this.mutator.onInputChange}
           value={this.props.paymentDetails.name}
+          onChange={this.mutator.name}
         />
 
         <CardElement

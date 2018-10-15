@@ -14,9 +14,8 @@ import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
-import { mutator, Transforms } from '../ComposableFormUtils';
+import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
 
 const createProductMutation = gql`
 mutation($product: ProductInput!) {

@@ -1,4 +1,43 @@
-import { parseIntOrNull, parseFloatOrNull, convertDatetimeValue } from './FormUtils';
+import moment from 'moment-timezone';
+
+export function parseIntOrNull(stringValue) {
+  const intValue = parseInt(stringValue, 10);
+  if (Number.isNaN(intValue)) {
+    return null;
+  }
+  return intValue;
+}
+
+export function parseFloatOrNull(stringValue) {
+  const floatValue = parseFloat(stringValue, 10);
+  if (Number.isNaN(floatValue)) {
+    return null;
+  }
+  return floatValue;
+}
+
+export function parseMoneyOrNull(value) {
+  const newPrice = parseFloatOrNull(value);
+
+  if (newPrice == null) {
+    return null;
+  }
+
+  return {
+    fractional: Math.floor(newPrice * 100),
+    currency_code: 'USD',
+  };
+}
+
+export function convertDatetimeValue(value, timezoneName) {
+  if (value == null || typeof value === 'string') {
+    return value;
+  }
+
+  // it's hopefully a moment
+  const valueInTimezone = moment.tz(value.toObject(), timezoneName);
+  return valueInTimezone.toISOString();
+}
 
 function namedFunction(func, name) {
   Object.defineProperty(func, 'name', { value: name });
@@ -111,13 +150,5 @@ export function mutator(config = {}) {
     config.component ? () => config.component.state : config.getState,
     config.component ? state => config.component.setState(state) : config.setState,
     combineStateChangeCalculators(config.transforms),
-  );
-}
-
-export function componentLocalStateUpdater(component, stateChangeCalculators) {
-  return stateUpdater(
-    () => component.state,
-    state => component.setState(state),
-    stateChangeCalculators,
   );
 }
