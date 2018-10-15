@@ -29,17 +29,19 @@ class BootstrapFormInput extends React.Component {
   render = () => {
     const inputId = this.nextUniqueId();
 
+    const { helpText, label, ...otherProps } = this.props;
+
     return (
       <div className="form-group">
-        <label htmlFor={inputId}>{this.props.label}</label>
+        <label htmlFor={inputId}>{label}</label>
         <input
           className="form-control"
           id={inputId}
-          {...this.props}
+          {...otherProps}
         />
         {
-          this.props.helpText
-            ? <small className="form-text text-muted">{this.props.helpText}</small>
+          helpText
+            ? <small className="form-text text-muted">{helpText}</small>
             : null
         }
       </div>
