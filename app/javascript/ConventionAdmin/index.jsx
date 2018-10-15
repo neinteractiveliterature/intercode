@@ -14,6 +14,7 @@ fragment ConventionAdminConventionFields on Convention {
   ends_at
   name
   domain
+  event_mailing_list_domain
   timezone_name
   show_schedule
   maximum_tickets
@@ -29,6 +30,7 @@ fragment ConventionAdminConventionFields on Convention {
 
   default_layout {
     id
+    name
   }
 
   cms_layouts {
@@ -38,6 +40,7 @@ fragment ConventionAdminConventionFields on Convention {
 
   root_page {
     id
+    name
   }
 
   pages {
@@ -96,6 +99,7 @@ class ConventionAdmin extends React.Component {
         ends_at: convention.ends_at,
         name: convention.name,
         domain: convention.domain,
+        event_mailing_list_domain: convention.event_mailing_list_domain,
         timezone_name: convention.timezone_name,
         show_schedule: convention.show_schedule,
         maximum_tickets: convention.maximum_tickets,
@@ -107,8 +111,8 @@ class ConventionAdmin extends React.Component {
             string_value: timespan.value,
           })),
         },
-        default_layout_id: convention.default_layout_id,
-        root_page_id: convention.root_page_id,
+        default_layout_id: (convention.default_layout || {}).id,
+        root_page_id: (convention.root_page || {}).id,
       },
     };
 
@@ -132,11 +136,7 @@ class ConventionAdmin extends React.Component {
   render = () => (
     <div className="mb-4">
       <ConventionForm
-        initialConvention={{
-          ...this.props.data.convention,
-          default_layout_id: (this.props.data.convention.default_layout || {}).id,
-          root_page_id: (this.props.data.convention.root_page || {}).id,
-        }}
+        initialConvention={{ ...this.props.data.convention }}
         saveConvention={this.saveConvention}
         cmsLayouts={this.props.data.convention.cms_layouts}
         pages={this.props.data.convention.pages}
