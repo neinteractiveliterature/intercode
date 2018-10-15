@@ -24,6 +24,13 @@ fragment UserActivityAlertFields on UserActivityAlert {
   }
 }
 
+query ConventionTicketNameQuery {
+  convention {
+    id
+    ticket_name
+  }
+}
+
 query UserActivityAlertQuery($id: Int!) {
   convention {
     id
@@ -53,7 +60,7 @@ query UserActivityAlertsAdminQuery {
 
 mutation CreateUserActivityAlert(
   $userActivityAlert: UserActivityAlertInput!,
-  $alertDestinations: [AlertDestinationInput!],
+  $alertDestinations: [AlertDestinationInput!]!,
 ) {
   createUserActivityAlert(input: {
     user_activity_alert: $userActivityAlert,
