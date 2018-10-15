@@ -7,6 +7,7 @@ import GraphQLAsyncSelect from './GraphQLAsyncSelect';
 export const DEFAULT_USER_CON_PROFILES_QUERY = gql`
 query($name: String) {
   convention {
+    id
     user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
       entries {
         id

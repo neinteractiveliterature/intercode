@@ -10,10 +10,9 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 //   }),
 // )
 
-//
-// environment.loaders.get('sass').use.unshift({
-//   loader: 'cache-loader'
-// });
+environment.loaders.append('graphql',
+  { test: /\.(gql|graphql)$/, use: [{ loader: 'graphql-tag/loader' }] },
+);
 
 environment.plugins.prepend(
   'LodashModuleReplacementPlugin',

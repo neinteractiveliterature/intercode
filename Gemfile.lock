@@ -188,6 +188,11 @@ GEM
       promise.rb (~> 0.7.2)
     graphql-guard (1.2.0)
       graphql (>= 1.6.0, < 2)
+    graphql-rails_logger (1.1.0)
+      actionpack (~> 5.0)
+      activesupport (~> 5.0)
+      railties (~> 5.0)
+      rouge (~> 3.0)
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
@@ -335,6 +340,7 @@ GEM
     rollbar-shoryuken (0.1.2)
       rollbar
       shoryuken
+    rouge (3.3.0)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     sass (3.5.4)
@@ -443,6 +449,7 @@ DEPENDENCIES
   graphql
   graphql-batch
   graphql-guard
+  graphql-rails_logger
   haml
   htmldiff-lcs!
   letter_opener

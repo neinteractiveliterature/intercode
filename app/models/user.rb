@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_many :user_con_profiles
   has_many :event_proposals, through: :user_con_profiles
+  has_many :user_activity_alerts, dependent: :nullify
 
   attr_accessor :reset_password_mail_options
 
