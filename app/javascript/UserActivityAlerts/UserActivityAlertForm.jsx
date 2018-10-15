@@ -7,12 +7,7 @@ import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox'
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import Confirm from '../ModalDialogs/Confirm';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import {
-  componentLocalStateUpdater,
-  stateUpdater,
-  combineStateChangeCalculators,
-  Transforms,
-} from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 
@@ -64,21 +59,24 @@ class UserActivityAlertForm extends React.Component {
       addDestinationType: null,
     };
 
-    this.stateUpdater = stateUpdater(
-      () => this.props.userActivityAlert,
-      this.props.onChange,
-      combineStateChangeCalculators({
+    this.userActivityAlertMutator = mutator({
+      getState: () => this.props.userActivityAlert,
+      setState: this.props.onChange,
+      transforms: {
         partial_name: Transforms.textInputChange,
         email: Transforms.textInputChange,
         user: Transforms.identity,
         trigger_on_user_con_profile_create: Transforms.checkboxChange,
         trigger_on_ticket_create: Transforms.checkboxChange,
-      }),
-    );
+      },
+    });
 
-    this.localStateUpdater = componentLocalStateUpdater(this, combineStateChangeCalculators({
-      addDestinationType: Transforms.identity,
-    }));
+    this.localStateMutator = mutator({
+      component: this,
+      transforms: {
+        addDestinationType: Transforms.identity,
+      },
+    });
   }
 
   addStaffPositionDestination = (staffPosition) => {
@@ -104,7 +102,7 @@ class UserActivityAlertForm extends React.Component {
             label="Partial name"
             helpText="If any part of the user's name matches this string, the alert will match.  Case insensitive."
             value={this.props.userActivityAlert.partial_name || ''}
-            onChange={this.stateUpdater.partial_name}
+            onChange={this.userActivityAlertMutator.partial_name}
             disabled={this.props.disabled}
           />
 
@@ -114,7 +112,7 @@ class UserActivityAlertForm extends React.Component {
             label="Email"
             helpText="If the user's email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."
             value={this.props.userActivityAlert.email || ''}
-            onChange={this.stateUpdater.email}
+            onChange={this.userActivityAlertMutator.email}
             disabled={this.props.disabled}
           />
 
@@ -123,7 +121,7 @@ class UserActivityAlertForm extends React.Component {
             <UserSelect
               inputId={this.lastUniqueId()}
               value={this.props.userActivityAlert.user}
-              onChange={this.stateUpdater.user}
+              onChange={this.userActivityAlertMutator.user}
               disabled={this.props.disabled}
             />
             <small className="form-text text-muted">Matches across all conventions using this server.</small>
@@ -142,7 +140,7 @@ class UserActivityAlertForm extends React.Component {
             label="Trigger on profile creation"
             type="checkbox"
             checked={this.props.userActivityAlert.trigger_on_user_con_profile_create}
-            onChange={this.stateUpdater.trigger_on_user_con_profile_create}
+            onChange={this.userActivityAlertMutator.trigger_on_user_con_profile_create}
             disabled={this.props.disabled}
           />
 
@@ -151,7 +149,7 @@ class UserActivityAlertForm extends React.Component {
             label={`Trigger on ${this.props.convention.ticket_name} creation`}
             type="checkbox"
             checked={this.props.userActivityAlert.trigger_on_ticket_create}
-            onChange={this.stateUpdater.trigger_on_ticket_create}
+            onChange={this.userActivityAlertMutator.trigger_on_ticket_create}
             disabled={this.props.disabled}
           />
         </div>
@@ -210,7 +208,7 @@ class UserActivityAlertForm extends React.Component {
               name="addDestinationType"
               choices={[{ label: 'Staff position', value: 'staff_position' }, { label: 'User', value: 'user_con_profile' }]}
               value={this.state.addDestinationType}
-              onChange={this.localStateUpdater.addDestinationType}
+              onChange={this.localStateMutator.addDestinationType}
               choiceClassName="form-check-inline"
               disabled={this.props.disabled}
             />

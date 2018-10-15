@@ -102,6 +102,18 @@ export function stateUpdater(getState, setState, stateChangeCalculators) {
   );
 }
 
+export function mutator(config = {}) {
+  if (!config.component && !(config.getState && config.setState)) {
+    throw new Error('mutator requires either a component or getState/setState');
+  }
+
+  return stateUpdater(
+    config.component ? () => config.component.state : config.getState,
+    config.component ? state => config.component.setState(state) : config.setState,
+    combineStateChangeCalculators(config.transforms),
+  );
+}
+
 export function componentLocalStateUpdater(component, stateChangeCalculators) {
   return stateUpdater(
     () => component.state,

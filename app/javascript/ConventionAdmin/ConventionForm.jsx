@@ -4,7 +4,7 @@ import { pluralize } from 'inflected';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
-import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
@@ -82,25 +82,31 @@ class ConventionForm extends React.Component {
       convention: props.initialConvention,
     };
 
-    this.conventionMutator = new ModelStateChangeCalculator(
-      'convention',
-      {
-        name: FIELD_TYPES.STRING,
-        domain: FIELD_TYPES.STRING,
-        event_mailing_list_domain: FIELD_TYPES.STRING,
-        timezone_name: FIELD_TYPES.SELECT,
-        starts_at: FIELD_TYPES.DATETIME,
-        ends_at: FIELD_TYPES.DATETIME,
-        accepting_proposals: FIELD_TYPES.BOOLEAN,
-        show_schedule: FIELD_TYPES.CHECKBOX,
-        maximum_event_signups: FIELD_TYPES.OBJECT,
-        maximum_tickets: FIELD_TYPES.INTEGER,
-        ticket_name: FIELD_TYPES.STRING,
-        default_layout: FIELD_TYPES.OBJECT,
-        root_page: FIELD_TYPES.OBJECT,
+    const lazyDatetime = (value) => {
+      const timezoneName = this.state.convention.timezone_name;
+      return Transforms.datetime(timezoneName)(value);
+    };
+
+    this.mutator = mutator({
+      component: this,
+      transforms: {
+        convention: {
+          name: Transforms.textInputChange,
+          domain: Transforms.textInputChange,
+          event_mailing_list_domain: Transforms.textInputChange,
+          timezone_name: Transforms.identity,
+          starts_at: lazyDatetime,
+          ends_at: lazyDatetime,
+          accepting_proposals: Transforms.identity,
+          show_schedule: Transforms.identity,
+          maximum_event_signups: Transforms.identity,
+          maximum_tickets: Transforms.inputChange(Transforms.integer),
+          ticket_name: Transforms.textInputChange,
+          default_layout: Transforms.identity,
+          root_page: Transforms.identity,
+        },
       },
-      () => this.state.convention.timezone_name,
-    ).getMutatorForComponent(this);
+    });
   }
 
   onClickSave = (event) => {
@@ -113,7 +119,7 @@ class ConventionForm extends React.Component {
       name={name}
       caption={caption}
       value={this.state.convention[name]}
-      onChange={this.conventionMutator.valueChangeCallback(name)}
+      onChange={this.mutator.convention[name]}
     />
   )
 
@@ -124,7 +130,7 @@ class ConventionForm extends React.Component {
         <DateTimeInput
           value={this.state.convention[name]}
           timezoneName={this.state.convention.timezone_name}
-          onChange={this.conventionMutator.valueChangeCallback(name)}
+          onChange={this.mutator.convention[name]}
         />
       </div>
     ));
@@ -135,14 +141,14 @@ class ConventionForm extends React.Component {
           name="name"
           label="Name"
           value={this.state.convention.name}
-          onChange={this.conventionMutator.onInputChange}
+          onChange={this.mutator.convention.name}
         />
 
         <BootstrapFormInput
           name="domain"
           label="Convention domain name"
           value={this.state.convention.domain}
-          onChange={this.conventionMutator.onInputChange}
+          onChange={this.mutator.convention.domain}
         />
 
         <BootstrapFormInput
@@ -150,14 +156,14 @@ class ConventionForm extends React.Component {
           label="Event mailing list domain name"
           value={this.state.convention.event_mailing_list_domain}
           helpText="If present, event teams can use this domain name to create automatically-managed mailing lists for their team."
-          onChange={this.conventionMutator.onInputChange}
+          onChange={this.mutator.convention.event_mailing_list_domain}
         />
 
         <TimezoneSelect
           name="timezone_name"
           label="Time zone"
           value={this.state.convention.timezone_name}
-          onChange={this.conventionMutator.valueChangeCallback('timezone_name')}
+          onChange={this.mutator.convention.timezone_name}
         />
 
         <div className="row form-group">
@@ -171,7 +177,7 @@ class ConventionForm extends React.Component {
           getOptionValue={option => option.id}
           getOptionLabel={option => option.name}
           options={this.props.cmsLayouts}
-          onChange={this.conventionMutator.valueChangeCallback('default_layout')}
+          onChange={this.mutator.convention.default_layout}
         />
 
         <SelectWithLabel
@@ -181,7 +187,7 @@ class ConventionForm extends React.Component {
           getOptionValue={option => option.id}
           getOptionLabel={option => option.name}
           options={this.props.pages}
-          onChange={this.conventionMutator.valueChangeCallback('root_page')}
+          onChange={this.mutator.convention.root_page}
         />
 
         {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
@@ -196,7 +202,7 @@ class ConventionForm extends React.Component {
             { value: 'yes', label: 'Yes, to everyone' },
           ]}
           value={this.state.convention.show_schedule}
-          onChange={this.conventionMutator.valueChangeCallback('show_schedule')}
+          onChange={this.mutator.convention.show_schedule}
         />
 
         <BootstrapFormInput
@@ -204,7 +210,7 @@ class ConventionForm extends React.Component {
           label={'Name for "ticket" at this convention'}
           type="text"
           value={this.state.convention.ticket_name}
-          onChange={this.conventionMutator.onInputChange}
+          onChange={this.mutator.convention.ticket_name}
         />
 
         <BootstrapFormInput
@@ -212,7 +218,7 @@ class ConventionForm extends React.Component {
           label={`Maximum ${pluralize(this.state.convention.ticket_name)}`}
           type="number"
           value={(this.state.convention.maximum_tickets || '').toString()}
-          onChange={this.conventionMutator.onInputChange}
+          onChange={this.mutator.convention.maximum_tickets}
         />
 
         <fieldset>
@@ -220,7 +226,7 @@ class ConventionForm extends React.Component {
           <ScheduledValueEditor
             scheduledValue={this.state.convention.maximum_event_signups}
             timezone={this.state.convention.timezone_name}
-            setScheduledValue={this.conventionMutator.valueChangeCallback('maximum_event_signups')}
+            setScheduledValue={this.mutator.convention.maximum_event_signups}
             buildValueInput={buildMaximumEventSignupsInput}
           />
         </fieldset>
