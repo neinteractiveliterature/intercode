@@ -55,8 +55,14 @@ class ConventionForm extends React.Component {
       }).isRequired,
       maximum_tickets: PropTypes.number,
       ticket_name: PropTypes.string.isRequired,
-      default_layout_id: PropTypes.number,
-      root_page_id: PropTypes.number,
+      default_layout: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      }),
+      root_page: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      }),
     }).isRequired,
     cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -81,6 +87,7 @@ class ConventionForm extends React.Component {
       {
         name: FIELD_TYPES.STRING,
         domain: FIELD_TYPES.STRING,
+        event_mailing_list_domain: FIELD_TYPES.STRING,
         timezone_name: FIELD_TYPES.SELECT,
         starts_at: FIELD_TYPES.DATETIME,
         ends_at: FIELD_TYPES.DATETIME,
@@ -89,8 +96,8 @@ class ConventionForm extends React.Component {
         maximum_event_signups: FIELD_TYPES.OBJECT,
         maximum_tickets: FIELD_TYPES.INTEGER,
         ticket_name: FIELD_TYPES.STRING,
-        default_layout_id: FIELD_TYPES.SELECT,
-        root_page_id: FIELD_TYPES.SELECT,
+        default_layout: FIELD_TYPES.OBJECT,
+        root_page: FIELD_TYPES.OBJECT,
       },
       () => this.state.convention.timezone_name,
     ).getMutatorForComponent(this);
@@ -138,6 +145,14 @@ class ConventionForm extends React.Component {
           onChange={this.conventionMutator.onInputChange}
         />
 
+        <BootstrapFormInput
+          name="event_mailing_list_domain"
+          label="Event mailing list domain name"
+          value={this.state.convention.event_mailing_list_domain}
+          helpText="If present, event teams can use this domain name to create automatically-managed mailing lists for their team."
+          onChange={this.conventionMutator.onInputChange}
+        />
+
         <TimezoneSelect
           name="timezone_name"
           label="Time zone"
@@ -152,17 +167,21 @@ class ConventionForm extends React.Component {
         <SelectWithLabel
           name="default_layout_id"
           label="Default layout for pages"
-          value={this.state.convention.default_layout_id}
-          options={this.props.cmsLayouts.map(layout => ({ value: layout.id, label: layout.name }))}
-          onChange={this.conventionMutator.valueChangeCallback('default_layout_id')}
+          value={this.state.convention.default_layout}
+          getOptionValue={option => option.id}
+          getOptionLabel={option => option.name}
+          options={this.props.cmsLayouts}
+          onChange={this.conventionMutator.valueChangeCallback('default_layout')}
         />
 
         <SelectWithLabel
           name="root_page_id"
           label="Root page"
-          value={this.state.convention.root_page_id}
-          options={this.props.pages.map(page => ({ value: page.id, label: page.name }))}
-          onChange={this.conventionMutator.valueChangeCallback('root_page_id')}
+          value={this.state.convention.root_page}
+          getOptionValue={option => option.id}
+          getOptionLabel={option => option.name}
+          options={this.props.pages}
+          onChange={this.conventionMutator.valueChangeCallback('root_page')}
         />
 
         {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
@@ -206,7 +225,7 @@ class ConventionForm extends React.Component {
           />
         </fieldset>
 
-        <button className="btn btn-primary" onClick={this.onClickSave}>
+        <button className="btn btn-primary" onClick={this.onClickSave} type="button">
           Save settings
         </button>
       </form>
