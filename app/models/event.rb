@@ -73,6 +73,8 @@ class Event < ApplicationRecord
 
   has_one :event_proposal, required: false
 
+  after_commit :sync_team_mailing_list, on: [:create, :update]
+
   STATUSES.each do |status|
     scope status, -> { where(status: status) }
   end
@@ -145,5 +147,9 @@ class Event < ApplicationRecord
 
     errors.add :registration_policy, "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
+  end
+
+  def sync_team_mailing_list
+    SyncTeamMailingListJob.perform_later(event: self)
   end
 end
