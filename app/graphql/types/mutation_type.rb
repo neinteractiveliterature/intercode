@@ -323,6 +323,12 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:ticket_types, :update))
   end
 
+  ### UserActivityAlert
+
+  field :updateUserActivityAlert, mutation: Mutations::UpdateUserActivityAlert do
+    guard(guard_for_model_with_id(UserActivityAlert, :update))
+  end
+
   ### UserConProfile
 
   field :createUserConProfile, field: Mutations::CreateUserConProfile.field do
