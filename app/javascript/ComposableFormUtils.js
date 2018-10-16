@@ -29,14 +29,31 @@ export function parseMoneyOrNull(value) {
   };
 }
 
-export function convertDatetimeValue(value, timezoneName) {
-  if (value == null || typeof value === 'string') {
+export function forceTimezoneForDatetimeValue(value, timezoneName) {
+  if (value == null) {
     return value;
+  }
+
+  if (typeof value === 'string') {
+    const valueWithoutTimezone = value.replace(/(Z|[+-]\d\d(:\d\d)?)$/, '');
+    return forceTimezoneForDatetimeValue(moment(valueWithoutTimezone), timezoneName);
   }
 
   // it's hopefully a moment
   const valueInTimezone = moment.tz(value.toObject(), timezoneName);
-  return valueInTimezone.toISOString();
+  return valueInTimezone.toISOString(true);
+}
+
+export function convertDatetimeValue(value, timezoneName = null) {
+  if (value == null) {
+    return value;
+  }
+
+  if (timezoneName) {
+    return moment.tz(value, timezoneName).toISOString(true);
+  }
+
+  return moment(value).toISOString();
 }
 
 function namedFunction(func, name) {
@@ -48,10 +65,17 @@ export const Transforms = {
   identity(value) { return value; },
   integer(value) { return parseIntOrNull(value); },
   float(value) { return parseFloatOrNull(value); },
-  datetime(timezoneName) {
+  datetime(value) { return convertDatetimeValue(value); },
+  datetimeWithTimezone(timezoneName) {
     return namedFunction(
       value => convertDatetimeValue(value, timezoneName),
-      `datetime('${timezoneName}')`,
+      `datetimeWithTimezone('${timezoneName}')`,
+    );
+  },
+  datetimeWithForcedTimezone(timezoneName) {
+    return namedFunction(
+      value => forceTimezoneForDatetimeValue(value, timezoneName),
+      `datetimeWithForcedTimezone('${timezoneName}')`,
     );
   },
   booleanString(value) { return value === 'true'; },
