@@ -82,11 +82,6 @@ class ConventionForm extends React.Component {
       convention: props.initialConvention,
     };
 
-    const lazyDatetime = (value) => {
-      const timezoneName = this.state.convention.timezone_name;
-      return Transforms.datetimeWithForcedTimezone(timezoneName)(value);
-    };
-
     this.mutator = mutator({
       component: this,
       transforms: {
@@ -95,8 +90,8 @@ class ConventionForm extends React.Component {
           domain: Transforms.textInputChange,
           event_mailing_list_domain: Transforms.textInputChange,
           timezone_name: Transforms.identity,
-          starts_at: lazyDatetime,
-          ends_at: lazyDatetime,
+          starts_at: Transforms.datetime,
+          ends_at: Transforms.datetime,
           accepting_proposals: Transforms.identity,
           show_schedule: Transforms.identity,
           maximum_event_signups: Transforms.identity,
