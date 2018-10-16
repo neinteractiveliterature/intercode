@@ -84,7 +84,7 @@ class ConventionForm extends React.Component {
 
     const lazyDatetime = (value) => {
       const timezoneName = this.state.convention.timezone_name;
-      return Transforms.datetime(timezoneName)(value);
+      return Transforms.datetimeWithForcedTimezone(timezoneName)(value);
     };
 
     this.mutator = mutator({
