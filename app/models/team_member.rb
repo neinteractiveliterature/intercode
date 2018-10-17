@@ -39,6 +39,6 @@ event #{event.name} is from #{event.convention.name}.")
 
   def sync_team_mailing_list
     return unless event
-    SyncTeamMailingListJob.perform_later(event: event)
+    SyncTeamMailingListJob.perform_later(event)
   end
 end

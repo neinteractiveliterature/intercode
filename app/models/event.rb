@@ -150,6 +150,6 @@ Use EventChangeRegistrationPolicyService instead."
   end
 
   def sync_team_mailing_list
-    SyncTeamMailingListJob.perform_later(event: self)
+    SyncTeamMailingListJob.perform_later(self)
   end
 end
