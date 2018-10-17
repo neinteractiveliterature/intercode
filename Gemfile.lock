@@ -71,7 +71,7 @@ GEM
       graphql (~> 1.7)
       rails (>= 4.2)
     arel (9.0.0)
-    autoprefixer-rails (9.2.0)
+    autoprefixer-rails (9.2.1)
       execjs
     aws-eventstream (1.0.1)
     aws-partitions (1.105.0)
