@@ -1,0 +1,23 @@
+- signups_by_state_and_bucket_key = count_presenter.signups_by_state_and_bucket_key
+- progress_classes = ['bg-success', 'bg-danger', 'bg-info', 'bg-primary']
+
+.run-capacity.bg-white.rounded.mb-2{style: 'overflow: hidden'}
+  - count_presenter.buckets.each_with_index do |bucket, index|
+    - signups = signups_by_state_and_bucket_key['confirmed'][bucket.key]
+    - capacity = bucket.total_slots
+    - next if capacity < 1 && bucket.slots_limited?
+    - capacity_fraction = count_presenter.capacity_fraction_for_bucket(bucket.key)
+    .bucket-capacity
+      .bucket-capacity-bars
+        - remaining_capacity = capacity - signups.size
+        .bucket-capacity-bar{class: "bg-bucket-color-#{(index % 9) + 1}", style: "width: #{capacity_fraction * 100.0}%;"}
+          - (remaining_capacity - 1).times do |index|
+            .bucket-capacity-tickmark.bg-white{class: (capacity >= 10 ? 'bucket-capacity-tickmark-thin' : ''), style: "left: #{((index + 1).to_f / remaining_capacity) * 100.0}%;"}
+        - if signups.size > 0
+          .bucket-capacity-bar.bg-bucket-color-full{style: "width: #{(1.0 - capacity_fraction) * 100.0}%;"}
+            - signups.size.times do |index|
+              .bucket-capacity-tickmark.bg-white{class: (capacity >= 10 ? 'bucket-capacity-tickmark-thin' : ''), style: "left: #{(index.to_f / signups.size) * 100.0}%;"}
+      #{bucket.name}: #{count_presenter.capacity_description_for_bucket(bucket.key)}
+  - if count_presenter.waitlist_count > 0
+    .bucket-capacity
+      Waitlist: #{count_presenter.waitlist_count}

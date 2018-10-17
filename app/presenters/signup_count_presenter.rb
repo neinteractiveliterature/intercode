@@ -1,10 +1,12 @@
 class SignupCountPresenter
   include Concerns::SortBuckets
+  include ActionView::Helpers::TextHelper
 
-  attr_reader :run
+  attr_reader :run, :signups_available
 
-  def initialize(run)
+  def initialize(run, signups_available: true)
     @run = run
+    @signups_available = signups_available
   end
 
   def signups_description
@@ -62,6 +64,10 @@ class SignupCountPresenter
     return 'unlimited' if bucket.slots_unlimited?
 
     remaining_capacity = bucket.total_slots - confirmed_count_for_bucket(bucket_key)
+    if !signups_available && remaining_capacity == bucket.total_slots
+      return pluralize(remaining_capacity, 'slot')
+    end
+
     "#{remaining_capacity} / #{bucket.total_slots} available"
   end
 
