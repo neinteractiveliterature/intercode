@@ -76,7 +76,8 @@ class EventAdminRow extends React.Component {
 
   renderRuns = (event) => {
     if (this.state.expanded || event.runs.length <= 2) {
-      const sortedRuns = [...event.runs].sort((a, b) => moment(a.starts_at).diff(moment(b.starts_at)));
+      const sortedRuns = [...event.runs]
+        .sort((a, b) => moment(a.starts_at).diff(moment(b.starts_at)));
 
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
@@ -89,12 +90,12 @@ class EventAdminRow extends React.Component {
     }
 
     return (
-      <button className="btn btn-outline-secondary" onClick={this.expand}>
+      <button className="btn btn-outline-secondary" onClick={this.expand} type="button">
         Show
         {' '}
         {event.runs.length}
         {' '}
-runs
+        runs
       </button>
     );
   }

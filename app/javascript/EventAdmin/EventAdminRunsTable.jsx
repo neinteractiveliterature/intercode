@@ -48,16 +48,18 @@ class EventAdminRunsTable extends React.Component {
           </tbody>
         </table>
 
-        <Route path="/:eventId/runs/:runId/edit">
-          {props => (
+        <Route
+          path="/:eventId/runs/:runId/edit"
+          render={props => (
             <EditRun {...props} events={data.events} convention={data.convention} />
           )}
-        </Route>
-        <Route path="/:eventId/runs/new">
-          {props => (
+        />
+        <Route
+          path="/:eventId/runs/new"
+          render={props => (
             <EditRun {...props} events={data.events} convention={data.convention} />
           )}
-        </Route>
+        />
       </div>
     );
   }
