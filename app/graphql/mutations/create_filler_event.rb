@@ -3,7 +3,7 @@ Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
   return_field :event, Types::EventType
 
   input_field :event, !Types::EventInputType
-  input_field :run, !Types::RunInputType
+  input_field :run, Types::RunInputType
 
   resolve ->(_obj, args, ctx) {
     event_attrs = args[:event].to_h.merge(
@@ -14,11 +14,13 @@ Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
     event = ctx[:convention].events.new(event_attrs)
     event.assign_form_response_attributes(form_response_attrs)
 
-    event.runs.new(
-      args[:run].to_h.merge(
-        updated_by: ctx[:user_con_profile].user
+    if args[:run]
+      event.runs.new(
+        args[:run].to_h.merge(
+          updated_by: ctx[:user_con_profile].user
+        )
       )
-    )
+    end
 
     event.save!
 

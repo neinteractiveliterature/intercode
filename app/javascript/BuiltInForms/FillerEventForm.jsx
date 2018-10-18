@@ -49,20 +49,19 @@ class FillerEventForm extends React.Component {
   isDataComplete = () => (
     this.state.event.form_response_attrs.title != null
     && this.state.event.form_response_attrs.length_seconds
-    && this.state.run.starts_at != null
   )
 
   eventFieldChanged = (eventData) => {
-    this.setState({
+    this.setState(prevState => ({
       event: {
-        ...this.state.event,
+        ...prevState.event,
         ...eventData,
       },
-    });
+    }));
   }
 
   runChanged = (runData) => {
-    this.setState({ run: { ...this.state.run, ...runData } });
+    this.setState(prevState => ({ run: { ...prevState.run, ...runData } }));
   }
 
   saveClicked = (event) => {
