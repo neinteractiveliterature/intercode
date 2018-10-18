@@ -1,10 +1,6 @@
 module EventsHelper
-  def schedule_grid(config = {})
-    app_component(
-      'ScheduleGrid',
-      basename: url_for(params.permit!.to_h.merge(extra: nil, only_path: true)),
-      config: config
-    )
+  def schedule_grid(basename:, **config)
+    app_component('ScheduleGrid', basename: basename, config: config)
   end
 
   def signup_button(event, run, signup_option)

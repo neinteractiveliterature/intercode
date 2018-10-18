@@ -20,11 +20,6 @@ class AcceptEventProposalService < CivilService::Service
     content_warnings: 'content_warnings'
   }
 
-  DEFAULT_EVENT_ATTRIBUTES = {
-    category: 'larp',
-    status: 'active'
-  }
-
   attr_reader :event_proposal
 
   def initialize(event_proposal:)
@@ -34,7 +29,9 @@ class AcceptEventProposalService < CivilService::Service
   private
 
   def inner_call
-    event = convention.events.create!(event_attributes)
+    event = convention.events.new(category: 'larp', status: 'active')
+    event.assign_default_values_from_form_items(event_form.form_items)
+    event.assign_form_response_attributes(event_attributes)
     event_proposal.update!(event: event)
 
     if event_proposal.owner
@@ -52,25 +49,29 @@ class AcceptEventProposalService < CivilService::Service
 
   def event_attributes
     @event_attributes ||= begin
-      event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, form_attr), hash|
-        next unless form_item_identifiers.include?(form_attr)
-        hash[event_attr] = event_proposal.read_form_response_attribute(form_attr)
+      event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, proposal_attr), hash|
+        next unless proposal_form_item_identifiers.include?(proposal_attr)
+        hash[event_attr] = event_proposal.read_form_response_attribute(proposal_attr)
       end
 
       event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
 
-      DEFAULT_EVENT_ATTRIBUTES.merge(event_attributes).merge(
+      event_attributes.merge(
         admin_notes: event_proposal.admin_notes
       )
     end
   end
 
-  def form
-    @form ||= convention.regular_event_form
+  def event_form
+    @event_form ||= convention.regular_event_form
   end
 
-  def form_item_identifiers
-    @form_item_identifiers ||= form.form_items.pluck(:identifier)
+  def event_proposal_form
+    @event_proposal_form ||= convention.event_proposal_form
+  end
+
+  def proposal_form_item_identifiers
+    @proposal_form_item_identifiers ||= event_proposal_form.form_items.pluck(:identifier)
   end
 
   def convention
