@@ -1,4 +1,4 @@
-FROM ruby:2.4.2 as build
+FROM ruby:2.5.1 as build
 
 RUN mkdir -p /usr/src/build
 WORKDIR /usr/src/build
@@ -26,7 +26,7 @@ RUN mv config/database.yml.docker config/database.yml
 RUN bundle exec rake assets:precompile
 RUN rm -rf node_modules
 
-FROM ruby:2.4.2
+FROM ruby:2.5.1
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -35,7 +35,7 @@ ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_LOG_TO_STDOUT true
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
 COPY --from=build /usr/src/build .
