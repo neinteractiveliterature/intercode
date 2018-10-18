@@ -50,6 +50,7 @@ const EventAdminEditEvent = (props) => {
         data.myProfile.ability.can_override_maximum_event_provided_tickets
       }
       showDropButton
+      showCategorySelect
     />
   );
 };

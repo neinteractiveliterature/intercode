@@ -60,8 +60,8 @@ class Event < ApplicationRecord
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
 
-  # Single-run events have to have exactly one run
-  validate :single_run_events_must_have_exactly_one_run, unless: :bypass_single_event_run_check
+  # Single-run events have to have no more than one run
+  validate :single_run_events_must_have_no_more_than_one_run, unless: :bypass_single_event_run_check
 
   # Making it slightly harder to change the registration policy unless you really know what
   # you're doing
@@ -128,12 +128,12 @@ class Event < ApplicationRecord
     end
   end
 
-  def single_run_events_must_have_exactly_one_run
+  def single_run_events_must_have_no_more_than_one_run
     category_obj = EventCategory.find(category)
     return unless category_obj.single_run? && status == 'active'
-    return if runs.size == 1
+    return if runs.size <= 1
 
-    errors.add(:base, "#{category_obj.key.humanize} events must have exactly one run")
+    errors.add(:base, "#{category_obj.key.humanize} events must have no more than one run")
   end
 
   def registration_policy_cannot_change
