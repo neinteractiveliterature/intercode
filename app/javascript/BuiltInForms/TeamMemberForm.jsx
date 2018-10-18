@@ -199,18 +199,20 @@ const describeTicketingStatus = (userConProfile, existingTicket, convention) => 
       <span key="unticketed-warning">
         <span className="text-danger">
           {' '}
-has no
+          has no
+          {' '}
           {ticketName}
           {' '}
-for
+          for
+          {' '}
           {convention.name}
-.
+          .
         </span>
         {' '}
         Without a
         {' '}
         {ticketName}
-, users cannot sign up for events at the convention.
+        , users cannot sign up for events at the convention.
       </span>
     ));
   }
