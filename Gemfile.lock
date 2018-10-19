@@ -186,7 +186,7 @@ GEM
     graphql-batch (0.3.10)
       graphql (>= 0.8, < 2)
       promise.rb (~> 0.7.2)
-    graphql-guard (1.2.0)
+    graphql-guard (1.2.1)
       graphql (>= 1.6.0, < 2)
     graphql-rails_logger (1.1.0)
       actionpack (~> 5.0)
