@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { FIELD_TYPES, ModelStateChangeCalculator } from '../FormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import defaultCodeMirrorOptions from '../defaultCodeMirrorOptions';
 import ErrorDisplay from '../ErrorDisplay';
@@ -73,13 +73,15 @@ class FormJSONEditor extends React.Component {
       form: formDataFromJSON(this.props.data.form.export_json),
     };
 
-    this.formMutator = new ModelStateChangeCalculator(
-      'form',
-      {
-        title: FIELD_TYPES.STRING,
-        sectionsJSON: FIELD_TYPES.STRING,
+    this.mutator = mutator({
+      component: this,
+      transforms: {
+        form: {
+          title: Transforms.textInputChange,
+          sectionsJSON: Transforms.identity,
+        },
       },
-    ).getMutatorForComponent(this);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,7 +93,7 @@ class FormJSONEditor extends React.Component {
   }
 
   onBeforeChangeSections = (editor, data, value) => {
-    this.formMutator.onValueChange('sectionsJSON', value);
+    this.mutator.form.sectionsJSON(value);
   }
 
   save = () => {
@@ -117,7 +119,8 @@ class FormJSONEditor extends React.Component {
   render = () => (
     <div>
       <h1 className="mb-4">
-Editing
+        Editing
+        {' '}
         {this.state.form.title}
       </h1>
 
@@ -125,7 +128,7 @@ Editing
         label="Title"
         name="title"
         value={this.state.form.title}
-        onChange={this.formMutator.onInputChange}
+        onChange={this.mutator.form.title}
       />
 
       <fieldset className="mb-4">

@@ -50,6 +50,7 @@ fragment StandaloneEditEvent_EventFormData on Convention {
   starts_at
   ends_at
   timezone_name
+  event_mailing_list_domain
 
   regular_event_form {
     form_api_json

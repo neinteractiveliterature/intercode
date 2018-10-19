@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { combineStateChangeCalculators, componentLocalStateUpdater, Transforms } from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import ErrorDisplay from '../ErrorDisplay';
 import PlainTextDisplay from '../PlainTextDisplay';
 
@@ -24,9 +24,12 @@ class AdminNotes extends React.Component {
       mutationInProgress: false,
     };
 
-    this.stateUpdater = componentLocalStateUpdater(this, combineStateChangeCalculators({
-      editingValue: Transforms.inputChange(Transforms.identity),
-    }));
+    this.mutator = mutator({
+      component: this,
+      transforms: {
+        editingValue: Transforms.inputChange(Transforms.identity),
+      },
+    });
   }
 
   startEditing = () => {
@@ -83,7 +86,7 @@ class AdminNotes extends React.Component {
           <textarea
             className="form-control"
             value={this.state.editingValue}
-            onChange={this.stateUpdater.editingValue}
+            onChange={this.mutator.editingValue}
             ref={(element) => { this.textareaElement = element; }}
           />
           <ErrorDisplay graphQLError={this.state.error} />

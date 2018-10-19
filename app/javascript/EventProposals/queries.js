@@ -20,6 +20,7 @@ fragment EventProposalFormData on Convention {
   starts_at
   ends_at
   timezone_name
+  event_mailing_list_domain
 
   event_proposal_form {
     form_api_json

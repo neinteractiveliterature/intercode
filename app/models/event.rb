@@ -1,5 +1,6 @@
 class Event < ApplicationRecord
   include Concerns::FormResponse
+  include Concerns::EventEmail
 
   STATUSES = Set.new(%w[active dropped])
   CATEGORIES = Set.new(EventCategory::CATEGORIES_BY_KEY.keys)
@@ -8,6 +9,8 @@ class Event < ApplicationRecord
   register_form_response_attrs :title,
     :author,
     :email,
+    :event_email,
+    :team_mailing_list_name,
     :organization,
     :url,
     :length_seconds,
@@ -72,6 +75,8 @@ class Event < ApplicationRecord
   has_many :runs, dependent: :destroy
 
   has_one :event_proposal, required: false
+
+  after_commit :sync_team_mailing_list, on: [:create, :update]
 
   STATUSES.each do |status|
     scope status, -> { where(status: status) }
@@ -142,5 +147,9 @@ class Event < ApplicationRecord
 
     errors.add :registration_policy, "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
+  end
+
+  def sync_team_mailing_list
+    SyncTeamMailingListJob.perform_later(self)
   end
 end

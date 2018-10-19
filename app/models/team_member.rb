@@ -14,6 +14,8 @@ class TeamMember < ApplicationRecord
 
   belongs_to :updated_by, class_name: 'User', optional: true
 
+  after_commit :sync_team_mailing_list
+
   delegate :name, to: :user_con_profile
 
   scope :visible, -> { where(display: true) }
@@ -33,5 +35,10 @@ class TeamMember < ApplicationRecord
     errors.add(:base, "User con profile and event must belong to the same convention!  \
 User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and \
 event #{event.name} is from #{event.convention.name}.")
+  end
+
+  def sync_team_mailing_list
+    return unless event
+    SyncTeamMailingListJob.perform_later(event)
   end
 end

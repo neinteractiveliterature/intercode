@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_11_174357) do
+ActiveRecord::Schema.define(version: 2018_10_15_021731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_174357) do
     t.bigint "regular_event_form_id"
     t.bigint "volunteer_event_form_id"
     t.bigint "filler_event_form_id"
+    t.text "event_mailing_list_domain"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
@@ -166,6 +167,7 @@ ActiveRecord::Schema.define(version: 2018_10_11_174357) do
     t.text "content_warnings"
     t.text "additional_info"
     t.text "admin_notes"
+    t.text "team_mailing_list_name"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
@@ -452,8 +454,8 @@ ActiveRecord::Schema.define(version: 2018_10_11_174357) do
     t.bigint "user_id"
     t.text "partial_name"
     t.text "email"
-    t.boolean "trigger_on_user_con_profile_create"
-    t.boolean "trigger_on_ticket_create"
+    t.boolean "trigger_on_user_con_profile_create", default: false, null: false
+    t.boolean "trigger_on_ticket_create", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["convention_id"], name: "index_user_activity_alerts_on_convention_id"

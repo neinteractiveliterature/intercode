@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap4-modal';
 import { enableUniqueIds } from 'react-html-id';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
-import { combineStateChangeCalculators, componentLocalStateUpdater, Transforms } from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import ErrorDisplay from '../ErrorDisplay';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
@@ -61,9 +61,12 @@ class ProposeEventButton extends React.Component {
       cloneEventProposalId: null,
     };
 
-    this.stateUpdater = componentLocalStateUpdater(this, combineStateChangeCalculators({
-      cloneEventProposalId: Transforms.integer,
-    }));
+    this.mutator = mutator({
+      component: this,
+      transforms: {
+        cloneEventProposalId: Transforms.integer,
+      },
+    });
 
     enableUniqueIds(this);
   }
@@ -126,7 +129,7 @@ class ProposeEventButton extends React.Component {
                   ]}
                   disabled={this.state.mutationInProgress}
                   value={(this.state.cloneEventProposalId || '').toString()}
-                  onChange={this.stateUpdater.cloneEventProposalId}
+                  onChange={this.mutator.cloneEventProposalId}
                 />
                 <ErrorDisplay graphQLError={this.state.error} />
               </div>

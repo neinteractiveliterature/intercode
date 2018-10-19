@@ -75,6 +75,12 @@ export default class FormItem extends Record(defaultProperties) {
     }
 
     switch (this.itemType) {
+      case 'event_email':
+        if (!value) {
+          return false;
+        }
+
+        return (value.team_mailing_list_name || value.email);
       case 'free_text':
         if (typeof value === 'string') {
           return value.trim() !== '';

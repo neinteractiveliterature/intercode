@@ -12,7 +12,7 @@ const AdminCaption = ({ formItem }) => {
     return <span dangerouslySetInnerHTML={{ __html: formItem.properties.caption }} />;
   }
 
-  return <span>formItem.identifier</span>;
+  return <span>{formItem.identifier}</span>;
 };
 
 AdminCaption.propTypes = {

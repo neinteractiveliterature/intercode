@@ -62,6 +62,9 @@ gem 'apollo_upload_server', '2.0.0.beta.1'
 gem 'graphql-rails_logger'
 gem 'graphiql-rails', group: :development
 
+# Mailgun (for managing email aliases automatically)
+gem 'mailgun-ruby'
+
 # Markdown
 gem 'redcarpet'
 
