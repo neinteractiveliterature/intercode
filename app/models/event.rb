@@ -103,10 +103,7 @@ class Event < ApplicationRecord
   end
 
   def team_member_name
-    case category
-    when 'larp' then 'GM'
-    else 'team member'
-    end
+    EventCategory[category]&.team_member_name || 'team member'
   end
 
   def to_liquid
