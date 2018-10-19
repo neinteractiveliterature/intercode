@@ -454,8 +454,8 @@ ActiveRecord::Schema.define(version: 2018_10_15_021731) do
     t.bigint "user_id"
     t.text "partial_name"
     t.text "email"
-    t.boolean "trigger_on_user_con_profile_create"
-    t.boolean "trigger_on_ticket_create"
+    t.boolean "trigger_on_user_con_profile_create", default: false, null: false
+    t.boolean "trigger_on_ticket_create", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["convention_id"], name: "index_user_activity_alerts_on_convention_id"
