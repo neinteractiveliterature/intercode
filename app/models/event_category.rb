@@ -3,10 +3,11 @@ class EventCategory
     File.read(File.expand_path('config/event_categories.json', Rails.root))
   )
 
-  attr_reader :key
+  attr_reader :key, :team_member_name
 
   def initialize(data)
     @key = data['key']
+    @team_member_name = data['team_member_name']
     @recurring = !!data['recurring']
     @single_run = !!data['single_run']
   end
@@ -24,6 +25,10 @@ class EventCategory
   end
 
   CATEGORIES_BY_KEY = DATA.map { |item| EventCategory.new(item) }.index_by(&:key)
+
+  def self.[](key)
+    CATEGORIES_BY_KEY[key]
+  end
 
   def self.find(key)
     CATEGORIES_BY_KEY.fetch(key)
