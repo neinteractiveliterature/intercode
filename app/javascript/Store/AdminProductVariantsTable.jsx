@@ -5,35 +5,32 @@ import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'; // or any o
 import { DragDropContext } from 'react-dnd';
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import formatMoney from '../formatMoney';
-import { parseMoneyOrNull } from '../FormUtils';
 import sortProductVariants from './sortProductVariants';
-import { stateUpdater, combineStateChangeCalculators, Transforms } from '../ComposableFormUtils';
+import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
 
 const variantMatches = (a, b) => (
   (a.generatedId && b.generatedId === a.generatedId)
   || (a.id && b.id === a.id)
 );
 
-const productVariantUpdaterForComponent = (component, variant, stateChangeCalculators) => (
-  stateUpdater(
-    () => component.props.product.product_variants
-      .find(existingVariant => variantMatches(variant, existingVariant)),
+const productVariantUpdaterForComponent = (component, variant, transforms) => mutator({
+  getState: () => component.props.product.product_variants
+    .find(existingVariant => variantMatches(variant, existingVariant)),
 
-    (state) => {
-      const newVariants = component.props.product.product_variants.map((existingVariant) => {
-        if (variantMatches(variant, existingVariant)) {
-          return { ...existingVariant, ...state };
-        }
+  setState: (state) => {
+    const newVariants = component.props.product.product_variants.map((existingVariant) => {
+      if (variantMatches(variant, existingVariant)) {
+        return { ...existingVariant, ...state };
+      }
 
-        return existingVariant;
-      });
+      return existingVariant;
+    });
 
-      component.props.onChange(newVariants);
-    },
+    component.props.onChange(newVariants);
+  },
 
-    stateChangeCalculators,
-  )
-);
+  transforms,
+});
 
 @DragDropContext(MultiBackend(HTML5toTouch))
 class AdminProductVariantsTable extends React.Component {
@@ -155,11 +152,11 @@ class AdminProductVariantsTable extends React.Component {
         const variantUpdater = productVariantUpdaterForComponent(
           this,
           variant,
-          combineStateChangeCalculators({
+          {
             name: Transforms.identity,
             description: Transforms.identity,
             override_price: parseMoneyOrNull,
-          }),
+          },
         );
 
         return (

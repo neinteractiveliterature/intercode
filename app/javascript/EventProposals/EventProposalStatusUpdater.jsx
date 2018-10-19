@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { Mutation } from 'react-apollo';
 
-import { componentLocalStateUpdater, combineStateChangeCalculators, Transforms } from '../ComposableFormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import ErrorDisplay from '../ErrorDisplay';
 import { transitionEventProposalMutation } from './mutations';
 
@@ -22,12 +22,12 @@ class EventProposalStatusUpdater extends React.Component {
       error: null,
     };
 
-    this.stateUpdater = componentLocalStateUpdater(
-      this,
-      combineStateChangeCalculators({
+    this.mutator = mutator({
+      component: this,
+      transforms: {
         status: Transforms.inputChange(Transforms.identity),
-      }),
-    );
+      },
+    });
 
     enableUniqueIds(this);
   }
@@ -43,7 +43,7 @@ class EventProposalStatusUpdater extends React.Component {
             id={selectId}
             className="form-control-sm ml-1 mr-2"
             value={this.state.status}
-            onChange={this.stateUpdater.status}
+            onChange={this.mutator.status}
             disabled={this.state.mutating}
           >
             {

@@ -14,7 +14,7 @@
       - if @event.url.present? && form_item_identifiers.include?('url')
         %dt.col-md-3 Home Page
         %dd.col-md-9= link_to @event.url, @event.url, :target => '_blank'
-      - if @event.email.present? && form_item_identifiers.include?('email')
+      - if @event.email.present? && (form_item_identifiers.include?('email') || form_item_identifiers.include?('event_email'))
         %dt.col-md-3 Contact Email
         %dd.col-md-9= intercode_mail_to @event.email
       - if @team_members.any?

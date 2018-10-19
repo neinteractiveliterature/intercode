@@ -8,6 +8,7 @@ class AcceptEventProposalService < CivilService::Service
     title: 'title',
     author: 'authors',
     email: 'email',
+    event_email: 'event_email',
     organization: 'organization',
     url: 'url',
     length_seconds: 'length_seconds',

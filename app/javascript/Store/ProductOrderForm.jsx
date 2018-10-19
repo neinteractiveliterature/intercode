@@ -9,7 +9,7 @@ import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import LoadingIndicator from '../LoadingIndicator';
 import formatMoney from '../formatMoney';
-import { parseIntOrNull } from '../FormUtils';
+import { parseIntOrNull } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 
 const productQuery = gql`

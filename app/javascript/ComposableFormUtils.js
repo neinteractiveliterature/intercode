@@ -1,4 +1,60 @@
-import { parseIntOrNull, parseFloatOrNull, convertDatetimeValue } from './FormUtils';
+import moment from 'moment-timezone';
+
+export function parseIntOrNull(stringValue) {
+  const intValue = parseInt(stringValue, 10);
+  if (Number.isNaN(intValue)) {
+    return null;
+  }
+  return intValue;
+}
+
+export function parseFloatOrNull(stringValue) {
+  const floatValue = parseFloat(stringValue, 10);
+  if (Number.isNaN(floatValue)) {
+    return null;
+  }
+  return floatValue;
+}
+
+export function parseMoneyOrNull(value) {
+  const newPrice = parseFloatOrNull(value);
+
+  if (newPrice == null) {
+    return null;
+  }
+
+  return {
+    fractional: Math.floor(newPrice * 100),
+    currency_code: 'USD',
+  };
+}
+
+export function forceTimezoneForDatetimeValue(value, timezoneName) {
+  if (value == null) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const valueWithoutTimezone = value.replace(/(Z|[+-]\d\d(:\d\d)?)$/, '');
+    return forceTimezoneForDatetimeValue(moment(valueWithoutTimezone), timezoneName);
+  }
+
+  // it's hopefully a moment
+  const valueInTimezone = moment.tz(value.toObject(), timezoneName);
+  return valueInTimezone.toISOString(true);
+}
+
+export function convertDatetimeValue(value, timezoneName = null) {
+  if (value == null) {
+    return value;
+  }
+
+  if (timezoneName) {
+    return moment.tz(value, timezoneName).toISOString(true);
+  }
+
+  return moment(value).toISOString();
+}
 
 function namedFunction(func, name) {
   Object.defineProperty(func, 'name', { value: name });
@@ -9,10 +65,17 @@ export const Transforms = {
   identity(value) { return value; },
   integer(value) { return parseIntOrNull(value); },
   float(value) { return parseFloatOrNull(value); },
-  datetime(timezoneName) {
+  datetime(value) { return convertDatetimeValue(value); },
+  datetimeWithTimezone(timezoneName) {
     return namedFunction(
       value => convertDatetimeValue(value, timezoneName),
-      `datetime('${timezoneName}')`,
+      `datetimeWithTimezone('${timezoneName}')`,
+    );
+  },
+  datetimeWithForcedTimezone(timezoneName) {
+    return namedFunction(
+      value => forceTimezoneForDatetimeValue(value, timezoneName),
+      `datetimeWithForcedTimezone('${timezoneName}')`,
     );
   },
   booleanString(value) { return value === 'true'; },
@@ -102,10 +165,14 @@ export function stateUpdater(getState, setState, stateChangeCalculators) {
   );
 }
 
-export function componentLocalStateUpdater(component, stateChangeCalculators) {
+export function mutator(config = {}) {
+  if (!config.component && !(config.getState && config.setState)) {
+    throw new Error('mutator requires either a component or getState/setState');
+  }
+
   return stateUpdater(
-    () => component.state,
-    state => component.setState(state),
-    stateChangeCalculators,
+    config.component ? () => config.component.state : config.getState,
+    config.component ? state => config.component.setState(state) : config.setState,
+    combineStateChangeCalculators(config.transforms),
   );
 }

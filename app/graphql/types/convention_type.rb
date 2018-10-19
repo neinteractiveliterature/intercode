@@ -8,6 +8,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :ends_at, Types::DateType
   field :name, types.String
   field :domain, types.String
+  field :event_mailing_list_domain, types.String
   field :timezone_name, types.String
   field :show_schedule, Types::ShowScheduleType
   field :maximum_tickets, types.Int

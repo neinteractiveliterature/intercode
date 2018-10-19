@@ -12,7 +12,7 @@ import arrayToSentence from 'array-to-sentence';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { getStateChangeForCheckboxChange } from '../FormUtils';
+import { mutator, Transforms } from '../ComposableFormUtils';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import ErrorDisplay from '../ErrorDisplay';
@@ -313,6 +313,19 @@ class TeamMemberForm extends React.Component {
         receive_signup_email: false,
       };
     }
+
+    this.mutator = mutator({
+      component: this,
+      transforms: {
+        teamMember: {
+          user_con_profile: Transforms.identity,
+          display: Transforms.checkboxChange,
+          show_email: Transforms.checkboxChange,
+          receive_con_email: Transforms.checkboxChange,
+          receive_signup_email: Transforms.checkboxChange,
+        },
+      },
+    });
   }
 
   getExistingTicket = () => {
@@ -331,16 +344,6 @@ class TeamMemberForm extends React.Component {
   getSubmitText = () => (
     `${this.state.teamMember.id ? 'Update' : 'Add'} ${this.props.data.event.team_member_name}`
   )
-
-  checkboxChanged = (event) => {
-    this.setState(getStateChangeForCheckboxChange(event, this.state, 'teamMember'));
-  }
-
-  userConProfileIdChanged = (selection) => {
-    this.setState({
-      teamMember: { ...this.state.teamMember, user_con_profile: selection },
-    });
-  }
 
   provideTicketTypeIdChanged = (value) => {
     this.setState({ provideTicketTypeId: value === '' ? null : parseInt(value, 10) });
@@ -468,7 +471,7 @@ class TeamMemberForm extends React.Component {
         <UserConProfileSelect
           id={userConProfileSelectId}
           value={this.state.teamMember.user_con_profile}
-          onChange={this.userConProfileIdChanged}
+          onChange={this.mutator.teamMember.user_con_profile}
           userConProfilesQuery={userConProfilesQuery}
         />
       </div>
@@ -487,7 +490,7 @@ class TeamMemberForm extends React.Component {
         label={label}
         name={name}
         checked={this.state.teamMember[name]}
-        onChange={this.checkboxChanged}
+        onChange={this.mutator.teamMember[name]}
       />
     ))
   )
