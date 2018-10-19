@@ -4,7 +4,7 @@ echo 'Getting database URL from Heroku'
 DATABASE_URL=$(heroku config:get DATABASE_URL)
 
 echo 'Pulling database contents'
-docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.3 pg_dump -v --no-owner -Fp "$DATABASE_URL" -f /out/intercode_production_tmp.sql
+docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.3 pg_dump -v -x --no-owner -Fp "$DATABASE_URL" -f /out/intercode_production_tmp.sql
 
 echo 'Loading database into local Postgres'
 createdb -U postgres intercode_production_tmp

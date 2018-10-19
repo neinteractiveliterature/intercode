@@ -18,6 +18,7 @@ import eventsQuery from './eventsQuery';
 import { timespanFromRun } from '../TimespanUtils';
 import {
   createFillerEventMutation,
+  createRunMutation,
   dropEventMutation,
   updateEventMutation,
   updateRunMutation,
@@ -34,19 +35,26 @@ const buildEventInput = (event, defaultFormResponseAttrs = {}) => ({
   },
 });
 
-const buildRunInput = run => ({
-  run: {
-    starts_at: run.starts_at,
-    schedule_note: run.schedule_note,
-    title_suffix: run.title_suffix,
-    room_ids: run.rooms.map(room => room.id),
-  },
-});
+const buildRunInput = (run) => {
+  if (!run.starts_at) {
+    return null;
+  }
+
+  return {
+    run: {
+      starts_at: run.starts_at,
+      schedule_note: run.schedule_note,
+      title_suffix: run.title_suffix,
+      room_ids: run.rooms.map(room => room.id),
+    },
+  };
+};
 
 @withRouter
 @flowRight([
   graphql(eventsQuery),
   graphql(createFillerEventMutation, { name: 'createFillerEvent' }),
+  graphql(createRunMutation, { name: 'createRun' }),
   graphql(dropEventMutation, { name: 'dropEvent' }),
   graphql(updateEventMutation, { name: 'updateEvent' }),
   graphql(updateRunMutation, { name: 'updateRun' }),
@@ -59,6 +67,7 @@ class FillerEventAdmin extends React.Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
     createFillerEvent: PropTypes.func.isRequired,
+    createRun: PropTypes.func.isRequired,
     dropEvent: PropTypes.func.isRequired,
     updateEvent: PropTypes.func.isRequired,
     updateRun: PropTypes.func.isRequired,
@@ -111,28 +120,61 @@ class FillerEventAdmin extends React.Component {
     );
   }
 
-  updateFillerEvent = ({ event, run }) => {
+  updateFillerEvent = async ({ event, run }) => {
     const eventInput = {
       ...buildEventInput(event),
       id: event.id,
     };
 
-    const runInput = {
-      ...buildRunInput(run),
-      id: run.id,
-    };
-
-    this.setState(
-      { requestInProgress: true },
-      () => {
-        this.props.updateEvent({ variables: { input: eventInput } }).then(() => this.props.updateRun({ variables: { input: runInput } })).then(() => {
-          this.props.history.push('/filler_events');
-          this.setState({ requestInProgress: false });
-        }).catch((error) => {
-          this.setState({ error, requestInProgress: false });
+    this.setState({ requestInProgress: true });
+    try {
+      await this.props.updateEvent({ variables: { input: eventInput } });
+      if (run.id) {
+        await this.props.updateRun({
+          variables: {
+            input: {
+              ...buildRunInput(run),
+              id: run.id,
+            },
+          },
         });
-      },
-    );
+      } else if (run) {
+        await this.props.createRun({
+          variables: {
+            input: {
+              ...buildRunInput(run),
+              event_id: event.id,
+            },
+          },
+          update: (store, { data: { createRun: { run: newRun } } }) => {
+            const eventsData = store.readQuery({ query: eventsQuery });
+            store.writeQuery({
+              query: eventsQuery,
+              data: {
+                ...eventsData,
+                events: eventsData.events.map((existingEvent) => {
+                  if (existingEvent.id === event.id) {
+                    return {
+                      ...existingEvent,
+                      runs: [
+                        ...existingEvent.runs,
+                        newRun,
+                      ],
+                    };
+                  }
+
+                  return existingEvent;
+                }),
+              },
+            });
+          },
+        });
+      }
+      this.props.history.push('/filler_events');
+      this.setState({ requestInProgress: false });
+    } catch (error) {
+      this.setState({ error, requestInProgress: false });
+    }
   }
 
   dropClicked = (eventId) => {
@@ -167,6 +209,14 @@ class FillerEventAdmin extends React.Component {
       EventCategory.get(event.category).isSingleRun() && event.status === 'active'
     ));
     fillerEvents.sort((a, b) => {
+      if (!a.runs[0]) {
+        return -1;
+      }
+
+      if (!b.runs[0]) {
+        return 1;
+      }
+
       const timespanA = timespanFromRun(this.props.data.convention, a, a.runs[0]);
       const timespanB = timespanFromRun(this.props.data.convention, b, b.runs[0]);
 
@@ -174,7 +224,10 @@ class FillerEventAdmin extends React.Component {
     });
     const eventRows = fillerEvents.map((event) => {
       const run = event.runs[0];
-      const timespan = timespanFromRun(this.props.data.convention, event, run);
+      let timespan;
+      if (run) {
+        timespan = timespanFromRun(this.props.data.convention, event, run);
+      }
 
       return (
         <tr className={event.id}>
@@ -184,7 +237,7 @@ class FillerEventAdmin extends React.Component {
             </span>
           </th>
           <td>
-            {timespan.humanizeInTimezone(this.props.data.convention.timezone_name)}
+            {timespan && timespan.humanizeInTimezone(this.props.data.convention.timezone_name)}
           </td>
           <td>
             <Link className="btn btn-secondary btn-sm" to={`/filler_events/${event.id}/edit`}>
