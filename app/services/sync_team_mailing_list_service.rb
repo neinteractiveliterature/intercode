@@ -45,7 +45,7 @@ class SyncTeamMailingListService < CivilService::Service
   end
 
   def recipient_email
-    "#{event.team_mailing_list_name}@#{convention.event_mailing_list_domain}"
+    event.team_mailing_list_email
   end
 
   def applicable_routes

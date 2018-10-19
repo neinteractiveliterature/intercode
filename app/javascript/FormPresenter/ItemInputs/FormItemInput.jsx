@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DateItemInput from './DateItemInput';
+import EventEmailInput from './EventEmailInput';
 import FreeTextItemInput from './FreeTextItemInput';
 import MultipleChoiceItemInput from './MultipleChoiceItemInput';
 import RegistrationPolicyItemInput from './RegistrationPolicyItemInput';
@@ -64,6 +65,8 @@ class FormItemInput extends React.Component {
     switch (formItem.itemType) {
       case 'date':
         return <DateItemInput {...commonProps} />;
+      case 'event_email':
+        return <EventEmailInput {...commonProps} convention={convention} />;
       case 'free_text':
         return <FreeTextItemInput {...commonProps} />;
       case 'multiple_choice':
