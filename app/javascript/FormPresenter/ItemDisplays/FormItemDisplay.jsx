@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DateItemDisplay from './DateItemDisplay';
+import EventEmailDisplay from './EventEmailDisplay';
 import FreeTextItemDisplay from './FreeTextItemDisplay';
 import MultipleChoiceItemDisplay from './MultipleChoiceItemDisplay';
 import RegistrationPolicyItemDisplay from './RegistrationPolicyItemDisplay';
@@ -46,6 +47,8 @@ class FormItemDisplay extends React.PureComponent {
     switch (formItem.itemType) {
       case 'date':
         return <DateItemDisplay {...commonProps} convention={convention} />;
+      case 'event_email':
+        return <EventEmailDisplay {...commonProps} convention={convention} />;
       case 'free_text':
         return <FreeTextItemDisplay {...commonProps} />;
       case 'multiple_choice':

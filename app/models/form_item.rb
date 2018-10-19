@@ -5,6 +5,10 @@ class FormItem < ApplicationRecord
       caption: :required,
       required: :optional
     },
+    event_email: {
+      identifier: :required,
+      required: :optional
+    },
     free_text: {
       identifier: :required,
       caption: :required,

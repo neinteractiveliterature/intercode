@@ -1,5 +1,6 @@
 class Event < ApplicationRecord
   include Concerns::FormResponse
+  include Concerns::EventEmail
 
   STATUSES = Set.new(%w[active dropped])
   CATEGORIES = Set.new(EventCategory::CATEGORIES_BY_KEY.keys)
@@ -8,6 +9,8 @@ class Event < ApplicationRecord
   register_form_response_attrs :title,
     :author,
     :email,
+    :event_email,
+    :team_mailing_list_name,
     :organization,
     :url,
     :length_seconds,

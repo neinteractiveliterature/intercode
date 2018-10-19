@@ -120,6 +120,7 @@ class FormJSONEditor extends React.Component {
     <div>
       <h1 className="mb-4">
         Editing
+        {' '}
         {this.state.form.title}
       </h1>
 
