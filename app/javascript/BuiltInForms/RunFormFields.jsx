@@ -88,7 +88,7 @@ class RunFormFields extends React.Component {
   roomsInputChanged = (rooms) => {
     this.props.onChange({
       ...this.props.run,
-      rooms: rooms.map(room => ({ id: room.value, name: room.label })),
+      rooms,
     });
   }
 
@@ -160,11 +160,11 @@ class RunFormFields extends React.Component {
         <label>Room(s)</label>
         <Select
           name="room_ids"
-          options={
-            this.props.convention.rooms.map(room => ({ label: room.name, value: room.id }))
-          }
-          multi
-          value={this.props.run.rooms.map(room => room.id)}
+          options={this.props.convention.rooms}
+          getOptionValue={room => room.id}
+          getOptionLabel={room => room.name}
+          isMulti
+          value={this.props.run.rooms}
           onChange={this.roomsInputChanged}
         />
       </div>

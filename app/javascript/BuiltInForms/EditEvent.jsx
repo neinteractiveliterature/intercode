@@ -17,6 +17,7 @@ class EditEvent extends React.Component {
     updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     cancelPath: PropTypes.string,
     showDropButton: PropTypes.bool,
+    showCategorySelect: PropTypes.bool,
     canOverrideMaximumEventProvidedTickets: PropTypes.bool,
     ticketTypes: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -31,6 +32,7 @@ class EditEvent extends React.Component {
   static defaultProps = {
     cancelPath: null,
     showDropButton: false,
+    showCategorySelect: false,
     canOverrideMaximumEventProvidedTickets: false,
     ticketName: null,
   };
@@ -97,6 +99,7 @@ class EditEvent extends React.Component {
         this.props.updateMaximumEventProvidedTicketsOverride
       }
       showDropButton={this.props.showDropButton}
+      showCategorySelect={this.props.showCategorySelect}
       canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
       ticketTypes={this.props.ticketTypes}
       ticketName={this.props.ticketName}

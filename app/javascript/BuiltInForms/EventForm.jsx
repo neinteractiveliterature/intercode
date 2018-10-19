@@ -17,6 +17,7 @@ class EventForm extends React.Component {
     }).isRequired,
     disabled: PropTypes.bool,
     error: PropTypes.string,
+    showCategorySelect: PropTypes.bool,
     showDropButton: PropTypes.bool,
     canOverrideMaximumEventProvidedTickets: PropTypes.bool,
     ticketTypes: PropTypes.arrayOf(PropTypes.shape({
@@ -41,6 +42,7 @@ class EventForm extends React.Component {
     disabled: false,
     error: null,
     showDropButton: false,
+    showCategorySelect: false,
     canOverrideMaximumEventProvidedTickets: false,
     ticketName: null,
   };
@@ -143,14 +145,22 @@ class EventForm extends React.Component {
       <form className="my-4">
         {this.renderHeader()}
 
-        <BootstrapFormSelect
-          label="Category"
-          name="cagegory"
-          value={this.state.event.category}
-          onChange={event => this.eventChanged({ ...this.state.event, category: event.target.value })}
-        >
-          {categoryOptions}
-        </BootstrapFormSelect>
+        {
+          this.props.showCategorySelect
+            ? (
+              <BootstrapFormSelect
+                label="Category"
+                name="cagegory"
+                value={this.state.event.category}
+                onChange={
+                  event => this.eventChanged({ ...this.state.event, category: event.target.value })
+                }
+              >
+                {categoryOptions}
+              </BootstrapFormSelect>
+            ) :
+            null
+        }
 
         <CommonEventFormFields
           event={this.state.event}

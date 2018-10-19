@@ -41,7 +41,7 @@ class EditRun extends React.Component {
 
     const event = nextProps.events.find(e => e.id.toString() === match.params.eventId);
     if (match.path === '/:eventId/runs/new') {
-      const run = {
+      const run = prevState.run || {
         starts_at: null,
         title_suffix: null,
         schedule_note: null,
