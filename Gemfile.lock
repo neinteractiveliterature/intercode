@@ -202,6 +202,9 @@ GEM
       domain_name (~> 0.5)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
+    icalendar (2.5.0)
+      ice_cube (~> 0.16)
+    ice_cube (0.16.3)
     ipaddress (0.8.3)
     jmespath (1.4.0)
     json (2.1.0)
@@ -467,6 +470,7 @@ DEPENDENCIES
   graphql-rails_logger
   haml
   htmldiff-lcs!
+  icalendar
   letter_opener
   liquid-md5
   listen
