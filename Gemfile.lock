@@ -433,6 +433,7 @@ GEM
     will_paginate (3.1.6)
     with_advisory_lock (4.0.0)
       activerecord (>= 4.2)
+    yard (0.9.16)
 
 PLATFORMS
   java
@@ -512,6 +513,7 @@ DEPENDENCIES
   whenever
   will_paginate
   with_advisory_lock
+  yard
 
 RUBY VERSION
    ruby 2.5.1p57

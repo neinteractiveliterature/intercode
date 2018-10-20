@@ -108,6 +108,9 @@ group :development do
 
   # Reloader support
   gem 'listen'
+
+  # Doc generation
+  gem 'yard'
 end
 
 group :development, :test do
