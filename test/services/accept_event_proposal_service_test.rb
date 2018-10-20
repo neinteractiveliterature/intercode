@@ -33,4 +33,18 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
     assert_equal 'Alexander Graham Bell', event.author
     assert_equal 'ahoy hoy!', event.participant_communications
   end
+
+  it 'copies event_email correctly' do
+    event_proposal.assign_form_response_attributes(
+      event_email: {
+        email: 'test@example.com',
+        con_mail_destination: 'event_email'
+      }
+    )
+    event_proposal.save!
+
+    event = AcceptEventProposalService.new(event_proposal: event_proposal).call!.event
+    assert_equal 'test@example.com', event.email
+    assert_equal 'event_email', event.con_mail_destination
+  end
 end
