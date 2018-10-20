@@ -76,16 +76,10 @@ class EventEmailInput extends React.Component {
         ...(this.props.value || {}),
         con_mail_destination: 'event_email',
       });
-    } else if (emailBehavior === 'gms') {
-      this.props.onChange({
-        con_mail_destination: 'gms',
-        email: null,
-        team_mailing_list_name: null,
-      });
     } else {
       this.props.onChange({
         ...(this.props.value || {}),
-        con_mail_destination: 'event_email',
+        con_mail_destination: emailBehavior,
         team_mailing_list_name: null,
       });
     }

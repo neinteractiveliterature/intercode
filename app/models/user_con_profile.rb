@@ -25,6 +25,7 @@ class UserConProfile < ApplicationRecord
   validates :preferred_contact,
     inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
 
+  before_create :generate_ical_secret
   after_commit :send_user_activity_alerts, on: :create
 
   scope :has_any_privileges, -> {
@@ -176,5 +177,9 @@ class UserConProfile < ApplicationRecord
 
   def send_user_activity_alerts
     SendUserActivityAlertsJob.perform_later(self, 'user_con_profile_create')
+  end
+
+  def generate_ical_secret
+    self.ical_secret ||= Devise.friendly_token
   end
 end

@@ -1,5 +1,6 @@
 class UserConProfileDrop < Liquid::Drop
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
+  include Rails.application.routes.url_helpers
 
   attr_reader :user_con_profile
   delegate :bio_name, :email, :first_name, :gravatar_url, :id, :last_name,
@@ -32,6 +33,14 @@ class UserConProfileDrop < Liquid::Drop
 
   def event_proposals
     user_con_profile.event_proposals.to_a
+  end
+
+  def schedule_calendar_url
+    user_schedule_url(
+      user_con_profile.ical_secret,
+      host: user_con_profile.convention.domain,
+      protocol: Rails.application.config.force_ssl ? 'webcals' : 'webcal'
+    )
   end
 
   private
