@@ -43,3 +43,53 @@ tool 'cleanup_branches' do
     sh 'git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d'
   end
 end
+
+tool 'update_liquid_doc_json' do
+  desc 'Generate a new liquid_doc.json by introspecting the Liquid code'
+
+  def serialize_class(klass)
+    {
+      name: klass.path,
+      superclasses: klass.inheritance_tree.map(&:path),
+      docstring: klass.docstring,
+      tags: klass.tags.map { |tag| serialize_tag(tag) },
+      methods: klass.meths.map { |meth| serialize_method(meth) }
+    }
+  end
+
+  def serialize_method(meth)
+    {
+      name: meth.name,
+      docstring: meth.docstring,
+      tags: meth.tags.map { |tag| serialize_tag(tag) }
+    }
+  end
+
+  def serialize_tag(tag)
+    {
+      tag_name: tag.tag_name,
+      text: tag.text,
+      types: tag.types
+    }
+  end
+
+  def run
+    require 'yard'
+    require 'json'
+    require 'pry'
+
+    %w[app/liquid_drops/**/*.rb lib/intercode/liquid/**/*.rb].each do |path|
+      YARD.parse(path)
+    end
+
+    classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
+    
+    json = {
+      classes: classes.map { |klass| serialize_class(klass) }
+    }
+
+    File.open('liquid_doc.json', 'w') do |file|
+      file.write(JSON.pretty_generate(json))
+    end
+  end
+end
