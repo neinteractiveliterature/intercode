@@ -68,6 +68,7 @@ tool 'update_liquid_doc_json' do
   def serialize_tag(tag)
     {
       tag_name: tag.tag_name,
+      name: tag.name,
       text: tag.text,
       types: tag.types
     }
@@ -83,7 +84,7 @@ tool 'update_liquid_doc_json' do
     end
 
     classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
-    
+
     json = {
       classes: classes.map { |klass| serialize_class(klass) }
     }
