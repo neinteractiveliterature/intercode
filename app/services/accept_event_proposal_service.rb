@@ -33,6 +33,7 @@ class AcceptEventProposalService < CivilService::Service
     event = convention.events.new(category: 'larp', status: 'active')
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
+    event.save!
     event_proposal.update!(event: event)
 
     if event_proposal.owner
