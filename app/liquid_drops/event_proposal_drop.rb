@@ -8,7 +8,7 @@ class EventProposalDrop < Liquid::Drop
   # @!method id
   #   @return [Integer] The numeric database ID of this event proposal
   # @!method owner
-  #   @return [UserConProfile] The profile of the person who submitted this event proposal
+  #   @return [UserConProfileDrop] The profile of the person who submitted this event proposal
   # @!method event
   #   @return [EventDrop] The event created from this proposal, if this proposal has been accepted
   # @!method status
