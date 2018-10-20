@@ -2,12 +2,12 @@
   "title": "Proposal form",
   "sections": [
     {
-      "title": "Game Information",
+      "title": "Larp Information",
       "section_items": [
         {
           "item_type": "static_text",
           "style": "subhead",
-          "content": "This will be shown on the Public description of the game."
+          "content": "This will be shown on the Public description of the event."
         },
         {
           "item_type": "free_text",
@@ -36,11 +36,9 @@
           "lines": 1
         },
         {
-          "item_type": "free_text",
-          "identifier": "email",
-          "caption": "Email for Event Inquiries",
-          "lines": 1,
-          "free_text_type": "email",
+          "item_type": "event_email",
+          "identifier": "event_email",
+          "admin_description": "Event email",
           "required": true
         },
         {
@@ -52,11 +50,11 @@
         {
           "item_type": "free_text",
           "identifier": "description",
-          "admin_description": "Description",
+          "admin_description": "Full Description",
           "lines": 15,
           "required": true,
           "format": "markdown",
-          "caption": "**Description** for use on the {{ convention.name }} website. This information will displayed on\nthe page users see for the game. The description should be at least a couple of paragraphs, but can\nbe as long as you like.\n\nThe game description is used to promote your game and attract players who will enjoy it. Be\nreasonably clear on where and when the game is set, and what the game is about. Let your players\nknow what can they expect to be doing during the LARP, and make them excited to play your game!\n(We can offer suggestions if you would like advice on this.)\n\n**Per NEIL policy, game descriptions must include either a content warning or an explicit statement\nthat no content warnings are applicable.** For more information,\n[see the NEIL policies page](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy).\n\nPlease also include the preferred ages of players for your larp. Examples are \"Players must be 18 or\nolder\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age]\nyears old are welcome in this game\".\n\nThe description will be displayed in the user's browser. You must use Markdown for formatting.\n[A quick primer on Markdown syntax is available here.](https://en.support.wordpress.com/markdown-quick-reference/)\n"
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the event. The description should be at least a couple of paragraphs, but can be as long as you like.<br>This description is used to promote your larp and attract players who will enjoy it. Be reasonably clear on where and when the larp is set, and what the larp is about. Let your players know what can they expect to be doing during the larp, and make them excited to play your larp! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
         },
         {
           "item_type": "free_text",
@@ -65,7 +63,25 @@
           "lines": 4,
           "required": true,
           "format": "markdown",
-          "caption": "A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description!\n\nThe short blurb will be displayed in the user's browser. You must use Markdown for formatting.\n[A quick primer on Markdown syntax is available here.](https://en.support.wordpress.com/markdown-quick-reference/)\n"
+          "caption": "A **Short Blurb** (50 words or less) for the event to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "content_warnings",
+          "admin_description": "Player Visible Content Warnings",
+          "lines": 4,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Content Warnings**<br>Per NEIL policy, larp descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='fa fa-external-link' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page.<br>Please provide a content warning for your larp."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "age_restrictions",
+          "admin_description": "Player Visible Age Restrictions",
+          "lines": 1,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Age Restrictions**<br>Please include the preferred ages of players for your larp. Examples are \"Players must be 18 or older\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age] years old are welcome in this larp\"."
         },
         {
           "item_type": "free_text",
@@ -73,7 +89,8 @@
           "admin_description": "Player Communications",
           "lines": 4,
           "required": true,
-          "caption": "**Player Communications**\n\nHow will you distribute game information to your players? Will you be using a casting form? Will\ncharacter roles be cast and distributed before the convention or on site, or will characters be\ndeveloped as part of the game?\n"
+          "format": "markdown",
+          "caption": "**Player Communications**<br>How will you distribute larp information to your players? Will you be using a casting form? Will character roles be cast and distributed before the convention or on site, or will characters be developed as part of the larp?<br>Please use this space to let your players know what to expect."
         }
       ]
     },
@@ -83,17 +100,17 @@
         {
           "item_type": "static_text",
           "style": "subhead",
-          "content": "This will be shown on the Public description of the game."
+          "content": "This will be shown on the Public description of the event."
         },
         {
           "item_type": "static_text",
           "style": "normal",
-          "content": "As part of the game signup process, you can ask your players to make once signup-time casting choice.  For example, you can ask your characters what gender of character they would like to play, or if they would prefer to be Horde or Cast.\n\nFirst, select one of the pre-built bucket types, or select custom to design your own.\n\nSecond, enter the minimum, preferred and maximum number of characters  in each bucket for your LARP. The character counts will be visible to users signing up to your LARP.\n\n* Minimum - The minimum number of characters required for your LARP. If there are fewer than the minimum number of characters signed up, you should talk with the GM Liaison about lowering the minimum number of players or cancelling the LARP.\n* Preferred - The number of characters that you'd prefer to have in your LARP. If you're not sure, make this the same number as the Maximum.\n* Maximum - The maximum number of players that your LARP can accommodate.\n\nYou can also specify the minimum / preferred / maximum number of characters in a Flex bucket,  which will resolve to buckets selected by attendees as they sign up for your game.\n\nYour total game size will be calculated as the maximum number of characters in each bucket, including the Flex  bucket.  For example, if you have a max 3 Female, 3 Male characters, 2 Enby characters and 2 Flex characters, your game will max out at 10 characters in total, and the 2 Flex characters will be mapped to the female/male/non-binary bucket based on player signup selection.\n\nAt signup time, attendees will be presented with one button for each bucket available in your game,  The website will enforce your bucket limits, so if only one roles in one bucket are available, any players that signup using the button for a different role will be put on the waitlist. Once you've cast the game, you'll be able to \"freeze\" the bucket balance of the game; essentially converting all of your flex characters to the bucket they signed up using.  This way, if a player drops out, the website will pick the first player on the waitlist with a matching signup bucket selection so you don't have to frantically rewrite the character sheet to match a different selection."
+          "content": "{% include \"proposal_form_registration_policy_instructions\" %}"
         },
         {
           "item_type": "registration_policy",
           "identifier": "registration_policy",
-          "admin_description": "Registration Policy",
+          "admin_description": "Character Slots",
           "required": true
         }
       ]
@@ -109,17 +126,31 @@
         {
           "item_type": "free_text",
           "identifier": "genre",
-          "admin_description": "Genre",
+          "admin_description": "Larp Genre",
           "lines": 1,
-          "caption": "Genre:",
+          "caption": "What is the **Genre** of your larp:",
           "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "run_before",
+          "admin_description": "Has this larp run before?",
+          "lines": 1,
+          "caption": "{{ convention.name }} is looking for larps that are new and larps that have run before, either at a\nconvention, or elsewhere.<br>If this larp has run before, where was that?\n"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "game_system",
+          "admin_description": "What game system will be used? ",
+          "lines": 1,
+          "caption": "**Game System** that will be used, if any:"
         },
         {
           "item_type": "multiple_choice",
           "identifier": "ongoing_campaign",
-          "admin_description": "Ongoing Campaign",
+          "admin_description": "Is part of an ongoing campaign?",
           "style": "radio_horizontal",
-          "caption": "Is this game part of an ongoing campaign?",
+          "caption": "Is this event part of an ongoing campaign?",
           "choices": [
             {
               "caption": "Yes",
@@ -132,25 +163,11 @@
           ]
         },
         {
-          "item_type": "free_text",
-          "identifier": "run_before",
-          "admin_description": "Run Before?",
-          "lines": 1,
-          "caption": "{{ convention.name }} is looking for games that are new and games that have run before, either at a\nconvention, or elsewhere. If this game has run before, where was that?\n"
-        },
-        {
-          "item_type": "free_text",
-          "identifier": "game_system",
-          "admin_description": "Game System",
-          "lines": 1,
-          "caption": "Game System:"
-        },
-        {
           "item_type": "multiple_choice",
           "identifier": "combat_resolution",
           "admin_description": "Combat Resolution",
           "style": "radio_vertical",
-          "caption": "How combat will be resolved:",
+          "caption": "How will combat be resolved:",
           "choices": [
             {
               "caption": "Physical Methods (such as boffer weapons)",
@@ -165,7 +182,7 @@
               "value": "NoCombat"
             },
             {
-              "caption": "Other (describe in Other Details)",
+              "caption": "Other (describe in Additional Background Information, below)",
               "value": "Other"
             }
           ]
@@ -175,14 +192,14 @@
           "identifier": "other_committee_info",
           "admin_description": "Other Info for the Committee",
           "lines": 4,
-          "caption": "Please enter any additional background information here, or any other information you wish to tell\nthe Proposals Committee. This information will be shown only to the Proposals Committee.\n"
+          "caption": "Please enter any additional background information here, or any other information you wish to tell the Proposals Committee. <br>This information will be shown only to the Proposals Committee."
         },
         {
           "item_type": "free_text",
           "identifier": "setup_teardown",
-          "admin_description": "Setup/Teardown",
+          "admin_description": "Setup/Teardown requirements",
           "lines": 4,
-          "caption": "Are there any special setup or teardown requirements for this LARP? For example, do you need extra\ntime to set up or tear down a complex set? (Requests for standard furniture will be handled\nseparately closer to the convention. Intercon can not provide unusual setup materials for your\ngame.)\n"
+          "caption": "Are there any special setup or teardown requirements for this event? For example, do you need extra time to set up or tear down a complex set? (Requests for standard furniture will be handled separately closer to the convention. Intercon can not provide unusual setup materials for your event. Please reference [the GM Policies <i class='fa fa-external-link' aria-hidden='true'></i>]({% page_url gmpolicies %}#FurnitureService) for available items )"
         }
       ]
     },
@@ -197,16 +214,16 @@
         {
           "item_type": "free_text",
           "identifier": "gms",
-          "admin_description": "GMs",
+          "admin_description": "GMs for the larp",
           "lines": 2,
-          "caption": "**GMs for your game.** Note that the GMs listed here are only for the purpose of evaluating your\nproposal. If your proposal is accepted, you'll be able to select GMs from the users registered for\n{{ convention.name }}.\n"
+          "caption": "**GMs for your larp.**<br>Note that the GMs listed here are only for the purpose of evaluating your proposal. If your proposal is accepted, you'll be able to select GMs from the users registered for  {{ convention.name }}."
         },
         {
           "item_type": "free_text",
           "identifier": "other_games",
-          "admin_description": "Other LARPs from Team",
+          "admin_description": "Other larps from the team",
           "lines": 4,
-          "caption": "What other LARPs have you written or run? Where and when were they run?"
+          "caption": "What other larps have you written or run? Where and when were they run?"
         }
       ]
     },
@@ -221,28 +238,28 @@
         {
           "item_type": "static_text",
           "style": "normal",
-          "content": "Intercon R appeals to a diverse group of players of all ages, ethnicities, belief systems, sexual\norientations, physical capabilities, experience, etc. Authors can write interesting games that might\nnot be suitable for all audiences. In order for the con staff to balance these potentially opposing\nrequirements, please answer the following questions.\n\nNote that answering yes to any or all of these questions does not disqualify your proposal.\n"
+          "content": "{{convention.name}} appeals to a diverse group of players of all ages, ethnicities, belief systems, sexual orientations, physical capabilities, experience, etc. Authors can write interesting larps that might not be suitable for all audiences. In order for the con staff to balance these potentially opposing requirements, please answer the following questions.<br><br>Note that answering yes to any or all of these questions does not disqualify your proposal.<br><br>"
         },
         {
           "item_type": "free_text",
           "identifier": "offensive",
           "admin_description": "Offensive Elements",
           "lines": 4,
-          "caption": "Are there any components of your LARP that might offend or upset some group of attendees? For\nexample, adult themes, potentially offensive story arcs, etc. If so, please explain and consider if\nthis needs to be mentioned in the game descriptions.\n"
-        },
-        {
-          "item_type": "free_text",
-          "identifier": "physical_restrictions",
-          "admin_description": "Physical Restrictions",
-          "lines": 4,
-          "caption": "Are there any physical restrictions imposed by your LARP? For example, live boffer combat, confined\nsets, etc. If so, please explain and consider if this needs to be mentioned in the game\ndescriptions.\n"
+          "caption": "Are there any components of your larp that might offend or upset some group of attendees? For example, adult themes, potentially offensive story arcs, etc. If so, please explain and consider if this needs to be mentioned in the event descriptions or content warning."
         },
         {
           "item_type": "free_text",
           "identifier": "age_appropriate",
           "admin_description": "Appropriate for Under 18?",
           "lines": 4,
-          "caption": "Is your game appropriate for players under the age of 18? Please discuss any age restrictions here.\nIf there are any components of your LARP that might be illegal for attendees under the age of 18\n(props or items that are illegal for a minor to possess, alcohol, etc.) please explain. If your\ngame has age restrictions, please be sure to mention this in the game descriptions.\n"
+          "caption": "Is your larp appropriate for players under the age of 18? If you specified any age restictions earlier, please elaborate here. If there are any components of your larp that might be illegal for attendees under the age of 18 (props or items that are illegal for a minor to possess, alcohol, etc.) please explain."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "physical_restrictions",
+          "admin_description": "Physical Restrictions",
+          "lines": 4,
+          "caption": "Are there any physical restrictions imposed by your larp? For example, live boffer combat, confined sets, etc. If so, please explain and consider if this needs to be mentioned in the event descriptions."
         }
       ]
     },
@@ -257,13 +274,13 @@
         {
           "item_type": "static_text",
           "style": "normal",
-          "content": "The con can schedule your game into one (or more) of the time slots available over the weekend. The\ncon has to put together a balanced schedule so we can satisfy the most players in the most time\nslots. Your flexibility in scheduling your game is vital.\n"
+          "content": "The con can schedule your event into one (or more) of the time slots available over the weekend. The con has to put together a balanced schedule so we can satisfy the most players in the most time slots. Your flexibility in scheduling your event is vital."
         },
         {
           "item_type": "timeblock_preference",
           "identifier": "timeblock_preferences",
           "admin_description": "Timeblock Preferences",
-          "caption": "Please pick your top three preferences for when you'd like to run your game.",
+          "caption": "Please pick your top three preferences for when you'd like to run your larp. Please also mark all times when you will not be available to run your larp",
           "timeblocks": [
             {
               "label": "Morning",
@@ -301,35 +318,16 @@
                 "hour": 28
               }
             }
-          ]
-        },
-        {
-          "item_type": "multiple_choice",
-          "identifier": "can_play_concurrently",
-          "admin_description": "Can Play Concurrently?",
-          "style": "radio_horizontal",
-          "caption": "Can players play in your LARP and another event at the same time?",
-          "required": true,
-          "default_value": "false",
-          "choices": [
-            {
-              "caption": "Yes",
-              "value": "true"
-            },
-            {
-              "caption": "No",
-              "value": "false"
-            }
-          ]
+          ],
+          "omit_timeblocks": []
         },
         {
           "item_type": "multiple_choice",
           "identifier": "multiple_runs",
           "admin_description": "Can Do Multiple Runs?",
-          "style": "radio_horizontal",
-          "caption": "Are you willing to hold this LARP more than once at this convention?",
-          "required": true,
           "default_value": "false",
+          "style": "radio_horizontal",
+          "caption": "Are you willing to hold this event more than once at this convention?",
           "choices": [
             {
               "caption": "Yes",
@@ -339,21 +337,48 @@
               "caption": "No",
               "value": "false"
             }
-          ]
+          ],
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "can_play_concurrently",
+          "admin_description": "Can Play Concurrently?",
+          "default_value": "false",
+          "style": "radio_horizontal",
+          "caption": "Can players play in your larp and another event at the same time?",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ],
+          "required": true
         },
         {
           "item_type": "free_text",
           "identifier": "scheduling_constraints",
           "admin_description": "Scheduling Constraints",
           "lines": 4,
-          "caption": "If you are willing to hold the LARP more than once, please discuss your preferences here.\n\nIn addition, if there are scheduling constraints on your LARP (for example, if are you proposing\nanother event), or there are times your LARP cannot be scheduled, please discuss them as well.\n"
+          "caption": "If you are willing to hold the larp more than once, please discuss your preferences below.<br>In addition, if there are scheduling constraints on your larp (for example, if are you proposing another event), or there are times your larp cannot be scheduled, please discuss them as well."
         },
         {
           "item_type": "free_text",
           "identifier": "space_requirements",
           "admin_description": "Space Requirements",
           "lines": 2,
-          "caption": "Space Requirements:"
+          "caption": "Please list any **Space Requirements** for your event."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "sound_requirements",
+          "admin_description": "Sound Requirements",
+          "lines": 2,
+          "caption": "Please list any **Sound Requirements** for your event.  If your event is going to be loud, or is going to run better in a quieter area, please let us know.  We run in shared space, with rooms near by each other, so perfect sound isolation is impossible, but we want to arrange games to not interfere with each other."
         }
       ]
     }

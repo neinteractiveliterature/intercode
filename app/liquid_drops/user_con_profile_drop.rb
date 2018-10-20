@@ -39,7 +39,7 @@ class UserConProfileDrop < Liquid::Drop
     user_schedule_url(
       user_con_profile.ical_secret,
       host: user_con_profile.convention.domain,
-      protocol: Rails.application.config.force_ssl ? 'webcals' : 'webcal'
+      protocol: 'webcal'
     )
   end
 

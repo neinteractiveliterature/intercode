@@ -33,6 +33,8 @@ class AcceptEventProposalService < CivilService::Service
     event = convention.events.new(category: 'larp', status: 'active')
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
+    event.con_mail_destination ||= 'gms'
+    event.save!
     event_proposal.update!(event: event)
 
     if event_proposal.owner
@@ -54,8 +56,6 @@ class AcceptEventProposalService < CivilService::Service
         next unless proposal_form_item_identifiers.include?(proposal_attr)
         hash[event_attr] = event_proposal.read_form_response_attribute(proposal_attr)
       end
-
-      event_attributes[:con_mail_destination] ||= (event_attributes[:email] ? 'event_email' : 'gms')
 
       event_attributes.merge(
         admin_notes: event_proposal.admin_notes

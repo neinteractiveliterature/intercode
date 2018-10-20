@@ -6,13 +6,10 @@ class CalendarsController < ApplicationController
   def user_schedule
     user_con_profile = convention.user_con_profiles.find_by!(ical_secret: params[:id])
 
-    respond_to do |format|
-      format.ics do
-        cal = build_user_schedule_calendar(user_con_profile)
-        cal.publish
-        render plain: cal.to_ical
-      end
-    end
+    cal = build_user_schedule_calendar(user_con_profile)
+    cal.publish
+    response.content_type = 'text/calendar'
+    render plain: cal.to_ical
   end
 
   private
