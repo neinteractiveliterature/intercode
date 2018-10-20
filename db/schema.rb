@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_15_021731) do
+ActiveRecord::Schema.define(version: 2018_10_20_012444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -499,6 +499,7 @@ ActiveRecord::Schema.define(version: 2018_10_15_021731) do
     t.text "additional_info"
     t.boolean "receive_whos_free_emails", default: true, null: false
     t.boolean "gravatar_enabled", default: false, null: false
+    t.text "ical_secret", null: false
     t.index ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true
   end
 
