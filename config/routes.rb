@@ -121,6 +121,8 @@ Intercode::Application.routes.draw do
     get 'staff_positions/(*extra)' => 'staff_positions#index', as: :staff_positions
     resources :forms, only: [:show]
     resources :admin_forms
+
+    get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end
 
   # the following routes apply only when we're not in a virtual host
