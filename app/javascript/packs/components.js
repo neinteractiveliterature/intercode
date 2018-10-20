@@ -8,6 +8,7 @@ import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
 import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
+import LiquidDocs from '../LiquidDocs';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
 // import NavigationBar from '../NavigationBar';
@@ -45,6 +46,7 @@ const components = {
   EventProposalsAdmin: AppWrapper(EventProposalsAdmin),
   EventListSortDropdown,
   FormJSONEditor: AppWrapper(FormJSONEditor),
+  LiquidDocs,
   LiquidHTMLEditor,
   MyProfileForm: AppWrapper(MyProfileForm),
   // NavigationBar: AppWrapper(NavigationBar),
