@@ -57,6 +57,7 @@ query($eventProposalId: Int!) {
     owner {
       id
       name
+      email
     }
   }
 
