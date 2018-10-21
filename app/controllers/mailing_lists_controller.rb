@@ -63,12 +63,12 @@ class MailingListsController < ApplicationController
       convention.events.active.includes(team_members: { user_con_profile: :user })
     )
     emails_by_event = events.map do |event|
-      if event.con_mail_destination == 'event_email'
+      if event.con_mail_destination == 'event_email' && event.email.present?
         [event, [ContactEmail.new(event.email, "#{event.title} Team", event: event.title)]]
       else
-        emails = event.team_members.map do |team_member|
+        emails = event.team_members.select(&:receive_con_email).map do |team_member|
           ContactEmail.new(
-            team_member.email,
+            team_member.user_con_profile.email,
             team_member.user_con_profile.name_without_nickname,
             event: event.title
           )
