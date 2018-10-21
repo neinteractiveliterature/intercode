@@ -56,6 +56,12 @@ class EventProposalDisplay extends React.Component {
               </div>
               <div className="col-md-10">
                 {data.eventProposal.owner.name}
+                {' '}
+                (
+                <a href={`mailto:${data.eventProposal.owner.email}`}>
+                  {data.eventProposal.owner.email}
+                </a>
+                )
               </div>
             </div>
           </li>
