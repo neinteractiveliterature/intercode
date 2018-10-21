@@ -84,9 +84,13 @@ tool 'update_liquid_doc_json' do
     end
 
     classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
+    filters_module = YARD::Registry.all.find do |obj|
+      obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == 'Intercode::Liquid::Filters'
+    end
 
     json = {
-      classes: classes.map { |klass| serialize_class(klass) }
+      classes: classes.map { |klass| serialize_class(klass) },
+      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
     }
 
     File.open('liquid_doc.json', 'w') do |file|
