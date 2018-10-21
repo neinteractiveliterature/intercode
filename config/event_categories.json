@@ -2,6 +2,7 @@
   { "key": "board_game" },
   { "key": "filler", "single_run": true },
   { "key": "larp", "team_member_name": "GM" },
+  { "key": "meetup", "single_run": true, "team_member_name": "host" },
   { "key": "moderated_discussion", "single_run": true, "team_member_name": "moderator" },
   { "key": "panel", "single_run": true, "team_member_name": "panelist" },
   { "key": "presentation", "single_run": true, "team_member_name": "presenter" },
