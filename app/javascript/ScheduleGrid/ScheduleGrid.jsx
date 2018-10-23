@@ -101,8 +101,8 @@ class ScheduleGrid extends React.Component {
         const hourEventRuns = eventRuns.filter(eventRun => hourTimespan.overlapsTimespan(eventRun.timespan));
 
         const hourRunData = hourEventRuns.map((eventRun) => {
-          const run = this.runsById.get(eventRun.runId);
-          const event = this.eventsById.get(run.event_id);
+          const run = this.props.schedule.getRun(eventRun.runId);
+          const event = this.props.schedule.getEvent(run.event_id);
           return { eventRun, run, event };
         });
 
