@@ -1,5 +1,6 @@
 class GraphqlController < ApplicationController
   skip_authorization_check
+  skip_before_action :verify_authenticity_token # We're doing this in MutationType's guard instead
 
   def execute
     ActiveRecord::Base.transaction do
@@ -12,24 +13,28 @@ class GraphqlController < ApplicationController
 
   private
 
-  def execute_from_params(params)
-    variables = ensure_hash(params[:variables])
-    query = params[:query]
-    operation_name = params[:operationName]
-    context = {
+  def execution_context
+    {
       current_user: current_user,
       current_ability: current_ability,
       user_con_profile: user_con_profile,
       convention: convention,
       cadmus_renderer: cadmus_renderer,
       current_pending_order: current_pending_order,
-      assumed_identity_from_profile: assumed_identity_from_profile
+      assumed_identity_from_profile: assumed_identity_from_profile,
+      verified_request: verified_request?
     }
+  end
+
+  def execute_from_params(params)
+    variables = ensure_hash(params[:variables])
+    query = params[:query]
+    operation_name = params[:operationName]
 
     IntercodeSchema.execute(
       query,
       variables: variables,
-      context: context,
+      context: execution_context,
       operation_name: operation_name
     )
   end

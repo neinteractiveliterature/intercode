@@ -29,6 +29,11 @@ end
 class Types::MutationType < Types::BaseObject
   graphql_name 'Mutation'
 
+  # CSRF verification, but only for mutations
+  guard do |_obj, _args, ctx|
+    raise ActionController::InvalidAuthenticityToken unless ctx[:verified_request]
+  end
+
   ### CmsNavigationItems
 
   field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do
