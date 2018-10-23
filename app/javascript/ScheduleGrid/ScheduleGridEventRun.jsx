@@ -127,6 +127,7 @@ class ScheduleGridEventRun extends React.Component {
     const eventFull = (
       event.registration_policy.slots_limited
       && run.confirmed_limited_signup_count === event.registration_policy.total_slots
+      && event.registration_policy.total_slots > 0
     );
     const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
 
