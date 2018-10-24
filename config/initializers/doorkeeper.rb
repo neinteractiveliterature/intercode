@@ -96,7 +96,8 @@ Doorkeeper.configure do
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   default_scopes  :public
-  optional_scopes :read_profile,
+  optional_scopes :openid,
+    :read_profile,
     :read_signups,
     :read_events,
     :read_conventions,
