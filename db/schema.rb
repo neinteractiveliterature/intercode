@@ -270,8 +270,9 @@ ActiveRecord::Schema.define(version: 2018_10_24_143839) do
   end
 
   create_table "oauth_openid_requests", force: :cascade do |t|
-    t.integer "access_grant_id", null: false
+    t.bigint "access_grant_id", null: false
     t.string "nonce", null: false
+    t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
   end
 
   create_table "order_entries", force: :cascade do |t|
