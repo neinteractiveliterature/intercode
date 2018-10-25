@@ -4,7 +4,7 @@ class EventSignupService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit, :bucket_finder
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit
   delegate :event, to: :run
   delegate :convention, to: :event
 
@@ -40,12 +40,6 @@ class EventSignupService < CivilService::Service
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       return failure(errors) unless valid?
 
-      @bucket_finder = SignupBucketFinder.new(
-        run.registration_policy,
-        requested_bucket_key,
-        run.signups.counted.confirmed.to_a
-      )
-
       move_signup if actual_bucket && actual_bucket.full?(run.signups)
 
       signup = run.signups.create!(
@@ -67,6 +61,7 @@ class EventSignupService < CivilService::Service
 
   def signup_count_must_be_allowed
     return if team_member?
+    return unless counts_towards_total?
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     case @max_signups_allowed
@@ -152,6 +147,14 @@ sign up for events."
 
   def other_signups
     @other_signups ||= other_signups_including_not_counted.select(&:counted?)
+  end
+
+  def bucket_finder
+    @bucket_finder ||= SignupBucketFinder.new(
+      run.registration_policy,
+      requested_bucket_key,
+      run.signups.counted.confirmed.to_a
+    )
   end
 
   def actual_bucket
