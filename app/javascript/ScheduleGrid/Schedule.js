@@ -1,10 +1,8 @@
-import moment from 'moment-timezone';
-
 import EventCategory from '../EventAdmin/EventCategory';
 import EventRun from '../PCSG/EventRun';
 import ScheduleBlock from '../PCSG/ScheduleBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
-import { timespanFromConvention } from '../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 
 export default class Schedule {
   constructor(config, data) {
@@ -20,10 +18,9 @@ export default class Schedule {
 
     this.conventionTimespan = timespanFromConvention(data.convention);
 
-    this.conventionDayTimespans = this.conventionTimespan.getTimespansWithin(
+    this.conventionDayTimespans = getConventionDayTimespans(
+      this.conventionTimespan,
       data.convention.timezone_name,
-      'day',
-      moment.duration(6, 'hours'), // start convention days at 6:00am
     );
 
     this.eventRuns = EventRun.buildEventRunsFromApi(data.events);

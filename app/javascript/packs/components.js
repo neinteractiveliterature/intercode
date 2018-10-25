@@ -1,12 +1,11 @@
 import Cart from '../Store/Cart';
 import ConventionAdmin from '../ConventionAdmin';
-import DatagridFilters from '../Datagrid/DatagridFilters';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
+import EventList from '../EventList';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
-import EventListSortDropdown from '../UIComponents/EventListSortDropdown';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
@@ -37,13 +36,12 @@ import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 const components = {
   Cart: AppWrapper(Cart),
   ConventionAdmin: AppWrapper(ConventionAdmin),
-  DatagridFilters,
   EditUserConProfile: AppWrapper(EditUserConProfile),
   EventAdmin: AppWrapper(EventAdmin),
+  EventList: AppWrapper(EventList),
   EventProposalDisplay: AppWrapper(EventProposalDisplay),
   EventProposalForm: AppWrapper(EventProposalForm),
   EventProposalsAdmin: AppWrapper(EventProposalsAdmin),
-  EventListSortDropdown,
   FormJSONEditor: AppWrapper(FormJSONEditor),
   LiquidHTMLEditor,
   MyProfileForm: AppWrapper(MyProfileForm),

@@ -12,3 +12,11 @@ export function timespanFromRun(convention, event, run) {
 
   return new Timespan(start, finish);
 }
+
+export function getConventionDayTimespans(conventionTimespan, timezoneName) {
+  return conventionTimespan.getTimespansWithin(
+    timezoneName,
+    'day',
+    moment.duration(6, 'hours'), // start convention days at 6:00am
+  );
+}
