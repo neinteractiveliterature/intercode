@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_24_143839) do
+ActiveRecord::Schema.define(version: 2018_10_25_162756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 2018_10_24_143839) do
     t.datetime "submitted_at"
     t.text "admin_notes"
     t.datetime "reminded_at"
+    t.text "team_mailing_list_name"
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"

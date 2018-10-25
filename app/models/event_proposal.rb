@@ -7,6 +7,7 @@ class EventProposal < ApplicationRecord
   register_form_response_attrs :title,
     :email,
     :event_email,
+    :team_mailing_list_name,
     :length_seconds,
     :description,
     :short_blurb,
