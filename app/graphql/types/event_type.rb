@@ -26,6 +26,8 @@ Types::EventType = GraphQL::ObjectType.define do
   field :description, types.String
   field :short_blurb, types.String
   field :status, types.String
+  field :created_at, Types::DateType
+
   field :runs, !types[!Types::RunType] do
     guard -> (event, _args, ctx) do
       ctx[:current_ability].can?(:read, Run.new(event: event))

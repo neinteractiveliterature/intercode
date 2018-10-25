@@ -9,7 +9,7 @@ const ReactRouterReactTableContext = React.createContext({
 export const ReactRouterReactTableConsumer = ReactRouterReactTableContext.Consumer;
 
 @withRouter
-export class ReactRouterReactTableProvider extends React.PureComponent {
+class ReactRouterReactTableProvider extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     decodeFilterValue: PropTypes.func,
@@ -146,3 +146,5 @@ export class ReactRouterReactTableProvider extends React.PureComponent {
     );
   }
 }
+
+export { ReactRouterReactTableProvider };
