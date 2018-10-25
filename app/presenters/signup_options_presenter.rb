@@ -193,7 +193,11 @@ class SignupOptionsPresenter
       non_anything_buckets_count = buckets.reject(&:anything?).size
       buckets.each_with_index.map do |bucket, index|
         next if bucket.anything?
-        BucketSignupOption.new(bucket, index, non_anything_buckets_count <= 1)
+        BucketSignupOption.new(
+          bucket,
+          index,
+          bucket.counted? && non_anything_buckets_count <= 1
+        )
       end.compact + no_preference_options
     end
   end
