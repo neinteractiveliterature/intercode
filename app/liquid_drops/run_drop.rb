@@ -19,4 +19,8 @@ class RunDrop < Liquid::Drop
   def withdraw_url
     event_run_user_signup_path(event, run)
   end
+
+  def room_names
+    run.rooms.map(&:name)
+  end
 end
