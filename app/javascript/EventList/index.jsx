@@ -104,6 +104,37 @@ class EventList extends React.PureComponent {
     });
   }
 
+  renderBottomPagination = ({
+    eventsPaginated, onPageChange, pageSize, onPageSizeChange,
+  }) => {
+    if (eventsPaginated.entries.length < 4) {
+      return null;
+    }
+
+    return (
+      <div className="d-flex flex-wrap mt-4">
+        <div className="flex-grow-1">
+          {this.renderPagination(eventsPaginated, onPageChange)}
+        </div>
+        <div className="form-inline">
+          Show
+          <select
+            className="form-control mx-1"
+            value={pageSize.toString()}
+            onChange={(event) => { onPageSizeChange(Number.parseInt(event.target.value, 10)); }}
+          >
+            {[10, 20, 50, 100, 200].map(pageSizeOption => (
+              <option value={pageSizeOption.toString()} key={pageSizeOption}>
+                {pageSizeOption}
+              </option>
+            ))}
+          </select>
+          events
+        </div>
+      </div>
+    );
+  }
+
   render = () => (
     <BrowserRouter basename={this.props.basename}>
       <QueryWithStateDisplay query={EventListCommonDataQuery}>
@@ -114,7 +145,14 @@ class EventList extends React.PureComponent {
           >
             <CombinedReactTableConsumer consumers={[ReactRouterReactTableConsumer]}>
               {({
-                page, sorted, filtered, onPageChange, onSortedChange, onFilteredChange,
+                page,
+                sorted,
+                filtered,
+                pageSize,
+                onPageChange,
+                onSortedChange,
+                onFilteredChange,
+                onPageSizeChange,
               }) => (
                 <React.Fragment>
                   <h1 className="text-nowrap">
@@ -127,6 +165,7 @@ class EventList extends React.PureComponent {
                     query={EventListEventsQuery}
                     variables={{
                       page: (page || 1),
+                      pageSize: (pageSize || 20),
                       sort: reactTableSortToTableResultsSort(
                         sorted && sorted.length > 0
                           ? sorted
@@ -167,12 +206,9 @@ class EventList extends React.PureComponent {
                         </div>
 
                         {this.renderEvents(convention, eventsPaginated, sorted)}
-
-                        {
-                          eventsPaginated.entries.length > 3
-                            ? this.renderPagination(eventsPaginated, onPageChange, 'justify-content-center mt-4')
-                            : null
-                        }
+                        {this.renderBottomPagination({
+                          eventsPaginated, onPageChange, pageSize, onPageSizeChange,
+                        })}
                       </React.Fragment>
                     )}
                   </QueryWithStateDisplay>
