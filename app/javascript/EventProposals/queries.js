@@ -61,12 +61,9 @@ query($eventProposalId: Int!) {
     }
   }
 
-  myProfile {
-    id
-    ability {
-      can_update_event_proposal(event_proposal_id: $eventProposalId)
-      can_read_admin_notes_on_event_proposal(event_proposal_id: $eventProposalId)
-    }
+  currentAbility {
+    can_update_event_proposal(event_proposal_id: $eventProposalId)
+    can_read_admin_notes_on_event_proposal(event_proposal_id: $eventProposalId)
   }
 }
 

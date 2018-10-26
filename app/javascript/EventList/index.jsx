@@ -107,7 +107,7 @@ class EventList extends React.PureComponent {
   render = () => (
     <BrowserRouter basename={this.props.basename}>
       <QueryWithStateDisplay query={EventListCommonDataQuery}>
-        {({ data: { convention, myProfile } }) => (
+        {({ data: { convention, currentAbility } }) => (
           <ReactRouterReactTableProvider
             decodeFilterValue={decodeFilterValue}
             encodeFilterValue={encodeFilterValue}
@@ -158,9 +158,7 @@ class EventList extends React.PureComponent {
 
                             <div className="ml-2">
                               <EventListSortDropdown
-                                showConventionOrder={
-                                  ((myProfile || {}).ability || {}).can_read_schedule
-                                }
+                                showConventionOrder={currentAbility.can_read_schedule}
                                 value={sorted}
                                 onChange={onSortedChange}
                               />

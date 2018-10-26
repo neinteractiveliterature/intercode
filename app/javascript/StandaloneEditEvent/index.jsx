@@ -68,11 +68,8 @@ fragment StandaloneEditEvent_EventFormData on Convention {
 
 const eventQuery = gql`
 query($eventId: Int!) {
-  myProfile {
-    id
-    ability {
-      can_override_maximum_event_provided_tickets
-    }
+  currentAbility {
+    can_override_maximum_event_provided_tickets
   }
 
   convention {
@@ -271,7 +268,7 @@ class StandaloneEditEvent extends React.Component {
         updateMaximumEventProvidedTicketsOverride={updateMaximumEventProvidedTicketsOverride}
         showDropButton={showDropButton}
         canOverrideMaximumEventProvidedTickets={
-          data.myProfile.ability.can_override_maximum_event_provided_tickets
+          data.currentAbility.can_override_maximum_event_provided_tickets
         }
         ticketTypes={data.convention.ticket_types}
         ticketName={data.convention.ticket_name}

@@ -45,7 +45,7 @@ class EditUserConProfile extends React.Component {
             id: userConProfile.id,
             user_con_profile: {
               ...(
-                this.props.data.myProfile.can_update_privileges_user_con_profile
+                this.props.data.currentAbility.can_update_privileges_user_con_profile
                   ? { privileges: userConProfile.privileges }
                   : {}
               ),
@@ -85,7 +85,7 @@ class EditUserConProfile extends React.Component {
       </h1>
       <UserConProfileForm
         canUpdatePrivileges={
-          this.props.data.myProfile.ability.can_update_privileges_user_con_profile
+          this.props.data.currentAbility.can_update_privileges_user_con_profile
         }
         userConProfile={this.state.userConProfile}
         regularPrivilegeNames={this.props.data.convention.privilege_names

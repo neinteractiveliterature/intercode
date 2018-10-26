@@ -28,7 +28,7 @@ class EventProposalAdminDisplay extends React.PureComponent {
             </div>
 
             {
-              data.myProfile.ability.can_update_event_proposal
+              data.currentAbility.can_update_event_proposal
                 ? (
                   <EventProposalStatusUpdater
                     eventProposalId={this.props.eventProposalId}
@@ -63,7 +63,7 @@ class EventProposalAdminDisplay extends React.PureComponent {
             }
             <div className="flex-grow-1 d-flex justify-content-end">
               {
-                data.myProfile.ability.can_read_admin_notes_on_event_proposal
+                data.currentAbility.can_read_admin_notes_on_event_proposal
                   ? (
                     <QueryWithStateDisplay
                       query={eventProposalAdminNotesQuery}
