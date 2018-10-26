@@ -164,7 +164,7 @@ class ScheduleGrid extends React.Component {
       }
 
       hourDivs.push((
-        <div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
+        <div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
           <div className="small text-muted ml-1">
             {formatTime(now, this.props.schedule.timezoneName)}
             {extendedCounts}
@@ -212,6 +212,7 @@ class ScheduleGrid extends React.Component {
                     className="schedule-grid-row-header"
                     style={{
                       width: `${PIXELS_PER_HOUR}px`,
+                      minWidth: `${PIXELS_PER_HOUR}px`,
                       height: `${layoutResult.laneCount * PIXELS_PER_LANE + 5}px`,
                     }}
                   >
@@ -232,7 +233,7 @@ class ScheduleGrid extends React.Component {
           <div className="mt-1 d-flex">
             {
               shouldUseRowHeaders
-                ? (<div style={{ width: `${PIXELS_PER_HOUR}px` }} />)
+                ? (<div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />)
                 : null
             }
             {hourDivs}
