@@ -13,6 +13,11 @@ class EventsController < ApplicationController
     @page_title = 'Event Schedule'
   end
 
+  def schedule_by_room
+    authorize! :schedule, convention
+    @page_title = 'Event Schedule By Room'
+  end
+
   def schedule_with_counts
     authorize! :schedule_with_counts, convention
     @page_title = 'Schedule With Counts'

@@ -1,0 +1,8 @@
+%nav{'aria-label' => 'breadcrumb'}
+  %ol.breadcrumb
+    %li.breadcrumb-item
+      = link_to 'Con schedule', schedule_events_path
+    %li.breadcrumb-item.active{'aria-current' => 'page'}
+      Schedule by room
+
+= schedule_grid classifyEventsBy: 'category', groupEventsBy: 'room', showSignupStatusBadge: true, showSignedUp: true, basename: schedule_by_room_events_path
