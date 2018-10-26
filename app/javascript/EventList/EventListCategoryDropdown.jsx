@@ -19,7 +19,8 @@ function downcaseFirst(string) {
 }
 
 const EventListCategoryDropdown = ({ categoryKeys, value, onChange }) => {
-  const currentCategories = SORTED_CATEGORIES.filter(category => (value || []).includes(category.key));
+  const currentCategories = SORTED_CATEGORIES
+    .filter(category => (value || []).includes(category.key));
 
   return (
     <PopperDropdown
