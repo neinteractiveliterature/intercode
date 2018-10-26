@@ -38,7 +38,8 @@
 }
 
 .schedule-grid-row-header {
-  position: fixed;
+  position: sticky;
+  left: 0;
   z-index: 10;
   padding-right: 2px;
   border-top: 2px rgba(0, 0, 0, .1) solid;

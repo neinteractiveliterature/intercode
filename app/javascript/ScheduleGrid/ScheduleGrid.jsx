@@ -217,7 +217,6 @@ class ScheduleGrid extends React.Component {
                   >
                     <small className="schedule-grid-row-header-label">{options.rowHeader}</small>
                   </div>
-                  <div style={{ width: `${PIXELS_PER_HOUR}px` }} />
                 </React.Fragment>
               )
               : null
