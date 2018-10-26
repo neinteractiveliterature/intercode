@@ -1,3 +1,13 @@
+%nav{'aria-label' => 'breadcrumb'}
+  %ol.breadcrumb
+    %li.breadcrumb-item
+      - if can?(:schedule, convention) && @runs.any?
+        = link_to 'Con schedule', "/events/schedule/#{@runs.first.starts_at.strftime('%A').downcase}"
+      - else
+        = link_to 'List of events', events_path
+    %li.breadcrumb-item.active{'aria-current' => 'page'}
+      = @event.title
+
 .row
   .col-md-9
     %h1.larp-title= @event.title
@@ -20,12 +30,15 @@
       - if @team_members.any?
         %dt.col-md-3= @event.team_member_name.titleize.pluralize
         %dd.col-md-9
-          %ul.list-unstyled
+          %ul.list-unstyled.mb-0
             - @team_members.each do |team_member|
               %li
                 = team_member.user.name
                 - if team_member.email
                   (#{intercode_mail_to team_member.email})
+      - if @event.registration_policy.accepts_signups?
+        %dt.col-md-3 Capacity
+        %dd.col-md-9= render 'reports/event_capacity', event: @event
 
   .col-md-3
     - if can? :edit, @event
