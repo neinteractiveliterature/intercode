@@ -1,3 +1,13 @@
+%nav{'aria-label' => 'breadcrumb'}
+  %ol.breadcrumb
+    %li.breadcrumb-item
+      - if can?(:schedule, convention) && @runs.any?
+        = link_to 'Con schedule', "/events/schedule/#{@runs.first.starts_at.strftime('%A').downcase}"
+      - else
+        = link_to 'List of events', events_path
+    %li.breadcrumb-item.active{'aria-current' => 'page'}
+      = @event.title
+
 .row
   .col-md-9
     %h1.larp-title= @event.title
