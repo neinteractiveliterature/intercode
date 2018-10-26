@@ -1,12 +1,19 @@
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_convention(convention, ability, filters, sort, visible_field_ids = nil)
+  def self.for_convention(convention:, ability:, filters: {}, sort: nil, visible_field_ids: nil)
     scope = convention.events.where(status: 'active').accessible_by(ability)
-    new(scope, convention, ability, filters, sort, visible_field_ids)
+    new(
+      base_scope: scope,
+      convention: convention,
+      ability: ability,
+      filters: filters,
+      sort: sort,
+      visible_field_ids: visible_field_ids
+    )
   end
 
   attr_reader :ability, :convention
 
-  def initialize(base_scope, convention, ability, filters, sort, visible_field_ids = nil)
+  def initialize(base_scope:, convention:, ability:, filters: {}, sort: nil, visible_field_ids: nil)
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @ability = ability

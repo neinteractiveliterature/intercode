@@ -171,10 +171,10 @@ Types::ConventionType = GraphQL::ObjectType.define do
 
     resolve ->(convention, args, ctx) do
       Tables::EventsTableResultsPresenter.for_convention(
-        convention,
-        ctx[:current_ability],
-        args[:filters].to_h,
-        args[:sort]
+        convention: convention,
+        ability: ctx[:current_ability],
+        filters: args[:filters].to_h,
+        sort: args[:sort]
       ).paginate(page: args[:page], per_page: args[:per_page])
     end
   end
