@@ -38,36 +38,52 @@ export default class Schedule {
 
   getRunTimespan = runId => this.runTimespansById.get(runId)
 
-  groupEventRunsByCategory = eventRuns => (
-    eventRuns.reduce(
-      (eventRunsByCategory, eventRun) => {
-        const { runId } = eventRun;
-        const run = this.runsById.get(runId);
-        const event = this.eventsById.get(run.event_id);
-        const { category: categoryKey } = event;
+  groupEventRunsByCategory = eventRuns => eventRuns.reduce(
+    (eventRunsByCategory, eventRun) => {
+      const { runId } = eventRun;
+      const run = this.runsById.get(runId);
+      const event = this.eventsById.get(run.event_id);
+      const { category: categoryKey } = event;
 
-        const category = EventCategory.get(categoryKey);
-        let groupName = 'regular';
+      const category = EventCategory.get(categoryKey);
+      let groupName = 'regular';
 
-        if (category.isSingleRun()) {
-          groupName = 'singleRun';
+      if (category.isSingleRun()) {
+        groupName = 'singleRun';
+      }
+
+      if (category.isRecurring()) {
+        groupName = 'recurring';
+      }
+
+      if (!eventRunsByCategory.has(groupName)) {
+        eventRunsByCategory.set(groupName, []);
+      }
+
+      return eventRunsByCategory.set(
+        groupName,
+        eventRunsByCategory.get(groupName).concat(eventRun),
+      );
+    },
+    new Map(),
+  )
+
+  groupEventRunsByRoom = eventRuns => eventRuns.reduce(
+    (eventRunsByRoom, eventRun) => {
+      const { runId } = eventRun;
+      const run = this.runsById.get(runId);
+
+      run.rooms.forEach((room) => {
+        if (!eventRunsByRoom.has(room.name)) {
+          eventRunsByRoom.set(room.name, []);
         }
 
-        if (category.isRecurring()) {
-          groupName = 'recurring';
-        }
+        eventRunsByRoom.set(room.name, [...eventRunsByRoom.get(room.name), eventRun]);
+      });
 
-        if (!eventRunsByCategory.has(groupName)) {
-          eventRunsByCategory.set(groupName, []);
-        }
-
-        return eventRunsByCategory.set(
-          groupName,
-          eventRunsByCategory.get(groupName).concat(eventRun),
-        );
-      },
-      new Map(),
-    )
+      return eventRunsByRoom;
+    },
+    new Map(),
   )
 
   buildLayoutForTimespanRange = (minTimespan, maxTimespan) => {
@@ -76,6 +92,21 @@ export default class Schedule {
       (currentMaxTimespan, eventRun) => currentMaxTimespan.expandedToFit(eventRun.timespan),
       minTimespan,
     );
+
+    if (this.config.groupEventsBy === 'room') {
+      const eventRunsByRoom = this.groupEventRunsByRoom(eventRuns);
+      const roomNames = [...eventRunsByRoom.keys()]
+        .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' }));
+
+      const scheduleBlocksWithOptions = roomNames.map(roomName => (
+        [
+          new ScheduleBlock(actualTimespan, eventRunsByRoom.get(roomName)),
+          { rowHeader: roomName },
+        ]
+      ));
+
+      return new ScheduleGridLayout(eventRuns, actualTimespan, scheduleBlocksWithOptions);
+    }
 
     const eventRunsByCategory = this.groupEventRunsByCategory(eventRuns);
 
@@ -99,4 +130,6 @@ export default class Schedule {
 
     return this.buildLayoutForTimespanRange(minTimespan, conventionDayTimespan);
   }
+
+  shouldUseRowHeaders = () => this.config.groupEventsBy === 'room'
 }

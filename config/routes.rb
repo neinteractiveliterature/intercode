@@ -28,6 +28,7 @@ Intercode::Application.routes.draw do
     resources :events do
       collection do
         get 'schedule(/*extra)' => :schedule, as: :schedule
+        get 'schedule_by_room(/*extra)' => :schedule_by_room, as: :schedule_by_room
         get 'schedule_with_counts(/*extra)' => :schedule_with_counts, as: :schedule_with_counts
       end
 
