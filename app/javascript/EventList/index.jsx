@@ -5,10 +5,12 @@ import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 import Pagination from 'react-js-pagination';
-import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
+import classNames from 'classnames';
 
 import CombinedReactTableConsumer from '../Tables/CombinedReactTableConsumer';
-import { EventListQuery } from './queries.gql';
+import { decodeStringArray, encodeStringArray } from '../Tables/FilterUtils';
+import EventListCategoryDropdown from './EventListCategoryDropdown';
+import { EventListCommonDataQuery, EventListEventsQuery } from './queries.gql';
 import EventListSortDropdown from './EventListSortDropdown';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { ReactRouterReactTableProvider, ReactRouterReactTableConsumer } from '../Tables/ReactRouterReactTableContext';
@@ -16,11 +18,28 @@ import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
 } from '../Tables/TableUtils';
+import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 
 function getSortedRuns(event) {
   return [...event.runs].sort((a, b) => (
     moment(a.starts_at).valueOf() - moment(b.starts_at).valueOf()
   ));
+}
+
+function decodeFilterValue(field, value) {
+  if (field === 'category') {
+    return decodeStringArray(value);
+  }
+
+  return value;
+}
+
+function encodeFilterValue(field, value) {
+  if (field === 'category') {
+    return encodeStringArray(value);
+  }
+
+  return value;
 }
 
 class EventList extends React.PureComponent {
@@ -115,11 +134,11 @@ class EventList extends React.PureComponent {
     );
   }
 
-  renderPagination = (data, onPageChange) => {
+  renderPagination = (eventsPaginated, onPageChange, extraClasses) => {
     const {
       current_page: currentPage,
       total_pages: totalPages,
-    } = data.convention.events_paginated;
+    } = eventsPaginated;
 
     return (
       <nav>
@@ -128,7 +147,7 @@ class EventList extends React.PureComponent {
           activePage={currentPage}
           onChange={onPageChange}
           itemsCountPerPage={1}
-          innerClass="pagination justify-content-center mt-4"
+          innerClass={classNames('pagination', extraClasses)}
           itemClass="page-item"
           linkClass="page-link"
         />
@@ -136,20 +155,20 @@ class EventList extends React.PureComponent {
     );
   }
 
-  renderEvents = (data, sorted) => {
+  renderEvents = (convention, eventsPaginated, sorted) => {
     let previousConventionDay = null;
     const conventionDayTimespans = getConventionDayTimespans(
-      timespanFromConvention(data.convention),
-      data.convention.timezone_name,
+      timespanFromConvention(convention),
+      convention.timezone_name,
     );
 
-    return data.convention.events_paginated.entries.map((event) => {
+    return eventsPaginated.entries.map((event) => {
       let preamble = null;
       if (sorted.some(sort => sort.id === 'first_scheduled_run_start')) {
         const runs = getSortedRuns(event);
         if (runs.length > 0) {
           const conventionDay = conventionDayTimespans.find(timespan => timespan.includesTime(
-            moment.tz(runs[0].starts_at, data.convention.timezone_name),
+            moment.tz(runs[0].starts_at, convention.timezone_name),
           ));
           if (
             conventionDay
@@ -171,7 +190,7 @@ class EventList extends React.PureComponent {
           {this.renderEventCard(
             event,
             sorted,
-            data.convention.timezone_name,
+            convention.timezone_name,
           )}
         </React.Fragment>
       );
@@ -180,42 +199,78 @@ class EventList extends React.PureComponent {
 
   render = () => (
     <BrowserRouter basename={this.props.basename}>
-      <ReactRouterReactTableProvider>
-        <CombinedReactTableConsumer consumers={[ReactRouterReactTableConsumer]}>
-          {({ page, sorted, onPageChange, onSortedChange }) => (
-            <QueryWithStateDisplay
-              query={EventListQuery}
-              variables={{
-                page: (page || 1),
-                sort: reactTableSortToTableResultsSort(sorted || [{ id: 'title', desc: 'false' }]),
-              }}
-            >
-              {({ data }) => (
+      <QueryWithStateDisplay query={EventListCommonDataQuery}>
+        {({ data: { convention, myProfile } }) => (
+          <ReactRouterReactTableProvider
+            decodeFilterValue={decodeFilterValue}
+            encodeFilterValue={encodeFilterValue}
+          >
+            <CombinedReactTableConsumer consumers={[ReactRouterReactTableConsumer]}>
+              {({
+                page, sorted, filtered, onPageChange, onSortedChange, onFilteredChange,
+              }) => (
                 <React.Fragment>
-                  <div className="d-flex align-items-center flex-wrap">
-                    <div className="col p-0">
-                      <h1 className="text-nowrap">
-                        Events at
-                        {' '}
-                        {data.convention.name}
-                      </h1>
-                    </div>
-                    <EventListSortDropdown
-                      showConventionOrder={data.myProfile.ability.can_read_schedule}
-                      value={sorted}
-                      onChange={onSortedChange}
-                    />
-                  </div>
+                  <h1 className="text-nowrap">
+                    Events at
+                    {' '}
+                    {convention.name}
+                  </h1>
 
-                  {this.renderPagination(data, onPageChange)}
-                  {this.renderEvents(data, sorted)}
-                  {this.renderPagination(data, onPageChange)}
+                  <QueryWithStateDisplay
+                    query={EventListEventsQuery}
+                    variables={{
+                      page: (page || 1),
+                      sort: reactTableSortToTableResultsSort(sorted || [{ id: 'title', desc: 'false' }]),
+                      filters: reactTableFiltersToTableResultsFilters(filtered),
+                    }}
+                  >
+                    {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
+                      <React.Fragment>
+                        <div className="d-flex align-items-start flex-wrap mt-4">
+                          <div className="flex-grow-1">
+                            {this.renderPagination(eventsPaginated, onPageChange)}
+                          </div>
+
+                          <div className="d-flex flex-wrap">
+                            <div className="mb-2">
+                              <EventListCategoryDropdown
+                                categoryKeys={convention.event_category_keys}
+                                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+                                onChange={(value) => {
+                                  onFilteredChange([
+                                    ...(filtered || []).filter(({ id }) => id !== 'category'),
+                                    { id: 'category', value },
+                                  ]);
+                                }}
+                              />
+                            </div>
+
+                            <div className="ml-2">
+                              <EventListSortDropdown
+                                showConventionOrder={myProfile.ability.can_read_schedule}
+                                value={sorted}
+                                onChange={onSortedChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {this.renderEvents(convention, eventsPaginated, sorted)}
+
+                        {
+                          eventsPaginated.entries.length > 3
+                            ? this.renderPagination(eventsPaginated, onPageChange, 'justify-content-center mt-4')
+                            : null
+                        }
+                      </React.Fragment>
+                    )}
+                  </QueryWithStateDisplay>
                 </React.Fragment>
               )}
-            </QueryWithStateDisplay>
-          )}
-        </CombinedReactTableConsumer>
-      </ReactRouterReactTableProvider>
+            </CombinedReactTableConsumer>
+          </ReactRouterReactTableProvider>
+        )}
+      </QueryWithStateDisplay>
     </BrowserRouter>
   )
 }

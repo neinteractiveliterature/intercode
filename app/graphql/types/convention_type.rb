@@ -20,6 +20,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :volunteer_event_form, !Types::FormType
   field :filler_event_form, !Types::FormType
 
+  field :event_category_keys, types[types.String] do
+    resolve -> (convention, _args, _ctx) do
+      convention.events.pluck('distinct category')
+    end
+  end
+
   field :privilege_names, !types[!types.String] do
     resolve -> (_convention, _args, _ctx) do
       ['site_admin'] + UserConProfile::PRIV_NAMES.to_a

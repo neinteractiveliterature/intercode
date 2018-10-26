@@ -20,8 +20,8 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
 
   def apply_filter(scope, filter, value)
     case filter
-    when :status
-      value.present? ? scope.where(status: value) : scope
+    when :category
+      value.present? ? scope.where(category: value) : scope
     else
       scope
     end
