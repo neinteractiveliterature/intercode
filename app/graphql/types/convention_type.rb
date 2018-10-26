@@ -20,6 +20,12 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :volunteer_event_form, !Types::FormType
   field :filler_event_form, !Types::FormType
 
+  field :event_category_keys, types[types.String] do
+    resolve -> (convention, _args, _ctx) do
+      convention.events.pluck('distinct category')
+    end
+  end
+
   field :privilege_names, !types[!types.String] do
     resolve -> (_convention, _args, _ctx) do
       ['site_admin'] + UserConProfile::PRIV_NAMES.to_a
@@ -153,6 +159,22 @@ Types::ConventionType = GraphQL::ObjectType.define do
         ctx[:current_ability],
         args[:filters].to_h,
         args[:sort]
+      ).paginate(page: args[:page], per_page: args[:per_page])
+    end
+  end
+
+  field :events_paginated, Types::EventsPaginationType.to_non_null_type do
+    argument :page, types.Int
+    argument :per_page, types.Int
+    argument :filters, Types::EventFiltersInputType
+    argument :sort, types[Types::SortInputType]
+
+    resolve ->(convention, args, ctx) do
+      Tables::EventsTableResultsPresenter.for_convention(
+        convention: convention,
+        ability: ctx[:current_ability],
+        filters: args[:filters].to_h,
+        sort: args[:sort]
       ).paginate(page: args[:page], per_page: args[:per_page])
     end
   end

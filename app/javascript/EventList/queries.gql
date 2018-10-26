@@ -1,0 +1,44 @@
+query EventListCommonDataQuery {
+  convention {
+    id
+    name
+    starts_at
+    ends_at
+    timezone_name
+    event_category_keys
+  }
+
+  myProfile {
+    id
+    ability {
+      can_read_schedule
+    }
+  }
+}
+
+query EventListEventsQuery($page: Int, $filters: EventFiltersInput, $sort: [SortInput]) {
+  convention {
+    id
+
+    events_paginated(page: $page, per_page: 20, filters: $filters, sort: $sort) {
+      total_entries
+      total_pages
+      current_page
+      per_page
+
+      entries {
+        id
+        category
+        title
+        created_at
+        short_blurb_html
+        form_response_attrs_json
+
+        runs {
+          id
+          starts_at
+        }
+      }
+    }
+  }
+}
