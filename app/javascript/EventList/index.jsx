@@ -127,7 +127,11 @@ class EventList extends React.PureComponent {
                     query={EventListEventsQuery}
                     variables={{
                       page: (page || 1),
-                      sort: reactTableSortToTableResultsSort(sorted || [{ id: 'title', desc: 'false' }]),
+                      sort: reactTableSortToTableResultsSort(
+                        sorted && sorted.length > 0
+                          ? sorted
+                          : [{ id: 'title', desc: false }],
+                      ),
                       filters: reactTableFiltersToTableResultsFilters(filtered),
                     }}
                   >
