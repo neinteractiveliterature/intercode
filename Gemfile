@@ -89,7 +89,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.6.12'
+gem 'oj', '~> 3.6.13'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
