@@ -67,11 +67,8 @@ query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [S
     }
   }
 
-  myProfile {
-    id
-    ability {
-      can_create_user_con_profiles
-    }
+  currentAbility {
+    can_create_user_con_profiles
   }
 }
 `;
@@ -313,7 +310,7 @@ class UserConProfilesTable extends React.Component {
             renderLeftContent={() => (
               <GraphQLReactTableConsumer>
                 {({ queryResult: { data } }) => (
-                  data.myProfile.ability.can_create_user_con_profiles
+                  data.currentAbility.can_create_user_con_profiles
                     ? (
                       <Link to="/new" className="btn btn-primary ml-2 mb-2">
                         <i className="fa fa-plus" />

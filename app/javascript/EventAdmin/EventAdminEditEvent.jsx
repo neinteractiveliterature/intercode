@@ -47,7 +47,7 @@ const EventAdminEditEvent = (props) => {
       ticketTypes={data.convention.ticket_types}
       ticketName={data.convention.ticket_name}
       canOverrideMaximumEventProvidedTickets={
-        data.myProfile.ability.can_override_maximum_event_provided_tickets
+        data.currentAbility.can_override_maximum_event_provided_tickets
       }
       showDropButton
       showCategorySelect

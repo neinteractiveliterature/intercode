@@ -8,11 +8,8 @@ query EventListCommonDataQuery {
     event_category_keys
   }
 
-  myProfile {
-    id
-    ability {
-      can_read_schedule
-    }
+  currentAbility {
+    can_read_schedule
   }
 }
 

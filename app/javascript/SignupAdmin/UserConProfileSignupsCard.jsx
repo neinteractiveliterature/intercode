@@ -66,7 +66,6 @@ query($id: Int!) {
 
   myProfile {
     id
-
     ability {
       can_update_signups
     }

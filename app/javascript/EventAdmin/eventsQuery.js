@@ -131,12 +131,8 @@ export { fragments };
 
 export default gql`
 query {
-  myProfile {
-    id
-
-    ability {
-      can_override_maximum_event_provided_tickets
-    }
+  currentAbility {
+    can_override_maximum_event_provided_tickets
   }
 
   convention {

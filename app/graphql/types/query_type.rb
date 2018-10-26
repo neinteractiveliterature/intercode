@@ -74,6 +74,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :currentAbility, !Types::AbilityType do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:current_ability]
+    }
+  end
+
   field :assumedIdentityFromProfile, Types::UserConProfileType do
     resolve ->(_obj, _args, ctx) {
       ctx[:assumed_identity_from_profile]
