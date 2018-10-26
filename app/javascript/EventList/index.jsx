@@ -158,7 +158,9 @@ class EventList extends React.PureComponent {
 
                             <div className="ml-2">
                               <EventListSortDropdown
-                                showConventionOrder={myProfile.ability.can_read_schedule}
+                                showConventionOrder={
+                                  ((myProfile || {}).ability || {}).can_read_schedule
+                                }
                                 value={sorted}
                                 onChange={onSortedChange}
                               />
