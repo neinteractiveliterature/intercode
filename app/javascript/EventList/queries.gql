@@ -13,11 +13,11 @@ query EventListCommonDataQuery {
   }
 }
 
-query EventListEventsQuery($page: Int, $filters: EventFiltersInput, $sort: [SortInput]) {
+query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput]) {
   convention {
     id
 
-    events_paginated(page: $page, per_page: 20, filters: $filters, sort: $sort) {
+    events_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
       total_entries
       total_pages
       current_page
