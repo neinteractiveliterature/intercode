@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   load_resource through: :convention, except: [:schedule, :schedule_with_counts]
-  authorize_resource except: [:schedule, :schedule_with_counts]
+  authorize_resource only: [:edit]
   respond_to :html, :json
 
   # List the available LARPs
