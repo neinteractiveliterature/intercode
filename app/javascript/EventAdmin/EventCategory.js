@@ -3,6 +3,7 @@ import categoryData from '../../../config/event_categories.json';
 class EventCategory {
   constructor({ key, ...props }) {
     this.key = key;
+    this.name = props.name;
     this.singleRun = !!props.single_run;
     this.recurring = !!props.recurring;
   }

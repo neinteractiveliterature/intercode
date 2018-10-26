@@ -1,13 +1,13 @@
 [
-  { "key": "board_game" },
-  { "key": "filler", "single_run": true },
-  { "key": "larp", "team_member_name": "GM" },
-  { "key": "meetup", "single_run": true, "team_member_name": "host" },
-  { "key": "moderated_discussion", "single_run": true, "team_member_name": "moderator" },
-  { "key": "panel", "single_run": true, "team_member_name": "panelist" },
-  { "key": "party", "single_run": true, "team_member_name": "host" },
-  { "key": "presentation", "single_run": true, "team_member_name": "presenter" },
-  { "key": "tabletop_rpg", "team_member_name": "GM" },
-  { "key": "workshop", "single_run": true, "team_member_name": "facilitator" },
-  { "key": "volunteer_event", "recurring": true }
+  { "key": "board_game", "name": "Board game" },
+  { "key": "filler", "name": "Filler event", "single_run": true },
+  { "key": "larp", "name": "Larp", "team_member_name": "GM" },
+  { "key": "meetup", "name": "Meetup", "single_run": true, "team_member_name": "host" },
+  { "key": "moderated_discussion", "name": "Moderated discussion", "single_run": true, "team_member_name": "moderator" },
+  { "key": "panel", "name": "Panel", "single_run": true, "team_member_name": "panelist" },
+  { "key": "party", "name": "Party", "single_run": true, "team_member_name": "host" },
+  { "key": "presentation", "name": "Presentation", "single_run": true, "team_member_name": "presenter" },
+  { "key": "tabletop_rpg", "name": "Tabletop RPG", "team_member_name": "GM" },
+  { "key": "workshop", "name": "Workshop", "single_run": true, "team_member_name": "facilitator" },
+  { "key": "volunteer_event", "name": "Volunteer event", "recurring": true }
 ]
