@@ -117,6 +117,12 @@ class NavigationBarPresenter
       active? { |request| request.path == schedule_events_path }
     end,
     NavigationItem.define do
+      label 'Con Schedule by Room'
+      url { schedule_by_room_events_path }
+      visible? { can?(:schedule, convention) }
+      active? { |request| request.path == schedule_by_room_events_path }
+    end,
+    NavigationItem.define do
       label 'List of Events'
       url { events_path }
       visible? true
