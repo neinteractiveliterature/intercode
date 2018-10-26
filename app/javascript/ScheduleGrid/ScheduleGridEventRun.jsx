@@ -135,6 +135,7 @@ class ScheduleGridEventRun extends React.Component {
     const signupStatus = userSignupStatus(run);
     const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
     const availabilityDescription = describeAvailability(event, run);
+    const roomsDescription = run.rooms.map(room => room.name).sort().join(', ');
 
     const eventRunClasses = classNames(
       className,
@@ -225,10 +226,16 @@ class ScheduleGridEventRun extends React.Component {
                         <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
                         <td>{timespan.humanizeInTimezone(convention.timezone_name)}</td>
                       </tr>
-                      <tr>
-                        <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
-                        <td>{run.rooms.map(room => room.name).sort().join(', ')}</td>
-                      </tr>
+                      {
+                        roomsDescription
+                          ? (
+                            <tr>
+                              <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
+                              <td>{roomsDescription}</td>
+                            </tr>
+                          )
+                          : null
+                      }
                       {
                         availabilityDescription
                           ? (
