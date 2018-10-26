@@ -13,13 +13,6 @@ describe EventsController do
     assert_response :success
   end
 
-  it 'should not let you view the index page in run order unless you can see the schedule' do
-    convention.update!(show_schedule: 'gms')
-    get :index, params: { sort: 'first_scheduled_run' }
-    assert_response :redirect
-    assert flash[:alert]
-  end
-
   describe 'as a con staffer' do
     let(:staff_con_profile) { FactoryBot.create :user_con_profile, convention: convention, staff: true }
     let(:staff_user) { staff_con_profile.user }
