@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   load_resource through: :convention, except: [:schedule, :schedule_with_counts]
-  authorize_resource except: [:schedule, :schedule_with_counts]
+  authorize_resource only: [:index, :show, :edit]
   respond_to :html, :json
 
   # List the available LARPs
@@ -11,6 +11,11 @@ class EventsController < ApplicationController
   def schedule
     authorize! :schedule, convention
     @page_title = 'Event Schedule'
+  end
+
+  def schedule_by_room
+    authorize! :schedule, convention
+    @page_title = 'Event Schedule By Room'
   end
 
   def schedule_with_counts
