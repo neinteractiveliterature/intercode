@@ -125,7 +125,7 @@ Intercode::Application.routes.draw do
     resources :admin_forms
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
-    resource :liquid_docs, only: [:show]
+    get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
   end
 
   # the following routes apply only when we're not in a virtual host
