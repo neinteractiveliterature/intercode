@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import AssignName from './AssignName';
 import findClass from './findClass';
 
 function AssignDocHeader({ assign, prefix = null }) {
@@ -10,10 +11,7 @@ function AssignDocHeader({ assign, prefix = null }) {
     <React.Fragment>
       <h2>
         <code>
-          {'{{ '}
-          {prefix}
-          {assign.name}
-          {' }}'}
+          <AssignName assign={assign} prefix={prefix} />
         </code>
       </h2>
       <h5>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import AssignName from './AssignName';
 import findClass from './findClass';
 
 function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = null }) {
@@ -11,10 +12,7 @@ function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = 
       <div>
         {preAssignNameContent}
         <code>
-          {'{{ '}
-          {prefix}
-          {assign.name}
-          {' }}'}
+          <AssignName assign={assign} prefix={prefix} />
         </code>
         <br />
         <strong>

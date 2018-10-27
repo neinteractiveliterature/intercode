@@ -21,31 +21,45 @@ function LiquidDocs({ basename }) {
           const sortedAssigns = sortAssigns(liquidAssigns);
 
           return (
-            <Switch>
-              {sortedAssigns.map(assign => (
-                <Route
-                  path={`/assigns/${assign.name}(\\..*)?`}
-                  render={() => (
-                    <AssignDoc assign={assign} />
-                  )}
-                  key={`route-${assign.name}`}
-                />
-              ))}
+            <React.Fragment>
+              <header className="mb-4">
+                <h1>Liquid documentation</h1>
+              </header>
 
-              <Route path="/" exact>
-                <React.Fragment>
-                  <header className="mb-4">
-                    <h1>Liquid documentation</h1>
-                  </header>
+              <Switch>
+                {sortedAssigns.map(assign => (
+                  <Route
+                    path={`/assigns/${assign.name}(\\..*)?`}
+                    render={() => (
+                      <AssignDoc assign={assign} />
+                    )}
+                    key={`route-${assign.name}`}
+                  />
+                ))}
 
-                  {
-                    sortedAssigns.map(assign => <AssignDocLink assign={assign} key={assign.name} />)
-                  }
-                </React.Fragment>
-              </Route>
-              { // <Redirect to="/" />
-              }
-            </Switch>
+                <Route path="/" exact>
+                  <React.Fragment>
+                    <nav aria-label="breadcrumb mb-4">
+                      <ol className="breadcrumb">
+                        <li className="breadcrumb-item active" aria-current="page">Documentation home</li>
+                      </ol>
+                    </nav>
+
+                    <section>
+                      <h2 className="mb-2">Assigns</h2>
+
+                      {
+                        sortedAssigns.map(assign => (
+                          <AssignDocLink compact assign={assign} key={assign.name} />
+                        ))
+                      }
+                    </section>
+                  </React.Fragment>
+                </Route>
+
+                <Redirect to="/" />
+              </Switch>
+            </React.Fragment>
           );
         }}
       </QueryWithStateDisplay>
