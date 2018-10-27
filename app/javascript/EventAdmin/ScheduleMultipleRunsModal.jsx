@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import { graphql } from 'react-apollo';
 import Modal from 'react-bootstrap4-modal';
+
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
+import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../PCSG/Timespan';
 import { timespanFromConvention, timespanFromRun } from '../TimespanUtils';
@@ -30,6 +32,7 @@ class ScheduleMultipleRunsModal extends React.Component {
       startMinute: null,
       finishHour: null,
       finishMinute: null,
+      mutationInProgress: false,
     };
   }
 
@@ -97,26 +100,31 @@ class ScheduleMultipleRunsModal extends React.Component {
     this.setState({ finishHour: hour, finishMinute: minute });
   }
 
-  scheduleRuns = () => {
+  scheduleRuns = async () => {
     const runs = this.getNonConflictingTimespansWithinRange().map(timespan => ({
       starts_at: timespan.start.toISOString(),
     }));
 
-    return this.props.createMultipleRuns({
-      variables: {
-        input: {
-          event_id: this.props.event.id,
-          runs,
+    this.setState({ mutationInProgress: true });
+    try {
+      await this.props.createMultipleRuns({
+        variables: {
+          input: {
+            event_id: this.props.event.id,
+            runs,
+          },
         },
-      },
-      update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
-        const eventsData = store.readQuery({ query: eventsQuery });
-        const eventData = eventsData.events.find(event => event.id === this.props.event.id);
-        eventData.runs = [...eventData.runs, ...newRuns];
-        store.writeQuery({ query: eventsQuery, data: eventsData });
-        this.props.onFinish();
-      },
-    });
+        update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
+          const eventsData = store.readQuery({ query: eventsQuery });
+          const eventData = eventsData.events.find(event => event.id === this.props.event.id);
+          eventData.runs = [...eventData.runs, ...newRuns];
+          store.writeQuery({ query: eventsQuery, data: eventsData });
+        },
+      });
+      this.props.onFinish();
+    } catch (error) {
+      this.setState({ error, mutationInProgress: false });
+    }
   }
 
   renderTimeSelects = () => {
@@ -205,6 +213,8 @@ class ScheduleMultipleRunsModal extends React.Component {
 
       {this.renderTimeSelects()}
       {this.renderRunPreview()}
+
+      <ErrorDisplay graphQLError={this.state.error} />
     </div>
   );
 
@@ -213,7 +223,8 @@ class ScheduleMultipleRunsModal extends React.Component {
       <Modal visible={this.props.visible}>
         <div className="modal-header">
           <h5 className="modal-title">
-Schedule runs of
+            Schedule runs of
+            {' '}
             {this.props.event.title}
           </h5>
         </div>
@@ -221,14 +232,22 @@ Schedule runs of
         <div className="modal-footer">
           <div className="d-flex w-100">
             <div className="col text-right pr-0">
-              <button type="button" className="btn btn-secondary mr-2" onClick={this.props.onCancel}>
+              <button
+                type="button"
+                className="btn btn-secondary mr-2"
+                onClick={this.props.onCancel}
+                disabled={this.state.mutationInProgress}
+              >
                 Cancel
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
                 onClick={this.scheduleRuns}
-                disabled={this.getNonConflictingTimespansWithinRange().length < 1}
+                disabled={
+                  this.getNonConflictingTimespansWithinRange().length < 1
+                  || this.state.mutationInProgress
+                }
               >
                 Schedule runs
               </button>
