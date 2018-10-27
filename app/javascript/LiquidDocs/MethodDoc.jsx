@@ -43,12 +43,10 @@ MethodDoc.propTypes = {
     })).isRequired,
   }).isRequired,
   prefix: PropTypes.string,
-  alreadyRenderedClasses: PropTypes.arrayOf(PropTypes.string),
 };
 
 MethodDoc.defaultProps = {
   prefix: null,
-  alreadyRenderedClasses: [],
 };
 
 export default MethodDoc;

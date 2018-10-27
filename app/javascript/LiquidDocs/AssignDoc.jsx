@@ -9,7 +9,7 @@ import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import MethodDoc from './MethodDoc';
 
-function AssignDoc({ assign, prefix = null, alreadyRenderedClasses = [] }) {
+function AssignDoc({ assign, prefix = null }) {
   const assignClass = findClass(assign.drop_class_name);
   if (!assignClass) {
     return null;
@@ -33,7 +33,6 @@ function AssignDoc({ assign, prefix = null, alreadyRenderedClasses = [] }) {
                   <AssignDoc
                     assign={{ name: assignName, drop_class_name: returnClassName }}
                     prefix={buildMemberPrefix(assign.name, prefix)}
-                    alreadyRenderedClasses={alreadyRenderedClasses}
                   />
                 )}
               />
@@ -58,7 +57,6 @@ function AssignDoc({ assign, prefix = null, alreadyRenderedClasses = [] }) {
                 <MethodDoc
                   method={method}
                   prefix={buildMemberPrefix(assign.name, prefix)}
-                  alreadyRenderedClasses={[...alreadyRenderedClasses, assignClass.name]}
                   key={method.name}
                 />
               ))}
@@ -76,12 +74,10 @@ AssignDoc.propTypes = {
     drop_class_name: PropTypes.string.isRequired,
   }).isRequired,
   prefix: PropTypes.string,
-  alreadyRenderedClasses: PropTypes.arrayOf(PropTypes.string),
 };
 
 AssignDoc.defaultProps = {
   prefix: null,
-  alreadyRenderedClasses: [],
 };
 
 export default AssignDoc;
