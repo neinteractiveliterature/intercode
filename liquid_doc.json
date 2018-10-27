@@ -1,0 +1,3396 @@
+{
+  "classes": [
+    {
+      "name": "RunDrop",
+      "superclasses": [
+        "RunDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A run of an event",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "run",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID of this run",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event this is a run of",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "starts_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this run starts",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ends_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this run ends",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "length_seconds",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The length of this run in seconds",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of RunDrop",
+              "types": [
+                "RunDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL to use for linking to the event's page on the convention site",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signup_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL to use for signing up for this event (using a POST request)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "withdraw_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL to use for withdrawing from event (using a DELETE request)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "room_names",
+          "docstring": "",
+          "tags": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PageDrop",
+      "superclasses": [
+        "PageDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A page in the CMS for this convention",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "page",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the page",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "slug",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The unique URL path of the page (under the /pages URL)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of PageDrop",
+              "types": [
+                "PageDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserDrop",
+      "superclasses": [
+        "UserDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A user account on the site.  Most of the relevant data for the user is not here, but in\nUserConProfileDrop, which is the user's profile for a particular convention.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "user",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's email address",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "first_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's first name.  Note that this may be different than the first name\nthis person has used for particular convention profiles.",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID for this user account",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "last_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's last name.  Note that this may be different than the last name\nthis person has used for particular convention profiles.",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's full name.  Note that this may be different than the name\nthis person has used for particular convention profiles.",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of UserDrop",
+              "types": [
+                "UserDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EventDrop",
+      "superclasses": [
+        "EventDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "An event in a convention.  Events can have one or more runs, depending on their category.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of the event",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "title",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The title of the event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team_member_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name to use for \"team members\" in this event (e.g. \"GM\", \"panelist\")",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_proposal",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The proposal associated with this event, if this event went\nthrough the proposal process",
+              "types": [
+                "EventProposalDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "author",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The author of this event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "organization",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The organization running this event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The contact email address for this event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of EventDrop",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team_member_user_con_profiles",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The UserConProfiles of this event's team members",
+              "types": [
+                "Array<UserConProfileDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL to use for linking to this event on this site",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "homepage_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The external URL for this event, if its team provided one",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The description of this event, rendered to HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "content_warnings",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The content warnings for this event, rendered to HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "age_restrictions",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The age restrictions for this event, rendered to HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "participant_communications",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The participant communication info for this event, rendered to HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "short_blurb",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The short blurb for this event, rendered to HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SignupDrop",
+      "superclasses": [
+        "SignupDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A signup for a run of an event",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "signup",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of this signup",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "run",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The run the signup is for",
+              "types": [
+                "RunDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user_con_profile",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The profile of the person who is signed up",
+              "types": [
+                "UserConProfileDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "state",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The state of this signup (e.g. confirmed, waitlisted, withdrawn)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bucket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The bucket assigned to this signup",
+              "types": [
+                "RegistrationPolicy::BucketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team_member",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not this signup is for an event team member",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event the signup is for",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "starts_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the run starts",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ends_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the run ends",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "length_seconds",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The length of the run in seconds",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of SignupDrop",
+              "types": [
+                "SignupDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL of the event's page on the convention site",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "withdraw_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL to use for withdrawing from the event (using a DELETE request)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TicketDrop",
+      "superclasses": [
+        "TicketDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A ticket for this convention (which may allow its holder to sign up for events)",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "ticket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID of this ticket",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user_con_profile",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The profile of the ticket holder",
+              "types": [
+                "UserConProfileDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "provided_by_event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event that provided this ticket, if applicable",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "payment_amount",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The amount the person paid for the ticket",
+              "types": [
+                "Money"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "allows_event_signups",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not this ticket allows its holder to sign up for events",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ticket_type",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The type of this ticket",
+              "types": [
+                "TicketTypeDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The unique name of the type of this ticket",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The human-readable description of the type of this ticket",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of TicketDrop",
+              "types": [
+                "TicketDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ProductDrop",
+      "superclasses": [
+        "ProductDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A product that can be sold through the convention's web site",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "product",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "available",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the product is publicly available for purchase",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the product",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "payment_options",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The purchase methods allowed for this product (e.g. stripe,\npay_at_convention)",
+              "types": [
+                "Array<String>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of ProductDrop",
+              "types": [
+                "ProductDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The description of the product, as HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "image_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL of the product image, if present",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The base price for the product",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "product_variants",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Any variants of this product",
+              "types": [
+                "Array<ProductVariantDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL to use for linking to this product's page",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ConventionDrop",
+      "superclasses": [
+        "ConventionDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "The convention itself",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "convention",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of the convention",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the convention",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_mailing_list_domain",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The domain name this convention uses for automatically-generated event\nmailing lists",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "accepting_proposals",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the convention is currently accepting event proposals",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ticket_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name this convention uses for \"tickets\"",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "started",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the convention has already started",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ended",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the convention has already ended",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of ConventionDrop",
+              "types": [
+                "ConventionDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "runs_with_openings",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Runs of events in this convention that have any available slots",
+              "types": [
+                "Array<RunDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "non_volunteer_runs_with_openings",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Runs of non-volunteer events in this convention that have any available\nslots",
+              "types": [
+                "Array<RunDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bio_eligible_user_con_profiles",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "UserConProfiles in this convention that can have a bio",
+              "types": [
+                "Array<UserConProfileDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "products",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All products in this convention",
+              "types": [
+                "Array<ProductDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "available_products",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Products in this convention that are available for purchase",
+              "types": [
+                "Array<ProductDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "staff_positions",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All staff positions in this convention",
+              "types": [
+                "Array<StaffPositionDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "staff_positions_by_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All staff positions in this convention, indexed by\nname (all lowercase, spaces replaced with underscores)",
+              "types": [
+                "Hash<String, StaffPositionDrop>"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "Retrieving the vendor liaison email address for a convention",
+              "text": "{{ convention.staff_positions_by_name.vendor_liaison.email }}",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "ticket_types",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All ticket types for this convention",
+              "types": [
+                "Array<TicketTypeDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ticket_counts_by_type",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The number of tickets that have been issued in this convention,\nindexed by ticket type name",
+              "types": [
+                "Hash<String, Integer>"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "Retrieving the count of weekend tickets for a convention",
+              "text": "{{ convention.ticket_counts_by_type.weekend }}",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "maximum_event_signups",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The schedule of maximum event signups for this convention",
+              "types": [
+                "ScheduledValueDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "starts_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this convention starts",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ends_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this convention ends",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TicketTypeDrop",
+      "superclasses": [
+        "TicketTypeDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A type of ticket that this convention issues",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "ticket_type",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID of this ticket type",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The unique string name of this ticket type",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The human-readable description of this ticket type",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "next_price_change",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the price of this ticket type will next change, if there is\nan upcoming price change",
+              "types": [
+                "ActiveSupport::Time"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "publicly_available",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether this ticket type is publicly available for purchase",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "maximum_event_provided_tickets",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The default number of tickets of this type events are allowed to provide",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of TicketTypeDrop",
+              "types": [
+                "TicketTypeDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "pricing_schedule",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The pricing schedule for this ticket type",
+              "types": [
+                "ScheduledValueDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The current price of this ticket type",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "next_price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The price this ticket type will next change to, if there is an upcoming change",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EventProposalDrop",
+      "superclasses": [
+        "EventProposalDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "An event proposal which, if accepted, has an event associated with it",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "event_proposal",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID of this event proposal",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "owner",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The profile of the person who submitted this event proposal",
+              "types": [
+                "UserConProfileDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event created from this proposal, if this proposal has been accepted",
+              "types": [
+                "EventDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "status",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The status of this proposal (e.g. proposed, accepted, rejected, withdrawn)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "title",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The title of the proposed event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The contact email for the proposed event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "length_seconds",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The length of the proposed event, in seconds",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The description of the proposed event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "short_blurb",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The short blurb for the proposed event",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "can_play_concurrently",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the proposed event allows attendees to sign up for it\nalong with other events happening at the same time",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "additional_info",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Additional information the proposer wanted to provide",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "created_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the proposal was first started",
+              "types": [
+                "DateTime"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "updated_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the proposal was last modified",
+              "types": [
+                "DateTime"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of EventProposalDrop",
+              "types": [
+                "EventProposalDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "edit_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The relative URL for linking to edit the proposal",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "StaffPositionDrop",
+      "superclasses": [
+        "StaffPositionDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A staff position at a convention",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "staff_position",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID of this staff position",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of this staff position",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The contact email for this staff position",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of StaffPositionDrop",
+              "types": [
+                "StaffPositionDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "user_con_profiles",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The profiles of the people who hold this position",
+              "types": [
+                "Array<UserConProfileDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "email_link",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A mailto: URL for this staff position",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name_with_email_link",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "An HTML link for emailing this staff position (the link text will be the name\nof the position)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ProductVariantDrop",
+      "superclasses": [
+        "ProductVariantDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A variant of a product that can be sold at this convention",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "product_variant",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of this variant",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "product",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The product this is a variant of",
+              "types": [
+                "ProductDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of ProductVariantDrop",
+              "types": [
+                "ProductVariantDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The description of this variant, as HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "image_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL of this variant's image, if present",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "price",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The price of this variant",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ScheduledValueDrop",
+      "superclasses": [
+        "ScheduledValueDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A ScheduledValue represents a value that changes over time.  For example, the convention's\nmaximum allowed signups and the price of ticket types are ScheduledValues.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "scheduled_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "now",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The current time, as used for calculating the value of\nthis ScheduledValue",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time zone used for calculating the value of this\nScheduledValue",
+              "types": [
+                "ActiveSupport::TimeZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "covers_all_time",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not this ScheduledValue covers all possible times",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of ScheduledValueDrop",
+              "types": [
+                "ScheduledValueDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "timespans",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The timespans covered by this ScheduledValue, along with\nthe value for that range of time",
+              "types": [
+                "Array<TimespanWithValueDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "current_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The current value of this ScheduledValue (type may vary)",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "next_value_change",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the value will next change",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "next_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "What the value will be after it next changes (type may vary)",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserConProfileDrop",
+      "superclasses": [
+        "UserConProfileDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A profile for a user attending a convention.  This is the main object used for all user-specific\ndata in a convention, rather than User, which is just the sitewide account data shared between\nall conventions.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "user_con_profile",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "bio_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name used for the user's bio, which will either include a nickname or not\ndepending on their preference",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's email address",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "first_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's first name",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "gravatar_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The URL of the user's Gravatar",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database ID of the user profile",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "last_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's last name",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's name, including nickname if present",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name_inverted",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's name in \"Last, First\" format",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "nickname",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The nickname the user entered on their profile",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name_without_nickname",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's name, not including nickname",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ticket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's convention ticket, if present",
+              "types": [
+                "TicketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of UserConProfileDrop",
+              "types": [
+                "UserConProfileDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team_member_events",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All the events at this convention for which this user is a team member",
+              "types": [
+                "Array<EventDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "signups",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All the user's signups, excluding withdrawn events",
+              "types": [
+                "Array<SignupDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bio",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's bio, as HTML",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "privileges",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's privileges for this convention",
+              "types": [
+                "Array<String>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "staff_positions",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All the staff positions this user holds at this convention",
+              "types": [
+                "Array<StaffPosition>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_proposals",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All the event proposals this user submitted for this convention",
+              "types": [
+                "Array<StaffPosition>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "schedule_calendar_url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A webcal:// URL for the user's personal schedule for this convention.  This URL\nis considered secret and should only be given to that user.",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "markdown_presenter",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TimespanWithValueDrop",
+      "superclasses": [
+        "TimespanWithValueDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A timespan inside a ScheduledValue that associates a range of time with a particular value",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "timespan_with_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time zone used for calculating the range of time",
+              "types": [
+                "ActiveSupport::TimeZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of TimespanWithValueDrop",
+              "types": [
+                "TimespanWithValueDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "start",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the timespan starts.  (This moment is considered\npart of the timespan.)",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "finish",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the timespan ends.  (This moment is NOT considered\npart of the timespan.)",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A human-readable description of the timespan and its value",
+              "types": [
+                "String"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"$30.00 from January 3, 2018 up to January 9, 2018\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"42 from November 22, 2017 indefinitely\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"$10.25 anytime up to April 13, 1972\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"10 anytime\"",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "description_without_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A human-readable description of just the timespan without its value",
+              "types": [
+                "String"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"from January 3, 2018 up to January 9, 2018\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"from November 22, 2017 indefinitely\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"anytime up to April 13, 1972\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"anytime\"",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "short_description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A shorter format of the human-readable description of the timespan and its value",
+              "types": [
+                "String"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"$30.00 January 3, 2018 - January 9, 2018\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"42 November 22, 2017 onwards\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"$10.25 up to April 13, 1972\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"10\"",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "short_description_without_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A shorter format of the human-readable description of the timespan, without its\nvalue",
+              "types": [
+                "String"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"January 3, 2018 - January 9, 2018\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"November 22, 2017 onwards\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "",
+              "text": "\"up to April 13, 1972\"",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "Infinite timespans return an empty string",
+              "text": "\"\"",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The value for this timespan, formatted as a string",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RegistrationPolicy::BucketDrop",
+      "superclasses": [
+        "RegistrationPolicy::BucketDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A registration bucket for an event",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "bucket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "key",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The unique string identifier for this bucket",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of this bucket",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A long-form description for the bucket (currently not exposed anywhere)",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "minimum_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The minimum number of attendees needed for this bucket",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "preferred_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The preferred number of attendees for this bucket",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "total_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The maximum number of attendees this bucket can accept",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "slots_limited",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the number of attendees is limited in this bucket",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "anything",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not this is a \"flex\" bucket (\"anything\" is a legacy term for\n\"flex\")",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "not_counted",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "If true, attendees in this bucket are not counted towards total attendees\nfor runs of this event, and this event will not count towards their maximum\nevent signups allowed",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "expose_attendees",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not to allow other attendees to see that a person is in this\nbucket in the signup summary page",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of BucketDrop",
+              "types": [
+                "BucketDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::Youtube",
+      "superclasses": [
+        "Intercode::Liquid::Tags::Youtube",
+        "Liquid::Tag"
+      ],
+      "docstring": "Embeds a YouTube video.  The video ID must be provided.",
+      "tags": [
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "youtube",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Rickroll",
+          "text": "{% youtube oHg5SJYRHA0 %}",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "video_id",
+          "docstring": "Returns the value of attribute video_id",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of Youtube",
+              "types": [
+                "Youtube"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::LoginForm",
+      "superclasses": [
+        "Intercode::Liquid::Tags::LoginForm",
+        "Intercode::Liquid::Tags::RailsPartialRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders a login form for the site.",
+      "tags": [
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "login_form",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "partial",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "locals",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::RailsPartialRenderer",
+      "superclasses": [
+        "Intercode::Liquid::Tags::RailsPartialRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "",
+      "tags": [
+        {
+          "tag_name": "api",
+          "name": null,
+          "text": "",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "partial",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "locals",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::NewEventProposalButton",
+      "superclasses": [
+        "Intercode::Liquid::Tags::NewEventProposalButton",
+        "Intercode::Liquid::Tags::RailsPartialRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders a \"Propose an event\" button.  This will automatically render as a\n\"Log in to propose\" button if the user is not logged in.  The button text and the button\nCSS classes can be customized.",
+      "tags": [
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "new_event_proposal_button",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Customizing the button text",
+          "text": "{% new_event_proposal_button \"Propose, right now!\" %}",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Customizing the button text and the CSS class",
+          "text": "{% new_event_proposal_button \"Propose, or don't\" btn-warning %}",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "button_text",
+          "docstring": "Returns the value of attribute button_text",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "button_class",
+          "docstring": "Returns the value of attribute button_class",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of NewEventProposalButton",
+              "types": [
+                "NewEventProposalButton"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "partial",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "locals",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filter_methods": [
+    {
+      "name": "pluralize",
+      "docstring": "Can be used to either pluralize a singular noun, or to conditionally pluralize a noun based\non a count.",
+      "tags": [
+        {
+          "tag_name": "param",
+          "name": "input",
+          "text": "The input to pluralize.  If it's a string, that string will\nbe unconditionally pluralized.  If it's a number, pluralize\nwill read the singular and plural parameters and decide\nbetween them depending on whether input is 1.",
+          "types": [
+            "String",
+            "Integer"
+          ]
+        },
+        {
+          "tag_name": "param",
+          "name": "singular",
+          "text": "Optional.  If input is a number, this will be the result if input\nis 1.",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "param",
+          "name": "plural",
+          "text": "Optional.  If input is a number, this will be the result if input is\nnot 1.",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "return",
+          "name": null,
+          "text": "String",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Pluralizing a noun unconditionally",
+          "text": "{{ \"goose\" | pluralize }} => \"geese\"",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Pluralizing a count",
+          "text": "You are signed up for {{ user_con_profile.signups.length | pluralize \"game\" \"games\" }}\n=> \"You are signed up for 3 games\"",
+          "types": null
+        }
+      ]
+    },
+    {
+      "name": "email_link",
+      "docstring": "Outputs either a clickable mailto: link (if the user is currently logged in), or an\nobfuscated email (if the user is not logged in).  The intent of this is to be a spammer-safe\nway to link to email addresses.",
+      "tags": [
+        {
+          "tag_name": "param",
+          "name": "input",
+          "text": "An email address",
+          "types": [
+            "String"
+          ]
+        },
+        {
+          "tag_name": "return",
+          "name": null,
+          "text": "String A spammer-safe HTML representation of the email address",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "When logged in",
+          "text": "{{ \"test@example.com\" | email_link }}\n=> <a href=\"mailto:test@example.com\">test@example.com</a>",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "When not logged in",
+          "text": "{{ \"test@example.com\" | email_link }}\n=> test AT example DOT com",
+          "types": null
+        }
+      ]
+    },
+    {
+      "name": "to_sentence",
+      "docstring": "Given an array of strings, outputs an English representation of that array.",
+      "tags": [
+        {
+          "tag_name": "param",
+          "name": "input",
+          "text": "An array of strings",
+          "types": [
+            "Array<String>"
+          ]
+        },
+        {
+          "tag_name": "return",
+          "name": null,
+          "text": "String",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "One string",
+          "text": "{{ [\"one fish\"] | to_sentence }} => one fish",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Two strings",
+          "text": "{{ [\"one fish\", \"two fish\"] | to_sentence }} => one fish and two fish",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "More than two strings",
+          "text": "{{ [\"one fish\", \"two fish\", \"red fish\", \"blue fish\"] | to_sentence }}\n=> one fish, two fish, red fish, and blue fish",
+          "types": null
+        }
+      ]
+    },
+    {
+      "name": "humanize",
+      "docstring": "Runs a string through the Ruby on Rails \"humanize\" filter.",
+      "tags": [
+        {
+          "tag_name": "see",
+          "name": "https://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-humanize",
+          "text": "the Rails documentation for this method",
+          "types": null
+        }
+      ]
+    },
+    {
+      "name": "singularize",
+      "docstring": "Runs a string through the Ruby on Rails \"singularize\" filter.",
+      "tags": [
+        {
+          "tag_name": "see",
+          "name": "https://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-singularize",
+          "text": "the Rails documentation for this method",
+          "types": null
+        }
+      ]
+    },
+    {
+      "name": "titleize",
+      "docstring": "Runs a string through the Ruby on Rails \"titleize\" filter.",
+      "tags": [
+        {
+          "tag_name": "see",
+          "name": "https://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-titleize",
+          "text": "the Rails documentation for this method",
+          "types": null
+        }
+      ]
+    }
+  ]
+}
