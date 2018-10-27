@@ -139,6 +139,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :liquidAssigns, types[Types::LiquidAssign.to_non_null_type] do
+    resolve ->(_obj, _args, ctx) do
+      LiquidAssignGraphqlPresenter.from_hash(ctx[:cadmus_renderer].default_assigns)
+    end
+  end
+
   field :previewMarkdown, !types.String do
     argument :markdown, !types.String
 

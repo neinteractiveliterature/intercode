@@ -44,7 +44,7 @@ const components = {
   EventProposalForm: AppWrapper(EventProposalForm),
   EventProposalsAdmin: AppWrapper(EventProposalsAdmin),
   FormJSONEditor: AppWrapper(FormJSONEditor),
-  LiquidDocs,
+  LiquidDocs: AppWrapper(LiquidDocs),
   LiquidHTMLEditor,
   MyProfileForm: AppWrapper(MyProfileForm),
   // NavigationBar: AppWrapper(NavigationBar),

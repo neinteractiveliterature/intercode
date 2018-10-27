@@ -1,0 +1,6 @@
+query LiquidAssignsQuery {
+  liquidAssigns {
+    name
+    drop_class_name
+  }
+}
