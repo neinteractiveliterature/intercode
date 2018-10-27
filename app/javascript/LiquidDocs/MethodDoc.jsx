@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import MethodReturnDoc from './MethodReturnDoc';
 import TagDoc from './TagDoc';
 
-function MethodDoc({ method, prefix = null, alreadyRenderedClasses = [] }) {
+function MethodDoc({ method, prefix = null }) {
   if (method.tags.some(tag => tag.tag_name === 'api')) {
     return null;
   }
@@ -26,16 +25,12 @@ function MethodDoc({ method, prefix = null, alreadyRenderedClasses = [] }) {
 
       <ul className="list-unstyled">
         {
-          // eslint-disable-next-line react/no-array-index-key
-          method.tags.map((tag, i) => <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} />)
+          method.tags.map((tag, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} method={method} prefix={prefix} />
+          ))
         }
       </ul>
-
-      <MethodReturnDoc
-        method={method}
-        prefix={prefix}
-        alreadyRenderedClasses={alreadyRenderedClasses}
-      />
     </li>
   );
 }
