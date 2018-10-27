@@ -1,3 +1,5 @@
+/* global Rollbar */
+
 import EventCategory from '../EventAdmin/EventCategory';
 import EventRun from '../PCSG/EventRun';
 import ScheduleBlock from '../PCSG/ScheduleBlock';
@@ -48,11 +50,15 @@ export default class Schedule {
       const category = EventCategory.get(categoryKey);
       let groupName = 'regular';
 
-      if (category.isSingleRun()) {
+      if (!category && typeof Rollbar !== 'undefined') {
+        Rollbar.warn(`Unknown category ${categoryKey} for event ${event.id} (${event.title})`);
+      }
+
+      if (category && category.isSingleRun()) {
         groupName = 'singleRun';
       }
 
-      if (category.isRecurring()) {
+      if (category && category.isRecurring()) {
         groupName = 'recurring';
       }
 
