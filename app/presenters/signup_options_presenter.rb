@@ -21,6 +21,10 @@ class SignupOptionsPresenter
       "btn-outline-bucket-color-#{(index % 9) + 1}"
     end
 
+    def help_text
+      bucket.description
+    end
+
     def no_preference?
       false
     end
@@ -49,6 +53,10 @@ class SignupOptionsPresenter
 
     def bucket
       nil
+    end
+
+    def help_text
+      'Sign up for any of the limited-capacity buckets in this event'
     end
 
     def no_preference?
@@ -87,6 +95,10 @@ class SignupOptionsPresenter
       nil
     end
 
+    def help_text
+      "Register your intent to come to this event as a #{team_member_name}"
+    end
+
     def no_preference?
       false
     end
@@ -101,13 +113,14 @@ class SignupOptionsPresenter
   end
 
   class SignupOption
-    attr_reader :label, :params, :button_class, :bucket
+    attr_reader :label, :params, :button_class, :bucket, :help_text
 
-    def initialize(label: nil, params: nil, button_class: nil, bucket: nil)
+    def initialize(label: nil, params: nil, button_class: nil, bucket: nil, help_text: nil)
       @label = label
       @params = params
       @button_class = button_class
       @bucket = bucket
+      @help_text = help_text
     end
   end
 
@@ -180,7 +193,11 @@ class SignupOptionsPresenter
       non_anything_buckets_count = buckets.reject(&:anything?).size
       buckets.each_with_index.map do |bucket, index|
         next if bucket.anything?
-        BucketSignupOption.new(bucket, index, non_anything_buckets_count <= 1)
+        BucketSignupOption.new(
+          bucket,
+          index,
+          bucket.counted? && non_anything_buckets_count <= 1
+        )
       end.compact + no_preference_options
     end
   end

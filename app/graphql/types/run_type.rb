@@ -67,7 +67,7 @@ Types::RunType = GraphQL::ObjectType.define do
     guard ->(run, _args, ctx) do
       (
         ctx[:current_ability].can?(:read, Signup.new(run: run)) ||
-        ctx[:current_ability].can?(:signup_summary, Signup.new(run: run))
+        ctx[:current_ability].can?(:signup_summary, run)
       )
     end
 

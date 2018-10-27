@@ -37,6 +37,25 @@
   }
 }
 
+.schedule-grid-row-header {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  padding-right: 2px;
+  border-top: 2px rgba(0, 0, 0, .1) solid;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.schedule-grid-row-header-label {
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .event-category-filler {
   background-color: lighten(map-get($theme-colors, 'info'), 50%);
 

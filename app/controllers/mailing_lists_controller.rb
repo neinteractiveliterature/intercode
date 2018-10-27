@@ -1,6 +1,9 @@
 require 'mail'
+require 'csv'
 
 class MailingListsController < ApplicationController
+  include Concerns::SendCsv
+
   class ContactEmail
     def self.from_user_con_profiles(user_con_profiles)
       user_con_profiles.map { |user_con_profile| from_user_con_profile(user_con_profile) }
@@ -32,6 +35,39 @@ class MailingListsController < ApplicationController
     end
   end
 
+  class MailingListCsvPresenter
+    attr_reader :emails, :metadata_fields
+
+    def initialize(emails, metadata_fields)
+      @emails = emails
+      @metadata_fields = metadata_fields || []
+    end
+
+    def headers
+      [
+        'Email',
+        'Name',
+        *(metadata_fields.map { |field| field.to_s.humanize })
+      ]
+    end
+
+    def csv_enumerator
+      return to_enum(:csv_enumerator) unless block_given?
+
+      yield CSV.generate_line(headers)
+
+      emails.each do |email|
+        csv_data = [
+          email.email,
+          email.name,
+          *(metadata_fields.map { |field| email.metadata[field] })
+        ]
+
+        yield CSV.generate_line(csv_data)
+      end
+    end
+  end
+
   def index
     authorize! :mail_to_any, convention
   end
@@ -53,7 +89,7 @@ class MailingListsController < ApplicationController
     end
     @metadata_fields = [:title]
 
-    render action: 'single_mailing_list'
+    render_single_mailing_list('Event proposers')
   end
 
   def team_members
@@ -63,12 +99,12 @@ class MailingListsController < ApplicationController
       convention.events.active.includes(team_members: { user_con_profile: :user })
     )
     emails_by_event = events.map do |event|
-      if event.con_mail_destination == 'event_email'
+      if event.con_mail_destination == 'event_email' && event.email.present?
         [event, [ContactEmail.new(event.email, "#{event.title} Team", event: event.title)]]
       else
-        emails = event.team_members.map do |team_member|
+        emails = event.team_members.select(&:receive_con_email).map do |team_member|
           ContactEmail.new(
-            team_member.email,
+            team_member.user_con_profile.email,
             team_member.user_con_profile.name_without_nickname,
             event: event.title
           )
@@ -81,7 +117,7 @@ class MailingListsController < ApplicationController
     @emails = events.flat_map { |event| emails_by_event[event] }
     @metadata_fields = [:event]
 
-    render action: 'single_mailing_list'
+    render_single_mailing_list('Event team members')
   end
 
   def ticketed_attendees
@@ -92,7 +128,7 @@ class MailingListsController < ApplicationController
 
     @emails = ContactEmail.from_user_con_profiles(user_con_profiles)
 
-    render action: 'single_mailing_list'
+    render_single_mailing_list('All ticketed attendees')
   end
 
   def users_with_pending_bio
@@ -103,7 +139,7 @@ class MailingListsController < ApplicationController
     end
     @emails = ContactEmail.from_user_con_profiles(pending_bio_users.sort_by(&:name_inverted))
 
-    render action: 'single_mailing_list'
+    render_single_mailing_list('Users with pending bio')
   end
 
   def waitlists
@@ -144,5 +180,31 @@ class MailingListsController < ApplicationController
       .reject { |user_con_profile| busy_user_con_profile_ids.include?(user_con_profile.id) }
 
     @emails = ContactEmail.from_user_con_profiles(free_user_con_profiles)
+
+    respond_to do |format|
+      format.html {}
+      format.csv do
+        send_mailing_list_csv(@emails, [], "Who's free #{timespan.to_s(:short_weekday_with_time)}")
+      end
+    end
+  end
+
+  private
+
+  def render_single_mailing_list(basename)
+    respond_to do |format|
+      format.html do
+        render action: 'single_mailing_list'
+      end
+
+      format.csv do
+        send_mailing_list_csv(@emails, @metadata_fields, basename)
+      end
+    end
+  end
+
+  def send_mailing_list_csv(emails, metadata_fields, basename)
+    configure_csv_headers("#{basename} - #{convention.name}.csv")
+    self.response_body = MailingListCsvPresenter.new(emails, metadata_fields).csv_enumerator
   end
 end

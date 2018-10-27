@@ -35,6 +35,7 @@ class ScheduleGrid extends React.Component {
       buildLayoutForConventionDayTimespan: PropTypes.func.isRequired,
       getRun: PropTypes.func.isRequired,
       getEvent: PropTypes.func.isRequired,
+      shouldUseRowHeaders: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -101,8 +102,8 @@ class ScheduleGrid extends React.Component {
         const hourEventRuns = eventRuns.filter(eventRun => hourTimespan.overlapsTimespan(eventRun.timespan));
 
         const hourRunData = hourEventRuns.map((eventRun) => {
-          const run = this.runsById.get(eventRun.runId);
-          const event = this.eventsById.get(run.event_id);
+          const run = this.props.schedule.getRun(eventRun.runId);
+          const event = this.props.schedule.getEvent(run.event_id);
           return { eventRun, run, event };
         });
 
@@ -142,9 +143,9 @@ class ScheduleGrid extends React.Component {
           <div className="schedule-grid-hour-extended-counts">
             <div>
               {minimumSlots}
-/
+              /
               {preferredSlots}
-/
+              /
               {totalSlots}
             </div>
             <div>
@@ -155,7 +156,7 @@ class ScheduleGrid extends React.Component {
               <span className="text-danger">{waitlistedSignups}</span>
             </div>
             <div>
-Players:
+              Players:
               {playerCount}
             </div>
           </div>
@@ -163,7 +164,7 @@ Players:
       }
 
       hourDivs.push((
-        <div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
+        <div key={now.toISOString()} style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px`, overflow: 'hidden' }}>
           <div className="small text-muted ml-1">
             {formatTime(now, this.props.schedule.timezoneName)}
             {extendedCounts}
@@ -177,8 +178,7 @@ Players:
     return hourDivs;
   }
 
-  renderScheduleBlock(scheduleBlock, key, options = {}) {
-    const layoutResult = computeRunDimensionsWithoutSpanning(scheduleBlock);
+  renderScheduleBlock(scheduleBlock, layoutResult, key, options = {}) {
     const runDivs = this.renderEvents(layoutResult, options);
     const blockContentStyle = {
       position: 'relative',
@@ -195,18 +195,47 @@ Players:
     );
   }
 
-  renderGridWithLayout = (layout) => {
+  renderGridWithLayout = (layout, shouldUseRowHeaders) => {
     const { eventRuns, timespan, blocksWithOptions } = layout;
 
     const hourDivs = this.renderHours(timespan, eventRuns);
-    const scheduleBlockDivs = blocksWithOptions.map(([scheduleBlock, options], i) => (
-      this.renderScheduleBlock(scheduleBlock, i, options)
-    ));
+    const scheduleBlockDivs = blocksWithOptions.map(([scheduleBlock, options], i) => {
+      const layoutResult = computeRunDimensionsWithoutSpanning(scheduleBlock);
+
+      return (
+        <div className="d-flex">
+          {
+            shouldUseRowHeaders
+              ? (
+                <React.Fragment>
+                  <div
+                    className="schedule-grid-row-header"
+                    style={{
+                      width: `${PIXELS_PER_HOUR}px`,
+                      minWidth: `${PIXELS_PER_HOUR}px`,
+                      height: `${layoutResult.laneCount * PIXELS_PER_LANE + 5}px`,
+                    }}
+                  >
+                    <small className="schedule-grid-row-header-label">{options.rowHeader}</small>
+                  </div>
+                </React.Fragment>
+              )
+              : null
+          }
+          {this.renderScheduleBlock(scheduleBlock, layoutResult, i, options)}
+        </div>
+      );
+    });
 
     return (
       <div className="schedule-grid mb-4 bg-light" style={{ overflowX: 'auto' }}>
         <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
           <div className="mt-1 d-flex">
+            {
+              shouldUseRowHeaders
+                ? (<div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />)
+                : null
+            }
             {hourDivs}
           </div>
           {scheduleBlockDivs}
@@ -235,7 +264,10 @@ Players:
       return (
         <Route
           path={`/${timespan.start.format('dddd').toLowerCase()}`}
-          render={() => this.renderGridWithLayout(layout)}
+          render={() => this.renderGridWithLayout(
+            layout,
+            this.props.schedule.shouldUseRowHeaders(),
+          )}
           key={timespan.start.toISOString()}
         />
       );

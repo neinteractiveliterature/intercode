@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_20_012444) do
+ActiveRecord::Schema.define(version: 2018_10_25_162756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 2018_10_20_012444) do
     t.datetime "submitted_at"
     t.text "admin_notes"
     t.datetime "reminded_at"
+    t.text "team_mailing_list_name"
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
@@ -267,6 +268,12 @@ ActiveRecord::Schema.define(version: 2018_10_20_012444) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
+  create_table "oauth_openid_requests", force: :cascade do |t|
+    t.bigint "access_grant_id", null: false
+    t.string "nonce", null: false
+    t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
   end
 
   create_table "order_entries", force: :cascade do |t|
@@ -551,6 +558,7 @@ ActiveRecord::Schema.define(version: 2018_10_20_012444) do
   add_foreign_key "maximum_event_provided_tickets_overrides", "ticket_types"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id"
   add_foreign_key "order_entries", "orders"
   add_foreign_key "order_entries", "product_variants"
   add_foreign_key "order_entries", "products"

@@ -100,7 +100,7 @@ class Tables::TableResultsPresenter
   end
 
   def sql_order_for_sort_field(field_id, direction)
-    "#{field_id} #{direction}"
+    { field_id => direction }
   end
 
   def generate_csv_cell(_field, _model)

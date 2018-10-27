@@ -34,11 +34,15 @@ class RegistrationPolicy
   end
 
   def slots_unlimited?
-    buckets.any? { |bucket| bucket.slots_unlimited? && bucket.counted? }
+    buckets.any? { |bucket| bucket.slots_unlimited? && (bucket.counted? || only_uncounted?) }
   end
 
   def slots_limited?
     !slots_unlimited?
+  end
+
+  def only_uncounted?
+    buckets.none?(&:counted?)
   end
 
   def prevent_no_preference_signups
