@@ -1,6 +1,15 @@
 module Intercode
   module Liquid
     module Tags
+      # Renders a "Propose an event" button.  This will automatically render as a
+      # "Log in to propose" button if the user is not logged in.  The button text and the button
+      # CSS classes can be customized.
+      #
+      # @liquid_tag_name new_event_proposal_button
+      # @example Customizing the button text
+      #   {% new_event_proposal_button "Propose, right now!" %}
+      # @example Customizing the button text and the CSS class
+      #   {% new_event_proposal_button "Propose, or don't" btn-warning %}
       class NewEventProposalButton < RailsPartialRenderer
         attr_reader :button_text, :button_class
 

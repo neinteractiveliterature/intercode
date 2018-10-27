@@ -7,7 +7,10 @@ import {
 import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';
 import DocData from '../../../liquid_doc.json';
+import findLiquidTagName from './findLiquidTagName';
 import { LiquidAssignsQuery } from './queries.gql';
+import LiquidTagDoc from './LiquidTagDoc';
+import LiquidTagDocLink from './LiquidTagDocLink';
 import MethodDoc from './MethodDoc';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
@@ -22,6 +25,11 @@ function LiquidDocs({ basename }) {
         {({ data: { liquidAssigns } }) => {
           const sortedAssigns = sortByName(liquidAssigns);
           const sortedFilters = sortByName(DocData.filter_methods);
+          const sortedTags = sortByName(
+            DocData.classes.filter(
+              klass => klass.tags.some(tag => tag.tag_name === 'liquid_tag_name'),
+            ),
+          );
 
           return (
             <React.Fragment>
@@ -37,6 +45,15 @@ function LiquidDocs({ basename }) {
                       <AssignDoc assign={assign} />
                     )}
                     key={`route-${assign.name}`}
+                  />
+                ))}
+                {sortedTags.map(liquidTag => (
+                  <Route
+                    path={`/tags/${findLiquidTagName(liquidTag)}(\\..*)?`}
+                    render={() => (
+                      <LiquidTagDoc liquidTag={liquidTag} />
+                    )}
+                    key={`route-${liquidTag.name}`}
                   />
                 ))}
 
@@ -58,7 +75,7 @@ function LiquidDocs({ basename }) {
                       }
                     </section>
 
-                    <section>
+                    <section className="mb-4">
                       <h2 className="mb-2">Filters</h2>
                       <ul className="list-group">
                         {
@@ -72,6 +89,16 @@ function LiquidDocs({ basename }) {
                           ))
                         }
                       </ul>
+                    </section>
+
+                    <section>
+                      <h2 className="mb-2">Tags</h2>
+
+                      {
+                        sortedTags.map(liquidTag => (
+                          <LiquidTagDocLink compact liquidTag={liquidTag} key={liquidTag.name} />
+                        ))
+                      }
                     </section>
                   </React.Fragment>
                 </Route>

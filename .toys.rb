@@ -79,6 +79,8 @@ tool 'update_liquid_doc_json' do
     require 'json'
     require 'pry'
 
+    YARD::Tags::Library.define_tag('Liquid tag name', :liquid_tag_name)
+
     %w[app/liquid_drops/**/*.rb lib/intercode/liquid/**/*.rb].each do |path|
       YARD.parse(path)
     end
