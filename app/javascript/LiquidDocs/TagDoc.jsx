@@ -62,6 +62,20 @@ function TagDoc({ tag, method = null, prefix = null }) {
     }
   }
 
+  if (tag.tag_name === 'see') {
+    return (
+      <li>
+        <strong>See:</strong>
+        {' '}
+        {
+          tag.name
+            ? <a href={tag.name}>{tag.text}</a>
+            : tag.text
+        }
+      </li>
+    );
+  }
+
   return (
     <li>
       <strong>{humanize(tag.tag_name)}</strong>

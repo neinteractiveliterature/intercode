@@ -6,11 +6,13 @@ import {
 
 import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';
+import DocData from '../../../liquid_doc.json';
 import { LiquidAssignsQuery } from './queries.gql';
+import MethodDoc from './MethodDoc';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
-function sortAssigns(assigns) {
-  return [...assigns].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
+function sortByName(items) {
+  return [...items].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
 }
 
 function LiquidDocs({ basename }) {
@@ -18,7 +20,8 @@ function LiquidDocs({ basename }) {
     <BrowserRouter basename={basename}>
       <QueryWithStateDisplay query={LiquidAssignsQuery}>
         {({ data: { liquidAssigns } }) => {
-          const sortedAssigns = sortAssigns(liquidAssigns);
+          const sortedAssigns = sortByName(liquidAssigns);
+          const sortedFilters = sortByName(DocData.filter_methods);
 
           return (
             <React.Fragment>
@@ -45,7 +48,7 @@ function LiquidDocs({ basename }) {
                       </ol>
                     </nav>
 
-                    <section>
+                    <section className="mb-4">
                       <h2 className="mb-2">Assigns</h2>
 
                       {
@@ -53,6 +56,22 @@ function LiquidDocs({ basename }) {
                           <AssignDocLink compact assign={assign} key={assign.name} />
                         ))
                       }
+                    </section>
+
+                    <section>
+                      <h2 className="mb-2">Filters</h2>
+                      <ul className="list-group">
+                        {
+                          sortedFilters.map(filter => (
+                            <MethodDoc
+                              method={{
+                                ...filter,
+                                name: `input | ${filter.name}`,
+                              }}
+                            />
+                          ))
+                        }
+                      </ul>
                     </section>
                   </React.Fragment>
                 </Route>
