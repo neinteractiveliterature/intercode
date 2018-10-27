@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 
-function TagDoc({ tag }) {
+import AssignDocLink from './AssignDocLink';
+import findClass from './findClass';
+import findMethodReturnClass from './findMethodReturnClass';
+
+function TagDoc({ tag, method = null, prefix = null }) {
   if (tag.tag_name === 'example') {
     return (
       <li>
-        <div className="card mt-4">
-          <div className="card-header">
+        <div className="card mt-4 border-success">
+          <div className="card-header bg-success-light">
             {
               tag.name
                 ? (
@@ -27,6 +31,35 @@ function TagDoc({ tag }) {
         </div>
       </li>
     );
+  }
+
+  if (tag.tag_name === 'return') {
+    const { returnClassName, assignName } = findMethodReturnClass(method);
+    const returnClass = findClass(returnClassName);
+
+    if (returnClass) {
+      return (
+        <React.Fragment>
+          <p className="mb-1">
+            <strong>Return:</strong>
+            {' '}
+            <em>
+              {tag.types.join(', ')}
+            </em>
+          </p>
+          <div className="d-flex align-items-start">
+            <div className="h3 mr-1">
+              ↳
+            </div>
+            <AssignDocLink
+              assign={{ name: assignName, drop_class_name: returnClassName }}
+              compact
+              prefix={prefix}
+            />
+          </div>
+        </React.Fragment>
+      );
+    }
   }
 
   return (
@@ -69,6 +102,13 @@ TagDoc.propTypes = {
     types: PropTypes.arrayOf(PropTypes.string),
     text: PropTypes.string,
   }).isRequired,
+  method: PropTypes.shape({}),
+  prefix: PropTypes.string,
+};
+
+TagDoc.defaultProps = {
+  method: null,
+  prefix: null,
 };
 
 export default TagDoc;
