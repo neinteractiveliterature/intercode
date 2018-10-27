@@ -9,7 +9,7 @@ function AssignDocLink({
   assign, compact = false, prefix = null, preAssignNameContent = null,
 }) {
   return (
-    <Link to={`/assigns/${prefix || ''}${assign.name}`} className="card-link text-body">
+    <Link to={`/assigns/${prefix || ''}${assign.name}`} className="card-link m-0 text-body">
       <div className="card mb-2">
         <div className="card-header">
           {

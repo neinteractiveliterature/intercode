@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
 import buildMemberPrefix from './buildMemberPrefix';
@@ -16,55 +16,79 @@ function AssignDoc({ assign, prefix = null }) {
   }
 
   const sortedMethods = assignClass.methods.sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
+  const prefixParts = (prefix || '').split('.').filter(part => part.length > 0);
 
   return (
-    <Switch>
-      {
-        sortedMethods.map((method) => {
-          const { returnClassName, assignName } = findMethodReturnClass(method);
-          const returnClass = findClass(returnClassName);
+    <React.Fragment>
+      <Switch>
+        {
+          sortedMethods.map((method) => {
+            const { returnClassName, assignName } = findMethodReturnClass(method);
+            const returnClass = findClass(returnClassName);
 
-          if (returnClass) {
-            return (
-              <Route
-                path={`/assigns/${escapeRegExp(prefix || '')}${assign.name}\\.${escapeRegExp(assignName)}(\\..*)?`}
-                key={method.name}
-                render={() => (
-                  <AssignDoc
-                    assign={{ name: assignName, drop_class_name: returnClassName }}
-                    prefix={buildMemberPrefix(assign.name, prefix)}
-                  />
-                )}
-              />
-            );
-          }
-
-          return null;
-        })
-      }
-
-      <Route
-        path={`/assigns/${escapeRegExp(prefix || '')}${assign.name}`}
-        exact
-        render={() => (
-          <section id={assignClass.name} className="card my-4">
-            <div className="card-header">
-              <AssignDocHeader assign={assign} prefix={prefix} />
-            </div>
-
-            <ul className="list-group list-group-flush">
-              {sortedMethods.map(method => (
-                <MethodDoc
-                  method={method}
-                  prefix={buildMemberPrefix(assign.name, prefix)}
+            if (returnClass) {
+              return (
+                <Route
+                  path={`/assigns/${escapeRegExp(prefix || '')}${assign.name}\\.${escapeRegExp(assignName)}(\\..*)?`}
                   key={method.name}
+                  render={() => (
+                    <AssignDoc
+                      assign={{ name: assignName, drop_class_name: returnClassName }}
+                      prefix={buildMemberPrefix(assign.name, prefix)}
+                    />
+                  )}
                 />
-              ))}
-            </ul>
-          </section>
-        )}
-      />
-    </Switch>
+              );
+            }
+
+            return null;
+          })
+        }
+
+        <Route
+          path={`/assigns/${escapeRegExp(prefix || '')}${assign.name}`}
+          exact
+          render={() => (
+            <React.Fragment>
+              <nav aria-label="breadcrumb mb-4">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link to="/">Documentation home</Link>
+                  </li>
+                  {
+                    prefixParts.map((part, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <li className="breadcrumb-item text-nowrap" key={i}>
+                        <Link to={`/assigns/${prefixParts.slice(0, i + 1).join('.')}`}>
+                          {part}
+                        </Link>
+                      </li>
+                    ))
+                  }
+                  <li className="breadcrumb-item active" aria-current="page">{assign.name}</li>
+                </ol>
+              </nav>
+
+              <section id={assignClass.name} className="card my-4">
+                <div className="card-header">
+                  <AssignDocHeader assign={assign} prefix={prefix} />
+                </div>
+
+                <ul className="list-group list-group-flush">
+                  {sortedMethods.map(method => (
+                    <MethodDoc
+                      method={method}
+                      prefix={buildMemberPrefix(assign.name, prefix)}
+                      key={method.name}
+                    />
+                  ))}
+                </ul>
+              </section>
+            </React.Fragment>
+          )}
+        />
+      </Switch>
+    </React.Fragment>
   );
 }
 

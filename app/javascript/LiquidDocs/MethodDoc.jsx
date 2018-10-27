@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import AssignName from './AssignName';
 import TagDoc from './TagDoc';
 
 function MethodDoc({ method, prefix = null }) {
@@ -10,14 +11,11 @@ function MethodDoc({ method, prefix = null }) {
 
   return (
     <li key={method.name} className="list-group-item">
-      <h5>
-        <code>
-          {'{{ '}
-          {prefix}
-          {method.name}
-          {' }}'}
+      <p>
+        <code className="font-weight-bold">
+          <AssignName assign={method} prefix={prefix} />
         </code>
-      </h5>
+      </p>
 
       <p className="mb-0">
         {method.docstring}
