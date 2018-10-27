@@ -56,7 +56,7 @@ class EventEmailInput extends React.Component {
         } else {
           this.props.onChange({
             ...state,
-            team_mailing_list_name: false,
+            team_mailing_list_name: null,
           });
         }
       },

@@ -24,13 +24,10 @@ query {
 
 const ticketAbilityQuery = gql`
 query($ticketId: Int!) {
-  myProfile {
-    id
-    ability {
-      can_create_tickets
-      can_update_ticket(ticket_id: $ticketId)
-      can_delete_ticket(ticket_id: $ticketId)
-    }
+  currentAbility {
+    can_create_tickets
+    can_update_ticket(ticket_id: $ticketId)
+    can_delete_ticket(ticket_id: $ticketId)
   }
 }
 `;
@@ -71,9 +68,9 @@ class TicketAdminSection extends React.Component {
 
   renderTicketControls = (ticketAbilityData) => {
     const buttons = [];
-    const { ability } = ticketAbilityData.myProfile;
+    const { currentAbility } = ticketAbilityData;
 
-    if (this.props.userConProfile.ticket && ability.can_update_ticket) {
+    if (this.props.userConProfile.ticket && currentAbility.can_update_ticket) {
       buttons.push(
         <a href={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
           Edit
@@ -82,7 +79,7 @@ class TicketAdminSection extends React.Component {
         </a>,
       );
 
-      if (ability.can_delete_ticket) {
+      if (currentAbility.can_delete_ticket) {
         buttons.push(
           <Confirm.Trigger>
             {confirm => (
@@ -168,7 +165,7 @@ class TicketAdminSection extends React.Component {
           </Confirm.Trigger>,
         );
       }
-    } else if (ability.can_create_tickets) {
+    } else if (currentAbility.can_create_tickets) {
       buttons.push(
         <a href={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
           Create

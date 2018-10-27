@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
   # Make the user create their profile for this con if they haven't got one
   before_action :ensure_user_con_profile_exists, unless: :devise_controller?
 
+  # Working around an issue where if the CSRF token expires and the user hits the back button,
+  # they could have the wrong token in their browser cache
+  before_action :no_cache
+
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
   # logged in, or throw them back to the root URL with an error if they are.

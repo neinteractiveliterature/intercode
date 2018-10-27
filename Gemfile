@@ -23,8 +23,9 @@ gem 'with_advisory_lock'
 gem 'devise'
 gem 'cancancan'
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'doorkeeper', '5.0.1'
+gem 'doorkeeper', '5.0.2'
 gem 'devise-doorkeeper'
+gem 'doorkeeper-openid_connect'
 
 # Let's store sessions in the database, shall we?
 gem 'activerecord-session_store'
@@ -88,7 +89,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.6.12'
+gem 'oj', '~> 3.6.13'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

@@ -31,6 +31,12 @@ Types::AbilityType = GraphQL::ObjectType.define do
     end
   end
 
+  field :can_read_schedule, !types.Boolean do
+    resolve -> (obj, _args, ctx) do
+      obj.can?(:schedule, ctx[:convention])
+    end
+  end
+
   field :can_read_admin_notes_on_event_proposal, !types.Boolean do
     argument :event_proposal_id, !types.Int
     resolve -> (obj, args, _ctx) do

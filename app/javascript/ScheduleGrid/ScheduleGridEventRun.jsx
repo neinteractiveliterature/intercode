@@ -18,6 +18,31 @@ function userSignupStatus(run) {
   return null;
 }
 
+function runFull(event, run) {
+  return (
+    event.registration_policy.slots_limited
+    && run.confirmed_limited_signup_count === event.registration_policy.total_slots
+    && event.registration_policy.total_slots > 0
+  );
+}
+
+function describeAvailability(event, run) {
+  if (runFull(event, run)) {
+    return 'Full';
+  }
+
+  if (!event.registration_policy.slots_limited) {
+    return 'Unlimited slots';
+  }
+
+  if (event.registration_policy.total_slots === 0) {
+    return null;
+  }
+
+  const availableSlots = event.registration_policy.total_slots - run.confirmed_limited_signup_count;
+  return `${availableSlots}/${event.registration_policy.total_slots} slots available`;
+}
+
 class ScheduleGridEventRun extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
@@ -33,22 +58,6 @@ class ScheduleGridEventRun extends React.Component {
     className: null,
     config: defaultConfigProp,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      popoverVisible: false,
-    };
-  }
-
-  showPopover = () => {
-    this.setState({ popoverVisible: true });
-  }
-
-  hidePopover = () => {
-    this.setState({ popoverVisible: false });
-  }
 
   renderAvailabilityBar = () => {
     const { event, run } = this.props;
@@ -124,11 +133,9 @@ class ScheduleGridEventRun extends React.Component {
     };
 
     const signupStatus = userSignupStatus(run);
-    const eventFull = (
-      event.registration_policy.slots_limited
-      && run.confirmed_limited_signup_count === event.registration_policy.total_slots
-    );
     const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
+    const availabilityDescription = describeAvailability(event, run);
+    const roomsDescription = run.rooms.map(room => room.name).sort().join(', ');
 
     const eventRunClasses = classNames(
       className,
@@ -136,7 +143,7 @@ class ScheduleGridEventRun extends React.Component {
       'small',
       {
         'signed-up': this.props.config.showSignedUp && signupStatus != null,
-        full: eventFull && signupStatus == null,
+        full: runFull(event, run) && signupStatus == null,
       },
     );
 
@@ -214,14 +221,32 @@ class ScheduleGridEventRun extends React.Component {
                     </div>
                   </div>
                   <div className="popover-body">
-                    <ul className="list-unstyled mb-2">
-                      <li>
-                        {timespan.humanizeInTimezone(convention.timezone_name)}
-                      </li>
-                      <li>
-                        {run.rooms.map(room => room.name).sort().join(', ')}
-                      </li>
-                    </ul>
+                    <table className="mb-2">
+                      <tr>
+                        <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
+                        <td>{timespan.humanizeInTimezone(convention.timezone_name)}</td>
+                      </tr>
+                      {
+                        roomsDescription
+                          ? (
+                            <tr>
+                              <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
+                              <td>{roomsDescription}</td>
+                            </tr>
+                          )
+                          : null
+                      }
+                      {
+                        availabilityDescription
+                          ? (
+                            <tr>
+                              <td className="text-center pr-1"><i className="fa fa-users" /></td>
+                              <td>{availabilityDescription}</td>
+                            </tr>
+                          )
+                          : null
+                      }
+                    </table>
 
                     <a href={event.event_page_url} className="btn btn-primary btn-sm mb-2">
                       Go to event &raquo;
