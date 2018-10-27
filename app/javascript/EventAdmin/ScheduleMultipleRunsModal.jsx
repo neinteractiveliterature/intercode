@@ -121,6 +121,7 @@ class ScheduleMultipleRunsModal extends React.Component {
           store.writeQuery({ query: eventsQuery, data: eventsData });
         },
       });
+      this.setState({ mutationInProgress: false });
       this.props.onFinish();
     } catch (error) {
       this.setState({ error, mutationInProgress: false });
