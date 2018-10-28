@@ -74,6 +74,17 @@ function AssignDoc({ assign, prefix = null }) {
                   <AssignDocHeader assign={assign} prefix={prefix} />
                 </div>
 
+                {
+                  assign.cms_variable_value_json
+                    ? (
+                      <div className="card-body">
+                        <h4>Value</h4>
+                        <code>{assign.cms_variable_value_json}</code>
+                      </div>
+                    )
+                    : null
+                }
+
                 <ul className="list-group list-group-flush">
                   {sortedMethods.map(method => (
                     <MethodDoc

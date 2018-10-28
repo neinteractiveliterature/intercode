@@ -3234,6 +3234,31 @@
           ]
         }
       ]
+    },
+    {
+      "name": "CmsVariable",
+      "superclasses": [
+        "CmsVariable",
+        "ApplicationRecord"
+      ],
+      "docstring": "A convention-specific variable.  To set the values of these variables, go to Admin -> Site\nContent -> Variables.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "to_liquid",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
     }
   ],
   "filter_methods": [

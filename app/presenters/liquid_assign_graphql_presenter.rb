@@ -13,6 +13,14 @@ class LiquidAssignGraphqlPresenter
   end
 
   def drop_class_name
-    assign.to_liquid.class.name
+    case assign
+    when CmsVariable then 'CmsVariable'
+    else assign.to_liquid.class.name
+    end
+  end
+
+  def cms_variable_value_json
+    return unless assign.is_a?(CmsVariable)
+    JSON.dump(assign.value)
   end
 end

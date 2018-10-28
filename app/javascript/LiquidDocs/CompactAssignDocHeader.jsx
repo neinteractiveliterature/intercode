@@ -16,11 +16,27 @@ function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = 
         </code>
         <br />
         <strong>
-          {assignClass.name}
+          {(assignClass || {}).name || assign.drop_class_name}
         </strong>
+        {
+          assign.cms_variable_value_json
+            ? (
+              <React.Fragment>
+                <br />
+                <strong>
+                  Value:
+                  {' '}
+                </strong>
+                <code>
+                  {assign.cms_variable_value_json}
+                </code>
+              </React.Fragment>
+            )
+            : null
+        }
       </div>
       {
-        assignClass.docstring
+        (assignClass || {}).docstring
           ? <p className="mt-2 mb-0">{assignClass.docstring}</p>
           : null
       }
