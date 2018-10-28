@@ -10,6 +10,9 @@
 import 'custom-event-polyfill';
 import 'url-search-params-polyfill';
 
+// eslint-disable-next-line import/order
+import '../displayBrowserWarning';
+
 import ClipboardJS from 'clipboard';
 import Rails from 'rails-ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
