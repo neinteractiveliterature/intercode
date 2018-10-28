@@ -1,16 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
-import defaultCodeMirrorOptions from '../defaultCodeMirrorOptions';
+
+import LiquidInput from '../BuiltInFormControls/LiquidInput';
 
 class LiquidHTMLEditor extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     initialContent: PropTypes.string,
+    lines: PropTypes.number,
+    codeMirrorOptions: PropTypes.shape({}),
   }
 
   static defaultProps = {
     initialContent: '',
+    lines: 10,
+    codeMirrorOptions: {},
   }
 
   constructor(props) {
@@ -21,23 +25,32 @@ class LiquidHTMLEditor extends React.Component {
     };
   }
 
-  contentDidChange = (editor, data, value) => {
+  contentDidChange = (value) => {
     this.setState({ content: value });
   }
 
-  render = () => (
-    <div className="border p-0 cms-editor">
-      <input type="hidden" name={this.props.name} value={this.state.content} />
-      <CodeMirror
-        value={this.props.initialContent}
-        options={{
-          ...defaultCodeMirrorOptions,
-          mode: 'liquid-html',
-        }}
-        onChange={this.contentDidChange}
-      />
-    </div>
-  )
+  render = () => {
+    const {
+      name, initialContent, codeMirrorOptions, ...otherProps
+    } = this.props;
+
+    return (
+      <React.Fragment>
+        <input type="hidden" name={this.props.name} value={this.state.content} />
+        <LiquidInput
+          value={this.state.content}
+          onChange={this.contentDidChange}
+          getPreviewContent={() => this.state.content}
+          codeMirrorOptions={{
+            lineNumbers: true,
+            ...(codeMirrorOptions || {}),
+          }}
+          editorWrapperClassName="p-0"
+          {...otherProps}
+        />
+      </React.Fragment>
+    );
+  };
 }
 
 export default LiquidHTMLEditor;
