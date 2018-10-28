@@ -31,6 +31,7 @@ admin_notes: This is the root page of the website
     <section class="my-4">
       <h3>Convention News</h3>
       {% include '0-news' %}
+      <a href="{% page_url news %}">All News</a>
     </section>
     {% unless convention.maximum_event_signups.current_value == 'not_yet' %}
       {% include 'runs_with_openings' %}

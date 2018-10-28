@@ -1,29 +1,40 @@
 ---
 name: user_signups
+admin_notes: ''
 ---
 {% assign signups = user_con_profile.signups | sort: "starts_at" %}
 
 {% if signups.size > 0 %}
   <section class="card bg-info text-white my-4">
-    <div class="card-header">My Schedule</div>
-
+    <div class="card-header">My Schedule
+      <div class="float-right">
+          <a  class="btn btn-outline-light" target="_blank" href="https://calendar.google.com/calendar/r?cid={{user_con_profile.schedule_calendar_url | url_encode}}" title='Add to Google Calendar' data-toggle="tooltip" data-placement="top"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+      </div>
+      </div>
     <ul class="list-group list-group-flush text-dark">
       {% for signup in signups %}
         <li class="list-group-item d-flex align-items-baseline">
-          <div style="width: 11em">
-            {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}
-          </div>
           <div class="col">
-            <a href="{{ signup.event_url }}">{{ signup.event.title }}</a>
-            {% if signup.state != 'confirmed' %}
-              [{{ signup.state | capitalize }}]
-            {% endif %}
-            {% if signup.team_member? %}
-              [{{ signup.event.team_member_name }}]
-            {% endif %}
+            <div class="row">
+              {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}: 
+              {{ signup.run.room_names | join: ', ' }}
+            </div>
+            <div class="row">
+              <strong>
+                <a href="{{ signup.event_url }}">{{ signup.event.title }} </a>
+              </strong>
+              {% if signup.state != 'confirmed' %}
+                [{{ signup.state | capitalize }}]
+              {% endif %}
+              {% if signup.team_member? %}
+                [{{ signup.event.team_member_name }}]
+              {% elsif signup.bucket.name %}
+                [{{ signup.bucket.name }}]
+              {% endif %}
+            </div>
           </div>
 
-          <div>
+          <div class="align-middle">
             <a class="btn btn-sm btn-outline-danger" href="{{ signup.withdraw_url }}" data-method="DELETE" data-confirm="Are you sure you want to withdraw from {{ signup.event.title }}?">Withdraw</a>
           </div>
         </li>
