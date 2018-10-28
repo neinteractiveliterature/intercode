@@ -13,11 +13,8 @@ import { userConProfileAdminQuery } from './queries';
 
 const noTicketAbilityQuery = gql`
 query {
-  myProfile {
-    id
-    ability {
-      can_create_tickets
-    }
+  currentAbility {
+    can_create_tickets
   }
 }
 `;
