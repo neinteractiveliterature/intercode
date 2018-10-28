@@ -34,7 +34,10 @@ class ExportCmsContentSetService < CivilService::Service
           convention.cms_navigation_items.root.order(:position)
         ),
         'root_page_slug' => convention.root_page&.slug,
-        'default_layout_name' => convention.default_layout&.name
+        'default_layout_name' => convention.default_layout&.name,
+        'variables' => serialize_variables(
+          convention.cms_variables.order(:key)
+        )
       }.compact
 
       f.write(YAML.dump(metadata))
@@ -74,13 +77,14 @@ class ExportCmsContentSetService < CivilService::Service
   end
 
   def write_template_content(model, frontmatter_attrs, path)
+    FileUtils.mkdir_p(File.dirname(path))
     File.open(path, 'w') do |f|
       if frontmatter_attrs.present?
         f.write(YAML.dump(frontmatter_attrs))
         f.write("---\n")
       end
 
-      f.write(model.content)
+      f.write(model.content.gsub("\r\n", "\n"))
     end
   end
 
@@ -119,6 +123,12 @@ class ExportCmsContentSetService < CivilService::Service
           item.navigation_links.order(:position)
         ).presence
       }.compact
+    end
+  end
+
+  def serialize_variables(variables)
+    variables.each_with_object({}) do |variable, hash|
+      hash[variable.key] = variable.value
     end
   end
 
