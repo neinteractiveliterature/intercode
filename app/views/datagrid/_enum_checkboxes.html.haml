@@ -1,6 +1,0 @@
-= form.form_group filter.name, label: { } do
-  %ul.list-inline
-    - elements.each do |value, text, checked|
-      - id = [form.object_name, filter.name, value].join('_').underscore
-      %li.list-inline-item
-        = form.check_box(filter.name, { :multiple => true, :id => id, :checked => checked, :include_hidden => false, :label => text }, value.to_s, nil)
