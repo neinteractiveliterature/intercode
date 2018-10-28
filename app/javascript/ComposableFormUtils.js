@@ -57,7 +57,11 @@ export function convertDatetimeValue(value, timezoneName = null) {
 }
 
 function namedFunction(func, name) {
-  Object.defineProperty(func, 'name', { value: name });
+  try {
+    Object.defineProperty(func, 'name', { value: name });
+  } catch (error) {
+    // fall back to just not naming the function if the browser doesn't support it (e.g. Safari 9)
+  }
   return func;
 }
 
