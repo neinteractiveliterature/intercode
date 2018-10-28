@@ -19,7 +19,7 @@ admin_notes: ''
     <div class="alert alert-warning" role="alert">
       <p>You do not have a {{convention.ticket_name}} for {{convention.name}}.  You will not be able to sign up for games until you have purchased a {{convention.ticket_name}}.</p>
       <p>{% include 'signup_text'%}</p>
-      <p class='mb-0'><a class="alert-link" href=/ticket/new>Purchase your {{convention.ticket_name}} now!</a></p>
+      <p class='mb-0'><a class="btn btn-warning" href="/ticket/new">Purchase your {{convention.ticket_name}} now!</a></p>
     </div>
   {% endif %}
 {% endif %}

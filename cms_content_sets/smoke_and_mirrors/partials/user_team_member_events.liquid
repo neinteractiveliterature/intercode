@@ -1,11 +1,12 @@
 ---
 name: user_team_member_events
+admin_notes: ''
 ---
 {% assign team_member_events = user_con_profile.team_member_events %}
 
 {% if team_member_events.size > 0 %}
   <section class="card bg-info text-white my-4">
-    <div class="card-header">Games I'm a GM For</div>
+    <div class="card-header">Events I'm Running</div>
 
     <ul class="list-group list-group-flush text-dark">
       {% for event in team_member_events %}
@@ -14,7 +15,7 @@ name: user_team_member_events
             <a href="{{ event.url }}">{{ event.title }}</a>
           </div>
           <div>
-            <a href="{{ event.edit_url }}" class="btn btn-secondary btn-sm">
+            <a href="{{ event.url }}/edit" class="btn btn-secondary btn-sm">
               Edit
             </a>
           </div>
