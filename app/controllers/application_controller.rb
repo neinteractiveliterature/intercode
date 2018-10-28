@@ -102,7 +102,11 @@ class ApplicationController < ActionController::Base
   # These variables will automatically be made available to Cadmus CMS content.  For
   # example, you'll be able to do {{ user.name }} in a page template.
   def liquid_assigns
-    { 'user' => current_user, 'convention' => convention, 'user_con_profile' => user_con_profile }
+    cms_variables.merge(
+      'user' => current_user,
+      'convention' => convention,
+      'user_con_profile' => user_con_profile
+    )
   end
 
   # These variables aren't available from Cadmus CMS templates, but are available to
@@ -115,6 +119,13 @@ class ApplicationController < ActionController::Base
       :cached_files => @cached_files,
       :file_system => Cadmus::PartialFileSystem.new(convention)
     )
+  end
+
+  def cms_variables
+    return {} unless convention
+    convention.cms_variables.each_with_object({}) do |cms_variable, hash|
+      hash[cms_variable.key.to_s] = cms_variable
+    end
   end
 
   # Devise is going to do some operations in its controllers that require writing to a
