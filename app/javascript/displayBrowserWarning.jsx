@@ -8,6 +8,7 @@ import { detect } from 'detect-browser';
 
 const BROWSER_NAMES = {
   chrome: 'Google Chrome',
+  crios: 'Google Chrome on iOS',
   firefox: 'Mozilla Firefox',
   edge: 'Microsoft Edge',
   ie: 'Microsoft Internet Explorer',
@@ -22,6 +23,7 @@ const BROWSER_NAMES = {
 // modernity in a browser
 const MIN_SUPPORTED_VERSION = {
   chrome: 57,
+  crios: 11,
   firefox: 52,
   safari: 11,
   ios: 11,
@@ -75,6 +77,13 @@ function renderRecommendation(browser) {
     case 'ios-webview':
       return (
         <p className="text-left">To get the latest Safari, update to the latest version of iOS.</p>
+      );
+    case 'crios':
+      return (
+        <p className="text-left">
+          Chrome for iOS uses the Safari engine, which ships with iOS itself.  To update it,
+          update your device to the latest version of iOS.
+        </p>
       );
     case 'edge':
       return (
@@ -168,9 +177,22 @@ function displayBrowserWarning() {
     return;
   }
 
-  const browser = detect() || {};
+  let browser = detect() || {};
   if (browser.bot) {
     return;
+  }
+
+  if (browser.name === 'crios') {
+    // special handling for Chrome for iOS, which is actually just a UIWebView
+
+    const match = navigator.userAgent.match(/iPhone OS (\d+)/);
+    if (match) {
+      const iosVersion = Number.parseInt(match[1], 10);
+      browser = {
+        name: 'crios',
+        version: iosVersion.toString(),
+      };
+    }
   }
 
   if (SUPPORTED_BROWSERS.includes(browser.name)) {
@@ -186,4 +208,8 @@ function displayBrowserWarning() {
   ReactDOM.render(<BrowserWarning browser={browser} />, warningDiv);
 }
 
-displayBrowserWarning();
+try {
+  displayBrowserWarning();
+} catch (error) {
+  // welp
+}
