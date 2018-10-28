@@ -33,10 +33,6 @@ function LiquidDocs({ basename }) {
 
           return (
             <React.Fragment>
-              <header className="mb-4">
-                <h1>Liquid documentation</h1>
-              </header>
-
               <Switch>
                 {sortedAssigns.map(assign => (
                   <Route

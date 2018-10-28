@@ -9,23 +9,83 @@ query($liquid: String!) {
 }
 `;
 
-const LiquidInput = props => (
-  <ApolloConsumer>
-    {client => (
-      <CodeInput
-        {...props}
-        mode="liquid-html"
-        getPreviewContent={async (liquid) => {
-          const response = await client.query({
-            query: previewLiquidQuery,
-            variables: { liquid },
-          });
+class LiquidInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showingDocs: false,
+    };
+  }
 
-          return response.data.previewLiquid;
-        }}
-      />
-    )}
-  </ApolloConsumer>
-);
+  renderDocs = () => {
+    if (!this.state.showingDocs) {
+      return null;
+    }
+
+    return (
+      <React.Fragment>
+        <div className="liquid-docs-browser d-flex flex-column align-items-stretch">
+          <header className="bg-light border-top border-color-dark d-flex align-items-center">
+            <div className="font-weight-bold text-dark flex-grow-1 ml-2 pt-1">
+              Liquid documentation
+            </div>
+            <div>
+              <button
+                type="button"
+                className="btn btn-link btn-sm mr-3 text-dark"
+                style={{ cursor: 'pointer' }}
+                onClick={() => { this.setState({ showingDocs: false }); }}
+              >
+                <i className="fa fa-close" title="Close" />
+              </button>
+            </div>
+          </header>
+          <iframe
+            src="/liquid_docs"
+            title="Liquid documentation"
+            className="flex-grow-1 border-0"
+          />
+        </div>
+        <div className="liquid-docs-spacer" />
+      </React.Fragment>
+    );
+  }
+
+  render = () => (
+    <ApolloConsumer>
+      {client => (
+        <CodeInput
+          {...this.props}
+          mode="liquid-html"
+          getPreviewContent={async (liquid) => {
+            const response = await client.query({
+              query: previewLiquidQuery,
+              variables: { liquid },
+            });
+
+            return response.data.previewLiquid;
+          }}
+          extraNavControls={(
+            <li className="flex-grow-1 text-right">
+              <div className="nav-item">
+                <a
+                  href="#"
+                  className="nav-link py-0 px-2"
+                  onClick={(e) => { e.preventDefault(); this.setState({ showingDocs: true }); }}
+                >
+                  <i className="fa fa-question-circle" />
+                  {' '}
+                  Help
+                </a>
+              </div>
+            </li>
+          )}
+        >
+          {this.renderDocs()}
+        </CodeInput>
+      )}
+    </ApolloConsumer>
+  )
+}
 
 export default LiquidInput;
