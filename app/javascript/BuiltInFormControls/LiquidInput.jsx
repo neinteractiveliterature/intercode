@@ -25,14 +25,14 @@ class LiquidInput extends React.Component {
     return (
       <React.Fragment>
         <div className="liquid-docs-browser d-flex flex-column align-items-stretch">
-          <header className="bg-light border-top border-color-dark d-flex align-items-center">
-            <div className="font-weight-bold text-dark flex-grow-1 ml-2 pt-1">
-              Liquid documentation
+          <header className="bg-dark border-top border-color-light d-flex align-items-center">
+            <div className="font-weight-bold text-white flex-grow-1 ml-2 pt-1 text-center">
+              Liquid markup documentation
             </div>
             <div>
               <button
                 type="button"
-                className="btn btn-link btn-sm mr-3 text-dark"
+                className="btn btn-link btn-sm mr-3 text-white"
                 style={{ cursor: 'pointer' }}
                 onClick={() => { this.setState({ showingDocs: false }); }}
               >
@@ -42,7 +42,7 @@ class LiquidInput extends React.Component {
           </header>
           <iframe
             src="/liquid_docs"
-            title="Liquid documentation"
+            title="Liquid markup documentation"
             className="flex-grow-1 border-0"
           />
         </div>

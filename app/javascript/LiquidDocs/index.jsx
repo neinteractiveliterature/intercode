@@ -8,10 +8,11 @@ import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';
 import DocData from '../../../liquid_doc.json';
 import findLiquidTagName from './findLiquidTagName';
+import FilterDoc from './FilterDoc';
+import FilterDocLink from './FilterDocLink';
 import { LiquidAssignsQuery } from './queries.gql';
 import LiquidTagDoc from './LiquidTagDoc';
 import LiquidTagDocLink from './LiquidTagDocLink';
-import MethodDoc from './MethodDoc';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
 function sortByName(items) {
@@ -41,6 +42,15 @@ function LiquidDocs({ basename }) {
                       <AssignDoc assign={assign} />
                     )}
                     key={`route-${assign.name}`}
+                  />
+                ))}
+                {sortedFilters.map(filter => (
+                  <Route
+                    path={`/filters/${filter.name}(\\..*)?`}
+                    render={() => (
+                      <FilterDoc filter={filter} />
+                    )}
+                    key={`route-${filter.name}`}
                   />
                 ))}
                 {sortedTags.map(liquidTag => (
@@ -76,12 +86,7 @@ function LiquidDocs({ basename }) {
                       <ul className="list-group">
                         {
                           sortedFilters.map(filter => (
-                            <MethodDoc
-                              method={{
-                                ...filter,
-                                name: `input | ${filter.name}`,
-                              }}
-                            />
+                            <FilterDocLink compact filter={filter} key={filter.name} />
                           ))
                         }
                       </ul>
