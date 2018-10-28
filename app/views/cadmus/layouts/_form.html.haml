@@ -16,6 +16,6 @@
 
 .form-group
   = f.label :content
-  = react_component 'LiquidHTMLEditor', name: 'cms_layout[content]', initialContent: f.object.content
+  = app_component 'LiquidHTMLEditor', name: 'cms_layout[content]', initialContent: f.object.content
 
 = f.submit 'Save changes', class: 'btn btn-primary'
