@@ -1,0 +1,52 @@
+---
+name: Forum@Intercon
+admin_notes: ''
+---
+<h1 class="my-3">Forum@Intercon</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <p>Forum@Intercon is a collection of programming, including workshops, moderated discussions, presentations, and panel discussions.  These sessions typically happen on Thursday night and during the day on Friday.</p>
+
+    <p>Forum@Intercon was previously known by many names, including "panels," "precon," and "Thursday Thing."</p>
+
+    <section class="mt-4">
+      <h3>Session schedule</h3>
+    
+      <p>The session schedule is now available!  You can see the sessions on the <a href="/events/schedule">main convention schedule</a> (they're the pink events at the top of the grid).  If you want to see a full listing of just the Forum@Intercon sessions, <a href="/events/?filters.category=moderated_discussion%2Cpresentation%2Cworkshop%2Cpanel">go here</a>.</p>
+      
+      <p>There are still some sessions that have been proposed but aren't yet added to the schedule, and we're still gladly accepting session proposals!</p>
+    </section>
+
+<section class="mt-4">    
+      <h3>I'd like to lead a session at Forum@Intercon!</h3>
+
+      <p>Great!  Please <a href="{% page_url forum/propose %}">fill out the proposal form</a>.  If you have more than one session you're interested in leading, you'll need to fill out the form multiple times (similar to how larp proposals work).</p>
+
+      <p>Once you've filled out the form, we'll get back to you via email to let you know we've received it and give you some information on what you can expect.</p>
+    </section>
+    
+  </div>
+  
+  <div class="col-md-4">
+    <div class="mb-4 d-flex flex-column justify-content-stretch">
+      <a href="{% page_url forum/propose %}" class="btn btn-primary btn-lg mb-2">Propose a session</a>
+      <a href="/events/?filters.category=moderated_discussion%2Cpresentation%2Cworkshop%2Cpanel" class="btn btn-outline-primary btn-lg">List of sessions</a>
+    </div>
+    <div class="card bg-light">
+      <div class="card-header">Contact information</div>
+      <div class="card-body">
+        {% assign staff_position = convention.staff_positions_by_name.forum_intercon_coordinators %}
+        
+        <strong>{{ staff_position.name }}</strong>
+        <ul class="list-unstyled">
+          {% for user_con_profile in staff_position.user_con_profiles %}
+            <li>{{ user_con_profile.name_without_nickname }}</li>
+          {% endfor %}
+        </ul>
+        
+        <p class="mb-0">{{ staff_position.email | email_link }}</p>
+      </div>
+    </div>
+  </div>
+</div>

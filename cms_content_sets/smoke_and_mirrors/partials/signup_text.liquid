@@ -3,7 +3,14 @@ name: signup_text
 admin_notes: ''
 ---
 {% assign next_val = convention.maximum_event_signups.next_value | plus: 0 %}
+{% if convention.maximum_event_signups.next_value == 'unlimited' %}
+  {% assign next_val = 'unlimited' %}
+{% endif %}
 {% assign current_val = convention.maximum_event_signups.current_value | plus: 0 %}
+{% if convention.maximum_event_signups.current_value == 'unlimited' %}
+  {% assign current_val = 'unlimited' %}
+{% endif %}
+
 {% assign show_next = false %}
 {% if next_val and convention.maximum_event_signups.current_value != 'unlimited' %}
   {% assign show_next = true %}

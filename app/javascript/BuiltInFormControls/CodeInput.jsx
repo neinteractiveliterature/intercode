@@ -17,6 +17,9 @@ class CodeInput extends React.Component {
     formControlClassName: PropTypes.string,
     lines: PropTypes.number,
     children: PropTypes.node,
+    codeMirrorOptions: PropTypes.shape({}),
+    editorWrapperClassName: PropTypes.string,
+    extraNavControls: PropTypes.node,
   }
 
   static defaultProps = {
@@ -25,6 +28,9 @@ class CodeInput extends React.Component {
     lines: null,
     children: null,
     onBlur: null,
+    codeMirrorOptions: {},
+    editorWrapperClassName: null,
+    extraNavControls: null,
   };
 
   constructor(props) {
@@ -94,6 +100,7 @@ class CodeInput extends React.Component {
           foldGutter: false,
           gutters: [],
           mode: this.props.mode,
+          ...(this.props.codeMirrorOptions || {}),
         }}
         {...eventHandlers}
         onBeforeChange={this.onBeforeChange}
@@ -129,8 +136,9 @@ class CodeInput extends React.Component {
               Preview
             </a>
           </li>
+          {this.props.extraNavControls}
         </ul>
-        <div className="form-control border-0">
+        <div className={classNames('form-control border-0', this.props.editorWrapperClassName)}>
           {this.renderContent()}
         </div>
       </div>

@@ -85,6 +85,7 @@ Intercode::Application.routes.draw do
       end
     end
     resources :cms_layouts
+    resources :cms_variables, only: [:index]
 
     resource :my_profile do
       member do
@@ -125,6 +126,7 @@ Intercode::Application.routes.draw do
     resources :admin_forms
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
+    get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
   end
 
   # the following routes apply only when we're not in a virtual host

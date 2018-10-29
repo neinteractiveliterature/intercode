@@ -43,3 +43,66 @@ tool 'cleanup_branches' do
     sh 'git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d'
   end
 end
+
+tool 'update_liquid_doc_json' do
+  desc 'Generate a new liquid_doc.json by introspecting the Liquid code'
+
+  def serialize_class(klass)
+    {
+      name: klass.path,
+      superclasses: klass.inheritance_tree.map(&:path),
+      docstring: klass.docstring,
+      tags: klass.tags.map { |tag| serialize_tag(tag) },
+      methods: klass.meths.map { |meth| serialize_method(meth) }
+    }
+  end
+
+  def serialize_method(meth)
+    {
+      name: meth.name,
+      docstring: meth.docstring,
+      tags: meth.tags.map { |tag| serialize_tag(tag) }
+    }
+  end
+
+  def serialize_tag(tag)
+    {
+      tag_name: tag.tag_name,
+      name: tag.name,
+      text: tag.text,
+      types: tag.types
+    }
+  end
+
+  def serialize_registry
+    classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
+    filters_module = YARD::Registry.all.find do |obj|
+      obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == 'Intercode::Liquid::Filters'
+    end
+
+    {
+      classes: classes.map { |klass| serialize_class(klass) },
+      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
+    }
+  end
+
+  def run
+    require 'yard'
+    require 'json'
+    require 'pry'
+
+    YARD::Tags::Library.define_tag('Liquid tag name', :liquid_tag_name)
+
+    %w[
+      app/liquid_drops/**/*.rb
+      lib/intercode/liquid/**/*.rb
+      app/models/cms_variable.rb
+    ].each do |path|
+      YARD.parse(path)
+    end
+
+    File.open('liquid_doc.json', 'w') do |file|
+      file.write(JSON.pretty_generate(serialize_registry))
+    end
+  end
+end

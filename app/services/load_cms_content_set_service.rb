@@ -31,6 +31,7 @@ class LoadCmsContentSetService < CivilService::Service
     load_form_content
     load_navigation_items
     load_files
+    load_variables
     set_default_layout
     set_root_page
 
@@ -81,6 +82,13 @@ class LoadCmsContentSetService < CivilService::Service
       root_item = convention.cms_navigation_items.new(position: i + 1)
       populate_navigation_item(root_item, navigation_item)
       root_item.save!
+    end
+  end
+
+  def load_variables
+    return unless content_set.metadata[:variables]
+    content_set.metadata[:variables].each do |key, value|
+      convention.cms_variables.create!(key: key, value: value)
     end
   end
 

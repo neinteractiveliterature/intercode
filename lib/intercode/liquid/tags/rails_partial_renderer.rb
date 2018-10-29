@@ -1,6 +1,7 @@
 module Intercode
   module Liquid
     module Tags
+      # @api
       class RailsPartialRenderer < ::Liquid::Tag
         def render(context)
           context.registers['controller'].render_to_string(

@@ -30,11 +30,10 @@ class ExportCmsContentSetService < CivilService::Service
     File.open(File.expand_path('metadata.yml', content_set.root_path), 'w') do |f|
       metadata = {
         'inherit' => inherit,
-        'navigation_items' => serialize_navigation_items(
-          convention.cms_navigation_items.root.order(:position)
-        ),
+        'navigation_items' => serialize_root_navigation_items,
         'root_page_slug' => convention.root_page&.slug,
-        'default_layout_name' => convention.default_layout&.name
+        'default_layout_name' => convention.default_layout&.name,
+        'variables' => serialize_variables
       }.compact
 
       f.write(YAML.dump(metadata))
@@ -74,13 +73,14 @@ class ExportCmsContentSetService < CivilService::Service
   end
 
   def write_template_content(model, frontmatter_attrs, path)
+    FileUtils.mkdir_p(File.dirname(path))
     File.open(path, 'w') do |f|
       if frontmatter_attrs.present?
         f.write(YAML.dump(frontmatter_attrs))
         f.write("---\n")
       end
 
-      f.write(model.content)
+      f.write(model.content.gsub("\r\n", "\n"))
     end
   end
 
@@ -109,6 +109,10 @@ class ExportCmsContentSetService < CivilService::Service
     end
   end
 
+  def serialize_root_navigation_items
+    serialize_navigation_items(convention.cms_navigation_items.root.order(:position))
+  end
+
   def serialize_navigation_items(items)
     items.map do |item|
       {
@@ -119,6 +123,12 @@ class ExportCmsContentSetService < CivilService::Service
           item.navigation_links.order(:position)
         ).presence
       }.compact
+    end
+  end
+
+  def serialize_variables
+    convention.cms_variables.order(:key).each_with_object({}) do |variable, hash|
+      hash[variable.key] = variable.value
     end
   end
 
