@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   NavLink, Redirect, Route, Switch,
 } from 'react-router-dom';
+import classNames from 'classnames';
 
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 import Timespan from '../PCSG/Timespan';
@@ -187,7 +188,7 @@ class ScheduleGrid extends React.Component {
     };
 
     return (
-      <div className="schedule-grid-block" style={{ flexGrow: (options.flexGrow ? 1 : null) }} key={key}>
+      <div className="schedule-grid-block" key={key}>
         <div style={blockContentStyle}>
           {runDivs}
         </div>
@@ -203,7 +204,7 @@ class ScheduleGrid extends React.Component {
       const layoutResult = computeRunDimensionsWithoutSpanning(scheduleBlock);
 
       return (
-        <div className="d-flex">
+        <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}>
           {
             shouldUseRowHeaders
               ? (
