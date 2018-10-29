@@ -46,11 +46,12 @@ class OrderPaymentModal extends React.Component {
     paymentOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
     stripe: PropTypes.shape({
       createToken: PropTypes.func.isRequired,
-    }).isRequired,
+    }),
   }
 
   static defaultProps = {
     initialName: '',
+    stripe: null, // injectStripe is going to inject it soon after page load
   };
 
   constructor(props) {
