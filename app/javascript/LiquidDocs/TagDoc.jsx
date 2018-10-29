@@ -6,74 +6,115 @@ import AssignDocLink from './AssignDocLink';
 import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 
+const ExampleTagDoc = ({ tag }) => (
+  <li>
+    <div className="card mt-4 border-success">
+      <div className="card-header bg-success-light">
+        {
+          tag.name
+            ? (
+              <React.Fragment>
+                <strong>Example:</strong>
+                {' '}
+                {tag.name}
+              </React.Fragment>
+            )
+            : <strong>Example</strong>
+        }
+      </div>
+
+      <div className="card-body">
+        <code>{tag.text}</code>
+      </div>
+    </div>
+  </li>
+);
+
+ExampleTagDoc.propTypes = {
+  tag: PropTypes.shape({
+    name: PropTypes.string,
+    text: PropTypes.string,
+  }).isRequired,
+};
+
+const ReturnTagWithClassDoc = ({
+  tag, assignName, returnClassName, prefix,
+}) => (
+  <React.Fragment>
+    <p className="mb-1">
+      <strong>Return:</strong>
+      {' '}
+      <em>
+        {tag.types.join(', ')}
+      </em>
+    </p>
+    <div className="d-flex align-items-start">
+      <div className="h3 mr-1">
+          ↳
+      </div>
+      <AssignDocLink
+        assign={{ name: assignName, drop_class_name: returnClassName }}
+        compact
+        prefix={prefix}
+      />
+    </div>
+  </React.Fragment>
+);
+
+ReturnTagWithClassDoc.propTypes = {
+  tag: PropTypes.shape({
+    types: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+  assignName: PropTypes.string.isRequired,
+  returnClassName: PropTypes.string.isRequired,
+  prefix: PropTypes.string,
+};
+
+ReturnTagWithClassDoc.defaultProps = {
+  prefix: null,
+};
+
+const SeeTagDoc = ({ tag }) => (
+  <li>
+    <strong>See:</strong>
+    {' '}
+    {
+      tag.name
+        ? <a href={tag.name}>{tag.text}</a>
+        : tag.text
+    }
+  </li>
+);
+
+SeeTagDoc.propTypes = {
+  tag: PropTypes.shape({
+    name: PropTypes.string,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 function TagDoc({ tag, method = null, prefix = null }) {
   if (tag.tag_name === 'example') {
-    return (
-      <li>
-        <div className="card mt-4 border-success">
-          <div className="card-header bg-success-light">
-            {
-              tag.name
-                ? (
-                  <React.Fragment>
-                    <strong>Example:</strong>
-                    {' '}
-                    {tag.name}
-                  </React.Fragment>
-                )
-                : <strong>Example</strong>
-            }
-          </div>
-
-          <div className="card-body">
-            <code>{tag.text}</code>
-          </div>
-        </div>
-      </li>
-    );
+    return (<ExampleTagDoc tag={tag} />);
   }
 
   if (tag.tag_name === 'return') {
     const { returnClassName, assignName } = findMethodReturnClass(method);
-    const returnClass = findClass(returnClassName);
 
-    if (returnClass) {
+    if (findClass(returnClassName)) {
       return (
-        <React.Fragment>
-          <p className="mb-1">
-            <strong>Return:</strong>
-            {' '}
-            <em>
-              {tag.types.join(', ')}
-            </em>
-          </p>
-          <div className="d-flex align-items-start">
-            <div className="h3 mr-1">
-              ↳
-            </div>
-            <AssignDocLink
-              assign={{ name: assignName, drop_class_name: returnClassName }}
-              compact
-              prefix={prefix}
-            />
-          </div>
-        </React.Fragment>
+        <ReturnTagWithClassDoc
+          tag={tag}
+          assignName={assignName}
+          returnClassName={returnClassName}
+          prefix={prefix}
+        />
       );
     }
   }
 
   if (tag.tag_name === 'see') {
-    return (
-      <li>
-        <strong>See:</strong>
-        {' '}
-        {
-          tag.name
-            ? <a href={tag.name}>{tag.text}</a>
-            : tag.text
-        }
-      </li>
-    );
+    return (<SeeTagDoc tag={tag} />);
   }
 
   return (
