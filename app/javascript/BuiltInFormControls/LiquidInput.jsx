@@ -1,6 +1,8 @@
 import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
+import classNames from 'classnames';
+
 import CodeInput from './CodeInput';
 
 const previewLiquidQuery = gql`
@@ -14,7 +16,13 @@ class LiquidInput extends React.Component {
     super(props);
     this.state = {
       showingDocs: false,
+      currentDocTab: 'convention',
     };
+  }
+
+  docTabClicked = (event, tab) => {
+    event.preventDefault();
+    this.setState({ currentDocTab: tab });
   }
 
   renderDocs = () => {
@@ -25,14 +33,35 @@ class LiquidInput extends React.Component {
     return (
       <React.Fragment>
         <div className="liquid-docs-browser d-flex flex-column align-items-stretch">
-          <header className="bg-dark border-top border-color-light d-flex align-items-center">
-            <div className="font-weight-bold text-white flex-grow-1 ml-2 pt-1 text-center">
-              Liquid markup documentation
+          <header className="bg-light border-top border-color-light d-flex align-items-stretch">
+            <div className="flex-grow-1 pt-1">
+              <ul className="nav nav-tabs pl-2 justify-content-center">
+                <li className="nav-item">
+                  { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
+                  <a
+                    href="#"
+                    className={classNames('nav-link', { active: this.state.currentDocTab === 'convention' })}
+                    onClick={e => this.docTabClicked(e, 'convention')}
+                  >
+                    Convention-specific markup
+                  </a>
+                </li>
+                <li className="nav-item">
+                  { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
+                  <a
+                    href="#"
+                    className={classNames('nav-link', { active: this.state.currentDocTab === 'core' })}
+                    onClick={e => this.docTabClicked(e, 'core')}
+                  >
+                    Core Liquid markup
+                  </a>
+                </li>
+              </ul>
             </div>
-            <div>
+            <div className="border-bottom border-color-light d-flex align-items-center">
               <button
                 type="button"
-                className="btn btn-link btn-sm mr-3 text-white"
+                className="btn btn-link btn-sm mr-3 text-body"
                 style={{ cursor: 'pointer' }}
                 onClick={() => { this.setState({ showingDocs: false }); }}
               >
@@ -41,7 +70,11 @@ class LiquidInput extends React.Component {
             </div>
           </header>
           <iframe
-            src="/liquid_docs"
+            src={
+              this.state.currentDocTab === 'convention'
+                ? '/liquid_docs'
+                : 'https://shopify.github.io/liquid/'
+            }
             title="Liquid markup documentation"
             className="flex-grow-1 border-0"
           />
