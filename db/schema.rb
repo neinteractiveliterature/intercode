@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2018_10_28_182940) do
 
   create_table "cms_variables", force: :cascade do |t|
     t.bigint "convention_id", null: false
-    t.string "key", limit: 256, null: false
+    t.string "key", limit: 100, null: false
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
