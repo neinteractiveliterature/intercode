@@ -93,6 +93,46 @@ SeeTagDoc.propTypes = {
   }).isRequired,
 };
 
+const FallbackTagDoc = ({ tag }) => (
+  <li>
+    <strong>{humanize(tag.tag_name)}</strong>
+    {
+      tag.types
+        ? (
+          <React.Fragment>
+            {' '}
+            <em>
+              [
+              {tag.types.join(', ')}
+              ]
+            </em>
+          </React.Fragment>
+        )
+        : null
+    }
+    {
+      tag.text
+        ? (
+          <React.Fragment>
+            {' '}
+            &mdash;
+            {' '}
+            {tag.text}
+          </React.Fragment>
+        )
+        : null
+    }
+  </li>
+);
+
+FallbackTagDoc.propTypes = {
+  tag: PropTypes.shape({
+    tag_name: PropTypes.string.isRequired,
+    types: PropTypes.arrayOf(PropTypes.string),
+    text: PropTypes.string,
+  }).isRequired,
+};
+
 function TagDoc({ tag, method = null, prefix = null }) {
   if (tag.tag_name === 'example') {
     return (<ExampleTagDoc tag={tag} />);
@@ -117,37 +157,7 @@ function TagDoc({ tag, method = null, prefix = null }) {
     return (<SeeTagDoc tag={tag} />);
   }
 
-  return (
-    <li>
-      <strong>{humanize(tag.tag_name)}</strong>
-      {
-        tag.types
-          ? (
-            <React.Fragment>
-              {' '}
-              <em>
-                [
-                {tag.types.join(', ')}
-                ]
-              </em>
-            </React.Fragment>
-          )
-          : null
-      }
-      {
-        tag.text
-          ? (
-            <React.Fragment>
-              {' '}
-              &mdash;
-              {' '}
-              {tag.text}
-            </React.Fragment>
-          )
-          : null
-      }
-    </li>
-  );
+  return (<FallbackTagDoc tag={tag} />);
 }
 
 TagDoc.propTypes = {
