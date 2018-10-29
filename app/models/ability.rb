@@ -256,6 +256,7 @@ class Ability
       CmsLayout,
       CmsNavigationItem,
       CmsPartial,
+      CmsVariable,
       Convention,
       Form,
       Page,
@@ -353,7 +354,7 @@ class Ability
 
     return unless has_scope?(:manage_conventions)
 
-    can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem, CmsLayout],
+    can :manage, [Page, CmsPartial, CmsFile, CmsNavigationItem, CmsLayout, CmsVariable],
       parent_type: 'Convention', parent_id: staff_con_ids
 
     can :update, Convention, id: staff_con_ids

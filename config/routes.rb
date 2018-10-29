@@ -85,6 +85,7 @@ Intercode::Application.routes.draw do
       end
     end
     resources :cms_layouts
+    resources :cms_variables, only: [:index]
 
     resource :my_profile do
       member do
