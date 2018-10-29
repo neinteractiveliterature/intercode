@@ -1,6 +1,11 @@
 module Intercode
   module Liquid
     module Tags
+      # Embeds a YouTube video.  The video ID must be provided.
+      #
+      # @liquid_tag_name youtube
+      # @example Rickroll
+      #   {% youtube oHg5SJYRHA0 %}
       class Youtube < ::Liquid::Tag
         attr_reader :video_id
 

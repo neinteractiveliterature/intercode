@@ -18,6 +18,6 @@
   = f.collection_select :cms_layout_id, CmsLayout.global.order(:name), :id, :name, include_blank: 'Default layout', label: 'Layout'
 
 .my-2
-  = react_component 'LiquidHTMLEditor', name: 'page[content]', initialContent: f.object.content
+  = app_component 'LiquidHTMLEditor', name: 'page[content]', initialContent: f.object.content
 
 = f.submit class: 'btn btn-primary'

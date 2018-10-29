@@ -11,7 +11,7 @@
   = f.text_field :admin_notes
 
   .my-2
-    = react_component 'LiquidHTMLEditor', name: 'cms_partial[content]', initialContent: f.object.content
+    = app_component 'LiquidHTMLEditor', name: 'cms_partial[content]', initialContent: f.object.content
 
   .actions
     = f.submit 'Save changes', class: 'btn btn-primary'

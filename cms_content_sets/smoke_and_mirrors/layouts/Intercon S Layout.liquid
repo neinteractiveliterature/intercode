@@ -13,12 +13,16 @@ admin_notes: ''
     {% else %}
       <meta property="og:title" content="{{page.name}}"/>
     {% endif %}
+    {% if event %}
+      <meta property="og:description" content="{{ event.short_blurb }}">
+    {% endif %}
     <meta property="og:type" content="website"/>
     <link rel="icon" 
       type="image/png" 
       href="{% file_url "neilSquare.png" %}">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Montserrat:400,700" rel="stylesheet">
     {% include "site-css" %}
+    {% include "google-analytics" %}
   </head>
   <body>
     <div class="overall d-flex flex-column">

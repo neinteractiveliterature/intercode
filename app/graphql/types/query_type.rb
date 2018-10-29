@@ -74,6 +74,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :cmsVariables, types[Types::CmsVariable.to_non_null_type] do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:convention].cms_variables
+    }
+  end
+
   field :currentAbility, !Types::AbilityType do
     resolve ->(_obj, _args, ctx) {
       ctx[:current_ability]
@@ -137,6 +143,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     resolve ->(_obj, args, ctx) {
       ctx[:convention].staff_positions.find(args[:id])
     }
+  end
+
+  field :liquidAssigns, types[Types::LiquidAssign.to_non_null_type] do
+    resolve ->(_obj, _args, ctx) do
+      LiquidAssignGraphqlPresenter.from_hash(ctx[:cadmus_renderer].default_assigns)
+    end
   end
 
   field :previewMarkdown, !types.String do

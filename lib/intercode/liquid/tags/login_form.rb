@@ -1,6 +1,9 @@
 module Intercode
   module Liquid
     module Tags
+      # Renders a login form for the site.
+      #
+      # @liquid_tag_name login_form
       class LoginForm < RailsPartialRenderer
         def partial(_context)
           'devise/sessions/login_form'

@@ -6,8 +6,8 @@ navigation_items:
   title: Programming
   navigation_links:
   - item_type: link
-    title: Panels
-    page_slug: panels
+    title: Forum@Intercon
+    page_slug: forum
   - item_type: link
     title: Iron GM
     page_slug: irongm
@@ -49,3 +49,4 @@ navigation_items:
     page_slug: flyer
 root_page_slug: root
 default_layout_name: Intercon S Layout
+variables: {}

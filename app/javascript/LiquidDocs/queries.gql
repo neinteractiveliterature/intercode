@@ -1,0 +1,7 @@
+query LiquidAssignsQuery {
+  liquidAssigns {
+    name
+    drop_class_name
+    cms_variable_value_json
+  }
+}

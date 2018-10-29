@@ -1,14 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 class CommitableInput extends React.Component {
   static propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
     value: null,
+    className: null,
+    onCancel: null,
+    disabled: false,
   };
 
   constructor(props) {
@@ -17,6 +24,7 @@ class CommitableInput extends React.Component {
     this.state = {
       editing: false,
       editingValue: '',
+      commitInProgress: false,
     };
   }
 
@@ -30,14 +38,27 @@ class CommitableInput extends React.Component {
     if (this.input) {
       this.input.blur();
     }
+    if (this.props.onCancel) {
+      this.props.onCancel();
+    }
   }
 
-  commitEditing = (event) => {
+  commitEditing = async (event) => {
     event.preventDefault();
-    this.props.onChange(this.state.editingValue);
-    this.setState({ editing: false, editingValue: undefined });
-    if (this.input) {
-      this.input.blur();
+    this.setState({ commitInProgress: true });
+    try {
+      await this.props.onChange(this.state.editingValue);
+      this.setState({ editing: false, editingValue: undefined, commitInProgress: false });
+      if (this.input) {
+        this.input.blur();
+      }
+    } catch (error) {
+      this.setState({ commitInProgress: false }, () => {
+        if (this.input) {
+          this.input.focus();
+        }
+      });
+      throw error;
     }
   }
 
@@ -69,7 +90,7 @@ class CommitableInput extends React.Component {
 
   render = () => {
     const inputProps = {
-      className: 'form-control',
+      className: classNames('form-control', this.props.className),
       onChange: this.inputChange,
       ref: (element) => { this.input = element; },
     };
@@ -82,12 +103,23 @@ class CommitableInput extends React.Component {
             onBlur={this.blur}
             value={this.state.editingValue || ''}
             onKeyDown={this.keyDownInInput}
+            disabled={this.state.commitInProgress}
           />
           <div className="input-group-append">
-            <button type="button" className="btn btn-outline-secondary" onClick={this.cancelEditing}>
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={this.cancelEditing}
+              disabled={this.props.disabled || this.state.commitInProgress}
+            >
               <i className="fa fa-times" />
             </button>
-            <button type="button" className="btn btn-primary" onClick={this.commitEditing}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.commitEditing}
+              disabled={this.props.disabled || this.state.commitInProgress}
+            >
               <i className="fa fa-check" />
             </button>
           </div>
@@ -101,6 +133,7 @@ class CommitableInput extends React.Component {
           {...inputProps}
           value={this.props.value || ''}
           onFocus={this.beginEditing}
+          disabled={this.props.disabled}
         />
       </div>
     );
