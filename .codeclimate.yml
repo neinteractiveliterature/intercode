@@ -13,7 +13,7 @@ engines:
       languages:
         ruby:
         javascript:
-          mass_threshold: 60
+          mass_threshold: 100
   eslint:
     enabled: true
     config:
