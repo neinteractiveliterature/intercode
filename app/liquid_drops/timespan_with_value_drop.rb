@@ -53,7 +53,8 @@ class TimespanWithValueDrop < Liquid::Drop
     ].join(' ')
   end
 
-  # @return [String] A shorter format of the human-readable description of the timespan and its value
+  # @return [String] A shorter format of the human-readable description of the timespan and its
+  #                  value
   # @example
   #   "$30.00 January 3, 2018 - January 9, 2018"
   # @example

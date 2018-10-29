@@ -40,7 +40,8 @@ class UserConProfileDrop < Liquid::Drop
     @user_con_profile = user_con_profile
   end
 
-  # @return [Array<EventDrop>] All the events at this convention for which this user is a team member
+  # @return [Array<EventDrop>] All the events at this convention for which this user is a team
+  #                            member
   def team_member_events
     user_con_profile.team_members.map(&:event)
   end
