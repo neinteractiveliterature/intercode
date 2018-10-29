@@ -14,7 +14,7 @@ gem 'sass-rails'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem 'haml'
-gem 'webpacker', '~> 4.0.0-pre.2'
+gem 'webpacker', '~> 4.0.0.pre.pre.3'
 gem 'webpacker-react', '~> 0.3.2'
 
 gem 'with_advisory_lock'
