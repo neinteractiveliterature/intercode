@@ -7,6 +7,7 @@ import { Elements } from 'react-stripe-elements';
 
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
+import LazyStripe from '../LazyStripe';
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
 
@@ -215,23 +216,25 @@ Order #
         <ul className="list-unstyled">
           {renderedOrders}
 
-          <Elements>
-            <OrderPaymentModal
-              visible={this.state.payingForOrder != null}
-              onCancel={this.payNowCanceled}
-              initialName={this.props.data.myProfile.name_without_nickname}
-              orderId={(this.state.payingForOrder || { id: 0 }).id}
-              onComplete={this.payNowComplete}
-              paymentOptions={
-                this.state.payingForOrder
-                  ? intersection(
-                    ...this.state.payingForOrder.order_entries
-                      .map(entry => entry.product.payment_options),
-                  ).filter(paymentOption => paymentOption !== 'pay_at_convention')
-                  : []
-              }
-            />
-          </Elements>
+          <LazyStripe>
+            <Elements>
+              <OrderPaymentModal
+                visible={this.state.payingForOrder != null}
+                onCancel={this.payNowCanceled}
+                initialName={this.props.data.myProfile.name_without_nickname}
+                orderId={(this.state.payingForOrder || { id: 0 }).id}
+                onComplete={this.payNowComplete}
+                paymentOptions={
+                  this.state.payingForOrder
+                    ? intersection(
+                      ...this.state.payingForOrder.order_entries
+                        .map(entry => entry.product.payment_options),
+                    ).filter(paymentOption => paymentOption !== 'pay_at_convention')
+                    : []
+                }
+              />
+            </Elements>
+          </LazyStripe>
         </ul>
       );
     }

@@ -11,6 +11,7 @@ import formatMoney from '../formatMoney';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
+import LazyStripe from '../LazyStripe';
 import OrderPaymentModal from './OrderPaymentModal';
 
 const orderEntryFragment = gql`
@@ -268,21 +269,23 @@ class Cart extends React.Component {
       <ErrorDisplay graphQLError={this.state.error} />
       {this.renderOrderEntriesTable()}
 
-      <Elements>
-        <OrderPaymentModal
-          visible={this.state.checkingOut}
-          onCancel={this.checkOutCanceled}
-          initialName={this.props.data.myProfile.name_without_nickname}
-          orderId={(this.props.data.currentPendingOrder || {}).id}
-          onComplete={this.checkOutComplete}
-          paymentOptions={
-            intersection(
-              ...this.props.data.currentPendingOrder.order_entries
-                .map(entry => entry.product.payment_options),
-            )
-          }
-        />
-      </Elements>
+      <LazyStripe>
+        <Elements>
+          <OrderPaymentModal
+            visible={this.state.checkingOut}
+            onCancel={this.checkOutCanceled}
+            initialName={this.props.data.myProfile.name_without_nickname}
+            orderId={(this.props.data.currentPendingOrder || {}).id}
+            onComplete={this.checkOutComplete}
+            paymentOptions={
+              intersection(
+                ...this.props.data.currentPendingOrder.order_entries
+                  .map(entry => entry.product.payment_options),
+              )
+            }
+          />
+        </Elements>
+      </LazyStripe>
 
       <ConfirmModal
         visible={this.state.confirmingDeleteOrderEntryId != null}

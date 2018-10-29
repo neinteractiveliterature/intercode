@@ -3,11 +3,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
-import { StripeProvider } from 'react-stripe-elements';
 
 import buildApolloClient from './buildApolloClient';
 import Confirm from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
+import { LazyStripeProvider } from './LazyStripe';
 
 export default (WrappedComponent) => {
   const wrapper = class Wrapper extends React.Component {
@@ -21,19 +21,7 @@ export default (WrappedComponent) => {
       this.client = buildApolloClient(this.props.authenticityToken);
       this.state = {
         error: null,
-        stripe: null,
       };
-    }
-
-    componentDidMount() {
-      if (window.Stripe) {
-        this.setState({ stripe: window.Stripe(this.props.stripePublishableKey) });
-      } else {
-        document.querySelector('#stripe-js').addEventListener('load', () => {
-          // Create Stripe instance once Stripe.js loads
-          this.setState({ stripe: window.Stripe(this.props.stripePublishableKey) });
-        });
-      }
     }
 
     componentDidCatch(error, info) {
@@ -51,7 +39,7 @@ export default (WrappedComponent) => {
 
     render = () => (
       <ApolloProvider client={this.client}>
-        <StripeProvider stripe={this.state.stripe}>
+        <LazyStripeProvider publishableKey={this.props.stripePublishableKey}>
           <Confirm>
             {
               this.state.error
@@ -59,7 +47,7 @@ export default (WrappedComponent) => {
                 : <WrappedComponent {...this.props} />
             }
           </Confirm>
-        </StripeProvider>
+        </LazyStripeProvider>
       </ApolloProvider>
     )
   };

@@ -8,6 +8,7 @@ import { Elements } from 'react-stripe-elements';
 
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
+import LazyStripe from '../LazyStripe';
 import TicketPurchasePaymentSection from './TicketPurchasePaymentSection';
 
 const purchaseTicketMutation = gql`
@@ -187,37 +188,39 @@ class TicketPurchaseForm extends React.Component {
   )
 
   render = () => (
-    <Elements>
-      <React.Fragment>
-        {this.renderTicketTypeSelect()}
-        {this.renderPaymentSection()}
-        <Modal visible={this.state.ticket != null}>
-          <div className="modal-header"><h3>Thank you!</h3></div>
-          <div className="modal-body">
-            {
-              this.state.ticket
-                ? (
-                  <div>
-                  Your purchase of a
-                    {' '}
-                    {this.state.ticket.ticket_type.description}
-                    {' '}
-  for
-                    {' '}
-                    {formatMoney(this.state.ticket.payment_amount)}
-                    {' '}
-                  was successful.  We&apos;ve emailed you a receipt.
-                  </div>
-                )
-                : null
-            }
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-primary" onClick={this.purchaseAcknowledged}>OK</button>
-          </div>
-        </Modal>
-      </React.Fragment>
-    </Elements>
+    <LazyStripe>
+      <Elements>
+        <React.Fragment>
+          {this.renderTicketTypeSelect()}
+          {this.renderPaymentSection()}
+          <Modal visible={this.state.ticket != null}>
+            <div className="modal-header"><h3>Thank you!</h3></div>
+            <div className="modal-body">
+              {
+                this.state.ticket
+                  ? (
+                    <div>
+                    Your purchase of a
+                      {' '}
+                      {this.state.ticket.ticket_type.description}
+                      {' '}
+    for
+                      {' '}
+                      {formatMoney(this.state.ticket.payment_amount)}
+                      {' '}
+                    was successful.  We&apos;ve emailed you a receipt.
+                    </div>
+                  )
+                  : null
+              }
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary" onClick={this.purchaseAcknowledged}>OK</button>
+            </div>
+          </Modal>
+        </React.Fragment>
+      </Elements>
+    </LazyStripe>
   );
 }
 
