@@ -12,7 +12,7 @@ gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'sass-rails'
 gem 'autoprefixer-rails'
-gem 'bootstrap_form', git: "https://github.com/bootstrap-ruby/rails-bootstrap-forms.git", branch: "bootstrap-v4"
+gem 'bootstrap_form'
 gem 'haml'
 gem 'webpacker', '~> 4.0.0-pre.2'
 gem 'webpacker-react', '~> 0.3.2'
