@@ -1,6 +1,7 @@
 import { mapValues } from 'lodash';
 
 import Cart from '../Store/Cart';
+import CmsVariablesAdmin from '../CmsVariablesAdmin';
 import ConventionAdmin from '../ConventionAdmin';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EventAdmin from '../EventAdmin';
@@ -38,6 +39,7 @@ import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 
 const unwrappedComponents = {
   Cart,
+  CmsVariablesAdmin,
   ConventionAdmin,
   EditUserConProfile,
   EventAdmin,

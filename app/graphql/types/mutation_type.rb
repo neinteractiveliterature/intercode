@@ -1,6 +1,6 @@
-def guard_for_convention_associated_model(association, action)
+def guard_for_convention_associated_model(association, action, find_by: :id)
   ->(_obj, args, ctx) {
-    model = ctx[:convention].public_send(association).find(args[:id])
+    model = ctx[:convention].public_send(association).find_by(find_by => args[find_by])
     ctx[:current_ability].can?(action, model)
   }
 end
@@ -20,9 +20,9 @@ def guard_for_create_event_associated_model(association, arg_name)
   }
 end
 
-def guard_for_model_with_id(model_class, action)
+def guard_for_model_with_id(model_class, action, find_by: :id)
   ->(_obj, args, ctx) {
-    ctx[:current_ability].can?(action, model_class.find(args[:id]))
+    ctx[:current_ability].can?(action, model_class.find_by(find_by => args[find_by]))
   }
 end
 
@@ -34,7 +34,7 @@ class Types::MutationType < Types::BaseObject
     raise ActionController::InvalidAuthenticityToken unless ctx[:verified_request]
   end
 
-  ### CmsNavigationItems
+  ### CmsNavigationItem
 
   field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do
     guard(guard_for_create_convention_associated_model(:cms_navigation_items))
@@ -52,6 +52,16 @@ class Types::MutationType < Types::BaseObject
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:sort, ctx[:convention].cms_navigation_items.new)
     }
+  end
+
+  ### CmsVariable
+
+  field :setCmsVariable, mutation: Mutations::SetCmsVariable do
+    guard(guard_for_create_convention_associated_model(:cms_variables))
+  end
+
+  field :deleteCmsVariable, mutation: Mutations::DeleteCmsVariable do
+    guard(guard_for_convention_associated_model(:cms_variables, :destroy, find_by: :key))
   end
 
   ### Convention

@@ -1,0 +1,27 @@
+fragment CmsVariableFields on CmsVariable {
+  id
+  key
+  value_json
+}
+
+query CmsVariablesQuery {
+  cmsVariables {
+    ...CmsVariableFields
+  }
+}
+
+mutation SetCmsVariableMutation($key: String!, $value_json: String!) {
+  setCmsVariable(input: { cms_variable: { key: $key, value_json: $value_json } }) {
+    cms_variable {
+      ...CmsVariableFields
+    }
+  }
+}
+
+mutation DeleteCmsVariableMutation($key: String!) {
+  deleteCmsVariable(input: { key: $key }) {
+    cms_variable {
+      ...CmsVariableFields
+    }
+  }
+}
