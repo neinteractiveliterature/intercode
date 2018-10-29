@@ -8,7 +8,7 @@ module Mutations
       begin
         value = JSON.parse(cms_variable['value_json'])
       rescue JSON::ParserError => error
-        raise "Invalid JSON: #{error.message}"
+        raise BetterRescueMiddleware::UnloggedError.new("Invalid JSON: #{error.message}")
       end
 
       variable = context[:convention].cms_variables.find_or_initialize_by(key: cms_variable['key'])

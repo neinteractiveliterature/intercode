@@ -22,7 +22,7 @@ class BetterRescueMiddleware
 
   def call(*)
     yield
-  rescue UnloggedError => err
+  rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid, UnloggedError => err
     GraphQL::ExecutionError.new(err.message)
   rescue StandardError => err
     Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")
