@@ -8,7 +8,7 @@ describe TicketDrop do
   let(:ticket_drop) { TicketDrop.new(ticket) }
   let(:ticket_type) { ticket.ticket_type }
 
-  %w[user_con_profile provided_by_event payment_amount].each do |field|
+  %w[user_con_profile provided_by_event payment_amount ticket_type].each do |field|
     it "returns the #{field} of the ticket" do
       ticket_drop.public_send(field).must_equal ticket.public_send(field)
     end
@@ -17,12 +17,6 @@ describe TicketDrop do
   %w[name description].each do |field|
     it "returns the #{field} of the ticket type" do
       ticket_drop.public_send("ticket_type_#{field}").must_equal ticket_type.public_send(field)
-    end
-  end
-
-  it 'does not expose the ticket type' do
-    assert_raises do
-      ticket_drop.ticket_type
     end
   end
 end
