@@ -2456,7 +2456,7 @@
             {
               "tag_name": "return",
               "name": null,
-              "text": "All the events at this convention for which this user is a team member",
+              "text": "All the events at this convention for which this user is a team\nmember",
               "types": [
                 "Array<EventDrop>"
               ]
@@ -2729,7 +2729,7 @@
             {
               "tag_name": "return",
               "name": null,
-              "text": "A shorter format of the human-readable description of the timespan and its value",
+              "text": "A shorter format of the human-readable description of the timespan and its\nvalue",
               "types": [
                 "String"
               ]

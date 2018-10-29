@@ -30,14 +30,10 @@ class ExportCmsContentSetService < CivilService::Service
     File.open(File.expand_path('metadata.yml', content_set.root_path), 'w') do |f|
       metadata = {
         'inherit' => inherit,
-        'navigation_items' => serialize_navigation_items(
-          convention.cms_navigation_items.root.order(:position)
-        ),
+        'navigation_items' => serialize_root_navigation_items,
         'root_page_slug' => convention.root_page&.slug,
         'default_layout_name' => convention.default_layout&.name,
-        'variables' => serialize_variables(
-          convention.cms_variables.order(:key)
-        )
+        'variables' => serialize_variables
       }.compact
 
       f.write(YAML.dump(metadata))
@@ -113,6 +109,10 @@ class ExportCmsContentSetService < CivilService::Service
     end
   end
 
+  def serialize_root_navigation_items
+    serialize_navigation_items(convention.cms_navigation_items.root.order(:position))
+  end
+
   def serialize_navigation_items(items)
     items.map do |item|
       {
@@ -126,8 +126,8 @@ class ExportCmsContentSetService < CivilService::Service
     end
   end
 
-  def serialize_variables(variables)
-    variables.each_with_object({}) do |variable, hash|
+  def serialize_variables
+    convention.cms_variables.order(:key).each_with_object({}) do |variable, hash|
       hash[variable.key] = variable.value
     end
   end

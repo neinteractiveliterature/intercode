@@ -74,6 +74,18 @@ tool 'update_liquid_doc_json' do
     }
   end
 
+  def serialize_registry
+    classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
+    filters_module = YARD::Registry.all.find do |obj|
+      obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == 'Intercode::Liquid::Filters'
+    end
+
+    {
+      classes: classes.map { |klass| serialize_class(klass) },
+      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
+    }
+  end
+
   def run
     require 'yard'
     require 'json'
@@ -81,22 +93,16 @@ tool 'update_liquid_doc_json' do
 
     YARD::Tags::Library.define_tag('Liquid tag name', :liquid_tag_name)
 
-    %w[app/liquid_drops/**/*.rb lib/intercode/liquid/**/*.rb app/models/cms_variable.rb].each do |path|
+    %w[
+      app/liquid_drops/**/*.rb
+      lib/intercode/liquid/**/*.rb
+      app/models/cms_variable.rb
+    ].each do |path|
       YARD.parse(path)
     end
 
-    classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
-    filters_module = YARD::Registry.all.find do |obj|
-      obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == 'Intercode::Liquid::Filters'
-    end
-
-    json = {
-      classes: classes.map { |klass| serialize_class(klass) },
-      filter_methods: filters_module.meths.map { |meth| serialize_method(meth) }
-    }
-
     File.open('liquid_doc.json', 'w') do |file|
-      file.write(JSON.pretty_generate(json))
+      file.write(JSON.pretty_generate(serialize_registry))
     end
   end
 end
