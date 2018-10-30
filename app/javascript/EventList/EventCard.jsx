@@ -36,19 +36,6 @@ function sortTeamMembers(event) {
     .sort((a, b) => teamMemberSortKey(a).localeCompare(teamMemberSortKey(b), { sensitivity: 'base' }));
 }
 
-function teamMemberIconClass(event) {
-  switch (event.team_member_name) {
-    case 'presenter':
-    case 'panelist':
-    case 'facilitator':
-      return 'fa fa-microphone';
-    case 'moderator':
-      return 'fa fa-gavel';
-    default:
-      return 'fa fa-id-badge';
-  }
-}
-
 function teamIsAllAuthors(author, teamMembers) {
   if (!author || !teamMembers) {
     return false;
@@ -76,18 +63,20 @@ const EventCard = ({ event, timezoneName, sorted }) => {
     .map(teamMember => teamMember.user_con_profile.name_without_nickname).join(', ');
 
   if (teamMemberNames) {
+    const teamMemberDescription = pluralizeWithCount(
+      capitalize(event.team_member_name),
+      event.team_members.length,
+      true,
+    );
+
     metadataItems.push({
       key: 'team_members',
       content: (
         <React.Fragment>
-          <i
-            className={`${teamMemberIconClass(event)} mr-1`}
-            title={pluralizeWithCount(
-              capitalize(event.team_member_name),
-              event.team_members.length,
-              true,
-            )}
-          />
+          <strong>
+            {teamMemberDescription}
+            {':'}
+          </strong>
           {' '}
           {teamMemberNames}
         </React.Fragment>
@@ -96,14 +85,15 @@ const EventCard = ({ event, timezoneName, sorted }) => {
   }
 
   if (formResponse.author && !teamIsAllAuthors(formResponse.author, event.team_members)) {
+    const authorDescription = pluralizeWithCount('Author', formResponse.author.split(/(,|;| and )/).length, true);
     metadataItems.push({
       key: 'author',
       content: (
         <React.Fragment>
-          <i
-            className="fa fa-pencil mr-1"
-            title={pluralizeWithCount('Author', formResponse.author.split(',').length, true)}
-          />
+          <strong>
+            {authorDescription}
+            {':'}
+          </strong>
           {' '}
           {formResponse.author}
         </React.Fragment>
@@ -116,7 +106,7 @@ const EventCard = ({ event, timezoneName, sorted }) => {
       key: 'organization',
       content: (
         <React.Fragment>
-          <i className="fa fa-building mr-1" title="Organization" />
+          <strong>Organization:</strong>
           {' '}
           {formResponse.organization}
         </React.Fragment>
