@@ -372,6 +372,18 @@ class TeamMemberForm extends React.Component {
 
     const { teamMember } = this.state;
 
+    if (!teamMember.id && !teamMember.user_con_profile) {
+      this.setState({
+        error: {
+          graphQLErrors: [
+            { message: `Please select a person to add as a ${this.props.data.event.team_member_name}.` },
+          ],
+        },
+      });
+
+      return;
+    }
+
     this.setState({ requestInProgress: true });
 
     try {
