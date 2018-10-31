@@ -61,7 +61,7 @@ class EventSignupService < CivilService::Service
 
   def signup_count_must_be_allowed
     return if team_member?
-    return unless counts_towards_total?
+    return if signup_state == 'confirmed' && !counts_towards_total?
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     case @max_signups_allowed
