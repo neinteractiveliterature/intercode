@@ -260,6 +260,7 @@ class Ability
       Convention,
       Form,
       Page,
+      Product,
       Room,
       Order,
       OrderEntry,
