@@ -32,7 +32,7 @@
     "apollo-client": "^2.4.5",
     "apollo-link": "^1.2.1",
     "apollo-link-http": "^1.5.5",
-    "apollo-upload-client": "^8.1.0",
+    "apollo-upload-client": "^9.1.0",
     "array-to-sentence": "^2.0.0",
     "autoprefixer": "^9.3.1",
     "babel-loader": "^8.0.4",
@@ -125,6 +125,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.6.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react-test-renderer": "^16.6.0",
     "webpack-dev-server": "^3.1.4"
   },
