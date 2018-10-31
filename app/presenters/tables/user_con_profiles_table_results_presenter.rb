@@ -44,11 +44,13 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   def apply_filter(scope, filter, value)
     case filter
     when :name
-      scope.where(
-        "lower(user_con_profiles.last_name) like :value \
-OR lower(user_con_profiles.first_name) like :value",
-        value: "%#{value.downcase}%"
-      )
+      value.split(/\s+/).select(&:present?).inject(scope) do |working_scope, term|
+        working_scope.where(
+          "lower(user_con_profiles.last_name) like :term \
+OR lower(user_con_profiles.first_name) like :term",
+          term: "%#{term}%"
+        )
+      end
     when :first_name
       scope.where(
         'lower(user_con_profiles.first_name) like :value',
