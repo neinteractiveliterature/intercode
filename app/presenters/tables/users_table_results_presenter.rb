@@ -12,10 +12,7 @@ class Tables::UsersTableResultsPresenter < Tables::TableResultsPresenter
   def apply_filter(scope, filter, value)
     case filter
     when :name
-      scope.where(
-        'lower(last_name) like :value OR lower(first_name) like :value',
-        value: "%#{value.downcase}%"
-      )
+      scope.name_search(value)
     when :email
       scope.where('lower(email) like :value', value: "%#{value.downcase}%")
     when :privileges
