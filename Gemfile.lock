@@ -202,7 +202,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
-    icalendar (2.5.0)
+    icalendar (2.5.1)
       ice_cube (~> 0.16)
     ice_cube (0.16.3)
     ipaddress (0.8.3)
