@@ -31,6 +31,14 @@ module.exports = {
         test: /\.mjs$/,
         include: /node_modules/,
         type: "javascript/auto",
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: path.join(config.cache_path, 'babel-loader')
+            }
+          }
+        ],
       },
       {
         test: /\.(mjs|js|jsx)?(\.erb)?$/,
