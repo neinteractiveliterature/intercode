@@ -6,7 +6,7 @@ Types::SignupType = GraphQL::ObjectType.define do
   field :counted, types.Boolean
   field :bucket_key, types.String do
     resolve ->(signup, _args, ctx) do
-      if ctx[:current_ability].can?(:read, signup) || signup.bucket.expose_attendees?
+      if ctx[:current_ability].can?(:read, signup) || signup.bucket&.expose_attendees?
         signup.bucket_key
       end
     end
