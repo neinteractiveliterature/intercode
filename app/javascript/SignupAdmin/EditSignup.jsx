@@ -191,7 +191,7 @@ class EditSignup extends React.Component {
   }
 
   renderForceConfirmButton = () => {
-    if (!this.props.data.currentAbility.can_update_signup) {
+    if (!this.props.data.myProfile.ability.can_update_signup) {
       return null;
     }
 
@@ -214,7 +214,7 @@ class EditSignup extends React.Component {
   }
 
   renderCountedToggle = () => {
-    if (!this.props.data.currentAbility.can_update_signup) {
+    if (!this.props.data.myProfile.ability.can_update_signup) {
       return null;
     }
 
