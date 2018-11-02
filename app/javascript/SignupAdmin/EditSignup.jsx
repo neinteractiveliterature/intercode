@@ -344,7 +344,8 @@ class EditSignup extends React.Component {
   render = () => (
     <React.Fragment>
       <h1 className="mb-4">
-Edit signup for
+        Edit signup for
+        {' '}
         {this.props.data.signup.run.event.title}
       </h1>
 
