@@ -1,9 +1,9 @@
 groups:
   default:
-    concurrency: 15
+    concurrency: 5
     queues:
       - default
   mailers:
-    concurrency: 15
+    concurrency: 5
     queues:
       - mailers
