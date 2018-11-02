@@ -60,7 +60,7 @@ gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
 gem 'apollo_upload_server', '2.0.0.beta.1'
-gem 'graphql-rails_logger'
+gem 'graphql-rails_logger', groups: [:development, :test]
 gem 'graphiql-rails', group: :development
 
 # Mailgun (for managing email aliases automatically)
