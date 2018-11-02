@@ -474,6 +474,20 @@
           ]
         },
         {
+          "name": "category",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The category key of the event (e.g. \"larp\", \"party\", \"tabletop_rpg\")",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
           "name": "initialize",
           "docstring": "",
           "tags": [

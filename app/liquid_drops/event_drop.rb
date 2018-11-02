@@ -20,8 +20,10 @@ class EventDrop < Liquid::Drop
   #   @return [String] The organization running this event
   # @!method email
   #   @return [String] The contact email address for this event
+  # @!method category
+  #   @return [String] The category key of the event (e.g. "larp", "party", "tabletop_rpg")
   delegate :id, :title, :team_member_name, :event_proposal, :author, :organization,
-    :email, to: :event
+    :email, :category, to: :event
 
   # @api
   def initialize(event)
