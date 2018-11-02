@@ -58,7 +58,7 @@
     "graphql": "^14.0.2",
     "graphql-anywhere": "^4.1.22",
     "graphql-tag": "^2.10.0",
-    "hypernova": "^2.3.0",
+    "hypernova": "^2.4.0",
     "immutable": "^3.8.2",
     "inflected": "^2.0.3",
     "js-yaml": "^3.12.0",
