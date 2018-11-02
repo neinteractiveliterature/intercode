@@ -24,6 +24,7 @@ class NavigationSection extends React.PureComponent {
             <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">{this.props.item.label}</button>
           </li>
         )}
+        style={{ zIndex: 1100 }}
       >
         {this.props.item.items.map((item, i) => (
           // eslint-disable-next-line react/no-array-index-key

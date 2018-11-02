@@ -22,7 +22,7 @@ module NavigationBarHelper
     content_tag(:li, class: 'nav-item dropdown', role: 'presentation') do
       safe_join([
         content_tag(:a, label, DROPDOWN_TARGET_ATTRS),
-        content_tag(:div, class: 'dropdown-menu') do
+        content_tag(:div, class: 'dropdown-menu', style: 'z-index: 1100;') do
           render_navigation_items(items)
         end
       ])
@@ -196,7 +196,7 @@ module NavigationBarHelper
             content_tag(:div, class: 'btn-group', role: 'group') do
               safe_join([
                 user_navigation_dropdown_target,
-                content_tag(:div, class: 'dropdown-menu') do
+                content_tag(:div, class: 'dropdown-menu', style: 'z-index: 1100;') do
                   render_navigation_items(items)
                 end
               ])
