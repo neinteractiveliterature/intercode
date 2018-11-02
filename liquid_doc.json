@@ -831,6 +831,20 @@
               ]
             }
           ]
+        },
+        {
+          "name": "counted",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Whether or not the signup is counted (for the purposes of maximum signups\nallowed, and counting totals for the event)",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
         }
       ]
     },
