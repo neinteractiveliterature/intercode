@@ -162,6 +162,33 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       result.signup.must_be :confirmed?
     end
 
+    it 'does count waitlisted signups towards the signup limit' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(
+          timespans: [
+            {
+              start: nil,
+              finish: nil,
+              value: '1'
+            }
+          ]
+        )
+      )
+
+      another_event = FactoryBot.create(:event, convention: convention)
+      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
+      FactoryBot.create(
+        :signup,
+        state: 'waitlisted',
+        user_con_profile: user_con_profile,
+        run: another_run
+      )
+
+      result = subject.call
+      result.must_be :failure?
+      result.errors.full_messages.join('\n').must_match /\AYou are already signed up for 1 event/
+    end
+
     it 'does not count withdrawn signups towards the signup limit' do
       convention.update!(
         maximum_event_signups: ScheduledValue::ScheduledValue.new(
