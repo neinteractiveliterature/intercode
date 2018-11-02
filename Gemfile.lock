@@ -374,7 +374,7 @@ GEM
       tilt (>= 1.1, < 3)
     scheduled_value (1.2.1)
     sequel (5.13.0)
-    shoryuken (3.3.1)
+    shoryuken (4.0.0)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
