@@ -112,6 +112,7 @@ class UserNavigationSection extends React.PureComponent {
                 myProfile,
                 assumedIdentityFromProfile,
               })}
+              style={{ zIndex: 1100 }}
             >
               {this.props.item.items.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
