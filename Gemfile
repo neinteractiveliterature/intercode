@@ -81,6 +81,7 @@ gem 'whenever'
 gem 'parallel'
 gem 'skylight'
 gem 'icalendar'
+gem 'dalli'
 
 # Heroku prod fix
 gem 'rails_12factor', group: 'stage'

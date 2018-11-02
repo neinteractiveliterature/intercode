@@ -119,6 +119,7 @@ GEM
     concurrent-ruby (1.0.5)
     concurrent-ruby (1.0.5-java)
     crass (1.0.4)
+    dalli (2.7.9)
     dante (0.2.0)
     database_cleaner (1.7.0)
     devise (4.5.0)
@@ -457,6 +458,7 @@ DEPENDENCIES
   cancancan
   carrierwave
   civil_service
+  dalli
   database_cleaner
   devise
   devise-doorkeeper
