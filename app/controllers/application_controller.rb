@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
   # Make the user create their profile for this con if they haven't got one
   before_action :ensure_user_con_profile_exists, unless: :devise_controller?
 
+  before_action :preload_cms_layout_content
+
   # Working around an issue where if the CSRF token expires and the user hits the back button,
   # they could have the wrong token in their browser cache
   before_action :no_cache
@@ -188,5 +190,18 @@ sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option
     return true if devise_controller?
     return true if self.class.name =~ /\ADoorkeeper::/
     false
+  end
+
+  def preload_cms_layout_content(cms_layout = nil)
+    cms_layout ||= convention&.default_layout
+    return unless convention&.default_layout
+
+    @cached_partials ||= {}
+    @cached_partials.update(
+      cms_layout.cms_partials.index_by(&:name).transform_values(&:liquid_template)
+    )
+
+    @cached_files ||= {}
+    @cached_files.update(cms_layout.cms_files.index_by(&:filename))
   end
 end

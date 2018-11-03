@@ -5,7 +5,8 @@ class AddInvariantToCmsPartials < ActiveRecord::Migration[5.2]
     reversible do |dir|
       dir.up do
         CmsPartial.find_each do |cms_partial|
-          cms_partial.update!(invariant: cms_partial.template_invariant?)
+          cms_partial.send(:set_performance_metadata)
+          cms_partial.save!
         end
       end
     end
