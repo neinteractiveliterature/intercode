@@ -86,13 +86,17 @@ Types::EventType = GraphQL::ObjectType.define do
 
   field :short_blurb_html, types.String do
     resolve ->(obj, _args, _ctx) {
-      MarkdownPresenter.new('No blurb provided').render obj.short_blurb
+      Rails.cache.fetch([obj, 'short_blurb_html']) do
+        MarkdownPresenter.new('No blurb provided').render obj.short_blurb
+      end
     }
   end
 
   field :description_html, types.String do
     resolve ->(obj, _args, _ctx) {
-      MarkdownPresenter.new('No description provided').render obj.description
+      Rails.cache.fetch([obj, 'description_html']) do
+        MarkdownPresenter.new('No description provided').render obj.description
+      end
     }
   end
 
