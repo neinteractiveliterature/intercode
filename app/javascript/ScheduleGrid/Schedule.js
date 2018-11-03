@@ -79,12 +79,12 @@ export default class Schedule {
       const { runId } = eventRun;
       const run = this.runsById.get(runId);
 
-      run.rooms.forEach((room) => {
-        if (!eventRunsByRoom.has(room.name)) {
-          eventRunsByRoom.set(room.name, []);
+      run.room_names.forEach((roomName) => {
+        if (!eventRunsByRoom.has(roomName)) {
+          eventRunsByRoom.set(roomName, []);
         }
 
-        eventRunsByRoom.set(room.name, [...eventRunsByRoom.get(room.name), eventRun]);
+        eventRunsByRoom.set(roomName, [...eventRunsByRoom.get(roomName), eventRun]);
       });
 
       return eventRunsByRoom;
