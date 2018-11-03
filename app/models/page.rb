@@ -7,7 +7,7 @@ class Page < ApplicationRecord
   has_and_belongs_to_many :cms_files
   has_and_belongs_to_many :cms_partials
 
-  before_commit :set_references, on: [:create, :update]
+  before_commit :set_performance_metadata, on: [:create, :update]
 
   def effective_cms_layout
     cms_layout || parent&.default_layout
@@ -27,8 +27,9 @@ class Page < ApplicationRecord
 
   private
 
-  def set_references
+  def set_performance_metadata
     self.cms_file_ids = referenced_files_recursive.map(&:id)
     self.cms_partial_ids = referenced_partials_recursive.map(&:id)
+    self.invariant = template_invariant?
   end
 end
