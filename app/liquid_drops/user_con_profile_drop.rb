@@ -48,7 +48,14 @@ class UserConProfileDrop < Liquid::Drop
 
   # @return [Array<SignupDrop>] All the user's signups, excluding withdrawn events
   def signups
-    user_con_profile.signups.includes(run: { event: :team_members }).reject(&:withdrawn?).to_a
+    user_con_profile.signups.where.not(state: 'withdrawn')
+      .includes(
+        :event,
+        run: {
+          rooms: nil,
+          event: { team_members: :user_con_profile }
+        }
+      ).to_a
   end
 
   # @return [String] The user's bio, as HTML
