@@ -10,35 +10,7 @@
 
 .row
   .col-md-9
-    %h1.larp-title= @event.title
-
-    - form_item_identifiers = Set.new(@event.form.form_items.pluck(:identifier))
-
-    %dl.row
-      - if @event.author.present? && form_item_identifiers.include?('author')
-        %dt.col-md-3 Author(s)
-        %dd.col-md-9= @event.author
-      - if @event.organization.present? && form_item_identifiers.include?('organization')
-        %dt.col-md-3 Organization
-        %dd.col-md-9= @event.organization
-      - if @event.url.present? && form_item_identifiers.include?('url')
-        %dt.col-md-3 Home Page
-        %dd.col-md-9= link_to @event.url, @event.url, :target => '_blank'
-      - if @event.email.present? && (form_item_identifiers.include?('email') || form_item_identifiers.include?('event_email'))
-        %dt.col-md-3 Contact Email
-        %dd.col-md-9= intercode_mail_to @event.email
-      - if @team_members.any?
-        %dt.col-md-3= @event.team_member_name.titleize.pluralize
-        %dd.col-md-9
-          %ul.list-unstyled.mb-0
-            - @team_members.each do |team_member|
-              %li
-                = team_member.user.name
-                - if team_member.email
-                  (#{intercode_mail_to team_member.email})
-      - if @event.registration_policy.accepts_signups?
-        %dt.col-md-3 Capacity
-        %dd.col-md-9= render 'reports/event_capacity', event: @event
+    = render 'event_page_header'
 
   .col-md-3
     - if can? :edit, @event
@@ -119,17 +91,4 @@
           - count_presenter = SignupCountPresenter.new(OpenStruct.new(registration_policy: @event.registration_policy, signups: []), signups_available: false)
           = render 'run_capacity_graph', count_presenter: count_presenter
 
-%section.my-4
-  %hr
-
-  = MarkdownPresenter.new('No description provided').render @event.description
-
-- %w[content_warnings age_restrictions participant_communications].each do |field|
-  - value = @event.public_send(field)
-  - if value.present?
-    %hr
-
-    %section.my-4
-      %h4= field.humanize
-
-      = MarkdownPresenter.new('No information provided').render value
+= render 'long_form_fields'
