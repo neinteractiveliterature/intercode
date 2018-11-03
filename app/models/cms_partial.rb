@@ -9,6 +9,6 @@ class CmsPartial < ApplicationRecord
   private
 
   def set_performance_metadata
-    self.invariant = template_invariant?(parent.cms_variables.pluck(:key))
+    self.invariant = template_invariant?(parent&.cms_variables&.pluck(:key) || [])
   end
 end
