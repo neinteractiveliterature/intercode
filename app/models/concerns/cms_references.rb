@@ -59,12 +59,15 @@ module Concerns::CmsReferences
     ))
   end
 
-  def template_invariant?
-    referenced_partials_recursive.all?(&:template_invariant?)
+  def template_invariant?(cms_variable_names)
+    referenced_partials_recursive.all? { |partial| partial.template_invariant?(cms_variable_names) }
     each_liquid_node do |node|
       case node
       when String, Liquid::Include
         next
+      when Liquid::Variable
+        next if cms_variable_names.include?(node.name.name)
+        return false
       else
         return false
       end

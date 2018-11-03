@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_03_150022) do
+ActiveRecord::Schema.define(version: 2018_11_03_160827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(version: 2018_11_03_150022) do
     t.index ["uploader_id"], name: "index_cms_files_on_uploader_id"
   end
 
+  create_table "cms_files_layouts", id: false, force: :cascade do |t|
+    t.bigint "cms_file_id", null: false
+    t.bigint "cms_layout_id", null: false
+  end
+
   create_table "cms_files_pages", id: false, force: :cascade do |t|
     t.bigint "cms_file_id", null: false
     t.bigint "page_id", null: false
@@ -54,6 +59,11 @@ ActiveRecord::Schema.define(version: 2018_11_03_150022) do
     t.datetime "updated_at", null: false
     t.text "admin_notes"
     t.index ["parent_type", "parent_id"], name: "index_cms_layouts_on_parent_type_and_parent_id"
+  end
+
+  create_table "cms_layouts_partials", id: false, force: :cascade do |t|
+    t.bigint "cms_partial_id", null: false
+    t.bigint "cms_layout_id", null: false
   end
 
   create_table "cms_navigation_items", force: :cascade do |t|

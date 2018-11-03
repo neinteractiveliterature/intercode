@@ -33,8 +33,6 @@ class PagesController < ApplicationController
   # Intercode's layout uses the @page_title instance variable for the <title> tag.
   before_action :set_page_title, only: :show
 
-  before_action :preload_cms_content, only: [:show, :root]
-
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
   def root
@@ -81,6 +79,20 @@ class PagesController < ApplicationController
 
   def page_params
     params.require(:page).permit(:name, :slug, :content, :admin_notes)
+  end
+
+  def render_page_content
+    preload_cms_content
+    cadmus_renderer.render(@page.liquid_template, :html, assigns: { 'page' => @page })
+  end
+  helper_method :render_page_content
+
+  def preload_cms_layout_content
+    if @page
+      super(@page.effective_cms_layout)
+    else
+      super
+    end
   end
 
   def preload_cms_content
