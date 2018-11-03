@@ -95,6 +95,9 @@ GEM
     bootstrap_form (4.0.0)
       rails (>= 5.0)
     builder (3.2.3)
+    bullet (5.8.1)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     cadmus (0.7.0)
       liquid
       rails (>= 5.0.0)
@@ -420,6 +423,7 @@ GEM
       unf_ext
     unf (0.1.4-java)
     unf_ext (0.0.7.5)
+    uniform_notifier (1.12.1)
     warden (1.2.7)
       rack (>= 1.0)
     webpacker (4.0.0.pre.3)
@@ -452,6 +456,7 @@ DEPENDENCIES
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
   bootstrap_form
+  bullet
   cadmus (~> 0.7.0)
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)

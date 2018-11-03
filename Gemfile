@@ -113,6 +113,9 @@ group :development do
 
   # Doc generation
   gem 'yard'
+
+  # n+1 query profiling
+  gem 'bullet'
 end
 
 group :development, :test do
