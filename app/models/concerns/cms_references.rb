@@ -16,14 +16,16 @@ module Concerns::CmsReferences
     end
   end
 
+  def template_name_for_include_node(include_node)
+    regexp = /\A#{Regexp.escape include_node.tag_name}\s+#{Liquid::Include::Syntax}/
+    return nil unless include_node.raw =~ regexp
+    Liquid::Expression.parse(Regexp.last_match(1))
+  end
+
   def referenced_partial_names
     each_liquid_node
       .select { |node| node.is_a?(Liquid::Include) }
-      .map do |include_node|
-        regexp = /\A#{Regexp.escape include_node.tag_name}\s+#{Liquid::Include::Syntax}/
-        next unless include_node.raw =~ regexp
-        Liquid::Expression.parse(Regexp.last_match(1))
-      end
+      .map { |include_node| template_name_for_include_node(include_node) }
       .compact
   end
 
@@ -55,5 +57,19 @@ module Concerns::CmsReferences
     CmsFile.where(file: (
       referenced_file_names + referenced_partials_recursive.flat_map(&:referenced_file_names)
     ))
+  end
+
+  def template_invariant?
+    referenced_partials_recursive.all?(&:template_invariant?)
+    each_liquid_node do |node|
+      case node
+      when String, Liquid::Include
+        next
+      else
+        return false
+      end
+    end
+
+    true
   end
 end
