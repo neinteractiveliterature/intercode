@@ -30,6 +30,6 @@ class Page < ApplicationRecord
   def set_performance_metadata
     self.cms_file_ids = referenced_files_recursive.map(&:id)
     self.cms_partial_ids = referenced_partials_recursive.map(&:id)
-    self.invariant = template_invariant?(parent.cms_variables.pluck(:key))
+    self.invariant = template_invariant?(parent&.cms_variables&.pluck(:key) || [])
   end
 end
