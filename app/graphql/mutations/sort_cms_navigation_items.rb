@@ -11,6 +11,8 @@ Mutations::SortCmsNavigationItems = GraphQL::Relay::Mutation.define do
         .update_all(cms_navigation_item_attrs)
     end
 
+    ctx[:convention].touch # invalidate the navigation bar cache
+
     {}
   }
 end
