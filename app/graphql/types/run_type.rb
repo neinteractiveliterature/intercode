@@ -18,10 +18,16 @@ Types::RunType = GraphQL::ObjectType.define do
     end
   end
 
+  field :room_names, types[types.String] do
+    resolve ->(obj, _args, _ctx) do
+      RunRoomNamesLoader.for.load(obj)
+    end
+  end
+
   field :confirmed_signup_count, types.Int do
     resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
-        presenter.counted_signups_by_state('confirmed').size
+        presenter.counted_signups_by_state('confirmed')
       end
     }
   end
@@ -35,7 +41,7 @@ Types::RunType = GraphQL::ObjectType.define do
   field :waitlisted_signup_count, types.Int do
     resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
-        presenter.counted_signups_by_state('waitlisted').size
+        presenter.counted_signups_by_state('waitlisted')
       end
     }
   end
@@ -44,8 +50,8 @@ Types::RunType = GraphQL::ObjectType.define do
     resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
         (
-          presenter.not_counted_signups_by_state('confirmed').size +
-          presenter.not_counted_signups_by_state('waitlisted').size
+          presenter.not_counted_signups_by_state('confirmed') +
+          presenter.not_counted_signups_by_state('waitlisted')
         )
       end
     }
