@@ -49,9 +49,7 @@ query($extendedCounts: Boolean!) {
       waitlisted_signup_count @include(if: $extendedCounts)
       not_counted_signup_count @include(if: $extendedCounts)
 
-      rooms {
-        name
-      }
+      room_names
 
       my_signups {
         state

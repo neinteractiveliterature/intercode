@@ -135,7 +135,7 @@ class ScheduleGridEventRun extends React.Component {
     const signupStatus = userSignupStatus(run);
     const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
     const availabilityDescription = describeAvailability(event, run);
-    const roomsDescription = run.rooms.map(room => room.name).sort().join(', ');
+    const roomsDescription = run.room_names.sort().join(', ');
 
     const eventRunClasses = classNames(
       className,
