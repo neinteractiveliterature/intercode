@@ -121,8 +121,8 @@ class ApplicationController < ActionController::Base
 
   def cms_variables
     return {} unless convention
-    convention.cms_variables.each_with_object({}) do |cms_variable, hash|
-      hash[cms_variable.key.to_s] = cms_variable
+    convention.cms_variables.pluck(:key, :value).each_with_object({}) do |(key, value), hash|
+      hash[key] = value
     end
   end
 
