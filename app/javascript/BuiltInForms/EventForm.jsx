@@ -158,8 +158,8 @@ class EventForm extends React.Component {
               >
                 {categoryOptions}
               </BootstrapFormSelect>
-            ) :
-            null
+            )
+            : null
         }
 
         <CommonEventFormFields

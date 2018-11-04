@@ -40,7 +40,7 @@ class ColumnSelector extends React.PureComponent {
                 this.renderHiddenColumnCount(
                   alwaysVisibleColumns,
                   getPossibleColumns,
-                  getVisibleColumnIds
+                  getVisibleColumnIds,
                 )
               }
             </button>

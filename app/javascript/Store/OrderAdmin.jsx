@@ -68,7 +68,7 @@ class OrderAdmin extends React.Component {
           filter={filter}
           multiple={false}
         />
-      )
+      ),
     },
     {
       Header: 'Submitted',
