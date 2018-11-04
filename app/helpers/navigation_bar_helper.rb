@@ -9,7 +9,9 @@ module NavigationBarHelper
   }
 
   def render_navigation_item(item)
-    link_to item.label, item.url, class: item.item_class(request), method: item.http_method
+    options = { class: item.item_class(request), method: item.http_method }
+    options.delete(:method) if options[:method] && options[:method].to_s.downcase == 'get'
+    link_to item.label, item.url, options.compact
   end
 
   def render_navigation_items(items)
