@@ -4,7 +4,7 @@ class IntercodeSchema < GraphQL::Schema
 
   use GraphQL::Guard.new
   use GraphQL::Batch
-  use GraphQL::Tracing::SkylightTracing
+  use GraphQL::Tracing::SkylightTracing.new(set_endpoint_name: true)
 
   better_rescue_middleware = BetterRescueMiddleware.new
   better_rescue_middleware.rescue_from ActiveRecord::RecordInvalid do |err|
