@@ -9,7 +9,7 @@ import StaffPositionPropType from './StaffPositionPropType';
 import { fragments } from './queries';
 
 const updateStaffPositionMutation = gql`
-mutation($input: UpdateStaffPositionInput!) {
+mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
   updateStaffPosition(input: $input) {
     staff_position {
       ...StaffPositionFields

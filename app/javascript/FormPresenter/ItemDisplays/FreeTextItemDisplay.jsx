@@ -1,15 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 
 import PlainTextDisplay from '../../PlainTextDisplay';
+import { previewMarkdownQuery } from '../../BuiltInFormControls/MarkdownInput';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
-
-const previewMarkdownQuery = gql`
-query($markdown: String!) {
-  previewMarkdown(markdown: $markdown)
-}
-`;
 
 class FreeTextItemDisplay extends React.PureComponent {
   static propTypes = {

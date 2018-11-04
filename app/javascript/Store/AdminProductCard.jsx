@@ -18,7 +18,7 @@ import sortProductVariants from './sortProductVariants';
 import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
 
 const createProductMutation = gql`
-mutation($product: ProductInput!) {
+mutation CreateProduct($product: ProductInput!) {
   createProduct(input: { product: $product }) {
     product {
       ...AdminProductFields
@@ -30,7 +30,7 @@ ${adminProductFragment}
 `;
 
 const updateProductMutation = gql`
-mutation($id: Int!, $product: ProductInput!) {
+mutation UpdateProduct($id: Int!, $product: ProductInput!) {
   updateProduct(input: { id: $id, product: $product }) {
     product {
       ...AdminProductFields
@@ -42,7 +42,7 @@ ${adminProductFragment}
 `;
 
 const deleteProductMutation = gql`
-mutation($id: Int!) {
+mutation DeleteProduct($id: Int!) {
   deleteProduct(input: { id: $id }) {
     product {
       ...AdminProductFields

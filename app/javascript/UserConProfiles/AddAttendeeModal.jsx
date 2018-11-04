@@ -13,7 +13,7 @@ import UserConProfileForm from './UserConProfileForm';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 
 const usersQuery = gql`
-query($name: String) {
+query AddAttendeeUsersQuery($name: String) {
   users_paginated(filters: { name: $name }, per_page: 50) {
     entries {
       id
@@ -26,7 +26,7 @@ query($name: String) {
 `;
 
 const userConProfileFormQuery = gql`
-query {
+query AddAttendeeUserConProfileFormQuery {
   convention {
     privilege_names
     mail_privilege_names
@@ -39,7 +39,7 @@ query {
 `;
 
 const createUserConProfileMutation = gql`
-mutation($user_id: Int!, $user_con_profile: UserConProfileInput!) {
+mutation CreateUserConProfile($user_id: Int!, $user_con_profile: UserConProfileInput!) {
   createUserConProfile(input: { user_id: $user_id, user_con_profile: $user_con_profile }) {
     user_con_profile {
       id

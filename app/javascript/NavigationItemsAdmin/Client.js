@@ -17,7 +17,7 @@ fragment NavigationItemFields on CmsNavigationItem {
 `;
 
 const cmsNavigationItemsQuery = gql`
-query {
+query NavigationItemsAdminQuery {
   convention {
     pages {
       id
@@ -34,7 +34,7 @@ ${navigationItemFragment}
 `;
 
 const createNavigationItemMutation = gql`
-mutation($navigationItem: CmsNavigationItemInput!) {
+mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
   createCmsNavigationItem(input: { cms_navigation_item: $navigationItem }) {
     cms_navigation_item {
       ...NavigationItemFields
@@ -46,7 +46,7 @@ ${navigationItemFragment}
 `;
 
 const updateNavigationItemMutation = gql`
-mutation($id: Int!, $navigationItem: CmsNavigationItemInput!) {
+mutation UpdateNavigationItem($id: Int!, $navigationItem: CmsNavigationItemInput!) {
   updateCmsNavigationItem(input: { id: $id, cms_navigation_item: $navigationItem }) {
     cms_navigation_item {
       ...NavigationItemFields
@@ -58,7 +58,7 @@ ${navigationItemFragment}
 `;
 
 const deleteNavigationItemMutation = gql`
-mutation($id: Int!) {
+mutation DeleteNavigationItem($id: Int!) {
   deleteCmsNavigationItem(input: { id: $id }) {
     cms_navigation_item {
       id
@@ -68,7 +68,7 @@ mutation($id: Int!) {
 `;
 
 const sortNavigationItemsMutation = gql`
-mutation($sortItems: [UpdateCmsNavigationItemInput!]!) {
+mutation SortNavigationItems($sortItems: [UpdateCmsNavigationItemInput!]!) {
   sortCmsNavigationItems(input: { sort_items: $sortItems }) {
     clientMutationId
   }

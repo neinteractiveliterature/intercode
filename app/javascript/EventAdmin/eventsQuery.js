@@ -130,7 +130,7 @@ ${fragments.maximumEventProvidedTicketsOverride}
 export { fragments };
 
 export default gql`
-query {
+query EventAdminEventsQuery {
   currentAbility {
     can_override_maximum_event_provided_tickets
   }

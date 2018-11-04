@@ -12,7 +12,7 @@ import LazyStripe from '../LazyStripe';
 import TicketPurchasePaymentSection from './TicketPurchasePaymentSection';
 
 const purchaseTicketMutation = gql`
-mutation($input: PurchaseTicketInput!) {
+mutation PurchaseTicket($input: PurchaseTicketInput!) {
   purchaseTicket(input: $input) {
     ticket {
       id

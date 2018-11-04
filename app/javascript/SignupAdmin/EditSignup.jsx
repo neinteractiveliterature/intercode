@@ -17,7 +17,7 @@ import GraphQLResultPropType from '../GraphQLResultPropType';
 import Timespan from '../PCSG/Timespan';
 
 const updateCountedMutation = gql`
-mutation($signupId: Int!, $counted: Boolean!) {
+mutation UpdateSignupCounted($signupId: Int!, $counted: Boolean!) {
   updateSignupCounted(input: { id: $signupId, counted: $counted }) {
     signup {
       ...SignupFields

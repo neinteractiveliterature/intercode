@@ -68,7 +68,7 @@ ${userConProfileFragment}
 `;
 
 const teamMemberQuery = gql`
-query($eventId: Int!) {
+query TeamMemberQuery($eventId: Int!) {
   convention {
     name
 
@@ -102,7 +102,7 @@ ${teamMemberFragment}
 `;
 
 const userConProfilesQuery = gql`
-query($name: String) {
+query TeamMemberUserConProfilesQuery($name: String) {
   convention {
     user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
       entries {
@@ -116,7 +116,7 @@ ${userConProfileFragment}
 `;
 
 const createTeamMemberMutation = gql`
-mutation($input: CreateTeamMemberInput!) {
+mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
     team_member {
       ...TeamMemberFields
@@ -128,7 +128,7 @@ ${teamMemberFragment}
 `;
 
 const deleteTeamMemberMutation = gql`
-mutation($input: DeleteTeamMemberInput!) {
+mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
   deleteTeamMember(input: $input) {
     team_member {
       ...TeamMemberFields
@@ -140,7 +140,7 @@ ${teamMemberFragment}
 `;
 
 const updateTeamMemberMutation = gql`
-mutation($input: UpdateTeamMemberInput!) {
+mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
   updateTeamMember(input: $input) {
     team_member {
       ...TeamMemberFields
@@ -152,7 +152,7 @@ ${teamMemberFragment}
 `;
 
 const provideEventTicketMutation = gql`
-mutation($input: ProvideEventTicketInput!) {
+mutation ProvideEventTicket($input: ProvideEventTicketInput!) {
   provideEventTicket(input: $input) {
     ticket {
       ...TeamMemberTicketFields

@@ -13,7 +13,7 @@ import { parseIntOrNull } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 
 const productQuery = gql`
-query($productId: Int!) {
+query OrderFormProductQuery($productId: Int!) {
   product(id: $productId) {
     price {
       fractional
@@ -32,7 +32,7 @@ query($productId: Int!) {
 `;
 
 const addOrderEntryToCurrentPendingOrderMutation = gql`
-mutation($input: AddOrderEntryToCurrentPendingOrderInput!) {
+mutation AddOrderEntryToCurrentPendingOrder($input: AddOrderEntryToCurrentPendingOrderInput!) {
   addOrderEntryToCurrentPendingOrder(input: $input) {
     order_entry {
       id

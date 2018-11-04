@@ -11,13 +11,12 @@ import gql from 'graphql-tag';
 import classNames from 'classnames';
 
 import EditSignup from './EditSignup';
-import LoadingIndicator from '../LoadingIndicator';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
 
 const eventQuery = gql`
-query($eventId: Int!) {
+query SignupAdminEventQuery($eventId: Int!) {
   event(id: $eventId) {
     id
     title

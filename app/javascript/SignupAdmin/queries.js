@@ -57,7 +57,7 @@ fragment SignupFields on Signup {
 `;
 
 export const adminSignupQuery = gql`
-query($id: Int!) {
+query AdminSignupQuery($id: Int!) {
   convention {
     timezone_name
   }

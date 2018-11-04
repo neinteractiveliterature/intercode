@@ -11,7 +11,7 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 const eventProposalsAdminQuery = gql`
-query($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput]) {
+query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput]) {
   convention {
     id
     timezone_name

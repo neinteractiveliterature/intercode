@@ -58,7 +58,7 @@ fragment UserConProfileSignupsFragment on UserConProfile {
 `;
 
 const userConProfileSignupsQuery = gql`
-query($id: Int!) {
+query UserConProfileSignupsQuery($id: Int!) {
   convention {
     name
     timezone_name
@@ -92,7 +92,7 @@ ${userConProfileSignupsFragment}
 `;
 
 const withdrawFromAllMutation = gql`
-mutation($userConProfileId: Int!) {
+mutation WithdrawAllUserConProfileSignups($userConProfileId: Int!) {
   withdrawAllUserConProfileSignups(input: { user_con_profile_id: $userConProfileId }) {
     user_con_profile {
       id

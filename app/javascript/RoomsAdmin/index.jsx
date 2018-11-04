@@ -11,7 +11,7 @@ import GraphQLResultPropType from '../GraphQLResultPropType';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 
 const roomsQuery = gql`
-query {
+query RoomsAdminQuery {
   convention {
     rooms {
       id
@@ -26,7 +26,7 @@ query {
 `;
 
 const createRoomMutation = gql`
-mutation($input: CreateRoomInput!) {
+mutation CreateRoom($input: CreateRoomInput!) {
   createRoom(input: $input) {
     room {
       id
@@ -41,7 +41,7 @@ mutation($input: CreateRoomInput!) {
 `;
 
 const updateRoomMutation = gql`
-mutation($input: UpdateRoomInput!) {
+mutation UpdateRoom($input: UpdateRoomInput!) {
   updateRoom(input: $input) {
     room {
       id
@@ -56,7 +56,7 @@ mutation($input: UpdateRoomInput!) {
 `;
 
 const deleteRoomMutation = gql`
-mutation($input: DeleteRoomInput!) {
+mutation DeleteRoom($input: DeleteRoomInput!) {
   deleteRoom(input: $input) {
     room {
       id

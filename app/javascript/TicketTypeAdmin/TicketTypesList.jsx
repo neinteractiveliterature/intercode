@@ -65,7 +65,7 @@ function renderPricingSchedule(ticketType, timezoneName) {
 }
 
 const deleteTicketTypeMutation = gql`
-mutation($input: DeleteTicketTypeInput!) {
+mutation DeleteTicketType($input: DeleteTicketTypeInput!) {
   deleteTicketType(input: $input) {
     ticket_type {
       id

@@ -8,7 +8,7 @@ import StaffPositionForm from './StaffPositionForm';
 import { fragments, staffPositionsQuery } from './queries';
 
 const createStaffPositionMutation = gql`
-mutation($input: CreateStaffPositionInput!) {
+mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
   createStaffPosition(input: $input) {
     staff_position {
       ...StaffPositionFields

@@ -12,7 +12,7 @@ import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 
 const formQuery = gql`
-query($formId: Int!) {
+query FormJSONEditorFormQuery($formId: Int!) {
   form(id: $formId) {
     id
     export_json
@@ -21,7 +21,7 @@ query($formId: Int!) {
 `;
 
 const updateFormMutation = gql`
-mutation($input: UpdateFormWithJSONInput!) {
+mutation UpdateFormWithJSON($input: UpdateFormWithJSONInput!) {
   updateFormWithJSON(input: $input) {
     form {
       id

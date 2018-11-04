@@ -8,7 +8,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import { signupFields } from './queries';
 
 const changeBucketMutation = gql`
-mutation($signupId: Int!, $bucketKey: String!) {
+mutation ChangeSignupBucket($signupId: Int!, $bucketKey: String!) {
   updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {
       ...SignupFields

@@ -7,7 +7,7 @@ import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 
 const orderSummaryQuery = gql`
-query {
+query OrderSummaryQuery {
   convention {
     products {
       name

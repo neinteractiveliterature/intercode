@@ -12,7 +12,7 @@ import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
 
 const orderHistoryQuery = gql`
-query {
+query OrderHistoryQuery {
   convention {
     name
     timezone_name
