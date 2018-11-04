@@ -123,7 +123,7 @@ class TicketAdminSection extends React.Component {
                                   </p>
                                 </React.Fragment>
                               ),
-                              displayError: (error) => <ErrorDisplay graphQLError={error} />,
+                              displayError: error => <ErrorDisplay graphQLError={error} />,
                             })}
                           >
                           Delete with refund
@@ -150,7 +150,7 @@ class TicketAdminSection extends React.Component {
                             </p>
                           </React.Fragment>
                         ),
-                        displayError: (error) => <ErrorDisplay graphQLError={error} />,
+                        displayError: error => <ErrorDisplay graphQLError={error} />,
                       })}
                     >
                       Delete without refund

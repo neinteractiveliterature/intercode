@@ -349,8 +349,26 @@ class AdminProductCard extends React.Component {
             name="payment_options"
             caption="Payment options"
             choices={[
-              { label: (<span><i className="fa fa-cc-stripe" /> Stripe</span>), value: 'stripe' },
-              { label: (<span><i className="fa fa-suitcase" /> Pay at convention</span>), value: 'pay_at_convention' },
+              {
+                label: (
+                  <span>
+                    <i className="fa fa-cc-stripe" />
+                    {' '}
+                    Stripe
+                  </span>
+                ),
+                value: 'stripe',
+              },
+              {
+                label: (
+                  <span>
+                    <i className="fa fa-suitcase" />
+                    {' '}
+                    Pay at convention
+                  </span>
+                ),
+                value: 'pay_at_convention',
+              },
             ]}
             multiple
             value={this.state.editingProduct.payment_options}
@@ -381,7 +399,7 @@ class AdminProductCard extends React.Component {
                 {
                   'fa-cc-stripe': paymentOption === 'stripe',
                   'fa-suitcase': paymentOption === 'pay_at_convention',
-                }
+                },
               )
             }
             title={humanize(paymentOption)}
