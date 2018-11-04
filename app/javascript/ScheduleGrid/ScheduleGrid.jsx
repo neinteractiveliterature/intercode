@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  NavLink, Redirect, Route, Switch,
-} from 'react-router-dom';
 import classNames from 'classnames';
 
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
@@ -32,11 +29,13 @@ class ScheduleGrid extends React.Component {
     config: ConfigPropType,
     schedule: PropTypes.shape({
       timezoneName: PropTypes.string.isRequired,
-      conventionDayTimespans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-      buildLayoutForConventionDayTimespan: PropTypes.func.isRequired,
+      buildLayoutForTimespanRange: PropTypes.func.isRequired,
       getRun: PropTypes.func.isRequired,
       getEvent: PropTypes.func.isRequired,
       shouldUseRowHeaders: PropTypes.func.isRequired,
+    }).isRequired,
+    timespan: PropTypes.shape({
+      clone: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -85,9 +84,7 @@ class ScheduleGrid extends React.Component {
           runDimensions={runDimensions}
           event={event}
           run={run}
-          convention={this.props.schedule.data.convention}
           className={className}
-          config={this.props.config}
         />
       );
     })
@@ -246,44 +243,18 @@ class ScheduleGrid extends React.Component {
   }
 
   render = () => {
-    const conventionDayTabs = this.props.schedule.conventionDayTimespans.map(({ start }) => (
-      <li className="nav-item" key={start.toISOString()}>
-        <NavLink to={`/${start.format('dddd').toLowerCase()}`} className="nav-link">
-          <span className="d-inline d-md-none">
-            {start.format('ddd')}
-          </span>
-          <span className="d-none d-md-inline">
-            {start.format('dddd')}
-          </span>
-        </NavLink>
-      </li>
-    ));
+    const minTimespan = this.props.timespan.clone();
+    minTimespan.start.add(3, 'hours'); // start grid at 9am unless something is earlier
+    minTimespan.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
 
-    const conventionDayGrids = this.props.schedule.conventionDayTimespans.map((timespan) => {
-      const layout = this.props.schedule.buildLayoutForConventionDayTimespan(timespan);
+    const layout = this.props.schedule.buildLayoutForTimespanRange(
+      minTimespan,
+      this.props.timespan,
+    );
 
-      return (
-        <Route
-          path={`/${timespan.start.format('dddd').toLowerCase()}`}
-          render={() => this.renderGridWithLayout(
-            layout,
-            this.props.schedule.shouldUseRowHeaders(),
-          )}
-          key={timespan.start.toISOString()}
-        />
-      );
-    });
-
-    return (
-      <div>
-        <ul className="nav nav-tabs">
-          {conventionDayTabs}
-        </ul>
-        <Switch>
-          {conventionDayGrids}
-          <Redirect to={`${this.props.schedule.conventionDayTimespans[0].start.format('dddd').toLowerCase()}`} />
-        </Switch>
-      </div>
+    return this.renderGridWithLayout(
+      layout,
+      this.props.schedule.shouldUseRowHeaders(),
     );
   }
 }

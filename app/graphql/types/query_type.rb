@@ -26,6 +26,8 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :events, types[Types::EventType] do
     argument :extendedCounts, types.Boolean
     argument :includeDropped, types.Boolean
+    argument :start, Types::DateType
+    argument :finish, Types::DateType
 
     guard ->(_obj, args, ctx) do
       current_ability = ctx[:current_ability]
@@ -40,6 +42,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     resolve ->(_obj, args, ctx) {
       events = ctx[:convention].events
       events = events.active unless args['includeDropped']
+      if args[:start] || args[:finish]
+        run_scope = Run
+        run_scope = run_scope.where('starts_at >= ?', args[:start]) if args[:start]
+        run_scope = run_scope.where('starts_at < ?', args[:finish]) if args[:finish]
+        events = events.where(id: run_scope.select(:event_id))
+      end
       events
     }
   end

@@ -1107,6 +1107,7 @@ type Run {
   id: Int!
   my_signups: [Signup]
   not_counted_signup_count: Int
+  room_names: [String]
   rooms: [Room]
   schedule_note: String
   signups_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!

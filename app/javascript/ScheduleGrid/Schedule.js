@@ -4,28 +4,22 @@ import EventCategory from '../EventAdmin/EventCategory';
 import EventRun from '../PCSG/EventRun';
 import ScheduleBlock from '../PCSG/ScheduleBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
-import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
+import { timespanFromConvention } from '../TimespanUtils';
 
 export default class Schedule {
-  constructor(config, data) {
+  constructor(config, convention, events) {
     this.config = config;
-    this.data = data;
 
-    this.timezoneName = data.convention.timezone_name;
+    this.timezoneName = convention.timezone_name;
 
-    this.eventsById = new Map(data.events.map(event => [event.id, event]));
-    this.runsById = new Map(data.events.map(event => (
+    this.eventsById = new Map(events.map(event => [event.id, event]));
+    this.runsById = new Map(events.map(event => (
       event.runs.map(run => [run.id, { ...run, event_id: event.id }])
     )).reduce((runEntries, entriesForEvent) => [...runEntries, ...entriesForEvent], []));
 
-    this.conventionTimespan = timespanFromConvention(data.convention);
+    this.conventionTimespan = timespanFromConvention(convention);
 
-    this.conventionDayTimespans = getConventionDayTimespans(
-      this.conventionTimespan,
-      data.convention.timezone_name,
-    );
-
-    this.eventRuns = EventRun.buildEventRunsFromApi(data.events);
+    this.eventRuns = EventRun.buildEventRunsFromApi(events);
     this.runTimespansById = new Map(this.eventRuns
       .map(eventRun => [eventRun.runId, eventRun.timespan]));
   }

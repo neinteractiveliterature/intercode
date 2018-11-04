@@ -1,63 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import { Set } from 'immutable';
+import { detect } from 'detect-browser';
 
 import ConfigPropType from './ConfigPropType';
+import ConventionDayTabContainer from './ConventionDayTabContainer';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import Schedule from './Schedule';
+import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery, ScheduleGridCombinedQuery } from './queries.gql';
+import { timespanFromConvention } from '../TimespanUtils';
+
+const IS_MOBILE = ['iOS', 'Android OS'].includes(detect().os);
 
 const ScheduleGridContext = React.createContext({
   schedule: {},
+  config: {},
   isRunDetailsVisible: () => false,
   toggleRunDetailsVisibility: () => {},
 });
 
 export const ScheduleGridConsumer = ScheduleGridContext.Consumer;
-
-const scheduleQuery = gql`
-query($extendedCounts: Boolean!) {
-  convention {
-    starts_at
-    ends_at
-    timezone_name
-  }
-
-  events(extendedCounts: $extendedCounts) {
-    id
-    title
-    length_seconds
-    category
-    short_blurb_html
-    event_page_url
-
-    registration_policy {
-      slots_limited
-      total_slots
-      preferred_slots
-      minimum_slots
-    }
-
-    runs {
-      id
-      starts_at
-      schedule_note
-      title_suffix
-
-      confirmed_limited_signup_count
-      confirmed_signup_count @include(if: $extendedCounts)
-      waitlisted_signup_count @include(if: $extendedCounts)
-      not_counted_signup_count @include(if: $extendedCounts)
-
-      room_names
-
-      my_signups {
-        state
-      }
-    }
-  }
-}
-`;
 
 export class ScheduleGridProvider extends React.Component {
   static propTypes = {
@@ -72,6 +34,15 @@ export class ScheduleGridProvider extends React.Component {
       visibleRunDetailsIds: new Set(),
     };
   }
+
+  getEventsQueryParams = timespan => ({
+    query: ScheduleGridEventsQuery,
+    variables: {
+      start: timespan.start.toISOString(),
+      finish: timespan.finish.toISOString(),
+      extendedCounts: this.props.config.showExtendedCounts || false,
+    },
+  })
 
   toggleRunDetailsVisibility = (schedule, runId) => {
     if (this.state.visibleRunDetailsIds.contains(runId)) {
@@ -93,28 +64,63 @@ export class ScheduleGridProvider extends React.Component {
     return true;
   }
 
-  render = () => (
-    <QueryWithStateDisplay
-      query={scheduleQuery}
-      variables={{
-        extendedCounts: this.props.config.showExtendedCounts || false,
-      }}
-    >
-      {({ data }) => {
-        const schedule = new Schedule(this.props.config, data);
+  renderProvider = (convention, events, timespan) => {
+    const schedule = new Schedule(this.props.config, convention, events);
 
-        return (
-          <ScheduleGridContext.Provider
-            value={{
-              schedule,
-              isRunDetailsVisible: runId => this.state.visibleRunDetailsIds.contains(runId),
-              toggleRunDetailsVisibility: this.toggleRunDetailsVisibility,
-            }}
+    return (
+      <ScheduleGridContext.Provider
+        value={{
+          schedule,
+          config: this.props.config,
+          isRunDetailsVisible: runId => this.state.visibleRunDetailsIds.contains(runId),
+          toggleRunDetailsVisibility: this.toggleRunDetailsVisibility,
+        }}
+      >
+        {this.props.children(timespan)}
+      </ScheduleGridContext.Provider>
+    );
+  }
+
+  render = () => {
+    if (IS_MOBILE) {
+      // We can't detect hovers on mobile, so prefetching isn't an option - just fetch all
+      // the data on the first request
+
+      return (
+        <QueryWithStateDisplay
+          query={ScheduleGridCombinedQuery}
+          variables={{
+            extendedCounts: this.props.config.showExtendedCounts || false,
+          }}
+        >
+          {({ data: { convention, events } }) => (
+            <ConventionDayTabContainer
+              conventionTimespan={timespanFromConvention(convention)}
+              timezoneName={convention.timezone_name}
+            >
+              {timespan => this.renderProvider(convention, events, timespan)}
+            </ConventionDayTabContainer>
+          )}
+        </QueryWithStateDisplay>
+      );
+    }
+
+    return (
+      <QueryWithStateDisplay query={ScheduleGridConventionDataQuery}>
+        {({ data: { convention }, client }) => (
+          <ConventionDayTabContainer
+            conventionTimespan={timespanFromConvention(convention)}
+            timezoneName={convention.timezone_name}
+            prefetchTimespan={timespan => client.query(this.getEventsQueryParams(timespan))}
           >
-            {this.props.children}
-          </ScheduleGridContext.Provider>
-        );
-      }}
-    </QueryWithStateDisplay>
-  )
+            {timespan => (
+              <QueryWithStateDisplay {...this.getEventsQueryParams(timespan)}>
+                {({ data: { events } }) => this.renderProvider(convention, events, timespan)}
+              </QueryWithStateDisplay>
+            )}
+          </ConventionDayTabContainer>
+        )}
+      </QueryWithStateDisplay>
+    );
+  }
 }
