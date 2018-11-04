@@ -11,7 +11,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
 const previousProposalsQuery = gql`
-query {
+query PreviousProposalsQuery {
   myProfile {
     id
 
@@ -35,7 +35,7 @@ query {
 `;
 
 const createEventProposal = gql`
-mutation($cloneEventProposalId: Int) {
+mutation CreateEventProposal($cloneEventProposalId: Int) {
   createEventProposal(input: { clone_event_proposal_id: $cloneEventProposalId }) {
     event_proposal {
       id

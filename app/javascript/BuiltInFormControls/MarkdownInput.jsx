@@ -3,8 +3,8 @@ import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 import CodeInput from './CodeInput';
 
-const previewMarkdownQuery = gql`
-query($markdown: String!) {
+export const previewMarkdownQuery = gql`
+query PreviewMarkdownQuery($markdown: String!) {
   previewMarkdown(markdown: $markdown)
 }
 `;

@@ -67,7 +67,7 @@ fragment StandaloneEditEvent_EventFormData on Convention {
 `;
 
 const eventQuery = gql`
-query($eventId: Int!) {
+query StandaloneEditEventQuery($eventId: Int!) {
   currentAbility {
     can_override_maximum_event_provided_tickets
   }
@@ -92,7 +92,7 @@ ${eventFormDataFragment}
 `;
 
 export const dropEventMutation = gql`
-mutation($input: DropEventInput!) {
+mutation StandaloneDropEvent($input: DropEventInput!) {
   dropEvent(input: $input) {
     event {
       id
@@ -103,7 +103,7 @@ mutation($input: DropEventInput!) {
 `;
 
 export const updateEventMutation = gql`
-mutation($input: UpdateEventInput!) {
+mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
     event {
       ...StandaloneEditEvent_EventFields
@@ -115,7 +115,7 @@ ${eventFragment}
 `;
 
 export const createMaximumEventProvidedTicketsOverrideMutation = gql`
-mutation($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
+mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
@@ -127,7 +127,7 @@ ${maximumEventProvidedTicketsOverrideFragment}
 `;
 
 export const deleteMaximumEventProvidedTicketsOverrideMutation = gql`
-mutation($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
+mutation StandaloneDeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
@@ -139,7 +139,7 @@ ${maximumEventProvidedTicketsOverrideFragment}
 `;
 
 export const updateMaximumEventProvidedTicketsOverrideMutation = gql`
-mutation($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
+mutation StandaloneUpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields

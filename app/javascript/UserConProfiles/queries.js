@@ -24,7 +24,7 @@ fragment UserConProfileFormData on Convention {
 `;
 
 export const userConProfileQuery = gql`
-query($id: Int!) {
+query UserConProfileQuery($id: Int!) {
   currentAbility {
     can_update_privileges_user_con_profile(user_con_profile_id: $id)
   }
@@ -46,7 +46,7 @@ ${fragments.userConProfileFormData}
 `;
 
 export const myProfileQuery = gql`
-query {
+query MyProfileQuery {
   convention {
     ...UserConProfileFormData
   }
@@ -61,7 +61,7 @@ ${fragments.userConProfileFormData}
 `;
 
 export const userConProfileAdminQuery = gql`
-query($id: Int!) {
+query UserConProfileAdminQuery($id: Int!) {
   myProfile {
     id
     ability {

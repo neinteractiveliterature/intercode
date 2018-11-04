@@ -51,7 +51,7 @@ fragment ConventionAdminConventionFields on Convention {
 `;
 
 const conventionQuery = gql`
-query($id: Int!) {
+query ConventionAdminConventionQuery($id: Int!) {
   convention(id: $id) {
     ...ConventionAdminConventionFields
   }
@@ -61,7 +61,7 @@ ${conventionFragment}
 `;
 
 const updateConventionMutation = gql`
-mutation($input: UpdateConventionInput!) {
+mutation UpdateConvention($input: UpdateConventionInput!) {
   updateConvention(input: $input) {
     convention {
       ...ConventionAdminConventionFields

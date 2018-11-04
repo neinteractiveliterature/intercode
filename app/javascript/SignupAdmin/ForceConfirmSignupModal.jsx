@@ -8,7 +8,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import { signupFields } from './queries';
 
 const forceConfirmMutation = gql`
-mutation($signupId: Int!, $bucketKey: String!) {
+mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
   forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {
       ...SignupFields

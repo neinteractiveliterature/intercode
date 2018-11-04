@@ -15,7 +15,7 @@ import { userConProfileAdminQuery } from './queries';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 
 const deleteUserConProfileMutation = gql`
-mutation($userConProfileId: Int!) {
+mutation DeleteUserConProfile($userConProfileId: Int!) {
   deleteUserConProfile(input: { id: $userConProfileId }) {
     user_con_profile {
       id

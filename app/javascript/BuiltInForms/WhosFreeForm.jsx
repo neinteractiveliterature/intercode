@@ -11,7 +11,7 @@ import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../PCSG/Timespan';
 
 const conventionQuery = gql`
-query {
+query WhosFreeFormConventionQuery {
   convention {
     starts_at
     ends_at

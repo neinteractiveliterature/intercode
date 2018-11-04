@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import LoadingIndicator from '../LoadingIndicator';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { timespanFromRun } from '../TimespanUtils';
 
 const runInfoQuery = gql`
-query($eventId: Int!, $runId: Int!) {
+query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
   convention {
     timezone_name
   }

@@ -29,7 +29,7 @@ fragment EventProposalFormData on Convention {
 `;
 
 export const eventProposalQuery = gql`
-query($eventProposalId: Int!) {
+query EventProposalQuery($eventProposalId: Int!) {
   convention {
     id
     ...EventProposalFormData
@@ -45,7 +45,7 @@ ${fragments.eventProposalFormData}
 `;
 
 export const eventProposalQueryWithOwner = gql`
-query($eventProposalId: Int!) {
+query EventProposalQueryWithOwner($eventProposalId: Int!) {
   convention {
     id
     ...EventProposalFormData
@@ -72,7 +72,7 @@ ${fragments.eventProposalFormData}
 `;
 
 export const eventProposalAdminNotesQuery = gql`
-query($eventProposalId: Int!) {
+query EventProposalAdminNotesQuery($eventProposalId: Int!) {
   eventProposal(id: $eventProposalId) {
     id
     admin_notes

@@ -12,7 +12,7 @@ import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { userConProfileAdminQuery } from './queries';
 
 const noTicketAbilityQuery = gql`
-query {
+query TicketAdminWithoutAbilityQuery {
   currentAbility {
     can_create_tickets
   }
@@ -20,7 +20,7 @@ query {
 `;
 
 const ticketAbilityQuery = gql`
-query($ticketId: Int!) {
+query TicketAdminWithAbilityQuery($ticketId: Int!) {
   currentAbility {
     can_create_tickets
     can_update_ticket(ticket_id: $ticketId)
@@ -30,7 +30,7 @@ query($ticketId: Int!) {
 `;
 
 const deleteTicketMutation = gql`
-mutation($ticketId: Int!, $refund: Boolean!) {
+mutation DeleteTicket($ticketId: Int!, $refund: Boolean!) {
   deleteTicket(input: { id: $ticketId, refund: $refund }) {
     ticket {
       id

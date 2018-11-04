@@ -16,7 +16,7 @@ import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 
 const userConProfilesQuery = gql`
-query($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
+query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
   convention {
     name
     privilege_names

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import CodeInput from './CodeInput';
 
 const previewLiquidQuery = gql`
-query($liquid: String!) {
+query PreviewLiquidQuery($liquid: String!) {
   previewLiquid(content: $liquid)
 }
 `;

@@ -41,7 +41,7 @@ fragment OrderEntryFields on OrderEntry {
 `;
 
 const cartQuery = gql`
-query {
+query CartQuery {
   myProfile {
     id
     name_without_nickname
@@ -60,7 +60,7 @@ ${orderEntryFragment}
 `;
 
 const updateOrderEntryMutation = gql`
-mutation($input: UpdateOrderEntryInput!) {
+mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
   updateOrderEntry(input: $input) {
     order_entry {
       ...OrderEntryFields
@@ -72,7 +72,7 @@ ${orderEntryFragment}
 `;
 
 const deleteOrderEntryMutation = gql`
-mutation($input: DeleteOrderEntryInput!) {
+mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
   deleteOrderEntry(input: $input) {
     order_entry {
       id

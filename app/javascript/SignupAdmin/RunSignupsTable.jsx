@@ -12,7 +12,7 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 const signupsQuery = gql`
-query($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
+query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
   event(id: $eventId) {
     id
     team_member_name

@@ -9,7 +9,7 @@ import TicketTypeForm from './TicketTypeForm';
 import { fragments, ticketTypesQuery } from './queries';
 
 const createTicketTypeMutation = gql`
-mutation($input: CreateTicketTypeInput!) {
+mutation CreateTicketType($input: CreateTicketTypeInput!) {
   createTicketType(input: $input) {
     ticket_type {
       ...TicketTypeAdmin_TicketTypeFields

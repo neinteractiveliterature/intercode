@@ -8,7 +8,7 @@ import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 
 const signupsQuery = gql`
-query($page: Int, $perPage: Int) {
+query SignupSpySignupsQuery($page: Int, $perPage: Int) {
   convention {
     id
     timezone_name

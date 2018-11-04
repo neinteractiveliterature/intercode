@@ -10,7 +10,7 @@ import TicketTypePropType from './TicketTypePropType';
 import { fragments } from './queries';
 
 const updateTicketTypeMutation = gql`
-mutation($input: UpdateTicketTypeInput!) {
+mutation UpdateTicketType($input: UpdateTicketTypeInput!) {
   updateTicketType(input: $input) {
     ticket_type {
       ...TicketTypeAdmin_TicketTypeFields

@@ -9,7 +9,7 @@ import StaffPositionPropType from './StaffPositionPropType';
 import { staffPositionsQuery } from './queries';
 
 const deleteStaffPositionMutation = gql`
-mutation($input: DeleteStaffPositionInput!) {
+mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
   deleteStaffPosition(input: $input) {
     staff_position {
       id

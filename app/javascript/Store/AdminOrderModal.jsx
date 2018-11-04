@@ -10,7 +10,7 @@ import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 
 const markOrderPaidMutation = gql`
-mutation($orderId: Int!) {
+mutation MarkOrderPaid($orderId: Int!) {
   markOrderPaid(input: { id: $orderId }) {
     order {
       ...AdminOrderFieldsFragment
@@ -22,7 +22,7 @@ ${adminOrderFragment}
 `;
 
 const cancelOrderMutation = gql`
-mutation($orderId: Int!) {
+mutation CancelOrder($orderId: Int!) {
   cancelOrder(input: { id: $orderId }) {
     order {
       ...AdminOrderFieldsFragment
@@ -34,7 +34,7 @@ ${adminOrderFragment}
 `;
 
 const updateOrderMutation = gql`
-mutation($orderId: Int!, $paymentNote: String) {
+mutation AdminUpdateOrder($orderId: Int!, $paymentNote: String) {
   updateOrder(input: { id: $orderId, order: { payment_note: $paymentNote } }) {
     order {
       ...AdminOrderFieldsFragment

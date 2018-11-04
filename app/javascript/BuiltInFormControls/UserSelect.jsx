@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import GraphQLAsyncSelect from './GraphQLAsyncSelect';
 
 export const DEFAULT_USERS_QUERY = gql`
-query($name: String) {
+query DefaultUsersQuery($name: String) {
   users_paginated(filters: { name: $name }, per_page: 50) {
     entries {
       id

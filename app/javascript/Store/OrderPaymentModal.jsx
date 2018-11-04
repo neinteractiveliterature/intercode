@@ -12,7 +12,7 @@ import paymentDetailsComplete from './paymentDetailsComplete';
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 
 const submitOrderMutation = gql`
-mutation($input: SubmitOrderInput!) {
+mutation SubmitOrder($input: SubmitOrderInput!) {
   submitOrder(input: $input) {
     order {
       id

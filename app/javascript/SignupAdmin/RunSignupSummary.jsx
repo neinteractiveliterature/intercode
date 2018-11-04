@@ -9,7 +9,7 @@ import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RunHeader from './RunHeader';
 
 const signupSummaryQuery = gql`
-query($eventId: Int!, $runId: Int!) {
+query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
   event(id: $eventId) {
     id
 
@@ -45,6 +45,11 @@ query($eventId: Int!, $runId: Int!) {
 `;
 
 class RunSignupSummary extends React.Component {
+  static propTypes = {
+    eventId: PropTypes.number.isRequired,
+    runId: PropTypes.number.isRequired,
+  }
+
   renderSignupRow = (signup, registrationPolicy) => {
     const bucket = findBucket(signup.bucket_key, registrationPolicy);
     const suffix = (

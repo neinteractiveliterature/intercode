@@ -7,7 +7,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from './PopperDropdown';
 
 const deletePageMutation = gql`
-mutation($input: DeletePageInput!) {
+mutation DeletePage($input: DeletePageInput!) {
   deletePage(input: $input) {
     page {
       id
