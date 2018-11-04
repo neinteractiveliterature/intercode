@@ -48,9 +48,11 @@ OR lower(user_con_profiles.first_name) like :value",
   def sql_order_for_sort_field(sort_field, direction)
     case sort_field
     when :status
-      "(status IN ('proposed', 'reviewing')) #{invert_sort_direction direction}, status #{direction}"
+      Arel.sql("(status IN ('proposed', 'reviewing')) #{invert_sort_direction direction}, \
+status #{direction}")
     when :owner
-      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
+      Arel.sql("user_con_profiles.last_name #{direction}, \
+user_con_profiles.first_name #{direction}")
     else
       super
     end
