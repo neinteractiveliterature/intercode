@@ -11,9 +11,9 @@ class GraphqlController < ApplicationController
       verified_request: :verified_request?
     }.transform_values { |method_name| GraphqlController.instance_method(method_name) }
 
-    def initialize(controller)
+    def initialize(controller, **values)
       @controller = controller
-      @values = {}
+      @values = values
     end
 
     def [](key)
@@ -51,10 +51,6 @@ class GraphqlController < ApplicationController
 
   private
 
-  def execution_context
-    @execution_context ||= Context.new(self)
-  end
-
   def execute_from_params(params)
     variables = ensure_hash(params[:variables])
     query = params[:query]
@@ -63,7 +59,7 @@ class GraphqlController < ApplicationController
     IntercodeSchema.execute(
       query,
       variables: variables,
-      context: execution_context,
+      context: Context.new(self),
       operation_name: operation_name
     )
   end
