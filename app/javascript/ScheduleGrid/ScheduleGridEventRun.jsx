@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { ScheduleGridConsumer } from './ScheduleGridContext';
 
@@ -45,18 +44,15 @@ function describeAvailability(event, run) {
 
 class ScheduleGridEventRun extends React.Component {
   static propTypes = {
-    event: PropTypes.object.isRequired,
-    run: PropTypes.object.isRequired,
-    runDimensions: PropTypes.object.isRequired,
-    convention: PropTypes.object.isRequired,
-    layoutResult: PropTypes.object.isRequired,
+    event: PropTypes.shape({}).isRequired,
+    run: PropTypes.shape({}).isRequired,
+    runDimensions: PropTypes.shape({}).isRequired,
+    layoutResult: PropTypes.shape({}).isRequired,
     className: PropTypes.string,
-    config: ConfigPropType,
   };
 
   static defaultProps = {
     className: null,
-    config: defaultConfigProp,
   };
 
   renderAvailabilityBar = () => {
@@ -76,8 +72,8 @@ class ScheduleGridEventRun extends React.Component {
     );
   }
 
-  renderExtendedCounts = () => {
-    const { event, run, config } = this.props;
+  renderExtendedCounts = (config) => {
+    const { event, run } = this.props;
 
     if (!config.showExtendedCounts || !event.registration_policy.slots_limited) {
       return null;
@@ -100,17 +96,17 @@ class ScheduleGridEventRun extends React.Component {
     );
   }
 
-  renderSignupStatusBadge = (signupStatus) => {
-    if (!this.props.config.showSignupStatusBadge) {
+  renderSignupStatusBadge = (signupStatus, config) => {
+    if (!config.showSignupStatusBadge) {
       return null;
     }
 
     if (signupStatus === 'confirmed') {
-      return <i className="fa fa-check-square" title="Confirmed signup" />;
+      return <i className="fa fa-check-square mr-1" title="Confirmed signup" />;
     }
 
     if (signupStatus === 'waitlisted') {
-      return <i className="fa fa-hourglass-half" title="Waitlisted" />;
+      return <i className="fa fa-hourglass-half mr-1" title="Waitlisted" />;
     }
 
     return null;
@@ -118,7 +114,7 @@ class ScheduleGridEventRun extends React.Component {
 
   render = () => {
     const {
-      layoutResult, runDimensions, event, run, className, convention,
+      layoutResult, runDimensions, event, run, className,
     } = this.props;
     const { timespan } = runDimensions.eventRun;
 
@@ -133,23 +129,14 @@ class ScheduleGridEventRun extends React.Component {
     };
 
     const signupStatus = userSignupStatus(run);
-    const signupStatusBadge = this.renderSignupStatusBadge(signupStatus);
     const availabilityDescription = describeAvailability(event, run);
     const roomsDescription = run.room_names.sort().join(', ');
 
-    const eventRunClasses = classNames(
-      className,
-      'schedule-grid-event',
-      'small',
-      {
-        'signed-up': this.props.config.showSignedUp && signupStatus != null,
-        full: runFull(event, run) && signupStatus == null,
-      },
-    );
-
     return (
       <ScheduleGridConsumer>
-        {({ schedule, isRunDetailsVisible, toggleRunDetailsVisibility }) => (
+        {({
+          schedule, isRunDetailsVisible, toggleRunDetailsVisibility, config,
+        }) => (
           <PopperDropdown
             placement="bottom"
             visible={isRunDetailsVisible(run.id)}
@@ -158,7 +145,15 @@ class ScheduleGridEventRun extends React.Component {
               <div
                 style={style}
                 tabIndex={0}
-                className={eventRunClasses}
+                className={classNames(
+                  className,
+                  'schedule-grid-event',
+                  'small',
+                  {
+                    'signed-up': config.showSignedUp && signupStatus != null,
+                    full: runFull(event, run) && signupStatus == null,
+                  },
+                )}
                 role="button"
                 onClick={toggle}
                 onKeyDown={(keyEvent) => {
@@ -171,10 +166,9 @@ class ScheduleGridEventRun extends React.Component {
               >
                 {this.renderAvailabilityBar()}
                 <div className="d-flex">
-                  {this.renderExtendedCounts()}
+                  {this.renderExtendedCounts(config)}
                   <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {signupStatusBadge}
-                    {signupStatusBadge ? ' ' : ''}
+                    {this.renderSignupStatusBadge(signupStatus, config)}
                     {event.title}
                   </div>
                 </div>
@@ -224,7 +218,7 @@ class ScheduleGridEventRun extends React.Component {
                     <table className="mb-2">
                       <tr>
                         <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
-                        <td>{timespan.humanizeInTimezone(convention.timezone_name)}</td>
+                        <td>{timespan.humanizeInTimezone(schedule.timezoneName)}</td>
                       </tr>
                       {
                         roomsDescription

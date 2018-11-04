@@ -1,0 +1,56 @@
+fragment ScheduleGridConventionDataFragment on Query {
+  convention {
+    starts_at
+    ends_at
+    timezone_name
+  }
+}
+
+fragment ScheduleGridEventsFragment on Query {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    id
+    title
+    length_seconds
+    category
+    short_blurb_html
+    event_page_url
+
+    registration_policy {
+      slots_limited
+      total_slots
+      preferred_slots
+      minimum_slots
+    }
+
+    runs(start: $start, finish: $finish) {
+      id
+      starts_at
+      schedule_note
+      title_suffix
+
+      confirmed_limited_signup_count
+      confirmed_signup_count @include(if: $extendedCounts)
+      waitlisted_signup_count @include(if: $extendedCounts)
+      not_counted_signup_count @include(if: $extendedCounts)
+
+      room_names
+
+      my_signups {
+        state
+      }
+    }
+  }
+}
+
+query ScheduleGridConventionDataQuery {
+  ...ScheduleGridConventionDataFragment
+}
+
+query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  ...ScheduleGridEventsFragment
+}
+
+query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  ...ScheduleGridConventionDataFragment
+  ...ScheduleGridEventsFragment
+}

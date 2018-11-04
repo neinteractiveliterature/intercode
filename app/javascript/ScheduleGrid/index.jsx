@@ -8,11 +8,13 @@ import { ScheduleGridConsumer, ScheduleGridProvider } from './ScheduleGridContex
 const ScheduleGridApp = ({ basename, config, ...otherProps }) => (
   <BrowserRouter basename={basename}>
     <ScheduleGridProvider config={config}>
-      <ScheduleGridConsumer>
-        {({ schedule }) => (
-          <ScheduleGrid config={config} schedule={schedule} {...otherProps} />
-        )}
-      </ScheduleGridConsumer>
+      {timespan => (
+        <ScheduleGridConsumer>
+          {({ schedule }) => (
+            <ScheduleGrid config={config} schedule={schedule} timespan={timespan} {...otherProps} />
+          )}
+        </ScheduleGridConsumer>
+      )}
     </ScheduleGridProvider>
   </BrowserRouter>
 );
