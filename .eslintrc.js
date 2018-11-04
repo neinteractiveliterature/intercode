@@ -1,3 +1,5 @@
+const schemaJson = require('./schema.json');
+
 module.exports = {
   env: {
     amd: true,
@@ -31,10 +33,16 @@ module.exports = {
     'jest/no-focused-tests': "error",
     'jest/no-identical-title': "error",
     'jest/valid-expect': "error",
-    'graphql/template-strings': ['error', {
-      env: 'apollo',
-      schemaJsonFilepath: './schema.json',
-    }],
+    'graphql/template-strings': [
+      'error',
+      { env: 'apollo', schemaJson },
+      { env: 'literal', schemaJson },
+    ],
+    'graphql/named-operations': [
+      'warn',
+      { env: 'apollo', schemaJson },
+      { env: 'literal', schemaJson },
+    ],
     'no-underscore-dangle': ['error', { allow: ['__typename'] } ],
     'react/destructuring-assignment': 'off',
   }

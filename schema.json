@@ -216,6 +216,26 @@
                     "ofType": null
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "start",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "finish",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {
@@ -2719,7 +2739,26 @@
               "name": "runs",
               "description": null,
               "args": [
-
+                {
+                  "name": "start",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "finish",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
               ],
               "type": {
                 "kind": "NON_NULL",
