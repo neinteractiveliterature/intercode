@@ -613,7 +613,7 @@ type Event {
   provided_tickets: [Ticket!]!
   registration_policy: RegistrationPolicy
   run(id: Int!): Run!
-  runs: [Run!]!
+  runs(finish: Date, start: Date): [Run!]!
   short_blurb: String
   short_blurb_html: String
   slots_limited: Boolean
@@ -1031,7 +1031,7 @@ type Query {
   currentUser: User
   event(id: Int!): Event
   eventProposal(id: Int!): EventProposal
-  events(extendedCounts: Boolean, includeDropped: Boolean): [Event]
+  events(extendedCounts: Boolean, finish: Date, includeDropped: Boolean, start: Date): [Event]
   form(id: Int!): FormType
   liquidAssigns: [LiquidAssign!]
   myProfile: UserConProfile
