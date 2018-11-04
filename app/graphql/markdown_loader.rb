@@ -12,7 +12,7 @@ class MarkdownLoader < GraphQL::Batch::Loader
     end
 
     presenter = MarkdownPresenter.new(default_content)
-    rendered_content = Rails.cache.fetch_multi(markdown_by_cache_key.keys) do |key|
+    rendered_content = Rails.cache.fetch_multi(*markdown_by_cache_key.keys) do |key|
       presenter.render(markdown_by_cache_key[key])
     end
 
