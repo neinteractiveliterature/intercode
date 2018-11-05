@@ -6,9 +6,16 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { detect } from 'detect-browser';
 
-const BROWSER_NAMES = {
-  chrome: 'Google Chrome',
+const IOS_WEBVIEW_APP_HOSTS = {
   crios: 'Google Chrome on iOS',
+  facebook: 'Facebook on iOS',
+  fxios: 'Firefox on iOS',
+  instagram: 'Instagram on iOS',
+};
+
+const BROWSER_NAMES = {
+  ...IOS_WEBVIEW_APP_HOSTS,
+  chrome: 'Google Chrome',
   firefox: 'Mozilla Firefox',
   edge: 'Microsoft Edge',
   ie: 'Microsoft Internet Explorer',
@@ -22,8 +29,11 @@ const BROWSER_NAMES = {
 // we don't actually use CSS Grid right now but we might and it's a decent proxy for
 // modernity in a browser
 const MIN_SUPPORTED_VERSION = {
+  ...(Object.keys(IOS_WEBVIEW_APP_HOSTS).reduce((iosVersions, browserName) => ({
+    ...iosVersions,
+    [browserName]: 11,
+  }), {})),
   chrome: 57,
-  crios: 11,
   firefox: 52,
   safari: 11,
   ios: 11,
@@ -48,6 +58,18 @@ function getMajorVersion(versionString) {
 }
 
 function renderRecommendation(browser) {
+  if (IOS_WEBVIEW_APP_HOSTS[browser]) {
+    return (
+      <p className="text-left">
+        {IOS_WEBVIEW_APP_HOSTS[browser]}
+        {' '}
+        uses the Safari engine, which ships with iOS itself.  To update it, update your device to
+        {' '}
+        the latest version of iOS.
+      </p>
+    );
+  }
+
   switch (browser.name) {
     case 'chrome':
       return (
@@ -77,13 +99,6 @@ function renderRecommendation(browser) {
     case 'ios-webview':
       return (
         <p className="text-left">To get the latest Safari, update to the latest version of iOS.</p>
-      );
-    case 'crios':
-      return (
-        <p className="text-left">
-          Chrome for iOS uses the Safari engine, which ships with iOS itself.  To update it,
-          update your device to the latest version of iOS.
-        </p>
       );
     case 'edge':
       return (
@@ -182,14 +197,14 @@ function displayBrowserWarning() {
     return;
   }
 
-  if (browser.name === 'crios') {
-    // special handling for Chrome for iOS, which is actually just a UIWebView
+  if (IOS_WEBVIEW_APP_HOSTS[browser.name] && browser.os === 'iOS') {
+    // special handling for iOS apps which are actually just a UIWebView
 
     const match = navigator.userAgent.match(/iPhone OS (\d+)/);
     if (match) {
       const iosVersion = Number.parseInt(match[1], 10);
       browser = {
-        name: 'crios',
+        name: browser.name,
         version: iosVersion.toString(),
       };
     }
