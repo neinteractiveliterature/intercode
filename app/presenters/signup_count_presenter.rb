@@ -159,7 +159,9 @@ class SignupCountPresenter
 
   def signup_count_by_state_and_bucket_key_and_counted
     @signup_count_by_state_and_bucket_key_and_counted ||= begin
-      data = run.signups.group(:state, :bucket_key, :requested_bucket_key, :counted).count
+      data = Signup.where(run_id: run.id)
+        .group(:state, :bucket_key, :requested_bucket_key, :counted)
+        .count
       SignupCountPresenter.process_signup_count_data(buckets, data)
     end
   end
