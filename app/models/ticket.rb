@@ -2,14 +2,14 @@ class Ticket < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :ticket_type
   belongs_to :provided_by_event, class_name: 'Event', optional: true, inverse_of: 'provided_tickets'
+  has_one :convention, through: :user_con_profile
+  has_one :user, through: :user_con_profile
 
   validates :user_con_profile, :ticket_type, presence: true
   validates :user_con_profile, uniqueness: true
   validate :ticket_type_must_be_valid_for_convention
   validate :provided_by_event_must_be_part_of_convention, on: :create
 
-  delegate :convention, to: :user_con_profile
-  delegate :user, to: :user_con_profile
   delegate :allows_event_signups?, :allows_event_signups, to: :ticket_type
 
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
