@@ -90,19 +90,20 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   def sql_order_for_sort_field(sort_field, direction)
     case sort_field
     when :name
-      "lower(last_name) #{direction}, lower(first_name) #{direction}"
+      Arel.sql("lower(user_con_profiles.last_name) #{direction}, \
+lower(user_con_profiles.first_name) #{direction}")
     when :first_name
-      "lower(first_name) #{direction}"
+      Arel.sql("lower(user_con_profiles.first_name) #{direction}")
     when :last_name
-      "lower(last_name) #{direction}"
+      Arel.sql("lower(user_con_profiles.last_name) #{direction}")
     when :email
-      "lower(users.email) #{direction}"
+      Arel.sql("lower(users.email) #{direction}")
     when :ticket
-      "ticket_types.name #{direction}, tickets.payment_amount_cents #{direction}"
+      Arel.sql("ticket_types.name #{direction}, tickets.payment_amount_cents #{direction}")
     when :ticket_updated_at
     when :privileges
       clauses = UserConProfile::PRIV_NAMES.map do |priv_name|
-        "#{priv_name} #{invert_sort_direction direction}"
+        Arel.sql("user_con_profiles.#{priv_name} #{invert_sort_direction direction}")
       end
 
       clauses.join(', ')
