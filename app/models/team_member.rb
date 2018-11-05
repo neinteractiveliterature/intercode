@@ -1,6 +1,6 @@
 class TeamMember < ApplicationRecord
   # All team members must be assigned to an event that exists
-  belongs_to :event
+  belongs_to :event, touch: true
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
 
