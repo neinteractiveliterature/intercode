@@ -22,7 +22,7 @@
         %ul.list-unstyled.mb-0
           - @team_members.each do |team_member|
             %li
-              = team_member.user.name
+              = team_member.user_con_profile.name
               - if team_member.email
                 (#{intercode_mail_to team_member.email})
     - if @event.registration_policy.accepts_signups?

@@ -27,6 +27,7 @@ class UserConProfile < ApplicationRecord
 
   before_create :generate_ical_secret
   after_commit :send_user_activity_alerts, on: :create
+  after_commit :touch_team_member_events, on: [:create, :update]
 
   scope :has_any_privileges, -> {
     sql_clauses = PRIV_NAMES.map { |priv_name| "#{priv_name} = ?" }
@@ -181,5 +182,9 @@ class UserConProfile < ApplicationRecord
 
   def generate_ical_secret
     self.ical_secret ||= Devise.friendly_token
+  end
+
+  def touch_team_member_events
+    Event.where(id: team_members.select(:event_id)).update_all(updated_at: Time.now)
   end
 end
