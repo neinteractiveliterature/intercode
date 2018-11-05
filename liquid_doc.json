@@ -1332,6 +1332,20 @@
           ]
         },
         {
+          "name": "events",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Events at the convention",
+              "types": [
+                "Array<EventDrop>"
+              ]
+            }
+          ]
+        },
+        {
           "name": "bio_eligible_user_con_profiles",
           "docstring": "",
           "tags": [
