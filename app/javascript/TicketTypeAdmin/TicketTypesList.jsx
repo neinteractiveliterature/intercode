@@ -228,16 +228,17 @@ class TicketTypesList extends React.Component {
         <h1 className="mb-4">
           {capitalize(this.props.ticketName)}
           {' '}
-types
+          types
         </h1>
 
         {ticketTypeDisplays}
 
         <Link to="/new" className="btn btn-primary">
-New
+          New
+          {' '}
           {this.props.ticketName}
           {' '}
-type
+          type
         </Link>
 
         {this.renderDeleteConfirmation()}
