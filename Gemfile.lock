@@ -194,8 +194,6 @@ GEM
       promise.rb (~> 0.7.2)
     graphql-guard (1.2.1)
       graphql (>= 1.6.0, < 2)
-    graphql-libgraphqlparser (1.3.0)
-      graphql (~> 1.2)
     graphql-rails_logger (1.1.0)
       actionpack (~> 5.0)
       activesupport (~> 5.0)
@@ -482,7 +480,6 @@ DEPENDENCIES
   graphql
   graphql-batch
   graphql-guard
-  graphql-libgraphqlparser
   graphql-rails_logger
   haml
   htmldiff-lcs!
