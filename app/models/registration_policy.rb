@@ -27,10 +27,14 @@ class RegistrationPolicy
     define_method method do
       buckets.select(&:counted?).map(&method).sum
     end
+
+    define_method :"#{method}_including_not_counted" do
+      buckets.map(&method).sum
+    end
   end
 
   def accepts_signups?
-    slots_unlimited? || total_slots > 0
+    slots_unlimited? || total_slots_including_not_counted > 0
   end
 
   def slots_unlimited?
