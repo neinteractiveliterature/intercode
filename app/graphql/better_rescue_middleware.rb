@@ -1,10 +1,11 @@
 class BetterRescueMiddleware
   class UnloggedError < StandardError; end
 
-  attr_reader :rescue_table
+  attr_reader :rescue_table, :unlogged_error_classes
 
   def initialize
     @rescue_table = []
+    @unlogged_error_classes = [UnloggedError]
   end
 
   def rescue_from(*error_classes, &block)
@@ -15,6 +16,10 @@ class BetterRescueMiddleware
     end
   end
 
+  def suppress_logs(*error_classes)
+    @unlogged_error_classes.concat(error_classes)
+  end
+
   def remove_handler(*error_classes)
     remove_classes = Set.new(error_classes)
     rescue_table.reject! { |error_class| remove_classes.include?(error_class) }
@@ -22,12 +27,12 @@ class BetterRescueMiddleware
 
   def call(*)
     yield
-  rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid, UnloggedError => err
-    GraphQL::ExecutionError.new(err.message)
   rescue StandardError => err
-    Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")
-    Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
-    Rollbar.error(err)
+    unless unlogged_error_classes.any? { |klass| err.is_a?(klass) }
+      Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")
+      Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
+      Rollbar.error(err)
+    end
     attempt_rescue(err)
   end
 

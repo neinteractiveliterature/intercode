@@ -22,6 +22,11 @@ class IntercodeSchema < GraphQL::Schema
   better_rescue_middleware.rescue_from GraphQL::Guard::NotAuthorizedError do |err|
     "Unauthorized access: #{err.message}"
   end
+  better_rescue_middleware.suppress_logs(
+    ActiveRecord::RecordNotFound,
+    ActiveRecord::RecordInvalid,
+    Liquid::SyntaxError
+  )
   middleware better_rescue_middleware
 
   def self.resolve_type(type, obj, ctx)
