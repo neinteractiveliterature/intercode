@@ -12,6 +12,7 @@ class EventsCreatedSinceDrop < Liquid::Drop
 
   # @api
   def liquid_method_missing(date)
+    return [] unless date
     return invoke_drop(DateTime.iso8601(date)) if date.is_a?(String)
     convention.events
       .where('created_at >= ?', date)
