@@ -40,7 +40,7 @@ class ConventionDrop < Liquid::Drop
 
   # @return [Array<EventDrop>] Events at the convention
   def events
-    @events ||= convention.events.includes(:runs).to_a
+    @events ||= convention.events.includes(:runs, team_members: :user_con_profile).to_a
   end
 
   # @return [Array<RunDrop>] Event runs at the convention
