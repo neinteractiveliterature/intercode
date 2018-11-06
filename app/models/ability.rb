@@ -254,35 +254,42 @@ class Ability
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, StaffPosition, convention_id: staff_con_ids
-    can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
-    can :manage, Form, convention_id: staff_con_ids
-    can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
-    can :manage, UserActivityAlert, convention_id: staff_con_ids
+    can :manage, TeamMember do |team_member|
+      con_ids_with_privilege(:gm_liaison).include?(team_member.event.convention_id)
+    end
+    can :manage, Form do |form|
+      staff_con_ids.include?(form.convention_id)
+    end
+    can :manage, Room do |room|
+      con_ids_with_privilege(:gm_liaison, :scheduling).include?(room.convention_id)
+    end
+    can :manage, Order do |order|
+      staff_con_ids.include?(order.user_con_profile.convention_id)
+    end
+    can :manage, UserActivityAlert do |user_activity_alert|
+      staff_con_ids.include?(user_activity_alert.convention_id)
+    end
   end
 
   def add_event_proposal_abilities
     return unless has_scope?(:read_events)
 
-    can :read, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_committee, :gm_liaison),
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
-    can :read, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_chair),
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :read_admin_notes, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
+    can :read, EventProposal do |event_proposal|
+      user_can_view_event_proposal?(event_proposal)
+    end
+    can :read_admin_notes, EventProposal do |event_proposal|
+      con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
+        .include?(event_proposal.convention_id)
+    end
 
     return unless has_scope?(:manage_events)
 
-    can :update, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_chair),
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :update, EventProposal,
-      convention_id: con_ids_with_privilege(:gm_liaison),
-      status: %w[accepted withdrawn]
-    can :update_admin_notes, EventProposal,
-      convention_id: con_ids_with_privilege(:scheduling)
+    can :update, EventProposal do |event_proposal|
+      user_can_update_event_proposal?(event_proposal)
+    end
+    can :update_admin_notes, EventProposal do |event_proposal|
+      con_ids_with_privilege(:scheduling).include?(event_proposal.convention_id)
+    end
   end
 
   def add_team_member_abilities
@@ -338,6 +345,33 @@ class Ability
     when 'priv' then con_ids_with_privilege(:scheduling, :gm_liaison)
     else
       false
+    end
+  end
+
+  def user_can_view_event_proposal?(event_proposal)
+    return true if user.id == event_proposal.owner.user_id
+
+    case event_proposal.status
+    when 'proposed'
+      con_ids_with_privilege(:proposal_chair).include?(event_proposal.convention_id)
+    when EVENT_PROPOSAL_NON_DRAFT_STATUSES
+      con_ids_with_privilege(:proposal_chair, :proposal_committee, :gm_liaison).include?(event_proposal.convention_id)
+    else
+      false
+    end
+  end
+
+  def user_can_update_event_proposal?(event_proposal)
+    case event_proposal.status
+    when 'draft'
+      user.id == event_proposal.owner.user_id
+    when 'proposed', 'reviewing'
+      (
+        user.id == event_proposal.owner.user_id ||
+        con_ids_with_privilege(:proposal_chair)
+      )
+    when 'accepted', 'withdrawn'
+      con_ids_with_privilege(:gm_liaison)
     end
   end
 end
