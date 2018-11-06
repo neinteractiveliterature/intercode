@@ -11,6 +11,10 @@ cache:
   - node_modules
   - public/packs-test
   yarn: true
+# Someday, add this in before travis-before.sh
+# - wget https://github.com/graphql/libgraphqlparser/archive/v0.6.0.tar.gz
+# - tar -xzvf v0.6.0.tar.gz
+# - cd libgraphqlparser-0.6.0/ && cmake . && make && make install
 before_script:
 - pip install --user awscli
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64

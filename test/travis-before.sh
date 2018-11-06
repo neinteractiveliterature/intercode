@@ -11,11 +11,6 @@ npm install --global yarn
 yarn install
 
 if [ "${LANGUAGE}" = "ruby" ]; then
-  echo "Building libgraphqlparser"
-  wget https://github.com/graphql/libgraphqlparser/archive/v0.6.0.tar.gz
-  tar -xzvf v0.6.0.tar.gz
-  cd libgraphqlparser-0.6.0/ && cmake . && make && make install
-
   echo "Setting up Intercode"
   cp config/database.yml.ci config/database.yml
   echo | gem uninstall -i /home/travis/.rvm/gems/ruby-2.5.1@global bundler
