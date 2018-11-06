@@ -48,6 +48,8 @@ class ConventionDrop < Liquid::Drop
   #                                  events method and filtering by created_at.
   # @example Retrieving the events created since a certain date
   #   {{ convention.events_created_since["2018-11-03T00:00:00-05:00"] }}
+  # @example Retrieving the events created since the last signup round opened
+  #   {{ convention.events_created_since[convention.maximum_event_signups.current_value_change] }}
   def events_created_since
     @events_created_since ||= EventsCreatedSinceDrop.new(convention)
   end

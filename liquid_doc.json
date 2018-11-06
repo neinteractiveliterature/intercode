@@ -80,6 +80,20 @@
           ]
         },
         {
+          "name": "created_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this run was first created in the\ndatabase (by being scheduled by con staff)",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
           "name": "length_seconds",
           "docstring": "",
           "tags": [
@@ -488,6 +502,20 @@
           ]
         },
         {
+          "name": "created_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which this event was first created in the\ndatabase (either by being accepted as a proposal, or)\nby being created manually by con staff",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
           "name": "initialize",
           "docstring": "",
           "tags": [
@@ -545,6 +573,20 @@
               "text": "The external URL for this event, if its team provided one",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "runs",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The runs of this event",
+              "types": [
+                "Array<RunDrop>"
               ]
             }
           ]
@@ -1341,6 +1383,46 @@
               "text": "Events at the convention",
               "types": [
                 "Array<EventDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "events_created_since",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A structure that lets you access just the events created since\na certain time.  This is much more efficient than using the\nevents method and filtering by created_at.",
+              "types": [
+                "EventsCreatedSinceDrop"
+              ]
+            },
+            {
+              "tag_name": "example",
+              "name": "Retrieving the events created since a certain date",
+              "text": "{{ convention.events_created_since[\"2018-11-03T00:00:00-05:00\"] }}",
+              "types": null
+            },
+            {
+              "tag_name": "example",
+              "name": "Retrieving the events created since the last signup round opened",
+              "text": "{{ convention.events_created_since[convention.maximum_event_signups.current_value_change] }}",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "runs",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Event runs at the convention",
+              "types": [
+                "Array<RunDrop>"
               ]
             }
           ]
@@ -2267,6 +2349,20 @@
           ]
         },
         {
+          "name": "current_value_change",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When the current value came into effect",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
           "name": "next_value_change",
           "docstring": "",
           "tags": [
@@ -2851,6 +2947,68 @@
               "types": [
                 "String"
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EventsCreatedSinceDrop",
+      "superclasses": [
+        "EventsCreatedSinceDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A magical container for finding the events that were created since a certain date.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "Retrieving the events created since a certain date",
+          "text": "{{ convention.events_created_since[\"2018-11-03T00:00:00-05:00\"] }}",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "convention",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of EventsCreatedSinceDrop",
+              "types": [
+                "EventsCreatedSinceDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "liquid_method_missing",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
             }
           ]
         }
