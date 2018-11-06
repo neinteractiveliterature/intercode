@@ -22,8 +22,12 @@ class EventDrop < Liquid::Drop
   #   @return [String] The contact email address for this event
   # @!method category
   #   @return [String] The category key of the event (e.g. "larp", "party", "tabletop_rpg")
+  # @!method created_at
+  #   @return [ActiveSupport::TimeWithZone] The time at which this event was first created in the
+  #                                         database (either by being accepted as a proposal, or)
+  #                                         by being created manually by con staff
   delegate :id, :title, :team_member_name, :event_proposal, :author, :organization,
-    :email, :category, to: :event
+    :email, :category, :created_at, to: :event
 
   # @api
   def initialize(event)
@@ -43,6 +47,11 @@ class EventDrop < Liquid::Drop
   # @return [String] The external URL for this event, if its team provided one
   def homepage_url
     event.url
+  end
+
+  # @return [Array<RunDrop>] The runs of this event
+  def runs
+    event.runs.to_a
   end
 
   # @!method description

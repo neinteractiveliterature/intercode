@@ -13,9 +13,12 @@ class RunDrop < Liquid::Drop
   #   @return [ActiveSupport::TimeWithZone] The time at which this run starts
   # @!method ends_at
   #   @return [ActiveSupport::TimeWithZone] The time at which this run ends
+  # @!method created_at
+  #   @return [ActiveSupport::TimeWithZone] The time at which this run was first created in the
+  #                                         database (by being scheduled by con staff)
   # @!method length_seconds
   #   @return [Integer] The length of this run in seconds
-  delegate :id, :event, :starts_at, :ends_at, :length_seconds, to: :run
+  delegate :id, :event, :starts_at, :ends_at, :created_at, :length_seconds, to: :run
 
   # @api
   def initialize(run)
