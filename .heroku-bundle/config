@@ -1,1 +1,0 @@
-BUNDLE_BUILD__GRAPHQL-LIBGRAPHQLPARSER: "--with-graphql-include=/app/libgraphqlparser/include/graphqlparser --with-graphql-lib=/app/libgraphqlparser/lib"
