@@ -124,14 +124,14 @@ class SignupCountPresenter
     return 1.0 if bucket.slots_unlimited?
     return 0.0 if bucket.total_slots == 0
 
-    (bucket.total_slots - confirmed_count_for_bucket(bucket_key)).to_f / bucket.total_slots.to_f
+    (bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key)).to_f / bucket.total_slots.to_f
   end
 
   def capacity_description_for_bucket(bucket_key)
     bucket = registration_policy.bucket_with_key(bucket_key)
     return 'unlimited' if bucket.slots_unlimited?
 
-    remaining_capacity = bucket.total_slots - confirmed_count_for_bucket(bucket_key)
+    remaining_capacity = bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key)
     if !signups_available && remaining_capacity == bucket.total_slots
       return pluralize(remaining_capacity, 'slot')
     end
