@@ -85,13 +85,25 @@ class SignupCountPresenter
 
   def bucket_descriptions(state)
     signups_by_bucket_key = signup_count_by_state_and_bucket_key_and_counted[state]
+    counted_key = :counted
+    counted_key = :not_counted if state != 'confirmed'
 
     if buckets.size == 1
-      [signups_by_bucket_key.values.first[:counted].to_s]
+      [signups_by_bucket_key.values.first[counted_key].to_s]
     else
-      buckets.map do |bucket|
-        "#{bucket.name}: #{signups_by_bucket_key[bucket.key][:counted]}"
+      bucket_texts = buckets.map do |bucket|
+        bucket_counted_key = counted_key
+        bucket_counted_key = :not_counted if bucket.not_counted?
+        "#{bucket.name}: #{signups_by_bucket_key[bucket.key][bucket_counted_key]}"
       end
+
+      if state == 'waitlisted'
+        if signups_by_bucket_key[nil] && signups_by_bucket_key[nil][:not_counted] > 0
+          bucket_texts << "No preference: #{signups_by_bucket_key[nil][:not_counted]}"
+        end
+      end
+
+      bucket_texts
     end
   end
 

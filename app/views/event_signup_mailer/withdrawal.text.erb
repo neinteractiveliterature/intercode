@@ -8,7 +8,7 @@ To fill the vacancy, the following signups were moved:
 <% @move_results.each do |move_result| -%>
 * <%= move_result_description(move_result, show_buckets: true, html: false) %>
 <% end -%>
-<% else -%>
+<% elsif @prev_bucket -%>
 There were no signups that could be moved to fill the vacancy.
 <% end -%>
 
