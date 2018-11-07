@@ -2,6 +2,7 @@ sudo: false
 branches:
   only:
   - master
+language: generic
 before_script:
 - docker build -t neinteractiveliterature/intercode:test .
 script:
