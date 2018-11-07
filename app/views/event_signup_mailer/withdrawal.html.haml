@@ -10,7 +10,7 @@
   %ul
     - @move_results.each do |move_result|
       %li= move_result_description(move_result, show_buckets: true, html: true)
-- else
+- elsif @prev_bucket
   %p There were no signups that could be moved to fill the vacancy.
 
 = simple_format "As of this withdrawal, this event run has:\n#{@signup_count_presenter.signups_description}"
