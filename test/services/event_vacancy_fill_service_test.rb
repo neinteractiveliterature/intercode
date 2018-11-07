@@ -189,6 +189,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
           buckets: [
             { key: 'pc', slots_limited: true, total_slots: 1 },
             { key: 'npc', slots_limited: true, total_slots: 1, not_counted: true },
+            { key: 'spectator', slots_limited: false },
             { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
           ]
         }
@@ -222,6 +223,54 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
           requested_bucket_key: nil
         )
 
+        result = subject.call
+        result.must_be :success?
+
+        result.move_results.size.must_equal 0
+      end
+    end
+
+    describe 'drops in other buckets' do
+      let(:bucket_key) { 'pc' }
+
+      it 'will not fill them in using not-counted signups' do
+        FactoryBot.create(
+          :signup,
+          user_con_profile: no_pref_user_con_profile,
+          run: the_run,
+          state: 'confirmed',
+          bucket_key: 'pc',
+          requested_bucket_key: 'pc'
+        )
+
+        result = subject.call
+        result.must_be :success?
+
+        result.move_results.size.must_equal 0
+      end
+
+      it 'will not fill them in using unlimited signups' do
+        FactoryBot.create(
+          :signup,
+          user_con_profile: no_pref_user_con_profile,
+          run: the_run,
+          state: 'confirmed',
+          bucket_key: 'spectator',
+          requested_bucket_key: 'spectator'
+        )
+
+        result = subject.call
+        result.must_be :success?
+
+        result.move_results.size.must_equal 0
+      end
+    end
+
+    describe 'drops in unlimited buckets' do
+      let(:bucket_key) { 'spectator' }
+
+      it 'will not fill them' do
+        waitlist_signup
         result = subject.call
         result.must_be :success?
 

@@ -21,6 +21,9 @@ class EventVacancyFillService < CivilService::Service
   private
 
   def inner_call
+    bucket = event.registration_policy.bucket_with_key(bucket_key)
+    return success(move_results: []) if bucket.slots_unlimited?
+
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       fill_bucket_vacancy(bucket_key)
     end
@@ -56,6 +59,8 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def signup_can_fill_bucket_vacancy?(signup, bucket)
+    return false if signup.bucket&.not_counted? || signup.bucket&.slots_unlimited?
+
     (
       (signup.requested_bucket_key.nil? && bucket.slots_limited?) ||
       signup.requested_bucket_key == bucket.key ||
