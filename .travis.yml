@@ -11,22 +11,10 @@ cache:
   - node_modules
   - public/packs-test
   yarn: true
-# Someday, add this in before travis-before.sh
-# - wget https://github.com/graphql/libgraphqlparser/archive/v0.6.0.tar.gz
-# - tar -xzvf v0.6.0.tar.gz
-# - cd libgraphqlparser-0.6.0/ && cmake . && make && make install
 before_script:
-- pip install --user awscli
-- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-  > ./cc-test-reporter
-- chmod +x ./cc-test-reporter
-- "./cc-test-reporter before-build"
-- ./test/travis-before.sh
+- docker build -t neinteractiveliterature/intercode:test .
 script:
-- ./test/travis-test.sh
-after_script:
-  - "./cc-test-reporter format-coverage --output coverage/codeclimate.$TRAVIS_JOB_NUMBER.json"
-  - aws s3 sync coverage/ "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER"
+- docker run intercode:test --env LANGUAGE=$LANGUAGE --env DATABASE=$DATABASE --env TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER --env TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER test/travis-complete.sh
 jobs:
   include:
   - stage: Coverage processing

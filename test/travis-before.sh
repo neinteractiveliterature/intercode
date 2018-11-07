@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo "Preparing CodeClimate coverage reporter"
+pip install --user awscli
+curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+chmod +x ./cc-test-reporter
+./cc-test-reporter before-build
+
 source ~/.nvm/nvm.sh
 
 # We need Javascript for Ruby tests because some tests need assets, so do this unconditionally
