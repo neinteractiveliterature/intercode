@@ -11,11 +11,13 @@ if (process.env.ANALYZE_BUNDLE_SIZE) {
 } else {
   const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 
-  environment.plugins.push(new RollbarSourceMapPlugin({
-    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
-    version: process.env.SOURCE_VERSION,
-    publicPath: process.env.ROLLBAR_PUBLIC_PATH,
-  }));
+  if (process.env.ROLLBAR_ACCESS_TOKEN) {
+    environment.plugins.push(new RollbarSourceMapPlugin({
+      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+      version: process.env.SOURCE_VERSION,
+      publicPath: process.env.ROLLBAR_PUBLIC_PATH,
+    }));
+  }
 }
 
 module.exports = {
