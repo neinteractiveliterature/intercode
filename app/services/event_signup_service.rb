@@ -145,15 +145,9 @@ sign up for events."
       .where.not(run_id: run.id).where.not(state: 'withdrawn').to_a
   end
 
-  # TODO: is there a better way to handle waitlisted people for not-counted buckets?  That's a real
-  # edge case, but right now this is being too strict about that and will end up treating that
-  # waitlist signup as a blocker, whereas if they'd gotten into the bucket it wouldn't block other
-  # signups.  The issue is that the waitlist signup could theoretically materialize into a counted
-  # flex signup.  I mean, event runners, please for the love of everything do not do a setup like
-  # that, but...
   def other_signups
     @other_signups ||= other_signups_including_not_counted.select do |signup|
-      signup.counted? || signup.state == 'waitlisted'
+      signup.counted? || (signup.state == 'waitlisted' && !signup.requested_bucket&.not_counted?)
     end
   end
 
