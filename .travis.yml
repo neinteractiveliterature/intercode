@@ -4,9 +4,9 @@ branches:
   - master
 language: generic
 before_script:
-- docker build -t neinteractiveliterature/intercode:test .
+- docker-compose up --scale web=0
 script:
-- docker run intercode:test --env LANGUAGE=$LANGUAGE --env DATABASE=$DATABASE --env TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER --env TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER test/travis-complete.sh
+- docker-compose run web -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER test/travis-complete.sh
 jobs:
   include:
   - stage: Coverage processing

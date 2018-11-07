@@ -10,9 +10,14 @@ test:
 <% elsif ENV['DATABASE'] == 'mysql' %>
   adapter: mysql2
   database: intercode_test
+  host: mysql
   username: root
+  password: mysql
   encoding: utf8
 <% elsif ENV['DATABASE'] == 'postgresql' %>
   adapter: postgresql
   database: intercode_test
+  host: postgres
+  username: postgres
+  password: postgres
 <% end %>
