@@ -8,18 +8,23 @@ services:
       - "3000:3000"
     links:
       - postgres
-      - redis
+      - mysql
+  mysql:
+    image: mysql:5.7
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    volumes:
+      - mysqldata:/var/lib/mysql
   postgres:
-    image: postgres:9.6
+    image: postgres:10.4
     expose:
       - "5432"
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
-  redis:
-    image: redis:latest
-    expose:
-      - "6379"
 volumes:
   pgdata:
+  mysqldata:
