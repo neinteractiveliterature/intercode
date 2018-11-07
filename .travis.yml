@@ -1,16 +1,7 @@
-rvm:
-- 2.5.1
 sudo: false
 branches:
   only:
   - master
-bundler_args: "--without development:production:intercode1_import"
-cache:
-  bundler: true
-  directories:
-  - node_modules
-  - public/packs-test
-  yarn: true
 before_script:
 - docker build -t neinteractiveliterature/intercode:test .
 script:
@@ -42,13 +33,6 @@ env:
   - DATABASE=postgresql LANGUAGE=ruby
   - LANGUAGE=javascript
 addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - cmake
-    - build-essential
-    - bison
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
 after_success:
