@@ -27,12 +27,6 @@ class EventSignupService < CivilService::Service
     @skip_locking = skip_locking
   end
 
-  def conflicting_waitlist_signups
-    @conflicting_waitlist_signups ||= other_signups.select do |signup|
-      signup.waitlisted? && run.overlaps?(signup.run)
-    end
-  end
-
   private
 
   def inner_call
@@ -51,8 +45,6 @@ class EventSignupService < CivilService::Service
         state: signup_state,
         updated_by: whodunit
       )
-
-      withdraw_user_from_conflicting_waitlist_signups
     end
 
     notify_team_members(signup)
@@ -78,10 +70,15 @@ class EventSignupService < CivilService::Service
 
   def must_not_have_conflicting_signups
     return unless !event.can_play_concurrently? && concurrent_signups.any?
-    event_titles = concurrent_signups.map { |signup| signup.event.title }
-    verb = (event_titles.size > 1) ? 'conflict' : 'conflicts'
+    confirmed_titles = concurrent_signups.select(&:confirmed?).map { |signup| signup.event.title }
+    waitlisted_titles = concurrent_signups.select(&:waitlisted?).map { |signup| signup.event.title }
+    conflict_descriptions = [
+      confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
+      waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
+    ].compact.join(' and ')
+    verb = (concurrent_signups.size > 1) ? 'conflict' : 'conflicts'
     errors.add :base,
-      "You are already signed up for #{event_titles.to_sentence}, which #{verb} \
+      "You are already #{conflict_descriptions}, which #{verb} \
 with #{event.title}."
   end
 
@@ -185,7 +182,7 @@ sign up for events."
   def concurrent_signups
     @concurrent_signups ||= other_signups_including_not_counted.select do |signup|
       other_run = signup.run
-      signup.confirmed? && !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
+      !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
     end
   end
 
@@ -207,12 +204,6 @@ sign up for events."
 
     movable_signup.update!(bucket_key: destination_bucket.key)
     movable_signup
-  end
-
-  def withdraw_user_from_conflicting_waitlist_signups
-    conflicting_waitlist_signups.each do |conflicting_waitlist_signup|
-      EventWithdrawService.new(conflicting_waitlist_signup, whodunit, skip_locking: true).call
-    end
   end
 
   def notify_team_members(signup)
