@@ -212,7 +212,7 @@ class Ability
     can :manage, Doorkeeper::Application unless doorkeeper_token
 
     can :read, [Event, Run, Signup] if has_scope?(:read_signups)
-    can :signup_summary, Run
+    can :signup_summary, Run, event: { private_signup_list: false }
 
     if has_scope?(:read_events)
       can :read, [
@@ -291,7 +291,7 @@ class Ability
     if has_scope?(:read_events)
       can :read, EventProposal, id: own_event_proposal_ids
       can :read, EventProposal, owner: { user_id: user.id }
-      can :signup_summary, Run, id: signed_up_run_ids
+      can :signup_summary, Run, id: signed_up_run_ids, event: { private_signup_list: false }
       can :read, TeamMember, user_con_profile: { user_id: user.id }
     end
 
