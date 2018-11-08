@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
-import { humanize } from 'inflected';
+import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
 
 import { findBucket } from './SignupUtils';
@@ -12,12 +12,20 @@ const signupSummaryQuery = gql`
 query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
   event(id: $eventId) {
     id
+    team_member_name
 
     registration_policy {
       buckets {
         key
         name
         expose_attendees
+      }
+    }
+
+    team_members {
+      id
+      user_con_profile {
+        id
       }
     }
 
@@ -35,6 +43,7 @@ query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
           bucket_key
 
           user_con_profile {
+            id
             name_inverted
           }
         }
@@ -50,17 +59,38 @@ class RunSignupSummary extends React.Component {
     runId: PropTypes.number.isRequired,
   }
 
-  renderSignupRow = (signup, registrationPolicy) => {
+  renderSignupRow = (signup, registrationPolicy, teamMembers, teamMemberName) => {
     const bucket = findBucket(signup.bucket_key, registrationPolicy);
     const suffix = (
       signup.bucket_key && bucket && bucket.expose_attendees
         ? ` (${bucket.name})`
         : null
     );
+    const isTeamMember = teamMembers
+      .some(teamMember => teamMember.user_con_profile.id === signup.user_con_profile.id);
 
     return (
-      <tr key={signup.id} className={classNames({ 'table-warning': signup.state === 'waitlisted' })}>
-        <td>{signup.user_con_profile.name_inverted}</td>
+      <tr
+        key={signup.id}
+        className={classNames({
+          'table-warning': signup.state === 'waitlisted',
+          'table-secondary': isTeamMember,
+        })}
+      >
+        <td>
+          {signup.user_con_profile.name_inverted}
+          {
+            isTeamMember
+              ? (
+                <strong>
+                  {' ('}
+                  {humanize(underscore(teamMemberName))}
+                  {')'}
+                </strong>
+              )
+              : null
+          }
+        </td>
         <td>
           {humanize(signup.state)}
           {suffix}
@@ -83,7 +113,12 @@ class RunSignupSummary extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {data.event.run.signups_paginated.entries.map(signup => this.renderSignupRow(signup, data.event.registration_policy))}
+              {data.event.run.signups_paginated.entries.map(signup => this.renderSignupRow(
+                signup,
+                data.event.registration_policy,
+                data.event.team_members,
+                data.event.team_member_name,
+              ))}
             </tbody>
           </table>
         )}
