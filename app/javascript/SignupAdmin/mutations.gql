@@ -1,0 +1,25 @@
+#import "./queries.gql"
+
+mutation ChangeSignupBucket($signupId: Int!, $bucketKey: String!) {
+  updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
+    signup {
+      ...SignupFields
+    }
+  }
+}
+
+mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
+  forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
+    signup {
+      ...SignupFields
+    }
+  }
+}
+
+mutation UpdateSignupCounted($signupId: Int!, $counted: Boolean!) {
+  updateSignupCounted(input: { id: $signupId, counted: $counted }) {
+    signup {
+      ...SignupFields
+    }
+  }
+}

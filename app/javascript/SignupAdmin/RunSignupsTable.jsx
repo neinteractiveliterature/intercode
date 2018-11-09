@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
 
@@ -10,60 +9,7 @@ import { encodeStringArray, decodeStringArray } from '../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-
-const signupsQuery = gql`
-query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
-  event(id: $eventId) {
-    id
-    team_member_name
-
-    team_members {
-      id
-
-      user_con_profile {
-        id
-      }
-    }
-
-    registration_policy {
-      buckets {
-        key
-        name
-      }
-    }
-
-    run(id: $runId) {
-      id
-
-      signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-        total_entries
-        total_pages
-        current_page
-        per_page
-
-        entries {
-          id
-          state
-          counted
-          bucket_key
-          requested_bucket_key
-
-          run {
-            starts_at
-          }
-
-          user_con_profile {
-            id
-            name_inverted
-            email
-            birth_date
-          }
-        }
-      }
-    }
-  }
-}
-`;
+import { RunSignupsTableSignupsQuery } from './queries.gql'
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
@@ -189,7 +135,7 @@ class RunSignupsTable extends React.Component {
         getData={({ data }) => data.event.run.signups_paginated.entries}
         getPages={({ data }) => data.event.run.signups_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
-        query={signupsQuery}
+        query={RunSignupsTableSignupsQuery}
         variables={{ eventId: this.props.eventId, runId: this.props.runId }}
 
         className="-striped -highlight"

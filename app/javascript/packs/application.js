@@ -44,6 +44,3 @@ import components from './components';
 WebpackerReact.setup(components);
 
 Rails.start();
-
-// eslint-disable-next-line no-new
-new ClipboardJS('[data-clipboard-target], [data-clipboard-text]');

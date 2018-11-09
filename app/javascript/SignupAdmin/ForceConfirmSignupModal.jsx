@@ -2,22 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
+
 import BucketInput from './BucketInput';
 import ErrorDisplay from '../ErrorDisplay';
-import { signupFields } from './queries';
-
-const forceConfirmMutation = gql`
-mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
-  forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
-    signup {
-      ...SignupFields
-    }
-  }
-}
-
-${signupFields}
-`;
+import { ForceConfirmSignup } from './mutations.gql';
 
 class ForceConfirmSignupModal extends React.Component {
   static propTypes = {
@@ -118,7 +106,7 @@ class ForceConfirmSignupModal extends React.Component {
         </div>
         <div className="modal-footer">
           <button className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
-          <Mutation mutation={forceConfirmMutation}>
+          <Mutation mutation={ForceConfirmSignup}>
             {forceConfirm => (
               <button
                 className="btn btn-primary"

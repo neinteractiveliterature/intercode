@@ -2606,7 +2606,7 @@ cli-width@^2.0.0:
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.2.0.tgz#ff19ede8a9a5e579324147b0c11f0fbcbabed639"
   integrity sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
 
-clipboard@^2.0.1:
+clipboard@^2.0.0, clipboard@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.1.tgz#a12481e1c13d8a50f5f036b0560fe5d16d74e46a"
   integrity sha512-7yhQBmtN+uYZmfRjjVjKa0dZdWuabzpSKGtyQZN+9C8xlC788SSJjOHWh7tzurfwTqTD5UDYAhIv5fRJg3sHjQ==
@@ -8875,7 +8875,7 @@ prompts@^0.1.9:
     kleur "^2.0.1"
     sisteransi "^0.1.1"
 
-"prop-types@15.x.x - 16.x.x", prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+"prop-types@15.x.x - 16.x.x", prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   integrity sha512-3pboPvLiWD7dkI3qf3KbUe6hKFKa52w+AE0VCqECtf+QHAKgOL37tTaNCnuX1nAAQ4ZhyP+kYVKf8rLmJ/feDQ==
@@ -9104,6 +9104,14 @@ react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.6.2:
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.5.10"
+
+react-clipboard.js@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-clipboard.js/-/react-clipboard.js-2.0.1.tgz#aa05590f047a2671e890e51c8af113404fbf6967"
+  integrity sha512-Erq0sAqH69cEAKArGt5geeF4uJVy+MT6PFWchapfc3jx1FPuhUA2EQHtLBugzBIjHf1SfKg+9wgq/3Y8OyhYHA==
+  dependencies:
+    clipboard "^2.0.0"
+    prop-types "^15.5.0"
 
 react-codemirror2@^5.1.0:
   version "5.1.0"

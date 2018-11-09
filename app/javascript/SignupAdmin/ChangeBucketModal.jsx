@@ -2,22 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import BucketInput from './BucketInput';
 import ErrorDisplay from '../ErrorDisplay';
-import { signupFields } from './queries';
-
-const changeBucketMutation = gql`
-mutation ChangeSignupBucket($signupId: Int!, $bucketKey: String!) {
-  updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
-    signup {
-      ...SignupFields
-    }
-  }
-}
-
-${signupFields}
-`;
+import { ChangeSignupBucket } from './mutations.gql';
 
 class ChangeBucketModal extends React.Component {
   static propTypes = {
@@ -115,7 +102,7 @@ class ChangeBucketModal extends React.Component {
         </div>
         <div className="modal-footer">
           <button className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
-          <Mutation mutation={changeBucketMutation}>
+          <Mutation mutation={ChangeSignupBucket}>
             {changeBucket => (
               <button
                 className="btn btn-primary"
