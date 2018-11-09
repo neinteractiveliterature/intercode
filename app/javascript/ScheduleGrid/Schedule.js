@@ -49,7 +49,12 @@ export default class Schedule {
       }
 
       if (category && category.isSingleRun()) {
-        groupName = 'singleRun';
+        // HACK HACK HACK
+        if (category.key === 'con_services') {
+          groupName = 'recurring';
+        } else {
+          groupName = 'singleRun';
+        }
       }
 
       if (category && category.isRecurring()) {

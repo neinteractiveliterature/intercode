@@ -1,5 +1,6 @@
 [
   { "key": "board_game", "name": "Board game" },
+  { "key": "con_services", "name": "Con services", "single_run": true },
   { "key": "filler", "name": "Filler event", "single_run": true },
   { "key": "larp", "name": "Larp", "team_member_name": "GM" },
   { "key": "meetup", "name": "Meetup", "single_run": true, "team_member_name": "host" },
