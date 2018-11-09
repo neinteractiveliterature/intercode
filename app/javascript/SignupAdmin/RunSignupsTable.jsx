@@ -52,7 +52,7 @@ class RunSignupsTable extends React.Component {
       id: 'id',
       accessor: 'id',
       filterable: false,
-      width: 40,
+      width: 50,
     },
     {
       Header: 'State',
