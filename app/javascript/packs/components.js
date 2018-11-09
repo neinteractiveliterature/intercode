@@ -4,6 +4,7 @@ import Cart from '../Store/Cart';
 import CmsVariablesAdmin from '../CmsVariablesAdmin';
 import ConventionAdmin from '../ConventionAdmin';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
+import EmailList from '../UIComponents/EmailList';
 import EventAdmin from '../EventAdmin';
 import EventList from '../EventList';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
@@ -42,6 +43,7 @@ const unwrappedComponents = {
   CmsVariablesAdmin,
   ConventionAdmin,
   EditUserConProfile,
+  EmailList,
   EventAdmin,
   EventList,
   EventProposalDisplay,

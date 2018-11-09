@@ -5,24 +5,13 @@ import {
   Link,
   Route,
   Switch,
-  Redirect,
 } from 'react-router-dom';
-import gql from 'graphql-tag';
 import classNames from 'classnames';
 
 import EditSignup from './EditSignup';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import RunHeader from './RunHeader';
-import RunSignupsTable from './RunSignupsTable';
-
-const eventQuery = gql`
-query SignupAdminEventQuery($eventId: Int!) {
-  event(id: $eventId) {
-    id
-    title
-  }
-}
-`;
+import SignupsIndex from './SignupsIndex';
+import { SignupAdminEventQuery } from './queries.gql';
 
 const EventAdminApp = ({
   basename,
@@ -34,7 +23,7 @@ const EventAdminApp = ({
 }) => (
   <BrowserRouter basename={basename}>
     <div>
-      <QueryWithStateDisplay query={eventQuery} variables={{ eventId }}>
+      <QueryWithStateDisplay query={SignupAdminEventQuery} variables={{ eventId }}>
         {({ data }) => (
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
@@ -69,20 +58,10 @@ const EventAdminApp = ({
         <Route path="/:id/edit" render={({ match }) => <EditSignup id={Number.parseInt(match.params.id, 10)} teamMembersUrl={teamMembersUrl} />} />
         <Route
           path="/"
-          exact
           render={() => (
-            <div>
-              <RunHeader runId={runId} eventId={eventId} />
-              <RunSignupsTable
-                runId={runId}
-                eventId={eventId}
-                exportUrl={exportSignupsUrl}
-                defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age', 'email']}
-              />
-            </div>
+            <SignupsIndex runId={runId} eventId={eventId} exportSignupsUrl={exportSignupsUrl} />
           )}
         />
-        <Redirect to="/" />
       </Switch>
     </div>
   </BrowserRouter>

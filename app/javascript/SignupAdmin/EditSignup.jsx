@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import { pluralize, humanize } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
 
-import { adminSignupQuery, signupFields } from './queries';
+import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
 import Confirm from '../ModalDialogs/Confirm';
@@ -15,18 +14,7 @@ import ForceConfirmSignupModal from './ForceConfirmSignupModal';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import Timespan from '../PCSG/Timespan';
-
-const updateCountedMutation = gql`
-mutation UpdateSignupCounted($signupId: Int!, $counted: Boolean!) {
-  updateSignupCounted(input: { id: $signupId, counted: $counted }) {
-    signup {
-      ...SignupFields
-    }
-  }
-}
-
-${signupFields}
-`;
+import { UpdateSignupCounted } from './mutations.gql';
 
 function cityState(userConProfile) {
   return [
@@ -109,11 +97,11 @@ function getToggleCountedConfirmPrompt(signup, error) {
   return getMakeCountedConfirmPrompt(signup, error);
 }
 
-@graphql(adminSignupQuery)
+@graphql(AdminSignupQuery)
 @GraphQLQueryResultWrapper
 class EditSignup extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(adminSignupQuery).isRequired,
+    data: GraphQLResultPropType(AdminSignupQuery).isRequired,
     teamMembersUrl: PropTypes.string.isRequired,
   }
 
@@ -223,7 +211,7 @@ class EditSignup extends React.Component {
     return (
       <Confirm.Trigger>
         {confirm => (
-          <Mutation mutation={updateCountedMutation}>
+          <Mutation mutation={UpdateSignupCounted}>
             {updateCounted => (
               <button
                 className="btn btn-link"
