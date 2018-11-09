@@ -87,8 +87,12 @@ class ReactRouterReactTableProvider extends React.PureComponent {
       params.set('page', page + 1);
     }
 
-    if (pageSize != null && pageSize !== 20) {
-      params.set('pageSize', pageSize);
+    if (pageSize != null) {
+      if (pageSize === 20) {
+        params.delete('pageSize');
+      } else {
+        params.set('pageSize', pageSize);
+      }
     }
 
     // remove existing filters and sorts rather than just adding on

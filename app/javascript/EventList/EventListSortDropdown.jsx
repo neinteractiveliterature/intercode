@@ -36,8 +36,8 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
   return (
     <PopperDropdown
       renderReference={({ ref, toggle }) => (
-        <button type="button" className="btn btn-outline-primary dropdown-toggle" ref={ref} onClick={toggle}>
-          Sorting by
+        <button type="button" className="btn btn-link dropdown-toggle" ref={ref} onClick={toggle}>
+          Sort by
           {' '}
           {currentSort.caption}
         </button>

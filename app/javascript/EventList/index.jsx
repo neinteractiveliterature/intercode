@@ -57,6 +57,7 @@ class EventList extends React.PureComponent {
           innerClass={classNames('pagination', extraClasses)}
           itemClass="page-item"
           linkClass="page-link"
+          hideNavigation
         />
       </nav>
     );
@@ -104,6 +105,24 @@ class EventList extends React.PureComponent {
     });
   }
 
+  renderPageSizeControl = ({ pageSize, onPageSizeChange }) => (
+    <div className="form-inline align-items-start">
+      <select
+        className="form-control mx-1"
+        value={pageSize.toString()}
+        onChange={(event) => { onPageSizeChange(Number.parseInt(event.target.value, 10)); }}
+      >
+        {[10, 20, 50, 100, 200].map(pageSizeOption => (
+          <option value={pageSizeOption.toString()} key={pageSizeOption}>
+            {pageSizeOption}
+            {' '}
+            per page
+          </option>
+        ))}
+      </select>
+    </div>
+  )
+
   renderBottomPagination = ({
     eventsPaginated, onPageChange, pageSize, onPageSizeChange,
   }) => {
@@ -112,25 +131,9 @@ class EventList extends React.PureComponent {
     }
 
     return (
-      <div className="d-flex flex-wrap mt-4">
-        <div className="flex-grow-1">
-          {this.renderPagination(eventsPaginated, onPageChange)}
-        </div>
-        <div className="form-inline">
-          Show
-          <select
-            className="form-control mx-1"
-            value={pageSize.toString()}
-            onChange={(event) => { onPageSizeChange(Number.parseInt(event.target.value, 10)); }}
-          >
-            {[10, 20, 50, 100, 200].map(pageSizeOption => (
-              <option value={pageSizeOption.toString()} key={pageSizeOption}>
-                {pageSizeOption}
-              </option>
-            ))}
-          </select>
-          events
-        </div>
+      <div className="d-flex flex-wrap justify-content-center mt-4">
+        {this.renderPagination(eventsPaginated, onPageChange)}
+        {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
       </div>
     );
   }
@@ -177,8 +180,9 @@ class EventList extends React.PureComponent {
                     {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
                       <React.Fragment>
                         <div className="d-flex align-items-start flex-wrap mt-4">
-                          <div className="flex-grow-1">
+                          <div className="flex-grow-1 d-flex">
                             {this.renderPagination(eventsPaginated, onPageChange)}
+                            {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
                           </div>
 
                           <div className="d-flex flex-wrap">

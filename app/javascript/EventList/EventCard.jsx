@@ -115,23 +115,27 @@ const EventCard = ({ event, timezoneName, sorted }) => {
   }
 
   return (
-    <div className="card my-4" key={event.id}>
+    <div className="card mb-4" key={event.id}>
       <div className="card-header">
-        <h4 className="m-0">
-          <a href={`/events/${event.id}`}>{event.title}</a>
-          {
-            event.category !== 'filler'
-              ? (
-                <small className="text-muted">
-                  {' '}
-                  &mdash;
-                  {' '}
-                  {EventCategory.get(event.category).name}
-                </small>
-              )
-              : null
-          }
-        </h4>
+        <div className="d-flex flex-wrap mb-3">
+          <div className="d-flex flex-grow-1">
+            <h4 className="m-0">
+              <a href={`/events/${event.id}`}>{event.title}</a>
+            </h4>
+            {
+              event.category !== 'filler'
+                ? (
+                  <div className="lead ml-2 text-muted">
+                    {EventCategory.get(event.category).name}
+                  </div>
+                )
+                : null
+            }
+          </div>
+          <div className="lead">
+            {renderFirstRunTime(event, timezoneName)}
+          </div>
+        </div>
         <ul className="list-inline my-1">
           {metadataItems.map(metadataItem => (
             <li className="list-inline-item mr-4" key={metadataItem.key}>
@@ -147,15 +151,6 @@ const EventCard = ({ event, timezoneName, sorted }) => {
                   Added
                   {' '}
                   {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
-                </strong>
-              )
-              : null
-          }
-          {
-            sorted.some(sort => sort.id === 'first_scheduled_run_start')
-              ? (
-                <strong>
-                  {renderFirstRunTime(event, timezoneName)}
                 </strong>
               )
               : null
