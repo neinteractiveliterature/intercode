@@ -78,7 +78,7 @@
     "rails-ujs": "^5.2.1",
     "react": "^16.6.0",
     "react-apollo": "^2.2.4",
-    "react-bootstrap4-modal": "^1.6.2",
+    "react-bootstrap4-modal": "^1.7.0",
     "react-clipboard.js": "^2.0.1",
     "react-codemirror2": "^5.1.0",
     "react-dnd": "^5.0.0",
