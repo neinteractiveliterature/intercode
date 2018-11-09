@@ -20,7 +20,7 @@ module Concerns::Names
       query = columns.map { |column| "lower(#{table_name}.#{column}) like :term" }.join(' OR ')
 
       search_string.split(/\s+/).select(&:present?).inject(self) do |working_scope, term|
-        working_scope.where(query, term: "%#{term}%")
+        working_scope.where(query, term: "%#{term.downcase}%")
       end
     end
   end
