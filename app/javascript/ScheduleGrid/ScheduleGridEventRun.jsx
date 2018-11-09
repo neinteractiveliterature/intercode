@@ -63,6 +63,13 @@ class ScheduleGridEventRun extends React.Component {
       unavailableBarWidth = (
         (run.confirmed_limited_signup_count / event.registration_policy.total_slots) * 100.0
       );
+    } else if (event.registration_policy.only_uncounted) {
+      unavailableBarWidth = (
+        (
+          run.not_counted_confirmed_signup_count
+          / event.registration_policy.total_slots_including_not_counted
+        ) * 100.0
+      );
     }
 
     return (
@@ -151,7 +158,11 @@ class ScheduleGridEventRun extends React.Component {
                   'small',
                   {
                     'signed-up': config.showSignedUp && signupStatus != null,
-                    full: runFull(event, run) && signupStatus == null,
+                    full: (
+                      config.classifyEventsBy !== 'fullness'
+                      && runFull(event, run)
+                      && signupStatus == null
+                    ),
                   },
                 )}
                 role="button"
