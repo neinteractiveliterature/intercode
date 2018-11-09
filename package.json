@@ -86,7 +86,7 @@
     "react-dom": "^16.6.0",
     "react-html-id": "^0.1.4",
     "react-immutable-proptypes": "^2.1.0",
-    "react-js-pagination": "^3.0.2",
+    "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-moment-proptypes": "^1.6.0",
     "react-onclickoutside": "^6.7.0",
     "react-popper": "^1.0.2",

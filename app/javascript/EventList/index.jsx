@@ -58,6 +58,8 @@ class EventList extends React.PureComponent {
           itemClass="page-item"
           linkClass="page-link"
           hideNavigation
+          hideFirstLastPages
+          ellipsis
         />
       </nav>
     );
