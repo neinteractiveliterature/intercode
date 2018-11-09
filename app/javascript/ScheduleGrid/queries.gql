@@ -17,9 +17,13 @@ fragment ScheduleGridEventsFragment on Query {
 
     registration_policy {
       slots_limited
+      only_uncounted
       total_slots
-      preferred_slots
-      minimum_slots
+      total_slots_including_not_counted
+      preferred_slots @include(if: $extendedCounts)
+      preferred_slots_including_not_counted @include(if: $extendedCounts)
+      minimum_slots @include(if: $extendedCounts)
+      minimum_slots_including_not_counted @include(if: $extendedCounts)
     }
 
     runs(start: $start, finish: $finish) {
@@ -29,6 +33,7 @@ fragment ScheduleGridEventsFragment on Query {
       title_suffix
 
       confirmed_limited_signup_count
+      not_counted_confirmed_signup_count
       confirmed_signup_count @include(if: $extendedCounts)
       waitlisted_signup_count @include(if: $extendedCounts)
       not_counted_signup_count @include(if: $extendedCounts)

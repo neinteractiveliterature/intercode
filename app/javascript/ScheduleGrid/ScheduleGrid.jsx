@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
+import getFullnessClass from './getFullnessClass';
 import Timespan from '../PCSG/Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
 import computeRunDimensionsWithoutSpanning from '../PCSG/computeRunDimensionsWithoutSpanning';
@@ -59,22 +60,11 @@ class ScheduleGrid extends React.Component {
       }
 
       let className;
-      const { registration_policy: registrationPolicy } = event;
 
       if (this.props.config.classifyEventsBy === 'category') {
         className = `event-category-${event.category.replace(/_/g, '-')}`;
       } else if (this.props.config.classifyEventsBy === 'fullness') {
-        if (!event.registration_policy.slots_limited) {
-          className = 'event-fullness-unlimited';
-        } else if (run.confirmed_limited_signup_count >= registrationPolicy.total_slots) {
-          className = 'event-fullness-full';
-        } else if (run.confirmed_limited_signup_count >= registrationPolicy.preferred_slots) {
-          className = 'event-fullness-preferred';
-        } else if (run.confirmed_limited_signup_count >= registrationPolicy.minimum_slots) {
-          className = 'event-fullness-minimum';
-        } else {
-          className = 'event-fullness-below-minimum';
-        }
+        className = getFullnessClass(event, run);
       }
 
       return (

@@ -57,6 +57,14 @@ Types::RunType = GraphQL::ObjectType.define do
     }
   end
 
+  field :not_counted_confirmed_signup_count, types.Int do
+    resolve ->(obj, _args, _ctx) {
+      SignupCountLoader.for.load(obj).then do |presenter|
+        presenter.not_counted_signups_by_state('confirmed')
+      end
+    }
+  end
+
   field :my_signups, types[Types::SignupType] do
     resolve ->(obj, _args, ctx) {
       return [] unless ctx[:user_con_profile]
