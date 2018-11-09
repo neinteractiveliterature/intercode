@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Mutation } from 'react-apollo';
-import { pluralize, humanize } from 'inflected';
+import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
 
@@ -314,7 +314,7 @@ class EditSignup extends React.Component {
           </li>
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
-              {run.event.team_member_name}
+              {humanize(underscore(run.event.team_member_name))}
 :
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
