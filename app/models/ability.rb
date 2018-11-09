@@ -373,7 +373,7 @@ class Ability
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, StaffPosition, convention_id: staff_con_ids
-    can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
+    can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
