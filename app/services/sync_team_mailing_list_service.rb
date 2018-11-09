@@ -1,4 +1,6 @@
 class SyncTeamMailingListService < CivilService::Service
+  include Concerns::SkippableAdvisoryLock
+
   attr_reader :event
 
   def initialize(event:)
@@ -12,6 +14,18 @@ class SyncTeamMailingListService < CivilService::Service
       return success
     end
 
+    with_advisory_lock_unless_skip_locking("sync_team_mailing_list_event_#{event.id}") do
+      if team_member_user_con_profiles.any?
+        create_or_update_route
+      else
+        delete_route_if_exists
+      end
+    end
+
+    success
+  end
+
+  def create_or_update_route
     if applicable_routes.size > 0
       keep_route, *delete_routes = applicable_routes
       mailgun.put("/routes/#{keep_route['id']}", route_properties)
@@ -22,12 +36,21 @@ class SyncTeamMailingListService < CivilService::Service
     else
       mailgun.post('routes', route_properties)
     end
+  end
 
-    success
+  def delete_route_if_exists
+    applicable_routes.each do |route|
+      mailgun.delete("/routes/#{route['id']}")
+    end
   end
 
   def convention
     event.convention
+  end
+
+  def team_member_user_con_profiles
+    @team_member_user_con_profiles ||= event.team_members.includes(user_con_profile: :user)
+      .map(&:user_con_profile)
   end
 
   def route_expression
@@ -37,8 +60,8 @@ class SyncTeamMailingListService < CivilService::Service
   def route_properties
     @route_properties ||= {
       expression: route_expression,
-      action: event.team_members.includes(user_con_profile: :user).map do |team_member|
-        "forward(\"#{team_member.user_con_profile.email}\")"
+      action: team_member_user_con_profiles.map do |user_con_profile|
+        "forward(\"#{user_con_profile.email}\")"
       end,
       description: "#{event.title} Mailing List"
     }
