@@ -10,17 +10,25 @@ import pluralizeWithCount from '../pluralizeWithCount';
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
-    const firstRunsSorted = getSortedRuns(event).slice(0, 4);
+    const sortedRuns = getSortedRuns(event);
+    if (sortedRuns.length > 4) {
+      const firstRunStart = moment.tz(sortedRuns[0].starts_at, timezoneName);
+      return `${sortedRuns.length} runs starting ${firstRunStart.format('dddd h:mma')}`;
+    }
+
+    let previousDayName = null;
 
     return arrayToSentence([
-      ...firstRunsSorted.map(run => (
-        moment.tz(run.starts_at, timezoneName).format('dddd h:mma')
-      )),
-      ...(
-        event.runs.length > firstRunsSorted.length
-          ? [`${event.runs.length - firstRunsSorted.length} more`]
-          : []
-      ),
+      ...sortedRuns.map((run) => {
+        const runStart = moment.tz(run.starts_at, timezoneName);
+        const dayName = runStart.format('dddd');
+        if (previousDayName === dayName) {
+          return runStart.format('h:mma');
+        }
+
+        previousDayName = dayName;
+        return `${dayName} ${runStart.format('h:mma')}`;
+      }),
     ]);
   }
 
