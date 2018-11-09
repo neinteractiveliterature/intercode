@@ -13,6 +13,8 @@ class EventCategory {
   isRecurring = () => this.recurring
 
   isRegular = () => !this.isSingleRun() && !this.isRecurring()
+
+  getClassName = () => `event-category-${this.key.replace(/_/g, '-')}`
 }
 
 EventCategory.allCategories = categoryData.map(category => new EventCategory(category));

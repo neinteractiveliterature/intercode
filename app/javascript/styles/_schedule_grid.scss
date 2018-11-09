@@ -82,7 +82,7 @@
   }
 }
 
-.event-category-volunteer-event {
+.event-category-volunteer-event, .event-category-con-services {
   background-color: $gray-300;
 
   &.full {
@@ -95,7 +95,7 @@
   }
 }
 
-.event-category-panel, .event-category-moderated-discussion, .event-category-tabletop-rpg, .event-category-presentation {
+.event-category-panel, .event-category-moderated-discussion, .event-category-workshop, .event-category-presentation {
   background-color: lighten($red, 30%);
 
   &.full {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
+import EventCategory from '../EventAdmin/EventCategory';
 import getFullnessClass from './getFullnessClass';
 import Timespan from '../PCSG/Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
@@ -62,7 +63,7 @@ class ScheduleGrid extends React.Component {
       let className;
 
       if (this.props.config.classifyEventsBy === 'category') {
-        className = `event-category-${event.category.replace(/_/g, '-')}`;
+        className = EventCategory.get(event.category).getClassName();
       } else if (this.props.config.classifyEventsBy === 'fullness') {
         className = getFullnessClass(event, run);
       }

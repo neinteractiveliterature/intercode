@@ -38,7 +38,7 @@
               %td= email.metadata[field]
 
   .tab-pane{id: "comma-separated-#{@hacky_mailing_list_sequence}", 'aria-labelledby' => "comma-separated-tab-#{@hacky_mailing_list_sequence}"}
-    = react_component 'EmailList', emails: emails.map { |email| { email: email.email, name: email.name } }, separator: ', '
+    = app_component 'EmailList', emails: emails.map { |email| { email: email.email, name: email.name } }, separator: ', '
 
   .tab-pane{id: "semicolon-separated-#{@hacky_mailing_list_sequence}", 'aria-labelledby' => "semicolon-separated-tab-#{@hacky_mailing_list_sequence}"}
-    = react_component 'EmailList', emails: emails.map { |email| { email: email.email, name: email.name } }, separator: '; '
+    = app_component 'EmailList', emails: emails.map { |email| { email: email.email, name: email.name } }, separator: '; '
