@@ -82,7 +82,7 @@
   }
 }
 
-.event-category-volunteer-event, .event-category-con-services {
+.event-category-volunteer-event {
   background-color: $gray-300;
 
   &.full {
@@ -92,6 +92,19 @@
   &.signed-up {
     background-color: $gray-700;
     border-color: $gray-700;
+  }
+}
+
+.event-category-con-services {
+  background-color: lighten($yellow, 35%);
+
+  &.full {
+    background-color: fade-out(lighten($yellow, 35%), 0.4);
+  }
+
+  &.signed-up {
+    background-color: $yellow;
+    border-color: $yellow;
   }
 }
 
