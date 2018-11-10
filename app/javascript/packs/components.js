@@ -1,5 +1,6 @@
 import { mapValues } from 'lodash';
 
+import AppWrapper from '../AppWrapper';
 import Cart from '../Store/Cart';
 import CategoryLegend from '../ScheduleGrid/CategoryLegend';
 import CmsVariablesAdmin from '../CmsVariablesAdmin';
@@ -22,6 +23,7 @@ import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import ProposeEventButton from '../EventProposals/ProposeEventButton';
 import RoomsAdmin from '../RoomsAdmin';
+import RunCapacityGraph from '../EventPage/RunCapacityGraph';
 import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
 import ScheduleGrid from '../ScheduleGrid';
 import SignupAdmin from '../SignupAdmin';
@@ -29,7 +31,6 @@ import SignupSpyTable from '../Reports/SignupSpyTable';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
 import StandaloneEditEvent from '../StandaloneEditEvent';
-import AppWrapper from '../AppWrapper';
 import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
@@ -62,6 +63,7 @@ const unwrappedComponents = {
   ProductOrderForm,
   ProposeEventButton,
   RoomsAdmin,
+  RunCapacityGraph,
   RunSignupSummary,
   ScheduleGrid,
   SignupAdmin,

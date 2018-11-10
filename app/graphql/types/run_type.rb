@@ -65,6 +65,12 @@ Types::RunType = GraphQL::ObjectType.define do
     }
   end
 
+  field :signup_count_by_state_and_bucket_key_and_counted, Types::Json.to_non_null_type do
+    resolve ->(obj, _args, _ctx) {
+      SignupCountLoader.for.load(obj).then(&:signup_count_by_state_and_bucket_key_and_counted)
+    }
+  end
+
   field :my_signups, types[Types::SignupType] do
     resolve ->(obj, _args, ctx) {
       return [] unless ctx[:user_con_profile]
