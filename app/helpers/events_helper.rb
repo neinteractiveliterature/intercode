@@ -1,8 +1,4 @@
 module EventsHelper
-  def schedule_grid(basename:, **config)
-    app_component('ScheduleGrid', basename: basename, config: config)
-  end
-
   def signup_button(event, run, signup_option)
     url = event_run_user_signup_path(event, run, signup_option.params)
 

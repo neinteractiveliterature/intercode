@@ -3,7 +3,7 @@
     %li.breadcrumb-item.active{'aria-current' => 'page'}
       Con schedule
 
-= schedule_grid classifyEventsBy: 'category', showSignupStatusBadge: true, showSignedUp: true, basename: schedule_events_path
+= app_component 'ScheduleGrid', basename: schedule_events_path, configKey: 'con_schedule'
 
 .mt-4
   = app_component 'CategoryLegend'
