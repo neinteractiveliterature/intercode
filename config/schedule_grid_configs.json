@@ -12,10 +12,10 @@
         "match": [{ "categoryKey": "larp" }, { "categoryKey": "tabletop_rpg" }, { "categoryKey": "board_game" }]
       },
       {
-        "match": [{ "categoryKey": "volunteer_event" }]
+        "match": [{ "categoryKey": "con_services" }]
       },
       {
-        "match": [{ "categoryKey": "con_services" }]
+        "match": [{ "categoryKey": "volunteer_event" }]
       }
     ],
     "filterEmptyGroups": true
@@ -40,10 +40,10 @@
         "match": [{ "categoryKey": "larp" }, { "categoryKey": "tabletop_rpg" }, { "categoryKey": "board_game" }]
       },
       {
-        "match": [{ "categoryKey": "volunteer_event" }]
+        "match": [{ "categoryKey": "con_services" }]
       },
       {
-        "match": [{ "categoryKey": "con_services" }]
+        "match": [{ "categoryKey": "volunteer_event" }]
       }
     ],
     "filterEmptyGroups": true
