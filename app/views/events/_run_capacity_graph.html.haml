@@ -17,6 +17,8 @@
             - signup_count.times do |index|
               .bucket-capacity-tickmark.bg-white{class: (capacity >= 10 ? 'bucket-capacity-tickmark-thin' : ''), style: "left: #{(index.to_f / signup_count) * 100.0}%;"}
       #{bucket.name}: #{count_presenter.capacity_description_for_bucket(bucket.key)}
+      - if bucket.slots_unlimited? && count_presenter.signups_available
+        (#{signup_count} signed up)
   - if count_presenter.waitlist_count > 0
     .bucket-capacity
       Waitlist: #{count_presenter.waitlist_count}
