@@ -1,20 +1,4 @@
-function getFullnessThresholds(event) {
-  const { registration_policy: registrationPolicy } = event;
-
-  if (registrationPolicy.only_uncounted) {
-    return {
-      total_slots: registrationPolicy.total_slots_including_not_counted,
-      preferred_slots: registrationPolicy.preferred_slots_including_not_counted,
-      minimum_slots: registrationPolicy.minimum_slots_including_not_counted,
-    };
-  }
-
-  return {
-    total_slots: registrationPolicy.total_slots,
-    preferred_slots: registrationPolicy.preferred_slots,
-    minimum_slots: registrationPolicy.minimum_slots,
-  };
-}
+import getCapacityThresholds from './getCapacityThresholds';
 
 export default function getFullnessClass(event, run) {
   if (!event.registration_policy.slots_limited) {
@@ -25,7 +9,7 @@ export default function getFullnessClass(event, run) {
     return 'event-fullness-no-slots';
   }
 
-  const thresholds = getFullnessThresholds(event);
+  const thresholds = getCapacityThresholds(event.registration_policy);
   const signupCount = (
     event.registration_policy.only_uncounted
       ? run.not_counted_confirmed_signup_count
