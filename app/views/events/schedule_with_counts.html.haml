@@ -2,7 +2,7 @@
 
 .row
   .col-xl-9
-    = schedule_grid classifyEventsBy: 'fullness', showExtendedCounts: true, basename: schedule_with_counts_events_path
+    = app_component 'ScheduleGrid', basename: schedule_with_counts_events_path, configKey: 'schedule_with_counts'
   .col-xl-3
     .card.bg-light.mb-4
       .card-header Legend

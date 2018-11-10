@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import AvailabilityBar from './AvailabilityBar';
 import { ConventionEventCategoryKeysQuery } from './queries.gql';
 import EventCategory from '../EventAdmin/EventCategory';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
@@ -15,9 +16,7 @@ function FakeEventRun({
     <div className={classNames(COMMON_EVENT_CLASSES, className)} style={{ zIndex: 0, position: 'relative' }}>
       {children}
 
-      <div className={classNames('availability-bar', { unlimited })}>
-        <div style={{ width: `${100.0 - availability}%` }} className="unavailable" />
-      </div>
+      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} />
     </div>
   );
 }
@@ -67,11 +66,11 @@ function CategoryLegend() {
           </div>
 
           <div className="card-body">
-            <FakeEventRun className="event-category-larp" availability={100}>
+            <FakeEventRun className="event-category-larp" availability={1}>
               100% slots available
             </FakeEventRun>
 
-            <FakeEventRun className="event-category-larp" availability={50}>
+            <FakeEventRun className="event-category-larp" availability={0.5}>
               50% slots available
             </FakeEventRun>
 

@@ -1,0 +1,51 @@
+[
+  {
+    "key": "con_schedule",
+    "classifyEventsBy": "category",
+    "showSignedUp": true,
+    "showSignupStatusBadge": true,
+    "groupEventsBy": "category",
+    "categoryGroups": [
+      { "match": [{ "allRemaining": true }] },
+      {
+        "flexGrow": 1,
+        "match": [{ "categoryKey": "larp" }, { "categoryKey": "tabletop_rpg" }, { "categoryKey": "board_game" }]
+      },
+      {
+        "match": [{ "categoryKey": "volunteer_event" }]
+      },
+      {
+        "match": [{ "categoryKey": "con_services" }]
+      }
+    ],
+    "filterEmptyGroups": true
+  },
+  {
+    "key": "con_schedule_by_room",
+    "classifyEventsBy": "category",
+    "showSignupStatusBadge": true,
+    "showSignedUp": true,
+    "groupEventsBy": "room",
+    "filterEmptyGroups": true
+  },
+  {
+    "key": "schedule_with_counts",
+    "classifyEventsBy": "fullness",
+    "showExtendedCounts": true,
+    "groupEventsBy": "category",
+    "categoryGroups": [
+      { "match": [{ "allRemaining": true }] },
+      {
+        "flexGrow": 1,
+        "match": [{ "categoryKey": "larp" }, { "categoryKey": "tabletop_rpg" }, { "categoryKey": "board_game" }]
+      },
+      {
+        "match": [{ "categoryKey": "volunteer_event" }]
+      },
+      {
+        "match": [{ "categoryKey": "con_services" }]
+      }
+    ],
+    "filterEmptyGroups": true
+  }
+]

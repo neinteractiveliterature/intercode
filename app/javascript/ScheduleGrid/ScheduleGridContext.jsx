@@ -23,7 +23,7 @@ export const ScheduleGridConsumer = ScheduleGridContext.Consumer;
 
 export class ScheduleGridProvider extends React.Component {
   static propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.func.isRequired,
     config: ConfigPropType.isRequired,
   };
 

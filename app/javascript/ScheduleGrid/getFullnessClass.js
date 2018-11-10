@@ -21,6 +21,10 @@ export default function getFullnessClass(event, run) {
     return 'event-fullness-unlimited';
   }
 
+  if (event.registration_policy.total_slots_including_not_counted === 0) {
+    return 'event-fullness-no-slots';
+  }
+
   const thresholds = getFullnessThresholds(event);
   const signupCount = (
     event.registration_policy.only_uncounted

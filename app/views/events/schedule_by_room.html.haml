@@ -5,7 +5,7 @@
     %li.breadcrumb-item.active{'aria-current' => 'page'}
       Schedule by room
 
-= schedule_grid classifyEventsBy: 'category', groupEventsBy: 'room', showSignupStatusBadge: true, showSignedUp: true, basename: schedule_by_room_events_path
+= app_component 'ScheduleGrid', basename: schedule_by_room_events_path, configKey: 'con_schedule_by_room'
 
 %p.font-italic
   Events that use multiple rooms will appear multiple times on this schedule.

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import AvailabilityBar from './AvailabilityBar';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { ScheduleGridConsumer } from './ScheduleGridContext';
 
@@ -58,24 +59,32 @@ class ScheduleGridEventRun extends React.Component {
   renderAvailabilityBar = () => {
     const { event, run } = this.props;
 
-    let unavailableBarWidth = 100.0;
+    if (
+      event.registration_policy.slots_limited
+      && event.registration_policy.total_slots_including_not_counted === 0
+    ) {
+      return null;
+    }
+
+    let availabilityFraction = 100.0;
     if (event.registration_policy.total_slots > 0) {
-      unavailableBarWidth = (
-        (run.confirmed_limited_signup_count / event.registration_policy.total_slots) * 100.0
+      availabilityFraction = (
+        1.0 - (run.confirmed_limited_signup_count / event.registration_policy.total_slots)
       );
     } else if (event.registration_policy.only_uncounted) {
-      unavailableBarWidth = (
-        (
+      availabilityFraction = (
+        1.0 - (
           run.not_counted_confirmed_signup_count
           / event.registration_policy.total_slots_including_not_counted
-        ) * 100.0
+        )
       );
     }
 
     return (
-      <div className={classNames('availability-bar', { unlimited: !event.registration_policy.slots_limited })}>
-        <div style={{ width: `${unavailableBarWidth}%` }} className="unavailable" />
-      </div>
+      <AvailabilityBar
+        availabilityFraction={availabilityFraction}
+        unlimited={!event.registration_policy.slots_limited}
+      />
     );
   }
 
