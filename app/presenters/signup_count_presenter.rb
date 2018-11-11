@@ -2,7 +2,7 @@ class SignupCountPresenter
   include Concerns::SortBuckets
   include ActionView::Helpers::TextHelper
 
-  attr_reader :run, :signups_available
+  attr_reader :run
 
   # Initializes the signups-by-state-and-bucket hash with empty arrays for each state/bucket
   # combination
@@ -52,20 +52,18 @@ class SignupCountPresenter
     end
   end
 
-  def self.for_runs(runs, signups_available: true)
+  def self.for_runs(runs)
     data_by_run_id = signup_count_data_for_runs(runs)
     runs.each_with_object({}) do |run, hash|
       hash[run.id] = new(
         run,
-        signups_available: signups_available,
         count_data: data_by_run_id[run.id] || []
       )
     end
   end
 
-  def initialize(run, signups_available: true, count_data: nil)
+  def initialize(run, count_data: nil)
     @run = run
-    @signups_available = signups_available
 
     return unless count_data
     @signup_count_by_state_and_bucket_key_and_counted =
@@ -137,18 +135,6 @@ class SignupCountPresenter
     return 0.0 if bucket.total_slots == 0
 
     (bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key)).to_f / bucket.total_slots.to_f
-  end
-
-  def capacity_description_for_bucket(bucket_key)
-    bucket = registration_policy.bucket_with_key(bucket_key)
-    return 'unlimited' if bucket.slots_unlimited?
-
-    remaining_capacity = bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key)
-    if !signups_available && remaining_capacity == bucket.total_slots
-      return pluralize(remaining_capacity, 'slot')
-    end
-
-    "#{remaining_capacity} / #{bucket.total_slots} available"
   end
 
   def has_waitlist?

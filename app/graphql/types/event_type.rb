@@ -26,6 +26,7 @@ Types::EventType = GraphQL::ObjectType.define do
   field :description, types.String
   field :short_blurb, types.String
   field :status, types.String
+  field :private_signup_list, types.Boolean
   field :created_at, Types::DateType
 
   field :runs, !types[!Types::RunType] do

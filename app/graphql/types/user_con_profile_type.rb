@@ -77,7 +77,7 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
     }
   end
 
-  field :signups, !types[Types::SignupType] do
+  field :signups, Types::Signup.to_list_type.to_non_null_type do
     guard -> (obj, _args, ctx) {
       ctx[:current_ability].can?(:read, Signup.new(user_con_profile: obj, run: obj.convention.events.new.runs.new))
     }

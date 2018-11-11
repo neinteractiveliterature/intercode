@@ -8,8 +8,7 @@ import sortBuckets from './sortBuckets';
 function RunCapacityGraph({ run, event, signupsAvailable }) {
   const signupCounts = JSON.parse(run.signup_count_by_state_and_bucket_key_and_counted);
   const waitlistCount = sum(Object.values(signupCounts.waitlisted)
-    .map(bucketCounts => sum(Object.values(bucketCounts)
-      .map(countsByCounted => Object.values(countsByCounted)))));
+    .map(countsByCounted => sum(Object.values(countsByCounted))));
 
   return (
     <div className="run-capacity bg-white rounded mb-2" style={{ overflow: 'hidden' }}>

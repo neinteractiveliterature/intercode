@@ -31,6 +31,13 @@ Types::AbilityType = GraphQL::ObjectType.define do
     end
   end
 
+  field :can_signup_summary_event, !types.Boolean do
+    argument :event_id, !types.Int
+    resolve -> (obj, args, _ctx) do
+      ModelPermissionLoader.for(Event).load([obj, :signup_summary, args[:event_id]])
+    end
+  end
+
   field :can_read_schedule, !types.Boolean do
     resolve -> (obj, _args, ctx) do
       obj.can?(:schedule, ctx[:convention])
@@ -89,6 +96,14 @@ Types::AbilityType = GraphQL::ObjectType.define do
   field :can_read_signups, !types.Boolean do
     resolve -> (obj, _args, ctx) do
       obj.can?(:read, Signup.new(run: Run.new(event: Event.new(convention: ctx[:convention]))))
+    end
+  end
+
+  field :can_read_event_signups, !types.Boolean do
+    argument :event_id, !types.Int
+    resolve -> (obj, args, ctx) do
+      event = ctx[:convention].events.find(args[:event_id])
+      obj.can?(:read, Signup.new(run: Run.new(event: event)))
     end
   end
 

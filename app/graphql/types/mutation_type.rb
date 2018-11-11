@@ -243,6 +243,14 @@ class Types::MutationType < Types::BaseObject
 
   ### Signup
 
+  field :createMySignup, mutation: Mutations::CreateMySignup do
+    guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
+  end
+
+  field :withdrawMySignup, mutation: Mutations::WithdrawMySignup do
+    guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
+  end
+
   field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
