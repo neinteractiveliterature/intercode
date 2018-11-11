@@ -23,7 +23,7 @@ import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import ProposeEventButton from '../EventProposals/ProposeEventButton';
 import RoomsAdmin from '../RoomsAdmin';
-import RunCapacityGraph from '../EventPage/RunCapacityGraph';
+import RunsSectionScaffold from '../EventPage/RunsSectionScaffold';
 import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
 import ScheduleGrid from '../ScheduleGrid';
 import SignupAdmin from '../SignupAdmin';
@@ -63,7 +63,7 @@ const unwrappedComponents = {
   ProductOrderForm,
   ProposeEventButton,
   RoomsAdmin,
-  RunCapacityGraph,
+  RunsSectionScaffold,
   RunSignupSummary,
   ScheduleGrid,
   SignupAdmin,

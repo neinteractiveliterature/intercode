@@ -98,7 +98,7 @@ sign up for events."
 
   def must_not_already_be_signed_up
     already_signed_up = existing_signups.reject(&:withdrawn?).any? do |signup|
-      signup.user_con_profile == user_con_profile
+      signup.user_con_profile_id == user_con_profile.id
     end
 
     return unless already_signed_up
