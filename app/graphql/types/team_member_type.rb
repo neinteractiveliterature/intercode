@@ -6,6 +6,7 @@ Types::TeamMemberType = GraphQL::ObjectType.define do
   field :show_email, !types.Boolean
   field :receive_con_email, !types.Boolean
   field :receive_signup_email, !types.Boolean
+  field :email, types.String
 
   field :event, !Types::EventType do
     resolve ->(obj, _args, _ctx) {

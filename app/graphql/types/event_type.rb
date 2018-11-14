@@ -2,12 +2,20 @@ Types::EventType = GraphQL::ObjectType.define do
   name 'Event'
 
   field :id, !types.Int
-  field :form_response_attrs_json, types.String do
+  field :form_response_attrs_json, Types::Json do
     resolve -> (obj, _args, ctx) do
       FormResponsePresenter.new(
         ctx[:convention].form_for_event_category(obj.category),
         obj
-      ).as_json.to_json
+      ).as_json
+    end
+  end
+  field :form_response_attrs_json_with_rendered_markdown, Types::Json do
+    resolve -> (obj, _args, ctx) do
+      FormResponsePresenter.new(
+        ctx[:convention].form_for_event_category(obj.category),
+        obj
+      ).as_json_with_rendered_markdown('event', obj, 'No information provided')
     end
   end
 
@@ -27,6 +35,7 @@ Types::EventType = GraphQL::ObjectType.define do
   field :short_blurb, types.String
   field :status, types.String
   field :private_signup_list, types.Boolean
+  field :form, Types::FormType
   field :created_at, Types::DateType
 
   field :runs, !types[!Types::RunType] do
@@ -91,13 +100,13 @@ Types::EventType = GraphQL::ObjectType.define do
 
   field :short_blurb_html, types.String do
     resolve ->(obj, _args, _ctx) {
-      MarkdownLoader.for('short_blurb_html', 'No blurb provided').load([obj, obj.short_blurb])
+      MarkdownLoader.for('event', 'No information provided').load([[obj, 'short_blurb_html'], obj.short_blurb])
     }
   end
 
   field :description_html, types.String do
     resolve ->(obj, _args, _ctx) {
-      MarkdownLoader.for('description_html', 'No description provided').load([obj, obj.description])
+      MarkdownLoader.for('event', 'No information provided').load([[obj, 'description_html'], obj.description])
     }
   end
 

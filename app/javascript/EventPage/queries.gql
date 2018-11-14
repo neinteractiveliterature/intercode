@@ -24,6 +24,7 @@ fragment EventPageRunFields on Run {
 query EventPageQuery($eventId: Int!) {
   currentAbility {
     can_read_schedule
+    can_update_event(event_id: $eventId)
     can_read_event_signups(event_id: $eventId)
     can_signup_summary_event(event_id: $eventId)
   }
@@ -42,11 +43,18 @@ query EventPageQuery($eventId: Int!) {
     length_seconds
     private_signup_list
     team_member_name
+    form_response_attrs_json_with_rendered_markdown
+
+    form {
+      form_api_json
+    }
 
     team_members {
       id
+      email
       user_con_profile {
         id
+        name_without_nickname
       }
     }
 
@@ -62,6 +70,7 @@ query EventPageQuery($eventId: Int!) {
         not_counted
         slots_limited
         anything
+        minimum_slots
         total_slots
       }
     }
