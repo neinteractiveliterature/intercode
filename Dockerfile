@@ -36,11 +36,11 @@ FROM build-common as build-js
 COPY package.json yarn.lock /usr/src/build/
 RUN yarn install
 
+FROM build-common as build-app
+
 COPY . /usr/src/build
 RUN mv config/database.yml.docker config/database.yml
 RUN bundle exec rake assets:precompile
-
-FROM build-common as build-combined
 
 COPY --from=build-js /usr/src/build .
 COPY --from=build-ruby /usr/src/build/vendor/bundle ./vendor/bundle
