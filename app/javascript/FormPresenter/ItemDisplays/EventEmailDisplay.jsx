@@ -11,19 +11,35 @@ class EventEmailDisplay extends React.PureComponent {
       email: PropTypes.string,
       team_mailing_list_name: PropTypes.string,
     }).isRequired,
+    displayMode: PropTypes.oneOf(['admin', 'public']),
   };
 
-  render = () => {
+  static defaultProps = {
+    displayMode: 'admin',
+  }
+
+  getAddress = () => {
     const { convention, value } = this.props;
     if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
+      return `${value.team_mailing_list_name}@${convention.event_mailing_list_domain}`;
+    }
+
+    return value.email;
+  }
+
+  render = () => {
+    const { convention, value, displayMode } = this.props;
+    if (displayMode === 'public') {
+      return <a href={`mailto:${this.getAddress()}`}>{this.getAddress()}</a>;
+    }
+
+    if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
       return (
-        <ul className="list-unstyled">
+        <ul className="list-unstyled m-0">
           <li>
             <strong>Auto-managed mailing list:</strong>
             {' '}
-            {value.team_mailing_list_name}
-            @
-            {convention.event_mailing_list_domain}
+            {this.getAddress()}
           </li>
         </ul>
       );
@@ -31,11 +47,11 @@ class EventEmailDisplay extends React.PureComponent {
 
     if (value.con_mail_destination === 'gms') {
       return (
-        <ul className="list-unstyled">
+        <ul className="list-unstyled m-0">
           <li>
             <strong>Attendee contact email:</strong>
             {' '}
-            {value.email}
+            {this.getAddress()}
           </li>
           <li>
             <strong>Convention will email team members individually</strong>
@@ -45,9 +61,9 @@ class EventEmailDisplay extends React.PureComponent {
     }
 
     return (
-      <ul className="list-unstyled">
+      <ul className="list-unstyled m-0">
         <li>
-          {value.email}
+          {this.getAddress()}
         </li>
       </ul>
     );

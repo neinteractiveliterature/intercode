@@ -9,6 +9,7 @@ import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EmailList from '../UIComponents/EmailList';
 import EventAdmin from '../EventAdmin';
 import EventList from '../EventList';
+import EventPage from '../EventPage';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
@@ -23,7 +24,6 @@ import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import ProposeEventButton from '../EventProposals/ProposeEventButton';
 import RoomsAdmin from '../RoomsAdmin';
-import RunsSectionScaffold from '../EventPage/RunsSectionScaffold';
 import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
 import ScheduleGrid from '../ScheduleGrid';
 import SignupAdmin from '../SignupAdmin';
@@ -49,6 +49,7 @@ const unwrappedComponents = {
   EmailList,
   EventAdmin,
   EventList,
+  EventPage,
   EventProposalDisplay,
   EventProposalForm,
   EventProposalsAdmin,
@@ -63,7 +64,6 @@ const unwrappedComponents = {
   ProductOrderForm,
   ProposeEventButton,
   RoomsAdmin,
-  RunsSectionScaffold,
   RunSignupSummary,
   ScheduleGrid,
   SignupAdmin,

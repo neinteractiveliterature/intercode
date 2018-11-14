@@ -1,5 +1,11 @@
 class ImportFormContentService < CivilService::Service
-  DIRECT_PROPERTY_NAMES = %i[item_type identifier admin_description default_value]
+  DIRECT_PROPERTY_NAMES = %i[
+    item_type
+    identifier
+    admin_description
+    public_description
+    default_value
+  ]
 
   attr_reader :form, :content
 
