@@ -9,6 +9,6 @@ chmod +x ./cc-test-reporter
 if [ "${LANGUAGE}" = "ruby" ]; then
   echo "Setting up Intercode"
   cp config/database.yml.ci config/database.yml
-  bin/rake db:create db:migrate RAILS_ENV=test
+  bin/rake db:create db:migrate
   RAILS_ENV=test bin/webpack
 fi

@@ -36,7 +36,6 @@ COPY . /usr/src/build
 RUN mv config/database.yml.docker config/database.yml
 
 RUN bundle exec rake assets:precompile
-RUN rm -rf node_modules
 
 FROM dependencies
 
