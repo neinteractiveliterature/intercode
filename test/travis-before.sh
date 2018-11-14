@@ -9,5 +9,8 @@ chmod +x ./cc-test-reporter
 if [ "${LANGUAGE}" = "ruby" ]; then
   echo "Setting up Intercode"
   cp config/database.yml.ci config/database.yml
-  bin/rake db:create db:migrate
+  bin/rake db:create db:migrate db:test:prepare
+
+  # HACK: we could rerun the precompile with RAILS_ENV=test, or we could do this which is faster
+  cp -R public/packs public/packs-test
 fi
