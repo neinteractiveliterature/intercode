@@ -1,20 +1,10 @@
 #!/bin/bash
 
 echo "Preparing CodeClimate coverage reporter"
-pip install --user awscli
+apt-get install -y awscli
 curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
 chmod +x ./cc-test-reporter
 ./cc-test-reporter before-build
-
-source ~/.nvm/nvm.sh
-
-# We need Javascript for Ruby tests because some tests need assets, so do this unconditionally
-echo "Installing node"
-nvm install
-
-set -x
-npm install --global yarn
-yarn install
 
 if [ "${LANGUAGE}" = "ruby" ]; then
   echo "Setting up Intercode"
