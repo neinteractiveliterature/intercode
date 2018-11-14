@@ -15,7 +15,7 @@ WORKDIR /tmp/libgraphqlparser-0.7.0
 RUN cmake .
 RUN make install
 
-FROM dependencies as build
+FROM dependencies as build-common
 
 RUN mkdir -p /usr/src/build
 WORKDIR /usr/src/build
@@ -24,18 +24,26 @@ ENV RAILS_ENV $RAILS_ENV
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-COPY package.json yarn.lock /usr/src/build/
-RUN yarn install
+FROM build-common as build-ruby
 
 COPY Gemfile /usr/src/build/
 COPY Gemfile.lock /usr/src/build/
 RUN bundle config --global frozen 1
 RUN bundle install --deployment
 
+FROM build-common as build-js
+
+COPY package.json yarn.lock /usr/src/build/
+RUN yarn install
+
 COPY . /usr/src/build
 RUN mv config/database.yml.docker config/database.yml
-
 RUN bundle exec rake assets:precompile
+
+FROM build-common as build-combined
+
+COPY --from=build-js /usr/src/build .
+COPY --from=build-ruby /usr/src/build/vendor/bundle ./vendor/bundle
 
 FROM dependencies
 
@@ -46,7 +54,7 @@ ENV RAILS_ENV $RAILS_ENV
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_LOG_TO_STDOUT true
 
-COPY --from=build /usr/src/build .
+COPY --from=build-combined /usr/src/build .
 
 RUN bundle install --deployment
 
