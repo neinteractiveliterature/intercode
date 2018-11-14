@@ -39,7 +39,7 @@ RUN yarn install
 FROM build-common as build-app
 
 COPY --from=build-js /usr/src/build .
-COPY --from=build-ruby /usr/src/build/vendor/bundle ./vendor/bundle
+COPY --from=build-ruby /usr/src/build .
 
 COPY . /usr/src/build
 RUN mv config/database.yml.docker config/database.yml
