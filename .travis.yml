@@ -6,7 +6,7 @@ language: minimal
 before_script:
 - docker-compose up --no-start
 script:
-- docker-compose run -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER web test/travis-complete.sh
+- docker-compose run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER web test/travis-complete.sh
 jobs:
   include:
   - stage: Coverage processing
