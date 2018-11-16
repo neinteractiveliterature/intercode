@@ -51,6 +51,7 @@ env:
 addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
-after_success:
-- test/docker-push.sh
-- heroku login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
+deploy:
+  provider: script
+  script:
+    - test/docker-push.sh
