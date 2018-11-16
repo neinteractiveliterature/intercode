@@ -22,12 +22,11 @@ ENV RAILS_ENV $RAILS_ENV
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-COPY Gemfile /usr/src/build/
-COPY Gemfile.lock /usr/src/build/
+COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bundle config --global frozen 1
 RUN bundle install --deployment
 
-COPY package.json yarn.lock /usr/src/build/
+COPY package.json yarn.lock /usr/src/app/
 RUN yarn install
 
 RUN mv config/database.yml.docker config/database.yml
