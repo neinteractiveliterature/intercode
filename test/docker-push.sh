@@ -9,4 +9,8 @@ if [ -n "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
 else
   docker tag intercode_web:latest neinteractiveliterature/intercode:latest
   docker push neinteractiveliterature/intercode:latest
+
+  heroku login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
+  docker tag intercode_web:latest registry.heroku.com/nbudin/intercode-stage
+  docker push registry.heroku.com/nbudin/intercode-stage
 fi
