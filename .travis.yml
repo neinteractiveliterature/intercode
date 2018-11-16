@@ -3,6 +3,11 @@ branches:
   only:
   - master
 language: minimal
+before_install:
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - test/docker-pull.sh
@@ -31,6 +36,7 @@ env:
   global:
   - PATH=$HOME/.local/bin:$PATH
   - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
+  - DOCKER_COMPOSE_VERSION=1.23.0
   - secure: FOqb5pEOm+aHRz10TYFnGWPw5q7lY+SPrRWiy3HHvq3UK1vpPzUG2bHI+XPShF/JyCyxdqbyOEgC4DLwLXGebG7wWDolf0yE5iHtUmUuPK68EePulltyG00LM361DkniVhu2cHwXFloH30e3BwSPbgcgQfypZA+ITJ3LGhwZ5+E=
   - secure: PNEoXEJTlUd0fLMJBg2mvusuOqFXH24ZWK3JBwtVt2nW8fco2ePw+ZPe+W5ajs3fHrrfTfY5yB484ZA2f91NvC8bxHHfrZ0sN2CgLepxkn4Ox67NbTIPPBPrAmjBdjF2nwMf3CQ//Yp4g+IXBqA4sPp/spW+b+BIyodqBQMRQ8U=
   - secure: bOZbyApoNrBQVTsrM2hQwuW7VwyIahNFtMrth2uJsq+CRO4zdDrwAba7CJe+us0cSUSKlgLpnPX0F8kgIMtriJkT7GF14CUYHbflRtvrOGzxREISTKhFuyzbfnoB+9pOfyZk4Vu9nXsRpVjWaIa7ySX28jBECQXJrZ1Lspyy2Eg=
