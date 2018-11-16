@@ -6,19 +6,24 @@ language: minimal
 before_script:
 - docker-compose up --no-start
 script:
-- docker-compose run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER web test/travis-complete.sh
+- echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+- test/docker-build.sh
+- docker-compose run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER
+  -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER web test/travis-complete.sh
 jobs:
   include:
   - stage: Coverage processing
     language: generic
     before_script:
-      - pip install --user awscli
-      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-        > ./cc-test-reporter
-      - chmod +x ./cc-test-reporter
+    - pip install --user awscli
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+      > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
     script:
-      - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
-      - ./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
+    - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
+    - "./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json
+      | ./cc-test-reporter upload-coverage --input -"
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
@@ -28,6 +33,8 @@ env:
   - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
   - secure: FOqb5pEOm+aHRz10TYFnGWPw5q7lY+SPrRWiy3HHvq3UK1vpPzUG2bHI+XPShF/JyCyxdqbyOEgC4DLwLXGebG7wWDolf0yE5iHtUmUuPK68EePulltyG00LM361DkniVhu2cHwXFloH30e3BwSPbgcgQfypZA+ITJ3LGhwZ5+E=
   - secure: PNEoXEJTlUd0fLMJBg2mvusuOqFXH24ZWK3JBwtVt2nW8fco2ePw+ZPe+W5ajs3fHrrfTfY5yB484ZA2f91NvC8bxHHfrZ0sN2CgLepxkn4Ox67NbTIPPBPrAmjBdjF2nwMf3CQ//Yp4g+IXBqA4sPp/spW+b+BIyodqBQMRQ8U=
+  - secure: bOZbyApoNrBQVTsrM2hQwuW7VwyIahNFtMrth2uJsq+CRO4zdDrwAba7CJe+us0cSUSKlgLpnPX0F8kgIMtriJkT7GF14CUYHbflRtvrOGzxREISTKhFuyzbfnoB+9pOfyZk4Vu9nXsRpVjWaIa7ySX28jBECQXJrZ1Lspyy2Eg=
+  - secure: gITTAZnM8nqHYJDqXS9M0sdoShDr3v7+/tMajvDB2EUgAvtXFKPE/Cv8/nDxhHCTmLU8SUMvFY72HWhDU+tLUoZfUFdnuTtct2do9+VXNUx+p97abdQ1t4qeX6ce2xC83us3VwhvsA1bDnRCb3ErLs37YTFtyZuSKICHQW6yGCY=
   matrix:
   - DATABASE=sqlite LANGUAGE=ruby
   - DATABASE=mysql LANGUAGE=ruby
@@ -37,5 +44,4 @@ addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
 after_success:
-- "./cc-test-reporter sum-coverage coverage/codeclimate.*.json"
-- "./cc-test-reporter upload-coverage"
+- test/docker-push.sh
