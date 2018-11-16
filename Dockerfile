@@ -29,6 +29,8 @@ RUN bundle install --deployment
 COPY package.json yarn.lock /usr/src/app/
 RUN yarn install
 
+COPY . /usr/src/app
+
 RUN mv config/database.yml.docker config/database.yml
 RUN bundle exec rake assets:precompile
 
