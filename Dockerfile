@@ -15,7 +15,13 @@ WORKDIR /tmp/libgraphqlparser-0.7.0
 RUN cmake .
 RUN make install
 
+RUN bundle config --global frozen 1
+
 RUN mkdir -p /usr/src/app
+RUN useradd -m www
+RUN chown www /usr/src/app
+USER www
+
 WORKDIR /usr/src/app
 
 ENV RAILS_ENV $RAILS_ENV
@@ -23,7 +29,6 @@ ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
 COPY Gemfile Gemfile.lock /usr/src/app/
-RUN bundle config --global frozen 1
 RUN bundle install --deployment
 
 COPY package.json yarn.lock /usr/src/app/
@@ -35,4 +40,4 @@ RUN mv config/database.yml.docker config/database.yml
 RUN bundle exec rake assets:precompile
 
 EXPOSE 3000
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rails", "server", "-p", "$PORT", "-b", "0.0.0.0"]
