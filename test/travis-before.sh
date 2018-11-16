@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 echo "Preparing CodeClimate coverage reporter"
 apt-get install -y s3cmd
