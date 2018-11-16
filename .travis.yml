@@ -16,7 +16,7 @@ script:
 - docker-compose -f docker-compose.yml -f docker-compose.${DATABASE,,}.yml run -e
   AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE web test/travis-complete.sh
+  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
 jobs:
   include:
   - stage: Coverage processing
