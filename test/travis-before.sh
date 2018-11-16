@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "Preparing CodeClimate coverage reporter"
 apt-get install -y s3cmd
 curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
