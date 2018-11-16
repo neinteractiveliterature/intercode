@@ -7,6 +7,9 @@ services:
     links:
       - postgres
       - mysql
+    cache_from:
+      - neinteractiveliterature/intercode:latest
+      - neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH}
   mysql:
     image: mysql:5.7
     expose:

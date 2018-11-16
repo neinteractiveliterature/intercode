@@ -5,7 +5,7 @@ branches:
 language: minimal
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-- test/docker-build.sh
+- test/docker-pull.sh
 - docker-compose up --no-start
 script:
 - docker-compose run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
