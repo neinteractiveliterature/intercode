@@ -3,7 +3,7 @@
 docker tag intercode_web:latest neinteractiveliterature/intercode:$TRAVIS_COMMIT
 docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
 
-if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
+if [ -n "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
   docker tag intercode_web:latest neinteractiveliterature/intercode:$TRAVIS_PULL_REQUEST_BRANCH
   docker push neinteractiveliterature/intercode:$TRAVIS_PULL_REQUEST_BRANCH
 else
