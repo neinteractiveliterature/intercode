@@ -7,7 +7,9 @@ else
   docker tag neinteractiveliterature/intercode:$TRAVIS_COMMIT neinteractiveliterature/intercode:latest
   docker push neinteractiveliterature/intercode:latest
 
-  docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
+  echo "$HEROKU_AUTH_TOKEN" | docker login --username=_ --password-stdin registry.heroku.com
   docker tag neinteractiveliterature/intercode:$TRAVIS_COMMIT registry.heroku.com/intercode/web
+  docker tag neinteractiveliterature/intercode:$TRAVIS_COMMIT registry.heroku.com/intercode/release
   docker push registry.heroku.com/intercode/web
+  docker push registry.heroku.com/intercode/release
 fi
