@@ -11,6 +11,11 @@ before_install:
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - test/docker-pull.sh
+stages:
+  - build
+  - test
+  - coverage processing
+  - docker push
 jobs:
   include:
   - stage: build
@@ -24,7 +29,7 @@ jobs:
       AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
       -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
       -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
-  - stage: Coverage processing
+  - stage: coverage processing
     language: generic
     before_script:
     - pip install --user awscli
@@ -35,7 +40,7 @@ jobs:
     - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
     - "./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json
       | ./cc-test-reporter upload-coverage --input -"
-  - stage: Docker push
+  - stage: docker push
     language: minimal
     before_script:
       - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
