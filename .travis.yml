@@ -19,8 +19,10 @@ stages:
 jobs:
   include:
   - stage: build
-    script:
+    before_script:
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
+    script:
     - docker-compose -f docker-compose.test.yml build web
     - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
   - stage: test
