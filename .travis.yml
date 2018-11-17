@@ -10,7 +10,7 @@ before_install:
 - sudo mv docker-compose /usr/local/bin
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-- test/docker-pull.sh
+- docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
 stages:
   - build
   - test
@@ -20,8 +20,8 @@ jobs:
   include:
   - stage: build
     script:
+    - test/docker-pull.sh
     - docker-compose -f docker-compose.test.yml build web
-    - docker tag intercode_web:latest neinteractiveliterature/intercode:$TRAVIS_COMMIT
     - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
   - stage: test
     script:
@@ -42,9 +42,6 @@ jobs:
       | ./cc-test-reporter upload-coverage --input -"
   - stage: docker push
     language: minimal
-    before_script:
-      - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-      - test/docker-pull.sh
     script:
       - test/docker-push.sh
 notifications:
