@@ -1,25 +1,10 @@
-version: '3'
+version: '3.4'
 services:
   web:
-    build: .
-    volumes:
-      - .:/usr/src/app
+    build:
+      context: .
+      cache_from:
+        - neinteractiveliterature/intercode:latest
+        - neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH}
     ports:
       - "3000:3000"
-    links:
-      - postgres
-      - redis
-  postgres:
-    image: postgres:9.6
-    expose:
-      - "5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-  redis:
-    image: redis:latest
-    expose:
-      - "6379"
-volumes:
-  pgdata:

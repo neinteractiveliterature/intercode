@@ -1,0 +1,17 @@
+version: '3.4'
+services:
+  web:
+    links:
+      - mysql
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    volumes:
+      - mysqldata:/var/lib/mysql
+volumes:
+  mysqldata:
