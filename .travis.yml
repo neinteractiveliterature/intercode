@@ -5,22 +5,23 @@ branches:
 language: minimal
 before_install:
 - sudo rm /usr/local/bin/docker-compose
-- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+  -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
 script:
-- docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run -e
-  AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+- docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run
+  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
   -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
 stages:
-  - build
-  - test
-  - coverage processing
-  - docker push
+- build
+- test
+- coverage processing
+- docker push
 jobs:
   include:
   - stage: build
@@ -44,7 +45,7 @@ jobs:
   - stage: docker push
     language: minimal
     script:
-      - test/docker-push.sh
+    - test/docker-push.sh
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
@@ -58,6 +59,8 @@ env:
   - secure: bOZbyApoNrBQVTsrM2hQwuW7VwyIahNFtMrth2uJsq+CRO4zdDrwAba7CJe+us0cSUSKlgLpnPX0F8kgIMtriJkT7GF14CUYHbflRtvrOGzxREISTKhFuyzbfnoB+9pOfyZk4Vu9nXsRpVjWaIa7ySX28jBECQXJrZ1Lspyy2Eg=
   - secure: gITTAZnM8nqHYJDqXS9M0sdoShDr3v7+/tMajvDB2EUgAvtXFKPE/Cv8/nDxhHCTmLU8SUMvFY72HWhDU+tLUoZfUFdnuTtct2do9+VXNUx+p97abdQ1t4qeX6ce2xC83us3VwhvsA1bDnRCb3ErLs37YTFtyZuSKICHQW6yGCY=
   - secure: eDGbrUupdZ9JI1xQdh3hHrRFK+wMa2DE+Dc+MeAVYkQueE5h3JDIl5ituljFCQhSP7Qe/DUyRm1t/0vqWa+AQ4Jg4SghKf8NX7oYze9JIB5D0On40mDZroYo6/AJtAthlEOLc0EzBDl3y7pyjFbxSGFE3bi2MJ48hG0MniU/yVk=
+  - secure: UuIzUbDax08gPFnSVD2bB6ma5lSQsPMEgaDgRJEpqMR/5zZ5enSMv1QG5uiW4W6spKqXbM2wRiAxLEfMU1h/MJqNz5trA1+hss8wjHcCcbnTeILv9Qdrn0IUKzsY5JfkqHtQSesLUAmof3AwdP+SZOFZaQ0EQy6BLmulbuP9gfI=
+  - secure: l+zizfE9Ve5rOhcXraFA7PEaY6Z5gdlB0lZfL28LFSDOQqKwFA1Gl4FTNusaKbTU8dRLAN+RiRkUMQ+l7E99gBUievqkri7786ZopeStjAG1yQ5yeJe03Knq2Kh8GGhb3K/6WjMPVfOYZtrxVZZZh3LXJ4AnmgjP6g9ptKv6JCM=
   matrix:
   - DATABASE=sqlite LANGUAGE=ruby
   - DATABASE=mysql LANGUAGE=ruby
