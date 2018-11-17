@@ -1,6 +1,7 @@
 version: '3.4'
 services:
   web:
+    image: neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     build:
       context: .
       cache_from:

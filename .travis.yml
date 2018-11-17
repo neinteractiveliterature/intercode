@@ -11,14 +11,19 @@ before_install:
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - test/docker-pull.sh
-- docker-compose -f docker-compose.yml -f docker-compose.${DATABASE,,}.yml up --no-start
-script:
-- docker-compose -f docker-compose.yml -f docker-compose.${DATABASE,,}.yml run -e
-  AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
 jobs:
   include:
+  - stage: build
+    script:
+    - docker-compose -f docker-compose.test.yml build web
+    - docker tag intercode_web:latest neinteractiveliterature/intercode:$TRAVIS_COMMIT
+    - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
+  - stage: test
+    script:
+    - docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run -e
+      AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+      -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
   - stage: Coverage processing
     language: generic
     before_script:
