@@ -11,6 +11,6 @@ else
   docker push neinteractiveliterature/intercode:latest
 
   docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
-  docker tag intercode_web:latest registry.heroku.com/nbudin/intercode-stage
-  docker push registry.heroku.com/nbudin/intercode-stage
+  docker tag intercode_web:latest registry.heroku.com/intercode/web
+  docker push registry.heroku.com/intercode/web
 fi
