@@ -32,9 +32,10 @@ jobs:
       | ./cc-test-reporter upload-coverage --input -"
   - stage: Docker push
     language: minimal
-    script:
+    before_script:
       - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
       - test/docker-pull.sh
+    script:
       - test/docker-push.sh
 notifications:
   slack:
