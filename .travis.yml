@@ -11,12 +11,19 @@ before_install:
 - sudo mv docker-compose /usr/local/bin
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-- docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
 script:
+- docker pull neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
 - docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
+  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE
+  -e CI=$CI -e TRAVIS=$TRAVIS -e TRAVIS_COMMIT=$TRAVIS_COMMIT
+  -e TRAVIS_BRANCH=$TRAVIS_BRANCH -e TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
+  -e TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA
+  -e TRAVIS_JOB_ID=$TRAVIS_JOB_ID -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+  -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
+  -u root
+  web
+  test/travis-complete.sh
 stages:
 - build
 - test
@@ -29,8 +36,25 @@ jobs:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
     script:
-    - docker-compose -f docker-compose.test.yml build web
-    - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
+    - docker build --target build -f Dockerfile.web --cache-from neinteractiveliterature/intercode:build-latest
+      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
+      -t neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} .
+    - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+    - docker tag neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
+    - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
+    - docker pull neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
+    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      --cache-from neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      -f Dockerfile.web -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
+    - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      --cache-from neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+      -f Dockerfile.test
+      --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
+      -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
+      .
+    - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
   - stage: coverage processing
     language: generic
     before_script:
@@ -45,6 +69,7 @@ jobs:
   - stage: docker push
     language: minimal
     script:
+    - docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
     - test/docker-push.sh
 notifications:
   slack:
