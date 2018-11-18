@@ -33,7 +33,8 @@ jobs:
       --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
       -t neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} .
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-    - docker build -f Dockerfile.web -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
+    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      -f Dockerfile.web -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
     - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
   - stage: coverage processing
     language: generic
