@@ -33,6 +33,8 @@ jobs:
       --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
       -t neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} .
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+    - docker tag neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
+    - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker pull neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
     - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest}
