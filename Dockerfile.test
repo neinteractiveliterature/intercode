@@ -1,5 +1,5 @@
 ARG INTERCODE_TAG
-FROM neinteractiveliterature/intercode:build-${INTERCODE_TAG}
+FROM neinteractiveliterature/intercode:${INTERCODE_TAG}
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends s3cmd && rm -rf /var/lib/apt/lists/*
