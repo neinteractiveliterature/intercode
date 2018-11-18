@@ -46,6 +46,7 @@ jobs:
     - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       -f Dockerfile.web -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
+    - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       -f Dockerfile.test
