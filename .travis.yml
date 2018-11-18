@@ -11,7 +11,7 @@ before_install:
 - sudo mv docker-compose /usr/local/bin
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-- docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
+- docker pull neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
 script:
 - docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
