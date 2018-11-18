@@ -1,14 +1,5 @@
 #!/bin/bash
 
-set -e
-set -x
-
-echo "Preparing CodeClimate coverage reporter"
-apt-get install -y s3cmd
-curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-chmod +x ./cc-test-reporter
-./cc-test-reporter before-build
-
 if [ "${LANGUAGE}" = "ruby" ]; then
   if [ "${DATABASE}" = "mysql" ]; then
     ./wait-for-it.sh mysql:3306
@@ -19,12 +10,4 @@ if [ "${LANGUAGE}" = "ruby" ]; then
   echo "Setting up Intercode"
   cp config/database.yml.ci config/database.yml
   RAILS_ENV=development bin/rake db:create db:migrate db:test:prepare
-
-  # HACK: we could rerun the precompile with RAILS_ENV=test, or we could do this which is faster
-  cp -R public/packs public/packs-test
-fi
-
-if [ "${LANGUAGE}" = "javascript" ]; then
-  echo "Installing dev dependencies"
-  yarn install --production=false
 fi

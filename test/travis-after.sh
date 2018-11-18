@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
 
 # awscli bails unless you have this, apparently
 export LC_ALL="en_US.UTF-8"
