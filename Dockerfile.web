@@ -1,13 +1,16 @@
-FROM ruby:2.5.1
+ARG RUBY_VERSION=2.5.3
+
+FROM ruby:${RUBY_VERSION} as build
 ARG RAILS_ENV=production
 
 RUN mkdir -p /tmp
 WORKDIR /tmp
 
+RUN apt-get update && apt-get install -y --no-install-recommends curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && apt-get install -y nodejs yarn cmake flex
+RUN apt-get update && apt-get install --no-install-recommends -y nodejs yarn cmake flex && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sL https://github.com/graphql/libgraphqlparser/archive/v0.7.0.tar.gz >libgraphqlparser-0.7.0.tar.gz
 RUN tar xfz libgraphqlparser-0.7.0.tar.gz
@@ -17,27 +20,46 @@ RUN make install
 
 RUN bundle config --global frozen 1
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/build
 RUN useradd -m www
-RUN chown www /usr/src/app
+RUN chown www /usr/src/build
 USER www
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/build
 
 ENV RAILS_ENV $RAILS_ENV
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-COPY Gemfile Gemfile.lock /usr/src/app/
+COPY Gemfile Gemfile.lock /usr/src/build/
 RUN bundle install --deployment
 
-COPY package.json yarn.lock /usr/src/app/
+COPY package.json yarn.lock /usr/src/build/
 RUN yarn install
 
-COPY --chown=www . /usr/src/app
+COPY --chown=www . /usr/src/build
 
 RUN mv config/database.yml.docker config/database.yml
 RUN bundle exec rake assets:precompile
+RUN rm -rf node_modules
 
-EXPOSE 3000
+FROM ruby:${RUBY_VERSION}-slim
+ARG RAILS_ENV=production
+
+ENV RAILS_ENV $RAILS_ENV
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl gnupg && rm -rf /var/lib/apt/lists/*
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install -y --no-install-recommends nodejs yarn sqlite3 libpq5 libmariadbclient18 && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m www
+USER www
+
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
+COPY --from=build --chown=www /usr/src/build /usr/src/app
+WORKDIR /usr/src/app
+
 CMD bundle exec rails server -p $PORT -b 0.0.0.0
