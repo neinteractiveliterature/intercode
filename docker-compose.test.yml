@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.web
       cache_from:
-        - neinteractiveliterature/intercode:latest
-        - neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH}
+        - neinteractiveliterature/intercode:build-latest
+        - neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
     ports:
       - "3000:3000"

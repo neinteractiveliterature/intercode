@@ -29,6 +29,8 @@ jobs:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
     script:
+    - docker build --target build -t neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} .
+    - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
     - docker-compose -f docker-compose.test.yml build web
     - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
   - stage: coverage processing
