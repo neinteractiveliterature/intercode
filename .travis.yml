@@ -16,7 +16,11 @@ script:
 - docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE -u root web test/travis-complete.sh
+  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE
+  -e GIT_COMMIT_SHA=$GIT_COMMIT_SHA -e GIT_BRANCH=$GIT_BRANCH
+  -u root
+  web
+  test/travis-complete.sh
 stages:
 - build
 - test
