@@ -8,6 +8,8 @@
 /test/docker-*.sh
 /.travis.yml
 
+/.git
+
 # Ignore bundler config
 /.bundle
 
