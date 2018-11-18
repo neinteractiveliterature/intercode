@@ -39,7 +39,10 @@ jobs:
       -f Dockerfile.web -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
     - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      -f Dockerfile.test -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT} .
+      -f Dockerfile.test
+      --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
+      -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
+      .
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
   - stage: coverage processing
     language: generic
