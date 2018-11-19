@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_08_151904) do
+ActiveRecord::Schema.define(version: 2018_11_13_145849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,6 +206,7 @@ ActiveRecord::Schema.define(version: 2018_11_08_151904) do
     t.datetime "updated_at", null: false
     t.text "admin_description"
     t.text "default_value"
+    t.text "public_description"
     t.index ["form_section_id"], name: "index_form_items_on_form_section_id"
   end
 
