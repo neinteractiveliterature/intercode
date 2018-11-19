@@ -9,15 +9,15 @@ namespace :release do
 
     uri = URI.parse 'https://api.rollbar.com/api/1/deploy/'
     params = {
-      :access_token   => ENV['ROLLBAR_ACCESS_TOKEN'],
-      :environment    => ENV['RAILS_ENV'],
-      :revision       => ENV['REVISION']
+      access_token: ENV['ROLLBAR_ACCESS_TOKEN'],
+      environment: ENV['RAILS_ENV'],
+      revision: ENV['REVISION']
     }
 
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = ::JSON.dump(params)
 
-    Net::HTTP.start(uri.host, uri.port, :ENV, :use_ssl => true) do |http|
+    Net::HTTP.start(uri.host, uri.port, :ENV, use_ssl: true) do |http|
       response = http.request(request)
       unless response.is_a?(Net::HTTPSuccess)
         raise "Rollbar error: #{response.code}\n#{response.body}"
