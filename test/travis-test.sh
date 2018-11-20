@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "${LANGUAGE}" = "ruby" ]; then
   exec bin/rails test

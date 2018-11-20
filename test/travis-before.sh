@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "${LANGUAGE}" = "ruby" ]; then
   if [ "${DATABASE}" = "mysql" ]; then
