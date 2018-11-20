@@ -2,12 +2,11 @@ ARG INTERCODE_TAG
 FROM neinteractiveliterature/intercode:${INTERCODE_TAG}
 
 USER root
-RUN apt-get update && apt-get install -y --no-install-recommends s3cmd && rm -rf /var/lib/apt/lists/*
+RUN apk add --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted --no-cache s3cmd curl bash
 
 USER www
-RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-RUN chmod +x ./cc-test-reporter
-RUN ./cc-test-reporter before-build
-
-RUN yarn install --production=false
-RUN cp -R public/packs public/packs-test
+RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
+  && chmod +x ./cc-test-reporter \
+  && ./cc-test-reporter before-build \
+  && yarn install --production=false \
+  && cp -R public/packs public/packs-test
