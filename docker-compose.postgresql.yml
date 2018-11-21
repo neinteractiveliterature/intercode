@@ -6,8 +6,8 @@ services:
     depends_on:
       - postgres
     environment:
-      DEVELOPMENT_DATABASE_URL: postgresql://postgres@postgres/intercode_development
-      TEST_DATABASE_URL: postgresql://postgres@postgres/intercode_test
+      DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
+      TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
   postgres:
     image: postgres:10.4
     expose:

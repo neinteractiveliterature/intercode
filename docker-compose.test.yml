@@ -4,7 +4,8 @@ services:
     image: neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: Dockerfile.web
       cache_from:
         - neinteractiveliterature/intercode:build-latest
         - neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
+      target: test

@@ -1,24 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo 'Getting database URL from Heroku'
-DATABASE_URL=$(heroku config:get DATABASE_URL)
+PRODUCTION_DATABASE_URL=${PRODUCTION_DATABASE_URL:-$(heroku config:get DATABASE_URL)}
 
 echo 'Pulling database contents'
-docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.3 pg_dump -v -x --no-owner -Fp "$DATABASE_URL" -f /out/intercode_production_tmp.sql
+docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.3 pg_dump -v -x --no-owner -Fp "$PRODUCTION_DATABASE_URL" -f /out/intercode_production_tmp.sql
 
-echo 'Loading database into local Postgres'
-createdb -U postgres intercode_production_tmp
-cat intercode_production_tmp.sql | psql -U postgres intercode_production_tmp
+docker-compose -f docker-compose.dev.yml -f docker-compose.postgresql.yml run web bin/load_production_database
 
-echo 'Changing convention domains and names for development'
-echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test', name = name || ' [dev]';" | psql -U postgres intercode_production_tmp
-
-echo 'Dropping intercode_development database'
-dropdb -U postgres intercode_development
-
-echo 'Recreating intercode_development from production data'
-createdb -U postgres -T intercode_production_tmp intercode_development
-
-echo 'Dropping tmp database and erasing production sql dump'
-dropdb -U postgres intercode_production_tmp
+echo 'Erasing production sql dump'
 rm intercode_production_tmp.sql
