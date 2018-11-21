@@ -64,10 +64,8 @@ jobs:
   - stage: docker push
     language: minimal
     script:
-    - docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
-    - docker pull neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
-    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      --cache-from neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+    - docker pull neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
+    - docker build --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
       -f Dockerfile.web
       --target production
       -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
