@@ -28,11 +28,10 @@ ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
 COPY Gemfile Gemfile.lock /usr/src/build/
-RUN bundle config --global frozen 1 \
-  && bundle install --deployment \
-  && rm -rf vendor/bundle/ruby/2.5.0/cache/*.gem \
-  && find vendor/bundle/ruby/2.5.0/gems -name '*.c' -delete \
-  && find vendor/bundle/ruby/2.5.0/gems -name '*.o' -delete
+RUN bundle install \
+  && rm -rf /usr/local/bundle/cache/*.gem \
+  && find /usr/local/bundle/gems -name '*.c' -delete \
+  && find /usr/local/bundle/gems -name '*.o' -delete
 
 COPY package.json yarn.lock /usr/src/build/
 RUN yarn install
