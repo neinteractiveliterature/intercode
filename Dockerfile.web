@@ -34,7 +34,7 @@ RUN bundle install \
 
 FROM build AS dev
 
-ENV RAILS_ENV devleopment
+ENV RAILS_ENV development
 
 USER root
 RUN apk add --no-cache less \
