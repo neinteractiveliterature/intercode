@@ -4,10 +4,12 @@ branches:
   - master
 language: minimal
 before_install:
+- curl -O http://launchpadlibrarian.net/340284182/libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
+- dpkg -i libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
 - sudo apt-get update
-- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install containerd.io libseccomp2 docker-ce
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 - cat /etc/docker/daemon.json
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
