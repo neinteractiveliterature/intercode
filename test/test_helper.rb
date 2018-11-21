@@ -12,6 +12,15 @@ Minitest::Reporters.use!(
   Minitest.backtrace_filter
 )
 
+# TODO once DatabaseCleaner actually releases a gem version with the url whitelist feature,
+# switch to this, until then we need to just turn off the safeguard so it will work with Docker
+# environments
+#
+# DatabaseCleaner.url_whitelist = [
+#   'postgres://postgres@postgres/intercode_development',
+#   'mysql2://root:mysql@mysql/intercode_development'
+# ]
+DatabaseCleaner.allow_remote_database_url = true
 DatabaseCleaner.strategy = :transaction
 
 class ActiveSupport::TestCase
