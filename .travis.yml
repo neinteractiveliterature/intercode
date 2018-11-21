@@ -21,7 +21,6 @@ script:
   -e TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA
   -e TRAVIS_JOB_ID=$TRAVIS_JOB_ID -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
   -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
-  -u root
   web
   test/travis-complete.sh
 stages:
