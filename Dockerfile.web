@@ -42,6 +42,8 @@ RUN apk add --no-cache less \
 
 USER www
 WORKDIR /usr/src/app
+
+COPY package.json yarn.lock /usr/src/app/
 RUN yarn install
 
 ### test
@@ -54,6 +56,7 @@ USER root
 RUN apk add --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted --no-cache s3cmd curl bash
 
 USER www
+WORKDIR /usr/src/build
 
 COPY package.json yarn.lock /usr/src/build/
 RUN yarn install
