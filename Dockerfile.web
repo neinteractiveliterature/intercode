@@ -38,13 +38,14 @@ RUN yarn install
 
 COPY --chown=www:www . /usr/src/build
 
-RUN bundle exec rake assets:precompile \
+RUN DATABASE_URL=sqlite3:db/assets.sqlite3 bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
 FROM build AS dev
 
 USER root
-RUN mv /usr/src/build /usr/src/app
+RUN apk add --no-cache less \
+  && mv /usr/src/build /usr/src/app
 
 USER www
 ENV RAILS_ENV development
