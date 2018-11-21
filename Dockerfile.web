@@ -38,8 +38,7 @@ RUN yarn install
 
 COPY --chown=www:www . /usr/src/build
 
-RUN mv config/database.yml.docker config/database.yml \
-  && bundle exec rake assets:precompile \
+RUN bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
 FROM build AS dev

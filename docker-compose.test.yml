@@ -8,5 +8,3 @@ services:
       cache_from:
         - neinteractiveliterature/intercode:build-latest
         - neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
-    ports:
-      - "3000:3000"
