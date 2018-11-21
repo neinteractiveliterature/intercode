@@ -4,15 +4,16 @@ branches:
   - master
 language: minimal
 before_install:
-- curl -O http://launchpadlibrarian.net/340284182/libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
-- sudo dpkg -i libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-- sudo apt-get update
-- sudo apt-get install -y dpkg
-- sudo apt-get -y remove docker-ce
-- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-- sudo cat /var/log/upstart/docker.log
+# TODO figure out if it's possible to get buildkit running on Travis, for faster builds
+# - curl -O http://launchpadlibrarian.net/340284182/libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
+# - sudo dpkg -i libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
+# - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+# - sudo apt-get update
+# - sudo apt-get install -y dpkg
+# - sudo apt-get -y remove docker-ce
+# - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+# - sudo cat /var/log/upstart/docker.log
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
   -s`-`uname -m` > docker-compose
@@ -45,7 +46,6 @@ jobs:
     - test/docker-pull.sh
     script:
     - docker build
-      --buildkit
       --target build
       -f Dockerfile.web
       --cache-from neinteractiveliterature/intercode:build-latest
@@ -56,7 +56,6 @@ jobs:
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker pull neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
     - docker build
-      --buildkit
       -f Dockerfile.web
       --target test
       --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
@@ -84,7 +83,6 @@ jobs:
     script:
     - docker pull neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
     - docker build
-      --buildkit
       --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
       -f Dockerfile.web
       --target production
