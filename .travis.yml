@@ -41,15 +41,18 @@ jobs:
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
     - docker tag neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
+    - docker pull neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
     - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      --cache-from neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
       -f Dockerfile.web
       --target test
       --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
+    - docker tag neinteractiveliterature/intercode:test-$TRAVIS_COMMIT neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+    - docker push neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
   - stage: coverage processing
     language: generic
     before_script:
