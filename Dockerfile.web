@@ -42,6 +42,16 @@ RUN mv config/database.yml.docker config/database.yml \
   && bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
+FROM build AS dev
+
+USER root
+RUN mv /usr/src/build /usr/src/app
+
+USER www
+ENV RAILS_ENV development
+WORKDIR /usr/src/app
+RUN yarn install
+
 FROM ruby:${RUBY_VERSION}-alpine
 ARG RAILS_ENV=production
 
