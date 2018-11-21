@@ -41,15 +41,11 @@ jobs:
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
     - docker tag neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
-    - docker pull neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
-    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      --cache-from neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      -f Dockerfile.web -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
-    - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:${TRAVIS_COMMIT}
-      -f Dockerfile.test
+      -f Dockerfile.web
+      --target test
       --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
@@ -69,6 +65,13 @@ jobs:
     language: minimal
     script:
     - docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
+    - docker pull neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
+    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      --cache-from neinteractiveliterature/intercode:${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      -f Dockerfile.web
+      --target production
+      -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
+    - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     - test/docker-push.sh
 notifications:
   slack:
