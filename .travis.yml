@@ -4,6 +4,10 @@ branches:
   - master
 language: minimal
 before_install:
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+- sudo apt-get update
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
   -s`-`uname -m` > docker-compose
@@ -35,14 +39,18 @@ jobs:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
     script:
-    - docker build --target build -f Dockerfile.web --cache-from neinteractiveliterature/intercode:build-latest
+    - docker build --buildkit
+      --target build
+      -f Dockerfile.web
+      --cache-from neinteractiveliterature/intercode:build-latest
       --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
       -t neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} .
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
     - docker tag neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker pull neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
-    - docker build --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+    - docker build --buildkit
+      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
       --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
       -f Dockerfile.web
@@ -68,7 +76,8 @@ jobs:
     language: minimal
     script:
     - docker pull neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
-    - docker build --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
+    - docker build --buildkit
+      --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
       -f Dockerfile.web
       --target production
       -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
