@@ -5,9 +5,10 @@ branches:
 language: minimal
 before_install:
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
 - sudo apt-get update
 - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+- cat /etc/docker/daemon.json
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
   -s`-`uname -m` > docker-compose
@@ -39,7 +40,7 @@ jobs:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
     script:
-    - docker build --buildkit
+    - docker build
       --target build
       -f Dockerfile.web
       --cache-from neinteractiveliterature/intercode:build-latest
@@ -49,13 +50,13 @@ jobs:
     - docker tag neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest} neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker pull neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest} || true
-    - docker build --buildkit
-      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
-      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
+    - docker build
       -f Dockerfile.web
       --target test
       --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
+      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      --cache-from neinteractiveliterature/intercode:test-${TRAVIS_PULL_REQUEST_BRANCH:-latest}
+      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
@@ -76,7 +77,7 @@ jobs:
     language: minimal
     script:
     - docker pull neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
-    - docker build --buildkit
+    - docker build
       --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
       -f Dockerfile.web
       --target production
