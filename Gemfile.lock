@@ -185,7 +185,7 @@ GEM
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    graphiql-rails (1.4.11)
+    graphiql-rails (1.5.0)
       railties
       sprockets-rails
     graphql (1.8.11)
