@@ -75,6 +75,9 @@ ENV RAILS_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
+USER www
+WORKDIR /usr/src/build
+
 RUN DATABASE_URL=sqlite3:db/assets.sqlite3 bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
