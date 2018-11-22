@@ -1,13 +1,18 @@
 version: '3.4'
+x-link-database: &link-database
+  links:
+    - postgres
+  depends_on:
+    - postgres
+  environment:
+    DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
+    TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
+
 services:
   web:
-    links:
-      - postgres
-    depends_on:
-      - postgres
-    environment:
-      DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
-      TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
+    *link-database
+  shoryuken:
+    *link-database
   postgres:
     image: postgres:10.4
     expose:
