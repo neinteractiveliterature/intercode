@@ -479,12 +479,15 @@ class TeamMemberForm extends React.Component {
       <div className="form-group">
         <label htmlFor={userConProfileSelectId}>
           {`${humanize(underscore(this.props.data.event.team_member_name))}`}
+          {' '}
+          to add
         </label>
         <UserConProfileSelect
-          id={userConProfileSelectId}
+          inputId={userConProfileSelectId}
           value={this.state.teamMember.user_con_profile}
           onChange={this.mutator.teamMember.user_con_profile}
           userConProfilesQuery={userConProfilesQuery}
+          placeholder={`Type the name of the ${this.props.data.event.team_member_name} you want to add`}
         />
       </div>
     );

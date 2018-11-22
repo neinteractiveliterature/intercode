@@ -31,7 +31,10 @@ default: &default
 
 development:
   <<: *default
-  compile: true
+  compile: false
+
+  # Without this, test builds in Docker will fail because we compile the bundle in production mode :(
+  check_yarn_integrity: false
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
@@ -48,7 +51,7 @@ development:
 
 test:
   <<: *default
-  
+
   # We're precompiling in tests in travis-before.sh
   compile: false
 

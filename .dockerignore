@@ -4,6 +4,12 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_global
 
+# Scripts that run in CI but outside the container
+/test/docker-*.sh
+/.travis.yml
+
+/.git
+
 # Ignore bundler config
 /.bundle
 
@@ -12,9 +18,6 @@
 
 # Ignore SQLite journals
 *.sqlite3-journal
-
-# Ignore the user's database.yml
-config/database.yml
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
@@ -47,4 +50,7 @@ cookbooks
 
 /*.pgdump
 /Dockerfile
+/Dockerfile.*
+/docker-compose*.yml
 /kubernetes
+/.dockerignore

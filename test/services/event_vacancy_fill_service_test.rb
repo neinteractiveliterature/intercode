@@ -88,8 +88,12 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   it 'moves a no-preference signup out of the way in order to fill a vacancy' do
-    no_pref_signup
-    anything_signup
+    travel(-2.seconds) do
+      no_pref_signup
+    end
+    travel(-1.second) do
+      anything_signup
+    end
     waitlist_signup
 
     result = EventVacancyFillService.new(the_run, 'cats').call
@@ -117,7 +121,9 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   it 'cascades vacancy filling chronologically' do
-    anything_signup
+    travel(-1.second) do
+      anything_signup
+    end
     waitlist_signup
 
     result = subject.call

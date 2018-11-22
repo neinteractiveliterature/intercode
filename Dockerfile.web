@@ -1,0 +1,104 @@
+ARG RUBY_VERSION=2.5.3
+
+### build
+
+FROM ruby:${RUBY_VERSION}-alpine as build
+
+RUN apk add \
+  --no-cache \
+  build-base yarn git postgresql-dev mariadb-connector-c-dev sqlite-dev cmake flex curl python tzdata less bash
+RUN apk add \
+  --no-cache \
+  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
+  s3cmd
+
+RUN mkdir -p /tmp \
+  && cd /tmp \
+  && curl -sL https://github.com/graphql/libgraphqlparser/archive/v0.7.0.tar.gz >libgraphqlparser-0.7.0.tar.gz \
+  && tar xfz libgraphqlparser-0.7.0.tar.gz \
+  && cd /tmp/libgraphqlparser-0.7.0 \
+  && cmake . \
+  && make install \
+  && cd /tmp \
+  && rm -rf libgraphqlparser-0.7.0 libgraphqlparser-0.7.0.tar.gz
+
+RUN mkdir -p /usr/src/build \
+  && addgroup -S www \
+  && adduser -G www -S www \
+  && chown www:www /usr/src/build
+USER www
+
+WORKDIR /usr/src/build
+
+COPY Gemfile Gemfile.lock /usr/src/build/
+RUN bundle install -j4 \
+  && rm -rf /usr/local/bundle/cache/*.gem \
+  && find /usr/local/bundle/gems -name '*.c' -delete \
+  && find /usr/local/bundle/gems -name '*.o' -delete
+
+COPY package.json yarn.lock /usr/src/build/
+RUN yarn install --production=false
+
+### dev
+
+FROM build AS dev
+
+ENV RAILS_ENV development
+
+USER root
+RUN mv /usr/src/build /usr/src/app
+
+USER www
+WORKDIR /usr/src/app
+
+### test
+
+FROM build AS test
+
+COPY --chown=www:www . /usr/src/build
+
+ENV RAILS_ENV test
+
+USER www
+WORKDIR /usr/src/build
+
+RUN bin/webpack \
+  && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
+  && chmod +x ./cc-test-reporter \
+  && ./cc-test-reporter before-build
+
+### build-production
+
+FROM build AS build-production
+
+COPY --chown=www:www . /usr/src/build
+
+ENV RAILS_ENV production
+ENV AWS_ACCESS_KEY_ID dummy
+ENV AWS_SECRET_ACCESS_KEY dummy
+
+USER www
+WORKDIR /usr/src/build
+
+RUN DATABASE_URL=sqlite3:db/assets.sqlite3 bundle exec rake assets:precompile \
+  && rm -rf node_modules tmp/cache
+
+### production
+
+FROM ruby:${RUBY_VERSION}-alpine AS production
+ARG RAILS_ENV=production
+
+ENV RAILS_ENV $RAILS_ENV
+
+RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite tzdata
+
+RUN addgroup -S www \
+  && adduser -G www -S www
+USER www
+
+COPY --from=build-production /usr/local/bundle /usr/local/bundle
+COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
+COPY --from=build-production --chown=www /usr/src/build /usr/src/app
+WORKDIR /usr/src/app
+
+CMD bundle exec rails server -p $PORT -b 0.0.0.0
