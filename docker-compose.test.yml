@@ -9,3 +9,5 @@ services:
         - neinteractiveliterature/intercode:build-latest
         - neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
       target: test
+  shoryuken:
+    image: neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
