@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "${LANGUAGE}" = "ruby" ]; then
-  exec bin/rake test
+  exec bin/rails test
 fi
 
 if [ "${LANGUAGE}" = "javascript" ]; then

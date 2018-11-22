@@ -1,0 +1,6 @@
+ARG INTERCODE_TAG
+FROM neinteractiveliterature/intercode:${INTERCODE_TAG}
+ARG REVISION
+
+ENV REVISION $REVISION
+CMD bundle exec rails release:perform

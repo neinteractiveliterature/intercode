@@ -64,7 +64,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     end
   end
 
-  field :my_signups, types[Types::Signup] do
+  field :my_signups, Types::Signup.to_list_type do
     resolve ->(_obj, _args, ctx) {
       ctx[:user_con_profile].signups
     }

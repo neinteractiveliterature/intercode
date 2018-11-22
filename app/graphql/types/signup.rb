@@ -42,10 +42,7 @@ class Types::Signup < Types::BaseObject
 
   def waitlist_position
     return nil unless object.waitlisted?
-    Signup.where(run_id: object.run_id)
-      .waitlisted
-      .where('created_at < ?', object.created_at)
-      .count + 1
+    WaitlistPositionLoader.for.load(object)
   end
 
   def counted

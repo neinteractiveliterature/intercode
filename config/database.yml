@@ -1,13 +1,17 @@
+# This database config file is used for CI environments that set the database using
+# the DATABASE environment variable.
+
 development:
-  adapter: postgresql
-  database: intercode_development
-  user: postgres
+  pool: 5
+  timeout: 5000
+  url: <%= ENV['DEVELOPMENT_DATABASE_URL'] %>
 
 test:
-  adapter: postgresql
-  database: intercode_test
-  user: postgres
+  pool: 5
+  timeout: 5000
+  url: <%= ENV['TEST_DATABASE_URL'] %>
 
 production:
-  url:  <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV["DB_POOL"] || ENV['RAILS_MAX_THREADS'] || 5 %>
+  pool: 5
+  timeout: 5000
+  url: <%= ENV['DATABASE_URL'] %>

@@ -331,7 +331,7 @@ class Ability
         show_schedule: %w[gms yes]
       }
     }
-    can :read, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison) }
+    can :read, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
     can :read, User if staff_con_ids.any?
 
     can :read_admin_notes, Event,
@@ -340,7 +340,7 @@ class Ability
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Order, user_con_profile: { convention_id: staff_con_ids }
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
-    can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach) } }
+    can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, MaximumEventProvidedTicketsOverride,
       event: {
         convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)

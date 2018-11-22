@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.1'
+ruby '2.5.3'
 gem 'rails', '5.2.1'
 
 gem 'sqlite3', groups: [:development, :test]
@@ -59,7 +59,7 @@ gem 'will_paginate'
 gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
-# gem 'graphql-libgraphqlparser' someday...
+gem 'graphql-libgraphqlparser'
 gem 'apollo_upload_server', '2.0.0.beta.1'
 gem 'graphql-rails_logger', groups: [:development, :test]
 gem 'graphiql-rails', group: :development
@@ -92,7 +92,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.7.0'
+gem 'oj', '~> 3.7.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

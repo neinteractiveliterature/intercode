@@ -28,7 +28,7 @@ function runFull(event, run) {
 
 function describeAvailability(event, run) {
   if (runFull(event, run)) {
-    return 'Full';
+    return `Full, waitlist: ${run.waitlisted_signup_count}`;
   }
 
   if (!event.registration_policy.slots_limited) {
