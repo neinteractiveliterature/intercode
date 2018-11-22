@@ -4,9 +4,9 @@ echo 'Getting database URL from Heroku'
 PRODUCTION_DATABASE_URL=${PRODUCTION_DATABASE_URL:-$(heroku config:get DATABASE_URL)}
 
 echo 'Pulling database contents'
-docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.3 pg_dump -v -x --no-owner -Fp "$PRODUCTION_DATABASE_URL" -f /out/intercode_production_tmp.sql
+docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.4 pg_dump -v -x --no-owner -Fc "$PRODUCTION_DATABASE_URL" -f /out/intercode_production_tmp.pgdump
 
-docker-compose -f docker-compose.dev.yml -f docker-compose.postgresql.yml run web bin/load_production_database
+docker-compose -f docker-compose.dev.yml -f docker-compose.load_production_database.yml -f docker-compose.postgresql.yml run load_production_database
 
-echo 'Erasing production sql dump'
-rm intercode_production_tmp.sql
+echo 'Erasing production pgdump'
+rm intercode_production_tmp.pgdump
