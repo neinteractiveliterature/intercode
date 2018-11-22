@@ -8,6 +8,37 @@ import { findBucket } from './SignupUtils';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RunHeader from './RunHeader';
 
+function isTeamMember(signup, teamMembers) {
+  return teamMembers
+    .some(teamMember => teamMember.user_con_profile.id === signup.user_con_profile.id);
+}
+
+function sortSignups(signups, teamMembers) {
+  return [...signups].sort((a, b) => {
+    if (a.state === 'waitlisted' && b.state !== 'waitlisted') {
+      return 1;
+    }
+
+    if (b.state === 'waitlisted' && a.state !== 'waitlisted') {
+      return -1;
+    }
+
+    if (isTeamMember(a, teamMembers) && !isTeamMember(b, teamMembers)) {
+      return -1;
+    }
+
+    if (isTeamMember(b, teamMembers) && !isTeamMember(a, teamMembers)) {
+      return 1;
+    }
+
+    if (a.state === 'waitlisted') {
+      return a.waitlist_position - b.waitlist_position;
+    }
+
+    return a.user_con_profile.name_inverted.localeCompare(b.user_con_profile.name_inverted, { sensitivity: 'base' });
+  });
+}
+
 const signupSummaryQuery = gql`
 query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
   event(id: $eventId) {
@@ -34,13 +65,13 @@ query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
 
       signups_paginated(
         per_page: 1000,
-        sort: [{ field: "state", desc: false }, { field: "name", desc: false }],
         filters: { state: ["confirmed", "waitlisted"] }
       ) {
         entries {
           id
           state
           bucket_key
+          waitlist_position
 
           user_con_profile {
             id
@@ -66,21 +97,24 @@ class RunSignupSummary extends React.Component {
         ? ` (${bucket.name})`
         : null
     );
-    const isTeamMember = teamMembers
-      .some(teamMember => teamMember.user_con_profile.id === signup.user_con_profile.id);
+    const waitlistPosition = (
+      signup.state === 'waitlisted'
+        ? ` #${signup.waitlist_position}`
+        : null
+    );
 
     return (
       <tr
         key={signup.id}
         className={classNames({
           'table-warning': signup.state === 'waitlisted',
-          'table-secondary': isTeamMember,
+          'table-secondary': isTeamMember(signup, teamMembers),
         })}
       >
         <td>
           {signup.user_con_profile.name_inverted}
           {
-            isTeamMember
+            isTeamMember(signup, teamMembers)
               ? (
                 <strong>
                   {' ('}
@@ -93,6 +127,7 @@ class RunSignupSummary extends React.Component {
         </td>
         <td>
           {humanize(signup.state)}
+          {waitlistPosition}
           {suffix}
         </td>
       </tr>
@@ -113,12 +148,14 @@ class RunSignupSummary extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {data.event.run.signups_paginated.entries.map(signup => this.renderSignupRow(
-                signup,
-                data.event.registration_policy,
-                data.event.team_members,
-                data.event.team_member_name,
-              ))}
+              {sortSignups(data.event.run.signups_paginated.entries, data.event.team_members)
+                .map(signup => this.renderSignupRow(
+                  signup,
+                  data.event.registration_policy,
+                  data.event.team_members,
+                  data.event.team_member_name,
+                ))
+              }
             </tbody>
           </table>
         )}
