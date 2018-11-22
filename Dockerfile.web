@@ -36,7 +36,7 @@ RUN bundle install \
   && find /usr/local/bundle/gems -name '*.c' -delete \
   && find /usr/local/bundle/gems -name '*.o' -delete
 
-COPY package.json yarn.lock /usr/src/app/
+COPY package.json yarn.lock /usr/src/build/
 RUN yarn install --production=false
 
 ### dev
@@ -70,6 +70,8 @@ RUN bin/webpack \
 ### build-production
 
 FROM build AS build-production
+
+COPY --chown=www:www . /usr/src/build
 
 ENV RAILS_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
