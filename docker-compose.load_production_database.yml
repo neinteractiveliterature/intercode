@@ -1,0 +1,21 @@
+version: '3.4'
+x-link-database: &link-database
+  links:
+    - postgres
+  depends_on:
+    - postgres
+  environment:
+    DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
+    TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
+
+services:
+  load_production_database:
+    image: postgres:10.4
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: ./bin/load_production_database
