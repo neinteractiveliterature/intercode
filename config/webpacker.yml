@@ -31,7 +31,7 @@ default: &default
 
 development:
   <<: *default
-  compile: true
+  compile: false
 
   # Without this, test builds in Docker will fail because we compile the bundle in production mode :(
   check_yarn_integrity: false

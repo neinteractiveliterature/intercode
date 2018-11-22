@@ -9,17 +9,13 @@ x-link-database: &link-database
     TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
 
 services:
-  web:
-    *link-database
-  shoryuken:
-    *link-database
-  postgres:
+  load_production_database:
     image: postgres:10.4
-    expose:
-      - "5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
+    links:
+      - postgres
+    depends_on:
+      - postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: ./bin/load_production_database
