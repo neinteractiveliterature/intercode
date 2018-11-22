@@ -64,7 +64,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     end
   end
 
-  field :my_signups, types[Types::SignupType] do
+  field :my_signups, Types::Signup.to_list_type do
     resolve ->(_obj, _args, ctx) {
       ctx[:user_con_profile].signups
     }
@@ -200,7 +200,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
-  field :signup, !Types::SignupType do
+  field :signup, Types::Signup.to_non_null_type do
     argument :id, !types.Int
 
     guard ->(_obj, args, ctx) do
