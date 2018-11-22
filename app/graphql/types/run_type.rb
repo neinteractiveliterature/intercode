@@ -41,7 +41,7 @@ Types::RunType = GraphQL::ObjectType.define do
   field :waitlisted_signup_count, types.Int do
     resolve ->(obj, _args, _ctx) {
       SignupCountLoader.for.load(obj).then do |presenter|
-        presenter.counted_signups_by_state('waitlisted')
+        presenter.waitlist_count
       end
     }
   end
