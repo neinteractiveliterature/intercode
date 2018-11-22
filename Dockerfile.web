@@ -4,7 +4,13 @@ ARG RUBY_VERSION=2.5.3
 
 FROM ruby:${RUBY_VERSION}-alpine as build
 
-RUN apk add --no-cache build-base yarn git postgresql-dev mariadb-connector-c-dev sqlite-dev cmake flex curl python tzdata
+RUN apk add \
+  --no-cache \
+  build-base yarn git postgresql-dev mariadb-connector-c-dev sqlite-dev cmake flex curl python tzdata less bash
+RUN apk add \
+  --no-cache \
+  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
+  s3cmd
 
 RUN mkdir -p /tmp \
   && cd /tmp \
@@ -30,6 +36,9 @@ RUN bundle install \
   && find /usr/local/bundle/gems -name '*.c' -delete \
   && find /usr/local/bundle/gems -name '*.o' -delete
 
+COPY package.json yarn.lock /usr/src/app/
+RUN yarn install --production=false
+
 ### dev
 
 FROM build AS dev
@@ -37,31 +46,18 @@ FROM build AS dev
 ENV RAILS_ENV development
 
 USER root
-RUN apk add --no-cache less \
-  && mv /usr/src/build /usr/src/app
+RUN mv /usr/src/build /usr/src/app
 
 USER www
 WORKDIR /usr/src/app
-
-COPY package.json yarn.lock /usr/src/app/
-RUN yarn install
 
 ### test
 
 FROM build AS test
 
-ENV RAILS_ENV test
-
-USER root
-RUN apk add --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted --no-cache s3cmd curl bash
-
-USER www
-WORKDIR /usr/src/build
-
-COPY package.json yarn.lock /usr/src/build/
-RUN yarn install
-
 COPY --chown=www:www . /usr/src/build
+
+ENV RAILS_ENV test
 
 RUN bin/webpack \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
@@ -75,11 +71,6 @@ FROM build AS build-production
 ENV RAILS_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
-
-COPY package.json yarn.lock /usr/src/build/
-RUN yarn install
-
-COPY --chown=www:www . /usr/src/build
 
 RUN DATABASE_URL=sqlite3:db/assets.sqlite3 bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
