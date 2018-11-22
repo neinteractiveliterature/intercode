@@ -65,7 +65,7 @@ Types::RunType = GraphQL::ObjectType.define do
     }
   end
 
-  field :my_signups, types[Types::SignupType] do
+  field :my_signups, types[Types::Signup] do
     resolve ->(obj, _args, ctx) {
       return [] unless ctx[:user_con_profile]
       ctx[:user_con_profile].signups.select { |signup| signup.run_id == obj.id }

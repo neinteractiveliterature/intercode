@@ -1,6 +1,6 @@
 Mutations::UpdateSignupCounted = GraphQL::Relay::Mutation.define do
   name 'UpdateSignupCounted'
-  return_field :signup, Types::SignupType
+  return_field :signup, Types::Signup
 
   input_field :id, !types.Int
   input_field :counted, !types.Boolean
