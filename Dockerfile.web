@@ -31,7 +31,7 @@ USER www
 WORKDIR /usr/src/build
 
 COPY Gemfile Gemfile.lock /usr/src/build/
-RUN bundle install \
+RUN bundle install -j4 \
   && rm -rf /usr/local/bundle/cache/*.gem \
   && find /usr/local/bundle/gems -name '*.c' -delete \
   && find /usr/local/bundle/gems -name '*.o' -delete
