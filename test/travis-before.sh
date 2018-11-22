@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "${LANGUAGE}" = "ruby" ]; then
   if [ "${DATABASE}" = "mysql" ]; then
@@ -8,6 +8,5 @@ if [ "${LANGUAGE}" = "ruby" ]; then
   fi
 
   echo "Setting up Intercode"
-  cp config/database.yml.ci config/database.yml
   RAILS_ENV=development bin/rake db:create db:migrate db:test:prepare
 fi

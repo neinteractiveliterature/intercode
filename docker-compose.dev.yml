@@ -1,0 +1,32 @@
+version: '3.4'
+
+x-dev-service: &dev-service
+  build:
+    context: .
+    dockerfile: Dockerfile.web
+    target: dev
+  environment:
+    RAILS_ENV: development
+  user: www
+  volumes:
+    - ./app:/usr/src/app/app
+    - ./cms_content_sets:/usr/src/app/cms_content_sets
+    - ./config:/usr/src/app/config
+    - ./lib:/usr/src/app/lib
+    - ./log:/usr/src/app/log
+    - ./test:/usr/src/app/test
+
+services:
+  web:
+    <<: *dev-service
+    command: bundle exec rails server -b 0.0.0.0 -p 5000
+    ports:
+      - "5000:5000"
+  webpack_dev_server:
+    <<: *dev-service
+    command: ./bin/webpack-dev-server
+    ports:
+      - "3035:3035"
+  shoryuken:
+    <<: *dev-service
+    command: bundle exec shoryuken --rails -C config/shoryuken.yml
