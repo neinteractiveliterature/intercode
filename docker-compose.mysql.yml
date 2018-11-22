@@ -5,6 +5,9 @@ services:
       - mysql
     depends_on:
       - mysql
+    environment:
+      DEVELOPMENT_DATABASE_URL: mysql2://root:mysql@mysql/intercode_development
+      TEST_DATABASE_URL: mysql2://root:mysql@mysql/intercode_test
   mysql:
     image: mysql:5.7
     expose:
