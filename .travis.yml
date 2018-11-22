@@ -19,7 +19,7 @@ before_install:
   -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
-- export BRANCH_TAG=$(echo $BRANCH_TAG | sed 's/[^[:alnum:]]/-/g')
+- export BRANCH_TAG=$(echo ${TRAVIS_PULL_REQUEST_BRANCH:-latest} | sed 's/[^[:alnum:]]/-/g')
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 script:
@@ -37,8 +37,7 @@ script:
 stages:
 - build
 - test
-- coverage processing
-- docker push
+- after
 jobs:
   include:
   - stage: build
@@ -68,7 +67,7 @@ jobs:
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
     - docker tag neinteractiveliterature/intercode:test-$TRAVIS_COMMIT neinteractiveliterature/intercode:test-$BRANCH_TAG
     - docker push neinteractiveliterature/intercode:test-$BRANCH_TAG
-  - stage: post build
+  - stage: after
     language: generic
     before_script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
