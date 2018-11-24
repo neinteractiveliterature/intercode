@@ -18,6 +18,7 @@ mutation PurchaseTicket($input: PurchaseTicketInput!) {
       id
 
       ticket_type {
+        id
         description
       }
 

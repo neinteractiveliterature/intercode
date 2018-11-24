@@ -34,6 +34,15 @@ class FreeTextItemDisplay extends React.PureComponent {
       );
     }
 
+    if (formItem.properties.format === 'url') {
+      try {
+        const url = new URL(value);
+        return (<a href={url.toString()}>{url.toString()}</a>);
+      } catch {
+        // fall through to displaying as plain text
+      }
+    }
+
     return <PlainTextDisplay value={value} />;
   };
 }

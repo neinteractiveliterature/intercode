@@ -19,6 +19,7 @@ fragment NavigationItemFields on CmsNavigationItem {
 const cmsNavigationItemsQuery = gql`
 query NavigationItemsAdminQuery {
   convention {
+    id
     pages {
       id
       name

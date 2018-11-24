@@ -15,7 +15,7 @@ Types::EventType = GraphQL::ObjectType.define do
       FormResponsePresenter.new(
         ctx[:convention].form_for_event_category(obj.category),
         obj
-      ).as_json_with_rendered_markdown('event', obj, 'No information provided')
+      ).as_json_with_rendered_markdown('event', obj, '')
     end
   end
 
@@ -107,12 +107,6 @@ Types::EventType = GraphQL::ObjectType.define do
   field :description_html, types.String do
     resolve ->(obj, _args, _ctx) {
       MarkdownLoader.for('event', 'No information provided').load([[obj, 'description_html'], obj.description])
-    }
-  end
-
-  field :event_page_url, types.String do
-    resolve ->(obj, _args, _ctx) {
-      Rails.application.routes.url_helpers.event_path(obj)
     }
   end
 

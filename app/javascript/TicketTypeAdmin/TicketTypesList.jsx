@@ -7,7 +7,7 @@ import { ConfirmModal } from 'react-bootstrap4-modal';
 import { capitalize } from 'inflected';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypePropType from './TicketTypePropType';
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { ticketTypesQuery } from './queries';

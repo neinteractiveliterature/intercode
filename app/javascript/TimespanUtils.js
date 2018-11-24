@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import Timespan from './PCSG/Timespan';
+import Timespan from './Timespan';
 
 export function timespanFromConvention(convention) {
   return Timespan.fromStrings(convention.starts_at, convention.ends_at)

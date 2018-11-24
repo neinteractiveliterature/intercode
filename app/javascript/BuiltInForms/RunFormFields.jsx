@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';
 
 const roomPropType = PropTypes.shape({
