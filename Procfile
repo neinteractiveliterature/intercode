@@ -1,3 +1,4 @@
-web: docker-compose -f docker-compose.dev.yml -f docker-compose.postgresql.yml run --service-ports web
-webpacker: docker-compose -f docker-compose.dev.yml -f docker-compose.postgresql.yml logs -f webpacker
-shoryuken: docker-compose -f docker-compose.dev.yml -f docker-compose.postgresql.yml run shoryuken
+web: bundle exec rails server -b 0.0.0.0 -p $PORT
+webpacker: ./bin/webpack-dev-server
+shoryuken: bundle exec shoryuken --rails -C config/shoryuken.yml
+release: bundle exec rails db:migrate
