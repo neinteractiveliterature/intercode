@@ -18,6 +18,7 @@ import TableHeader from '../Tables/TableHeader';
 const userConProfilesQuery = gql`
 query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
   convention {
+    id
     name
     privilege_names
     starts_at
@@ -31,6 +32,7 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
     }
 
     user_con_profile_form {
+      id
       form_api_json
     }
 

@@ -70,6 +70,7 @@ ${userConProfileFragment}
 const teamMemberQuery = gql`
 query TeamMemberQuery($eventId: Int!) {
   convention {
+    id
     name
 
     ticket_types {
@@ -82,6 +83,7 @@ query TeamMemberQuery($eventId: Int!) {
   }
 
   event(id: $eventId) {
+    id
     title
     team_member_name
     can_provide_tickets
@@ -91,6 +93,7 @@ query TeamMemberQuery($eventId: Int!) {
     }
 
     provided_tickets {
+      id
       ticket_type {
         id
       }
@@ -104,6 +107,7 @@ ${teamMemberFragment}
 const userConProfilesQuery = gql`
 query TeamMemberUserConProfilesQuery($name: String) {
   convention {
+    id
     user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
       entries {
         ...TeamMemberUserConProfileFields

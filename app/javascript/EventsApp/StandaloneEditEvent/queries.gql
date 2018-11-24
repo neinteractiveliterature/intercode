@@ -1,0 +1,69 @@
+#import "../queries.gql"
+
+fragment StandaloneEditEvent_TicketTypeFields on TicketType {
+  id
+  description
+  maximum_event_provided_tickets
+}
+
+fragment StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
+  ticket_type {
+    ...StandaloneEditEvent_TicketTypeFields
+  }
+
+  id
+  override_value
+}
+
+fragment StandaloneEditEvent_EventFields on Event {
+  id
+  category
+  title
+  form_response_attrs_json
+
+  maximum_event_provided_tickets_overrides {
+    ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
+  }
+}
+
+fragment StandaloneEditEvent_EventFormData on Convention {
+  event_mailing_list_domain
+
+  regular_event_form {
+    id
+    form_api_json
+  }
+
+  volunteer_event_form {
+    id
+    form_api_json
+  }
+
+  filler_event_form {
+    id
+    form_api_json
+  }
+}
+
+query StandaloneEditEventQuery($eventId: Int!) {
+  currentAbility {
+    can_override_maximum_event_provided_tickets
+    can_delete_event(event_id: $eventId)
+  }
+
+  convention {
+    ...CommonConventionData
+
+    ticket_types {
+      ...StandaloneEditEvent_TicketTypeFields
+    }
+
+    ticket_name
+
+    ...StandaloneEditEvent_EventFormData
+  }
+
+  event(id: $eventId) {
+    ...StandaloneEditEvent_EventFields
+  }
+}

@@ -23,7 +23,9 @@ function buildApolloClient(authenticityToken) {
       AuthLink,
       createUploadLink({ uri: '/graphql', fetch }),
     ]),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      addTypename: true,
+    }),
   });
 }
 

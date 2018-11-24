@@ -1454,7 +1454,7 @@ apollo-upload-client@^9.1.0:
     apollo-link-http-common "^0.2.5"
     extract-files "^4.0.0"
 
-apollo-utilities@1.0.25, apollo-utilities@^1.0.25:
+apollo-utilities@1.0.25:
   version "1.0.25"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.25.tgz#899b00f5f990fb451675adf84cb3de82eb6372ea"
   integrity sha512-AXvqkhni3Ir1ffm4SA1QzXn8k8I5BBl4PVKEyak734i4jFdp+xgfUyi2VCqF64TJlFTA/B73TRDUvO2D+tKtZg==
@@ -1468,6 +1468,13 @@ apollo-utilities@^1.0.0:
   dependencies:
     fast-json-stable-stringify "^2.0.0"
     fclone "^1.0.11"
+
+apollo-utilities@^1.0.25, apollo-utilities@^1.0.26:
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.26.tgz#589c66bf4d16223531351cf667a230c787def1da"
+  integrity sha512-URw7o3phymliqYCYatcird2YRPUU2eWCNvip64U9gQrX56mEfK4m99yBIDCMTpmcvOFsKLii1sIEZsHIs/bvnw==
+  dependencies:
+    fast-json-stable-stringify "^2.0.0"
 
 append-transform@^0.4.0:
   version "0.4.0"
@@ -4906,11 +4913,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   integrity sha1-Dovf5NHduIVNZOBOp8AOKgJuVlg=
 
 graphql-anywhere@^4.1.22:
-  version "4.1.22"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.22.tgz#1c831ba3c9e5664a0dd24d10d23a9e9512d92056"
-  integrity sha512-qm2/1cKM8nfotxDhm4J0r1znVlK0Yge/yEKt26EVVBgpIhvxjXYFALCGbr7cvfDlvzal1iSPpaYa+8YTtjsxQA==
+  version "4.1.23"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.23.tgz#4275b161432b7c60a36970a1d9840d8c5cc2516e"
+  integrity sha512-8wtmwxWmLzAy52Z4WAw9UiYZ4ViiNXM+2DMOSlg2F7WsVstD0v75uOjCLJQUvbld5kHrgzTxter/THFVkGL+Yw==
   dependencies:
-    apollo-utilities "^1.0.25"
+    apollo-utilities "^1.0.26"
 
 graphql-config@^2.0.1:
   version "2.2.1"
@@ -5109,9 +5116,9 @@ hoist-non-react-statics@^2.1.0, hoist-non-react-statics@^2.3.1, hoist-non-react-
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
 
 hoist-non-react-statics@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.0.1.tgz#fba3e7df0210eb9447757ca1a7cb607162f0a364"
-  integrity sha512-1kXwPsOi0OGQIZNVMPvgWJ9tSnGMiMfJdihqEzrPEXlHOBh9AAHXX/QYmAJTXztnz/K+PQ8ryCb4eGaN6HlGbQ==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.1.0.tgz#42414ccdfff019cd2168168be998c7b3bd5245c0"
+  integrity sha512-MYcYuROh7SBM69xHGqXEwQqDux34s9tz+sCnxJmN18kgWh6JFdTw/5YdZtqsOdZJXddE/wUpCzfEdDrJj8p0Iw==
   dependencies:
     react-is "^16.3.2"
 
@@ -9122,9 +9129,9 @@ rc@^1.2.7:
     strip-json-comments "~2.0.1"
 
 react-apollo@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.2.4.tgz#05b2a91deb4d5f30d2511fc663abc465b219435e"
-  integrity sha512-haS5R30Qvteb65ZLfWomUZQh47VU4ld4Kof3zlqdbLOrYPt3/DdVZC8ZFPZSxd5zPeIJtZqpUfAxD1WHVoMPIA==
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.3.1.tgz#f3687062f438b9b40e525d7e1ac2bcf0101b4495"
+  integrity sha512-xPteQmCzMJT8wE4v0zq38E6JWLhrNcJENl66fP117lwzU2lZA+qoUDcizqKl0z2OY5b+KklmqnPPD+wcWAdy7w==
   dependencies:
     fbjs "^1.0.0"
     hoist-non-react-statics "^3.0.0"
@@ -9256,7 +9263,12 @@ react-input-autosize@^2.2.1:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.3.2, react-is@^16.5.2:
+react-is@^16.3.2:
+  version "16.6.3"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
+  integrity sha512-u7FDWtthB4rWibG/+mFbVd5FvdI20yde86qKGx4lVUTWmPlSWQ4QxbBIrrs+HnXGbxOUlUzTAP/VDmvCwaP2yA==
+
+react-is@^16.5.2:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
   integrity sha512-hSl7E6l25GTjNEZATqZIuWOgSnpXb3kD0DVCujmg46K5zLxsbiKaaT6VO9slkSBDPZfYs30lwfJwbOFOnoEnKQ==
@@ -10899,9 +10911,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 ua-parser-js@^0.7.18:
-  version "0.7.18"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.18.tgz#a7bfd92f56edfb117083b69e31d2aa8882d4b1ed"
-  integrity sha512-LtzwHlVHwFGTptfNSgezHp7WUlwiqb0gA9AALRbKaERfxwJoiX0A73QbTToxteIAuIaFshhgIZfqK8s7clqgnA==
+  version "0.7.19"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"
+  integrity sha512-T3PVJ6uz8i0HzPxOF9SWzWAlfN/DavlpQqepn22xgve/5QecC+XMCAtmUNnY7C9StehaV6exjUCI801lOI7QlQ==
 
 uglify-es@^3.3.4:
   version "3.3.9"

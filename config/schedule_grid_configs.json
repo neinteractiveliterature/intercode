@@ -1,6 +1,8 @@
 [
   {
     "key": "con_schedule",
+    "basename": "/schedule",
+    "title": "Con schedule",
     "classifyEventsBy": "category",
     "showSignedUp": true,
     "showSignupStatusBadge": true,
@@ -18,18 +20,32 @@
         "match": [{ "categoryKey": "volunteer_event" }]
       }
     ],
-    "filterEmptyGroups": true
+    "filterEmptyGroups": true,
+    "legends": [
+      { "type": "category" }
+    ]
   },
   {
     "key": "con_schedule_by_room",
+    "basename": "/schedule_by_room",
+    "title": "Con schedule by room",
     "classifyEventsBy": "category",
     "showSignupStatusBadge": true,
     "showSignedUp": true,
     "groupEventsBy": "room",
-    "filterEmptyGroups": true
+    "filterEmptyGroups": true,
+    "legends": [
+      {
+        "type": "text",
+        "text": "Events that use multiple rooms will appear multiple times on this schedule."
+      },
+      { "type": "category" }
+    ]
   },
   {
     "key": "schedule_with_counts",
+    "basename": "/schedule_with_counts",
+    "title": "Schedule with counts",
     "classifyEventsBy": "fullness",
     "showExtendedCounts": true,
     "groupEventsBy": "category",
@@ -46,6 +62,9 @@
         "match": [{ "categoryKey": "volunteer_event" }]
       }
     ],
-    "filterEmptyGroups": true
+    "filterEmptyGroups": true,
+    "legends": [
+      { "type": "fullness" }
+    ]
   }
 ]

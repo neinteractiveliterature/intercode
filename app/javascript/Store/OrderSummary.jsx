@@ -9,7 +9,9 @@ import GraphQLResultPropType from '../GraphQLResultPropType';
 const orderSummaryQuery = gql`
 query OrderSummaryQuery {
   convention {
+    id
     products {
+      id
       name
 
       order_quantities_by_status {
@@ -18,6 +20,7 @@ query OrderSummaryQuery {
       }
 
       product_variants {
+        id
         name
 
         order_quantities_by_status {

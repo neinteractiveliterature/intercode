@@ -12,7 +12,7 @@ import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import { userConProfileAdminQuery } from './queries';
-import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
+import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 
 const deleteUserConProfileMutation = gql`
 mutation DeleteUserConProfile($userConProfileId: Int!) {

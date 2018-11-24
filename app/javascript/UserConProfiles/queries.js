@@ -18,6 +18,7 @@ fragment UserConProfileFormData on Convention {
   timezone_name
 
   user_con_profile_form {
+    id
     form_api_json
   }
 }
@@ -74,6 +75,7 @@ query UserConProfileAdminQuery($id: Int!) {
   }
 
   convention {
+    id
     name
     starts_at
     ends_at
@@ -81,6 +83,7 @@ query UserConProfileAdminQuery($id: Int!) {
     ticket_name
 
     user_con_profile_form {
+      id
       form_api_json
     }
   }

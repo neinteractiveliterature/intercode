@@ -28,6 +28,7 @@ fragment AdminOrderFieldsFragment on Order {
 export const adminOrdersQuery = gql`
 query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput]) {
   convention {
+    id
     timezone_name
 
     orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -77,6 +78,7 @@ fragment AdminProductFields on Product {
 export const productsQuery = gql`
 query AdminProductsQuery {
   convention {
+    id
     products {
       ...AdminProductFields
     }

@@ -1,0 +1,14 @@
+fragment CommonConventionData on Convention {
+  id
+  name
+  starts_at
+  ends_at
+  timezone_name
+  event_category_keys
+}
+
+query CommonConventionDataQuery {
+  convention {
+    ...CommonConventionData
+  }
+}
