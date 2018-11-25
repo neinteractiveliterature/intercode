@@ -5,6 +5,18 @@ import PlainTextDisplay from '../../PlainTextDisplay';
 import { previewMarkdownQuery } from '../../BuiltInFormControls/MarkdownInput';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 
+function parseURL(value) {
+  try {
+    return new URL(value);
+  } catch (error) {
+    try {
+      return new URL(`http://${value}`);
+    } catch (error2) {
+      return null;
+    }
+  }
+}
+
 class FreeTextItemDisplay extends React.PureComponent {
   static propTypes = {
     formItem: PropTypes.shape({
@@ -36,7 +48,7 @@ class FreeTextItemDisplay extends React.PureComponent {
 
     if (formItem.properties.format === 'url') {
       try {
-        const url = new URL(value);
+        const url = parseURL(value);
         return (<a href={url.toString()}>{url.toString()}</a>);
       } catch {
         // fall through to displaying as plain text

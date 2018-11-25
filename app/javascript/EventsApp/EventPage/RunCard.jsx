@@ -24,6 +24,34 @@ function updateCacheAfterSignup(cache, event, run, signup) {
 }
 
 class RunCard extends React.Component {
+  static propTypes = {
+    run: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title_suffix: PropTypes.string,
+      my_signups: PropTypes.arrayOf(PropTypes.shape({
+        state: PropTypes.string.isRequired,
+      })).isRequired,
+      rooms: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      })).isRequired,
+    }).isRequired,
+    event: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+    signupOptions: PropTypes.shape({
+      mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      auxiliary: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    }).isRequired,
+    timezoneName: PropTypes.string.isRequired,
+    currentAbility: PropTypes.shape({}).isRequired,
+    myProfile: PropTypes.shape({}),
+  }
+
+  static defaultProps = {
+    myProfile: null,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -32,12 +60,96 @@ class RunCard extends React.Component {
     };
   }
 
+  renderMainSignupSection = (signupButtonClicked) => {
+    const {
+      run, event, signupOptions, myProfile,
+    } = this.props;
+    const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
+
+    if (!myProfile) {
+      return (
+        <a
+          href={`/users/sign_in?user_return_to=${window.location.href}`}
+          className="btn btn-outline-primary"
+          style={{ whiteSpace: 'normal' }}
+        >
+          <strong>Log in</strong>
+          {' '}
+          to sign up for
+          <br />
+          <em>{event.title}</em>
+        </a>
+      );
+    }
+
+    if (mySignup) {
+      return (
+        <>
+          <em>
+            {
+              mySignup.state === 'confirmed'
+                ? 'You are signed up.'
+                : `You are #${mySignup.waitlist_position} on the waitlist.`
+            }
+          </em>
+          <p>
+            <WithdrawMySignupButton run={run} event={event} />
+          </p>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <SignupButtons
+          event={event}
+          run={run}
+          signupOptions={signupOptions.mainPreference}
+          disabled={this.state.mutationInProgress}
+          onClick={signupButtonClicked}
+        />
+        <SignupButtons
+          event={event}
+          run={run}
+          signupOptions={signupOptions.mainNoPreference}
+          disabled={this.state.mutationInProgress}
+          onClick={signupButtonClicked}
+        />
+        <ErrorDisplay graphQLError={this.state.signupError} />
+      </>
+    );
+  }
+
+  renderAuxiliarySignupSection = (signupButtonClicked) => {
+    const {
+      run, event, signupOptions, myProfile,
+    } = this.props;
+    const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
+
+    if (!myProfile || mySignup || signupOptions.auxiliary.length === 0) {
+      return null;
+    }
+
+    return (
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item border-bottom-0">
+          <SignupButtons
+            event={event}
+            run={run}
+            signupOptions={signupOptions.auxiliary}
+            disabled={this.state.mutationInProgress}
+            onClick={signupButtonClicked}
+          />
+        </li>
+      </ul>
+    );
+  }
+
   render = () => {
     const {
-      run, event, signupOptions, timezoneName, currentAbility,
+      run, event, timezoneName, currentAbility,
     } = this.props;
     const runTimespan = timespanFromRun({ timezone_name: timezoneName }, event, run);
-    const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
 
     return (
       <Mutation mutation={CreateMySignup}>
@@ -86,62 +198,10 @@ class RunCard extends React.Component {
 
                 <div className="card-body text-center">
                   <RunCapacityGraph run={run} event={event} signupsAvailable />
-
-                  {
-                    mySignup
-                      ? (
-                        <>
-                          <em>
-                            {
-                              mySignup.state === 'confirmed'
-                                ? 'You are signed up.'
-                                : `You are #${mySignup.waitlist_position} on the waitlist.`
-                            }
-                          </em>
-                          <p>
-                            <WithdrawMySignupButton run={run} event={event} />
-                          </p>
-                        </>
-                      )
-                      : (
-                        <>
-                          <SignupButtons
-                            event={event}
-                            run={run}
-                            signupOptions={signupOptions.mainPreference}
-                            disabled={this.state.mutationInProgress}
-                            onClick={signupButtonClicked}
-                          />
-                          <SignupButtons
-                            event={event}
-                            run={run}
-                            signupOptions={signupOptions.mainNoPreference}
-                            disabled={this.state.mutationInProgress}
-                            onClick={signupButtonClicked}
-                          />
-                          <ErrorDisplay graphQLError={this.state.signupError} />
-                        </>
-                      )
-                  }
+                  {this.renderMainSignupSection(signupButtonClicked)}
                 </div>
 
-                {
-                  mySignup || signupOptions.auxiliary.length === 0
-                    ? null
-                    : (
-                      <ul className="list-group list-group-flush">
-                        <li className="list-group-item border-bottom-0">
-                          <SignupButtons
-                            event={event}
-                            run={run}
-                            signupOptions={signupOptions.auxiliary}
-                            disabled={this.state.mutationInProgress}
-                            onClick={signupButtonClicked}
-                          />
-                        </li>
-                      </ul>
-                    )
-                }
+                {this.renderAuxiliarySignupSection(signupButtonClicked)}
 
                 <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />
               </div>

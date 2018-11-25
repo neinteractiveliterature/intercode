@@ -29,7 +29,19 @@ function FakeRun({ event }) {
   );
 }
 
-function RunsSection({ event, myProfile, currentAbility, timezoneName }) {
+FakeRun.propTypes = {
+  event: PropTypes.shape({
+    registration_policy: PropTypes.shape({
+      buckets: PropTypes.arrayOf(PropTypes.shape({
+        key: PropTypes.string.isRequired,
+      })).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+function RunsSection({
+  event, myProfile, currentAbility, timezoneName,
+}) {
   const acceptsSignups = (
     !event.registration_policy.slots_limited
     || event.registration_policy.total_slots_including_not_counted > 0
@@ -58,6 +70,7 @@ function RunsSection({ event, myProfile, currentAbility, timezoneName }) {
                 run={run}
                 timezoneName={timezoneName}
                 key={run.id}
+                myProfile={myProfile}
                 currentAbility={currentAbility}
                 signupOptions={signupOptions}
               />
@@ -68,5 +81,26 @@ function RunsSection({ event, myProfile, currentAbility, timezoneName }) {
     </section>
   );
 }
+
+RunsSection.propTypes = {
+  event: PropTypes.shape({
+    registration_policy: PropTypes.shape({
+      slots_limited: PropTypes.bool.isRequired,
+      total_slots_including_not_counted: PropTypes.number.isRequired,
+    }).isRequired,
+    runs: PropTypes.arrayOf(PropTypes.shape({
+      starts_at: PropTypes.string.isRequired,
+    })).isRequired,
+  }).isRequired,
+  myProfile: PropTypes.shape({}),
+  currentAbility: PropTypes.shape({
+    can_read_schedule: PropTypes.bool.isRequired,
+  }).isRequired,
+  timezoneName: PropTypes.string.isRequired,
+};
+
+RunsSection.defaultProps = {
+  myProfile: null,
+};
 
 export default RunsSection;

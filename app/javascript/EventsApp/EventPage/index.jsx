@@ -4,12 +4,12 @@ import { humanize, underscore, pluralize } from 'inflected';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
+import EventCapacityDisplay from './EventCapacityDisplay';
 import { EventPageQuery } from './queries.gql';
 import Form from '../../Models/Form';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import RunsSection from './RunsSection';
-import sortBuckets from './sortBuckets';
 
 function EventPage({ eventId }) {
   return (
@@ -24,6 +24,7 @@ function EventPage({ eventId }) {
 
         const displayFormItems = form.getAllItems().filter(item => (
           item.get('identifier') !== 'short_blurb'
+          && item.get('identifier') !== 'title'
           && item.get('properties').public_description != null
           && formResponse[item.get('identifier')]
         ));
@@ -136,28 +137,7 @@ function EventPage({ eventId }) {
                       ? (
                         <>
                           <dt className="col-md-3">Capacity</dt>
-                          <dd className="col-md-9">
-                            <ul className="list-inline">
-                              {sortBuckets(event.registration_policy.buckets).map(bucket => (
-                                <li className="list-inline-item mr-4" key={bucket.key}>
-                                  <strong>
-                                    {bucket.name}
-                                    :
-                                  </strong>
-                                  {' '}
-                                  {
-                                    bucket.slots_limited
-                                      ? (
-                                        bucket.minimum_slots === bucket.total_slots
-                                          ? bucket.minimum_slots
-                                          : `${bucket.minimum_slots}-${bucket.total_slots}`
-                                      )
-                                      : 'unlimited'
-                                  }
-                                </li>
-                              ))}
-                            </ul>
-                          </dd>
+                          <dd className="col-md-9"><EventCapacityDisplay event={event} /></dd>
                         </>
                       )
                       : null
