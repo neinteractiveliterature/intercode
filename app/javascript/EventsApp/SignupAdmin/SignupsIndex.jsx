@@ -12,14 +12,16 @@ import RunEmailList from './RunEmailList';
 import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
 
-function SignupsIndex({ runId, eventId, exportSignupsUrl }) {
+function SignupsIndex({
+  runId, eventId, runPath, exportSignupsUrl,
+}) {
   return (
     <>
       <RunHeader runId={runId} eventId={eventId} />
       <ul className="nav nav-tabs mb-2">
         <li className="nav-item">
           <NavLink
-            to={`/${eventId}/runs/${runId}/admin_signups/?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
+            to={`${runPath}/admin_signups/?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
             isActive={(match, location) => !location.pathname.endsWith('/comma') && !location.pathname.endsWith('/semicolon')}
             className="nav-link"
           >
@@ -27,15 +29,15 @@ function SignupsIndex({ runId, eventId, exportSignupsUrl }) {
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink to={`/${eventId}/runs/${runId}/admin_signups/emails/comma`} className="nav-link">Emails (comma-separated)</NavLink>
+          <NavLink to={`${runPath}/admin_signups/emails/comma`} className="nav-link">Emails (comma-separated)</NavLink>
         </li>
         <li className="nav-item">
-          <NavLink to={`/${eventId}/runs/${runId}/admin_signups/emails/semicolon`} className="nav-link">Emails (semicolon-separated)</NavLink>
+          <NavLink to={`${runPath}/admin_signups/emails/semicolon`} className="nav-link">Emails (semicolon-separated)</NavLink>
         </li>
       </ul>
       <Switch>
         <Route
-          path={`/:eventId(${eventIdRegexp})/runs/:runId/admin_signups/emails/comma`}
+          path={`${runPath}/admin_signups/emails/comma`}
           render={() => (
             <RunEmailList
               runId={runId}
@@ -45,7 +47,7 @@ function SignupsIndex({ runId, eventId, exportSignupsUrl }) {
           )}
         />
         <Route
-          path={`/:eventId(${eventIdRegexp})/runs/:runId/admin_signups/emails/semicolon`}
+          path={`${runPath}/admin_signups/emails/semicolon`}
           render={() => (
             <>
               <div className="alert alert-warning mb-2">
@@ -64,18 +66,19 @@ function SignupsIndex({ runId, eventId, exportSignupsUrl }) {
           )}
         />
         <Route
-          path={`/:eventId(${eventIdRegexp})/runs/:runId/admin_signups`}
+          path={`${runPath}/admin_signups`}
           exact
           render={() => (
             <RunSignupsTable
               runId={runId}
               eventId={eventId}
               exportUrl={exportSignupsUrl}
+              runPath={runPath}
               defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age', 'email']}
             />
           )}
         />
-        <Redirect to={`/${eventId}/runs/${runId}/admin_signups`} />
+        <Redirect to={`${runPath}/admin_signups`} />
       </Switch>
     </>
   );

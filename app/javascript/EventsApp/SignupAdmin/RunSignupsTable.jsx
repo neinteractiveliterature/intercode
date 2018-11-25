@@ -40,6 +40,7 @@ class RunSignupsTable extends React.Component {
     eventId: PropTypes.number.isRequired,
     exportUrl: PropTypes.string.isRequired,
     runId: PropTypes.number.isRequired,
+    runPath: PropTypes.string.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
       replace: PropTypes.func.isRequired,
@@ -142,8 +143,8 @@ class RunSignupsTable extends React.Component {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            const { eventId, runId } = this.props;
-            this.props.history.push(`/${eventId}/runs/${runId}/admin_signups/${rowInfo.original.id}/edit`);
+            const { runPath } = this.props;
+            this.props.history.push(`${runPath}/admin_signups/${rowInfo.original.id}/edit`);
           },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}

@@ -24,32 +24,57 @@ function EventsApp({ basename }) {
           render={() => <ScheduleGridApp configKey="schedule_with_counts" />}
         />
         <Route
-          path={`/:id(${eventIdRegexp})/edit`}
-          render={({ match }) => (
-            <StandaloneEditEvent eventId={Number.parseInt(match.params.id, 10)} />
-          )}
-        />
-        <Route
-          path={`/:eventId(${eventIdRegexp})/runs/:runId/admin_signups`}
-          render={({ match }) => (
-            <SignupAdmin
-              eventId={Number.parseInt(match.params.eventId, 10)}
-              runId={Number.parseInt(match.params.runId, 10)}
-            />
-          )}
-        />
-        <Route
-          path={`/:eventId(${eventIdRegexp})/runs/:runId/signup_summary`}
-          render={({ match }) => (
-            <RunSignupSummary
-              eventId={Number.parseInt(match.params.eventId, 10)}
-              runId={Number.parseInt(match.params.runId, 10)}
-            />
-          )}
-        />
-        <Route
-          path={`/:id(${eventIdRegexp})`}
-          render={({ match }) => <EventPage eventId={Number.parseInt(match.params.id, 10)} />}
+          path={`/:eventId(${eventIdRegexp})`}
+          render={({ match: { params: { eventId: eventIdSegment } } }) => {
+            const eventId = Number.parseInt(eventIdSegment, 10);
+            const eventPath = `/${eventIdSegment}`;
+
+            return (
+              <Switch>
+                <Route
+                  path={`/${eventIdSegment}/edit`}
+                  render={() => <StandaloneEditEvent eventId={eventId} />}
+                />
+                <Route
+                  path={`/${eventIdSegment}/runs/:runId`}
+                  render={({ match: { params: { runId: runIdSegment } } }) => {
+                    const runId = Number.parseInt(runIdSegment, 10);
+                    const runPath = `/${eventIdSegment}/runs/${runIdSegment}`;
+
+                    return (
+                      <Switch>
+                        <Route
+                          path={`${runPath}/admin_signups`}
+                          render={() => (
+                            <SignupAdmin
+                              eventId={eventId}
+                              runId={runId}
+                              eventPath={eventPath}
+                            />
+                          )}
+                        />
+                        <Route
+                          path={`${runPath}/signup_summary`}
+                          render={() => (
+                            <RunSignupSummary
+                              eventId={eventId}
+                              runId={runId}
+                              eventPath={eventPath}
+                            />
+                          )}
+                        />
+                      </Switch>
+                    );
+                  }}
+                />
+
+                <Route
+                  path={`/${eventIdSegment}`}
+                  render={() => <EventPage eventId={eventId} />}
+                />
+              </Switch>
+            );
+          }}
         />
         <Route path="/" render={() => <EventList />} />
       </Switch>
