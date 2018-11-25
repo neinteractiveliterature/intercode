@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SignupButtonDisplay from './SignupButtonDisplay';
 
@@ -24,5 +25,20 @@ function SignupButtons({
     </div>
   );
 }
+
+SignupButtons.propTypes = {
+  event: PropTypes.shape({}).isRequired,
+  run: PropTypes.shape({}).isRequired,
+  signupOptions: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+  })).isRequired,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+};
+
+SignupButtons.defaultProps = {
+  onClick: null,
+  disabled: false,
+};
 
 export default SignupButtons;
