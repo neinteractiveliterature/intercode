@@ -32,6 +32,7 @@ import UserConProfileAdminDisplay from '../UserConProfiles/UserConProfileAdminDi
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import UserConProfilesAdmin from '../UserConProfiles/UserConProfilesAdmin';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
+import WithdrawMySignupButton from '../EventsApp/EventPage/WithdrawMySignupButton';
 
 const unwrappedComponents = {
   Cart,
@@ -65,6 +66,7 @@ const unwrappedComponents = {
   UserConProfileSignupsCard,
   UserConProfilesAdmin,
   WhosFreeForm,
+  WithdrawMySignupButton,
 };
 
 const wrappedComponents = mapValues(unwrappedComponents, AppWrapper);
