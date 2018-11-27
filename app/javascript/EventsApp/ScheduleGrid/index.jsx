@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CategoryLegend from './CategoryLegend';
+import FullnessLegend from './FullnessLegend';
 import ScheduleGrid from './ScheduleGrid';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import { ScheduleGridConsumer, ScheduleGridProvider } from './ScheduleGridContext';
@@ -42,6 +43,11 @@ const ScheduleGridApp = ({ configKey, ...otherProps }) => {
           if (legend.type === 'category') {
             // eslint-disable-next-line react/no-array-index-key
             return <CategoryLegend key={i} />;
+          }
+
+          if (legend.type === 'fullness') {
+            // eslint-disable-next-line react/no-array-index-key
+            return <FullnessLegend key={i} />;
           }
 
           return `Unknown legend type ${legend.type}`;

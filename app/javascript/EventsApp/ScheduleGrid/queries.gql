@@ -12,10 +12,15 @@ fragment ScheduleGridEventFragment on Event {
     only_uncounted
     total_slots
     total_slots_including_not_counted
-    preferred_slots @include(if: $extendedCounts)
-    preferred_slots_including_not_counted @include(if: $extendedCounts)
-    minimum_slots @include(if: $extendedCounts)
-    minimum_slots_including_not_counted @include(if: $extendedCounts)
+    preferred_slots
+    preferred_slots_including_not_counted
+    minimum_slots
+    minimum_slots_including_not_counted
+
+    buckets {
+      key
+      slots_limited
+    }
   }
 
   runs(start: $start, finish: $finish) {
