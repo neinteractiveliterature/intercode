@@ -6,9 +6,10 @@ import {
 } from 'react-router-dom';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
+import RefreshButton from './RefreshButton';
 
 function ConventionDayTabContainer({
-  basename, conventionTimespan, timezoneName, prefetchTimespan, children,
+  basename, conventionTimespan, timezoneName, prefetchTimespan, children, refreshData,
 }) {
   const conventionDayTimespans = getConventionDayTimespans(
     conventionTimespan,
@@ -53,9 +54,15 @@ function ConventionDayTabContainer({
 
   return (
     <div>
-      <ul className="nav nav-tabs">
-        {conventionDayTabs}
-      </ul>
+      <div className="d-flex flex-wrap">
+        <ul className="nav nav-tabs flex-grow-1">
+          {conventionDayTabs}
+        </ul>
+
+        <div className="border-bottom border-color-light pl-2">
+          <RefreshButton refreshData={refreshData} />
+        </div>
+      </div>
       <Switch>
         {conventionDayRoutes}
         <Redirect to={`${basename}/${conventionDayTimespans[0].start.format('dddd').toLowerCase()}`} />
@@ -73,6 +80,7 @@ ConventionDayTabContainer.propTypes = {
   timezoneName: PropTypes.string.isRequired,
   prefetchTimespan: PropTypes.func,
   children: PropTypes.func.isRequired,
+  refreshData: PropTypes.func.isRequired,
 };
 
 ConventionDayTabContainer.defaultProps = {
