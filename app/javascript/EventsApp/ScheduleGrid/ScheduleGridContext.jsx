@@ -82,22 +82,23 @@ export class ScheduleGridProvider extends React.Component {
   }
 
   render = () => {
+    const combinedQueryParams = {
+      query: ScheduleGridCombinedQuery,
+      variables: { extendedCounts: this.props.config.showExtendedCounts || false },
+    };
+
     if (IS_MOBILE) {
       // We can't detect hovers on mobile, so prefetching isn't an option - just fetch all
       // the data on the first request
 
       return (
-        <QueryWithStateDisplay
-          query={ScheduleGridCombinedQuery}
-          variables={{
-            extendedCounts: this.props.config.showExtendedCounts || false,
-          }}
-        >
-          {({ data: { convention, events } }) => (
+        <QueryWithStateDisplay {...combinedQueryParams}>
+          {({ data: { convention, events }, client }) => (
             <ConventionDayTabContainer
               basename={this.props.config.basename}
               conventionTimespan={timespanFromConvention(convention)}
               timezoneName={convention.timezone_name}
+              refreshData={() => client.query({ ...combinedQueryParams, fetchPolicy: 'network-only' })}
             >
               {timespan => this.renderProvider(convention, events, timespan)}
             </ConventionDayTabContainer>
@@ -114,6 +115,7 @@ export class ScheduleGridProvider extends React.Component {
             conventionTimespan={timespanFromConvention(convention)}
             timezoneName={convention.timezone_name}
             prefetchTimespan={timespan => client.query(this.getEventsQueryParams(timespan))}
+            refreshData={() => client.query({ ...combinedQueryParams, fetchPolicy: 'network-only' })}
           >
             {timespan => (
               <QueryWithStateDisplay {...this.getEventsQueryParams(timespan)}>
