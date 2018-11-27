@@ -38,6 +38,7 @@ class RunCard extends React.Component {
     event: PropTypes.shape({
       id: PropTypes.number.isRequired,
     }).isRequired,
+    eventPath: PropTypes.string.isRequired,
     signupOptions: PropTypes.shape({
       mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -203,7 +204,12 @@ class RunCard extends React.Component {
 
                 {this.renderAuxiliarySignupSection(signupButtonClicked)}
 
-                <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />
+                <ViewSignupsOptions
+                  event={event}
+                  eventPath={this.props.eventPath}
+                  run={run}
+                  currentAbility={currentAbility}
+                />
               </div>
             </div>
           );

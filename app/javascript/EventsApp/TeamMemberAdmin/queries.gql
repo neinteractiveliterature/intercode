@@ -1,0 +1,87 @@
+#import "../queries.gql"
+
+fragment TeamMemberTicketFields on Ticket {
+  id
+
+  user_con_profile {
+    id
+  }
+
+  ticket_type {
+    id
+    name
+  }
+
+  provided_by_event {
+    id
+    title
+  }
+}
+
+fragment TeamMemberUserConProfileFields on UserConProfile {
+  id
+  name_without_nickname
+  name_inverted
+  email
+  day_phone
+  evening_phone
+  best_call_time
+  preferred_contact
+
+  ticket {
+    ...TeamMemberTicketFields
+  }
+}
+
+fragment TeamMemberFields on TeamMember {
+  id
+  display
+  show_email
+  receive_con_email
+  receive_signup_email
+
+  user_con_profile {
+    ...TeamMemberUserConProfileFields
+  }
+}
+
+query TeamMembersQuery($eventId: Int!) {
+  convention {
+    ...CommonConventionData
+
+    ticket_types {
+      id
+      name
+      description
+      maximum_event_provided_tickets(event_id: $eventId)
+    }
+
+    ticket_name
+  }
+
+  event(id: $eventId) {
+    id
+    title
+    team_member_name
+    can_provide_tickets
+
+    provided_tickets {
+      ...TeamMemberTicketFields
+    }
+
+    team_members {
+      ...TeamMemberFields
+    }
+  }
+}
+
+query TeamMemberUserConProfilesQuery($name: String) {
+  convention {
+    id
+    user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
+      entries {
+        ...TeamMemberUserConProfileFields
+      }
+    }
+  }
+}

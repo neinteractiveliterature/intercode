@@ -25,7 +25,6 @@ import RoomsAdmin from '../RoomsAdmin';
 import SignupSpyTable from '../Reports/SignupSpyTable';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
-import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import UserActivityAlertsAdmin from '../UserActivityAlerts/UserActivityAlertsAdmin';
@@ -59,7 +58,6 @@ const unwrappedComponents = {
   SignupSpyTable,
   StaffPositionAdmin,
   StoreAdmin,
-  TeamMemberForm,
   TicketTypeAdmin,
   TicketPurchaseForm,
   UserActivityAlertsAdmin,

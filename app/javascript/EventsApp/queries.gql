@@ -5,6 +5,7 @@ fragment CommonConventionData on Convention {
   ends_at
   timezone_name
   event_category_keys
+  ticket_name
 }
 
 query CommonConventionDataQuery {
