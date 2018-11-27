@@ -8,6 +8,17 @@ fragment CommonConventionData on Convention {
   ticket_name
 }
 
+fragment RunBasicSignupData on Run {
+  confirmed_limited_signup_count
+  not_counted_confirmed_signup_count
+  waitlisted_signup_count
+
+  my_signups {
+    id
+    state
+  }
+}
+
 query CommonConventionDataQuery {
   convention {
     ...CommonConventionData
