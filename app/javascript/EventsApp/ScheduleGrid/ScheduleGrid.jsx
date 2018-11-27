@@ -7,6 +7,7 @@ import EventCategory from '../../EventAdmin/EventCategory';
 import getFullnessClass from './getFullnessClass';
 import Timespan from '../../Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
+import SignupCountData from '../SignupCountData';
 import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWithoutSpanning';
 
 const PIXELS_PER_HOUR = 100;
@@ -62,10 +63,12 @@ class ScheduleGrid extends React.Component {
 
       let className;
 
+      const signupCountData = SignupCountData.fromRun(run);
+
       if (this.props.config.classifyEventsBy === 'category') {
         className = EventCategory.get(event.category).getClassName();
       } else if (this.props.config.classifyEventsBy === 'fullness') {
-        className = getFullnessClass(event, run);
+        className = getFullnessClass(event, signupCountData);
       }
 
       return (
@@ -75,6 +78,7 @@ class ScheduleGrid extends React.Component {
           runDimensions={runDimensions}
           event={event}
           run={run}
+          signupCountData={signupCountData}
           className={className}
         />
       );
@@ -88,12 +92,16 @@ class ScheduleGrid extends React.Component {
       let extendedCounts = null;
       if (this.props.config.showExtendedCounts) {
         const hourTimespan = new Timespan(now, now.clone().add(1, 'hour'));
-        const hourEventRuns = eventRuns.filter(eventRun => hourTimespan.overlapsTimespan(eventRun.timespan));
+        const hourEventRuns = eventRuns
+          .filter(eventRun => hourTimespan.overlapsTimespan(eventRun.timespan));
 
         const hourRunData = hourEventRuns.map((eventRun) => {
           const run = this.props.schedule.getRun(eventRun.runId);
           const event = this.props.schedule.getEvent(run.event_id);
-          return { eventRun, run, event };
+          const signupCountData = SignupCountData.fromRun(run);
+          return {
+            eventRun, run, event, signupCountData,
+          };
         });
 
         const minimumSlots = hourRunData.reduce(
@@ -112,17 +120,21 @@ class ScheduleGrid extends React.Component {
         );
 
         const confirmedSignups = hourRunData.reduce(
-          (sum, runData) => sum + runData.run.confirmed_signup_count,
+          (sum, { signupCountData }) => (
+            sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: true })
+          ),
           0,
         );
 
         const notCountedSignups = hourRunData.reduce(
-          (sum, runData) => sum + runData.run.not_counted_signup_count,
+          (sum, { signupCountData }) => (
+            sum + signupCountData.sumSignupCounts({ state: 'confirmed', counted: false })
+          ),
           0,
         );
 
         const waitlistedSignups = hourRunData.reduce(
-          (sum, runData) => sum + runData.run.waitlisted_signup_count,
+          (sum, { signupCountData }) => sum + signupCountData.getWaitlistCount(),
           0,
         );
 
@@ -145,7 +157,8 @@ class ScheduleGrid extends React.Component {
               <span className="text-danger">{waitlistedSignups}</span>
             </div>
             <div>
-              Players:
+              Total:
+              {' '}
               {playerCount}
             </div>
           </div>

@@ -35,7 +35,7 @@ function describeCapacity(bucket, signupCount, signupsAvailable) {
 }
 
 function RunCapacityGraphBucket({
-  bucket, signupCounts, signupsAvailable, bucketIndex,
+  bucket, signupCountData, signupsAvailable, bucketIndex,
 }) {
   const capacity = bucket.total_slots;
 
@@ -43,8 +43,7 @@ function RunCapacityGraphBucket({
     return null;
   }
 
-  const signupCount = Object.values(signupCounts.confirmed[bucket.key])
-    .reduce((sum, count) => sum + count, 0);
+  const signupCount = signupCountData.sumSignupCounts({ state: 'confirmed', bucket_key: bucket.key });
   const remainingCapacity = bucket.total_slots - signupCount;
   const availabilityFraction = getBucketAvailabilityFraction(bucket, remainingCapacity);
   const tickmarkClass = bucket.total_slots >= 10 ? 'bucket-capacity-tickmark-thin' : '';
@@ -84,10 +83,7 @@ RunCapacityGraphBucket.propTypes = {
     total_slots: PropTypes.number.isRequired,
     slots_limited: PropTypes.bool.isRequired,
   }).isRequired,
-  signupCounts: PropTypes.shape({
-    confirmed: PropTypes.objectOf(PropTypes.objectOf(PropTypes.number.isRequired).isRequired)
-      .isRequired,
-  }).isRequired,
+  signupCountData: PropTypes.shape({}).isRequired,
   signupsAvailable: PropTypes.bool.isRequired,
   bucketIndex: PropTypes.number.isRequired,
 };

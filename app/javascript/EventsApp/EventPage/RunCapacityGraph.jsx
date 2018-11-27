@@ -1,21 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { sum } from 'lodash';
 
 import RunCapacityGraphBucket from './RunCapacityGraphBucket';
+import SignupCountData from '../SignupCountData';
 import sortBuckets from './sortBuckets';
 
 function RunCapacityGraph({ run, event, signupsAvailable }) {
-  const signupCounts = JSON.parse(run.signup_count_by_state_and_bucket_key_and_counted);
-  const waitlistCount = sum(Object.values(signupCounts.waitlisted)
-    .map(countsByCounted => sum(Object.values(countsByCounted))));
+  const signupCountData = SignupCountData.fromRun(run);
 
   return (
     <div className="run-capacity bg-white rounded mb-2" style={{ overflow: 'hidden' }}>
       {sortBuckets(event.registration_policy.buckets).map((bucket, bucketIndex) => (
         <RunCapacityGraphBucket
           bucket={bucket}
-          signupCounts={signupCounts}
+          signupCountData={signupCountData}
           key={bucket.key}
           signupsAvailable={signupsAvailable}
           bucketIndex={bucketIndex}
@@ -24,7 +22,7 @@ function RunCapacityGraph({ run, event, signupsAvailable }) {
       <div className="bucket-capacity">
         Waitlist:
         {' '}
-        {waitlistCount}
+        {signupCountData.getWaitlistCount()}
       </div>
     </div>
   );

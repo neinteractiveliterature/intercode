@@ -1,6 +1,6 @@
 import getCapacityThresholds from './getCapacityThresholds';
 
-export default function getFullnessClass(event, run) {
+export default function getFullnessClass(event, signupCountData) {
   if (!event.registration_policy.slots_limited) {
     return 'event-fullness-unlimited';
   }
@@ -12,8 +12,8 @@ export default function getFullnessClass(event, run) {
   const thresholds = getCapacityThresholds(event.registration_policy);
   const signupCount = (
     event.registration_policy.only_uncounted
-      ? run.not_counted_confirmed_signup_count
-      : run.confirmed_limited_signup_count
+      ? signupCountData.getNotCountedConfirmedSignupCount()
+      : signupCountData.getConfirmedLimitedSignupCount(event)
   );
 
   if (signupCount >= thresholds.total_slots) {

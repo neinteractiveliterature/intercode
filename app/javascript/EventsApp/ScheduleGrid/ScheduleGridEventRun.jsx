@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import AvailabilityBar from './AvailabilityBar';
 import buildEventUrl from '../buildEventUrl';
 import PopperDropdown from '../../UIComponents/PopperDropdown';
+import SignupCountData from '../SignupCountData';
 import { ScheduleGridConsumer } from './ScheduleGridContext';
 
 function userSignupStatus(run) {
@@ -20,17 +21,9 @@ function userSignupStatus(run) {
   return null;
 }
 
-function runFull(event, run) {
-  return (
-    event.registration_policy.slots_limited
-    && run.confirmed_limited_signup_count === event.registration_policy.total_slots
-    && event.registration_policy.total_slots > 0
-  );
-}
-
-function describeAvailability(event, run) {
-  if (runFull(event, run)) {
-    return `Full, waitlist: ${run.waitlisted_signup_count}`;
+function describeAvailability(event, run, signupCountData) {
+  if (signupCountData.runFull(event)) {
+    return `Full, waitlist: ${signupCountData.getWaitlistCount()}`;
   }
 
   if (!event.registration_policy.slots_limited) {
@@ -41,7 +34,10 @@ function describeAvailability(event, run) {
     return null;
   }
 
-  const availableSlots = event.registration_policy.total_slots - run.confirmed_limited_signup_count;
+  const availableSlots = (
+    event.registration_policy.total_slots
+    - signupCountData.getConfirmedLimitedSignupCount(event)
+  );
   return `${availableSlots}/${event.registration_policy.total_slots} slots available`;
 }
 
@@ -52,6 +48,7 @@ class ScheduleGridEventRun extends React.Component {
     runDimensions: PropTypes.shape({}).isRequired,
     layoutResult: PropTypes.shape({}).isRequired,
     className: PropTypes.string,
+    signupCountData: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
@@ -59,7 +56,7 @@ class ScheduleGridEventRun extends React.Component {
   };
 
   renderAvailabilityBar = () => {
-    const { event, run } = this.props;
+    const { event, signupCountData } = this.props;
 
     if (
       event.registration_policy.slots_limited
@@ -71,12 +68,15 @@ class ScheduleGridEventRun extends React.Component {
     let availabilityFraction = 100.0;
     if (event.registration_policy.total_slots > 0) {
       availabilityFraction = (
-        1.0 - (run.confirmed_limited_signup_count / event.registration_policy.total_slots)
+        1.0 - (
+          signupCountData.getConfirmedLimitedSignupCount(event)
+          / event.registration_policy.total_slots
+        )
       );
     } else if (event.registration_policy.only_uncounted) {
       availabilityFraction = (
         1.0 - (
-          run.not_counted_confirmed_signup_count
+          signupCountData.getNotCountedConfirmedSignupCount()
           / event.registration_policy.total_slots_including_not_counted
         )
       );
@@ -91,24 +91,24 @@ class ScheduleGridEventRun extends React.Component {
   }
 
   renderExtendedCounts = (config) => {
-    const { event, run } = this.props;
-
-    if (!config.showExtendedCounts || !event.registration_policy.slots_limited) {
+    if (!config.showExtendedCounts) {
       return null;
     }
+
+    const { signupCountData } = this.props;
 
     return (
       <div className="event-extended-counts p-1">
         <span className="text-success">
-          {run.confirmed_signup_count}
+          {signupCountData.sumSignupCounts({ state: 'confirmed', counted: true })}
         </span>
         {'/'}
         <span className="text-info">
-          {run.not_counted_signup_count}
+          {signupCountData.sumSignupCounts({ state: 'confirmed', counted: false })}
         </span>
         {'/'}
         <span className="text-danger">
-          {run.waitlisted_signup_count}
+          {signupCountData.getWaitlistCount()}
         </span>
       </div>
     );
@@ -132,7 +132,7 @@ class ScheduleGridEventRun extends React.Component {
 
   render = () => {
     const {
-      layoutResult, runDimensions, event, run, className,
+      layoutResult, runDimensions, event, run, className, signupCountData,
     } = this.props;
     const { timespan } = runDimensions.eventRun;
 
@@ -147,7 +147,7 @@ class ScheduleGridEventRun extends React.Component {
     };
 
     const signupStatus = userSignupStatus(run);
-    const availabilityDescription = describeAvailability(event, run);
+    const availabilityDescription = describeAvailability(event, run, signupCountData);
     const roomsDescription = run.room_names.sort().join(', ');
 
     return (
@@ -171,7 +171,7 @@ class ScheduleGridEventRun extends React.Component {
                     'signed-up': config.showSignedUp && signupStatus != null,
                     full: (
                       config.classifyEventsBy !== 'fullness'
-                      && runFull(event, run)
+                      && signupCountData.runFull(event)
                       && signupStatus == null
                     ),
                   },
@@ -186,9 +186,9 @@ class ScheduleGridEventRun extends React.Component {
                 }}
                 ref={ref}
               >
-                {this.renderAvailabilityBar()}
+                {this.renderAvailabilityBar(signupCountData)}
                 <div className="d-flex">
-                  {this.renderExtendedCounts(config)}
+                  {this.renderExtendedCounts(config, signupCountData)}
                   <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {this.renderSignupStatusBadge(signupStatus, config)}
                     {event.title}
@@ -238,30 +238,32 @@ class ScheduleGridEventRun extends React.Component {
                   </div>
                   <div className="popover-body">
                     <table className="mb-2">
-                      <tr>
-                        <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
-                        <td>{timespan.humanizeInTimezone(schedule.timezoneName)}</td>
-                      </tr>
-                      {
-                        roomsDescription
-                          ? (
-                            <tr>
-                              <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
-                              <td>{roomsDescription}</td>
-                            </tr>
-                          )
-                          : null
-                      }
-                      {
-                        availabilityDescription
-                          ? (
-                            <tr>
-                              <td className="text-center pr-1"><i className="fa fa-users" /></td>
-                              <td>{availabilityDescription}</td>
-                            </tr>
-                          )
-                          : null
-                      }
+                      <tbody>
+                        <tr>
+                          <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
+                          <td>{timespan.humanizeInTimezone(schedule.timezoneName)}</td>
+                        </tr>
+                        {
+                          roomsDescription
+                            ? (
+                              <tr>
+                                <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
+                                <td>{roomsDescription}</td>
+                              </tr>
+                            )
+                            : null
+                        }
+                        {
+                          availabilityDescription
+                            ? (
+                              <tr>
+                                <td className="text-center pr-1"><i className="fa fa-users" /></td>
+                                <td>{availabilityDescription}</td>
+                              </tr>
+                            )
+                            : null
+                        }
+                      </tbody>
                     </table>
 
                     <Link to={buildEventUrl(event)} className="btn btn-primary btn-sm mb-2">
