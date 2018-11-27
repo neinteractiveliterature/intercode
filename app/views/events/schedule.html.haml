@@ -1,9 +1,0 @@
-%nav{'aria-label' => 'breadcrumb'}
-  %ol.breadcrumb
-    %li.breadcrumb-item.active{'aria-current' => 'page'}
-      Con schedule
-
-= app_component 'ScheduleGrid', basename: schedule_events_path, configKey: 'con_schedule'
-
-.mt-4
-  = app_component 'CategoryLegend'
