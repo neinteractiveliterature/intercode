@@ -3436,6 +3436,104 @@
       ]
     },
     {
+      "name": "Intercode::Liquid::Tags::WithdrawUserSignupButton",
+      "superclasses": [
+        "Intercode::Liquid::Tags::WithdrawUserSignupButton",
+        "Intercode::Liquid::Tags::RailsPartialRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders a \"Withdraw\" button for an existing signup.  The button text and the button\nCSS classes can be customized.",
+      "tags": [
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "withdraw_user_signup_button",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Basic",
+          "text": "{% withdraw_user_signup_button signup %}",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Customizing the button text",
+          "text": "{% withdraw_user_signup_button signup \"Withdraw my signup\" %}",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Customizing the button text and the CSS class",
+          "text": "{% withdraw_user_signup_button \"Withdraw my signup\" btn-warning %}",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "button_text",
+          "docstring": "Returns the value of attribute button_text",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "button_class",
+          "docstring": "Returns the value of attribute button_class",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "signup_variable_name",
+          "docstring": "Returns the value of attribute signup_variable_name",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of WithdrawUserSignupButton",
+              "types": [
+                "WithdrawUserSignupButton"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "partial",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "locals",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "CmsVariable",
       "superclasses": [
         "CmsVariable",
