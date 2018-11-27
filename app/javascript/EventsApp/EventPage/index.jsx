@@ -11,7 +11,7 @@ import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import RunsSection from './RunsSection';
 
-function EventPage({ eventId }) {
+function EventPage({ eventId, eventPath }) {
   return (
     <QueryWithStateDisplay query={EventPageQuery} variables={{ eventId }}>
       {({
@@ -155,10 +155,10 @@ function EventPage({ eventId }) {
                         </div>
                         <ul className="list-group list-group-flush">
                           <li className="list-group-item">
-                            <Link to={`/${event.id}/edit`}>Edit event</Link>
+                            <Link to={`${eventPath}/edit`}>Edit event</Link>
                           </li>
                           <li className="list-group-item">
-                            <Link to={`/${event.id}/team_members`}>
+                            <Link to={`${eventPath}/team_members`}>
                               Edit
                               {' '}
                               {pluralize(event.team_member_name)}
@@ -174,6 +174,7 @@ function EventPage({ eventId }) {
 
             <RunsSection
               event={event}
+              eventPath={eventPath}
               currentAbility={currentAbility}
               myProfile={myProfile}
               timezoneName={convention.timezone_name}
@@ -207,6 +208,7 @@ function EventPage({ eventId }) {
 
 EventPage.propTypes = {
   eventId: PropTypes.number.isRequired,
+  eventPath: PropTypes.string.isRequired,
 };
 
 export default EventPage;

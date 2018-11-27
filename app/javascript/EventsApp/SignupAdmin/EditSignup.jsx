@@ -163,12 +163,12 @@ class EditSignup extends React.Component {
           <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'day_phone' })}>
             Daytime phone:
             {' '}
-            {userConProfile.day_phone}
+            <a href={`tel:${userConProfile.day_phone}`}>{userConProfile.day_phone}</a>
           </li>
           <li className={classNames('list-group-item', { 'font-weight-bold': userConProfile.preferred_contact === 'evening_phone' })}>
             Evening phone:
             {' '}
-            {userConProfile.evening_phone}
+            <a href={`tel:${userConProfile.evening_phone}`}>{userConProfile.evening_phone}</a>
           </li>
           <li className="list-group-item">
             {this.renderAddressItem(userConProfile)}

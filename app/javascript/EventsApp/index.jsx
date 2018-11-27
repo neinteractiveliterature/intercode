@@ -9,6 +9,7 @@ import RunSignupSummary from './SignupAdmin/RunSignupSummary';
 import ScheduleGridApp from './ScheduleGrid';
 import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
+import TeamMemberAdmin from './TeamMemberAdmin';
 
 function EventsApp({ basename }) {
   return (
@@ -32,11 +33,15 @@ function EventsApp({ basename }) {
             return (
               <Switch>
                 <Route
-                  path={`/${eventIdSegment}/edit`}
+                  path={`${eventPath}/edit`}
                   render={() => <StandaloneEditEvent eventId={eventId} />}
                 />
                 <Route
-                  path={`/${eventIdSegment}/runs/:runId`}
+                  path={`${eventPath}/team_members`}
+                  render={() => <TeamMemberAdmin eventId={eventId} eventPath={eventPath} />}
+                />
+                <Route
+                  path={`${eventPath}/runs/:runId`}
                   render={({ match: { params: { runId: runIdSegment } } }) => {
                     const runId = Number.parseInt(runIdSegment, 10);
                     const runPath = `/${eventIdSegment}/runs/${runIdSegment}`;
@@ -69,8 +74,8 @@ function EventsApp({ basename }) {
                 />
 
                 <Route
-                  path={`/${eventIdSegment}`}
-                  render={() => <EventPage eventId={eventId} />}
+                  path={eventPath}
+                  render={() => <EventPage eventId={eventId} eventPath={eventPath} />}
                 />
               </Switch>
             );

@@ -27,8 +27,6 @@ Intercode::Application.routes.draw do
 
 
     resources :events, only: [] do
-      resources :team_members, except: [:show]
-
       resources :runs, only: [] do
         get 'admin_signups/export' => 'admin_signups#export', as: :export_admin_signups
       end

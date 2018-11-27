@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import AvailabilityBar from './AvailabilityBar';
+import buildEventUrl from '../buildEventUrl';
 import PopperDropdown from '../../UIComponents/PopperDropdown';
 import { ScheduleGridConsumer } from './ScheduleGridContext';
 
@@ -263,7 +264,7 @@ class ScheduleGridEventRun extends React.Component {
                       }
                     </table>
 
-                    <Link to={`/${event.id}`} className="btn btn-primary btn-sm mb-2">
+                    <Link to={buildEventUrl(event)} className="btn btn-primary btn-sm mb-2">
                       Go to event &raquo;
                     </Link>
 

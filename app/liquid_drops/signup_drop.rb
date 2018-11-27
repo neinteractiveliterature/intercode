@@ -37,7 +37,7 @@ class SignupDrop < Liquid::Drop
 
   # @return [String] The relative URL of the event's page on the convention site
   def event_url
-    event_path(run.event)
+    "#{events_path}/#{event.to_param}"
   end
 
   # @return [String] The URL to use for withdrawing from the event (using a DELETE request)

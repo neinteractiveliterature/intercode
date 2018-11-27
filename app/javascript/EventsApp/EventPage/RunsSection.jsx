@@ -40,7 +40,7 @@ FakeRun.propTypes = {
 };
 
 function RunsSection({
-  event, myProfile, currentAbility, timezoneName,
+  event, eventPath, myProfile, currentAbility, timezoneName,
 }) {
   const acceptsSignups = (
     !event.registration_policy.slots_limited
@@ -67,6 +67,7 @@ function RunsSection({
             ? sortedRuns.map(run => (
               <RunCard
                 event={event}
+                eventPath={eventPath}
                 run={run}
                 timezoneName={timezoneName}
                 key={run.id}
@@ -92,6 +93,7 @@ RunsSection.propTypes = {
       starts_at: PropTypes.string.isRequired,
     })).isRequired,
   }).isRequired,
+  eventPath: PropTypes.string.isRequired,
   myProfile: PropTypes.shape({}),
   currentAbility: PropTypes.shape({
     can_read_schedule: PropTypes.bool.isRequired,

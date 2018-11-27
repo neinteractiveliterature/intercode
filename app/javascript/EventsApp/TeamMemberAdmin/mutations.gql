@@ -1,0 +1,37 @@
+#import "./queries.gql"
+
+mutation CreateTeamMember($input: CreateTeamMemberInput!) {
+  createTeamMember(input: $input) {
+    team_member {
+      ...TeamMemberFields
+    }
+  }
+}
+
+mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
+  deleteTeamMember(input: $input) {
+    team_member {
+      ...TeamMemberFields
+    }
+  }
+}
+
+mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
+  updateTeamMember(input: $input) {
+    team_member {
+      ...TeamMemberFields
+    }
+  }
+}
+
+mutation ProvideEventTicket($eventId: Int!, $userConProfileId: Int!, $ticketTypeId: Int!) {
+  provideEventTicket(input: {
+    event_id: $eventId,
+    user_con_profile_id: $userConProfileId,
+    ticket_type_id: $ticketTypeId
+  }) {
+    ticket {
+      ...TeamMemberTicketFields
+    }
+  }
+}
