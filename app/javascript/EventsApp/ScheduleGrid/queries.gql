@@ -24,18 +24,11 @@ fragment ScheduleGridEventFragment on Event {
     schedule_note
     title_suffix
 
-    confirmed_limited_signup_count
-    not_counted_confirmed_signup_count
-    waitlisted_signup_count
+    ...RunBasicSignupData
     confirmed_signup_count @include(if: $extendedCounts)
     not_counted_signup_count @include(if: $extendedCounts)
 
     room_names
-
-    my_signups {
-      id
-      state
-    }
   }
 }
 

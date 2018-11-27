@@ -192,7 +192,7 @@ class ScheduleGrid extends React.Component {
       const layoutResult = computeRunDimensionsWithoutSpanning(scheduleBlock);
 
       return (
-        <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}>
+        <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={i}>
           {
             shouldUseRowHeaders
               ? (

@@ -1,9 +1,16 @@
 #import "./queries.gql"
+#import "../queries.gql"
+#import "../EventPage/queries.gql"
 
 mutation ChangeSignupBucket($signupId: Int!, $bucketKey: String!) {
   updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {
       ...SignupFields
+
+      run {
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
     }
   }
 }
@@ -12,6 +19,11 @@ mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
   forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {
       ...SignupFields
+
+      run {
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
     }
   }
 }
@@ -20,6 +32,11 @@ mutation UpdateSignupCounted($signupId: Int!, $counted: Boolean!) {
   updateSignupCounted(input: { id: $signupId, counted: $counted }) {
     signup {
       ...SignupFields
+
+      run {
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
     }
   }
 }
