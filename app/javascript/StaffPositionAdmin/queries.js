@@ -18,6 +18,7 @@ fragment StaffPositionFields on StaffPosition {
 export const staffPositionsQuery = gql`
 query StaffPositionsQuery {
   convention {
+    id
     staff_positions {
       ...StaffPositionFields
     }

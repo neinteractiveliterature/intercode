@@ -13,6 +13,7 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 const roomsQuery = gql`
 query RoomsAdminQuery {
   convention {
+    id
     rooms {
       id
       name

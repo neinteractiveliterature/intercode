@@ -28,6 +28,7 @@ fragment TicketTypeAdmin_TicketTypeFields on TicketType {
 export const ticketTypesQuery = gql`
 query TicketTypesAdminTicketTypesQuery {
   convention {
+    id
     ticket_types {
       ...TicketTypeAdmin_TicketTypeFields
     }

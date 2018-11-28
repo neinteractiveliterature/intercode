@@ -37,12 +37,7 @@ class SignupDrop < Liquid::Drop
 
   # @return [String] The relative URL of the event's page on the convention site
   def event_url
-    event_path(run.event)
-  end
-
-  # @return [String] The URL to use for withdrawing from the event (using a DELETE request)
-  def withdraw_url
-    event_run_user_signup_path(event, run)
+    "#{events_path}/#{event.to_param}"
   end
 
   # @return [Boolean] Whether or not the signup is counted (for the purposes of maximum signups

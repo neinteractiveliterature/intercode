@@ -8,11 +8,12 @@ import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 
 const conventionQuery = gql`
 query WhosFreeFormConventionQuery {
   convention {
+    id
     starts_at
     ends_at
     timezone_name

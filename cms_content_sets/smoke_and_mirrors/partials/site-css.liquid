@@ -1,6 +1,7 @@
 ---
 name: site-css
 admin_notes: ''
+invariant: true
 ---
  <style type="text/css">
       body, .popover {
@@ -13,9 +14,9 @@ admin_notes: ''
       
       .s-menubar {
         font-family: 'Montserrat', sans-serif;
-        background:  #C33764;
-        background: -webkit-linear-gradient(to right, #1D2671, #C33764);
-        background: linear-gradient(to bottom right, #1D2671, #C33764);
+        background:  {{css_color_2}};
+        background: -webkit-linear-gradient(to right, {{css_color_1}}, {{css_color_2}});
+        background: linear-gradient(to bottom right, {{css_color_1}}, {{css_color_2}});
         -webkit-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
         -moz-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
         box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);

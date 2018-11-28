@@ -14,10 +14,12 @@ import formatMoney from '../formatMoney';
 const orderHistoryQuery = gql`
 query OrderHistoryQuery {
   convention {
+    id
     name
     timezone_name
 
     staff_positions {
+      id
       name
       email
     }
@@ -47,12 +49,14 @@ query OrderHistoryQuery {
         quantity
 
         product {
+          id
           name
           image_url
           payment_options
         }
 
         product_variant {
+          id
           name
           image_url
         }

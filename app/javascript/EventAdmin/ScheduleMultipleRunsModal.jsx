@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap4-modal';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 import { timespanFromConvention, timespanFromRun } from '../TimespanUtils';
 import eventsQuery, { fragments } from './eventsQuery';
 import { createMultipleRunsMutation } from './mutations';

@@ -5,9 +5,6 @@ class AdminSignupsController < ApplicationController
   load_resource :run, through: :event
   load_and_authorize_resource class: Signup
 
-  def index
-  end
-
   def export
     respond_to do |format|
       format.csv do

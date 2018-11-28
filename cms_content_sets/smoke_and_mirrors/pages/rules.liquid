@@ -1,6 +1,7 @@
 ---
 name: Convention Rules
 admin_notes: ''
+invariant: false
 ---
 {% assign con_chair = convention.staff_positions_by_name.con_chair %}
 {% assign ops_lead = convention.staff_positions_by_name.operations_coordinator %}
@@ -24,6 +25,7 @@ admin_notes: ''
           <li class="toc-entry"><a href="#policies-weapons">Weapons Policy</a></li>
           <li class="toc-entry"><a href="#policies-violations">Policy Violations</a></li>
           <li class="toc-entry"><a href="#policies-withdrawing">Withdrawing</a></li>
+          <li class="toc-entry"><a href="#policies-children">Children</a></li>
         </ul></li>
       <li class="toc-entry"><a href="#hotel">Hotel Rules</a>
       <ul>
@@ -65,7 +67,7 @@ If you know in advance that you cannot make a game, please let the GMs or Operat
 <h2 class="my-3"><a name='policies'>Convention Policies</a></h2>
 
 <h3 class="my-2"><a name='policies-gameregistration'>Game Registration Policy</a></h3>
-<p>Intercon follows a strict first come, first serve policy when it comes to game registrations.</p>
+<p>Intercon follows a strict first come, first serve policy when it comes to game registrations.  We expect GMs to honor your signup bucket selection when it comes to casting.</p>
 
 <p>The only exceptions to this policy are age-related or legal restrictions.  Some games have age restrictions due to content or boffer combat, and the GMs have worked with the Convention staff to get approval for these restrictions.  In these cases, it will be clear from the game description.</p>
 
@@ -124,6 +126,17 @@ Violation of any of these rules is grounds for immediate expulsion from the con,
 <h3 class="my-2"><a name='policies-withdrawing'>Withdrawing from the Con</a></h3>
 <p>To withdraw from the Con, email the {{con_chair.name_with_email_link}} and {{registrar.name_with_email_link}}.</p>
 <p>If you withdraw from the Con more than 30 days before the Convention you are eligible for a full refund.  Withdrawals within 30 days of the Convention are eligible for a refund or membership in next year's Con at the discretion of the ConChair.</p>
+
+<h3 class="my-2"><a name='policies-children'>Children at Intercon</a></h3>
+<p>All attendees at the convention should be badged for security reasons.</p>
+<ul>
+  <li>Children under 5 are free to attend.</li>
+  <li>Children 5 - 14 who will not be playing games: $5 to cover costs.</li>
+  <li>Children under 14 who will be playing games : $20 to represent the limited selection of larps. ($10 at the door)</li>
+  <li>Children 14 and over: <a href="{% page_url pricing %}">normal price</a>.
+</ul>
+<p>We strongly recommend looking at the list of games for sutability before deciding to purchase a games badge.  The games available each year can vary quite a lot.  To arrange payment for child badges, please contact the {{registrar.name_with_email_link}}.</p>
+<p>Any child under 14 at Intercon must be attached to a parent or responsible person.  Children over 14 but under 18 must have a parent present at the convention.  All children under 18 must have contact information for their parents on them or left at Ops. Intercon can not be responsible for your children.</p>
 
 <h2 class="my-3"><a name='hotel'>Hotel Rules</a></h2>
 

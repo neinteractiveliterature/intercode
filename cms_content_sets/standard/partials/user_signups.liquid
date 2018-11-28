@@ -21,7 +21,7 @@
           </div>
 
           <div>
-            <a class="btn btn-sm btn-outline-danger" href="{{ signup.withdraw_url }}" data-method="DELETE" data-confirm="Are you sure you want to withdraw from {{ signup.event.title }}?">Withdraw</a>
+            {% withdraw_user_signup_button signup %}
           </div>
         </li>
       {% endfor %}

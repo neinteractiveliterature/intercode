@@ -1,5 +1,4 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 

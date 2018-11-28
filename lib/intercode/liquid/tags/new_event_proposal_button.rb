@@ -10,7 +10,7 @@ module Intercode
       #   {% new_event_proposal_button "Propose, right now!" %}
       # @example Customizing the button text and the CSS class
       #   {% new_event_proposal_button "Propose, or don't" btn-warning %}
-      class NewEventProposalButton < RailsPartialRenderer
+      class NewEventProposalButton < AppComponentRenderer
         attr_reader :button_text, :button_class
 
         def initialize(tag_name, args, _options)
@@ -21,14 +21,14 @@ module Intercode
           @button_class = Regexp.last_match(3)
         end
 
-        def partial(_context)
-          'event_proposals/new_event_proposal_button'
+        def component_name(_context)
+          'ProposeEventButton'
         end
 
-        def locals(_context)
+        def props(_context)
           {
-            button_text: button_text,
-            button_class: button_class
+            caption: button_text.presence || "Propose an event",
+            className: button_class.presence || 'btn btn-secondary'
           }
         end
       end

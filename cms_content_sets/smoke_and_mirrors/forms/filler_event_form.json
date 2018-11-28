@@ -7,6 +7,7 @@
         {
           "item_type": "free_text",
           "identifier": "title",
+          "public_description": "Title",
           "caption": "Title",
           "lines": 1,
           "required": true
@@ -15,6 +16,7 @@
           "item_type": "event_email",
           "identifier": "event_email",
           "admin_description": "Event email",
+          "public_description": "Event email",
           "required": true
         },
         {
@@ -27,6 +29,7 @@
           "item_type": "free_text",
           "identifier": "description",
           "admin_description": "Full Description",
+          "public_description": "Description",
           "lines": 15,
           "required": true,
           "format": "markdown",
@@ -36,6 +39,7 @@
           "item_type": "free_text",
           "identifier": "short_blurb",
           "admin_description": "Short Blurb",
+          "public_description": "Short Blurb",
           "lines": 4,
           "required": true,
           "format": "markdown",
@@ -45,6 +49,7 @@
           "item_type": "free_text",
           "identifier": "content_warnings",
           "admin_description": "Player Visible Content Warnings",
+          "public_description": "Content Warnings",
           "lines": 4,
           "required": true,
           "format": "markdown",
@@ -54,6 +59,7 @@
           "item_type": "free_text",
           "identifier": "age_restrictions",
           "admin_description": "Player Visible Age Restrictions",
+          "public_description": "Age Restrictions",
           "lines": 1,
           "required": true,
           "format": "markdown",

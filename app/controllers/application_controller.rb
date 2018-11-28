@@ -39,6 +39,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def graphql_authenticity_token
+    form_authenticity_token(form_options: { action: graphql_path, method: 'POST' })
+  end
+  helper_method :graphql_authenticity_token
+
+  def app_component_props
+    {
+      authenticityToken: graphql_authenticity_token,
+      stripePublishableKey: Rails.configuration.stripe[:publishable_key]
+    }
+  end
+  helper_method :app_component_props
+
   protected
 
   def current_ability

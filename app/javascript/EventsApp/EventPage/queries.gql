@@ -1,0 +1,86 @@
+#import "../queries.gql"
+
+fragment MySignupFields on Signup {
+  id
+  state
+  waitlist_position
+}
+
+fragment EventPageRunFields on Run {
+  id
+  title_suffix
+  starts_at
+
+  rooms {
+    id
+    name
+  }
+
+  my_signups {
+    ...MySignupFields
+  }
+
+  signup_count_by_state_and_bucket_key_and_counted
+}
+
+query EventPageQuery($eventId: Int!) {
+  __typename
+
+  currentAbility {
+    can_read_schedule
+    can_update_event(event_id: $eventId)
+    can_read_event_signups(event_id: $eventId)
+    can_signup_summary_event(event_id: $eventId)
+  }
+
+  convention {
+    ...CommonConventionData
+  }
+
+  myProfile {
+    id
+  }
+
+  event(id: $eventId) {
+    id
+    title
+    length_seconds
+    private_signup_list
+    team_member_name
+    form_response_attrs_json_with_rendered_markdown
+
+    form {
+      form_api_json
+    }
+
+    team_members {
+      id
+      email
+      user_con_profile {
+        id
+        name_without_nickname
+      }
+    }
+
+    registration_policy {
+      slots_limited
+      prevent_no_preference_signups
+      total_slots_including_not_counted
+
+      buckets {
+        key
+        name
+        description
+        not_counted
+        slots_limited
+        anything
+        minimum_slots
+        total_slots
+      }
+    }
+
+    runs {
+      ...EventPageRunFields
+    }
+  }
+}

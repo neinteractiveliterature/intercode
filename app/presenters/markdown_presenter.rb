@@ -58,7 +58,7 @@ class MarkdownPresenter
     pipeline << markdown_renderer
     pipeline << sanitizer
     pipeline << liquid_renderer if sanitize_content
-    pipeline << ->(content) { content.presence || "<p><em>#{default_content}</em></p>" }
+    pipeline << ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '') }
     pipeline << ->(content) { MarkdownPresenter.strip_single_p(content) } if strip_single_p
 
     pipeline

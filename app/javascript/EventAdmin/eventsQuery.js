@@ -38,14 +38,17 @@ fragment ConventionFields on Convention {
   event_mailing_list_domain
 
   regular_event_form {
+    id
     form_api_json
   }
 
   volunteer_event_form {
+    id
     form_api_json
   }
 
   filler_event_form {
+    id
     form_api_json
   }
 
@@ -136,6 +139,7 @@ query EventAdminEventsQuery {
   }
 
   convention {
+    id
     ...ConventionFields
   }
 

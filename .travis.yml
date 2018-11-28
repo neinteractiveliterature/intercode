@@ -1,19 +1,25 @@
-sudo: false
+dist: xenial
 branches:
   only:
   - master
 language: minimal
 before_install:
-# TODO figure out if it's possible to get buildkit running on Travis, for faster builds
-# - curl -O http://launchpadlibrarian.net/340284182/libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
-# - sudo dpkg -i libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
+# Upgrade Docker
 # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 # - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
 # - sudo apt-get update
-# - sudo apt-get install -y dpkg
-# - sudo apt-get -y remove docker-ce
-# - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-# - sudo cat /var/log/upstart/docker.log
+# - sudo apt-get -y install docker-ce
+# - sudo mkdir -p /etc/docker
+# "features": {
+#   "buildkit": true
+# },
+- |
+  echo '{
+    "storage-driver": "overlay2",
+    "max-concurrent-downloads": 50,
+    "max-concurrent-uploads": 50
+  }' | sudo tee /etc/docker/daemon.json
+- sudo service docker restart
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
   -s`-`uname -m` > docker-compose
@@ -47,9 +53,9 @@ jobs:
     script:
     - docker build
       --target build
-      -f Dockerfile.web
       --cache-from neinteractiveliterature/intercode:build-latest
       --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
+      -f Dockerfile.web
       -t neinteractiveliterature/intercode:build-$BRANCH_TAG .
     - docker push neinteractiveliterature/intercode:build-$BRANCH_TAG
     - docker tag neinteractiveliterature/intercode:build-$BRANCH_TAG neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
@@ -79,11 +85,12 @@ jobs:
     - docker pull neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
     - docker pull neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
     - docker build
-      --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
-      --cache-from neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
       -f Dockerfile.web
       --target production
-      -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
+      --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
+      --cache-from neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
+      -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+      .
     - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     - test/docker-push.sh
     - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
