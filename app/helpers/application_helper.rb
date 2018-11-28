@@ -178,10 +178,6 @@ module ApplicationHelper
     link_to(name, url, html_options.merge(class: classes), &block)
   end
 
-  def graphql_authenticity_token
-    form_authenticity_token(form_options: { action: graphql_path, method: 'POST' })
-  end
-
   def beginning_of_convention_day(time)
     if time.hour < 6
       (time - 1.day).beginning_of_day.change(hour: 6)
@@ -193,10 +189,7 @@ module ApplicationHelper
   def app_component(name, props = {})
     react_component(
       name,
-      props.merge(
-        authenticityToken: graphql_authenticity_token,
-        stripePublishableKey: Rails.configuration.stripe[:publishable_key]
-      )
+      props.merge(app_component_props)
     )
   end
 end

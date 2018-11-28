@@ -11,7 +11,7 @@ module Intercode
       #   {% withdraw_user_signup_button signup "Withdraw my signup" %}
       # @example Customizing the button text and the CSS class
       #   {% withdraw_user_signup_button "Withdraw my signup" btn-warning %}
-      class WithdrawUserSignupButton < RailsPartialRenderer
+      class WithdrawUserSignupButton < AppComponentRenderer
         attr_reader :button_text, :button_class, :signup_variable_name
 
         def initialize(tag_name, args, _options)
@@ -23,16 +23,17 @@ module Intercode
           @button_class = Regexp.last_match(5)
         end
 
-        def partial(_context)
-          'events/withdraw_user_signup_button'
+        def component_name(_context)
+          'WithdrawMySignupButton'
         end
 
-        def locals(context)
+        def props(context)
           {
-            event_title: context[signup_variable_name].event.title,
-            run_id: context[signup_variable_name].run.id,
-            button_text: button_text,
-            button_class: button_class
+            event: { title: context[signup_variable_name].event.title },
+            run: { id: context[signup_variable_name].run.id },
+            buttonText: button_text,
+            buttonClass: button_class,
+            reloadOnSuccess: true
           }
         end
       end
