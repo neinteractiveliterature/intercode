@@ -21,8 +21,4 @@ describe SignupDrop do
   it 'returns the event path' do
     signup_drop.event_url.must_match /events\/#{event.id}/
   end
-
-  it 'returns the withdraw path' do
-    signup_drop.withdraw_url.must_match /runs\/#{the_run.id}\/user_signup/
-  end
 end

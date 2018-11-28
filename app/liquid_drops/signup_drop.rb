@@ -40,11 +40,6 @@ class SignupDrop < Liquid::Drop
     "#{events_path}/#{event.to_param}"
   end
 
-  # @return [String] The URL to use for withdrawing from the event (using a DELETE request)
-  def withdraw_url
-    event_run_user_signup_path(event, run)
-  end
-
   # @return [Boolean] Whether or not the signup is counted (for the purposes of maximum signups
   #                   allowed, and counting totals for the event)
   def counted
