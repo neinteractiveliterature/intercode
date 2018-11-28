@@ -11,6 +11,7 @@ class EventsController < ApplicationController
 
   private
 
+  # This is here so that the OpenGraph meta tags can continue to work
   def liquid_assigns
     super.merge('event' => @event)
   end
