@@ -19,7 +19,7 @@ before_install:
     "max-concurrent-downloads": 50,
     "max-concurrent-uploads": 50
   }' | sudo tee /etc/docker/daemon.json
-- sudo service docker restart || sudo journalctl -xe
+- sudo service docker restart || sudo journalctl -x
 - exit 1
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
