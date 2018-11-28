@@ -38,6 +38,11 @@ module.exports = {
       { env: 'apollo', schemaJson },
       { env: 'literal', schemaJson },
     ],
+    'graphql/required-fields': [
+      'error',
+      { env: 'apollo', schemaJson, requiredFields: ['id'] },
+      { env: 'literal', schemaJson, requiredFields: ['id'] },
+    ],
     'graphql/named-operations': [
       'warn',
       { env: 'apollo', schemaJson },

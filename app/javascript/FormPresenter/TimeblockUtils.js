@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import { flatMap } from 'lodash';
 
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';
 
 export function describeTimeblock(timeblock) {

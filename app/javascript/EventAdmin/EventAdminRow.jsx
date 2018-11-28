@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 import { updateEventAdminNotesMutation } from './mutations';
 
 class EventAdminRow extends React.Component {

@@ -4,6 +4,7 @@ module Concerns::SortBuckets
       [
         bucket.slots_limited? ? 0 : 1,
         bucket.anything? ? 1 : 0,
+        bucket.not_counted? ? 1 : 0,
         (bucket.name || '').downcase
       ]
     end

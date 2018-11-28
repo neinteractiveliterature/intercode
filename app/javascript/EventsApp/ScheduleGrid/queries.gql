@@ -1,0 +1,60 @@
+#import "../queries.gql"
+
+fragment ScheduleGridEventFragment on Event {
+  id
+  title
+  length_seconds
+  category
+  short_blurb_html
+
+  registration_policy {
+    slots_limited
+    only_uncounted
+    total_slots
+    total_slots_including_not_counted
+    preferred_slots
+    preferred_slots_including_not_counted
+    minimum_slots
+    minimum_slots_including_not_counted
+
+    buckets {
+      key
+      slots_limited
+    }
+  }
+
+  runs(start: $start, finish: $finish) {
+    id
+    starts_at
+    schedule_note
+    title_suffix
+
+    ...RunBasicSignupData
+    confirmed_signup_count @include(if: $extendedCounts)
+    not_counted_signup_count @include(if: $extendedCounts)
+
+    room_names
+  }
+}
+
+query ScheduleGridConventionDataQuery {
+  convention {
+    ...CommonConventionData
+  }
+}
+
+query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    ...ScheduleGridEventFragment
+  }
+}
+
+query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  convention {
+    ...CommonConventionData
+  }
+
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    ...ScheduleGridEventFragment
+  }
+}

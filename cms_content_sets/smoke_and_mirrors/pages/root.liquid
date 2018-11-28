@@ -1,6 +1,7 @@
 ---
 name: Main Landing Page
 admin_notes: This is the root page of the website
+invariant: false
 ---
 {% include 'conintro' %}
  
@@ -29,13 +30,16 @@ admin_notes: This is the root page of the website
   
   <div class="{% if sidebar_content_stripped != '' %}col-lg-6{% else %}col-md-12{% endif %}">
     <section class="my-4">
+      {% include 'new_events_list' %}
       <h3>Convention News</h3>
       {% include '0-news' %}
       <a href="{% page_url news %}">All News</a>
     </section>
-    {% unless convention.maximum_event_signups.current_value == 'not_yet' %}
-      {% include 'runs_with_openings' %}
-    {% endunless %}
+    {% comment %}
+      {% if convention.maximum_event_signups.current_value == 'unlimited' %}
+        {% include 'runs_with_openings' %}
+      {% endif %}
+    {% endcomment %}
   </div>
   
 </div>

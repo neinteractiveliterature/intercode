@@ -25,25 +25,13 @@ Intercode::Application.routes.draw do
     resource :ticket, only: [:new, :show, :create]
     get 'ticket_types/(*extra)' => 'ticket_types#index', as: :ticket_types
 
-    resources :events do
-      collection do
-        get 'schedule(/*extra)' => :schedule, as: :schedule
-        get 'schedule_by_room(/*extra)' => :schedule_by_room, as: :schedule_by_room
-        get 'schedule_with_counts(/*extra)' => :schedule_with_counts, as: :schedule_with_counts
-      end
 
-      resources :team_members, except: [:show]
-
+    resources :events, only: [] do
       resources :runs, only: [] do
-        member do
-          get :signup_summary
-        end
-
-        resource :user_signup
         get 'admin_signups/export' => 'admin_signups#export', as: :export_admin_signups
-        get 'admin_signups/(*extra)' => 'admin_signups#index', as: :admin_signups
       end
     end
+    get 'events/(*extra)' => 'events#index', as: :events
 
     get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
 

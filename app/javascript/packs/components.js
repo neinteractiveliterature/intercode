@@ -1,16 +1,16 @@
 import { mapValues } from 'lodash';
 
+import AppWrapper from '../AppWrapper';
 import Cart from '../Store/Cart';
-import CategoryLegend from '../ScheduleGrid/CategoryLegend';
 import CmsVariablesAdmin from '../CmsVariablesAdmin';
 import ConventionAdmin from '../ConventionAdmin';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EmailList from '../UIComponents/EmailList';
 import EventAdmin from '../EventAdmin';
-import EventList from '../EventList';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
+import EventsApp from '../EventsApp';
 import FormJSONEditor from '../FormJSONEditor';
 import LiquidDocs from '../LiquidDocs';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
@@ -22,32 +22,26 @@ import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import ProposeEventButton from '../EventProposals/ProposeEventButton';
 import RoomsAdmin from '../RoomsAdmin';
-import RunSignupSummary from '../SignupAdmin/RunSignupSummary';
-import ScheduleGrid from '../ScheduleGrid';
-import SignupAdmin from '../SignupAdmin';
 import SignupSpyTable from '../Reports/SignupSpyTable';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
-import StandaloneEditEvent from '../StandaloneEditEvent';
-import AppWrapper from '../AppWrapper';
-import TeamMemberForm from '../BuiltInForms/TeamMemberForm';
 import TicketTypeAdmin from '../TicketTypeAdmin';
 import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
 import UserActivityAlertsAdmin from '../UserActivityAlerts/UserActivityAlertsAdmin';
 import UserConProfileAdminDisplay from '../UserConProfiles/UserConProfileAdminDisplay';
-import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
+import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import UserConProfilesAdmin from '../UserConProfiles/UserConProfilesAdmin';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
+import WithdrawMySignupButton from '../EventsApp/EventPage/WithdrawMySignupButton';
 
 const unwrappedComponents = {
   Cart,
-  CategoryLegend,
   CmsVariablesAdmin,
   ConventionAdmin,
   EditUserConProfile,
   EmailList,
   EventAdmin,
-  EventList,
+  EventsApp,
   EventProposalDisplay,
   EventProposalForm,
   EventProposalsAdmin,
@@ -62,14 +56,9 @@ const unwrappedComponents = {
   ProductOrderForm,
   ProposeEventButton,
   RoomsAdmin,
-  RunSignupSummary,
-  ScheduleGrid,
-  SignupAdmin,
   SignupSpyTable,
   StaffPositionAdmin,
-  StandaloneEditEvent,
   StoreAdmin,
-  TeamMemberForm,
   TicketTypeAdmin,
   TicketPurchaseForm,
   UserActivityAlertsAdmin,
@@ -77,6 +66,7 @@ const unwrappedComponents = {
   UserConProfileSignupsCard,
   UserConProfilesAdmin,
   WhosFreeForm,
+  WithdrawMySignupButton,
 };
 
 const wrappedComponents = mapValues(unwrappedComponents, AppWrapper);

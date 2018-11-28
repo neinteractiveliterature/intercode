@@ -22,10 +22,12 @@ class FormItemDisplay extends React.PureComponent {
       ends_at: PropTypes.string.isRequired,
       timezone_name: PropTypes.string.isRequired,
     }).isRequired,
+    displayMode: PropTypes.oneOf(['admin', 'public']),
   };
 
   static defaultProps = {
     value: null,
+    displayMode: 'admin',
   };
 
   render = () => {
@@ -33,11 +35,13 @@ class FormItemDisplay extends React.PureComponent {
       formItem,
       convention,
       value,
+      displayMode,
     } = this.props;
 
     const commonProps = {
       formItem,
       value,
+      displayMode,
     };
 
     if (value == null) {

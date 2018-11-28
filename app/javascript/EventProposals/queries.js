@@ -23,6 +23,7 @@ fragment EventProposalFormData on Convention {
   event_mailing_list_domain
 
   event_proposal_form {
+    id
     form_api_json
   }
 }

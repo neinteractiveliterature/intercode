@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { TimespanPropType } from '../ScheduledValuePropTypes';
 import ScheduledValueTimespanRowDatepicker from './ScheduledValueTimespanRowDatepicker';
-import Timespan from '../PCSG/Timespan';
+import Timespan from '../Timespan';
 
 require('moment-timezone');
 

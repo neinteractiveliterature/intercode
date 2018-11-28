@@ -1,6 +1,7 @@
 ---
 name: signup_text
 admin_notes: ''
+invariant: false
 ---
 {% assign next_val = convention.maximum_event_signups.next_value | plus: 0 %}
 {% if convention.maximum_event_signups.next_value == 'unlimited' %}
@@ -30,16 +31,24 @@ admin_notes: ''
   {% elsif convention.maximum_event_signups.current_value == 'not_now' %}
     The site is now frozen, and you may no longer sign up or drop larps.  Please email GMs directly or come to the Operations desk at the con to adjust your signups.
   {% else %}
+    {% assign signup_count = 0 %}
+    {% for signup in user_con_profile.signups %}
+      {% if signup.counted or signup.state == 'waitlisted' %}
+        {% assign signup_count = signup_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    {% assign remaining = current_val | minus: signup_count %}
     {% if user_con_profile.ticket %}
       {% if user_con_profile.ticket.allows_event_signups %}
-        Signups are open. You may sign up for 
-      {% else %}
-        Signups are open.  If you had a full {{convention.ticket_name}}, you would be able to sign up for
+        Signups are open. You are allowed to be signed up for <strong>{{ current_val }}</strong> game{% unless current_val == 1 %}s{% endunless %}.
+        You have <strong>{{ remaining }}</strong> signup{% unless remaining == 1 %}s{% endunless %} remaining.
+      {% else %}. 
+        Signups are open.  If you had a full {{convention.ticket_name}}, you would be able to sign up for <strong>{{ current_val }}</strong> game{% unless current_val == 1 %}s{% endunless %}.
       {% endif %}
     {% else %}
-      Signups are open.  If you had a {{convention.ticket_name}}, you would be able to sign up for
+      Signups are open.  If you had a {{convention.ticket_name}}, you would be able to sign up for <strong>{{ current_val }}</strong> game{% unless current_val == 1 %}s{% endunless %}.
     {% endif %}
-    <strong>{{ current_val }}</strong> game{% unless current_val == 1 %}s{% endunless %}.{% if show_next %}<br><br>{% endif %}
+    {% if show_next %}<br><br>{% endif %}
   {% endif %}
 {% endunless %}
 

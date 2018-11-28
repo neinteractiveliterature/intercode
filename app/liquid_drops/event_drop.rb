@@ -41,7 +41,7 @@ class EventDrop < Liquid::Drop
 
   # @return [String] The relative URL to use for linking to this event on this site
   def url
-    event_path(event)
+    "#{events_path}/#{event.to_param}"
   end
 
   # @return [String] The external URL for this event, if its team provided one

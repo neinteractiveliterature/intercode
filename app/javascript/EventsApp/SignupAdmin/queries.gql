@@ -1,0 +1,281 @@
+#import "../queries.gql"
+
+fragment SignupFields on Signup {
+  id
+  state
+  counted
+  bucket_key
+  requested_bucket_key
+
+  run {
+    id
+    title_suffix
+    starts_at
+    ends_at
+
+    rooms {
+      id
+      name
+    }
+
+    event {
+      id
+      title
+      team_member_name
+
+      registration_policy {
+        buckets {
+          key
+          name
+          anything
+        }
+      }
+
+      team_members {
+        id
+        user_con_profile {
+          id
+        }
+      }
+    }
+  }
+
+  user_con_profile {
+    id
+    name_without_nickname
+    nickname
+    birth_date
+    email
+    address
+    city
+    state
+    zipcode
+    country
+    day_phone
+    evening_phone
+    best_call_time
+    preferred_contact
+  }
+}
+
+fragment UserConProfileSignupsFragment on UserConProfile {
+  signups {
+    id
+    state
+    counted
+    bucket_key
+    requested_bucket_key
+
+    user_con_profile {
+      id
+    }
+
+    run {
+      id
+      starts_at
+
+      event {
+        id
+        title
+        length_seconds
+        team_member_name
+
+        registration_policy {
+          buckets {
+            key
+            name
+          }
+        }
+
+        team_members {
+          id
+
+          user_con_profile {
+            id
+          }
+        }
+      }
+
+      rooms {
+        id
+        name
+      }
+    }
+  }
+}
+
+query SignupAdminEventQuery($eventId: Int!) {
+  event(id: $eventId) {
+    id
+    title
+  }
+}
+
+query AdminSignupQuery($id: Int!) {
+  convention {
+    ...CommonConventionData
+  }
+
+  myProfile {
+    id
+    ability {
+      can_update_signup(signup_id: $id)
+    }
+  }
+
+  signup(id: $id) {
+    ...SignupFields
+  }
+}
+
+query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
+  event(id: $eventId) {
+    id
+    team_member_name
+
+    team_members {
+      id
+
+      user_con_profile {
+        id
+      }
+    }
+
+    registration_policy {
+      buckets {
+        key
+        name
+      }
+    }
+
+    run(id: $runId) {
+      id
+
+      signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+        total_entries
+        total_pages
+        current_page
+        per_page
+
+        entries {
+          id
+          state
+          counted
+          bucket_key
+          requested_bucket_key
+
+          run {
+            id
+            starts_at
+          }
+
+          user_con_profile {
+            id
+            name_inverted
+            name_without_nickname
+            email
+            birth_date
+          }
+        }
+      }
+    }
+  }
+}
+
+query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
+  convention {
+    ...CommonConventionData
+  }
+
+  event(id: $eventId) {
+    id
+    title
+    length_seconds
+
+    registration_policy {
+      total_slots
+
+      buckets {
+        name
+        total_slots
+      }
+    }
+
+    run(id: $runId) {
+      id
+      starts_at
+    }
+  }
+}
+
+query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
+  event(id: $eventId) {
+    id
+    team_member_name
+
+    registration_policy {
+      buckets {
+        key
+        name
+        expose_attendees
+      }
+    }
+
+    team_members {
+      id
+      user_con_profile {
+        id
+      }
+    }
+
+    run(id: $runId) {
+      id
+
+      signups_paginated(
+        per_page: 1000,
+        filters: { state: ["confirmed", "waitlisted"] }
+      ) {
+        entries {
+          id
+          state
+          bucket_key
+          waitlist_position
+
+          user_con_profile {
+            id
+            name_inverted
+          }
+        }
+      }
+    }
+  }
+}
+
+query UserConProfileSignupsQuery($id: Int!) {
+  convention {
+    ...CommonConventionData
+  }
+
+  myProfile {
+    id
+    ability {
+      can_update_signups
+    }
+  }
+
+  userConProfile(id: $id) {
+    id
+    name_without_nickname
+
+    team_members {
+      id
+
+      event {
+        id
+        title
+      }
+    }
+
+    ...UserConProfileSignupsFragment
+  }
+}

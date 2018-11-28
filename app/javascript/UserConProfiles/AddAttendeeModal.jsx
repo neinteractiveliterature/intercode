@@ -28,10 +28,12 @@ query AddAttendeeUsersQuery($name: String) {
 const userConProfileFormQuery = gql`
 query AddAttendeeUserConProfileFormQuery {
   convention {
+    id
     privilege_names
     mail_privilege_names
 
     user_con_profile_form {
+      id
       form_api_json
     }
   }

@@ -1,0 +1,31 @@
+#import './queries.gql'
+
+mutation CreateMySignup($runId: Int!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
+  createMySignup(input: {
+    run_id: $runId,
+    requested_bucket_key: $requestedBucketKey,
+    no_requested_bucket: $noRequestedBucket
+  }) {
+    signup {
+      ...MySignupFields
+
+      run {
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
+    }
+  }
+}
+
+mutation WithdrawMySignup($runId: Int!) {
+  withdrawMySignup(input: { run_id: $runId }) {
+    signup {
+      ...MySignupFields
+
+      run {
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
+    }
+  }
+}

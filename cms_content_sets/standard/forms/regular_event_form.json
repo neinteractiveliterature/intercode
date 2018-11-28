@@ -7,6 +7,7 @@
         {
           "item_type": "free_text",
           "identifier": "title",
+          "public_description": "Title",
           "caption": "Title",
           "lines": 1,
           "required": true
@@ -14,27 +15,30 @@
         {
           "item_type": "free_text",
           "identifier": "author",
+          "public_description": "Author(s)",
           "caption": "Author(s)",
           "lines": 1,
           "required": true
         },
         {
-          "item_type": "free_text",
-          "identifier": "email",
-          "caption": "Email for Event Inquiries",
-          "lines": 1,
-          "free_text_type": "email",
+          "item_type": "event_email",
+          "identifier": "event_email",
+          "admin_description": "Event email",
+          "public_description": "Event email",
           "required": true
         },
         {
           "item_type": "free_text",
           "identifier": "organization",
+          "public_description": "Organization",
           "caption": "Organization",
           "lines": 1
         },
         {
           "item_type": "free_text",
           "identifier": "url",
+          "public_description": "Homepage",
+          "format": "url",
           "caption": "Event or Organization Homepage URL",
           "lines": 1
         },
@@ -60,22 +64,6 @@
           ]
         },
         {
-          "item_type": "multiple_choice",
-          "identifier": "con_mail_destination",
-          "caption": "Send Convention Email to",
-          "style": "radio_vertical",
-          "choices": [
-            {
-              "caption": "Event email address",
-              "value": "event_email"
-            },
-            {
-              "caption": "Team members who have elected to receive email from the convention",
-              "value": "gms"
-            }
-          ]
-        },
-        {
           "item_type": "timespan",
           "identifier": "length_seconds",
           "caption": "Event Length",
@@ -85,6 +73,7 @@
           "item_type": "free_text",
           "identifier": "description",
           "admin_description": "Full Description",
+          "public_description": "Description",
           "lines": 15,
           "required": true,
           "format": "markdown",
@@ -94,6 +83,7 @@
           "item_type": "free_text",
           "identifier": "short_blurb",
           "admin_description": "Short Blurb",
+          "public_description": "Short Blurb",
           "lines": 4,
           "required": true,
           "format": "markdown",
@@ -103,6 +93,7 @@
           "item_type": "free_text",
           "identifier": "content_warnings",
           "admin_description": "Player Visible Content Warnings",
+          "public_description": "Content Warnings",
           "lines": 4,
           "required": true,
           "format": "markdown",
@@ -112,6 +103,7 @@
           "item_type": "free_text",
           "identifier": "age_restrictions",
           "admin_description": "Player Visible Age Restrictions",
+          "public_description": "Age Restrictions",
           "lines": 1,
           "required": true,
           "format": "markdown",
@@ -120,7 +112,8 @@
         {
           "item_type": "free_text",
           "identifier": "participant_communications",
-          "admin_description": "Player Communications",
+          "admin_description": "Participant Communications",
+          "public_description": "Participant Communications",
           "lines": 4,
           "required": true,
           "format": "markdown",

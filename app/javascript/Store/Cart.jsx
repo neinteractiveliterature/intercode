@@ -20,11 +20,13 @@ fragment OrderEntryFields on OrderEntry {
   quantity
 
   product {
+    id
     name
     payment_options
   }
 
   product_variant {
+    id
     name
   }
 

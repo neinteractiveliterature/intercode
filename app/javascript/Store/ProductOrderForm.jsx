@@ -15,6 +15,7 @@ import sortProductVariants from './sortProductVariants';
 const productQuery = gql`
 query OrderFormProductQuery($productId: Int!) {
   product(id: $productId) {
+    id
     price {
       fractional
     }
