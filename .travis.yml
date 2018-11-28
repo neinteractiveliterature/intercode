@@ -13,8 +13,9 @@ before_install:
 - sudo mkdir -p /etc/docker
 - |
   echo '{
-    "experimental": true,
-    "buildkit": true,
+    "features": {
+      "buildkit": true,
+    },
     "storage-driver": "overlay2",
     "max-concurrent-downloads": 50,
     "max-concurrent-uploads": 50
