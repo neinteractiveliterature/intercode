@@ -5,10 +5,12 @@ branches:
 language: minimal
 before_install:
 # Upgrade Docker
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-- sudo apt-get remove docker docker-engine docker.io
+- sudo apt-get update
 - sudo apt-get -y install docker-ce
 # Reconfigure docker to be more efficient
+- sudo mkdir -p /etc/docker
 - |
   echo '{
     "experimental": true,
