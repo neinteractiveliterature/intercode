@@ -55,9 +55,9 @@ jobs:
     - docker build
       --target build
       -f Dockerfile.web
-      --cache-from neinteractiveliterature/intercode:build-latest
-      --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
       -t neinteractiveliterature/intercode:build-$BRANCH_TAG .
+    # --cache-from neinteractiveliterature/intercode:build-latest
+    # --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
     - docker push neinteractiveliterature/intercode:build-$BRANCH_TAG
     - docker tag neinteractiveliterature/intercode:build-$BRANCH_TAG neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
@@ -66,11 +66,11 @@ jobs:
       -f Dockerfile.web
       --target test
       --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
-      --cache-from neinteractiveliterature/intercode:build-$BRANCH_TAG
-      --cache-from neinteractiveliterature/intercode:test-$BRANCH_TAG
-      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
+    # --cache-from neinteractiveliterature/intercode:build-$BRANCH_TAG
+    # --cache-from neinteractiveliterature/intercode:test-$BRANCH_TAG
+    # --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
     - docker tag neinteractiveliterature/intercode:test-$TRAVIS_COMMIT neinteractiveliterature/intercode:test-$BRANCH_TAG
     - docker push neinteractiveliterature/intercode:test-$BRANCH_TAG
@@ -86,11 +86,11 @@ jobs:
     - docker pull neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
     - docker pull neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
     - docker build
-      --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
-      --cache-from neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
       -f Dockerfile.web
       --target production
       -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
+    # --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
+    # --cache-from neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
     - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     - test/docker-push.sh
     - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
