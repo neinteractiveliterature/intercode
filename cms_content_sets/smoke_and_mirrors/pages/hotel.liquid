@@ -1,6 +1,7 @@
 ---
 name: Hotel Information
 admin_notes: ''
+invariant: false
 ---
 {% assign hotel_liaison = convention.staff_positions_by_name.hotel_liaison %}
 <h1 class="my-3">Hotel Information</h1>
@@ -23,15 +24,15 @@ admin_notes: ''
             <dt class="col-md-6">Phone:</dt>
             <dd class="col-md-6">(401) 732-6000</dd>
             <dt class="col-md-6">Block code:</dt>
-            <dd class="col-sm-6">INS</dd>
+            <dd class="col-sm-6">{{hotel_block_code}}</dd>
             <dt class="col-md-6">Checkin<span class="d-inline d-md-none d-lg-inline"> time</span>:</dt>
             <dd class="col-md-6">3:00 PM</dd>
             <dt class="col-md-6">Checkout<span class="d-inline d-md-none d-lg-inline"> time</span>:</dt>
             <dd class="col-md-6">11:00 AM</dd>
             <dt class="col-md-6">King bed<span class="d-inline d-md-none d-lg-inline"> rate</span>:</dt>
-            <dd class="col-md-6">$141/night</dd>
+            <dd class="col-md-6">${{hotel_king_rate}}/night</dd>
             <dt class="col-md-6"><span class="d-inline d-md-none d-lg-inline">Two </span>Double beds<span class="d-inline d-md-none d-xl-inline"> rate</span>:</dt>
-            <dd class="col-md-6">$141/night</dd>
+            <dd class="col-md-6">${{hotel_double_rate}}/night</dd>
           </dl>
         </li>
         <li class="list-group-item">

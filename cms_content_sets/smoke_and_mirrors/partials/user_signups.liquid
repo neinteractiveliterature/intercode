@@ -1,3 +1,8 @@
+---
+name: user_signups
+admin_notes: ''
+invariant: false
+---
 {% assign signups = user_con_profile.signups | sort: "starts_at" %}
 
 {% if signups.size > 0 %}

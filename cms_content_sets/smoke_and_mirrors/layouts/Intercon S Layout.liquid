@@ -14,7 +14,7 @@ admin_notes: ''
       <meta property="og:title" content="{{page.name}}"/>
     {% endif %}
     {% if event %}
-      <meta property="og:description" content="{{ event.short_blurb }}">
+      <meta property="og:description" content="{{ event.short_blurb | strip_html }}">
     {% endif %}
     <meta property="og:type" content="website"/>
     <link rel="icon" 

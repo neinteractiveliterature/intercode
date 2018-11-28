@@ -49,4 +49,12 @@ navigation_items:
     page_slug: flyer
 root_page_slug: root
 default_layout_name: Intercon S Layout
-variables: {}
+variables:
+  con_theme: Smoke&nbsp;and&nbsp;Mirrors
+  con_title: Smoke and Mirrors
+  css_color_1: "#1D2671"
+  css_color_2: "#C33764"
+  google_analytics_tracking_id: UA-115641034-1
+  hotel_block_code: INS
+  hotel_double_rate: 141
+  hotel_king_rate: 141
