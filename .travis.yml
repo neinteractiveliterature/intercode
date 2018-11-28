@@ -4,21 +4,15 @@ branches:
   - master
 language: minimal
 before_install:
-# TODO figure out if it's possible to get buildkit running on Travis, for faster builds
-# - curl -O http://launchpadlibrarian.net/340284182/libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
-# - sudo dpkg -i libseccomp2_2.3.1-2.1ubuntu3_amd64.deb
-# - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-# - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-# - sudo apt-get update
-# - sudo apt-get install -y dpkg
-# - sudo apt-get -y remove docker-ce
-# - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-# - sudo cat /var/log/upstart/docker.log
-#
+# Upgrade Docker
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+- sudo apt-get remove docker docker-engine docker.io
+- sudo apt-get -y install docker-ce
 # Reconfigure docker to be more efficient
 - |
   echo '{
     "experimental": true,
+    "buildkit": true,
     "storage-driver": "overlay2",
     "max-concurrent-downloads": 50,
     "max-concurrent-uploads": 50
