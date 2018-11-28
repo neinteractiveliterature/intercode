@@ -10,7 +10,7 @@ module Intercode
       #   {% new_event_proposal_button "Propose, right now!" %}
       # @example Customizing the button text and the CSS class
       #   {% new_event_proposal_button "Propose, or don't" btn-warning %}
-      class NewEventProposalButton < RailsPartialRenderer
+      class NewEventProposalButton < AppComponentRenderer
         attr_reader :button_text, :button_class
 
         def initialize(tag_name, args, _options)

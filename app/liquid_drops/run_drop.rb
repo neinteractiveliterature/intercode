@@ -30,16 +30,6 @@ class RunDrop < Liquid::Drop
     "#{events_path}/#{event.to_param}"
   end
 
-  # @return [String] The URL to use for signing up for this event (using a POST request)
-  def signup_url
-    event_run_user_signup_path(event, run)
-  end
-
-  # @return [String] The URL to use for withdrawing from event (using a DELETE request)
-  def withdraw_url
-    event_run_user_signup_path(event, run)
-  end
-
   def room_names
     run.rooms.map(&:name)
   end
