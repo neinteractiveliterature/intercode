@@ -5,17 +5,16 @@ branches:
 language: minimal
 before_install:
 # Upgrade Docker
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-- sudo apt-get update
-- sudo apt-get -y install docker-ce
-# Reconfigure docker to be more efficient
-- sudo mkdir -p /etc/docker
+# - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+# - sudo apt-get update
+# - sudo apt-get -y install docker-ce
+# - sudo mkdir -p /etc/docker
+# "features": {
+#   "buildkit": true
+# },
 - |
   echo '{
-    "features": {
-      "buildkit": true
-    },
     "storage-driver": "overlay2",
     "max-concurrent-downloads": 50,
     "max-concurrent-uploads": 50
@@ -54,10 +53,10 @@ jobs:
     script:
     - docker build
       --target build
+      --cache-from neinteractiveliterature/intercode:build-latest
+      --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
       -f Dockerfile.web
       -t neinteractiveliterature/intercode:build-$BRANCH_TAG .
-    # --cache-from neinteractiveliterature/intercode:build-latest
-    # --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
     - docker push neinteractiveliterature/intercode:build-$BRANCH_TAG
     - docker tag neinteractiveliterature/intercode:build-$BRANCH_TAG neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
@@ -66,11 +65,11 @@ jobs:
       -f Dockerfile.web
       --target test
       --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
+      --cache-from neinteractiveliterature/intercode:build-$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:test-$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
-    # --cache-from neinteractiveliterature/intercode:build-$BRANCH_TAG
-    # --cache-from neinteractiveliterature/intercode:test-$BRANCH_TAG
-    # --cache-from neinteractiveliterature/intercode:build-${TRAVIS_COMMIT}
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
     - docker tag neinteractiveliterature/intercode:test-$TRAVIS_COMMIT neinteractiveliterature/intercode:test-$BRANCH_TAG
     - docker push neinteractiveliterature/intercode:test-$BRANCH_TAG
@@ -88,9 +87,10 @@ jobs:
     - docker build
       -f Dockerfile.web
       --target production
-      -t neinteractiveliterature/intercode:${TRAVIS_COMMIT} .
-    # --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
-    # --cache-from neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
+      --cache-from neinteractiveliterature/intercode:build-$TRAVIS_COMMIT
+      --cache-from neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
+      -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+      .
     - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
     - test/docker-push.sh
     - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
