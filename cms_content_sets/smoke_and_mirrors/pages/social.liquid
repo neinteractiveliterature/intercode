@@ -1,6 +1,7 @@
 ---
 name: Social Events at Intercon
 admin_notes: IN PROGRESS
+invariant: false
 ---
 {% assign hospitality = convention.staff_positions_by_name.hospitality_coordinator %}
 <h1 class="my-3">Social Events at Intercon</h1>
@@ -25,7 +26,7 @@ admin_notes: IN PROGRESS
 
 
 <p class="lead">
-Intercon is more than just larps.  We also have a number of social events where you can meet and mingle with your fellow players and GMs.  If you want to talk to us about hosting a new event, drop us an email at {{hospitality.email_link}}.
+Intercon is more than just larps.  We also have a number of social events where you can meet and mingle with your fellow players and GMs.  If you want to talk to us about hosting a new event, <a href="{% page_url social/request %}">fill out the request form</a>
 
 <h2 class="my-3"><a name="annual">Annual Social Events</a></h2>
 
@@ -41,6 +42,6 @@ Intercon is more than just larps.  We also have a number of social events where 
 </p>
 <h2 class="my-3"><a name="other">Other Social Events</a></h2>
 <h3 class="my-2"><a name="yourevent">Your Event Here</a></h3>
-<p>Want to run a meetup for your larp organization?  <a href="mailto:{{ hospitality.email }}">Drop us a line!</a></p>
+<p>Want to run a meetup for your larp organization?  <a href="{% page_url social/request %}">Fill out the request form!</a></p>
 </div>
 </div>
