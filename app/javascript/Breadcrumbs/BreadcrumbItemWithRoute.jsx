@@ -12,12 +12,14 @@ class BreadcrumbItemWithRoute extends React.Component {
     path: PropTypes.string.isRequired,
     to: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
     hideUnlessMatch: PropTypes.bool,
+    pageTitleIfActive: PropTypes.string,
   }
 
   static defaultProps = {
     active: null,
     exact: false,
     hideUnlessMatch: false,
+    pageTitleIfActive: null,
   }
 
   buildActive = (routeProps) => {
@@ -37,7 +39,11 @@ class BreadcrumbItemWithRoute extends React.Component {
   }
 
   renderBreadcrumbItem = routeProps => (
-    <BreadcrumbItem to={this.buildToString(routeProps)} active={this.buildActive(routeProps)}>
+    <BreadcrumbItem
+      to={this.buildToString(routeProps)}
+      active={this.buildActive(routeProps)}
+      pageTitleIfActive={this.props.pageTitleIfActive}
+    >
       {
         typeof this.props.children === 'function'
           ? this.props.children(routeProps)

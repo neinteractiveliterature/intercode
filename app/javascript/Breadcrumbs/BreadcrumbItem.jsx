@@ -7,10 +7,24 @@ class BreadcrumbItem extends React.PureComponent {
     active: PropTypes.bool,
     children: PropTypes.node.isRequired,
     to: PropTypes.string.isRequired,
+    pageTitleIfActive: PropTypes.string,
   }
 
   static defaultProps = {
     active: false,
+    pageTitleIfActive: null,
+  }
+
+  componentDidMount = () => {
+    if (this.props.active && this.props.pageTitleIfActive) {
+      window.document.title = this.props.pageTitleIfActive;
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.active && this.props.pageTitleIfActive) {
+      window.document.title = this.props.pageTitleIfActive;
+    }
   }
 
   render = () => {

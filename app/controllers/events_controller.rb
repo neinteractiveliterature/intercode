@@ -4,4 +4,14 @@ class EventsController < ApplicationController
   def index
     @page_title = 'Event List'
   end
+
+  def show
+    render action: 'index'
+  end
+
+  private
+
+  def liquid_assigns
+    super.merge('event' => @event)
+  end
 end

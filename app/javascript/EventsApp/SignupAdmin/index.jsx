@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
+import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditSignup from './EditSignup';
-import eventIdRegexp from '../eventIdRegexp';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import SignupsIndex from './SignupsIndex';
 import { SignupAdminEventQuery } from './queries.gql';
@@ -32,19 +32,20 @@ const SignupAdmin = ({
                   <BreadcrumbItem
                     active={location.pathname.endsWith('admin_signups')}
                     to={`${runPath}/admin_signups?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
+                    pageTitleIfActive={`Signups - ${data.event.title} - ${data.convention.name}`}
                   >
                     Signups
                   </BreadcrumbItem>
                 )}
               </Route>
-              <Route
+              <BreadcrumbItemWithRoute
                 path={`${runPath}/admin_signups/:id/edit`}
-                render={() => (
-                  <li className="breadcrumb-item active">
-                    Edit signup
-                  </li>
-                )}
-              />
+                pageTitleIfActive={`Edit signup - ${data.event.title} - ${data.convention.name}`}
+                to={({ match }) => `${runPath}/admin_signups/${match.params.id}/edit`}
+                hideUnlessMatch
+              >
+                Edit signup
+              </BreadcrumbItemWithRoute>
             </ol>
           </nav>
         )}

@@ -30,6 +30,9 @@ function formatTime(time, timezoneName) {
 class ScheduleGrid extends React.Component {
   static propTypes = {
     config: ConfigPropType,
+    convention: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
     schedule: PropTypes.shape({
       timezoneName: PropTypes.string.isRequired,
       buildLayoutForTimespanRange: PropTypes.func.isRequired,
@@ -45,6 +48,10 @@ class ScheduleGrid extends React.Component {
   static defaultProps = {
     config: defaultConfigProp,
   };
+
+  componentDidMount = () => {
+    window.document.title = `${this.props.config.title} - ${this.props.convention.name}`;
+  }
 
   getPixelWidth = timespan => timespan.getLength('hour') * PIXELS_PER_HOUR
 

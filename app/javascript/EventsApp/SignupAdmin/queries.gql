@@ -105,6 +105,10 @@ fragment UserConProfileSignupsFragment on UserConProfile {
 }
 
 query SignupAdminEventQuery($eventId: Int!) {
+  convention {
+    ...CommonConventionData
+  }
+
   event(id: $eventId) {
     id
     title
@@ -209,8 +213,17 @@ query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
 }
 
 query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
+  convention {
+    ...CommonConventionData
+  }
+
+  currentAbility {
+    can_read_schedule
+  }
+
   event(id: $eventId) {
     id
+    title
     team_member_name
 
     registration_policy {
@@ -226,6 +239,10 @@ query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
       user_con_profile {
         id
       }
+    }
+
+    runs {
+      id
     }
 
     run(id: $runId) {

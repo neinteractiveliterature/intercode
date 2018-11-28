@@ -114,6 +114,10 @@ class StandaloneEditEvent extends React.Component {
     deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
   };
 
+  componentDidMount = () => {
+    window.document.title = `Edit ${this.props.data.event.title} - ${this.props.data.convention.name}`;
+  }
+
   render = () => {
     const {
       data,
