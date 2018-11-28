@@ -13,7 +13,7 @@ import { TeamMembersQuery } from './queries.gql';
 function TeamMemberAdmin({ eventId, eventPath }) {
   return (
     <QueryWithStateDisplay query={TeamMembersQuery} variables={{ eventId }}>
-      {({ data: { event } }) => (
+      {({ data: { event, convention } }) => (
         <>
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
@@ -25,6 +25,7 @@ function TeamMemberAdmin({ eventId, eventPath }) {
               <BreadcrumbItemWithRoute
                 path={`${eventPath}/team_members`}
                 to={`${eventPath}/team_members`}
+                pageTitleIfActive={`${pluralize(humanize(underscore(event.team_member_name)))} - ${event.title} - ${convention.name}`}
                 exact
               >
                 {pluralize(humanize(underscore(event.team_member_name)))}
@@ -32,6 +33,7 @@ function TeamMemberAdmin({ eventId, eventPath }) {
               <BreadcrumbItemWithRoute
                 path={`${eventPath}/team_members/new`}
                 to={`${eventPath}/team_members/new`}
+                pageTitleIfActive={`Add ${event.team_member_name} - ${event.title} - ${convention.name}`}
                 hideUnlessMatch
               >
                 {'Add '}
@@ -40,6 +42,7 @@ function TeamMemberAdmin({ eventId, eventPath }) {
               <BreadcrumbItemWithRoute
                 path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
                 to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
+                pageTitleIfActive={`Edit ${event.team_member_name} - ${event.title} - ${convention.name}`}
                 hideUnlessMatch
               >
                 {({ match }) => event.team_members

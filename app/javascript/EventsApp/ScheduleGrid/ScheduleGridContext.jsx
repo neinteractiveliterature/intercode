@@ -71,6 +71,7 @@ export class ScheduleGridProvider extends React.Component {
       <ScheduleGridContext.Provider
         value={{
           schedule,
+          convention,
           config: this.props.config,
           isRunDetailsVisible: runId => this.state.visibleRunDetailsIds.contains(runId),
           toggleRunDetailsVisibility: this.toggleRunDetailsVisibility,

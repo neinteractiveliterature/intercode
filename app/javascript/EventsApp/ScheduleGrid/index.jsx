@@ -22,11 +22,12 @@ const ScheduleGridApp = ({ configKey, ...otherProps }) => {
       <ScheduleGridProvider config={config}>
         {timespan => (
           <ScheduleGridConsumer>
-            {({ schedule }) => (
+            {({ schedule, convention }) => (
               <ScheduleGrid
                 config={config}
                 schedule={schedule}
                 timespan={timespan}
+                convention={convention}
                 {...otherProps}
               />
             )}

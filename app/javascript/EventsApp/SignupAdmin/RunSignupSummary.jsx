@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
 
+import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
+import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
 import { findBucket } from './SignupUtils';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import RunHeader from './RunHeader';
@@ -43,6 +45,7 @@ class RunSignupSummary extends React.Component {
   static propTypes = {
     eventId: PropTypes.number.isRequired,
     runId: PropTypes.number.isRequired,
+    eventPath: PropTypes.string.isRequired,
   }
 
   renderSignupRow = (signup, registrationPolicy, teamMembers, teamMemberName) => {
@@ -90,14 +93,31 @@ class RunSignupSummary extends React.Component {
   }
 
   render = () => (
-    <div>
-      <RunHeader eventId={this.props.eventId} runId={this.props.runId} />
+    <QueryWithStateDisplay
+      query={RunSignupSummaryQuery}
+      variables={{ eventId: this.props.eventId, runId: this.props.runId }}
+    >
+      {({ data }) => (
+        <>
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <EventBreadcrumbItems
+                event={data.event}
+                convention={data.convention}
+                currentAbility={data.currentAbility}
+                eventPath={this.props.eventPath}
+              />
+              <BreadcrumbItem
+                active
+                pageTitleIfActive={`Signup summary - ${data.event.title} - ${data.convention.name}`}
+              >
+                Signup summary
+              </BreadcrumbItem>
+            </ol>
+          </nav>
 
-      <QueryWithStateDisplay
-        query={RunSignupSummaryQuery}
-        variables={{ eventId: this.props.eventId, runId: this.props.runId }}
-      >
-        {({ data }) => (
+          <RunHeader eventId={this.props.eventId} runId={this.props.runId} />
+
           <table className="table">
             <thead>
               <tr>
@@ -116,9 +136,9 @@ class RunSignupSummary extends React.Component {
               }
             </tbody>
           </table>
-        )}
-      </QueryWithStateDisplay>
-    </div>
+        </>
+      )}
+    </QueryWithStateDisplay>
   )
 }
 

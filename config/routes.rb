@@ -31,6 +31,7 @@ Intercode::Application.routes.draw do
         get 'admin_signups/export' => 'admin_signups#export', as: :export_admin_signups
       end
     end
+    get 'events/:id/(*extra)' => 'events#show', as: :event, constraints: { id: /\d+(-[a-z0-9\-]*)?/ }
     get 'events/(*extra)' => 'events#index', as: :events
 
     get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
