@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import Timespan from '../../../app/javascript/Timespan';
+import Timespan from '../../app/javascript/Timespan';
 
 describe('Timespan', () => {
   const defaultTimespan = new Timespan(moment('2010-01-01T00:00:00Z'), moment('2010-01-02T00:00:00Z'));
