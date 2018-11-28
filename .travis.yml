@@ -14,14 +14,13 @@ before_install:
 - |
   echo '{
     "features": {
-      "buildkit": true,
+      "buildkit": true
     },
     "storage-driver": "overlay2",
     "max-concurrent-downloads": 50,
     "max-concurrent-uploads": 50
   }' | sudo tee /etc/docker/daemon.json
-- sudo service docker restart || sudo journalctl -x
-- exit 1
+- sudo service docker restart
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
   -s`-`uname -m` > docker-compose
