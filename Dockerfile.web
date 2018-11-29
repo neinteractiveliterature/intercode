@@ -93,6 +93,9 @@ FROM production AS test
 
 ENV RAILS_ENV test
 
+USER root
+RUN apk add --no-cache s3cmd
+
 USER www
 WORKDIR /usr/src/app
 
