@@ -74,7 +74,7 @@ ARG RAILS_ENV=production
 
 ENV RAILS_ENV $RAILS_ENV
 
-RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite tzdata
+RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite tzdata curl
 
 RUN addgroup -S www \
   && adduser -G www -S www
