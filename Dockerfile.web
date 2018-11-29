@@ -98,6 +98,7 @@ RUN apk add \
 USER www
 WORKDIR /usr/src/app
 
+COPY --from=build /usr/src/build/node_modules /usr/src/app/node_modules
 RUN mv public/packs public/packs-test \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
   && chmod +x ./cc-test-reporter \
