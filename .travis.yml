@@ -77,8 +77,8 @@ jobs:
       --target production
       --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
-      --cache-from neinteractiveliteruater/intercode:local-build
-      --cache-from neinteractiveliteruater/intercode:build-production-${TRAVIS_COMMIT}
+      --cache-from neinteractiveliterature/intercode:local-build
+      --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
       .
     - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
@@ -90,8 +90,8 @@ jobs:
       --target test
       --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
-      --cache-from neinteractiveliteruater/intercode:local-build
-      --cache-from neinteractiveliteruater/intercode:build-production-${TRAVIS_COMMIT}
+      --cache-from neinteractiveliterature/intercode:local-build
+      --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
       --cache-from neinteractiveliterature/intercode:neinteractiveliterature/intercode:${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
