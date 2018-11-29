@@ -7,10 +7,6 @@ FROM ruby:${RUBY_VERSION}-alpine as build
 RUN apk add \
   --no-cache \
   build-base yarn git postgresql-dev mariadb-connector-c-dev sqlite-dev cmake flex curl python tzdata less bash
-RUN apk add \
-  --no-cache \
-  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
-  s3cmd
 
 RUN mkdir -p /tmp \
   && cd /tmp \
@@ -94,7 +90,10 @@ FROM production AS test
 ENV RAILS_ENV test
 
 USER root
-RUN apk add --no-cache s3cmd
+RUN apk add \
+  --no-cache \
+  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
+  s3cmd
 
 USER www
 WORKDIR /usr/src/app
