@@ -54,9 +54,26 @@ jobs:
     - docker pull neinteractiveliterature/intercode:$BRANCH_TAG || true
     - docker build
       -f Dockerfile.web
-      --target production
-      --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
+      --target build
       --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:latest
+      -t neinteractiveliterature/intercode:local-build
+      .
+    - docker build
+      -f Dockerfile.web
+      --target build-production
+      --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:latest
+      --cache-from neinteractiveliteruater/intercode:local-build
+      -t neinteractiveliterature/intercode:local-build-production
+      .
+    - docker build
+      -f Dockerfile.web
+      --target production
+      --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:latest
+      --cache-from neinteractiveliteruater/intercode:local-build
+      --cache-from neinteractiveliteruater/intercode:local-build-production
       -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
       .
     - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
@@ -66,9 +83,11 @@ jobs:
     - docker build
       -f Dockerfile.web
       --target test
-      --build-arg INTERCODE_TAG=${TRAVIS_COMMIT}
       --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
       --cache-from neinteractiveliterature/intercode:test-$BRANCH_TAG
+      --cache-from neinteractiveliteruater/intercode:local-build
+      --cache-from neinteractiveliteruater/intercode:local-build-production
+      --cache-from neinteractiveliterature/intercode:neinteractiveliterature/intercode:${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
     - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
