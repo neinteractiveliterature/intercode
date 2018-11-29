@@ -74,7 +74,7 @@ ARG RAILS_ENV=production
 
 ENV RAILS_ENV $RAILS_ENV
 
-RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite tzdata curl
+RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite tzdata curl bash
 
 RUN addgroup -S www \
   && adduser -G www -S www
@@ -97,7 +97,6 @@ USER www
 WORKDIR /usr/src/app
 
 RUN mv public/packs public/packs-test \
-  && apk add --no-cache bash \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
   && chmod +x ./cc-test-reporter \
   && ./cc-test-reporter before-build
