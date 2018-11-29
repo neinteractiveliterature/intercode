@@ -51,48 +51,53 @@ jobs:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
     script:
-    - docker pull neinteractiveliterature/intercode:$BRANCH_TAG || true
+    - docker pull neinteractiveliterature/intercode:build-production-${BRANCH_TAG} || true
+    - docker pull neinteractiveliterature/intercode:${BRANCH_TAG} || true
     - docker build
       -f Dockerfile.web
       --target build
-      --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+      --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
       -t neinteractiveliterature/intercode:local-build
       .
     - docker build
       -f Dockerfile.web
       --target build-production
-      --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
       --cache-from neinteractiveliteruater/intercode:local-build
-      -t neinteractiveliterature/intercode:local-build-production
+      --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+      -t neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
       .
+    - docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+    - docker push neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
     - docker build
       -f Dockerfile.web
       --target production
-      --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
       --cache-from neinteractiveliteruater/intercode:local-build
-      --cache-from neinteractiveliteruater/intercode:local-build-production
+      --cache-from neinteractiveliteruater/intercode:build-production-${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
       .
-    - docker push neinteractiveliterature/intercode:$TRAVIS_COMMIT
-    - docker tag neinteractiveliterature/intercode:$TRAVIS_COMMIT neinteractiveliterature/intercode:$BRANCH_TAG
-    - docker push neinteractiveliterature/intercode:$BRANCH_TAG
-    - docker pull neinteractiveliterature/intercode:test-$BRANCH_TAG || true
+    - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+    - docker tag neinteractiveliterature/intercode:${TRAVIS_COMMIT} neinteractiveliterature/intercode:${BRANCH_TAG}
+    - docker push neinteractiveliterature/intercode:${BRANCH_TAG}
+    - docker pull neinteractiveliterature/intercode:test-${BRANCH_TAG} || true
     - docker build
       -f Dockerfile.web
       --target test
-      --cache-from neinteractiveliterature/intercode:$BRANCH_TAG
-      --cache-from neinteractiveliterature/intercode:test-$BRANCH_TAG
+      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+      --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
       --cache-from neinteractiveliteruater/intercode:local-build
-      --cache-from neinteractiveliteruater/intercode:local-build-production
+      --cache-from neinteractiveliteruater/intercode:build-production-${TRAVIS_COMMIT}
       --cache-from neinteractiveliterature/intercode:neinteractiveliterature/intercode:${TRAVIS_COMMIT}
       -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
       .
-    - docker push neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
-    - docker tag neinteractiveliterature/intercode:test-$TRAVIS_COMMIT neinteractiveliterature/intercode:test-$BRANCH_TAG
-    - docker push neinteractiveliterature/intercode:test-$BRANCH_TAG
+    - docker push neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
+    - docker tag neinteractiveliterature/intercode:test-${TRAVIS_COMMIT} neinteractiveliterature/intercode:test-${BRANCH_TAG}
+    - docker push neinteractiveliterature/intercode:test-${BRANCH_TAG}
   - stage: after
     language: generic
     before_script:
