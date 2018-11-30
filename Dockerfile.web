@@ -6,7 +6,7 @@ FROM ruby:${RUBY_VERSION}-alpine as build
 
 RUN apk add \
   --no-cache \
-  build-base yarn git postgresql-dev mariadb-connector-c-dev sqlite-dev cmake flex curl python tzdata less bash
+  build-base yarn git postgresql-dev cmake flex curl python tzdata less bash
 
 RUN mkdir -p /tmp \
   && cd /tmp \
@@ -27,7 +27,7 @@ USER www
 WORKDIR /usr/src/build
 
 COPY Gemfile Gemfile.lock /usr/src/build/
-RUN bundle install -j4 \
+RUN bundle install -j4 --without intercode1_import \
   && rm -rf /usr/local/bundle/cache/*.gem \
   && find /usr/local/bundle/gems -name '*.c' -delete \
   && find /usr/local/bundle/gems -name '*.o' -delete
@@ -60,7 +60,7 @@ ENV AWS_SECRET_ACCESS_KEY dummy
 USER www
 WORKDIR /usr/src/build
 
-RUN DATABASE_URL=sqlite3:db/assets.sqlite3 bundle exec rake assets:precompile \
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
 ### production
@@ -70,7 +70,7 @@ ARG RAILS_ENV=production
 
 ENV RAILS_ENV $RAILS_ENV
 
-RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite-libs tzdata curl bash
+RUN apk add --no-cache yarn postgresql-libs postgresql-client tzdata curl bash
 
 RUN addgroup -S www \
   && adduser -G www -S www

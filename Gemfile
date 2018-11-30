@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 ruby '2.5.3'
 gem 'rails', '5.2.1.1'
 
-gem 'sqlite3', groups: [:development, :test]
-gem 'mysql2', '~> 0.5.2'
 gem 'pg'
 gem 'puma'
 
@@ -129,6 +127,7 @@ group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
   gem 'reverse_markdown'
+  gem 'mysql2', '~> 0.5.2'
 end
 
 group :test do
