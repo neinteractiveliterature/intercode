@@ -7,10 +7,6 @@ FROM ruby:${RUBY_VERSION}-alpine as build
 RUN apk add \
   --no-cache \
   build-base yarn git postgresql-dev mariadb-connector-c-dev sqlite-dev cmake flex curl python tzdata less bash
-RUN apk add \
-  --no-cache \
-  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
-  s3cmd
 
 RUN mkdir -p /tmp \
   && cd /tmp \
@@ -51,22 +47,6 @@ RUN mv /usr/src/build /usr/src/app
 USER www
 WORKDIR /usr/src/app
 
-### test
-
-FROM build AS test
-
-COPY --chown=www:www . /usr/src/build
-
-ENV RAILS_ENV test
-
-USER www
-WORKDIR /usr/src/build
-
-RUN bin/webpack \
-  && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
-  && chmod +x ./cc-test-reporter \
-  && ./cc-test-reporter before-build
-
 ### build-production
 
 FROM build AS build-production
@@ -90,7 +70,7 @@ ARG RAILS_ENV=production
 
 ENV RAILS_ENV $RAILS_ENV
 
-RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite tzdata
+RUN apk add --no-cache yarn postgresql-libs mariadb-connector-c sqlite-libs tzdata curl bash
 
 RUN addgroup -S www \
   && adduser -G www -S www
@@ -102,3 +82,24 @@ COPY --from=build-production --chown=www /usr/src/build /usr/src/app
 WORKDIR /usr/src/app
 
 CMD bundle exec rails server -p $PORT -b 0.0.0.0
+
+### test
+
+FROM production AS test
+
+ENV RAILS_ENV test
+
+USER root
+RUN apk add \
+  --no-cache \
+  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
+  s3cmd
+
+USER www
+WORKDIR /usr/src/app
+
+COPY --from=build /usr/src/build/node_modules /usr/src/app/node_modules
+RUN mv public/packs public/packs-test \
+  && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
+  && chmod +x ./cc-test-reporter \
+  && ./cc-test-reporter before-build

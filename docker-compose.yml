@@ -1,0 +1,51 @@
+version: '3.4'
+
+x-dev-service: &dev-service
+  build:
+    context: .
+    dockerfile: Dockerfile.web
+    target: dev
+  environment:
+    RAILS_ENV: development
+  env_file: .env.development.local
+  user: www
+  volumes:
+    - .:/usr/src/app
+    - node_modules:/usr/src/app/node_modules
+
+services:
+  cat:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      target: dev
+    env_file: .env.development.local
+    user: www
+    volumes:
+      - .:/usr/src/app:cached
+      - node_modules:/usr/src/app/node_modules
+    command: cat
+    tty: true
+    stdin_open: true
+    ports:
+      - "3035:3035"
+      - "5000:5000"
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    environment:
+      RAILS_ENV: development
+      DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
+      TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
+  postgres:
+    image: postgres:10.4
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  node_modules:
+  pgdata:

@@ -46,3 +46,5 @@ cookbooks
 # If the dev is keeping pgdumps around for debugging, ignore those
 /*.pgdump
 
+# Hey, Threeman is pretty great.  Have you heard about it?  I recommend it a lot.
+/.threeman
