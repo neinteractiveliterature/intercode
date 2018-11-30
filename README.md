@@ -14,20 +14,35 @@ The original Intercode was written in PHP by Barry Tannenbaum for Intercon New E
 
 Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more flexible, and more modern.
 
+# Overall Architecture
+
+* **Backend**: Ruby on Rails application exposing a GraphQL API and an OpenID Connect-enabled OAuth2 server
+* **Frontend**: React and Apollo-based JavaScript app with some single-page app behavior, moving towards a fully single-page app
+* **Database engine**: PostgreSQL
+* **Background queue system**: Amazon SQS (this might change in the future)
+* **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Heroku](https://heroku.com) and running it as Docker containers (as opposed to using buildpacks).  In fact, trying to use Heroku buildpacks with this app won't work, because we use the C++-based libgraphqlparser on the server.  (If you figure out a way to make that work with buildpacks, please let @nbudin know, because he would really like to know.)
+
+# Getting Started with Developing Intercode
+
+* Intercode 2 in development mode uses `intercode.test` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.test` domain name.
+* We support (for now, at least) two development workflows: Docker Compose, and running Rails locally.  See the steps for both workflows below.
+
 # Developer Quickstart with Docker Compose
 
 This is a containerized development setup, and should work on Linux, macOS, and Windows.
 
 1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode.git`
-2. Install Docker Community Edition: https://store.docker.com/search?type=edition&offering=community
-  * Optional, but recommended: on macOS, if you have the RAM to spare, we recommend increasing Docker's memory to 4GB.  (Go to Preferences -> Advanced to do this.)
-3: From the Intercode source folder:
+2.
+  Install Docker Community Edition: https://store.docker.com/search?type=edition&offering=community<br/>
+  * _Optional, but recommended: on macOS, if you have the RAM to spare, we recommend increasing Docker's memory to 4GB.  (Go to Preferences -> Advanced to do this.)_
+3. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode.test`
+4. From the Intercode source folder:
   1. Build and start the Docker image for Intercode: `docker-compose up -d` (this will take awhile)
   2. Install JavaScript packages: `docker-compose exec cat yarn install`
   3. Set up the database: `docker-compose exec cat bin/rails db:create db:migrate`
   4. Start up the Intercode server: `docker-compose exec cat bin/rails server`
   5. Start up the Webpack server: `docker-compose exec cat bin/webpack-dev-server`
-4. You should now be able to go to http://intercode.dev:5000 and see the app running!
+5. You should now be able to go to http://intercode.test:5000 and see the app running!
 
 If you want to automate the server running part of this, we shamelessly recommend
 [Threeman](https://github.com/patientslikeme/threeman) for Mac and Linux users.
@@ -42,7 +57,7 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 4. Install [ruby-build](https://github.com/sstephenson/ruby-build#readme)
 5. Install the Ruby version Intercode requires: `rbenv install`
 6. Install Bundler: `gem install bundler`
-7. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode.dev`
+7. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode.test`
 8. From the Intercode source folder:
   1. Install all the dependencies of Intercode:
     1. Install PostgreSQL. With Homebrew: `brew install postgres`
@@ -53,9 +68,7 @@ This is the classic Rails development setup, and should work for Mac and Linux u
   3. Install JavaScript packages: `yarn install`
   4. Start up the Intercode server: `bin/rails server`
   5. Start up the Webpack server: `bin/webpack-dev-server`
-9. You should now be able to go to http://intercode.dev:3000 and see the app running!
-
-**IMPORTANT NOTE:** Intercode 2 in development mode uses `intercode.dev` as its cookie domain.  If you use `localhost` to visit the site, that will mysteriously fail.  I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.dev` domain name.
+9. You should now be able to go to http://intercode.test:3000 and see the app running!
 
 # Contacting us
 
