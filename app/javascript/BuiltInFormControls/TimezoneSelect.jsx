@@ -90,6 +90,7 @@ class TimezoneSelect extends React.Component {
         <Select
           id={selectId}
           options={this.state.options}
+          isClearable
           value={getTimezoneOptionsByName()[value]}
           onInputChange={input => this.filterOptions(input)}
           onChange={(newValue) => { onChange(newValue.value); }}

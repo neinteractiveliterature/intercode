@@ -169,6 +169,7 @@ class ConventionForm extends React.Component {
           name="default_layout_id"
           label="Default layout for pages"
           value={this.state.convention.default_layout}
+          isClearable
           getOptionValue={option => option.id}
           getOptionLabel={option => option.name}
           options={this.props.cmsLayouts}
@@ -179,6 +180,7 @@ class ConventionForm extends React.Component {
           name="root_page_id"
           label="Root page"
           value={this.state.convention.root_page}
+          isClearable
           getOptionValue={option => option.id}
           getOptionLabel={option => option.name}
           options={this.props.pages}

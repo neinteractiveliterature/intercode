@@ -29,6 +29,7 @@ class UserSelect extends React.PureComponent {
 
   render = () => (
     <GraphQLAsyncSelect
+      isClearable
       getOptions={data => data.users_paginated.entries}
       getOptionValue={option => option.id}
       getOptionLabel={option => option.name}
