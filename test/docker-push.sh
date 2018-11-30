@@ -1,6 +1,7 @@
 #!/bin/bash
 
 if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
+  docker pull neinteractiveliterature/intercode:$TRAVIS_COMMIT
   docker tag neinteractiveliterature/intercode:$TRAVIS_COMMIT neinteractiveliterature/intercode:latest
   docker push neinteractiveliterature/intercode:latest
 
