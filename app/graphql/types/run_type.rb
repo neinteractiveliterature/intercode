@@ -78,6 +78,12 @@ Types::RunType = GraphQL::ObjectType.define do
     }
   end
 
+  field :current_ability_can_signup_summary_run, !types.Boolean do
+    resolve -> (obj, _args, ctx) do
+      ModelPermissionLoader.for(Run).load([ctx[:current_ability], :signup_summary, obj.id])
+    end
+  end
+
   field :signups_paginated, Types::SignupsPaginationType.to_non_null_type do
     argument :page, types.Int
     argument :per_page, types.Int

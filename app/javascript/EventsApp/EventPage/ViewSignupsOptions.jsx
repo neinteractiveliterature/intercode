@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-function ViewSignupsOptions({ event, eventPath, run, currentAbility }) {
+function ViewSignupsOptions({
+  event, eventPath, run, currentAbility,
+}) {
   if (currentAbility.can_read_event_signups) {
     return (
       <div className="card-footer text-center">
@@ -10,7 +12,7 @@ function ViewSignupsOptions({ event, eventPath, run, currentAbility }) {
           View signups
         </Link>
         {
-          currentAbility.can_signup_summary_event && !event.private_signup_list
+          run.current_ability_can_signup_summary_run && !event.private_signup_list
             ? (
               <>
                 <br />
@@ -25,7 +27,7 @@ function ViewSignupsOptions({ event, eventPath, run, currentAbility }) {
     );
   }
 
-  if (currentAbility.can_signup_summary_event) {
+  if (run.current_ability_can_signup_summary_run) {
     return (
       <div className="card-footer text-center">
         <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>
@@ -47,10 +49,10 @@ ViewSignupsOptions.propTypes = {
   eventPath: PropTypes.string.isRequired,
   run: PropTypes.shape({
     id: PropTypes.number.isRequired,
+    current_ability_can_signup_summary_run: PropTypes.bool.isRequired,
   }).isRequired,
   currentAbility: PropTypes.shape({
     can_read_event_signups: PropTypes.bool.isRequired,
-    can_signup_summary_event: PropTypes.bool.isRequired,
   }).isRequired,
 };
 
