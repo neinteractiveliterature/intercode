@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "${LANGUAGE}" = "ruby" ]; then
-  if [ "${DATABASE}" = "mysql" ]; then
-    ./wait-for-it.sh mysql:3306
-  elif [ "${DATABASE}" = "postgresql" ]; then
-    ./wait-for-it.sh postgres:5432
-  fi
+  ./wait-for-it.sh postgres:5432
 
   echo "Setting up Intercode"
   RAILS_ENV=development bin/rake db:create db:migrate db:test:prepare
