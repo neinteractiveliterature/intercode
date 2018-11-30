@@ -7,6 +7,19 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const { config } = require('@rails/webpacker');
 const getStyleRule = require('@rails/webpacker/package/utils/get_style_rule');
+const threadLoader = require('thread-loader');
+
+threadLoader.warmup({
+  // pool options, like passed to loader options
+  // must match loader options to boot the correct pool
+}, [
+  // modules to load
+  // can be any module, i. e.
+  'babel-loader',
+  '@babel/preset-env',
+  'sass-loader',
+  'graphql-tag/loader'
+]);
 
 // I got really fed up with Webpacker's config management.  It reinvents a whole lot of wheels.
 //
@@ -27,6 +40,30 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.(jpg|jpeg|png|gif|tiff|ico|svg|eot|otf|ttf|woff|woff2)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name]-[hash].[ext]',
+              context: path.join(config.source_path),
+            }
+          }
+        ]
+      },
+      getStyleRule(/\.(css)$/i),
+      getStyleRule(/\.(scss|sass)$/i, false, [
+        {
+          loader: 'sass-loader',
+          options: { sourceMap: true },
+        },
+      ]),
+      {
+        use: {
+          loader: 'thread-loader'
+        },
+      },
       {
         test: /\.mjs$/,
         include: /node_modules/,
@@ -51,32 +88,6 @@ module.exports = {
             }
           }
         ],
-      },
-      getStyleRule(/\.(css)$/i),
-      getStyleRule(/\.(scss|sass)$/i, false, [
-        {
-          loader: 'sass-loader',
-          options: { sourceMap: true },
-        },
-      ]),
-      getStyleRule(/\.(css)$/i, true),
-      getStyleRule(/\.(scss|sass)$/i, true, [
-        {
-          loader: 'sass-loader',
-          options: { sourceMap: true },
-        },
-      ]),
-      {
-        test: /\.(jpg|jpeg|png|gif|tiff|ico|svg|eot|otf|ttf|woff|woff2)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[path][name]-[hash].[ext]',
-              context: path.join(config.source_path),
-            }
-          }
-        ]
       },
       {
         test: /\.(gql|graphql)$/,
