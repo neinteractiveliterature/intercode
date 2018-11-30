@@ -34,7 +34,7 @@ function encodeFilterValue(field, value) {
   return value;
 }
 
-class EventList extends React.PureComponent {
+class EventList extends React.Component {
   renderPagination = (eventsPaginated, onPageChange, extraClasses) => {
     const {
       current_page: currentPage,
