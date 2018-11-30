@@ -30,9 +30,9 @@ before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 script:
 - docker pull neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
-- docker-compose -f docker-compose.test.yml -f docker-compose.${DATABASE,,}.yml run
+- docker-compose -f docker-compose.test.yml run
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  -e LANGUAGE=$LANGUAGE -e DATABASE=$DATABASE
+  -e LANGUAGE=$LANGUAGE
   -e CI=$CI -e TRAVIS=$TRAVIS -e TRAVIS_COMMIT=$TRAVIS_COMMIT
   -e TRAVIS_BRANCH=$TRAVIS_BRANCH -e TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
   -e TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA
@@ -109,7 +109,7 @@ jobs:
     script:
     - test/docker-push.sh
     - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
-    - "./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json
+    - "./cc-test-reporter sum-coverage --output - --parts 2 coverage/codeclimate.*.json
       | ./cc-test-reporter upload-coverage --input -"
 notifications:
   slack:
@@ -127,9 +127,7 @@ env:
   - secure: UuIzUbDax08gPFnSVD2bB6ma5lSQsPMEgaDgRJEpqMR/5zZ5enSMv1QG5uiW4W6spKqXbM2wRiAxLEfMU1h/MJqNz5trA1+hss8wjHcCcbnTeILv9Qdrn0IUKzsY5JfkqHtQSesLUAmof3AwdP+SZOFZaQ0EQy6BLmulbuP9gfI=
   - secure: l+zizfE9Ve5rOhcXraFA7PEaY6Z5gdlB0lZfL28LFSDOQqKwFA1Gl4FTNusaKbTU8dRLAN+RiRkUMQ+l7E99gBUievqkri7786ZopeStjAG1yQ5yeJe03Knq2Kh8GGhb3K/6WjMPVfOYZtrxVZZZh3LXJ4AnmgjP6g9ptKv6JCM=
   matrix:
-  - DATABASE=sqlite LANGUAGE=ruby
-  - DATABASE=mysql LANGUAGE=ruby
-  - DATABASE=postgresql LANGUAGE=ruby
+  - LANGUAGE=ruby
   - LANGUAGE=javascript
 addons:
   code_climate:

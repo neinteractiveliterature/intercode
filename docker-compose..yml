@@ -1,3 +1,0 @@
-version: '3.4'
-# This is just here for when Travis runs with DATABASE set to an empty string.  It doesn't do
-# anything extra.
