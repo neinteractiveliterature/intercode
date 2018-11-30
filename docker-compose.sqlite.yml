@@ -1,6 +1,0 @@
-version: '3.4'
-services:
-  web:
-    environment:
-      DEVELOPMENT_DATABASE_URL: sqlite3:db/development.sqlite3
-      TEST_DATABASE_URL: sqlite3:db/test.sqlite3
