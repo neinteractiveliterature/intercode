@@ -34,6 +34,8 @@ en:
     applications:
       index:
         title: OAuth2 applications
+      help:
+        native_redirect_uri: 'Use %{native_redirect_uri} for non-web applications'
     authorized_applications:
       index:
         title: Authorized applications
