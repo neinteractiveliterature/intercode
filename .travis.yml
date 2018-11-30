@@ -109,7 +109,7 @@ jobs:
     script:
     - test/docker-push.sh
     - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
-    - "./cc-test-reporter sum-coverage --output - --parts 4 coverage/codeclimate.*.json
+    - "./cc-test-reporter sum-coverage --output - --parts 2 coverage/codeclimate.*.json
       | ./cc-test-reporter upload-coverage --input -"
 notifications:
   slack:
