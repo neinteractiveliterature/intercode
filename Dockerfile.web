@@ -60,7 +60,7 @@ ENV AWS_SECRET_ACCESS_KEY dummy
 USER www
 WORKDIR /usr/src/build
 
-RUN DATABASE_URL=sqlite3:db/assets.sqlite3 bundle exec rake assets:precompile \
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
 ### production
