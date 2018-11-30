@@ -219,6 +219,7 @@ class UserActivityAlertForm extends React.Component {
                   <React.Fragment>
                     <Select
                       options={this.props.convention.staff_positions}
+                      isClearable
                       getOptionValue={option => option.id}
                       getOptionLabel={option => option.name}
                       value={null}
