@@ -9,6 +9,8 @@ class CommitableInput extends React.Component {
     onCancel: PropTypes.func,
     className: PropTypes.string,
     disabled: PropTypes.bool,
+    renderInput: PropTypes.func,
+    placeholder: PropTypes.string,
   };
 
   static defaultProps = {
@@ -16,6 +18,8 @@ class CommitableInput extends React.Component {
     className: null,
     onCancel: null,
     disabled: false,
+    renderInput: null,
+    placeholder: null,
   };
 
   constructor(props) {
@@ -93,18 +97,21 @@ class CommitableInput extends React.Component {
       className: classNames('form-control', this.props.className),
       onChange: this.inputChange,
       ref: (element) => { this.input = element; },
+      placeholder: this.props.placeholder,
     };
+
+    const renderInput = this.props.renderInput || (props => <input {...props} />);
 
     if (this.state.editing) {
       return (
         <div className="input-group">
-          <input
-            {...inputProps}
-            onBlur={this.blur}
-            value={this.state.editingValue || ''}
-            onKeyDown={this.keyDownInInput}
-            disabled={this.state.commitInProgress}
-          />
+          {renderInput({
+            ...inputProps,
+            onBlur: this.blur,
+            value: this.state.editingValue || '',
+            onKeyDown: this.keyDownInInput,
+            disabled: this.state.commitInProgress,
+          })}
           <div className="input-group-append">
             <button
               type="button"
@@ -129,12 +136,12 @@ class CommitableInput extends React.Component {
 
     return (
       <div className="input-group">
-        <input
-          {...inputProps}
-          value={this.props.value || ''}
-          onFocus={this.beginEditing}
-          disabled={this.props.disabled}
-        />
+        {renderInput({
+          ...inputProps,
+          value: this.props.value || '',
+          onFocus: this.beginEditing,
+          disabled: this.props.disabled,
+        })}
       </div>
     );
   }
