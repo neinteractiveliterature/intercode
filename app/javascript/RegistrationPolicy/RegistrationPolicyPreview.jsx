@@ -33,6 +33,7 @@ function RegistrationPolicyPreview({ registrationPolicy }) {
                   waitlisted: blankSignupCounts,
                 }),
               }}
+              signupsAvailable
             />
             <SignupButtons signupOptions={signupOptions.mainPreference} />
             <SignupButtons signupOptions={signupOptions.mainNoPreference} />
