@@ -51,14 +51,13 @@ jobs:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - test/docker-pull.sh
     script:
-    - docker pull neinteractiveliterature/intercode:build-production-${BRANCH_TAG} || true
-    - docker pull neinteractiveliterature/intercode:${BRANCH_TAG} || true
     - docker build
       -f Dockerfile.web
       --target build
       --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+      --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
+      --cache-from neinteractiveliterature/intercode:build-latest
       -t neinteractiveliterature/intercode:local-build
       .
     - docker build
@@ -68,6 +67,7 @@ jobs:
       --cache-from neinteractiveliterature/intercode:latest
       --cache-from neinteractiveliterature/intercode:local-build
       --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+      --cache-from neinteractiveliterature/intercode:build-production-latest
       -t neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
       .
     - docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
