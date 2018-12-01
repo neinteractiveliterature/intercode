@@ -42,7 +42,7 @@ describe('RegistrationPolicyEditor', () => {
 
   test('basic layout', () => {
     const component = renderRegistrationPolicyEditor();
-    expect(component.find('th').length).toEqual(4);
+    expect(component.find('th').length).toEqual(3);
     expect(component.find(RegistrationBucketRow).length).toEqual(1);
     expect(component.find('ul button').length).toEqual(2);
   });
@@ -50,18 +50,19 @@ describe('RegistrationPolicyEditor', () => {
   test('lockNameAndDescription', () => {
     const component = renderRegistrationPolicyEditor({ lockNameAndDescription: true });
     expect(component.find('th').length).toEqual(3);
-    expect(component.text()).not.toMatch(/a bucket for testing/);
+    expect(component.find('table').text()).toMatch(/test/);
+    expect(component.find('table').text()).not.toMatch(/a bucket for testing/);
   });
 
   test('lockLimitedBuckets', () => {
     const component = renderRegistrationPolicyEditor({ lockLimitedBuckets: ['testBucket'] });
-    expect(component.find('th').length).toEqual(4);
+    expect(component.find('th').length).toEqual(3);
     expect(component.find('input[type="checkbox"]').length).toEqual(0);
   });
 
   test('lockDeleteBuckets', () => {
     const component = renderRegistrationPolicyEditor({ lockDeleteBuckets: ['testBucket'] });
-    expect(component.find('th').length).toEqual(4);
+    expect(component.find('th').length).toEqual(3);
     expect(component.find('i.fa-trash-o').length).toEqual(0);
   });
 
@@ -102,8 +103,10 @@ describe('RegistrationPolicyEditor', () => {
 
   describe('with presets', () => {
     const preset = defaultPresets.find(aPreset => aPreset.name === 'Limited slots by gender (classic Intercon-style)');
-    const presetBuckets = preset.policy.buckets.map(presetBucket =>
-      ({ ...defaultRegistrationPolicyBucket, ...presetBucket }));
+    const presetBuckets = preset.policy.buckets.map(presetBucket => ({
+      ...defaultRegistrationPolicyBucket,
+      ...presetBucket,
+    }));
 
     test('renders the selector by default', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, []);
@@ -126,7 +129,8 @@ describe('RegistrationPolicyEditor', () => {
     test('locks name and description for matching buckets when in a preset', () => {
       const component = renderRegistrationPolicyEditor({ presets: defaultPresets }, presetBuckets);
       expect(component.find('th').length).toEqual(3);
-      expect(component.text()).not.toMatch(new RegExp(presetBuckets[0].description));
+      expect(component.find('tbody tr').at(0).text()).toMatch(new RegExp(presetBuckets[0].name));
+      expect(component.find('tbody tr').at(0).text()).not.toMatch(new RegExp(presetBuckets[0].description));
     });
 
     test('locks limited for matching buckets when in a preset', () => {

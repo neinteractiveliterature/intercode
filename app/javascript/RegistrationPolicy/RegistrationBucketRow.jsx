@@ -4,8 +4,8 @@ import { ConfirmModal } from 'react-bootstrap4-modal';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
 
+import CommitableInput from '../BuiltInFormControls/CommitableInput';
 import HelpPopover from '../UIComponents/HelpPopover';
-import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import RegistrationPolicyBucket from './RegistrationPolicyBucket';
 
 class RegistrationBucketRow extends React.Component {
@@ -103,7 +103,7 @@ class RegistrationBucketRow extends React.Component {
     const exposeAttendeesId = this.nextUniqueId();
 
     return (
-      <div className="mr-2">
+      <div className="ml-2">
         <div className="form-check">
           <label className="form-check-label text-nowrap" htmlFor={unlimitedId}>
             <input
@@ -183,7 +183,7 @@ class RegistrationBucketRow extends React.Component {
       label,
       field,
       min,
-    }, i) => {
+    }) => {
       const inputId = this.nextUniqueId();
       let value = bucket.get(field);
       if (value == null) {
@@ -191,13 +191,13 @@ class RegistrationBucketRow extends React.Component {
       }
 
       return (
-        <div className={classNames('d-inline-flex', { 'ml-1': i > 0 })} key={field}>
-          <label htmlFor={inputId}>{label}</label>
+        <div key={field} className={this.props.lockLimited ? 'd-inline mr-2' : null}>
+          <label htmlFor={inputId} className="d-inline">{label}</label>
           <input
             id={inputId}
             type="number"
             size="2"
-            className="form-control form-control-sm ml-1"
+            className="form-control form-control-sm d-inline ml-1"
             min={min}
             placeholder={label}
             value={value}
@@ -209,7 +209,7 @@ class RegistrationBucketRow extends React.Component {
     });
 
     return (
-      <div className="form-inline ml-1 flex-nowrap">
+      <div>
         {slotControls}
       </div>
     );
@@ -225,17 +225,20 @@ class RegistrationBucketRow extends React.Component {
     }
 
     return [
-      <td key="name">
-        <InPlaceEditor
-          value={this.props.registrationBucket.name}
-          onChange={this.nameChanged}
-        />
-      </td>,
+      <td key="nameAndDescription" style={{ width: '19rem' }}>
+        <div className="mb-1">
+          <CommitableInput
+            value={this.props.registrationBucket.name}
+            onChange={this.nameChanged}
+            placeholder="Bucket name"
+          />
+        </div>
 
-      <td key="description">
-        <InPlaceEditor
+        <CommitableInput
           value={this.props.registrationBucket.description}
           onChange={this.descriptionChanged}
+          renderInput={props => <textarea rows={2} {...props} />}
+          placeholder="Bucket description"
         />
       </td>,
     ];
@@ -243,12 +246,12 @@ class RegistrationBucketRow extends React.Component {
 
   renderActions = () => {
     if (this.props.lockDelete) {
-      return <td />;
+      return <td style={{ width: 0 }} />;
     }
 
     return (
-      <td>
-        <button className="btn btn-sm btn-secondary" onClick={this.beginDelete}>
+      <td style={{ width: '30px' }}>
+        <button className="btn btn-sm btn-secondary" onClick={this.beginDelete} type="button">
           <i className="fa fa-trash-o" />
         </button>
 
@@ -266,9 +269,11 @@ class RegistrationBucketRow extends React.Component {
   render = () => (
     <tr className={classNames({ 'anything-bucket': this.props.registrationBucket.get('anything') })}>
       {this.renderNameAndDescription()}
-      <td className="d-flex">
-        {this.renderBucketFlags()}
-        {this.renderLimits()}
+      <td style={{ width: '20rem' }}>
+        <div className="d-flex">
+          {this.renderLimits()}
+          {this.renderBucketFlags()}
+        </div>
       </td>
       {this.renderActions()}
     </tr>
