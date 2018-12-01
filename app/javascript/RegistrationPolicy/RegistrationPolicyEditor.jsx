@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { List } from 'immutable';
-import classNames from 'classnames';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import {
