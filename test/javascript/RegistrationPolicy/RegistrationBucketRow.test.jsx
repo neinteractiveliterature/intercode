@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import InPlaceEditor from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
+import CommitableInput from '../../../app/javascript/BuiltInFormControls/CommitableInput';
 import RegistrationPolicyBucket from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyBucket';
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 
@@ -49,13 +49,16 @@ describe('RegistrationBucketRow', () => {
   test('it renders the correct field values', () => {
     const component = renderRegistrationBucketRow();
     expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(0).text()).toEqual('test');
-    expect(component.find('td').at(1).text()).toEqual('a bucket for testing');
-    expect(component.find('td').at(2).find('input[type="checkbox"]').at(0)
+    expect(component.find('td').at(0).find(CommitableInput)).toHaveLength(2);
+    expect(component.find('td').at(0).find(CommitableInput).at(0)
+      .prop('value')).toEqual('test');
+    expect(component.find('td').at(0).find(CommitableInput).at(1)
+      .prop('value')).toEqual('a bucket for testing');
+    expect(component.find('td').at(1).find('input[type="checkbox"]').at(0)
       .prop('checked')).toBeFalsy(); // unlimited
-    expect(component.find('td').at(2).find('input[type="checkbox"]').at(1)
+    expect(component.find('td').at(1).find('input[type="checkbox"]').at(1)
       .prop('checked')).toBeTruthy(); // counted
-    expect(component.find('td').at(2).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+    expect(component.find('td').at(1).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
       2,
       5,
       10,
@@ -81,10 +84,9 @@ describe('RegistrationBucketRow', () => {
   test('lockLimited', () => {
     const component = renderRegistrationBucketRow({ lockLimited: true });
     expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(0).text()).toEqual('test');
-    expect(component.find('td').at(1).text()).toEqual('a bucket for testing');
-    expect(component.find('td').at(2).find('input[type="checkbox"]').length).toEqual(0);
-    expect(component.find('td').at(2).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
+    expect(component.find('td').at(0).find(CommitableInput)).toHaveLength(2);
+    expect(component.find('td').at(1).find('input[type="checkbox"]')).toHaveLength(0);
+    expect(component.find('td').at(1).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
       2,
       5,
       10,
@@ -94,7 +96,7 @@ describe('RegistrationBucketRow', () => {
   test('lockDelete', () => {
     const component = renderRegistrationBucketRow({ lockDelete: true });
     expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(3).find('button').length).toEqual(0);
+    expect(component.find('td').at(2).find('button').length).toEqual(0);
   });
 
   test('anything bucket renders properly', () => {
@@ -104,7 +106,8 @@ describe('RegistrationBucketRow', () => {
 
   test('changing the name', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(0).find(InPlaceEditor).prop('onChange')('new name');
+    component.find('td').at(0).find(CommitableInput).at(0)
+      .prop('onChange')('new name');
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('name')).toEqual('new name');
     expect(onChange.mock.calls[0][1].get('key')).toEqual('testBucket');
@@ -112,14 +115,15 @@ describe('RegistrationBucketRow', () => {
 
   test('changing the description', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(1).find(InPlaceEditor).prop('onChange')('a new description');
+    component.find('td').at(0).find(CommitableInput).at(1)
+      .prop('onChange')('a new description');
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('description')).toEqual('a new description');
   });
 
   test('changing unlimited checkbox', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('input[type="checkbox"]').at(0)
+    component.find('td').at(1).find('input[type="checkbox"]').at(0)
       .simulate('change', { target: { checked: true } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('slotsLimited')).toEqual(false);
@@ -127,7 +131,7 @@ describe('RegistrationBucketRow', () => {
 
   test('changing counted checkbox', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('input[type="checkbox"]').at(1)
+    component.find('td').at(1).find('input[type="checkbox"]').at(1)
       .simulate('change', { target: { checked: false } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('notCounted')).toEqual(true);
@@ -135,7 +139,7 @@ describe('RegistrationBucketRow', () => {
 
   test('changing minimumSlots', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('input[type="number"]').at(0)
+    component.find('td').at(1).find('input[type="number"]').at(0)
       .simulate('change', { target: { value: 4 } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('minimumSlots')).toEqual(4);
@@ -143,7 +147,7 @@ describe('RegistrationBucketRow', () => {
 
   test('changing preferredSlots', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('input[type="number"]').at(1)
+    component.find('td').at(1).find('input[type="number"]').at(1)
       .simulate('change', { target: { value: 6 } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('preferredSlots')).toEqual(6);
@@ -151,7 +155,7 @@ describe('RegistrationBucketRow', () => {
 
   test('changing totalSlots', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('input[type="number"]').at(2)
+    component.find('td').at(1).find('input[type="number"]').at(2)
       .simulate('change', { target: { value: 55 } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].get('totalSlots')).toEqual(55);
@@ -159,7 +163,7 @@ describe('RegistrationBucketRow', () => {
 
   test('deleting', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(3).find('button').at(0)
+    component.find('td').at(2).find('button').at(0)
       .simulate('click');
     component.find(ConfirmModal).find('button').at(1).simulate('click');
     expect(onDelete.mock.calls[0][0]).toEqual('testBucket');
@@ -167,7 +171,7 @@ describe('RegistrationBucketRow', () => {
 
   test('canceling delete', () => {
     const component = renderRegistrationBucketRow();
-    component.find('td').at(3).find('button').at(0)
+    component.find('td').at(2).find('button').at(0)
       .simulate('click');
     component.find(ConfirmModal).find('button').at(0).simulate('click');
     expect(onDelete.mock.calls[0]).toBeFalsy();
