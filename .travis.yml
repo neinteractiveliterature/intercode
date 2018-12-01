@@ -57,7 +57,7 @@ jobs:
       --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
-      --cache-from neinteractiveliterature/intercode:build-latest
+      --cache-from neinteractiveliterature/intercode:build-master
       -t neinteractiveliterature/intercode:local-build
       .
     - docker build
@@ -67,7 +67,7 @@ jobs:
       --cache-from neinteractiveliterature/intercode:latest
       --cache-from neinteractiveliterature/intercode:local-build
       --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:build-production-latest
+      --cache-from neinteractiveliterature/intercode:build-production-master
       -t neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
       .
     - docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
