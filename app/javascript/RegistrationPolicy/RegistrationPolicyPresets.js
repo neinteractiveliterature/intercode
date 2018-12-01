@@ -53,15 +53,15 @@ const presets = [
     policy: {
       buckets: [
         {
-          key: 'horde',
-          name: 'Horde',
-          description: 'Players who will be playing multiple characters over the course of the game',
-          slots_limited: true,
-        },
-        {
           key: 'cast',
           name: 'Cast',
           description: 'Players who will have one character for the entire game',
+          slots_limited: true,
+        },
+        {
+          key: 'horde',
+          name: 'Horde',
+          description: 'Players who will be playing multiple characters over the course of the game',
           slots_limited: true,
         },
       ],
@@ -72,15 +72,15 @@ const presets = [
     policy: {
       buckets: [
         {
-          key: 'male',
-          name: 'Male role',
-          description: 'Male characters',
-          slots_limited: true,
-        },
-        {
           key: 'female',
           name: 'Female role',
           description: 'Female characters',
+          slots_limited: true,
+        },
+        {
+          key: 'male',
+          name: 'Male role',
+          description: 'Male characters',
           slots_limited: true,
         },
         {

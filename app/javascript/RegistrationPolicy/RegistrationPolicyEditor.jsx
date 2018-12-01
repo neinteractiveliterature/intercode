@@ -12,6 +12,7 @@ import {
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import RegistrationBucketRow from './RegistrationBucketRow';
 import RegistrationPolicy from './RegistrationPolicy';
+import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
@@ -47,12 +48,12 @@ class RegistrationPolicyEditor extends React.Component {
     this.state = {
       custom: initiallyCustom,
       preset: initialPreset,
+      showingPreview: false,
     };
   }
 
   getHeaderLabels = () => [
-    'Bucket name',
-    ...(this.state.preset || this.props.lockNameAndDescription ? [] : ['Description']),
+    this.state.preset || this.props.lockNameAndDescription ? 'Bucket name' : 'Bucket name/description',
     'Limits',
     '',
   ]
@@ -188,20 +189,20 @@ class RegistrationPolicyEditor extends React.Component {
     }
 
     return (
-      <ul className="list-inline">
-        <li className="list-inline-item">
-          Min:
+      <>
+        <span className="mr-2">
+          {'Min: '}
           {this.props.registrationPolicy.getMinimumSlots()}
-        </li>
-        <li className="list-inline-item">
-          Pref:
+        </span>
+        <span className="mr-2">
+          {'Pref: '}
           {this.props.registrationPolicy.getPreferredSlots()}
-        </li>
-        <li className="list-inline-item">
-          Max:
+        </span>
+        <span className="mr-2">
+          {'Max: '}
           {this.props.registrationPolicy.getTotalSlots()}
-        </li>
-      </ul>
+        </span>
+      </>
     );
   }
 
@@ -211,26 +212,28 @@ class RegistrationPolicyEditor extends React.Component {
       .map(bucket => this.renderBucketRow(bucket));
 
     return (
-      <table className="table">
-        <thead>
-          <tr>
-            {this.renderHeaders()}
-          </tr>
-        </thead>
-        <tbody>
-          {bucketRows}
-        </tbody>
-        <tfoot>
-          {this.renderPreventNoPreferenceSignupsRow()}
-          <tr>
-            <td colSpan={this.getHeaderLabels().findIndex(label => label === 'Limits')} />
-            <td className="d-flex">
-              <strong className="mr-2">Total capacity:</strong>
-              {this.renderTotals()}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              {this.renderHeaders()}
+            </tr>
+          </thead>
+          <tbody>
+            {bucketRows}
+          </tbody>
+          <tfoot>
+            {this.renderPreventNoPreferenceSignupsRow()}
+            <tr>
+              <td colSpan={this.getHeaderLabels().length} className="text-right">
+                <strong>Total capacity:</strong>
+                {' '}
+                {this.renderTotals()}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     );
   }
 
@@ -255,7 +258,7 @@ class RegistrationPolicyEditor extends React.Component {
     return (
       <div className="form-group">
         <label htmlFor={selectId}>
-          Registration policy
+          Select policy
           <select
             id={selectId}
             className="form-control"
@@ -342,30 +345,48 @@ class RegistrationPolicyEditor extends React.Component {
     );
   }
 
-  render = () => {
+  renderEditorBody = () => {
     if (this.props.presets) {
-      const selectorRow = this.renderPresetSelector();
-
       if (this.state.preset || this.state.custom) {
         return (
-          <div>
-            {selectorRow}
+          <>
+            {this.renderPresetSelector()}
             {this.renderTable()}
             {this.renderAddButtons()}
-          </div>
+          </>
         );
       }
 
-      return selectorRow;
+      return this.renderPresetSelector();
     }
 
     return (
-      <div>
+      <>
         {this.renderTable()}
         {this.renderAddButtons()}
-      </div>
+      </>
     );
   }
+
+  renderPreviewContent = () => (
+    <RegistrationPolicyPreview
+      registrationPolicy={this.props.registrationPolicy.getAPIRepresentation()}
+    />
+  )
+
+  render = () => (
+    <div className="card">
+      <div className="card-header">
+        Registration policy
+      </div>
+      <div className="d-flex flex-column flex-lg-row">
+        <div className="col-lg-8 p-3">
+          {this.renderEditorBody()}
+        </div>
+        {this.renderPreviewContent()}
+      </div>
+    </div>
+  )
 }
 
 export default RegistrationPolicyEditor;

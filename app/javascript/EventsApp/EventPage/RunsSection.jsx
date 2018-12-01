@@ -2,16 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
+import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
 import buildSignupOptions from './buildSignupOptions';
 import RunCapacityGraph from './RunCapacityGraph';
 import RunCard from './RunCard';
 
 function FakeRun({ event }) {
-  const blankSignupCountsByBucketKeyAndCounted = event.registration_policy.buckets
-    .reduce((signupCountByBucketAndCounted, bucket) => ({
-      ...signupCountByBucketAndCounted,
-      [bucket.key]: { counted: 0, not_counted: 0 },
-    }), {});
+  const blankSignupCountsByBucketKeyAndCounted = buildBlankSignupCountsFromRegistrationPolicy(
+    event.registration_policy,
+  );
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-12">
