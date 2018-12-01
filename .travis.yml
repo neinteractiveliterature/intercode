@@ -55,9 +55,9 @@ jobs:
       -f Dockerfile.web
       --target build
       --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:build-${BRANCH_TAG}
       --cache-from neinteractiveliterature/intercode:latest
-      --cache-from neinteractiveliterature/intercode:build-master
+      --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+      --cache-from neinteractiveliterature/intercode:build-production-master
       -t neinteractiveliterature/intercode:local-build
       .
     - docker build
