@@ -22,7 +22,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
 
   field :event_category_keys, types[types.String] do
     resolve -> (convention, _args, _ctx) do
-      convention.events.pluck('distinct category')
+      convention.events.pluck(Arel.sql('distinct category'))
     end
   end
 
