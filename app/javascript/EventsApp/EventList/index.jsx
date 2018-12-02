@@ -147,72 +147,76 @@ class EventList extends React.Component {
               sorted,
               filtered,
               pageSize,
-              onPageChange,
+              onPageChange: reactTableOnPageChange,
               onSortedChange,
               onFilteredChange,
               onPageSizeChange,
-            }) => (
-              <React.Fragment>
-                <h1 className="text-nowrap">
-                  Events at
-                  {' '}
-                  {convention.name}
-                </h1>
+            }) => {
+              const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
 
-                <QueryWithStateDisplay
-                  query={EventListEventsQuery}
-                  variables={{
-                    page: (page || 1),
-                    pageSize: (pageSize || 20),
-                    sort: reactTableSortToTableResultsSort(
-                      sorted && sorted.length > 0
-                        ? sorted
-                        : [{ id: 'title', desc: false }],
-                    ),
-                    filters: reactTableFiltersToTableResultsFilters(filtered),
-                  }}
-                >
-                  {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
-                    <React.Fragment>
-                      <div className="d-flex align-items-start flex-wrap mt-4">
-                        <div className="flex-grow-1 d-flex">
-                          {this.renderPagination(eventsPaginated, onPageChange)}
-                          {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
-                        </div>
+              return (
+                <React.Fragment>
+                  <h1 className="text-nowrap">
+                    Events at
+                    {' '}
+                    {convention.name}
+                  </h1>
 
-                        <div className="d-flex flex-wrap">
-                          <div className="mb-2">
-                            <EventListCategoryDropdown
-                              categoryKeys={convention.event_category_keys}
-                              value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                              onChange={(value) => {
-                                onFilteredChange([
-                                  ...(filtered || []).filter(({ id }) => id !== 'category'),
-                                  { id: 'category', value },
-                                ]);
-                              }}
-                            />
+                  <QueryWithStateDisplay
+                    query={EventListEventsQuery}
+                    variables={{
+                      page: page + 1,
+                      pageSize: (pageSize || 20),
+                      sort: reactTableSortToTableResultsSort(
+                        sorted && sorted.length > 0
+                          ? sorted
+                          : [{ id: 'title', desc: false }],
+                      ),
+                      filters: reactTableFiltersToTableResultsFilters(filtered),
+                    }}
+                  >
+                    {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
+                      <React.Fragment>
+                        <div className="d-flex align-items-start flex-wrap mt-4">
+                          <div className="flex-grow-1 d-flex">
+                            {this.renderPagination(eventsPaginated, onPageChange)}
+                            {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
                           </div>
 
-                          <div className="ml-2">
-                            <EventListSortDropdown
-                              showConventionOrder={currentAbility.can_read_schedule}
-                              value={sorted}
-                              onChange={onSortedChange}
-                            />
+                          <div className="d-flex flex-wrap">
+                            <div className="mb-2">
+                              <EventListCategoryDropdown
+                                categoryKeys={convention.event_category_keys}
+                                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+                                onChange={(value) => {
+                                  onFilteredChange([
+                                    ...(filtered || []).filter(({ id }) => id !== 'category'),
+                                    { id: 'category', value },
+                                  ]);
+                                }}
+                              />
+                            </div>
+
+                            <div className="ml-2">
+                              <EventListSortDropdown
+                                showConventionOrder={currentAbility.can_read_schedule}
+                                value={sorted}
+                                onChange={onSortedChange}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {this.renderEvents(convention, eventsPaginated, sorted)}
-                      {this.renderBottomPagination({
-                        eventsPaginated, onPageChange, pageSize, onPageSizeChange,
-                      })}
-                    </React.Fragment>
-                  )}
-                </QueryWithStateDisplay>
-              </React.Fragment>
-            )}
+                        {this.renderEvents(convention, eventsPaginated, sorted)}
+                        {this.renderBottomPagination({
+                          eventsPaginated, onPageChange, pageSize, onPageSizeChange,
+                        })}
+                      </React.Fragment>
+                    )}
+                  </QueryWithStateDisplay>
+                </React.Fragment>
+              );
+            }}
           </CombinedReactTableConsumer>
         </ReactRouterReactTableProvider>
       )}
