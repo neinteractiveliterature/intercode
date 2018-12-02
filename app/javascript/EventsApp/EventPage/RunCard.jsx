@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
+import classNames from 'classnames';
+import { withRouter } from 'react-router-dom';
 
 import { CreateMySignup } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -38,6 +40,11 @@ class RunCard extends React.Component {
     event: PropTypes.shape({
       id: PropTypes.number.isRequired,
     }).isRequired,
+    history: PropTypes.shape({
+      location: PropTypes.shape({
+        hash: PropTypes.string,
+      }).isRequired,
+    }).isRequired,
     eventPath: PropTypes.string.isRequired,
     signupOptions: PropTypes.shape({
       mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -59,6 +66,13 @@ class RunCard extends React.Component {
       mutationInProgress: false,
       signupError: null,
     };
+    this.cardRef = React.createRef();
+  }
+
+  componentDidMount = () => {
+    if (this.props.history.location.hash === `#run-${this.props.run.id}`) {
+      this.cardRef.current.scrollIntoView(false);
+    }
   }
 
   renderMainSignupSection = (signupButtonClicked) => {
@@ -177,7 +191,14 @@ class RunCard extends React.Component {
 
           return (
             <div className="col-lg-4 col-md-6 col-sm-12">
-              <div className="card mb-3">
+              <div
+                ref={this.cardRef}
+                className={classNames(
+                  'card mb-3',
+                  { 'glow-success': this.props.history.location.hash === `#run-${run.id}` },
+                )}
+                id={`run-${run.id}`}
+              >
                 <div className="card-header">
                   {
                     run.title_suffix
@@ -219,4 +240,4 @@ class RunCard extends React.Component {
   }
 }
 
-export default RunCard;
+export default withRouter(RunCard);
