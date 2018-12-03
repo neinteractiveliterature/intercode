@@ -107,6 +107,7 @@ class OrderAdmin extends React.Component {
         getData={({ data }) => data.convention.orders_paginated.entries}
         getPages={({ data }) => data.convention.orders_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
+        storageKeyPrefix="orderAdmin"
         query={adminOrdersQuery}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />

@@ -9,9 +9,13 @@ class CombinedReactTableConsumer extends React.PureComponent {
 
   render = () => {
     const rendererWithContexts = this.props.consumers.reduce(
-      (renderer, Consumer) => existingProps => (
+      (renderer, Consumer, i) => existingProps => (
         <Consumer>
-          {({ getReactTableProps }) => renderer({ ...getReactTableProps(), ...existingProps })}
+          {({ getReactTableProps }) => {
+            const props = getReactTableProps();
+            console.log(i, props);
+            return renderer({ ...props, ...existingProps });
+          }}
         </Consumer>
       ),
       this.props.children,
