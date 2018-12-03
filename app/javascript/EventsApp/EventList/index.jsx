@@ -10,6 +10,7 @@ import EventListCategoryDropdown from './EventListCategoryDropdown';
 import { EventListCommonDataQuery, EventListEventsQuery } from './queries.gql';
 import EventListSortDropdown from './EventListSortDropdown';
 import getSortedRuns from './getSortedRuns';
+import { LocalStorageReactTableProvider, LocalStorageReactTableConsumer } from '../../Tables/LocalStorageReactTableContext';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import { ReactRouterReactTableProvider, ReactRouterReactTableConsumer } from '../../Tables/ReactRouterReactTableContext';
 import {
@@ -141,83 +142,87 @@ class EventList extends React.Component {
           decodeFilterValue={decodeFilterValue}
           encodeFilterValue={encodeFilterValue}
         >
-          <CombinedReactTableConsumer consumers={[ReactRouterReactTableConsumer]}>
-            {({
-              page,
-              sorted,
-              filtered,
-              pageSize,
-              onPageChange: reactTableOnPageChange,
-              onSortedChange,
-              onFilteredChange,
-              onPageSizeChange,
-            }) => {
-              const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
+          <LocalStorageReactTableProvider storageKeyPrefix="eventList">
+            <CombinedReactTableConsumer
+              consumers={[ReactRouterReactTableConsumer, LocalStorageReactTableConsumer]}
+            >
+              {({
+                page,
+                sorted,
+                filtered,
+                pageSize,
+                onPageChange: reactTableOnPageChange,
+                onSortedChange,
+                onFilteredChange,
+                onPageSizeChange,
+              }) => {
+                const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
 
-              return (
-                <React.Fragment>
-                  <h1 className="text-nowrap">
-                    Events at
-                    {' '}
-                    {convention.name}
-                  </h1>
+                return (
+                  <React.Fragment>
+                    <h1 className="text-nowrap">
+                      Events at
+                      {' '}
+                      {convention.name}
+                    </h1>
 
-                  <QueryWithStateDisplay
-                    query={EventListEventsQuery}
-                    variables={{
-                      page: page + 1,
-                      pageSize: (pageSize || 20),
-                      sort: reactTableSortToTableResultsSort(
-                        sorted && sorted.length > 0
-                          ? sorted
-                          : [{ id: 'title', desc: false }],
-                      ),
-                      filters: reactTableFiltersToTableResultsFilters(filtered),
-                    }}
-                  >
-                    {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
-                      <React.Fragment>
-                        <div className="d-flex align-items-start flex-wrap mt-4">
-                          <div className="flex-grow-1 d-flex">
-                            {this.renderPagination(eventsPaginated, onPageChange)}
-                            {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
-                          </div>
-
-                          <div className="d-flex flex-wrap">
-                            <div className="mb-2">
-                              <EventListCategoryDropdown
-                                categoryKeys={convention.event_category_keys}
-                                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                                onChange={(value) => {
-                                  onFilteredChange([
-                                    ...(filtered || []).filter(({ id }) => id !== 'category'),
-                                    { id: 'category', value },
-                                  ]);
-                                }}
-                              />
+                    <QueryWithStateDisplay
+                      query={EventListEventsQuery}
+                      variables={{
+                        page: page + 1,
+                        pageSize: (pageSize || 20),
+                        sort: reactTableSortToTableResultsSort(
+                          sorted && sorted.length > 0
+                            ? sorted
+                            : [{ id: 'title', desc: false }],
+                        ),
+                        filters: reactTableFiltersToTableResultsFilters(filtered),
+                      }}
+                    >
+                      {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
+                        <React.Fragment>
+                          <div className="d-flex align-items-start flex-wrap mt-4">
+                            <div className="flex-grow-1 d-flex">
+                              {this.renderPagination(eventsPaginated, onPageChange)}
+                              {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
                             </div>
 
-                            <div className="ml-2">
-                              <EventListSortDropdown
-                                showConventionOrder={currentAbility.can_read_schedule}
-                                value={sorted}
-                                onChange={onSortedChange}
-                              />
+                            <div className="d-flex flex-wrap">
+                              <div className="mb-2">
+                                <EventListCategoryDropdown
+                                  categoryKeys={convention.event_category_keys}
+                                  value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+                                  onChange={(value) => {
+                                    onFilteredChange([
+                                      ...(filtered || []).filter(({ id }) => id !== 'category'),
+                                      { id: 'category', value },
+                                    ]);
+                                  }}
+                                />
+                              </div>
+
+                              <div className="ml-2">
+                                <EventListSortDropdown
+                                  showConventionOrder={currentAbility.can_read_schedule}
+                                  value={sorted}
+                                  onChange={onSortedChange}
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        {this.renderEvents(convention, eventsPaginated, sorted)}
-                        {this.renderBottomPagination({
-                          eventsPaginated, onPageChange, pageSize, onPageSizeChange,
-                        })}
-                      </React.Fragment>
-                    )}
-                  </QueryWithStateDisplay>
-                </React.Fragment>
-              );
-            }}
-          </CombinedReactTableConsumer>
+                          {this.renderEvents(convention, eventsPaginated, sorted)}
+                          {this.renderBottomPagination({
+                            eventsPaginated, onPageChange, pageSize, onPageSizeChange,
+                          })}
+                        </React.Fragment>
+                      )}
+                    </QueryWithStateDisplay>
+                  </React.Fragment>
+                );
+              }}
+            </CombinedReactTableConsumer>
+          </LocalStorageReactTableProvider>
         </ReactRouterReactTableProvider>
       )}
     </QueryWithStateDisplay>
