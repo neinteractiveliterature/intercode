@@ -108,6 +108,19 @@
   }
 }
 
+.event-category-town-hall {
+  background-color: lighten($green, 35%);
+
+  &.full {
+    background-color: fade-out(lighten($green, 35%), 0.4);
+  }
+
+  &.signed-up {
+    background-color: $green;
+    border-color: $green;
+  }
+}
+
 .event-category-panel, .event-category-moderated-discussion, .event-category-workshop, .event-category-presentation {
   background-color: lighten($red, 30%);
 
