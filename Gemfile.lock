@@ -296,7 +296,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
       spoon (~> 0.0)
-    pry-rails (0.3.7)
+    pry-rails (0.3.8)
       pry (>= 0.10.4)
     pry-remote (0.1.8)
       pry (~> 0.9)
