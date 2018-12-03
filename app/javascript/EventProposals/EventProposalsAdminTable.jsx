@@ -206,6 +206,7 @@ class EventProposalsAdminTable extends React.Component {
         getPages={({ data }) => data.convention.event_proposals_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
         query={eventProposalsAdminQuery}
+        storageKeyPrefix="eventProposalsAdmin"
 
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({

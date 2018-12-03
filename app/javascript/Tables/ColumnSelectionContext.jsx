@@ -14,7 +14,7 @@ const ColumnSelectionContext = React.createContext({
 export const ColumnSelectionConsumer = ColumnSelectionContext.Consumer;
 
 @withRouter
-export class ColumnSelectionProvider extends React.PureComponent {
+class ColumnSelectionProvider extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     alwaysVisibleColumns: PropTypes.arrayOf(PropTypes.string),
@@ -81,3 +81,5 @@ export class ColumnSelectionProvider extends React.PureComponent {
     </ColumnSelectionContext.Provider>
   )
 }
+
+export { ColumnSelectionProvider };

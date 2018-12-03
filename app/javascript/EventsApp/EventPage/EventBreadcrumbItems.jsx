@@ -1,13 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
+import { getConventionDayTimespans, timespanFromConvention } from '../../TimespanUtils';
+
+function findRunFromHash(runs, hash) {
+  if (!hash) {
+    return null;
+  }
+
+  return runs.find(run => `#run-${run.id}` === hash);
+}
+
+function getConventionDayStart(event, run, convention) {
+  const conventionTimespan = timespanFromConvention(convention);
+  if (!run) {
+    return conventionTimespan.start;
+  }
+
+  const runStart = moment.tz(run.starts_at, convention.timezone_name);
+  const conventionDayTimespans = getConventionDayTimespans(
+    conventionTimespan,
+    convention.timezone_name,
+  );
+  const conventionDay = conventionDayTimespans.find(timespan => timespan.includesTime(runStart));
+  return (conventionDay || conventionTimespan).start;
+}
 
 function EventBreadcrumbItems({
-  event, convention, currentAbility, eventPath,
+  event, convention, currentAbility, eventPath, history,
 }) {
+  const runToLink = findRunFromHash(event.runs, history.location.hash) || event.runs[0];
+  const conventionDayStart = getConventionDayStart(event, runToLink, convention);
+
   return (
     <>
       <li className="breadcrumb-item">
@@ -16,7 +43,7 @@ function EventBreadcrumbItems({
             ? (
               <Link
                 to={
-                  `/schedule/${moment.tz(event.runs[0].starts_at, convention.timezone_name).format('dddd').toLowerCase()}`
+                  `/schedule/${conventionDayStart.format('dddd').toLowerCase()}`
                 }
               >
                 Con schedule
@@ -52,6 +79,11 @@ EventBreadcrumbItems.propTypes = {
     can_read_schedule: PropTypes.bool.isRequired,
   }).isRequired,
   eventPath: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      hash: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
 };
 
-export default EventBreadcrumbItems;
+export default withRouter(EventBreadcrumbItems);

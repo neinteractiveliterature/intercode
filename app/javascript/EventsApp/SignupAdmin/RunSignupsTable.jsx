@@ -137,6 +137,7 @@ class RunSignupsTable extends React.Component {
         getPages={({ data }) => data.event.run.signups_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
         query={RunSignupsTableSignupsQuery}
+        storageKeyPrefix="adminSignups"
         variables={{ eventId: this.props.eventId, runId: this.props.runId }}
 
         className="-striped -highlight"
