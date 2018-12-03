@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ColumnSelectionConsumer, ColumnSelectionProvider } from './ColumnSelectionContext';
 import { GraphQLReactTableConsumer, GraphQLReactTableProvider } from './GraphQLReactTableContext';
+import { LocalStorageReactTableConsumer, LocalStorageReactTableProvider } from './LocalStorageReactTableContext';
 import { ReactRouterReactTableConsumer, ReactRouterReactTableProvider } from './ReactRouterReactTableContext';
 import ReactTableWithContexts from './ReactTableWithContexts';
 import TableHeader from './TableHeader';
@@ -21,6 +22,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
     query: PropTypes.shape({}).isRequired,
     renderHeader: PropTypes.func,
     renderFooter: PropTypes.func,
+    storageKeyPrefix: PropTypes.string.isRequired,
     variables: PropTypes.shape({}),
   };
 
@@ -55,6 +57,7 @@ class ReactTableWithTheWorks extends React.PureComponent {
 
     const consumers = [
       ReactRouterReactTableConsumer,
+      LocalStorageReactTableConsumer,
       GraphQLReactTableConsumer,
       ColumnSelectionConsumer,
     ];
@@ -70,51 +73,49 @@ class ReactTableWithTheWorks extends React.PureComponent {
         decodeFilterValue={decodeFilterValue}
         encodeFilterValue={encodeFilterValue}
       >
-        <GraphQLReactTableProvider
-          getData={getData}
-          getPages={getPages}
-          query={query}
-          variables={variables}
-        >
-          <GraphQLReactTableConsumer>
-            {({ queryResult: { data } }) => (
-              <ColumnSelectionProvider
-                alwaysVisibleColumns={alwaysVisibleColumns}
-                getPossibleColumns={() => getPossibleColumns(data)}
-                defaultVisibleColumns={defaultVisibleColumns}
-              >
-                <ReactTableWithContexts
-                  consumers={[
-                    ReactRouterReactTableConsumer,
-                    GraphQLReactTableConsumer,
-                    ColumnSelectionConsumer,
-                  ]}
-                  {...otherProps}
+        <LocalStorageReactTableProvider storageKeyPrefix={this.props.storageKeyPrefix}>
+          <GraphQLReactTableProvider
+            getData={getData}
+            getPages={getPages}
+            query={query}
+            variables={variables}
+          >
+            <GraphQLReactTableConsumer>
+              {({ queryResult: { data } }) => (
+                <ColumnSelectionProvider
+                  alwaysVisibleColumns={alwaysVisibleColumns}
+                  getPossibleColumns={() => getPossibleColumns(data)}
+                  defaultVisibleColumns={defaultVisibleColumns}
                 >
-                  {(state, makeTable, instance) => (
-                    children
-                      ? children({
-                        tableState: state,
-                        makeTable,
-                        instance,
-                        renderFooter,
-                        renderHeader: () => (
-                          renderHeader({ consumers, exportUrl, getPossibleColumns })
-                        ),
-                      })
-                      : (
-                        <React.Fragment>
-                          {renderHeader({ consumers, exportUrl, getPossibleColumns })}
-                          {makeTable()}
-                          {renderFooter()}
-                        </React.Fragment>
-                      )
-                  )}
-                </ReactTableWithContexts>
-              </ColumnSelectionProvider>
-            )}
-          </GraphQLReactTableConsumer>
-        </GraphQLReactTableProvider>
+                  <ReactTableWithContexts
+                    consumers={consumers}
+                    {...otherProps}
+                  >
+                    {(state, makeTable, instance) => (
+                      children
+                        ? children({
+                          tableState: state,
+                          makeTable,
+                          instance,
+                          renderFooter,
+                          renderHeader: () => (
+                            renderHeader({ consumers, exportUrl, getPossibleColumns })
+                          ),
+                        })
+                        : (
+                          <React.Fragment>
+                            {renderHeader({ consumers, exportUrl, getPossibleColumns })}
+                            {makeTable()}
+                            {renderFooter()}
+                          </React.Fragment>
+                        )
+                    )}
+                  </ReactTableWithContexts>
+                </ColumnSelectionProvider>
+              )}
+            </GraphQLReactTableConsumer>
+          </GraphQLReactTableProvider>
+        </LocalStorageReactTableProvider>
       </ReactRouterReactTableProvider>
     );
   }

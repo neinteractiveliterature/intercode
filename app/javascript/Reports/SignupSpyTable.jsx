@@ -121,6 +121,7 @@ class SignupSpyTable extends React.Component {
                 getPages={({ data }) => data.convention.signup_spy_paginated.total_pages}
                 getPossibleColumns={this.getPossibleColumns}
                 query={signupsQuery}
+                storageKeyPrefix="signupSpy"
                 className="-striped -highlight"
                 renderHeader={headerProps => (
                   <TableHeader

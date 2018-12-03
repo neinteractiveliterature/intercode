@@ -266,7 +266,10 @@ class ScheduleGridEventRun extends React.Component {
                       </tbody>
                     </table>
 
-                    <Link to={buildEventUrl(event)} className="btn btn-primary btn-sm mb-2">
+                    <Link
+                      to={`${buildEventUrl(event)}#run-${run.id}`}
+                      className="btn btn-primary btn-sm mb-2"
+                    >
                       Go to event &raquo;
                     </Link>
 

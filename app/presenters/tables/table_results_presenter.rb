@@ -24,7 +24,7 @@ class Tables::TableResultsPresenter
   end
 
   def paginate(page: nil, per_page: nil)
-    scoped.paginate(page: page || 1, per_page: [per_page || 20, 100].min)
+    scoped.paginate(page: page || 1, per_page: [per_page || 20, 200].min)
   end
 
   def fields

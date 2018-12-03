@@ -25,7 +25,7 @@ export const GraphQLReactTableConsumer = GraphQLReactTableContext.Consumer;
 // https://github.com/apollographql/react-apollo/issues/2114
 
 @withApollo
-export class GraphQLReactTableProvider extends React.Component {
+class GraphQLReactTableProvider extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     client: PropTypes.shape({
@@ -73,7 +73,12 @@ export class GraphQLReactTableProvider extends React.Component {
     { maxWait: 1000, leading: false, trailing: true },
   )
 
-  fetchFromTableState = tableState => this.fetchDataDebounced({
+  loggedFetchDataDebounced = (variables) => {
+    console.log('fetchData', variables);
+    this.fetchDataDebounced(variables);
+  }
+
+  fetchFromTableState = tableState => this.loggedFetchDataDebounced({
     ...this.props.variables,
     page: tableState.page + 1,
     perPage: tableState.pageSize,
@@ -112,3 +117,5 @@ export class GraphQLReactTableProvider extends React.Component {
     );
   }
 }
+
+export { GraphQLReactTableProvider };

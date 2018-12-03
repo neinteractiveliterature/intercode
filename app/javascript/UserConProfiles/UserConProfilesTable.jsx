@@ -306,6 +306,7 @@ class UserConProfilesTable extends React.Component {
         getPages={({ data }) => data.convention.user_con_profiles_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
         query={userConProfilesQuery}
+        storageKeyPrefix="userConProfiles"
         renderHeader={headerProps => (
           <TableHeader
             {...headerProps}

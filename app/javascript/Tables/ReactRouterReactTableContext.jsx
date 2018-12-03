@@ -32,7 +32,6 @@ class ReactRouterReactTableProvider extends React.PureComponent {
   decodeSearchParams = (search) => {
     const state = {
       page: 0,
-      pageSize: 20,
       filtered: [],
       sorted: [],
     };
@@ -44,11 +43,6 @@ class ReactRouterReactTableProvider extends React.PureComponent {
     Array.from(params.entries()).forEach(([key, value]) => {
       if (key === 'page') {
         state.page = Number.parseInt(value, 10) - 1;
-        return;
-      }
-
-      if (key === 'pageSize') {
-        state.pageSize = Number.parseInt(value, 10);
         return;
       }
 
@@ -75,7 +69,6 @@ class ReactRouterReactTableProvider extends React.PureComponent {
 
   encodeSearchParams = ({
     page,
-    pageSize,
     filtered,
     sorted,
   }, existingQuery) => {
@@ -85,14 +78,6 @@ class ReactRouterReactTableProvider extends React.PureComponent {
 
     if (page != null) {
       params.set('page', page + 1);
-    }
-
-    if (pageSize != null) {
-      if (pageSize === 20) {
-        params.delete('pageSize');
-      } else {
-        params.set('pageSize', pageSize);
-      }
     }
 
     // remove existing filters and sorts rather than just adding on
@@ -135,11 +120,9 @@ class ReactRouterReactTableProvider extends React.PureComponent {
         value={{
           getReactTableProps: () => ({
             page: tableState.page,
-            pageSize: tableState.pageSize,
             filtered: tableState.filtered,
             sorted: tableState.sorted,
             onPageChange: (page) => { this.updateSearch({ page }); },
-            onPageSizeChange: (pageSize) => { this.updateSearch({ pageSize }); },
             onFilteredChange: (filtered) => { this.updateSearch({ filtered, page: 0 }); },
             onSortedChange: (sorted) => { this.updateSearch({ sorted, page: 0 }); },
           }),
