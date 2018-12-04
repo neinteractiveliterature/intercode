@@ -20,6 +20,6 @@ class EventProposalsController < ApplicationController
   private
 
   def ensure_no_event_yet
-    redirect_to [:edit, @event_proposal.event] if @event_proposal.event
+    redirect_to "/events/#{@event_proposal.event.to_param}/edit" if @event_proposal.event
   end
 end

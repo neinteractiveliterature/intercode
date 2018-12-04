@@ -81,7 +81,7 @@ class ProvideTicketModal extends React.Component {
       event, convention, onClose, teamMember, visible,
     } = this.props;
 
-    const provideTicket = (mutate, ...args) => mutate({
+    const provideTicket = (mutate, args) => mutate({
       ...args,
       update: (store, { data: { provideEventTicket: { ticket } } }) => {
         const data = store.readQuery({

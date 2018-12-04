@@ -111,29 +111,10 @@ class NewTeamMember extends React.Component {
                                     user_con_profile_id: teamMember.user_con_profile.id,
                                   },
                                 },
-                                update: (
-                                  store,
-                                  { data: { createTeamMember: { team_member: newTeamMember } } },
-                                ) => {
-                                  const data = store.readQuery({
-                                    query: TeamMembersQuery,
-                                    variables: { eventId: event.id },
-                                  });
-                                  store.writeQuery({
-                                    query: TeamMembersQuery,
-                                    variables: { eventId: event.id },
-                                    data: {
-                                      ...data,
-                                      event: {
-                                        ...data.event,
-                                        team_members: [
-                                          ...data.event.team_members,
-                                          newTeamMember,
-                                        ],
-                                      },
-                                    },
-                                  });
-                                },
+                                refetchQueries: [
+                                  { query: TeamMembersQuery, variables: { eventId: event.id } },
+                                ],
+                                awaitRefetchQueries: true,
                               });
 
                               this.props.history.replace(`${eventPath}/team_members`);
