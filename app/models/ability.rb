@@ -77,6 +77,11 @@ class Ability
           .pluck(:event_id, :id)
           .group_by(&:first)
           .transform_values { |pairs| pairs.map(&:second) }
+        team_member_event_ids_by_run_id = team_member_run_ids_by_event_id.each_with_object({}) do |(event_id, run_ids), hash|
+          run_ids.each do |run_id|
+            hash[run_id] = event_id
+          end
+        end
 
         team_member_run_ids_by_user_id = team_member_event_ids_and_convention_ids.each_with_object({}) do |(user_id, pairs), hash|
           event_ids = pairs.map(&:first)
@@ -89,8 +94,16 @@ class Ability
           .group_by(&:first)
           .transform_values { |pairs| pairs.map(&:second) }
 
+        team_member_user_con_profile_ids_by_event_id = TeamMember.where(event_id: team_member_event_ids_by_run_id.values.flatten)
+          .pluck(:event_id, :user_con_profile_id)
+          .group_by(&:first)
+          .transform_values { |pairs| pairs.map(&:second) }
+
         team_member_run_ids_by_user_id.transform_values do |run_ids|
-          run_ids.flat_map { |run_id| signed_up_user_con_profile_ids_by_run_id[run_id] }
+          run_ids.flat_map do |run_id|
+            ((signed_up_user_con_profile_ids_by_run_id[run_id] || []) +
+              (team_member_user_con_profile_ids_by_event_id[team_member_event_ids_by_run_id[run_id]] || [])).uniq
+          end
         end
       end
     end
