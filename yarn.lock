@@ -8169,9 +8169,9 @@ react-dom@^16.6.0:
     prop-types "^15.6.2"
     scheduler "^0.11.0"
 
-react-html-id@^0.1.1, react-html-id@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/react-html-id/-/react-html-id-0.1.4.tgz#0194ae54f0eeb57140693d283e2767a4d204a914"
+react-html-id@^0.1.1, react-html-id@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-html-id/-/react-html-id-0.1.5.tgz#a180084bd8974aac6a497ebaaedcecb03aadf2bf"
 
 react-immutable-proptypes@^2.1.0:
   version "2.1.0"
