@@ -22,11 +22,6 @@ fragment TeamMemberUserConProfileFields on UserConProfile {
   id
   name_without_nickname
   name_inverted
-  email
-  day_phone
-  evening_phone
-  best_call_time
-  preferred_contact
 
   ticket {
     ...TeamMemberTicketFields
@@ -71,6 +66,14 @@ query TeamMembersQuery($eventId: Int!) {
 
     team_members {
       ...TeamMemberFields
+
+      user_con_profile {
+        day_phone
+        evening_phone
+        best_call_time
+        preferred_contact
+        email
+      }
     }
   }
 }
