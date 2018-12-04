@@ -3204,6 +3204,15 @@ dnd-core@^4.0.5:
     lodash "^4.17.10"
     redux "^4.0.0"
 
+dnd-core@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-7.0.2.tgz#6c080eb57243fa0372fd083b3db242d9eb525010"
+  dependencies:
+    asap "^2.0.6"
+    invariant "^2.2.4"
+    lodash "^4.17.11"
+    redux "^4.0.1"
+
 dnd-multi-backend@^3.1.11:
   version "3.1.11"
   resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-3.1.11.tgz#d3e7d426b823c20ce858d0161fcc737fc455ffbb"
@@ -4553,6 +4562,12 @@ hoist-non-react-statics@^2.1.0, hoist-non-react-statics@^2.3.1, hoist-non-react-
 hoist-non-react-statics@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.1.0.tgz#42414ccdfff019cd2168168be998c7b3bd5245c0"
+  dependencies:
+    react-is "^16.3.2"
+
+hoist-non-react-statics@^3.1.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.2.1.tgz#c09c0555c84b38a7ede6912b61efddafd6e75e1e"
   dependencies:
     react-is "^16.3.2"
 
@@ -8107,16 +8122,16 @@ react-dnd-touch-backend@^0.3.13:
     invariant "^2.2.2"
     react-dnd "^2.5.4"
 
-react-dnd@*, react-dnd@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-5.0.0.tgz#c4a17c70109e456dad8906be838e6ee8f32b06b5"
+react-dnd@*, react-dnd@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-7.0.2.tgz#8f5611a6e877592932c082d6280c64d1c817f420"
   dependencies:
-    dnd-core "^4.0.5"
-    hoist-non-react-statics "^2.5.0"
+    dnd-core "^7.0.2"
+    hoist-non-react-statics "^3.1.0"
     invariant "^2.1.0"
-    lodash "^4.17.10"
-    recompose "^0.27.1"
-    shallowequal "^1.0.2"
+    lodash "^4.17.11"
+    recompose "^0.30.0"
+    shallowequal "^1.1.0"
 
 react-dnd@^2.4.0, react-dnd@^2.5.4:
   version "2.6.0"
@@ -8275,16 +8290,7 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-"react@15.x.x - 16.x.x":
-  version "16.6.1"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.6.1.tgz#ee2aef4f0a09e494594882029821049772f915fe"
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.11.0"
-
-react@^16.6.0:
+"react@15.x.x - 16.x.x", react@^16.6.0:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react/-/react-16.6.3.tgz#25d77c91911d6bbdd23db41e70fb094cc1e0871c"
   dependencies:
@@ -8355,11 +8361,11 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
-recompose@^0.27.1:
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.27.1.tgz#1a49e931f183634516633bbb4f4edbfd3f38a7ba"
+recompose@^0.30.0:
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.30.0.tgz#82773641b3927e8c7d24a0d87d65aeeba18aabd0"
   dependencies:
-    babel-runtime "^6.26.0"
+    "@babel/runtime" "^7.0.0"
     change-emitter "^0.1.2"
     fbjs "^0.8.1"
     hoist-non-react-statics "^2.3.1"
@@ -8391,6 +8397,13 @@ redux@^4.0.0:
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.0.tgz#aa698a92b729315d22b34a0553d7e6533555cc03"
   dependencies:
     loose-envify "^1.1.0"
+    symbol-observable "^1.2.0"
+
+redux@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
+  dependencies:
+    loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
 
 regenerate-unicode-properties@^7.0.0:
@@ -8914,7 +8927,7 @@ shallow-clone@^1.0.0:
     kind-of "^5.0.0"
     mixin-object "^2.0.1"
 
-shallowequal@^1.0.2:
+shallowequal@^1.0.2, shallowequal@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
 
