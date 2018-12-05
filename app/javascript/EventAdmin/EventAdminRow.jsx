@@ -137,7 +137,7 @@ class EventAdminRow extends React.Component {
           :
           {length.minutes().toString().padStart(2, '0')}
         </td>
-        <td>{this.renderRuns(event)}</td>
+        <td style={{ minWidth: '29em' }}>{this.renderRuns(event)}</td>
       </tr>
     );
   }
