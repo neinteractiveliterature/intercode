@@ -30,7 +30,11 @@ class TimeSelect extends React.Component {
     const newValue = event.target.value;
 
     if (newValue && newValue !== '') {
-      this.props.onChange({ ...this.props.value, [event.target.name]: parseInt(newValue, 10) });
+      const newTime = { ...this.props.value, [event.target.name]: parseInt(newValue, 10) };
+      if (event.target.name === 'hour' && newTime.minute == null) {
+        newTime.minute = 0;
+      }
+      this.props.onChange(newTime);
     } else {
       this.props.onChange({ ...this.props.value, [event.target.name]: null });
     }
