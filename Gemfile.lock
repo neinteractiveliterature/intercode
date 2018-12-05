@@ -65,8 +65,6 @@ GEM
       graphql (~> 1.7)
       rails (>= 4.2)
     arel (9.0.0)
-    autoprefixer-rails (9.4.1)
-      execjs
     aws-eventstream (1.0.1)
     aws-partitions (1.121.0)
     aws-sdk-core (3.42.0)
@@ -154,7 +152,6 @@ GEM
       money (~> 6.11.0)
       nokogiri (~> 1.8.1)
     excon (0.62.0)
-    execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
     factory_bot_rails (4.11.1)
@@ -443,7 +440,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   apollo_upload_server (= 2.0.0.beta.1)
-  autoprefixer-rails
   aws-sdk-s3
   aws-sdk-sqs
   bootsnap (>= 1.1.0)

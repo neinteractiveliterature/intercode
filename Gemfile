@@ -8,7 +8,6 @@ gem 'puma'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem 'haml'
 gem 'webpacker', '~> 4.0.0.pre.pre.3'
