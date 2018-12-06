@@ -49,12 +49,20 @@ describe('TimeSelect', () => {
   });
 
   describe('onChange', () => {
-    test('it changes a field', () => {
+    test('it defaults to 0 minutes', () => {
       const onChange = jest.fn();
       const component = renderTimeSelect({ onChange });
       const hourSelect = component.find('select').at(0);
       hourSelect.simulate('change', { target: { value: '3', name: hourSelect.prop('name') } });
-      expect(onChange).toHaveBeenCalledWith({ hour: 3 });
+      expect(onChange).toHaveBeenCalledWith({ hour: 3, minute: 0 });
+    });
+
+    test('it does not clear minutes', () => {
+      const onChange = jest.fn();
+      const component = renderTimeSelect({ onChange, value: { hour: 1, minute: 15 } });
+      const hourSelect = component.find('select').at(0);
+      hourSelect.simulate('change', { target: { value: '3', name: hourSelect.prop('name') } });
+      expect(onChange).toHaveBeenCalledWith({ hour: 3, minute: 15 });
     });
 
     test('it clears a field', () => {
