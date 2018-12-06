@@ -8,6 +8,7 @@ import {
 } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import RegistrationPolicy from './RegistrationPolicy';
+import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 
 class RegistrationPolicyDisplay extends React.PureComponent {
   static propTypes = {
@@ -133,7 +134,7 @@ class RegistrationPolicyDisplay extends React.PureComponent {
     );
   }
 
-  render = () => {
+  renderPolicyTable = () => {
     const { registrationPolicy } = this.props;
     const preset = findPreset(registrationPolicy, this.props.presets);
     const columnCount = preset ? 3 : 4;
@@ -179,6 +180,22 @@ class RegistrationPolicyDisplay extends React.PureComponent {
       </table>
     );
   }
+
+  render = () => (
+    <div className="card">
+      <div className="card-header">
+        Registration policy
+      </div>
+      <div className="d-flex flex-column flex-lg-row">
+        <div className="col-lg-8 p-3">
+          {this.renderPolicyTable()}
+        </div>
+        <RegistrationPolicyPreview
+          registrationPolicy={this.props.registrationPolicy.getAPIRepresentation()}
+        />
+      </div>
+    </div>
+  )
 }
 
 export default RegistrationPolicyDisplay;
