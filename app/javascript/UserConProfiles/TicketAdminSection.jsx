@@ -6,10 +6,12 @@ import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 
 import Confirm from '../ModalDialogs/Confirm';
+import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
+import ModalContainer from '../ModalDialogs/ModalContainer';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import { userConProfileAdminQuery } from './queries';
+import { UserConProfileAdminQuery } from './queries.gql';
 
 const noTicketAbilityQuery = gql`
 query TicketAdminWithoutAbilityQuery {
@@ -51,6 +53,7 @@ class TicketAdminSection extends React.Component {
       ticket: PropTypes.shape({
         id: PropTypes.number.isRequired,
         charge_id: PropTypes.string,
+        provided_by_event: PropTypes.shape({}),
       }),
     }).isRequired,
   }
@@ -77,6 +80,33 @@ class TicketAdminSection extends React.Component {
       );
 
       if (currentAbility.can_delete_ticket) {
+        if (!this.props.userConProfile.ticket.provided_by_event) {
+          buttons.push(
+            <ModalContainer>
+              {({
+                modalVisible, openModal, closeModal,
+              }) => (
+                <>
+                  <button
+                    className="btn btn-warning"
+                    type="button"
+                    onClick={openModal}
+                  >
+                    {'Convert to event-provided '}
+                    {this.props.convention.ticket_name}
+                  </button>
+                  <ConvertToEventProvidedTicketModal
+                    visible={modalVisible}
+                    onClose={closeModal}
+                    convention={this.props.convention}
+                    userConProfile={this.props.userConProfile}
+                  />
+                </>
+              )}
+            </ModalContainer>,
+          );
+        }
+
         buttons.push(
           <Confirm.Trigger>
             {confirm => (
@@ -84,10 +114,10 @@ class TicketAdminSection extends React.Component {
                 mutation={deleteTicketMutation}
                 update={(cache) => {
                   const variables = { id: this.props.userConProfile.id };
-                  const query = cache.readQuery({ query: userConProfileAdminQuery, variables });
+                  const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
                   const { ticket, ...remainingProps } = query.userConProfile;
                   cache.writeQuery({
-                    query: userConProfileAdminQuery,
+                    query: UserConProfileAdminQuery,
                     variables,
                     data: {
                       ...query,
@@ -123,7 +153,7 @@ class TicketAdminSection extends React.Component {
                                   </p>
                                 </React.Fragment>
                               ),
-                              displayError: error => <ErrorDisplay graphQLError={error} />,
+                              renderError: error => <ErrorDisplay graphQLError={error} />,
                             })}
                           >
                           Delete with refund
@@ -150,7 +180,7 @@ class TicketAdminSection extends React.Component {
                             </p>
                           </React.Fragment>
                         ),
-                        displayError: error => <ErrorDisplay graphQLError={error} />,
+                        renderError: error => <ErrorDisplay graphQLError={error} />,
                       })}
                     >
                       Delete without refund

@@ -1,0 +1,17 @@
+#import './queries.gql'
+
+mutation UpdateUserConProfile($input: UpdateUserConProfileInput!) {
+  updateUserConProfile(input: $input) {
+    user_con_profile {
+      ...UserConProfileFields
+    }
+  }
+}
+
+mutation ConvertTicketToEventProvided($eventId: Int!, $ticketTypeId: Int!, $userConProfileId: Int!) {
+  convertTicketToEventProvided(input: { event_id: $eventId, ticket_type_id: $ticketTypeId, user_con_profile_id: $userConProfileId }) {
+    ticket {
+      ...UserConProfileAdminTicketFields
+    }
+  }
+}

@@ -30,7 +30,7 @@ function cityStateZip(userConProfile) {
   ].filter(item => item && item.trim() !== '').join(' ');
 }
 
-function getMakeCountedConfirmPrompt(signup, error) {
+function getMakeCountedConfirmPrompt(signup) {
   const { user_con_profile: userConProfile, run } = signup;
 
   return (
@@ -56,12 +56,11 @@ will also count towards
         Caution: this operation does not check whether the signup buckets are already full, and
         therefore may result in overfilling a bucket.
       </p>
-      <ErrorDisplay graphQLError={error} />
     </div>
   );
 }
 
-function getMakeNotCountedConfirmPrompt(signup, error) {
+function getMakeNotCountedConfirmPrompt(signup) {
   const { user_con_profile: userConProfile, run } = signup;
 
   return (
@@ -84,17 +83,16 @@ to sign up for an additional event if there is a
         Caution: this operation will pull additional attendees into the space freed up by making
         this signup not count.
       </p>
-      <ErrorDisplay graphQLError={error} />
     </div>
   );
 }
 
-function getToggleCountedConfirmPrompt(signup, error) {
+function getToggleCountedConfirmPrompt(signup) {
   if (signup.counted) {
-    return getMakeNotCountedConfirmPrompt(signup, error);
+    return getMakeNotCountedConfirmPrompt(signup);
   }
 
-  return getMakeCountedConfirmPrompt(signup, error);
+  return getMakeCountedConfirmPrompt(signup);
 }
 
 @graphql(AdminSignupQuery)
@@ -215,6 +213,7 @@ class EditSignup extends React.Component {
             {updateCounted => (
               <button
                 className="btn btn-link"
+                type="button"
                 onClick={() => confirm({
                   prompt: getToggleCountedConfirmPrompt(signup),
                   action: () => updateCounted({
@@ -223,7 +222,7 @@ class EditSignup extends React.Component {
                       counted: !signup.counted,
                     },
                   }),
-                  onError: error => confirm.setPrompt(getToggleCountedConfirmPrompt(signup, error)),
+                  renderError: error => <ErrorDisplay graphQLError={error} />,
                 })}
               >
                 {

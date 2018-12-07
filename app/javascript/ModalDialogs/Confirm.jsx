@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
+import ModalContainer from './ModalContainer';
+
 const ConfirmContext = React.createContext(() => {});
 
 export default class Confirm extends React.Component {
@@ -14,53 +16,25 @@ export default class Confirm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      action: null,
-      prompt: null,
-      onError: null,
-      displayError: null,
-      error: null,
       actionInProgress: false,
     };
-
-    this.startConfirm.setPrompt = prompt => this.setState({ prompt });
   }
 
-  startConfirm = ({
-    action, prompt, onError, displayError,
-  }) => {
-    this.setState({
-      action,
-      prompt,
-      onError,
-      displayError,
-      error: null,
-      actionInProgress: false,
-    });
-  }
-
-  cancelClicked = () => {
-    this.setState({
-      action: null, prompt: null, onError: null, error: null, displayError: null,
-    });
-  }
-
-  okClicked = async () => {
+  okClicked = async (modalState, closeModal) => {
     this.setState({ actionInProgress: true });
     try {
-      await this.state.action();
-      this.setState({
-        action: null, prompt: null, onError: null, error: null, displayError: null,
-      });
+      await modalState.action();
+      closeModal();
     } catch (error) {
-      if (this.state.onError) {
-        this.state.onError(error);
+      if (modalState.onError) {
+        modalState.onError(error);
       }
 
-      if (this.state.displayError) {
-        this.setState({ error });
+      if (modalState.renderError) {
+        modalState.setState({ error });
       }
 
-      if (!this.state.onError && !this.state.displayError) {
+      if (!modalState.onError && !modalState.renderError) {
         throw error;
       }
     } finally {
@@ -69,21 +43,28 @@ export default class Confirm extends React.Component {
   }
 
   render = () => (
-    <ConfirmContext.Provider value={this.startConfirm}>
-      {this.props.children}
-      <ConfirmModal
-        visible={this.state.action != null}
-        onOK={this.okClicked}
-        onCancel={this.cancelClicked}
-        disableButtons={this.state.actionInProgress}
-      >
-        {this.state.prompt || <div />}
-        {
-          (this.state.displayError && this.state.error)
-            ? this.state.displayError(this.state.error)
-            : null
-        }
-      </ConfirmModal>
-    </ConfirmContext.Provider>
+    <ModalContainer>
+      {({
+        modalVisible, modalState, openModal, closeModal, setModalState,
+      }) => (
+        <ConfirmContext.Provider value={openModal}>
+          {this.props.children}
+          <ConfirmModal
+            visible={modalVisible}
+            onOK={() => this.okClicked(modalState, closeModal)}
+            onCancel={closeModal}
+            disableButtons={this.state.actionInProgress}
+            setPrompt={(prompt) => { setModalState({ prompt }); }}
+          >
+            {(modalState || {}).prompt || <div />}
+            {
+              (modalState && modalState.renderError && modalState.error)
+                ? modalState.renderError(modalState.error)
+                : null
+            }
+          </ConfirmModal>
+        </ConfirmContext.Provider>
+      )}
+    </ModalContainer>
   );
 }

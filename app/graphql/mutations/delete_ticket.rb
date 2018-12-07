@@ -7,15 +7,7 @@ Mutations::DeleteTicket = GraphQL::Relay::Mutation.define do
 
   resolve ->(_obj, args, ctx) {
     ticket = ctx[:convention].tickets.find(args[:id])
-
-    if args[:refund]
-      raise 'Ticket cannot be refunded because there is no Stripe charge ID' unless ticket.charge_id
-      charge = Stripe::Charge.retrieve(ticket.charge_id)
-
-      Stripe::Refund.create(charge: ticket.charge_id) unless charge.refunded
-    end
-
-    ticket.destroy!
+    DeleteTicketService.new(ticket: ticket, refund: args[:refund]).call!
 
     { ticket: ticket }
   }
