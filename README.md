@@ -32,8 +32,7 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 This is a containerized development setup, and should work on Linux, macOS, and Windows.
 
 1. Clone this repository: `git clone https://github.com/neinteractiveliterature/intercode.git`
-2.
-  Install Docker Community Edition: https://store.docker.com/search?type=edition&offering=community<br/>
+2. Install Docker Community Edition: https://store.docker.com/search?type=edition&offering=community
   * _Optional, but recommended: on macOS, if you have the RAM to spare, we recommend increasing Docker's memory to 4GB.  (Go to Preferences -> Advanced to do this.)_
 3. Edit your hosts file (typically found in `/etc/hosts` on Mac and Linux systems) and add the following line: `127.0.0.1 intercode.test`
 4. From the Intercode source folder:
