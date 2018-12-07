@@ -10,14 +10,13 @@ class GraphQLAsyncSelect extends React.Component {
     }).isRequired,
     query: PropTypes.shape({}).isRequired,
     getOptions: PropTypes.func.isRequired,
+    getVariables: PropTypes.func.isRequired,
   };
 
   loadOptions = async (inputValue) => {
-    const variables = { name: inputValue };
-
     const results = await this.props.client.query({
       query: this.props.query,
-      variables,
+      variables: this.props.getVariables(inputValue),
     });
 
     return this.props.getOptions(results.data);

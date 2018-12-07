@@ -1,17 +1,10 @@
-import gql from 'graphql-tag';
-
-const fragments = {};
-
-fragments.userConProfile = gql`
 fragment UserConProfileFields on UserConProfile {
   id
   name
   privileges
   form_response_attrs_json
 }
-`;
 
-fragments.userConProfileFormData = gql`
 fragment UserConProfileFormData on Convention {
   starts_at
   ends_at
@@ -22,9 +15,7 @@ fragment UserConProfileFormData on Convention {
     form_api_json
   }
 }
-`;
 
-export const userConProfileQuery = gql`
 query UserConProfileQuery($id: Int!) {
   currentAbility {
     can_update_privileges_user_con_profile(user_con_profile_id: $id)
@@ -42,11 +33,6 @@ query UserConProfileQuery($id: Int!) {
   }
 }
 
-${fragments.userConProfile}
-${fragments.userConProfileFormData}
-`;
-
-export const myProfileQuery = gql`
 query MyProfileQuery {
   convention {
     ...UserConProfileFormData
@@ -57,11 +43,28 @@ query MyProfileQuery {
   }
 }
 
-${fragments.userConProfile}
-${fragments.userConProfileFormData}
-`;
+fragment UserConProfileAdminTicketFields on Ticket {
+  id
+  charge_id
+  payment_note
 
-export const userConProfileAdminQuery = gql`
+  payment_amount {
+    fractional
+    currency_code
+  }
+
+  ticket_type {
+    id
+    description
+    name
+  }
+
+  provided_by_event {
+    id
+    title
+  }
+}
+
 query UserConProfileAdminQuery($id: Int!) {
   myProfile {
     id
@@ -91,31 +94,39 @@ query UserConProfileAdminQuery($id: Int!) {
   userConProfile(id: $id) {
     id
     name
+    name_without_nickname
     privileges
     form_response_attrs_json
 
     ticket {
+      ...UserConProfileAdminTicketFields
+    }
+  }
+}
+
+query ConvertToEventProvidedTicketQuery($eventId: Int!) {
+  convention {
+    id
+    ticket_name
+
+    ticket_types {
       id
-      charge_id
-      payment_note
+      maximum_event_provided_tickets(event_id: $eventId)
+      description
+      name
+    }
+  }
 
-      payment_amount {
-        fractional
-        currency_code
-      }
+  event(id: $eventId) {
+    id
+    title
+    can_provide_tickets
 
+    provided_tickets {
+      id
       ticket_type {
         id
-        description
-      }
-
-      provided_by_event {
-        id
-        title
       }
     }
   }
 }
-`;
-
-export { fragments };

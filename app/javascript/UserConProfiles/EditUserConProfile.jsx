@@ -8,15 +8,15 @@ import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import UserConProfileForm from './UserConProfileForm';
-import { userConProfileQuery, userConProfileAdminQuery } from './queries';
-import { updateUserConProfileMutation } from './mutations';
+import { UserConProfileQuery, UserConProfileAdminQuery } from './queries.gql';
+import { UpdateUserConProfile } from './mutations.gql';
 
 @withRouter
-@graphql(userConProfileQuery)
+@graphql(UserConProfileQuery)
 @GraphQLQueryResultWrapper
 class EditUserConProfile extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(userConProfileQuery).isRequired,
+    data: GraphQLResultPropType(UserConProfileQuery).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -55,9 +55,9 @@ class EditUserConProfile extends React.Component {
         },
         update: (cache, { data: { updateUserConProfile: { user_con_profile: updatedUserConProfile } } }) => {
           const variables = { id: this.props.userConProfileId };
-          const query = cache.readQuery({ query: userConProfileAdminQuery, variables });
+          const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
           cache.writeQuery({
-            query: userConProfileAdminQuery,
+            query: UserConProfileAdminQuery,
             variables,
             data: {
               ...query,
@@ -93,7 +93,7 @@ class EditUserConProfile extends React.Component {
         mailPrivilegeNames={this.props.data.convention.mail_privilege_names}
         onChange={this.userConProfileChanged}
         footerContent={(
-          <Mutation mutation={updateUserConProfileMutation}>
+          <Mutation mutation={UpdateUserConProfile}>
             {updateUserConProfile => (
               <button
                 className="btn btn-primary"

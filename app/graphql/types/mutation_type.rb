@@ -327,6 +327,14 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
+  field :convertTicketToEventProvided, mutation: Mutations::ConvertTicketToEventProvided do
+    guard -> (_obj, args, ctx) {
+      event = ctx[:convention].events.find(args[:event_id])
+      user_con_profile = ctx[:convention].user_con_profiles.find(args[:user_con_profile_id])
+      ctx[:current_ability].can?(:destroy, user_con_profile.ticket) && ctx[:current_ability].can?(:update, event.team_members.new)
+    }
+  end
+
   ### TicketType
 
   field :createTicketType, field: Mutations::CreateTicketType.field do
