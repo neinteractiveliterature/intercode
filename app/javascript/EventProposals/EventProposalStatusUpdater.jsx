@@ -1,85 +1,194 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
 import { Mutation } from 'react-apollo';
+import Modal from 'react-bootstrap4-modal';
 
-import { mutator, Transforms } from '../ComposableFormUtils';
+import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import ErrorDisplay from '../ErrorDisplay';
-import { transitionEventProposalMutation } from './mutations';
+import ModalContainer from '../ModalDialogs/ModalContainer';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
+import { TransitionEventProposal } from './mutations.gql';
+
+// <select
+// id={selectId}
+// className="form-control-sm ml-1 mr-2"
+// value={this.state.status}
+// onChange={this.mutator.status}
+// disabled={this.state.mutating}
+// >
+// {
+//   ['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map(status => (
+//     <option value={status} key={status}>{status}</option>
+//   ))
+// }
+// </select>
+
+/* <Mutation mutation={TransitionEventProposal}>
+  {mutate => (
+    <button
+      type="button"
+      className="btn btn-sm btn-primary"
+      disabled={this.state.mutating}
+      onClick={async () => {
+        this.setState({ mutating: true });
+
+        try {
+          const { eventProposalId } = this.props;
+          const { status } = this.state;
+          await mutate({ variables: { eventProposalId, status } });
+          this.setState({ mutating: false });
+        } catch (error) {
+          this.setState({ mutating: false, error });
+        }
+      }}
+    >
+      Update
+    </button>
+  )}
+</Mutation> */
+
+const STATUSES = [
+  { key: 'proposed', transitionLabel: 'Update', buttonClass: 'btn-primary' },
+  { key: 'reviewing', transitionLabel: 'Update', buttonClass: 'btn-primary' },
+  { key: 'accepted', transitionLabel: 'Accept', buttonClass: 'btn-success' },
+  {
+    key: 'rejected', transitionLabel: 'Reject', buttonClass: 'btn-danger', offerDropEvent: true,
+  },
+  {
+    key: 'withdrawn', transitionLabel: 'Update', buttonClass: 'btn-danger', offerDropEvent: true,
+  },
+];
+
+function getStatus(key) {
+  return STATUSES.find(status => status.key === key);
+}
 
 class EventProposalStatusUpdater extends React.Component {
   static propTypes = {
-    eventProposalId: PropTypes.number.isRequired,
-    initialStatus: PropTypes.string.isRequired,
+    eventProposal: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string,
+      status: PropTypes.string.isRequired,
+      event: PropTypes.shape({}).isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      status: props.initialStatus,
-      mutating: false,
+      status: props.eventProposal.status,
+      mutationInProgress: false,
+      dropEvent: false,
       error: null,
     };
-
-    this.mutator = mutator({
-      component: this,
-      transforms: {
-        status: Transforms.inputChange(Transforms.identity),
-      },
-    });
-
-    enableUniqueIds(this);
   }
 
-  render = () => {
-    const selectId = this.nextUniqueId();
+  performTransition = async (mutate, closeModal) => {
+    this.setState({ mutationInProgress: true });
+    try {
+      await mutate({
+        variables: {
+          eventProposalId: this.props.eventProposal.id,
+          status: this.state.status,
+          dropEvent: this.state.dropEvent,
+        },
+      });
+      this.setState({ mutationInProgress: false });
+      closeModal();
+    } catch (error) {
+      this.setState({ mutationInProgress: false, error });
+    }
+  }
 
-    return (
-      <div className="form form-inline">
-        <label htmlFor={selectId}>
+  render = () => (
+    <ModalContainer>
+      {({ openModal, closeModal, modalVisible }) => (
+        <div>
           Status:
-          <select
-            id={selectId}
-            className="form-control-sm ml-1 mr-2"
-            value={this.state.status}
-            onChange={this.mutator.status}
-            disabled={this.state.mutating}
-          >
-            {
-              ['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map(status => (
-                <option value={status} key={status}>{status}</option>
-              ))
-            }
-          </select>
-        </label>
-        <Mutation mutation={transitionEventProposalMutation}>
-          {mutate => (
-            <button
-              type="button"
-              className="btn btn-sm btn-primary"
-              disabled={this.state.mutating}
-              onClick={async () => {
-                this.setState({ mutating: true });
+          {' '}
+          {this.props.eventProposal.status}
+          {' '}
+          <button type="button" className="btn btn-sm btn-primary" onClick={openModal}>
+            Change
+          </button>
 
-                try {
-                  const { eventProposalId } = this.props;
-                  const { status } = this.state;
-                  await mutate({ variables: { eventProposalId, status } });
-                  this.setState({ mutating: false });
-                } catch (error) {
-                  this.setState({ mutating: false, error });
-                }
-              }}
-            >
-              Update
-            </button>
-          )}
-        </Mutation>
-        <ErrorDisplay graphQLError={this.state.error} />
-      </div>
-    );
-  }
+          <Modal visible={modalVisible}>
+            <div className="modal-header">
+              {'Change status for '}
+              {this.props.eventProposal.title}
+            </div>
+
+            <div className="modal-body">
+              <MultipleChoiceInput
+                caption="New status"
+                choices={['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map(status => ({
+                  label: status, value: status,
+                }))}
+                value={this.state.status}
+                onChange={status => this.setState({ status, dropEvent: false })}
+                disabled={this.state.mutationInProgress}
+              />
+
+              {
+                this.state.status === 'accepted' && !this.props.eventProposal.event
+                  ? (
+                    <p className="text-danger">
+                      This will create an event on the convention web site.  It will not yet be
+                      on the schedule or possible to sign up for, but it will appear in the events
+                      list.
+                    </p>
+                  )
+                  : null
+              }
+
+              {
+                getStatus(this.state.status).offerDropEvent && this.props.eventProposal.event
+                  ? (
+                    <BooleanInput
+                      caption="Drop event?"
+                      value={this.state.dropEvent}
+                      onChange={dropEvent => this.setState({ dropEvent })}
+                      disabled={this.state.mutationInProgress}
+                    />
+                  )
+                  : null
+              }
+
+              <ErrorDisplay graphQLError={this.state.error} />
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={closeModal}
+                disabled={this.state.mutationInProgress}
+              >
+                Cancel
+              </button>
+
+              <Mutation mutation={TransitionEventProposal}>
+                {mutate => (
+                  <button
+                    type="button"
+                    className={`btn ${getStatus(this.state.status).buttonClass}`}
+                    onClick={() => this.performTransition(mutate, closeModal)}
+                    disabled={
+                      this.state.mutationInProgress
+                      || this.state.status === this.props.eventProposal.status
+                    }
+                  >
+                    {getStatus(this.state.status).transitionLabel}
+                  </button>
+                )}
+              </Mutation>
+            </div>
+          </Modal>
+        </div>
+      )}
+    </ModalContainer>
+  )
 }
 
 export default EventProposalStatusUpdater;
