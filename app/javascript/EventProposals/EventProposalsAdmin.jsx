@@ -8,7 +8,7 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EventProposalAdminDisplay from './EventProposalAdminDisplay';
 import EventProposalForm from './EventProposalForm';
-import { eventProposalQueryWithOwner } from './queries';
+import { EventProposalQueryWithOwner } from './queries.gql';
 import EventProposalsAdminTable from './EventProposalsAdminTable';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
@@ -32,7 +32,7 @@ const EventProposalsAdmin = ({
             path="/:id"
             render={({ match }) => (
               <QueryWithStateDisplay
-                query={eventProposalQueryWithOwner}
+                query={EventProposalQueryWithOwner}
                 variables={{ eventProposalId: Number.parseInt(match.params.id, 10) }}
               >
                 {({ data }) => (

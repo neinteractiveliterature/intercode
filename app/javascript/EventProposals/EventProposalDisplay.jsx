@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
-import { eventProposalQueryWithOwner } from './queries';
+import { EventProposalQueryWithOwner } from './queries.gql';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
@@ -44,7 +44,7 @@ class EventProposalDisplay extends React.Component {
 
   render = () => (
     <QueryWithStateDisplay
-      query={eventProposalQueryWithOwner}
+      query={EventProposalQueryWithOwner}
       variables={{ eventProposalId: this.props.eventProposalId }}
     >
       {({ data }) => (
