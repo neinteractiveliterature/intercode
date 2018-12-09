@@ -6,5 +6,6 @@ set -x
 # awscli bails unless you have this, apparently
 export LC_ALL="en_US.UTF-8"
 
-./cc-test-reporter format-coverage --output coverage/codeclimate.$TRAVIS_JOB_NUMBER.json
-s3cmd sync coverage/ "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER/"
+./cc-test-reporter format-coverage -t simplecov --output coverage/codeclimate.ruby.json
+./cc-test-reporter format-coverage -t lcov --output coverage/codeclimate.js.json
+./cc-test-reporter sum-coverage --output - --parts 2 coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
