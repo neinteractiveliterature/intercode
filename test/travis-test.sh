@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-if [ "${LANGUAGE}" = "ruby" ]; then
-  exec bin/rails test
-fi
+set -e
+set -x
 
-if [ "${LANGUAGE}" = "javascript" ]; then
-  exec yarn run test
-fi
+bin/rails test
+yarn run test
