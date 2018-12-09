@@ -41,11 +41,8 @@ FROM build AS dev
 
 ENV RAILS_ENV development
 
-USER root
-RUN mv /usr/src/build /usr/src/app
-
 USER www
-WORKDIR /usr/src/app
+WORKDIR /usr/src/build
 
 ### build-production
 
