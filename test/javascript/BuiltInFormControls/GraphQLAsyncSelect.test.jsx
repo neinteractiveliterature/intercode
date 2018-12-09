@@ -27,6 +27,7 @@ describe('GraphQLAsyncSelect', () => {
         getOptions={data => data.convention.user_con_profiles_paginated.entries}
         getOptionLabel={option => option.name_without_nickname}
         getOptionValue={option => option.id}
+        getVariables={input => ({ name: input })}
         {...props}
       />
     ));
