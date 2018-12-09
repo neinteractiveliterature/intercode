@@ -370,7 +370,6 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result.signup.requested_bucket_key.must_equal 'cats'
       end
 
-      focus
       it 'emails only the team members who have requested waitlist emails' do
         email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
         no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
