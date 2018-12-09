@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
+import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { mutator, Transforms } from '../../ComposableFormUtils';
 
 function TeamMemberForm({
@@ -14,26 +15,40 @@ function TeamMemberForm({
       display: Transforms.checkboxChange,
       show_email: Transforms.checkboxChange,
       receive_con_email: Transforms.checkboxChange,
-      receive_signup_email: Transforms.checkboxChange,
+      receive_signup_email: Transforms.identity,
     },
   });
 
   return (
-    [
-      { name: 'display', label: `Display as ${event.team_member_name}` },
-      { name: 'show_email', label: 'Show email address' },
-      { name: 'receive_con_email', label: 'Receive email from convention' },
-      { name: 'receive_signup_email', label: 'Receive email on signup and withdrawal' },
-    ].map(({ name, label }) => (
-      <BootstrapFormCheckbox
-        key={name}
-        label={label}
-        name={name}
-        disabled={disabled}
-        checked={value[name]}
-        onChange={formMutator[name]}
+    <>
+      {
+        [
+          { name: 'display', label: `Display as ${event.team_member_name}` },
+          { name: 'show_email', label: 'Show email address' },
+          { name: 'receive_con_email', label: 'Receive email from convention' },
+        ].map(({ name, label }) => (
+          <BootstrapFormCheckbox
+            key={name}
+            label={label}
+            name={name}
+            disabled={disabled}
+            checked={value[name]}
+            onChange={formMutator[name]}
+          />
+        ))
+      }
+
+      <MultipleChoiceInput
+        caption="Receive email on signup and withdrawal"
+        choices={[
+          { label: 'Yes, all signup activity', value: 'ALL_SIGNUPS' },
+          { label: 'Yes, except joining and dropping from waitlist', value: 'NON_WAITLIST_SIGNUPS' },
+          { label: 'No', value: 'NO' },
+        ]}
+        value={value.receive_signup_email}
+        onChange={formMutator.receive_signup_email}
       />
-    ))
+    </>
   );
 }
 

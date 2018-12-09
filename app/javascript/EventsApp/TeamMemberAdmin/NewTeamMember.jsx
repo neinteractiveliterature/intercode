@@ -38,7 +38,7 @@ class NewTeamMember extends React.Component {
         display: true,
         show_email: true,
         receive_con_email: true,
-        receive_signup_email: false,
+        receive_signup_email: 'NO',
       },
     };
   }

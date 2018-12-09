@@ -16,7 +16,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     )
   end
   let(:whodunit) { FactoryBot.create :user_con_profile, convention: convention }
-  let(:team_member) { FactoryBot.create :team_member, event: event, receive_signup_email: true }
+  let(:team_member) { FactoryBot.create :team_member, event: event, receive_signup_email: 'all_signups' }
 
   subject { EventChangeRegistrationPolicyService.new(event, new_registration_policy, whodunit) }
 
