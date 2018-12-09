@@ -1,8 +1,3 @@
-import gql from 'graphql-tag';
-
-const fragments = {};
-
-fragments.eventProposal = gql`
 fragment EventProposalFields on EventProposal {
   id
   title
@@ -13,9 +8,7 @@ fragment EventProposalFields on EventProposal {
     id
   }
 }
-`;
 
-fragments.eventProposalFormData = gql`
 fragment EventProposalFormData on Convention {
   starts_at
   ends_at
@@ -27,9 +20,7 @@ fragment EventProposalFormData on Convention {
     form_api_json
   }
 }
-`;
 
-export const eventProposalQuery = gql`
 query EventProposalQuery($eventProposalId: Int!) {
   convention {
     id
@@ -41,11 +32,6 @@ query EventProposalQuery($eventProposalId: Int!) {
   }
 }
 
-${fragments.eventProposal}
-${fragments.eventProposalFormData}
-`;
-
-export const eventProposalQueryWithOwner = gql`
 query EventProposalQueryWithOwner($eventProposalId: Int!) {
   convention {
     id
@@ -68,17 +54,9 @@ query EventProposalQueryWithOwner($eventProposalId: Int!) {
   }
 }
 
-${fragments.eventProposal}
-${fragments.eventProposalFormData}
-`;
-
-export const eventProposalAdminNotesQuery = gql`
 query EventProposalAdminNotesQuery($eventProposalId: Int!) {
   eventProposal(id: $eventProposalId) {
     id
     admin_notes
   }
 }
-`;
-
-export { fragments };

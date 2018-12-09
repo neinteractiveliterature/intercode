@@ -50,9 +50,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it 'emails the team members who have requested it' do
-      email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
-      email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
-      no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: false)
+      email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
+      email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
+      no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'no')
 
       perform_enqueued_jobs do
         result = subject.call
@@ -368,6 +368,24 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result.signup.must_be :waitlisted?
         result.signup.bucket_key.must_be :nil?
         result.signup.requested_bucket_key.must_equal 'cats'
+      end
+
+      focus
+      it 'emails only the team members who have requested waitlist emails' do
+        email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
+        no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
+        2.times { create_other_signup 'cats' }
+        4.times { create_other_signup 'anything' }
+
+        perform_enqueued_jobs do
+          result = subject.call
+          result.must_be :success?
+
+          ActionMailer::Base.deliveries.size.must_equal 1
+          recipients = ActionMailer::Base.deliveries.map(&:to)
+          recipients.must_include [email_team_member.user_con_profile.email]
+          recipients.wont_include [no_email_team_member.user_con_profile.email]
+        end
       end
 
       describe 'signing up to a nonexistent bucket' do

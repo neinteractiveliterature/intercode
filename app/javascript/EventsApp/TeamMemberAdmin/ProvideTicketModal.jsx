@@ -1,12 +1,11 @@
 import React from 'react';
-import arrayToSentence from 'array-to-sentence';
 import { capitalize, pluralize } from 'inflected';
 import Modal from 'react-bootstrap4-modal';
 import { Mutation } from 'react-apollo';
 
-import { describeTicketType, describeTicketTypeProvidability } from './ProvideTicketUtils';
 import ErrorDisplay from '../../ErrorDisplay';
-import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
+import { getProvidableTicketTypes } from './ProvideTicketUtils';
+import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import { ProvideEventTicket } from './mutations.gql';
 import { TeamMembersQuery } from './queries.gql';
 import TicketingStatusDescription from './TicketingStatusDescription';
@@ -19,61 +18,6 @@ class ProvideTicketModal extends React.Component {
       ticketTypeId: null,
       mutationInProgress: false,
     };
-  }
-
-  renderTicketTypeSelection = (providableTicketTypes, providedTicketCountByType) => {
-    const { teamMember, convention, event } = this.props;
-
-    if (teamMember.user_con_profile.ticket) {
-      return null;
-    }
-
-    const providableTicketTypeDescriptions = providableTicketTypes
-      .map(ticketType => describeTicketTypeProvidability(
-        ticketType,
-        providedTicketCountByType[ticketType.id],
-        convention.ticket_name,
-      ));
-
-    const providabilityDescription = [
-      `${event.title} has`,
-      (
-        providableTicketTypeDescriptions.length > 0
-          ? arrayToSentence(providableTicketTypeDescriptions)
-          : 'no tickets'
-      ),
-      'remaining to provide',
-    ].join(' ');
-
-    const choices = providableTicketTypes.map((ticketType) => {
-      const remaining = (
-        ticketType.maximum_event_provided_tickets - providedTicketCountByType[ticketType.id]
-      );
-
-      return {
-        label: `Provide ${describeTicketType(ticketType, convention.ticket_name)} (${remaining} remaining)`,
-        value: ticketType.id.toString(),
-        disabled: remaining < 1,
-      };
-    });
-
-    return (
-      <>
-        <div>
-          {providabilityDescription}
-          .
-        </div>
-
-        <MultipleChoiceInput
-          name="ticketTypeId"
-          caption=""
-          choices={choices}
-          value={this.state.ticketTypeId == null ? '' : this.state.ticketTypeId.toString()}
-          onChange={(value) => { this.setState({ ticketTypeId: Number.parseInt(value, 10) }); }}
-          disabled={this.state.mutationInProgress}
-        />
-      </>
-    );
   }
 
   render = () => {
@@ -102,21 +46,7 @@ class ProvideTicketModal extends React.Component {
       },
     });
 
-    const providableTicketTypes = convention.ticket_types.filter((
-      ticketType => ticketType.maximum_event_provided_tickets > 0
-    ));
-    const providedTicketCountByType = Object.assign(
-      {},
-      ...providableTicketTypes.map((
-        ticketType => ({
-          [ticketType.id]: event.provided_tickets.filter((
-            ticket => ticket.ticket_type.id === ticketType.id
-          )).length,
-        })
-      )),
-    );
-
-    if (providableTicketTypes.length < 1) {
+    if (getProvidableTicketTypes(convention).length < 1) {
       return null;
     }
 
@@ -138,7 +68,19 @@ class ProvideTicketModal extends React.Component {
                     />
                   </p>
 
-                  {this.renderTicketTypeSelection(providableTicketTypes, providedTicketCountByType)}
+                  {
+                    teamMember && !teamMember.user_con_profile.ticket
+                      ? (
+                        <ProvidableTicketTypeSelection
+                          event={event}
+                          convention={convention}
+                          value={this.state.ticketTypeId}
+                          onChange={(value) => { this.setState({ ticketTypeId: value }); }}
+                          disabled={this.state.mutationInProgress}
+                        />
+                      )
+                      : null
+                  }
                 </>
               )
               : null

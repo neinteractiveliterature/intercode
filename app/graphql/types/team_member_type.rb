@@ -1,22 +1,36 @@
-Types::TeamMemberType = GraphQL::ObjectType.define do
-  name 'TeamMember'
+class Types::TeamMemberType < Types::BaseObject
+  graphql_name 'TeamMember'
 
-  field :id, !types.Int
-  field :display, !types.Boolean
-  field :show_email, !types.Boolean
-  field :receive_con_email, !types.Boolean
-  field :receive_signup_email, !types.Boolean
-  field :email, types.String
+  field :id, Int, null: false
+  field :display, Boolean, null: false
+  field :show_email, Boolean, null: false, camelize: false
+  field :receive_con_email, Boolean, null: false, camelize: false
+  field :receive_signup_email, Types::ReceiveSignupEmailType, null: false, camelize: false
+  field :email, String, null: true
+  field :event, Types::EventType, null: false
+  field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
 
-  field :event, !Types::EventType do
-    resolve ->(obj, _args, _ctx) {
-      RecordLoader.for(Event).load(obj.event_id)
-    }
+  def event
+    RecordLoader.for(Event).load(object.event_id)
   end
 
-  field :user_con_profile, !Types::UserConProfileType do
-    resolve ->(obj, _args, _ctx) {
-      RecordLoader.for(UserConProfile).load(obj.user_con_profile_id)
-    }
+  def user_con_profile
+    RecordLoader.for(UserConProfile).load(object.user_con_profile_id)
+  end
+
+  def receive_signup_email
+    object.receive_signup_email.upcase
+  end
+
+  def display
+    !!object.display
+  end
+
+  def show_email
+    !!object.show_email
+  end
+
+  def receive_con_email
+    !!object.receive_con_email
   end
 end

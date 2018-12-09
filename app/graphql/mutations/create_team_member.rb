@@ -1,6 +1,6 @@
 Mutations::CreateTeamMember = GraphQL::Relay::Mutation.define do
   name 'CreateTeamMember'
-  return_field :team_member, !Types::TeamMemberType
+  return_field :team_member, Types::TeamMemberType.to_non_null_type
   return_field :ticket, Types::TicketType
 
   input_field :event_id, !types.Int

@@ -25,5 +25,6 @@ export default class ModalContainer extends React.Component {
     modalState: this.state.modalState,
     openModal: (modalState) => { this.setState({ visible: true, modalState }); },
     closeModal: () => { this.setState({ visible: false, modalState: null }); },
-  });
+    setModalState: (modalState) => { this.setState({ modalState }); },
+  })
 }

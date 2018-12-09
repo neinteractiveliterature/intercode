@@ -42,7 +42,7 @@ class AcceptEventProposalService < CivilService::Service
         display: true,
         show_email: false,
         receive_con_email: true,
-        receive_signup_email: false,
+        receive_signup_email: 'non_waitlist_signups',
         user_con_profile: event_proposal.owner
       )
     end

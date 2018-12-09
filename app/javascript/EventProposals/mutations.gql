@@ -1,7 +1,5 @@
-import gql from 'graphql-tag';
-import { fragments } from './queries';
+#import "./queries.gql"
 
-export const updateEventProposalMutation = gql`
 mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   updateEventProposal(input: $input) {
     event_proposal {
@@ -10,10 +8,6 @@ mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   }
 }
 
-${fragments.eventProposal}
-`;
-
-export const submitEventProposalMutation = gql`
 mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
   submitEventProposal(input: $input) {
     event_proposal {
@@ -22,22 +16,14 @@ mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
   }
 }
 
-${fragments.eventProposal}
-`;
-
-export const transitionEventProposalMutation = gql`
-mutation TransitionEventProposal($eventProposalId: Int!, $status: String!) {
-  transitionEventProposal(input: { id: $eventProposalId, status: $status}) {
+mutation TransitionEventProposal($eventProposalId: Int!, $status: String!, $dropEvent: Boolean) {
+  transitionEventProposal(input: { id: $eventProposalId, status: $status, drop_event: $dropEvent }) {
     event_proposal {
       ...EventProposalFields
     }
   }
 }
 
-${fragments.eventProposal}
-`;
-
-export const updateEventProposalAdminNotesMutation = gql`
 mutation UpdateEventProposalAdminNotes($eventProposalId: Int!, $adminNotes: String!) {
   updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
     event_proposal {
@@ -45,6 +31,3 @@ mutation UpdateEventProposalAdminNotes($eventProposalId: Int!, $adminNotes: Stri
     }
   }
 }
-
-${fragments.eventProposal}
-`;

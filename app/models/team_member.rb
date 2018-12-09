@@ -9,6 +9,8 @@ class TeamMember < ApplicationRecord
   validates :user_con_profile, presence: true
   validates_uniqueness_of :user_con_profile_id, scope: :event_id
 
+  validates_inclusion_of :receive_signup_email, in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase)
+
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
 
@@ -24,6 +26,10 @@ class TeamMember < ApplicationRecord
   # If not, return an empty string
   def email
     user_con_profile.email if show_email?
+  end
+
+  def receive_signup_email=(value)
+    write_attribute(:receive_signup_email, value&.downcase)
   end
 
   private

@@ -9,8 +9,8 @@ import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
-import { eventProposalQuery } from './queries';
-import { updateEventProposalMutation, submitEventProposalMutation } from './mutations';
+import { EventProposalQuery } from './queries.gql';
+import { UpdateEventProposal, SubmitEventProposal } from './mutations.gql';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -20,8 +20,8 @@ function parseResponseErrors(error) {
 }
 
 @flowRight([
-  graphql(eventProposalQuery),
-  graphql(updateEventProposalMutation, {
+  graphql(EventProposalQuery),
+  graphql(UpdateEventProposal, {
     props: ({ mutate }) => ({
       updateEventProposal: eventProposal => mutate({
         variables: {
@@ -35,7 +35,7 @@ function parseResponseErrors(error) {
       }),
     }),
   }),
-  graphql(submitEventProposalMutation, {
+  graphql(SubmitEventProposal, {
     props: ({ mutate }) => ({
       submitEventProposal: eventProposal => mutate({
         variables: {
@@ -50,7 +50,7 @@ function parseResponseErrors(error) {
 @GraphQLQueryResultWrapper
 class EventProposalForm extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventProposalQuery).isRequired,
+    data: GraphQLResultPropType(EventProposalQuery).isRequired,
     updateEventProposal: PropTypes.func.isRequired,
     submitEventProposal: PropTypes.func.isRequired,
     afterSubmitUrl: PropTypes.string,

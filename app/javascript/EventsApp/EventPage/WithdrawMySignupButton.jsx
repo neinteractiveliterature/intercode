@@ -30,7 +30,7 @@ function WithdrawMySignupButton({
 
                   return mutationResult;
                 },
-                displayError: error => <ErrorDisplay graphQLError={error} />,
+                renderError: error => <ErrorDisplay graphQLError={error} />,
               })}
             >
               {buttonText || 'Withdraw'}

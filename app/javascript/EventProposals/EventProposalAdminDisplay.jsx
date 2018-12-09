@@ -6,9 +6,9 @@ import { Mutation } from 'react-apollo';
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
-import { eventProposalQueryWithOwner, eventProposalAdminNotesQuery } from './queries';
+import { EventProposalQueryWithOwner, EventProposalAdminNotesQuery } from './queries.gql';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import { updateEventProposalAdminNotesMutation } from './mutations';
+import { UpdateEventProposalAdminNotes } from './mutations.gql';
 
 class EventProposalAdminDisplay extends React.PureComponent {
   static propTypes = {
@@ -17,7 +17,7 @@ class EventProposalAdminDisplay extends React.PureComponent {
 
   render = () => (
     <QueryWithStateDisplay
-      query={eventProposalQueryWithOwner}
+      query={EventProposalQueryWithOwner}
       variables={{ eventProposalId: this.props.eventProposalId }}
     >
       {({ data }) => (
@@ -31,8 +31,7 @@ class EventProposalAdminDisplay extends React.PureComponent {
               data.currentAbility.can_update_event_proposal
                 ? (
                   <EventProposalStatusUpdater
-                    eventProposalId={this.props.eventProposalId}
-                    initialStatus={data.eventProposal.status}
+                    eventProposal={data.eventProposal}
                   />
                 )
                 : (
@@ -71,11 +70,11 @@ class EventProposalAdminDisplay extends React.PureComponent {
                 data.currentAbility.can_read_admin_notes_on_event_proposal
                   ? (
                     <QueryWithStateDisplay
-                      query={eventProposalAdminNotesQuery}
+                      query={EventProposalAdminNotesQuery}
                       variables={{ eventProposalId: this.props.eventProposalId }}
                     >
                       {({ data: adminNotesData }) => (
-                        <Mutation mutation={updateEventProposalAdminNotesMutation}>
+                        <Mutation mutation={UpdateEventProposalAdminNotes}>
                           {mutate => (
                             <AdminNotes
                               value={adminNotesData.eventProposal.admin_notes}
@@ -86,11 +85,11 @@ class EventProposalAdminDisplay extends React.PureComponent {
                                 },
                                 update: (cache) => {
                                   const { eventProposal } = cache.readQuery({
-                                    query: eventProposalAdminNotesQuery,
+                                    query: EventProposalAdminNotesQuery,
                                     variables: { eventProposalId: this.props.eventProposalId },
                                   });
                                   cache.writeQuery({
-                                    query: eventProposalAdminNotesQuery,
+                                    query: EventProposalAdminNotesQuery,
                                     variables: { eventProposalId: this.props.eventProposalId },
                                     data: {
                                       eventProposal: {

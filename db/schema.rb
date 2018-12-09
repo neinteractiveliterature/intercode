@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_145849) do
+ActiveRecord::Schema.define(version: 2018_12_09_164557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -444,9 +444,9 @@ ActiveRecord::Schema.define(version: 2018_11_13_145849) do
     t.boolean "display"
     t.boolean "show_email"
     t.boolean "receive_con_email"
-    t.boolean "receive_signup_email"
     t.datetime "created_at"
     t.integer "user_con_profile_id", null: false
+    t.string "receive_signup_email", default: "no", null: false
     t.index ["user_con_profile_id"], name: "index_team_members_on_user_con_profile_id"
   end
 
