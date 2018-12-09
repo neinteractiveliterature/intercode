@@ -28,11 +28,53 @@ before_install:
 - export BRANCH_TAG=$(echo ${TRAVIS_PULL_REQUEST_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g')
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+- test/docker-pull.sh
+- docker build
+  -f Dockerfile.web
+  --target build
+  --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:latest
+  --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:build-production-master
+  -t neinteractiveliterature/intercode:local-build
+  .
+- docker build
+  -f Dockerfile.web
+  --target build-production
+  --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:latest
+  --cache-from neinteractiveliterature/intercode:local-build
+  --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:build-production-master
+  -t neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
+  .
+- docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+- docker push neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+- docker build
+  -f Dockerfile.web
+  --target production
+  --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:latest
+  --cache-from neinteractiveliterature/intercode:local-build
+  --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
+  -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+  .
+- docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+- docker tag neinteractiveliterature/intercode:${TRAVIS_COMMIT} neinteractiveliterature/intercode:${BRANCH_TAG}
+- docker push neinteractiveliterature/intercode:${BRANCH_TAG}
+- docker build
+  -f Dockerfile.web
+  --target test
+  --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
+  --cache-from neinteractiveliterature/intercode:local-build
+  --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
+  --cache-from neinteractiveliterature/intercode:neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+  -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
+  .
 script:
-- docker pull neinteractiveliterature/intercode:test-$TRAVIS_COMMIT
 - docker-compose -f docker-compose.test.yml run
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  -e LANGUAGE=$LANGUAGE
   -e CI=$CI -e TRAVIS=$TRAVIS -e TRAVIS_COMMIT=$TRAVIS_COMMIT
   -e TRAVIS_BRANCH=$TRAVIS_BRANCH -e TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
   -e TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA
@@ -40,77 +82,8 @@ script:
   -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
   web
   test/travis-complete.sh
-stages:
-- build
-- test
-- after
-jobs:
-  include:
-  - stage: build
-    before_script:
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-    - test/docker-pull.sh
-    script:
-    - docker build
-      -f Dockerfile.web
-      --target build
-      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:latest
-      --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:build-production-master
-      -t neinteractiveliterature/intercode:local-build
-      .
-    - docker build
-      -f Dockerfile.web
-      --target build-production
-      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:latest
-      --cache-from neinteractiveliterature/intercode:local-build
-      --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:build-production-master
-      -t neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
-      .
-    - docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-    - docker push neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-    - docker build
-      -f Dockerfile.web
-      --target production
-      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:latest
-      --cache-from neinteractiveliterature/intercode:local-build
-      --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
-      -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
-      .
-    - docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
-    - docker tag neinteractiveliterature/intercode:${TRAVIS_COMMIT} neinteractiveliterature/intercode:${BRANCH_TAG}
-    - docker push neinteractiveliterature/intercode:${BRANCH_TAG}
-    - docker pull neinteractiveliterature/intercode:test-${BRANCH_TAG} || true
-    - docker build
-      -f Dockerfile.web
-      --target test
-      --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
-      --cache-from neinteractiveliterature/intercode:local-build
-      --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
-      --cache-from neinteractiveliterature/intercode:neinteractiveliterature/intercode:${TRAVIS_COMMIT}
-      -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
-      .
-    - docker push neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
-    - docker tag neinteractiveliterature/intercode:test-${TRAVIS_COMMIT} neinteractiveliterature/intercode:test-${BRANCH_TAG}
-    - docker push neinteractiveliterature/intercode:test-${BRANCH_TAG}
-  - stage: after
-    language: generic
-    before_script:
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-    - pip install --user awscli
-    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-      > ./cc-test-reporter
-    - chmod +x ./cc-test-reporter
-    script:
-    - test/docker-push.sh
-    - aws s3 sync "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER" coverage/
-    - "./cc-test-reporter sum-coverage --output - --parts 2 coverage/codeclimate.*.json
-      | ./cc-test-reporter upload-coverage --input -"
+after_script:
+- test/docker-push.sh
 notifications:
   slack:
     secure: Ca/xHuvVik0EfevEAmMuLH+Ybd2yj7FuYsSmxJ/4dyxisuKg+tUvnJEZxnrU/QtHOdSyIh3ZAA4gVHd8PALuJ0HYOjotogqCZaQ0ZYTB7pKVvxc8u8YK7aY3P58guib7SrU3iRXsvjaV5xOflaBY4Ng1TQrkc8TCU4i8xZhWxWc=
@@ -126,9 +99,6 @@ env:
   - secure: eDGbrUupdZ9JI1xQdh3hHrRFK+wMa2DE+Dc+MeAVYkQueE5h3JDIl5ituljFCQhSP7Qe/DUyRm1t/0vqWa+AQ4Jg4SghKf8NX7oYze9JIB5D0On40mDZroYo6/AJtAthlEOLc0EzBDl3y7pyjFbxSGFE3bi2MJ48hG0MniU/yVk=
   - secure: UuIzUbDax08gPFnSVD2bB6ma5lSQsPMEgaDgRJEpqMR/5zZ5enSMv1QG5uiW4W6spKqXbM2wRiAxLEfMU1h/MJqNz5trA1+hss8wjHcCcbnTeILv9Qdrn0IUKzsY5JfkqHtQSesLUAmof3AwdP+SZOFZaQ0EQy6BLmulbuP9gfI=
   - secure: l+zizfE9Ve5rOhcXraFA7PEaY6Z5gdlB0lZfL28LFSDOQqKwFA1Gl4FTNusaKbTU8dRLAN+RiRkUMQ+l7E99gBUievqkri7786ZopeStjAG1yQ5yeJe03Knq2Kh8GGhb3K/6WjMPVfOYZtrxVZZZh3LXJ4AnmgjP6g9ptKv6JCM=
-  matrix:
-  - LANGUAGE=ruby
-  - LANGUAGE=javascript
 addons:
   code_climate:
     repo_token: 2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce

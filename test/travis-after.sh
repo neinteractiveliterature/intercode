@@ -7,4 +7,5 @@ set -x
 export LC_ALL="en_US.UTF-8"
 
 ./cc-test-reporter format-coverage --output coverage/codeclimate.$TRAVIS_JOB_NUMBER.json
-s3cmd sync coverage/ "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER/"
+./cc-test-reporter sum-coverage --output - --parts 2 coverage/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
+# s3cmd sync coverage/ "s3://intercode2-coverage/coverage/$TRAVIS_BUILD_NUMBER/"
