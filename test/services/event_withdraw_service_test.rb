@@ -31,9 +31,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   end
 
   it 'notifies team members who have requested it' do
-    email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
-    email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
-    no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: false)
+    email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
+    email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
+    no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'no')
 
     perform_enqueued_jobs do
       result = subject.call
@@ -143,7 +143,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     end
 
     it 'notifies team members who have requested it' do
-      team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: true)
+      team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
       anything_signup
 
       perform_enqueued_jobs do

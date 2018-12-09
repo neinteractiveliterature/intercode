@@ -59,7 +59,7 @@ Types::EventType = GraphQL::ObjectType.define do
       event.runs.find(args[:id])
     end
   end
-  field :team_members, !types[!Types::TeamMemberType] do
+  field :team_members, Types::TeamMemberType.to_list_type.to_non_null_type do
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(Event, :team_members).load(obj)
     }

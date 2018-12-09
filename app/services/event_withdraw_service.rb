@@ -46,7 +46,10 @@ class EventWithdrawService < CivilService::Service
   end
 
   def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
-    event.team_members.where(receive_signup_email: true).find_each do |team_member|
+    event.team_members.find_each do |team_member|
+      next if team_member.receive_signup_email == 'no'
+      next if team_member.receive_signup_email == 'non_waitlist_signups' && prev_state == 'waitlisted'
+
       EventSignupMailer.withdrawal(
         signup,
         prev_state,
