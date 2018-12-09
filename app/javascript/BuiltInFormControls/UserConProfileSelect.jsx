@@ -34,6 +34,7 @@ class UserConProfileSelect extends React.PureComponent {
     <GraphQLAsyncSelect
       isClearable
       getOptions={data => data.convention.user_con_profiles_paginated.entries}
+      getVariables={inputValue => ({ name: inputValue })}
       getOptionValue={option => option.id}
       getOptionLabel={option => option.name_without_nickname}
       query={this.props.userConProfilesQuery || DEFAULT_USER_CON_PROFILES_QUERY}

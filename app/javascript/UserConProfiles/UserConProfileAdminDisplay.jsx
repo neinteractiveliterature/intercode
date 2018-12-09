@@ -11,7 +11,7 @@ import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import TicketAdminSection from './TicketAdminSection';
-import { userConProfileAdminQuery } from './queries';
+import { UserConProfileAdminQuery } from './queries.gql';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 
 const deleteUserConProfileMutation = gql`
@@ -148,7 +148,7 @@ class UserConProfileAdminDisplay extends React.Component {
 
   render = () => (
     <QueryWithStateDisplay
-      query={userConProfileAdminQuery}
+      query={UserConProfileAdminQuery}
       variables={{ id: this.props.userConProfileId }}
     >
       {({ data }) => (

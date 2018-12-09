@@ -8,8 +8,8 @@ import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
-import { myProfileQuery } from './queries';
-import { updateUserConProfileMutation } from './mutations';
+import { MyProfileQuery } from './queries.gql';
+import { UpdateUserConProfile } from './mutations.gql';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -19,8 +19,8 @@ function parseResponseErrors(error) {
 }
 
 @flowRight([
-  graphql(myProfileQuery),
-  graphql(updateUserConProfileMutation, {
+  graphql(MyProfileQuery),
+  graphql(UpdateUserConProfile, {
     props: ({ mutate }) => ({
       updateUserConProfile: userConProfile => mutate({
         variables: {
@@ -38,7 +38,7 @@ function parseResponseErrors(error) {
 @GraphQLQueryResultWrapper
 class MyProfileForm extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(myProfileQuery).isRequired,
+    data: GraphQLResultPropType(MyProfileQuery).isRequired,
     updateUserConProfile: PropTypes.func.isRequired,
   };
 

@@ -6,7 +6,7 @@ FROM ruby:${RUBY_VERSION}-alpine as build
 
 RUN apk add \
   --no-cache \
-  build-base yarn git postgresql-dev cmake flex curl python tzdata less bash
+  build-base git postgresql-dev cmake flex curl python tzdata less bash nodejs yarn
 
 RUN mkdir -p /tmp \
   && cd /tmp \

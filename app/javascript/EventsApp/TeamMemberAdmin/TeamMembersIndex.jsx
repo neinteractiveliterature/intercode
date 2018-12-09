@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pluralize, titleize, underscore } from 'inflected';
+import {
+  humanize, pluralize, titleize, underscore,
+} from 'inflected';
 import { Link, withRouter } from 'react-router-dom';
 
 import Checkmark from './Checkmark';
@@ -10,7 +12,12 @@ import ModalContainer from '../../ModalDialogs/ModalContainer';
 import PopperDropdown from '../../UIComponents/PopperDropdown';
 import ProvideTicketModal from './ProvideTicketModal';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
+import { sortByLocaleString } from '../../ValueUtils';
 import { TeamMembersQuery } from './queries.gql';
+
+function sortTeamMembers(teamMembers) {
+  return sortByLocaleString(teamMembers, teamMember => teamMember.user_con_profile.name_inverted);
+}
 
 function TeamMembersIndex({ eventId, eventPath, history }) {
   return (
@@ -50,7 +57,7 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                           </tr>
                         </thead>
                         <tbody>
-                          {event.team_members.map(teamMember => (
+                          {sortTeamMembers(event.team_members).map(teamMember => (
                             <tr key={teamMember.id}>
                               <td>
                                 {teamMember.user_con_profile.name_inverted}
@@ -58,7 +65,9 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                               <td><Checkmark value={teamMember.display} /></td>
                               <td><Checkmark value={teamMember.show_email} /></td>
                               <td><Checkmark value={teamMember.receive_con_email} /></td>
-                              <td><Checkmark value={teamMember.receive_signup_email} /></td>
+                              <td>
+                                {humanize(teamMember.receive_signup_email)}
+                              </td>
                               <td>
                                 <Checkmark
                                   value={event.provided_tickets.some(ticket => (

@@ -246,8 +246,14 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
   def notify_team_members(move_results)
     return unless move_results.any?
+    no_confirmed_moves = move_results.none? do |move_result|
+      move_result.prev_state == 'confirmed' || move_result.state == 'confirmed'
+    end
 
-    event.team_members.where(receive_signup_email: true).find_each do |team_member|
+    event.team_members.find_each do |team_member|
+      next if team_member.receive_signup_email == 'no'
+      next if team_member.receive_signup_email == 'non_waitlist_signups' && no_confirmed_moves
+
       EventSignupMailer.registration_policy_change_moved_signups(
         event,
         move_results.map(&:to_h),

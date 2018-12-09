@@ -5,10 +5,9 @@ import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
-import Confirm from '../../ModalDialogs/Confirm';
-import { DeleteTeamMember, UpdateTeamMember } from './mutations.gql';
+import ErrorDisplay from '../../ErrorDisplay';
 import TeamMemberForm from './TeamMemberForm';
-import { TeamMembersQuery } from './queries.gql';
+import { UpdateTeamMember } from './mutations.gql';
 
 class EditTeamMember extends React.Component {
   static propTypes = {
@@ -34,6 +33,7 @@ class EditTeamMember extends React.Component {
     this.state = {
       mutationInProgress: false,
       teamMember: { ...event.team_members.find(tm => tm.id === teamMemberId) },
+      error: null,
     };
   }
 
@@ -91,6 +91,8 @@ class EditTeamMember extends React.Component {
           disabled={this.state.mutationInProgress}
         />
 
+        <ErrorDisplay graphQLError={this.state.error} />
+
         <ul className="list-inline mt-4">
           <Mutation mutation={UpdateTeamMember}>
             {mutate => (
@@ -113,7 +115,7 @@ class EditTeamMember extends React.Component {
 
                       this.props.history.replace(`${eventPath}/team_members`);
                     } catch (error) {
-                      this.setState({ mutationInProgress: false });
+                      this.setState({ mutationInProgress: false, error });
                     }
                   }}
                 >

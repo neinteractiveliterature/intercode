@@ -86,7 +86,7 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
     }
   end
 
-  field :team_members, !types[Types::TeamMemberType] do
+  field :team_members, Types::TeamMemberType.to_list_type.to_non_null_type do
     guard -> (obj, _args, ctx) {
       ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: obj, event: obj.convention.events.new))
     }

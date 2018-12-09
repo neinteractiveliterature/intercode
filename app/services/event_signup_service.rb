@@ -207,7 +207,10 @@ sign up for events."
   end
 
   def notify_team_members(signup)
-    event.team_members.where(receive_signup_email: true).find_each do |team_member|
+    event.team_members.find_each do |team_member|
+      next if team_member.receive_signup_email == 'no'
+      next if team_member.receive_signup_email == 'non_waitlist_signups' && signup.waitlisted?
+
       EventSignupMailer.new_signup(signup, team_member).deliver_later
     end
   end

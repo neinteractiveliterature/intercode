@@ -2,8 +2,7 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
   BOOL_FIELD_MAP = {
     display: :DisplayAsGM,
     show_email: :DisplayEMail,
-    receive_con_email: :ReceiveConEMail,
-    receive_signup_email: :ReceiveSignupEMail
+    receive_con_email: :ReceiveConEMail
   }
 
   def initialize(connection, con, event_id_map, user_id_map, user_con_profile_id_map)
@@ -29,6 +28,7 @@ class Intercode::Import::Intercode1::Tables::GMs < Intercode::Import::Intercode1
     BOOL_FIELD_MAP.each do |team_member_field, row_field|
       team_member[team_member_field] ||= row[row_field]
     end
+    team_member.receive_signup_email = row[:ReceiveSignupEMail] ? 'all_signups' : 'no'
 
     team_member.updated_by = @user_id_map[row[:UpdatedById]]
     team_member
