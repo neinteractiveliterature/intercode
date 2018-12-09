@@ -10,7 +10,7 @@ RUN apk add \
 
 RUN apk add \
   --repository https://alpine.global.ssl.fastly.net/alpine/edge/main/ \
-  --no-cache
+  --no-cache \
   nodejs yarn
 
 RUN mkdir -p /tmp \
