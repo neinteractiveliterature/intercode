@@ -283,12 +283,12 @@ class EditSignup extends React.Component {
               <strong>
                 {(bucket || { name: 'none' }).name}
                 {(
-                  (bucket && requestedBucket && bucket.key !== requestedBucket.key)
+                  (requestedBucket && (!bucket || bucket.key !== requestedBucket.key))
                     ? ` (requested ${requestedBucket.name})`
                     : ''
                 )}
                 {(
-                  (bucket && !requestedBucket)
+                  (!teamMember && !requestedBucket)
                     ? ' (no preference)'
                     : ''
                 )}
