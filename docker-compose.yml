@@ -10,8 +10,8 @@ x-dev-service: &dev-service
   env_file: .env.development.local
   user: www
   volumes:
-    - .:/usr/src/app
-    - node_modules:/usr/src/app/node_modules
+    - .:/usr/src/build
+    - node_modules:/usr/src/build/node_modules
 
 services:
   cat:
@@ -22,8 +22,8 @@ services:
     env_file: .env.development.local
     user: www
     volumes:
-      - .:/usr/src/app:cached
-      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/build:cached
+      - node_modules:/usr/src/build/node_modules
     command: cat
     tty: true
     stdin_open: true
