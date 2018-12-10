@@ -23,10 +23,12 @@ class ChoiceSetFilter extends React.Component {
     filter: PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
     }),
+    renderHeaderCaption: PropTypes.func,
   }
 
   static defaultProps = {
     filter: null,
+    renderHeaderCaption: null,
   }
 
   constructor(props) {
@@ -47,6 +49,10 @@ class ChoiceSetFilter extends React.Component {
 
     const filterValue = (this.props.filter || {}).value || [];
 
+    if (this.props.renderHeaderCaption) {
+      return <span className="mr-2">{this.props.renderHeaderCaption(filterValue)}</span>;
+    }
+
     if (Array.isArray(filterValue)) {
       if (filterValue.length > 0) {
         return sortChoices(filterValue.map(
@@ -57,10 +63,10 @@ class ChoiceSetFilter extends React.Component {
         )).map(({ label }) => <span className="mr-2">{label}</span>);
       }
 
-      return <span>Any</span>;
+      return <span className="mr-2">Any</span>;
     }
 
-    return <span>{filterValue || 'Any'}</span>;
+    return <span className="mr-2">{filterValue || 'Any'}</span>;
   }
 
   renderHeader = () => (

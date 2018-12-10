@@ -1,23 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pluralize } from 'inflected';
+import { pluralize, underscore, humanize } from 'inflected';
 
-import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
+import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
-import { mutator, Transforms } from '../../ComposableFormUtils';
 import { RunSignupsTableSignupsQuery } from './queries.gql';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 
-function getEmails({ data, includeTeamMembers, includeWaitlisted }) {
+function getEmails({ data, includes }) {
   const teamMemberUserConProfileIds = data.event.team_members
     .map(teamMember => teamMember.user_con_profile.id);
 
+  const includesObject = {};
+  includes.forEach((value) => { includesObject[value] = true; });
+
   const signups = data.event.run.signups_paginated.entries.filter((signup) => {
-    if (!includeWaitlisted && signup.state === 'waitlisted') {
+    const isTeamMember = teamMemberUserConProfileIds.includes(signup.user_con_profile.id);
+
+    if (!includesObject.confirmed && !isTeamMember && signup.state === 'confirmed') {
       return false;
     }
 
-    if (!includeTeamMembers && teamMemberUserConProfileIds.includes(signup.user_con_profile.id)) {
+    if (!includesObject.waitlisted && !isTeamMember && signup.state === 'waitlisted') {
+      return false;
+    }
+
+    if (!includesObject.teamMembers && isTeamMember) {
       return false;
     }
 
@@ -34,21 +42,13 @@ class RunEmailList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      includeTeamMembers: true,
-      includeWaitlisted: false,
+      includes: ['teamMembers', 'confirmed'],
     };
-    this.mutator = mutator({
-      component: this,
-      transforms: {
-        includeTeamMembers: Transforms.checkboxChange,
-        includeWaitlisted: Transforms.checkboxChange,
-      },
-    });
   }
 
   render = () => {
     const { runId, eventId } = this.props;
-    const { includeTeamMembers, includeWaitlisted } = this.state;
+    const { includes } = this.state;
 
     // TODO figure out how to handle more than 100 signups
     return (
@@ -69,27 +69,31 @@ class RunEmailList extends React.Component {
         {({ data }) => (
           <>
             <EmailList
-              emails={getEmails({ data, includeTeamMembers, includeWaitlisted })}
+              emails={getEmails({ data, includes })}
               separator={this.props.separator}
               renderToolbarContent={() => (
-                <ul className="list-inline">
-                  <li className="list-inline-item mr-4">
-                    <BootstrapFormCheckbox
-                      name="includeTeamMembers"
-                      label={`Include ${pluralize(data.event.team_member_name)}`}
-                      checked={includeTeamMembers}
-                      onChange={this.mutator.includeTeamMembers}
-                    />
-                  </li>
-                  <li className="list-inline-item mr-4">
-                    <BootstrapFormCheckbox
-                      name="includeWaitlisted"
-                      label="Include waitlisted"
-                      checked={includeWaitlisted}
-                      onChange={this.mutator.includeWaitlisted}
-                    />
-                  </li>
-                </ul>
+                <ChoiceSetFilter
+                  choices={[
+                    { label: `Include ${pluralize(data.event.team_member_name)}`, value: 'teamMembers' },
+                    { label: 'Include confirmed', value: 'confirmed' },
+                    { label: 'Include waitlisted', value: 'waitlisted' },
+                  ]}
+                  filter={{ value: includes }}
+                  onChange={(nextIncludes) => { this.setState({ includes: nextIncludes }); }}
+                  renderHeaderCaption={(currentIncludes) => {
+                    if (currentIncludes.length === 0) {
+                      return 'Nobody';
+                    }
+
+                    return [...currentIncludes].sort().map((include) => {
+                      if (include === 'teamMembers') {
+                        return humanize(underscore(pluralize(data.event.team_member_name)));
+                      }
+
+                      return humanize(underscore(include));
+                    }).join(', ');
+                  }}
+                />
               )}
             />
           </>
