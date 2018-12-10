@@ -18,6 +18,15 @@ export function formatBucket(signup, event) {
       return `${humanize(underscore(event.team_member_name))} (not counted)`;
     }
 
+    if (signup.state === 'waitlisted') {
+      const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy);
+      if (requestedBucket) {
+        return `Waitlisted (requested ${requestedBucket.name})`;
+      }
+
+      return 'Waitlisted (no preference)';
+    }
+
     return 'Not counted';
   }
 
