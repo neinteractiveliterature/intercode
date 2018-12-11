@@ -17,7 +17,8 @@ class Intercode::Import::Intercode1::Tables::StoreItems < Intercode::Import::Int
         description: "A #{product_name(row).downcase} with the #{con.name} logo.",
         image: image,
         price_cents: row[:PriceCents],
-        price_currency: 'USD'
+        price_currency: 'USD',
+        payment_options: %w[stripe pay_at_convention]
       )
 
       sizes(row).each_with_index do |size, i|
