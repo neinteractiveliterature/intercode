@@ -6,8 +6,11 @@ import { humanize } from 'inflected';
 
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
+import ErrorDisplay from '../ErrorDisplay';
 import EventCategory from '../EventAdmin/EventCategory';
 import Form from '../Models/Form';
+import { getIncompleteItems } from '../FormPresenter/FormPresenterUtils';
+import ItemInteractionTracker from '../FormPresenter/ItemInteractionTracker';
 
 class EventForm extends React.Component {
   static propTypes = {
@@ -58,12 +61,12 @@ class EventForm extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     const nextOverrides = nextProps.initialEvent.maximum_event_provided_tickets_overrides;
-    this.setState({
+    this.setState(prevState => ({
       event: {
-        ...this.state.event,
+        ...prevState.event,
         maximum_event_provided_tickets_overrides: nextOverrides,
       },
-    });
+    }));
   }
 
   beginDrop = (event) => {
@@ -81,29 +84,43 @@ class EventForm extends React.Component {
     this.setState({ droppingEvent: false });
   }
 
-  isDataComplete = () => {
-    const attrs = this.state.event.form_response_attrs;
-
-    return (
-      attrs.title != null && attrs.title !== ''
-      && attrs.length_seconds
-    );
-  };
-
   eventChanged = (eventData) => {
     this.setState({ event: eventData });
   }
 
-  saveClicked = (event) => {
+  saveClicked = (event, onInteract) => {
     event.preventDefault();
-    this.props.onSave(this.state.event);
+    if (this.validateComplete(onInteract)) {
+      this.props.onSave(this.state.event);
+    }
+  }
+
+  validateComplete = (onInteract) => {
+    const { form } = this.props;
+    const response = this.state.event.form_response_attrs;
+    const incompleteItems = getIncompleteItems(form.getAllItems(), response);
+
+    if (incompleteItems.isEmpty()) {
+      this.setState({ error: null });
+      return true;
+    }
+
+    incompleteItems.forEach((item) => {
+      if (item.identifier) {
+        onInteract(item.identifier);
+      }
+    });
+
+    this.setState({ error: `Please fill out the following required fields: ${incompleteItems.map(item => item.properties.caption).join(', ')}` });
+
+    return false;
   }
 
   renderHeader = () => {
     let dropButton = null;
     if (this.props.showDropButton && this.state.event.id && this.state.event.status !== 'dropped') {
       dropButton = (
-        <button className="btn btn-outline-danger float-right" onClick={this.beginDrop}>
+        <button type="button" className="btn btn-outline-danger float-right" onClick={this.beginDrop}>
           Drop event
         </button>
       );
@@ -120,14 +137,6 @@ class EventForm extends React.Component {
     );
   }
 
-  renderErrorDisplay = () => {
-    if (this.props.error) {
-      return <div className="alert alert-danger">{this.props.error}</div>;
-    }
-
-    return null;
-  }
-
   render = () => {
     const saveCaption = (this.state.event.id ? 'Save event' : 'Create event');
     let cancelLink = null;
@@ -138,8 +147,6 @@ class EventForm extends React.Component {
     const categoryOptions = EventCategory.regularCategoryKeys.map(category => (
       <option value={category} key={category}>{humanize(category)}</option>
     ));
-
-    const disabled = this.props.disabled || !this.isDataComplete();
 
     return (
       <form className="my-4">
@@ -179,14 +186,23 @@ class EventForm extends React.Component {
           ticketTypes={this.props.ticketTypes}
           form={this.props.form}
           convention={this.props.convention}
-        />
+        >
+          <ErrorDisplay stringError={this.state.error || this.props.error} />
 
-        {this.renderErrorDisplay()}
-
-        <button className="btn btn-primary mt-4" onClick={this.saveClicked} disabled={disabled}>
-          {saveCaption}
-        </button>
-        {cancelLink}
+          <ItemInteractionTracker.Interactor>
+            {({ interactWithItem }) => (
+              <button
+                type="button"
+                className="btn btn-primary mt-4"
+                disabled={this.props.disabled}
+                onClick={event => this.saveClicked(event, interactWithItem)}
+              >
+                {saveCaption}
+              </button>
+            )}
+          </ItemInteractionTracker.Interactor>
+          {cancelLink}
+        </CommonEventFormFields>
 
         <ConfirmModal
           visible={this.state.droppingEvent}
@@ -196,7 +212,7 @@ class EventForm extends React.Component {
           Are you sure you want to drop
           {' '}
           {this.state.event.title}
-?  Doing so will
+          ?  Doing so will
           also delete any runs of this event and remove any participants signed up
           for those runs.
         </ConfirmModal>

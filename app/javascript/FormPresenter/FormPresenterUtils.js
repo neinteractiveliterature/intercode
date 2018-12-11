@@ -5,12 +5,12 @@ export function getCurrentSection(form, currentSectionId) {
   return form.getSection(currentSectionId);
 }
 
-export function getIncompleteItems(form, section, response) {
-  return form.getItemsInSection(section.id).filter(item => (
+export function getIncompleteItems(items, response) {
+  return items.filter(item => (
     !item.valueIsComplete(response[item.identifier])
   )).toList();
 }
 
 export function sectionIsComplete(form, section, response) {
-  return getIncompleteItems(form, section, response).isEmpty();
+  return getIncompleteItems(form.getItemsInSection(section.id), response).isEmpty();
 }

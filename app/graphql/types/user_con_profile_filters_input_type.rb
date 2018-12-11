@@ -9,4 +9,5 @@ Types::UserConProfileFiltersInputType = GraphQL::InputObjectType.define do
   input_field :privileges, types[types.String]
   input_field :payment_amount, types.Float
   input_field :attending, types.Boolean
+  input_field :is_team_member, types.Boolean
 end

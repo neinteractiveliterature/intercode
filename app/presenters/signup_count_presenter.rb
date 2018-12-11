@@ -155,6 +155,26 @@ class SignupCountPresenter
     end
   end
 
+  def signup_count(state: nil, bucket_key: nil, counted: nil)
+    bucket_key_and_counted_hashes = signup_count_by_state_and_bucket_key_and_counted.select do |state_key, _hash|
+      state.nil? || state == state_key
+    end.values
+
+    counted_hashes = bucket_key_and_counted_hashes.flat_map do |hash|
+      hash.select do |bucket_key_key, _hash|
+        bucket_key.nil? || bucket_key == bucket_key_key
+      end.values
+    end
+
+    counts = counted_hashes.flat_map do |hash|
+      hash.select do |counted_key, _count|
+        counted.nil? || counted == counted_key
+      end.values
+    end
+
+    counts.sum
+  end
+
   def signup_count_by_state_and_bucket_key_and_counted
     @signup_count_by_state_and_bucket_key_and_counted ||= begin
       data = Signup.where(run_id: run.id)
