@@ -73,12 +73,7 @@ class GraphQLReactTableProvider extends React.Component {
     { maxWait: 1000, leading: false, trailing: true },
   )
 
-  loggedFetchDataDebounced = (variables) => {
-    console.log('fetchData', variables);
-    this.fetchDataDebounced(variables);
-  }
-
-  fetchFromTableState = tableState => this.loggedFetchDataDebounced({
+  fetchFromTableState = tableState => this.fetchDataDebounced({
     ...this.props.variables,
     page: tableState.page + 1,
     perPage: tableState.pageSize,
