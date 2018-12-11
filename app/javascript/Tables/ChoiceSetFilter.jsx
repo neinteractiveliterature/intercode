@@ -66,7 +66,8 @@ class ChoiceSetFilter extends React.Component {
       return <span className="mr-2">Any</span>;
     }
 
-    return <span className="mr-2">{filterValue || 'Any'}</span>;
+    const choice = this.props.choices.find(c => c.value === filterValue) || { label: filterValue };
+    return <span className="mr-2">{choice.label || 'Any'}</span>;
   }
 
   renderHeader = () => (
