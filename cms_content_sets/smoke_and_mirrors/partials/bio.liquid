@@ -1,5 +1,6 @@
 ---
 name: bio
+admin_notes: ''
 invariant: false
 ---
 {% assign positionslist = display_user_con_profile.staff_positions | map: "name" %}
@@ -23,7 +24,7 @@ invariant: false
       <h5 class="mt-0"><a name="user-{{ display_user_con_profile.id }}">{{ display_user_con_profile.bio_name }}</a></h5>
       <ul class="list-unstyled">
         {% unless team_member_event_names == blank %}
-          <li>GM for: {{ team_member_event_names }}</li>
+          <li>GM/Organizer for: {{ team_member_event_names }}</li>
         {% endunless %}
         
         {% unless positions == blank%}
