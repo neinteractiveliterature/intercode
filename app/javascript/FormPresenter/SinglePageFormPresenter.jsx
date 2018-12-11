@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import Form from '../Models/Form';
 import FormPresenterApp from '.';
 import FormSection from './Layouts/FormSection';
+import ItemInteractionTracker from './ItemInteractionTracker';
 
 const SinglePageFormPresenter = (props) => {
   const sectionContainers = props.form.getSections().map(section => (
@@ -19,9 +21,10 @@ const SinglePageFormPresenter = (props) => {
 
   return (
     <FormPresenterApp form={props.form}>
-      <div>
+      <ItemInteractionTracker>
         {sectionContainers}
-      </div>
+        {props.children}
+      </ItemInteractionTracker>
     </FormPresenterApp>
   );
 };
@@ -31,6 +34,11 @@ SinglePageFormPresenter.propTypes = {
   convention: PropTypes.shape({}).isRequired,
   response: PropTypes.shape({}).isRequired,
   responseValuesChanged: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};
+
+SinglePageFormPresenter.defaultProps = {
+  children: null,
 };
 
 export default SinglePageFormPresenter;
