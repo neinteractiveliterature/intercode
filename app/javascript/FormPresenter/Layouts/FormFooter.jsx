@@ -35,8 +35,7 @@ class FormFooter extends React.Component {
 
   validateContinue = () => {
     const { form, currentSectionId, response } = this.props;
-    const currentSection = getCurrentSection(form, currentSectionId);
-    const incompleteItems = getIncompleteItems(form, currentSection, response);
+    const incompleteItems = getIncompleteItems(form.getItemsInSection(currentSectionId), response);
 
     if (incompleteItems.isEmpty()) {
       return true;

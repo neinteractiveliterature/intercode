@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { humanize, titleize } from 'inflected';
 import moment from 'moment-timezone';
 
 import AddAttendeeModal from './AddAttendeeModal';
+import BooleanChoiceSetFilter from '../Tables/BooleanChoiceSetFilter';
+import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import Form from '../Models/Form';
 import formatMoney from '../formatMoney';
@@ -14,118 +15,15 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import { GraphQLReactTableConsumer } from '../Tables/GraphQLReactTableContext';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
+import { UserConProfilesTableUserConProfilesQuery } from './queries.gql';
 
-const userConProfilesQuery = gql`
-query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
-  convention {
-    id
-    name
-    privilege_names
-    starts_at
-    ends_at
-    timezone_name
-    ticket_name
-
-    ticket_types {
-      id
-      name
-    }
-
-    user_con_profile_form {
-      id
-      form_api_json
-    }
-
-    user_con_profiles_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-      total_entries
-      total_pages
-      current_page
-      per_page
-
-      entries {
-        id
-        name_inverted
-        first_name
-        last_name
-        email
-        privileges
-        form_response_attrs_json
-
-        ticket {
-          id
-          updated_at
-
-          payment_amount {
-            fractional
-            currency_code
-          }
-
-          ticket_type {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
-
-  currentAbility {
-    can_create_user_con_profiles
-  }
-}
-`;
-
-function encodeFilterValue(field, value) {
-  if (field === 'ticket' || field === 'privileges') {
-    const encoded = value.join(',');
-    if (encoded.length === 0) {
-      return null;
-    }
-    return encoded;
-  }
-
-  if (field === 'attending') {
-    if (value == null) {
-      return null;
-    }
-
-    return value ? 'true' : 'false';
-  }
-
-  if (field === 'payment_amount') {
-    if (value == null) {
-      return null;
-    }
-
-    return value.toString();
-  }
-
-  return value;
-}
-
-function decodeFilterValue(field, value) {
-  if (field === 'ticket' || field === 'privileges') {
-    const decoded = value.split(',').filter(decodedValue => decodedValue.length > 0);
-    if (decoded.length === 0) {
-      return null;
-    }
-    return decoded;
-  }
-
-  if (field === 'attending') {
-    return (value === 'true');
-  }
-
-  if (field === 'payment_amount') {
-    const floatValue = Number.parseFloat(value);
-    if (Number.isNaN(floatValue)) {
-      return null;
-    }
-    return floatValue;
-  }
-
-  return value;
-}
+const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
+  ticket: FilterCodecs.stringArray,
+  privileges: FilterCodecs.stringArray,
+  attending: FilterCodecs.boolean,
+  is_team_member: FilterCodecs.boolean,
+  payment_amount: FilterCodecs.float,
+});
 
 function formatTicketStatus(ticket) {
   if (!ticket) {
@@ -226,6 +124,21 @@ class UserConProfilesTable extends React.Component {
         ),
       },
       {
+        Header: 'Event team member?',
+        id: 'is_team_member',
+        accessor: userConProfile => userConProfile.team_members.length > 0,
+        width: 150,
+        sortable: false,
+        Cell: ({ value }) => (value ? 'yes' : 'no'),
+        Filter: ({ filter, onChange }) => (
+          <BooleanChoiceSetFilter
+            name="isTeamMember"
+            filter={filter}
+            onChange={onChange}
+          />
+        ),
+      },
+      {
         Header: 'Attending?',
         id: 'attending',
         accessor: 'ticket',
@@ -233,17 +146,10 @@ class UserConProfilesTable extends React.Component {
         sortable: false,
         Cell: ({ value }) => (value ? 'yes' : 'no'),
         Filter: ({ filter, onChange }) => (
-          <ChoiceSetFilter
+          <BooleanChoiceSetFilter
             name="attending"
-            choices={[
-              { label: 'any', value: 'any' },
-              { label: 'yes', value: 'yes' },
-              { label: 'no', value: 'no' },
-            ]}
-            multiple={false}
-            onChange={(value) => { onChange(value === 'any' ? null : value === 'yes'); }}
-            value={(filter == null || filter.value == null ? 'any' : (filter.value ? 'yes' : 'no'))}
             filter={filter}
+            onChange={onChange}
           />
         ),
       },
@@ -305,7 +211,7 @@ class UserConProfilesTable extends React.Component {
         getData={({ data }) => data.convention.user_con_profiles_paginated.entries}
         getPages={({ data }) => data.convention.user_con_profiles_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
-        query={userConProfilesQuery}
+        query={UserConProfilesTableUserConProfilesQuery}
         storageKeyPrefix="userConProfiles"
         renderHeader={headerProps => (
           <TableHeader

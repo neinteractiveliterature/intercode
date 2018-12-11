@@ -23,7 +23,7 @@ export default class ItemInteractionTracker extends React.Component {
   }
 
   interactWithItem = (itemId) => {
-    this.setState({ interactedItemIds: this.state.interactedItemIds.add(itemId) });
+    this.setState(prevState => ({ interactedItemIds: prevState.interactedItemIds.add(itemId) }));
   }
 
   hasInteractedWithItem = itemId => this.state.interactedItemIds.contains(itemId)

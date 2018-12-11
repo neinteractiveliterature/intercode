@@ -18,9 +18,10 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       Tables::TableResultsPresenter::Field.new(:first_name, 'First name'),
       Tables::TableResultsPresenter::Field.new(:last_name, 'Last name'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
-      Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
       Tables::TableResultsPresenter::Field.new(:payment_amount, 'Payment amount'),
+      Tables::TableResultsPresenter::Field.new(:is_team_member, 'Event team member?'),
+      Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
       Tables::TableResultsPresenter::Field.new(
         :ticket_updated_at,
         "#{convention.ticket_name.humanize} status changed"
@@ -56,6 +57,12 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
         scope.left_joins(:ticket).where.not(tickets: { id: nil })
       else
         scope.left_joins(:ticket).where(tickets: { id: nil })
+      end
+    when :is_team_member
+      if value
+        scope.where(id: TeamMember.select(:user_con_profile_id))
+      else
+        scope.where.not(id: TeamMember.select(:user_con_profile_id))
       end
     when :payment_amount
       scope.left_joins(:ticket).where(tickets: { payment_amount_cents: (value.to_f * 100.0).to_i })
@@ -134,7 +141,7 @@ lower(user_con_profiles.first_name) #{direction}")
   end
 
   def csv_scope
-    scoped.includes(:user, ticket: :ticket_type)
+    scoped.includes(:user, :team_members, ticket: :ticket_type)
   end
 
   def generate_csv_cell(field, user_con_profile)
@@ -143,6 +150,7 @@ lower(user_con_profiles.first_name) #{direction}")
     when :ticket then describe_ticket(user_con_profile.ticket)
     when :payment_amount then user_con_profile.ticket.payment_amount_cents / 100.0
     when :attending then user_con_profile.ticket ? 'yes' : 'no'
+    when :is_team_member then user_con_profile.team_members.any? ? 'yes' : 'no'
     when :ticket_updated_at then user_con_profile.ticket&.updated_at&.iso8601
     when :privileges then user_con_profile.privileges.map(&:titleize).sort.join(', ')
     else user_con_profile.public_send(field.id)
