@@ -22,15 +22,40 @@
           "lines": 1
         },
         {
+          "item_type": "free_text",
+          "identifier": "nickname",
+          "caption": "Nickname",
+          "lines": 1
+        },
+        {
           "item_type": "static_text",
           "style": "normal",
           "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email }}</li><li>Password: <em>not shown</em></li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
         },
         {
-          "item_type": "free_text",
-          "identifier": "nickname",
-          "caption": "Nickname",
-          "lines": 1
+          "item_type": "multiple_choice",
+          "identifier": "pronouns",
+          "caption": "Pronouns",
+          "style": "radio_vertical",
+          "choices": [
+            {
+              "caption": "She/Her/Hers",
+              "value": "She/Her/Hers"
+            },
+            {
+              "caption": "He/Him/His",
+              "value": "He/Him/His"
+            },
+            {
+              "caption": "They/Them/Theirs",
+              "value": "They/Them/Theirs"
+            },
+            {
+              "caption": "Don't use pronouns, use my name",
+              "value": "Don't use pronouns, use my name"
+            }
+          ],
+          "other": true
         },
         {
           "item_type": "date",
@@ -69,15 +94,15 @@
         },
         {
           "item_type": "free_text",
-          "free_text_type": "tel",
           "identifier": "day_phone",
+          "free_text_type": "tel",
           "caption": "Daytime phone",
           "lines": 1
         },
         {
           "item_type": "free_text",
-          "free_text_type": "tel",
           "identifier": "evening_phone",
+          "free_text_type": "tel",
           "caption": "Evening phone",
           "lines": 1
         },
@@ -116,6 +141,9 @@
         {
           "item_type": "multiple_choice",
           "identifier": "mailing_lists",
+          "default_value": [
+            "intercon"
+          ],
           "caption": "I would like to receive email about:",
           "style": "checkbox_vertical",
           "choices": [
@@ -131,12 +159,12 @@
               "caption": "Other NEIL initiatives",
               "value": "neil_other"
             }
-          ],
-          "default_value": ["intercon"]
+          ]
         },
         {
           "item_type": "multiple_choice",
           "identifier": "receive_whos_free_emails",
+          "default_value": "true",
           "style": "radio_vertical",
           "caption": "Closer to the convention, {{ convention.name }} may email attendees who are free in particular time slots, to promote events that need signups in order to run.  These emails are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
           "choices": [
@@ -148,8 +176,7 @@
               "caption": "Opt out of these emails",
               "value": "false"
             }
-          ],
-          "default_value": "true"
+          ]
         }
       ]
     }
