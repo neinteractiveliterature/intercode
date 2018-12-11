@@ -34,7 +34,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       category: category,
       status: event_status(row),
       registration_policy: registration_policy(row, category),
-      bypass_filler_event_run_check: true # we won't yet have the run for filler events
+      bypass_single_event_run_check: true # we won't yet have the run for filler events
 
       # notify_on_changes: this doesn't seem to be used anymore
     )
