@@ -1,3 +1,5 @@
+import { Transforms } from '../ComposableFormUtils';
+
 export function encodeStringArray(value) {
   const encoded = value.join(',');
   if (encoded.length === 0) {
@@ -12,4 +14,66 @@ export function decodeStringArray(value) {
     return null;
   }
   return decoded;
+}
+
+export function encodeBooleanFilter(value) {
+  if (value == null) {
+    return null;
+  }
+
+  return value ? 'true' : 'false';
+}
+
+export function decodeBooleanFilter(value) {
+  if (value == null) {
+    return null;
+  }
+
+  return (value === 'true');
+}
+
+export function toStringOrNull(value) {
+  if (value == null) {
+    return null;
+  }
+
+  return value.toString();
+}
+
+export const FilterCodecs = {
+  stringArray: {
+    encode: encodeStringArray,
+    decode: decodeStringArray,
+  },
+  boolean: {
+    encode: encodeBooleanFilter,
+    decode: decodeBooleanFilter,
+  },
+  float: {
+    encode: toStringOrNull,
+    decode: Transforms.float,
+  },
+  integer: {
+    encode: toStringOrNull,
+    decode: Transforms.integer,
+  },
+};
+
+export function buildFieldFilterCodecs(fieldCodecs) {
+  return {
+    encodeFilterValue: (field, value) => {
+      const codec = fieldCodecs[field];
+      if (codec) {
+        return codec.encode(value);
+      }
+      return value;
+    },
+    decodeFilterValue: (field, value) => {
+      const codec = fieldCodecs[field];
+      if (codec) {
+        return codec.decode(value);
+      }
+      return value;
+    },
+  };
 }
