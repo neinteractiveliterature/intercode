@@ -39,11 +39,13 @@ class CommonEventFormFields extends React.Component {
     createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
     updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
+    children: PropTypes.node,
   };
 
   static defaultProps = {
     canOverrideMaximumEventProvidedTickets: false,
     ticketName: null,
+    children: null,
   };
 
   processFormResponseValue = (key, value) => {
@@ -107,6 +109,8 @@ class CommonEventFormFields extends React.Component {
       />
 
       {this.renderMaximumEventProvidedTicketsOverrideEditor()}
+
+      {this.props.children}
     </div>
   )
 }
