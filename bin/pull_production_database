@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo 'Getting database URL from Heroku'
 PRODUCTION_DATABASE_URL=${PRODUCTION_DATABASE_URL:-$(heroku config:get DATABASE_URL)}
 
