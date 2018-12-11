@@ -46,7 +46,7 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
 
   def rooms(row)
     if connection.table_exists?(:RunsRooms)
-      (row[:RoomIds] || '').split(',').map(&:to_i)
+      room_ids = (row[:RoomIds] || '').split(',').map(&:to_i)
       room_ids.map { |id| @room_id_map[id] }
     else
       (row[:Rooms] || '').split(',').map { |room_name| @room_id_map[room_name] }
