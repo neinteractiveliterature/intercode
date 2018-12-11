@@ -47,6 +47,8 @@ fragment UserConProfileAdminTicketFields on Ticket {
   id
   charge_id
   payment_note
+  created_at
+  updated_at
 
   payment_amount {
     fractional
