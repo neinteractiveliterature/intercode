@@ -21,7 +21,15 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
 
   def build_record(row)
     run = @run_id_map[row[:RunId]]
-    return unless run
+    user_con_profile = @user_con_profile_id_map[row[:UserId]]
+    unless run
+      logger.info "Signup #{row_id(row)} references run #{row[:RunId]}, which does not exist"
+      return
+    end
+    unless user_con_profile
+      logger.info "Signup #{row_id(row)} references user #{row[:UserId]}, which does not exist"
+      return
+    end
 
     counted = (row[:Counted] == 'Y')
     row_bucket_key = (counted ? bucket_key(row, run) : nil)
@@ -34,7 +42,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     return if row[:Counted] == 'Y' && row[:State] == 'Confirmed' && !row_bucket_key
 
     run.signups.new(
-      user_con_profile: @user_con_profile_id_map[row[:UserId]],
+      user_con_profile: user_con_profile,
       bucket_key: row_bucket_key,
       requested_bucket_key: requested_bucket_key,
       state: STATE_MAP[row[:State]],
