@@ -41,7 +41,9 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
   end
 
   def start_time(row)
-    start_of_convention_day(@con, row[:Day]) + row[:StartHour].hours
+    start_hour = row[:StartHour]
+    start_hour = start_hour.to_i if start_hour.is_a?(String)
+    start_of_convention_day(@con, row[:Day]) + start_hour.hours
   end
 
   def rooms(row)
