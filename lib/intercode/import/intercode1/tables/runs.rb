@@ -51,7 +51,7 @@ class Intercode::Import::Intercode1::Tables::Runs < Intercode::Import::Intercode
       room_ids = (row[:RoomIds] || '').split(',').map(&:to_i)
       room_ids.map { |id| @room_id_map[id] }
     else
-      (row[:Rooms] || '').split(',').map { |room_name| @room_id_map[room_name] }
+      (row[:Rooms] || row[:Venue] || '').split(',').map { |room_name| @room_id_map[room_name.strip] }
     end
   end
 end
