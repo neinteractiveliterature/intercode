@@ -49,7 +49,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     when 'GameMail' then 'event_email'
     when 'GMs' then 'gms'
     when nil
-      row[:GameEMail].present ? 'event_email' : 'gms'
+      row[:GameEMail].present? ? 'event_email' : 'gms'
     else raise "Unknown ConMailDest value: #{row[:ConMailDest]}"
     end
   end
