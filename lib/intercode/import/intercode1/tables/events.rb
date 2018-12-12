@@ -89,9 +89,27 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     intercon_q_precon_event = parse_intercon_q_precon_event(row)
 
     if intercon_q_precon_event
-      intercon_q_precon_event[1]
+      find_unique_title(intercon_q_precon_event[1])
     else
-      row[:Title]
+      find_unique_title(row[:Title])
+    end
+  end
+
+  def find_unique_title(title, iteration = 1)
+    title_plus_iteration = if iteration == 1
+      title
+    else
+      "#{title} [#{iteration}]"
+    end
+
+    if con.events.where(title: title_plus_iteration).none?
+      return title_plus_iteration
+    end
+
+    if iteration < 10
+      return find_unique_title(title, iteration + 1)
+    else
+      raise "Too many iterations on title #{title}, giving up"
     end
   end
 
