@@ -77,7 +77,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
         user.send("#{key}=", value) unless user.send(key).present?
       end
 
-      if row[:HashedPassword].present? && !user.legacy_password_md5.present?
+      if row[:HashedPassword].present? && !user.legacy_password_md5.present? && !user.encrypted_password.present?
         user.legacy_password_md5 = legacy_password_md5
       end
     end
