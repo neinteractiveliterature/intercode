@@ -25,6 +25,7 @@ class Intercode::Import::Intercode1::Configuration
         "database_url" => "mysql2://".DB_ADMIN_USR.":".DB_ADMIN_PWD."@".DB_SERVER."/".DB_NAME,
         "con_name" => CON_NAME,
         "friday_date" => FRI_DATE,
+        "friday_text" => FRI_TEXT,
         "text_dir" => TEXT_DIR,
         "php_timezone" => date_default_timezone_get(),
         "show_flyer" => NAV_SHOW_FLYER,
@@ -92,7 +93,7 @@ class Intercode::Import::Intercode1::Configuration
   def processed_vars
     raw_vars.symbolize_keys.merge(
       text_dir: File.expand_path(raw_vars['text_dir'], File.dirname(constants_file)),
-      friday_date: Date.parse(raw_vars['friday_date']),
+      friday_date: parse_friday_date(raw_vars),
       php_timezone: ActiveSupport::TimeZone[raw_vars['php_timezone']]
     ).merge(processed_booleans)
   end
@@ -100,6 +101,16 @@ class Intercode::Import::Intercode1::Configuration
   def processed_booleans
     %w[thursday_enabled shirt_two_shirts shirt_img_available].each_with_object({}) do |key, hash|
       hash[key.to_sym] = (raw_vars[key] == 1)
+    end
+  end
+
+  def parse_friday_date(raw_vars)
+    if raw_vars['friday_date'] =~ /\A(\d\d)-([A-Za-z]+)-(\d\d\d\d)\z/
+      Date.new($1.to_i, Date::ABBR_MONTHNAMES.index($2), $3.to_i)
+    elsif raw_vars['friday_text'] =~ /\A([A-Za-z]+), (\d\d)-([A-Za-z]+)-(\d\d\d\d)\z/
+      Date.new($2.to_i, Date::ABBR_MONTHNAMES.index($3), $4.to_i)
+    else
+      raise "FATAL: Can't parse Friday date from FRI_DATE or FRI_TEXT constants"
     end
   end
 end
