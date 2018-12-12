@@ -66,6 +66,10 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
     dataset.each do |row|
       logger.debug "Importing #{object_name} #{row_id(row)}"
       event_proposal = @event_proposals_id_map[row[:BidId]]
+      unless event_proposal
+        logger.warn "BidTime #{row_id(row)} references BidId #{row[:BidId]}, which does not exist"
+        next
+      end
       next unless row[:Pref].present?
 
       timeblock_preference = build_timeblock_preference(row[:Day], row[:Slot], row[:Pref])
