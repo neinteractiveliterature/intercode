@@ -9,7 +9,7 @@ class Intercode::Import::Intercode1::Tables::Rooms < Intercode::Import::Intercod
     if rooms_column
       parse_legacy_column_definition(rooms_column.second[:db_type])
     else
-      logger.info("Using Venue column values since Rooms column doesn't exist")
+      Intercode::Import::Intercode1.logger.info("Using Venue column values since Rooms column doesn't exist")
       venue_strings = connection[:Runs].pluck(:Venue)
       venue_strings.flat_map { |venue_string| venue_string.split(',').map(&:strip) }.uniq
     end
