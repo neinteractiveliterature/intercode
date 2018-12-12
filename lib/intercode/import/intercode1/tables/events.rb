@@ -45,10 +45,11 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def con_mail_destination(row)
-    case row[:ConMailDest]
+    case row[:ConMailDest].presence
     when 'GameMail' then 'event_email'
     when 'GMs' then 'gms'
-    when nil then nil
+    when nil
+      row[:GameEMail].present ? 'event_email' : 'gms'
     else raise "Unknown ConMailDest value: #{row[:ConMailDest]}"
     end
   end
