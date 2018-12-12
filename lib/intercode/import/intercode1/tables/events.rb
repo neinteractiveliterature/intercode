@@ -102,7 +102,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
       "#{title} [#{iteration}]"
     end
 
-    if con.events.where(title: title_plus_iteration).none?
+    if @con.events.where(title: title_plus_iteration).none?
       return title_plus_iteration
     end
 
