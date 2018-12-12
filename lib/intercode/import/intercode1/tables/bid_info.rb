@@ -6,6 +6,15 @@ class Intercode::Import::Intercode1::Tables::BidInfo < Intercode::Import::Interc
     @file_root = File.dirname(constants_file)
   end
 
+  def import!
+    if connection.table_exists?(table_name)
+      super
+    else
+      logger.info("Creating blank partial since BidInfo table doesn't exist")
+      @convention.cms_partials.create!(name: 'ProposalInfo', content: '')
+    end
+  end
+
   private
 
   def build_record(row)
