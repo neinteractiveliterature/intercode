@@ -4,9 +4,15 @@ class Intercode::Import::Intercode1::Tables::Rooms < Intercode::Import::Intercod
   end
 
   def self.legacy_room_names_from_connection(connection)
-    parse_legacy_column_definition(
-      connection.schema(:Runs).find { |col| col.first == :Rooms }.second[:db_type]
-    )
+    rooms_column = connection.schema(:Runs).find { |col| col.first == :Rooms }
+
+    if rooms_column
+      parse_legacy_column_definition(rooms_column.second[:db_type])
+    else
+      logger.info("Using Venue column values since Rooms column doesn't exist")
+      venue_strings = connection[:Runs].pluck(:Venue)
+      venue_strings.flat_map { |venue_string| venue_string.split(',').map(&:strip) }.uniq
+    end
   end
 
   attr_reader :config
