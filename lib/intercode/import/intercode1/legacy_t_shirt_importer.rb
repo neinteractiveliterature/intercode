@@ -60,7 +60,8 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
       description: "A shirt with the #{con.name} logo.",
       image: image,
       price_cents: config.var(:tshirt_dollars) * 100,
-      price_currency: 'USD'
+      price_currency: 'USD',
+      payment_options: %w[stripe pay_at_convention]
     )
 
     LEGACY_SHIRT_SIZES.each_with_index do |size, i|
