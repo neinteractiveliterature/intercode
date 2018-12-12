@@ -65,7 +65,7 @@ to #{friday_start.strftime('%A, %b %d, %Y')}."
       name: @con_name,
       domain: @con_domain,
       show_schedule: row[:ShowSchedule].underscore,
-      accepting_proposals: yesno_to_bool(row[:AcceptingBids]),
+      accepting_proposals: yesno_to_bool(row[:AcceptingBids], false),
       starts_at: @starts_at,
       ends_at: @ends_at,
       timezone_name: @timezone.name,
