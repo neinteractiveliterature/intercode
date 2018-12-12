@@ -105,9 +105,11 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
   end
 
   def find_existing_image_path(filenames)
-    filenames.find do |filename|
+    existing_filename = filenames.find do |filename|
       File.exist?(image_path(filename))
     end
+    return unless existing_filename
+    image_path(existing_filename)
   end
 
   def image_path(filename)
