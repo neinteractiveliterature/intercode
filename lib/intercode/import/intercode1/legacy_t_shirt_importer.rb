@@ -34,23 +34,26 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
 
   def create_products
     logger.info 'Creating shirt 1'
-    @shirt1 = build_product_with_image_if_available(config.var(:shirt_name), 'shirt.gif')
+    @shirt1 = build_product_with_image_if_available(config.var(:shirt_name), 'shirt.gif', 'polo_web.gif')
     @shirt1.save!
 
     return unless two_shirts?
     logger.info 'Creating shirt 2'
-    @shirt2 = build_product_with_image_if_available(config.var(:shirt_2_name), 'shirt2.gif')
+    @shirt2 = build_product_with_image_if_available(config.var(:shirt_2_name), 'shirt2.gif', 'polo_web2.gif')
     @shirt2.save!
   end
 
-  def build_product_with_image_if_available(name, image_filename)
+  def build_product_with_image_if_available(name, *image_filenames)
     if config.var(:shirt_img_available)
-      File.open(image_path(image_filename)) do |image|
-        build_product_with_image(name, image)
+      path = find_existing_image_path(image_filenames)
+      if path
+        return File.open(path) do |image|
+          build_product_with_image(name, image)
+        end
       end
-    else
-      build_product_with_image(name, nil)
     end
+
+    build_product_with_image(name, nil)
   end
 
   def build_product_with_image(name, image)
@@ -98,6 +101,12 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
       if two_shirts? && row[:"#{size}_2"].to_i > 0
         create_order_entry(order, @shirt2, size, row[:"#{size}_2"])
       end
+    end
+  end
+
+  def find_existing_image_path(filenames)
+    filenames.find do |filename|
+      File.exist?(image_path(filename))
     end
   end
 
