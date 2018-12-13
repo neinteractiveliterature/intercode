@@ -32,6 +32,6 @@ class Intercode::Import::Intercode1::Tables::PreConRuns < Intercode::Import::Int
   end
 
   def rooms(row)
-    @con.rooms.where(name: row[:Rooms] || '').split(',').map(&:strip)).to_a
+    @con.rooms.where(name: row[:Rooms] || '').split(',').map(&:strip).to_a
   end
 end
