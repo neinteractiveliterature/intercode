@@ -66,7 +66,7 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
       "#{title} [#{iteration}]"
     end
 
-    if @con.pre_con_events.where(title: title_plus_iteration).none?
+    if @con.events.where(title: title_plus_iteration).none?
       return title_plus_iteration
     end
 
