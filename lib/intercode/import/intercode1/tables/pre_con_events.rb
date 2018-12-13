@@ -19,7 +19,7 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
 
       record.save!
 
-      submitter = @user_con_profile_id_map[row[:SubmitterId]]
+      submitter = @user_con_profile_id_map[row[:SubmitterUserId]]
       if submitter
         record.team_members.create!(
           user_con_profile: submitter,
