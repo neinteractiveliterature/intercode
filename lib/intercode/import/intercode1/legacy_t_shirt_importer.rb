@@ -17,6 +17,11 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
       logger.info "Importing TShirts for user #{row[:UserId]}"
 
       user_con_profile = user_con_profile_id_map[row[:UserId]]
+      unless user_con_profile
+        logger.warn "TShirt row referenced user #{row[:UserId]}, which does not exist"
+        next
+      end
+
       order = create_order(user_con_profile, row)
       create_order_entries(order, row)
     end
