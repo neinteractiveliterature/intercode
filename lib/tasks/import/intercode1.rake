@@ -35,11 +35,11 @@ namespace :import do
     )
     importer.con = Convention.find_by(domain: ENV['CON_DOMAIN'])
     user_con_profiles_by_email = importer.con.user_con_profiles.includes(:user).to_a.index_by(&:email)
-    user_con_profile_id_map = {}
+    user_con_profiles_id_map = {}
     importer.connection[:Users].each do |row|
-      user_con_profile_id_map[row[:UserId]] = user_con_profiles_by_email[row[:EMail].downcase]
+      user_con_profiles_id_map[row[:UserId]] = user_con_profiles_by_email[row[:EMail].downcase]
     end
-    importer.user_con_profile_id_map = user_con_profile_id_map
+    importer.user_con_profiles_id_map = user_con_profiles_id_map
 
     ActiveRecord::Base.connection.transaction do
       importer.import_pre_con_content!
