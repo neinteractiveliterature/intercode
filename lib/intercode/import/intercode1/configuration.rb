@@ -105,9 +105,9 @@ class Intercode::Import::Intercode1::Configuration
   end
 
   def parse_friday_date(raw_vars)
-    if raw_vars['friday_date'] =~ /\A(\d\d)-([A-Za-z]+)-(\d\d\d\d)\z/
+    if raw_vars['friday_date'] =~ /\A(\d?\d)-([A-Za-z]+)-(\d\d\d\d)\z/
       Date.new($3.to_i, Date::ABBR_MONTHNAMES.index($2), $1.to_i)
-    elsif raw_vars['friday_text'] =~ /\A([A-Za-z]+), (\d\d)-([A-Za-z]+)-(\d\d\d\d)\z/
+    elsif raw_vars['friday_text'] =~ /\A([A-Za-z]+), (\d?\d)-([A-Za-z]+)-(\d\d\d\d)\z/
       Date.new($4.to_i, Date::ABBR_MONTHNAMES.index($3), $2.to_i)
     else
       raise "FATAL: Can't parse Friday date from FRI_DATE or FRI_TEXT constants"
