@@ -75,12 +75,20 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
   end
 
   def create_order(user_con_profile, row)
-    user_con_profile.orders.create!(
-      status: row[:Status].downcase,
-      payment_amount_cents: row[:PaymentAmount],
-      payment_amount_currency: 'USD',
-      payment_note: row[:PaymentNote]
-    )
+    if row[:Status]
+      user_con_profile.orders.create!(
+        status: row[:Status].downcase,
+        payment_amount_cents: row[:PaymentAmount],
+        payment_amount_currency: 'USD',
+        payment_note: row[:PaymentNote]
+      )
+    else
+      user_con_profile.orders.create!(
+        status: 'unpaid',
+        payment_amount: nil,
+        payment_note: 'Imported from a version of Intercode that did not take shirt payments via site'
+      )
+    end
   end
 
   def create_order_entry(order, product, variant_name, quantity)
