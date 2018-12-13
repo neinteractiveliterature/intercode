@@ -84,6 +84,10 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   end
 
   def build_user_con_profile(row, con, user)
+    # Early Intercode 1 versions didn't enforce email address uniqueness
+    existing_profile = con.user_con_profiles.find_by(user_id: user.id)
+    return existing_profile if existing_profile
+
     profile_attrs = {
       convention: con,
       additional_info: additional_info(row)
