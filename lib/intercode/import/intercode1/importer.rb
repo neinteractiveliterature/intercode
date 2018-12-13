@@ -22,6 +22,8 @@ class Intercode::Import::Intercode1::Importer
         This Intercode installation does not hash passwords.  Users will have to reset their
         passwords via email to log in.
       WARNING
+
+      return
     end
 
     Intercode::Import::Intercode1.logger.info 'Hashing legacy MD5 passwords with BCrypt'
