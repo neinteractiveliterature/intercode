@@ -17,6 +17,13 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def build_password_hashes
+    if connection.schema(:Users).none? { |col| col.first == :HashedPassword }
+      Intercode::Import::Intercode1.logger.warn <<~WARNING
+        This Intercode installation does not hash passwords.  Users will have to reset their
+        passwords via email to log in.
+      WARNING
+    end
+
     Intercode::Import::Intercode1.logger.info 'Hashing legacy MD5 passwords with BCrypt'
     rows = connection[:Users].select(:UserId, :HashedPassword).to_a
 
