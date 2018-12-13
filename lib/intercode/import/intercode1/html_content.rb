@@ -13,7 +13,11 @@ class Intercode::Import::Intercode1::HtmlContent
     html_paths.each do |html_path|
       logger.info "Importing #{html_path}"
       content = build_content(html_path)
-      existing_standard_content = content.class.where(slug: content.slug).first
+      existing_standard_content = content.class.where(
+        parent_id: convention.id,
+        parent_type: 'Convention',
+        slug: content.slug
+      ).first
       if existing_standard_content
         logger.warn "#{content.slug} already exists; overwriting"
         existing_standard_content.update!(
