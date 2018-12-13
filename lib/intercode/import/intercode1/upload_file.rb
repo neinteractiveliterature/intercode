@@ -5,6 +5,8 @@ module Intercode::Import::Intercode1::UploadFile
     if cms_file
       cms_file
     else
+      return unless File.exist?(path)
+
       cms_file = convention.cms_files.new
       File.open(path) do |f|
         cms_file.file = f
