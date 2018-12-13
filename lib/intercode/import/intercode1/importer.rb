@@ -6,7 +6,7 @@ require 'bcrypt'
 class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :constants_file, :config
   attr_accessor :con, :con_domain, :con_name, :friday_date
-  attr_writer :user_con_profile_id_map
+  attr_writer :user_con_profiles_id_map
 
   def initialize(constants_file, con_domain)
     @constants_file = constants_file
@@ -211,7 +211,8 @@ class Intercode::Import::Intercode1::Importer
   def pre_con_events_table
     @pre_con_events_table ||= Intercode::Import::Intercode1::Tables::PreConEvents.new(
       connection,
-      con
+      con,
+      user_con_profiles_id_map
     )
   end
 
