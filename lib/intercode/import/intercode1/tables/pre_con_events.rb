@@ -40,6 +40,7 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
 
     @con.events.new(
       title: event_title(row),
+      con_mail_destination: 'gms',
       length_seconds: row[:Hours] * 1.hour,
       can_play_concurrently: true,
       description: @markdownifier.markdownify(row[:Description]),
