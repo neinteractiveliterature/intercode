@@ -78,6 +78,7 @@ class Intercode::Import::Intercode1::Importer
     end
 
     import_store_content!
+    import_pre_con_content!
   end
 
   def import_store_content!
@@ -91,6 +92,17 @@ class Intercode::Import::Intercode1::Importer
       end
     else
       legacy_t_shirt_importer.import!
+    end
+  end
+
+  def import_pre_con_content!
+    if @connection.table_exists?('PreConEvents')
+      %i[
+        pre_con_events_table
+        pre_con_runs_table
+      ].each do |importer|
+        send(importer).import!
+      end
     end
   end
 
@@ -192,6 +204,25 @@ class Intercode::Import::Intercode1::Importer
       connection,
       con,
       config.constants_file
+    )
+  end
+
+  def pre_con_events_table
+    @pre_con_events_table ||= Intercode::Import::Intercode1::Tables::PreConEvents.new(
+      connection,
+      con
+    )
+  end
+
+  def pre_con_events_id_map
+    @pre_con_events_id_map ||= pre_con_events_table.id_map
+  end
+
+  def pre_con_runs_table
+    @pre_con_runs_table ||= Intercode::Import::Intercode1::Tables::PreConRuns.new(
+      connection,
+      con,
+      pre_con_events_id_map
     )
   end
 
