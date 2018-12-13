@@ -4,8 +4,9 @@ require 'parallel'
 require 'bcrypt'
 
 class Intercode::Import::Intercode1::Importer
-  attr_reader :connection, :con, :constants_file, :config
-  attr_accessor :con_domain, :con_name, :friday_date
+  attr_reader :connection, :constants_file, :config
+  attr_accessor :con, :con_domain, :con_name, :friday_date
+  attr_writer :user_con_profile_id_map
 
   def initialize(constants_file, con_domain)
     @constants_file = constants_file
