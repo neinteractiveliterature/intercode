@@ -8,7 +8,14 @@ class RegistrationPolicy
   validate :validate_anything_bucket, :validate_key_uniqueness
 
   def self.unlimited
-    new(buckets: [RegistrationPolicy::Bucket.new(key: 'unlimited', slots_unlimited: true)])
+    new(buckets: [
+      RegistrationPolicy::Bucket.new(
+        key: 'unlimited',
+        name: 'Signups',
+        description: 'Signups for this event',
+        slots_limited: false
+      )
+    ])
   end
 
   attr_reader :buckets
