@@ -10,29 +10,6 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
     super.where(Status: %w[Accepted Dropped])
   end
 
-  def import!
-    logger.info "Importing #{object_name.pluralize}"
-    dataset.each do |row|
-      logger.debug "Importing #{object_name} #{row_id(row)}"
-      record = build_record(row)
-      next unless record
-
-      record.save!
-
-      submitter = @user_con_profile_id_map[row[:SubmitterUserId]]
-      if submitter
-        record.team_members.create!(
-          user_con_profile: submitter,
-          display: true,
-          show_email: false,
-          receive_con_email: false
-        )
-      end
-
-      id_map[row_id(row)] = record
-    end
-  end
-
   private
 
   def build_record(row)
