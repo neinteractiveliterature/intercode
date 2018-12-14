@@ -13,8 +13,6 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
   private
 
   def build_record(row)
-    category = 'panel'
-
     @con.events.new(
       title: event_title(row),
       con_mail_destination: 'gms',
