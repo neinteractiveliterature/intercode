@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import gql from 'graphql-tag';
-import { Controlled as CodeMirror } from 'react-codemirror2';
+
 import { mutator, Transforms } from '../ComposableFormUtils';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import defaultCodeMirrorOptions from '../defaultCodeMirrorOptions';
+import CodeInput from '../BuiltInFormControls/CodeInput';
 import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
@@ -92,10 +92,6 @@ class FormJSONEditor extends React.Component {
     });
   }
 
-  onBeforeChangeSections = (editor, data, value) => {
-    this.mutator.form.sectionsJSON(value);
-  }
-
   save = () => {
     this.setState(
       { operationInProgress: true },
@@ -133,16 +129,11 @@ class FormJSONEditor extends React.Component {
 
       <fieldset className="mb-4">
         <legend className="col-form-label">Content</legend>
-        <div className="border p-0">
-          <CodeMirror
-            value={this.state.form.sectionsJSON}
-            options={{
-              ...defaultCodeMirrorOptions,
-              mode: 'application/json',
-            }}
-            onBeforeChange={this.onBeforeChangeSections}
-          />
-        </div>
+        <CodeInput
+          value={this.state.form.sectionsJSON}
+          mode="application/json"
+          onBeforeChange={this.mutator.form.sectionsJSON}
+        />
       </fieldset>
 
       <div className="mb-4">
