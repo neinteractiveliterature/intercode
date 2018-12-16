@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_09_164557) do
+ActiveRecord::Schema.define(version: 2018_12_16_163057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,17 @@ ActiveRecord::Schema.define(version: 2018_12_09_164557) do
   create_table "cms_files_pages", id: false, force: :cascade do |t|
     t.bigint "cms_file_id", null: false
     t.bigint "page_id", null: false
+  end
+
+  create_table "cms_graphql_queries", force: :cascade do |t|
+    t.string "parent_type"
+    t.bigint "parent_id"
+    t.text "identifier"
+    t.text "admin_notes"
+    t.text "query"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_type", "parent_id"], name: "index_cms_graphql_queries_on_parent_type_and_parent_id"
   end
 
   create_table "cms_layouts", force: :cascade do |t|
