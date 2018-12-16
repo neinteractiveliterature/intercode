@@ -27,21 +27,21 @@ class ConventionDrop < Liquid::Drop
     @convention = convention
   end
 
-  # @return [Array<RunDrop>] Runs of events in this convention that have any available slots in
-  #                          limited buckets
+  # @return [Array<RunDrop>] Runs of events in this convention that have any available counted
+  #                          slots in limited buckets
   def runs_with_openings
     presenters = SignupCountPresenter.for_runs(convention.runs.includes(:event))
     presenters.select do |_run_id, presenter|
       buckets = presenter.run.event.registration_policy.buckets.select(&:slots_limited?)
       limited_signup_count = buckets.map do |bucket|
-        presenter.signup_count(state: 'confirmed', bucket_key: bucket.key)
+        presenter.signup_count(state: 'confirmed', bucket_key: bucket.key, counted: true)
       end.sum
       limited_signup_count < buckets.map(&:total_slots).sum
     end.values.map(&:run)
   end
 
   # @return [Array<RunDrop>] Runs of non-volunteer events in this convention that have any available
-  #                          slots in limited buckets
+  #                          counted slots in limited buckets
   def non_volunteer_runs_with_openings
     runs_with_openings.reject { |run| run.event.category == 'volunteer_event' }
   end
