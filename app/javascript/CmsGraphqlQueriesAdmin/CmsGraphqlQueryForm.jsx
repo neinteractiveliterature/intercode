@@ -1,66 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ApolloConsumer } from 'react-apollo';
-import GraphiQL from 'graphiql';
-import { parse } from 'graphql/language/parser';
+import React, { lazy, Suspense } from 'react';
 
-import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
-import { mutator, Transforms } from '../ComposableFormUtils';
+import LoadingIndicator from '../LoadingIndicator';
 
-function CmsGraphqlQueryForm({ value, onChange }) {
-  const valueMutator = mutator({
-    getState: () => value,
-    setState: onChange,
-    transforms: {
-      identifier: Transforms.textInputChange,
-      admin_notes: Transforms.textInputChange,
-      query: Transforms.identity,
-    },
-  });
+const SyncCmsGraphqlQueryForm = lazy(() => import(/* webpackChunkName: "cms-graphql-query-form" */ './SyncCmsGraphqlQueryForm'));
 
+function CmsGraphqlQueryForm(props) {
   return (
-    <>
-      <BootstrapFormInput
-        name="identifier"
-        label="Identifier"
-        className="form-control text-monospace"
-        value={value.identifier}
-        onChange={valueMutator.identifier}
-      />
-
-      <BootstrapFormTextarea
-        name="admin_notes"
-        label="Admin notes"
-        value={value.admin_notes}
-        onChange={valueMutator.admin_notes}
-      />
-
-      <ApolloConsumer>
-        {client => (
-          <div className="border" style={{ height: '40em' }}>
-            <GraphiQL
-              query={value.query}
-              onEditQuery={valueMutator.query}
-              fetcher={({ query, ...otherParams }) => client.query({
-                query: parse(query),
-                ...otherParams,
-              })}
-            />
-          </div>
-        )}
-      </ApolloConsumer>
-    </>
+    <Suspense fallback={<LoadingIndicator />}>
+      <SyncCmsGraphqlQueryForm {...props} />
+    </Suspense>
   );
 }
-
-CmsGraphqlQueryForm.propTypes = {
-  value: PropTypes.shape({
-    identifier: PropTypes.string.isRequired,
-    admin_notes: PropTypes.string.isRequired,
-    query: PropTypes.string.isRequired,
-  }),
-  onChange: PropTypes.func.isRequired,
-};
 
 export default CmsGraphqlQueryForm;

@@ -4,6 +4,7 @@ import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
+import LoadingIndicator from '../LoadingIndicator';
 import { UpdateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 
