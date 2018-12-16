@@ -68,6 +68,7 @@ Intercode::Application.routes.draw do
 
     resources :cms_partials
     resources :cms_files
+    get 'cms_graphql_queries/(*extra)' => 'cms_graphql_queries#index', as: :cms_graphql_queries
     resources :cms_navigation_items do
       collection do
         patch :sort
