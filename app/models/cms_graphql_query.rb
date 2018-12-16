@@ -1,6 +1,7 @@
 class CmsGraphqlQuery < ApplicationRecord
   belongs_to :parent, polymorphic: true
 
+  validates_uniqueness_of :identifier, scope: [:parent_type, :parent_id]
   validate :ensure_valid_query
 
   def execute(context:, variables:)

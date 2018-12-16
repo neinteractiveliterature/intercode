@@ -1,0 +1,2 @@
+module CmsGraphqlQueriesHelper
+end

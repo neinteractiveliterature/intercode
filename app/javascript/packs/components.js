@@ -2,6 +2,7 @@ import { mapValues } from 'lodash';
 
 import AppWrapper from '../AppWrapper';
 import Cart from '../Store/Cart';
+import CmsGraphqlQueriesAdmin from '../CmsGraphqlQueriesAdmin';
 import CmsVariablesAdmin from '../CmsVariablesAdmin';
 import ConventionAdmin from '../ConventionAdmin';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
@@ -36,6 +37,7 @@ import WithdrawMySignupButton from '../EventsApp/EventPage/WithdrawMySignupButto
 
 const unwrappedComponents = {
   Cart,
+  CmsGraphqlQueriesAdmin,
   CmsVariablesAdmin,
   ConventionAdmin,
   EditUserConProfile,
