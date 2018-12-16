@@ -20,7 +20,6 @@ module.exports = {
         '@babel/preset-react',
       ],
       plugins: [
-        '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-syntax-import-meta',
         '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-json-strings',
@@ -40,6 +39,7 @@ module.exports = {
         '@babel/plugin-proposal-nullish-coalescing-operator',
         '@babel/plugin-proposal-do-expressions',
         '@babel/plugin-proposal-function-bind',
+        'babel-plugin-dynamic-import-node',
       ],
     },
   },
