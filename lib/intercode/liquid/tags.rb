@@ -1,4 +1,5 @@
 require 'intercode/liquid/tags/app_component_renderer'
+require 'intercode/liquid/tags/assign_graphql_result'
 require 'intercode/liquid/tags/rails_partial_renderer'
 require 'intercode/liquid/tags/new_event_proposal_button'
 require 'intercode/liquid/tags/login_form'

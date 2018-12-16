@@ -1,0 +1,12 @@
+fragment CmsGraphqlQueryFields on CmsGraphqlQuery {
+  id
+  identifier
+  query
+  admin_notes
+}
+
+query CmsGraphqlQueriesQuery {
+  cmsGraphqlQueries {
+    ...CmsGraphqlQueryFields
+  }
+}

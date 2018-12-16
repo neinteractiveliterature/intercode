@@ -34,6 +34,20 @@ class Types::MutationType < Types::BaseObject
     raise ActionController::InvalidAuthenticityToken unless ctx[:verified_request]
   end
 
+  ### CmsGraphqlQuery
+
+  field :createCmsGraphqlQuery, mutation: Mutations::CreateCmsGraphqlQuery do
+    guard(guard_for_create_convention_associated_model(:cms_graphql_queries))
+  end
+
+  field :updateCmsGraphqlQuery, mutation: Mutations::UpdateCmsGraphqlQuery do
+    guard(guard_for_convention_associated_model(:cms_graphql_queries, :update))
+  end
+
+  field :deleteCmsGraphqlQuery, mutation: Mutations::DeleteCmsGraphqlQuery do
+    guard(guard_for_convention_associated_model(:cms_graphql_queries, :destroy))
+  end
+
   ### CmsNavigationItem
 
   field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do

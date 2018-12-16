@@ -88,6 +88,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :cmsGraphqlQueries, types[Types::CmsGraphqlQueryType.to_non_null_type] do
+    resolve ->(_obj, _args, ctx) {
+      ctx[:convention].cms_graphql_queries
+    }
+  end
+
   field :currentAbility, !Types::AbilityType do
     resolve ->(_obj, _args, ctx) {
       ctx[:current_ability]
