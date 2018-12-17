@@ -398,6 +398,7 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
   end
 
   create_table "root_sites", force: :cascade do |t|
+    t.text "site_name"
     t.bigint "root_page_id"
     t.bigint "default_layout_id"
     t.index ["default_layout_id"], name: "index_root_sites_on_default_layout_id"

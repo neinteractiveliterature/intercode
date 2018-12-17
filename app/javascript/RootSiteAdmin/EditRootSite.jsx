@@ -2,12 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
 
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { UpdateRootSite } from './mutations.gql';
 
 class EditRootSite extends React.Component {
+  static propTypes = {
+    initialRootSite: PropTypes.shape({
+      site_name: PropTypes.string,
+      default_layout: PropTypes.shape({}),
+      root_page: PropTypes.shape({}),
+    }).isRequired,
+    cmsPages: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+    cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -19,6 +36,7 @@ class EditRootSite extends React.Component {
       component: this,
       transforms: {
         rootSite: {
+          site_name: Transforms.textInputChange,
           default_layout: Transforms.identity,
           root_page: Transforms.identity,
         },
@@ -28,6 +46,14 @@ class EditRootSite extends React.Component {
 
   render = () => (
     <>
+      <BootstrapFormInput
+        name="site_name"
+        label="Site name"
+        helpText="This will show on the left side of the navigation bar"
+        value={this.state.rootSite.site_name}
+        onChange={this.mutator.rootSite.site_name}
+      />
+
       <SelectWithLabel
         name="default_layout_id"
         label="Default layout for pages"
@@ -66,6 +92,7 @@ class EditRootSite extends React.Component {
                 try {
                   await mutate({
                     variables: {
+                      siteName: this.state.rootSite.site_name,
                       rootPageId: this.state.rootSite.root_page.id,
                       defaultLayoutId: this.state.rootSite.default_layout.id,
                     },

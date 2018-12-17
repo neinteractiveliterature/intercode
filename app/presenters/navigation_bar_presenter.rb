@@ -351,7 +351,7 @@ class NavigationBarPresenter
   end
 
   def navbar_brand
-    NavigationBrand.new(convention&.name || 'Welcome to Intercode')
+    NavigationBrand.new(convention ? convention.name : RootSite.instance.site_name)
   end
 
   private
