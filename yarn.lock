@@ -1220,12 +1220,12 @@ apollo-link-http@^1.5.8:
     apollo-link "^1.2.5"
     apollo-link-http-common "^0.2.7"
 
-apollo-link@^1.0.0, apollo-link@^1.2.3, apollo-link@^1.2.4, apollo-link@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.5.tgz#f54932d6b8f1412a35e088bc199a116bce3f1f16"
+apollo-link@^1.0.0, apollo-link@^1.2.3, apollo-link@^1.2.4, apollo-link@^1.2.5, apollo-link@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.6.tgz#d9b5676d79c01eb4e424b95c7171697f6ad2b8da"
   dependencies:
     apollo-utilities "^1.0.0"
-    zen-observable-ts "^0.8.12"
+    zen-observable-ts "^0.8.13"
 
 apollo-upload-client@^9.1.0:
   version "9.1.0"
@@ -10288,9 +10288,9 @@ yargs@^7.0.0:
     y18n "^3.2.1"
     yargs-parser "^5.0.0"
 
-zen-observable-ts@^0.8.12:
-  version "0.8.12"
-  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.12.tgz#38810d98645285c074775ab26b69992cc847c830"
+zen-observable-ts@^0.8.13:
+  version "0.8.13"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.13.tgz#ae1fd77c84ef95510188b1f8bca579d7a5448fc2"
   dependencies:
     zen-observable "^0.8.0"
 
