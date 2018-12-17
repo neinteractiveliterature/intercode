@@ -92,6 +92,16 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :cmsLayouts, types[!Types::CmsLayoutType] do
+    resolve ->(_obj, _args, ctx) {
+      if ctx[:convention]
+        ctx[:convention].cms_layouts
+      else
+        CmsLayout.global
+      end
+    }
+  end
+
   field :cmsVariables, types[Types::CmsVariable.to_non_null_type] do
     resolve ->(_obj, _args, ctx) {
       if ctx[:convention]
@@ -235,6 +245,12 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :currentPendingOrder, Types::OrderType do
     resolve ->(_obj, _args, ctx) {
       ctx[:current_pending_order]
+    }
+  end
+
+  field :rootSite, Types::RootSiteType.to_non_null_type do
+    resolve ->(_obj, _args, _ctx) {
+      RootSite.instance
     }
   end
 

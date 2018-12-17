@@ -7,7 +7,7 @@ class CmsVariable < ApplicationRecord
 
   validates_presence_of :key
   validates_format_of :key, with: /\A[a-z]\w*\z/
-  validates_uniqueness_of :key, scope: :convention_id
+  validates_uniqueness_of :key, scope: [:parent_type, :parent_id]
 
   serialize :value, JSON
 

@@ -256,6 +256,14 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:rooms, :destroy))
   end
 
+  ### RootSite
+
+  field :updateRootSite, mutation: Mutations::UpdateRootSite do
+    guard ->(_obj, _args, ctx) {
+      ctx[:current_ability].can?(:update, RootSite)
+    }
+  end
+
   ### Run
 
   field :createRun, field: Mutations::CreateRun.field do

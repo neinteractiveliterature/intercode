@@ -15,5 +15,8 @@
     = nav_link_to "Variables", cms_variables_path, active: (params[:controller] == 'cms_variables'), role: "presentation"
   %li.nav-item
     = nav_link_to "GraphQL queries", cms_graphql_queries_path, active: (params[:controller] == 'cms_graphql_queries'), role: "presentation"
+  - unless convention
+    %li.nav-item
+      = nav_link_to "Root site settings", root_site_path, active: (params[:controller] == 'root_sites'), role: 'presentation'
 
 %br

@@ -11,7 +11,11 @@ module Mutations
         raise BetterRescueMiddleware::UnloggedError.new("Invalid JSON: #{error.message}")
       end
 
-      variable = context[:convention].cms_variables.find_or_initialize_by(key: cms_variable['key'])
+      variable = if context[:convention]
+        context[:convention].cms_variables.find_or_initialize_by(key: cms_variable['key'])
+      else
+        CmsVariable.global.find_or_initialize_by(key: cms_variable['key'])
+      end
       variable.value = value
       variable.save!
 

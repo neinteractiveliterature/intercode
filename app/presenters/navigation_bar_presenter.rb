@@ -233,11 +233,12 @@ class NavigationBarPresenter
 
   ROOT_SITE_ADMIN_NAVIGATION_ITEMS = [
     SITE_CONTENT_NAVIGATION_ITEM,
-    NavigationItem.define do
-      label 'Users'
-      url { users_path }
-      visible? { can?(:read, User) }
-    end
+    # TODO: re-add this once we have a user management UI
+    # NavigationItem.define do
+    #   label 'Users'
+    #   url { users_path }
+    #   visible? { can?(:read, User) }
+    # end
   ]
 
   USER_NAVIGATION_ITEMS = [
