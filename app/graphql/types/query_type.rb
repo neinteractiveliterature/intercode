@@ -82,15 +82,43 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :cmsPages, types[!Types::PageType] do
+    resolve ->(_obj, _args, ctx) {
+      if ctx[:convention]
+        ctx[:convention].pages
+      else
+        Page.global
+      end
+    }
+  end
+
   field :cmsVariables, types[Types::CmsVariable.to_non_null_type] do
     resolve ->(_obj, _args, ctx) {
-      ctx[:convention].cms_variables
+      if ctx[:convention]
+        ctx[:convention].cms_variables
+      else
+        CmsVariable.global
+      end
     }
   end
 
   field :cmsGraphqlQueries, types[Types::CmsGraphqlQueryType.to_non_null_type] do
     resolve ->(_obj, _args, ctx) {
-      ctx[:convention].cms_graphql_queries
+      if ctx[:convention]
+        ctx[:convention].cms_graphql_queries
+      else
+        CmsGraphqlQuery.global
+      end
+    }
+  end
+
+  field :cmsNavigationItems, types[!Types::CmsNavigationItemType] do
+    resolve ->(_obj, _args, ctx) {
+      if ctx[:convention]
+        ctx[:convention].cms_navigation_items
+      else
+        CmsNavigationItem.global
+      end
     }
   end
 
@@ -180,7 +208,11 @@ Types::QueryType = GraphQL::ObjectType.define do
       # TODO maybe better permission for this?  Not sure, but for now I'm using con_com as a proxy
       # for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary Liquid
       # drop data)"
-      ctx[:current_ability].can?(:view_reports, ctx[:convention])
+      if ctx[:convention]
+        ctx[:current_ability].can?(:view_reports, ctx[:convention])
+      else
+        ctx[:current_user].site_admin?
+      end
     end
 
     resolve ->(_obj, args, ctx) do
