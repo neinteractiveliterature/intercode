@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_16_163057) do
+ActiveRecord::Schema.define(version: 2018_12_17_185216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,13 +110,14 @@ ActiveRecord::Schema.define(version: 2018_12_16_163057) do
   end
 
   create_table "cms_variables", force: :cascade do |t|
-    t.bigint "convention_id", null: false
+    t.bigint "parent_id", null: false
     t.string "key", limit: 100, null: false
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["convention_id", "key"], name: "index_cms_variables_on_convention_id_and_key", unique: true
-    t.index ["convention_id"], name: "index_cms_variables_on_convention_id"
+    t.string "parent_type"
+    t.index ["parent_id", "key"], name: "index_cms_variables_on_parent_id_and_key", unique: true
+    t.index ["parent_id"], name: "index_cms_variables_on_parent_id"
   end
 
   create_table "conventions", id: :serial, force: :cascade do |t|
@@ -571,7 +572,6 @@ ActiveRecord::Schema.define(version: 2018_12_16_163057) do
   add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
-  add_foreign_key "cms_variables", "conventions"
   add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
   add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
   add_foreign_key "conventions", "forms", column: "filler_event_form_id"

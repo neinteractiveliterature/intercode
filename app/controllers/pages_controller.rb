@@ -58,7 +58,7 @@ class PagesController < ApplicationController
 
   # See above comment on the before_action for this.
   def redirect_if_root_page
-    redirect_to root_url if @page == convention.root_page
+    redirect_to root_url if convention && @page == convention.root_page
   end
 
   # See above comment on the before_action for this.
