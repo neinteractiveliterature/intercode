@@ -41,15 +41,18 @@ class PagesController < ApplicationController
 
   protected
 
-  # Set the @page variable if we're looking for the root page.  We expect a root page to exist on
-  # the Convention.  If not, it's an error (which will become a 404).
-  def find_root_page
-    @page = if parent_model
+  def root_page
+    @root_page ||= if parent_model
       parent_model.root_page
     else
       RootSite.instance.root_page
     end
+  end
 
+  # Set the @page variable if we're looking for the root page.  We expect a root page to exist on
+  # the Convention.  If not, it's an error (which will become a 404).
+  def find_root_page
+    @page = root_page
     raise ActiveRecord::RecordNotFound unless @page
   end
 
@@ -63,7 +66,7 @@ class PagesController < ApplicationController
 
   # See above comment on the before_action for this.
   def redirect_if_root_page
-    redirect_to root_url if convention && @page == convention.root_page
+    redirect_to root_url if @page == root_page
   end
 
   # See above comment on the before_action for this.

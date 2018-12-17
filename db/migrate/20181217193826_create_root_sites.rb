@@ -28,6 +28,7 @@ class CreateRootSites < ActiveRecord::Migration[5.2]
 
   def change
     create_table :root_sites do |t|
+      t.text :site_name
       t.references :root_page, foreign_key: { to_table: :pages }
       t.references :default_layout, foreign_key: { to_table: :cms_layouts }
     end
@@ -50,7 +51,7 @@ class CreateRootSites < ActiveRecord::Migration[5.2]
           layout.content = default_layout_content
         end
 
-        RootSite.create!(root_page: root_page, default_layout: default_layout)
+        RootSite.create!(site_name: 'Intercode', root_page: root_page, default_layout: default_layout)
       end
     end
   end

@@ -10,6 +10,7 @@ fragment CmsLayoutFields on CmsLayout {
 
 fragment RootSiteFields on RootSite {
   id
+  site_name
 
   root_page {
     ...PageFields
