@@ -94,6 +94,7 @@ class LiquidInput extends React.Component {
             const response = await client.query({
               query: previewLiquidQuery,
               variables: { liquid },
+              fetchPolicy: 'no-cache',
             });
 
             return response.data.previewLiquid;
