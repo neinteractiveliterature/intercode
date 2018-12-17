@@ -75,6 +75,16 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/helper-replace-supers" "^7.1.0"
 
+"@babel/helper-create-class-features-plugin@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@babel/helper-create-class-features-plugin/-/helper-create-class-features-plugin-7.2.2.tgz#aac79552e41c94716a804d371e943f20171df0c5"
+  dependencies:
+    "@babel/helper-function-name" "^7.1.0"
+    "@babel/helper-member-expression-to-functions" "^7.0.0"
+    "@babel/helper-optimise-call-expression" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-replace-supers" "^7.1.0"
+
 "@babel/helper-define-map@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-define-map/-/helper-define-map-7.1.0.tgz#3b74caec329b3c80c116290887c0dd9ae468c20c"
@@ -225,13 +235,12 @@
     "@babel/helper-create-class-features-plugin" "^7.2.1"
     "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-proposal-decorators@^7.1.6":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.2.0.tgz#6b4278282a6f5dd08b5d89b94f21aa1671fea071"
+"@babel/plugin-proposal-decorators@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.2.2.tgz#e7ce762732760542a5268a49bd19251f06dccd08"
   dependencies:
+    "@babel/helper-create-class-features-plugin" "^7.2.2"
     "@babel/helper-plugin-utils" "^7.0.0"
-    "@babel/helper-replace-supers" "^7.1.0"
-    "@babel/helper-split-export-declaration" "^7.0.0"
     "@babel/plugin-syntax-decorators" "^7.2.0"
 
 "@babel/plugin-proposal-do-expressions@^7.0.0":
