@@ -35,6 +35,8 @@ class CreateRootSites < ActiveRecord::Migration[5.2]
 
     reversible do |dir|
       dir.up do
+        [Page, CmsLayout].each(&:reset_column_information)
+
         root_page = Page.find_or_create_by!(parent_id: nil, parent_type: nil, slug: 'root') do |p|
           p.name = 'Main page'
           p.content = ROOT_PAGE_CONTENT
