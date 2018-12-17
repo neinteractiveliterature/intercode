@@ -19,6 +19,7 @@ const MarkdownInput = props => (
           const response = await client.query({
             query: previewMarkdownQuery,
             variables: { markdown },
+            fetchPolicy: 'no-cache',
           });
 
           return response.data.previewMarkdown;
