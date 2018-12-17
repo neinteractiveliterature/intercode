@@ -24,12 +24,10 @@ Intercode::Application.routes.draw do
   end
   resources :cms_layouts
   resources :cms_variables, only: [:index]
+  get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
-    # http://con.domain/ will go to the root page of the con
-    root to: 'pages#root', as: 'con_root'
-
     resource :convention
 
     resource :ticket, only: [:new, :show, :create]
@@ -114,11 +112,9 @@ Intercode::Application.routes.draw do
     resources :admin_forms
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
-    get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
   end
 
   # the following routes apply only when we're not in a virtual host
-  resources :conventions
-  resources :users
-  root to: 'conventions#index'
+  resource :root_site, only: [:show]
+  root to: 'pages#root'
 end

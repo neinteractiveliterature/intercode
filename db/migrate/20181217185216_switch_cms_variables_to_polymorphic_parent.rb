@@ -7,6 +7,8 @@ class SwitchCmsVariablesToPolymorphicParent < ActiveRecord::Migration[5.2]
       t.string :parent_type
     end
 
+    change_column_null :cms_variables, :parent_id, true
+
     reversible do |dir|
       dir.up { CmsVariable.update_all(parent_type: 'Convention') }
     end

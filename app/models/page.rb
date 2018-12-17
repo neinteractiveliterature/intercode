@@ -11,7 +11,12 @@ class Page < ApplicationRecord
   after_commit :touch_parent
 
   def effective_cms_layout
-    cms_layout || parent&.default_layout
+    return cms_layout if cms_layout
+    if parent
+      parent.default_layout
+    else
+      RootSite.instance.default_layout
+    end
   end
 
   def to_liquid

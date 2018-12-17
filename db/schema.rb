@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_17_185216) do
+ActiveRecord::Schema.define(version: 2018_12_17_193826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 2018_12_17_185216) do
   end
 
   create_table "cms_variables", force: :cascade do |t|
-    t.bigint "parent_id", null: false
+    t.bigint "parent_id"
     t.string "key", limit: 100, null: false
     t.text "value"
     t.datetime "created_at", null: false
@@ -397,6 +397,13 @@ ActiveRecord::Schema.define(version: 2018_12_17_185216) do
     t.index ["run_id"], name: "index_rooms_runs_on_run_id"
   end
 
+  create_table "root_sites", force: :cascade do |t|
+    t.bigint "root_page_id"
+    t.bigint "default_layout_id"
+    t.index ["default_layout_id"], name: "index_root_sites_on_default_layout_id"
+    t.index ["root_page_id"], name: "index_root_sites_on_root_page_id"
+  end
+
   create_table "runs", id: :serial, force: :cascade do |t|
     t.integer "event_id"
     t.datetime "starts_at"
@@ -605,6 +612,8 @@ ActiveRecord::Schema.define(version: 2018_12_17_185216) do
   add_foreign_key "rooms", "conventions"
   add_foreign_key "rooms_runs", "rooms"
   add_foreign_key "rooms_runs", "runs"
+  add_foreign_key "root_sites", "cms_layouts", column: "default_layout_id"
+  add_foreign_key "root_sites", "pages", column: "root_page_id"
   add_foreign_key "runs", "events"
   add_foreign_key "runs", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
