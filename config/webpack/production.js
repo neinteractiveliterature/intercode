@@ -1,6 +1,6 @@
 const environment = require('./environment');
 const process = require('process');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -37,11 +37,11 @@ module.exports = {
   ],
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
         parallel: true,
         cache: true,
         sourceMap: true,
-        uglifyOptions: {
+        terserOptions: {
           parse: {
             // Let uglify-js parse ecma 8 code but always output
             // ES5 compliant code for older browsers
