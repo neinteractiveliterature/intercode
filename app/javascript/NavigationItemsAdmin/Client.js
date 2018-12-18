@@ -1,80 +1,7 @@
-import gql from 'graphql-tag';
-
-const navigationItemFragment = gql`
-fragment NavigationItemFields on CmsNavigationItem {
-  id
-  position
-  title
-
-  page {
-    id
-  }
-
-  navigation_section {
-    id
-  }
-}
-`;
-
-const cmsNavigationItemsQuery = gql`
-query NavigationItemsAdminQuery {
-  convention {
-    id
-    pages {
-      id
-      name
-    }
-
-    cms_navigation_items {
-      ...NavigationItemFields
-    }
-  }
-}
-
-${navigationItemFragment}
-`;
-
-const createNavigationItemMutation = gql`
-mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
-  createCmsNavigationItem(input: { cms_navigation_item: $navigationItem }) {
-    cms_navigation_item {
-      ...NavigationItemFields
-    }
-  }
-}
-
-${navigationItemFragment}
-`;
-
-const updateNavigationItemMutation = gql`
-mutation UpdateNavigationItem($id: Int!, $navigationItem: CmsNavigationItemInput!) {
-  updateCmsNavigationItem(input: { id: $id, cms_navigation_item: $navigationItem }) {
-    cms_navigation_item {
-      ...NavigationItemFields
-    }
-  }
-}
-
-${navigationItemFragment}
-`;
-
-const deleteNavigationItemMutation = gql`
-mutation DeleteNavigationItem($id: Int!) {
-  deleteCmsNavigationItem(input: { id: $id }) {
-    cms_navigation_item {
-      id
-    }
-  }
-}
-`;
-
-const sortNavigationItemsMutation = gql`
-mutation SortNavigationItems($sortItems: [UpdateCmsNavigationItemInput!]!) {
-  sortCmsNavigationItems(input: { sort_items: $sortItems }) {
-    clientMutationId
-  }
-}
-`;
+import { NavigationItemsAdminQuery } from './queries.gql';
+import {
+  CreateNavigationItem, UpdateNavigationItem, DeleteNavigationItem, SortNavigationItems,
+} from './mutations.gql';
 
 function graphqlNavigationItemToCadmusNavbarAdminObject(navigationItem) {
   return {
@@ -112,8 +39,8 @@ class Client {
   async fetchNavigationItems() {
     this.requestsInProgress.loadingNavigationItems = true;
     try {
-      const { data } = await this.apolloClient.query({ query: cmsNavigationItemsQuery });
-      return data.convention.cms_navigation_items
+      const { data } = await this.apolloClient.query({ query: NavigationItemsAdminQuery });
+      return data.cmsNavigationItems
         .map(graphqlNavigationItemToCadmusNavbarAdminObject);
     } catch (error) {
       this.onError(error);
@@ -126,8 +53,8 @@ class Client {
   async fetchPages() {
     this.requestsInProgress.loadingPages = true;
     try {
-      const { data } = await this.apolloClient.query({ query: cmsNavigationItemsQuery });
-      return data.convention.pages;
+      const { data } = await this.apolloClient.query({ query: NavigationItemsAdminQuery });
+      return data.cmsPages;
     } catch (error) {
       this.onError(error);
       throw error;
@@ -151,23 +78,23 @@ class Client {
 
     try {
       if (navigationItem.id) {
-        mutation = updateNavigationItemMutation;
+        mutation = UpdateNavigationItem;
         variables.id = navigationItem.id;
       } else {
-        mutation = createNavigationItemMutation;
+        mutation = CreateNavigationItem;
         update = (
           cache,
           { data: { createCmsNavigationItem: { cms_navigation_item: newNavigationItem } } },
         ) => {
-          const data = cache.readQuery({ query: cmsNavigationItemsQuery });
+          const data = cache.readQuery({ query: NavigationItemsAdminQuery });
           data.convention.cms_navigation_items.push(newNavigationItem);
-          cache.writeQuery({ query: cmsNavigationItemsQuery, data });
+          cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         };
       }
 
       const { data } = await this.apolloClient.mutate({ mutation, variables, update });
       const mutationResponse = (
-        mutation === updateNavigationItemMutation
+        mutation === UpdateNavigationItem
           ? data.updateCmsNavigationItem
           : data.createCmsNavigationItem
       );
@@ -186,13 +113,13 @@ class Client {
 
     try {
       return await this.apolloClient.mutate({
-        mutation: deleteNavigationItemMutation,
+        mutation: DeleteNavigationItem,
         variables: { id: navigationItem.id },
         update: (cache) => {
-          const data = cache.readQuery({ query: cmsNavigationItemsQuery });
+          const data = cache.readQuery({ query: NavigationItemsAdminQuery });
           data.convention.cms_navigation_items = data.convention.cms_navigation_items
             .filter(item => item.id !== navigationItem.id);
-          cache.writeQuery({ query: cmsNavigationItemsQuery, data });
+          cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         },
       });
     } catch (error) {
@@ -215,10 +142,10 @@ class Client {
     this.requestsInProgress.sortingNavigationItems = true;
     try {
       return await this.apolloClient.mutate({
-        mutation: sortNavigationItemsMutation,
+        mutation: SortNavigationItems,
         variables: { sortItems },
         update: (cache) => {
-          const data = cache.readQuery({ query: cmsNavigationItemsQuery });
+          const data = cache.readQuery({ query: NavigationItemsAdminQuery });
           const newNavigationItems = data.convention.cms_navigation_items.map((item) => {
             const sortItem = sortItems.find(si => si.id === item.id);
             if (sortItem == null) {
@@ -229,7 +156,7 @@ class Client {
           });
 
           cache.writeQuery({
-            query: cmsNavigationItemsQuery,
+            query: NavigationItemsAdminQuery,
             data: {
               ...data,
               convention: {

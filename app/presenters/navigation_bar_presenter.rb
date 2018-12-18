@@ -44,10 +44,15 @@ class NavigationBarPresenter
       request.path.start_with?(url)
     end
 
-    def item_class(request)
-      item_class = 'dropdown-item'
-      item_class << ' active' if active?(request)
-      item_class
+    def item_class(request, navigation_section)
+      item_classes = []
+      if navigation_section
+        item_classes << 'dropdown-item'
+      else
+        item_classes << 'nav-link'
+      end
+      item_classes << 'active' if active?(request)
+      item_classes.join(' ')
     end
   end
 
@@ -140,6 +145,21 @@ class NavigationBarPresenter
     end
   ]
 
+  SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
+    label 'Site Content'
+    url { pages_path }
+    visible? { can?(:update, Page.new(parent: convention)) }
+    active? do |request|
+      [
+        pages_path,
+        cms_partials_path,
+        cms_layouts_path,
+        cms_files_path,
+        cms_navigation_items_path
+      ].include?(request.path)
+    end
+  end
+
   ADMIN_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Attendees'
@@ -186,20 +206,7 @@ class NavigationBarPresenter
       url { rooms_path }
       visible? { can?(:update, Room.new(convention: convention)) }
     end,
-    NavigationItem.define do
-      label 'Site Content'
-      url { pages_path }
-      visible? { can?(:update, Page.new(parent: convention)) }
-      active? do |request|
-        [
-          pages_path,
-          cms_partials_path,
-          cms_layouts_path,
-          cms_files_path,
-          cms_navigation_items_path
-        ].include?(request.path)
-      end
-    end,
+    SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Staff Positions'
       url { staff_positions_path }
@@ -222,6 +229,16 @@ class NavigationBarPresenter
       url { user_activity_alerts_path }
       visible? { can?(:read, UserActivityAlert.new(convention: convention)) }
     end
+  ]
+
+  ROOT_SITE_ADMIN_NAVIGATION_ITEMS = [
+    SITE_CONTENT_NAVIGATION_ITEM,
+    # TODO: re-add this once we have a user management UI
+    # NavigationItem.define do
+    #   label 'Users'
+    #   url { users_path }
+    #   visible? { can?(:read, User) }
+    # end
   ]
 
   USER_NAVIGATION_ITEMS = [
@@ -290,7 +307,7 @@ class NavigationBarPresenter
             if convention
               [NavigationSection.new('Admin', admin_navigation_items)]
             else
-              []
+              [NavigationSection.new('Admin', root_site_admin_navigation_items)]
             end
           )
         ], expand: true),
@@ -325,12 +342,16 @@ class NavigationBarPresenter
     build_navigation_items(ADMIN_NAVIGATION_ITEMS)
   end
 
+  def root_site_admin_navigation_items
+    build_navigation_items(ROOT_SITE_ADMIN_NAVIGATION_ITEMS)
+  end
+
   def user_navigation_items
     build_navigation_items(USER_NAVIGATION_ITEMS)
   end
 
   def navbar_brand
-    NavigationBrand.new(convention&.name || 'Welcome to Intercode')
+    NavigationBrand.new(convention ? convention.name : RootSite.instance.site_name)
   end
 
   private

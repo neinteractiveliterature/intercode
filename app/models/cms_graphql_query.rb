@@ -1,5 +1,6 @@
 class CmsGraphqlQuery < ApplicationRecord
-  belongs_to :parent, polymorphic: true
+  include Cadmus::Concerns::ModelWithParent
+  model_with_parent
 
   validates_uniqueness_of :identifier, scope: [:parent_type, :parent_id]
   validate :ensure_valid_query

@@ -8,6 +8,8 @@
 
 - if convention&.default_layout
   = render_in_cadmus_layout(page_content, convention.default_layout)
+- elsif !convention
+  = render_in_cadmus_layout(page_content, RootSite.instance.default_layout)
 - else
   !!!
   %html

@@ -3,6 +3,11 @@ class Mutations::CreateCmsGraphqlQuery < GraphQL::Schema::RelayClassicMutation
   argument :query, Types::CmsGraphqlQueryInputType, required: true
 
   def resolve(query:)
-    { query: context[:convention].cms_graphql_queries.create!(query.to_h) }
+    query_scope = if context[:convention]
+      context[:convention].cms_graphql_queries
+    else
+      CmsGraphqlQuery.global
+    end
+    { query: query_scope.create!(query.to_h) }
   end
 end

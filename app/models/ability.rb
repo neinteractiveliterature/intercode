@@ -276,6 +276,7 @@ class Ability
       Page,
       Product,
       Room,
+      RootSite,
       Order,
       OrderEntry,
       StaffPosition,

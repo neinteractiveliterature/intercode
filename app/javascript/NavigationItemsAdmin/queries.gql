@@ -1,0 +1,24 @@
+fragment NavigationItemFields on CmsNavigationItem {
+  id
+  position
+  title
+
+  page {
+    id
+  }
+
+  navigation_section {
+    id
+  }
+}
+
+query NavigationItemsAdminQuery {
+  cmsPages {
+    id
+    name
+  }
+
+  cmsNavigationItems {
+    ...NavigationItemFields
+  }
+}
