@@ -68,7 +68,10 @@ class SignupButtonDisplay extends React.Component {
             <div
               ref={ref}
               style={{ ...style, ...(this.state.showingHelpText ? {} : { zIndex: -9999 }) }}
-              className={classNames(`tooltip bs-tooltip-${placement}`, { show: this.state.showingHelpText })}
+              className={classNames(
+                `tooltip bs-tooltip-${placement}`,
+                { show: this.state.showingHelpText, 'd-none': !this.state.showingHelpText },
+              )}
               role="tooltip"
             >
               <div className="arrow" ref={arrowProps.ref} style={arrowProps.style} />
