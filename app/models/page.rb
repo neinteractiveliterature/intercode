@@ -15,7 +15,7 @@ class Page < ApplicationRecord
     if parent
       parent.default_layout
     else
-      RootSite.instance.default_layout
+      RootSite.instance&.default_layout
     end
   end
 
