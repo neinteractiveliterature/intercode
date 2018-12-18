@@ -23,6 +23,7 @@ import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import ProposeEventButton from '../EventProposals/ProposeEventButton';
 import RoomsAdmin from '../RoomsAdmin';
+import RootSiteAdmin from '../RootSiteAdmin';
 import SignupSpyTable from '../Reports/SignupSpyTable';
 import StaffPositionAdmin from '../StaffPositionAdmin';
 import StoreAdmin from '../Store/StoreAdmin';
@@ -58,6 +59,7 @@ const unwrappedComponents = {
   ProductOrderForm,
   ProposeEventButton,
   RoomsAdmin,
+  RootSiteAdmin,
   SignupSpyTable,
   StaffPositionAdmin,
   StoreAdmin,

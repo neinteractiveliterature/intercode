@@ -5,7 +5,13 @@ module Mutations
     argument :key, String, required: true
 
     def resolve(key:)
-      variable = context[:convention].cms_variables.find_by(key: key)
+      variable_scope = if context[:convention]
+        context[:convention].cms_variables
+      else
+        CmsVariable.global
+      end
+
+      variable = variable_scope.find_by(key: key)
       variable.destroy!
 
       { cms_variable: variable }

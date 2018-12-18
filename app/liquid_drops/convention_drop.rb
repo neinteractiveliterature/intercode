@@ -128,4 +128,16 @@ class ConventionDrop < Liquid::Drop
   def ends_at
     @ends_at ||= convention.ends_at&.in_time_zone(convention.timezone)
   end
+
+  # @return String The root URL for this convention
+  def url
+    protocol = Rails.application.config.action_mailer.default_url_options[:protocol] || 'http'
+    port = Rails.application.config.action_mailer.default_url_options[:port]
+
+    default_port = protocol == 'https' ? 443 : 80
+    hostname = convention.domain
+    hostname << ":#{port}" if port && port != default_port
+
+    "#{protocol}://#{hostname}"
+  end
 end

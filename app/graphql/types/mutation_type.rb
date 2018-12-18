@@ -1,3 +1,21 @@
+def guard_for_cms_model(model_class, action, find_by: :id)
+  ->(_obj, args, ctx) {
+    model = if ctx[:convention]
+      model_class.find_by(parent_type: 'Convention', parent_id: ctx[:convention.id], find_by => args[find_by])
+    else
+      model_class.global.find_by(find_by => args[find_by])
+    end
+    ctx[:current_ability].can?(action, model)
+  }
+end
+
+def guard_for_create_cms_model(model_class)
+  ->(_obj, args, ctx) {
+    model = model_class.new(parent: ctx[:convention])
+    ctx[:current_ability].can?(:create, model)
+  }
+end
+
 def guard_for_convention_associated_model(association, action, find_by: :id)
   ->(_obj, args, ctx) {
     model = ctx[:convention].public_send(association).find_by(find_by => args[find_by])
@@ -37,45 +55,45 @@ class Types::MutationType < Types::BaseObject
   ### CmsGraphqlQuery
 
   field :createCmsGraphqlQuery, mutation: Mutations::CreateCmsGraphqlQuery do
-    guard(guard_for_create_convention_associated_model(:cms_graphql_queries))
+    guard(guard_for_create_cms_model(CmsGraphqlQuery))
   end
 
   field :updateCmsGraphqlQuery, mutation: Mutations::UpdateCmsGraphqlQuery do
-    guard(guard_for_convention_associated_model(:cms_graphql_queries, :update))
+    guard(guard_for_cms_model(CmsGraphqlQuery, :update))
   end
 
   field :deleteCmsGraphqlQuery, mutation: Mutations::DeleteCmsGraphqlQuery do
-    guard(guard_for_convention_associated_model(:cms_graphql_queries, :destroy))
+    guard(guard_for_cms_model(CmsGraphqlQuery, :destroy))
   end
 
   ### CmsNavigationItem
 
   field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do
-    guard(guard_for_create_convention_associated_model(:cms_navigation_items))
+    guard(guard_for_create_cms_model(CmsNavigationItem))
   end
 
   field :updateCmsNavigationItem, field: Mutations::UpdateCmsNavigationItem.field do
-    guard(guard_for_convention_associated_model(:cms_navigation_items, :update))
+    guard(guard_for_cms_model(CmsNavigationItem, :update))
   end
 
   field :deleteCmsNavigationItem, field: Mutations::DeleteCmsNavigationItem.field do
-    guard(guard_for_convention_associated_model(:cms_navigation_items, :destroy))
+    guard(guard_for_cms_model(CmsNavigationItem, :destroy))
   end
 
   field :sortCmsNavigationItems, field: Mutations::SortCmsNavigationItems.field do
     guard ->(_obj, _args, ctx) {
-      ctx[:current_ability].can?(:sort, ctx[:convention].cms_navigation_items.new)
+      ctx[:current_ability].can?(:sort, CmsNavigationItem.new(parent: ctx[:convention]))
     }
   end
 
   ### CmsVariable
 
   field :setCmsVariable, mutation: Mutations::SetCmsVariable do
-    guard(guard_for_create_convention_associated_model(:cms_variables))
+    guard(guard_for_create_cms_model(::CmsVariable))
   end
 
   field :deleteCmsVariable, mutation: Mutations::DeleteCmsVariable do
-    guard(guard_for_convention_associated_model(:cms_variables, :destroy, find_by: :key))
+    guard(guard_for_cms_model(::CmsVariable, :destroy, find_by: :key))
   end
 
   ### Convention
@@ -200,7 +218,7 @@ class Types::MutationType < Types::BaseObject
   ### Page
 
   field :deletePage, field: Mutations::DeletePage.field do
-    guard(guard_for_convention_associated_model(:pages, :destroy))
+    guard(guard_for_cms_model(Page, :destroy))
   end
 
   ### Product
@@ -236,6 +254,14 @@ class Types::MutationType < Types::BaseObject
 
   field :deleteRoom, field: Mutations::DeleteRoom.field do
     guard(guard_for_convention_associated_model(:rooms, :destroy))
+  end
+
+  ### RootSite
+
+  field :updateRootSite, mutation: Mutations::UpdateRootSite do
+    guard ->(_obj, _args, ctx) {
+      ctx[:current_ability].can?(:update, RootSite)
+    }
   end
 
   ### Run

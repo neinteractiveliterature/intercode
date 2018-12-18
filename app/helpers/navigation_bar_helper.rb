@@ -8,24 +8,24 @@ module NavigationBarHelper
     'data-toggle' => 'dropdown'
   }
 
-  def render_navigation_item(item)
-    options = { class: item.item_class(request), method: item.http_method }
+  def render_navigation_item(item, navigation_section)
+    options = { class: item.item_class(request, navigation_section), method: item.http_method }
     options.delete(:method) if options[:method] && options[:method].to_s.downcase == 'get'
     link_to item.label, item.url, options.compact
   end
 
-  def render_navigation_items(items)
-    safe_join(items.map { |item| render_navigation_item(item) })
+  def render_navigation_items(items, navigation_section)
+    safe_join(items.map { |item| render_navigation_item(item, navigation_section) })
   end
 
-  def render_navigation_menu(label, items)
+  def render_navigation_menu(label, items, navigation_section)
     return unless items.any?
 
     content_tag(:li, class: 'nav-item dropdown', role: 'presentation') do
       safe_join([
         content_tag(:a, label, DROPDOWN_TARGET_ATTRS),
         content_tag(:div, class: 'dropdown-menu', style: 'z-index: 1100;') do
-          render_navigation_items(items)
+          render_navigation_items(items, navigation_section)
         end
       ])
     end
@@ -74,7 +74,7 @@ module NavigationBarHelper
     case item
     when NavigationBarPresenter::NavigationItem
       content_tag(:li, class: 'navigation-item my-auto') do
-        render_navigation_item(item)
+        render_navigation_item(item, nil)
       end
     when NavigationBarPresenter::NavigationCollapse
       render_navigation_collapse(item.groups)
@@ -85,9 +85,9 @@ module NavigationBarHelper
     when NavigationBarPresenter::TicketPurchaseNavigationItem
       render_ticket_purchase_navigation_item
     when NavigationBarPresenter::UserNavigationSection
-      user_navigation_section(item.items)
+      user_navigation_section(item.items, item)
     when NavigationBarPresenter::NavigationSection
-      render_navigation_menu(item.label, item.items)
+      render_navigation_menu(item.label, item.items, item)
     else item
     end
   end
@@ -187,7 +187,7 @@ module NavigationBarHelper
     end
   end
 
-  def user_navigation_section(items)
+  def user_navigation_section(items, navigation_section)
     return logged_out_user_navigation_section unless user_signed_in?
 
     safe_join([
@@ -199,7 +199,7 @@ module NavigationBarHelper
               safe_join([
                 user_navigation_dropdown_target,
                 content_tag(:div, class: 'dropdown-menu', style: 'z-index: 1100;') do
-                  render_navigation_items(items)
+                  render_navigation_items(items, navigation_section)
                 end
               ])
             end,

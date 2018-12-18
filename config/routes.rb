@@ -12,19 +12,26 @@ Intercode::Application.routes.draw do
     sessions: 'sessions'
   }
 
+  # CMS stuff
+  cadmus_pages
+  resources :cms_partials
+  resources :cms_files
+  get 'cms_graphql_queries/(*extra)' => 'cms_graphql_queries#index', as: :cms_graphql_queries
+  resources :cms_navigation_items do
+    collection do
+      patch :sort
+    end
+  end
+  resources :cms_layouts
+  resources :cms_variables, only: [:index]
+  get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
+
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
-    # all the /pages/* routes that Cadmus provides
-    cadmus_pages
-
-    # http://con.domain/ will go to the root page of the con
-    root to: 'pages#root', as: 'con_root'
-
     resource :convention
 
     resource :ticket, only: [:new, :show, :create]
     get 'ticket_types/(*extra)' => 'ticket_types#index', as: :ticket_types
-
 
     resources :events, only: [] do
       resources :runs, only: [] do
@@ -66,17 +73,6 @@ Intercode::Application.routes.draw do
     end
     get 'user_con_profiles/(*extra)' => 'user_con_profiles#index'
 
-    resources :cms_partials
-    resources :cms_files
-    get 'cms_graphql_queries/(*extra)' => 'cms_graphql_queries#index', as: :cms_graphql_queries
-    resources :cms_navigation_items do
-      collection do
-        patch :sort
-      end
-    end
-    resources :cms_layouts
-    resources :cms_variables, only: [:index]
-
     resource :my_profile do
       member do
         get :edit_bio
@@ -116,11 +112,9 @@ Intercode::Application.routes.draw do
     resources :admin_forms
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
-    get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
   end
 
   # the following routes apply only when we're not in a virtual host
-  resources :conventions
-  resources :users
-  root to: 'conventions#index'
+  resource :root_site, only: [:show]
+  root to: 'pages#root'
 end

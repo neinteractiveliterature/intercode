@@ -116,7 +116,8 @@ class ApplicationController < ActionController::Base
     cms_variables.merge(
       'user' => current_user,
       'convention' => convention,
-      'user_con_profile' => user_con_profile
+      'user_con_profile' => user_con_profile,
+      'conventions' => convention ? nil : Convention.all.to_a
     )
   end
 
