@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Set } from 'immutable';
 
 const ItemInteractionTrackerContext = React.createContext({
   interactWithItem: () => {},
@@ -23,10 +22,14 @@ export default class ItemInteractionTracker extends React.Component {
   }
 
   interactWithItem = (itemId) => {
-    this.setState(prevState => ({ interactedItemIds: prevState.interactedItemIds.add(itemId) }));
+    this.setState((prevState) => {
+      const newInteractedItemIds = new Set(prevState.interactedItemIds);
+      newInteractedItemIds.add(itemId);
+      return { interactedItemIds: newInteractedItemIds };
+    });
   }
 
-  hasInteractedWithItem = itemId => this.state.interactedItemIds.contains(itemId)
+  hasInteractedWithItem = itemId => this.state.interactedItemIds.has(itemId)
 
   render = () => (
     <ItemInteractionTrackerContext.Provider
