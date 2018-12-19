@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Set } from 'immutable';
 import { detect } from 'detect-browser';
 
 import ConfigPropType from './ConfigPropType';
@@ -45,10 +44,12 @@ export class ScheduleGridProvider extends React.Component {
   })
 
   toggleRunDetailsVisibility = (schedule, runId) => {
-    if (this.state.visibleRunDetailsIds.contains(runId)) {
-      this.setState(prevState => ({
-        visibleRunDetailsIds: prevState.visibleRunDetailsIds.subtract([runId]),
-      }));
+    if (this.state.visibleRunDetailsIds.has(runId)) {
+      this.setState((prevState) => {
+        const newVisibleRunDetailsIds = new Set(prevState.visibleRunDetailsIds);
+        newVisibleRunDetailsIds.delete(runId);
+        return { visibleRunDetailsIds: newVisibleRunDetailsIds };
+      });
 
       return false;
     }
@@ -57,9 +58,15 @@ export class ScheduleGridProvider extends React.Component {
     const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
       .map(eventRun => eventRun.runId);
 
-    this.setState(prevState => ({
-      visibleRunDetailsIds: prevState.visibleRunDetailsIds.subtract(concurrentRunIds).add(runId),
-    }));
+    this.setState((prevState) => {
+      const newVisibleRunDetailsIds = new Set(prevState.visibleRunDetailsIds);
+      concurrentRunIds.forEach((concurrentRunId) => {
+        newVisibleRunDetailsIds.delete(concurrentRunId);
+      });
+      newVisibleRunDetailsIds.add(runId);
+
+      return { visibleRunDetailsIds: newVisibleRunDetailsIds };
+    });
 
     return true;
   }
@@ -73,7 +80,7 @@ export class ScheduleGridProvider extends React.Component {
           schedule,
           convention,
           config: this.props.config,
-          isRunDetailsVisible: runId => this.state.visibleRunDetailsIds.contains(runId),
+          isRunDetailsVisible: runId => this.state.visibleRunDetailsIds.has(runId),
           toggleRunDetailsVisibility: this.toggleRunDetailsVisibility,
         }}
       >
