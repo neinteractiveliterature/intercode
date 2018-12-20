@@ -45,7 +45,7 @@ export default class Confirm extends React.Component {
   render = () => (
     <ModalContainer>
       {({
-        modalVisible, modalState, openModal, closeModal, setModalState,
+        modalVisible, modalState, openModal, closeModal,
       }) => (
         <ConfirmContext.Provider value={openModal}>
           {this.props.children}
@@ -54,7 +54,6 @@ export default class Confirm extends React.Component {
             onOK={() => this.okClicked(modalState, closeModal)}
             onCancel={closeModal}
             disableButtons={this.state.actionInProgress}
-            setPrompt={(prompt) => { setModalState({ prompt }); }}
           >
             {(modalState || {}).prompt || <div />}
             {

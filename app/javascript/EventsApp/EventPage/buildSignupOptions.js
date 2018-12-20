@@ -57,7 +57,7 @@ function buildNoPreferenceOptions(event) {
     label: 'No preference',
     buttonClass: 'btn-outline-dark',
     bucket: null,
-    helpText: 'Sign up for any of the limited-capacity buckets in this event',
+    helpText: `Sign up for any of: ${eligibleBuckets.map(bucket => bucket.name).join(', ')}`,
     noPreference: true,
     teamMember: false,
     counted: true, // no preference signups only go to counted buckets

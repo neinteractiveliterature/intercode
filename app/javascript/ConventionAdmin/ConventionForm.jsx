@@ -135,21 +135,21 @@ class ConventionForm extends React.Component {
         <BootstrapFormInput
           name="name"
           label="Name"
-          value={this.state.convention.name}
+          value={this.state.convention.name || ''}
           onChange={this.mutator.convention.name}
         />
 
         <BootstrapFormInput
           name="domain"
           label="Convention domain name"
-          value={this.state.convention.domain}
+          value={this.state.convention.domain || ''}
           onChange={this.mutator.convention.domain}
         />
 
         <BootstrapFormInput
           name="event_mailing_list_domain"
           label="Event mailing list domain name"
-          value={this.state.convention.event_mailing_list_domain}
+          value={this.state.convention.event_mailing_list_domain || ''}
           helpText="If present, event teams can use this domain name to create automatically-managed mailing lists for their team."
           onChange={this.mutator.convention.event_mailing_list_domain}
         />
@@ -206,7 +206,7 @@ class ConventionForm extends React.Component {
           name="ticket_name"
           label={'Name for "ticket" at this convention'}
           type="text"
-          value={this.state.convention.ticket_name}
+          value={this.state.convention.ticket_name || ''}
           onChange={this.mutator.convention.ticket_name}
         />
 

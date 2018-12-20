@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
-import { List } from 'immutable';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import {
@@ -11,19 +10,29 @@ import {
 } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import RegistrationBucketRow from './RegistrationBucketRow';
-import RegistrationPolicy from './RegistrationPolicy';
+import {
+  RegistrationPolicyPropType,
+  addRegistrationPolicyBucket,
+  getRegistrationPolicySlotsLimited,
+  sumMinimumSlots,
+  sumPreferredSlots,
+  sumTotalSlots,
+  updateRegistrationPolicyBucket,
+  getRegistrationPolicyAnythingBucket,
+  removeRegistrationPolicyBucket,
+} from './RegistrationPolicy';
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 
 class RegistrationPolicyEditor extends React.Component {
   static propTypes = {
-    registrationPolicy: RegistrationPolicy.propType.isRequired,
+    registrationPolicy: RegistrationPolicyPropType.isRequired,
     onChange: PropTypes.func.isRequired,
     lockNameAndDescription: PropTypes.bool,
     lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
     lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
     presets: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
-      policy: RegistrationPolicy.apiRepresentationPropType.isRequired,
+      policy: RegistrationPolicyPropType.isRequired,
     }).isRequired),
   }
 
@@ -42,13 +51,12 @@ class RegistrationPolicyEditor extends React.Component {
     const initiallyCustom = (
       this.props.presets
       && !initialPreset
-      && (this.props.registrationPolicy.buckets || new List()).size > 0
+      && (this.props.registrationPolicy.buckets || []).length > 0
     );
 
     this.state = {
       custom: initiallyCustom,
       preset: initialPreset,
-      showingPreview: false,
     };
   }
 
@@ -61,23 +69,30 @@ class RegistrationPolicyEditor extends React.Component {
   addBucket = (event) => {
     event.preventDefault();
     const customBucketKeyNumbers = this.props.registrationPolicy.buckets
-      .map(bucket => bucket.get('key'))
+      .map(bucket => bucket.key)
       .filter(key => key.match(/^custom-\d+$/))
-      .map(key => Number.parseInt(key.replace('custom-', ''), 10))
-      .toJS();
+      .map(key => Number.parseInt(key.replace('custom-', ''), 10));
     const maxBucketKeyNumber = (
       customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0
     );
     const customBucketNumber = maxBucketKeyNumber + 1;
-    this.props.onChange(this.props.registrationPolicy.addBucket(
+    this.props.onChange(addRegistrationPolicyBucket(
+      this.props.registrationPolicy,
       `custom-${customBucketNumber}`,
-      { name: `Custom ${customBucketNumber}`, slots_limited: true },
+      {
+        name: `Custom ${customBucketNumber}`,
+        anything: false,
+        slots_limited: true,
+        not_counted: false,
+        expose_attendees: false,
+      },
     ));
   }
 
   addFlexBucket = (event) => {
     event.preventDefault();
-    this.props.onChange(this.props.registrationPolicy.addBucket(
+    this.props.onChange(addRegistrationPolicyBucket(
+      this.props.registrationPolicy,
       'flex',
       {
         name: 'Flex',
@@ -89,15 +104,22 @@ class RegistrationPolicyEditor extends React.Component {
   }
 
   bucketChanged = (key, newBucket) => {
-    this.props.onChange(this.props.registrationPolicy.updateBucket(key, newBucket));
+    this.props.onChange(updateRegistrationPolicyBucket(
+      this.props.registrationPolicy,
+      key,
+      newBucket,
+    ));
   }
 
   preventNoPreferenceSignupsChanged = (newValue) => {
-    this.props.onChange(this.props.registrationPolicy.setPreventNoPreferenceSignups(newValue === 'true'));
+    this.props.onChange({
+      ...this.props.registrationPolicy,
+      prevent_no_preference_signups: newValue === 'true',
+    });
   }
 
   deleteBucket = (key) => {
-    this.props.onChange(this.props.registrationPolicy.deleteBucket(key));
+    this.props.onChange(removeRegistrationPolicyBucket(this.props.registrationPolicy, key));
   }
 
   presetSelected = (event) => {
@@ -115,9 +137,9 @@ class RegistrationPolicyEditor extends React.Component {
         { preset, custom: false },
         () => {
           if (preset) {
-            this.props.onChange(RegistrationPolicy.fromAPI(preset.policy));
+            this.props.onChange(preset.policy);
           } else {
-            this.props.onChange(new RegistrationPolicy());
+            this.props.onChange({ buckets: [], prevent_no_preference_signups: false });
           }
         },
       );
@@ -131,7 +153,7 @@ class RegistrationPolicyEditor extends React.Component {
       return null;
     }
 
-    const hasAnythingBucket = !!this.props.registrationPolicy.getAnythingBucket();
+    const hasAnythingBucket = !!getRegistrationPolicyAnythingBucket(this.props.registrationPolicy);
 
     return (
       <ul className="list-inline">
@@ -184,7 +206,7 @@ class RegistrationPolicyEditor extends React.Component {
   }
 
   renderTotals = () => {
-    if (!this.props.registrationPolicy.slotsLimited()) {
+    if (!getRegistrationPolicySlotsLimited(this.props.registrationPolicy)) {
       return 'unlimited';
     }
 
@@ -192,15 +214,15 @@ class RegistrationPolicyEditor extends React.Component {
       <>
         <span className="mr-2">
           {'Min: '}
-          {this.props.registrationPolicy.getMinimumSlots()}
+          {sumMinimumSlots(this.props.registrationPolicy)}
         </span>
         <span className="mr-2">
           {'Pref: '}
-          {this.props.registrationPolicy.getPreferredSlots()}
+          {sumPreferredSlots(this.props.registrationPolicy)}
         </span>
         <span className="mr-2">
           {'Max: '}
-          {this.props.registrationPolicy.getTotalSlots()}
+          {sumTotalSlots(this.props.registrationPolicy)}
         </span>
       </>
     );
@@ -285,7 +307,7 @@ class RegistrationPolicyEditor extends React.Component {
       );
     }
 
-    if (this.props.registrationPolicy.getPreventNoPreferenceSignups()) {
+    if (this.props.registrationPolicy.prevent_no_preference_signups) {
       return (
         <span>
           &quot;No preference&quot; option will not be available
@@ -319,7 +341,7 @@ class RegistrationPolicyEditor extends React.Component {
       );
     }
 
-    const boolValue = this.props.registrationPolicy.getPreventNoPreferenceSignups();
+    const boolValue = this.props.registrationPolicy.prevent_no_preference_signups;
     const choiceSetValue = (boolValue == null ? null : boolValue.toString());
 
     return (
@@ -370,7 +392,7 @@ class RegistrationPolicyEditor extends React.Component {
 
   renderPreviewContent = () => (
     <RegistrationPolicyPreview
-      registrationPolicy={this.props.registrationPolicy.getAPIRepresentation()}
+      registrationPolicy={this.props.registrationPolicy}
     />
   )
 

@@ -7,16 +7,21 @@ import {
   isPreventNoPreferenceSignupsApplicable,
 } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
-import RegistrationPolicy from './RegistrationPolicy';
+import {
+  RegistrationPolicyPropType,
+  sumMinimumSlots,
+  sumPreferredSlots,
+  sumTotalSlots,
+} from './RegistrationPolicy';
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 
 class RegistrationPolicyDisplay extends React.PureComponent {
   static propTypes = {
     presets: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
-      policy: RegistrationPolicy.apiRepresentationPropType.isRequired,
+      policy: RegistrationPolicyPropType.isRequired,
     }).isRequired),
-    registrationPolicy: RegistrationPolicy.propType.isRequired,
+    registrationPolicy: RegistrationPolicyPropType.isRequired,
   };
 
   static defaultProps = {
@@ -61,17 +66,17 @@ class RegistrationPolicyDisplay extends React.PureComponent {
           <div className="flex-grow-1">
             Min:
             {' '}
-            {bucket.get('minimumSlots')}
+            {bucket.minimum_slots}
           </div>
           <div className="flex-grow-1">
             Pref:
             {' '}
-            {bucket.get('preferredSlots')}
+            {bucket.preferred_slots}
           </div>
           <div className="flex-grow-1">
             Max:
             {' '}
-            {bucket.get('totalSlots')}
+            {bucket.total_slots}
           </div>
         </div>
       </td>
@@ -97,7 +102,7 @@ class RegistrationPolicyDisplay extends React.PureComponent {
     return (
       <tr>
         <td colSpan={columnCount}>
-          {this.props.registrationPolicy.getPreventNoPreferenceSignups()
+          {this.props.registrationPolicy.prevent_no_preference_signups
             ? <span>&quot;No preference&quot; option will not be available</span>
             : <span>&quot;No preference&quot; option will be available</span>
           }
@@ -109,7 +114,7 @@ class RegistrationPolicyDisplay extends React.PureComponent {
   }
 
   renderTotals = () => {
-    if (!this.props.registrationPolicy.slotsLimited()) {
+    if (!this.props.registrationPolicy.slots_limited) {
       return 'unlimited';
     }
 
@@ -118,17 +123,17 @@ class RegistrationPolicyDisplay extends React.PureComponent {
         <div className="flex-grow-1">
           Min:
           {' '}
-          {this.props.registrationPolicy.getMinimumSlots()}
+          {sumMinimumSlots(this.props.registrationPolicy)}
         </div>
         <div className="flex-grow-1">
           Pref:
           {' '}
-          {this.props.registrationPolicy.getPreferredSlots()}
+          {sumPreferredSlots(this.props.registrationPolicy)}
         </div>
         <div className="flex-grow-1">
           Max:
           {' '}
-          {this.props.registrationPolicy.getTotalSlots()}
+          {sumTotalSlots(this.props.registrationPolicy)}
         </div>
       </React.Fragment>
     );
@@ -191,7 +196,7 @@ class RegistrationPolicyDisplay extends React.PureComponent {
           {this.renderPolicyTable()}
         </div>
         <RegistrationPolicyPreview
-          registrationPolicy={this.props.registrationPolicy.getAPIRepresentation()}
+          registrationPolicy={this.props.registrationPolicy}
         />
       </div>
     </div>
