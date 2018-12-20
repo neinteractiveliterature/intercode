@@ -1298,6 +1298,13 @@ apollo-utilities@1.0.26, apollo-utilities@^1.0.0, apollo-utilities@^1.0.26:
   dependencies:
     fast-json-stable-stringify "^2.0.0"
 
+apollo-utilities@^1.0.27:
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.27.tgz#77c550f9086552376eca3a48e234a1466b5b057e"
+  integrity sha512-nzrMQ89JMpNmYnVGJ4t8zN75gQbql27UDhlxNi+3OModp0Masx5g+fQmQJ5B4w2dpRuYOsdwFLmj3lQbwOKV1Q==
+  dependencies:
+    fast-json-stable-stringify "^2.0.0"
+
 append-transform@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/append-transform/-/append-transform-0.4.0.tgz#d76ebf8ca94d276e247a36bad44a4b74ab611991"
@@ -4187,11 +4194,12 @@ graphiql@^0.12.0:
     codemirror-graphql "^0.7.1"
     markdown-it "^8.4.0"
 
-graphql-anywhere@^4.1.22:
-  version "4.1.23"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.23.tgz#4275b161432b7c60a36970a1d9840d8c5cc2516e"
+graphql-anywhere@^4.1.24:
+  version "4.1.24"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.24.tgz#59e2a8bfd3d00ac75f6a377e31e4e9fdaa5ce786"
+  integrity sha512-g81K7FqXSF3q1iqFWlwiwD+g0SDkPUUa9+Wa+7BOrAe5+7R4BdNWL4dw9BRsJxt0Xx6nOaI2E+VM7QMAucQFvA==
   dependencies:
-    apollo-utilities "^1.0.26"
+    apollo-utilities "^1.0.27"
 
 graphql-config@2.0.1:
   version "2.0.1"
