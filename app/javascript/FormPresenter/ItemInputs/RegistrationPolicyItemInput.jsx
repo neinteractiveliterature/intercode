@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
-import RegistrationPolicy from '../../RegistrationPolicy/RegistrationPolicy';
+import { RegistrationPolicyPropType } from '../../RegistrationPolicy/RegistrationPolicy';
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
 import presets from '../../RegistrationPolicy/RegistrationPolicyPresets';
 
 class RegistrationPolicyItemInput extends React.Component {
   static propTypes = {
-    value: RegistrationPolicy.apiRepresentationPropType,
+    value: RegistrationPolicyPropType,
     valueInvalid: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
   };
@@ -23,14 +23,14 @@ class RegistrationPolicyItemInput extends React.Component {
     enableUniqueIds(this);
 
     this.state = {
-      registrationPolicy: RegistrationPolicy.fromAPI(this.props.value),
+      registrationPolicy: this.props.value,
     };
   }
 
   registrationPolicyChanged = (newRegistrationPolicy) => {
     this.setState(
       { registrationPolicy: newRegistrationPolicy },
-      () => { this.props.onChange(newRegistrationPolicy.getAPIRepresentation()); },
+      () => { this.props.onChange(newRegistrationPolicy); },
     );
   }
 

@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: intercode
-        image: gcr.io/intercode-2/intercode:v1
+        image: neinteractiveliterature/intercode:latest
         resources:
           requests:
             cpu: 100m

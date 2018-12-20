@@ -4,6 +4,7 @@ import buildBlankSignupCountsFromRegistrationPolicy from '../EventsApp/EventPage
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import SignupButtons from '../EventsApp/EventPage/SignupButtons';
+import { RegistrationPolicyPropType } from './RegistrationPolicy';
 
 function RegistrationPolicyPreview({ registrationPolicy }) {
   const blankSignupCounts = buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy);
@@ -55,5 +56,9 @@ function RegistrationPolicyPreview({ registrationPolicy }) {
     </div>
   );
 }
+
+RegistrationPolicyPreview.propTypes = {
+  registrationPolicy: RegistrationPolicyPropType.isRequired,
+};
 
 export default RegistrationPolicyPreview;

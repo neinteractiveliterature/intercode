@@ -1,6 +1,5 @@
 import { Record } from 'immutable';
 import PropTypes from 'prop-types';
-import RegistrationPolicy from '../RegistrationPolicy/RegistrationPolicy';
 
 const defaultProperties = {
   id: null,
@@ -101,8 +100,8 @@ export default class FormItem extends Record(defaultProperties) {
 
       case 'registration_policy':
         if (typeof value === 'object') {
-          const policy = RegistrationPolicy.fromAPI(value);
-          if (policy.buckets.size === 0) {
+          const policy = value;
+          if (policy.buckets.length === 0) {
             return false;
           }
 
@@ -112,10 +111,10 @@ export default class FormItem extends Record(defaultProperties) {
             }
 
             if (
-              bucket.slotsLimited && !(
-                typeof bucket.minimumSlots === 'number' && bucket.minimumSlots >= 0
-                && typeof bucket.preferredSlots === 'number' && bucket.preferredSlots >= 0
-                && typeof bucket.totalSlots === 'number' && bucket.totalSlots >= 0
+              bucket.slots_limited && !(
+                typeof bucket.minimum_slots === 'number' && bucket.minimum_slots >= 0
+                && typeof bucket.preferred_slots === 'number' && bucket.preferred_slots >= 0
+                && typeof bucket.total_slots === 'number' && bucket.total_slots >= 0
               )
             ) {
               return false;

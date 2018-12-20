@@ -2,7 +2,7 @@ import React from 'react';
 
 import HelpPopover from '../UIComponents/HelpPopover';
 import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
-import RegistrationPolicy from './RegistrationPolicy';
+import { RegistrationPolicyPropType } from './RegistrationPolicy';
 
 const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration bucket with '
 + 'limited slots, we can display a "no preference" option for signups. Users who sign up '
@@ -11,7 +11,7 @@ const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration
 
 class NoPreferenceHelpPopover extends React.PureComponent {
   static propTypes = {
-    registrationPolicy: RegistrationPolicy.propType.isRequired,
+    registrationPolicy: RegistrationPolicyPropType.isRequired,
   }
 
   render = () => {
