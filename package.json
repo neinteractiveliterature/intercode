@@ -86,7 +86,7 @@
     "react-dnd": "^7.0.2",
     "react-dnd-html5-backend": "^7.0.2",
     "react-dnd-multi-backend": "^3.1.11",
-    "react-dom": "^16.6.3",
+    "react-dom": "^16.7.0",
     "react-html-id": "^0.1.5",
     "react-immutable-proptypes": "^2.1.0",
     "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
