@@ -2,9 +2,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import ErrorDisplay from '../../ErrorDisplay';
 import Form from '../../Models/Form';
 import FormItemInput from '../ItemInputs/FormItemInput';
+import { formResponseValueIsComplete } from '../../Models/FormItem';
 import ItemInteractionTracker from '../ItemInteractionTracker';
 
 class FormSection extends React.Component {
@@ -70,7 +72,7 @@ class FormSection extends React.Component {
             valueInvalid={
               item.identifier
               && hasInteractedWithItem(item.identifier)
-              && !item.valueIsComplete(response[item.identifier])
+              && !formResponseValueIsComplete(item, response[item.identifier])
             }
             value={item.identifier ? response[item.identifier] : null}
             onChange={this.responseValueChanged}
@@ -83,7 +85,7 @@ class FormSection extends React.Component {
 
     return (
       <div>
-        {items.toJS()}
+        {items}
       </div>
     );
   }

@@ -1,143 +1,96 @@
-import { Record } from 'immutable';
 import PropTypes from 'prop-types';
 
-const defaultProperties = {
-  id: null,
-  formSectionId: null,
-  position: null,
-  itemType: null,
-  identifier: null,
-  adminDescription: null,
-  properties: {},
-};
+function eventEmailValueIsComplete(value) {
+  if (!value) {
+    return false;
+  }
 
-export default class FormItem extends Record(defaultProperties) {
-  static propType = PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    formSectionId: PropTypes.number.isRequired,
-    position: PropTypes.number.isRequired,
-    itemType: PropTypes.string.isRequired,
-    identifier: PropTypes.string.isRequired,
-    adminDescription: PropTypes.string,
+  return (value.team_mailing_list_name || value.email);
+}
+
+function freeTextValueIsComplete(value) {
+  if (typeof value === 'string') {
+    return value.trim() !== '';
+  }
+
+  return false;
+}
+
+function multipleChoiceValueIsComplete(value) {
+  if (typeof value === 'string') {
+    return value.trim() !== '';
+  }
+
+  if (typeof value === 'boolean') {
+    return true;
+  }
+
+  return false;
+}
+
+function registrationPolicyValueIsComplete(value) {
+  if (typeof value !== 'object') {
+    return false;
+  }
+
+  const policy = value;
+  if (policy.buckets.length === 0) {
+    return false;
+  }
+
+  return policy.buckets.every((bucket) => {
+    if (!bucket.name || !bucket.description || !bucket.key) {
+      return false;
+    }
+
+    if (
+      bucket.slots_limited && !(
+        typeof bucket.minimum_slots === 'number' && bucket.minimum_slots >= 0
+        && typeof bucket.preferred_slots === 'number' && bucket.preferred_slots >= 0
+        && typeof bucket.total_slots === 'number' && bucket.total_slots >= 0
+      )
+    ) {
+      return false;
+    }
+
+    return true;
   });
+}
 
-  static fromAPI(body) {
-    return new FormItem().setAttributesFromAPI(body);
+function timeblockPreferenceValueIsComplete(value) {
+  if (Array.isArray(value)) {
+    return value.length > 0;
   }
 
-  setAttributesFromAPI(json) {
-    const {
-      id,
-      form_section_id: formSectionId,
-      position,
-      item_type: itemType,
-      identifier,
-      admin_description: adminDescription,
-      ...properties
-    } = json;
+  return false;
+}
 
-    let returnRecord = this.set('properties', {
-      ...this.get('properties'),
-      ...properties,
-    });
+function timespanValueIsComplete(value) {
+  return (typeof value === 'number');
+}
 
-    if (json.id !== undefined) {
-      returnRecord = returnRecord.set('id', json.id);
-    }
-
-    if (json.form_section_id !== undefined) {
-      returnRecord = returnRecord.set('formSectionId', json.form_section_id);
-    }
-
-    if (json.position !== undefined) {
-      returnRecord = returnRecord.set('position', json.position);
-    }
-
-    if (json.item_type !== undefined) {
-      returnRecord = returnRecord.set('itemType', json.item_type);
-    }
-
-    if (json.identifier !== undefined) {
-      returnRecord = returnRecord.set('identifier', json.identifier);
-    }
-
-    if (json.admin_description !== undefined) {
-      returnRecord = returnRecord.set('adminDescription', json.admin_description);
-    }
-
-    return returnRecord;
+export function formResponseValueIsComplete(formItem, value) {
+  if (!formItem.properties.required) {
+    return true;
   }
 
-  valueIsComplete(value) {
-    if (!this.properties.required) {
-      return true;
-    }
-
-    switch (this.itemType) {
-      case 'event_email':
-        if (!value) {
-          return false;
-        }
-
-        return (value.team_mailing_list_name || value.email);
-      case 'free_text':
-        if (typeof value === 'string') {
-          return value.trim() !== '';
-        }
-
-        return false;
-
-      case 'multiple_choice':
-        if (typeof value === 'string') {
-          return value.trim() !== '';
-        }
-
-        if (typeof value === 'boolean') {
-          return true;
-        }
-
-        return false;
-
-      case 'registration_policy':
-        if (typeof value === 'object') {
-          const policy = value;
-          if (policy.buckets.length === 0) {
-            return false;
-          }
-
-          return policy.buckets.every((bucket) => {
-            if (!bucket.name || !bucket.description || !bucket.key) {
-              return false;
-            }
-
-            if (
-              bucket.slots_limited && !(
-                typeof bucket.minimum_slots === 'number' && bucket.minimum_slots >= 0
-                && typeof bucket.preferred_slots === 'number' && bucket.preferred_slots >= 0
-                && typeof bucket.total_slots === 'number' && bucket.total_slots >= 0
-              )
-            ) {
-              return false;
-            }
-
-            return true;
-          });
-        }
-
-        return false;
-
-      case 'timeblock_preference':
-        if (Array.isArray(value)) {
-          return value.length > 0;
-        }
-
-        return false;
-
-      case 'timespan':
-        return (typeof value === 'number');
-
-      default:
-        return true;
-    }
+  switch (formItem.item_type) {
+    case 'event_email': return eventEmailValueIsComplete(value);
+    case 'free_text': return freeTextValueIsComplete(value);
+    case 'multiple_choice': return multipleChoiceValueIsComplete(value);
+    case 'registration_policy': return registrationPolicyValueIsComplete(value);
+    case 'timeblock_preference': return timeblockPreferenceValueIsComplete(value);
+    case 'timespan': return timespanValueIsComplete(value);
+    default: return true;
   }
 }
+
+export const FormItemPropType = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  form_section_id: PropTypes.number.isRequired,
+  position: PropTypes.number.isRequired,
+  item_type: PropTypes.string.isRequired,
+  identifier: PropTypes.string.isRequired,
+  properties: PropTypes.shape({}).isRequired,
+  admin_description: PropTypes.string,
+});

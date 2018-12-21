@@ -42,8 +42,8 @@ class RegistrationPolicyDisplay extends React.PureComponent {
     }
 
     const bucketOptions = [
-      bucket.get('notCounted') ? 'Not counted' : 'Counted',
-      bucket.get('exposeAttendees') ? 'Expose attendees' : null,
+      bucket.not_counted ? 'Not counted' : 'Counted',
+      bucket.expose_atendees ? 'Expose attendees' : null,
     ].filter(option => option != null);
 
     return (

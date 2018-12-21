@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormItem from '../../Models/FormItem';
+import { FormItemPropType } from '../../Models/FormItem';
 
 const AdminCaption = ({ formItem }) => {
   if (formItem.adminDescription) {
@@ -16,7 +16,7 @@ const AdminCaption = ({ formItem }) => {
 };
 
 AdminCaption.propTypes = {
-  formItem: FormItem.propType.isRequired,
+  formItem: FormItemPropType.isRequired,
 };
 
 export default AdminCaption;

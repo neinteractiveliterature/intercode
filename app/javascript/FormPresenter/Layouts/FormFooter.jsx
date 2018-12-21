@@ -37,7 +37,7 @@ class FormFooter extends React.Component {
     const { form, currentSectionId, response } = this.props;
     const incompleteItems = getIncompleteItems(form.getItemsInSection(currentSectionId), response);
 
-    if (incompleteItems.isEmpty()) {
+    if (incompleteItems.length === 0) {
       return true;
     }
 
@@ -46,7 +46,7 @@ class FormFooter extends React.Component {
         this.props.onInteract(item.identifier);
       }
     });
-    this.props.scrollToItem(incompleteItems.get(0));
+    this.props.scrollToItem(incompleteItems[0]);
 
     return false;
   }

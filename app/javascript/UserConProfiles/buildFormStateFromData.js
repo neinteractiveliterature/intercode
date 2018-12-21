@@ -1,5 +1,6 @@
 import deserializeUserConProfile from './deserializeUserConProfile';
 import Form from '../Models/Form';
+import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 
 const buildStateFromData = (userConProfileData, conventionData) => {
   const {
@@ -10,7 +11,7 @@ const buildStateFromData = (userConProfileData, conventionData) => {
   return {
     userConProfile: deserializeUserConProfile(userConProfileData),
     convention: conventionProps,
-    form: Form.fromApiResponse(JSON.parse(userConProfileForm.form_api_json)),
+    form: deserializeForm(userConProfileForm),
   };
 };
 

@@ -8,7 +8,6 @@ import AddAttendeeModal from './AddAttendeeModal';
 import BooleanChoiceSetFilter from '../Tables/BooleanChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
-import Form from '../Models/Form';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -16,6 +15,7 @@ import { GraphQLReactTableConsumer } from '../Tables/GraphQLReactTableContext';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import { UserConProfilesTableUserConProfilesQuery } from './queries.gql';
+import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
@@ -51,7 +51,7 @@ class UserConProfilesTable extends React.Component {
   };
 
   getPossibleColumns = (data) => {
-    const form = Form.fromApiResponse(JSON.parse(data.convention.user_con_profile_form.form_api_json));
+    const form = deserializeForm(data.convention.user_con_profile_form);
 
     const columns = [
       {
@@ -183,13 +183,13 @@ class UserConProfilesTable extends React.Component {
     ];
 
     form.getAllItems().forEach((formItem) => {
-      const identifier = formItem.get('identifier');
+      const { identifier } = formItem;
       if (!identifier || identifier === 'first_name' || identifier === 'last_name' || columns.some(column => column.id === identifier)) {
         return;
       }
 
       columns.push({
-        Header: formItem.get('admin_description') || humanize(identifier),
+        Header: formItem.admin_description || humanize(identifier),
         id: identifier,
         accessor: userConProfile => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
         Cell: ({ value }) => <FormItemDisplay formItem={formItem} value={value} convention={data.convention} />,
