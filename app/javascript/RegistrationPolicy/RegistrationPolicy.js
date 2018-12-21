@@ -1,122 +1,69 @@
-import { List } from 'immutable';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import RegistrationPolicyBucket from './RegistrationPolicyBucket';
+import { RegistrationPolicyBucketPropType } from './RegistrationPolicyBucket';
 
-export default class RegistrationPolicy {
-  static propType = PropTypes.shape({
-    buckets: ImmutablePropTypes.listOf(RegistrationPolicyBucket.propType.isRequired).isRequired,
-    preventNoPreferenceSignups: PropTypes.bool.isRequired,
-  });
-
-  static apiRepresentationPropType = PropTypes.shape({
-    buckets:
-      PropTypes.arrayOf(RegistrationPolicyBucket.apiRepresentationPropType.isRequired).isRequired,
-    prevent_no_preference_signups: PropTypes.bool,
-  });
-
-  static fromAPI(json) {
-    return new RegistrationPolicy().setAttributesFromAPI(json);
-  }
-
-  constructor(buckets = null, preventNoPreferenceSignups = false) {
-    this.buckets = buckets || new List();
-    this.preventNoPreferenceSignups = preventNoPreferenceSignups;
-  }
-
-  getAPIRepresentation() {
-    return {
-      prevent_no_preference_signups: this.preventNoPreferenceSignups,
-      buckets: this.buckets.map(bucket => bucket.getAPIRepresentation()).toJS(),
-    };
-  }
-
-  setAttributesFromAPI(json) {
-    let returnRecord = this;
-    if (json == null) {
-      return returnRecord;
-    }
-
-    if (json.buckets !== undefined) {
-      const buckets = json.buckets.map(bucket => RegistrationPolicyBucket.fromAPI(bucket));
-      returnRecord = returnRecord.setBuckets(buckets);
-    }
-
-    returnRecord = returnRecord.setPreventNoPreferenceSignups((
-      Boolean(json.prevent_no_preference_signups)
-    ));
-
-    return returnRecord;
-  }
-
-  sumBucketProperty = getter => (
-    this.buckets.reduce((sum, bucket) => sum + (getter(bucket) || 0), 0)
-  )
-
-  getTotalSlots = () => this.sumBucketProperty(bucket => bucket.totalSlots)
-
-  getMinimumSlots = () => this.sumBucketProperty(bucket => bucket.minimumSlots)
-
-  getPreferredSlots = () => this.sumBucketProperty(bucket => bucket.preferredSlots)
-
-  slotsLimited = () => this.buckets.every(bucket => bucket.slotsLimited)
-
-  addBucket(key, props) {
-    const bucket = new RegistrationPolicyBucket({ key });
-    return new RegistrationPolicy(
-      this.buckets.push(bucket.setAttributesFromAPI(props || {})),
-      this.preventNoPreferenceSignups,
-    );
-  }
-
-  getBucket(key) {
-    return this.buckets.find(bucket => bucket.get('key') === key);
-  }
-
-  deleteBucket(key) {
-    return new RegistrationPolicy(
-      this.buckets.filter(bucket => bucket.get('key') !== key),
-      this.preventNoPreferenceSignups,
-    );
-  }
-
-  updateBucket(key, newBucket) {
-    const index = this.buckets.findIndex(bucket => bucket.get('key') === key);
-
-    if (index === -1) {
-      return new RegistrationPolicy(
-        this.buckets.push(newBucket),
-        this.preventNoPreferenceSignups,
-      );
-    }
-
-    return new RegistrationPolicy(
-      this.buckets.set(index, newBucket),
-      this.preventNoPreferenceSignups,
-    );
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  setBuckets(buckets) {
-    if (Array.isArray(buckets)) {
-      return new RegistrationPolicy(
-        new List(buckets),
-        this.preventNoPreferenceSignups,
-      );
-    }
-
-    return new RegistrationPolicy(buckets, this.preventNoPreferenceSignups);
-  }
-
-  getAnythingBucket() {
-    return this.buckets.find(bucket => bucket.get('anything'));
-  }
-
-  getPreventNoPreferenceSignups() {
-    return this.preventNoPreferenceSignups;
-  }
-
-  setPreventNoPreferenceSignups(preventNoPreferenceSignups) {
-    return new RegistrationPolicy(this.buckets, preventNoPreferenceSignups);
-  }
+function sumBucketProperty(registrationPolicy, property) {
+  return registrationPolicy.buckets.reduce((sum, bucket) => (sum + bucket[property] || 0), 0);
 }
+
+export function sumTotalSlots(registrationPolicy) {
+  return sumBucketProperty(registrationPolicy, 'total_slots');
+}
+
+export function sumMinimumSlots(registrationPolicy) {
+  return sumBucketProperty(registrationPolicy, 'minimum_slots');
+}
+
+export function sumPreferredSlots(registrationPolicy) {
+  return sumBucketProperty(registrationPolicy, 'preferred_slots');
+}
+
+export function getRegistrationPolicySlotsLimited(registrationPolicy) {
+  return registrationPolicy.buckets.every(bucket => bucket.slots_limited);
+}
+
+export function getRegistrationPolicyBucket(registrationPolicy, key) {
+  return registrationPolicy.buckets.find(bucket => bucket.key === key);
+}
+
+export function addRegistrationPolicyBucket(registrationPolicy, key, bucket) {
+  if (getRegistrationPolicyBucket(registrationPolicy, key)) {
+    throw new Error(`Bucket with key ${key} already exists in registration policy`);
+  }
+
+  return {
+    ...registrationPolicy,
+    buckets: [...registrationPolicy.buckets, { key, ...bucket }],
+  };
+}
+
+export function removeRegistrationPolicyBucket(registrationPolicy, key) {
+  return {
+    ...registrationPolicy,
+    buckets: registrationPolicy.buckets.filter(bucket => bucket.key !== key),
+  };
+}
+
+export function updateRegistrationPolicyBucket(registrationPolicy, key, newBucket) {
+  const index = registrationPolicy.buckets.findIndex(bucket => bucket.key === key);
+
+  if (index === -1) {
+    return addRegistrationPolicyBucket(registrationPolicy, newBucket);
+  }
+
+  const newBuckets = [...registrationPolicy.buckets];
+  newBuckets.splice(index, 1, newBucket);
+
+  return {
+    ...registrationPolicy,
+    buckets: newBuckets,
+  };
+}
+
+export function getRegistrationPolicyAnythingBucket(registrationPolicy) {
+  return registrationPolicy.buckets.find(bucket => bucket.anything);
+}
+
+export const RegistrationPolicyPropType = PropTypes.shape({
+  buckets: PropTypes.arrayOf(RegistrationPolicyBucketPropType.isRequired).isRequired,
+  prevent_no_preference_signups: PropTypes.bool,
+});

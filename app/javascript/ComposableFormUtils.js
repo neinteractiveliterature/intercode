@@ -82,6 +82,8 @@ export const Transforms = {
       `datetimeWithForcedTimezone('${timezoneName}')`,
     );
   },
+  negate(func) { return namedFunction(value => !func(value), 'negate'); },
+  parseInt(func) { return namedFunction(value => Number.parseInt(func(value), 10), 'parseInt'); },
   booleanString(value) { return value === 'true'; },
   multiValue(choices) { return choices.map(choice => choice.value); },
   eventTargetValue(event) { return event.target.value; },

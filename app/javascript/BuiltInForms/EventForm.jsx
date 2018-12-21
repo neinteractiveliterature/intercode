@@ -100,7 +100,7 @@ class EventForm extends React.Component {
     const response = this.state.event.form_response_attrs;
     const incompleteItems = getIncompleteItems(form.getAllItems(), response);
 
-    if (incompleteItems.isEmpty()) {
+    if (incompleteItems.length === 0) {
       this.setState({ error: null });
       return true;
     }

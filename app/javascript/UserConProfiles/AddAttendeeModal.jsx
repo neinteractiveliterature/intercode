@@ -11,6 +11,7 @@ import LoadingIndicator from '../LoadingIndicator';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import UserConProfileForm from './UserConProfileForm';
 import UserSelect from '../BuiltInFormControls/UserSelect';
+import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 
 const usersQuery = gql`
 query AddAttendeeUsersQuery($name: String) {
@@ -101,9 +102,7 @@ class AddAttendeeModal extends React.Component {
               .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
             mailPrivilegeNames={data.convention.mail_privilege_names}
             onChange={this.userConProfileChanged}
-            form={
-              Form.fromApiResponse(JSON.parse(data.convention.user_con_profile_form.form_api_json))
-            }
+            form={deserializeForm(data.convention.user_con_profile_form)}
             convention={data.convention}
           />
         )}

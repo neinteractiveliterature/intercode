@@ -25,7 +25,7 @@ export default class SectionTraversalController extends React.Component {
     super(props);
 
     this.state = {
-      currentSectionId: props.form.getSections().get(0).id,
+      currentSectionId: props.form.getSections()[0].id,
     };
   }
 
@@ -35,7 +35,7 @@ export default class SectionTraversalController extends React.Component {
 
   setCurrentSectionIndex = (newSectionIndex, callback) => {
     this.setState({
-      currentSectionId: this.props.form.getSections().get(newSectionIndex).id,
+      currentSectionId: this.props.form.getSections()[newSectionIndex].id,
     }, callback);
   }
 
@@ -69,7 +69,7 @@ export default class SectionTraversalController extends React.Component {
 
   nextSection = (onChange) => {
     const oldSectionId = this.state.currentSectionId;
-    const maxSectionIndex = this.props.form.getSections().size - 1;
+    const maxSectionIndex = this.props.form.getSections().length - 1;
 
     this.addToSectionIndex(
       1,
@@ -84,11 +84,11 @@ export default class SectionTraversalController extends React.Component {
         currentSection: this.getCurrentSection(),
         currentSectionId: this.state.currentSectionId,
         currentSectionIndex: this.getCurrentSectionIndex(),
-        hasNextSection: this.getCurrentSectionIndex() < this.props.form.getSections().size - 1,
+        hasNextSection: this.getCurrentSectionIndex() < this.props.form.getSections().length - 1,
         hasPreviousSection: this.getCurrentSectionIndex() > 0,
         nextSection: this.nextSection,
         previousSection: this.previousSection,
-        sectionCount: this.props.form.getSections().size,
+        sectionCount: this.props.form.getSections().length,
       }}
     >
       {this.props.children}

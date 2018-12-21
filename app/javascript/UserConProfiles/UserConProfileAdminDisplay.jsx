@@ -47,7 +47,7 @@ class UserConProfileAdminDisplay extends React.Component {
     const formResponse = deserializeFormResponseModel(data.userConProfile);
 
     return form.getAllItems().map((item) => {
-      if (item.itemType === 'static_text') {
+      if (item.item_type === 'static_text') {
         return null;
       }
 

@@ -61,7 +61,6 @@
     "graphql-anywhere": "^4.1.24",
     "graphql-tag": "^2.10.0",
     "hypernova": "^2.4.0",
-    "immutable": "^3.8.2",
     "inflected": "^2.0.3",
     "js-yaml": "^3.12.0",
     "lodash": "^4.17.11",
@@ -88,7 +87,6 @@
     "react-dnd-multi-backend": "^3.1.11",
     "react-dom": "^16.7.0",
     "react-html-id": "^0.1.5",
-    "react-immutable-proptypes": "^2.1.0",
     "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-moment-proptypes": "^1.6.0",
     "react-onclickoutside": "^6.7.0",
@@ -129,6 +127,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.6.0",
+    "jest-prop-type-error": "^1.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react-test-renderer": "^16.7.0",
     "webpack-dev-server": "^3.1.4"
@@ -158,6 +157,9 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
+    "setupFiles": [
+      "jest-prop-type-error"
+    ],
     "setupTestFrameworkScriptFile": "./test/javascript/setupTests.js"
   }
 }

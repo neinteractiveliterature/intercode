@@ -6,8 +6,9 @@ echo 'postgres:*:*:postgres:postgres' > ~/.pgpass
 chmod 0600 ~/.pgpass
 
 echo 'Loading database into local Postgres'
+dropdb -h postgres -U postgres -w --if-exists intercode_production_tmp
 createdb -h postgres -U postgres -w intercode_production_tmp
-pg_restore -h postgres -U postgres -w -v -j4 -d intercode_production_tmp intercode_production_tmp.pgdump
+pg_restore -h postgres -U postgres -w -v --no-owner -j4 -d intercode_production_tmp intercode_production_tmp.pgdump
 
 echo 'Changing convention domains and names for development'
 echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test', name = name || ' [dev]';" | psql -h postgres -U postgres -w intercode_production_tmp
