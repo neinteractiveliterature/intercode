@@ -12,6 +12,7 @@ class Convention < ApplicationRecord
   has_many :user_con_profiles, dependent: :destroy
   has_many :users, through: :user_con_profiles
   has_many :events, dependent: :destroy
+  has_many :event_categories, dependent: :destroy
   has_many :runs, through: :events
   has_many :signups, through: :runs
   has_many :rooms, dependent: :destroy

@@ -1,48 +1,15 @@
-class EventCategory
-  DATA = JSON.parse(
-    File.read(File.expand_path('config/event_categories.json', Rails.root))
-  )
+class EventCategory < ApplicationRecord
+  SCHEDULING_UIS = Set.new(%w[regular recurring single_run])
 
-  attr_reader :key, :team_member_name
+  belongs_to :convention
+  belongs_to :event_form, class_name: 'Form'
+  belongs_to :event_proposal_form, class_name: 'Form', optional: true
 
-  def initialize(data)
-    @key = data['key']
-    @team_member_name = data['team_member_name']
-    @recurring = !!data['recurring']
-    @single_run = !!data['single_run']
-  end
+  validates :scheduling_ui, inclusion: { in: SCHEDULING_UIS }
 
-  def recurring?
-    @recurring
-  end
-
-  def single_run?
-    @single_run
-  end
-
-  def regular?
-    !recurring? && !single_run?
-  end
-
-  CATEGORIES_BY_KEY = DATA.map { |item| EventCategory.new(item) }.index_by(&:key)
-
-  def self.[](key)
-    CATEGORIES_BY_KEY[key]
-  end
-
-  def self.find(key)
-    CATEGORIES_BY_KEY.fetch(key)
-  end
-
-  def self.recurring_categories
-    CATEGORIES_BY_KEY.values.select(&:recurring?)
-  end
-
-  def self.regular_categories
-    CATEGORIES_BY_KEY.values.select(&:regular?)
-  end
-
-  def self.single_run_categories
-    CATEGORIES_BY_KEY.values.select(&:single_run?)
+  SCHEDULING_UIS.each do |scheduling_ui|
+    define_method "#{scheduling_ui}?" do
+      self.scheduling_ui == scheduling_ui
+    end
   end
 end

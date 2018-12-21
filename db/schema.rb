@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_17_193826) do
+ActiveRecord::Schema.define(version: 2018_12_21_201405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,20 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.index ["volunteer_event_form_id"], name: "index_conventions_on_volunteer_event_form_id"
   end
 
+  create_table "event_categories", force: :cascade do |t|
+    t.bigint "convention_id", null: false
+    t.text "name", null: false
+    t.text "team_member_name", null: false
+    t.text "scheduling_ui", null: false
+    t.bigint "event_form_id", null: false
+    t.bigint "event_proposal_form_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["convention_id"], name: "index_event_categories_on_convention_id"
+    t.index ["event_form_id"], name: "index_event_categories_on_event_form_id"
+    t.index ["event_proposal_form_id"], name: "index_event_categories_on_event_proposal_form_id"
+  end
+
   create_table "event_proposals", force: :cascade do |t|
     t.bigint "convention_id"
     t.bigint "owner_id"
@@ -194,7 +208,6 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.integer "convention_id"
     t.integer "owner_id"
     t.string "status", default: "active", null: false
-    t.string "category"
     t.text "registration_policy"
     t.text "participant_communications"
     t.text "age_restrictions"
@@ -203,7 +216,9 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.text "admin_notes"
     t.text "team_mailing_list_name"
     t.boolean "private_signup_list", default: false, null: false
+    t.bigint "event_category_id", null: false
     t.index ["convention_id"], name: "index_events_on_convention_id"
+    t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
   end
@@ -588,10 +603,14 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
   add_foreign_key "conventions", "forms", column: "volunteer_event_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
+  add_foreign_key "event_categories", "conventions"
+  add_foreign_key "event_categories", "forms", column: "event_form_id"
+  add_foreign_key "event_categories", "forms", column: "event_proposal_form_id"
   add_foreign_key "event_proposals", "conventions"
   add_foreign_key "event_proposals", "events"
   add_foreign_key "event_proposals", "user_con_profiles", column: "owner_id"
   add_foreign_key "events", "conventions"
+  add_foreign_key "events", "event_categories"
   add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "events", "users", column: "updated_by_id"
   add_foreign_key "form_items", "form_sections"

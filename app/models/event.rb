@@ -3,7 +3,6 @@ class Event < ApplicationRecord
   include Concerns::EventEmail
 
   STATUSES = Set.new(%w[active dropped])
-  CATEGORIES = Set.new(EventCategory::CATEGORIES_BY_KEY.keys)
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
 
   register_form_response_attrs :title,
@@ -27,15 +26,14 @@ class Event < ApplicationRecord
   # Ops) are owned by the department head
   belongs_to :owner, class_name: 'User', optional: true
 
-  # LARPs have GMs and Panels have Members
+  # LARPs have GMs and Panels have Panelists
   has_many :team_members, dependent: :destroy
 
   # The user who last updated the event.  Used for tracking
   belongs_to :updated_by, class_name: 'User', optional: true
 
-  # Each event must belong to a convention
   belongs_to :convention
-  validates :convention, presence: true
+  belongs_to :event_category
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
   has_many :provided_tickets,
@@ -46,10 +44,6 @@ class Event < ApplicationRecord
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
-
-  # Category currently does affect behavior of events; in Intercode 2.2 we plan to remove all the
-  # hard-coded behavior around category in favor of making it an adminable model.
-  validates :category, inclusion: { in: CATEGORIES }
 
   validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS }
 
@@ -131,8 +125,7 @@ class Event < ApplicationRecord
   end
 
   def single_run_events_must_have_no_more_than_one_run
-    category_obj = EventCategory.find(category)
-    return unless category_obj.single_run? && status == 'active'
+    return unless event_category.single_run? && status == 'active'
     return if runs.size <= 1
 
     errors.add(:base, "#{category_obj.key.humanize} events must have no more than one run")
