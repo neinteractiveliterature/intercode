@@ -5,34 +5,33 @@ import { Link } from 'react-router-dom';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
 import EventCapacityDisplay from './EventCapacityDisplay';
-import Form from '../../Models/Form';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import RunsSection from './RunsSection';
+import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';
 
-function getSectionizedFormItems(formApiJSON, formResponse) {
-  const form = Form.fromApiResponse(JSON.parse(formApiJSON));
-
+function getSectionizedFormItems(formData, formResponse) {
+  const form = deserializeForm(formData);
   const displayFormItems = form.getAllItems().filter(item => (
-    item.get('identifier') !== 'short_blurb'
-    && item.get('identifier') !== 'title'
-    && item.get('properties').public_description != null
-    && formResponse[item.get('identifier')]
+    item.identifier !== 'short_blurb'
+    && item.identifier !== 'title'
+    && item.public_description != null
+    && formResponse[item.identifier]
   ));
   const shortFormItems = [];
   const longFormItems = [];
   displayFormItems.forEach((item) => {
-    if (item.get('itemType') === 'free_text' && item.get('properties').format === 'markdown') {
+    if (item.item_type === 'free_text' && item.properties.format === 'markdown') {
       longFormItems.push(item);
     } else {
       shortFormItems.push(item);
     }
   });
   longFormItems.sort((a, b) => {
-    if (a.get('identifier') === 'description') {
+    if (a.identifier === 'description') {
       return -1;
     }
 
-    if (b.get('identifier') === 'description') {
+    if (b.identifier === 'description') {
       return 1;
     }
 
@@ -70,7 +69,7 @@ class EventPageDisplay extends React.PureComponent {
     const formResponse = JSON.parse(event.form_response_attrs_json_with_rendered_markdown);
     const {
       shortFormItems, longFormItems,
-    } = getSectionizedFormItems(event.form.form_api_json, formResponse);
+    } = getSectionizedFormItems(event.form, formResponse);
 
     const acceptsSignups = (
       !event.registration_policy.slots_limited
@@ -96,13 +95,13 @@ class EventPageDisplay extends React.PureComponent {
 
             <dl className="row">
               {shortFormItems.map(item => (
-                <React.Fragment key={item.get('identifier')}>
-                  <dt className="col-md-3">{item.get('properties').public_description}</dt>
+                <React.Fragment key={item.identifier}>
+                  <dt className="col-md-3">{item.public_description}</dt>
                   <dd className="col-md-9">
                     <FormItemDisplay
                       formItem={item}
                       convention={convention}
-                      value={formResponse[item.get('identifier')]}
+                      value={formResponse[item.identifier]}
                       displayMode="public"
                     />
                   </dd>
@@ -189,18 +188,18 @@ class EventPageDisplay extends React.PureComponent {
 
         {
           longFormItems.map(item => (
-            formResponse[item.get('identifier')] && formResponse[item.get('identifier')].trim() !== ''
+            formResponse[item.identifier] && formResponse[item.identifier].trim() !== ''
               ? (
-                <section className="my-4" key={item.get('identifier')}>
+                <section className="my-4" key={item.identifier}>
                   <hr />
 
                   {
-                  item.get('identifier') === 'description'
+                  item.identifier === 'description'
                     ? null
-                    : <h4>{item.get('properties').public_description}</h4>
+                    : <h4>{item.public_description}</h4>
                 }
 
-                  <div dangerouslySetInnerHTML={{ __html: formResponse[item.get('identifier')] }} />
+                  <div dangerouslySetInnerHTML={{ __html: formResponse[item.identifier] }} />
                 </section>
               )
               : null
