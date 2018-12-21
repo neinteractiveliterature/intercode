@@ -87,7 +87,7 @@ class Client {
           { data: { createCmsNavigationItem: { cms_navigation_item: newNavigationItem } } },
         ) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
-          data.convention.cms_navigation_items.push(newNavigationItem);
+          data.cmsNavigationItems.push(newNavigationItem);
           cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         };
       }
@@ -117,7 +117,7 @@ class Client {
         variables: { id: navigationItem.id },
         update: (cache) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
-          data.convention.cms_navigation_items = data.convention.cms_navigation_items
+          data.cmsNavigationItems = data.cmsNavigationItems
             .filter(item => item.id !== navigationItem.id);
           cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         },
@@ -146,7 +146,7 @@ class Client {
         variables: { sortItems },
         update: (cache) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
-          const newNavigationItems = data.convention.cms_navigation_items.map((item) => {
+          const newNavigationItems = data.cmsNavigationItems.map((item) => {
             const sortItem = sortItems.find(si => si.id === item.id);
             if (sortItem == null) {
               return item;
@@ -159,10 +159,7 @@ class Client {
             query: NavigationItemsAdminQuery,
             data: {
               ...data,
-              convention: {
-                ...data.convention,
-                cms_navigation_items: newNavigationItems,
-              },
+              cmsNavigationItems: newNavigationItems,
             },
           });
         },
