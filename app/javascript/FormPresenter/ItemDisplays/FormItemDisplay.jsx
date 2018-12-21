@@ -13,7 +13,7 @@ import TimespanItemDisplay from './TimespanItemDisplay';
 class FormItemDisplay extends React.PureComponent {
   static propTypes = {
     formItem: PropTypes.shape({
-      itemType: PropTypes.string.isRequired,
+      item_type: PropTypes.string.isRequired,
       identifier: PropTypes.string,
     }).isRequired,
     value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
@@ -48,7 +48,7 @@ class FormItemDisplay extends React.PureComponent {
       return null;
     }
 
-    switch (formItem.itemType) {
+    switch (formItem.item_type) {
       case 'date':
         return <DateItemDisplay {...commonProps} convention={convention} />;
       case 'event_email':

@@ -14,5 +14,5 @@ export function getIncompleteItems(items, response) {
 }
 
 export function sectionIsComplete(form, section, response) {
-  return getIncompleteItems(form.getItemsInSection(section.id), response).isEmpty();
+  return getIncompleteItems(form.getItemsInSection(section.id), response).length === 0;
 }

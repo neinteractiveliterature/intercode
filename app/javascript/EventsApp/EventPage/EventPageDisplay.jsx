@@ -11,11 +11,10 @@ import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization'
 
 function getSectionizedFormItems(formData, formResponse) {
   const form = deserializeForm(formData);
-
   const displayFormItems = form.getAllItems().filter(item => (
     item.identifier !== 'short_blurb'
     && item.identifier !== 'title'
-    && item.properties.public_description != null
+    && item.public_description != null
     && formResponse[item.identifier]
   ));
   const shortFormItems = [];
@@ -97,7 +96,7 @@ class EventPageDisplay extends React.PureComponent {
             <dl className="row">
               {shortFormItems.map(item => (
                 <React.Fragment key={item.identifier}>
-                  <dt className="col-md-3">{item.properties.public_description}</dt>
+                  <dt className="col-md-3">{item.public_description}</dt>
                   <dd className="col-md-9">
                     <FormItemDisplay
                       formItem={item}
@@ -197,7 +196,7 @@ class EventPageDisplay extends React.PureComponent {
                   {
                   item.identifier === 'description'
                     ? null
-                    : <h4>{item.properties.public_description}</h4>
+                    : <h4>{item.public_description}</h4>
                 }
 
                   <div dangerouslySetInnerHTML={{ __html: formResponse[item.identifier] }} />

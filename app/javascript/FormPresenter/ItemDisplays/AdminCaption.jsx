@@ -3,8 +3,8 @@ import React from 'react';
 import { FormItemPropType } from '../../Models/FormItem';
 
 const AdminCaption = ({ formItem }) => {
-  if (formItem.adminDescription) {
-    return <span>{formItem.adminDescription}</span>;
+  if (formItem.admin_description) {
+    return <span>{formItem.admin_description}</span>;
   }
 
   if (formItem.properties && formItem.properties.caption) {

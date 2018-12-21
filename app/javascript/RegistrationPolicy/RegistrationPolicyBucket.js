@@ -14,48 +14,44 @@ export function setBucketSlotsLimited(bucket, slotsLimited) {
   return { ...bucket, slots_limited: true };
 }
 
-function checkBucketFieldMinimums(bucket, targetFields, minimumValue) {
-  let newBucket = bucket;
+function checkFieldMinimums(object, targetFields, minimumValue) {
+  let newObject = object;
 
   targetFields.forEach((targetField) => {
-    if (newBucket[targetField] < minimumValue) {
-      newBucket = { ...newBucket, [targetField]: minimumValue };
+    if (newObject[targetField] < minimumValue) {
+      newObject = { ...newObject, [targetField]: minimumValue };
     }
   });
 
-  return newBucket;
+  return newObject;
 }
 
-function setBucketMinimumSlots(bucket, newCount) {
-  return checkBucketFieldMinimums(
-    { ...bucket, minimum_slots: newCount },
-    ['preferred_slots', 'total_slots'],
-    newCount,
-  );
-}
-
-function setBucketPreferredSlots(bucket, newCount) {
-  return checkBucketFieldMinimums(
-    { ...bucket, preferred_slots: newCount },
+function checkBucketFieldMinimums(bucket) {
+  return checkFieldMinimums(
+    checkFieldMinimums(
+      bucket,
+      ['preferred_slots', 'total_slots'],
+      bucket.minimum_slots,
+    ),
     ['total_slots'],
-    newCount,
+    bucket.preferred_slots,
   );
 }
 
 export function setBucketProperty(bucket, field, value) {
   switch (field) {
     case 'slots_limited': return setBucketSlotsLimited(bucket, value);
-    case 'minimum_slots': return setBucketMinimumSlots(bucket, value);
-    case 'preferred_slots': return setBucketPreferredSlots(bucket, value);
+    case 'minimum_slots': return checkBucketFieldMinimums({ ...bucket, minimum_slots: value });
+    case 'preferred_slots': return checkBucketFieldMinimums({ ...bucket, preferred_slots: value });
     default: return { ...bucket, [field]: value };
   }
 }
 
 export function setBucketProperties(bucket, properties) {
-  return Object.entries(properties).reduce(
-    (newBucket, [field, value]) => setBucketProperty(newBucket, field, value),
+  return checkBucketFieldMinimums(Object.entries(properties).reduce(
+    (newBucket, [field, value]) => ({ ...newBucket, [field]: value }),
     bucket,
-  );
+  ));
 }
 
 export const RegistrationPolicyBucketPropType = PropTypes.shape({
