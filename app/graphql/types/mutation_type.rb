@@ -1,7 +1,7 @@
 def guard_for_cms_model(model_class, action, find_by: :id)
   ->(_obj, args, ctx) {
     model = if ctx[:convention]
-      model_class.find_by(parent_type: 'Convention', parent_id: ctx[:convention.id], find_by => args[find_by])
+      model_class.find_by(parent_type: 'Convention', parent_id: ctx[:convention].id, find_by => args[find_by])
     else
       model_class.global.find_by(find_by => args[find_by])
     end
