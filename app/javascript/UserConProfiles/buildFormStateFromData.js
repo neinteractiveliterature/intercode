@@ -1,5 +1,4 @@
 import deserializeUserConProfile from './deserializeUserConProfile';
-import Form from '../Models/Form';
 import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 
 const buildStateFromData = (userConProfileData, conventionData) => {
