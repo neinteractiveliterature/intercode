@@ -1,5 +1,5 @@
 import EventCategory from './EventCategory';
-import Form from '../Models/Form';
+import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 
 function getFormDataForEventCategory(event, convention) {
   const category = EventCategory.get(event.category);
@@ -16,6 +16,5 @@ function getFormDataForEventCategory(event, convention) {
 }
 
 export default function getFormForEventCategory(event, convention) {
-  const jsonForForm = getFormDataForEventCategory(event, convention).form_api_json;
-  return Form.fromApiResponse(JSON.parse(jsonForForm));
+  return deserializeForm(getFormDataForEventCategory(event, convention));
 }

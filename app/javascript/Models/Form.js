@@ -1,6 +1,5 @@
-import { Map } from 'immutable';
 import PropTypes from 'prop-types';
-import FormItem from './FormItem';
+import { keyBy, flatMap } from 'lodash';
 
 export default class Form {
   static propType = PropTypes.shape({
@@ -11,10 +10,10 @@ export default class Form {
 
   static fromApiResponse(body) {
     const { form_sections: formSections, form_items: formItems, ...properties } = body;
-    const formSectionsById = Map((formSections || []).map(section => [section.id, section]));
-    const formItemsById = Map(formItems.map(item => [item.id, FormItem.fromAPI(item)]));
+    const formSectionsById = keyBy(formSections || [], section => section.id);
+    const formItemsById = keyBy(formItems, item => item.id);
 
-    return new Form(Map(properties), formSectionsById, formItemsById);
+    return new Form(properties, formSectionsById, formItemsById);
   }
 
   constructor(properties, formSections, formItems) {
@@ -25,26 +24,28 @@ export default class Form {
 
   getSections() {
     if (!this.memoizedFormSections) {
-      this.memoizedFormSections = this.formSections.valueSeq().sortBy(section => section.position);
+      this.memoizedFormSections = [...Object.values(this.formSections)]
+        .sort((a, b) => a.position - b.position);
     }
 
     return this.memoizedFormSections;
   }
 
   getSection(sectionId) {
-    return this.formSections.get(sectionId);
+    return this.formSections[sectionId];
   }
 
   getSectionIndex(sectionId) {
-    return this.getSections().indexOf(this.getSection(sectionId));
+    return this.getSections().findIndex(section => section.id === sectionId);
   }
 
   getItemsInSection(sectionId) {
-    const sectionItems = this.formItems.valueSeq().filter(item => item.formSectionId === sectionId);
-    return sectionItems.sortBy(item => item.position);
+    const sectionItems = Object.values(this.formItems)
+      .filter(item => item.form_section_id === sectionId);
+    return sectionItems.sort((a, b) => a.position - b.position);
   }
 
   getAllItems() {
-    return this.formSections.keySeq().flatMap(sectionId => this.getItemsInSection(sectionId));
+    return flatMap(this.getSections(), section => this.getItemsInSection(section.id));
   }
 }

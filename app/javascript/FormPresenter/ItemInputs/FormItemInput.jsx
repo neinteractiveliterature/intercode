@@ -13,7 +13,7 @@ import TimespanItemInput from './TimespanItemInput';
 class FormItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
-      itemType: PropTypes.string.isRequired,
+      item_type: PropTypes.string.isRequired,
       identifier: PropTypes.string,
     }).isRequired,
     value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
@@ -55,14 +55,14 @@ class FormItemInput extends React.Component {
     } = this.props;
 
     const commonProps = {
-      formItem,
+      formItem: { properties: {}, ...formItem }, // ensure properties object exists
       value,
       onInteract,
       valueInvalid,
       onChange: this.valueDidChange,
     };
 
-    switch (formItem.itemType) {
+    switch (formItem.item_type) {
       case 'date':
         return <DateItemInput {...commonProps} />;
       case 'event_email':

@@ -53,15 +53,15 @@ class FormPresenter extends React.Component {
 
   renderProgress = (section) => {
     const { form } = this.props;
-    if (form.getSections().size < 2) {
+    if (form.getSections().length < 2) {
       return null;
     }
 
     const items = form.getAllItems();
     const sectionItems = form.getItemsInSection(section.id);
-    const itemIndex = items.indexOf(sectionItems.get(sectionItems.size - 1)) + 1;
+    const itemIndex = items.indexOf(sectionItems[sectionItems.length - 1]) + 1;
     const sectionIndex = form.getSections().findIndex(formSection => formSection.id === section.id);
-    const progressPercentValue = Math.round((itemIndex / items.count()) * 100);
+    const progressPercentValue = Math.round((itemIndex / items.length) * 100);
     const progressPercent = `${progressPercentValue}%`;
 
     return (
@@ -80,7 +80,7 @@ class FormPresenter extends React.Component {
           {' '}
 of
           {' '}
-          {form.getSections().size}
+          {form.getSections().length}
         </div>
       </div>
     );
