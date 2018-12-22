@@ -9,8 +9,6 @@ class EventDrop < Liquid::Drop
   #   @return [Integer] The numeric database id of the event
   # @!method title
   #   @return [String] The title of the event
-  # @!method team_member_name
-  #   @return [String] The name to use for "team members" in this event (e.g. "GM", "panelist")
   # @!method event_proposal
   #   @return [EventProposalDrop] The proposal associated with this event, if this event went
   #                               through the proposal process
@@ -20,14 +18,12 @@ class EventDrop < Liquid::Drop
   #   @return [String] The organization running this event
   # @!method email
   #   @return [String] The contact email address for this event
-  # @!method category
-  #   @return [String] The category key of the event (e.g. "larp", "party", "tabletop_rpg")
   # @!method created_at
   #   @return [ActiveSupport::TimeWithZone] The time at which this event was first created in the
   #                                         database (either by being accepted as a proposal, or)
   #                                         by being created manually by con staff
-  delegate :id, :title, :team_member_name, :event_proposal, :author, :organization,
-    :email, :category, :created_at, to: :event
+  delegate :id, :title, :event_proposal, :author, :organization,
+    :email, :event_category, :created_at, to: :event
 
   # @api
   def initialize(event)
@@ -52,6 +48,20 @@ class EventDrop < Liquid::Drop
   # @return [Array<RunDrop>] The runs of this event
   def runs
     event.runs.to_a
+  end
+
+  # @deprecated Please use event_category.name instead.  (Note that the name field on
+  #             EventCategoryDrop is formatted as plain English rather than an underscored lowercase
+  #             string.)
+  # @return [String] The legacy category key of the event (e.g. "larp", "party", "tabletop_rpg")
+  def category
+    event_category.name.underscore
+  end
+
+  # @deprecated Please use event_category.team_member_name instead
+  # @return [String] The name to use for "team members" in this event (e.g. "GM", "panelist")
+  def team_member_name
+    event_category.team_member_name
   end
 
   # @!method description

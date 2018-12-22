@@ -64,6 +64,8 @@ class Event < ApplicationRecord
   # you're doing
   validate :registration_policy_cannot_change, unless: :allow_registration_policy_change
 
+  validate :event_category_must_be_from_same_convention
+
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
   has_many :runs, dependent: :destroy
@@ -101,16 +103,12 @@ class Event < ApplicationRecord
     "#{id}-#{title.parameterize}"
   end
 
-  def team_member_name
-    EventCategory[category]&.team_member_name || 'team member'
-  end
-
   def to_liquid
     EventDrop.new(self)
   end
 
   def form
-    convention.form_for_event_category(category)
+    event_category.event_form
   end
 
   private
@@ -140,6 +138,13 @@ class Event < ApplicationRecord
 
     errors.add :registration_policy, "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
+  end
+
+  def event_category_must_be_from_same_convention
+    return if convention == event_category.convention
+
+    errors.add :event_category, "is from #{event_category.convention.name} but this event is in \
+#{convention.name}"
   end
 
   def sync_team_mailing_list

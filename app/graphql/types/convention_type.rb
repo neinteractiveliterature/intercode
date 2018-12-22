@@ -15,14 +15,10 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :maximum_event_signups, Types::ScheduledValueType
   field :ticket_name, !types.String
   field :user_con_profile_form, !Types::FormType
-  field :event_proposal_form, !Types::FormType
-  field :regular_event_form, !Types::FormType
-  field :volunteer_event_form, !Types::FormType
-  field :filler_event_form, !Types::FormType
 
-  field :event_category_keys, types[types.String] do
+  field :event_categories, types[Types::EventCategoryType] do
     resolve -> (convention, _args, _ctx) do
-      convention.events.pluck(Arel.sql('distinct category'))
+      AssociationLoader.for(Convention, :event_categories).load(convention)
     end
   end
 

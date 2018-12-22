@@ -40,10 +40,11 @@ class ConventionDrop < Liquid::Drop
     end.values.map(&:run)
   end
 
+  # @deprecated
   # @return [Array<RunDrop>] Runs of non-volunteer events in this convention that have any available
   #                          slots in limited buckets
   def non_volunteer_runs_with_openings
-    runs_with_openings.reject { |run| run.event.category == 'volunteer_event' }
+    runs_with_openings.reject { |run| run.event.event_category.name == 'Volunteer event' }
   end
 
   # @return [Array<EventDrop>] Events at the convention

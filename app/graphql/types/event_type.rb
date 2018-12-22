@@ -4,18 +4,20 @@ Types::EventType = GraphQL::ObjectType.define do
   field :id, !types.Int
   field :form_response_attrs_json, Types::Json do
     resolve -> (obj, _args, ctx) do
-      FormResponsePresenter.new(
-        ctx[:convention].form_for_event_category(obj.category),
-        obj
-      ).as_json
+      AssociationLoader.for(Event, :event_category).load(obj).then do |event_category|
+        AssociationLoader.for(EventCategory, :event_form).load(event_category)
+      end.then do |form|
+        FormResponsePresenter.new(form, obj).as_json
+      end
     end
   end
   field :form_response_attrs_json_with_rendered_markdown, Types::Json do
     resolve -> (obj, _args, ctx) do
-      FormResponsePresenter.new(
-        ctx[:convention].form_for_event_category(obj.category),
-        obj
-      ).as_json_with_rendered_markdown('event', obj, '')
+      AssociationLoader.for(Event, :event_category).load(obj).then do |event_category|
+        AssociationLoader.for(EventCategory, :event_form).load(event_category)
+      end.then do |form|
+        FormResponsePresenter.new(form, obj).as_json_with_rendered_markdown('event', obj, '')
+      end
     end
   end
 
@@ -23,7 +25,6 @@ Types::EventType = GraphQL::ObjectType.define do
   field :author, types.String
   field :email, types.String
   field :organization, types.String
-  field :category, types.String
   field :url, types.String
   field :participant_communications, types.String
   field :age_restrictions, types.String
@@ -58,6 +59,11 @@ Types::EventType = GraphQL::ObjectType.define do
     resolve -> (event, args, _ctx) do
       event.runs.find(args[:id])
     end
+  end
+  field :event_category, Types::EventCategoryType.to_non_null_type do
+    resolve -> (obj, _args, _ctx) {
+      AssociationLoader.for(Event, :event_category).load(obj)
+    }
   end
   field :team_members, Types::TeamMemberType.to_list_type.to_non_null_type do
     resolve -> (obj, _args, _ctx) {
