@@ -17,31 +17,20 @@ fragment StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields on Maximu
 
 fragment StandaloneEditEvent_EventFields on Event {
   id
-  category
   title
   form_response_attrs_json
 
+  event_category {
+    id
+    name
+    event_form {
+      id
+      form_api_json
+    }
+  }
+
   maximum_event_provided_tickets_overrides {
     ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
-  }
-}
-
-fragment StandaloneEditEvent_EventFormData on Convention {
-  event_mailing_list_domain
-
-  regular_event_form {
-    id
-    form_api_json
-  }
-
-  volunteer_event_form {
-    id
-    form_api_json
-  }
-
-  filler_event_form {
-    id
-    form_api_json
   }
 }
 
@@ -59,8 +48,7 @@ query StandaloneEditEventQuery($eventId: Int!) {
     }
 
     ticket_name
-
-    ...StandaloneEditEvent_EventFormData
+    event_mailing_list_domain
   }
 
   event(id: $eventId) {

@@ -22,12 +22,16 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
 
       entries {
         id
-        category
         title
         created_at
         short_blurb_html
         form_response_attrs_json
-        team_member_name
+
+        event_category {
+          id
+          name
+          team_member_name
+        }
 
         runs {
           id

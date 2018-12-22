@@ -21,7 +21,11 @@ fragment SignupFields on Signup {
     event {
       id
       title
-      team_member_name
+
+      event_category {
+        id
+        team_member_name
+      }
 
       registration_policy {
         buckets {
@@ -78,7 +82,11 @@ fragment UserConProfileSignupsFragment on UserConProfile {
         id
         title
         length_seconds
-        team_member_name
+
+        event_category {
+          id
+          team_member_name
+        }
 
         registration_policy {
           buckets {
@@ -135,7 +143,11 @@ query AdminSignupQuery($id: Int!) {
 query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput]) {
   event(id: $eventId) {
     id
-    team_member_name
+
+    event_category {
+      id
+      team_member_name
+    }
 
     team_members {
       id
