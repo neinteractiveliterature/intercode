@@ -11,13 +11,13 @@
       { "match": [{ "allRemaining": true }] },
       {
         "flexGrow": 1,
-        "match": [{ "categoryKey": "larp" }, { "categoryKey": "tabletop_rpg" }, { "categoryKey": "board_game" }]
+        "match": [{ "categoryName": "Larp" }, { "categoryName": "Tabletop RPG" }, { "categoryName": "Board game" }]
       },
       {
-        "match": [{ "categoryKey": "con_services" }]
+        "match": [{ "categoryName": "Con services" }]
       },
       {
-        "match": [{ "categoryKey": "volunteer_event" }]
+        "match": [{ "categoryName": "Volunteer event" }]
       }
     ],
     "filterEmptyGroups": true,
@@ -53,13 +53,13 @@
       { "match": [{ "allRemaining": true }] },
       {
         "flexGrow": 1,
-        "match": [{ "categoryKey": "larp" }, { "categoryKey": "tabletop_rpg" }, { "categoryKey": "board_game" }]
+        "match": [{ "categoryName": "Larp" }, { "categoryName": "Tabletop RPG" }, { "categoryName": "Board game" }]
       },
       {
-        "match": [{ "categoryKey": "con_services" }]
+        "match": [{ "categoryName": "Con services" }]
       },
       {
-        "match": [{ "categoryKey": "volunteer_event" }]
+        "match": [{ "categoryName": "Volunteer event" }]
       }
     ],
     "filterEmptyGroups": true,

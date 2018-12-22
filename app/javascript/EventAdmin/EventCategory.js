@@ -1,5 +1,13 @@
 import categoryData from '../../../config/event_categories.json';
 
+export function getEventCategoryStyle(eventCategory, variant) {
+  if (eventCategory[`${variant}_color`]) {
+    return { backgroundColor: eventCategory[`${variant}_color`] };
+  }
+
+  return {};
+}
+
 class EventCategory {
   constructor({ key, ...props }) {
     this.key = key;

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import ConfigPropType, { defaultConfigProp } from './ConfigPropType';
-import EventCategory from '../../EventAdmin/EventCategory';
-import getFullnessClass from './getFullnessClass';
 import Timespan from '../../Timespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
 import SignupCountData from '../SignupCountData';
@@ -68,15 +66,7 @@ class ScheduleGrid extends React.Component {
         return null;
       }
 
-      let className;
-
       const signupCountData = SignupCountData.fromRun(run);
-
-      if (this.props.config.classifyEventsBy === 'category') {
-        className = EventCategory.get(event.category).getClassName();
-      } else if (this.props.config.classifyEventsBy === 'fullness') {
-        className = getFullnessClass(event, signupCountData);
-      }
 
       return (
         <ScheduleGridEventRun
@@ -86,7 +76,6 @@ class ScheduleGrid extends React.Component {
           event={event}
           run={run}
           signupCountData={signupCountData}
-          className={className}
         />
       );
     })

@@ -1,6 +1,3 @@
-/* global Rollbar */
-
-import EventCategory from '../../EventAdmin/EventCategory';
 import EventRun from './PCSG/EventRun';
 import ScheduleBlock from './PCSG/ScheduleBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
@@ -46,15 +43,10 @@ export default class Schedule {
       const { runId } = eventRun;
       const run = this.runsById.get(runId);
       const event = this.eventsById.get(run.event_id);
-      const { category: categoryKey } = event;
-
-      const category = EventCategory.get(categoryKey);
-      if (!category && typeof Rollbar !== 'undefined') {
-        Rollbar.warn(`Unknown category ${categoryKey} for event ${event.id} (${event.title})`);
-      }
+      const { event_category: eventCategory } = event;
 
       const applicableRule = matchRules.find(({ matchRule }) => {
-        if (matchRule.categoryKey && category.key === matchRule.categoryKey) {
+        if (matchRule.categoryName && eventCategory.name === matchRule.categoryName) {
           return true;
         }
 

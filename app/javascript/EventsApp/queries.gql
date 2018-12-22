@@ -10,6 +10,9 @@ fragment CommonConventionData on Convention {
     id
     name
     scheduling_ui
+    default_color
+    full_color
+    signed_up_color
   }
 }
 

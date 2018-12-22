@@ -8,6 +8,10 @@ fragment ScheduleGridEventFragment on Event {
 
   event_category {
     id
+    name
+    default_color
+    signed_up_color
+    full_color
   }
 
   registration_policy {

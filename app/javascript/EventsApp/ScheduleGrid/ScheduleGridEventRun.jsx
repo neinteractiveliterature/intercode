@@ -1,25 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import AvailabilityBar from './AvailabilityBar';
 import buildEventUrl from '../buildEventUrl';
 import PopperDropdown from '../../UIComponents/PopperDropdown';
-import SignupCountData from '../SignupCountData';
 import { ScheduleGridConsumer } from './ScheduleGridContext';
-
-function userSignupStatus(run) {
-  if (run.my_signups.some(signup => signup.state === 'confirmed')) {
-    return 'confirmed';
-  }
-
-  if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
-    return 'waitlisted';
-  }
-
-  return null;
-}
+import { userSignupStatus, getRunClassName, getRunStyle } from './StylingUtils';
 
 function describeAvailability(event, run, signupCountData) {
   if (signupCountData.runFull(event)) {
@@ -47,12 +34,7 @@ class ScheduleGridEventRun extends React.Component {
     run: PropTypes.shape({}).isRequired,
     runDimensions: PropTypes.shape({}).isRequired,
     layoutResult: PropTypes.shape({}).isRequired,
-    className: PropTypes.string,
     signupCountData: PropTypes.shape({}).isRequired,
-  };
-
-  static defaultProps = {
-    className: null,
   };
 
   renderAvailabilityBar = () => {
@@ -132,19 +114,9 @@ class ScheduleGridEventRun extends React.Component {
 
   render = () => {
     const {
-      layoutResult, runDimensions, event, run, className, signupCountData,
+      layoutResult, runDimensions, event, run, signupCountData,
     } = this.props;
     const { timespan } = runDimensions.eventRun;
-
-    const style = {
-      top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
-      height: `${100.0 / layoutResult.laneCount}%`,
-      left: `${runDimensions.timePlacement}%`,
-      width: `${runDimensions.timeSpan}%`,
-      position: 'absolute',
-      zIndex: runDimensions.laneIndex,
-      cursor: 'pointer',
-    };
 
     const signupStatus = userSignupStatus(run);
     const availabilityDescription = describeAvailability(event, run, signupCountData);
@@ -161,21 +133,13 @@ class ScheduleGridEventRun extends React.Component {
             onToggle={() => toggleRunDetailsVisibility(schedule, run.id)}
             renderReference={({ ref, toggle }) => (
               <div
-                style={style}
                 tabIndex={0}
-                className={classNames(
-                  className,
-                  'schedule-grid-event',
-                  'small',
-                  {
-                    'signed-up': config.showSignedUp && signupStatus != null,
-                    full: (
-                      config.classifyEventsBy !== 'fullness'
-                      && signupCountData.runFull(event)
-                      && signupStatus == null
-                    ),
-                  },
-                )}
+                className={getRunClassName({
+                  event, signupStatus, config, signupCountData,
+                })}
+                style={getRunStyle({
+                  event, signupStatus, config, signupCountData, runDimensions, layoutResult,
+                })}
                 role="button"
                 onClick={toggle}
                 onKeyDown={(keyEvent) => {
