@@ -38,7 +38,7 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
     yellow: {
       default: '#ffeeba',
       full: 'rgba(255, 238, 186, 0.6)',
-      signed_up: '#ffc107',
+      signed_up: '#d6a100',
     }
   }
 
