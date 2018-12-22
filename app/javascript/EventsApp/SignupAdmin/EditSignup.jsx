@@ -313,14 +313,14 @@ class EditSignup extends React.Component {
           </li>
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
-              {humanize(underscore(run.event.team_member_name))}
+              {humanize(underscore(run.event.event_category.team_member_name))}
 :
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
             <a href={this.props.teamMembersUrl} className="btn btn-link">
               Go to
               {' '}
-              {pluralize(run.event.team_member_name)}
+              {pluralize(run.event.event_category.team_member_name)}
             </a>
           </li>
         </ul>

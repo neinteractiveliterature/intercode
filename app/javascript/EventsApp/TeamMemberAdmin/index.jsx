@@ -25,24 +25,24 @@ function TeamMemberAdmin({ eventId, eventPath }) {
               <BreadcrumbItemWithRoute
                 path={`${eventPath}/team_members`}
                 to={`${eventPath}/team_members`}
-                pageTitleIfActive={`${pluralize(humanize(underscore(event.team_member_name)))} - ${event.title} - ${convention.name}`}
+                pageTitleIfActive={`${pluralize(humanize(underscore(event.event_category.team_member_name)))} - ${event.title} - ${convention.name}`}
                 exact
               >
-                {pluralize(humanize(underscore(event.team_member_name)))}
+                {pluralize(humanize(underscore(event.event_category.team_member_name)))}
               </BreadcrumbItemWithRoute>
               <BreadcrumbItemWithRoute
                 path={`${eventPath}/team_members/new`}
                 to={`${eventPath}/team_members/new`}
-                pageTitleIfActive={`Add ${event.team_member_name} - ${event.title} - ${convention.name}`}
+                pageTitleIfActive={`Add ${event.event_category.team_member_name} - ${event.title} - ${convention.name}`}
                 hideUnlessMatch
               >
                 {'Add '}
-                {event.team_member_name}
+                {event.event_category.team_member_name}
               </BreadcrumbItemWithRoute>
               <BreadcrumbItemWithRoute
                 path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
                 to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-                pageTitleIfActive={`Edit ${event.team_member_name} - ${event.title} - ${convention.name}`}
+                pageTitleIfActive={`Edit ${event.event_category.team_member_name} - ${event.title} - ${convention.name}`}
                 hideUnlessMatch
               >
                 {({ match }) => event.team_members

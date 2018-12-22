@@ -46,7 +46,7 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
     { key: "board_game", name: "Board game", color_class: :orange },
     { key: "con_services", name: "Con services", scheduling_ui: 'single_run', color_class: :yellow },
     { key: "filler", name: "Filler event", scheduling_ui: 'single_run' },
-    { key: "larp", name: "Larp", team_member_name: "GM", color_class: :indigo },
+    { key: "larp", name: "Larp", team_member_name: "GM", color_class: :indigo, can_provide_tickets: true },
     { key: "meetup", name: "Meetup", scheduling_ui: 'single_run', team_member_name: "host" },
     { key: "moderated_discussion", name: "Moderated discussion", scheduling_ui: 'single_run', team_member_name: "moderator", color_class: :red },
     { key: "panel", name: "Panel", scheduling_ui: 'single_run', team_member_name: "panelist", color_class: :red },
@@ -67,6 +67,7 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
       t.text :default_color
       t.text :full_color
       t.text :signed_up_color
+      t.boolean :can_provide_tickets, null: false, default: false
       t.references :event_form, null: false, foreign_key: { to_table: 'forms' }
       t.references :event_proposal_form, foreign_key: { to_table: 'forms' }
 
@@ -87,6 +88,8 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
           ) do |new_category|
             new_category.scheduling_ui = legacy_category[:scheduling_ui] || 'regular'
             new_category.team_member_name = legacy_category[:team_member_name] || 'team member'
+            new_category.can_provide_tickets = legacy_category[:can_provide_tickets] || false
+
             if legacy_category[:color_class]
               color_class = COLOR_CLASSES[legacy_category[:color_class]]
               new_category.default_color = color_class[:default]
