@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_21_201405) do
+ActiveRecord::Schema.define(version: 2018_12_22_160432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,23 +133,15 @@ ActiveRecord::Schema.define(version: 2018_12_21_201405) do
     t.string "domain", null: false
     t.string "timezone_name"
     t.text "maximum_event_signups"
-    t.bigint "event_proposal_form_id"
     t.integer "maximum_tickets"
     t.bigint "default_layout_id"
     t.bigint "user_con_profile_form_id"
     t.string "ticket_name", default: "ticket", null: false
-    t.bigint "regular_event_form_id"
-    t.bigint "volunteer_event_form_id"
-    t.bigint "filler_event_form_id"
     t.text "event_mailing_list_domain"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
-    t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
-    t.index ["filler_event_form_id"], name: "index_conventions_on_filler_event_form_id"
-    t.index ["regular_event_form_id"], name: "index_conventions_on_regular_event_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
     t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
-    t.index ["volunteer_event_form_id"], name: "index_conventions_on_volunteer_event_form_id"
   end
 
   create_table "event_categories", force: :cascade do |t|
@@ -596,11 +588,7 @@ ActiveRecord::Schema.define(version: 2018_12_21_201405) do
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
-  add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
-  add_foreign_key "conventions", "forms", column: "filler_event_form_id"
-  add_foreign_key "conventions", "forms", column: "regular_event_form_id"
   add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
-  add_foreign_key "conventions", "forms", column: "volunteer_event_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "event_categories", "conventions"
