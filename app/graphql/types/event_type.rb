@@ -70,7 +70,6 @@ Types::EventType = GraphQL::ObjectType.define do
       AssociationLoader.for(Event, :team_members).load(obj)
     }
   end
-  field :team_member_name, !types.String
   field :provided_tickets, !types[!Types::TicketType] do
     guard -> (event, _args, ctx) do
       ctx[:current_ability].can?(
@@ -120,5 +119,19 @@ Types::EventType = GraphQL::ObjectType.define do
     guard -> (obj, _args, ctx) do
       ctx[:current_ability].can?(:read_admin_notes, obj)
     end
+  end
+
+  field :category, !types.String do
+    deprecation_reason 'Please use event_category instead'
+    resolve ->(obj, _args, _ctx) {
+      obj.event_category.name.underscore
+    }
+  end
+
+  field :team_member_name, !types.String do
+    deprecation_reason 'Please use event_category.team_member_name instead'
+    resolve ->(obj, _args, _ctx) {
+      obj.event_category.team_member_name
+    }
   end
 end
