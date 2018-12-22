@@ -23,7 +23,7 @@ function TeamMemberForm({
     <>
       {
         [
-          { name: 'display', label: `Display as ${event.team_member_name}` },
+          { name: 'display', label: `Display as ${event.event_category.team_member_name}` },
           { name: 'show_email', label: 'Show email address' },
           { name: 'receive_con_email', label: 'Receive email from convention' },
         ].map(({ name, label }) => (
@@ -55,9 +55,11 @@ function TeamMemberForm({
 TeamMemberForm.propTypes = {
   event: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    can_provide_tickets: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
-    team_member_name: PropTypes.string.isRequired,
+    event_category: PropTypes.shape({
+      can_provide_tickets: PropTypes.bool.isRequired,
+      team_member_name: PropTypes.string.isRequired,
+    }).isRequired,
     team_members: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
     })).isRequired,

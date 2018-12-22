@@ -81,7 +81,12 @@ Types::EventType = GraphQL::ObjectType.define do
       )
     end
   end
-  field :can_provide_tickets, !types.Boolean, property: :can_provide_tickets?
+  field :can_provide_tickets, !types.Boolean do
+    deprecation_reason 'Plaese use event_category.can_provide_tickets instead'
+    resolve -> (obj, _args, _ctx) {
+      obj.event_category.can_provide_tickets?
+    }
+  end
   override_type = Types::MaximumEventProvidedTicketsOverrideType
   field :maximum_event_provided_tickets_overrides, !types[!override_type] do
     resolve -> (obj, _args, _ctx) {

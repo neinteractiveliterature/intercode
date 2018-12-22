@@ -9,6 +9,7 @@ class Types::EventCategoryType < Types::BaseObject
   field :default_color, String, null: true, camelize: false
   field :full_color, String, null: true, camelize: false
   field :signed_up_color, String, null: true, camelize: false
+  field :can_provide_tickets, Boolean, null: false, camelize: false, method: :can_provide_tickets?
 
   association_loaders EventCategory, :convention, :event_form, :event_proposal_form
 end

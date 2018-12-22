@@ -93,12 +93,6 @@ class Event < ApplicationRecord
     events.sort_by { |event| normalize_title_for_sort(event.title) }
   end
 
-  # TODO: when we make real adminable categories, we'll need to unbake this
-  # piece of business logic
-  def can_provide_tickets?
-    category == 'larp'
-  end
-
   def to_param
     "#{id}-#{title.parameterize}"
   end
