@@ -16,6 +16,23 @@ export function decodeStringArray(value) {
   return decoded;
 }
 
+export function encodeIntegerArray(value) {
+  if (value.length === 0) {
+    return null;
+  }
+
+  return value.map(integer => integer.toString()).join(',');
+}
+
+export function decodeIntegerArray(value) {
+  const decoded = value.split(',').map(Transforms.integer).filter(integer => integer != null);
+  if (decoded.length === 0) {
+    return null;
+  }
+  return decoded;
+}
+
+
 export function encodeBooleanFilter(value) {
   if (value == null) {
     return null;
@@ -44,6 +61,10 @@ export const FilterCodecs = {
   stringArray: {
     encode: encodeStringArray,
     decode: decodeStringArray,
+  },
+  integerArray: {
+    encode: encodeIntegerArray,
+    decode: decodeIntegerArray,
   },
   boolean: {
     encode: encodeBooleanFilter,

@@ -72,7 +72,7 @@ const EventCard = ({ event, timezoneName, sorted }) => {
 
   if (teamMemberNames) {
     const teamMemberDescription = pluralizeWithCount(
-      capitalize(event.team_member_name),
+      capitalize(event.event_category.team_member_name),
       event.team_members.length,
       true,
     );
@@ -134,7 +134,7 @@ const EventCard = ({ event, timezoneName, sorted }) => {
               event.category !== 'filler'
                 ? (
                   <div className="lead ml-2 text-muted">
-                    {EventCategory.get(event.category).name}
+                    {event.event_category.name}
                   </div>
                 )
                 : null

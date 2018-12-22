@@ -1,24 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { humanize } from 'inflected';
+import { pluralize } from 'inflected';
 
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
-import EventCategory from '../../EventAdmin/EventCategory';
 import PopperDropdown from '../../UIComponents/PopperDropdown';
+import { Transforms } from '../../ComposableFormUtils';
 
-const SORTED_CATEGORIES = [...EventCategory.allCategories]
-  .sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
-
-const EventListCategoryDropdown = ({ categoryKeys, value, onChange }) => {
-  const currentCategories = SORTED_CATEGORIES
-    .filter(category => (value || []).includes(category.key));
+const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
+  const currentCategories = eventCategories
+    .filter(category => (value || []).includes(category.id));
 
   let categoryDescription = 'All events';
   if (currentCategories.length === 1) {
-    categoryDescription = humanize(currentCategories[0].key);
+    categoryDescription = pluralize(currentCategories[0].name);
   } else if (currentCategories.length > 1) {
     categoryDescription = `${currentCategories.length} event types`;
   }
+
+  const sortedCategories = [...eventCategories].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
 
   return (
     <PopperDropdown
@@ -37,15 +36,14 @@ const EventListCategoryDropdown = ({ categoryKeys, value, onChange }) => {
     >
       <div className="p-2">
         <ChoiceSet
-          choices={SORTED_CATEGORIES
-            .filter(category => categoryKeys.includes(category.key))
+          choices={sortedCategories
             .map(category => ({
               label: category.name,
-              value: category.key,
+              value: category.id.toString(),
             }))
           }
-          value={value}
-          onChange={onChange}
+          value={(value || []).map(integer => integer.toString())}
+          onChange={(integerArray) => { onChange(integerArray.map(Transforms.integer)); }}
           multiple
         />
       </div>
@@ -54,7 +52,10 @@ const EventListCategoryDropdown = ({ categoryKeys, value, onChange }) => {
 };
 
 EventListCategoryDropdown.propTypes = {
-  categoryKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  eventCategories: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };

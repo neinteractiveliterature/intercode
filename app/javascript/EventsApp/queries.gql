@@ -4,8 +4,13 @@ fragment CommonConventionData on Convention {
   starts_at
   ends_at
   timezone_name
-  event_category_keys
   ticket_name
+
+  event_categories {
+    id
+    name
+    scheduling_ui
+  }
 }
 
 fragment RunBasicSignupData on Run {
