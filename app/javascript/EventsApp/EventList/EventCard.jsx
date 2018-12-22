@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 import { capitalize } from 'inflected';
 
-import EventCategory from '../../EventAdmin/EventCategory';
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 
