@@ -76,14 +76,6 @@ class Convention < ApplicationRecord
     ConventionDrop.new(self)
   end
 
-  def form_for_event_category(key)
-    category = EventCategory.find(key)
-
-    return volunteer_event_form if category.recurring?
-    return filler_event_form if category.single_run?
-    regular_event_form
-  end
-
   private
 
   def maximum_event_signups_must_cover_all_time

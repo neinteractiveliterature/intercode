@@ -50,7 +50,7 @@ class UserConProfileDrop < Liquid::Drop
   def signups
     user_con_profile.signups.where.not(state: 'withdrawn')
       .includes(
-        :event,
+        event: :event_category,
         run: {
           rooms: nil,
           event: { team_members: :user_con_profile }

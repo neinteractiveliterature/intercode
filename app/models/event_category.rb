@@ -12,4 +12,8 @@ class EventCategory < ApplicationRecord
       self.scheduling_ui == scheduling_ui
     end
   end
+
+  def to_liquid
+    EventCategoryDrop.new(self)
+  end
 end
