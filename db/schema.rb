@@ -149,6 +149,9 @@ ActiveRecord::Schema.define(version: 2018_12_22_160432) do
     t.text "name", null: false
     t.text "team_member_name", null: false
     t.text "scheduling_ui", null: false
+    t.text "default_color"
+    t.text "full_color"
+    t.text "signed_up_color"
     t.bigint "event_form_id", null: false
     t.bigint "event_proposal_form_id"
     t.datetime "created_at", null: false

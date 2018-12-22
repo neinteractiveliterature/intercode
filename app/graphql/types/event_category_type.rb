@@ -6,6 +6,9 @@ class Types::EventCategoryType < Types::BaseObject
   field :scheduling_ui, Types::SchedulingUiType, null: false, camelize: false
   field :event_form, Types::FormType, null: false, camelize: false
   field :event_proposal_form, Types::FormType, null: true, camelize: false
+  field :default_color, String, null: true, camelize: false
+  field :full_color, String, null: true, camelize: false
+  field :signed_up_color, String, null: true, camelize: false
 
   association_loaders EventCategory, :convention, :event_form, :event_proposal_form
 end

@@ -1,18 +1,61 @@
 class CreateEventCategories < ActiveRecord::Migration[5.2]
+  COLOR_CLASSES = {
+    aqua: {
+      default: '#d4f5fa',
+      full: 'rgba(212, 245, 250, 0.7)',
+      signed_up: '#17a2b8',
+    },
+    green: {
+      default: '#9be7ac',
+      full: 'rgba(155, 231, 172, 0.6)',
+      signed_up: '#28a745',
+    },
+    grey: {
+      default: '#dee2e6',
+      full: 'rgba(222, 226, 230, 0.6)',
+      signed_up: '#495057',
+    },
+    indigo: {
+      default: '#d2b9fb',
+      full: 'rgba(210, 185, 251, 0.6)',
+      signed_up: '#6610f2',
+    },
+    orange: {
+      default: '#fed1ac',
+      full: 'rgba(254, 209, 172, 0.5)',
+      signed_up: '#fd7e14',
+    },
+    red: {
+      default: '#f3b7bd',
+      full: 'rgba(243, 183, 189, 0.5)',
+      signed_up: '#dc3545',
+    },
+    teal: {
+      default: '#94eed3',
+      full: 'rgba(148, 238, 211, 0.5)',
+      signed_up: '#20c997',
+    },
+    yellow: {
+      default: '#ffeeba',
+      full: 'rgba(255, 238, 186, 0.6)',
+      signed_up: '#ffc107',
+    }
+  }
+
   LEGACY_EVENT_CATEGORIES = [
-    { key: "board_game", name: "Board game" },
-    { key: "con_services", name: "Con services", scheduling_ui: 'single_run' },
+    { key: "board_game", name: "Board game", color_class: :orange },
+    { key: "con_services", name: "Con services", scheduling_ui: 'single_run', color_class: :yellow },
     { key: "filler", name: "Filler event", scheduling_ui: 'single_run' },
-    { key: "larp", name: "Larp", team_member_name: "GM" },
+    { key: "larp", name: "Larp", team_member_name: "GM", color_class: :indigo },
     { key: "meetup", name: "Meetup", scheduling_ui: 'single_run', team_member_name: "host" },
-    { key: "moderated_discussion", name: "Moderated discussion", scheduling_ui: 'single_run', team_member_name: "moderator" },
-    { key: "panel", name: "Panel", scheduling_ui: 'single_run', team_member_name: "panelist" },
+    { key: "moderated_discussion", name: "Moderated discussion", scheduling_ui: 'single_run', team_member_name: "moderator", color_class: :red },
+    { key: "panel", name: "Panel", scheduling_ui: 'single_run', team_member_name: "panelist", color_class: :red },
     { key: "party", name: "Party", scheduling_ui: 'single_run', team_member_name: "host" },
-    { key: "presentation", name: "Presentation", scheduling_ui: 'single_run', team_member_name: "presenter" },
-    { key: "tabletop_rpg", name: "Tabletop RPG", team_member_name: "GM" },
-    { key: "town_hall", name: "Town hall", scheduling_ui: 'single_run', team_member_name: "facilitator" },
-    { key: "workshop", name: "Workshop", scheduling_ui: 'single_run', team_member_name: "facilitator" },
-    { key: "volunteer_event", name: "Volunteer event", scheduling_ui: 'recurring' }
+    { key: "presentation", name: "Presentation", scheduling_ui: 'single_run', team_member_name: "presenter", color_class: :red },
+    { key: "tabletop_rpg", name: "Tabletop RPG", team_member_name: "GM", color_class: :teal },
+    { key: "town_hall", name: "Town hall", scheduling_ui: 'single_run', team_member_name: "facilitator", color_class: :green },
+    { key: "workshop", name: "Workshop", scheduling_ui: 'single_run', team_member_name: "facilitator", color_class: :red },
+    { key: "volunteer_event", name: "Volunteer event", scheduling_ui: 'recurring', color_class: :grey }
   ].index_by { |category| category[:key] }
 
   def change
@@ -21,6 +64,9 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
       t.text :name, null: false
       t.text :team_member_name, null: false
       t.text :scheduling_ui, null: false
+      t.text :default_color
+      t.text :full_color
+      t.text :signed_up_color
       t.references :event_form, null: false, foreign_key: { to_table: 'forms' }
       t.references :event_proposal_form, foreign_key: { to_table: 'forms' }
 
@@ -41,6 +87,12 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
           ) do |new_category|
             new_category.scheduling_ui = legacy_category[:scheduling_ui] || 'regular'
             new_category.team_member_name = legacy_category[:team_member_name] || 'team member'
+            if legacy_category[:color_class]
+              color_class = COLOR_CLASSES[legacy_category[:color_class]]
+              new_category.default_color = color_class[:default]
+              new_category.full_color = color_class[:full]
+              new_category.signed_up_color = color_class[:signed_up]
+            end
 
             new_category.event_form_id = case legacy_category[:scheduling_ui]
             when 'recurring' then convention.volunteer_event_form_id
