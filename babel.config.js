@@ -5,6 +5,7 @@ module.exports = {
       { useBuiltIns: 'usage' },
     ],
     '@babel/preset-react',
+    '@babel/preset-flow',
   ],
   plugins: [
     'lodash',
