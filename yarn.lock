@@ -9695,10 +9695,10 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-thread-loader@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-2.0.2.tgz#d756b6accfcf9ec55a24daef58dacbd674a3581b"
-  integrity sha512-AK2MyeiPOwVHB3duKMMIE0IwlvcRMFa73Vs7+9dGcZ/0uhtRAmnCnMNHTMLcUQqAPYEImoENqodJDIJpCUsGGw==
+thread-loader@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-2.1.1.tgz#c105639b4908486f7756167870ada8b5b544f0a4"
+  integrity sha512-hMaTITa01Qt/I/Q1vKYDu2wjfWhJAfP5J3gOw32ng3/7DZHOOhBGVwsRvyHKk4I/KVTPaQi6J7fdlY+2nzjguw==
   dependencies:
     loader-runner "^2.3.1"
     loader-utils "^1.1.0"
