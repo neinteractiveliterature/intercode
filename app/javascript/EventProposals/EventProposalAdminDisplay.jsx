@@ -24,7 +24,15 @@ class EventProposalAdminDisplay extends React.PureComponent {
         <React.Fragment>
           <div className="d-flex justify-space-between align-items-baseline">
             <div className="col">
-              <h1>{data.eventProposal.title}</h1>
+              <h1>
+                {data.eventProposal.title}
+                {' '}
+                <small className="text-muted">
+                  (
+                  {data.eventProposal.event_category.name}
+                  )
+                </small>
+              </h1>
             </div>
 
             {
