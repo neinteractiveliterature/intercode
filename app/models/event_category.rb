@@ -13,6 +13,10 @@ class EventCategory < ApplicationRecord
     end
   end
 
+  def proposable?
+    event_proposal_form.present?
+  end
+
   def to_liquid
     EventCategoryDrop.new(self)
   end

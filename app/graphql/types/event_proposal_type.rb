@@ -22,7 +22,18 @@ Types::EventProposalType = GraphQL::ObjectType.define do
       AssociationLoader.for(EventProposal, :owner).load(obj)
     end
   end
-  field :event, Types::EventType
+
+  field :event, Types::EventType do
+    resolve -> (obj, _args, _ctx) do
+      AssociationLoader.for(EventProposal, :event).load(obj)
+    end
+  end
+
+  field :event_category, Types::EventCategoryType.to_non_null_type do
+    resolve -> (obj, _args, _ctx) do
+      AssociationLoader.for(EventProposal, :event_category).load(obj)
+    end
+  end
 
   field :admin_notes, types.String do
     guard -> (obj, _args, ctx) do

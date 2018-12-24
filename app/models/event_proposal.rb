@@ -18,6 +18,7 @@ class EventProposal < ApplicationRecord
   belongs_to :convention
   belongs_to :owner, class_name: 'UserConProfile', optional: true
   belongs_to :event, optional: true
+  belongs_to :event_category
 
   STATUSES.each do |status|
     scope status, -> { where(status: status) }
