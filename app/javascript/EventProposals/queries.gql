@@ -60,3 +60,38 @@ query EventProposalAdminNotesQuery($eventProposalId: Int!) {
     admin_notes
   }
 }
+
+query ProposeEventButtonQuery {
+  myProfile {
+    id
+
+    user {
+      id
+
+      event_proposals {
+        id
+        title
+        status
+        created_at
+
+        event_category {
+          id
+          name
+        }
+
+        convention {
+          id
+          name
+        }
+      }
+    }
+  }
+
+  convention {
+    event_categories {
+      id
+      name
+      proposable
+    }
+  }
+}
