@@ -182,7 +182,9 @@ ActiveRecord::Schema.define(version: 2018_12_22_160432) do
     t.text "admin_notes"
     t.datetime "reminded_at"
     t.text "team_mailing_list_name"
+    t.bigint "event_category_id", null: false
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
+    t.index ["event_category_id"], name: "index_event_proposals_on_event_category_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
   end
@@ -599,6 +601,7 @@ ActiveRecord::Schema.define(version: 2018_12_22_160432) do
   add_foreign_key "event_categories", "forms", column: "event_form_id"
   add_foreign_key "event_categories", "forms", column: "event_proposal_form_id"
   add_foreign_key "event_proposals", "conventions"
+  add_foreign_key "event_proposals", "event_categories"
   add_foreign_key "event_proposals", "events"
   add_foreign_key "event_proposals", "user_con_profiles", column: "owner_id"
   add_foreign_key "events", "conventions"

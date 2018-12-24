@@ -75,6 +75,7 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
     end
 
     add_reference :events, :event_category, foreign_key: true
+    add_reference :event_proposals, :event_category, foreign_key: true
 
     reversible do |dir|
       dir.up do
@@ -110,6 +111,24 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
 
           event.update!(event_category: event_category)
         end
+
+        say 'Adding event categories to all accepted event proposals'
+        execute <<~SQL
+          UPDATE event_proposals
+          SET event_category_id = events.event_category_id
+          FROM events
+          WHERE event_proposals.event_id = events.id
+        SQL
+
+        say 'Adding the larp event category to all remaining event proposals'
+        execute <<~SQL
+          UPDATE event_proposals
+          SET event_category_id = event_categories.id
+          FROM event_categories
+          WHERE event_categories.convention_id = event_proposals.convention_id
+          AND event_categories.name = 'Larp'
+          AND event_proposals.event_category_id IS NULL
+        SQL
       end
 
       dir.down do
@@ -126,6 +145,7 @@ class CreateEventCategories < ActiveRecord::Migration[5.2]
     end
 
     change_column_null :events, :event_category_id, false
+    change_column_null :event_proposals, :event_category_id, false
     remove_column :events, :category, :string
   end
 end
