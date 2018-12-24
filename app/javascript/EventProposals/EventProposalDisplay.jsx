@@ -13,7 +13,7 @@ class EventProposalDisplay extends React.Component {
   };
 
   renderFormItems = ({ convention, eventProposal }) => {
-    const form = deserializeForm(convention.event_proposal_form);
+    const form = deserializeForm(eventProposal.event_category.event_proposal_form);
     const formResponse = deserializeFormResponseModel(eventProposal);
 
     return form.getAllItems().map((item) => {
