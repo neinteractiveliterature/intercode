@@ -21,16 +21,17 @@ class AcceptEventProposalService < CivilService::Service
     content_warnings: 'content_warnings'
   }
 
-  attr_reader :event_proposal
+  attr_reader :event_proposal, :event_category
 
-  def initialize(event_proposal:)
+  def initialize(event_proposal:, event_category: nil)
     @event_proposal = event_proposal
+    @event_category = event_category || event_proposal.event_category
   end
 
   private
 
   def inner_call
-    event = convention.events.new(category: 'larp', status: 'active')
+    event = convention.events.new(event_category: event_category, status: 'active')
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
     event.con_mail_destination ||= 'gms'
@@ -64,11 +65,11 @@ class AcceptEventProposalService < CivilService::Service
   end
 
   def event_form
-    @event_form ||= convention.regular_event_form
+    @event_form ||= event_category.event_form
   end
 
   def event_proposal_form
-    @event_proposal_form ||= convention.event_proposal_form
+    @event_proposal_form ||= event_proposal.event_category.event_proposal_form
   end
 
   def proposal_form_item_identifiers
