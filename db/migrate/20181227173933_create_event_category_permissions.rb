@@ -6,6 +6,9 @@ class CreateEventCategoryPermissions < ActiveRecord::Migration[5.2]
       t.boolean :can_read_event_proposals, null: false, default: false
       t.boolean :can_read_pending_event_proposals, null: false, default: false
       t.boolean :can_update_event_proposals, null: false, default: false
+      t.boolean :can_access_admin_notes, null: false, default: false
+      t.boolean :can_override_event_tickets, null: false, default: false
+      t.boolean :can_update_events, null: false, default: false
       t.index [:event_category_id, :staff_position_id], unique: true, name: 'idx_event_category_permissions_unique_join'
 
       t.timestamps
@@ -18,7 +21,10 @@ class CreateEventCategoryPermissions < ActiveRecord::Migration[5.2]
           'proposal_chair',
           can_read_event_proposals: true,
           can_read_pending_event_proposals: true,
-          can_update_event_proposals: true
+          can_update_event_proposals: true,
+          can_access_admin_notes: true,
+          can_override_event_tickets: true,
+          can_update_events: true
         )
 
         autogenerate_hidden_staff_positions_for_privilege 'proposal_committee'
@@ -26,7 +32,10 @@ class CreateEventCategoryPermissions < ActiveRecord::Migration[5.2]
           'proposal_committee',
           can_read_event_proposals: true,
           can_read_pending_event_proposals: false,
-          can_update_event_proposals: false
+          can_update_event_proposals: false,
+          can_access_admin_notes: false,
+          can_override_event_tickets: false,
+          can_update_events: false
         )
       end
 
@@ -125,7 +134,10 @@ class CreateEventCategoryPermissions < ActiveRecord::Migration[5.2]
     privilege,
     can_read_event_proposals:,
     can_read_pending_event_proposals:,
-    can_update_event_proposals:
+    can_update_event_proposals:,
+    can_access_admin_notes:,
+    can_override_event_tickets:,
+    can_update_events:
   )
     execute <<~SQL, "Granting permissions to staff positions containing #{privilege} profiles"
       INSERT INTO event_category_permissions (
@@ -134,6 +146,9 @@ class CreateEventCategoryPermissions < ActiveRecord::Migration[5.2]
         can_read_event_proposals,
         can_read_pending_event_proposals,
         can_update_event_proposals,
+        can_access_admin_notes,
+        can_override_event_tickets,
+        can_update_events,
         created_at,
         updated_at
       )
@@ -143,6 +158,9 @@ class CreateEventCategoryPermissions < ActiveRecord::Migration[5.2]
         #{quote(can_read_event_proposals ? 't' : 'f')},
         #{quote(can_read_pending_event_proposals ? 't' : 'f')},
         #{quote(can_update_event_proposals ? 't' : 'f')},
+        #{quote(can_access_admin_notes ? 't' : 'f')},
+        #{quote(can_override_event_tickets ? 't' : 'f')},
+        #{quote(can_update_events ? 't' : 'f')},
         NOW(),
         NOW()
       FROM user_con_profiles

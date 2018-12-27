@@ -18,6 +18,7 @@ class UserConProfile < ApplicationRecord
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
   has_many :orders, dependent: :destroy
   has_and_belongs_to_many :staff_positions
+  has_many :event_category_permissions, through: :staff_positions
 
   delegate :email, to: :user, allow_nil: true
 
