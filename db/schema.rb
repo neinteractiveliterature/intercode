@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_22_160432) do
+ActiveRecord::Schema.define(version: 2018_12_27_173933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +160,19 @@ ActiveRecord::Schema.define(version: 2018_12_22_160432) do
     t.index ["convention_id"], name: "index_event_categories_on_convention_id"
     t.index ["event_form_id"], name: "index_event_categories_on_event_form_id"
     t.index ["event_proposal_form_id"], name: "index_event_categories_on_event_proposal_form_id"
+  end
+
+  create_table "event_category_permissions", force: :cascade do |t|
+    t.bigint "event_category_id", null: false
+    t.bigint "staff_position_id", null: false
+    t.boolean "can_read_event_proposals", default: false, null: false
+    t.boolean "can_read_pending_event_proposals", default: false, null: false
+    t.boolean "can_update_event_proposals", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_category_id", "staff_position_id"], name: "idx_event_category_permissions_unique_join", unique: true
+    t.index ["event_category_id"], name: "index_event_category_permissions_on_event_category_id"
+    t.index ["staff_position_id"], name: "index_event_category_permissions_on_staff_position_id"
   end
 
   create_table "event_proposals", force: :cascade do |t|
@@ -529,9 +542,7 @@ ActiveRecord::Schema.define(version: 2018_12_22_160432) do
   create_table "user_con_profiles", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "convention_id", null: false
-    t.boolean "proposal_committee", default: false, null: false
     t.boolean "staff", default: false, null: false
-    t.boolean "proposal_chair", default: false, null: false
     t.boolean "gm_liaison", default: false, null: false
     t.boolean "registrar", default: false, null: false
     t.boolean "outreach", default: false, null: false
@@ -600,6 +611,8 @@ ActiveRecord::Schema.define(version: 2018_12_22_160432) do
   add_foreign_key "event_categories", "conventions"
   add_foreign_key "event_categories", "forms", column: "event_form_id"
   add_foreign_key "event_categories", "forms", column: "event_proposal_form_id"
+  add_foreign_key "event_category_permissions", "event_categories"
+  add_foreign_key "event_category_permissions", "staff_positions"
   add_foreign_key "event_proposals", "conventions"
   add_foreign_key "event_proposals", "event_categories"
   add_foreign_key "event_proposals", "events"
