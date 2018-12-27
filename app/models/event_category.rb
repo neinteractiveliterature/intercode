@@ -4,6 +4,7 @@ class EventCategory < ApplicationRecord
   belongs_to :convention
   belongs_to :event_form, class_name: 'Form'
   belongs_to :event_proposal_form, class_name: 'Form', optional: true
+  has_many :event_category_permissions, dependent: :destroy
 
   validates :scheduling_ui, inclusion: { in: SCHEDULING_UIS }
 
