@@ -91,3 +91,17 @@ query AdminProductsQuery {
 
 ${adminProductFragment}
 `;
+
+export const adminStoreAbilityQuery = gql`
+query AdminStoreAbilityQuery {
+  currentAbility {
+    can_update_products
+    can_update_orders
+  }
+
+  convention {
+    id
+    timezone_name
+  }
+}
+`;
