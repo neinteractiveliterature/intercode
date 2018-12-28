@@ -83,6 +83,10 @@ query AdminProductsQuery {
       ...AdminProductFields
     }
   }
+
+  currentAbility {
+    can_update_products
+  }
 }
 
 ${adminProductFragment}
