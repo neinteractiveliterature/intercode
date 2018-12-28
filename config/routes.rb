@@ -41,6 +41,7 @@ Intercode::Application.routes.draw do
     get 'events/:id/(*extra)' => 'events#show', as: :event, constraints: { id: /\d+(-[a-z0-9\-]*)?/ }
     get 'events/(*extra)' => 'events#index', as: :events
 
+    get 'event_categories/(*extra)' => 'event_categories#index', as: :event_categories
     get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
 
     resources :event_proposals, except: [:update]

@@ -47,6 +47,20 @@ export function getRunPositioningStyles({ runDimensions, layoutResult }) {
   };
 }
 
+export function getEventCategoryStyles({ eventCategory, variant }) {
+  const color = eventCategory[`${variant}_color`];
+
+  if (color) {
+    if (variant === 'signed_up') {
+      return { backgroundColor: color, borderColor: color };
+    }
+
+    return { backgroundColor: color };
+  }
+
+  return {};
+}
+
 export function getRunClassificationStyles({
   config, signupCountData, event, signupStatus,
 }) {
@@ -58,14 +72,7 @@ export function getRunClassificationStyles({
       variant = 'full';
     }
 
-    const color = event.event_category[`${variant}_color`];
-    if (color) {
-      if (variant === 'signed_up') {
-        return { backgroundColor: color, borderColor: color };
-      }
-
-      return { backgroundColor: color };
-    }
+    return getEventCategoryStyles(event.event_category, variant);
   }
 
   return {};

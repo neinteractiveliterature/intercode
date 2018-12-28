@@ -1,0 +1,13 @@
+query EventCategoryAdminQuery {
+  convention {
+    id
+
+    event_categories {
+      id
+      name
+      default_color
+      signed_up_color
+      full_color
+    }
+  }
+}
