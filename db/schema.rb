@@ -168,6 +168,9 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
     t.boolean "can_read_event_proposals", default: false, null: false
     t.boolean "can_read_pending_event_proposals", default: false, null: false
     t.boolean "can_update_event_proposals", default: false, null: false
+    t.boolean "can_access_admin_notes", default: false, null: false
+    t.boolean "can_override_event_tickets", default: false, null: false
+    t.boolean "can_update_events", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_category_id", "staff_position_id"], name: "idx_event_category_permissions_unique_join", unique: true

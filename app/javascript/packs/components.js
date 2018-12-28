@@ -8,6 +8,7 @@ import ConventionAdmin from '../ConventionAdmin';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EmailList from '../UIComponents/EmailList';
 import EventAdmin from '../EventAdmin';
+import EventCategoryAdmin from '../EventCategoryAdmin';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
@@ -44,6 +45,7 @@ const unwrappedComponents = {
   EditUserConProfile,
   EmailList,
   EventAdmin,
+  EventCategoryAdmin,
   EventsApp,
   EventProposalDisplay,
   EventProposalForm,
