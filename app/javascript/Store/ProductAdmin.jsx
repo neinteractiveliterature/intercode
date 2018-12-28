@@ -65,7 +65,19 @@ class ProductAdmin extends React.Component {
       <div>
         {products}
         <div className="my-4">
-          <button type="button" className="btn btn-primary" onClick={this.newProductClicked}>New product</button>
+          {
+            this.props.data.currentAbility.can_update_products
+              ? (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={this.newProductClicked}
+                >
+                  New product
+                </button>
+              )
+              : null
+          }
         </div>
       </div>
     );
