@@ -20,7 +20,7 @@ export default class Confirm extends React.Component {
     };
   }
 
-  okClicked = async (modalState, closeModal) => {
+  okClicked = async (modalState, closeModal, setModalState) => {
     this.setState({ actionInProgress: true });
     try {
       await modalState.action();
@@ -31,7 +31,7 @@ export default class Confirm extends React.Component {
       }
 
       if (modalState.renderError) {
-        modalState.setState({ error });
+        setModalState({ ...modalState, error });
       }
 
       if (!modalState.onError && !modalState.renderError) {
@@ -45,13 +45,13 @@ export default class Confirm extends React.Component {
   render = () => (
     <ModalContainer>
       {({
-        modalVisible, modalState, openModal, closeModal,
+        modalVisible, modalState, openModal, closeModal, setModalState,
       }) => (
         <ConfirmContext.Provider value={openModal}>
           {this.props.children}
           <ConfirmModal
             visible={modalVisible}
-            onOK={() => this.okClicked(modalState, closeModal)}
+            onOK={() => this.okClicked(modalState, closeModal, setModalState)}
             onCancel={closeModal}
             disableButtons={this.state.actionInProgress}
           >
