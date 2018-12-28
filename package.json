@@ -103,7 +103,7 @@
     "sass-loader": "^7.1.0",
     "source-map-support": "^0.5.9",
     "style-loader": "^0.23.1",
-    "terser-webpack-plugin": "^1.2.0",
+    "terser-webpack-plugin": "^1.2.1",
     "thread-loader": "^2.1.1",
     "unfetch": "^4.0.1",
     "url-search-params-polyfill": "^5.0.0",
