@@ -358,7 +358,7 @@ class Ability
       event_category_conditions: { can_access_admin_notes: true }
     can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
-    can :read, Order, user_con_profile: { convention_id: staff_con_ids }
+    can :read, Order, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, MaximumEventProvidedTicketsOverride,

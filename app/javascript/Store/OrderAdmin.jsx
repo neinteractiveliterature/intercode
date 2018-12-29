@@ -4,10 +4,11 @@ import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 
 import AdminOrderModal from './AdminOrderModal';
-import { adminOrdersQuery } from './queries';
+import { adminOrdersQuery, adminStoreAbilityQuery } from './queries';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import formatMoney from '../formatMoney';
 import FreeTextFilter from '../Tables/FreeTextFilter';
+import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 class OrderAdmin extends React.Component {
@@ -19,28 +20,20 @@ class OrderAdmin extends React.Component {
     super(props);
 
     this.state = {
-      editingOrderId: null,
+      editingOrder: null,
+      timezoneName: null,
     };
   }
 
-  closeOrderModal = () => { this.setState({ editingOrderId: null }); }
+  closeOrderModal = () => { this.setState({ editingOrder: null }); }
 
-  renderEditModal = (data) => {
-    if (!data.convention) {
-      return null;
-    }
-
-    const editingOrder = data.convention.orders_paginated.entries
-      .find(order => order.id === this.state.editingOrderId);
-
-    return (
-      <AdminOrderModal
-        order={editingOrder}
-        closeModal={this.closeOrderModal}
-        timezoneName={data.convention.timezone_name}
-      />
-    );
-  }
+  renderEditModal = () => (
+    <AdminOrderModal
+      order={this.state.editingOrder}
+      closeModal={this.closeOrderModal}
+      timezoneName={this.state.timezoneName}
+    />
+  )
 
   getPossibleColumns = data => [
     {
@@ -102,15 +95,36 @@ class OrderAdmin extends React.Component {
 
   render = () => (
     <div className="mb-4">
-      <ReactTableWithTheWorks
-        exportUrl={this.props.exportUrl}
-        getData={({ data }) => data.convention.orders_paginated.entries}
-        getPages={({ data }) => data.convention.orders_paginated.total_pages}
-        getPossibleColumns={this.getPossibleColumns}
-        storageKeyPrefix="orderAdmin"
-        query={adminOrdersQuery}
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-      />
+      <QueryWithStateDisplay query={adminStoreAbilityQuery}>
+        {({ data: { currentAbility, convention } }) => (
+          <ReactTableWithTheWorks
+            exportUrl={this.props.exportUrl}
+            getData={({ data }) => data.convention.orders_paginated.entries}
+            getPages={({ data }) => data.convention.orders_paginated.total_pages}
+            getPossibleColumns={this.getPossibleColumns}
+            storageKeyPrefix="orderAdmin"
+            query={adminOrdersQuery}
+            getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+            getTrProps={(state, rowInfo) => {
+              if (currentAbility.can_update_orders) {
+                return {
+                  style: { cursor: 'pointer' },
+                  onClick: () => {
+                    this.setState({
+                      editingOrder: rowInfo.original,
+                      timezoneName: convention.timezone_name,
+                    });
+                  },
+                };
+              }
+
+              return {};
+            }}
+          />
+        )}
+      </QueryWithStateDisplay>
+
+      {this.renderEditModal()}
     </div>
   )
 }

@@ -76,6 +76,9 @@ class AdminProductCard extends React.Component {
       }).isRequired).isRequired,
       available: PropTypes.bool.isRequired,
     }).isRequired,
+    currentAbility: PropTypes.shape({
+      can_update_products: PropTypes.bool.isRequired,
+    }).isRequired,
     initialEditing: PropTypes.bool,
     onCancelNewProduct: PropTypes.func.isRequired,
     onSaveNewProduct: PropTypes.func.isRequired,
@@ -147,35 +150,35 @@ class AdminProductCard extends React.Component {
       return;
     }
 
-    this.setState({
+    this.setState(prevState => ({
       editingProduct: {
-        ...this.state.editingProduct,
+        ...prevState.editingProduct,
         image: file,
       },
-    });
+    }));
 
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      this.setState({
+      this.setState(prevState => ({
         editingProduct: {
-          ...this.state.editingProduct,
+          ...prevState.editingProduct,
           image_url: reader.result,
         },
-      });
+      }));
     });
     reader.readAsDataURL(file);
   }
 
   deleteVariant = (variantId) => {
-    this.setState({
+    this.setState(prevState => ({
       editingProduct: {
-        ...this.state.editingProduct,
+        ...prevState.editingProduct,
         delete_variant_ids: [
-          ...this.state.editingProduct.delete_variant_ids,
+          ...prevState.editingProduct.delete_variant_ids,
           variantId,
         ],
       },
-    });
+    }));
   }
 
   beginConfirm = (prompt, action) => {
@@ -279,11 +282,21 @@ class AdminProductCard extends React.Component {
   )
 
   renderActions = () => {
+    if (!this.props.currentAbility.can_update_products) {
+      return null;
+    }
+
     if (this.state.editing) {
       return (
         <ul className="list-inline m-0">
           <li className="list-inline-item">
-            <button className="btn btn-sm btn-secondary" onClick={this.cancelClicked}>Cancel</button>
+            <button
+              type="button"
+              className="btn btn-sm btn-secondary"
+              onClick={this.cancelClicked}
+            >
+              Cancel
+            </button>
           </li>
           <li className="list-inline-item">
             <Mutation mutation={createProductMutation}>
@@ -291,6 +304,7 @@ class AdminProductCard extends React.Component {
                 <Mutation mutation={updateProductMutation}>
                   {updateProduct => (
                     <button
+                      type="button"
                       className="btn btn-sm btn-primary"
                       onClick={() => { this.saveClicked(createProduct, updateProduct); }}
                     >
@@ -312,6 +326,7 @@ class AdminProductCard extends React.Component {
           <Mutation mutation={deleteProductMutation}>
             {deleteProduct => (
               <button
+                type="button"
                 className="btn btn-sm btn-danger"
                 onClick={() => { this.deleteClicked(deleteProduct); }}
               >
@@ -329,7 +344,13 @@ class AdminProductCard extends React.Component {
       <ul className="list-inline m-0">
         {deleteButton}
         <li className="list-inline-item">
-          <button className="btn btn-sm btn-secondary" onClick={this.editClicked}>Edit</button>
+          <button
+            type="button"
+            className="btn btn-sm btn-secondary"
+            onClick={this.editClicked}
+          >
+            Edit
+          </button>
         </li>
       </ul>
     );

@@ -9,7 +9,7 @@ class Mutations::WithdrawMySignup < GraphQL::Schema::RelayClassicMutation
       .first
 
     unless signup
-      raise BetterRescueMiddleware::UnloggedError, "You are not signed up for #{@event.title}."
+      raise BetterRescueMiddleware::UnloggedError, "You are not signed up for #{run.event.title}."
     end
 
     EventWithdrawService.new(signup, context[:current_user]).call!
