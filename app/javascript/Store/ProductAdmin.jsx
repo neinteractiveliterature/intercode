@@ -21,9 +21,9 @@ class ProductAdmin extends React.Component {
   }
 
   newProductClicked = () => {
-    this.setState({
+    this.setState(prevState => ({
       newProducts: [
-        ...this.state.newProducts,
+        ...prevState.newProducts,
         {
           generatedId: new Date().getTime(),
           name: '',
@@ -34,14 +34,14 @@ class ProductAdmin extends React.Component {
           available: true,
         },
       ],
-    });
+    }));
   }
 
   removeNewProduct = (product) => {
-    const newProducts = this.state.newProducts
-      .filter(newProduct => newProduct.generatedId !== product.generatedId);
-
-    this.setState({ newProducts });
+    this.setState(prevState => ({
+      newProducts: prevState.newProducts
+        .filter(newProduct => newProduct.generatedId !== product.generatedId)
+    }));
   }
 
   renderProduct = product => (
@@ -49,6 +49,7 @@ class ProductAdmin extends React.Component {
       key={product.id || product.generatedId}
       product={product}
       initialEditing={product.id == null}
+      currentAbility={this.props.data.currentAbility}
       onSaveNewProduct={this.removeNewProduct}
       onCancelNewProduct={this.removeNewProduct}
     />
@@ -64,7 +65,19 @@ class ProductAdmin extends React.Component {
       <div>
         {products}
         <div className="my-4">
-          <button className="btn btn-primary" onClick={this.newProductClicked}>New product</button>
+          {
+            this.props.data.currentAbility.can_update_products
+              ? (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={this.newProductClicked}
+                >
+                  New product
+                </button>
+              )
+              : null
+          }
         </div>
       </div>
     );

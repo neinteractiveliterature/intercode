@@ -3,10 +3,10 @@
     %h1= event.title
 
     %ul.list-unstyled{style: 'columns: 3 auto'}
-      - event.runs.each do |run|
+      - event.runs.order(:starts_at).includes(signups: :user_con_profile).each do |run|
         %li
           / work around poor cross-browser column break avoidance
-          .mb-2{style: 'display: inline-block'}
+          .mb-4{style: 'display: inline-block'}
             %p.font-weight-bold.mb-0= format_run_day_and_time run.starts_at
             - if run.signups.any?
               %ul.list-unstyled
