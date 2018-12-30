@@ -2,6 +2,7 @@ Types::FormType = GraphQL::ObjectType.define do
   name 'FormType'
 
   field :id, !types.Int
+  field :title, types.String
   field :form_api_json, !types.String do
     resolve ->(obj, _args, ctx) do
       FormApiPresenter.new(obj, ctx[:cadmus_renderer]).as_json.to_json

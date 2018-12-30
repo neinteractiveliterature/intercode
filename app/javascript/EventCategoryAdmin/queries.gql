@@ -5,9 +5,20 @@ query EventCategoryAdminQuery {
     event_categories {
       id
       name
+      team_member_name
+      scheduling_ui
       default_color
       signed_up_color
       full_color
+
+      events_paginated {
+        total_entries
+      }
+    }
+
+    forms {
+      id
+      title
     }
   }
 }
