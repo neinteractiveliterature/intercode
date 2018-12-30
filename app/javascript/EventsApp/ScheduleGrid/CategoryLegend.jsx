@@ -1,57 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
-import AvailabilityBar from './AvailabilityBar';
 import { CommonConventionDataQuery } from '../queries.gql';
+import FakeEventRun from './FakeEventRun';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
-import { getRunClassificationStyles, getRunClassName } from './StylingUtils';
-
-function FakeEventRun({
-  eventCategory, children, availability, unlimited, runFull, signupStatus,
-}) {
-  const config = { classifyEventsBy: 'category', showSignedUp: true };
-  const signupCountData = { runFull: () => runFull };
-  const event = { event_category: eventCategory || {} };
-
-  return (
-    <div
-      className={classNames(
-        'px-1 pb-1 schedule-grid-event small',
-        getRunClassName({
-          config, signupCountData, signupStatus, event,
-        }),
-      )}
-      style={{
-        zIndex: 0,
-        position: 'relative',
-        ...getRunClassificationStyles({
-          config, signupCountData, signupStatus, event,
-        }),
-      }}
-    >
-      {children}
-
-      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} />
-    </div>
-  );
-}
-
-FakeEventRun.propTypes = {
-  eventCategory: PropTypes.shape({}).isRequired,
-  children: PropTypes.node.isRequired,
-  availability: PropTypes.number,
-  unlimited: PropTypes.bool,
-  runFull: PropTypes.bool,
-  signupStatus: PropTypes.string,
-};
-
-FakeEventRun.defaultProps = {
-  availability: 0.0,
-  unlimited: false,
-  runFull: false,
-  signupStatus: null,
-};
 
 function CategoryLegend() {
   return (
@@ -131,7 +82,7 @@ function CategoryLegend() {
               </div>
             </div>
           </div>
-        )
+        );
       }}
     </QueryWithStateDisplay>
   );

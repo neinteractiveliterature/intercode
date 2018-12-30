@@ -72,7 +72,7 @@ export function getRunClassificationStyles({
       variant = 'full';
     }
 
-    return getEventCategoryStyles(event.event_category, variant);
+    return getEventCategoryStyles({ eventCategory: event.event_category, variant });
   }
 
   return {};

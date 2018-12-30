@@ -16,9 +16,15 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :ticket_name, !types.String
   field :user_con_profile_form, !Types::FormType
 
-  field :event_categories, types[Types::EventCategoryType] do
+  field :event_categories, Types::EventCategoryType.to_list_type.to_non_null_type do
     resolve -> (convention, _args, _ctx) do
       AssociationLoader.for(Convention, :event_categories).load(convention)
+    end
+  end
+
+  field :forms, !types[Types::FormType] do
+    resolve -> (convention, _args, _ctx) do
+      AssociationLoader.for(Convention, :forms).load(convention)
     end
   end
 
