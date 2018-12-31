@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { humanize } from 'inflected';
+import { humanize, pluralize } from 'inflected';
 import classNames from 'classnames';
 import tinycolor2 from 'tinycolor2';
 
+import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ColorPicker from '../ColorPicker';
 import FakeEventRun from '../EventsApp/ScheduleGrid/FakeEventRun';
@@ -34,18 +35,22 @@ function autogenerateColors(eventCategory) {
   };
 }
 
-function EventCategoryForm({ value, onChange, forms }) {
+function EventCategoryForm({
+  value, onChange, forms, disabled, ticketName,
+}) {
   const valueMutator = mutator({
     getState: () => value,
     setState: onChange,
     transforms: {
       name: Transforms.textInputChange,
       team_member_name: Transforms.textInputChange,
+      scheduling_ui: Transforms.identity,
       default_color: Transforms.identity,
       signed_up_color: Transforms.identity,
       full_color: Transforms.identity,
       event_form: Transforms.identity,
       event_proposal_form: Transforms.identity,
+      can_provide_tickets: Transforms.identity,
     },
   });
 
@@ -56,6 +61,7 @@ function EventCategoryForm({ value, onChange, forms }) {
         label="Name"
         value={value.name}
         onChange={valueMutator.name}
+        disabled={disabled}
       />
 
       <BootstrapFormInput
@@ -67,6 +73,7 @@ function EventCategoryForm({ value, onChange, forms }) {
           This is the word the site will use to refer to team members of this event, e.g.
           "GM", "facilitator", etc.
         `}
+        disabled={disabled}
       />
 
       <MultipleChoiceInput
@@ -79,6 +86,7 @@ function EventCategoryForm({ value, onChange, forms }) {
           { value: 'single_run', label: 'Single run' },
           { value: 'recurring', label: 'Recurring' },
         ]}
+        disabled={disabled}
       />
 
       <fieldset className="form-group">
@@ -129,6 +137,7 @@ function EventCategoryForm({ value, onChange, forms }) {
                     <ColorPicker
                       value={value[`${variant}_color`]}
                       onChange={valueMutator[`${variant}_color`]}
+                      disabled={disabled}
                     />
                   </div>
                   <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
@@ -142,6 +151,7 @@ function EventCategoryForm({ value, onChange, forms }) {
           type="button"
           className="mt-2 ml-1 btn btn-sm btn-outline-secondary"
           onClick={() => onChange(autogenerateColors(value))}
+          disabled={disabled}
         >
           Generate signed up and full colors based on default color
         </button>
@@ -154,6 +164,7 @@ function EventCategoryForm({ value, onChange, forms }) {
         getOptionLabel={option => option.title}
         value={value.event_form}
         onChange={valueMutator.event_form}
+        disabled={disabled}
       />
 
       <SelectWithLabel
@@ -163,6 +174,14 @@ function EventCategoryForm({ value, onChange, forms }) {
         getOptionLabel={option => option.title}
         value={value.event_proposal_form}
         onChange={valueMutator.event_proposal_form}
+        disabled={disabled}
+      />
+
+      <BooleanInput
+        name="can_provide_tickets"
+        caption={`Can provide ${pluralize(ticketName)}?`}
+        value={value.can_provide_tickets}
+        onChange={valueMutator.can_provide_tickets}
       />
     </>
   );
@@ -172,6 +191,7 @@ EventCategoryForm.propTypes = {
   value: PropTypes.shape({
     name: PropTypes.string,
     team_member_name: PropTypes.string,
+    scheduling_ui: PropTypes.string,
     default_color: PropTypes.string,
     signed_up_color: PropTypes.string,
     full_color: PropTypes.string,
@@ -183,6 +203,12 @@ EventCategoryForm.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
+  disabled: PropTypes.bool,
+  ticketName: PropTypes.string.isRequired,
+};
+
+EventCategoryForm.defaultProps = {
+  disabled: false,
 };
 
 export default EventCategoryForm;
