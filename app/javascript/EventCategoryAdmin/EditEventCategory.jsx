@@ -6,6 +6,7 @@ import EventCategoryForm from './EventCategoryForm';
 class EditEventCategory extends React.Component {
   static propTypes = {
     initialEventCategory: PropTypes.shape({}).isRequired,
+    forms: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }
 
   constructor(props) {
@@ -23,6 +24,7 @@ class EditEventCategory extends React.Component {
       <EventCategoryForm
         value={this.state.eventCategory}
         onChange={(eventCategory) => { this.setState({ eventCategory }); }}
+        forms={this.props.forms}
       />
     </>
   )

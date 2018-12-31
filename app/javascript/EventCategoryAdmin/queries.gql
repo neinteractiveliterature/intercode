@@ -14,6 +14,16 @@ query EventCategoryAdminQuery {
       events_paginated {
         total_entries
       }
+
+      event_form {
+        id
+        title
+      }
+
+      event_proposal_form {
+        id
+        title
+      }
     }
 
     forms {

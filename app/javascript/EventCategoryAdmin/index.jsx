@@ -15,11 +15,11 @@ function EventCategoryAdmin({ basename }) {
           path="/:id/edit"
           render={({ match: { params } }) => (
             <QueryWithStateDisplay query={EventCategoryAdminQuery}>
-              {({ data: { convention: { event_categories: eventCategories } } }) => {
+              {({ data: { convention: { event_categories: eventCategories, forms } } }) => {
                 const eventCategory = eventCategories.find(c => c.id.toString() === params.id);
 
                 return (
-                  <EditEventCategory initialEventCategory={eventCategory} />
+                  <EditEventCategory initialEventCategory={eventCategory} forms={forms} />
                 );
               }}
             </QueryWithStateDisplay>

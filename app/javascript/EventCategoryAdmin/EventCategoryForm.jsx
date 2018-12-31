@@ -7,9 +7,10 @@ import tinycolor2 from 'tinycolor2';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ColorPicker from '../ColorPicker';
 import FakeEventRun from '../EventsApp/ScheduleGrid/FakeEventRun';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import PopperDropdown from '../UIComponents/PopperDropdown';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
+import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 
 function autogenerateColors(eventCategory) {
   if (!eventCategory.default_color) {
@@ -33,7 +34,7 @@ function autogenerateColors(eventCategory) {
   };
 }
 
-function EventCategoryForm({ value, onChange }) {
+function EventCategoryForm({ value, onChange, forms }) {
   const valueMutator = mutator({
     getState: () => value,
     setState: onChange,
@@ -41,6 +42,10 @@ function EventCategoryForm({ value, onChange }) {
       name: Transforms.textInputChange,
       team_member_name: Transforms.textInputChange,
       default_color: Transforms.identity,
+      signed_up_color: Transforms.identity,
+      full_color: Transforms.identity,
+      event_form: Transforms.identity,
+      event_proposal_form: Transforms.identity,
     },
   });
 
@@ -76,7 +81,7 @@ function EventCategoryForm({ value, onChange }) {
         ]}
       />
 
-      <fieldset>
+      <fieldset className="form-group">
         <legend className="col-form-label">Colors</legend>
 
         <div className="d-flex flex-wrap">
@@ -141,6 +146,24 @@ function EventCategoryForm({ value, onChange }) {
           Generate signed up and full colors based on default color
         </button>
       </fieldset>
+
+      <SelectWithLabel
+        label="Event form (required)"
+        options={forms}
+        getOptionValue={option => option.id}
+        getOptionLabel={option => option.title}
+        value={value.event_form}
+        onChange={valueMutator.event_form}
+      />
+
+      <SelectWithLabel
+        label="Event proposal form (optional; if blank this event category cannot be proposed)"
+        options={forms}
+        getOptionValue={option => option.id}
+        getOptionLabel={option => option.title}
+        value={value.event_proposal_form}
+        onChange={valueMutator.event_proposal_form}
+      />
     </>
   );
 }
@@ -149,8 +172,17 @@ EventCategoryForm.propTypes = {
   value: PropTypes.shape({
     name: PropTypes.string,
     team_member_name: PropTypes.string,
+    default_color: PropTypes.string,
+    signed_up_color: PropTypes.string,
+    full_color: PropTypes.string,
+    event_form: PropTypes.shape({}),
+    event_proposal_form: PropTypes.shape({}),
   }).isRequired,
   onChange: PropTypes.func.isRequired,
+  forms: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
 export default EventCategoryForm;
