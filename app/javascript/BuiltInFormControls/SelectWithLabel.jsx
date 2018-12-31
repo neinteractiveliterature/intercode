@@ -24,7 +24,7 @@ class SelectWithLabel extends React.Component {
         <label htmlFor={selectId}>
           {label}
         </label>
-        <Select id={selectId} {...otherProps} />
+        <Select inputId={selectId} {...otherProps} />
       </div>
     );
   }
