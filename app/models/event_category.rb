@@ -7,6 +7,7 @@ class EventCategory < ApplicationRecord
   has_many :event_category_permissions, dependent: :destroy
   has_many :events
 
+  validates :name, :team_member_name, presence: true
   validates :scheduling_ui, inclusion: { in: SCHEDULING_UIS }
 
   SCHEDULING_UIS.each do |scheduling_ui|

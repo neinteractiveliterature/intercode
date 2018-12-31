@@ -4,13 +4,13 @@ import { withRouter } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
+import { CreateEventCategory } from './mutations.gql';
+import { EventCategoryAdminQuery } from './queries.gql';
 import EventCategoryForm from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
-import { UpdateEventCategory } from './mutations.gql';
 
-class EditEventCategory extends React.Component {
+class NewEventCategory extends React.Component {
   static propTypes = {
-    initialEventCategory: PropTypes.shape({}).isRequired,
     forms: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     ticketName: PropTypes.string.isRequired,
     history: PropTypes.shape({
@@ -23,14 +23,19 @@ class EditEventCategory extends React.Component {
 
     this.state = {
       error: null,
-      eventCategory: props.initialEventCategory,
+      eventCategory: {
+        name: '',
+        team_member_name: 'team member',
+        scheduling_ui: null,
+        can_provide_tickets: false,
+      },
       mutationInProgress: false,
     };
   }
 
   render = () => (
     <>
-      <h1 className="mb-4">Edit event category</h1>
+      <h1 className="mb-4">New event category</h1>
 
       <EventCategoryForm
         value={this.state.eventCategory}
@@ -42,7 +47,7 @@ class EditEventCategory extends React.Component {
 
       <ErrorDisplay graphQLError={this.state.error} />
 
-      <Mutation mutation={UpdateEventCategory}>
+      <Mutation mutation={CreateEventCategory}>
         {mutate => (
           <button
             type="button"
@@ -52,8 +57,26 @@ class EditEventCategory extends React.Component {
               try {
                 await mutate({
                   variables: {
-                    id: this.state.eventCategory.id,
                     eventCategory: buildEventCategoryInput(this.state.eventCategory),
+                  },
+                  update: (
+                    store,
+                    { data: { createEventCategory: { event_category: eventCategory } } },
+                  ) => {
+                    const data = store.readQuery({ query: EventCategoryAdminQuery });
+                    store.writeQuery({
+                      query: EventCategoryAdminQuery,
+                      data: {
+                        ...data,
+                        convention: {
+                          ...data.convention,
+                          event_categories: [
+                            ...data.convention.event_categories,
+                            eventCategory,
+                          ],
+                        },
+                      },
+                    });
                   },
                 });
 
@@ -64,7 +87,7 @@ class EditEventCategory extends React.Component {
             }}
             disabled={this.state.mutationInProgress}
           >
-            Save changes
+            Create event category
           </button>
         )}
       </Mutation>
@@ -72,4 +95,4 @@ class EditEventCategory extends React.Component {
   )
 }
 
-export default withRouter(EditEventCategory);
+export default withRouter(NewEventCategory);

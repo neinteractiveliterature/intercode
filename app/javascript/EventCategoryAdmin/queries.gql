@@ -1,29 +1,35 @@
+fragment EventCategoryFields on EventCategory {
+  id
+  name
+  team_member_name
+  scheduling_ui
+  default_color
+  signed_up_color
+  full_color
+  can_provide_tickets
+
+  events_paginated {
+    total_entries
+  }
+
+  event_form {
+    id
+    title
+  }
+
+  event_proposal_form {
+    id
+    title
+  }
+}
+
 query EventCategoryAdminQuery {
   convention {
     id
+    ticket_name
 
     event_categories {
-      id
-      name
-      team_member_name
-      scheduling_ui
-      default_color
-      signed_up_color
-      full_color
-
-      events_paginated {
-        total_entries
-      }
-
-      event_form {
-        id
-        title
-      }
-
-      event_proposal_form {
-        id
-        title
-      }
+      ...EventCategoryFields
     }
 
     forms {
