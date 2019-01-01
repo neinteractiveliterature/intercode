@@ -314,7 +314,8 @@ class Ability
     end
 
     if has_scope?(:manage_events)
-      can [:create, :submit], EventProposal
+      can :create, EventProposal
+      can :submit, EventProposal, id: own_event_proposal_ids
       can :update, EventProposal,
         id: own_event_proposal_ids,
         status: %w[draft proposed reviewing]
@@ -329,6 +330,15 @@ class Ability
     return unless has_scope?(:read_conventions)
 
     can :view_reports, Convention, id: con_ids_with_privilege(:con_com)
+    scope_authorization :view_event_proposals, Convention, Convention.where(
+      id: StaffPosition.where(
+        id: event_category_permission_scope.where(can_read_event_proposals: true).select(:staff_position_id)
+      ).select(:convention_id)
+    ) do |convention|
+      convention.staff_positions.where(
+        id: event_category_permission_scope.where(can_read_event_proposals: true).select(:staff_position_id)
+      ).any?
+    end
     can [:schedule, :schedule_with_counts], Convention,
       id: con_ids_with_privilege(:scheduling, :gm_liaison),
       show_schedule: %w[priv gms yes]
@@ -349,7 +359,8 @@ class Ability
         show_schedule: %w[gms yes]
       }
     }
-    can :read, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
+    can token_scope_action(:manage_conventions), TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
+
     can :read, User if staff_con_ids.any?
 
     can :read_admin_notes, Event,
@@ -361,19 +372,25 @@ class Ability
     can :read, Order, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
-    can :read, MaximumEventProvidedTicketsOverride,
+    can token_scope_action(:manage_conventions), MaximumEventProvidedTicketsOverride,
       event: {
         convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
       }
-    scope_authorization :read, MaximumEventProvidedTicketsOverride,
+    scope_authorization token_scope_action(:manage_conventions),
+      MaximumEventProvidedTicketsOverride,
       MaximumEventProvidedTicketsOverride.where(
         event_id: Event.where(
           event_category_id: event_category_permission_scope.where(
             can_override_event_tickets: true
           ).select(:event_category_id)
         ).select(:id)
-      )
-    can :read, UserActivityAlert, convention_id: staff_con_ids
+      ) do |maximum_event_provided_tickets_override|
+        event_category_permission_scope.where(
+          event_category_id: maximum_event_provided_tickets_override.event.event_category_id,
+          can_override_event_tickets: true
+        ).any?
+      end
+    can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     # Mail privileges (smash the patriarchy)
     can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
@@ -397,27 +414,13 @@ class Ability
     event_category_authorization :manage, Event,
       event_category_conditions: { can_update_events: true }
     can :manage, EventCategory, convention_id: staff_con_ids
-    can :manage, MaximumEventProvidedTicketsOverride,
-      event: {
-        convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-      }
-    scope_authorization :manage, MaximumEventProvidedTicketsOverride,
-      MaximumEventProvidedTicketsOverride.where(
-        event_id: Event.where(
-          event_category_id: event_category_permission_scope.where(
-            can_override_event_tickets: true
-          ).select(:event_category_id)
-        ).select(:id)
-      )
     can :manage, Product, convention_id: staff_con_ids
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, StaffPosition, convention_id: staff_con_ids
-    can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
-    can :manage, UserActivityAlert, convention_id: staff_con_ids
   end
 
   def add_event_proposal_abilities
@@ -431,10 +434,13 @@ class Ability
     event_category_authorization :read, EventProposal,
       model_conditions: { status: EVENT_PROPOSAL_NON_DRAFT_STATUSES },
       event_category_conditions: { can_read_pending_event_proposals: true }
-    can :read_admin_notes, EventProposal,
+    can token_scope_action(:manage_events, :read_admin_notes, :update_admin_notes), EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    event_category_authorization :read_admin_notes, EventProposal,
+    event_category_authorization(
+      token_scope_action(:manage_events, :read_admin_notes, :update_admin_notes),
+      EventProposal,
       event_category_conditions: { can_access_admin_notes: true }
+    )
 
     return unless has_scope?(:manage_events)
 
@@ -444,10 +450,6 @@ class Ability
     can :update, EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison),
       status: %w[accepted withdrawn]
-    can :update_admin_notes, EventProposal,
-      convention_id: con_ids_with_privilege(:scheduling)
-    event_category_authorization :update_admin_notes, EventProposal,
-      event_category_conditions: { can_access_admin_notes: true }
   end
 
   def add_team_member_abilities
@@ -460,16 +462,14 @@ class Ability
         }
       }
       can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
-      can :read, Signup, run: { event_id: team_member_event_ids }
+      can token_scope_action(:manage_events, :read, :update_bucket), Signup, run: { event_id: team_member_event_ids }
       can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
-      can :read, TeamMember, event_id: team_member_event_ids
+      can token_scope_action(:manage_events), TeamMember, event_id: team_member_event_ids
     end
 
     if has_scope?(:manage_events)
       can :update, Event, id: team_member_event_ids
       can :update, EventProposal, event_id: team_member_event_ids
-      can :update_bucket, Signup, run: { event_id: team_member_event_ids }
-      can :manage, TeamMember, event_id: team_member_event_ids
     end
 
     return unless has_scope?(:read_conventions)
@@ -478,19 +478,25 @@ class Ability
     can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
   end
 
+  def token_scope_action(manage_scope, read_action = :read, manage_action = :manage)
+    if has_scope?(manage_scope)
+      manage_action
+    else
+      read_action
+    end
+  end
+
   def event_category_permission_scope
     @event_category_permission_scope ||= EventCategoryPermission
       .joins(staff_position: :user_con_profiles)
       .where(user_con_profiles: { user_id: user.id })
   end
 
-  def scope_authorization(action, model_class, scope)
+  def scope_authorization(action, model_class, scope, &allow_model)
     subquery = scope.select(model_class.primary_key).to_sql
     sql = "#{model_class.table_name}.#{model_class.primary_key} IN (#{subquery})"
 
-    can action, model_class, sql do |model|
-      scope.where(model_class.primary_key => model.public_send(model_class.primary_key)).any?
-    end
+    can action, model_class, sql, &allow_model
   end
 
   def event_category_authorization(action, model_class, event_category_conditions: {}, model_conditions: {})
@@ -500,6 +506,18 @@ class Ability
       **model_conditions
     )
 
-    scope_authorization(action, model_class, scope)
+    scope_authorization(action, model_class, scope) do |model|
+      (
+        model_conditions.all? do |key, value|
+          model_value = model.public_send(key)
+
+          case value
+          when Array then value.include?(model_value)
+          else value == model_value
+          end
+        end &&
+        event_category_permission_scope.where(event_category_conditions).where(id: model.event_category_id).any?
+      )
+    end
   end
 end

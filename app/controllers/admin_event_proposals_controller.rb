@@ -1,11 +1,6 @@
 class AdminEventProposalsController < ApplicationController
   include Concerns::SendCsv
 
-  load_and_authorize_resource(
-    class: EventProposal,
-    through: :convention,
-    through_association: :event_proposals
-  )
   before_action :authorize_admin
 
   def index
@@ -33,6 +28,6 @@ class AdminEventProposalsController < ApplicationController
   # Even if the user can manage some event proposals (i.e. their own), only
   # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
-    authorize! :read, EventProposal.new(convention: convention, status: 'reviewing')
+    authorize! :view_event_proposals, convention
   end
 end
