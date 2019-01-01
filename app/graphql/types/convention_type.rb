@@ -149,10 +149,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
     argument :sort, types[Types::SortInputType]
 
     guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
-        EventProposal.new(convention: convention, status: 'reviewing')
-      )
+      ctx[:current_ability].can?(:view_event_proposals, convention)
     end
 
     resolve ->(convention, args, ctx) do

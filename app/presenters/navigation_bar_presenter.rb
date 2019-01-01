@@ -1,6 +1,6 @@
 class NavigationBarPresenter
   # Bump this whenever we make changes, to invalidate caches
-  VERSION = 1
+  VERSION = 2
 
   include Rails.application.routes.url_helpers
 
@@ -182,7 +182,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Event Proposals'
       url { admin_event_proposals_path('sort.status' => 'asc', 'sort.submitted_at' => 'desc') }
-      visible? { can?(:read, EventProposal.new(convention: convention, status: 'reviewing')) }
+      visible? { can?(:view_event_proposals, convention) }
     end,
     NavigationItem.define do
       label 'Event Scheduling'
