@@ -60,7 +60,7 @@
     "graphql": "^14.0.2",
     "graphql-anywhere": "^4.1.24",
     "graphql-tag": "^2.10.0",
-    "hypernova": "^2.4.0",
+    "hypernova": "^2.5.0",
     "inflected": "^2.0.3",
     "js-yaml": "^3.12.0",
     "lodash": "^4.17.11",
