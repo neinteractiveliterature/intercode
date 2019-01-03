@@ -1902,7 +1902,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.5.1, bluebird@^3.5.2:
+bluebird@^3.5.1, bluebird@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
 
@@ -4751,17 +4751,18 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-hypernova@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/hypernova/-/hypernova-2.4.0.tgz#401b6b95ed171c20d6fb96ad3b95d57729d01672"
+hypernova@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/hypernova/-/hypernova-2.5.0.tgz#b446717b003155da95d5c71185eae89c10de11fe"
+  integrity sha512-V+Di9fyXkjb3LKHh4eYM1X9LuNb+PIR4JujlDXYQEp9fzTL0sUih7+mZrKbmFALfQ8m6/O74kC+O/TK5RLhe8g==
   dependencies:
     airbnb-js-shims "^2 || ^3"
-    bluebird "^3.5.2"
+    bluebird "^3.5.3"
     body-parser "^1.18.3"
     express "^4.16.4"
     glob "^7.1.3"
     has "^1.0.3"
-    lru-cache "^4.1.3"
+    lru-cache "^4.1.5"
     object.assign "^4.1.0"
     winston "^2.4.4"
 
@@ -6128,7 +6129,7 @@ loud-rejection@^1.0.0:
     currently-unhandled "^0.4.1"
     signal-exit "^3.0.0"
 
-lru-cache@^4.0.1, lru-cache@^4.1.3:
+lru-cache@^4.0.1, lru-cache@^4.1.3, lru-cache@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
   dependencies:
