@@ -4,23 +4,26 @@ import { Link, Switch, Route } from 'react-router-dom';
 
 import CreateVolunteerEventForm from './CreateVolunteerEventForm';
 import EditRun from './EditRun';
-import EventCategory from './EventCategory';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import VolunteerEventSection from './VolunteerEventSection';
-import eventsQuery from './eventsQuery';
+import { EventAdminEventsQuery } from './queries.gql';
 
-@graphql(eventsQuery)
+@graphql(EventAdminEventsQuery)
 @GraphQLQueryResultWrapper
 class VolunteerEventAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery).isRequired,
+    data: GraphQLResultPropType(EventAdminEventsQuery).isRequired,
   };
 
   renderVolunteerEventsList = () => {
     const { data } = this.props;
 
-    const volunteerEvents = data.events.filter(event => EventCategory.get(event.category).isRecurring() && event.status === 'active');
+    const volunteerEvents = data.events.filter((event) => {
+      const eventCategory = data.convention.event_categories
+        .find(c => c.id === event.event_category.id);
+      return eventCategory.scheduling_ui === 'recurring' && event.status === 'active';
+    });
     volunteerEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
     const eventSections = volunteerEvents.map(event => (
       <VolunteerEventSection

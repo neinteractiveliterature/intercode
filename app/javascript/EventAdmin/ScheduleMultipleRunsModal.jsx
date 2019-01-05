@@ -9,14 +9,14 @@ import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import { timespanFromConvention, timespanFromRun } from '../TimespanUtils';
-import eventsQuery, { fragments } from './eventsQuery';
-import { createMultipleRunsMutation } from './mutations';
+import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries.gql';
+import { CreateMultipleRuns } from './mutations.gql';
 
-@graphql(createMultipleRunsMutation, { name: 'createMultipleRuns' })
+@graphql(CreateMultipleRuns, { name: 'createMultipleRuns' })
 class ScheduleMultipleRunsModal extends React.Component {
   static propTypes = {
-    convention: propType(fragments.conventionFragment).isRequired,
-    event: propType(fragments.eventFragment).isRequired,
+    convention: propType(ConventionFields).isRequired,
+    event: propType(EventFields).isRequired,
     visible: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
     onFinish: PropTypes.func.isRequired,
@@ -115,10 +115,10 @@ class ScheduleMultipleRunsModal extends React.Component {
           },
         },
         update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
-          const eventsData = store.readQuery({ query: eventsQuery });
+          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
           const eventData = eventsData.events.find(event => event.id === this.props.event.id);
           eventData.runs = [...eventData.runs, ...newRuns];
-          store.writeQuery({ query: eventsQuery, data: eventsData });
+          store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
       });
       this.setState({ mutationInProgress: false });
@@ -182,7 +182,8 @@ class ScheduleMultipleRunsModal extends React.Component {
     const runTimespanItems = runTimespans.map((runTimespan) => {
       let description = runTimespan.start.format('h:mma');
       const runConflicts = (
-        nonConflictingTimespans.find(nonConflictingTimespan => nonConflictingTimespan.isSame(runTimespan)) == null
+        nonConflictingTimespans
+          .find(nonConflictingTimespan => nonConflictingTimespan.isSame(runTimespan)) == null
       );
 
       if (runConflicts) {

@@ -3,13 +3,13 @@ import moment from 'moment-timezone';
 import { propType } from 'graphql-anywhere';
 import { Link } from 'react-router-dom';
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
-import { fragments } from './eventsQuery';
+import { EventFields, ConventionFields } from './queries.gql';
 import { timespanFromConvention } from '../TimespanUtils';
 
 class VolunteerEventSection extends React.Component {
   static propTypes = {
-    event: propType(fragments.eventFragment).isRequired,
-    convention: propType(fragments.conventionFragment).isRequired,
+    event: propType(EventFields).isRequired,
+    convention: propType(ConventionFields).isRequired,
   }
 
   constructor(props) {
@@ -29,7 +29,7 @@ class VolunteerEventSection extends React.Component {
     )
 
   toggleExpanded = () => {
-    this.setState({ expanded: !this.state.expanded });
+    this.setState(prevState => ({ expanded: !prevState.expanded }));
   }
 
   startSchedulingRuns = () => {
@@ -90,7 +90,12 @@ class VolunteerEventSection extends React.Component {
   }
 
   renderHeader = () => (
-    <button onClick={this.toggleExpanded} className="hidden-button" aria-expanded={this.state.expanded}>
+    <button
+      type="button"
+      onClick={this.toggleExpanded}
+      className="hidden-button"
+      aria-expanded={this.state.expanded}
+    >
       <h4>
         {this.renderDisclosureTriangle()}
         {' '}
@@ -130,7 +135,7 @@ per run)
         </div>
 
         <div className="mb-4">
-          <button className="btn btn-primary" onClick={this.startSchedulingRuns}>
+          <button type="button" className="btn btn-primary" onClick={this.startSchedulingRuns}>
             Schedule additional runs
           </button>
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import EditRunModal from './EditRunModal';
-import { fragments } from './eventsQuery';
+import { ConventionFields, EventFields } from './queries.gql';
 
 class EditRun extends React.Component {
   static propTypes = {
@@ -13,8 +13,8 @@ class EditRun extends React.Component {
         runId: PropTypes.string.isRequired,
       }).isRequired,
     }),
-    convention: propType(fragments.conventionFragment).isRequired,
-    events: PropTypes.arrayOf(propType(fragments.eventFragment)).isRequired,
+    convention: propType(ConventionFields).isRequired,
+    events: PropTypes.arrayOf(propType(EventFields)).isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
