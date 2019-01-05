@@ -64,7 +64,6 @@ fragment EventFields on Event {
   content_warnings
   email
   length_seconds
-  category
   status
   description_html
   form_response_attrs_json
