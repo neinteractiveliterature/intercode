@@ -100,3 +100,49 @@ query ProposeEventButtonQuery {
     }
   }
 }
+
+query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput]) {
+  convention {
+    id
+    timezone_name
+
+    event_categories(current_ability_can_read_event_proposals: true) {
+      id
+      name
+      default_color
+    }
+
+    event_proposals_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+      total_entries
+      total_pages
+      current_page
+      per_page
+
+      entries {
+        id
+        title
+        length_seconds
+        status
+        submitted_at
+        updated_at
+
+        event_category {
+          id
+          name
+          default_color
+        }
+
+        registration_policy {
+          minimum_slots
+          total_slots
+          slots_limited
+        }
+
+        owner {
+          id
+          name_inverted
+        }
+      }
+    }
+  }
+}
