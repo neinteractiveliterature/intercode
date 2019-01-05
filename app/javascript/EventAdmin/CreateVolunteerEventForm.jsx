@@ -5,12 +5,12 @@ import { Link, withRouter } from 'react-router-dom';
 import { enableUniqueIds } from 'react-html-id';
 import CommonEventFormFields from '../BuiltInForms/CommonEventFormFields';
 import ErrorDisplay from '../ErrorDisplay';
-import eventsQuery from './eventsQuery';
-import { createEventMutation } from './mutations';
+import { EventAdminEventsQuery } from './queries.gql';
+import { CreateEvent } from './mutations.gql';
 import getFormForEventCategory from './getFormForEventCategory';
 
 @withRouter
-@graphql(createEventMutation, { name: 'createEvent' })
+@graphql(CreateEvent, { name: 'createEvent' })
 class CreateVolunteerEventForm extends React.Component {
   static propTypes = {
     convention: PropTypes.shape({
@@ -55,7 +55,7 @@ class CreateVolunteerEventForm extends React.Component {
   }
 
   eventFieldChanged = (newEventData) => {
-    this.setState({ event: { ...this.state.event, ...newEventData } });
+    this.setState(prevState => ({ event: { ...prevState.event, ...newEventData } }));
   }
 
   createEvent = async () => {
@@ -72,9 +72,9 @@ class CreateVolunteerEventForm extends React.Component {
           },
         },
         update: (store, { data: { createEvent: { event: newEvent } } }) => {
-          const eventsData = store.readQuery({ query: eventsQuery });
+          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
           eventsData.events.push(newEvent);
-          store.writeQuery({ query: eventsQuery, data: eventsData });
+          store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
           this.props.history.replace('/volunteer_events');
         },
       });

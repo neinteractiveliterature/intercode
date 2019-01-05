@@ -10,19 +10,18 @@ import {
 } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
-import EventCategory from './EventCategory';
+import { EventAdminEventsQuery } from './queries.gql';
 import FillerEventForm from '../BuiltInForms/FillerEventForm';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import eventsQuery from './eventsQuery';
 import { timespanFromRun } from '../TimespanUtils';
 import {
-  createFillerEventMutation,
-  createRunMutation,
-  dropEventMutation,
-  updateEventMutation,
-  updateRunMutation,
-} from './mutations';
+  CreateFillerEvent,
+  CreateRun,
+  DropEvent,
+  UpdateEvent,
+  UpdateRun,
+} from './mutations.gql';
 import deserializeEvent from './deserializeEvent';
 
 const buildEventInput = (event, defaultFormResponseAttrs = {}) => ({
@@ -52,17 +51,17 @@ const buildRunInput = (run) => {
 
 @withRouter
 @flowRight([
-  graphql(eventsQuery),
-  graphql(createFillerEventMutation, { name: 'createFillerEvent' }),
-  graphql(createRunMutation, { name: 'createRun' }),
-  graphql(dropEventMutation, { name: 'dropEvent' }),
-  graphql(updateEventMutation, { name: 'updateEvent' }),
-  graphql(updateRunMutation, { name: 'updateRun' }),
+  graphql(EventAdminEventsQuery),
+  graphql(CreateFillerEvent, { name: 'createFillerEvent' }),
+  graphql(CreateRun, { name: 'createRun' }),
+  graphql(DropEvent, { name: 'dropEvent' }),
+  graphql(UpdateEvent, { name: 'updateEvent' }),
+  graphql(UpdateRun, { name: 'updateRun' }),
 ])
 @GraphQLQueryResultWrapper
 class FillerEventAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery).isRequired,
+    data: GraphQLResultPropType(EventAdminEventsQuery).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -106,9 +105,9 @@ class FillerEventAdmin extends React.Component {
         this.props.createFillerEvent({
           variables: { input },
           update: (store, { data: { createFillerEvent: { event: newEvent } } }) => {
-            const eventsData = store.readQuery({ query: eventsQuery });
+            const eventsData = store.readQuery({ query: EventAdminEventsQuery });
             eventsData.events.push(newEvent);
-            store.writeQuery({ query: eventsQuery, data: eventsData });
+            store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
           },
         }).then(() => {
           this.props.history.push('/filler_events');
@@ -147,9 +146,9 @@ class FillerEventAdmin extends React.Component {
             },
           },
           update: (store, { data: { createRun: { run: newRun } } }) => {
-            const eventsData = store.readQuery({ query: eventsQuery });
+            const eventsData = store.readQuery({ query: EventAdminEventsQuery });
             store.writeQuery({
-              query: eventsQuery,
+              query: EventAdminEventsQuery,
               data: {
                 ...eventsData,
                 events: eventsData.events.map((existingEvent) => {
@@ -205,9 +204,11 @@ class FillerEventAdmin extends React.Component {
   renderFillerEventsList = () => {
     const { data } = this.props;
 
-    const fillerEvents = data.events.filter(event => (
-      EventCategory.get(event.category).isSingleRun() && event.status === 'active'
-    ));
+    const fillerEvents = data.events.filter((event) => {
+      const eventCategory = data.convention.event_categories
+        .find(c => c.id === event.event_category.id);
+      return eventCategory.scheduling_ui === 'single_run' && event.status === 'active';
+    });
     fillerEvents.sort((a, b) => {
       if (!a.runs[0]) {
         return -1;
@@ -244,7 +245,7 @@ class FillerEventAdmin extends React.Component {
               Edit
             </Link>
             {' '}
-            <button className="btn btn-outline-danger btn-sm" onClick={() => this.dropClicked(event.id)}>
+            <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => this.dropClicked(event.id)}>
               <i className="fa fa-trash-o" />
             </button>
           </td>

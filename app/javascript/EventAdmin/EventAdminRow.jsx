@@ -6,7 +6,7 @@ import { Mutation } from 'react-apollo';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import Timespan from '../Timespan';
-import { updateEventAdminNotesMutation } from './mutations';
+import { UpdateEventAdminNotes } from './mutations.gql';
 
 class EventAdminRow extends React.Component {
   static propTypes = {
@@ -120,7 +120,7 @@ class EventAdminRow extends React.Component {
             )
           </small>
           <div className="mt-2">
-            <Mutation mutation={updateEventAdminNotesMutation}>
+            <Mutation mutation={UpdateEventAdminNotes}>
               {mutate => (
                 <AdminNotes
                   value={event.admin_notes}
