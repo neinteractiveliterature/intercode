@@ -12,6 +12,7 @@ import { ConfirmModal } from 'react-bootstrap4-modal';
 
 import { EventAdminEventsQuery } from './queries.gql';
 import FillerEventForm from '../BuiltInForms/FillerEventForm';
+import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import { timespanFromRun } from '../TimespanUtils';
@@ -26,7 +27,7 @@ import deserializeEvent from './deserializeEvent';
 
 const buildEventInput = (event, defaultFormResponseAttrs = {}) => ({
   event: {
-    category: event.category,
+    event_category_id: event.event_category.id,
     form_response_attrs_json: JSON.stringify({
       ...defaultFormResponseAttrs,
       ...event.form_response_attrs,
@@ -230,10 +231,16 @@ class FillerEventAdmin extends React.Component {
         timespan = timespanFromRun(this.props.data.convention, event, run);
       }
 
+      const eventCategory = data.convention.event_categories
+        .find(c => c.id === event.event_category.id);
+
       return (
         <tr className={event.id}>
           <th scope="row">
-            <span className={`rounded p-1 event-category-${event.category.replace(/_/, '-')} text-dark`}>
+            <span
+              className="rounded p-1 text-dark"
+              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+            >
               {event.title}
             </span>
           </th>
@@ -280,7 +287,7 @@ class FillerEventAdmin extends React.Component {
         disabled={this.state.requestInProgress}
         error={this.state.error ? this.state.error.message : null}
         initialEvent={{
-          category: 'filler',
+          event_category: { id: null },
           form_response_attrs: {
             email: '',
             short_blurb: '',

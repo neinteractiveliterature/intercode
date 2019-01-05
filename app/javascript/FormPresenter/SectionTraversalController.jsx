@@ -25,7 +25,7 @@ export default class SectionTraversalController extends React.Component {
     super(props);
 
     this.state = {
-      currentSectionId: props.form.getSections()[0].id,
+      currentSectionId: (props.form.getSections()[0] || {}).id,
     };
   }
 

@@ -118,9 +118,16 @@ class FillerEventForm extends React.Component {
         <BootstrapFormSelect
           label="Category"
           name="cagegory"
-          value={this.state.event.category}
-          onChange={event => this.eventFieldChanged({ category: event.target.value })}
+          value={this.state.event.event_category.id}
+          onChange={event => this.eventFieldChanged({
+            event_category: { id: Number.parseInt(event.target.value, 10) },
+          })}
         >
+          {
+            this.state.event.id
+              ? null
+              : <option value={null} />
+          }
           {categoryOptions}
         </BootstrapFormSelect>
 

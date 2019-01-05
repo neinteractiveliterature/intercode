@@ -164,9 +164,12 @@ class EventForm extends React.Component {
               <BootstrapFormSelect
                 label="Category"
                 name="cagegory"
-                value={this.state.event.category}
+                value={this.state.event.event_category.id}
                 onChange={
-                  event => this.eventChanged({ ...this.state.event, category: event.target.value })
+                  event => this.eventChanged({
+                    ...this.state.event,
+                    event_category: { id: Number.parseInt(event.target.value, 10) },
+                  })
                 }
               >
                 {categoryOptions}
