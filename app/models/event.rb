@@ -142,6 +142,7 @@ Use EventChangeRegistrationPolicyService instead."
   end
 
   def sync_team_mailing_list
+    return unless SyncTeamMailingListService.mailgun
     SyncTeamMailingListJob.perform_later(self)
   end
 end
