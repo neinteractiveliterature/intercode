@@ -2,7 +2,8 @@ module Ability::EventCategoryPermissions
   def add_event_category_permission_abilities
     if has_scope?(:read_events)
       event_category_authorization :read, EventProposal,
-        model_conditions: { status: Ability::EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed'] }
+        model_conditions: { status: Ability::EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed'] },
+        event_category_conditions: { can_read_event_proposals: true }
       event_category_authorization :read, EventProposal,
         model_conditions: { status: Ability::EVENT_PROPOSAL_NON_DRAFT_STATUSES },
         event_category_conditions: { can_read_pending_event_proposals: true }
@@ -78,7 +79,7 @@ module Ability::EventCategoryPermissions
           else value == model_value
           end
         end &&
-        event_category_permission_scope.where(event_category_conditions).where(id: model.event_category_id).any?
+        event_category_permission_scope.where(event_category_conditions).where(event_category_id: model.event_category_id).any?
       )
     end
   end
