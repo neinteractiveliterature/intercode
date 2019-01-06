@@ -121,7 +121,7 @@ class EventAdminRow extends React.Component {
           {' '}
           <small>
             (
-            {event.category}
+            {eventCategory.name}
             )
           </small>
           <div className="mt-2">
