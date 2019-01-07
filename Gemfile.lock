@@ -66,8 +66,8 @@ GEM
       rails (>= 4.2)
     arel (9.0.0)
     aws-eventstream (1.0.1)
-    aws-partitions (1.122.0)
-    aws-sdk-core (3.43.0)
+    aws-partitions (1.128.0)
+    aws-sdk-core (3.44.2)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
@@ -140,6 +140,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.0.2)
       railties (>= 4.2)
+    doorkeeper-jwt (0.3.0)
+      jwt (~> 2.1.0, >= 2.1.0)
     doorkeeper-openid_connect (1.5.2)
       doorkeeper (>= 4.3)
       json-jwt (~> 1.6)
@@ -186,7 +188,7 @@ GEM
     graphiql-rails (1.5.0)
       railties
       sprockets-rails
-    graphql (1.8.12)
+    graphql (1.8.13)
     graphql-batch (0.3.10)
       graphql (>= 0.8, < 2)
       promise.rb (~> 0.7.2)
@@ -217,6 +219,7 @@ GEM
       activesupport
       aes_key_wrap
       bindata
+    jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     launchy (2.4.3-java)
@@ -367,7 +370,7 @@ GEM
     ruby_dep (1.5.0)
     scheduled_value (1.2.1)
     sequel (5.16.0)
-    shoryuken (4.0.2)
+    shoryuken (4.0.3)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
@@ -457,6 +460,7 @@ DEPENDENCIES
   devise
   devise-doorkeeper
   doorkeeper (= 5.0.2)
+  doorkeeper-jwt
   doorkeeper-openid_connect
   dotenv-rails
   eu_central_bank
@@ -519,4 +523,4 @@ RUBY VERSION
    ruby 2.5.3p105
 
 BUNDLED WITH
-   1.17.1
+   1.17.3
