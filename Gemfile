@@ -21,6 +21,7 @@ gem 'cancancan'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'doorkeeper', '5.0.2'
 gem 'devise-doorkeeper'
+gem 'doorkeeper-jwt'
 gem 'doorkeeper-openid_connect'
 
 # Let's store sessions in the database, shall we?

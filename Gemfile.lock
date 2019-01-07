@@ -140,6 +140,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.0.2)
       railties (>= 4.2)
+    doorkeeper-jwt (0.3.0)
+      jwt (~> 2.1.0, >= 2.1.0)
     doorkeeper-openid_connect (1.5.2)
       doorkeeper (>= 4.3)
       json-jwt (~> 1.6)
@@ -217,6 +219,7 @@ GEM
       activesupport
       aes_key_wrap
       bindata
+    jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     launchy (2.4.3-java)
@@ -457,6 +460,7 @@ DEPENDENCIES
   devise
   devise-doorkeeper
   doorkeeper (= 5.0.2)
+  doorkeeper-jwt
   doorkeeper-openid_connect
   dotenv-rails
   eu_central_bank
@@ -519,4 +523,4 @@ RUBY VERSION
    ruby 2.5.3p105
 
 BUNDLED WITH
-   1.17.1
+   1.17.3
