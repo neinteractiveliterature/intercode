@@ -3165,9 +3165,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-browser@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/detect-browser/-/detect-browser-3.0.1.tgz#39beead014347a8a2be1f3c4cb30a0aef2127c44"
+detect-browser@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/detect-browser/-/detect-browser-4.0.0.tgz#e66ea9e777c86916f042057b0a15227fb77eb64d"
+  integrity sha512-L4aOcjXh6IHFC/Gw/LTrGTPPYA91fi0IZNG42fMzSjYr5YO2UbqqIEpN+31D54rF0FyIBR6vc/mKAcBwjYg+7Q==
 
 detect-indent@^4.0.0:
   version "4.0.0"
