@@ -8,7 +8,7 @@ class CreatePermissions < ActiveRecord::Migration[5.2]
         :staff_position_id,
         :permission,
         :event_category_id
-      ], unique: true, name: 'idx_event_category_permissions_unique_join'
+      ], unique: true, name: 'idx_permissions_unique_join'
 
       t.check_constraint 'permissions_exclusive_arc', <<~SQL
         (
