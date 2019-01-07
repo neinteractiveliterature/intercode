@@ -1,0 +1,25 @@
+#import "./queries.gql"
+
+mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
+  createStaffPosition(input: $input) {
+    staff_position {
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
+  updateStaffPosition(input: $input) {
+    staff_position {
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
+  deleteStaffPosition(input: $input) {
+    staff_position {
+      id
+    }
+  }
+}

@@ -1,0 +1,41 @@
+fragment StaffPositionFields on StaffPosition {
+  id
+  name
+  email
+  visible
+
+  user_con_profiles {
+    id
+    name_without_nickname
+  }
+
+  event_category_permissions {
+    id
+    can_read_event_proposals
+    can_read_pending_event_proposals
+    can_update_event_proposals
+    can_access_admin_notes
+    can_override_event_tickets
+    can_update_events
+
+    event_category {
+      id
+      name
+    }
+  }
+}
+
+query StaffPositionsQuery {
+  convention {
+    id
+
+    event_categories {
+      id
+      name
+    }
+
+    staff_positions {
+      ...StaffPositionFields
+    }
+  }
+}
