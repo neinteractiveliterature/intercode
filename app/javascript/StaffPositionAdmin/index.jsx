@@ -40,7 +40,7 @@ class StaffPositionAdmin extends React.Component {
 
     return (
       <EditStaffPositionPermissions
-        initialStaffPosition={staffPosition}
+        staffPosition={staffPosition}
         eventCategories={this.props.data.convention.event_categories}
       />
     );

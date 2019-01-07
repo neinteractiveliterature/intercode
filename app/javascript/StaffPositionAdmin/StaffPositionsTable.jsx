@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { Link, withRouter } from 'react-router-dom';
+import { groupBy } from 'lodash';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { DeleteStaffPosition } from './mutations.gql';
@@ -11,9 +12,10 @@ import StaffPositionPropType from './StaffPositionPropType';
 import { StaffPositionsQuery } from './queries.gql';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 
-function describePermissionAbilities(eventCategoryPermission) {
-  const abilities = PermissionNames.EventCategory.reduce((acc, { permission, name }) => {
-    if (eventCategoryPermission[permission]) {
+function describePermissionAbilities(modelPermissions) {
+  const typename = modelPermissions[0].model.__typename;
+  const abilities = PermissionNames[typename].reduce((acc, { permission, name }) => {
+    if (modelPermissions.some(modelPermission => modelPermission.permission === permission)) {
       return [...acc, name];
     }
 
@@ -21,6 +23,23 @@ function describePermissionAbilities(eventCategoryPermission) {
   }, []);
 
   return abilities.join(', ');
+}
+
+function describePermissionModel(model) {
+  switch (model.__typename) {
+    case 'EventCategory':
+      return model.name;
+    default:
+      return `${model.__typename} ${model.id}`;
+  }
+}
+
+function describePermissions(permissions) {
+  const permissionsByModel = groupBy(permissions, ({ model }) => [model.__typename, model.id]);
+  return Object.entries(permissionsByModel).map(([, modelPermissions]) => {
+    const { model } = modelPermissions[0];
+    return `${describePermissionModel(model)}: ${describePermissionAbilities(modelPermissions)}`;
+  });
 }
 
 @withRouter
@@ -59,11 +78,9 @@ class StaffPositionsTable extends React.Component {
       <td>{staffPosition.user_con_profiles.map(ucp => ucp.name_without_nickname).join(', ')}</td>
       <td>
         <ul className="list-unstyled">
-          {staffPosition.event_category_permissions.map(permission => (
-            <li key={permission.id}>
-              {permission.event_category.name}
-              {': '}
-              {describePermissionAbilities(permission)}
+          {describePermissions(staffPosition.permissions).map(description => (
+            <li key={description}>
+              {description}
             </li>
           ))}
         </ul>

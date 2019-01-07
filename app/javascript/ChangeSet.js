@@ -3,7 +3,17 @@ class ChangeSet {
     this.changes = changes;
   }
 
-  add(value) {
+  add(value, originalValues, comparisonFunction) {
+    if (originalValues && comparisonFunction) {
+      const removedValue = originalValues
+        .find(originalValue => comparisonFunction(value, originalValue));
+      if (removedValue) {
+        return new ChangeSet(this.changes.filter(({ changeType, id }) => (
+          !(changeType === 'remove' && id === removedValue.id)
+        )));
+      }
+    }
+
     return new ChangeSet([
       ...this.changes,
       {

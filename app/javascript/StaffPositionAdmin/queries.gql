@@ -9,18 +9,17 @@ fragment StaffPositionFields on StaffPosition {
     name_without_nickname
   }
 
-  event_category_permissions {
+  permissions {
     id
-    can_read_event_proposals
-    can_read_pending_event_proposals
-    can_update_event_proposals
-    can_access_admin_notes
-    can_override_event_tickets
-    can_update_events
+    permission
 
-    event_category {
-      id
-      name
+    model {
+      __typename
+
+      ...on EventCategory {
+        id
+        name
+      }
     }
   }
 }
