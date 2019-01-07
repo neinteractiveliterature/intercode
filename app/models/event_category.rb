@@ -4,7 +4,7 @@ class EventCategory < ApplicationRecord
   belongs_to :convention
   belongs_to :event_form, class_name: 'Form'
   belongs_to :event_proposal_form, class_name: 'Form', optional: true
-  has_many :event_category_permissions, dependent: :destroy
+  has_many :permissions, dependent: :destroy
   has_many :events
 
   validates :name, :team_member_name, presence: true

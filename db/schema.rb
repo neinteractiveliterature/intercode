@@ -162,22 +162,6 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
     t.index ["event_proposal_form_id"], name: "index_event_categories_on_event_proposal_form_id"
   end
 
-  create_table "event_category_permissions", force: :cascade do |t|
-    t.bigint "event_category_id", null: false
-    t.bigint "staff_position_id", null: false
-    t.boolean "can_read_event_proposals", default: false, null: false
-    t.boolean "can_read_pending_event_proposals", default: false, null: false
-    t.boolean "can_update_event_proposals", default: false, null: false
-    t.boolean "can_access_admin_notes", default: false, null: false
-    t.boolean "can_override_event_tickets", default: false, null: false
-    t.boolean "can_update_events", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_category_id", "staff_position_id"], name: "idx_event_category_permissions_unique_join", unique: true
-    t.index ["event_category_id"], name: "index_event_category_permissions_on_event_category_id"
-    t.index ["staff_position_id"], name: "index_event_category_permissions_on_staff_position_id"
-  end
-
   create_table "event_proposals", force: :cascade do |t|
     t.bigint "convention_id"
     t.bigint "owner_id"
@@ -381,6 +365,18 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
     t.boolean "invariant", default: false, null: false
     t.index ["cms_layout_id"], name: "index_pages_on_cms_layout_id"
     t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
+  end
+
+  create_table "permissions", force: :cascade do |t|
+    t.bigint "event_category_id"
+    t.bigint "staff_position_id", null: false
+    t.string "permission", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_category_id"], name: "index_permissions_on_event_category_id"
+    t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_event_category_permissions_unique_join", unique: true
+    t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
+    t.check_constraint :permissions_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = 1)"
   end
 
   create_table "product_variants", force: :cascade do |t|
@@ -614,8 +610,6 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
   add_foreign_key "event_categories", "conventions"
   add_foreign_key "event_categories", "forms", column: "event_form_id"
   add_foreign_key "event_categories", "forms", column: "event_proposal_form_id"
-  add_foreign_key "event_category_permissions", "event_categories"
-  add_foreign_key "event_category_permissions", "staff_positions"
   add_foreign_key "event_proposals", "conventions"
   add_foreign_key "event_proposals", "event_categories"
   add_foreign_key "event_proposals", "events"
@@ -638,6 +632,8 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
   add_foreign_key "order_entries", "products"
   add_foreign_key "orders", "user_con_profiles"
   add_foreign_key "pages", "cms_layouts"
+  add_foreign_key "permissions", "event_categories"
+  add_foreign_key "permissions", "staff_positions"
   add_foreign_key "product_variants", "products"
   add_foreign_key "products", "conventions"
   add_foreign_key "rooms", "conventions"
