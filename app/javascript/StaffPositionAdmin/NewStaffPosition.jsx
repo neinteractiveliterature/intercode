@@ -1,26 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
+
+import { CreateStaffPosition } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
-import { fragments, staffPositionsQuery } from './queries';
-
-const createStaffPositionMutation = gql`
-mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
-  createStaffPosition(input: $input) {
-    staff_position {
-      ...StaffPositionFields
-    }
-  }
-}
-
-${fragments.staffPosition}
-`;
+import { StaffPositionsQuery } from './queries.gql';
 
 @graphql(
-  createStaffPositionMutation,
+  CreateStaffPosition,
   {
     props: ({ mutate }) => ({
       createStaffPosition: staffPosition => mutate({
@@ -40,9 +29,9 @@ ${fragments.staffPosition}
           proxy,
           { data: { createStaffPosition: { staff_position: newStaffPosition } } },
         ) => {
-          const data = proxy.readQuery({ query: staffPositionsQuery });
+          const data = proxy.readQuery({ query: StaffPositionsQuery });
           data.convention.staff_positions.push(newStaffPosition);
-          proxy.writeQuery({ query: staffPositionsQuery, data });
+          proxy.writeQuery({ query: StaffPositionsQuery, data });
         },
       }),
     }),
@@ -75,8 +64,10 @@ class NewStaffPosition extends React.Component {
 
   saveClicked = async () => {
     try {
-      await this.props.createStaffPosition(this.state.staffPosition);
-      this.props.history.replace('/');
+      const {
+        data: { createStaffPosition: { staff_position: { id } } },
+      } = await this.props.createStaffPosition(this.state.staffPosition);
+      this.props.history.replace(`/${id}/edit_permissions`);
     } catch (error) {
       this.setState({ error });
     }
@@ -89,7 +80,7 @@ class NewStaffPosition extends React.Component {
         staffPosition={this.state.staffPosition}
         onChange={this.staffPositionChanged}
       />
-      <button className="btn btn-primary" onClick={this.saveClicked}>Save</button>
+      <button type="button" className="btn btn-primary" onClick={this.saveClicked}>Save</button>
       <ErrorDisplay graphQLError={this.state.error} />
     </div>
   );

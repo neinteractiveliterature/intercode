@@ -4,18 +4,20 @@ import { graphql } from 'react-apollo';
 import {
   BrowserRouter, Route, Switch, Redirect,
 } from 'react-router-dom';
+
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import EditStaffPosition from './EditStaffPosition';
+import EditStaffPositionPermissions from './EditStaffPositionPermissions';
 import NewStaffPosition from './NewStaffPosition';
+import { StaffPositionsQuery } from './queries.gql';
 import StaffPositionsTable from './StaffPositionsTable';
-import { staffPositionsQuery } from './queries';
 
-@graphql(staffPositionsQuery)
+@graphql(StaffPositionsQuery)
 @GraphQLQueryResultWrapper
 class StaffPositionAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(staffPositionsQuery).isRequired,
+    data: GraphQLResultPropType(StaffPositionsQuery).isRequired,
     basename: PropTypes.string.isRequired,
   }
 
@@ -26,16 +28,20 @@ class StaffPositionAdmin extends React.Component {
     return <EditStaffPosition initialStaffPosition={staffPosition} />;
   }
 
-  renderStaffPositionsTable = ({ match: { path, params: { id } } }) => {
-    let deleteId = null;
-    if (path === '/:id/delete') {
-      deleteId = Number.parseInt(id, 10);
-    }
+  renderStaffPositionsTable = () => (
+    <StaffPositionsTable
+      staffPositions={this.props.data.convention.staff_positions}
+    />
+  )
+
+  renderEditPermissions = ({ match: { params: { id } } }) => {
+    const staffPosition = this.props.data.convention.staff_positions
+      .find(sp => sp.id.toString(10) === id);
 
     return (
-      <StaffPositionsTable
-        staffPositions={this.props.data.convention.staff_positions}
-        deleteId={deleteId}
+      <EditStaffPositionPermissions
+        initialStaffPosition={staffPosition}
+        eventCategories={this.props.data.convention.event_categories}
       />
     );
   }
@@ -45,6 +51,7 @@ class StaffPositionAdmin extends React.Component {
       <Switch>
         <Route path="/new" component={NewStaffPosition} />
         <Route path="/:id/edit" render={this.renderEditStaffPosition} />
+        <Route path="/:id/edit_permissions" render={this.renderEditPermissions} />
         <Route path="/:id/delete" render={this.renderStaffPositionsTable} />
         <Route path="/" render={this.renderStaffPositionsTable} />
         <Redirect to="/" />

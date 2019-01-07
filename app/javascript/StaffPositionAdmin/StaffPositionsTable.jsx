@@ -1,34 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { Link, withRouter } from 'react-router-dom';
-import { ConfirmModal } from 'react-bootstrap4-modal';
-import ErrorDisplay from '../ErrorDisplay';
-import StaffPositionPropType from './StaffPositionPropType';
-import { staffPositionsQuery } from './queries';
 
-const deleteStaffPositionMutation = gql`
-mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
-  deleteStaffPosition(input: $input) {
-    staff_position {
-      id
+import Confirm from '../ModalDialogs/Confirm';
+import { DeleteStaffPosition } from './mutations.gql';
+import ErrorDisplay from '../ErrorDisplay';
+import PermissionNames from '../../../config/permission_names.json';
+import StaffPositionPropType from './StaffPositionPropType';
+import { StaffPositionsQuery } from './queries.gql';
+import PopperDropdown from '../UIComponents/PopperDropdown';
+
+function describePermissionAbilities(eventCategoryPermission) {
+  const abilities = PermissionNames.EventCategory.reduce((acc, { permission, name }) => {
+    if (eventCategoryPermission[permission]) {
+      return [...acc, name];
     }
-  }
+
+    return acc;
+  }, []);
+
+  return abilities.join(', ');
 }
-`;
 
 @withRouter
-@graphql(deleteStaffPositionMutation, {
+@graphql(DeleteStaffPosition, {
   props: ({ mutate }) => ({
     deleteStaffPosition: id => mutate({
       variables: { input: { id } },
       update: (proxy) => {
-        const data = proxy.readQuery({ query: staffPositionsQuery });
+        const data = proxy.readQuery({ query: StaffPositionsQuery });
         data.convention.staff_positions = data.convention.staff_positions.filter((
           staffPosition => staffPosition.id !== id
         ));
-        proxy.writeQuery({ query: staffPositionsQuery, data });
+        proxy.writeQuery({ query: StaffPositionsQuery, data });
       },
     }),
   }),
@@ -39,12 +44,7 @@ class StaffPositionsTable extends React.Component {
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
-    deleteId: PropTypes.number,
     deleteStaffPosition: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    deleteId: null,
   };
 
   constructor(props) {
@@ -52,58 +52,57 @@ class StaffPositionsTable extends React.Component {
     this.state = {};
   }
 
-  deleteConfirmed = async () => {
-    try {
-      await this.props.deleteStaffPosition(this.props.deleteId);
-      this.props.history.replace('/');
-    } catch (error) {
-      this.setState({ error });
-    }
-  }
-
-  deleteCanceled = () => {
-    this.props.history.replace('/');
-  }
-
   renderRow = staffPosition => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
       <td>{staffPosition.visible ? (<i className="fa fa-check" />) : null}</td>
       <td>{staffPosition.user_con_profiles.map(ucp => ucp.name_without_nickname).join(', ')}</td>
+      <td>
+        <ul className="list-unstyled">
+          {staffPosition.event_category_permissions.map(permission => (
+            <li key={permission.id}>
+              {permission.event_category.name}
+              {': '}
+              {describePermissionAbilities(permission)}
+            </li>
+          ))}
+        </ul>
+      </td>
       <td>{staffPosition.email}</td>
       <td>
-        <Link to={`/${staffPosition.id}/edit`} className="btn btn-secondary btn-sm mr-1">Edit</Link>
-        <Link to={`/${staffPosition.id}/delete`} className="btn btn-danger btn-sm">Delete</Link>
+        <PopperDropdown
+          renderReference={({ ref, toggle }) => (
+            <button type="button" className="btn btn-sm btn-primary" ref={ref} onClick={toggle}>
+              <i className="fa fa-ellipsis-h" />
+              <span className="sr-only">Options</span>
+            </button>
+          )}
+        >
+          <Link to={`/${staffPosition.id}/edit`} className="dropdown-item">
+            Edit settings
+          </Link>
+          <Link to={`/${staffPosition.id}/edit_permissions`} className="dropdown-item">
+            Edit permissions
+          </Link>
+          <Confirm.Trigger>
+            {confirm => (
+              <button
+                className="dropdown-item cursor-pointer text-danger"
+                type="button"
+                onClick={() => confirm({
+                  prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
+                  action: () => this.props.deleteStaffPosition(staffPosition.id),
+                  renderError: error => <ErrorDisplay graphQLError={error} />,
+                })}
+              >
+                Delete
+              </button>
+            )}
+          </Confirm.Trigger>
+        </PopperDropdown>
       </td>
     </tr>
   )
-
-  renderDeleteConfirmation = () => {
-    let staffPositionName = null;
-    if (this.props.deleteId != null) {
-      const deleteStaffPosition = this.props.staffPositions.find((
-        sp => sp.id === this.props.deleteId
-      ));
-      if (deleteStaffPosition != null) {
-        staffPositionName = deleteStaffPosition.name;
-      }
-    }
-
-    return (
-      <ConfirmModal
-        visible={this.props.deleteId != null}
-        onOK={this.deleteConfirmed}
-        onCancel={this.deleteCanceled}
-      >
-        Are you sure you want to delete the staff position
-        {' '}
-        {staffPositionName}
-?
-
-        <ErrorDisplay graphQLError={this.state.error} />
-      </ConfirmModal>
-    );
-  }
 
   render = () => {
     const sortedStaffPositions = [...this.props.staffPositions].sort((
@@ -115,12 +114,13 @@ class StaffPositionsTable extends React.Component {
       <div>
         <h1 className="mb-4">Staff positions</h1>
 
-        <table className="table">
+        <table className="table table-striped">
           <thead>
             <tr>
               <th>Name</th>
               <th>Visible</th>
               <th>People</th>
+              <th>Permissions</th>
               <th>Email</th>
               <th />
             </tr>
@@ -132,8 +132,6 @@ class StaffPositionsTable extends React.Component {
         </table>
 
         <Link to="/new" className="btn btn-primary">New Staff Position</Link>
-
-        {this.renderDeleteConfirmation()}
       </div>
     );
   }
