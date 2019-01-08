@@ -351,6 +351,16 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:staff_positions, :update))
   end
 
+  field :updateStaffPositionPermissions, mutation: Mutations::UpdateStaffPositionPermissions do
+    guard ->(_obj, args, ctx) {
+      staff_position = ctx[:convention].staff_positions.find(args[:staff_position_id])
+      ctx[:current_ability].can?(
+        :create,
+        Permission.new(staff_position: staff_position)
+      )
+    }
+  end
+
   field :deleteStaffPosition, field: Mutations::DeleteStaffPosition.field do
     guard(guard_for_convention_associated_model(:staff_positions, :destroy))
   end
