@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { titleize } from 'inflected';
+import classNames from 'classnames';
+import { Mutation } from 'react-apollo';
+import { withRouter } from 'react-router-dom';
 
 import ChangeSet from '../ChangeSet';
+import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
 import { sortByLocaleString } from '../ValueUtils';
+import { UpdateStaffPositionPermissions } from './mutations.gql';
 
 function modelEquals(a, b) {
   return (
@@ -21,6 +26,14 @@ function findPermission(currentPermissions, model, permission) {
   return currentPermissions.find(currentPermission => (
     permissionEquals(currentPermission, { model, permission })
   ));
+}
+
+function buildPermissionInput(permission) {
+  return {
+    model_type: permission.model.__typename,
+    model_id: permission.model.id,
+    permission: permission.permission,
+  };
 }
 
 class EditStaffPositionPermissions extends React.Component {
@@ -88,13 +101,13 @@ class EditStaffPositionPermissions extends React.Component {
           {' Permissions'}
         </h1>
 
-        <table className="table table-striped">
+        <table className="table table-striped table-responsive" role="grid">
           <thead>
             <tr>
               <th>Event Category</th>
               {
                 PermissionNames.EventCategory.map(({ permission, name }) => (
-                  <th key={permission}>{titleize(name)}</th>
+                  <th key={permission} className="text-center">{titleize(name)}</th>
                 ))
               }
             </tr>
@@ -107,24 +120,95 @@ class EditStaffPositionPermissions extends React.Component {
             ).map(eventCategory => (
               <tr key={eventCategory.id}>
                 <th scope="row">{eventCategory.name}</th>
-                {PermissionNames.EventCategory.map(({ permission }) => (
-                  <td key={permission}>
-                    <input
-                      type="checkbox"
-                      checked={findPermission(currentPermissions, eventCategory, permission) != null}
-                      onChange={(event) => {
-                        this.setPermission(eventCategory, permission, event.target.checked);
+                {PermissionNames.EventCategory.map(({ permission }) => {
+                  const existingPermission = findPermission(
+                    this.props.staffPosition.permissions, eventCategory, permission,
+                  );
+                  const hasPermission = (
+                    findPermission(currentPermissions, eventCategory, permission) != null
+                  );
+
+                  return (
+                    <td
+                      key={permission}
+                      role="gridcell"
+                      tabIndex={0}
+                      className={classNames('cursor-pointer text-center align-middle', {
+                        'table-success': this.state.changeSet.changes.some(({ changeType, value }) => (
+                          changeType === 'add'
+                          && permissionEquals(value, { model: eventCategory, permission })
+                        )),
+                        'table-danger': (
+                          existingPermission
+                          && this.state.changeSet.changes.some(({ changeType, id }) => (
+                            changeType === 'remove'
+                            && existingPermission.id === id
+                          ))
+                        ),
+                      })}
+                      onClick={() => {
+                        this.setPermission(eventCategory, permission, !hasPermission);
                       }}
-                    />
-                  </td>
-                ))}
+                      onKeyDown={(event) => {
+                        if (event.keyCode === 32 || event.keyCode === 13) {
+                          this.setPermission(eventCategory, permission, !hasPermission);
+                        }
+                      }}
+                    >
+                      {
+                        hasPermission
+                          ? (
+                            <i className="fa fa-check">
+                              <span className="sr-only">✓</span>
+                            </i>
+                          )
+                          : null
+                      }
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
         </table>
+
+        <ErrorDisplay graphQLError={this.state.error} />
+
+        <Mutation mutation={UpdateStaffPositionPermissions}>
+          {mutate => (
+            <button
+              className="mt-4 btn btn-primary"
+              type="button"
+              onClick={async () => {
+                this.setState({ mutationInProgress: true });
+                try {
+                  await mutate({
+                    variables: {
+                      staffPositionId: this.props.staffPosition.id,
+                      grantPermissions: this.state.changeSet.getAddValues().map(buildPermissionInput),
+                      revokePermissions: this.state.changeSet.getRemoveIds().map((removeId) => {
+                        const existingPermission = this.props.staffPosition.permissions
+                          .find(p => p.id === removeId);
+
+                        return buildPermissionInput(existingPermission);
+                      }),
+                    },
+                  });
+
+                  this.props.history.push('/');
+                } catch (error) {
+                  this.setState({ mutationInProgress: false, error });
+                }
+              }}
+              disabled={this.state.mutationInProgress}
+            >
+              Save changes
+            </button>
+          )}
+        </Mutation>
       </>
     );
   }
 }
 
-export default EditStaffPositionPermissions;
+export default withRouter(EditStaffPositionPermissions);

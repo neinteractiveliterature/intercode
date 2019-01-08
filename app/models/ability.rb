@@ -250,7 +250,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
+      can :read, [Permission, Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
       can :read_personal_info, UserConProfile
     end
 
@@ -279,6 +279,7 @@ class Ability
       EventCategory,
       Form,
       Page,
+      Permission,
       Product,
       Room,
       RootSite,
@@ -360,6 +361,7 @@ class Ability
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
+    can :read, Permission, staff_position: { convention_id: staff_con_ids }
     can :read, Order, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
@@ -389,6 +391,7 @@ class Ability
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, EventCategory, convention_id: staff_con_ids
+    can :manage, Permission, convention_id: staff_con_ids
     can :manage, Product, convention_id: staff_con_ids
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
