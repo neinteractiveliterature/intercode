@@ -11,6 +11,7 @@ import PermissionNames from '../../../config/permission_names.json';
 import StaffPositionPropType from './StaffPositionPropType';
 import { StaffPositionsQuery } from './queries.gql';
 import PopperDropdown from '../UIComponents/PopperDropdown';
+import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
@@ -22,13 +23,24 @@ function describePermissionAbilities(modelPermissions) {
     return acc;
   }, []);
 
+  if (abilities.length === PermissionNames[typename].length) {
+    return 'full admin';
+  }
+
   return abilities.join(', ');
 }
 
 function describePermissionModel(model) {
   switch (model.__typename) {
     case 'EventCategory':
-      return model.name;
+      return (
+        <span
+          className="px-1 rounded"
+          style={getEventCategoryStyles({ eventCategory: model, variant: 'default' })}
+        >
+          {model.name}
+        </span>
+      );
     default:
       return `${model.__typename} ${model.id}`;
   }
@@ -38,7 +50,13 @@ function describePermissions(permissions) {
   const permissionsByModel = groupBy(permissions, ({ model }) => [model.__typename, model.id]);
   return Object.entries(permissionsByModel).map(([, modelPermissions]) => {
     const { model } = modelPermissions[0];
-    return `${describePermissionModel(model)}: ${describePermissionAbilities(modelPermissions)}`;
+    return (
+      <>
+        {describePermissionModel(model)}
+        {': '}
+        {describePermissionAbilities(modelPermissions)}
+      </>
+    );
   });
 }
 
@@ -79,7 +97,7 @@ class StaffPositionsTable extends React.Component {
       <td>
         <ul className="list-unstyled">
           {describePermissions(staffPosition.permissions).map(description => (
-            <li key={description}>
+            <li key={description} className="text-nowrap">
               {description}
             </li>
           ))}

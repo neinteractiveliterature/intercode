@@ -10,6 +10,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
 import { sortByLocaleString } from '../ValueUtils';
 import { UpdateStaffPositionPermissions } from './mutations.gql';
+import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 
 function modelEquals(a, b) {
   return (
@@ -123,7 +124,14 @@ class EditStaffPositionPermissions extends React.Component {
               category => category.name,
             ).map(eventCategory => (
               <tr key={eventCategory.id}>
-                <th scope="row">{eventCategory.name}</th>
+                <th scope="row">
+                  <span
+                    className="p-1 rounded"
+                    style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+                  >
+                    {eventCategory.name}
+                  </span>
+                </th>
                 {PermissionNames.EventCategory.map(({ permission }) => {
                   const existingPermission = findPermission(
                     this.props.staffPosition.permissions, eventCategory, permission,
