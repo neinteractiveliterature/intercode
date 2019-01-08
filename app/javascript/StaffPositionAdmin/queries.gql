@@ -19,6 +19,7 @@ fragment StaffPositionFields on StaffPosition {
       ...on EventCategory {
         id
         name
+        default_color
       }
     }
   }
@@ -31,6 +32,7 @@ query StaffPositionsQuery {
     event_categories {
       id
       name
+      default_color
     }
 
     staff_positions {
