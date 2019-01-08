@@ -39,6 +39,7 @@ function buildPermissionInput(permission) {
 class EditStaffPositionPermissions extends React.Component {
   static propTypes = {
     staffPosition: PropTypes.shape({
+      id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       permissions: PropTypes.arrayOf(PropTypes.shape({
         model: PropTypes.shape({
@@ -52,6 +53,9 @@ class EditStaffPositionPermissions extends React.Component {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
     })).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
@@ -185,7 +189,8 @@ class EditStaffPositionPermissions extends React.Component {
                   await mutate({
                     variables: {
                       staffPositionId: this.props.staffPosition.id,
-                      grantPermissions: this.state.changeSet.getAddValues().map(buildPermissionInput),
+                      grantPermissions: this.state.changeSet.getAddValues()
+                        .map(buildPermissionInput),
                       revokePermissions: this.state.changeSet.getRemoveIds().map((removeId) => {
                         const existingPermission = this.props.staffPosition.permissions
                           .find(p => p.id === removeId);
