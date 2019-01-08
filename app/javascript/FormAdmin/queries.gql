@@ -1,0 +1,31 @@
+fragment FormFields on Form {
+  id
+  title
+  export_json
+
+  event_categories {
+    id
+    name
+  }
+
+  proposal_event_categories {
+    id
+    name
+  }
+
+  user_con_profile_conventions {
+    id
+    name
+  }
+}
+
+query FormAdminQuery {
+  convention {
+    id
+    name
+
+    forms {
+      ...FormFields
+    }
+  }
+}

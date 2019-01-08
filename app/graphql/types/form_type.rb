@@ -1,16 +1,19 @@
-Types::FormType = GraphQL::ObjectType.define do
-  name 'FormType'
+class Types::FormType < Types::BaseObject
+  field :id, Int, null: false
+  field :title, String, null: false
+  field :form_api_json, Types::Json, null: false, camelize: false
+  field :export_json, Types::Json, null: false, camelize: false
+  field :event_categories, [Types::EventCategoryType], null: false, camelize: false
+  field :proposal_event_categories, [Types::EventCategoryType], null: false, camelize: false
+  field :user_con_profile_conventions, [Types::ConventionType], null: false, camelize: false
 
-  field :id, !types.Int
-  field :title, types.String
-  field :form_api_json, !types.String do
-    resolve ->(obj, _args, ctx) do
-      FormApiPresenter.new(obj, ctx[:cadmus_renderer]).as_json.to_json
-    end
+  association_loaders Form, :event_categories, :proposal_event_categories, :user_con_profile_conventions
+
+  def form_api_json
+    FormApiPresenter.new(object, cadmus_renderer).as_json
   end
-  field :export_json, !types.String do
-    resolve ->(obj, _args, _ctx) {
-      FormExportPresenter.new(obj).as_json.to_json
-    }
+
+  def export_json
+    FormExportPresenter.new(object).as_json
   end
 end

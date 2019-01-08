@@ -109,7 +109,7 @@ Intercode::Application.routes.draw do
     get 'user_activity_alerts/(*extra)' => 'user_activity_alerts#index', as: :user_activity_alerts
 
     get 'staff_positions/(*extra)' => 'staff_positions#index', as: :staff_positions
-    resources :admin_forms
+    get 'admin_forms/(*extra)' => 'admin_forms#index', as: :admin_forms
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end

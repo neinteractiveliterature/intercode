@@ -14,7 +14,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :maximum_tickets, types.Int
   field :maximum_event_signups, Types::ScheduledValueType
   field :ticket_name, !types.String
-  field :user_con_profile_form, !Types::FormType
+  field :user_con_profile_form, Types::FormType.to_non_null_type
 
   field :event_categories, Types::EventCategoryType.to_list_type.to_non_null_type do
     argument :current_ability_can_read_event_proposals, types.Boolean
@@ -34,7 +34,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
     end
   end
 
-  field :forms, !types[Types::FormType] do
+  field :forms, Types::FormType.to_list_type.to_non_null_type do
     resolve -> (convention, _args, _ctx) do
       AssociationLoader.for(Convention, :forms).load(convention)
     end
