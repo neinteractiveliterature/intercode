@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import FormAdminIndex from './FormAdminIndex';
 import { FormAdminQuery } from './queries.gql';
 import FormJSONEditor from './FormJSONEditor';
@@ -11,6 +12,34 @@ function FormAdmin({ basename }) {
   return (
     <BrowserRouter basename={basename}>
       <>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <BreadcrumbItemWithRoute
+              path="/"
+              to="/"
+              exact
+            >
+              Forms
+            </BreadcrumbItemWithRoute>
+
+            <BreadcrumbItemWithRoute
+              path="/new"
+              to="/new"
+              hideUnlessMatch
+            >
+              New form
+            </BreadcrumbItemWithRoute>
+
+            <BreadcrumbItemWithRoute
+              path="/:id/edit"
+              to={({ match }) => `/${match.params.id}/edit`}
+              hideUnlessMatch
+            >
+              Edit form
+            </BreadcrumbItemWithRoute>
+          </ol>
+        </nav>
+
         <Switch>
           <Route
             path="/new"

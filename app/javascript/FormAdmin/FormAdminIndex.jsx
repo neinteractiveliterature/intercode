@@ -28,6 +28,11 @@ function FormAdminIndex() {
             {data.convention.name}
           </h1>
 
+          <div className="alert alert-danger mt-4">
+            Form editing is an advanced feature that requires knowledge of Intercode’s
+            form system as well as directly editing JSON data.  Proceed with caution.
+          </div>
+
           <table className="table table-striped">
             <thead>
               <tr>
@@ -100,11 +105,6 @@ function FormAdminIndex() {
           <Link to="/new" className="btn btn-primary">
             New form
           </Link>
-
-          <div className="alert alert-danger mt-4">
-            Form editing is an advanced feature that requires knowledge of Intercode’s
-            form system as well as directly editing JSON data.  Proceed with caution.
-          </div>
         </>
       )}
     </QueryWithStateDisplay>
