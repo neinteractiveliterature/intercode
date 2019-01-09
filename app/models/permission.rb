@@ -8,6 +8,13 @@ class Permission < ApplicationRecord
     )
   end
 
+  scope :for_model, ->(model) do
+    case model
+    when EventCategory then where(event_category_id: model.id)
+    else raise InvalidArgument, "Permission does not support #{model.class} models"
+    end
+  end
+
   def model
     event_category
   end
