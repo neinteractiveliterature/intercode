@@ -25,6 +25,7 @@
     "@babel/plugin-transform-regenerator": "^7.0.0",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.3",
+    "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@rails/webpacker": "^4.0.0-rc.2",
@@ -116,7 +117,6 @@
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
-    "@babel/preset-flow": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
