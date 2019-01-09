@@ -6,15 +6,12 @@ FactoryBot.define do
 
     sequence(:title) { |n| "Event #{n}" }
     status { 'active' }
-    event_category
     registration_policy { RegistrationPolicy.unlimited }
     length_seconds { 4.hours }
     con_mail_destination { 'event_email' }
 
-    factory :filler_event do
-      category { 'filler' }
-
-      after(:build) { |filler_event| filler_event.runs << FactoryBot.build(:run, event: filler_event) }
+    after(:build) do |event|
+      event.event_category ||= FactoryBot.build(:event_category, convention: event.convention)
     end
   end
 end
