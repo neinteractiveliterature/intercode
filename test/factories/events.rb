@@ -6,7 +6,7 @@ FactoryBot.define do
 
     sequence(:title) { |n| "Event #{n}" }
     status { 'active' }
-    category { 'larp' }
+    event_category
     registration_policy { RegistrationPolicy.unlimited }
     length_seconds { 4.hours }
     con_mail_destination { 'event_email' }
