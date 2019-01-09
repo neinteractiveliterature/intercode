@@ -20,11 +20,11 @@ module Ability::EventCategoryPermissions
     if has_scope?(:read_conventions)
       scope_authorization :view_event_proposals, Convention, Convention.where(
         id: StaffPosition.where(
-          id: user_permission_scope.where(can_read_event_proposals: true).select(:staff_position_id)
+          id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
         ).select(:convention_id)
       ) do |convention|
         convention.staff_positions.where(
-          id: event_category_permission_scope.where(can_read_event_proposals: true).select(:staff_position_id)
+          id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
         ).any?
       end
 
@@ -35,13 +35,13 @@ module Ability::EventCategoryPermissions
         MaximumEventProvidedTicketsOverride.where(
           event_id: Event.where(
             event_category_id: user_permission_scope.where(
-              can_override_event_tickets: true
+              permission: 'override_event_tickets'
             ).select(:event_category_id)
           ).select(:id)
         ) do |maximum_event_provided_tickets_override|
           user_permission_scope.where(
             event_category_id: maximum_event_provided_tickets_override.event.event_category_id,
-            can_override_event_tickets: true
+            permission: 'override_event_tickets'
           ).any?
         end
     end
@@ -57,7 +57,7 @@ module Ability::EventCategoryPermissions
     @user_permission_scope ||= Permission.for_user(user)
   end
 
-  def event_category_authorization(action, model_class, model_conditions: {})
+  def event_category_authorization(action, model_class, permission, model_conditions: {})
     scope = model_class.where(
       event_category_id: user_permission_scope
         .where(permission: permission).select(:event_category_id),
