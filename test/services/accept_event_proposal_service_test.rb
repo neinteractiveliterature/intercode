@@ -2,10 +2,11 @@ require 'test_helper'
 
 class AcceptEventProposalServiceTest < ActiveSupport::TestCase
   let(:convention) { FactoryBot.create(:convention) }
+  let(:event_category) { FactoryBot.create(:event_category, convention: convention) }
   let(:event_proposal) do
-    FactoryBot.build(:event_proposal, convention: convention).tap do |proposal|
+    FactoryBot.build(:event_proposal, event_category: event_category, convention: convention).tap do |proposal|
       proposal.assign_default_values_from_form_items(
-        proposal.convention.event_proposal_form.form_items
+        proposal.event_category.event_proposal_form.form_items
       )
       proposal.save!
     end
@@ -14,6 +15,7 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
   before do
     ClearCmsContentService.new(convention: convention).call!
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
+    event_category.update!(event_proposal_form: convention.forms.find_by(title: 'Proposal form'))
   end
 
   it 'creates an event' do
