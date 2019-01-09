@@ -74,7 +74,7 @@ module Ability::EventCategoryPermissions
           else value == model_value
           end
         end &&
-        user_permission_scope.where(event_category_conditions).where(event_category_id: model.event_category_id).any?
+        user_permission_scope.where(permission: permission).where(event_category_id: model.event_category_id).any?
       )
     end
   end
