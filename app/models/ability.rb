@@ -405,13 +405,20 @@ class Ability
     return unless has_scope?(:read_events)
 
     can :read, EventProposal,
+      convention_id: staff_con_ids,
+      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+    can :read, EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison),
       status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
+    can :view_event_proposals, Convention, id: con_ids_with_privilege(:gm_liaison)
     can token_scope_action(:manage_events, :read_admin_notes, :update_admin_notes), EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
 
     return unless has_scope?(:manage_events)
 
+    can :update, EventProposal,
+      convention_id: staff_con_ids,
+      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
     can :update, EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison),
       status: %w[accepted withdrawn]
