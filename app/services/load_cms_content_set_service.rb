@@ -1,10 +1,6 @@
 class LoadCmsContentSetService < CivilService::Service
   FORM_NAMES = %w[
-    event_proposal_form
-    filler_event_form
-    regular_event_form
     user_con_profile_form
-    volunteer_event_form
   ]
 
   attr_reader :convention, :content_set, :content_set_name
@@ -44,7 +40,7 @@ class LoadCmsContentSetService < CivilService::Service
       when *FORM_NAMES
         create_form(name)
       else
-        raise "Invalid form name: #{name}"
+        convention.forms.create!
       end
 
       ImportFormContentService.new(form: form, content: JSON.parse(File.read(path))).call!
