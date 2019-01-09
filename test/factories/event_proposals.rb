@@ -5,5 +5,6 @@ FactoryBot.define do
     sequence(:title) { |n| "Event proposal #{n}" }
     status { 'proposed' }
     convention
+    event_category
   end
 end

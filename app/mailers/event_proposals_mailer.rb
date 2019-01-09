@@ -25,10 +25,10 @@ class EventProposalsMailer < ApplicationMailer
   private
 
   def proposal_mail_destination(event_proposal)
-    proposal_chair_staff_positions = convention.staff_positions
+    proposal_chair_staff_positions = event_proposal.convention.staff_positions
       .where(
         id: Permission.for_model(event_proposal.event_category)
-          .where(can_read_draft_event_proposals: true)
+          .where(permission: 'read_pending_event_proposals')
           .select(:staff_position_id)
       )
 
@@ -41,7 +41,7 @@ class EventProposalsMailer < ApplicationMailer
     if proposal_chair_staff_position_emails.any?
       proposal_chair_staff_position_emails
     else
-      users_with_priv = convention.user_con_profiles.where(staff: true).to_a
+      users_with_priv = event_proposal.convention.user_con_profiles.where(staff: true).to_a
 
       users_with_priv.map do |user_con_profile|
         "#{user_con_profile.name} <#{user_con_profile.email}>"
