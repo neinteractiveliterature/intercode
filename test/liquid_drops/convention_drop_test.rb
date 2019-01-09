@@ -28,11 +28,12 @@ describe ConventionDrop do
     let(:run_with_openings) { FactoryBot.create(:run, event: event_with_openings) }
     let(:unlimited_event_with_openings) { FactoryBot.create(:event, convention: convention) }
     let(:unlimited_run_with_openings) { FactoryBot.create(:run, event: unlimited_event_with_openings) }
+    let(:volunteer_event_category) { FactoryBot.create(:event_category, convention: convention, name: 'Volunteer event') }
     let(:volunteer_event_with_openings) do
       FactoryBot.create(
         :event,
         convention: convention,
-        category: 'volunteer_event',
+        event_category: volunteer_event_category,
         registration_policy: limited_registration_policy
       )
     end
