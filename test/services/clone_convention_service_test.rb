@@ -54,7 +54,11 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal 1, result.convention.event_categories.count
   end
 
-  it 'clones rooms'
+  it 'clones rooms' do
+    FactoryBot.create_list(:room, 5, convention: convention)
+    result = service.call
+    assert_equal 5, result.convention.rooms.count
+  end
 
   it 'clones ticket types' do
     FactoryBot.create(
