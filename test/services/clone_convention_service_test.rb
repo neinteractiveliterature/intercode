@@ -94,7 +94,25 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     refute_equal staff_position.permissions.first.model, result.convention.staff_positions.first.permissions.first.model
   end
 
-  it 'clones store content'
+  it 'clones store content' do
+    FactoryBot.create(:product, convention: convention)
+    product_with_variants = FactoryBot.create(:product, convention: convention)
+    FactoryBot.create_list(:product_variant, 5, product: product_with_variants)
 
-  it 'clones user activity alerts'
+    result = service.call
+    assert result.success?
+    assert_equal 2, result.convention.products.count
+    assert_equal 5, ProductVariant.joins(:product).where(products: { convention_id: result.convention.id }).count
+  end
+
+  it 'clones user activity alerts' do
+    alert = FactoryBot.create(:user_activity_alert, convention: convention)
+    staff_position = FactoryBot.create(:staff_position, convention: convention)
+    alert.alert_destinations.create!(staff_position: staff_position)
+
+    result = service.call
+    assert result.success?
+    assert_equal 1, result.convention.user_activity_alerts.count
+    assert_equal 1, result.convention.user_activity_alerts.first.alert_destinations.count
+  end
 end
