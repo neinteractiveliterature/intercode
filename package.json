@@ -107,7 +107,7 @@
     "thread-loader": "^2.1.1",
     "unfetch": "^4.0.1",
     "url-search-params-polyfill": "^5.0.0",
-    "webpack": "^4.28.3",
+    "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.2.1",
