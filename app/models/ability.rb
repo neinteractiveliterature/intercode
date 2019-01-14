@@ -434,7 +434,7 @@ class Ability
         }
       }
       can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
-      can token_scope_action(:manage_events, :read, :update_bucket), Signup, run: { event_id: team_member_event_ids }
+      can token_scope_action(:manage_events, :read, [:read, :update_bucket]), Signup, run: { event_id: team_member_event_ids }
       can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
       can token_scope_action(:manage_events), TeamMember, event_id: team_member_event_ids
     end
