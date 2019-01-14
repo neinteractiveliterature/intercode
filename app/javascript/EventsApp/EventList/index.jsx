@@ -4,7 +4,7 @@ import Pagination from 'react-js-pagination';
 import classNames from 'classnames';
 
 import CombinedReactTableConsumer from '../../Tables/CombinedReactTableConsumer';
-import { decodeStringArray, encodeStringArray } from '../../Tables/FilterUtils';
+import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import EventCard from './EventCard';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
 import { EventListCommonDataQuery, EventListEventsQuery } from './queries.gql';
@@ -19,21 +19,9 @@ import {
 } from '../../Tables/TableUtils';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
 
-function decodeFilterValue(field, value) {
-  if (field === 'category') {
-    return decodeStringArray(value);
-  }
-
-  return value;
-}
-
-function encodeFilterValue(field, value) {
-  if (field === 'category') {
-    return encodeStringArray(value);
-  }
-
-  return value;
-}
+const filterCodecs = buildFieldFilterCodecs({
+  category: FilterCodecs.integerArray,
+});
 
 class EventList extends React.Component {
   renderPagination = (eventsPaginated, onPageChange, extraClasses) => {
@@ -138,10 +126,7 @@ class EventList extends React.Component {
   render = () => (
     <QueryWithStateDisplay query={EventListCommonDataQuery}>
       {({ data: { convention, currentAbility } }) => (
-        <ReactRouterReactTableProvider
-          decodeFilterValue={decodeFilterValue}
-          encodeFilterValue={encodeFilterValue}
-        >
+        <ReactRouterReactTableProvider {...filterCodecs}>
           <LocalStorageReactTableProvider storageKeyPrefix="eventList">
             <CombinedReactTableConsumer
               consumers={[ReactRouterReactTableConsumer, LocalStorageReactTableConsumer]}
@@ -190,7 +175,7 @@ class EventList extends React.Component {
                             <div className="d-flex flex-wrap">
                               <div className="mb-2">
                                 <EventListCategoryDropdown
-                                  categoryKeys={convention.event_category_keys}
+                                  eventCategories={convention.event_categories}
                                   value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
                                   onChange={(value) => {
                                     onFilteredChange([

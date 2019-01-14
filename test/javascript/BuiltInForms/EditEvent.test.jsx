@@ -11,6 +11,9 @@ describe('EditEvent', () => {
     <EditEvent
       event={{
         id: 123,
+        event_category: {
+          id: 456,
+        },
         form_response_attrs: {
           registration_policy: {
             buckets: [
@@ -20,7 +23,11 @@ describe('EditEvent', () => {
         },
       }}
       form={formFromExportJSON(RegularEventForm)}
-      convention={{}}
+      convention={{
+        event_categories: [
+          { id: 456, name: 'Board game' },
+        ],
+      }}
       updateEvent={() => {}}
       dropEvent={() => {}}
       onSave={() => {}}

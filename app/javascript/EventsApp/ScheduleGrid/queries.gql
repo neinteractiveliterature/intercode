@@ -4,8 +4,15 @@ fragment ScheduleGridEventFragment on Event {
   id
   title
   length_seconds
-  category
   short_blurb_html
+
+  event_category {
+    id
+    name
+    default_color
+    signed_up_color
+    full_color
+  }
 
   registration_policy {
     slots_limited

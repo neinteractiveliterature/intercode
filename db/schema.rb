@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_17_193826) do
+ActiveRecord::Schema.define(version: 2018_12_27_173933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,23 +133,33 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.string "domain", null: false
     t.string "timezone_name"
     t.text "maximum_event_signups"
-    t.bigint "event_proposal_form_id"
     t.integer "maximum_tickets"
     t.bigint "default_layout_id"
     t.bigint "user_con_profile_form_id"
     t.string "ticket_name", default: "ticket", null: false
-    t.bigint "regular_event_form_id"
-    t.bigint "volunteer_event_form_id"
-    t.bigint "filler_event_form_id"
     t.text "event_mailing_list_domain"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
-    t.index ["event_proposal_form_id"], name: "index_conventions_on_event_proposal_form_id"
-    t.index ["filler_event_form_id"], name: "index_conventions_on_filler_event_form_id"
-    t.index ["regular_event_form_id"], name: "index_conventions_on_regular_event_form_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
     t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
-    t.index ["volunteer_event_form_id"], name: "index_conventions_on_volunteer_event_form_id"
+  end
+
+  create_table "event_categories", force: :cascade do |t|
+    t.bigint "convention_id", null: false
+    t.text "name", null: false
+    t.text "team_member_name", null: false
+    t.text "scheduling_ui", null: false
+    t.text "default_color"
+    t.text "full_color"
+    t.text "signed_up_color"
+    t.boolean "can_provide_tickets", default: false, null: false
+    t.bigint "event_form_id", null: false
+    t.bigint "event_proposal_form_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["convention_id"], name: "index_event_categories_on_convention_id"
+    t.index ["event_form_id"], name: "index_event_categories_on_event_form_id"
+    t.index ["event_proposal_form_id"], name: "index_event_categories_on_event_proposal_form_id"
   end
 
   create_table "event_proposals", force: :cascade do |t|
@@ -172,7 +182,9 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.text "admin_notes"
     t.datetime "reminded_at"
     t.text "team_mailing_list_name"
+    t.bigint "event_category_id", null: false
     t.index ["convention_id"], name: "index_event_proposals_on_convention_id"
+    t.index ["event_category_id"], name: "index_event_proposals_on_event_category_id"
     t.index ["event_id"], name: "index_event_proposals_on_event_id"
     t.index ["owner_id"], name: "index_event_proposals_on_owner_id"
   end
@@ -194,7 +206,6 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.integer "convention_id"
     t.integer "owner_id"
     t.string "status", default: "active", null: false
-    t.string "category"
     t.text "registration_policy"
     t.text "participant_communications"
     t.text "age_restrictions"
@@ -203,7 +214,9 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.text "admin_notes"
     t.text "team_mailing_list_name"
     t.boolean "private_signup_list", default: false, null: false
+    t.bigint "event_category_id", null: false
     t.index ["convention_id"], name: "index_events_on_convention_id"
+    t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
   end
@@ -352,6 +365,18 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
     t.boolean "invariant", default: false, null: false
     t.index ["cms_layout_id"], name: "index_pages_on_cms_layout_id"
     t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
+  end
+
+  create_table "permissions", force: :cascade do |t|
+    t.bigint "event_category_id"
+    t.bigint "staff_position_id", null: false
+    t.string "permission", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_category_id"], name: "index_permissions_on_event_category_id"
+    t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_event_category_permissions_unique_join", unique: true
+    t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
+    t.check_constraint :permissions_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = 1)"
   end
 
   create_table "product_variants", force: :cascade do |t|
@@ -516,9 +541,7 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
   create_table "user_con_profiles", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "convention_id", null: false
-    t.boolean "proposal_committee", default: false, null: false
     t.boolean "staff", default: false, null: false
-    t.boolean "proposal_chair", default: false, null: false
     t.boolean "gm_liaison", default: false, null: false
     t.boolean "registrar", default: false, null: false
     t.boolean "outreach", default: false, null: false
@@ -581,17 +604,18 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
-  add_foreign_key "conventions", "forms", column: "event_proposal_form_id"
-  add_foreign_key "conventions", "forms", column: "filler_event_form_id"
-  add_foreign_key "conventions", "forms", column: "regular_event_form_id"
   add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
-  add_foreign_key "conventions", "forms", column: "volunteer_event_form_id"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
+  add_foreign_key "event_categories", "conventions"
+  add_foreign_key "event_categories", "forms", column: "event_form_id"
+  add_foreign_key "event_categories", "forms", column: "event_proposal_form_id"
   add_foreign_key "event_proposals", "conventions"
+  add_foreign_key "event_proposals", "event_categories"
   add_foreign_key "event_proposals", "events"
   add_foreign_key "event_proposals", "user_con_profiles", column: "owner_id"
   add_foreign_key "events", "conventions"
+  add_foreign_key "events", "event_categories"
   add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "events", "users", column: "updated_by_id"
   add_foreign_key "form_items", "form_sections"
@@ -608,6 +632,8 @@ ActiveRecord::Schema.define(version: 2018_12_17_193826) do
   add_foreign_key "order_entries", "products"
   add_foreign_key "orders", "user_con_profiles"
   add_foreign_key "pages", "cms_layouts"
+  add_foreign_key "permissions", "event_categories"
+  add_foreign_key "permissions", "staff_positions"
   add_foreign_key "product_variants", "products"
   add_foreign_key "products", "conventions"
   add_foreign_key "rooms", "conventions"

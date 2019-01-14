@@ -5,7 +5,6 @@ import { humanize } from 'inflected';
 
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
-import EventCategory from '../EventAdmin/EventCategory';
 import RunFormFields from './RunFormFields';
 import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
 
@@ -102,9 +101,11 @@ class FillerEventForm extends React.Component {
       cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
     }
 
-    const categoryOptions = EventCategory.singleRunCategoryKeys.map(category => (
-      <option value={category} key={category}>{humanize(category)}</option>
-    ));
+    const categoryOptions = this.props.convention.event_categories
+      .filter(category => category.scheduling_ui === 'single_run')
+      .map(category => (
+        <option value={category.id} key={category.id}>{humanize(category.name)}</option>
+      ));
 
     const disabled = this.props.disabled || !this.isDataComplete();
 
@@ -117,9 +118,16 @@ class FillerEventForm extends React.Component {
         <BootstrapFormSelect
           label="Category"
           name="cagegory"
-          value={this.state.event.category}
-          onChange={event => this.eventFieldChanged({ category: event.target.value })}
+          value={this.state.event.event_category.id}
+          onChange={event => this.eventFieldChanged({
+            event_category: { id: Number.parseInt(event.target.value, 10) },
+          })}
         >
+          {
+            this.state.event.id
+              ? null
+              : <option value={null} />
+          }
           {categoryOptions}
         </BootstrapFormSelect>
 
@@ -134,7 +142,7 @@ class FillerEventForm extends React.Component {
 
         {this.renderErrorDisplay()}
 
-        <button className="btn btn-primary" onClick={this.saveClicked} disabled={disabled}>
+        <button type="button" className="btn btn-primary" onClick={this.saveClicked} disabled={disabled}>
           {saveCaption}
         </button>
         {cancelLink}

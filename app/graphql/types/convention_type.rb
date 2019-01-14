@@ -14,15 +14,29 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :maximum_tickets, types.Int
   field :maximum_event_signups, Types::ScheduledValueType
   field :ticket_name, !types.String
-  field :user_con_profile_form, !Types::FormType
-  field :event_proposal_form, !Types::FormType
-  field :regular_event_form, !Types::FormType
-  field :volunteer_event_form, !Types::FormType
-  field :filler_event_form, !Types::FormType
+  field :user_con_profile_form, Types::FormType.to_non_null_type
 
-  field :event_category_keys, types[types.String] do
+  field :event_categories, Types::EventCategoryType.to_list_type.to_non_null_type do
+    argument :current_ability_can_read_event_proposals, types.Boolean
+
+    resolve -> (convention, args, ctx) do
+      promise = AssociationLoader.for(Convention, :event_categories).load(convention)
+
+      if args[:current_ability_can_read_event_proposals]
+        promise.then do |event_categories|
+          event_categories.select do |category|
+            ctx[:current_ability].can?(:read, EventProposal.new(event_category: category, status: 'proposed'))
+          end
+        end
+      else
+        AssociationLoader.for(Convention, :event_categories).load(convention)
+      end
+    end
+  end
+
+  field :forms, Types::FormType.to_list_type.to_non_null_type do
     resolve -> (convention, _args, _ctx) do
-      convention.events.pluck(Arel.sql('distinct category'))
+      AssociationLoader.for(Convention, :forms).load(convention)
     end
   end
 
@@ -147,10 +161,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
     argument :sort, types[Types::SortInputType]
 
     guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
-        EventProposal.new(convention: convention, status: 'reviewing')
-      )
+      ctx[:current_ability].can?(:view_event_proposals, convention)
     end
 
     resolve ->(convention, args, ctx) do

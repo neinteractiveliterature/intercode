@@ -29,7 +29,7 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
           {({ data: { convention, event } }) => (
             <>
               <h1>
-                {pluralize(titleize(underscore(event.team_member_name)))}
+                {pluralize(titleize(underscore(event.event_category.team_member_name)))}
                 {' for '}
                 {event.title}
               </h1>
@@ -44,7 +44,7 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                             <th>Name</th>
                             <th>
                               {'Display as '}
-                              {event.team_member_name}
+                              {event.event_category.team_member_name}
                             </th>
                             <th>Display email address</th>
                             <th>Receive email from con</th>
@@ -86,11 +86,11 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                                 >
                                   <Link to={`${eventPath}/team_members/${teamMember.id}`} className="dropdown-item">
                                     {'Edit '}
-                                    {convention.team_member_name}
+                                    {event.event_category.team_member_name}
                                     {' settings'}
                                   </Link>
                                   {
-                                    event.can_provide_tickets
+                                    event.event_category.can_provide_tickets
                                       ? (
                                         <button
                                           className="dropdown-item cursor-pointer"
@@ -119,7 +119,7 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                                             })}
                                           >
                                             {'Remove '}
-                                            {event.team_member_name}
+                                            {event.event_category.team_member_name}
                                           </button>
                                         )}
                                       </Confirm.Trigger>
@@ -138,7 +138,7 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
               <p>
                 <Link to={`${eventPath}/team_members/new`} className="btn btn-primary">
                   {'Add '}
-                  {event.team_member_name}
+                  {event.event_category.team_member_name}
                 </Link>
               </p>
 

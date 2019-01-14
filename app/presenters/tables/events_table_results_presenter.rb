@@ -28,7 +28,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def apply_filter(scope, filter, value)
     case filter
     when :category
-      value.present? ? scope.where(category: value) : scope
+      value.present? ? scope.where(event_category_id: value) : scope
     when :title
       Concerns::Names.string_search(scope, value, ['title'])
     else

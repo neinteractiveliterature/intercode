@@ -123,7 +123,11 @@ query ConvertToEventProvidedTicketQuery($eventId: Int!) {
   event(id: $eventId) {
     id
     title
-    can_provide_tickets
+
+    event_category {
+      id
+      can_provide_tickets
+    }
 
     provided_tickets {
       id

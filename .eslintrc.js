@@ -50,5 +50,13 @@ module.exports = {
     ],
     'no-underscore-dangle': ['error', { allow: ['__typename'] } ],
     'react/destructuring-assignment': 'off',
+    'jsx-a11y/label-has-for': 'off',
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        labelAttributes: ['inputId'],
+        controlComponents: ['Select'],
+      },
+    ],
   }
 };

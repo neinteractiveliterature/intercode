@@ -4,16 +4,15 @@ import { Route } from 'react-router-dom';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
-import EventCategory from './EventCategory';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import eventsQuery from './eventsQuery';
+import { EventAdminEventsQuery } from './queries.gql';
 
-@graphql(eventsQuery)
+@graphql(EventAdminEventsQuery)
 @GraphQLQueryResultWrapper
 class EventAdminRunsTable extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery).isRequired,
+    data: GraphQLResultPropType(EventAdminEventsQuery).isRequired,
   };
 
   render = () => {
@@ -21,11 +20,14 @@ class EventAdminRunsTable extends React.Component {
 
     const getNormalizedTitle = event => event.title.replace(/^(the|a|) /i, '').replace(/[^A-Za-z0-9]/g, '').toLocaleLowerCase();
 
-    const sortedEvents = [...data.events].sort((a, b) => getNormalizedTitle(a).localeCompare(getNormalizedTitle(b)));
+    const sortedEvents = [...data.events].sort((a, b) => getNormalizedTitle(a)
+      .localeCompare(getNormalizedTitle(b)));
 
-    const eventRows = sortedEvents.filter(event => (
-      EventCategory.get(event.category).isRegular() && event.status === 'active'
-    )).map(event => (
+    const eventRows = sortedEvents.filter((event) => {
+      const eventCategory = data.convention.event_categories
+        .find(c => c.id === event.event_category.id);
+      return eventCategory.scheduling_ui === 'regular' && event.status === 'active';
+    }).map(event => (
       <EventAdminRow
         event={event}
         convention={data.convention}

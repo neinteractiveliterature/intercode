@@ -15,7 +15,7 @@ export function formatBucket(signup, event) {
     if (event.team_members
       .some(teamMember => teamMember.user_con_profile.id === signup.user_con_profile.id)
     ) {
-      return `${humanize(underscore(event.team_member_name))} (not counted)`;
+      return `${humanize(underscore(event.event_category.team_member_name))} (not counted)`;
     }
 
     if (signup.state === 'waitlisted') {

@@ -24,21 +24,24 @@ class EventProposalsMailer < ApplicationMailer
 
   private
 
-  def proposal_mail_destination(convention)
-    proposal_chair_staff_position = convention.staff_positions
-      .where(name: 'Game Proposals Chair').first
+  def proposal_mail_destination(event_proposal)
+    proposal_chair_staff_positions = event_proposal.convention.staff_positions
+      .where(
+        id: Permission.for_model(event_proposal.event_category)
+          .where(permission: 'read_pending_event_proposals')
+          .select(:staff_position_id)
+      )
 
-    if proposal_chair_staff_position&.email.present?
-      proposal_chair_staff_position.email
-    elsif proposal_chair_staff_position
-      proposal_chair_staff_position.user_con_profiles.map do |user_con_profile|
+    proposal_chair_staff_position_emails = proposal_chair_staff_positions.flat_map do |staff_position|
+      staff_position.email.presence || staff_position.user_con_profiles.map do |user_con_profile|
         "#{user_con_profile.name} <#{user_con_profile.email}>"
       end
+    end
+
+    if proposal_chair_staff_position_emails.any?
+      proposal_chair_staff_position_emails
     else
-      users_with_priv = convention.user_con_profiles.where(proposal_chair: true).to_a
-      if users_with_priv.none?
-        users_with_priv = convention.user_con_profiles.where(staff: true).to_a
-      end
+      users_with_priv = event_proposal.convention.user_con_profiles.where(staff: true).to_a
 
       users_with_priv.map do |user_con_profile|
         "#{user_con_profile.name} <#{user_con_profile.email}>"
@@ -58,7 +61,7 @@ class EventProposalsMailer < ApplicationMailer
   def event_proposal_mail(event_proposal, status_change)
     mail(
       from: from_address_for_convention(event_proposal.convention),
-      to: proposal_mail_destination(event_proposal.convention),
+      to: proposal_mail_destination(event_proposal),
       subject: "#{subject_prefix(event_proposal)} #{status_change}: #{event_proposal.title}"
     )
   end

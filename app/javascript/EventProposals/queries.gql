@@ -4,6 +4,16 @@ fragment EventProposalFields on EventProposal {
   status
   form_response_attrs_json
 
+  event_category {
+    id
+    name
+
+    event_proposal_form {
+      id
+      form_api_json
+    }
+  }
+
   event {
     id
   }
@@ -14,11 +24,6 @@ fragment EventProposalFormData on Convention {
   ends_at
   timezone_name
   event_mailing_list_domain
-
-  event_proposal_form {
-    id
-    form_api_json
-  }
 }
 
 query EventProposalQuery($eventProposalId: Int!) {
@@ -58,5 +63,86 @@ query EventProposalAdminNotesQuery($eventProposalId: Int!) {
   eventProposal(id: $eventProposalId) {
     id
     admin_notes
+  }
+}
+
+query ProposeEventButtonQuery {
+  myProfile {
+    id
+
+    user {
+      id
+
+      event_proposals {
+        id
+        title
+        status
+        created_at
+
+        event_category {
+          id
+          name
+        }
+
+        convention {
+          id
+          name
+        }
+      }
+    }
+  }
+
+  convention {
+    event_categories {
+      id
+      name
+      proposable
+    }
+  }
+}
+
+query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput]) {
+  convention {
+    id
+    timezone_name
+
+    event_categories(current_ability_can_read_event_proposals: true) {
+      id
+      name
+      default_color
+    }
+
+    event_proposals_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+      total_entries
+      total_pages
+      current_page
+      per_page
+
+      entries {
+        id
+        title
+        length_seconds
+        status
+        submitted_at
+        updated_at
+
+        event_category {
+          id
+          name
+          default_color
+        }
+
+        registration_policy {
+          minimum_slots
+          total_slots
+          slots_limited
+        }
+
+        owner {
+          id
+          name_inverted
+        }
+      }
+    }
   }
 }

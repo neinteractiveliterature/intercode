@@ -1,5 +1,16 @@
 #import "./queries.gql"
 
+mutation CreateEventProposal($cloneEventProposalId: Int, $eventCategoryId: Int!) {
+  createEventProposal(input: {
+    clone_event_proposal_id: $cloneEventProposalId,
+    event_category_id: $eventCategoryId
+  }) {
+    event_proposal {
+      id
+    }
+  }
+}
+
 mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   updateEventProposal(input: $input) {
     event_proposal {

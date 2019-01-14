@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
+import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import Timespan from '../Timespan';
-import { updateEventAdminNotesMutation } from './mutations';
+import { UpdateEventAdminNotes } from './mutations.gql';
 
 class EventAdminRow extends React.Component {
   static propTypes = {
@@ -27,6 +28,7 @@ class EventAdminRow extends React.Component {
 
     convention: PropTypes.shape({
       timezone_name: PropTypes.string.isRequired,
+      event_categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     }).isRequired,
   };
 
@@ -103,24 +105,27 @@ class EventAdminRow extends React.Component {
   render = () => {
     const { event } = this.props;
     const length = moment.duration(event.length_seconds, 'seconds');
+    const eventCategory = this.props.convention.event_categories
+      .find(c => c.id === event.event_category.id);
 
     return (
       <tr>
         <td>
           <Link
             to={`/${event.id}/edit`}
-            className={`rounded p-1 event-category-${event.category.replace(/_/, '-')} text-dark`}
+            className="rounded p-1 text-dark"
+            style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
           >
             {event.title}
           </Link>
           {' '}
           <small>
             (
-            {event.category}
+            {eventCategory.name}
             )
           </small>
           <div className="mt-2">
-            <Mutation mutation={updateEventAdminNotesMutation}>
+            <Mutation mutation={UpdateEventAdminNotes}>
               {mutate => (
                 <AdminNotes
                   value={event.admin_notes}

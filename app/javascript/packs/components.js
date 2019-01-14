@@ -8,11 +8,12 @@ import ConventionAdmin from '../ConventionAdmin';
 import EditUserConProfile from '../UserConProfiles/EditUserConProfile';
 import EmailList from '../UIComponents/EmailList';
 import EventAdmin from '../EventAdmin';
+import EventCategoryAdmin from '../EventCategoryAdmin';
 import EventProposalDisplay from '../EventProposals/EventProposalDisplay';
 import EventProposalForm from '../EventProposals/EventProposalForm';
 import EventProposalsAdmin from '../EventProposals/EventProposalsAdmin';
 import EventsApp from '../EventsApp';
-import FormJSONEditor from '../FormJSONEditor';
+import FormAdmin from '../FormAdmin';
 import LiquidDocs from '../LiquidDocs';
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
@@ -44,11 +45,12 @@ const unwrappedComponents = {
   EditUserConProfile,
   EmailList,
   EventAdmin,
+  EventCategoryAdmin,
   EventsApp,
   EventProposalDisplay,
   EventProposalForm,
   EventProposalsAdmin,
-  FormJSONEditor,
+  FormAdmin,
   LiquidDocs,
   LiquidHTMLEditor,
   MyProfileForm,

@@ -96,17 +96,23 @@ class PopperDropdown extends React.Component {
       renderReference,
     } = this.props;
 
+    const effectivePlacement = placement || 'bottom-start';
+
     return (
       <Manager ref={(manager) => { this.managerNode = manager; }}>
         <Reference>
-          {({ ref }) => renderReference({ ref, toggle: this.targetClicked })}
+          {({ ref }) => renderReference({
+            ref,
+            toggle: this.targetClicked,
+            setVisible: (visible) => { this.setState({ visible }); },
+          })}
         </Reference>
-        <Popper placement={this.state.visible ? (placement || 'bottom-start') : 'invalid'}>
+        <Popper placement={this.state.visible ? effectivePlacement : 'invalid'}>
           {({ ref, style, ...otherProps }) => (
             <PopperDropdownContentWithOnClickOutside
               getPopperRef={ref}
               style={style}
-              placement={placement}
+              placement={effectivePlacement}
               visible={this.state.visible || false}
               handleClickOutside={this.handleClickOutside}
               suppressWrapperDiv={typeof children === 'function'}
@@ -118,7 +124,9 @@ class PopperDropdown extends React.Component {
                     style,
                     visible: this.state.visible || false,
                     toggle: this.targetClicked,
+                    setVisible: (visible) => { this.setState({ visible }); },
                     ...otherProps,
+                    placement: effectivePlacement,
                   })
                   : children
               }

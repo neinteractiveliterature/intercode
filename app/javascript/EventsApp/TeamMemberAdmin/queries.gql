@@ -57,8 +57,12 @@ query TeamMembersQuery($eventId: Int!) {
   event(id: $eventId) {
     id
     title
-    team_member_name
-    can_provide_tickets
+
+    event_category {
+      id
+      can_provide_tickets
+      team_member_name
+    }
 
     provided_tickets {
       ...TeamMemberTicketFields

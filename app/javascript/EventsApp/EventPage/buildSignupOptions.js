@@ -69,10 +69,10 @@ function allSignupOptions(event, userConProfile) {
     return [
       {
         key: '_team_member',
-        label: event.team_member_name,
+        label: event.event_category.team_member_name,
         buttonClass: 'btn-outline-primary',
         bucket: null,
-        helpText: `Register your intent to come to this event as a ${event.team_member_name}`,
+        helpText: `Register your intent to come to this event as a ${event.event_category.team_member_name}`,
         noPreference: false,
         teamMember: true,
         counted: false,

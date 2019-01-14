@@ -75,7 +75,7 @@ class EventProposalForm extends React.Component {
     this.state = {
       eventProposal: deserializeFormResponseModel(props.data.eventProposal),
       convention: props.data.convention,
-      form: deserializeForm(props.data.convention.event_proposal_form),
+      form: deserializeForm(props.data.eventProposal.event_category.event_proposal_form),
     };
   }
 

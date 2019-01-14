@@ -13,7 +13,9 @@ class EditTeamMember extends React.Component {
   static propTypes = {
     event: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      team_member_name: PropTypes.string.isRequired,
+      event_category: PropTypes.shape({
+        team_member_name: PropTypes.string.isRequired,
+      }).isRequired,
       team_members: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
       })).isRequired,
@@ -46,7 +48,7 @@ class EditTeamMember extends React.Component {
     return (
       <>
         <h1 className="mb-4">
-          {titleize(underscore(event.team_member_name))}
+          {titleize(underscore(event.event_category.team_member_name))}
           {' Settings for '}
           {teamMember.user_con_profile.name_without_nickname}
         </h1>
@@ -120,7 +122,7 @@ class EditTeamMember extends React.Component {
                   }}
                 >
                   {'Update '}
-                  {event.team_member_name}
+                  {event.event_category.team_member_name}
                 </button>
               </li>
             )}

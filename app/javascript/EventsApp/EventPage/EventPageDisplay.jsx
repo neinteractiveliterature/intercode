@@ -111,7 +111,7 @@ class EventPageDisplay extends React.PureComponent {
                 event.team_members.length > 0
                   ? (
                     <>
-                      <dt className="col-md-3">{pluralize(humanize(underscore(event.team_member_name)))}</dt>
+                      <dt className="col-md-3">{pluralize(humanize(underscore(event.event_category.team_member_name)))}</dt>
                       <dd className="col-md-9">
                         <ul className="list-unstyled mb-0">
                           {event.team_members.map(teamMember => (
@@ -167,7 +167,7 @@ class EventPageDisplay extends React.PureComponent {
                         <Link to={`${eventPath}/team_members`}>
                           Edit
                           {' '}
-                          {pluralize(event.team_member_name)}
+                          {pluralize(event.event_category.team_member_name)}
                         </Link>
                       </li>
                     </ul>

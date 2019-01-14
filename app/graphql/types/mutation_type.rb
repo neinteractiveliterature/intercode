@@ -131,6 +131,21 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:events, :update_admin_notes))
   end
 
+  ### EventCategory
+
+  field :createEventCategory, mutation: Mutations::CreateEventCategory do
+    guard(guard_for_create_convention_associated_model(:event_categories))
+  end
+
+  field :updateEventCategory, mutation: Mutations::UpdateEventCategory do
+    guard(guard_for_convention_associated_model(:event_categories, :update))
+  end
+
+
+  field :deleteEventCategory, mutation: Mutations::DeleteEventCategory do
+    guard(guard_for_convention_associated_model(:event_categories, :destroy))
+  end
+
   ### EventProposal
 
   field :createEventProposal, mutation: Mutations::CreateEventProposal do
@@ -161,8 +176,16 @@ class Types::MutationType < Types::BaseObject
 
   ### Form
 
+  field :createFormWithJSON, mutation: Mutations::CreateFormWithJSON do
+    guard(guard_for_create_convention_associated_model(:forms))
+  end
+
   field :updateFormWithJSON, field: Mutations::UpdateFormWithJSON.field do
-    guard(guard_for_model_with_id(Form, :update))
+    guard(guard_for_convention_associated_model(:forms, :update))
+  end
+
+  field :deleteForm, mutation: Mutations::DeleteForm do
+    guard(guard_for_convention_associated_model(:forms, :destroy))
   end
 
   ### MaximumEventProvidedTicketsOverride
@@ -334,6 +357,16 @@ class Types::MutationType < Types::BaseObject
 
   field :updateStaffPosition, field: Mutations::UpdateStaffPosition.field do
     guard(guard_for_convention_associated_model(:staff_positions, :update))
+  end
+
+  field :updateStaffPositionPermissions, mutation: Mutations::UpdateStaffPositionPermissions do
+    guard ->(_obj, args, ctx) {
+      staff_position = ctx[:convention].staff_positions.find(args[:staff_position_id])
+      ctx[:current_ability].can?(
+        :create,
+        Permission.new(staff_position: staff_position)
+      )
+    }
   end
 
   field :deleteStaffPosition, field: Mutations::DeleteStaffPosition.field do
