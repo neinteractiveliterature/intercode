@@ -16,7 +16,7 @@ class RemindDraftEventProposals < CivilService::Service
         .joins(:convention)
         .where('event_proposals.created_at < ?', 1.week.ago)
         .where('conventions.starts_at > ?', Time.now)
-        .includes(convention: { event_proposal_form: :form_items })
+        .includes(event_category: { event_proposal_form: :form_items })
 
       old_drafts.select do |proposal|
         completion_fraction(proposal) > 0.25
