@@ -49,25 +49,40 @@ class CloneConventionService < CivilService::Service
     end
 
     Rails.logger.info("Cloning pages")
-    @id_maps[:pages] = clone_with_id_map(source_convention.pages, convention.pages) do |page, cloned_page|
+    @id_maps[:pages] = clone_with_id_map(
+      source_convention.pages,
+      convention.pages
+    ) do |page, cloned_page|
       cloned_page.cms_layout = @id_maps[:cms_layouts][page.cms_layout_id]
     end
 
     Rails.logger.info('Cloning navigation items')
-    clone_with_id_map(source_convention.cms_navigation_items.root.order(:position), convention.cms_navigation_items) do |navigation_item, cloned_navigation_item|
+    clone_with_id_map(
+      source_convention.cms_navigation_items.root.order(:position),
+      convention.cms_navigation_items
+    ) do |navigation_item, cloned_navigation_item|
       cloned_navigation_item.save!
-      clone_with_id_map(navigation_item.navigation_links.order(:position), convention.cms_navigation_items) do |navigation_link, cloned_navigation_link|
+      clone_with_id_map(
+        navigation_item.navigation_links.order(:position),
+        convention.cms_navigation_items
+      ) do |navigation_link, cloned_navigation_link|
         cloned_navigation_link.navigation_section = cloned_navigation_item
       end
     end
 
     Rails.logger.info('Cloning files')
-    @id_maps[:cms_files] = clone_with_id_map(source_convention.cms_files, convention.cms_files) do |file, cloned_file|
+    @id_maps[:cms_files] = clone_with_id_map(
+      source_convention.cms_files,
+      convention.cms_files
+    ) do |file, cloned_file|
       file.file.cache_stored_file!
       cloned_file.file = file.file
     end
 
-    @id_maps[:forms] = clone_with_id_map(source_convention.forms, convention.forms) do |form, cloned_form|
+    @id_maps[:forms] = clone_with_id_map(
+      source_convention.forms,
+      convention.forms
+    ) do |form, cloned_form|
       cloned_form.save!
       content = FormExportPresenter.new(form).as_json
       ImportFormContentService.new(form: cloned_form, content: content).call!
@@ -81,7 +96,10 @@ class CloneConventionService < CivilService::Service
   end
 
   def clone_event_categories(convention)
-    @id_maps[:event_categories] = clone_with_id_map(source_convention.event_categories, convention.event_categories) do |event_category, cloned_event_category|
+    @id_maps[:event_categories] = clone_with_id_map(
+      source_convention.event_categories,
+      convention.event_categories
+    ) do |event_category, cloned_event_category|
       cloned_event_category.event_form = @id_maps[:forms][event_category.event_form_id]
       cloned_event_category.event_proposal_form = @id_maps[:forms][event_category.event_proposal_form_id]
     end
@@ -92,7 +110,10 @@ class CloneConventionService < CivilService::Service
   end
 
   def clone_ticket_types(convention)
-    @id_maps[:ticket_types] = clone_with_id_map(source_convention.ticket_types, convention.ticket_types) do |ticket_type, cloned_ticket_type|
+    @id_maps[:ticket_types] = clone_with_id_map(
+      source_convention.ticket_types,
+      convention.ticket_types
+    ) do |ticket_type, cloned_ticket_type|
       cloned_ticket_type.pricing_schedule = shift_scheduled_value_by_convention_distance(
         convention,
         ticket_type.pricing_schedule
@@ -101,7 +122,10 @@ class CloneConventionService < CivilService::Service
   end
 
   def clone_staff_positions(convention)
-    @id_maps[:staff_positions] = clone_with_id_map(source_convention.staff_positions, convention.staff_positions) do |staff_position, cloned_staff_position|
+    @id_maps[:staff_positions] = clone_with_id_map(
+      source_convention.staff_positions,
+      convention.staff_positions
+    ) do |staff_position, cloned_staff_position|
       cloned_staff_position.save!
 
       staff_position.permissions.each do |permission|
@@ -115,7 +139,10 @@ class CloneConventionService < CivilService::Service
 
   def clone_store_content(convention)
     @id_maps[:product_variants] = {}
-    @id_maps[:products] = clone_with_id_map(source_convention.products, convention.products) do |product, cloned_product|
+    @id_maps[:products] = clone_with_id_map(
+      source_convention.products,
+      convention.products
+    ) do |product, cloned_product|
       cloned_product.save!
       variant_id_map = clone_with_id_map(product.product_variants, cloned_product.product_variants)
       @id_maps[:product_variants].merge!(variant_id_map)
@@ -124,16 +151,22 @@ class CloneConventionService < CivilService::Service
 
   def clone_user_activity_alerts(convention)
     @id_maps[:alert_destinations] = {}
-    @id_maps[:user_activity_alerts] = clone_with_id_map(source_convention.user_activity_alerts, convention.user_activity_alerts) do |user_activity_alert, cloned_user_activity_alert|
+    @id_maps[:user_activity_alerts] = clone_with_id_map(
+      source_convention.user_activity_alerts,
+      convention.user_activity_alerts
+    ) do |user_activity_alert, cloned_user_activity_alert|
       cloned_user_activity_alert.save!
-      destination_id_map = clone_with_id_map(user_activity_alert.alert_destinations, cloned_user_activity_alert.alert_destinations) do |alert_destination, cloned_alert_destination|
+
+      destination_id_map = clone_with_id_map(
+        user_activity_alert.alert_destinations,
+        cloned_user_activity_alert.alert_destinations
+      ) do |alert_destination, cloned_alert_destination|
         cloned_alert_destination.staff_position = @id_maps[:staff_positions][alert_destination.staff_position_id]
         cloned_alert_destination.user_con_profile = nil
       end
       @id_maps[:alert_destinations].merge!(destination_id_map)
     end
   end
-
 
   def clone_with_id_map(source_scope, destination_scope, &block)
     id_map = {}
