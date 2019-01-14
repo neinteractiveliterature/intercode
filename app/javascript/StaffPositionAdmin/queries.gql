@@ -1,31 +1,42 @@
-import gql from 'graphql-tag';
-
-const fragments = {};
-
-fragments.staffPosition = gql`
 fragment StaffPositionFields on StaffPosition {
   id
   name
   email
   visible
+
   user_con_profiles {
     id
     name_without_nickname
   }
-}
-`;
 
-export const staffPositionsQuery = gql`
+  permissions {
+    id
+    permission
+
+    model {
+      __typename
+
+      ...on EventCategory {
+        id
+        name
+        default_color
+      }
+    }
+  }
+}
+
 query StaffPositionsQuery {
   convention {
     id
+
+    event_categories {
+      id
+      name
+      default_color
+    }
+
     staff_positions {
       ...StaffPositionFields
     }
   }
 }
-
-${fragments.staffPosition}
-`;
-
-export { fragments };

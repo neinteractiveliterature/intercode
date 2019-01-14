@@ -131,7 +131,7 @@ class RunSignupSummary extends React.Component {
                   signup,
                   data.event.registration_policy,
                   data.event.team_members,
-                  data.event.team_member_name,
+                  data.event.event_category.team_member_name,
                 ))
               }
             </tbody>

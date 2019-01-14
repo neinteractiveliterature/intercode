@@ -1,0 +1,41 @@
+#import "./queries.gql"
+
+mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
+  createStaffPosition(input: $input) {
+    staff_position {
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
+  updateStaffPosition(input: $input) {
+    staff_position {
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation UpdateStaffPositionPermissions(
+  $staffPositionId: Int!,
+  $grantPermissions: [PermissionInput!]!,
+  $revokePermissions: [PermissionInput!]!
+) {
+  updateStaffPositionPermissions(input: {
+    staff_position_id: $staffPositionId,
+    grant_permissions: $grantPermissions,
+    revoke_permissions: $revokePermissions
+  }) {
+    staff_position {
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
+  deleteStaffPosition(input: $input) {
+    staff_position {
+      id
+    }
+  }
+}

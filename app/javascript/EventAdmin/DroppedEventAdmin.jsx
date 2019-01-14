@@ -5,20 +5,19 @@ import { flowRight } from 'lodash';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
 import ErrorDisplay from '../ErrorDisplay';
-import EventCategory from './EventCategory';
-import eventsQuery from './eventsQuery';
+import { EventAdminEventsQuery } from './queries.gql';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import { restoreDroppedEventMutation } from './mutations';
+import { RestoreDroppedEvent } from './mutations.gql';
 
 @flowRight([
-  graphql(eventsQuery),
-  graphql(restoreDroppedEventMutation, { name: 'restoreDroppedEvent' }),
+  graphql(EventAdminEventsQuery),
+  graphql(RestoreDroppedEvent, { name: 'restoreDroppedEvent' }),
 ])
 @GraphQLQueryResultWrapper
 class DroppedEventAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(eventsQuery).isRequired,
+    data: GraphQLResultPropType(EventAdminEventsQuery).isRequired,
     restoreDroppedEvent: PropTypes.func.isRequired,
   }
 
@@ -53,7 +52,11 @@ class DroppedEventAdmin extends React.Component {
   render = () => {
     const { data } = this.props;
 
-    const droppedEvents = data.events.filter(event => event.status === 'dropped' && !EventCategory.get(event.category).isSingleRun());
+    const droppedEvents = data.events.filter((event) => {
+      const eventCategory = data.convention.event_categories
+        .find(c => c.id === event.event_category.id);
+      return event.status === 'dropped' && eventCategory.scheduling_ui !== 'single_run';
+    });
     droppedEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
 
     if (droppedEvents.length === 0) {
@@ -70,6 +73,7 @@ class DroppedEventAdmin extends React.Component {
         <td>{droppedEvent.title}</td>
         <td className="text-right">
           <button
+            type="button"
             className="btn btn-sm btn-secondary"
             onClick={() => this.startRestoringDroppedEvent(droppedEvent.id)}
           >

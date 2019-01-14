@@ -1,0 +1,10 @@
+{
+  "EventCategory": [
+    { "permission": "read_event_proposals", "name": "read proposals" },
+    { "permission": "read_pending_event_proposals", "name": "read pending proposals" },
+    { "permission": "update_event_proposals", "name": "update proposals" },
+    { "permission": "access_admin_notes", "name": "access admin notes" },
+    { "permission": "update_events", "name": "modify events" },
+    { "permission": "override_event_tickets", "name": "override ticket quotas" }
+  ]
+}

@@ -7,7 +7,6 @@ import { humanize } from 'inflected';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
 import ErrorDisplay from '../ErrorDisplay';
-import EventCategory from '../EventAdmin/EventCategory';
 import Form from '../Models/Form';
 import { getIncompleteItems } from '../FormPresenter/FormPresenterUtils';
 import ItemInteractionTracker from '../FormPresenter/ItemInteractionTracker';
@@ -30,7 +29,12 @@ class EventForm extends React.Component {
     }).isRequired).isRequired,
     ticketName: PropTypes.string,
     form: Form.propType.isRequired,
-    convention: PropTypes.shape({}).isRequired,
+    convention: PropTypes.shape({
+      event_categories: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      })).isRequired,
+    }).isRequired,
 
     cancelPath: PropTypes.string,
     onSave: PropTypes.func.isRequired,
@@ -144,9 +148,11 @@ class EventForm extends React.Component {
       cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
     }
 
-    const categoryOptions = EventCategory.regularCategoryKeys.map(category => (
-      <option value={category} key={category}>{humanize(category)}</option>
-    ));
+    const categoryOptions = this.props.convention.event_categories
+      .filter(category => category.scheduling_ui === 'regular')
+      .map(category => (
+        <option value={category.id} key={category.id}>{humanize(category.name)}</option>
+      ));
 
     return (
       <form className="my-4">
@@ -158,9 +164,12 @@ class EventForm extends React.Component {
               <BootstrapFormSelect
                 label="Category"
                 name="cagegory"
-                value={this.state.event.category}
+                value={this.state.event.event_category.id}
                 onChange={
-                  event => this.eventChanged({ ...this.state.event, category: event.target.value })
+                  event => this.eventChanged({
+                    ...this.state.event,
+                    event_category: { id: Number.parseInt(event.target.value, 10) },
+                  })
                 }
               >
                 {categoryOptions}

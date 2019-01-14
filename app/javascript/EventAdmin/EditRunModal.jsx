@@ -4,20 +4,22 @@ import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { propType } from 'graphql-anywhere';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
-import eventsQuery, { fragments } from './eventsQuery';
-import { createRunMutation, updateRunMutation, deleteRunMutation } from './mutations';
+import {
+  EventAdminEventsQuery, RunFields, EventFields, ConventionFields,
+} from './queries.gql';
+import { CreateRun, UpdateRun, DeleteRun } from './mutations.gql';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 
 @flowRight([
-  graphql(createRunMutation, { name: 'createRun' }),
-  graphql(updateRunMutation, { name: 'updateRun' }),
-  graphql(deleteRunMutation, { name: 'deleteRun' }),
+  graphql(CreateRun, { name: 'createRun' }),
+  graphql(UpdateRun, { name: 'updateRun' }),
+  graphql(DeleteRun, { name: 'deleteRun' }),
 ])
 class EditRunModal extends React.Component {
   static propTypes = {
-    run: propType(fragments.runFragment),
-    event: propType(fragments.eventFragment),
-    convention: propType(fragments.conventionFragment).isRequired,
+    run: propType(RunFields),
+    event: propType(EventFields),
+    convention: propType(ConventionFields).isRequired,
     editingRunChanged: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     onSaveStart: PropTypes.func.isRequired,
@@ -82,10 +84,10 @@ class EditRunModal extends React.Component {
         },
       },
       update: (store, { data: { createRun: { run: newRun } } }) => {
-        const eventsData = store.readQuery({ query: eventsQuery });
+        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
         const eventData = eventsData.events.find(event => event.id === this.props.event.id);
         eventData.runs.push(newRun);
-        store.writeQuery({ query: eventsQuery, data: eventsData });
+        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
       },
     });
   }
@@ -114,11 +116,11 @@ class EditRunModal extends React.Component {
         },
       },
       update: (store) => {
-        const eventsData = store.readQuery({ query: eventsQuery });
+        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
         const eventData = eventsData.events.find(event => event.id === this.props.event.id);
         const runIndex = eventData.runs.findIndex(run => run.id === this.props.run.id);
         eventData.runs.splice(runIndex, 1);
-        store.writeQuery({ query: eventsQuery, data: eventsData });
+        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
       },
     }).then(() => {
       this.setState(

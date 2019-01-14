@@ -1,26 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
+
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
 import StaffPositionPropType from './StaffPositionPropType';
-import { fragments } from './queries';
+import { UpdateStaffPosition } from './mutations.gql';
 
-const updateStaffPositionMutation = gql`
-mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
-  updateStaffPosition(input: $input) {
-    staff_position {
-      ...StaffPositionFields
-    }
-  }
-}
-
-${fragments.staffPosition}
-`;
-
-@graphql(updateStaffPositionMutation, {
+@graphql(UpdateStaffPosition, {
   props: ({ mutate }) => ({
     updateStaffPosition: staffPosition => mutate({
       variables: {
@@ -73,14 +61,15 @@ class EditStaffPosition extends React.Component {
   render = () => (
     <div>
       <h1 className="mb-4">
-Editing
+        Editing
+        {' '}
         {this.state.staffPosition.name}
       </h1>
       <StaffPositionForm
         staffPosition={this.state.staffPosition}
         onChange={this.staffPositionChanged}
       />
-      <button className="btn btn-primary" onClick={this.saveClicked}>Save changes</button>
+      <button type="button" className="btn btn-primary" onClick={this.saveClicked}>Save changes</button>
       <ErrorDisplay graphQLError={this.state.error} />
     </div>
   );

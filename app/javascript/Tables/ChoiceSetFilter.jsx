@@ -23,11 +23,19 @@ class ChoiceSetFilter extends React.Component {
     filter: PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
     }),
+    filterCodec: PropTypes.shape({
+      decode: PropTypes.func.isRequired,
+      encode: PropTypes.func.isRequired,
+    }),
+    multiple: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
     renderHeaderCaption: PropTypes.func,
   }
 
   static defaultProps = {
+    multiple: true,
     filter: null,
+    filterCodec: null,
     renderHeaderCaption: null,
   }
 
@@ -36,6 +44,40 @@ class ChoiceSetFilter extends React.Component {
     this.state = {
       collapsed: true,
     };
+  }
+
+  getFilterValue = () => {
+    const filterValue = (this.props.filter || {}).value || [];
+    if (this.props.filterCodec) {
+      if (this.props.multiple) {
+        return filterValue.map(singleValue => this.props.filterCodec.encode(singleValue));
+      }
+
+      return this.props.filterCodec.encode(filterValue);
+    }
+    return filterValue;
+  }
+
+  getChoices = () => {
+    if (this.props.filterCodec) {
+      return sortChoices(this.props.choices.map(choice => ({
+        ...choice,
+        value: this.props.filterCodec.encode(choice.value),
+      })));
+    }
+
+    return sortChoices(this.props.choices);
+  }
+
+  onChange = (value) => {
+    if (this.props.filterCodec) {
+      if (this.props.multiple) {
+        this.props.onChange(value.map(singleValue => this.props.filterCodec.decode(singleValue)));
+      } else {
+        this.props.onChange(this.props.filterCodec.decode(value));
+      }
+    }
+    this.props.onChange(value);
   }
 
   uncollapse = () => { this.setState({ collapsed: false }); }
@@ -47,26 +89,28 @@ class ChoiceSetFilter extends React.Component {
       return null;
     }
 
-    const filterValue = (this.props.filter || {}).value || [];
+    const filterValue = this.getFilterValue();
 
     if (this.props.renderHeaderCaption) {
       return <span className="mr-2">{this.props.renderHeaderCaption(filterValue)}</span>;
     }
 
+    const choices = this.getChoices();
+
     if (Array.isArray(filterValue)) {
       if (filterValue.length > 0) {
-        return sortChoices(filterValue.map(
+        return filterValue.map(
           item => (
-            this.props.choices.find(choice => choice.value === item)
+            choices.find(choice => choice.value === item)
             || { label: item }
           ),
-        )).map(({ label }) => <span className="mr-2">{label}</span>);
+        ).map(({ label }) => <span className="mr-2">{label}</span>);
       }
 
       return <span className="mr-2">Any</span>;
     }
 
-    const choice = this.props.choices.find(c => c.value === filterValue) || { label: filterValue };
+    const choice = choices.find(c => c.value === filterValue) || { label: filterValue };
     return <span className="mr-2">{choice.label || 'Any'}</span>;
   }
 
@@ -82,9 +126,11 @@ class ChoiceSetFilter extends React.Component {
   )
 
   render = () => {
-    const { filter, choices, ...otherProps } = this.props;
+    const {
+      filter, choices, onChange, ...otherProps
+    } = this.props;
 
-    const filterValue = (filter || {}).value || [];
+    const filterValue = this.getFilterValue();
 
     return (
       <Manager>
@@ -96,15 +142,16 @@ class ChoiceSetFilter extends React.Component {
           )}
         </Reference>
         <Popper
-          placement="top-start"
+          placement="bottom-start"
           modifiers={{
-            inner: { enabled: true, order: 700 },
             matchWidth: {
               enabled: true,
               order: 750,
               fn: (data) => {
                 const { popper, reference } = data.offsets;
-                popper.width = reference.width;
+                if (popper.width < reference.width) {
+                  popper.width = reference.width;
+                }
                 return data;
               },
             },
@@ -119,13 +166,21 @@ class ChoiceSetFilter extends React.Component {
           }}
         >
           {({ ref, style, placement }) => (
-            <div className={classNames('card', { 'd-none': this.state.collapsed })} ref={ref} style={style} data-placement={placement}>
-              {this.renderHeader()}
+            <div
+              className={classNames('card align-items-start', { invisible: this.state.collapsed })}
+              ref={ref}
+              style={{
+                ...style,
+                marginTop: '-3px',
+                borderTop: 'none',
+              }}
+              data-placement={placement}
+            >
               <div className="card-body p-1">
                 <ChoiceSet
                   value={filterValue}
-                  choices={sortChoices(choices)}
-                  multiple
+                  choices={this.getChoices()}
+                  onChange={this.onChange}
                   {...otherProps}
                 />
               </div>

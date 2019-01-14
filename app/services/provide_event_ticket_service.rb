@@ -54,7 +54,7 @@ by #{event.title}"
   end
 
   def event_must_be_able_to_provide_tickets
-    return if event.can_provide_tickets?
+    return if event.event_category.can_provide_tickets?
     errors.add :base, "#{event.title} cannot provide #{convention.ticket_name.pluralize} to \
 attendees"
   end

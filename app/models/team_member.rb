@@ -44,6 +44,7 @@ event #{event.name} is from #{event.convention.name}.")
   end
 
   def sync_team_mailing_list
+    return unless SyncTeamMailingListService.mailgun
     return unless event
     SyncTeamMailingListJob.perform_later(event)
   end

@@ -25,7 +25,9 @@ module Concerns::FormResponse
 
     attributes.stringify_keys.each do |key, value|
       old_value = read_form_response_attribute(key)
-      form_response_attribute_changes[key] = [old_value, value] unless old_value == value
+      unless normalize_form_response_value(old_value) == normalize_form_response_value(value)
+        form_response_attribute_changes[key] = [old_value, value]
+      end
 
       if form_response_attrs.include?(key)
         new_model_attrs[key] = value
@@ -66,5 +68,15 @@ module Concerns::FormResponse
 
   def form_response_attribute_changes
     @form_response_attribute_changes ||= {}
+  end
+
+  private
+
+  # Used for comparing values when determining form response changes
+  def normalize_form_response_value(value)
+    case value
+    when Hash then value.stringify_keys
+    else value
+    end
   end
 end

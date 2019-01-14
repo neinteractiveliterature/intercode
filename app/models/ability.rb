@@ -134,6 +134,7 @@ class Ability
   EVENT_PROPOSAL_NON_DRAFT_STATUSES = EventProposal::STATUSES.to_a - ['draft']
 
   include CanCan::Ability
+  include Ability::EventCategoryPermissions
 
   attr_reader :user, :doorkeeper_token, :associated_records_loader
 
@@ -160,6 +161,7 @@ class Ability
       add_con_staff_abilities
       add_event_proposal_abilities
       add_team_member_abilities if team_member_event_ids.any?
+      add_event_category_permission_abilities
     end
   end
 
@@ -211,6 +213,7 @@ class Ability
     can :read, Convention
     can :schedule, Convention, show_schedule: 'yes'
     can :read, Event, status: 'active'
+    can :read, EventCategory
     can :read, Form
     can [:read, :root], Page
     can :read, Product
@@ -230,6 +233,7 @@ class Ability
     if has_scope?(:read_events)
       can :read, [
         Event,
+        EventCategory,
         EventProposal,
         MaximumEventProvidedTicketsOverride,
         Run,
@@ -246,7 +250,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
+      can :read, [Permission, Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
       can :read_personal_info, UserConProfile
     end
 
@@ -272,8 +276,10 @@ class Ability
       CmsPartial,
       CmsVariable,
       Convention,
+      EventCategory,
       Form,
       Page,
+      Permission,
       Product,
       Room,
       RootSite,
@@ -311,7 +317,8 @@ class Ability
     end
 
     if has_scope?(:manage_events)
-      can [:create, :submit], EventProposal
+      can :create, EventProposal
+      can :submit, EventProposal, id: own_event_proposal_ids
       can :update, EventProposal,
         id: own_event_proposal_ids,
         status: %w[draft proposed reviewing]
@@ -346,21 +353,23 @@ class Ability
         show_schedule: %w[gms yes]
       }
     }
-    can :read, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
+    can token_scope_action(:manage_conventions), TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
+
     can :read, User if staff_con_ids.any?
 
     can :read_admin_notes, Event,
-      convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
+      convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
+    can :read, Permission, staff_position: { convention_id: staff_con_ids }
     can :read, Order, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
-    can :read, MaximumEventProvidedTicketsOverride,
+    can token_scope_action(:manage_conventions), MaximumEventProvidedTicketsOverride,
       event: {
-        convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
+        convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
       }
-    can :read, UserActivityAlert, convention_id: staff_con_ids
+    can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     # Mail privileges (smash the patriarchy)
     can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
@@ -380,44 +389,39 @@ class Ability
     can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
     can :manage, TicketType, convention_id: staff_con_ids
     can :manage, Event,
-      convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
-    can :manage, MaximumEventProvidedTicketsOverride,
-      event: {
-        convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
-      }
+      convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
+    can :manage, EventCategory, convention_id: staff_con_ids
+    can :manage, Permission, convention_id: staff_con_ids
     can :manage, Product, convention_id: staff_con_ids
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, StaffPosition, convention_id: staff_con_ids
-    can :manage, TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
-    can :manage, UserActivityAlert, convention_id: staff_con_ids
   end
 
   def add_event_proposal_abilities
     return unless has_scope?(:read_events)
 
     can :read, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_committee, :gm_liaison),
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
-    can :read, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_chair),
+      convention_id: staff_con_ids,
       status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :read_admin_notes, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_chair, :gm_liaison, :scheduling)
+    can :read, EventProposal,
+      convention_id: con_ids_with_privilege(:gm_liaison),
+      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
+    can :view_event_proposals, Convention, id: con_ids_with_privilege(:gm_liaison)
+    can token_scope_action(:manage_events, :read_admin_notes, :update_admin_notes), EventProposal,
+      convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
 
     return unless has_scope?(:manage_events)
 
     can :update, EventProposal,
-      convention_id: con_ids_with_privilege(:proposal_chair),
+      convention_id: staff_con_ids,
       status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
     can :update, EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison),
       status: %w[accepted withdrawn]
-    can :update_admin_notes, EventProposal,
-      convention_id: con_ids_with_privilege(:scheduling)
   end
 
   def add_team_member_abilities
@@ -430,21 +434,34 @@ class Ability
         }
       }
       can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
-      can :read, Signup, run: { event_id: team_member_event_ids }
+      can token_scope_action(:manage_events, :read, :update_bucket), Signup, run: { event_id: team_member_event_ids }
       can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
-      can :read, TeamMember, event_id: team_member_event_ids
+      can token_scope_action(:manage_events), TeamMember, event_id: team_member_event_ids
     end
 
     if has_scope?(:manage_events)
       can :update, Event, id: team_member_event_ids
       can :update, EventProposal, event_id: team_member_event_ids
-      can :update_bucket, Signup, run: { event_id: team_member_event_ids }
-      can :manage, TeamMember, event_id: team_member_event_ids
     end
 
     return unless has_scope?(:read_conventions)
     can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
     can :read, UserConProfile, convention_id: team_member_convention_ids
     can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
+  end
+
+  def token_scope_action(manage_scope, read_action = :read, manage_action = :manage)
+    if has_scope?(manage_scope)
+      manage_action
+    else
+      read_action
+    end
+  end
+
+  def scope_authorization(action, model_class, scope, &allow_model)
+    subquery = scope.select(model_class.primary_key).to_sql
+    sql = "#{model_class.table_name}.#{model_class.primary_key} IN (#{subquery})"
+
+    can action, model_class, sql, &allow_model
   end
 end

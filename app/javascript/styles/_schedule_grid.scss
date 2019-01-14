@@ -25,14 +25,18 @@
 }
 
 .schedule-grid-event {
-  @extend .event-category-filler;
+  // default colors, overrideable by event categories
+  background-color: lighten(map-get($theme-colors, 'info'), 50%);
   border: 1px map-get($theme-colors, 'light') solid;
 
   &.full {
+    background-color: fade-out(lighten(map-get($theme-colors, 'info'), 50%), 0.3);
     color: fade-out(black, 0.3);
   }
 
   &.signed-up {
+    background-color: map-get($theme-colors, 'info');
+    border-color: map-get($theme-colors, 'info');
     color: white;
   }
 }
@@ -54,110 +58,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.event-category-filler {
-  background-color: lighten(map-get($theme-colors, 'info'), 50%);
-
-  &.full {
-    background-color: fade-out(lighten(map-get($theme-colors, 'info'), 50%), 0.3);
-  }
-
-  &.signed-up {
-    background-color: map-get($theme-colors, 'info');
-    border-color: map-get($theme-colors, 'info');
-  }
-}
-
-.event-category-larp {
-  background-color: lighten($indigo, 35%);
-
-  &.full {
-    background-color: fade-out(lighten($indigo, 35%), 0.4);
-  }
-
-  &.signed-up {
-    background-color: $indigo;
-    border-color: $indigo;
-  }
-}
-
-.event-category-volunteer-event {
-  background-color: $gray-300;
-
-  &.full {
-    background-color: fade-out($gray-300, 0.4);
-  }
-
-  &.signed-up {
-    background-color: $gray-700;
-    border-color: $gray-700;
-  }
-}
-
-.event-category-con-services {
-  background-color: lighten($yellow, 35%);
-
-  &.full {
-    background-color: fade-out(lighten($yellow, 35%), 0.4);
-  }
-
-  &.signed-up {
-    background-color: $yellow;
-    border-color: $yellow;
-  }
-}
-
-.event-category-town-hall {
-  background-color: lighten($green, 35%);
-
-  &.full {
-    background-color: fade-out(lighten($green, 35%), 0.4);
-  }
-
-  &.signed-up {
-    background-color: $green;
-    border-color: $green;
-  }
-}
-
-.event-category-panel, .event-category-moderated-discussion, .event-category-workshop, .event-category-presentation {
-  background-color: lighten($red, 30%);
-
-  &.full {
-    background-color: fade-out(lighten($red, 30%), 0.5);
-  }
-
-  &.signed-up {
-    background-color: $red;
-    border-color: $red;
-  }
-}
-
-.event-category-tabletop-rpg {
-  background-color: lighten($teal, 30%);
-
-  &.full {
-    background-color: fade-out(lighten($teal, 30%), 0.5);
-  }
-
-  &.signed-up {
-    background-color: $teal;
-    border-color: $teal;
-  }
-}
-
-.event-category-board-game {
-  background-color: lighten($orange, 30%);
-
-  &.full {
-    background-color: fade-out(lighten($orange, 30%), 0.5);
-  }
-
-  &.signed-up {
-    background-color: $orange;
-    border-color: $orange;
-  }
 }
 
 .event-fullness-unlimited {

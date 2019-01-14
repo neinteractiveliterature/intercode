@@ -16,7 +16,9 @@ class NewTeamMember extends React.Component {
   static propTypes = {
     event: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      team_member_name: PropTypes.string.isRequired,
+      event_category: PropTypes.shape({
+        team_member_name: PropTypes.string.isRequired,
+      }).isRequired,
       team_members: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
       })).isRequired,
@@ -55,12 +57,12 @@ class NewTeamMember extends React.Component {
       <>
         <h1 className="mb-4">
           {'Add '}
-          {titleize(underscore(event.team_member_name))}
+          {titleize(underscore(event.event_category.team_member_name))}
         </h1>
 
         <div className="form-group">
           <label htmlFor={userConProfileSelectId}>
-            {`${humanize(underscore(this.props.event.team_member_name))}`}
+            {`${humanize(underscore(this.props.event.event_category.team_member_name))}`}
             {' '}
             to add
           </label>
@@ -75,7 +77,7 @@ class NewTeamMember extends React.Component {
             }))}
             disabled={this.state.mutationInProgress}
             userConProfilesQuery={TeamMemberUserConProfilesQuery}
-            placeholder={`Type the name of the ${this.props.event.team_member_name} you want to add`}
+            placeholder={`Type the name of the ${this.props.event.event_category.team_member_name} you want to add`}
           />
         </div>
 
@@ -124,7 +126,7 @@ class NewTeamMember extends React.Component {
                           }}
                         >
                           {'Add '}
-                          {event.team_member_name}
+                          {event.event_category.team_member_name}
                         </button>
                       </li>
                     )}

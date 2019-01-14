@@ -74,7 +74,7 @@ class RunEmailList extends React.Component {
               renderToolbarContent={() => (
                 <ChoiceSetFilter
                   choices={[
-                    { label: `Include ${pluralize(data.event.team_member_name)}`, value: 'teamMembers' },
+                    { label: `Include ${pluralize(data.event.event_category.team_member_name)}`, value: 'teamMembers' },
                     { label: 'Include confirmed', value: 'confirmed' },
                     { label: 'Include waitlisted', value: 'waitlisted' },
                   ]}
@@ -87,7 +87,7 @@ class RunEmailList extends React.Component {
 
                     return [...currentIncludes].sort().map((include) => {
                       if (include === 'teamMembers') {
-                        return humanize(underscore(pluralize(data.event.team_member_name)));
+                        return humanize(underscore(pluralize(data.event.event_category.team_member_name)));
                       }
 
                       return humanize(underscore(include));

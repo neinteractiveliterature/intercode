@@ -12,6 +12,7 @@ class Convention < ApplicationRecord
   has_many :user_con_profiles, dependent: :destroy
   has_many :users, through: :user_con_profiles
   has_many :events, dependent: :destroy
+  has_many :event_categories, dependent: :destroy
   has_many :runs, through: :events
   has_many :signups, through: :runs
   has_many :rooms, dependent: :destroy
@@ -26,11 +27,7 @@ class Convention < ApplicationRecord
 
   belongs_to :root_page, class_name: 'Page', optional: true
   belongs_to :default_layout, class_name: 'CmsLayout', optional: true
-  belongs_to :event_proposal_form, class_name: 'Form', optional: true
   belongs_to :user_con_profile_form, class_name: 'Form', optional: true
-  belongs_to :regular_event_form, class_name: 'Form', optional: true
-  belongs_to :volunteer_event_form, class_name: 'Form', optional: true
-  belongs_to :filler_event_form, class_name: 'Form', optional: true
 
   serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
 
@@ -73,14 +70,6 @@ class Convention < ApplicationRecord
 
   def to_liquid
     ConventionDrop.new(self)
-  end
-
-  def form_for_event_category(key)
-    category = EventCategory.find(key)
-
-    return volunteer_event_form if category.recurring?
-    return filler_event_form if category.single_run?
-    regular_event_form
   end
 
   private

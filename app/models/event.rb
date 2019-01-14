@@ -3,7 +3,6 @@ class Event < ApplicationRecord
   include Concerns::EventEmail
 
   STATUSES = Set.new(%w[active dropped])
-  CATEGORIES = Set.new(EventCategory::CATEGORIES_BY_KEY.keys)
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
 
   register_form_response_attrs :title,
@@ -27,15 +26,14 @@ class Event < ApplicationRecord
   # Ops) are owned by the department head
   belongs_to :owner, class_name: 'User', optional: true
 
-  # LARPs have GMs and Panels have Members
+  # LARPs have GMs and Panels have Panelists
   has_many :team_members, dependent: :destroy
 
   # The user who last updated the event.  Used for tracking
   belongs_to :updated_by, class_name: 'User', optional: true
 
-  # Each event must belong to a convention
   belongs_to :convention
-  validates :convention, presence: true
+  belongs_to :event_category
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
   has_many :provided_tickets,
@@ -46,10 +44,6 @@ class Event < ApplicationRecord
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
-
-  # Category currently does affect behavior of events; in Intercode 2.2 we plan to remove all the
-  # hard-coded behavior around category in favor of making it an adminable model.
-  validates :category, inclusion: { in: CATEGORIES }
 
   validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS }
 
@@ -69,6 +63,8 @@ class Event < ApplicationRecord
   # Making it slightly harder to change the registration policy unless you really know what
   # you're doing
   validate :registration_policy_cannot_change, unless: :allow_registration_policy_change
+
+  validate :event_category_must_be_from_same_convention
 
   # Runs specify how many instances of this event there are on the schedule.
   # An event may have 0 or more runs.
@@ -97,18 +93,8 @@ class Event < ApplicationRecord
     events.sort_by { |event| normalize_title_for_sort(event.title) }
   end
 
-  # TODO: when we make real adminable categories, we'll need to unbake this
-  # piece of business logic
-  def can_provide_tickets?
-    category == 'larp'
-  end
-
   def to_param
     "#{id}-#{title.parameterize}"
-  end
-
-  def team_member_name
-    EventCategory[category]&.team_member_name || 'team member'
   end
 
   def to_liquid
@@ -116,7 +102,7 @@ class Event < ApplicationRecord
   end
 
   def form
-    convention.form_for_event_category(category)
+    event_category.event_form
   end
 
   private
@@ -131,8 +117,7 @@ class Event < ApplicationRecord
   end
 
   def single_run_events_must_have_no_more_than_one_run
-    category_obj = EventCategory.find(category)
-    return unless category_obj.single_run? && status == 'active'
+    return unless event_category.single_run? && status == 'active'
     return if runs.size <= 1
 
     errors.add(:base, "#{category_obj.key.humanize} events must have no more than one run")
@@ -149,7 +134,15 @@ class Event < ApplicationRecord
 Use EventChangeRegistrationPolicyService instead."
   end
 
+  def event_category_must_be_from_same_convention
+    return if convention == event_category.convention
+
+    errors.add :event_category, "is from #{event_category.convention.name} but this event is in \
+#{convention.name}"
+  end
+
   def sync_team_mailing_list
+    return unless SyncTeamMailingListService.mailgun
     SyncTeamMailingListJob.perform_later(self)
   end
 end

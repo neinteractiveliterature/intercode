@@ -1,6 +1,11 @@
 class SyncTeamMailingListService < CivilService::Service
   include Concerns::SkippableAdvisoryLock
 
+  def self.mailgun
+    return unless ENV['MAILGUN_PRIVATE_KEY']
+    @mailgun ||= Mailgun::Client.new(ENV['MAILGUN_PRIVATE_KEY'])
+  end
+
   attr_reader :event
 
   def initialize(event:)
@@ -12,6 +17,11 @@ class SyncTeamMailingListService < CivilService::Service
   def inner_call
     unless event.team_mailing_list_name.present? && convention.event_mailing_list_domain.present?
       return success
+    end
+
+    unless mailgun
+      errors.add :base, 'Mailgun private key is not configured; cannot sync team mailing lists'
+      return failure(errors)
     end
 
     with_advisory_lock_unless_skip_locking("sync_team_mailing_list_event_#{event.id}") do
@@ -97,7 +107,6 @@ class SyncTeamMailingListService < CivilService::Service
   end
 
   def mailgun
-    return unless ENV['MAILGUN_PRIVATE_KEY']
-    @mailgun ||= Mailgun::Client.new(ENV['MAILGUN_PRIVATE_KEY'])
+    SyncTeamMailingListService.mailgun
   end
 end

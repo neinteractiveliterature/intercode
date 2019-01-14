@@ -1,16 +1,9 @@
-import gql from 'graphql-tag';
-
-const fragments = {};
-
-fragments.ticketType = gql`
 fragment TicketTypeFields on TicketType {
   id
   description
   maximum_event_provided_tickets
 }
-`;
 
-fragments.maximumEventProvidedTicketsOverride = gql`
 fragment MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
   ticket_type {
     ...TicketTypeFields
@@ -20,36 +13,19 @@ fragment MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicket
   override_value
 }
 
-${fragments.ticketType}
-`;
-
-fragments.room = gql`
 fragment RoomFields on Room {
   id
   name
 }
-`;
 
-fragments.convention = gql`
 fragment ConventionFields on Convention {
   starts_at
   ends_at
   timezone_name
   event_mailing_list_domain
 
-  regular_event_form {
-    id
-    form_api_json
-  }
-
-  volunteer_event_form {
-    id
-    form_api_json
-  }
-
-  filler_event_form {
-    id
-    form_api_json
+  event_categories {
+    ...EventCategoryFields
   }
 
   rooms {
@@ -62,11 +38,6 @@ fragment ConventionFields on Convention {
   ticket_name
 }
 
-${fragments.room}
-${fragments.ticketType}
-`;
-
-fragments.run = gql`
 fragment RunFields on Run {
   id
   starts_at
@@ -78,10 +49,6 @@ fragment RunFields on Run {
   }
 }
 
-${fragments.room}
-`;
-
-fragments.event = gql`
 fragment EventFields on Event {
   id
   title
@@ -97,11 +64,14 @@ fragment EventFields on Event {
   content_warnings
   email
   length_seconds
-  category
   status
   description_html
   form_response_attrs_json
   admin_notes
+
+  event_category {
+    id
+  }
 
   registration_policy {
     buckets {
@@ -126,13 +96,18 @@ fragment EventFields on Event {
   }
 }
 
-${fragments.run}
-${fragments.maximumEventProvidedTicketsOverride}
-`;
+fragment EventCategoryFields on EventCategory {
+  id
+  name
+  scheduling_ui
+  default_color
 
-export { fragments };
+  event_form {
+    id
+    form_api_json
+  }
+}
 
-export default gql`
 query EventAdminEventsQuery {
   currentAbility {
     can_override_maximum_event_provided_tickets
@@ -147,7 +122,3 @@ query EventAdminEventsQuery {
     ...EventFields
   }
 }
-
-${fragments.convention}
-${fragments.event}
-`;

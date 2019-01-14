@@ -4,10 +4,12 @@ describe EventDrop do
   let(:event) { FactoryBot.create(:event) }
   let(:event_drop) { EventDrop.new(event) }
 
-  %w[title team_member_name].each do |field|
-    it "returns the #{field} of the event" do
-      event_drop.public_send(field).must_equal event.public_send(field)
-    end
+  it "returns the title of the event" do
+    event_drop.title.must_equal event.title
+  end
+
+  it 'returns the team member name of the event category' do
+    event_drop.team_member_name.must_equal event.event_category.team_member_name
   end
 
   describe 'with team members' do

@@ -1,66 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import moment from 'moment-timezone';
 import { withRouter, Link } from 'react-router-dom';
 
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
-import { encodeStringArray, decodeStringArray } from '../Tables/FilterUtils';
+import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
+import { EventProposalsAdminQuery } from './queries.gql';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 
-const eventProposalsAdminQuery = gql`
-query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput]) {
-  convention {
-    id
-    timezone_name
-
-    event_proposals_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-      total_entries
-      total_pages
-      current_page
-      per_page
-
-      entries {
-        id
-        title
-        length_seconds
-        status
-        submitted_at
-        updated_at
-
-        registration_policy {
-          minimum_slots
-          total_slots
-          slots_limited
-        }
-
-        owner {
-          id
-          name_inverted
-        }
-      }
-    }
-  }
-}
-`;
-
-function encodeFilterValue(field, value) {
-  if (field === 'status') {
-    return encodeStringArray(value);
-  }
-
-  return value;
-}
-
-function decodeFilterValue(field, value) {
-  if (field === 'status') {
-    return decodeStringArray(value);
-  }
-
-  return value;
-}
+const FILTER_CODECS = buildFieldFilterCodecs({
+  status: FilterCodecs.stringArray,
+  event_category: FilterCodecs.integerArray,
+});
 
 function formatCapacity(registrationPolicy) {
   if (!registrationPolicy.slots_limited) {
@@ -82,7 +36,6 @@ const STATUS_OPTIONS = [
   { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'badge-warning' },
 ];
 
-@withRouter
 class EventProposalsAdminTable extends React.Component {
   static propTypes = {
     defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -94,6 +47,29 @@ class EventProposalsAdminTable extends React.Component {
   };
 
   getPossibleColumns = data => [
+    {
+      Header: 'Category',
+      id: 'event_category',
+      accessor: 'event_category',
+      width: 100,
+      Cell: ({ value }) => (
+        <span className="p-1 small rounded" style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}>
+          {value.name}
+        </span>
+      ),
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSetFilter
+          name="event_category"
+          choices={data.convention.event_categories.map(eventCategory => ({
+            value: eventCategory.id,
+            label: eventCategory.name,
+          }))}
+          onChange={onChange}
+          filter={filter}
+          filterCodec={FilterCodecs.integer}
+        />
+      ),
+    },
     {
       Header: 'Title',
       id: 'title',
@@ -197,15 +173,15 @@ class EventProposalsAdminTable extends React.Component {
   render = () => (
     <div className="mb-4">
       <ReactTableWithTheWorks
-        decodeFilterValue={decodeFilterValue}
+        decodeFilterValue={FILTER_CODECS.decodeFilterValue}
         defaultVisibleColumns={this.props.defaultVisibleColumns}
         alwaysVisibleColumns={['_extra']}
-        encodeFilterValue={encodeFilterValue}
+        encodeFilterValue={FILTER_CODECS.encodeFilterValue}
         exportUrl={this.props.exportUrl}
         getData={({ data }) => data.convention.event_proposals_paginated.entries}
         getPages={({ data }) => data.convention.event_proposals_paginated.total_pages}
         getPossibleColumns={this.getPossibleColumns}
-        query={eventProposalsAdminQuery}
+        query={EventProposalsAdminQuery}
         storageKeyPrefix="eventProposalsAdmin"
 
         className="-striped -highlight"
@@ -221,4 +197,4 @@ class EventProposalsAdminTable extends React.Component {
   )
 }
 
-export default EventProposalsAdminTable;
+export default withRouter(EventProposalsAdminTable);

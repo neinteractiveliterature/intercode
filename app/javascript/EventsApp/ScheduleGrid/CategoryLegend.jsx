@@ -1,116 +1,90 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
-import AvailabilityBar from './AvailabilityBar';
 import { CommonConventionDataQuery } from '../queries.gql';
-import EventCategory from '../../EventAdmin/EventCategory';
+import FakeEventRun from './FakeEventRun';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
-
-const COMMON_EVENT_CLASSES = 'px-1 pb-1 schedule-grid-event small';
-
-function FakeEventRun({
-  className, children, availability, unlimited,
-}) {
-  return (
-    <div className={classNames(COMMON_EVENT_CLASSES, className)} style={{ zIndex: 0, position: 'relative' }}>
-      {children}
-
-      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} />
-    </div>
-  );
-}
-
-FakeEventRun.propTypes = {
-  className: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  availability: PropTypes.number,
-  unlimited: PropTypes.bool,
-};
-
-FakeEventRun.defaultProps = {
-  availability: 0.0,
-  unlimited: false,
-};
 
 function CategoryLegend() {
   return (
-    <div className="d-flex flex-wrap">
-      <div className="col-md-6 col-lg-4 mb-4">
-        <div className="card bg-light">
-          <div className="card-header">
-            Event categories
-          </div>
+    <QueryWithStateDisplay query={CommonConventionDataQuery}>
+      {({ data: { convention: { event_categories: eventCategories } } }) => {
+        const sortedEventCategories = [...eventCategories]
+          .sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
+        const defaultCategory = sortedEventCategories[0];
 
-          <div className="card-body">
-            <QueryWithStateDisplay query={CommonConventionDataQuery}>
-              {({ data: { convention: { event_category_keys: eventCategoryKeys } } }) => {
-                const eventCategories = eventCategoryKeys.map(key => EventCategory.get(key));
-                eventCategories.sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
+        return (
+          <div className="d-flex flex-wrap">
+            <div className="col-md-6 col-lg-4 mb-4">
+              <div className="card bg-light">
+                <div className="card-header">
+                  Event categories
+                </div>
 
-                return eventCategories.map(category => (
-                  <FakeEventRun key={category.key} className={category.getClassName()}>
-                    {category.name}
+                <div className="card-body">
+                  {sortedEventCategories.map(category => (
+                    <FakeEventRun key={category.id} eventCategory={category}>
+                      {category.name}
+                    </FakeEventRun>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-lg-4 mb-4">
+              <div className="card bg-light">
+                <div className="card-header">
+                  Slot availability
+                </div>
+
+                <div className="card-body">
+                  <FakeEventRun eventCategory={defaultCategory} availability={1}>
+                    100% slots available
                   </FakeEventRun>
-                ));
-              }}
-            </QueryWithStateDisplay>
+
+                  <FakeEventRun eventCategory={defaultCategory} availability={0.5}>
+                    50% slots available
+                  </FakeEventRun>
+
+                  <FakeEventRun eventCategory={defaultCategory} runFull availability={0}>
+                    Full
+                  </FakeEventRun>
+
+                  <FakeEventRun eventCategory={defaultCategory} unlimited>
+                    Unlimited slots
+                  </FakeEventRun>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-lg-4 mb-4">
+              <div className="card bg-light">
+                <div className="card-header">
+                  Signup status
+                </div>
+
+                <div className="card-body">
+                  <FakeEventRun eventCategory={defaultCategory} signupStatus="confirmed">
+                    <i className="fa fa-check-square" />
+                    {' '}
+                    Confirmed
+                  </FakeEventRun>
+
+                  <FakeEventRun eventCategory={defaultCategory} signupStatus="waitlisted">
+                    <i className="fa fa-hourglass-half" />
+                    {' '}
+                    Waitlisted
+                  </FakeEventRun>
+
+                  <FakeEventRun eventCategory={defaultCategory}>
+                    Not signed up
+                  </FakeEventRun>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div className="col-md-6 col-lg-4 mb-4">
-        <div className="card bg-light">
-          <div className="card-header">
-            Slot availability
-          </div>
-
-          <div className="card-body">
-            <FakeEventRun className="event-category-larp" availability={1}>
-              100% slots available
-            </FakeEventRun>
-
-            <FakeEventRun className="event-category-larp" availability={0.5}>
-              50% slots available
-            </FakeEventRun>
-
-            <FakeEventRun className="event-category-larp full" availability={0}>
-              Full
-            </FakeEventRun>
-
-            <FakeEventRun className="event-category-larp" unlimited>
-              Unlimited slots
-            </FakeEventRun>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-6 col-lg-4 mb-4">
-        <div className="card bg-light">
-          <div className="card-header">
-            Signup status
-          </div>
-
-          <div className="card-body">
-            <FakeEventRun className="event-category-larp border-light signed-up">
-              <i className="fa fa-check-square" />
-              {' '}
-              Confirmed
-            </FakeEventRun>
-
-            <FakeEventRun className="event-category-larp border-light signed-up">
-              <i className="fa fa-hourglass-half" />
-              {' '}
-              Waitlisted
-            </FakeEventRun>
-
-            <FakeEventRun className="event-category-larp border-light">
-              Not signed up
-            </FakeEventRun>
-          </div>
-        </div>
-      </div>
-    </div>
+        );
+      }}
+    </QueryWithStateDisplay>
   );
 }
 

@@ -34,6 +34,17 @@ tool 'pull_production_db' do
   end
 end
 
+tool 'load_production_db' do
+  desc 'Load a production pgdump into development'
+  include :exec, exit_on_nonzero_status: true
+  flag :file, default: 'intercode_production.pgdump'
+
+  def run
+    sh "docker-compose -f docker-compose.yml -f docker-compose.load_production_database.yml \
+run load_production_database bin/load_production_database #{file}"
+  end
+end
+
 tool 'cleanup_branches' do
   desc 'Clean up local branches that were deleted or merged in origin'
   include :exec, exit_on_nonzero_status: true

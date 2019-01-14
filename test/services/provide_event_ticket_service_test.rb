@@ -2,7 +2,8 @@ require 'test_helper'
 
 describe ProvideEventTicketService do
   let(:convention) { FactoryBot.create(:convention) }
-  let(:event) { FactoryBot.create(:event, convention: convention) }
+  let(:event_category) { FactoryBot.create(:event_category, convention: convention, can_provide_tickets: true) }
+  let(:event) { FactoryBot.create(:event, convention: convention, event_category: event_category) }
   let(:ticket_type) { FactoryBot.create(:event_provided_ticket_type, convention: convention) }
   let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
   let(:service) { ProvideEventTicketService.new(event, user_con_profile, ticket_type) }
@@ -32,7 +33,7 @@ describe ProvideEventTicketService do
   end
 
   describe 'if the event cannot provide tickets' do
-    let(:event) { FactoryBot.create(:filler_event, convention: convention) }
+    let(:event_category) { FactoryBot.create(:event_category, convention: convention, can_provide_tickets: false) }
 
     it 'fails' do
       result = service.call
