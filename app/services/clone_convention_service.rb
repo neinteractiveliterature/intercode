@@ -61,12 +61,14 @@ class CloneConventionService < CivilService::Service
       source_convention.cms_navigation_items.root.order(:position),
       convention.cms_navigation_items
     ) do |navigation_item, cloned_navigation_item|
+      cloned_navigation_item.page = @id_maps[:pages][navigation_item.page_id]
       cloned_navigation_item.save!
       clone_with_id_map(
         navigation_item.navigation_links.order(:position),
         convention.cms_navigation_items
       ) do |navigation_link, cloned_navigation_link|
         cloned_navigation_link.navigation_section = cloned_navigation_item
+        cloned_navigation_link.page = @id_maps[:pages][navigation_link.page_id]
       end
     end
 
@@ -126,6 +128,10 @@ class CloneConventionService < CivilService::Service
       source_convention.staff_positions,
       convention.staff_positions
     ) do |staff_position, cloned_staff_position|
+      cloned_staff_position.email = replace_convention_domain(
+        staff_position.email,
+        convention
+      )
       cloned_staff_position.save!
 
       staff_position.permissions.each do |permission|
@@ -158,7 +164,7 @@ class CloneConventionService < CivilService::Service
       cloned_user_activity_alert.save!
 
       destination_id_map = clone_with_id_map(
-        user_activity_alert.alert_destinations,
+        user_activity_alert.alert_destinations.where.not(staff_position_id: nil),
         cloned_user_activity_alert.alert_destinations
       ) do |alert_destination, cloned_alert_destination|
         cloned_alert_destination.staff_position = @id_maps[:staff_positions][alert_destination.staff_position_id]
@@ -199,5 +205,10 @@ class CloneConventionService < CivilService::Service
 
   def shift_scheduled_value_by_convention_distance(convention, value)
     shift_scheduled_value(value, convention.starts_at - source_convention.starts_at)
+  end
+
+  def replace_convention_domain(string, convention)
+    return nil unless string
+    string.gsub(/#{Regexp.escape source_convention.domain}/, convention.domain)
   end
 end
