@@ -61,7 +61,7 @@ class MyProfilesController < ApplicationController
       convention.user_con_profile_form.form_items
     )
 
-    most_recent_profile = current_user.user_con_profiles.order(:created_at).last
+    most_recent_profile = current_user.user_con_profiles.joins(:conventions).order(conventions: :starts_at).last
     return unless most_recent_profile
 
     @user_con_profile.assign_form_response_attributes(
