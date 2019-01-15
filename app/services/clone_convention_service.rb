@@ -21,10 +21,12 @@ class CloneConventionService < CivilService::Service
 
   def inner_call
     convention = Convention.new(new_convention_attributes)
-    convention.maximum_event_signups ||= shift_scheduled_value_by_convention_distance(
-      convention,
-      source_convention.maximum_event_signups
-    )
+    unless new_convention_attributes.key?(:maximum_event_signups)
+      convention.maximum_event_signups = shift_scheduled_value_by_convention_distance(
+        convention,
+        source_convention.maximum_event_signups
+      )
+    end
     convention.save!
 
     @id_maps = {}
