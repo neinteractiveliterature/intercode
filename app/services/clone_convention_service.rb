@@ -21,22 +21,24 @@ class CloneConventionService < CivilService::Service
 
   def inner_call
     convention = Convention.new(new_convention_attributes)
-    unless new_convention_attributes.key?(:maximum_event_signups)
-      convention.maximum_event_signups = shift_scheduled_value_by_convention_distance(
-        convention,
-        source_convention.maximum_event_signups
-      )
-    end
-    convention.save!
+    ActiveRecord::Base.transaction do
+      unless new_convention_attributes.key?(:maximum_event_signups)
+        convention.maximum_event_signups = shift_scheduled_value_by_convention_distance(
+          convention,
+          source_convention.maximum_event_signups
+        )
+      end
+      convention.save!
 
-    @id_maps = {}
-    clone_cms_content(convention)
-    clone_event_categories(convention)
-    clone_rooms(convention)
-    clone_ticket_types(convention)
-    clone_staff_positions(convention)
-    clone_store_content(convention)
-    clone_user_activity_alerts(convention)
+      @id_maps = {}
+      clone_cms_content(convention)
+      clone_event_categories(convention)
+      clone_rooms(convention)
+      clone_ticket_types(convention)
+      clone_staff_positions(convention)
+      clone_store_content(convention)
+      clone_user_activity_alerts(convention)
+    end
 
     success(convention: convention)
   end
