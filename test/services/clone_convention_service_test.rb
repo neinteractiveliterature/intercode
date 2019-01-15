@@ -51,12 +51,14 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     FactoryBot.create(:event_category, convention: convention)
     result = service.call
     assert result.success?
+    result.convention.reload
     assert_equal 1, result.convention.event_categories.count
   end
 
   it 'clones rooms' do
     FactoryBot.create_list(:room, 5, convention: convention)
     result = service.call
+    result.convention.reload
     assert_equal 5, result.convention.rooms.count
   end
 
@@ -73,6 +75,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       )
     )
     result = service.call
+    result.convention.reload
     assert result.success?
 
     cloned_pricing_schedule = result.convention.ticket_types.first.pricing_schedule
@@ -87,6 +90,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     staff_position.permissions.create!(model: event_category, permission: 'read_event_proposals')
 
     result = service.call
+    result.convention.reload
     assert result.success?
     assert_equal 1, result.convention.staff_positions.count
     assert_equal staff_position.name, result.convention.staff_positions.first.name
@@ -100,6 +104,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     FactoryBot.create_list(:product_variant, 5, product: product_with_variants)
 
     result = service.call
+    result.convention.reload
     assert result.success?
     assert_equal 2, result.convention.products.count
     assert_equal 5, ProductVariant.joins(:product).where(products: { convention_id: result.convention.id }).count
@@ -111,6 +116,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     alert.alert_destinations.create!(staff_position: staff_position)
 
     result = service.call
+    result.convention.reload
     assert result.success?
     assert_equal 1, result.convention.user_activity_alerts.count
     assert_equal 1, result.convention.user_activity_alerts.first.alert_destinations.count
