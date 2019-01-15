@@ -7,6 +7,6 @@ class CmsNavigationItem < ApplicationRecord
   private
 
   def touch_parent
-    parent.touch if parent
+    parent.touch if parent && parent.persisted?
   end
 end
