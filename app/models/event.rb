@@ -78,7 +78,7 @@ class Event < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
-  scope :regular, -> { where(category: EventCategory.regular_categories.map(&:key)) }
+  scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
