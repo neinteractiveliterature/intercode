@@ -7,7 +7,7 @@ import EditEvent from '../../BuiltInForms/EditEvent';
 import GraphQLResultPropType from '../../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
-import getFormForEventCategory from '../../EventAdmin/getFormForEventCategory';
+import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';
 import { StandaloneEditEventQuery } from './queries.gql';
 import {
   StandaloneDropEvent,
@@ -145,7 +145,7 @@ class StandaloneEditEvent extends React.Component {
         ticketTypes={data.convention.ticket_types}
         ticketName={data.convention.ticket_name}
         convention={data.convention}
-        form={getFormForEventCategory(data.event, data.convention)}
+        form={deserializeForm(data.event.event_category.event_form)}
       />
     );
   }
