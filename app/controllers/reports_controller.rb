@@ -101,8 +101,9 @@ class ReportsController < ApplicationController
   end
 
   def volunteer_events
+    volunteer_event_category_ids = convention.event_categories.where("name ilike '%volunteer%'").pluck(:id)
     @events = Event.title_sort(
-      convention.events.where(category: 'volunteer_event').active.includes(
+      convention.events.where(event_category_id: volunteer_event_category_ids).active.includes(
         runs: [signups: :user_con_profile]
       )
     )
