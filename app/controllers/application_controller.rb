@@ -171,10 +171,16 @@ class ApplicationController < ActionController::Base
 
   def ensure_user_con_profile_exists
     return unless convention && user_signed_in?
-    return if user_con_profile
+    return if user_con_profile && !user_con_profile.needs_update?
 
-    redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
+    if user_con_profile
+      user_con_profile.update!(needs_update: false)
+      redirect_to edit_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
+    else
+      redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
+into this convention before, so please take a moment to update your profile."
+    end
   end
 
   def ensure_assumed_identity_matches_convention

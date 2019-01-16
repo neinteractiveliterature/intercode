@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_27_173933) do
+ActiveRecord::Schema.define(version: 2019_01_16_034950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -374,7 +374,7 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_category_id"], name: "index_permissions_on_event_category_id"
-    t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_event_category_permissions_unique_join", unique: true
+    t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_permissions_unique_join", unique: true
     t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
     t.check_constraint :permissions_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = 1)"
   end
@@ -574,6 +574,7 @@ ActiveRecord::Schema.define(version: 2018_12_27_173933) do
     t.boolean "receive_whos_free_emails", default: true, null: false
     t.boolean "gravatar_enabled", default: false, null: false
     t.text "ical_secret", null: false
+    t.boolean "needs_update", default: false, null: false
     t.index ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true
   end
 
