@@ -20,7 +20,7 @@
       %section
         .d-flex
           %div.mr-1
-            %strong #{event.team_member_name.titleize.pluralize}:
+            %strong #{event.event_category.team_member_name.titleize.pluralize}:
           %div
             %ul.list-unstyled
               - event.team_members.each do |team_member|
