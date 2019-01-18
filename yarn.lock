@@ -4259,11 +4259,12 @@ graphiql@^0.12.0:
     codemirror-graphql "^0.7.1"
     markdown-it "^8.4.0"
 
-graphql-anywhere@^4.1.24:
-  version "4.1.24"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.24.tgz#59e2a8bfd3d00ac75f6a377e31e4e9fdaa5ce786"
+graphql-anywhere@^4.1.25:
+  version "4.1.25"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.25.tgz#fa6be19ddc4ee516a7a197a651f21c6051a13d9f"
+  integrity sha512-6XgTH+3n2R+xhmfFMM37tIUyZPy7Q7/TA4H37m0x6dN/UtsDiGs4jfH1upCIiHc8eKtJ0leyadhFIiXqNB4KzA==
   dependencies:
-    apollo-utilities "^1.0.27"
+    apollo-utilities "^1.1.0"
 
 graphql-config@2.0.1:
   version "2.0.1"
