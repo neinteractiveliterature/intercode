@@ -19,6 +19,7 @@ import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
 import MyProfileForm from '../UserConProfiles/MyProfileForm';
 // import NavigationBar from '../NavigationBar';
 import NavigationItemsAdmin from '../NavigationItemsAdmin';
+import OAuthPermissionsPrompt from '../OAuthPermissionsPrompt';
 import OrderHistory from '../Store/OrderHistory';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
@@ -56,6 +57,7 @@ const unwrappedComponents = {
   MyProfileForm,
   // NavigationBar,
   NavigationItemsAdmin,
+  OAuthPermissionsPrompt,
   OrderHistory,
   PageAdminDropdown,
   ProductOrderForm,
