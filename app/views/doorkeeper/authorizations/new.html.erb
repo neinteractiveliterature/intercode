@@ -14,20 +14,11 @@
         about events you can access.
       </p>
 
-      <% if @pre_auth.scopes.count > 0 %>
-        <div id="oauth-permissions">
-          <p><%= t('.able_to') %>:</p>
 
-          <ul>
-            <% @pre_auth.scopes.each do |scope| %>
-              <li>
-                <span class="p-1 rounded <%= scope =~ /\Aread_/ ? 'bg-warning' : '' %><%= scope =~ /\Amanage_/ ? 'bg-danger text-white' : '' %>">
-                  <%= t scope, scope: [:doorkeeper, :scopes] %>
-                </span>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+      <% if @pre_auth.scopes.count > 0 %>
+        <% grouped_scopes = @pre_auth.scopes.group_by { |scope| scope =~ /\Aread_/ ? 'read_private' : (scope =~ /\Amanage_/ ? 'manage' : 'read_public') } %>
+
+        <%= app_component 'OAuthPermissionsPrompt', scopes: @pre_auth.scopes.map { |scope| { name: scope, description: t(scope, scope: [:doorkeeper, :scopes]) } } %>
       <% end %>
     </div>
 
