@@ -18,8 +18,8 @@ namespace :intercode do
     expirable_tokens = Doorkeeper::AccessToken.where(refresh_token: nil).where(Arel.sql(<<~SQL))
       created_at != (
         SELECT MAX(created_at) FROM #{Doorkeeper::AccessToken.table_name} tokens2
-        WHERE resource_owner_id = tokens2.resource_owner_id
-        AND application_id = tokens2.application_id
+        WHERE #{Doorkeeper::AccessToken.table_name}.resource_owner_id = tokens2.resource_owner_id
+        AND #{Doorkeeper::AccessToken.table_name}.application_id = tokens2.application_id
       )
     SQL
     cleaner = Doorkeeper::StaleRecordsCleaner.new(expirable_tokens)
