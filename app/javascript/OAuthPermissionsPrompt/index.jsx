@@ -20,6 +20,12 @@ const CLASS_NAMES_BY_SCOPE_GROUP = {
   manage: 'bg-danger-light',
 };
 
+const SCOPE_GROUP_DESCRIPTIONS = {
+  readPublic: 'Read-only access to public data',
+  readPrivate: 'Read-only access to personal data',
+  manage: 'Read/write access to personal data',
+};
+
 class OAuthPermissionsPrompt extends React.Component {
   static propTypes = {
     scopes: PropTypes.arrayOf(PropTypes.shape({
@@ -64,7 +70,7 @@ class OAuthPermissionsPrompt extends React.Component {
               }
             </button>
             {' '}
-            <strong>Read-only access to public data</strong>
+            <strong>{SCOPE_GROUP_DESCRIPTIONS[scopeGroup]}</strong>
           </div>
 
           {
