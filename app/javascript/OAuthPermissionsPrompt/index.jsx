@@ -65,12 +65,12 @@ class OAuthPermissionsPrompt extends React.Component {
             >
               {
                 this.state.expandedGroups.includes(scopeGroup)
-                  ? '▼'
-                  : '▶'
+                  ? <i className="fa fa-caret-down"><span className="sr-only">Collapse</span></i>
+                  : <i className="fa fa-caret-right"><span className="sr-only">Expand</span></i>
               }
+              {' '}
+              <strong>{SCOPE_GROUP_DESCRIPTIONS[scopeGroup]}</strong>
             </button>
-            {' '}
-            <strong>{SCOPE_GROUP_DESCRIPTIONS[scopeGroup]}</strong>
           </div>
 
           {
