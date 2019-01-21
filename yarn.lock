@@ -1265,19 +1265,27 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-cache-inmemory@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.4.0.tgz#8bcb1de8d1950dcdbd42f9af6d16fccca8e9e9ca"
+apollo-cache-inmemory@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.4.2.tgz#c91aeb4adff45cdc7872d603cbff055fa9cd5021"
   dependencies:
-    apollo-cache "^1.1.23"
-    apollo-utilities "^1.1.0"
-    optimism "^0.6.8"
+    apollo-cache "^1.1.25"
+    apollo-utilities "^1.1.2"
+    optimism "^0.6.9"
+    tslib "^1.9.3"
 
-apollo-cache@1.1.23, apollo-cache@^1.1.23:
+apollo-cache@1.1.23:
   version "1.1.23"
   resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.23.tgz#4765571223cae756ab7faf29792f1ab9a8450a91"
   dependencies:
     apollo-utilities "^1.1.0"
+
+apollo-cache@^1.1.25:
+  version "1.1.25"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.25.tgz#87a15a2a19993bb07234ccee6839b59d6fb49ac5"
+  dependencies:
+    apollo-utilities "^1.1.2"
+    tslib "^1.9.3"
 
 apollo-client@^2.4.9:
   version "2.4.9"
@@ -6621,9 +6629,9 @@ opn@^5.1.0:
   dependencies:
     is-wsl "^1.1.0"
 
-optimism@^0.6.8:
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.6.8.tgz#0780b546da8cd0a72e5207e0c3706c990c8673a6"
+optimism@^0.6.9:
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.6.9.tgz#19258ff8b3be0cea29ac35f06bff818e026e30bb"
   dependencies:
     immutable-tuple "^0.4.9"
 
