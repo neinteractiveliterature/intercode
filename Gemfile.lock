@@ -209,7 +209,7 @@ GEM
       tilt
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (1.5.2)
+    i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     icalendar (2.5.2)
       ice_cube (~> 0.16)
@@ -262,7 +262,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    minitest-spec-rails (5.4.0)
+    minitest-spec-rails (5.5.0)
       minitest (~> 5.0)
       rails (>= 4.1)
     monetize (1.9.0)
