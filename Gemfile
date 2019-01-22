@@ -57,7 +57,7 @@ gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
 gem 'graphql-libgraphqlparser'
-gem 'apollo_upload_server', '2.0.0.beta.1'
+gem 'apollo_upload_server', '2.0.0.beta.2'
 gem 'graphql-rails_logger', groups: [:development, :test]
 gem 'graphiql-rails', group: :development
 
