@@ -48,7 +48,7 @@ class EventList extends React.Component {
     );
   }
 
-  renderEvents = (convention, eventsPaginated, sorted) => {
+  renderEvents = (convention, eventsPaginated, sorted, canReadSchedule) => {
     let previousConventionDay = null;
     const conventionDayTimespans = getConventionDayTimespans(
       timespanFromConvention(convention),
@@ -84,6 +84,7 @@ class EventList extends React.Component {
             event={event}
             sorted={sorted}
             timezoneName={convention.timezone_name}
+            canReadSchedule={canReadSchedule}
           />
         </React.Fragment>
       );
@@ -196,7 +197,9 @@ class EventList extends React.Component {
                             </div>
                           </div>
 
-                          {this.renderEvents(convention, eventsPaginated, sorted)}
+                          {this.renderEvents(
+                            convention, eventsPaginated, sorted, currentAbility.can_read_schedule,
+                          )}
                           {this.renderBottomPagination({
                             eventsPaginated, onPageChange, pageSize, onPageSizeChange,
                           })}
