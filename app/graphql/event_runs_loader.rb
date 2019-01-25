@@ -9,8 +9,8 @@ class EventRunsLoader < GraphQL::Batch::Loader
 
   def perform(keys)
     run_scope = Run.includes(:event).where(event_id: keys.map(&:id)).accessible_by(ability)
-    run_scope = run_scope.where('starts_at >= ?', start) if start
-    run_scope = run_scope.where('starts_at < ?', finish) if finish
+    run_scope = run_scope.where('runs.starts_at >= ?', start) if start
+    run_scope = run_scope.where('runs.starts_at < ?', finish) if finish
 
     runs_by_event_id = run_scope.to_a.group_by(&:event_id)
     keys.each do |event|
