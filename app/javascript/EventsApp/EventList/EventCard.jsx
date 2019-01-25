@@ -62,7 +62,9 @@ function teamIsAllAuthors(author, teamMembers) {
   return true;
 }
 
-const EventCard = ({ event, timezoneName, sorted }) => {
+const EventCard = ({
+  event, timezoneName, sorted, canReadSchedule,
+}) => {
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
 
@@ -140,7 +142,7 @@ const EventCard = ({ event, timezoneName, sorted }) => {
             }
           </div>
           <div className="lead">
-            {renderFirstRunTime(event, timezoneName)}
+            {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
           </div>
         </div>
         <ul className="list-inline my-1">
@@ -187,10 +189,12 @@ EventCard.propTypes = {
     id: PropTypes.string.isRequired,
     desc: PropTypes.bool.isRequired,
   })),
+  canReadSchedule: PropTypes.bool,
 };
 
 EventCard.defaultProps = {
   sorted: null,
+  canReadSchedule: false,
 };
 
 export default EventCard;

@@ -43,12 +43,8 @@ Types::EventType = GraphQL::ObjectType.define do
     argument :start, Types::DateType
     argument :finish, Types::DateType
 
-    guard -> (event, _args, ctx) do
-      ctx[:current_ability].can?(:read, Run.new(event: event))
-    end
-
-    resolve -> (obj, args, _ctx) do
-      EventRunsLoader.for(args[:start], args[:finish]).load(obj)
+    resolve -> (obj, args, ctx) do
+      EventRunsLoader.for(args[:start], args[:finish], ctx[:current_ability]).load(obj)
     end
   end
   field :run, !Types::RunType do
