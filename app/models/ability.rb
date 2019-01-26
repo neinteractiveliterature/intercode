@@ -355,7 +355,8 @@ class Ability
     }
     can token_scope_action(:manage_conventions), TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
 
-    can :read, User if staff_con_ids.any?
+    # TODO: Re-enable this once Organizations exist
+    # can :read, User if staff_con_ids.any?
 
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)

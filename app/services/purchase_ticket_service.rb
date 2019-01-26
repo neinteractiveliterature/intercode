@@ -39,15 +39,21 @@ class PurchaseTicketService < CivilService::Service
 
   def create_charge
     customer = Stripe::Customer.create(
-      email: user_con_profile.email,
-      source: stripe_token
+      {
+        email: user_con_profile.email,
+        source: stripe_token
+      },
+      api_key: convention.stripe_secret_key
     )
 
     Stripe::Charge.create(
-      customer: customer.id,
-      amount: current_price.fractional,
-      description: "#{ticket_type.description} for #{convention.name}",
-      currency: current_price.currency.iso_code.downcase
+      {
+        customer: customer.id,
+        amount: current_price.fractional,
+        description: "#{ticket_type.description} for #{convention.name}",
+        currency: current_price.currency.iso_code.downcase
+      },
+      api_key: convention.stripe_secret_key
     )
   end
 

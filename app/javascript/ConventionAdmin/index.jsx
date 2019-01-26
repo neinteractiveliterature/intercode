@@ -2,84 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
-import gql from 'graphql-tag';
+
+import { ConventionAdminConventionQuery } from './queries.gql';
 import ConventionForm from './ConventionForm';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
-
-const conventionFragment = gql`
-fragment ConventionAdminConventionFields on Convention {
-  accepting_proposals
-  starts_at
-  ends_at
-  name
-  domain
-  event_mailing_list_domain
-  timezone_name
-  show_schedule
-  maximum_tickets
-  ticket_name
-
-  maximum_event_signups {
-    timespans {
-      start
-      finish
-      value
-    }
-  }
-
-  default_layout {
-    id
-    name
-  }
-
-  cms_layouts {
-    id
-    name
-  }
-
-  root_page {
-    id
-    name
-  }
-
-  pages {
-    id
-    name
-  }
-}
-`;
-
-const conventionQuery = gql`
-query ConventionAdminConventionQuery($id: Int!) {
-  convention(id: $id) {
-    ...ConventionAdminConventionFields
-  }
-}
-
-${conventionFragment}
-`;
-
-const updateConventionMutation = gql`
-mutation UpdateConvention($input: UpdateConventionInput!) {
-  updateConvention(input: $input) {
-    convention {
-      ...ConventionAdminConventionFields
-    }
-  }
-}
-
-${conventionFragment}
-`;
+import { UpdateConvention } from './mutations.gql';
 
 @flowRight([
-  graphql(conventionQuery),
-  graphql(updateConventionMutation, { name: 'updateConvention' }),
+  graphql(ConventionAdminConventionQuery),
+  graphql(UpdateConvention, { name: 'updateConvention' }),
 ])
 @GraphQLQueryResultWrapper
 class ConventionAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(conventionQuery).isRequired,
+    data: GraphQLResultPropType(ConventionAdminConventionQuery).isRequired,
     updateConvention: PropTypes.func.isRequired,
   };
 
@@ -113,6 +50,12 @@ class ConventionAdmin extends React.Component {
         },
         default_layout_id: (convention.default_layout || {}).id,
         root_page_id: (convention.root_page || {}).id,
+        stripe_publishable_key: convention.stripe_publishable_key,
+        ...(
+          convention.stripe_secret_key
+            ? { stripe_secret_key: convention.stripe_secret_key }
+            : {}
+        ),
       },
     };
 

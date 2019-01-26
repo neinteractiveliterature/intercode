@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pluralize } from 'inflected';
+import classNames from 'classnames';
+
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
@@ -9,6 +11,7 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
+import CommitableInput from '../BuiltInFormControls/CommitableInput';
 
 const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
@@ -24,8 +27,8 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
     onChange(event.target.value);
   };
 
-  const options = MAXIMUM_EVENT_SIGNUPS_OPTIONS.map(([value, label]) => (
-    <option key={value} value={value}>{label}</option>
+  const options = MAXIMUM_EVENT_SIGNUPS_OPTIONS.map(([optionValue, label]) => (
+    <option key={optionValue} value={optionValue}>{label}</option>
   ));
 
   return (
@@ -63,6 +66,8 @@ class ConventionForm extends React.Component {
         name: PropTypes.string.isRequired,
         id: PropTypes.number.isRequired,
       }),
+      stripe_publishable_key: PropTypes.string,
+      masked_stripe_secret_key: PropTypes.string,
     }).isRequired,
     cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -99,6 +104,8 @@ class ConventionForm extends React.Component {
           ticket_name: Transforms.textInputChange,
           default_layout: Transforms.identity,
           root_page: Transforms.identity,
+          stripe_publishable_key: Transforms.identity,
+          stripe_secret_key: Transforms.identity,
         },
       },
     });
@@ -153,6 +160,41 @@ class ConventionForm extends React.Component {
           helpText="If present, event teams can use this domain name to create automatically-managed mailing lists for their team."
           onChange={this.mutator.convention.event_mailing_list_domain}
         />
+
+        <div className="form-group">
+          <label htmlFor="stripe_publishable_key">Stripe publishable key</label>
+          <CommitableInput
+            value={this.state.convention.stripe_publishable_key || ''}
+            onChange={this.mutator.convention.stripe_publishable_key}
+            renderInput={props => (
+              <input
+                id="stripe_publishable_key"
+                {...props}
+                className={classNames(props.className, 'text-monospace', { 'bg-warning-light': props.onFocus != null })}
+              />
+            )}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="stripe_secret_key">Stripe secret key</label>
+          <CommitableInput
+            value={this.state.convention.stripe_secret_key || ''}
+            onChange={this.mutator.convention.stripe_secret_key}
+            renderInput={props => (
+              <input
+                id="stripe_secret_key"
+                {...props}
+                className={classNames(props.className, 'text-monospace', { 'bg-warning-light': props.onFocus != null })}
+                value={
+                  props.onFocus
+                    ? (props.value || this.props.initialConvention.masked_stripe_secret_key)
+                    : props.value
+                }
+              />
+            )}
+          />
+        </div>
 
         <TimezoneSelect
           name="timezone_name"

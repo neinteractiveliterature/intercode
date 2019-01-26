@@ -16,6 +16,13 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :ticket_name, !types.String
   field :user_con_profile_form, Types::FormType.to_non_null_type
 
+  field :stripe_publishable_key, types.String
+  field :masked_stripe_secret_key, types.String do
+    guard ->(convention, _args, ctx) do
+      ctx[:current_ability].can?(:update, convention)
+    end
+  end
+
   field :event_categories, Types::EventCategoryType.to_list_type.to_non_null_type do
     argument :current_ability_can_read_event_proposals, types.Boolean
 

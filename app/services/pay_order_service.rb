@@ -30,15 +30,21 @@ class PayOrderService < CivilService::Service
 
   def create_charge
     customer = Stripe::Customer.create(
-      email: order.user_con_profile.email,
-      source: stripe_token
+      {
+        email: order.user_con_profile.email,
+        source: stripe_token
+      },
+      api_key: convention.stripe_secret_key
     )
 
     Stripe::Charge.create(
-      customer: customer.id,
-      amount: order.total_price.fractional,
-      description: "#{description} for #{convention.name}",
-      currency: order.total_price.currency.iso_code.downcase
+      {
+        customer: customer.id,
+        amount: order.total_price.fractional,
+        description: "#{description} for #{convention.name}",
+        currency: order.total_price.currency.iso_code.downcase
+      },
+      api_key: convention.stripe_secret_key
     )
   end
 
