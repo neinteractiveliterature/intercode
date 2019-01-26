@@ -15,9 +15,9 @@
             - day_runs.each do |run|
               %tr
                 %td
-                  = format_run_time(run.starts_at)
+                  = format_run_time_compact_hour(run.starts_at)
                   &ndash;
-                  = format_run_time(run.ends_at)
+                  = format_run_time_compact_hour(run.ends_at)
                 %td
                   = run.event.title
                   - if run.title_suffix.present?
