@@ -63,7 +63,7 @@ class ReportsController < ApplicationController
 
   def events_by_time
     @runs = convention.runs.where(
-      event_id: convention.events.where.not(category: 'filler').active.select(:id)
+      event_id: convention.events.joins(:event_category).where.not(event_categories: { name: 'Filler event' }).active.select(:id)
     ).order(:starts_at).includes(:event, :rooms)
   end
 
