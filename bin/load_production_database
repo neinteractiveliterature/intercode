@@ -13,6 +13,9 @@ pg_restore -h postgres -U postgres -w -v --no-owner -j4 -d intercode_production_
 echo 'Changing convention domains and names for development'
 echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test', name = name || ' [dev]';" | psql -h postgres -U postgres -w intercode_production_tmp
 
+echo 'Changing Stripe keys for development'
+echo "UPDATE conventions SET stripe_publishable_key = 'pk_test_uD3hl7sRFOjcbdSG6KaH9olQ', stripe_secret_key = 'sk_test_VRD1WlpRoaPdwhmzRTIoqRrr';" | psql -h postgres -U postgres -w intercode_production_tmp
+
 echo 'Dropping intercode_development database'
 dropdb --if-exists -h postgres -U postgres -w intercode_development
 

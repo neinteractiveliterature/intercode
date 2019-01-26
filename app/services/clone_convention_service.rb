@@ -13,7 +13,9 @@ class CloneConventionService < CivilService::Service
       accepting_proposals: false,
       maximum_tickets: source_convention.maximum_tickets,
       ticket_name: source_convention.ticket_name,
-      timezone_name: source_convention.timezone_name
+      timezone_name: source_convention.timezone_name,
+      stripe_publishable_key: source_convention.stripe_publishable_key,
+      stripe_secret_key: source_convention.stripe_secret_key
     }.merge(new_convention_attributes.symbolize_keys)
   end
 

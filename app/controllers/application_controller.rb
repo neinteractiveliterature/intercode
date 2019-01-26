@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
   def app_component_props
     {
       authenticityToken: graphql_authenticity_token,
-      stripePublishableKey: Rails.configuration.stripe[:publishable_key]
+      stripePublishableKey: convention&.stripe_publishable_key
     }
   end
   helper_method :app_component_props
