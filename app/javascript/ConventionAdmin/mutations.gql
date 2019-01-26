@@ -1,0 +1,9 @@
+#import "./queries.gql"
+
+mutation UpdateConvention($input: UpdateConventionInput!) {
+  updateConvention(input: $input) {
+    convention {
+      ...ConventionAdminConventionFields
+    }
+  }
+}

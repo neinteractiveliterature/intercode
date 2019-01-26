@@ -72,6 +72,12 @@ class Convention < ApplicationRecord
     ConventionDrop.new(self)
   end
 
+  def masked_stripe_secret_key
+    return stripe_secret_key if stripe_secret_key.blank?
+
+    "#{stripe_secret_key[0..7]}...#{stripe_secret_key[-4..-1]}"
+  end
+
   private
 
   def maximum_event_signups_must_cover_all_time

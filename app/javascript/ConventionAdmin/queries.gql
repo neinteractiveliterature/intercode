@@ -1,0 +1,48 @@
+fragment ConventionAdminConventionFields on Convention {
+  accepting_proposals
+  starts_at
+  ends_at
+  name
+  domain
+  event_mailing_list_domain
+  timezone_name
+  show_schedule
+  maximum_tickets
+  ticket_name
+  stripe_publishable_key
+  masked_stripe_secret_key
+
+  maximum_event_signups {
+    timespans {
+      start
+      finish
+      value
+    }
+  }
+
+  default_layout {
+    id
+    name
+  }
+
+  cms_layouts {
+    id
+    name
+  }
+
+  root_page {
+    id
+    name
+  }
+
+  pages {
+    id
+    name
+  }
+}
+
+query ConventionAdminConventionQuery($id: Int!) {
+  convention(id: $id) {
+    ...ConventionAdminConventionFields
+  }
+}
