@@ -18,11 +18,11 @@ class DeleteTicketService < CivilService::Service
 
     if refund
       raise 'Ticket cannot be refunded because there is no Stripe charge ID' unless ticket.charge_id
-      charge = Stripe::Charge.retrieve(ticket.charge_id)
+      charge = Stripe::Charge.retrieve(ticket.charge_id, api_key: convention.stripe_secret_key)
       if charge.refunded
         refund_status = :already_refunded
       else
-        Stripe::Refund.create(charge: ticket.charge_id)
+        Stripe::Refund.create({ charge: ticket.charge_id }, api_key: convention.stripe_secret_key)
         refund_status = :refunded
       end
     end
@@ -30,5 +30,9 @@ class DeleteTicketService < CivilService::Service
     ticket.destroy!
 
     success(refund_status: refund_status)
+  end
+
+  def convention
+    @convention ||= ticket.convention
   end
 end

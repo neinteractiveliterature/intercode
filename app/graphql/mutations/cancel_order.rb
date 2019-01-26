@@ -10,12 +10,12 @@ Mutations::CancelOrder = GraphQL::Relay::Mutation.define do
 
     refund = nil
     if order.charge_id
-      charge = Stripe::Charge.retrieve(order.charge_id)
+      charge = Stripe::Charge.retrieve(order.charge_id, api_key: ctx[:convention].stripe_secret_key)
 
       if charge.refunded
         refund = charge.refunds.first
       else
-        refund = Stripe::Refund.create(charge: order.charge_id)
+        refund = Stripe::Refund.create({ charge: order.charge_id }, api_key: ctx[:convention].stripe_secret_key)
       end
     end
 
