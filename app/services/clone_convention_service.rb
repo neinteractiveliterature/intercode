@@ -10,13 +10,15 @@ class CloneConventionService < CivilService::Service
     @source_convention = source_convention
     @new_convention_attributes = {
       show_schedule: 'no',
-      accepting_proposals: false,
-      maximum_tickets: source_convention.maximum_tickets,
-      ticket_name: source_convention.ticket_name,
-      timezone_name: source_convention.timezone_name,
-      stripe_publishable_key: source_convention.stripe_publishable_key,
-      stripe_secret_key: source_convention.stripe_secret_key
-    }.merge(new_convention_attributes.symbolize_keys)
+      accepting_proposals: false
+    }.merge(source_convention.attributes.symbolize_keys.slice(*%i[
+      maximum_tickets
+      ticket_name
+      timezone_name
+      stripe_publishable_key
+      stripe_secret_key
+      clickwrap_agreement
+    ])).merge(new_convention_attributes.symbolize_keys)
   end
 
   private

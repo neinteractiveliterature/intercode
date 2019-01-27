@@ -33,6 +33,11 @@ class PagesController < ApplicationController
   # Intercode's layout uses the @page_title instance variable for the <title> tag.
   before_action :set_page_title, only: :show
 
+  # We're going to do our own slightly more complicated check here, because pages can explicitly
+  # skip the clickwrap check
+  skip_before_action :ensure_clickwrap_agreement_accepted
+  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it
+
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
   def root
@@ -86,7 +91,7 @@ class PagesController < ApplicationController
   end
 
   def page_params
-    params.require(:page).permit(:name, :slug, :content, :admin_notes)
+    params.require(:page).permit(:name, :slug, :content, :admin_notes, :skip_clickwrap_agreement)
   end
 
   def render_page_content
@@ -109,5 +114,10 @@ class PagesController < ApplicationController
 
     @cached_files ||= {}
     @cached_files.update(@page.cms_files.index_by(&:filename))
+  end
+
+  def ensure_clickwrap_agreement_accepted_unless_page_skips_it
+    return if @page&.skip_clickwrap_agreement?
+    ensure_clickwrap_agreement_accepted
   end
 end

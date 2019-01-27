@@ -56,6 +56,7 @@ class ConventionAdmin extends React.Component {
             ? { stripe_secret_key: convention.stripe_secret_key }
             : {}
         ),
+        clickwrap_agreement: convention.clickwrap_agreement,
       },
     };
 
