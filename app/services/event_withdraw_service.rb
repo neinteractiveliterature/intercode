@@ -50,13 +50,14 @@ class EventWithdrawService < CivilService::Service
       next if team_member.receive_signup_email == 'no'
       next if team_member.receive_signup_email == 'non_waitlist_signups' && prev_state == 'waitlisted'
 
+      # Wait 30 seconds because the transaction hasn't been committed yet
       EventSignupMailer.withdrawal(
         signup,
         prev_state,
         prev_bucket_key,
         move_results.map(&:to_h),
         team_member
-      ).deliver_later
+      ).deliver_later(wait: 30.seconds)
     end
   end
 end

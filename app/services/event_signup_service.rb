@@ -211,7 +211,8 @@ sign up for events."
       next if team_member.receive_signup_email == 'no'
       next if team_member.receive_signup_email == 'non_waitlist_signups' && signup.waitlisted?
 
-      EventSignupMailer.new_signup(signup, team_member).deliver_later
+      # Wait 30 seconds because the transaction hasn't been committed yet
+      EventSignupMailer.new_signup(signup, team_member).deliver_later(wait: 30.seconds)
     end
   end
 end

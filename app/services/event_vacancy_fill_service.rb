@@ -88,6 +88,7 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def notify_moved_signup(result)
-    EventSignupMailer.user_signup_moved(result.to_h).deliver_later
+    # Wait 30 seconds because the transaction hasn't been committed yet
+    EventSignupMailer.user_signup_moved(result.to_h).deliver_later(wait: 30.seconds)
   end
 end
