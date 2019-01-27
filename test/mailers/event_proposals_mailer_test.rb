@@ -52,4 +52,20 @@ class EventProposalsMailerTest < ActionMailer::TestCase
       assert_equal [staffer.email], email.to
     end
   end
+
+  describe '#proposal_submit_confirmation' do
+    it 'sends email to the proposal owner' do
+      event_proposal
+      proposal_chair_staff_position
+      proposal_chair_staff_position.update!(email: 'proposal-chair@example.com')
+      email = EventProposalsMailer.proposal_submit_confirmation(event_proposal)
+
+      assert_emails 1 do
+        email.deliver_now
+      end
+
+      assert_equal [proposal_chair_staff_position.email], email.from
+      assert_equal [event_proposal.owner.email], email.to
+    end
+  end
 end
