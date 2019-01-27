@@ -6,6 +6,20 @@ class EventProposalsMailer < ApplicationMailer
     event_proposal_mail(event_proposal, 'New')
   end
 
+  def proposal_submit_confirmation(event_proposal)
+    @event_proposal = event_proposal
+    @proposal_chair_staff_position = proposal_chair_staff_positions(event_proposal)
+      .select { |staff_position| staff_position.email.present? }
+      .first
+    from_address = @proposal_chair_staff_position&.email || from_address_for_convention(event_proposal.convention)
+
+    mail(
+      from: from_address,
+      to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
+      subject: "#{subject_prefix(event_proposal)} Submitted"
+    )
+  end
+
   def proposal_updated(event_proposal, changes)
     @event_proposal = event_proposal
     @changes = changes
@@ -24,15 +38,18 @@ class EventProposalsMailer < ApplicationMailer
 
   private
 
-  def proposal_mail_destination(event_proposal)
-    proposal_chair_staff_positions = event_proposal.convention.staff_positions
+  def proposal_chair_staff_positions(event_proposal)
+    event_proposal.convention.staff_positions
       .where(
         id: Permission.for_model(event_proposal.event_category)
           .where(permission: 'read_pending_event_proposals')
           .select(:staff_position_id)
       )
+  end
 
-    proposal_chair_staff_position_emails = proposal_chair_staff_positions.flat_map do |staff_position|
+  def proposal_mail_destination(event_proposal)
+    staff_positions = proposal_chair_staff_positions(event_proposal)
+    proposal_chair_staff_position_emails = staff_positions.flat_map do |staff_position|
       staff_position.email.presence || staff_position.user_con_profiles.map do |user_con_profile|
         "#{user_con_profile.name} <#{user_con_profile.email}>"
       end
