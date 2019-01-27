@@ -1,0 +1,2 @@
+module ClickwrapAgreementsHelper
+end

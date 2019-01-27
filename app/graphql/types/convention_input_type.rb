@@ -14,6 +14,7 @@ Types::ConventionInputType = GraphQL::InputObjectType.define do
   input_field :default_layout_id, types.Int
   input_field :stripe_publishable_key, types.String
   input_field :stripe_secret_key, types.String
+  input_field :clickwrap_agreement, types.String
 
   input_field :maximum_event_signups, Types::ScheduledValueInputType
 end

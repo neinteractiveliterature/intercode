@@ -23,6 +23,9 @@ class ApplicationController < ActionController::Base
   # Make the user create their profile for this con if they haven't got one
   before_action :ensure_user_con_profile_exists, unless: :devise_controller?
 
+  # Make sure the user accepts the clickwrap agreement if one exists
+  before_action :ensure_clickwrap_agreement_accepted, unless: :devise_controller?
+
   before_action :preload_cms_layout_content
 
   # Defines what to do if the current user doesn't have access to the page they're
@@ -181,6 +184,13 @@ into this convention before, so please take a moment to update your profile."
       redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
     end
+  end
+
+  def ensure_clickwrap_agreement_accepted
+    return unless convention && convention.clickwrap_agreement.present?
+    return unless user_con_profile && !user_con_profile.accepted_clickwrap_agreement?
+
+    redirect_to clickwrap_agreement_path
   end
 
   def ensure_assumed_identity_matches_convention
