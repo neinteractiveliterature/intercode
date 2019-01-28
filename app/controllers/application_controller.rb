@@ -177,7 +177,6 @@ class ApplicationController < ActionController::Base
     return if user_con_profile && !user_con_profile.needs_update?
 
     if user_con_profile
-      user_con_profile.update!(needs_update: false)
       redirect_to edit_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
     else
@@ -190,6 +189,7 @@ into this convention before, so please take a moment to update your profile."
     return unless convention && convention.clickwrap_agreement.present?
     return unless user_con_profile && !user_con_profile.accepted_clickwrap_agreement?
 
+    flash.clear
     redirect_to clickwrap_agreement_path
   end
 

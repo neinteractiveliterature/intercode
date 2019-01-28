@@ -20,6 +20,7 @@ class MyProfilesController < ApplicationController
   end
 
   def edit
+    @user_con_profile.update!(needs_update: false)
   end
 
   def edit_bio
@@ -31,6 +32,7 @@ class MyProfilesController < ApplicationController
   end
 
   def new
+    @user_con_profile.needs_update = true
     @user_con_profile.save!
     redirect_to edit_my_profile_path
   end
