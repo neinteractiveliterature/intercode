@@ -9312,9 +9312,9 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-thread-loader@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-2.1.1.tgz#c105639b4908486f7756167870ada8b5b544f0a4"
+thread-loader@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-2.1.2.tgz#f585dd38e852c7f9cded5d092992108148f5eb30"
   dependencies:
     loader-runner "^2.3.1"
     loader-utils "^1.1.0"
