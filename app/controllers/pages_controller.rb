@@ -36,7 +36,8 @@ class PagesController < ApplicationController
   # We're going to do our own slightly more complicated check here, because pages can explicitly
   # skip the clickwrap check
   skip_before_action :ensure_clickwrap_agreement_accepted
-  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it
+  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it, only: [:show]
+  before_action :ensure_clickwrap_agreement_accepted, except: [:show]
 
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
@@ -117,7 +118,7 @@ class PagesController < ApplicationController
   end
 
   def ensure_clickwrap_agreement_accepted_unless_page_skips_it
-    return if @page&.skip_clickwrap_agreement?
+    return if @page.skip_clickwrap_agreement?
     ensure_clickwrap_agreement_accepted
   end
 end
