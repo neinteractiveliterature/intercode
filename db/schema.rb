@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_26_155504) do
+ActiveRecord::Schema.define(version: 2019_01_27_192813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 2019_01_26_155504) do
     t.text "event_mailing_list_domain"
     t.text "stripe_publishable_key"
     t.text "stripe_secret_key"
+    t.text "clickwrap_agreement"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
@@ -365,6 +366,7 @@ ActiveRecord::Schema.define(version: 2019_01_26_155504) do
     t.bigint "cms_layout_id"
     t.text "admin_notes"
     t.boolean "invariant", default: false, null: false
+    t.boolean "skip_clickwrap_agreement", default: false, null: false
     t.index ["cms_layout_id"], name: "index_pages_on_cms_layout_id"
     t.index ["parent_type", "parent_id", "slug"], name: "index_pages_on_parent_type_and_parent_id_and_slug", unique: true
   end
@@ -577,6 +579,7 @@ ActiveRecord::Schema.define(version: 2019_01_26_155504) do
     t.boolean "gravatar_enabled", default: false, null: false
     t.text "ical_secret", null: false
     t.boolean "needs_update", default: false, null: false
+    t.boolean "accepted_clickwrap_agreement", default: false, null: false
     t.index ["convention_id", "user_id"], name: "index_user_con_profiles_on_convention_id_and_user_id", unique: true
   end
 

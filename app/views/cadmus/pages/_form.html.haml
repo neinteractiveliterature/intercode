@@ -10,6 +10,8 @@
 = f.text_field :name
 = f.text_field :admin_notes
 = f.text_field :slug, style: "font-family: monospace;", label: 'URL', prepend: url_for(:action => 'show', :page_glob => "slug", :only_path => false).sub(/slug$/, '')
+.mb-2
+  = f.check_box :skip_clickwrap_agreement, label: 'Skip clickwrap agreement (if selected, this page will not check whether the user has accepted the clickwrap agreement)'
 
 - if convention
   - default_layout_label = convention.default_layout ? "Default (currently set as #{convention.default_layout.name})" : "Default layout"

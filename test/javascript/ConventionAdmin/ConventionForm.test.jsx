@@ -1,10 +1,12 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import moment from 'moment-timezone';
-import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
+
+import BooleanInput from '../../../app/javascript/BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
 import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
 import DateTimeInput from '../../../app/javascript/BuiltInFormControls/DateTimeInput';
+import MultipleChoiceInput from '../../../app/javascript/BuiltInFormControls/MultipleChoiceInput';
 import ScheduledValueEditor from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
@@ -28,7 +30,7 @@ describe('ConventionForm', () => {
     root_page_id: null,
   };
 
-  const renderConventionForm = (props, initialConventionProps) => mount((
+  const renderConventionForm = (props, initialConventionProps) => shallow((
     <ConventionForm
       initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
       saveConvention={() => {}}
@@ -62,28 +64,29 @@ describe('ConventionForm', () => {
     expect(component.find(BootstrapFormInput).filter({ name: 'name' }).prop('value')).toEqual('myName');
     expect(component.find(BootstrapFormInput).filter({ name: 'domain' }).prop('value')).toEqual('myDomain');
     expect(component.find(TimezoneSelect).prop('value')).toEqual('UTC');
-    expect(component.find(BootstrapFormCheckbox).filter({ name: 'accepting_proposals', value: 'true' }).prop('checked')).toBeTruthy();
-    expect(component.find(BootstrapFormCheckbox).filter({ name: 'show_schedule', value: 'gms' }).prop('checked')).toBeTruthy();
+    expect(component.find(BooleanInput).filter({ name: 'accepting_proposals' }).prop('value')).toBeTruthy();
+    expect(component.find(MultipleChoiceInput).filter({ name: 'show_schedule' }).prop('value')).toEqual('gms');
     expect(component.find(BootstrapFormInput).filter({ name: 'maximum_tickets' }).prop('value')).toEqual('100');
 
-    const maximumEventSignups = component.find(ScheduledValueEditor);
-    expect(maximumEventSignups.find(DateTimeInput).at(1).prop('value')).toEqual(now);
-    expect(maximumEventSignups.find(DateTimeInput).at(2).prop('value')).toEqual(now);
-    expect(maximumEventSignups.find('select').at(0).prop('value')).toEqual('not_yet');
-    expect(maximumEventSignups.find('select').at(1).prop('value')).toEqual('unlimited');
+    expect(component.find(ScheduledValueEditor).prop('scheduledValue')).toEqual({
+      timespans: [
+        { start: null, finish: now, value: 'not_yet' },
+        { start: now, finish: null, value: 'unlimited' },
+      ],
+    });
   });
 
   test('mutating form fields', () => {
     const component = renderConventionForm();
-    component.find(BootstrapFormCheckbox).filter({ name: 'accepting_proposals', value: 'true' })
-      .find('input').simulate('change', { target: { name: 'accepting_proposals', value: 'true' } });
+    component.find(BooleanInput).filter({ name: 'accepting_proposals' })
+      .prop('onChange')(true);
     expect(component.instance().state.convention.accepting_proposals).toBeTruthy();
   });
 
   test('onClickSave', () => {
     const saveConvention = jest.fn();
     const component = renderConventionForm({ saveConvention });
-    component.find('.btn-primary').simulate('click');
+    component.find('.btn-primary').simulate('click', { preventDefault: () => {} });
     expect(saveConvention.mock.calls[0][0]).toEqual(defaultInitialConvention);
   });
 });

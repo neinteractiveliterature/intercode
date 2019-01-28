@@ -15,6 +15,7 @@ Types::ConventionType = GraphQL::ObjectType.define do
   field :maximum_event_signups, Types::ScheduledValueType
   field :ticket_name, !types.String
   field :user_con_profile_form, Types::FormType.to_non_null_type
+  field :clickwrap_agreement, types.String
 
   field :stripe_publishable_key, types.String
   field :masked_stripe_secret_key, types.String do
