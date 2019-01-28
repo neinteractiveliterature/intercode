@@ -12,6 +12,7 @@ import ScheduledValueEditor from '../BuiltInFormControls/ScheduledValueEditor';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import CommitableInput from '../BuiltInFormControls/CommitableInput';
+import LiquidInput from '../BuiltInFormControls/LiquidInput';
 
 const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
@@ -68,6 +69,7 @@ class ConventionForm extends React.Component {
       }),
       stripe_publishable_key: PropTypes.string,
       masked_stripe_secret_key: PropTypes.string,
+      clickwrap_agreement: PropTypes.string,
     }).isRequired,
     cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -106,6 +108,7 @@ class ConventionForm extends React.Component {
           root_page: Transforms.identity,
           stripe_publishable_key: Transforms.identity,
           stripe_secret_key: Transforms.identity,
+          clickwrap_agreement: Transforms.identity,
         },
       },
     });
@@ -267,6 +270,17 @@ class ConventionForm extends React.Component {
             timezone={this.state.convention.timezone_name}
             setScheduledValue={this.mutator.convention.maximum_event_signups}
             buildValueInput={buildMaximumEventSignupsInput}
+          />
+        </fieldset>
+
+        <fieldset className="mb-4">
+          <legend className="col-form-label">
+            Clickwrap agreement (if present, all users will be prompted to accept this agreement
+            before using the site)
+          </legend>
+          <LiquidInput
+            value={this.state.convention.clickwrap_agreement}
+            onChange={this.mutator.convention.clickwrap_agreement}
           />
         </fieldset>
 

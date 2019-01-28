@@ -100,17 +100,17 @@ class LiquidInput extends React.Component {
             return response.data.previewLiquid;
           }}
           extraNavControls={(
-            <li className="flex-grow-1 text-right">
+            <li className="flex-grow-1 d-flex justify-content-end">
               <div className="nav-item">
-                <a
-                  href="#"
-                  className="nav-link py-0 px-2"
+                <button
+                  type="button"
+                  className="btn btn-link nav-link py-0 px-2"
                   onClick={(e) => { e.preventDefault(); this.setState({ showingDocs: true }); }}
                 >
                   <i className="fa fa-question-circle" />
                   {' '}
                   Help
-                </a>
+                </button>
               </div>
             </li>
           )}

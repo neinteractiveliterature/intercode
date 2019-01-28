@@ -105,6 +105,9 @@ Intercode::Application.routes.draw do
     end
 
     resources :rooms, only: [:index]
+    resource :clickwrap_agreement, only: [:show] do
+      post :accept
+    end
 
     get 'user_activity_alerts/(*extra)' => 'user_activity_alerts#index', as: :user_activity_alerts
 
