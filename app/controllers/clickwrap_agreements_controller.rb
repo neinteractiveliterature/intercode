@@ -1,4 +1,5 @@
 class ClickwrapAgreementsController < ApplicationController
+  skip_before_action :ensure_user_con_profile_exists
   skip_before_action :ensure_clickwrap_agreement_accepted
   skip_authorization_check
 
