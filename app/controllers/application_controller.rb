@@ -187,6 +187,7 @@ into this convention before, so please take a moment to update your profile."
 
   def ensure_clickwrap_agreement_accepted
     return unless convention && convention.clickwrap_agreement.present?
+    return if assumed_identity_from_profile
     return unless user_con_profile && !user_con_profile.accepted_clickwrap_agreement?
 
     flash.clear
