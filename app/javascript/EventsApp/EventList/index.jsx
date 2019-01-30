@@ -50,10 +50,11 @@ class EventList extends React.Component {
 
   renderEvents = (convention, eventsPaginated, sorted, canReadSchedule) => {
     let previousConventionDay = null;
-    const conventionDayTimespans = getConventionDayTimespans(
-      timespanFromConvention(convention),
-      convention.timezone_name,
-    );
+    let conventionDayTimespans = [];
+    const conventionTimespan = timespanFromConvention(convention);
+    if (conventionTimespan.isFinite()) {
+      conventionDayTimespans = getConventionDayTimespans(conventionTimespan, convention.timezone_name);
+    }
 
     return eventsPaginated.entries.map((event) => {
       let preamble = null;
