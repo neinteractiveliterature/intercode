@@ -11,6 +11,14 @@ import RefreshButton from './RefreshButton';
 function ConventionDayTabContainer({
   basename, conventionTimespan, timezoneName, prefetchTimespan, children, refreshData,
 }) {
+  if (!conventionTimespan.isFinite()) {
+    return (
+      <div className="alert alert-warning">
+        Convention start/end dates have not yet been set.
+      </div>
+    );
+  }
+
   const conventionDayTimespans = getConventionDayTimespans(
     conventionTimespan,
     timezoneName,
