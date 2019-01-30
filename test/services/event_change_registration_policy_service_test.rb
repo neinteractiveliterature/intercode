@@ -273,18 +273,18 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       signup2
     end
 
-    it 'moves confirmed signups' do
+    it 'tries not to move confirmed signups' do
       result = subject.call
 
       result.must_be :success?
-      signup1.reload.bucket_key.must_equal 'dogs'
+      signup1.reload.bucket_key.must_equal 'anything'
     end
 
     it 'pulls in waitlisted signups' do
       result = subject.call
 
       result.must_be :success?
-      signup2.reload.bucket_key.must_equal 'anything'
+      signup2.reload.bucket_key.must_equal 'dogs'
       signup2.reload.state.must_equal 'confirmed'
     end
 
