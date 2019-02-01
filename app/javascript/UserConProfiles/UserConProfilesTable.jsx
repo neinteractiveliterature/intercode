@@ -180,6 +180,13 @@ class UserConProfilesTable extends React.Component {
           />
         ),
       },
+      {
+        Header: 'Order summary',
+        id: 'order_summary',
+        accessor: 'order_summary',
+        filterable: false,
+        sortable: false,
+      },
     ];
 
     form.getAllItems().forEach((formItem) => {

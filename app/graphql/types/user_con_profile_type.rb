@@ -77,6 +77,15 @@ Types::UserConProfileType = GraphQL::ObjectType.define do
     }
   end
 
+  field :order_summary, !types.String do
+    guard -> (obj, _args, ctx) {
+      ctx[:current_ability].can?(:read, Order.new(user_con_profile: obj))
+    }
+    resolve -> (obj, _args, _ctx) {
+      OrderSummaryLoader.for().load(obj)
+    }
+  end
+
   field :signups, Types::Signup.to_list_type.to_non_null_type do
     guard -> (obj, _args, ctx) {
       ctx[:current_ability].can?(:read, Signup.new(user_con_profile: obj, run: obj.convention.events.new.runs.new))
