@@ -76,6 +76,10 @@ To contact the Intercode 2 project team, you can:
 * [File an issue or feature request here](https://github.com/neinteractiveliterature/issues)
 * [Email Nat Budin](mailto:natbudin@gmail.com).
 
+# Code of Conduct
+
+Participants in the Intercode project are expected to follow the Contributor Covenant.  For details, [see CODE_OF_CONDUCT.md](https://github.com/neinteractiveliterature/intercode/blob/master/CODE_OF_CONDUCT.md).
+
 # License
 
 Intercode 2 is released under the terms and conditions of the MIT license.  Please see the LICENSE file for the full legalese.
