@@ -27,6 +27,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
         "#{convention.ticket_name.humanize} status changed"
       ),
       Tables::TableResultsPresenter::Field.new(:privileges, 'Privileges'),
+      Tables::TableResultsPresenter::Field.new(:order_summary, 'Order summary'),
       *form_fields
     ].uniq(&:id)
   end
@@ -141,7 +142,7 @@ lower(user_con_profiles.first_name) #{direction}")
   end
 
   def csv_scope
-    scoped.includes(:user, :team_members, ticket: :ticket_type)
+    scoped.includes(:user, :team_members, ticket: :ticket_type, orders: { order_entries: [:product, :product_variant] })
   end
 
   def generate_csv_cell(field, user_con_profile)

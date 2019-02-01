@@ -26,9 +26,10 @@ class OrderEntry < ApplicationRecord
     price_per_item * quantity
   end
 
-  def describe_products
+  def describe_products(always_show_quantity: false)
     [
-      quantity > 1 ? "#{quantity} #{product.name.pluralize}" : product.name,
+      always_show_quantity || quantity > 1 ? quantity.to_s : nil,
+      quantity > 1 ? product.name.pluralize : product.name,
       product_variant ? "(#{product_variant.name})" : nil
     ].compact.join(' ')
   end

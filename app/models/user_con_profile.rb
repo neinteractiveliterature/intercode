@@ -175,6 +175,11 @@ class UserConProfile < ApplicationRecord
     end
   end
 
+  def order_summary
+    OrderSummaryPresenter.preload_associations([self])
+    OrderSummaryPresenter.new(user_con_profile: self).order_summary
+  end
+
   private
 
   def send_user_activity_alerts

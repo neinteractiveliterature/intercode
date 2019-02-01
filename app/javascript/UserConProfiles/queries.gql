@@ -172,6 +172,7 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
         email
         privileges
         form_response_attrs_json
+        order_summary
 
         team_members {
           id
