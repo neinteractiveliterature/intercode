@@ -70,19 +70,22 @@ class UserConProfileAdminDisplay extends React.Component {
 
   renderUserAdminSection = (data) => {
     const { ability } = data.myProfile;
-    if (!ability.can_update_user_con_profile) {
-      return null;
-    }
 
     return (
       <div className="card my-4 mt-lg-0">
         <div className="card-header">User administration</div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <Link to={`/${this.props.userConProfileId}/edit`}>
-              Edit profile/privileges
-            </Link>
-          </li>
+          {
+            ability.can_update_user_con_profile
+              ? (
+                <li className="list-group-item">
+                  <Link to={`/${this.props.userConProfileId}/edit`}>
+                    Edit profile/privileges
+                  </Link>
+                </li>
+              )
+              : null
+          }
           <li className="list-group-item">
             <a
               href={`/reports/user_con_profiles/${this.props.userConProfileId}`}
