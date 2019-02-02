@@ -2,29 +2,7 @@ ARG RUBY_VERSION=2.5.3
 
 ### build
 
-FROM ruby:${RUBY_VERSION}-alpine as build
-
-RUN apk add \
-  --no-cache \
-  build-base git postgresql-dev cmake flex curl python tzdata less bash nodejs yarn
-
-RUN mkdir -p /tmp \
-  && cd /tmp \
-  && curl -sL https://github.com/graphql/libgraphqlparser/archive/v0.7.0.tar.gz >libgraphqlparser-0.7.0.tar.gz \
-  && tar xfz libgraphqlparser-0.7.0.tar.gz \
-  && cd /tmp/libgraphqlparser-0.7.0 \
-  && cmake . \
-  && make install \
-  && cd /tmp \
-  && rm -rf libgraphqlparser-0.7.0 libgraphqlparser-0.7.0.tar.gz
-
-RUN mkdir -p /usr/src/build \
-  && addgroup -S www \
-  && adduser -G www -S www \
-  && chown www:www /usr/src/build
-USER www
-
-WORKDIR /usr/src/build
+FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build
 
 COPY Gemfile Gemfile.lock /usr/src/build/
 RUN bundle install -j4 --without intercode1_import \
@@ -62,16 +40,7 @@ RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake asse
 
 ### production
 
-FROM ruby:${RUBY_VERSION}-alpine AS production
-ARG RAILS_ENV=production
-
-ENV RAILS_ENV $RAILS_ENV
-
-RUN apk add --no-cache yarn postgresql-libs postgresql-client tzdata curl bash
-
-RUN addgroup -S www \
-  && adduser -G www -S www
-USER www
+FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
 
 COPY --from=build-production /usr/local/bundle /usr/local/bundle
 COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
@@ -85,12 +54,6 @@ CMD bundle exec rails server -p $PORT -b 0.0.0.0
 FROM production AS test
 
 ENV RAILS_ENV test
-
-USER root
-RUN apk add \
-  --no-cache \
-  --repository https://alpine.global.ssl.fastly.net/alpine/edge/testing/ --allow-untrusted \
-  s3cmd
 
 USER www
 WORKDIR /usr/src/app
