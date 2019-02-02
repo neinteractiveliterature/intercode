@@ -69,11 +69,13 @@ class ReportsController < ApplicationController
 
   def per_event
     @events = Event.title_sort(
-      convention.events.regular.active.includes(
-        :event_category,
-        team_members: :user_con_profile,
-        runs: [:rooms, signups: :user_con_profile]
-      )
+      convention.events.regular.active
+        .where.not(event_category_id: volunteer_event_category_ids)
+        .includes(
+          :event_category,
+          team_members: :user_con_profile,
+          runs: [:rooms, signups: :user_con_profile]
+        )
     )
   end
 
@@ -96,6 +98,7 @@ class ReportsController < ApplicationController
 
     @events = Event.title_sort(
       Event.where(id: TeamMember.where(user_con_profile_id: @subject_profile.id).select(:event_id))
+        .where.not(event_category_id: volunteer_event_category_ids)
         .active
         .includes(
           :event_category,
@@ -118,7 +121,6 @@ class ReportsController < ApplicationController
   end
 
   def volunteer_events
-    volunteer_event_category_ids = convention.event_categories.where("name ilike '%volunteer%'").pluck(:id)
     @events = Event.title_sort(
       convention.events.where(event_category_id: volunteer_event_category_ids).active.includes(
         runs: [signups: :user_con_profile]
@@ -130,5 +132,9 @@ class ReportsController < ApplicationController
 
   def ensure_authorized
     authorize! :view_reports, convention
+  end
+
+  def volunteer_event_category_ids
+    @volunteer_event_category_ids ||= convention.event_categories.where("name ilike '%volunteer%'").pluck(:id)
   end
 end
