@@ -3,7 +3,7 @@ version: '3.4'
 x-dev-service: &dev-service
   build:
     context: .
-    dockerfile: Dockerfile.web
+    dockerfile: Dockerfile
     target: dev
   environment:
     RAILS_ENV: development
@@ -17,7 +17,7 @@ services:
   cat:
     build:
       context: .
-      dockerfile: Dockerfile.web
+      dockerfile: Dockerfile
       target: dev
     env_file: .env.development.local
     user: www
