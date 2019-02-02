@@ -83,6 +83,15 @@ class UserConProfileAdminDisplay extends React.Component {
               Edit profile/privileges
             </Link>
           </li>
+          <li className="list-group-item">
+            <a
+              href={`/reports/user_con_profiles/${this.props.userConProfileId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Printable report
+            </a>
+          </li>
           {ability.can_become_user_con_profile
             ? (
               <li className="list-group-item">
@@ -157,6 +166,13 @@ class UserConProfileAdminDisplay extends React.Component {
             <h1>{data.userConProfile.name}</h1>
             <table className="table table-sm table-striped my-4">
               <tbody>
+                <tr>
+                  <th scope="row" className="pr-2">Email</th>
+                  <td className="col-md-9">
+                    {data.userConProfile.user.email}
+                  </td>
+                </tr>
+
                 {this.renderFormItems(data)}
 
                 <tr>

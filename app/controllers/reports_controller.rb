@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
 
   before_action :ensure_authorized
 
-  layout 'print_reports', only: %w[events_by_time per_event per_user per_room volunteer_events]
+  layout 'print_reports', only: %w[events_by_time per_event per_user per_room single_user_printable volunteer_events]
 
   def index
   end
@@ -70,6 +70,7 @@ class ReportsController < ApplicationController
   def per_event
     @events = Event.title_sort(
       convention.events.regular.active.includes(
+        :event_category,
         team_members: :user_con_profile,
         runs: [:rooms, signups: :user_con_profile]
       )
@@ -86,6 +87,22 @@ class ReportsController < ApplicationController
     @rooms = convention.rooms.includes(
       runs: [:event, :rooms]
     ).sort_by { |room| room.name.downcase }
+  end
+
+  def single_user_printable
+    @subject_profile = convention.user_con_profiles.includes(
+      signups: [:event, run: :rooms]
+    ).find(params[:user_con_profile_id])
+
+    @events = Event.title_sort(
+      Event.where(id: TeamMember.where(user_con_profile_id: @subject_profile.id).select(:event_id))
+        .active
+        .includes(
+          :event_category,
+          team_members: :user_con_profile,
+          runs: [:rooms, signups: :user_con_profile]
+        )
+    )
   end
 
   def signup_spy

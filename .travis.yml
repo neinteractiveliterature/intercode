@@ -40,7 +40,7 @@ before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - test/docker-pull.sh
 - docker build
-  -f Dockerfile.web
+  -f Dockerfile
   --target build
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
@@ -49,7 +49,7 @@ before_script:
   -t neinteractiveliterature/intercode:local-build
   .
 - docker build
-  -f Dockerfile.web
+  -f Dockerfile
   --target build-production
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
@@ -61,7 +61,7 @@ before_script:
 - docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
 - docker push neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
 - docker build
-  -f Dockerfile.web
+  -f Dockerfile
   --target production
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
@@ -73,7 +73,7 @@ before_script:
 - docker tag neinteractiveliterature/intercode:${TRAVIS_COMMIT} neinteractiveliterature/intercode:${BRANCH_TAG}
 - docker push neinteractiveliterature/intercode:${BRANCH_TAG}
 - docker build
-  -f Dockerfile.web
+  -f Dockerfile
   --target test
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
