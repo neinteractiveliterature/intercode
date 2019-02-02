@@ -83,6 +83,15 @@ class UserConProfileAdminDisplay extends React.Component {
               Edit profile/privileges
             </Link>
           </li>
+          <li className="list-group-item">
+            <a
+              href={`/reports/user_con_profiles/${this.props.userConProfileId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Printable report
+            </a>
+          </li>
           {ability.can_become_user_con_profile
             ? (
               <li className="list-group-item">
