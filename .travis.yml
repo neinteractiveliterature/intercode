@@ -8,6 +8,7 @@ cache:
     - $HOME/docker
 before_cache:
 # Save tagged docker images
+- echo "Excluding images containing ${TRAVIS_COMMIT}"
 - >
   mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
   | grep -v ${TRAVIS_COMMIT}
