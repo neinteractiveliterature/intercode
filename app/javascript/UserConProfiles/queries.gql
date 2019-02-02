@@ -101,6 +101,11 @@ query UserConProfileAdminQuery($id: Int!) {
     privileges
     form_response_attrs_json
 
+    user {
+      id
+      email
+    }
+
     ticket {
       ...UserConProfileAdminTicketFields
     }
