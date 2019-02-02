@@ -91,6 +91,7 @@ Intercode::Application.routes.draw do
       get :per_user
       get :per_room
       get :signup_spy
+      get 'user_con_profiles/:user_con_profile_id' => :single_user_printable
       get :volunteer_events
     end
 
