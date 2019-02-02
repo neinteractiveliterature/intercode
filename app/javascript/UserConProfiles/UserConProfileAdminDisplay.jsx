@@ -166,6 +166,13 @@ class UserConProfileAdminDisplay extends React.Component {
             <h1>{data.userConProfile.name}</h1>
             <table className="table table-sm table-striped my-4">
               <tbody>
+                <tr>
+                  <th scope="row" className="pr-2">Email</th>
+                  <td className="col-md-9">
+                    {data.userConProfile.user.email}
+                  </td>
+                </tr>
+
                 {this.renderFormItems(data)}
 
                 <tr>
