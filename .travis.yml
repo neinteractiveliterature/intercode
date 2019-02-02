@@ -61,7 +61,6 @@ before_script:
   -t neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
   .
 - docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-- docker push neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
 - docker build
   -f Dockerfile
   --target production
