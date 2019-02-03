@@ -66,6 +66,14 @@ class UserConProfilesTable extends React.Component {
         width: 70,
       },
       {
+        Header: 'User ID',
+        id: 'user_id',
+        accessor: userConProfile => userConProfile.user.id,
+        filterable: false,
+        sortable: false,
+        width: 70,
+      },
+      {
         Header: 'Name',
         id: 'name',
         accessor: userConProfile => userConProfile.name_inverted,
