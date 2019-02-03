@@ -15,6 +15,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   def fields
     [
       Tables::TableResultsPresenter::Field.new(:id, 'ID'),
+      Tables::TableResultsPresenter::Field.new(:user_id, 'User ID'),
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
       Tables::TableResultsPresenter::Field.new(:first_name, 'First name'),
       Tables::TableResultsPresenter::Field.new(:last_name, 'Last name'),
@@ -35,7 +36,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   end
 
   def form_fields
-    convention.user_con_profile_form.form_items.select(&:identifier).map do |form_item|
+    @form_fields ||= convention.user_con_profile_form.form_items.select(&:identifier).map do |form_item|
       Tables::TableResultsPresenter::Field.new(
         form_item.identifier.to_sym,
         form_item.properties['admin_description'] || form_item.identifier.humanize
@@ -159,6 +160,8 @@ lower(user_con_profiles.first_name) #{direction}")
     when :is_team_member then user_con_profile.team_members.any? ? 'yes' : 'no'
     when :ticket_updated_at then user_con_profile.ticket&.updated_at&.iso8601
     when :privileges then user_con_profile.privileges.map(&:titleize).sort.join(', ')
+    when *form_fields.map(&:id).map(&:to_sym)
+      user_con_profile.read_form_response_attribute(field.id)
     else user_con_profile.public_send(field.id)
     end
   end

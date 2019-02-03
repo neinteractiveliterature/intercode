@@ -179,6 +179,10 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
         form_response_attrs_json
         order_summary
 
+        user {
+          id
+        }
+
         team_members {
           id
         }
