@@ -19,21 +19,24 @@ import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
+  ticket_type: FilterCodecs.stringArray,
   privileges: FilterCodecs.stringArray,
   attending: FilterCodecs.boolean,
   is_team_member: FilterCodecs.boolean,
   payment_amount: FilterCodecs.float,
 });
 
-function formatTicketStatus(ticket) {
+function formatTicketStatus(ticket, includePaymentAmount = true) {
   if (!ticket) {
     return 'Unpaid';
   }
 
   const ticketTypeName = humanize(ticket.ticket_type.name);
 
-  if (ticket.payment_amount && ticket.payment_amount.fractional > 0) {
-    return `${ticketTypeName} ${formatMoney(ticket.payment_amount)}`;
+  if (includePaymentAmount) {
+    if (ticket.payment_amount && ticket.payment_amount.fractional > 0) {
+      return `${ticketTypeName} ${formatMoney(ticket.payment_amount)}`;
+    }
   }
 
   return ticketTypeName;
@@ -54,6 +57,14 @@ class UserConProfilesTable extends React.Component {
     const form = deserializeForm(data.convention.user_con_profile_form);
 
     const columns = [
+      {
+        Header: 'ID',
+        id: 'id',
+        accessor: 'id',
+        filterable: false,
+        sortable: false,
+        width: 70,
+      },
       {
         Header: 'Name',
         id: 'name',
@@ -97,6 +108,28 @@ class UserConProfilesTable extends React.Component {
         accessor: 'ticket',
         width: 150,
         Cell: ({ value }) => formatTicketStatus(value),
+        Filter: ({ filter, onChange }) => (
+          <ChoiceSetFilter
+            name="ticketType"
+            choices={[
+              { label: 'Unpaid', value: 'none' },
+              ...(data.convention.ticket_types
+                .map(ticketType => ({
+                  label: humanize(ticketType.name),
+                  value: ticketType.id.toString(),
+                }))),
+            ]}
+            onChange={onChange}
+            filter={filter}
+          />
+        ),
+      },
+      {
+        Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
+        id: 'ticket_type',
+        accessor: 'ticket',
+        width: 150,
+        Cell: ({ value }) => formatTicketStatus(value, false),
         Filter: ({ filter, onChange }) => (
           <ChoiceSetFilter
             name="ticketType"

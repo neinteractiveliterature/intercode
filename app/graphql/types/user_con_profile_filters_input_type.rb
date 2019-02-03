@@ -6,6 +6,7 @@ Types::UserConProfileFiltersInputType = GraphQL::InputObjectType.define do
   input_field :last_name, types.String
   input_field :email, types.String
   input_field :ticket, types[types.String]
+  input_field :ticket_type, types[types.String]
   input_field :privileges, types[types.String]
   input_field :payment_amount, types.Float
   input_field :attending, types.Boolean

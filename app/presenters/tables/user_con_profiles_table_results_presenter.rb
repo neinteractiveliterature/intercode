@@ -14,11 +14,13 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
 
   def fields
     [
+      Tables::TableResultsPresenter::Field.new(:id, 'ID'),
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
       Tables::TableResultsPresenter::Field.new(:first_name, 'First name'),
       Tables::TableResultsPresenter::Field.new(:last_name, 'Last name'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:ticket, convention.ticket_name.humanize),
+      Tables::TableResultsPresenter::Field.new(:ticket_type, "#{convention.ticket_name.humanize} type"),
       Tables::TableResultsPresenter::Field.new(:payment_amount, 'Payment amount'),
       Tables::TableResultsPresenter::Field.new(:is_team_member, 'Event team member?'),
       Tables::TableResultsPresenter::Field.new(:attending, 'Attending?'),
@@ -67,7 +69,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       end
     when :payment_amount
       scope.left_joins(:ticket).where(tickets: { payment_amount_cents: (value.to_f * 100.0).to_i })
-    when :ticket
+    when :ticket, :ticket_type
       ticket_type_ids = value.map do |id_value|
         if id_value == 'none'
           nil
@@ -88,7 +90,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     case sort_field
     when :email
       scope.joins(:user)
-    when :ticket
+    when :ticket, :ticket_type
       scope.joins(ticket: :ticket_type)
     else
       scope
@@ -108,6 +110,8 @@ lower(user_con_profiles.first_name) #{direction}")
       Arel.sql("lower(users.email) #{direction}")
     when :ticket
       Arel.sql("ticket_types.name #{direction}, tickets.payment_amount_cents #{direction}")
+    when :ticket_type
+      Arel.sql("ticket_types.name #{direction}")
     when :ticket_updated_at
     when :privileges
       clauses = UserConProfile::PRIV_NAMES.map do |priv_name|
@@ -149,6 +153,7 @@ lower(user_con_profiles.first_name) #{direction}")
     case field.id
     when :name then user_con_profile.name_inverted
     when :ticket then describe_ticket(user_con_profile.ticket)
+    when :ticket_type then describe_ticket(user_con_profile.ticket, include_payment_amount: false)
     when :payment_amount then user_con_profile.ticket.payment_amount_cents / 100.0
     when :attending then user_con_profile.ticket ? 'yes' : 'no'
     when :is_team_member then user_con_profile.team_members.any? ? 'yes' : 'no'
@@ -158,14 +163,16 @@ lower(user_con_profiles.first_name) #{direction}")
     end
   end
 
-  def describe_ticket(ticket)
+  def describe_ticket(ticket, include_payment_amount: true)
     return 'Unpaid' unless ticket
 
     status_parts = []
     status_parts << ticket.ticket_type.name.humanize
 
-    payment_amount = ticket.payment_amount
-    status_parts << humanized_money_with_symbol(payment_amount) if payment_amount.try(:>, 0)
+    if include_payment_amount
+      payment_amount = ticket.payment_amount
+      status_parts << humanized_money_with_symbol(payment_amount) if payment_amount.try(:>, 0)
+    end
 
     status_parts.compact.join(' ')
   end
