@@ -372,7 +372,7 @@ GEM
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     scheduled_value (1.2.2)
-    sequel (5.16.0)
+    sequel (5.17.0)
     shoryuken (4.0.3)
       aws-sdk-core (>= 2)
       concurrent-ruby
