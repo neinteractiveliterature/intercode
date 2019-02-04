@@ -153,7 +153,7 @@ GEM
       dotenv (= 2.6.0)
       railties (>= 3.2, < 6.0)
     erubi (1.8.0)
-    eu_central_bank (1.4.1)
+    eu_central_bank (1.4.2)
       money (~> 6.13)
       nokogiri (~> 1.8)
     excon (0.62.0)
