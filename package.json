@@ -110,7 +110,7 @@
     "tinycolor2": "^1.4.1",
     "unfetch": "^4.0.1",
     "url-search-params-polyfill": "^5.0.0",
-    "webpack": "^4.29.0",
+    "webpack": "^4.29.1",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.2.1",
