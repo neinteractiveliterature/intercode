@@ -1892,9 +1892,9 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
 
-bootstrap.native@^2.0.24:
-  version "2.0.24"
-  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.24.tgz#52e473e4aeff770ca7e0aae06369799167bc2de1"
+bootstrap.native@^2.0.25:
+  version "2.0.25"
+  resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.25.tgz#a562132ec25850e3cc6dcf113c2fdf2b3de4c07a"
 
 bootstrap@^4.2.1:
   version "4.2.1"
