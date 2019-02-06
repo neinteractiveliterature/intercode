@@ -78,7 +78,7 @@
     "prop-types": "^15.6.2",
     "query-string": "^5.1.1",
     "rails-ujs": "^5.2.1",
-    "react": "^16.7.0",
+    "react": "^16.8.0",
     "react-apollo": "^2.4.1",
     "react-bootstrap4-modal": "^1.7.0",
     "react-clipboard.js": "^2.0.1",
