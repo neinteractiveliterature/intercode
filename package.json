@@ -161,8 +161,9 @@
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "setupFiles": [
-      "jest-prop-type-error"
-    ],
-    "setupTestFrameworkScriptFile": "./test/javascript/setupTests.js"
+      "jest-prop-type-error",
+      "regenerator-runtime/runtime",
+      "./test/javascript/setupTests.js"
+    ]
   }
 }
