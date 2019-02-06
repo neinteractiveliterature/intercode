@@ -3,18 +3,6 @@ branches:
   only:
   - master
 language: minimal
-cache:
-  directories:
-    - $HOME/docker
-before_cache:
-# Save tagged docker images
-- echo "Excluding images containing ${TRAVIS_COMMIT}"
-- >
-  mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
-  | grep -v ${TRAVIS_COMMIT}
-  | grep -v neinteractiveliterature/intercode:local-build
-  | grep -v neinteractiveliterature/base-ruby
-  | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
 before_install:
 # Upgrade Docker
 # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -25,8 +13,6 @@ before_install:
 # "features": {
 #   "buildkit": true
 # },
-# Load cached docker images
-- if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 - |
   echo '{
     "storage-driver": "overlay2",
