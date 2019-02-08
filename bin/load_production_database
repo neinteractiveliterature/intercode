@@ -2,25 +2,31 @@
 
 set -e
 
-echo 'postgres:*:*:postgres:postgres' > ~/.pgpass
-chmod 0600 ~/.pgpass
+PG_OPTIONS=""
+
+if [[ -n $USE_DOCKER_COMPOSE ]]
+then
+  echo 'postgres:*:*:postgres:postgres' > ~/.pgpass
+  chmod 0600 ~/.pgpass
+  PG_OPTIONS="-h postgres"
+fi
 
 echo 'Loading database into local Postgres'
-dropdb -h postgres -U postgres -w --if-exists intercode_production_tmp
-createdb -h postgres -U postgres -w intercode_production_tmp
-pg_restore -h postgres -U postgres -w -v --no-owner -j4 -d intercode_production_tmp "$1"
+dropdb $PG_OPTIONS -U postgres -w --if-exists intercode_production_tmp
+createdb $PG_OPTIONS -U postgres -w intercode_production_tmp
+pg_restore $PG_OPTIONS -U postgres -w -v --no-owner -j4 -d intercode_production_tmp "$1"
 
 echo 'Changing convention domains and names for development'
-echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test', name = name || ' [dev]';" | psql -h postgres -U postgres -w intercode_production_tmp
+echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test', name = name || ' [dev]';" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
 
 echo 'Changing Stripe keys for development'
-echo "UPDATE conventions SET stripe_publishable_key = 'pk_test_uD3hl7sRFOjcbdSG6KaH9olQ', stripe_secret_key = 'sk_test_VRD1WlpRoaPdwhmzRTIoqRrr';" | psql -h postgres -U postgres -w intercode_production_tmp
+echo "UPDATE conventions SET stripe_publishable_key = 'pk_test_uD3hl7sRFOjcbdSG6KaH9olQ', stripe_secret_key = 'sk_test_VRD1WlpRoaPdwhmzRTIoqRrr';" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
 
 echo 'Dropping intercode_development database'
-dropdb --if-exists -h postgres -U postgres -w intercode_development
+dropdb --if-exists $PG_OPTIONS -U postgres -w intercode_development
 
 echo 'Recreating intercode_development from production data'
-createdb -h postgres -U postgres -w -T intercode_production_tmp intercode_development
+createdb $PG_OPTIONS -U postgres -w -T intercode_production_tmp intercode_development
 
 echo 'Dropping tmp database'
-dropdb -h postgres -U postgres -w intercode_production_tmp
+dropdb $PG_OPTIONS -U postgres -w intercode_production_tmp
