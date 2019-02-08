@@ -212,6 +212,7 @@ class Ability
     # Here's what the general public can do...
     can :read, Convention
     can :schedule, Convention, show_schedule: 'yes'
+    can :list_events, Convention, show_event_list: 'yes'
     can :read, Event, status: 'active'
     can :read, EventCategory
     can :read, Form
@@ -247,6 +248,7 @@ class Ability
         :mail_to_any,
         :schedule,
         :schedule_with_counts,
+        :list_events,
         :view_reports,
         :view_attendees
       ], Convention
@@ -336,6 +338,9 @@ class Ability
     can [:schedule, :schedule_with_counts], Convention,
       id: con_ids_with_privilege(:scheduling, :gm_liaison),
       show_schedule: %w[priv gms yes]
+    can :list_events, Convention,
+      id: con_ids_with_privilege(:scheduling, :gm_liaison),
+      show_event_list: %w[priv gms yes]
     can :read, Run, event: {
       status: 'active',
       convention: {
@@ -346,6 +351,9 @@ class Ability
     can [:schedule, :schedule_with_counts], Convention,
       id: con_ids_with_privilege(:con_com),
       show_schedule: %w[gms yes]
+    can :list_events, Convention,
+      id: con_ids_with_privilege(:con_com),
+      show_event_list: %w[gms yes]
     can :read, Run, event: {
       status: 'active',
       convention: {
@@ -447,6 +455,7 @@ class Ability
 
     return unless has_scope?(:read_conventions)
     can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
+    can :list_events, Convention, id: team_member_convention_ids, show_event_list: %w[gms yes]
     can :read, UserConProfile, convention_id: team_member_convention_ids
     can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
   end
