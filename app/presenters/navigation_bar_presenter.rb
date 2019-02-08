@@ -133,7 +133,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'List of Events'
       url { events_path }
-      visible? true
+      visible? { can?(:list_events, convention) }
       active? { |request| request.path == events_path }
     end,
     NavigationItem.define do

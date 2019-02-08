@@ -17,6 +17,7 @@ class TeamMember < ApplicationRecord
   belongs_to :updated_by, class_name: 'User', optional: true
 
   after_commit :sync_team_mailing_list
+  after_commit :touch_convention
 
   delegate :name, to: :user_con_profile
 
@@ -47,5 +48,9 @@ event #{event.name} is from #{event.convention.name}.")
     return unless SyncTeamMailingListService.mailgun
     return unless event
     SyncTeamMailingListJob.perform_later(event)
+  end
+
+  def touch_convention
+    event.convention.touch
   end
 end
