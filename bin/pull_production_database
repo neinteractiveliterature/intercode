@@ -8,7 +8,12 @@ PRODUCTION_DATABASE_URL=${PRODUCTION_DATABASE_URL:-$(heroku config:get DATABASE_
 echo 'Pulling database contents'
 docker run -i -t --mount type=bind,source="$(pwd)",target=/out postgres:10.4 pg_dump --exclude-table-data="form_response_changes" -v -x --no-owner -Fc "$PRODUCTION_DATABASE_URL" -f /out/intercode_production.pgdump
 
-docker-compose -f docker-compose.yml -f docker-compose.load_production_database.yml run load_production_database bin/load_production_database intercode_production.pgdump
+if [[ -n $USE_DOCKER_COMPOSE ]]
+then
+  docker-compose -f docker-compose.yml -f docker-compose.load_production_database.yml run load_production_database bin/load_production_database intercode_production.pgdump
+else
+  bin/load_production_database intercode_production.pgdump
+fi
 
 # echo 'Erasing production pgdump'
 # rm intercode_production_tmp.pgdump
