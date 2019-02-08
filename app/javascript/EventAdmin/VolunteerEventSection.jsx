@@ -90,29 +90,39 @@ class VolunteerEventSection extends React.Component {
   }
 
   renderHeader = () => (
-    <button
-      type="button"
-      onClick={this.toggleExpanded}
-      className="hidden-button"
-      aria-expanded={this.state.expanded}
-    >
-      <h4>
-        {this.renderDisclosureTriangle()}
-        {' '}
-        {this.props.event.title}
-        {' '}
-        <small>
-          (
-          {this.props.event.runs.length}
-          {' '}
-runs;
-          {' '}
-          {moment.duration(this.props.event.length_seconds, 'seconds').humanize()}
-          {' '}
-per run)
-        </small>
-      </h4>
-    </button>
+    <div className="d-flex">
+      <div className="flex-grow-1">
+        <button
+          type="button"
+          onClick={this.toggleExpanded}
+          className="hidden-button"
+          aria-expanded={this.state.expanded}
+        >
+          <h4>
+            {this.renderDisclosureTriangle()}
+            {' '}
+            {this.props.event.title}
+            {' '}
+            <small>
+              (
+              {this.props.event.runs.length}
+              {' '}
+    runs;
+              {' '}
+              {moment.duration(this.props.event.length_seconds, 'seconds').humanize()}
+              {' '}
+    per run)
+            </small>
+          </h4>
+        </button>
+      </div>
+
+      <div>
+        <Link className="btn btn-outline-primary" to={`/${this.props.event.id}/edit`}>
+          Edit
+        </Link>
+      </div>
+    </div>
   )
 
   renderBody = () => {

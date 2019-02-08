@@ -1,13 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  BrowserRouter, NavLink, Route, Switch, Redirect,
+  BrowserRouter, NavLink, Route, Switch, Redirect, withRouter,
 } from 'react-router-dom';
+
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
+import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import FillerEventAdmin from './FillerEventAdmin';
+import NewEvent from './NewEvent';
+import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import VolunteerEventAdmin from './VolunteerEventAdmin';
+
+function ExitableNewEvent({ convention, history }) {
+  return (
+    <NewEvent
+      convention={convention}
+      onExit={() => history.replace('/runs')}
+    />
+  );
+}
+
+ExitableNewEvent.propTypes = {
+  convention: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+const ExitableNewEventWithRouter = withRouter(ExitableNewEvent);
 
 const EventAdminApp = ({ basename }) => (
   <BrowserRouter basename={basename}>
@@ -34,6 +56,16 @@ const EventAdminApp = ({ basename }) => (
         <Route path="/filler_events" component={FillerEventAdmin} />
         <Route path="/dropped_events" component={DroppedEventAdmin} />
         <Route path="/:id/edit" component={EventAdminEditEvent} />
+        <Route
+          path="/new"
+          render={() => (
+            <QueryWithStateDisplay query={EventAdminEventsQuery}>
+              {({ data: { convention } }) => (
+                <ExitableNewEventWithRouter convention={convention} />
+              )}
+            </QueryWithStateDisplay>
+          )}
+        />
         <Redirect to="/runs" />
       </Switch>
     </div>
