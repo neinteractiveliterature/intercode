@@ -19,6 +19,7 @@ describe('ConventionForm', () => {
     timezone_name: '',
     accepting_proposals: false,
     show_schedule: 'no',
+    show_event_list: 'no',
     maximum_event_signups: {
       timespans: [
         { start: null, finish: null, value: 'unlimited' },
