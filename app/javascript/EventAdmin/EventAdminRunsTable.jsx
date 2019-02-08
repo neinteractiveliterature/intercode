@@ -1,6 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
@@ -37,6 +37,10 @@ class EventAdminRunsTable extends React.Component {
 
     return (
       <div>
+        <Link to="/new" className="btn btn-primary mt-4 mb-2">
+          New event
+        </Link>
+
         <table className="table table-striped no-top-border">
           <thead>
             <tr>

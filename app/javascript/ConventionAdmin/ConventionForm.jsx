@@ -50,6 +50,7 @@ class ConventionForm extends React.Component {
       timezone_name: PropTypes.string.isRequired,
       accepting_proposals: PropTypes.bool.isRequired,
       show_schedule: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
+      show_event_list: PropTypes.oneOf(['no', 'priv', 'gms', 'yes']).isRequired,
       maximum_event_signups: PropTypes.shape({
         timespans: PropTypes.arrayOf(PropTypes.shape({
           start: PropTypes.string,
@@ -101,6 +102,7 @@ class ConventionForm extends React.Component {
           ends_at: Transforms.datetime,
           accepting_proposals: Transforms.identity,
           show_schedule: Transforms.identity,
+          show_event_list: Transforms.identity,
           maximum_event_signups: Transforms.identity,
           maximum_tickets: Transforms.inputChange(Transforms.integer),
           ticket_name: Transforms.textInputChange,
@@ -233,6 +235,19 @@ class ConventionForm extends React.Component {
         />
 
         {this.renderBooleanInput('accepting_proposals', 'Accepting event proposals')}
+
+        <MultipleChoiceInput
+          name="show_event_list"
+          caption="Show list of events"
+          choices={[
+            { value: 'no', label: 'No' },
+            { value: 'priv', label: 'Only to users with scheduling privileges' },
+            { value: 'gms', label: 'Only to event team members and users with any privileges' },
+            { value: 'yes', label: 'Yes, to everyone' },
+          ]}
+          value={this.state.convention.show_event_list}
+          onChange={this.mutator.convention.show_event_list}
+        />
 
         <MultipleChoiceInput
           name="show_schedule"

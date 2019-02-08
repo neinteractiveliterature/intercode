@@ -39,6 +39,7 @@ class ConventionAdmin extends React.Component {
         event_mailing_list_domain: convention.event_mailing_list_domain,
         timezone_name: convention.timezone_name,
         show_schedule: convention.show_schedule,
+        show_event_list: convention.show_event_list,
         maximum_tickets: convention.maximum_tickets,
         ticket_name: convention.ticket_name,
         maximum_event_signups: {

@@ -100,18 +100,17 @@ class CommonEventFormFields extends React.Component {
   }
 
   render = () => (
-    <div>
-      <SinglePageFormPresenter
-        form={this.props.form}
-        convention={this.props.convention}
-        response={this.props.event.form_response_attrs}
-        responseValuesChanged={this.formResponseValuesChanged}
-      />
+    <SinglePageFormPresenter
+      form={this.props.form}
+      convention={this.props.convention}
+      response={this.props.event.form_response_attrs}
+      responseValuesChanged={this.formResponseValuesChanged}
+    >
 
       {this.renderMaximumEventProvidedTicketsOverrideEditor()}
 
       {this.props.children}
-    </div>
+    </SinglePageFormPresenter>
   )
 }
 

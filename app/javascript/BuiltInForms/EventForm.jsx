@@ -149,7 +149,6 @@ class EventForm extends React.Component {
     }
 
     const categoryOptions = this.props.convention.event_categories
-      .filter(category => category.scheduling_ui === 'regular')
       .map(category => (
         <option value={category.id} key={category.id}>{humanize(category.name)}</option>
       ));
