@@ -2,6 +2,8 @@ require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
   belongs_to :updated_by, class_name: 'User', optional: true
+  belongs_to :organization, optional: true
+
   has_many :cms_navigation_items, as: :parent, dependent: :destroy
   has_many :pages, as: :parent, dependent: :destroy
   has_many :cms_layouts, as: :parent, dependent: :destroy

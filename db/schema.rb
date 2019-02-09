@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_08_214318) do
+ActiveRecord::Schema.define(version: 2019_02_09_165241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,8 +142,10 @@ ActiveRecord::Schema.define(version: 2019_02_08_214318) do
     t.text "stripe_secret_key"
     t.text "clickwrap_agreement"
     t.string "show_event_list", default: "no", null: false
+    t.bigint "organization_id"
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
+    t.index ["organization_id"], name: "index_conventions_on_organization_id"
     t.index ["updated_by_id"], name: "index_conventions_on_updated_by_id"
     t.index ["user_con_profile_form_id"], name: "index_conventions_on_user_con_profile_form_id"
   end
@@ -356,6 +358,25 @@ ActiveRecord::Schema.define(version: 2019_02_08_214318) do
     t.index ["user_con_profile_id"], name: "index_orders_on_user_con_profile_id"
   end
 
+  create_table "organization_roles", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.text "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_roles_on_organization_id"
+  end
+
+  create_table "organization_roles_users", id: false, force: :cascade do |t|
+    t.bigint "organization_role_id", null: false
+    t.bigint "user_id", null: false
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.text "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pages", id: :serial, force: :cascade do |t|
     t.text "name"
     t.string "slug"
@@ -374,14 +395,17 @@ ActiveRecord::Schema.define(version: 2019_02_08_214318) do
 
   create_table "permissions", force: :cascade do |t|
     t.bigint "event_category_id"
-    t.bigint "staff_position_id", null: false
+    t.bigint "staff_position_id"
     t.string "permission", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_role_id"
     t.index ["event_category_id"], name: "index_permissions_on_event_category_id"
+    t.index ["organization_role_id"], name: "index_permissions_on_organization_role_id"
     t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_permissions_unique_join", unique: true
     t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
-    t.check_constraint :permissions_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = 1)"
+    t.check_constraint :permissions_model_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = 1)"
+    t.check_constraint :permissions_role_exclusive_arc, "((((staff_position_id IS NOT NULL))::integer + ((organization_role_id IS NOT NULL))::integer) = 1)"
   end
 
   create_table "product_variants", force: :cascade do |t|
@@ -612,6 +636,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_214318) do
   add_foreign_key "cms_navigation_items", "pages"
   add_foreign_key "conventions", "cms_layouts", column: "default_layout_id"
   add_foreign_key "conventions", "forms", column: "user_con_profile_form_id"
+  add_foreign_key "conventions", "organizations"
   add_foreign_key "conventions", "pages", column: "root_page_id"
   add_foreign_key "conventions", "users", column: "updated_by_id"
   add_foreign_key "event_categories", "conventions"
@@ -638,8 +663,10 @@ ActiveRecord::Schema.define(version: 2019_02_08_214318) do
   add_foreign_key "order_entries", "product_variants"
   add_foreign_key "order_entries", "products"
   add_foreign_key "orders", "user_con_profiles"
+  add_foreign_key "organization_roles", "organizations"
   add_foreign_key "pages", "cms_layouts"
   add_foreign_key "permissions", "event_categories"
+  add_foreign_key "permissions", "organization_roles"
   add_foreign_key "permissions", "staff_positions"
   add_foreign_key "product_variants", "products"
   add_foreign_key "products", "conventions"
