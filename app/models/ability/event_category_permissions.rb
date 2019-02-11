@@ -53,10 +53,6 @@ module Ability::EventCategoryPermissions
 
   private
 
-  def user_permission_scope
-    @user_permission_scope ||= Permission.for_user(user)
-  end
-
   def event_category_authorization(action, model_class, permission, model_conditions: {})
     scope = model_class.where(
       event_category_id: user_permission_scope

@@ -1,6 +1,6 @@
 class NavigationBarPresenter
   # Bump this whenever we make changes, to invalidate caches
-  VERSION = 2
+  VERSION = 3
 
   include Rails.application.routes.url_helpers
 
@@ -240,6 +240,11 @@ class NavigationBarPresenter
   ]
 
   ROOT_SITE_ADMIN_NAVIGATION_ITEMS = [
+    NavigationItem.define do
+      label 'Organizations'
+      url { organizations_path }
+      visible? { can?(:read, Organization) }
+    end,
     SITE_CONTENT_NAVIGATION_ITEM,
     # TODO: re-add this once we have a user management UI
     # NavigationItem.define do
