@@ -4,7 +4,10 @@ class EventsMailer < ApplicationMailer
   def event_updated(event, changes)
     @event = event
     @changes = changes
-    event_mail(event, 'Update')
+
+    use_convention_timezone(@event.convention) do
+      event_mail(event, 'Update')
+    end
   end
 
   private
