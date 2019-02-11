@@ -9,9 +9,14 @@ require('source-map-support/register');
 const requireFromString = require('require-from-string');
 const webpackConfig = require('./config/webpack/development');
 
+global.window = {};
+
 const fs = new MemoryFS();
 const compiler = webpack({
   ...webpackConfig,
+  entry: {
+    components: './app/javascript/packs/components.js',
+  },
   output: {
     ...webpackConfig.output,
     libraryTarget: 'commonjs2',
@@ -25,7 +30,7 @@ compiler.run((err, stats) => {
     console.error(err);
   }
 
-  console.log('Loading components...');
+  console.log('Loading components from in-memory filesystem...');
   const componentsFilename = fs.readdirSync(webpackConfig.output.path)
     .find(filename => filename.match(/^components-[0-9a-f]+\.js$/));
   const componentsPathname = `${webpackConfig.output.path}/${componentsFilename}`;
