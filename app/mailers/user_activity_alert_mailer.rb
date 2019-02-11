@@ -9,11 +9,13 @@ class UserActivityAlertMailer < ApplicationMailer
     else event.to_s.humanize
     end
 
-    mail(
-      from: from_address_for_convention(user_activity_alert.convention),
-      to: "#{destination_user_con_profile.name_without_nickname} \
+    use_convention_timezone(user_activity_alert.convention) do
+      mail(
+        from: from_address_for_convention(user_activity_alert.convention),
+        to: "#{destination_user_con_profile.name_without_nickname} \
 <#{destination_user_con_profile.email}>",
-      subject: "[Alert] #{event_short_description}: #{alert_user_con_profile.name_without_nickname}"
-    )
+        subject: "[Alert] #{event_short_description}: #{alert_user_con_profile.name_without_nickname}"
+      )
+    end
   end
 end
