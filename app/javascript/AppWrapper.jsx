@@ -13,7 +13,11 @@ export default (WrappedComponent) => {
   const wrapper = class Wrapper extends React.Component {
     static propTypes = {
       authenticityToken: PropTypes.string.isRequired,
-      stripePublishableKey: PropTypes.string.isRequired,
+      stripePublishableKey: PropTypes.string,
+    };
+
+    static defaultProps = {
+      stripePublishableKey: null,
     };
 
     constructor(props) {

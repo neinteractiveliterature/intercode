@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { Link, withRouter } from 'react-router-dom';
-import { groupBy } from 'lodash';
+import { groupBy, flatMap } from 'lodash';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { DeleteStaffPosition } from './mutations.gql';
@@ -15,7 +15,9 @@ import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
-  const abilities = PermissionNames[typename].reduce((acc, { permission, name }) => {
+  const permissionNameGroups = PermissionNames.filter(group => group.model_type === typename);
+  const permissionNamesForType = flatMap(permissionNameGroups, group => group.permissions);
+  const abilities = permissionNamesForType.reduce((acc, { permission, name }) => {
     if (modelPermissions.some(modelPermission => modelPermission.permission === permission)) {
       return [...acc, name];
     }
@@ -23,7 +25,7 @@ function describePermissionAbilities(modelPermissions) {
     return acc;
   }, []);
 
-  if (abilities.length === PermissionNames[typename].length) {
+  if (abilities.length === permissionNamesForType.length) {
     return 'full admin';
   }
 

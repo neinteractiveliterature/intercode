@@ -4,6 +4,7 @@ import { titleize } from 'inflected';
 import classNames from 'classnames';
 import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
+import { flatMap } from 'lodash';
 
 import ChangeSet from '../ChangeSet';
 import ErrorDisplay from '../ErrorDisplay';
@@ -36,6 +37,13 @@ function buildPermissionInput(permission) {
     permission: permission.permission,
   };
 }
+
+const EventCategoryPermissionNames = flatMap(
+  PermissionNames.filter(
+    permissionNameGroup => permissionNameGroup.model_type === 'EventCategory',
+  ),
+  permissionNameGroup => permissionNameGroup.permissions,
+);
 
 class EditStaffPositionPermissions extends React.Component {
   static propTypes = {
@@ -111,7 +119,7 @@ class EditStaffPositionPermissions extends React.Component {
             <tr>
               <th>Event Category</th>
               {
-                PermissionNames.EventCategory.map(({ permission, name }) => (
+                EventCategoryPermissionNames.map(({ permission, name }) => (
                   <th key={permission} className="text-center">{titleize(name)}</th>
                 ))
               }
@@ -132,7 +140,7 @@ class EditStaffPositionPermissions extends React.Component {
                     {eventCategory.name}
                   </span>
                 </th>
-                {PermissionNames.EventCategory.map(({ permission }) => {
+                {EventCategoryPermissionNames.map(({ permission }) => {
                   const existingPermission = findPermission(
                     this.props.staffPosition.permissions, eventCategory, permission,
                   );
