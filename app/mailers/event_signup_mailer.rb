@@ -3,11 +3,13 @@ class EventSignupMailer < ApplicationMailer
     @signup = signup
     @signup_count_presenter = SignupCountPresenter.new(signup.run)
 
-    mail(
-      from: from_address_for_convention(@signup.event.convention),
-      to: team_member.user_con_profile.email,
-      subject: "#{subject_prefix(signup.event)} Signup: #{signup.user_con_profile.name}"
-    )
+    use_convention_timezone(@signup.event.convention) do
+      mail(
+        from: from_address_for_convention(@signup.event.convention),
+        to: team_member.user_con_profile.email,
+        subject: "#{subject_prefix(signup.event)} Signup: #{signup.user_con_profile.name}"
+      )
+    end
   end
 
   def withdrawal(signup, prev_state, prev_bucket_key, move_results, team_member)
@@ -19,12 +21,14 @@ class EventSignupMailer < ApplicationMailer
     @move_results = move_results
     @signup_count_presenter = SignupCountPresenter.new(signup.run)
 
-    mail(
-      from: from_address_for_convention(@signup.event.convention),
-      to: team_member.user_con_profile.email,
-      subject: "#{subject_prefix(signup.event)} #{prev_state.humanize} -> #{signup.state.humanize}: \
-#{signup.user_con_profile.name}"
-    )
+    use_convention_timezone(@signup.event.convention) do
+      mail(
+        from: from_address_for_convention(@signup.event.convention),
+        to: team_member.user_con_profile.email,
+        subject: "#{subject_prefix(signup.event)} #{prev_state.humanize} -> \
+#{signup.state.humanize}: #{signup.user_con_profile.name}"
+      )
+    end
   end
 
   def registration_policy_change_moved_signups(event, move_results, team_member, whodunit)
@@ -38,11 +42,13 @@ class EventSignupMailer < ApplicationMailer
     end
     @runs = @move_results_by_run.keys.sort_by(&:starts_at)
 
-    mail(
-      from: from_address_for_convention(@event.convention),
-      to: team_member.user_con_profile.email,
-      subject: "#{subject_prefix(@event)} Signups moved due to bucket changes"
-    )
+    use_convention_timezone(@event.convention) do
+      mail(
+        from: from_address_for_convention(@event.convention),
+        to: team_member.user_con_profile.email,
+        subject: "#{subject_prefix(@event)} Signups moved due to bucket changes"
+      )
+    end
   end
 
   def user_signup_moved(move_result)
@@ -56,11 +62,13 @@ class EventSignupMailer < ApplicationMailer
       subject = 'Signup status change'
     end
 
-    mail(
-      from: from_address_for_convention(@signup.event.convention),
-      to: @signup.user_con_profile.email,
-      subject: "#{subject_prefix(@signup.event)} #{subject}"
-    )
+    use_convention_timezone(@signup.event.convention) do
+      mail(
+        from: from_address_for_convention(@signup.event.convention),
+        to: @signup.user_con_profile.email,
+        subject: "#{subject_prefix(@signup.event)} #{subject}"
+      )
+    end
   end
 
   private
