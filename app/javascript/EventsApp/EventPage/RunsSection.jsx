@@ -41,15 +41,6 @@ FakeRun.propTypes = {
 function RunsSection({
   event, eventPath, myProfile, currentAbility, timezoneName,
 }) {
-  const acceptsSignups = (
-    !event.registration_policy.slots_limited
-    || event.registration_policy.total_slots_including_not_counted > 0
-  );
-
-  if (!acceptsSignups) {
-    return null;
-  }
-
   const sortedRuns = [...event.runs]
     .sort((a, b) => moment.tz(a.starts_at, timezoneName).valueOf()
       - moment.tz(b.starts_at, timezoneName).valueOf());

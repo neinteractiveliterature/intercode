@@ -165,6 +165,10 @@ class RunCard extends React.Component {
       run, event, timezoneName, currentAbility,
     } = this.props;
     const runTimespan = timespanFromRun({ timezone_name: timezoneName }, event, run);
+    const acceptsSignups = (
+      !event.registration_policy.slots_limited
+      || event.registration_policy.total_slots_including_not_counted > 0
+    );
 
     return (
       <Mutation mutation={CreateMySignup}>
@@ -218,19 +222,31 @@ class RunCard extends React.Component {
                   {run.rooms.map(room => room.name).sort().join(', ')}
                 </div>
 
-                <div className="card-body text-center">
-                  <RunCapacityGraph run={run} event={event} signupsAvailable />
-                  {this.renderMainSignupSection(signupButtonClicked)}
-                </div>
+                {
+                  acceptsSignups
+                    ? (
+                      <>
+                        <div className="card-body text-center">
+                          <RunCapacityGraph run={run} event={event} signupsAvailable />
+                          {this.renderMainSignupSection(signupButtonClicked)}
+                        </div>
 
-                {this.renderAuxiliarySignupSection(signupButtonClicked)}
+                        {this.renderAuxiliarySignupSection(signupButtonClicked)}
 
-                <ViewSignupsOptions
-                  event={event}
-                  eventPath={this.props.eventPath}
-                  run={run}
-                  currentAbility={currentAbility}
-                />
+                        <ViewSignupsOptions
+                          event={event}
+                          eventPath={this.props.eventPath}
+                          run={run}
+                          currentAbility={currentAbility}
+                        />
+                      </>
+                    )
+                    : (
+                      <div className="card-body">
+                        <small>This event does not take signups.</small>
+                      </div>
+                    )
+                }
               </div>
             </div>
           );
