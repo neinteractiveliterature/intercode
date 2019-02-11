@@ -3,7 +3,9 @@ class EventProposalsMailer < ApplicationMailer
 
   def new_proposal(event_proposal)
     @event_proposal = event_proposal
-    event_proposal_mail(event_proposal, 'New')
+    use_convention_timezone(@event_proposal.convention) do
+      event_proposal_mail(event_proposal, 'New')
+    end
   end
 
   def proposal_submit_confirmation(event_proposal)
@@ -13,27 +15,33 @@ class EventProposalsMailer < ApplicationMailer
       .first
     from_address = @proposal_chair_staff_position&.email || from_address_for_convention(event_proposal.convention)
 
-    mail(
-      from: from_address,
-      to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
-      subject: "#{subject_prefix(event_proposal)} Submitted"
-    )
+    use_convention_timezone(@event_proposal.convention) do
+      mail(
+        from: from_address,
+        to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
+        subject: "#{subject_prefix(event_proposal)} Submitted"
+      )
+    end
   end
 
   def proposal_updated(event_proposal, changes)
     @event_proposal = event_proposal
     @changes = changes
-    event_proposal_mail(event_proposal, 'Update')
+    use_convention_timezone(@event_proposal.convention) do
+      event_proposal_mail(event_proposal, 'Update')
+    end
   end
 
   def unfinished_draft_reminder(event_proposal)
     @event_proposal = event_proposal
 
-    mail(
-      from: from_address_for_convention(event_proposal.convention),
-      to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
-      subject: "#{subject_prefix(event_proposal)} Reminder: #{event_proposal.title}"
-    )
+    use_convention_timezone(@event_proposal.convention) do
+      mail(
+        from: from_address_for_convention(event_proposal.convention),
+        to: "#{event_proposal.owner.name_without_nickname} <#{event_proposal.owner.email}>",
+        subject: "#{subject_prefix(event_proposal)} Reminder: #{event_proposal.title}"
+      )
+    end
   end
 
   private
