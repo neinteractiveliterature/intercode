@@ -25,7 +25,7 @@ fragment ConventionFields on Convention {
   event_mailing_list_domain
 
   event_categories {
-    ...EventCategoryFields
+    ...EventPageEventCategoryFields
   }
 
   rooms {
@@ -96,7 +96,7 @@ fragment EventFields on Event {
   }
 }
 
-fragment EventCategoryFields on EventCategory {
+fragment EventPageEventCategoryFields on EventCategory {
   id
   name
   scheduling_ui
