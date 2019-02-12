@@ -7746,9 +7746,9 @@ react-bootstrap4-modal@^1.2.2, react-bootstrap4-modal@^1.7.0:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-react-clipboard.js@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-clipboard.js/-/react-clipboard.js-2.0.2.tgz#bceb55e9cd00e2b937c36158f2a7b7038311bd24"
+react-clipboard.js@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-clipboard.js/-/react-clipboard.js-2.0.3.tgz#98ff15e514bdce6d0b0435ac5677d9c9941d085b"
   dependencies:
     clipboard "^2.0.0"
     prop-types "^15.5.0"
