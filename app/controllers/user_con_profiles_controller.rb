@@ -22,7 +22,7 @@ class UserConProfilesController < ApplicationController
   end
 
   def become
-    identity_assumer = user_con_profile
+    identity_assumer = assumed_identity_from_profile || user_con_profile
     sign_in @subject_profile.user
     session[:assumed_identity_from_profile_id] = identity_assumer.id
     redirect_to root_url, notice: "You are now signed in as #{@subject_profile.user.name}."
