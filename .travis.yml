@@ -58,9 +58,6 @@ before_script:
   --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
   -t neinteractiveliterature/intercode:${TRAVIS_COMMIT}
   .
-- docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
-- docker tag neinteractiveliterature/intercode:${TRAVIS_COMMIT} neinteractiveliterature/intercode:${BRANCH_TAG}
-- docker push neinteractiveliterature/intercode:${BRANCH_TAG}
 - docker build
   -f Dockerfile
   --target test
@@ -68,7 +65,7 @@ before_script:
   --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:local-build
   --cache-from neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT}
-  --cache-from neinteractiveliterature/intercode:neinteractiveliterature/intercode:${TRAVIS_COMMIT}
+  --cache-from neinteractiveliterature/intercode:${TRAVIS_COMMIT}
   -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
   .
 script:
