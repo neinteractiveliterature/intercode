@@ -7937,9 +7937,9 @@ react-stripe-elements@^2.0.3:
   dependencies:
     prop-types "^15.5.10"
 
-react-table@^6.9.1:
-  version "6.9.1"
-  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.9.1.tgz#50a1713a4de90089f14dcb8cf0f313992ad93a20"
+react-table@^6.9.2:
+  version "6.9.2"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.9.2.tgz#6a59adfeb8d5deced288241ed1c7847035b5ec5f"
   dependencies:
     classnames "^2.2.5"
 
