@@ -1839,9 +1839,9 @@ bootstrap.native@^2.0.25:
   version "2.0.25"
   resolved "https://registry.yarnpkg.com/bootstrap.native/-/bootstrap.native-2.0.25.tgz#a562132ec25850e3cc6dcf113c2fdf2b3de4c07a"
 
-bootstrap@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.3.0.tgz#2559ccb8d45426ac6c54db23eb3d1c9f4257fa22"
+bootstrap@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.3.1.tgz#280ca8f610504d99d7b6b4bfc4b68cec601704ac"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
