@@ -1348,7 +1348,7 @@ apollo-upload-client@^10.0.0:
     apollo-link-http-common "^0.2.8"
     extract-files "^5.0.0"
 
-apollo-utilities@1.1.3, apollo-utilities@^1.1.2, apollo-utilities@^1.1.3:
+apollo-utilities@1.1.3, apollo-utilities@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.1.3.tgz#a8883c0392f6b46eac0d366204ebf34be9307c87"
   dependencies:
@@ -5866,9 +5866,9 @@ mem@^4.0.0:
     mimic-fn "^1.0.0"
     p-is-promise "^1.1.0"
 
-memoize-one@^4.0.0:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-4.0.3.tgz#cdfdd942853f1a1b4c71c5336b8c49da0bf0273c"
+memoize-one@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.0.0.tgz#d55007dffefb8de7546659a1722a5d42e128286e"
 
 memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"
@@ -7920,13 +7920,13 @@ react-select-fast-filter-options@^0.2.3:
   dependencies:
     js-search "^1.3.1"
 
-react-select@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/react-select/-/react-select-2.3.0.tgz#990429622445eb2b4a6e985b8069fe7d498cae91"
+react-select@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-2.4.0.tgz#3b44d38c3fdd15040078fc121cd1285fd891bdba"
   dependencies:
     classnames "^2.2.5"
     emotion "^9.1.2"
-    memoize-one "^4.0.0"
+    memoize-one "^5.0.0"
     prop-types "^15.6.0"
     raf "^3.4.0"
     react-input-autosize "^2.2.1"
