@@ -145,7 +145,7 @@ GEM
       railties (>= 4.2)
     doorkeeper-jwt (0.3.0)
       jwt (~> 2.1.0, >= 2.1.0)
-    doorkeeper-openid_connect (1.5.3)
+    doorkeeper-openid_connect (1.5.4)
       doorkeeper (>= 4.3)
       json-jwt (~> 1.6)
     dotenv (2.6.0)
