@@ -248,6 +248,12 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
+  field :organizations, Types::OrganizationType.to_list_type.to_non_null_type do
+    resolve ->(_obj, _args, _ctx) do
+      Organization.all
+    end
+  end
+
   field :rootSite, Types::RootSiteType.to_non_null_type do
     resolve ->(_obj, _args, _ctx) {
       RootSite.instance
