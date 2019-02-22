@@ -7746,9 +7746,9 @@ react-input-autosize@^2.2.1:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.3.2, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.2:
-  version "16.8.2"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
+react-is@^16.3.2, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.3:
+  version "16.8.3"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.3.tgz#4ad8b029c2a718fc0cfc746c8d4e1b7221e5387d"
 
 react-js-pagination@neinteractiveliterature/react-js-pagination#ellipsis:
   version "3.0.2"
@@ -7837,14 +7837,14 @@ react-table@^6.9.2:
   dependencies:
     classnames "^2.2.5"
 
-react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.2:
-  version "16.8.2"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.8.2.tgz#3ce0bf12aa211116612fda01a886d6163c9c459b"
+react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.3:
+  version "16.8.3"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.8.3.tgz#230006af264cc46aeef94392e04747c21839e05e"
   dependencies:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    react-is "^16.8.2"
-    scheduler "^0.13.2"
+    react-is "^16.8.3"
+    scheduler "^0.13.3"
 
 react-transition-group@^2.2.1:
   version "2.5.0"
@@ -8362,9 +8362,9 @@ sax@^1.2.4, sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-scheduler@^0.13.2:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.2.tgz#969eaee2764a51d2e97b20a60963b2546beff8fa"
+scheduler@^0.13.2, scheduler@^0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.3.tgz#bed3c5850f62ea9c716a4d781f9daeb9b2a58896"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
