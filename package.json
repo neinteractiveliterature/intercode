@@ -29,7 +29,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@rails/webpacker": "^4.0.0-rc.7",
-    "apollo-cache-inmemory": "^1.4.3",
+    "apollo-cache-inmemory": "^1.5.0",
     "apollo-client": "^2.4.13",
     "apollo-link": "^1.2.8",
     "apollo-link-http": "^1.5.11",
