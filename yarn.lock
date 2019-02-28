@@ -4082,9 +4082,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   version "4.1.15"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
 
-graphiql@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.12.0.tgz#a035c93a6e3c18850c2f450c039747b2ea3eb953"
+graphiql@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.13.0.tgz#8fcbfd25f73d84806ba6d3e8c96eac0a5bec8ab7"
   dependencies:
     codemirror "^5.26.0"
     codemirror-graphql "^0.7.1"
