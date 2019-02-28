@@ -1280,9 +1280,17 @@ apollo-upload-client@^10.0.0:
     apollo-link-http-common "^0.2.8"
     extract-files "^5.0.0"
 
-apollo-utilities@1.2.0, apollo-utilities@^1.2.0:
+apollo-utilities@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.2.0.tgz#ba5a1271c55e0d79069b1919c9d533164a70f9c3"
+  dependencies:
+    fast-json-stable-stringify "^2.0.0"
+    ts-invariant "^0.2.1"
+    tslib "^1.9.3"
+
+apollo-utilities@^1.2.0, apollo-utilities@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.2.1.tgz#1c3a1ebf5607d7c8efe7636daaf58e7463b41b3c"
   dependencies:
     fast-json-stable-stringify "^2.0.0"
     ts-invariant "^0.2.1"
@@ -4092,11 +4100,11 @@ graphiql@^0.12.0:
     codemirror-graphql "^0.7.1"
     markdown-it "^8.4.0"
 
-graphql-anywhere@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.2.0.tgz#0e9a98efddc648f6eb8f01829ff9810a571ac34a"
+graphql-anywhere@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.2.1.tgz#1f7c3a3d9004dbe81b1c553d7fd1ef2e16e14a85"
   dependencies:
-    apollo-utilities "^1.2.0"
+    apollo-utilities "^1.2.1"
     tslib "^1.9.3"
 
 graphql-config@2.0.1:
