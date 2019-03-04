@@ -108,7 +108,7 @@
     "terser-webpack-plugin": "^1.2.3",
     "thread-loader": "^2.1.2",
     "tinycolor2": "^1.4.1",
-    "unfetch": "^4.0.1",
+    "unfetch": "^4.1.0",
     "url-search-params-polyfill": "^5.0.0",
     "webpack": "^4.29.6",
     "webpack-bundle-analyzer": "^3.0.4",
