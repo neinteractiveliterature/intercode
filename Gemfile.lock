@@ -145,7 +145,7 @@ GEM
       railties (>= 4.2)
     doorkeeper-jwt (0.3.0)
       jwt (~> 2.1.0, >= 2.1.0)
-    doorkeeper-openid_connect (1.5.4)
+    doorkeeper-openid_connect (1.5.5)
       doorkeeper (>= 4.3)
       json-jwt (~> 1.6)
     dotenv (2.7.1)
@@ -209,7 +209,7 @@ GEM
       tilt
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (1.5.3)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     icalendar (2.5.2)
       ice_cube (~> 0.16)
