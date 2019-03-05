@@ -10,7 +10,7 @@ gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'bootstrap_form'
 gem 'haml'
-gem 'webpacker', '~> 4.0.0.rc.rc.7'
+gem 'webpacker', '~> 4.0.1'
 gem 'webpacker-react', '~> 0.3.2'
 
 gem 'with_advisory_lock'
