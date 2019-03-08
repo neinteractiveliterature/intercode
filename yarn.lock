@@ -2957,9 +2957,9 @@ dnd-core@^2.6.0:
     lodash "^4.2.0"
     redux "^3.7.1"
 
-dnd-core@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-7.1.0.tgz#fb0a51a2a2b0b47da900e3762e6bb92084dfa827"
+dnd-core@^7.1.0, dnd-core@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-7.2.0.tgz#70d4ab6c0c6f90423c27b1711624b5d834025bf3"
   dependencies:
     asap "^2.0.6"
     invariant "^2.2.4"
@@ -7630,11 +7630,11 @@ react-color@^2.17.0:
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-7.1.0.tgz#fa4cd9a67078baee1baf4381772072b40281d428"
+react-dnd-html5-backend@*, react-dnd-html5-backend@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-7.2.0.tgz#4cde55fb690020d98d7b6f3d4400c56b2ae82dfa"
   dependencies:
-    dnd-core "^7.1.0"
+    dnd-core "^7.2.0"
     lodash "^4.17.11"
 
 react-dnd-html5-backend@^2.4.1:
