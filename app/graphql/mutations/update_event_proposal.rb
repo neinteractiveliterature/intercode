@@ -3,7 +3,7 @@ Mutations::UpdateEventProposal = GraphQL::Relay::Mutation.define do
   return_field :event_proposal, Types::EventProposalType
 
   input_field :id, !types.Int
-  input_field :event_proposal, !Types::EventProposalInputType
+  input_field :event_proposal, Types::EventProposalInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     event_proposal = ctx[:convention].event_proposals.find(args[:id])
