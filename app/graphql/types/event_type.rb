@@ -66,7 +66,7 @@ Types::EventType = GraphQL::ObjectType.define do
       AssociationLoader.for(Event, :team_members).load(obj)
     }
   end
-  field :provided_tickets, !types[!Types::TicketType] do
+  field :provided_tickets, Types::TicketType.to_non_null_type.to_list_type.to_non_null_type do
     guard -> (event, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
@@ -84,7 +84,7 @@ Types::EventType = GraphQL::ObjectType.define do
     }
   end
   override_type = Types::MaximumEventProvidedTicketsOverrideType
-  field :maximum_event_provided_tickets_overrides, !types[!override_type] do
+  field :maximum_event_provided_tickets_overrides, override_type.to_non_null_type.to_list_type.to_non_null_type do
     resolve -> (obj, _args, _ctx) {
       AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(obj)
     }

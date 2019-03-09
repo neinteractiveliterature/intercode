@@ -120,6 +120,9 @@ group :development do
 
   # n+1 query profiling
   gem 'bullet'
+
+  # TODO remove after GraphQL upgrade
+  gem 'parser'
 end
 
 group :development, :test do

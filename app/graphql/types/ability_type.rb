@@ -1,154 +1,165 @@
-Types::AbilityType = GraphQL::ObjectType.define do
-  name 'Ability'
+class Types::AbilityType < Types::BaseObject
+  field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
-  field :can_override_maximum_event_provided_tickets, !types.Boolean do
-    resolve -> (obj, _args, ctx) {
-      override = Event.new(convention: ctx[:convention])
-        .maximum_event_provided_tickets_overrides
-        .new
-      obj.can?(:create, override)
-    }
+  def can_override_maximum_event_provided_tickets
+    override = Event.new(convention: context[:convention])
+      .maximum_event_provided_tickets_overrides
+      .new
+    object.can?(:create, override)
   end
 
-  field :can_update_signup, !types.Boolean do
-    argument :signup_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Signup).load([obj, :update, args[:signup_id]])
-    end
+  field :can_update_signup, Boolean, null: false do
+    argument :signup_id, Integer, required: true, camelize: false
   end
 
-  field :can_update_event, !types.Boolean do
-    argument :event_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Event).load([obj, :update, args[:event_id]])
-    end
+  def can_update_signup(**args)
+    ModelPermissionLoader.for(Signup).load([object, :update, args[:signup_id]])
   end
 
-  field :can_delete_event, !types.Boolean do
-    argument :event_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Event).load([obj, :destroy, args[:event_id]])
-    end
+  field :can_update_event, Boolean, null: false do
+    argument :event_id, Integer, required: true, camelize: false
   end
 
-  field :can_read_schedule, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:schedule, ctx[:convention])
-    end
+  def can_update_event(**args)
+    ModelPermissionLoader.for(Event).load([object, :update, args[:event_id]])
   end
 
-  field :can_read_admin_notes_on_event_proposal, !types.Boolean do
-    argument :event_proposal_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(EventProposal).load([
-        obj,
-        :read_admin_notes,
-        args[:event_proposal_id]
-      ])
-    end
+  field :can_delete_event, Boolean, null: false do
+    argument :event_id, Integer, required: true, camelize: false
   end
 
-  field :can_update_admin_notes_on_event_proposal, !types.Boolean do
-    argument :event_proposal_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(EventProposal).load([
-        obj,
-        :update_admin_notes,
-        args[:event_proposal_id]
-      ])
-    end
+  def can_delete_event(**args)
+    ModelPermissionLoader.for(Event).load([object, :destroy, args[:event_id]])
   end
 
-  field :can_update_event_proposal, !types.Boolean do
-    argument :event_proposal_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(EventProposal).load([obj, :update, args[:event_proposal_id]])
-    end
+  field :can_read_schedule, Boolean, null: false
+
+  def can_read_schedule
+    object.can?(:schedule, context[:convention])
   end
 
-  field :can_update_orders, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:update, Order.new(user_con_profile: UserConProfile.new(convention: ctx[:convention])))
-    end
+  field :can_read_admin_notes_on_event_proposal, Boolean, null: false do
+    argument :event_proposal_id, Integer, required: true, camelize: false
   end
 
-  field :can_create_tickets, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:create, Ticket.new(user_con_profile: UserConProfile.new(convention: ctx[:convention])))
-    end
+  def can_read_admin_notes_on_event_proposal(**args)
+    ModelPermissionLoader.for(EventProposal).load([
+      object,
+      :read_admin_notes,
+      args[:event_proposal_id]
+    ])
   end
 
-  field :can_update_ticket, !types.Boolean do
-    argument :ticket_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Ticket).load([obj, :update, args[:ticket_id]])
-    end
+  field :can_update_admin_notes_on_event_proposal, Boolean, null: false do
+    argument :event_proposal_id, Integer, required: true, camelize: false
   end
 
-  field :can_delete_ticket, !types.Boolean do
-    argument :ticket_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(Ticket).load([obj, :destroy, args[:ticket_id]])
-    end
+  def can_update_admin_notes_on_event_proposal(**args)
+    ModelPermissionLoader.for(EventProposal).load([
+      object,
+      :update_admin_notes,
+      args[:event_proposal_id]
+    ])
   end
 
-  field :can_read_signups, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:read, Signup.new(run: Run.new(event: Event.new(convention: ctx[:convention]))))
-    end
+  field :can_update_event_proposal, Boolean, null: false do
+    argument :event_proposal_id, Integer, required: true, camelize: false
   end
 
-  field :can_read_event_signups, !types.Boolean do
-    argument :event_id, !types.Int
-    resolve -> (obj, args, ctx) do
-      event = ctx[:convention].events.find(args[:event_id])
-      obj.can?(:read, Signup.new(run: Run.new(event: event)))
-    end
+  def can_update_event_proposal(**args)
+    ModelPermissionLoader.for(EventProposal).load([object, :update, args[:event_proposal_id]])
   end
 
-  field :can_update_signups, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:update, Signup.new(run: Run.new(event: Event.new(convention: ctx[:convention]))))
-    end
+  field :can_update_orders, Boolean, null: false
+
+  def can_update_orders
+    object.can?(:update, Order.new(user_con_profile: UserConProfile.new(convention: context[:convention])))
   end
 
-  field :can_update_products, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:update, Product.new(convention: ctx[:convention]))
-    end
+  field :can_create_tickets, Boolean, null: false
+
+  def can_create_tickets
+    object.can?(:create, Ticket.new(user_con_profile: UserConProfile.new(convention: context[:convention])))
   end
 
-  field :can_create_user_con_profiles, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      obj.can?(:create, UserConProfile.new(convention: ctx[:convention]))
-    end
+  field :can_update_ticket, Boolean, null: false do
+    argument :ticket_id, Integer, required: true, camelize: false
   end
 
-  field :can_update_user_con_profile, !types.Boolean do
-    argument :user_con_profile_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(UserConProfile).load([obj, :update, args[:user_con_profile_id]])
-    end
+  def can_update_ticket(**args)
+    ModelPermissionLoader.for(Ticket).load([object, :update, args[:ticket_id]])
   end
 
-  field :can_update_privileges_user_con_profile, !types.Boolean do
-    argument :user_con_profile_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(UserConProfile).load([obj, :update_privileges, args[:user_con_profile_id]])
-    end
+  field :can_delete_ticket, Boolean, null: false do
+    argument :ticket_id, Integer, required: true, camelize: false
   end
 
-  field :can_delete_user_con_profile, !types.Boolean do
-    argument :user_con_profile_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(UserConProfile).load([obj, :destroy, args[:user_con_profile_id]])
-    end
+  def can_delete_ticket(**args)
+    ModelPermissionLoader.for(Ticket).load([object, :destroy, args[:ticket_id]])
   end
 
-  field :can_become_user_con_profile, !types.Boolean do
-    argument :user_con_profile_id, !types.Int
-    resolve -> (obj, args, _ctx) do
-      ModelPermissionLoader.for(UserConProfile).load([obj, :become, args[:user_con_profile_id]])
-    end
+  field :can_read_signups, Boolean, null: false
+
+  def can_read_signups
+    object.can?(:read, Signup.new(run: Run.new(event: Event.new(convention: context[:convention]))))
+  end
+
+  field :can_read_event_signups, Boolean, null: false do
+    argument :event_id, Integer, required: true, camelize: false
+  end
+
+  def can_read_event_signups(**args)
+    event = context[:convention].events.find(args[:event_id])
+    object.can?(:read, Signup.new(run: Run.new(event: event)))
+  end
+
+  field :can_update_signups, Boolean, null: false
+
+  def can_update_signups
+    object.can?(:update, Signup.new(run: Run.new(event: Event.new(convention: context[:convention]))))
+  end
+
+  field :can_update_products, Boolean, null: false
+
+  def can_update_products
+    object.can?(:update, Product.new(convention: context[:convention]))
+  end
+
+  field :can_create_user_con_profiles, Boolean, null: false
+
+  def can_create_user_con_profiles
+    object.can?(:create, UserConProfile.new(convention: context[:convention]))
+  end
+
+  field :can_update_user_con_profile, Boolean, null: false do
+    argument :user_con_profile_id, Integer, required: true, camelize: false
+  end
+
+  def can_update_user_con_profile(**args)
+    ModelPermissionLoader.for(UserConProfile).load([object, :update, args[:user_con_profile_id]])
+  end
+
+  field :can_update_privileges_user_con_profile, Boolean, null: false do
+    argument :user_con_profile_id, Integer, required: true, camelize: false
+  end
+
+  def can_update_privileges_user_con_profile(**args)
+    ModelPermissionLoader.for(UserConProfile).load([object, :update_privileges, args[:user_con_profile_id]])
+  end
+
+  field :can_delete_user_con_profile, Boolean, null: false do
+    argument :user_con_profile_id, Integer, required: true, camelize: false
+  end
+
+  def can_delete_user_con_profile(**args)
+    ModelPermissionLoader.for(UserConProfile).load([object, :destroy, args[:user_con_profile_id]])
+  end
+
+  field :can_become_user_con_profile, Boolean, null: false do
+    argument :user_con_profile_id, Integer, required: true, camelize: false
+  end
+
+  def can_become_user_con_profile(**args)
+    ModelPermissionLoader.for(UserConProfile).load([object, :become, args[:user_con_profile_id]])
   end
 end

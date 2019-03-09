@@ -13,7 +13,7 @@ Types::EventProposalType = GraphQL::ObjectType.define do
   end
   field :title, types.String
   field :status, !types.String
-  field :convention, !Types::ConventionType
+  field :convention, Types::ConventionType.to_non_null_type
   field :submitted_at, !Types::DateType
   field :created_at, !Types::DateType
   field :updated_at, !Types::DateType

@@ -14,13 +14,15 @@ class Types::BaseObject < GraphQL::Schema::Object
   def self.pagination_field(name, pagination_type, filters_input_type, **options, &block)
     field name, pagination_type, null: false, **options do
       argument :page, Int, required: false
-      argument :per_page, Int, required: false
+      argument :per_page, Int, required: false, camelize: false
       argument :filters, filters_input_type, required: false
       argument :sort, [Types::SortInputType], required: false
 
       instance_eval(&block) if block
     end
   end
+
+  field_class Types::BaseField
 
   # Convenience accessors for stuff the context will have
   %i[

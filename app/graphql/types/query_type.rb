@@ -92,7 +92,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
-  field :cmsLayouts, types[!Types::CmsLayoutType] do
+  field :cmsLayouts, Types::CmsLayoutType.to_non_null_type.to_list_type.to_non_null_type do
     resolve ->(_obj, _args, ctx) {
       if ctx[:convention]
         ctx[:convention].cms_layouts
@@ -122,7 +122,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
-  field :cmsNavigationItems, types[!Types::CmsNavigationItemType] do
+  field :cmsNavigationItems, Types::CmsNavigationItemType.to_non_null_type.to_list_type.to_non_null_type do
     resolve ->(_obj, _args, ctx) {
       if ctx[:convention]
         ctx[:convention].cms_navigation_items
@@ -132,7 +132,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     }
   end
 
-  field :currentAbility, !Types::AbilityType do
+  field :currentAbility, Types::AbilityType.to_non_null_type do
     resolve ->(_obj, _args, ctx) {
       ctx[:current_ability]
     }

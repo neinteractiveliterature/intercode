@@ -19,7 +19,7 @@ Mutations::UpdateConvention = GraphQL::Relay::Mutation.define do
   return_field :convention, Types::ConventionType
 
   input_field :id, types.Int
-  input_field :convention, !Types::ConventionInputType
+  input_field :convention, Types::ConventionInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
