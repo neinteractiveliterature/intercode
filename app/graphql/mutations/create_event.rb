@@ -2,7 +2,7 @@ Mutations::CreateEvent = GraphQL::Relay::Mutation.define do
   name 'CreateEvent'
   return_field :event, Types::EventType
 
-  input_field :event, !Types::EventInputType
+  input_field :event, Types::EventInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     event_attrs = args[:event].to_h.merge(

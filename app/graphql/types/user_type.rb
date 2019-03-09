@@ -1,23 +1,20 @@
-Types::UserType = GraphQL::ObjectType.define do
-  name 'User'
+class Types::UserType < Types::BaseObject
+  field :id, Integer, null: false
+  field :privileges, [String, null: true], null: true
+  field :name, String, null: true
+  field :name_inverted, String, null: true
+  field :first_name, String, null: true
+  field :last_name, String, null: true
+  field :email, String, null: true
 
-  field :id, !types.Int
-  field :privileges, types[types.String]
-  field :name, types.String
-  field :name_inverted, types.String
-  field :first_name, types.String
-  field :last_name, types.String
-  field :email, types.String
-
-  field :event_proposals, !types[Types::EventProposalType] do
+  field :event_proposals, [Types::EventProposalType], null: false do
     guard ->(user, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
         EventProposal.new(owner: UserConProfile.new(user: user))
       )
     end
-    resolve ->(obj, _args, _ctx) do
-      AssociationLoader.for(User, :event_proposals).load(obj)
-    end
   end
+
+  association_loaders User, :event_proposals
 end

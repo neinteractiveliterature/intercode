@@ -1,6 +1,4 @@
-Types::EventFiltersInputType = GraphQL::InputObjectType.define do
-  name 'EventFiltersInput'
-
-  input_field :category, types[types.Int]
-  input_field :title, types.String
+class Types::EventFiltersInputType < Types::BaseInputObject
+  argument :category, [Integer, null: true], required: false
+  argument :title, String, required: false
 end
