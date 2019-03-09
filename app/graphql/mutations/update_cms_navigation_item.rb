@@ -3,7 +3,7 @@ Mutations::UpdateCmsNavigationItem = GraphQL::Relay::Mutation.define do
   return_field :cms_navigation_item, Types::CmsNavigationItemType
 
   input_field :id, !types.Int
-  input_field :cms_navigation_item, !Types::CmsNavigationItemInputType
+  input_field :cms_navigation_item, Types::CmsNavigationItemInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     cms_navigation_item = if ctx[:convention]
