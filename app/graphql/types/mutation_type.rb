@@ -72,7 +72,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_cms_model(CmsNavigationItem))
   end
 
-  field :updateCmsNavigationItem, field: Mutations::UpdateCmsNavigationItem.field do
+  field :updateCmsNavigationItem, mutation: Mutations::UpdateCmsNavigationItem do
     guard(guard_for_cms_model(CmsNavigationItem, :update))
   end
 
@@ -98,7 +98,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Convention
 
-  field :updateConvention, field: Mutations::UpdateConvention.field do
+  field :updateConvention, mutation: Mutations::UpdateConvention do
     guard ->(_obj, args, ctx) {
       convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
       ctx[:current_ability].can?(:update, convention)
@@ -123,7 +123,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:events, :restore))
   end
 
-  field :updateEvent, field: Mutations::UpdateEvent.field do
+  field :updateEvent, mutation: Mutations::UpdateEvent do
     guard(guard_for_convention_associated_model(:events, :update))
   end
 
@@ -152,7 +152,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_convention_associated_model(:event_proposals))
   end
 
-  field :updateEventProposal, field: Mutations::UpdateEventProposal.field do
+  field :updateEventProposal, mutation: Mutations::UpdateEventProposal do
     guard(guard_for_convention_associated_model(:event_proposals, :update))
   end
 
@@ -180,7 +180,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_convention_associated_model(:forms))
   end
 
-  field :updateFormWithJSON, field: Mutations::UpdateFormWithJSON.field do
+  field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON do
     guard(guard_for_convention_associated_model(:forms, :update))
   end
 
@@ -214,7 +214,7 @@ class Types::MutationType < Types::BaseObject
     guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
-  field :updateOrderEntry, field: Mutations::UpdateOrderEntry.field do
+  field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry do
     guard(guard_for_model_with_id(OrderEntry, :update))
   end
 
@@ -230,7 +230,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(Order, :update))
   end
 
-  field :updateOrder, field: Mutations::UpdateOrder.field do
+  field :updateOrder, mutation: Mutations::UpdateOrder do
     guard(guard_for_model_with_id(Order, :update))
   end
 
@@ -252,7 +252,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :updateProduct, field: Mutations::UpdateProduct.field do
+  field :updateProduct, mutation: Mutations::UpdateProduct do
     guard(guard_for_convention_associated_model(:products, :update))
   end
 
@@ -271,7 +271,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :updateRoom, field: Mutations::UpdateRoom.field do
+  field :updateRoom, mutation: Mutations::UpdateRoom do
     guard(guard_for_convention_associated_model(:rooms, :update))
   end
 
@@ -306,7 +306,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:runs, :destroy))
   end
 
-  field :updateRun, field: Mutations::UpdateRun.field do
+  field :updateRun, mutation: Mutations::UpdateRun do
     guard(guard_for_convention_associated_model(:runs, :update))
   end
 
@@ -336,11 +336,11 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
-  field :updateSignupBucket, field: Mutations::UpdateSignupBucket.field do
+  field :updateSignupBucket, mutation: Mutations::UpdateSignupBucket do
     guard(guard_for_convention_associated_model(:signups, :update_bucket))
   end
 
-  field :updateSignupCounted, field: Mutations::UpdateSignupCounted.field do
+  field :updateSignupCounted, mutation: Mutations::UpdateSignupCounted do
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
@@ -355,7 +355,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :updateStaffPosition, field: Mutations::UpdateStaffPosition.field do
+  field :updateStaffPosition, mutation: Mutations::UpdateStaffPosition do
     guard(guard_for_convention_associated_model(:staff_positions, :update))
   end
 
@@ -383,7 +383,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(TeamMember, :destroy))
   end
 
-  field :updateTeamMember, field: Mutations::UpdateTeamMember.field do
+  field :updateTeamMember, mutation: Mutations::UpdateTeamMember do
     guard(guard_for_model_with_id(TeamMember, :update))
   end
 
@@ -455,7 +455,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :updateUserConProfile, field: Mutations::UpdateUserConProfile.field do
+  field :updateUserConProfile, mutation: Mutations::UpdateUserConProfile do
     guard ->(_obj, args, ctx) {
       user_con_profile = ctx[:convention].user_con_profiles.find(args[:id])
       if args[:user_con_profile][:privileges]

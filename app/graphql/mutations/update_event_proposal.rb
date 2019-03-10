@@ -1,12 +1,11 @@
-Mutations::UpdateEventProposal = GraphQL::Relay::Mutation.define do
-  name 'UpdateEventProposal'
-  return_field :event_proposal, Types::EventProposalType
+class Mutations::UpdateEventProposal < Mutations::BaseMutation
+  field :event_proposal, Types::EventProposalType, null: false
 
-  input_field :id, !types.Int
-  input_field :event_proposal, Types::EventProposalInputType.to_non_null_type
+  argument :id, Integer, required: true
+  argument :event_proposal, Types::EventProposalInputType, required: true, camelize: false
 
-  resolve ->(_obj, args, ctx) {
-    event_proposal = ctx[:convention].event_proposals.find(args[:id])
+  def resolve(**args)
+    event_proposal = convention.event_proposals.find(args[:id])
     event_proposal_attrs = args[:event_proposal].to_h
     event_proposal.assign_form_response_attributes(
       JSON.parse(event_proposal_attrs.delete('form_response_attrs_json'))
@@ -18,7 +17,7 @@ Mutations::UpdateEventProposal = GraphQL::Relay::Mutation.define do
       event_proposal.form_response_attribute_changes.each do |(key, (previous_value, new_value))|
         FormResponseChange.create!(
           response: event_proposal,
-          user_con_profile: ctx[:user_con_profile],
+          user_con_profile: user_con_profile,
           field_identifier: key,
           previous_value: previous_value,
           new_value: new_value
@@ -27,5 +26,5 @@ Mutations::UpdateEventProposal = GraphQL::Relay::Mutation.define do
     end
 
     { event_proposal: event_proposal }
-  }
+  end
 end

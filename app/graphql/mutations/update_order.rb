@@ -1,14 +1,13 @@
-Mutations::UpdateOrder = GraphQL::Relay::Mutation.define do
-  name 'UpdateOrder'
-  return_field :order, Types::OrderType
+class Mutations::UpdateOrder < Mutations::BaseMutation
+  field :order, Types::OrderType, null: false
 
-  input_field :id, !types.Int
-  input_field :order, Types::OrderInputType.to_non_null_type
+  argument :id, Integer, required: true
+  argument :order, Types::OrderInputType, required: true
 
-  resolve ->(_obj, args, _ctx) {
+  def resolve(**args)
     order = Order.find(args[:id])
     order.update!(args[:order].to_h)
 
     { order: order }
-  }
+  end
 end
