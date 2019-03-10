@@ -1,4 +1,4 @@
-class Mutations::DeleteCmsGraphqlQuery < GraphQL::Schema::RelayClassicMutation
+class Mutations::DeleteCmsGraphqlQuery < Mutations::BaseMutation
   field :query, Types::CmsGraphqlQueryType, null: false
 
   argument :id, Int, required: true

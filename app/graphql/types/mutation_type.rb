@@ -76,7 +76,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_cms_model(CmsNavigationItem, :update))
   end
 
-  field :deleteCmsNavigationItem, field: Mutations::DeleteCmsNavigationItem.field do
+  field :deleteCmsNavigationItem, mutation: Mutations::DeleteCmsNavigationItem do
     guard(guard_for_cms_model(CmsNavigationItem, :destroy))
   end
 
@@ -218,7 +218,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(OrderEntry, :update))
   end
 
-  field :deleteOrderEntry, field: Mutations::DeleteOrderEntry.field do
+  field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry do
     guard(guard_for_model_with_id(OrderEntry, :destroy))
   end
 
@@ -240,7 +240,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Page
 
-  field :deletePage, field: Mutations::DeletePage.field do
+  field :deletePage, mutation: Mutations::DeletePage do
     guard(guard_for_cms_model(Page, :destroy))
   end
 
@@ -256,7 +256,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:products, :update))
   end
 
-  field :deleteProduct, field: Mutations::DeleteProduct.field do
+  field :deleteProduct, mutation: Mutations::DeleteProduct do
     guard(guard_for_convention_associated_model(:products, :destroy))
   end
 
@@ -275,7 +275,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:rooms, :update))
   end
 
-  field :deleteRoom, field: Mutations::DeleteRoom.field do
+  field :deleteRoom, mutation: Mutations::DeleteRoom do
     guard(guard_for_convention_associated_model(:rooms, :destroy))
   end
 
