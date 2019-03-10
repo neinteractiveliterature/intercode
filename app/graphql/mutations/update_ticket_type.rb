@@ -3,7 +3,7 @@ Mutations::UpdateTicketType = GraphQL::Relay::Mutation.define do
   return_field :ticket_type, Types::TicketTypeType
 
   input_field :id, !types.Int
-  input_field :ticket_type, !Types::TicketTypeInputType
+  input_field :ticket_type, Types::TicketTypeInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     ticket_type = ctx[:convention].ticket_types.find(args[:id])

@@ -3,7 +3,7 @@ Mutations::UpdateOrder = GraphQL::Relay::Mutation.define do
   return_field :order, Types::OrderType
 
   input_field :id, !types.Int
-  input_field :order, !Types::OrderInputType
+  input_field :order, Types::OrderInputType.to_non_null_type
 
   resolve ->(_obj, args, _ctx) {
     order = Order.find(args[:id])

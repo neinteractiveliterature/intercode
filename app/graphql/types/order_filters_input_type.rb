@@ -1,6 +1,4 @@
-Types::OrderFiltersInputType = GraphQL::InputObjectType.define do
-  name 'OrderFiltersInput'
-
-  input_field :user_name, types.String
-  input_field :status, types.String
+class Types::OrderFiltersInputType < Types::BaseInputObject
+  argument :user_name, String, required: false, camelize: false
+  argument :status, String, required: false
 end

@@ -1,6 +1,6 @@
 Mutations::ForceConfirmSignup = GraphQL::Relay::Mutation.define do
   name 'ForceConfirmSignup'
-  return_field :signup, Types::Signup
+  return_field :signup, Types::SignupType
 
   input_field :id, !types.Int
   input_field :bucket_key, !types.String

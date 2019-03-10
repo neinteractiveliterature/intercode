@@ -1,6 +1,4 @@
-Types::SortInputType = GraphQL::InputObjectType.define do
-  name 'SortInput'
-
-  input_field :field, !types.String
-  input_field :desc, !types.Boolean
+class Types::SortInputType < Types::BaseInputObject
+  argument :field, String, required: true
+  argument :desc, Boolean, required: true
 end

@@ -1,94 +1,91 @@
-Types::RunType = GraphQL::ObjectType.define do
-  name 'Run'
+class Types::RunType < Types::BaseObject
+  field :id, Integer, null: false
+  field :event, Types::EventType, null: true
 
-  field :id, !types.Int
-  field :event, Types::EventType do
-    resolve ->(obj, _args, _ctx) do
-      RecordLoader.for(Event).load(obj.event_id)
-    end
-  end
-  field :starts_at, Types::DateType
-  field :ends_at, Types::DateType
-  field :title_suffix, types.String
-  field :schedule_note, types.String
-
-  field :rooms, types[Types::RoomType] do
-    resolve ->(obj, _args, _ctx) do
-      AssociationLoader.for(Run, :rooms).load(obj)
-    end
+  def event
+    RecordLoader.for(Event).load(object.event_id)
   end
 
-  field :room_names, types[types.String] do
-    resolve ->(obj, _args, _ctx) do
-      RunRoomNamesLoader.for.load(obj)
-    end
+  field :starts_at, Types::DateType, null: true
+  field :ends_at, Types::DateType, null: true
+  field :title_suffix, String, null: true
+  field :schedule_note, String, null: true
+
+  field :rooms, [Types::RoomType, null: true], null: true
+
+  association_loaders Run, :rooms
+
+  field :room_names, [String, null: true], null: true
+
+  def room_names
+    RunRoomNamesLoader.for.load(object)
   end
 
-  field :confirmed_signup_count, types.Int do
-    resolve ->(obj, _args, _ctx) {
-      SignupCountLoader.for.load(obj).then do |presenter|
-        presenter.counted_signups_by_state('confirmed')
-      end
-    }
-  end
+  field :confirmed_signup_count, Integer, null: true
 
-  field :confirmed_limited_signup_count, types.Int do
-    resolve ->(obj, _args, _ctx) {
-      SignupCountLoader.for.load(obj).then(&:confirmed_limited_count)
-    }
-  end
-
-  field :waitlisted_signup_count, types.Int do
-    resolve ->(obj, _args, _ctx) {
-      SignupCountLoader.for.load(obj).then do |presenter|
-        presenter.waitlist_count
-      end
-    }
-  end
-
-  field :not_counted_signup_count, types.Int do
-    resolve ->(obj, _args, _ctx) {
-      SignupCountLoader.for.load(obj).then do |presenter|
-        (
-          presenter.not_counted_signups_by_state('confirmed') +
-          presenter.not_counted_signups_by_state('waitlisted')
-        )
-      end
-    }
-  end
-
-  field :not_counted_confirmed_signup_count, types.Int do
-    resolve ->(obj, _args, _ctx) {
-      SignupCountLoader.for.load(obj).then do |presenter|
-        presenter.not_counted_signups_by_state('confirmed')
-      end
-    }
-  end
-
-  field :signup_count_by_state_and_bucket_key_and_counted, Types::Json.to_non_null_type do
-    resolve ->(obj, _args, _ctx) {
-      SignupCountLoader.for.load(obj).then(&:signup_count_by_state_and_bucket_key_and_counted)
-    }
-  end
-
-  field :my_signups, types[Types::Signup] do
-    resolve ->(obj, _args, ctx) {
-      return [] unless ctx[:user_con_profile]
-      ctx[:user_con_profile].signups.select { |signup| signup.run_id == obj.id }
-    }
-  end
-
-  field :current_ability_can_signup_summary_run, !types.Boolean do
-    resolve -> (obj, _args, ctx) do
-      ModelPermissionLoader.for(Run).load([ctx[:current_ability], :signup_summary, obj.id])
+  def confirmed_signup_count
+    SignupCountLoader.for.load(object).then do |presenter|
+      presenter.counted_signups_by_state('confirmed')
     end
   end
 
-  field :signups_paginated, Types::SignupsPaginationType.to_non_null_type do
-    argument :page, types.Int
-    argument :per_page, types.Int
-    argument :filters, Types::SignupFiltersInputType
-    argument :sort, types[Types::SortInputType]
+  field :confirmed_limited_signup_count, Integer, null: true
+
+  def confirmed_limited_signup_count
+    SignupCountLoader.for.load(object).then(&:confirmed_limited_count)
+  end
+
+  field :waitlisted_signup_count, Integer, null: true
+
+  def waitlisted_signup_count
+    SignupCountLoader.for.load(object).then do |presenter|
+      presenter.waitlist_count
+    end
+  end
+
+  field :not_counted_signup_count, Integer, null: true
+
+  def not_counted_signup_count
+    SignupCountLoader.for.load(object).then do |presenter|
+      (
+        presenter.not_counted_signups_by_state('confirmed') +
+        presenter.not_counted_signups_by_state('waitlisted')
+      )
+    end
+  end
+
+  field :not_counted_confirmed_signup_count, Integer, null: true
+
+  def not_counted_confirmed_signup_count
+    SignupCountLoader.for.load(object).then do |presenter|
+      presenter.not_counted_signups_by_state('confirmed')
+    end
+  end
+
+  field :signup_count_by_state_and_bucket_key_and_counted, Types::Json, null: false
+
+  def signup_count_by_state_and_bucket_key_and_counted
+    SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)
+  end
+
+  field :my_signups, [Types::SignupType, null: true], null: true
+
+  def my_signups
+    return [] unless context[:user_con_profile]
+    context[:user_con_profile].signups.select { |signup| signup.run_id == object.id }
+  end
+
+  field :current_ability_can_signup_summary_run, Boolean, null: false
+
+  def current_ability_can_signup_summary_run
+    ModelPermissionLoader.for(Run).load([context[:current_ability], :signup_summary, object.id])
+  end
+
+  field :signups_paginated, Types::SignupsPaginationType, null: false do
+    argument :page, Integer, required: false
+    argument :per_page, Integer, required: false
+    argument :filters, Types::SignupFiltersInputType, required: false
+    argument :sort, [Types::SortInputType, null: true], required: false
 
     guard ->(run, _args, ctx) do
       (
@@ -96,12 +93,12 @@ Types::RunType = GraphQL::ObjectType.define do
         ctx[:current_ability].can?(:signup_summary, run)
       )
     end
+  end
 
-    resolve ->(run, args, _ctx) do
-      scope = run.signups
+  def signups_paginated(**args)
+    scope = object.signups
 
-      Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
-        .paginate(page: args[:page], per_page: args[:per_page])
-    end
+    Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
   end
 end

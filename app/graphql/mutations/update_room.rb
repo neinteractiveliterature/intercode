@@ -3,7 +3,7 @@ Mutations::UpdateRoom = GraphQL::Relay::Mutation.define do
   return_field :room, Types::RoomType
 
   input_field :id, !types.Int
-  input_field :room, !Types::RoomInputType
+  input_field :room, Types::RoomInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     room = ctx[:convention].rooms.find(args[:id])

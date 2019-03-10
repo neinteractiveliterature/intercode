@@ -1,7 +1,5 @@
-Types::OrderEntryInputType = GraphQL::InputObjectType.define do
-  name 'OrderEntryInput'
-
-  input_field :product_id, types.Int
-  input_field :product_variant_id, types.Int
-  input_field :quantity, types.Int
+class Types::OrderEntryInputType < Types::BaseInputObject
+  argument :product_id, Integer, required: false, camelize: false
+  argument :product_variant_id, Integer, required: false, camelize: false
+  argument :quantity, Integer, required: false
 end

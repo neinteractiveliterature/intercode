@@ -87,7 +87,7 @@ class Types::UserConProfileType < Types::BaseObject
     OrderSummaryLoader.for().load(object)
   end
 
-  field :signups, [Types::Signup], null: false do
+  field :signups, [Types::SignupType], null: false do
     guard -> (obj, _args, ctx) {
       ctx[:current_ability].can?(:read, Signup.new(user_con_profile: obj, run: obj.convention.events.new.runs.new))
     }

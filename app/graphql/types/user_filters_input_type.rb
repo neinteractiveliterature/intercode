@@ -1,7 +1,5 @@
-Types::UserFiltersInputType = GraphQL::InputObjectType.define do
-  name 'UserFiltersInput'
-
-  input_field :name, types.String
-  input_field :email, types.String
-  input_field :privileges, types[types.String]
+class Types::UserFiltersInputType < Types::BaseInputObject
+  argument :name, String, required: false
+  argument :email, String, required: false
+  argument :privileges, [String], required: false
 end

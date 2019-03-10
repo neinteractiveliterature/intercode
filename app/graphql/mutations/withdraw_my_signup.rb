@@ -1,5 +1,5 @@
 class Mutations::WithdrawMySignup < GraphQL::Schema::RelayClassicMutation
-  field :signup, Types::Signup, null: false
+  field :signup, Types::SignupType, null: false
   argument :run_id, Int, required: true, camelize: false
 
   def resolve(run_id:)

@@ -3,7 +3,7 @@ Mutations::CreateRun = GraphQL::Relay::Mutation.define do
   return_field :run, Types::RunType
 
   input_field :event_id, !types.Int
-  input_field :run, !Types::RunInputType
+  input_field :run, Types::RunInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     event = ctx[:convention].events.find(args[:event_id])

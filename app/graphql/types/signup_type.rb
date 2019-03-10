@@ -1,4 +1,4 @@
-class Types::Signup < Types::BaseObject
+class Types::SignupType < Types::BaseObject
   field :id, Int, null: false
   field :state, Types::SignupStateType, null: false
   field :counted, Boolean, null: false

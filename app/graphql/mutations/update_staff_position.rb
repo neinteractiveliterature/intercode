@@ -3,7 +3,7 @@ Mutations::UpdateStaffPosition = GraphQL::Relay::Mutation.define do
   return_field :staff_position, Types::StaffPositionType
 
   input_field :id, !types.Int
-  input_field :staff_position, !Types::StaffPositionInputType
+  input_field :staff_position, Types::StaffPositionInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     staff_position = ctx[:convention].staff_positions.find(args[:id])

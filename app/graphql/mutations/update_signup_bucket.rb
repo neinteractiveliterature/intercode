@@ -1,6 +1,6 @@
 Mutations::UpdateSignupBucket = GraphQL::Relay::Mutation.define do
   name 'UpdateSignupBucket'
-  return_field :signup, Types::Signup
+  return_field :signup, Types::SignupType
 
   input_field :id, !types.Int
   input_field :bucket_key, !types.String

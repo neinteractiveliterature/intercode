@@ -1,9 +1,7 @@
-Types::ProductVariantInputType = GraphQL::InputObjectType.define do
-  name 'ProductVariantInput'
-
-  input_field :id, types.Int
-  input_field :name, types.String
-  input_field :description, types.String
-  input_field :image, ApolloUploadServer::Upload
-  input_field :override_price, Types::MoneyInputType
+class Types::ProductVariantInputType < Types::BaseInputObject
+  argument :id, Integer, required: false
+  argument :name, String, required: false
+  argument :description, String, required: false
+  argument :image, ApolloUploadServer::Upload, required: false
+  argument :override_price, Types::MoneyInputType, required: false, camelize: false
 end
