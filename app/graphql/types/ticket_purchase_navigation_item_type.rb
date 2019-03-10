@@ -1,4 +1,4 @@
-class Types::TicketPurchaseNavigationItem < Types::BaseObject
+class Types::TicketPurchaseNavigationItemType < Types::BaseObject
   # There's really nothing to return here, but GraphQL requires we return something
   field :id, String, null: false
 
