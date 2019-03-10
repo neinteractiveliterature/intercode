@@ -1,14 +1,14 @@
-Mutations::DeleteMaximumEventProvidedTicketsOverride = GraphQL::Relay::Mutation.define do
-  name 'DeleteMaximumEventProvidedTicketsOverride'
-  return_field :maximum_event_provided_tickets_override,
-    Types::MaximumEventProvidedTicketsOverrideType.to_non_null_type
+class Mutations::DeleteMaximumEventProvidedTicketsOverride < Mutations::BaseMutation
+  field :maximum_event_provided_tickets_override,
+    Types::MaximumEventProvidedTicketsOverrideType,
+    null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, _ctx) {
+  def resolve(**args)
     override = MaximumEventProvidedTicketsOverride.find(args[:id])
     override.destroy!
 
     { maximum_event_provided_tickets_override: override }
-  }
+  end
 end
