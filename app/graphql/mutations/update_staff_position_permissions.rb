@@ -1,4 +1,4 @@
-class Mutations::UpdateStaffPositionPermissions < GraphQL::Schema::RelayClassicMutation
+class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   field :staff_position, Types::StaffPositionType, null: false, camelize: false
   argument :staff_position_id, Int, required: true, camelize: false
   argument :grant_permissions, [Types::PermissionInputType], required: true, camelize: false

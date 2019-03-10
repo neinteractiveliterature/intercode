@@ -1,19 +1,18 @@
-Mutations::UpdateTeamMember = GraphQL::Relay::Mutation.define do
-  name 'UpdateTeamMember'
-  return_field :team_member, Types::TeamMemberType
+class Mutations::UpdateTeamMember < Mutations::BaseMutation
+  field :team_member, Types::TeamMemberType, null: false
 
-  input_field :id, !types.Int
-  input_field :team_member, Types::TeamMemberInputType.to_non_null_type
+  argument :id, Integer, required: true
+  argument :team_member, Types::TeamMemberInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
+  def resolve(**args)
     team_member = TeamMember.find(args[:id])
 
     team_member.update!(
       args[:team_member].to_h.merge(
-        updated_by: ctx[:user_con_profile].user
+        updated_by: user_con_profile.user
       )
     )
 
     { team_member: team_member }
-  }
+  end
 end

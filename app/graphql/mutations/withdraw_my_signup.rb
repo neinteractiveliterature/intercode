@@ -1,4 +1,4 @@
-class Mutations::WithdrawMySignup < GraphQL::Schema::RelayClassicMutation
+class Mutations::WithdrawMySignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
   argument :run_id, Int, required: true, camelize: false
 

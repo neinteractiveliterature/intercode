@@ -1,12 +1,11 @@
-Mutations::UpdateProduct = GraphQL::Relay::Mutation.define do
-  name 'UpdateProduct'
-  return_field :product, Types::ProductType
+class Mutations::UpdateProduct < Mutations::BaseMutation
+  field :product, Types::ProductType, null: false
 
-  input_field :id, !types.Int
-  input_field :product, Types::ProductInputType.to_non_null_type
+  argument :id, Integer, required: true
+  argument :product, Types::ProductInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
-    product = ctx[:convention].products.includes(:product_variants).find(args[:id])
+  def resolve(**args)
+    product = convention.products.includes(:product_variants).find(args[:id])
     product_fields = args[:product].to_h.deep_symbolize_keys
 
     product_fields[:price] = MoneyHelper.coerce_money_input(product_fields[:price])
@@ -24,5 +23,5 @@ Mutations::UpdateProduct = GraphQL::Relay::Mutation.define do
     product.update!(product_fields)
 
     { product: product }
-  }
+  end
 end
