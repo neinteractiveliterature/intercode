@@ -65,7 +65,7 @@ class Types::QueryType < Types::BaseObject
     convention.event_proposals.find(args[:id])
   end
 
-  field :my_signups, [Types::Signup], null: true
+  field :my_signups, [Types::SignupType], null: true
 
   def my_signups
     context[:user_con_profile].signups
@@ -255,7 +255,7 @@ class Types::QueryType < Types::BaseObject
     RootSite.instance
   end
 
-  field :signup, Types::Signup, null: false do
+  field :signup, Types::SignupType, null: false do
     argument :id, Integer, required: true
 
     guard ->(_obj, args, ctx) do

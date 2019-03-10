@@ -2,7 +2,7 @@ Mutations::CreateProduct = GraphQL::Relay::Mutation.define do
   name 'CreateProduct'
   return_field :product, Types::ProductType
 
-  input_field :product, !Types::ProductInputType
+  input_field :product, Types::ProductInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     product_fields = args[:product].to_h.deep_symbolize_keys

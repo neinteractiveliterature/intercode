@@ -5,7 +5,7 @@ Mutations::CreateTeamMember = GraphQL::Relay::Mutation.define do
 
   input_field :event_id, !types.Int
   input_field :user_con_profile_id, !types.Int
-  input_field :team_member, !Types::TeamMemberInputType
+  input_field :team_member, Types::TeamMemberInputType.to_non_null_type
   input_field :provide_ticket_type_id, types.Int
 
   resolve ->(_obj, args, ctx) {

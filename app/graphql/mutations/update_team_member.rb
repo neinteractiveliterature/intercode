@@ -3,7 +3,7 @@ Mutations::UpdateTeamMember = GraphQL::Relay::Mutation.define do
   return_field :team_member, Types::TeamMemberType
 
   input_field :id, !types.Int
-  input_field :team_member, !Types::TeamMemberInputType
+  input_field :team_member, Types::TeamMemberInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     team_member = TeamMember.find(args[:id])

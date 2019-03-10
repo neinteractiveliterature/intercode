@@ -2,7 +2,7 @@ Mutations::AddOrderEntryToCurrentPendingOrder = GraphQL::Relay::Mutation.define 
   name 'AddOrderEntryToCurrentPendingOrder'
   return_field :order_entry, Types::OrderEntryType
 
-  input_field :order_entry, !Types::OrderEntryInputType
+  input_field :order_entry, Types::OrderEntryInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     order = ctx[:current_pending_order]

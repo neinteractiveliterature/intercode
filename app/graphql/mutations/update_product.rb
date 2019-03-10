@@ -3,7 +3,7 @@ Mutations::UpdateProduct = GraphQL::Relay::Mutation.define do
   return_field :product, Types::ProductType
 
   input_field :id, !types.Int
-  input_field :product, !Types::ProductInputType
+  input_field :product, Types::ProductInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     product = ctx[:convention].products.includes(:product_variants).find(args[:id])

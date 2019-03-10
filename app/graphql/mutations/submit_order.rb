@@ -3,7 +3,7 @@ Mutations::SubmitOrder = GraphQL::Relay::Mutation.define do
   return_field :order, Types::OrderType
 
   input_field :id, !types.Int
-  input_field :payment_mode, !Types::PaymentModeType
+  input_field :payment_mode, Types::PaymentModeType.to_non_null_type
   input_field :stripe_token, types.String
 
   resolve ->(_obj, args, _ctx) do

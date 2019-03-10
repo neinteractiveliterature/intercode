@@ -3,7 +3,7 @@ Mutations::CreateUserConProfile = GraphQL::Relay::Mutation.define do
   return_field :user_con_profile, Types::UserConProfileType
 
   input_field :user_id, !types.Int
-  input_field :user_con_profile, !Types::UserConProfileInputType
+  input_field :user_con_profile, Types::UserConProfileInputType.to_non_null_type
 
   resolve ->(_obj, args, ctx) {
     user = User.find(args[:user_id])

@@ -1,14 +1,12 @@
-Types::RegistrationPolicyBucketInputType = GraphQL::InputObjectType.define do
-  name 'RegistrationPolicyBucketInput'
-
-  input_field :key, !types.String
-  input_field :name, types.String
-  input_field :description, types.String
-  input_field :minimum_slots, types.Int
-  input_field :preferred_slots, types.Int
-  input_field :total_slots, types.Int
-  input_field :slots_limited, types.Boolean
-  input_field :anything, types.Boolean
-  input_field :not_counted, types.Boolean
-  input_field :expose_attendees, types.Boolean
+class Types::RegistrationPolicyBucketInputType < Types::BaseInputObject
+  argument :key, String, required: true
+  argument :name, String, required: false
+  argument :description, String, required: false
+  argument :minimum_slots, Integer, required: false, camelize: false
+  argument :preferred_slots, Integer, required: false, camelize: false
+  argument :total_slots, Integer, required: false, camelize: false
+  argument :slots_limited, Boolean, required: false, camelize: false
+  argument :anything, Boolean, required: false
+  argument :not_counted, Boolean, required: false, camelize: false
+  argument :expose_attendees, Boolean, required: false, camelize: false
 end
