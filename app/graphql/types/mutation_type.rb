@@ -80,7 +80,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_cms_model(CmsNavigationItem, :destroy))
   end
 
-  field :sortCmsNavigationItems, field: Mutations::SortCmsNavigationItems.field do
+  field :sortCmsNavigationItems, mutation: Mutations::SortCmsNavigationItems do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:sort, CmsNavigationItem.new(parent: ctx[:convention]))
     }
@@ -115,11 +115,11 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_convention_associated_model(:events))
   end
 
-  field :dropEvent, field: Mutations::DropEvent.field do
+  field :dropEvent, mutation: Mutations::DropEvent do
     guard(guard_for_convention_associated_model(:events, :drop))
   end
 
-  field :restoreDroppedEvent, field: Mutations::RestoreDroppedEvent.field do
+  field :restoreDroppedEvent, mutation: Mutations::RestoreDroppedEvent do
     guard(guard_for_convention_associated_model(:events, :restore))
   end
 
@@ -156,7 +156,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:event_proposals, :update))
   end
 
-  field :submitEventProposal, field: Mutations::SubmitEventProposal.field do
+  field :submitEventProposal, mutation: Mutations::SubmitEventProposal do
     guard(guard_for_convention_associated_model(:event_proposals, :submit))
   end
 
@@ -222,11 +222,11 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(OrderEntry, :destroy))
   end
 
-  field :submitOrder, field: Mutations::SubmitOrder.field do
+  field :submitOrder, mutation: Mutations::SubmitOrder do
     guard(guard_for_model_with_id(Order, :submit))
   end
 
-  field :markOrderPaid, field: Mutations::MarkOrderPaid.field do
+  field :markOrderPaid, mutation: Mutations::MarkOrderPaid do
     guard(guard_for_model_with_id(Order, :update))
   end
 
@@ -332,7 +332,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :forceConfirmSignup, field: Mutations::ForceConfirmSignup.field do
+  field :forceConfirmSignup, mutation: Mutations::ForceConfirmSignup do
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
@@ -393,13 +393,13 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(Ticket, :destroy))
   end
 
-  field :purchaseTicket, field: Mutations::PurchaseTicket.field do
+  field :purchaseTicket, mutation: Mutations::PurchaseTicket do
     guard -> (_obj, _args, ctx) do
       ctx[:user_con_profile]
     end
   end
 
-  field :provideEventTicket, field: Mutations::ProvideEventTicket.field do
+  field :provideEventTicket, mutation: Mutations::ProvideEventTicket do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:update, event.team_members.new)
