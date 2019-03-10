@@ -1,72 +1,71 @@
-Types::EventType = GraphQL::ObjectType.define do
-  name 'Event'
+class Types::EventType < Types::BaseObject
+  field :id, Integer, null: false
 
-  field :id, !types.Int
-  field :form_response_attrs_json, Types::Json do
-    resolve -> (obj, _args, ctx) do
-      AssociationLoader.for(Event, :event_category).load(obj).then do |event_category|
-        AssociationLoader.for(EventCategory, :event_form).load(event_category)
-      end.then do |form|
-        FormResponsePresenter.new(form, obj).as_json
-      end
+  field :title, String, null: true
+  field :author, String, null: true
+  field :email, String, null: true
+  field :organization, String, null: true
+  field :url, String, null: true
+  field :participant_communications, String, null: true
+  field :age_restrictions, String, null: true
+  field :content_warnings, String, null: true
+  field :length_seconds, Integer, null: true
+  field :can_play_concurrently, Boolean, null: true
+  field :con_mail_destination, String, null: true
+  field :description, String, null: true
+  field :short_blurb, String, null: true
+  field :status, String, null: true
+  field :private_signup_list, Boolean, null: true
+  field :form, Types::FormType, null: true
+  field :created_at, Types::DateType, null: true
+
+  field :event_category, Types::EventCategoryType, null: false
+  field :team_members, [Types::TeamMemberType], null: false
+
+  association_loaders Event, :event_category, :team_members
+
+
+  field :form_response_attrs_json, Types::Json, null: true
+
+  def form_response_attrs_json
+    AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
+      AssociationLoader.for(EventCategory, :event_form).load(event_category)
+    end.then do |form|
+      FormResponsePresenter.new(form, object).as_json
     end
   end
-  field :form_response_attrs_json_with_rendered_markdown, Types::Json do
-    resolve -> (obj, _args, ctx) do
-      AssociationLoader.for(Event, :event_category).load(obj).then do |event_category|
-        AssociationLoader.for(EventCategory, :event_form).load(event_category)
-      end.then do |form|
-        FormResponsePresenter.new(form, obj).as_json_with_rendered_markdown('event', obj, '')
-      end
+
+  field :form_response_attrs_json_with_rendered_markdown, Types::Json, null: true
+
+  def form_response_attrs_json_with_rendered_markdown
+    AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
+      AssociationLoader.for(EventCategory, :event_form).load(event_category)
+    end.then do |form|
+      FormResponsePresenter.new(form, object).as_json_with_rendered_markdown('event', object, '')
     end
   end
 
-  field :title, types.String
-  field :author, types.String
-  field :email, types.String
-  field :organization, types.String
-  field :url, types.String
-  field :participant_communications, types.String
-  field :age_restrictions, types.String
-  field :content_warnings, types.String
-  field :length_seconds, types.Int
-  field :can_play_concurrently, types.Boolean
-  field :con_mail_destination, types.String
-  field :description, types.String
-  field :short_blurb, types.String
-  field :status, types.String
-  field :private_signup_list, types.Boolean
-  field :form, Types::FormType
-  field :created_at, Types::DateType
-
-  field :runs, !types[!Types::RunType] do
-    argument :start, Types::DateType
-    argument :finish, Types::DateType
-
-    resolve -> (obj, args, ctx) do
-      EventRunsLoader.for(args[:start], args[:finish], ctx[:current_ability]).load(obj)
-    end
+  field :runs, [Types::RunType], null: false do
+    argument :start, Types::DateType, required: false
+    argument :finish, Types::DateType, required: false
   end
-  field :run, !Types::RunType do
-    argument :id, !types.Int
+
+  def runs(**args)
+    EventRunsLoader.for(args[:start], args[:finish], context[:current_ability]).load(object)
+  end
+
+  field :run, Types::RunType, null: false do
+    argument :id, Integer, required: true
     guard -> (event, args, ctx) do
       ctx[:current_ability].can?(:read, event.runs.find(args[:id]))
     end
-    resolve -> (event, args, _ctx) do
-      event.runs.find(args[:id])
-    end
   end
-  field :event_category, Types::EventCategoryType.to_non_null_type do
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(Event, :event_category).load(obj)
-    }
+
+  def run(**args)
+    context[:current_ability].can?(:read, object.runs.find(args[:id]))
   end
-  field :team_members, Types::TeamMemberType.to_list_type.to_non_null_type do
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(Event, :team_members).load(obj)
-    }
-  end
-  field :provided_tickets, Types::TicketType.to_non_null_type.to_list_type.to_non_null_type do
+
+  field :provided_tickets, [Types::TicketType], null: false do
     guard -> (event, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
@@ -77,62 +76,60 @@ Types::EventType = GraphQL::ObjectType.define do
       )
     end
   end
-  field :can_provide_tickets, !types.Boolean do
-    deprecation_reason 'Plaese use event_category.can_provide_tickets instead'
-    resolve -> (obj, _args, _ctx) {
-      obj.event_category.can_provide_tickets?
-    }
+  field :can_provide_tickets, Boolean, deprecation_reason: 'Plaese use event_category.can_provide_tickets instead', null: false
+
+  def can_provide_tickets
+    object.event_category.can_provide_tickets?
   end
+
   override_type = Types::MaximumEventProvidedTicketsOverrideType
-  field :maximum_event_provided_tickets_overrides, override_type.to_non_null_type.to_list_type.to_non_null_type do
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(obj)
-    }
+  field :maximum_event_provided_tickets_overrides, [override_type], null: false
+
+  def maximum_event_provided_tickets_overrides
+    AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(object)
   end
 
-  field :registration_policy, Types::RegistrationPolicyType
+  field :registration_policy, Types::RegistrationPolicyType, null: true
 
-  field :slots_limited, types.Boolean do
-    resolve -> (obj, _args, _ctx) {
-      obj.registration_policy.slots_limited?
-    }
+  field :slots_limited, Boolean, null: true
+
+  def slots_limited
+    object.registration_policy.slots_limited?
   end
 
-  field :total_slots, types.Int do
-    resolve -> (obj, _args, _ctx) {
-      obj.registration_policy.total_slots
-    }
+  field :total_slots, Integer, null: true
+
+  def total_slots
+    object.registration_policy.total_slots
   end
 
-  field :short_blurb_html, types.String do
-    resolve ->(obj, _args, _ctx) {
-      MarkdownLoader.for('event', 'No information provided').load([[obj, 'short_blurb_html'], obj.short_blurb])
-    }
+  field :short_blurb_html, String, null: true
+
+  def short_blurb_html
+    MarkdownLoader.for('event', 'No information provided').load([[object, 'short_blurb_html'], object.short_blurb])
   end
 
-  field :description_html, types.String do
-    resolve ->(obj, _args, _ctx) {
-      MarkdownLoader.for('event', 'No information provided').load([[obj, 'description_html'], obj.description])
-    }
+  field :description_html, String, null: true
+
+  def description_html
+    MarkdownLoader.for('event', 'No information provided').load([[object, 'description_html'], object.description])
   end
 
-  field :admin_notes, types.String do
+  field :admin_notes, String, null: true do
     guard -> (obj, _args, ctx) do
       ctx[:current_ability].can?(:read_admin_notes, obj)
     end
   end
 
-  field :category, !types.String do
-    deprecation_reason 'Please use event_category instead'
-    resolve ->(obj, _args, _ctx) {
-      obj.event_category.name.underscore
-    }
+  field :category, String, deprecation_reason: 'Please use event_category instead', null: false
+
+  def category
+    object.event_category.name.underscore
   end
 
-  field :team_member_name, !types.String do
-    deprecation_reason 'Please use event_category.team_member_name instead'
-    resolve ->(obj, _args, _ctx) {
-      obj.event_category.team_member_name
-    }
+  field :team_member_name, String, deprecation_reason: 'Please use event_category.team_member_name instead', null: false
+
+  def team_member_name
+    object.event_category.team_member_name
   end
 end
