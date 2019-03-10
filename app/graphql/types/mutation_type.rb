@@ -302,7 +302,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteRun, field: Mutations::DeleteRun.field do
+  field :deleteRun, mutation: Mutations::DeleteRun do
     guard(guard_for_convention_associated_model(:runs, :destroy))
   end
 
@@ -369,7 +369,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteStaffPosition, field: Mutations::DeleteStaffPosition.field do
+  field :deleteStaffPosition, mutation: Mutations::DeleteStaffPosition do
     guard(guard_for_convention_associated_model(:staff_positions, :destroy))
   end
 
@@ -379,7 +379,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_event_associated_model(:team_members, :team_member))
   end
 
-  field :deleteTeamMember, field: Mutations::DeleteTeamMember.field do
+  field :deleteTeamMember, mutation: Mutations::DeleteTeamMember do
     guard(guard_for_model_with_id(TeamMember, :destroy))
   end
 
@@ -389,7 +389,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Ticket
 
-  field :deleteTicket, field: Mutations::DeleteTicket.field do
+  field :deleteTicket, mutation: Mutations::DeleteTicket do
     guard(guard_for_model_with_id(Ticket, :destroy))
   end
 
@@ -425,11 +425,11 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteTicketType, field: Mutations::DeleteTicketType.field do
+  field :deleteTicketType, mutation: Mutations::DeleteTicketType do
     guard(guard_for_convention_associated_model(:ticket_types, :destroy))
   end
 
-  field :updateTicketType, field: Mutations::UpdateTicketType.field do
+  field :updateTicketType, mutation: Mutations::UpdateTicketType do
     guard(guard_for_convention_associated_model(:ticket_types, :update))
   end
 
@@ -466,7 +466,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteUserConProfile, field: Mutations::DeleteUserConProfile.field do
+  field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile do
     guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
 end

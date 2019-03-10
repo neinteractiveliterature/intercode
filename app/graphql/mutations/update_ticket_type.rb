@@ -1,14 +1,15 @@
-Mutations::UpdateTicketType = GraphQL::Relay::Mutation.define do
-  name 'UpdateTicketType'
-  return_field :ticket_type, Types::TicketTypeType
+class Mutations::UpdateTicketType < Mutations::BaseMutation
+  graphql_name 'UpdateTicketType'
 
-  input_field :id, !types.Int
-  input_field :ticket_type, Types::TicketTypeInputType.to_non_null_type
+  field :ticket_type, Types::TicketTypeType, null: false
 
-  resolve ->(_obj, args, ctx) {
-    ticket_type = ctx[:convention].ticket_types.find(args[:id])
+  argument :id, Integer, required: true
+  argument :ticket_type, Types::TicketTypeInputType, required: true, camelize: false
+
+  def resolve(**args)
+    ticket_type = convention.ticket_types.find(args[:id])
     ticket_type.update!(args[:ticket_type].to_h)
 
     { ticket_type: ticket_type }
-  }
+  end
 end

@@ -1,4 +1,6 @@
 class Mutations::CreateTicketType < Mutations::BaseMutation
+  graphql_name 'CreateTicketType'
+
   field :ticket_type, Types::TicketTypeType, null: false
 
   argument :ticket_type, Types::TicketTypeInputType, required: true, camelize: false
