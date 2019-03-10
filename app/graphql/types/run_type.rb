@@ -83,7 +83,7 @@ class Types::RunType < Types::BaseObject
 
   field :signups_paginated, Types::SignupsPaginationType, null: false do
     argument :page, Integer, required: false
-    argument :per_page, Integer, required: false
+    argument :per_page, Integer, required: false, camelize: false
     argument :filters, Types::SignupFiltersInputType, required: false
     argument :sort, [Types::SortInputType, null: true], required: false
 

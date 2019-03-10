@@ -1,7 +1,7 @@
 class Mutations::CreateCmsNavigationItem < Mutations::BaseMutation
   field :cms_navigation_item, Types::CmsNavigationItemType, null: false
 
-  argument :cms_navigation_item, Types::CmsNavigationItemInputType, required: true
+  argument :cms_navigation_item, Types::CmsNavigationItemInputType, required: true, camelize: false
 
   def resolve(**args)
     cms_navigation_item = CmsNavigationItem

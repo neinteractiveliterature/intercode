@@ -2,7 +2,7 @@ class Mutations::UpdateTeamMember < Mutations::BaseMutation
   field :team_member, Types::TeamMemberType, null: false
 
   argument :id, Integer, required: true
-  argument :team_member, Types::TeamMemberInputType, required: true
+  argument :team_member, Types::TeamMemberInputType, required: true, camelize: false
 
   def resolve(**args)
     team_member = TeamMember.find(args[:id])

@@ -1,5 +1,5 @@
 class Mutations::SortCmsNavigationItems < Mutations::BaseMutation
-  argument :sort_items, [Mutations::UpdateCmsNavigationItem.input_type], required: true
+  argument :sort_items, [Mutations::UpdateCmsNavigationItem.input_type], required: true, camelize: false
 
   def resolve(**args)
     args[:sort_items].each do |sort_item|

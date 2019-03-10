@@ -65,7 +65,7 @@ class Types::QueryType < Types::BaseObject
     convention.event_proposals.find(args[:id])
   end
 
-  field :my_signups, [Types::SignupType], null: true
+  field :my_signups, [Types::SignupType], null: true, camelize: false
 
   def my_signups
     context[:user_con_profile].signups
@@ -170,7 +170,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :navigation_bar, Types::NavigationBarType, null: false do
-    argument :cms_layout_id, Integer, required: false
+    argument :cms_layout_id, Integer, required: false, camelize: false
   end
 
   def navigation_bar(**args)
@@ -267,7 +267,7 @@ class Types::QueryType < Types::BaseObject
     convention.signups.find(args[:id])
   end
 
-  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType do
+  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false do
     guard ->(_obj, _args, ctx) do
       ctx[:current_ability].can?(:read, User)
     end
