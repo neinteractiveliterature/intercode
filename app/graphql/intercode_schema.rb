@@ -2,6 +2,8 @@ class IntercodeSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
 
+  use GraphQL::Execution::Interpreter
+  use GraphQL::Analysis::AST
   use GraphQL::Guard.new
   use GraphQL::Batch
   use GraphQL::Tracing::SkylightTracing, set_endpoint_name: true
