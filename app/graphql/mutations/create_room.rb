@@ -1,12 +1,11 @@
-Mutations::CreateRoom = GraphQL::Relay::Mutation.define do
-  name 'CreateRoom'
-  return_field :room, Types::RoomType
+class Mutations::CreateRoom < Mutations::BaseMutation
+  field :room, Types::RoomType, null: false
 
-  input_field :room, Types::RoomInputType.to_non_null_type
+  argument :room, Types::RoomInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
-    room = ctx[:convention].rooms.create!(args[:room].to_h)
+  def resolve(**args)
+    room = convention.rooms.create!(args[:room].to_h)
 
     { room: room }
-  }
+  end
 end

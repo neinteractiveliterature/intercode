@@ -246,7 +246,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Product
 
-  field :createProduct, field: Mutations::CreateProduct.field do
+  field :createProduct, mutation: Mutations::CreateProduct do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:create, Product.new(convention: ctx[:convention]))
     }
@@ -262,7 +262,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Room
 
-  field :createRoom, field: Mutations::CreateRoom.field do
+  field :createRoom, mutation: Mutations::CreateRoom do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -289,11 +289,11 @@ class Types::MutationType < Types::BaseObject
 
   ### Run
 
-  field :createRun, field: Mutations::CreateRun.field do
+  field :createRun, mutation: Mutations::CreateRun do
     guard(guard_for_create_event_associated_model(:runs, :run))
   end
 
-  field :createMultipleRuns, field: Mutations::CreateMultipleRuns.field do
+  field :createMultipleRuns, mutation: Mutations::CreateMultipleRuns do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       args.to_h['runs'].all? do |run_args|
@@ -346,7 +346,7 @@ class Types::MutationType < Types::BaseObject
 
   ### StaffPosition
 
-  field :createStaffPosition, field: Mutations::CreateStaffPosition.field do
+  field :createStaffPosition, mutation: Mutations::CreateStaffPosition do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -375,7 +375,7 @@ class Types::MutationType < Types::BaseObject
 
   ### TeamMember
 
-  field :createTeamMember, field: Mutations::CreateTeamMember.field do
+  field :createTeamMember, mutation: Mutations::CreateTeamMember do
     guard(guard_for_create_event_associated_model(:team_members, :team_member))
   end
 
@@ -416,7 +416,7 @@ class Types::MutationType < Types::BaseObject
 
   ### TicketType
 
-  field :createTicketType, field: Mutations::CreateTicketType.field do
+  field :createTicketType, mutation: Mutations::CreateTicketType do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -449,7 +449,7 @@ class Types::MutationType < Types::BaseObject
 
   ### UserConProfile
 
-  field :createUserConProfile, field: Mutations::CreateUserConProfile.field do
+  field :createUserConProfile, mutation: Mutations::CreateUserConProfile do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:create, UserConProfile.new(convention: ctx[:convention]))
     }

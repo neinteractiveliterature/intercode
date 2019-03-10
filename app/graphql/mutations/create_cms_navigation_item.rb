@@ -5,7 +5,7 @@ class Mutations::CreateCmsNavigationItem < Mutations::BaseMutation
 
   def resolve(**args)
     cms_navigation_item = CmsNavigationItem
-      .create!(args[:cms_navigation_item].to_h.merge(parent: ctx[:convention]))
+      .create!(args[:cms_navigation_item].to_h.merge(parent: convention))
     { cms_navigation_item: cms_navigation_item }
   end
 end

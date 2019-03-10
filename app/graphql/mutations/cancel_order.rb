@@ -28,8 +28,8 @@ class Mutations::CancelOrder < Mutations::BaseMutation
     order.update!(
       status: 'cancelled',
       payment_note: [
-        "#{action} by #{ctx[:user_con_profile].name_without_nickname} \
-on #{Time.now.in_time_zone(ctx[:convention].timezone).strftime('%B %-d, %Y at %l:%M%P')}",
+        "#{action} by #{user_con_profile.name_without_nickname} \
+on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}",
         order.payment_note.presence
       ].compact.join('; ')
     )
