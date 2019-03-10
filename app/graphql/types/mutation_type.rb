@@ -68,7 +68,7 @@ class Types::MutationType < Types::BaseObject
 
   ### CmsNavigationItem
 
-  field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do
+  field :createCmsNavigationItem, mutation: Mutations::CreateCmsNavigationItem do
     guard(guard_for_create_cms_model(CmsNavigationItem))
   end
 
@@ -107,11 +107,11 @@ class Types::MutationType < Types::BaseObject
 
   ### Event
 
-  field :createEvent, field: Mutations::CreateEvent.field do
+  field :createEvent, mutation: Mutations::CreateEvent do
     guard(guard_for_create_convention_associated_model(:events))
   end
 
-  field :createFillerEvent, field: Mutations::CreateFillerEvent.field do
+  field :createFillerEvent, mutation: Mutations::CreateFillerEvent do
     guard(guard_for_create_convention_associated_model(:events))
   end
 
@@ -190,27 +190,27 @@ class Types::MutationType < Types::BaseObject
 
   ### MaximumEventProvidedTicketsOverride
 
-  create_override_field = Mutations::CreateMaximumEventProvidedTicketsOverride.field
-  field :createMaximumEventProvidedTicketsOverride, field: create_override_field do
+  create_override = Mutations::CreateMaximumEventProvidedTicketsOverride
+  field :createMaximumEventProvidedTicketsOverride, mutation: create_override do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:create, event.maximum_event_provided_tickets_overrides.new)
     }
   end
 
-  update_override_field = Mutations::UpdateMaximumEventProvidedTicketsOverride.field
-  field :updateMaximumEventProvidedTicketsOverride, field: update_override_field do
+  update_override = Mutations::UpdateMaximumEventProvidedTicketsOverride
+  field :updateMaximumEventProvidedTicketsOverride, mutation: update_override do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :update))
   end
 
-  delete_override_field = Mutations::DeleteMaximumEventProvidedTicketsOverride.field
-  field :deleteMaximumEventProvidedTicketsOverride, field: delete_override_field do
+  delete_override = Mutations::DeleteMaximumEventProvidedTicketsOverride
+  field :deleteMaximumEventProvidedTicketsOverride, mutation: delete_override do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :destroy))
   end
 
   ### Order / OrderEntry
 
-  field :addOrderEntryToCurrentPendingOrder, field: Mutations::AddOrderEntryToCurrentPendingOrder.field do
+  field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder do
     guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
@@ -234,7 +234,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(Order, :update))
   end
 
-  field :cancelOrder, field: Mutations::CancelOrder.field do
+  field :cancelOrder, mutation: Mutations::CancelOrder do
     guard(guard_for_model_with_id(Order, :cancel))
   end
 

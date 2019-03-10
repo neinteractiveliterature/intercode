@@ -1,23 +1,22 @@
-Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
-  name 'CreateFillerEvent'
-  return_field :event, Types::EventType
+class Mutations::CreateFillerEvent < Mutations::BaseMutation
+  field :event, Types::EventType, null: false
 
-  input_field :event, Types::EventInputType.to_non_null_type
-  input_field :run, Types::RunInputType
+  argument :event, Types::EventInputType, required: true
+  argument :run, Types::RunInputType, required: false
 
-  resolve ->(_obj, args, ctx) {
+  def resolve(**args)
     event_attrs = args[:event].to_h.merge(
-      updated_by: ctx[:user_con_profile].user
+      updated_by: user_con_profile.user
     )
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
 
-    event = ctx[:convention].events.new(event_attrs)
+    event = convention.events.new(event_attrs)
     event.assign_form_response_attributes(form_response_attrs)
 
     if args[:run]
       event.runs.new(
         args[:run].to_h.merge(
-          updated_by: ctx[:user_con_profile].user
+          updated_by: user_con_profile.user
         )
       )
     end
@@ -25,5 +24,5 @@ Mutations::CreateFillerEvent = GraphQL::Relay::Mutation.define do
     event.save!
 
     { event: event }
-  }
+  end
 end

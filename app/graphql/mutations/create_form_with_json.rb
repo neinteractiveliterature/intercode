@@ -1,4 +1,4 @@
-class Mutations::CreateFormWithJSON < GraphQL::Schema::RelayClassicMutation
+class Mutations::CreateFormWithJSON < Mutations::BaseMutation
   field :form, Types::FormType, null: false
 
   argument :form_json, String, required: true, camelize: false

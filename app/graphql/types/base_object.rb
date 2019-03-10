@@ -1,4 +1,6 @@
 class Types::BaseObject < GraphQL::Schema::Object
+  include Concerns::ContextAccessors
+
   def self.association_loader(model_class, association)
     define_method association do
       AssociationLoader.for(model_class, association).load(object)
@@ -23,22 +25,4 @@ class Types::BaseObject < GraphQL::Schema::Object
   end
 
   field_class Types::BaseField
-
-  # Convenience accessors for stuff the context will have
-  %i[
-    current_user
-    current_ability
-    user_con_profile
-    convention
-    cadmus_renderer
-    current_pending_order
-    assumed_identity_from_profile
-    verified_request
-  ].each do |context_attribute|
-    define_method context_attribute do
-      context[context_attribute]
-    end
-  end
-
-  delegate :can?, to: :current_ability
 end
