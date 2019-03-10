@@ -1,14 +1,13 @@
-Mutations::DeleteTicket = GraphQL::Relay::Mutation.define do
-  name 'DeleteTicket'
-  return_field :ticket, Types::TicketType
+class Mutations::DeleteTicket < Mutations::BaseMutation
+  field :ticket, Types::TicketType, null: false
 
-  input_field :id, !types.Int
-  input_field :refund, types.Boolean
+  argument :id, Integer, required: true
+  argument :refund, Boolean, required: false
 
-  resolve ->(_obj, args, ctx) {
-    ticket = ctx[:convention].tickets.find(args[:id])
+  def resolve(**args)
+    ticket = convention.tickets.find(args[:id])
     DeleteTicketService.new(ticket: ticket, refund: args[:refund]).call!
 
     { ticket: ticket }
-  }
+  end
 end

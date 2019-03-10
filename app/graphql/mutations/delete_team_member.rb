@@ -1,12 +1,11 @@
-Mutations::DeleteTeamMember = GraphQL::Relay::Mutation.define do
-  name 'DeleteTeamMember'
-  return_field :team_member, Types::TeamMemberType
+class Mutations::DeleteTeamMember < Mutations::BaseMutation
+  field :team_member, Types::TeamMemberType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, _ctx) {
+  def resolve(**args)
     team_member = TeamMember.find(args[:id])
     team_member.destroy!
     { team_member: team_member }
-  }
+  end
 end
