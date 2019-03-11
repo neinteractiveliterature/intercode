@@ -1989,7 +1989,7 @@ type TicketType {
   counts_towards_convention_maximum: Boolean!
   description: String
   id: Int!
-  maximum_event_provided_tickets(event_id: Int): Int!
+  maximum_event_provided_tickets(eventId: Int): Int!
   name: String
   pricing_schedule: ScheduledMoneyValue
   publicly_available: Boolean!
@@ -2525,7 +2525,7 @@ input UpdateTeamMemberInput {
   """
   clientMutationId: String
   id: Int!
-  team_member: TeamMemberInput!
+  teamMember: TeamMemberInput!
 }
 
 """

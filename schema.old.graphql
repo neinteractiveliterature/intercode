@@ -41,7 +41,7 @@ type AddOrderEntryToCurrentPendingOrderPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order_entry: OrderEntry!
+  order_entry: OrderEntry
 }
 
 union Alert = UserActivityAlert
@@ -77,7 +77,7 @@ type CancelOrderPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order: Order!
+  order: Order
 }
 
 type CmsGraphqlQuery {
@@ -131,17 +131,17 @@ input CmsVariableInput {
 type Convention {
   accepting_proposals: Boolean
   clickwrap_agreement: String
-  cms_layouts: [CmsLayout!]
-  cms_navigation_items: [CmsNavigationItem!]
+  cms_layouts: [CmsLayout]
+  cms_navigation_items: [CmsNavigationItem]
   created_at: Date
   default_layout: CmsLayout
   domain: String
   ends_at: Date
-  event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory!]!
+  event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory]!
   event_mailing_list_domain: String
-  event_proposals_paginated(filters: EventProposalFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EventProposalsPagination!
-  events_paginated(filters: EventFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EventsPagination!
-  forms: [Form!]!
+  event_proposals_paginated(filters: EventProposalFiltersInput, page: Int, per_page: Int, sort: [SortInput]): EventProposalsPagination!
+  events_paginated(filters: EventFiltersInput, page: Int, per_page: Int, sort: [SortInput]): EventsPagination!
+  forms: [Form]!
   id: Int!
   mail_privilege_names: [String!]!
   masked_stripe_secret_key: String
@@ -169,26 +169,26 @@ type Convention {
     """
     last: Int
   ): OrdersConnection
-  orders_paginated(filters: OrderFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): OrdersPagination!
-  pages: [Page!]
+  orders_paginated(filters: OrderFiltersInput, page: Int, per_page: Int, sort: [SortInput]): OrdersPagination!
+  pages: [Page]
   privilege_names: [String!]!
-  products: [Product!]
-  rooms: [Room!]
+  products: [Product]
+  rooms: [Room]
   root_page: Page
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
-  signup_spy_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupsPagination!
-  staff_positions: [StaffPosition!]
+  signup_spy_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!
+  staff_positions: [StaffPosition]
   starts_at: Date
   stripe_publishable_key: String
   ticket_name: String!
-  ticket_types: [TicketType!]
+  ticket_types: [TicketType]
   timezone_name: String
   updated_at: Date
   user_activity_alert(id: Int!): UserActivityAlert!
   user_activity_alerts: [UserActivityAlert]
   user_con_profile_form: Form!
-  user_con_profiles_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UserConProfilesPagination!
+  user_con_profiles_paginated(filters: UserConProfileFiltersInput, page: Int, per_page: Int, sort: [SortInput]): UserConProfilesPagination!
 }
 
 input ConventionInput {
@@ -286,7 +286,7 @@ type CreateCmsNavigationItemPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  cms_navigation_item: CmsNavigationItem!
+  cms_navigation_item: CmsNavigationItem
 }
 
 """
@@ -330,7 +330,7 @@ type CreateEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event: Event!
+  event: Event
 }
 
 """
@@ -376,7 +376,7 @@ type CreateFillerEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event: Event!
+  event: Event
 }
 
 """
@@ -491,7 +491,7 @@ type CreateProductPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  product: Product!
+  product: Product
 }
 
 """
@@ -513,7 +513,7 @@ type CreateRoomPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  room: Room!
+  room: Room
 }
 
 """
@@ -536,7 +536,7 @@ type CreateRunPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  run: Run!
+  run: Run
 }
 
 """
@@ -558,7 +558,7 @@ type CreateStaffPositionPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  staff_position: StaffPosition!
+  staff_position: StaffPosition
 }
 
 """
@@ -606,7 +606,7 @@ type CreateTicketTypePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  ticket_type: TicketType!
+  ticket_type: TicketType
 }
 
 """
@@ -653,7 +653,7 @@ type CreateUserConProfilePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  user_con_profile: UserConProfile!
+  user_con_profile: UserConProfile
 }
 
 """
@@ -702,7 +702,7 @@ type DeleteCmsNavigationItemPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  cms_navigation_item: CmsNavigationItem!
+  cms_navigation_item: CmsNavigationItem
 }
 
 """
@@ -812,7 +812,7 @@ type DeleteOrderEntryPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order_entry: OrderEntry!
+  order_entry: OrderEntry
 }
 
 """
@@ -834,7 +834,7 @@ type DeletePagePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  page: Page!
+  page: Page
 }
 
 """
@@ -856,7 +856,7 @@ type DeleteProductPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  product: Product!
+  product: Product
 }
 
 """
@@ -878,7 +878,7 @@ type DeleteRoomPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  room: Room!
+  room: Room
 }
 
 """
@@ -900,7 +900,7 @@ type DeleteRunPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  run: Run!
+  run: Run
 }
 
 """
@@ -922,7 +922,7 @@ type DeleteStaffPositionPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  staff_position: StaffPosition!
+  staff_position: StaffPosition
 }
 
 """
@@ -944,7 +944,7 @@ type DeleteTeamMemberPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  team_member: TeamMember!
+  team_member: TeamMember
 }
 
 """
@@ -967,7 +967,7 @@ type DeleteTicketPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  ticket: Ticket!
+  ticket: Ticket
 }
 
 """
@@ -989,7 +989,7 @@ type DeleteTicketTypePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  ticket_type: TicketType!
+  ticket_type: TicketType
 }
 
 """
@@ -1033,7 +1033,7 @@ type DeleteUserConProfilePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  user_con_profile: UserConProfile!
+  user_con_profile: UserConProfile
 }
 
 """
@@ -1055,7 +1055,7 @@ type DropEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event: Event!
+  event: Event
 }
 
 type Event {
@@ -1090,7 +1090,7 @@ type Event {
   slots_limited: Boolean
   status: String
   team_member_name: String! @deprecated(reason: "Please use event_category.team_member_name instead")
-  team_members: [TeamMember!]!
+  team_members: [TeamMember]!
   title: String
   total_slots: Int
   url: String
@@ -1102,7 +1102,7 @@ type EventCategory {
   default_color: String
   event_form: Form!
   event_proposal_form: Form
-  events_paginated(filters: EventFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): EventsPagination!
+  events_paginated(filters: EventFiltersInput, page: Int, perPage: Int, sort: [SortInput!]): EventsPagination!
   full_color: String
   id: Int!
   name: String!
@@ -1199,7 +1199,7 @@ type ForceConfirmSignupPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  signup: Signup!
+  signup: Signup
 }
 
 type Form {
@@ -1242,7 +1242,7 @@ type MarkOrderPaidPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order: Order!
+  order: Order
 }
 
 type MaximumEventProvidedTicketsOverride {
@@ -1436,11 +1436,6 @@ type OrdersConnection {
   edges: [OrderEdge]
 
   """
-  A list of nodes.
-  """
-  nodes: [Order]
-
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -1522,21 +1517,21 @@ type Product {
   id: Int
   image_url: String
   name: String!
-  order_quantities_by_status: [OrderQuantityByStatus!]!
+  order_quantities_by_status: [OrderQuantityByStatus]!
   payment_options: [String]!
   price: Money!
-  product_variants: [ProductVariant!]!
+  product_variants: [ProductVariant]!
 }
 
 input ProductInput {
   available: Boolean
-  delete_variant_ids: [Int!]
+  delete_variant_ids: [Int]
   description: String
   image: Upload
   name: String
-  payment_options: [String!]
+  payment_options: [String]
   price: MoneyInput
-  product_variants: [ProductVariantInput!]
+  product_variants: [ProductVariantInput]
 }
 
 type ProductVariant {
@@ -1545,7 +1540,7 @@ type ProductVariant {
   id: Int
   image_url: String
   name: String!
-  order_quantities_by_status: [OrderQuantityByStatus!]!
+  order_quantities_by_status: [OrderQuantityByStatus]!
   override_price: Money
   position: Int
   product: Product!
@@ -1580,7 +1575,7 @@ type ProvideEventTicketPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  ticket: Ticket!
+  ticket: Ticket
 }
 
 """
@@ -1603,14 +1598,14 @@ type PurchaseTicketPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  ticket: Ticket!
+  ticket: Ticket
 }
 
 type Query {
   assumedIdentityFromProfile: UserConProfile
   cmsGraphqlQueries: [CmsGraphqlQuery!]
-  cmsLayouts: [CmsLayout!]!
-  cmsNavigationItems: [CmsNavigationItem!]!
+  cmsLayouts: [CmsLayout!]
+  cmsNavigationItems: [CmsNavigationItem!]
   cmsPages: [Page!]
   cmsVariables: [CmsVariable!]
   convention(id: Int): Convention
@@ -1623,7 +1618,7 @@ type Query {
   form(id: Int!): Form
   liquidAssigns: [LiquidAssign!]
   myProfile: UserConProfile
-  my_signups: [Signup!]
+  my_signups: [Signup]
   navigationBar(cms_layout_id: Int): NavigationBar!
   previewLiquid(content: String!): String!
   previewMarkdown(markdown: String!): String!
@@ -1632,7 +1627,7 @@ type Query {
   signup(id: Int!): Signup!
   staffPosition(id: Int!): StaffPosition
   userConProfile(id: Int!): UserConProfile
-  users_paginated(filters: UserFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): UsersPagination!
+  users_paginated(filters: UserFiltersInput, page: Int, per_page: Int, sort: [SortInput]): UsersPagination!
 }
 
 enum ReceiveSignupEmail {
@@ -1714,13 +1709,13 @@ type RestoreDroppedEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event: Event!
+  event: Event
 }
 
 type Room {
-  id: Int!
+  id: Int
   name: String
-  runs: [Run!]!
+  runs: [Run]
 }
 
 input RoomInput {
@@ -1768,7 +1763,7 @@ type Run {
 }
 
 input RunInput {
-  room_ids: [Int!]
+  room_ids: [Int]
   schedule_note: String
   starts_at: Date
   title_suffix: String
@@ -1840,10 +1835,10 @@ type Signup {
 }
 
 input SignupFiltersInput {
-  bucket: [String!]
+  bucket: [String]
   email: String
   name: String
-  state: [String!]
+  state: [String]
 }
 
 enum SignupState {
@@ -1868,7 +1863,7 @@ input SortCmsNavigationItemsInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  sort_items: [UpdateCmsNavigationItemInput!]!
+  sort_items: [UpdateCmsNavigationItemInput]!
 }
 
 """
@@ -1890,15 +1885,15 @@ type StaffPosition {
   email: String
   id: Int!
   name: String
-  permissions: [Permission!]!
-  user_con_profiles: [UserConProfile!]
+  permissions: [Permission]!
+  user_con_profiles: [UserConProfile]
   visible: Boolean
 }
 
 input StaffPositionInput {
   email: String
   name: String
-  userConProfileIds: [Int!]
+  user_con_profile_ids: [Int]
   visible: Boolean
 }
 
@@ -1921,7 +1916,7 @@ type SubmitEventProposalPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_proposal: EventProposal!
+  event_proposal: EventProposal
 }
 
 """
@@ -1945,7 +1940,7 @@ type SubmitOrderPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order: Order!
+  order: Order
 }
 
 type TeamMember {
@@ -2084,7 +2079,7 @@ input UpdateCmsNavigationItemInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  cms_navigation_item: CmsNavigationItemInput
+  cms_navigation_item: CmsNavigationItemInput!
   id: Int!
 }
 
@@ -2096,7 +2091,7 @@ type UpdateCmsNavigationItemPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  cms_navigation_item: CmsNavigationItem!
+  cms_navigation_item: CmsNavigationItem
 }
 
 """
@@ -2119,7 +2114,7 @@ type UpdateConventionPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  convention: Convention!
+  convention: Convention
 }
 
 """
@@ -2177,8 +2172,8 @@ input UpdateEventInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event: EventInput
-  id: Int
+  event: EventInput!
+  id: Int!
 }
 
 """
@@ -2189,7 +2184,7 @@ type UpdateEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event: Event!
+  event: Event
 }
 
 """
@@ -2236,7 +2231,7 @@ type UpdateEventProposalPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_proposal: EventProposal!
+  event_proposal: EventProposal
 }
 
 """
@@ -2259,7 +2254,7 @@ type UpdateFormWithJSONPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  form: Form!
+  form: Form
 }
 
 """
@@ -2305,7 +2300,7 @@ type UpdateOrderEntryPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order_entry: OrderEntry!
+  order_entry: OrderEntry
 }
 
 """
@@ -2328,7 +2323,7 @@ type UpdateOrderPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  order: Order!
+  order: Order
 }
 
 """
@@ -2351,7 +2346,7 @@ type UpdateProductPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  product: Product!
+  product: Product
 }
 
 """
@@ -2374,7 +2369,7 @@ type UpdateRoomPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  room: Room!
+  room: Room
 }
 
 """
@@ -2419,7 +2414,7 @@ type UpdateRunPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  run: Run!
+  run: Run
 }
 
 """
@@ -2443,7 +2438,7 @@ type UpdateSignupBucketPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  signup: Signup!
+  signup: Signup
 }
 
 """
@@ -2466,7 +2461,7 @@ type UpdateSignupCountedPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  signup: Signup!
+  signup: Signup
 }
 
 """
@@ -2489,7 +2484,7 @@ type UpdateStaffPositionPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  staff_position: StaffPosition!
+  staff_position: StaffPosition
 }
 
 """
@@ -2536,7 +2531,7 @@ type UpdateTeamMemberPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  team_member: TeamMember!
+  team_member: TeamMember
 }
 
 """
@@ -2559,7 +2554,7 @@ type UpdateTicketTypePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  ticket_type: TicketType!
+  ticket_type: TicketType
 }
 
 """
@@ -2608,14 +2603,14 @@ type UpdateUserConProfilePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  user_con_profile: UserConProfile!
+  user_con_profile: UserConProfile
 }
 
 scalar Upload
 
 type User {
   email: String
-  event_proposals: [EventProposal!]!
+  event_proposals: [EventProposal]!
   first_name: String
   id: Int!
   last_name: String
@@ -2669,9 +2664,9 @@ type UserConProfile {
   preferred_contact: String
   privileges: [String]
   show_nickname_in_bio: Boolean
-  signups: [Signup!]!
+  signups: [Signup]!
   state: String
-  team_members: [TeamMember!]!
+  team_members: [TeamMember]!
   ticket: Ticket
   user: User
   zipcode: String
@@ -2685,9 +2680,9 @@ input UserConProfileFiltersInput {
   last_name: String
   name: String
   payment_amount: Float
-  privileges: [String!]
-  ticket: [String!]
-  ticket_type: [String!]
+  privileges: [String]
+  ticket: [String]
+  ticket_type: [String]
 }
 
 input UserConProfileInput {
@@ -2704,7 +2699,7 @@ input UserConProfileInput {
   last_name: String
   nickname: String
   preferred_contact: String
-  privileges: [String!]
+  privileges: [String]
   show_nickname_in_bio: Boolean
   state: String
   zipcode: String
@@ -2721,7 +2716,7 @@ type UserConProfilesPagination implements PaginationInterface {
 input UserFiltersInput {
   email: String
   name: String
-  privileges: [String!]
+  privileges: [String]
 }
 
 type UserNavigationSection {

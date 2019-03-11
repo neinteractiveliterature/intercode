@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 
 import AdminOrderModal from './AdminOrderModal';
-import { adminOrdersQuery, adminStoreAbilityQuery } from './queries';
+import { AdminOrdersQuery, AdminStoreAbilityQuery } from './queries.gql';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import formatMoney from '../formatMoney';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -95,7 +95,7 @@ class OrderAdmin extends React.Component {
 
   render = () => (
     <div className="mb-4">
-      <QueryWithStateDisplay query={adminStoreAbilityQuery}>
+      <QueryWithStateDisplay query={AdminStoreAbilityQuery}>
         {({ data: { currentAbility, convention } }) => (
           <ReactTableWithTheWorks
             exportUrl={this.props.exportUrl}
@@ -103,7 +103,7 @@ class OrderAdmin extends React.Component {
             getPages={({ data }) => data.convention.orders_paginated.total_pages}
             getPossibleColumns={this.getPossibleColumns}
             storageKeyPrefix="orderAdmin"
-            query={adminOrdersQuery}
+            query={AdminOrdersQuery}
             getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
             getTrProps={(state, rowInfo) => {
               if (currentAbility.can_update_orders) {

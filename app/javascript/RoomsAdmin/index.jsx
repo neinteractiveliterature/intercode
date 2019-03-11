@@ -3,79 +3,25 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
 import { pluralize } from 'inflected';
-import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
+
+import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-
-const roomsQuery = gql`
-query RoomsAdminQuery {
-  convention {
-    id
-    rooms {
-      id
-      name
-
-      runs {
-        id
-      }
-    }
-  }
-}
-`;
-
-const createRoomMutation = gql`
-mutation CreateRoom($input: CreateRoomInput!) {
-  createRoom(input: $input) {
-    room {
-      id
-      name
-
-      runs {
-        id
-      }
-    }
-  }
-}
-`;
-
-const updateRoomMutation = gql`
-mutation UpdateRoom($input: UpdateRoomInput!) {
-  updateRoom(input: $input) {
-    room {
-      id
-      name
-
-      runs {
-        id
-      }
-    }
-  }
-}
-`;
-
-const deleteRoomMutation = gql`
-mutation DeleteRoom($input: DeleteRoomInput!) {
-  deleteRoom(input: $input) {
-    room {
-      id
-    }
-  }
-}
-`;
+import { RoomsAdminQuery } from './queries.gql';
 
 @flowRight([
-  graphql(roomsQuery),
-  graphql(createRoomMutation, { name: 'createRoom' }),
-  graphql(updateRoomMutation, { name: 'updateRoom' }),
-  graphql(deleteRoomMutation, { name: 'deleteRoom' }),
+  graphql(RoomsAdminQuery),
+  graphql(CreateRoom, { name: 'createRoom' }),
+  graphql(UpdateRoom, { name: 'updateRoom' }),
+  graphql(DeleteRoom, { name: 'deleteRoom' }),
 ])
 @GraphQLQueryResultWrapper
 class RoomsAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(roomsQuery).isRequired,
+    data: GraphQLResultPropType(RoomsAdminQuery).isRequired,
     createRoom: PropTypes.func.isRequired,
     updateRoom: PropTypes.func.isRequired,
     deleteRoom: PropTypes.func.isRequired,
@@ -111,9 +57,9 @@ class RoomsAdmin extends React.Component {
     this.props.createRoom({
       variables: { input: { room: { name: this.state.creatingRoomName } } },
       update: (store, { data: { createRoom: { room: newRoom } } }) => {
-        const roomsData = store.readQuery({ query: roomsQuery });
+        const roomsData = store.readQuery({ query: RoomsAdminQuery });
         roomsData.convention.rooms.push(newRoom);
-        store.writeQuery({ query: roomsQuery, data: roomsData });
+        store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
       },
     }).then(() => { this.setState({ creatingRoomName: '' }); })
       .catch((error) => { this.setState({ error }); });
@@ -128,10 +74,10 @@ class RoomsAdmin extends React.Component {
     this.props.deleteRoom({
       variables: { input: { id: roomId } },
       update: (store) => {
-        const roomsData = store.readQuery({ query: roomsQuery });
+        const roomsData = store.readQuery({ query: RoomsAdminQuery });
         const roomIndex = roomsData.convention.rooms.findIndex(room => room.id === roomId);
         roomsData.convention.rooms.splice(roomIndex, 1);
-        store.writeQuery({ query: roomsQuery, data: roomsData });
+        store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
       },
     }).then(() => { this.setState({ confirmingDeleteRoomId: null }); })
       .catch((error) => { this.setState({ error }); });
@@ -168,6 +114,7 @@ class RoomsAdmin extends React.Component {
             className="btn btn-sm btn-outline-danger mr-3"
             title="Delete room"
             onClick={() => { this.startDeletingRoom(room.id); }}
+            type="button"
           >
             <i className="fa fa-trash" />
           </button>
@@ -195,6 +142,7 @@ class RoomsAdmin extends React.Component {
                 className="btn btn-primary mr-2"
                 disabled={this.state.creatingRoomName === ''}
                 onClick={this.createRoomWasClicked}
+                type="button"
               >
                 Add room
               </button>

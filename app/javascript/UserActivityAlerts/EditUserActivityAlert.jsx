@@ -6,8 +6,9 @@ import { withRouter } from 'react-router-dom';
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import ChangeSet from '../ChangeSet';
 import Confirm from '../ModalDialogs/Confirm';
+import { DeleteUserActivityAlert, UpdateUserActivityAlert } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import { DeleteUserActivityAlert, UpdateUserActivityAlert, UserActivityAlertsAdminQuery } from './queries.gql';
+import { UserActivityAlertsAdminQuery } from './queries.gql';
 import UserActivityAlertForm from './UserActivityAlertForm';
 
 @withRouter
