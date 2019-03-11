@@ -5,7 +5,7 @@ class Types::TicketTypeType < Types::BaseObject
   field :counts_towards_convention_maximum, Boolean, null: false
   field :allows_event_signups, Boolean, null: false
   field :maximum_event_provided_tickets, Integer, null: false do
-    argument :event_id, Integer, required: false
+    argument :event_id, Integer, required: false, camelize: false
   end
 
   def maximum_event_provided_tickets(**args)
