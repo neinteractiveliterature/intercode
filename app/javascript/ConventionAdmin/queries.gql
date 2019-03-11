@@ -1,4 +1,5 @@
 fragment ConventionAdminConventionFields on Convention {
+  id
   accepting_proposals
   starts_at
   ends_at
@@ -45,6 +46,7 @@ fragment ConventionAdminConventionFields on Convention {
 
 query ConventionAdminConventionQuery($id: Int!) {
   convention(id: $id) {
+    id
     ...ConventionAdminConventionFields
   }
 }

@@ -1,37 +1,11 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { flatten } from 'lodash';
 import { humanize } from 'inflected';
+
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
-
-const orderSummaryQuery = gql`
-query OrderSummaryQuery {
-  convention {
-    id
-    products {
-      id
-      name
-
-      order_quantities_by_status {
-        status
-        quantity
-      }
-
-      product_variants {
-        id
-        name
-
-        order_quantities_by_status {
-          status
-          quantity
-        }
-      }
-    }
-  }
-}
-`;
+import { OrderSummaryQuery } from './queries.gql';
 
 const ORDER_STATUSES = ['paid', 'unpaid', 'cancelled'];
 
@@ -44,11 +18,11 @@ function statusClass(status) {
   }
 }
 
-@graphql(orderSummaryQuery)
+@graphql(OrderSummaryQuery)
 @GraphQLQueryResultWrapper
 class OrderSummary extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(orderSummaryQuery).isRequired,
+    data: GraphQLResultPropType(OrderSummaryQuery).isRequired,
   }
 
   renderQuantityCell = (quantitiesByStatus, status) => {

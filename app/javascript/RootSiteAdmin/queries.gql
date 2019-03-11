@@ -13,24 +13,29 @@ fragment RootSiteFields on RootSite {
   site_name
 
   root_page {
+    id
     ...PageFields
   }
 
   default_layout {
+    id
     ...CmsLayoutFields
   }
 }
 
 query RootSiteAdminQuery {
   rootSite {
+    id
     ...RootSiteFields
   }
 
   cmsPages {
+    id
     ...PageFields
   }
 
   cmsLayouts {
+    id
     ...CmsLayoutFields
   }
 }

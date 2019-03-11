@@ -6,6 +6,7 @@ fragment UserConProfileFields on UserConProfile {
 }
 
 fragment UserConProfileFormData on Convention {
+  id
   starts_at
   ends_at
   timezone_name
@@ -30,16 +31,19 @@ query UserConProfileQuery($id: Int!) {
   }
 
   userConProfile(id: $id) {
+    id
     ...UserConProfileFields
   }
 }
 
 query MyProfileQuery {
   convention {
+    id
     ...UserConProfileFormData
   }
 
   myProfile {
+    id
     ...UserConProfileFields
   }
 }
@@ -107,6 +111,7 @@ query UserConProfileAdminQuery($id: Int!) {
     }
 
     ticket {
+      id
       ...UserConProfileAdminTicketFields
     }
   }

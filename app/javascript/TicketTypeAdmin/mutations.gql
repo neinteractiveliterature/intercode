@@ -1,0 +1,19 @@
+#import "./queries.gql"
+
+mutation CreateTicketType($input: CreateTicketTypeInput!) {
+  createTicketType(input: $input) {
+    ticket_type {
+      id
+      ...TicketTypeAdmin_TicketTypeFields
+    }
+  }
+}
+
+mutation UpdateTicketType($input: UpdateTicketTypeInput!) {
+  updateTicketType(input: $input) {
+    ticket_type {
+      id
+      ...TicketTypeAdmin_TicketTypeFields
+    }
+  }
+}

@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight, intersection } from 'lodash';
-import gql from 'graphql-tag';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import { Elements } from 'react-stripe-elements';
 
+import { CartQuery } from './queries.gql';
+import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
@@ -14,93 +15,24 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LazyStripe from '../LazyStripe';
 import OrderPaymentModal from './OrderPaymentModal';
 
-const orderEntryFragment = gql`
-fragment OrderEntryFields on OrderEntry {
-  id
-  quantity
-
-  product {
-    id
-    name
-    payment_options
-  }
-
-  product_variant {
-    id
-    name
-  }
-
-  price {
-    fractional
-    currency_code
-  }
-
-  price_per_item {
-    fractional
-    currency_code
-  }
-}
-`;
-
-const cartQuery = gql`
-query CartQuery {
-  myProfile {
-    id
-    name_without_nickname
-  }
-
-  currentPendingOrder {
-    id
-
-    order_entries {
-      ...OrderEntryFields
-    }
-  }
-}
-
-${orderEntryFragment}
-`;
-
-const updateOrderEntryMutation = gql`
-mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
-  updateOrderEntry(input: $input) {
-    order_entry {
-      ...OrderEntryFields
-    }
-  }
-}
-
-${orderEntryFragment}
-`;
-
-const deleteOrderEntryMutation = gql`
-mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
-  deleteOrderEntry(input: $input) {
-    order_entry {
-      id
-    }
-  }
-}
-`;
-
 @flowRight([
-  graphql(cartQuery),
-  graphql(updateOrderEntryMutation, {
+  graphql(CartQuery),
+  graphql(UpdateOrderEntry, {
     props: ({ mutate }) => ({
       updateOrderEntry: (id, quantity) => mutate({
         variables: { input: { id, order_entry: { quantity } } },
       }),
     }),
   }),
-  graphql(deleteOrderEntryMutation, {
+  graphql(DeleteOrderEntry, {
     props: ({ mutate }) => ({
       deleteOrderEntry: id => mutate({
         variables: { input: { id } },
         update: (proxy) => {
-          const data = proxy.readQuery({ query: cartQuery });
+          const data = proxy.readQuery({ query: CartQuery });
           data.currentPendingOrder.order_entries = data.currentPendingOrder.order_entries
             .filter(entry => entry.id !== id);
-          proxy.writeQuery({ query: cartQuery, data });
+          proxy.writeQuery({ query: CartQuery, data });
         },
       }),
     }),
@@ -109,7 +41,7 @@ mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
 @GraphQLQueryResultWrapper
 class Cart extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(cartQuery).isRequired,
+    data: GraphQLResultPropType(CartQuery).isRequired,
     afterCompleteUrl: PropTypes.string.isRequired,
     updateOrderEntry: PropTypes.func.isRequired,
     deleteOrderEntry: PropTypes.func.isRequired,
@@ -216,6 +148,7 @@ class Cart extends React.Component {
         <td>{formatMoney(entry.price)}</td>
         <td>
           <button
+            type="button"
             className="btn btn-outline-danger"
             onClick={() => { this.deleteOrderEntryClicked(entry.id); }}
           >
@@ -251,9 +184,11 @@ class Cart extends React.Component {
               <strong>Total</strong>
             </td>
             <td colSpan="2">
-              <strong>{formatMoney({ fractional: totalPrice, currency_code: currencyCode })}</strong>
+              <strong>
+                {formatMoney({ fractional: totalPrice, currency_code: currencyCode })}
+              </strong>
               <br />
-              <button className="btn btn-primary mt-2" onClick={this.checkOutClicked}>
+              <button type="button" className="btn btn-primary mt-2" onClick={this.checkOutClicked}>
                 <i className="fa fa-shopping-cart" />
                 {' '}
                 Check out

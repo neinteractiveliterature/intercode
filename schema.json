@@ -4887,7 +4887,7 @@
               "description": null,
               "args": [
                 {
-                  "name": "eventId",
+                  "name": "event_id",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

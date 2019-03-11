@@ -7,9 +7,11 @@ mutation CreateMySignup($runId: Int!, $requestedBucketKey: String, $noRequestedB
     no_requested_bucket: $noRequestedBucket
   }) {
     signup {
+      id
       ...MySignupFields
 
       run {
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -20,9 +22,11 @@ mutation CreateMySignup($runId: Int!, $requestedBucketKey: String, $noRequestedB
 mutation WithdrawMySignup($runId: Int!) {
   withdrawMySignup(input: { run_id: $runId }) {
     signup {
+      id
       ...MySignupFields
 
       run {
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }

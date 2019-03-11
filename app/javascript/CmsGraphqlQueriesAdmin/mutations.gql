@@ -3,6 +3,7 @@
 mutation CreateCmsGraphqlQuery($query: CmsGraphqlQueryInput!) {
   createCmsGraphqlQuery(input: { query: $query }) {
     query {
+      id
       ...CmsGraphqlQueryFields
     }
   }
@@ -11,6 +12,7 @@ mutation CreateCmsGraphqlQuery($query: CmsGraphqlQueryInput!) {
 mutation UpdateCmsGraphqlQuery($id: Int!, $query: CmsGraphqlQueryInput!) {
   updateCmsGraphqlQuery(input: { id: $id, query: $query }) {
     query {
+      id
       ...CmsGraphqlQueryFields
     }
   }

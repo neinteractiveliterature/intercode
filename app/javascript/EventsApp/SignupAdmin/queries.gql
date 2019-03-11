@@ -63,6 +63,7 @@ fragment SignupFields on Signup {
 }
 
 fragment UserConProfileSignupsFragment on UserConProfile {
+  id
   signups {
     id
     state
@@ -114,6 +115,7 @@ fragment UserConProfileSignupsFragment on UserConProfile {
 
 query SignupAdminEventQuery($eventId: Int!) {
   convention {
+    id
     ...CommonConventionData
   }
 
@@ -125,6 +127,7 @@ query SignupAdminEventQuery($eventId: Int!) {
 
 query AdminSignupQuery($id: Int!) {
   convention {
+    id
     ...CommonConventionData
   }
 
@@ -136,6 +139,7 @@ query AdminSignupQuery($id: Int!) {
   }
 
   signup(id: $id) {
+    id
     ...SignupFields
   }
 }
@@ -200,6 +204,7 @@ query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $per
 
 query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
   convention {
+    id
     ...CommonConventionData
   }
 
@@ -226,6 +231,7 @@ query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
 
 query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
   convention {
+    id
     ...CommonConventionData
   }
 
@@ -286,6 +292,7 @@ query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
 
 query UserConProfileSignupsQuery($id: Int!) {
   convention {
+    id
     ...CommonConventionData
   }
 

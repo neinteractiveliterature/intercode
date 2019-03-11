@@ -29,6 +29,7 @@ query EventCategoryAdminQuery {
     ticket_name
 
     event_categories {
+      id
       ...EventCategoryFields
     }
 

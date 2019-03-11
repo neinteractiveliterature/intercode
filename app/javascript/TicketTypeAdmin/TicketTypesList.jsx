@@ -5,12 +5,13 @@ import gql from 'graphql-tag';
 import { Link, withRouter } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import { capitalize } from 'inflected';
+
+import { AdminTicketTypesQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypePropType from './TicketTypePropType';
 import Timespan from '../Timespan';
 import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { ticketTypesQuery } from './queries';
 
 function cardClassForTicketType(ticketType) {
   if (ticketType.publicly_available) {
@@ -80,11 +81,11 @@ mutation DeleteTicketType($input: DeleteTicketTypeInput!) {
     deleteTicketType: id => mutate({
       variables: { input: { id } },
       update: (proxy) => {
-        const data = proxy.readQuery({ query: ticketTypesQuery });
+        const data = proxy.readQuery({ query: AdminTicketTypesQuery });
         data.convention.ticket_types = data.convention.ticket_types.filter((
           ticketType => ticketType.id !== id
         ));
-        proxy.writeQuery({ query: ticketTypesQuery, data });
+        proxy.writeQuery({ query: AdminTicketTypesQuery, data });
       },
     }),
   }),
@@ -192,7 +193,7 @@ class TicketTypesList extends React.Component {
       >
         Are you sure you want to delete the ticket type &quot;
         {ticketTypeDescription}
-&quot;?
+        &quot;?
 
         <ErrorDisplay graphQLError={this.state.error} />
       </ConfirmModal>

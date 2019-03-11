@@ -20,6 +20,7 @@ fragment EventProposalFields on EventProposal {
 }
 
 fragment EventProposalFormData on Convention {
+  id
   starts_at
   ends_at
   timezone_name
@@ -33,6 +34,7 @@ query EventProposalQuery($eventProposalId: Int!) {
   }
 
   eventProposal(id: $eventProposalId) {
+    id
     ...EventProposalFields
   }
 }
@@ -44,6 +46,7 @@ query EventProposalQueryWithOwner($eventProposalId: Int!) {
   }
 
   eventProposal(id: $eventProposalId) {
+    id
     ...EventProposalFields
 
     owner {
@@ -93,6 +96,7 @@ query ProposeEventButtonQuery {
   }
 
   convention {
+    id
     event_categories {
       id
       name
