@@ -8,10 +8,10 @@ class Types::UserType < Types::BaseObject
   field :email, String, null: true
 
   field :event_proposals, [Types::EventProposalType], null: false do
-    guard ->(user, _args, ctx) do
+    guard ->(graphql_object, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
-        EventProposal.new(owner: UserConProfile.new(user: user))
+        EventProposal.new(owner: UserConProfile.new(user: graphql_object.object))
       )
     end
   end

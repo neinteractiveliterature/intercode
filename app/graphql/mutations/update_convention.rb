@@ -5,7 +5,7 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
   argument :convention, Types::ConventionInputType, required: true
 
   def resolve(**args)
-    convention = args[:id] ? Convention.find(args[:id]) : convention
+    convention = args[:id] ? Convention.find(args[:id]) : self.convention
 
     convention_data = args[:convention].to_h.merge(
       'maximum_event_signups' => process_scheduled_value_input(

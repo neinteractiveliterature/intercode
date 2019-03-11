@@ -26,7 +26,7 @@ fragment AdminOrderFieldsFragment on Order {
 `;
 
 export const adminOrdersQuery = gql`
-query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput]) {
+query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
   convention {
     id
     timezone_name

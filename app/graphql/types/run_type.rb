@@ -87,10 +87,10 @@ class Types::RunType < Types::BaseObject
     argument :filters, Types::SignupFiltersInputType, required: false
     argument :sort, [Types::SortInputType, null: true], required: false
 
-    guard ->(run, _args, ctx) do
+    guard ->(graphql_object, _args, ctx) do
       (
-        ctx[:current_ability].can?(:read, Signup.new(run: run)) ||
-        ctx[:current_ability].can?(:signup_summary, run)
+        ctx[:current_ability].can?(:read, Signup.new(run: graphql_object.object)) ||
+        ctx[:current_ability].can?(:signup_summary, graphql_object.object)
       )
     end
   end

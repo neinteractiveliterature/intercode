@@ -9,8 +9,8 @@ class Types::EventProposalType < Types::BaseObject
   field :registration_policy, Types::RegistrationPolicyType, null: true
   field :length_seconds, Integer, null: true
   field :admin_notes, String, null: true do
-    guard -> (obj, _args, ctx) do
-      ctx[:current_ability].can?(:read_admin_notes, obj)
+    guard -> (graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read_admin_notes, graphql_object.object)
     end
   end
 

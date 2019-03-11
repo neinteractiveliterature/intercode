@@ -4,8 +4,8 @@ class Types::SignupType < Types::BaseObject
   field :counted, Boolean, null: false
   field :bucket_key, String, null: true, camelize: false
   field :requested_bucket_key, String, null: true, camelize: false do
-    guard ->(signup, _args, ctx) do
-      ctx[:current_ability].can?(:read, signup.object)
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, graphql_object.object)
     end
   end
 

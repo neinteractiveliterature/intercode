@@ -10,7 +10,7 @@ query EventListCommonDataQuery {
   }
 }
 
-query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput]) {
+query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
   convention {
     ...CommonConventionData
 

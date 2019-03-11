@@ -56,22 +56,22 @@ class Types::EventType < Types::BaseObject
 
   field :run, Types::RunType, null: false do
     argument :id, Integer, required: true
-    guard -> (event, args, ctx) do
-      ctx[:current_ability].can?(:read, event.runs.find(args[:id]))
+    guard -> (graphql_object, args, ctx) do
+      ctx[:current_ability].can?(:read, graphql_object.object.runs.find(args[:id]))
     end
   end
 
   def run(**args)
-    context[:current_ability].can?(:read, object.runs.find(args[:id]))
+    RecordLoader.for(Run).load(args[:id])
   end
 
   field :provided_tickets, [Types::TicketType], null: false do
-    guard -> (event, _args, ctx) do
+    guard -> (graphql_object, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
         Ticket.new(
           user_con_profile: UserConProfile.new(convention: ctx[:convention]),
-          provided_by_event: event
+          provided_by_event: graphql_object.object
         )
       )
     end
@@ -116,8 +116,8 @@ class Types::EventType < Types::BaseObject
   end
 
   field :admin_notes, String, null: true do
-    guard -> (obj, _args, ctx) do
-      ctx[:current_ability].can?(:read_admin_notes, obj)
+    guard -> (graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read_admin_notes, graphql_object.object)
     end
   end
 

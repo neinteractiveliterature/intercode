@@ -1,8 +1,8 @@
 class Types::UserConProfileType < Types::BaseObject
   def self.personal_info_field(*args, **kwargs, &block)
     field(*args, **kwargs) do
-      guard ->(user_con_profile, _args, ctx) do
-        ctx[:current_ability].can?(:read_personal_info, user_con_profile)
+      guard ->(graphql_object, _args, ctx) do
+        ctx[:current_ability].can?(:read_personal_info, graphql_object.object)
       end
       instance_eval(&block) if block
     end
@@ -34,7 +34,7 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :user, Types::UserType, null: true
   personal_info_field :email, String, null: true
 
-  association_loaders UserConProfile, :user, :orders, :signups, :team_members
+  association_loaders UserConProfile, :user, :orders, :signups, :team_members, :ticket
 
   def email
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
@@ -52,13 +52,11 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :preferred_contact, String, null: true
 
   field :ticket, Types::TicketType, null: true do
-    guard -> (ticket, _args, ctx) {
-      ctx[:current_ability].can?(:read, ticket)
+    guard -> (graphql_object, _args, ctx) {
+      # Using the actual user_con_profile object here will set the ticket association on that object
+      # which will cause problems if we try to actually read it
+      ctx[:current_ability].can?(:read, Ticket.new(user_con_profile_id: graphql_object.object.id))
     }
-  end
-
-  def ticket
-    current_ability.can?(:read, object)
   end
 
   field :ability, Types::AbilityType, null: true
@@ -72,14 +70,14 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   field :orders, [Types::OrderType, null: true], null: false do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: obj))
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
     }
   end
 
   field :order_summary, String, null: false do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: obj))
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
     }
   end
 
@@ -88,14 +86,14 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   field :signups, [Types::SignupType], null: false do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: obj, run: obj.convention.events.new.runs.new))
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: graphql_object.object, run: graphql_object.object.convention.events.new.runs.new))
     }
   end
 
   field :team_members, [Types::TeamMemberType], null: false do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: obj, event: obj.convention.events.new))
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: graphql_object.object, event: graphql_object.object.convention.events.new))
     }
   end
 
