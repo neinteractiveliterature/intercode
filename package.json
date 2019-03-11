@@ -139,7 +139,7 @@
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
     "graphdoc:generate": "graphdoc -s schema.graphql",
-    "lint": "eslint app/javascript --ext .js,.jsx,.gql,.graphql",
+    "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
