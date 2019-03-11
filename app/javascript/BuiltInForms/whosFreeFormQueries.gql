@@ -1,0 +1,8 @@
+query WhosFreeFormConventionQuery {
+  convention {
+    id
+    starts_at
+    ends_at
+    timezone_name
+  }
+}

@@ -1,45 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 
 import Confirm from '../ModalDialogs/Confirm';
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
+import { DeleteTicket } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import ModalContainer from '../ModalDialogs/ModalContainer';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import { UserConProfileAdminQuery } from './queries.gql';
-
-const noTicketAbilityQuery = gql`
-query TicketAdminWithoutAbilityQuery {
-  currentAbility {
-    can_create_tickets
-  }
-}
-`;
-
-const ticketAbilityQuery = gql`
-query TicketAdminWithAbilityQuery($ticketId: Int!) {
-  currentAbility {
-    can_create_tickets
-    can_update_ticket(ticket_id: $ticketId)
-    can_delete_ticket(ticket_id: $ticketId)
-  }
-}
-`;
-
-const deleteTicketMutation = gql`
-mutation DeleteTicket($ticketId: Int!, $refund: Boolean!) {
-  deleteTicket(input: { id: $ticketId, refund: $refund }) {
-    ticket {
-      id
-    }
-  }
-}
-`;
+import {
+  TicketAdminWithTicketAbilityQuery, TicketAdminWithoutTicketAbilityQuery, UserConProfileAdminQuery,
+} from './queries.gql';
 
 class TicketAdminSection extends React.Component {
   static propTypes = {
@@ -111,7 +85,7 @@ class TicketAdminSection extends React.Component {
           <Confirm.Trigger>
             {confirm => (
               <Mutation
-                mutation={deleteTicketMutation}
+                mutation={DeleteTicket}
                 update={(cache) => {
                   const variables = { id: this.props.userConProfile.id };
                   const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
@@ -138,7 +112,12 @@ class TicketAdminSection extends React.Component {
                             className="btn btn-warning mr-2"
                             type="button"
                             onClick={() => confirm({
-                              action: () => deleteTicket({ variables: { ticketId: this.props.userConProfile.ticket.id, refund: true } }),
+                              action: () => deleteTicket({
+                                variables: {
+                                  ticketId: this.props.userConProfile.ticket.id,
+                                  refund: true,
+                                },
+                              }),
                               prompt: (
                                 <React.Fragment>
                                   <p>
@@ -165,7 +144,12 @@ class TicketAdminSection extends React.Component {
                       className="btn btn-danger"
                       type="button"
                       onClick={() => confirm({
-                        action: () => deleteTicket({ variables: { ticketId: this.props.userConProfile.ticket.id, refund: false } }),
+                        action: () => deleteTicket({
+                          variables: {
+                            ticketId: this.props.userConProfile.ticket.id,
+                            refund: false,
+                          },
+                        }),
                         prompt: (
                           <React.Fragment>
                             <p>
@@ -271,7 +255,11 @@ class TicketAdminSection extends React.Component {
       <div className="card-body pb-0">
         {this.renderTicketData(this.props.userConProfile.ticket)}
         <QueryWithStateDisplay
-          query={this.props.userConProfile.ticket ? ticketAbilityQuery : noTicketAbilityQuery}
+          query={
+            this.props.userConProfile.ticket
+              ? TicketAdminWithTicketAbilityQuery
+              : TicketAdminWithoutTicketAbilityQuery
+          }
           variables={{ ticketId: (this.props.userConProfile.ticket || {}).id }}
         >
           {({ data: ticketAbilityData }) => this.renderTicketControls(ticketAbilityData)}

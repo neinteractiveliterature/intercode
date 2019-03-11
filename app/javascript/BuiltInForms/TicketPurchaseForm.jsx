@@ -2,35 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import Modal from 'react-bootstrap4-modal';
 import { Elements } from 'react-stripe-elements';
 
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LazyStripe from '../LazyStripe';
+import { PurchaseTicket } from './ticketPurchaseFormMutations.gql';
 import TicketPurchasePaymentSection from './TicketPurchasePaymentSection';
 
-const purchaseTicketMutation = gql`
-mutation PurchaseTicket($input: PurchaseTicketInput!) {
-  purchaseTicket(input: $input) {
-    ticket {
-      id
-
-      ticket_type {
-        id
-        description
-      }
-
-      payment_amount {
-        fractional
-      }
-    }
-  }
-}
-`;
-
-@graphql(purchaseTicketMutation, {
+@graphql(PurchaseTicket, {
   props: ({ mutate }) => ({
     purchaseTicket: (ticketTypeId, stripeToken) => mutate({
       variables: {
@@ -52,7 +33,6 @@ class TicketPurchaseForm extends React.Component {
       formattedPrice: PropTypes.string.isRequired,
       available: PropTypes.bool.isRequired,
     })).isRequired,
-    createChargeUrl: PropTypes.string.isRequired,
     purchaseCompleteUrl: PropTypes.string.isRequired,
     ticketTypeId: PropTypes.number,
     initialName: PropTypes.string,
@@ -88,10 +68,11 @@ class TicketPurchaseForm extends React.Component {
   }
 
   handleStripeResponse = async (token) => {
+    const { ticketTypeId } = this.state;
     this.setState({ paymentError: null, submitting: true });
     try {
       const purchaseResponse = await this.props.purchaseTicket(
-        Number.parseInt(this.state.ticketTypeId, 10),
+        Number.parseInt(ticketTypeId, 10),
         token.id,
       );
       this.setState({
@@ -216,7 +197,9 @@ class TicketPurchaseForm extends React.Component {
               }
             </div>
             <div className="modal-footer">
-              <button className="btn btn-primary" onClick={this.purchaseAcknowledged}>OK</button>
+              <button className="btn btn-primary" onClick={this.purchaseAcknowledged} type="button">
+                OK
+              </button>
             </div>
           </Modal>
         </React.Fragment>

@@ -53,35 +53,35 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
     ));
 
     if (newTicketType == null) {
-      this.setState({
+      this.setState(prevState => ({
         addingOverride: {
-          ...this.state.addingOverride,
+          ...prevState.addingOverride,
           ticket_type: {
             id: '',
             description: '',
             maximum_event_provided_tickets: '',
           },
         },
-      });
+      }));
     } else {
-      this.setState({
+      this.setState(prevState => ({
         addingOverride: {
-          ...this.state.addingOverride,
+          ...prevState.addingOverride,
           ticket_type: newTicketType,
         },
-      });
+      }));
     }
   }
 
   addingOverrideValueDidChange = (event) => {
     const newValue = Number.parseInt(event.target.value, 10);
 
-    this.setState({
+    this.setState(prevState => ({
       addingOverride: {
-        ...this.state.addingOverride,
+        ...prevState.addingOverride,
         override_value: (Number.isNaN(newValue) ? null : newValue),
       },
-    });
+    }));
   }
 
   addOverride = async () => {
