@@ -1170,16 +1170,6 @@
               "description": null,
               "args": [
                 {
-                  "name": "first",
-                  "description": "Returns the first _n_ elements from the list.",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
                   "name": "after",
                   "description": "Returns the elements in the list that come after the specified cursor.",
                   "type": {
@@ -1190,8 +1180,18 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "last",
-                  "description": "Returns the last _n_ elements from the list.",
+                  "name": "before",
+                  "description": "Returns the elements in the list that come before the specified cursor.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "Returns the first _n_ elements from the list.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -1200,11 +1200,11 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "before",
-                  "description": "Returns the elements in the list that come before the specified cursor.",
+                  "name": "last",
+                  "description": "Returns the last _n_ elements from the list.",
                   "type": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "Int",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -8767,7 +8767,7 @@
         {
           "kind": "SCALAR",
           "name": "Float",
-          "description": "Represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
+          "description": "Represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
