@@ -18,8 +18,8 @@ class Types::ConventionType < Types::BaseObject
   field :clickwrap_agreement, String, null: true
   field :stripe_publishable_key, String, null: true
   field :masked_stripe_secret_key, String, null: true do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:update, convention)
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:update, graphql_object.object)
     end
   end
   field :forms, [Types::FormType], null: false
@@ -28,25 +28,25 @@ class Types::ConventionType < Types::BaseObject
   field :cms_navigation_items, [Types::CmsNavigationItemType], null: true
   field :pages, [Types::PageType], null: true
   field :rooms, [Types::RoomType], null: true do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, Room.new(convention: convention))
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, Room.new(convention: graphql_object.object))
     end
   end
   field :root_page, Types::PageType, null: true
   field :staff_positions, [Types::StaffPositionType], null: true do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, StaffPosition.new(convention: convention))
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, StaffPosition.new(convention: graphql_object.object))
     end
   end
   field :ticket_types, [Types::TicketTypeType], null: true do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, TicketType.new(convention: convention))
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, TicketType.new(convention: graphql_object.object))
     end
   end
   field :products, [Types::ProductType], null: true
   field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: convention))
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
     end
   end
 
@@ -98,8 +98,8 @@ class Types::ConventionType < Types::BaseObject
   field :user_activity_alert, Types::UserActivityAlert, null: false do
     argument :id, Integer, required: true
 
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: convention))
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
     end
   end
 
@@ -108,10 +108,10 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :orders, Types::OrdersConnectionType, max_page_size: 1000, null: true, connection: true do
-    guard ->(convention, _args, ctx) do
+    guard ->(graphql_object, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
-        Order.new(user_con_profile: UserConProfile.new(convention: convention))
+        Order.new(user_con_profile: UserConProfile.new(convention: graphql_object.object))
       )
     end
   end
@@ -122,8 +122,8 @@ class Types::ConventionType < Types::BaseObject
   end
 
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:view_event_proposals, convention)
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:view_event_proposals, graphql_object.object)
     end
   end
 
@@ -148,10 +148,10 @@ class Types::ConventionType < Types::BaseObject
   end
 
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType do
-    guard ->(convention, _args, ctx) do
+    guard ->(graphql_object, _args, ctx) do
       ctx[:current_ability].can?(
         :read,
-        Order.new(user_con_profile: UserConProfile.new(convention: convention))
+        Order.new(user_con_profile: UserConProfile.new(convention: graphql_object.object))
       )
     end
   end
@@ -165,8 +165,8 @@ class Types::ConventionType < Types::BaseObject
   end
 
   pagination_field :signup_spy_paginated, Types::SignupsPaginationType, Types::UserConProfileFiltersInputType, null: false do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:view_reports, convention)
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:view_reports, graphql_object.object)
     end
   end
 
@@ -176,8 +176,8 @@ class Types::ConventionType < Types::BaseObject
   end
 
   pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType, Types::UserConProfileFiltersInputType do
-    guard ->(convention, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserConProfile.new(convention: convention))
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, UserConProfile.new(convention: graphql_object.object))
     end
   end
 

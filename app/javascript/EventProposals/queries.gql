@@ -101,7 +101,7 @@ query ProposeEventButtonQuery {
   }
 }
 
-query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput]) {
+query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
   convention {
     id
     timezone_name

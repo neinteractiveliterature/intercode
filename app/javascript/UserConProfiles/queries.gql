@@ -143,7 +143,7 @@ query ConvertToEventProvidedTicketQuery($eventId: Int!) {
   }
 }
 
-query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput]) {
+query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput!]) {
   convention {
     id
     name
