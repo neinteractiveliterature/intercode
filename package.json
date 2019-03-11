@@ -131,6 +131,7 @@
     "eslint-plugin-react": "^7.12.4",
     "jest": "^24.3.1",
     "jest-prop-type-error": "^1.1.0",
+    "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react-test-renderer": "^16.8.4",
     "webpack-dev-server": "^3.2.1"
@@ -164,6 +165,10 @@
       "jest-prop-type-error",
       "regenerator-runtime/runtime",
       "./test/javascript/setupTests.js"
-    ]
+    ],
+    "transform": {
+      "\\.(gql|graphql)$": "jest-transform-graphql",
+      ".*": "babel-jest"
+    }
   }
 }
