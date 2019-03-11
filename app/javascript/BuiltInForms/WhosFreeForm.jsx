@@ -1,25 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import moment from 'moment-timezone';
 import queryString from 'query-string';
+
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-
-const conventionQuery = gql`
-query WhosFreeFormConventionQuery {
-  convention {
-    id
-    starts_at
-    ends_at
-    timezone_name
-  }
-}
-`;
+import { WhosFreeFormConventionQuery } from './whosFreeFormQueries.gql';
 
 const momentToTimeObject = (momentValue) => {
   if (momentValue == null) {
@@ -35,11 +25,11 @@ const momentToTimeObject = (momentValue) => {
   };
 };
 
-@graphql(conventionQuery)
+@graphql(WhosFreeFormConventionQuery)
 @GraphQLQueryResultWrapper
 class WhosFreeForm extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(conventionQuery).isRequired,
+    data: GraphQLResultPropType(WhosFreeFormConventionQuery).isRequired,
     initialStart: PropTypes.string,
     initialFinish: PropTypes.string,
     baseUrl: PropTypes.string.isRequired,
@@ -63,9 +53,9 @@ class WhosFreeForm extends React.Component {
   dayChanged = (day) => { this.setState({ day }); }
 
   timeChanged = (field, newTime) => {
-    const oldTime = this.state[field] || this.state.day;
-
-    this.setState({ [field]: oldTime.clone().set(newTime) });
+    this.setState(prevState => ({
+      [field]: (prevState[field] || prevState.day).clone().set(newTime),
+    }));
   }
 
   search = (event) => {
@@ -123,6 +113,7 @@ class WhosFreeForm extends React.Component {
 
         <p className="mb-0">
           <button
+            type="button"
             className="btn btn-primary"
             disabled={!(this.state.start && this.state.finish)}
             onClick={this.search}

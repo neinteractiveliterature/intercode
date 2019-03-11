@@ -28,7 +28,7 @@ function BooleanChoiceSetFilter({ filter, onChange, ...otherProps }) {
       filter={{ ...filter, value: getBooleanFilterValue(filter) }}
       {...otherProps}
     />
-  )
+  );
 }
 
 BooleanChoiceSetFilter.propTypes = {

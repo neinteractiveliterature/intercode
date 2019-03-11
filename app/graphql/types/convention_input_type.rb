@@ -1,21 +1,19 @@
-Types::ConventionInputType = GraphQL::InputObjectType.define do
-  name 'ConventionInput'
-  input_field :accepting_proposals, types.Boolean
-  input_field :starts_at, Types::DateType
-  input_field :ends_at, Types::DateType
-  input_field :name, types.String
-  input_field :domain, types.String
-  input_field :event_mailing_list_domain, types.String
-  input_field :timezone_name, types.String
-  input_field :show_schedule, Types::ShowScheduleType
-  input_field :show_event_list, Types::ShowScheduleType
-  input_field :maximum_tickets, types.Int
-  input_field :ticket_name, types.String
-  input_field :root_page_id, types.Int
-  input_field :default_layout_id, types.Int
-  input_field :stripe_publishable_key, types.String
-  input_field :stripe_secret_key, types.String
-  input_field :clickwrap_agreement, types.String
-
-  input_field :maximum_event_signups, Types::ScheduledValueInputType
+class Types::ConventionInputType < Types::BaseInputObject
+  argument :accepting_proposals, Boolean, required: false, camelize: false
+  argument :starts_at, Types::DateType, required: false, camelize: false
+  argument :ends_at, Types::DateType, required: false, camelize: false
+  argument :name, String, required: false
+  argument :domain, String, required: false
+  argument :event_mailing_list_domain, String, required: false, camelize: false
+  argument :timezone_name, String, required: false, camelize: false
+  argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
+  argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false
+  argument :maximum_tickets, Integer, required: false, camelize: false
+  argument :ticket_name, String, required: false, camelize: false
+  argument :root_page_id, Integer, required: false, camelize: false
+  argument :default_layout_id, Integer, required: false, camelize: false
+  argument :stripe_publishable_key, String, required: false, camelize: false
+  argument :stripe_secret_key, String, required: false, camelize: false
+  argument :clickwrap_agreement, String, required: false, camelize: false
+  argument :maximum_event_signups, Types::ScheduledValueInputType, required: false, camelize: false
 end

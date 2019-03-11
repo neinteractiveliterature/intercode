@@ -1,5 +1,3 @@
-Types::ScheduledMoneyValueInputType = GraphQL::InputObjectType.define do
-  name 'ScheduledMoneyValueInput'
-
-  input_field :timespans, !types[!Types::TimespanWithMoneyValueInputType]
+class Types::ScheduledMoneyValueInputType < Types::BaseInputObject
+  argument :timespans, [Types::TimespanWithMoneyValueInputType], required: true
 end

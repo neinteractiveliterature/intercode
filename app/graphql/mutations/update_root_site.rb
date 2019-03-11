@@ -1,4 +1,4 @@
-class Mutations::UpdateRootSite < GraphQL::Schema::RelayClassicMutation
+class Mutations::UpdateRootSite < Mutations::BaseMutation
   field :root_site, Types::RootSiteType, null: false, camelize: false
 
   argument :root_site, Types::RootSiteInputType, required: true, camelize: false

@@ -1,0 +1,89 @@
+#import "./queries.gql"
+
+mutation MarkOrderPaid($orderId: Int!) {
+  markOrderPaid(input: { id: $orderId }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation CancelOrder($orderId: Int!) {
+  cancelOrder(input: { id: $orderId }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation AdminUpdateOrder($orderId: Int!, $paymentNote: String) {
+  updateOrder(input: { id: $orderId, order: { payment_note: $paymentNote } }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation CreateProduct($product: ProductInput!) {
+  createProduct(input: { product: $product }) {
+    product {
+      id
+      ...AdminProductFields
+    }
+  }
+}
+
+mutation UpdateProduct($id: Int!, $product: ProductInput!) {
+  updateProduct(input: { id: $id, product: $product }) {
+    product {
+      id
+      ...AdminProductFields
+    }
+  }
+}
+
+mutation DeleteProduct($id: Int!) {
+  deleteProduct(input: { id: $id }) {
+    product {
+      id
+      ...AdminProductFields
+    }
+  }
+}
+
+mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
+  updateOrderEntry(input: $input) {
+    order_entry {
+      id
+      ...OrderEntryFields
+    }
+  }
+}
+
+mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
+  deleteOrderEntry(input: $input) {
+    order_entry {
+      id
+    }
+  }
+}
+
+mutation SubmitOrder($input: SubmitOrderInput!) {
+  submitOrder(input: $input) {
+    order {
+      id
+      status
+    }
+  }
+}
+
+mutation AddOrderEntryToCurrentPendingOrder($input: AddOrderEntryToCurrentPendingOrderInput!) {
+  addOrderEntryToCurrentPendingOrder(input: $input) {
+    order_entry {
+      id
+    }
+  }
+}

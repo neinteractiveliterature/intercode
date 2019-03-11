@@ -1,0 +1,33 @@
+mutation CreateRoom($input: CreateRoomInput!) {
+  createRoom(input: $input) {
+    room {
+      id
+      name
+
+      runs {
+        id
+      }
+    }
+  }
+}
+
+mutation UpdateRoom($input: UpdateRoomInput!) {
+  updateRoom(input: $input) {
+    room {
+      id
+      name
+
+      runs {
+        id
+      }
+    }
+  }
+}
+
+mutation DeleteRoom($input: DeleteRoomInput!) {
+  deleteRoom(input: $input) {
+    room {
+      id
+    }
+  }
+}

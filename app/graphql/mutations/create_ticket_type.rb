@@ -1,12 +1,13 @@
-Mutations::CreateTicketType = GraphQL::Relay::Mutation.define do
-  name 'CreateTicketType'
-  return_field :ticket_type, Types::TicketTypeType
+class Mutations::CreateTicketType < Mutations::BaseMutation
+  graphql_name 'CreateTicketType'
 
-  input_field :ticket_type, !Types::TicketTypeInputType
+  field :ticket_type, Types::TicketTypeType, null: false
 
-  resolve ->(_obj, args, ctx) {
-    ticket_type = ctx[:convention].ticket_types.create!(args[:ticket_type].to_h)
+  argument :ticket_type, Types::TicketTypeInputType, required: true, camelize: false
+
+  def resolve(**args)
+    ticket_type = convention.ticket_types.create!(args[:ticket_type].to_h)
 
     { ticket_type: ticket_type }
-  }
+  end
 end

@@ -1,14 +1,12 @@
-Types::UserConProfileFiltersInputType = GraphQL::InputObjectType.define do
-  name 'UserConProfileFiltersInput'
-
-  input_field :name, types.String
-  input_field :first_name, types.String
-  input_field :last_name, types.String
-  input_field :email, types.String
-  input_field :ticket, types[types.String]
-  input_field :ticket_type, types[types.String]
-  input_field :privileges, types[types.String]
-  input_field :payment_amount, types.Float
-  input_field :attending, types.Boolean
-  input_field :is_team_member, types.Boolean
+class Types::UserConProfileFiltersInputType < Types::BaseInputObject
+  argument :name, String, required: false
+  argument :first_name, String, required: false, camelize: false
+  argument :last_name, String, required: false, camelize: false
+  argument :email, String, required: false
+  argument :ticket, [String], required: false
+  argument :ticket_type, [String], required: false, camelize: false
+  argument :privileges, [String], required: false
+  argument :payment_amount, Float, required: false, camelize: false
+  argument :attending, Boolean, required: false
+  argument :is_team_member, Boolean, required: false, camelize: false
 end

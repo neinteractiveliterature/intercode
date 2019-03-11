@@ -1,11 +1,11 @@
-class Types::Signup < Types::BaseObject
+class Types::SignupType < Types::BaseObject
   field :id, Int, null: false
   field :state, Types::SignupStateType, null: false
   field :counted, Boolean, null: false
   field :bucket_key, String, null: true, camelize: false
   field :requested_bucket_key, String, null: true, camelize: false do
-    guard ->(signup, _args, ctx) do
-      ctx[:current_ability].can?(:read, signup.object)
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, graphql_object.object)
     end
   end
 

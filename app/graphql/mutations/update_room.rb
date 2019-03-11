@@ -1,15 +1,14 @@
-Mutations::UpdateRoom = GraphQL::Relay::Mutation.define do
-  name 'UpdateRoom'
-  return_field :room, Types::RoomType
+class Mutations::UpdateRoom < Mutations::BaseMutation
+  field :room, Types::RoomType, null: false
 
-  input_field :id, !types.Int
-  input_field :room, !Types::RoomInputType
+  argument :id, Integer, required: true
+  argument :room, Types::RoomInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
-    room = ctx[:convention].rooms.find(args[:id])
+  def resolve(**args)
+    room = convention.rooms.find(args[:id])
 
     room.update!(args[:room].to_h)
 
     { room: room }
-  }
+  end
 end

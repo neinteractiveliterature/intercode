@@ -159,7 +159,7 @@ class SyncCodeInput extends React.Component {
         </li>
         {this.props.extraNavControls}
       </ul>
-    )
+    );
   }
 
   render = () => (

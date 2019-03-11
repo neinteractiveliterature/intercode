@@ -3,26 +3,16 @@ import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
 import fetch from 'unfetch';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import { Link, withRouter } from 'react-router-dom';
 
 import Confirm from '../ModalDialogs/Confirm';
+import { DeleteUserConProfile } from './mutations.gql';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import { UserConProfileAdminQuery } from './queries.gql';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
-
-const deleteUserConProfileMutation = gql`
-mutation DeleteUserConProfile($userConProfileId: Int!) {
-  deleteUserConProfile(input: { id: $userConProfileId }) {
-    user_con_profile {
-      id
-    }
-  }
-}
-`;
 
 @withRouter
 class UserConProfileAdminDisplay extends React.Component {
@@ -119,7 +109,7 @@ class UserConProfileAdminDisplay extends React.Component {
             ? (
               <li className="list-group-item">
                 <Mutation
-                  mutation={deleteUserConProfileMutation}
+                  mutation={DeleteUserConProfile}
                   variables={{ userConProfileId: data.userConProfile.id }}
                 >
                   {deleteUserConProfile => (

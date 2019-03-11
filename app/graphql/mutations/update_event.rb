@@ -1,14 +1,13 @@
-Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
-  name 'UpdateEvent'
-  return_field :event, Types::EventType
+class Mutations::UpdateEvent < Mutations::BaseMutation
+  field :event, Types::EventType, null: false
 
-  input_field :id, !types.Int
-  input_field :event, !Types::EventInputType
+  argument :id, Integer, required: false
+  argument :event, Types::EventInputType, required: false
 
-  resolve ->(_obj, args, ctx) {
-    event = ctx[:convention].events.find(args[:id])
+  def resolve(**args)
+    event = convention.events.find(args[:id])
     event_attrs = args[:event].to_h.merge(
-      updated_by: ctx[:user_con_profile].user
+      updated_by: user_con_profile.user
     )
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
     registration_policy_attributes = form_response_attrs.delete('registration_policy')
@@ -24,7 +23,7 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
       EventChangeRegistrationPolicyService.new(
         event,
         new_registration_policy,
-        ctx[:user_con_profile]
+        user_con_profile
       ).call!
     end
 
@@ -37,7 +36,7 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
     changes.each do |(key, (previous_value, new_value))|
       FormResponseChange.create!(
         response: event,
-        user_con_profile: ctx[:user_con_profile],
+        user_con_profile: user_con_profile,
         field_identifier: key,
         previous_value: previous_value,
         new_value: new_value
@@ -45,5 +44,5 @@ Mutations::UpdateEvent = GraphQL::Relay::Mutation.define do
     end
 
     { event: event }
-  }
+  end
 end

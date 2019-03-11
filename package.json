@@ -131,6 +131,7 @@
     "eslint-plugin-react": "^7.12.4",
     "jest": "^24.3.1",
     "jest-prop-type-error": "^1.1.0",
+    "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react-test-renderer": "^16.8.4",
     "webpack-dev-server": "^3.2.1"
@@ -139,7 +140,7 @@
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
     "graphdoc:generate": "graphdoc -s schema.graphql",
-    "lint": "eslint app/javascript --ext .js,.jsx,.gql,.graphql",
+    "lint": "eslint app/javascript --cache --ext .js,.jsx,.gql,.graphql",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },
@@ -164,6 +165,10 @@
       "jest-prop-type-error",
       "regenerator-runtime/runtime",
       "./test/javascript/setupTests.js"
-    ]
+    ],
+    "transform": {
+      "\\.(gql|graphql)$": "jest-transform-graphql",
+      ".*": "babel-jest"
+    }
   }
 }

@@ -8,6 +8,7 @@ fragment StandaloneEditEvent_TicketTypeFields on TicketType {
 
 fragment StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
   ticket_type {
+    id
     ...StandaloneEditEvent_TicketTypeFields
   }
 
@@ -30,6 +31,7 @@ fragment StandaloneEditEvent_EventFields on Event {
   }
 
   maximum_event_provided_tickets_overrides {
+    id
     ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
   }
 }
@@ -41,9 +43,11 @@ query StandaloneEditEventQuery($eventId: Int!) {
   }
 
   convention {
+    id
     ...CommonConventionData
 
     ticket_types {
+      id
       ...StandaloneEditEvent_TicketTypeFields
     }
 
@@ -52,6 +56,7 @@ query StandaloneEditEventQuery($eventId: Int!) {
   }
 
   event(id: $eventId) {
+    id
     ...StandaloneEditEvent_EventFields
   }
 }

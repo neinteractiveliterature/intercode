@@ -2,49 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { flowRight } from 'lodash';
-import gql from 'graphql-tag';
 import { enableUniqueIds } from 'react-html-id';
+
+import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
+import formatMoney from '../formatMoney';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import LoadingIndicator from '../LoadingIndicator';
-import formatMoney from '../formatMoney';
+import { OrderFormProductQuery } from './queries.gql';
 import { parseIntOrNull } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 
-const productQuery = gql`
-query OrderFormProductQuery($productId: Int!) {
-  product(id: $productId) {
-    id
-    price {
-      fractional
-    }
-
-    product_variants {
-      id
-      name
-      position
-      override_price {
-        fractional
-      }
-    }
-  }
-}
-`;
-
-const addOrderEntryToCurrentPendingOrderMutation = gql`
-mutation AddOrderEntryToCurrentPendingOrder($input: AddOrderEntryToCurrentPendingOrderInput!) {
-  addOrderEntryToCurrentPendingOrder(input: $input) {
-    order_entry {
-      id
-    }
-  }
-}
-`;
-
 @flowRight([
-  graphql(productQuery),
-  graphql(addOrderEntryToCurrentPendingOrderMutation, {
+  graphql(OrderFormProductQuery),
+  graphql(AddOrderEntryToCurrentPendingOrder, {
     props: ({ mutate }) => ({
       addOrderEntryToCurrentPendingOrder: (productId, productVariantId, quantity) => mutate({
         variables: {
@@ -65,7 +37,7 @@ class ProductOrderForm extends React.Component {
   static propTypes = {
     productId: PropTypes.number.isRequired,
     cartUrl: PropTypes.string.isRequired,
-    data: GraphQLResultPropType(productQuery).isRequired,
+    data: GraphQLResultPropType(OrderFormProductQuery).isRequired,
     addOrderEntryToCurrentPendingOrder: PropTypes.func.isRequired,
   };
 
@@ -205,6 +177,7 @@ Total:
           </div>
           <div className="col-6 mb-2">
             <button
+              type="button"
               className="w-100 btn btn-primary"
               disabled={!this.isDataComplete() || this.state.submitting}
               onClick={this.addToCartClicked}

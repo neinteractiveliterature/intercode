@@ -1,19 +1,20 @@
-Mutations::DeleteTicketType = GraphQL::Relay::Mutation.define do
-  name 'DeleteTicketType'
-  return_field :ticket_type, Types::TicketTypeType
+class Mutations::DeleteTicketType < Mutations::BaseMutation
+  graphql_name 'DeleteTicketType'
 
-  input_field :id, !types.Int
+  field :ticket_type, Types::TicketTypeType, null: false
 
-  resolve ->(_obj, args, ctx) {
-    ticket_type = ctx[:convention].ticket_types.find(args[:id])
+  argument :id, Integer, required: true
+
+  def resolve(**args)
+    ticket_type = convention.ticket_types.find(args[:id])
     if ticket_type.tickets.any?
       return GraphQL::ExecutionError.new("#{ticket_type.description} can't be deleted because \
-#{ctx[:convention].ticket_name.pluralize} have already been purchased using this \
-#{ctx[:convention].ticket_name} type.")
+#{convention.ticket_name.pluralize} have already been purchased using this \
+#{convention.ticket_name} type.")
     end
 
     ticket_type.destroy!
 
     { ticket_type: ticket_type }
-  }
+  end
 end

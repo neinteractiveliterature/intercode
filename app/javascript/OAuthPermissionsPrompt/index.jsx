@@ -56,7 +56,10 @@ class OAuthPermissionsPrompt extends React.Component {
               onClick={() => {
                 this.setState((prevState) => {
                   if (prevState.expandedGroups.includes(scopeGroup)) {
-                    return { expandedGroups: prevState.expandedGroups.filter(group => group !== scopeGroup) };
+                    return {
+                      expandedGroups: prevState.expandedGroups
+                        .filter(group => group !== scopeGroup),
+                    };
                   }
 
                   return { expandedGroups: [...prevState.expandedGroups, scopeGroup] };

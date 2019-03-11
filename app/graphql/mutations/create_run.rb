@@ -1,19 +1,18 @@
-Mutations::CreateRun = GraphQL::Relay::Mutation.define do
-  name 'CreateRun'
-  return_field :run, Types::RunType
+class Mutations::CreateRun < Mutations::BaseMutation
+  field :run, Types::RunType, null: false
 
-  input_field :event_id, !types.Int
-  input_field :run, !Types::RunInputType
+  argument :event_id, Integer, required: true, camelize: false
+  argument :run, Types::RunInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
-    event = ctx[:convention].events.find(args[:event_id])
+  def resolve(**args)
+    event = convention.events.find(args[:event_id])
 
     run = event.runs.create!(
       args[:run].to_h.merge(
-        updated_by: ctx[:user_con_profile].user
+        updated_by: user_con_profile.user
       )
     )
 
     { run: run }
-  }
+  end
 end

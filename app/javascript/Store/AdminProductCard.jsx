@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import classNames from 'classnames';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 
-import { adminProductFragment, productsQuery } from './queries';
+import { AdminProductsQuery } from './queries.gql';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
+import { CreateProduct, DeleteProduct, UpdateProduct } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
@@ -16,42 +16,6 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import sortProductVariants from './sortProductVariants';
 import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
-
-const createProductMutation = gql`
-mutation CreateProduct($product: ProductInput!) {
-  createProduct(input: { product: $product }) {
-    product {
-      ...AdminProductFields
-    }
-  }
-}
-
-${adminProductFragment}
-`;
-
-const updateProductMutation = gql`
-mutation UpdateProduct($id: Int!, $product: ProductInput!) {
-  updateProduct(input: { id: $id, product: $product }) {
-    product {
-      ...AdminProductFields
-    }
-  }
-}
-
-${adminProductFragment}
-`;
-
-const deleteProductMutation = gql`
-mutation DeleteProduct($id: Int!) {
-  deleteProduct(input: { id: $id }) {
-    product {
-      ...AdminProductFields
-    }
-  }
-}
-
-${adminProductFragment}
-`;
 
 class AdminProductCard extends React.Component {
   static propTypes = {
@@ -238,9 +202,9 @@ class AdminProductCard extends React.Component {
         await createProduct({
           variables: { product: productInput },
           update: (cache, { data: { createProduct: { product } } }) => {
-            const data = cache.readQuery({ query: productsQuery });
+            const data = cache.readQuery({ query: AdminProductsQuery });
             data.convention.products.push(product);
-            cache.writeQuery({ query: productsQuery, data });
+            cache.writeQuery({ query: AdminProductsQuery, data });
           },
         });
 
@@ -259,10 +223,10 @@ class AdminProductCard extends React.Component {
           await deleteProduct({
             variables: { id: this.props.product.id },
             update: (cache) => {
-              const data = cache.readQuery({ query: productsQuery });
+              const data = cache.readQuery({ query: AdminProductsQuery });
               data.convention.products = data.convention.products
                 .filter(product => product.id !== this.props.product.id);
-              cache.writeQuery({ query: productsQuery, data });
+              cache.writeQuery({ query: AdminProductsQuery, data });
             },
           });
         } catch (error) {
@@ -299,9 +263,9 @@ class AdminProductCard extends React.Component {
             </button>
           </li>
           <li className="list-inline-item">
-            <Mutation mutation={createProductMutation}>
+            <Mutation mutation={CreateProduct}>
               {createProduct => (
-                <Mutation mutation={updateProductMutation}>
+                <Mutation mutation={UpdateProduct}>
                   {updateProduct => (
                     <button
                       type="button"
@@ -323,7 +287,7 @@ class AdminProductCard extends React.Component {
     if (this.props.product.id != null) {
       deleteButton = (
         <li className="list-inline-item">
-          <Mutation mutation={deleteProductMutation}>
+          <Mutation mutation={DeleteProduct}>
             {deleteProduct => (
               <button
                 type="button"

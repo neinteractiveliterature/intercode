@@ -1,19 +1,18 @@
-Mutations::CreateEvent = GraphQL::Relay::Mutation.define do
-  name 'CreateEvent'
-  return_field :event, Types::EventType
+class Mutations::CreateEvent < Mutations::BaseMutation
+  field :event, Types::EventType, null: false
 
-  input_field :event, !Types::EventInputType
+  argument :event, Types::EventInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
+  def resolve(**args)
     event_attrs = args[:event].to_h.merge(
-      updated_by: ctx[:user_con_profile].user,
+      updated_by: user_con_profile.user,
     )
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
 
-    event = ctx[:convention].events.new(event_attrs)
+    event = convention.events.new(event_attrs)
     event.assign_form_response_attributes(form_response_attrs)
     event.save!
 
     { event: event }
-  }
+  end
 end

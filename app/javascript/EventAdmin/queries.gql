@@ -6,6 +6,7 @@ fragment TicketTypeFields on TicketType {
 
 fragment MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
   ticket_type {
+    id
     ...TicketTypeFields
   }
 
@@ -19,20 +20,24 @@ fragment RoomFields on Room {
 }
 
 fragment ConventionFields on Convention {
+  id
   starts_at
   ends_at
   timezone_name
   event_mailing_list_domain
 
   event_categories {
+    id
     ...EventPageEventCategoryFields
   }
 
   rooms {
+    id
     ...RoomFields
   }
 
   ticket_types {
+    id
     ...TicketTypeFields
   }
   ticket_name
@@ -45,6 +50,7 @@ fragment RunFields on Run {
   title_suffix
 
   rooms {
+    id
     ...RoomFields
   }
 }
@@ -88,10 +94,12 @@ fragment EventFields on Event {
   }
 
   runs {
+    id
     ...RunFields
   }
 
   maximum_event_provided_tickets_overrides {
+    id
     ...MaximumEventProvidedTicketsOverrideFields
   }
 }
@@ -119,6 +127,7 @@ query EventAdminEventsQuery {
   }
 
   events(includeDropped: true) {
+    id
     ...EventFields
   }
 }

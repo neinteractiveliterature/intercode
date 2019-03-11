@@ -1,12 +1,11 @@
-Mutations::DeleteOrderEntry = GraphQL::Relay::Mutation.define do
-  name 'DeleteOrderEntry'
-  return_field :order_entry, Types::OrderEntryType
+class Mutations::DeleteOrderEntry < Mutations::BaseMutation
+  field :order_entry, Types::OrderEntryType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, _ctx) {
+  def resolve(**args)
     order_entry = OrderEntry.find(args[:id])
     order_entry.destroy!
     { order_entry: order_entry }
-  }
+  end
 end

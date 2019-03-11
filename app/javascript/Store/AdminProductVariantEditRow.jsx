@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
+
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
@@ -129,6 +129,7 @@ class AdminProductVariantEditRow extends React.Component {
         </td>
         <td>
           <button
+            type="button"
             className="btn btn-sm btn-danger"
             onClick={deleteVariant}
           >

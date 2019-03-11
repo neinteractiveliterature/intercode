@@ -1,0 +1,7 @@
+mutation DeletePage($input: DeletePageInput!) {
+  deletePage(input: $input) {
+    page {
+      id
+    }
+  }
+}
