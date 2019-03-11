@@ -1,8 +1,8 @@
-Types::MoneyType = GraphQL::ObjectType.define do
-  name 'Money'
+class Types::MoneyType < Types::BaseObject
+  field :fractional, Integer, null: false
+  field :currency_code, String, null: false
 
-  field :fractional, !types.Int
-  field :currency_code, !types.String do
-    resolve ->(obj, _args, _ctx) { obj.currency.iso_code }
+  def currency_code
+    object.currency.iso_code
   end
 end

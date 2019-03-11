@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { Link, withRouter } from 'react-router-dom';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import { capitalize } from 'inflected';
+
+import { AdminTicketTypesQuery } from './queries.gql';
+import { DeleteTicketType } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypePropType from './TicketTypePropType';
 import Timespan from '../Timespan';
 import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { ticketTypesQuery } from './queries';
 
 function cardClassForTicketType(ticketType) {
   if (ticketType.publicly_available) {
@@ -64,27 +65,17 @@ function renderPricingSchedule(ticketType, timezoneName) {
   return <ul className="mb-0">{timespanItems}</ul>;
 }
 
-const deleteTicketTypeMutation = gql`
-mutation DeleteTicketType($input: DeleteTicketTypeInput!) {
-  deleteTicketType(input: $input) {
-    ticket_type {
-      id
-    }
-  }
-}
-`;
-
 @withRouter
-@graphql(deleteTicketTypeMutation, {
+@graphql(DeleteTicketType, {
   props: ({ mutate }) => ({
     deleteTicketType: id => mutate({
       variables: { input: { id } },
       update: (proxy) => {
-        const data = proxy.readQuery({ query: ticketTypesQuery });
+        const data = proxy.readQuery({ query: AdminTicketTypesQuery });
         data.convention.ticket_types = data.convention.ticket_types.filter((
           ticketType => ticketType.id !== id
         ));
-        proxy.writeQuery({ query: ticketTypesQuery, data });
+        proxy.writeQuery({ query: AdminTicketTypesQuery, data });
       },
     }),
   }),
@@ -192,7 +183,7 @@ class TicketTypesList extends React.Component {
       >
         Are you sure you want to delete the ticket type &quot;
         {ticketTypeDescription}
-&quot;?
+        &quot;?
 
         <ErrorDisplay graphQLError={this.state.error} />
       </ConfirmModal>

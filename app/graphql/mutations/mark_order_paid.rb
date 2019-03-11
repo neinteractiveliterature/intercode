@@ -1,19 +1,18 @@
-Mutations::MarkOrderPaid = GraphQL::Relay::Mutation.define do
-  name 'MarkOrderPaid'
-  return_field :order, Types::OrderType
+class Mutations::MarkOrderPaid < Mutations::BaseMutation
+  field :order, Types::OrderType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    order = ctx[:convention].orders.find(args[:id])
+  def resolve(**args)
+    order = convention.orders.find(args[:id])
     raise "Order is #{order.status}" unless order.status == 'unpaid'
 
     order.update!(
       status: 'paid',
-      payment_note: "Marked as paid by #{ctx[:user_con_profile].name_without_nickname} \
-on #{Time.now.in_time_zone(ctx[:convention].timezone).strftime('%B %-d, %Y at %l:%M%P')}"
+      payment_note: "Marked as paid by #{user_con_profile.name_without_nickname} \
+on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}"
     )
 
     { order: order }
-  }
+  end
 end

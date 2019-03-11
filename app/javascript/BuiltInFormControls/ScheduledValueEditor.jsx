@@ -92,7 +92,9 @@ class ScheduledValueEditor extends React.Component {
           {timespanRows}
           <tr>
             <td colSpan="4">
-              <button className="btn btn-link" onClick={this.addRowClicked}>Add row</button>
+              <button className="btn btn-link" onClick={this.addRowClicked} type="button">
+                Add row
+              </button>
             </td>
           </tr>
         </tbody>

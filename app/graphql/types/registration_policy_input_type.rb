@@ -1,6 +1,4 @@
-Types::RegistrationPolicyInputType = GraphQL::InputObjectType.define do
-  name 'RegistrationPolicyInput'
-
-  input_field :buckets, types[!Types::RegistrationPolicyBucketInputType]
-  input_field :prevent_no_preference_signups, types.Boolean
+class Types::RegistrationPolicyInputType < Types::BaseInputObject
+  argument :buckets, [Types::RegistrationPolicyBucketInputType], required: false
+  argument :prevent_no_preference_signups, Boolean, required: false, camelize: false
 end

@@ -1,12 +1,11 @@
-Mutations::CreateCmsNavigationItem = GraphQL::Relay::Mutation.define do
-  name 'CreateCmsNavigationItem'
-  return_field :cms_navigation_item, Types::CmsNavigationItemType
+class Mutations::CreateCmsNavigationItem < Mutations::BaseMutation
+  field :cms_navigation_item, Types::CmsNavigationItemType, null: false
 
-  input_field :cms_navigation_item, !Types::CmsNavigationItemInputType
+  argument :cms_navigation_item, Types::CmsNavigationItemInputType, required: true, camelize: false
 
-  resolve ->(_obj, args, ctx) {
+  def resolve(**args)
     cms_navigation_item = CmsNavigationItem
-      .create!(args[:cms_navigation_item].to_h.merge(parent: ctx[:convention]))
+      .create!(args[:cms_navigation_item].to_h.merge(parent: convention))
     { cms_navigation_item: cms_navigation_item }
-  }
+  end
 end

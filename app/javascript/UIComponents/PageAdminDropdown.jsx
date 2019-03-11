@@ -2,21 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+
+import { DeletePage } from './pageAdminDropdownMutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from './PopperDropdown';
 
-const deletePageMutation = gql`
-mutation DeletePage($input: DeletePageInput!) {
-  deletePage(input: $input) {
-    page {
-      id
-    }
-  }
-}
-`;
-
-@graphql(deletePageMutation, { name: 'deletePage' })
+@graphql(DeletePage, { name: 'deletePage' })
 class PageAdminDropdown extends React.Component {
   static propTypes = {
     editUrl: PropTypes.string.isRequired,
@@ -69,7 +60,9 @@ class PageAdminDropdown extends React.Component {
           <a href={pageListUrl} className="dropdown-item">View all pages</a>
           {
             showDelete ? (
-              <button className="dropdown-item text-danger" onClick={this.deletePageClicked}>Delete page</button>
+              <button className="dropdown-item text-danger" onClick={this.deletePageClicked} type="button">
+                Delete page
+              </button>
             ) : null
           }
         </PopperDropdown>

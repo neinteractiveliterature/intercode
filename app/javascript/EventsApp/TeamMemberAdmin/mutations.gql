@@ -3,6 +3,7 @@
 mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
     team_member {
+      id
       ...TeamMemberFields
     }
   }
@@ -11,6 +12,7 @@ mutation CreateTeamMember($input: CreateTeamMemberInput!) {
 mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
   deleteTeamMember(input: $input) {
     team_member {
+      id
       ...TeamMemberFields
     }
   }
@@ -19,6 +21,7 @@ mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
 mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
   updateTeamMember(input: $input) {
     team_member {
+      id
       ...TeamMemberFields
     }
   }
@@ -31,6 +34,7 @@ mutation ProvideEventTicket($eventId: Int!, $userConProfileId: Int!, $ticketType
     ticket_type_id: $ticketTypeId
   }) {
     ticket {
+      id
       ...TeamMemberTicketFields
     }
   }

@@ -46,22 +46,26 @@ fragment ScheduleGridEventFragment on Event {
 
 query ScheduleGridConventionDataQuery {
   convention {
+    id
     ...CommonConventionData
   }
 }
 
 query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    id
     ...ScheduleGridEventFragment
   }
 }
 
 query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   convention {
+    id
     ...CommonConventionData
   }
 
   events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+    id
     ...ScheduleGridEventFragment
   }
 }

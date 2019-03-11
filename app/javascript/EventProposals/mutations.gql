@@ -14,6 +14,7 @@ mutation CreateEventProposal($cloneEventProposalId: Int, $eventCategoryId: Int!)
 mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   updateEventProposal(input: $input) {
     event_proposal {
+      id
       ...EventProposalFields
     }
   }
@@ -22,6 +23,7 @@ mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
 mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
   submitEventProposal(input: $input) {
     event_proposal {
+      id
       ...EventProposalFields
     }
   }
@@ -30,6 +32,7 @@ mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
 mutation TransitionEventProposal($eventProposalId: Int!, $status: String!, $dropEvent: Boolean) {
   transitionEventProposal(input: { id: $eventProposalId, status: $status, drop_event: $dropEvent }) {
     event_proposal {
+      id
       ...EventProposalFields
     }
   }
@@ -38,6 +41,7 @@ mutation TransitionEventProposal($eventProposalId: Int!, $status: String!, $drop
 mutation UpdateEventProposalAdminNotes($eventProposalId: Int!, $adminNotes: String!) {
   updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
     event_proposal {
+      id
       ...EventProposalFields
     }
   }

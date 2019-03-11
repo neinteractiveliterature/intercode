@@ -1,119 +1,112 @@
-CAN_READ_PERSONAL_INFO_GUARD = ->(user_con_profile, _args, ctx) do
-  ctx[:current_ability].can?(:read_personal_info, user_con_profile)
-end
-
-Types::UserConProfileType = GraphQL::ObjectType.define do
-  name 'UserConProfile'
-
-  field :id, !types.Int
-  field :convention, Types::ConventionType
-  field :privileges, types[types.String] do
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(UserConProfile, :user).load(obj).then do |user|
-        user.privileges + obj.user_con_profile_privileges
+class Types::UserConProfileType < Types::BaseObject
+  def self.personal_info_field(*args, **kwargs, &block)
+    field(*args, **kwargs) do
+      guard ->(graphql_object, _args, ctx) do
+        ctx[:current_ability].can?(:read_personal_info, graphql_object.object)
       end
+      instance_eval(&block) if block
     end
   end
-  field :name, types.String
-  field :name_without_nickname, types.String
-  field :name_inverted, types.String
-  field :first_name, types.String
-  field :last_name, types.String
-  field :nickname, types.String
-  field :bio, types.String
-  field :show_nickname_in_bio, types.Boolean
-  field :form_response_attrs_json, types.String do
-    resolve -> (obj, _args, ctx) do
-      FormResponsePresenter.new(ctx[:convention].user_con_profile_form, obj).as_json.to_json
+
+  field :id, Integer, null: false
+  field :convention, Types::ConventionType, null: true
+  field :privileges, [String, null: true], null: true
+
+  def privileges
+    AssociationLoader.for(UserConProfile, :user).load(object).then do |user|
+      user.privileges + object.user_con_profile_privileges
     end
   end
-  field :user, Types::UserType do
-    guard CAN_READ_PERSONAL_INFO_GUARD
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(UserConProfile, :user).load(obj)
+  field :name, String, null: true
+  field :name_without_nickname, String, null: true
+  field :name_inverted, String, null: true
+  field :first_name, String, null: true
+  field :last_name, String, null: true
+  field :nickname, String, null: true
+  field :bio, String, null: true
+  field :show_nickname_in_bio, Boolean, null: true
+  field :form_response_attrs_json, String, null: true
+
+  def form_response_attrs_json
+    FormResponsePresenter.new(context[:convention].user_con_profile_form, object).as_json.to_json
+  end
+
+  personal_info_field :user, Types::UserType, null: true
+  personal_info_field :email, String, null: true
+
+  association_loaders UserConProfile, :user, :orders, :signups, :team_members, :ticket
+
+  def email
+    AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
+  end
+
+  personal_info_field :birth_date, Types::DateType, null: true
+  personal_info_field :address, String, null: true
+  personal_info_field :city, String, null: true
+  personal_info_field :state, String, null: true
+  personal_info_field :zipcode, String, null: true
+  personal_info_field :country, String, null: true
+  personal_info_field :day_phone, String, null: true
+  personal_info_field :evening_phone, String, null: true
+  personal_info_field :best_call_time, String, null: true
+  personal_info_field :preferred_contact, String, null: true
+
+  field :ticket, Types::TicketType, null: true do
+    guard -> (graphql_object, _args, ctx) {
+      # Using the actual user_con_profile object here will set the ticket association on that object
+      # which will cause problems if we try to actually read it
+      ctx[:current_ability].can?(:read, Ticket.new(user_con_profile_id: graphql_object.object.id))
+    }
+  end
+
+  field :ability, Types::AbilityType, null: true
+
+  def ability
+    if object == context[:user_con_profile]
+      current_ability
+    else
+      AbilityLoader.for(UserConProfile).load(object)
     end
   end
-  field(:email, types.String) do
-    guard CAN_READ_PERSONAL_INFO_GUARD
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(UserConProfile, :user).load(obj).then(&:email)
+
+  field :orders, [Types::OrderType, null: true], null: false do
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
+    }
+  end
+
+  field :order_summary, String, null: false do
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
+    }
+  end
+
+  def order_summary
+    OrderSummaryLoader.for().load(object)
+  end
+
+  field :signups, [Types::SignupType], null: false do
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: graphql_object.object, run: graphql_object.object.convention.events.new.runs.new))
+    }
+  end
+
+  field :team_members, [Types::TeamMemberType], null: false do
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: graphql_object.object, event: graphql_object.object.convention.events.new))
+    }
+  end
+
+  field :can_override_maximum_event_provided_tickets, Boolean, null: false
+
+  def can_override_maximum_event_provided_tickets
+    ability = if object == context[:user_con_profile]
+      current_ability
+    else
+      Ability.new(object.user)
     end
-  end
-  field(:birth_date, Types::DateType) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:address, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:city, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:state, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:zipcode, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:country, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:day_phone, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:evening_phone, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:best_call_time, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field(:preferred_contact, types.String) { guard CAN_READ_PERSONAL_INFO_GUARD }
-  field :ticket, Types::TicketType do
-    guard -> (ticket, _args, ctx) {
-      ctx[:current_ability].can?(:read, ticket)
-    }
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(UserConProfile, :ticket).load(obj)
-    }
-  end
 
-  field :ability, Types::AbilityType do
-    resolve -> (obj, _args, ctx) {
-      if obj == ctx[:user_con_profile]
-        ctx[:current_ability]
-      else
-        AbilityLoader.for(UserConProfile).load(obj)
-      end
-    }
-  end
-
-  field :orders, !types[Types::OrderType] do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: obj))
-    }
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(UserConProfile, :orders).load(obj)
-    }
-  end
-
-  field :order_summary, !types.String do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: obj))
-    }
-    resolve -> (obj, _args, _ctx) {
-      OrderSummaryLoader.for().load(obj)
-    }
-  end
-
-  field :signups, Types::Signup.to_list_type.to_non_null_type do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: obj, run: obj.convention.events.new.runs.new))
-    }
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(UserConProfile, :signups).load(obj)
-    }
-  end
-
-  field :team_members, Types::TeamMemberType.to_list_type.to_non_null_type do
-    guard -> (obj, _args, ctx) {
-      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: obj, event: obj.convention.events.new))
-    }
-    resolve -> (obj, _args, _ctx) {
-      AssociationLoader.for(UserConProfile, :team_members).load(obj)
-    }
-  end
-
-  field :can_override_maximum_event_provided_tickets, !types.Boolean do
-    resolve -> (obj, _args, ctx) {
-      ability = if obj == ctx[:user_con_profile]
-        ctx[:current_ability]
-      else
-        Ability.new(obj.user)
-      end
-
-      override = ctx[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
-      ability.can?(:create, override)
-    }
+    override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
+    ability.can?(:create, override)
   end
 end

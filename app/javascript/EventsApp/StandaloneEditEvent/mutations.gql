@@ -12,6 +12,7 @@ mutation StandaloneDropEvent($input: DropEventInput!) {
 mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
     event {
+      id
       ...StandaloneEditEvent_EventFields
     }
   }
@@ -20,6 +21,7 @@ mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
 mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -28,6 +30,7 @@ mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaxim
 mutation StandaloneDeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -36,6 +39,7 @@ mutation StandaloneDeleteMaximumEventProvidedTicketsOverride($input: DeleteMaxim
 mutation StandaloneUpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }

@@ -1,12 +1,11 @@
-Mutations::DeleteRun = GraphQL::Relay::Mutation.define do
-  name 'DeleteRun'
-  return_field :run, Types::RunType
+class Mutations::DeleteRun < Mutations::BaseMutation
+  field :run, Types::RunType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    run = ctx[:convention].runs.find(args[:id])
+  def resolve(**args)
+    run = convention.runs.find(args[:id])
     run.destroy!
     { run: run }
-  }
+  end
 end

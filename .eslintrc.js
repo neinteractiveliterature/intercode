@@ -36,17 +36,18 @@ module.exports = {
     'graphql/template-strings': [
       'error',
       { env: 'apollo', schemaJson },
-      { env: 'literal', schemaJson },
     ],
     'graphql/required-fields': [
       'error',
       { env: 'apollo', schemaJson, requiredFields: ['id'] },
-      { env: 'literal', schemaJson, requiredFields: ['id'] },
     ],
     'graphql/named-operations': [
       'warn',
       { env: 'apollo', schemaJson },
-      { env: 'literal', schemaJson },
+    ],
+    'graphql/no-deprecated-fields': [
+      'warn',
+      { env: 'apollo', schemaJson },
     ],
     'no-underscore-dangle': ['error', { allow: ['__typename'] } ],
     'react/destructuring-assignment': 'off',
@@ -58,5 +59,6 @@ module.exports = {
         controlComponents: ['Select'],
       },
     ],
+    "no-restricted-imports": ['error', 'graphql-tag'],
   }
 };

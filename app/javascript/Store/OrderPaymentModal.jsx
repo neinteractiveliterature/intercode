@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import Modal from 'react-bootstrap4-modal';
 import { injectStripe } from 'react-stripe-elements';
 
@@ -10,19 +9,9 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import OrderPaymentForm from './OrderPaymentForm';
 import paymentDetailsComplete from './paymentDetailsComplete';
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
+import { SubmitOrder } from './mutations.gql';
 
-const submitOrderMutation = gql`
-mutation SubmitOrder($input: SubmitOrderInput!) {
-  submitOrder(input: $input) {
-    order {
-      id
-      status
-    }
-  }
-}
-`;
-
-@graphql(submitOrderMutation, {
+@graphql(SubmitOrder, {
   props: ({ mutate }) => ({
     submitOrder: (orderId, paymentMode, stripeToken) => mutate({
       variables: {
@@ -174,6 +163,7 @@ class OrderPaymentModal extends React.Component {
               }
             </div>
             <button
+              type="button"
               className="btn btn-secondary mr-2"
               onClick={this.props.onCancel}
               disabled={this.state.submitting}
@@ -181,6 +171,7 @@ class OrderPaymentModal extends React.Component {
               Cancel
             </button>
             <button
+              type="button"
               className="btn btn-primary"
               onClick={this.submitCheckOut}
               disabled={disabled}

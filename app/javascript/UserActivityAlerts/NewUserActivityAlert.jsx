@@ -5,8 +5,9 @@ import { withRouter } from 'react-router-dom';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import ChangeSet from '../ChangeSet';
+import { CreateUserActivityAlert } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import { CreateUserActivityAlert, UserActivityAlertsAdminQuery } from './queries.gql';
+import { UserActivityAlertsAdminQuery } from './queries.gql';
 import UserActivityAlertForm from './UserActivityAlertForm';
 
 @withRouter

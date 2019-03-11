@@ -1,12 +1,11 @@
-Mutations::SubmitOrder = GraphQL::Relay::Mutation.define do
-  name 'SubmitOrder'
-  return_field :order, Types::OrderType
+class Mutations::SubmitOrder < Mutations::BaseMutation
+  field :order, Types::OrderType, null: false
 
-  input_field :id, !types.Int
-  input_field :payment_mode, !Types::PaymentModeType
-  input_field :stripe_token, types.String
+  argument :id, Integer, required: true
+  argument :payment_mode, Types::PaymentModeType, required: true, camelize: false
+  argument :stripe_token, String, required: false, camelize: false
 
-  resolve ->(_obj, args, _ctx) do
+  def resolve(**args)
     order = Order.find(args[:id])
 
     if args[:payment_mode] == 'now'

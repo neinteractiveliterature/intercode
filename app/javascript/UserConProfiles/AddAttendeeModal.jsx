@@ -3,53 +3,15 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { withRouter } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 
+import { AddAttendeeUsersQuery, AddAttendeeUserConProfileFormQuery } from './queries.gql';
+import { CreateUserConProfile } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import Form from '../Models/Form';
 import LoadingIndicator from '../LoadingIndicator';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import UserConProfileForm from './UserConProfileForm';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
-
-const usersQuery = gql`
-query AddAttendeeUsersQuery($name: String) {
-  users_paginated(filters: { name: $name }, per_page: 50) {
-    entries {
-      id
-      name
-      first_name
-      last_name
-    }
-  }
-}
-`;
-
-const userConProfileFormQuery = gql`
-query AddAttendeeUserConProfileFormQuery {
-  convention {
-    id
-    privilege_names
-    mail_privilege_names
-
-    user_con_profile_form {
-      id
-      form_api_json
-    }
-  }
-}
-`;
-
-const createUserConProfileMutation = gql`
-mutation CreateUserConProfile($user_id: Int!, $user_con_profile: UserConProfileInput!) {
-  createUserConProfile(input: { user_id: $user_id, user_con_profile: $user_con_profile }) {
-    user_con_profile {
-      id
-    }
-  }
-}
-`;
 
 @withRouter
 class AddAttendeeModal extends React.Component {
@@ -93,7 +55,7 @@ class AddAttendeeModal extends React.Component {
 
   renderForm = () => (
     <div className="mt-4">
-      <QueryWithStateDisplay query={userConProfileFormQuery}>
+      <QueryWithStateDisplay query={AddAttendeeUserConProfileFormQuery}>
         {({ data }) => (
           <UserConProfileForm
             canUpdatePrivileges
@@ -124,7 +86,11 @@ class AddAttendeeModal extends React.Component {
           already be a user in the site database in order to be added.
         </p>
 
-        <UserSelect value={this.state.user} onChange={this.userSelected} usersQuery={usersQuery} />
+        <UserSelect
+          value={this.state.user}
+          onChange={this.userSelected}
+          usersQuery={AddAttendeeUsersQuery}
+        />
 
         {
           this.state.userId
@@ -143,7 +109,7 @@ class AddAttendeeModal extends React.Component {
         >
           Cancel
         </button>
-        <Mutation mutation={createUserConProfileMutation}>
+        <Mutation mutation={CreateUserConProfile}>
           {mutate => (
             <button
               className="btn btn-primary"
