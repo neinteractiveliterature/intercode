@@ -135,8 +135,9 @@ class ScheduledValueTimespanRow extends React.Component {
       </td>
 
       <td className="w-25 text-right" style={{ verticalAlign: 'middle' }}>
-        <button className="btn btn-danger btn-sm" onClick={this.deleteClicked}>
+        <button className="btn btn-danger btn-sm" onClick={this.deleteClicked} type="button">
           <i className="fa fa-trash-o" />
+          <span className="sr-only">Delete timespan</span>
         </button>
       </td>
     </tr>

@@ -214,3 +214,41 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
     can_create_user_con_profiles
   }
 }
+
+query AddAttendeeUsersQuery($name: String) {
+  users_paginated(filters: { name: $name }, per_page: 50) {
+    entries {
+      id
+      name
+      first_name
+      last_name
+    }
+  }
+}
+
+query AddAttendeeUserConProfileFormQuery {
+  convention {
+    id
+    privilege_names
+    mail_privilege_names
+
+    user_con_profile_form {
+      id
+      form_api_json
+    }
+  }
+}
+
+query TicketAdminWithoutTicketAbilityQuery {
+  currentAbility {
+    can_create_tickets
+  }
+}
+
+query TicketAdminWithTicketAbilityQuery($ticketId: Int!) {
+  currentAbility {
+    can_create_tickets
+    can_update_ticket(ticket_id: $ticketId)
+    can_delete_ticket(ticket_id: $ticketId)
+  }
+}

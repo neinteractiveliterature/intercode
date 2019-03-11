@@ -1,0 +1,16 @@
+mutation PurchaseTicket($input: PurchaseTicketInput!) {
+  purchaseTicket(input: $input) {
+    ticket {
+      id
+
+      ticket_type {
+        id
+        description
+      }
+
+      payment_amount {
+        fractional
+      }
+    }
+  }
+}

@@ -1,22 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 
+import { DefaultEventsQuery } from './selectDefaultQueries.gql';
 import GraphQLAsyncSelect from './GraphQLAsyncSelect';
-
-export const DEFAULT_EVENTS_QUERY = gql`
-query EventsQuery($title: String) {
-  convention {
-    id
-    events_paginated(filters: { title: $title }, per_page: 50) {
-      entries {
-        id
-        title
-      }
-    }
-  }
-}
-`;
 
 class EventSelect extends React.PureComponent {
   static propTypes = {
@@ -37,7 +23,7 @@ class EventSelect extends React.PureComponent {
       getVariables={inputValue => ({ title: inputValue })}
       getOptionValue={option => option.id}
       getOptionLabel={option => option.title}
-      query={this.props.eventsQuery || DEFAULT_EVENTS_QUERY}
+      query={this.props.eventsQuery || DefaultEventsQuery}
       {...this.props}
     />
   )

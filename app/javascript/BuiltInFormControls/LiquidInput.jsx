@@ -1,15 +1,9 @@
 import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
-import gql from 'graphql-tag';
 import classNames from 'classnames';
 
 import CodeInput from './CodeInput';
-
-const previewLiquidQuery = gql`
-query PreviewLiquidQuery($liquid: String!) {
-  previewLiquid(content: $liquid)
-}
-`;
+import { PreviewLiquidQuery } from './previewQueries.gql';
 
 class LiquidInput extends React.Component {
   constructor(props) {
@@ -92,7 +86,7 @@ class LiquidInput extends React.Component {
           mode="liquid-html"
           getPreviewContent={async (liquid) => {
             const response = await client.query({
-              query: previewLiquidQuery,
+              query: PreviewLiquidQuery,
               variables: { liquid },
               fetchPolicy: 'no-cache',
             });

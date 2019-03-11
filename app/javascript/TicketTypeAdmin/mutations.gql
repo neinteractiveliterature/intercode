@@ -17,3 +17,11 @@ mutation UpdateTicketType($input: UpdateTicketTypeInput!) {
     }
   }
 }
+
+mutation DeleteTicketType($input: DeleteTicketTypeInput!) {
+  deleteTicketType(input: $input) {
+    ticket_type {
+      id
+    }
+  }
+}

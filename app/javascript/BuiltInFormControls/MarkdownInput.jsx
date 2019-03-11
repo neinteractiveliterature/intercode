@@ -1,13 +1,8 @@
 import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
-import gql from 'graphql-tag';
-import CodeInput from './CodeInput';
 
-export const previewMarkdownQuery = gql`
-query PreviewMarkdownQuery($markdown: String!) {
-  previewMarkdown(markdown: $markdown)
-}
-`;
+import CodeInput from './CodeInput';
+import { PreviewMarkdownQuery } from './previewQueries.gql';
 
 const MarkdownInput = props => (
   <ApolloConsumer>
@@ -17,7 +12,7 @@ const MarkdownInput = props => (
         mode="liquid-markdown"
         getPreviewContent={async (markdown) => {
           const response = await client.query({
-            query: previewMarkdownQuery,
+            query: PreviewMarkdownQuery,
             variables: { markdown },
             fetchPolicy: 'no-cache',
           });
