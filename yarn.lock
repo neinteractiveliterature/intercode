@@ -7877,9 +7877,9 @@ react-dnd-touch-backend@^0.3.13:
     invariant "^2.2.2"
     react-dnd "^2.5.4"
 
-react-dnd@*, react-dnd@^7.2.1:
-  version "7.2.1"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-7.2.1.tgz#1fa2b759bfd33402410ded2ed7b221d21af33a25"
+react-dnd@*, react-dnd@^7.3.1:
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-7.3.1.tgz#40591760d11d996ac859ac6312ea6f26dbfffd23"
   dependencies:
     dnd-core "^7.2.0"
     hoist-non-react-statics "^3.3.0"
