@@ -3,6 +3,7 @@
 mutation CreateFormWithJSON($formJSON: String!) {
   createFormWithJSON(input: { form_json: $formJSON }) {
     form {
+      id
       ...FormFields
     }
   }
@@ -11,6 +12,7 @@ mutation CreateFormWithJSON($formJSON: String!) {
 mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
   updateFormWithJSON(input: { id: $id, form_json: $formJSON }) {
     form {
+      id
       ...FormFields
     }
   }

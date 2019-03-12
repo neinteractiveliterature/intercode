@@ -1,7 +1,5 @@
-Types::TimespanWithValueType = GraphQL::ObjectType.define do
-  name 'TimespanWithValue'
-
-  field :start, Types::DateType
-  field :finish, Types::DateType
-  field :value, !types.String
+class Types::TimespanWithValueType < Types::BaseObject
+  field :start, Types::DateType, null: true
+  field :finish, Types::DateType, null: true
+  field :value, String, null: false
 end

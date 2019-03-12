@@ -1,3 +1,3 @@
 class Types::SignupsPaginationType < Types::PaginationType
-  entries_field Types::Signup
+  entries_field Types::SignupType
 end

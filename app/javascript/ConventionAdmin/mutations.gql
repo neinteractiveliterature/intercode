@@ -3,6 +3,7 @@
 mutation UpdateConvention($input: UpdateConventionInput!) {
   updateConvention(input: $input) {
     convention {
+      id
       ...ConventionAdminConventionFields
     }
   }

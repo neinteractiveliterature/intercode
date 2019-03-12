@@ -1,12 +1,11 @@
-Mutations::ForceConfirmSignup = GraphQL::Relay::Mutation.define do
-  name 'ForceConfirmSignup'
-  return_field :signup, Types::Signup
+class Mutations::ForceConfirmSignup < Mutations::BaseMutation
+  field :signup, Types::SignupType, null: false
 
-  input_field :id, !types.Int
-  input_field :bucket_key, !types.String
+  argument :id, Integer, required: true
+  argument :bucket_key, String, required: true, camelize: false
 
-  resolve ->(_obj, args, ctx) do
-    signup = ctx[:convention].signups.find(args[:id])
+  def resolve(**args)
+    signup = convention.signups.find(args[:id])
     signup.update!(state: 'confirmed', bucket_key: args[:bucket_key])
     { signup: signup }
   end

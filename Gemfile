@@ -10,7 +10,7 @@ gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'bootstrap_form'
 gem 'haml'
-gem 'webpacker', '~> 4.0.0.rc.rc.7'
+gem 'webpacker', '~> 4.0.2'
 gem 'webpacker-react', '~> 0.3.2'
 
 gem 'with_advisory_lock'
@@ -56,7 +56,7 @@ gem 'will_paginate'
 gem 'graphql'
 gem 'graphql-guard'
 gem 'graphql-batch'
-gem 'graphql-libgraphqlparser'
+# gem 'graphql-libgraphqlparser'  TODO: reenable this once it supports graphql 1.9
 gem 'apollo_upload_server', '2.0.0.beta.3'
 gem 'graphql-rails_logger', groups: [:development, :test]
 gem 'graphiql-rails', group: :development
@@ -94,7 +94,7 @@ gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
 gem 'rollbar-shoryuken'
-gem 'oj', '~> 3.7.8'
+gem 'oj', '~> 3.7.9'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

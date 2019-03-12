@@ -1,8 +1,6 @@
-Types::CmsNavigationItemInputType = GraphQL::InputObjectType.define do
-  name 'CmsNavigationItemInput'
-
-  input_field :title, types.String
-  input_field :position, types.Int
-  input_field :navigation_section_id, types.Int
-  input_field :page_id, types.Int
+class Types::CmsNavigationItemInputType < Types::BaseInputObject
+  argument :title, String, required: false
+  argument :position, Integer, required: false
+  argument :navigation_section_id, Integer, required: false, camelize: false
+  argument :page_id, Integer, required: false, camelize: false
 end

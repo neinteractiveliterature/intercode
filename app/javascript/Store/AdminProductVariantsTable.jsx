@@ -123,7 +123,7 @@ class AdminProductVariantsTable extends React.Component {
     const addVariantButton = (
       this.props.editing
         ? (
-          <button className="btn btn-primary btn-sm" onClick={this.addVariantClicked}>
+          <button type="button" className="btn btn-primary btn-sm" onClick={this.addVariantClicked}>
             Add variant
           </button>
         )

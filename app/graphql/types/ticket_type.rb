@@ -1,22 +1,14 @@
-Types::TicketType = GraphQL::ObjectType.define do
-  name 'Ticket'
+class Types::TicketType < Types::BaseObject
+  field :id, Integer, null: false
+  field :convention, Types::ConventionType, null: false
+  field :user_con_profile, Types::UserConProfileType, null: false
+  field :ticket_type, Types::TicketTypeType, null: false
+  field :payment_amount, Types::MoneyType, null: true
+  field :payment_note, String, null: true
+  field :charge_id, String, null: true
+  field :provided_by_event, Types::EventType, null: true
+  field :created_at, Types::DateType, null: false
+  field :updated_at, Types::DateType, null: false
 
-  field :id, !types.Int
-  field :convention, !Types::ConventionType
-  field :user_con_profile, !Types::UserConProfileType
-  field :ticket_type, !Types::TicketTypeType do
-    resolve -> (obj, _args, _ctx) {
-      RecordLoader.for(TicketType).load(obj.ticket_type_id)
-    }
-  end
-  field :payment_amount, Types::MoneyType
-  field :payment_note, types.String
-  field :charge_id, types.String
-  field :provided_by_event, Types::EventType do
-    resolve -> (obj, _args, _ctx) {
-      RecordLoader.for(Event).load(obj.provided_by_event_id)
-    }
-  end
-  field :created_at, !Types::DateType
-  field :updated_at, !Types::DateType
+  association_loaders Ticket, :ticket_type, :provided_by_event
 end

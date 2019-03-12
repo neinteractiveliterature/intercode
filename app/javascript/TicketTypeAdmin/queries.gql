@@ -1,8 +1,3 @@
-import gql from 'graphql-tag';
-
-const fragments = {};
-
-fragments.ticketType = gql`
 fragment TicketTypeAdmin_TicketTypeFields on TicketType {
   id
   name
@@ -23,13 +18,12 @@ fragment TicketTypeAdmin_TicketTypeFields on TicketType {
     }
   }
 }
-`;
 
-export const ticketTypesQuery = gql`
-query TicketTypesAdminTicketTypesQuery {
+query AdminTicketTypesQuery {
   convention {
     id
     ticket_types {
+      id
       ...TicketTypeAdmin_TicketTypeFields
     }
 
@@ -37,8 +31,3 @@ query TicketTypesAdminTicketTypesQuery {
     timezone_name
   }
 }
-
-${fragments.ticketType}
-`;
-
-export { fragments };

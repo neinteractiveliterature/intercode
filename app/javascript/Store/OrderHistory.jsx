@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import moment from 'moment-timezone';
 import { intersection } from 'lodash';
 import { Elements } from 'react-stripe-elements';
@@ -8,79 +7,15 @@ import { Elements } from 'react-stripe-elements';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 import LazyStripe from '../LazyStripe';
+import { OrderHistoryQuery } from './queries.gql';
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
 
-const orderHistoryQuery = gql`
-query OrderHistoryQuery {
-  convention {
-    id
-    name
-    timezone_name
-
-    staff_positions {
-      id
-      name
-      email
-    }
-  }
-
-  myProfile {
-    id
-    name_without_nickname
-
-    orders {
-      id
-      status
-      submitted_at
-
-      total_price {
-        fractional
-        currency_code
-      }
-
-      payment_amount {
-        fractional
-        currency_code
-      }
-
-      order_entries {
-        id
-        quantity
-
-        product {
-          id
-          name
-          image_url
-          payment_options
-        }
-
-        product_variant {
-          id
-          name
-          image_url
-        }
-
-        price_per_item {
-          fractional
-          currency_code
-        }
-
-        price {
-          fractional
-          currency_code
-        }
-      }
-    }
-  }
-}
-`;
-
-@graphql(orderHistoryQuery)
+@graphql(OrderHistoryQuery)
 @GraphQLQueryResultWrapper
 class OrderHistory extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(orderHistoryQuery).isRequired,
+    data: GraphQLResultPropType(OrderHistoryQuery).isRequired,
   }
 
   constructor(props) {
@@ -170,6 +105,7 @@ class OrderHistory extends React.Component {
         </div>
       </div>,
       <button
+        type="button"
         className="btn btn-sm btn-outline-success mt-2"
         key="pay-now-button"
         onClick={() => { this.payNowClicked(order); }}

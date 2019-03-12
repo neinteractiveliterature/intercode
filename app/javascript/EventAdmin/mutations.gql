@@ -3,6 +3,7 @@
 mutation CreateEvent($input: CreateEventInput!) {
   createEvent(input: $input) {
     event {
+      id
       ...EventFields
     }
   }
@@ -11,6 +12,7 @@ mutation CreateEvent($input: CreateEventInput!) {
 mutation CreateFillerEvent($input: CreateFillerEventInput!) {
   createFillerEvent(input: $input) {
     event {
+      id
       ...EventFields
     }
   }
@@ -37,6 +39,7 @@ mutation RestoreDroppedEvent($input: RestoreDroppedEventInput!) {
 mutation UpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
     event {
+      id
       ...EventFields
     }
   }
@@ -45,6 +48,7 @@ mutation UpdateEvent($input: UpdateEventInput!) {
 mutation CreateRun($input: CreateRunInput!) {
   createRun(input: $input) {
     run {
+      id
       ...RunFields
     }
   }
@@ -53,6 +57,7 @@ mutation CreateRun($input: CreateRunInput!) {
 mutation CreateMultipleRuns($input: CreateMultipleRunsInput!) {
   createMultipleRuns(input: $input) {
     runs {
+      id
       ...RunFields
     }
   }
@@ -61,6 +66,7 @@ mutation CreateMultipleRuns($input: CreateMultipleRunsInput!) {
 mutation UpdateRun($input: UpdateRunInput!) {
   updateRun(input: $input) {
     run {
+      id
       ...RunFields
     }
   }
@@ -69,6 +75,7 @@ mutation UpdateRun($input: UpdateRunInput!) {
 mutation DeleteRun($input: DeleteRunInput!) {
   deleteRun(input: $input) {
     run {
+      id
       ...RunFields
     }
   }
@@ -77,6 +84,7 @@ mutation DeleteRun($input: DeleteRunInput!) {
 mutation CreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
+      id
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -85,6 +93,7 @@ mutation CreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventPro
 mutation DeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
+      id
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -93,6 +102,7 @@ mutation DeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventPro
 mutation UpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
+      id
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -101,6 +111,7 @@ mutation UpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventPro
 mutation UpdateEventAdminNotes($eventId: Int!, $adminNotes: String!) {
   updateEventAdminNotes(input: { id: $eventId, admin_notes: $adminNotes }) {
     event {
+      id
       ...EventFields
     }
   }

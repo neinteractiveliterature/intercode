@@ -19,6 +19,7 @@ fragment EventPageRunFields on Run {
   }
 
   my_signups {
+    id
     ...MySignupFields
   }
 }
@@ -33,6 +34,7 @@ query EventPageQuery($eventId: Int!) {
   }
 
   convention {
+    id
     ...CommonConventionData
   }
 
@@ -53,6 +55,7 @@ query EventPageQuery($eventId: Int!) {
     }
 
     form {
+      id
       form_api_json
     }
 
@@ -83,6 +86,7 @@ query EventPageQuery($eventId: Int!) {
     }
 
     runs {
+      id
       ...EventPageRunFields
     }
   }

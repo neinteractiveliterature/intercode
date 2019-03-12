@@ -1,27 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
+
+import { AdminTicketTypesQuery } from './queries.gql';
 import buildTicketTypeInput from './buildTicketTypeInput';
+import { CreateTicketType } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
-import { fragments, ticketTypesQuery } from './queries';
-
-const createTicketTypeMutation = gql`
-mutation CreateTicketType($input: CreateTicketTypeInput!) {
-  createTicketType(input: $input) {
-    ticket_type {
-      ...TicketTypeAdmin_TicketTypeFields
-    }
-  }
-}
-
-${fragments.ticketType}
-`;
 
 @graphql(
-  createTicketTypeMutation,
+  CreateTicketType,
   {
     props: ({ mutate }) => ({
       createTicketType: ticketType => mutate({
@@ -34,9 +23,9 @@ ${fragments.ticketType}
           proxy,
           { data: { createTicketType: { ticket_type: newTicketType } } },
         ) => {
-          const data = proxy.readQuery({ query: ticketTypesQuery });
+          const data = proxy.readQuery({ query: AdminTicketTypesQuery });
           data.convention.ticket_types.push(newTicketType);
-          proxy.writeQuery({ query: ticketTypesQuery, data });
+          proxy.writeQuery({ query: AdminTicketTypesQuery, data });
         },
       }),
     }),
@@ -98,7 +87,7 @@ class NewTicketType extends React.Component {
         timezone={this.props.timezoneName}
         onChange={this.ticketTypeChanged}
       />
-      <button className="btn btn-primary" onClick={this.saveClicked}>Save</button>
+      <button type="button" className="btn btn-primary" onClick={this.saveClicked}>Save</button>
       <ErrorDisplay graphQLError={this.state.error} />
     </div>
   );

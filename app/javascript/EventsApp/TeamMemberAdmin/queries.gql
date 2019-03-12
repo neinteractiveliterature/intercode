@@ -24,6 +24,7 @@ fragment TeamMemberUserConProfileFields on UserConProfile {
   name_inverted
 
   ticket {
+    id
     ...TeamMemberTicketFields
   }
 }
@@ -36,12 +37,14 @@ fragment TeamMemberFields on TeamMember {
   receive_signup_email
 
   user_con_profile {
+    id
     ...TeamMemberUserConProfileFields
   }
 }
 
 query TeamMembersQuery($eventId: Int!) {
   convention {
+    id
     ...CommonConventionData
 
     ticket_types {
@@ -65,13 +68,16 @@ query TeamMembersQuery($eventId: Int!) {
     }
 
     provided_tickets {
+      id
       ...TeamMemberTicketFields
     }
 
     team_members {
+      id
       ...TeamMemberFields
 
       user_con_profile {
+        id
         day_phone
         evening_phone
         best_call_time
@@ -87,6 +93,7 @@ query TeamMemberUserConProfilesQuery($name: String) {
     id
     user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
       entries {
+        id
         ...TeamMemberUserConProfileFields
       }
     }

@@ -2,6 +2,7 @@
 
 query EventListCommonDataQuery {
   convention {
+    id
     ...CommonConventionData
   }
 
@@ -10,8 +11,9 @@ query EventListCommonDataQuery {
   }
 }
 
-query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput]) {
+query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
   convention {
+    id
     ...CommonConventionData
 
     events_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {

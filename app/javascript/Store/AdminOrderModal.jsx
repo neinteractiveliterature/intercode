@@ -2,48 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
-import { adminOrderFragment } from './queries';
+
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-
-const markOrderPaidMutation = gql`
-mutation MarkOrderPaid($orderId: Int!) {
-  markOrderPaid(input: { id: $orderId }) {
-    order {
-      ...AdminOrderFieldsFragment
-    }
-  }
-}
-
-${adminOrderFragment}
-`;
-
-const cancelOrderMutation = gql`
-mutation CancelOrder($orderId: Int!) {
-  cancelOrder(input: { id: $orderId }) {
-    order {
-      ...AdminOrderFieldsFragment
-    }
-  }
-}
-
-${adminOrderFragment}
-`;
-
-const updateOrderMutation = gql`
-mutation AdminUpdateOrder($orderId: Int!, $paymentNote: String) {
-  updateOrder(input: { id: $orderId, order: { payment_note: $paymentNote } }) {
-    order {
-      ...AdminOrderFieldsFragment
-    }
-  }
-}
-
-${adminOrderFragment}
-`;
+import { MarkOrderPaid, AdminUpdateOrder, CancelOrder } from './mutations.gql';
 
 class AdminOrderModal extends React.Component {
   static propTypes = {
@@ -94,15 +58,15 @@ class AdminOrderModal extends React.Component {
       prompt = (
         <div>
           <p>
-Are you sure you want to cancel order #
+            Are you sure you want to cancel order #
             {this.props.order.id}
-?
+            ?
           </p>
           <p>
             This will issue a refund back to
             {' '}
             {this.props.order.user_con_profile.name_without_nickname}
-&apos;s payment card.
+            &apos;s payment card.
           </p>
         </div>
       );
@@ -111,9 +75,9 @@ Are you sure you want to cancel order #
       prompt = (
         <div>
           <p>
-Are you sure you want to cancel order #
+            Are you sure you want to cancel order #
             {this.props.order.id}
-?
+            ?
           </p>
           <p>
             Because there is
@@ -121,7 +85,7 @@ Are you sure you want to cancel order #
             {' '}
             {this.props.order.user_con_profile.name_without_nickname}
             {' '}
-will not automatically
+            will not automatically
             receive a refund, so they will have to be refunded manually.
           </p>
         </div>
@@ -141,9 +105,10 @@ Are you sure you want to cancel order #
     }
 
     return (
-      <Mutation mutation={cancelOrderMutation}>
+      <Mutation mutation={CancelOrder}>
         {cancelOrder => (
           <button
+            type="button"
             className="btn btn-sm btn-outline-danger"
             onClick={() => {
               this.beginConfirm(
@@ -163,9 +128,10 @@ Are you sure you want to cancel order #
     if (this.props.order.status === 'unpaid') {
       return (
         <div>
-          <Mutation mutation={markOrderPaidMutation}>
+          <Mutation mutation={MarkOrderPaid}>
             {markOrderPaid => (
               <button
+                type="button"
                 className="btn btn-sm btn-outline-danger mr-1"
                 onClick={() => {
                   this.beginConfirm(
@@ -234,7 +200,7 @@ Are you sure you want to cancel order #
 
           <dt className="col-md-3">Payment note</dt>
           <dd className="col-md-9">
-            <Mutation mutation={updateOrderMutation}>
+            <Mutation mutation={AdminUpdateOrder}>
               {updateOrder => (
                 <InPlaceEditor
                   value={order.payment_note}
@@ -274,7 +240,7 @@ Are you sure you want to cancel order #
           {this.renderBody()}
         </div>
         <div className="modal-footer">
-          <button className="btn btn-primary" onClick={this.props.closeModal}>Close</button>
+          <button type="button" className="btn btn-primary" onClick={this.props.closeModal}>Close</button>
         </div>
       </Modal>
 

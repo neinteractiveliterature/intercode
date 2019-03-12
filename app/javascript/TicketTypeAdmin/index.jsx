@@ -9,13 +9,13 @@ import GraphQLResultPropType from '../GraphQLResultPropType';
 import EditTicketType from './EditTicketType';
 import NewTicketType from './NewTicketType';
 import TicketTypesList from './TicketTypesList';
-import { ticketTypesQuery } from './queries';
+import { AdminTicketTypesQuery } from './queries.gql';
 
-@graphql(ticketTypesQuery)
+@graphql(AdminTicketTypesQuery)
 @GraphQLQueryResultWrapper
 class TicketTypeAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(ticketTypesQuery).isRequired,
+    data: GraphQLResultPropType(AdminTicketTypesQuery).isRequired,
     basename: PropTypes.string.isRequired,
   }
 

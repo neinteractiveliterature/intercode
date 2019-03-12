@@ -1,8 +1,6 @@
-Types::EventProposalFiltersInputType = GraphQL::InputObjectType.define do
-  name 'EventProposalFiltersInput'
-
-  input_field :title, types.String
-  input_field :owner, types.String
-  input_field :status, types[types.String]
-  input_field :event_category, types[types.Int]
+class Types::EventProposalFiltersInputType < Types::BaseInputObject
+  argument :title, String, required: false
+  argument :owner, String, required: false
+  argument :status, [String, null: true], required: false
+  argument :event_category, [Integer, null: true], required: false, camelize: false
 end

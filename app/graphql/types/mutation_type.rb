@@ -68,19 +68,19 @@ class Types::MutationType < Types::BaseObject
 
   ### CmsNavigationItem
 
-  field :createCmsNavigationItem, field: Mutations::CreateCmsNavigationItem.field do
+  field :createCmsNavigationItem, mutation: Mutations::CreateCmsNavigationItem do
     guard(guard_for_create_cms_model(CmsNavigationItem))
   end
 
-  field :updateCmsNavigationItem, field: Mutations::UpdateCmsNavigationItem.field do
+  field :updateCmsNavigationItem, mutation: Mutations::UpdateCmsNavigationItem do
     guard(guard_for_cms_model(CmsNavigationItem, :update))
   end
 
-  field :deleteCmsNavigationItem, field: Mutations::DeleteCmsNavigationItem.field do
+  field :deleteCmsNavigationItem, mutation: Mutations::DeleteCmsNavigationItem do
     guard(guard_for_cms_model(CmsNavigationItem, :destroy))
   end
 
-  field :sortCmsNavigationItems, field: Mutations::SortCmsNavigationItems.field do
+  field :sortCmsNavigationItems, mutation: Mutations::SortCmsNavigationItems do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:sort, CmsNavigationItem.new(parent: ctx[:convention]))
     }
@@ -98,7 +98,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Convention
 
-  field :updateConvention, field: Mutations::UpdateConvention.field do
+  field :updateConvention, mutation: Mutations::UpdateConvention do
     guard ->(_obj, args, ctx) {
       convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
       ctx[:current_ability].can?(:update, convention)
@@ -107,23 +107,23 @@ class Types::MutationType < Types::BaseObject
 
   ### Event
 
-  field :createEvent, field: Mutations::CreateEvent.field do
+  field :createEvent, mutation: Mutations::CreateEvent do
     guard(guard_for_create_convention_associated_model(:events))
   end
 
-  field :createFillerEvent, field: Mutations::CreateFillerEvent.field do
+  field :createFillerEvent, mutation: Mutations::CreateFillerEvent do
     guard(guard_for_create_convention_associated_model(:events))
   end
 
-  field :dropEvent, field: Mutations::DropEvent.field do
+  field :dropEvent, mutation: Mutations::DropEvent do
     guard(guard_for_convention_associated_model(:events, :drop))
   end
 
-  field :restoreDroppedEvent, field: Mutations::RestoreDroppedEvent.field do
+  field :restoreDroppedEvent, mutation: Mutations::RestoreDroppedEvent do
     guard(guard_for_convention_associated_model(:events, :restore))
   end
 
-  field :updateEvent, field: Mutations::UpdateEvent.field do
+  field :updateEvent, mutation: Mutations::UpdateEvent do
     guard(guard_for_convention_associated_model(:events, :update))
   end
 
@@ -152,11 +152,11 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_convention_associated_model(:event_proposals))
   end
 
-  field :updateEventProposal, field: Mutations::UpdateEventProposal.field do
+  field :updateEventProposal, mutation: Mutations::UpdateEventProposal do
     guard(guard_for_convention_associated_model(:event_proposals, :update))
   end
 
-  field :submitEventProposal, field: Mutations::SubmitEventProposal.field do
+  field :submitEventProposal, mutation: Mutations::SubmitEventProposal do
     guard(guard_for_convention_associated_model(:event_proposals, :submit))
   end
 
@@ -180,7 +180,7 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_create_convention_associated_model(:forms))
   end
 
-  field :updateFormWithJSON, field: Mutations::UpdateFormWithJSON.field do
+  field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON do
     guard(guard_for_convention_associated_model(:forms, :update))
   end
 
@@ -190,79 +190,79 @@ class Types::MutationType < Types::BaseObject
 
   ### MaximumEventProvidedTicketsOverride
 
-  create_override_field = Mutations::CreateMaximumEventProvidedTicketsOverride.field
-  field :createMaximumEventProvidedTicketsOverride, field: create_override_field do
+  create_override = Mutations::CreateMaximumEventProvidedTicketsOverride
+  field :createMaximumEventProvidedTicketsOverride, mutation: create_override do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:create, event.maximum_event_provided_tickets_overrides.new)
     }
   end
 
-  update_override_field = Mutations::UpdateMaximumEventProvidedTicketsOverride.field
-  field :updateMaximumEventProvidedTicketsOverride, field: update_override_field do
+  update_override = Mutations::UpdateMaximumEventProvidedTicketsOverride
+  field :updateMaximumEventProvidedTicketsOverride, mutation: update_override do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :update))
   end
 
-  delete_override_field = Mutations::DeleteMaximumEventProvidedTicketsOverride.field
-  field :deleteMaximumEventProvidedTicketsOverride, field: delete_override_field do
+  delete_override = Mutations::DeleteMaximumEventProvidedTicketsOverride
+  field :deleteMaximumEventProvidedTicketsOverride, mutation: delete_override do
     guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :destroy))
   end
 
   ### Order / OrderEntry
 
-  field :addOrderEntryToCurrentPendingOrder, field: Mutations::AddOrderEntryToCurrentPendingOrder.field do
+  field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder do
     guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
-  field :updateOrderEntry, field: Mutations::UpdateOrderEntry.field do
+  field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry do
     guard(guard_for_model_with_id(OrderEntry, :update))
   end
 
-  field :deleteOrderEntry, field: Mutations::DeleteOrderEntry.field do
+  field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry do
     guard(guard_for_model_with_id(OrderEntry, :destroy))
   end
 
-  field :submitOrder, field: Mutations::SubmitOrder.field do
+  field :submitOrder, mutation: Mutations::SubmitOrder do
     guard(guard_for_model_with_id(Order, :submit))
   end
 
-  field :markOrderPaid, field: Mutations::MarkOrderPaid.field do
+  field :markOrderPaid, mutation: Mutations::MarkOrderPaid do
     guard(guard_for_model_with_id(Order, :update))
   end
 
-  field :updateOrder, field: Mutations::UpdateOrder.field do
+  field :updateOrder, mutation: Mutations::UpdateOrder do
     guard(guard_for_model_with_id(Order, :update))
   end
 
-  field :cancelOrder, field: Mutations::CancelOrder.field do
+  field :cancelOrder, mutation: Mutations::CancelOrder do
     guard(guard_for_model_with_id(Order, :cancel))
   end
 
   ### Page
 
-  field :deletePage, field: Mutations::DeletePage.field do
+  field :deletePage, mutation: Mutations::DeletePage do
     guard(guard_for_cms_model(Page, :destroy))
   end
 
   ### Product
 
-  field :createProduct, field: Mutations::CreateProduct.field do
+  field :createProduct, mutation: Mutations::CreateProduct do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:create, Product.new(convention: ctx[:convention]))
     }
   end
 
-  field :updateProduct, field: Mutations::UpdateProduct.field do
+  field :updateProduct, mutation: Mutations::UpdateProduct do
     guard(guard_for_convention_associated_model(:products, :update))
   end
 
-  field :deleteProduct, field: Mutations::DeleteProduct.field do
+  field :deleteProduct, mutation: Mutations::DeleteProduct do
     guard(guard_for_convention_associated_model(:products, :destroy))
   end
 
   ### Room
 
-  field :createRoom, field: Mutations::CreateRoom.field do
+  field :createRoom, mutation: Mutations::CreateRoom do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -271,11 +271,11 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :updateRoom, field: Mutations::UpdateRoom.field do
+  field :updateRoom, mutation: Mutations::UpdateRoom do
     guard(guard_for_convention_associated_model(:rooms, :update))
   end
 
-  field :deleteRoom, field: Mutations::DeleteRoom.field do
+  field :deleteRoom, mutation: Mutations::DeleteRoom do
     guard(guard_for_convention_associated_model(:rooms, :destroy))
   end
 
@@ -289,11 +289,11 @@ class Types::MutationType < Types::BaseObject
 
   ### Run
 
-  field :createRun, field: Mutations::CreateRun.field do
+  field :createRun, mutation: Mutations::CreateRun do
     guard(guard_for_create_event_associated_model(:runs, :run))
   end
 
-  field :createMultipleRuns, field: Mutations::CreateMultipleRuns.field do
+  field :createMultipleRuns, mutation: Mutations::CreateMultipleRuns do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       args.to_h['runs'].all? do |run_args|
@@ -302,11 +302,11 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteRun, field: Mutations::DeleteRun.field do
+  field :deleteRun, mutation: Mutations::DeleteRun do
     guard(guard_for_convention_associated_model(:runs, :destroy))
   end
 
-  field :updateRun, field: Mutations::UpdateRun.field do
+  field :updateRun, mutation: Mutations::UpdateRun do
     guard(guard_for_convention_associated_model(:runs, :update))
   end
 
@@ -332,21 +332,21 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :forceConfirmSignup, field: Mutations::ForceConfirmSignup.field do
+  field :forceConfirmSignup, mutation: Mutations::ForceConfirmSignup do
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
-  field :updateSignupBucket, field: Mutations::UpdateSignupBucket.field do
+  field :updateSignupBucket, mutation: Mutations::UpdateSignupBucket do
     guard(guard_for_convention_associated_model(:signups, :update_bucket))
   end
 
-  field :updateSignupCounted, field: Mutations::UpdateSignupCounted.field do
+  field :updateSignupCounted, mutation: Mutations::UpdateSignupCounted do
     guard(guard_for_convention_associated_model(:signups, :update))
   end
 
   ### StaffPosition
 
-  field :createStaffPosition, field: Mutations::CreateStaffPosition.field do
+  field :createStaffPosition, mutation: Mutations::CreateStaffPosition do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -355,7 +355,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :updateStaffPosition, field: Mutations::UpdateStaffPosition.field do
+  field :updateStaffPosition, mutation: Mutations::UpdateStaffPosition do
     guard(guard_for_convention_associated_model(:staff_positions, :update))
   end
 
@@ -369,37 +369,37 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteStaffPosition, field: Mutations::DeleteStaffPosition.field do
+  field :deleteStaffPosition, mutation: Mutations::DeleteStaffPosition do
     guard(guard_for_convention_associated_model(:staff_positions, :destroy))
   end
 
   ### TeamMember
 
-  field :createTeamMember, field: Mutations::CreateTeamMember.field do
+  field :createTeamMember, mutation: Mutations::CreateTeamMember do
     guard(guard_for_create_event_associated_model(:team_members, :team_member))
   end
 
-  field :deleteTeamMember, field: Mutations::DeleteTeamMember.field do
+  field :deleteTeamMember, mutation: Mutations::DeleteTeamMember do
     guard(guard_for_model_with_id(TeamMember, :destroy))
   end
 
-  field :updateTeamMember, field: Mutations::UpdateTeamMember.field do
+  field :updateTeamMember, mutation: Mutations::UpdateTeamMember do
     guard(guard_for_model_with_id(TeamMember, :update))
   end
 
   ### Ticket
 
-  field :deleteTicket, field: Mutations::DeleteTicket.field do
+  field :deleteTicket, mutation: Mutations::DeleteTicket do
     guard(guard_for_model_with_id(Ticket, :destroy))
   end
 
-  field :purchaseTicket, field: Mutations::PurchaseTicket.field do
+  field :purchaseTicket, mutation: Mutations::PurchaseTicket do
     guard -> (_obj, _args, ctx) do
       ctx[:user_con_profile]
     end
   end
 
-  field :provideEventTicket, field: Mutations::ProvideEventTicket.field do
+  field :provideEventTicket, mutation: Mutations::ProvideEventTicket do
     guard -> (_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
       ctx[:current_ability].can?(:update, event.team_members.new)
@@ -416,7 +416,7 @@ class Types::MutationType < Types::BaseObject
 
   ### TicketType
 
-  field :createTicketType, field: Mutations::CreateTicketType.field do
+  field :createTicketType, mutation: Mutations::CreateTicketType do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
         :create,
@@ -425,11 +425,11 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteTicketType, field: Mutations::DeleteTicketType.field do
+  field :deleteTicketType, mutation: Mutations::DeleteTicketType do
     guard(guard_for_convention_associated_model(:ticket_types, :destroy))
   end
 
-  field :updateTicketType, field: Mutations::UpdateTicketType.field do
+  field :updateTicketType, mutation: Mutations::UpdateTicketType do
     guard(guard_for_convention_associated_model(:ticket_types, :update))
   end
 
@@ -449,13 +449,13 @@ class Types::MutationType < Types::BaseObject
 
   ### UserConProfile
 
-  field :createUserConProfile, field: Mutations::CreateUserConProfile.field do
+  field :createUserConProfile, mutation: Mutations::CreateUserConProfile do
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:create, UserConProfile.new(convention: ctx[:convention]))
     }
   end
 
-  field :updateUserConProfile, field: Mutations::UpdateUserConProfile.field do
+  field :updateUserConProfile, mutation: Mutations::UpdateUserConProfile do
     guard ->(_obj, args, ctx) {
       user_con_profile = ctx[:convention].user_con_profiles.find(args[:id])
       if args[:user_con_profile][:privileges]
@@ -466,7 +466,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteUserConProfile, field: Mutations::DeleteUserConProfile.field do
+  field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile do
     guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
 end

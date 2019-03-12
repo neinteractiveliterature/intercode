@@ -1,19 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 
+import { DefaultUsersQuery } from './selectDefaultQueries.gql';
 import GraphQLAsyncSelect from './GraphQLAsyncSelect';
-
-export const DEFAULT_USERS_QUERY = gql`
-query DefaultUsersQuery($name: String) {
-  users_paginated(filters: { name: $name }, per_page: 50) {
-    entries {
-      id
-      name
-    }
-  }
-}
-`;
 
 class UserSelect extends React.PureComponent {
   static propTypes = {
@@ -34,7 +23,7 @@ class UserSelect extends React.PureComponent {
       getVariables={inputValue => ({ name: inputValue })}
       getOptionValue={option => option.id}
       getOptionLabel={option => option.name}
-      query={this.props.usersQuery || DEFAULT_USERS_QUERY}
+      query={this.props.usersQuery || DefaultUsersQuery}
       {...this.props}
     />
   )

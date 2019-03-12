@@ -1,49 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import moment from 'moment-timezone';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { SignupSpySignupsQuery } from './queries.gql';
 import TableHeader from '../Tables/TableHeader';
-
-const signupsQuery = gql`
-query SignupSpySignupsQuery($page: Int, $perPage: Int) {
-  convention {
-    id
-    timezone_name
-
-    signup_spy_paginated(page: $page, per_page: $perPage, sort: [{ field: "created_at", desc: true }]) {
-      total_entries
-      total_pages
-      current_page
-      per_page
-
-      entries {
-        id
-        state
-        counted
-        choice
-        created_at
-
-        run {
-          id
-
-          event {
-            id
-            title
-          }
-        }
-
-        user_con_profile {
-          id
-          name_inverted
-        }
-      }
-    }
-  }
-}
-`;
 
 const ReactTableInstanceContext = React.createContext({ instance: null });
 
@@ -120,7 +82,7 @@ class SignupSpyTable extends React.Component {
                 getData={({ data }) => data.convention.signup_spy_paginated.entries}
                 getPages={({ data }) => data.convention.signup_spy_paginated.total_pages}
                 getPossibleColumns={this.getPossibleColumns}
-                query={signupsQuery}
+                query={SignupSpySignupsQuery}
                 storageKeyPrefix="signupSpy"
                 className="-striped -highlight"
                 renderHeader={headerProps => (

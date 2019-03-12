@@ -1,0 +1,44 @@
+#import "./queries.gql"
+
+mutation CreateUserActivityAlert(
+  $userActivityAlert: UserActivityAlertInput!,
+  $alertDestinations: [AlertDestinationInput!]!,
+) {
+  createUserActivityAlert(input: {
+    user_activity_alert: $userActivityAlert,
+    alert_destinations: $alertDestinations
+  }) {
+    user_activity_alert {
+      id
+      ...UserActivityAlertFields
+    }
+  }
+}
+
+mutation UpdateUserActivityAlert(
+  $id: Int!,
+  $userActivityAlert: UserActivityAlertInput!,
+  $addAlertDestinations: [AlertDestinationInput!]!,
+  $removeAlertDestinationIds: [Int!]!
+) {
+  updateUserActivityAlert(input: {
+    id: $id,
+    user_activity_alert: $userActivityAlert,
+    add_alert_destinations: $addAlertDestinations,
+    remove_alert_destination_ids: $removeAlertDestinationIds
+  }) {
+    user_activity_alert {
+      id
+      ...UserActivityAlertFields
+    }
+  }
+}
+
+mutation DeleteUserActivityAlert($id: Int!) {
+  deleteUserActivityAlert(input: { id: $id }) {
+    user_activity_alert {
+      id
+      ...UserActivityAlertFields
+    }
+  }
+}

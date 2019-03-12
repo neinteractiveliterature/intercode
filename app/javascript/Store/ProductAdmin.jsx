@@ -1,15 +1,15 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import AdminProductCard from './AdminProductCard';
-import { productsQuery } from './queries';
+import { AdminProductsQuery } from './queries.gql';
 import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
 import GraphQLResultPropType from '../GraphQLResultPropType';
 
-@graphql(productsQuery)
+@graphql(AdminProductsQuery)
 @GraphQLQueryResultWrapper
 class ProductAdmin extends React.Component {
   static propTypes = {
-    data: GraphQLResultPropType(productsQuery).isRequired,
+    data: GraphQLResultPropType(AdminProductsQuery).isRequired,
   }
 
   constructor(props) {
@@ -40,7 +40,7 @@ class ProductAdmin extends React.Component {
   removeNewProduct = (product) => {
     this.setState(prevState => ({
       newProducts: prevState.newProducts
-        .filter(newProduct => newProduct.generatedId !== product.generatedId)
+        .filter(newProduct => newProduct.generatedId !== product.generatedId),
     }));
   }
 
