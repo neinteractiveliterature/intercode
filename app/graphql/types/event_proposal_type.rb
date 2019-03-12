@@ -1,47 +1,32 @@
-Types::EventProposalType = GraphQL::ObjectType.define do
-  name 'EventProposal'
-
-  field :id, !types.Int
-  field :form_response_attrs_json, types.String do
-    resolve -> (obj, _args, ctx) do
-      AssociationLoader.for(EventProposal, :event_category).load(obj).then do |event_category|
-        AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category)
-      end.then do |event_proposal_form|
-        FormResponsePresenter.new(event_proposal_form, obj).as_json.to_json
-      end
-    end
-  end
-  field :title, types.String
-  field :status, !types.String
-  field :convention, !Types::ConventionType
-  field :submitted_at, !Types::DateType
-  field :created_at, !Types::DateType
-  field :updated_at, !Types::DateType
-
-  field :registration_policy, Types::RegistrationPolicyType
-  field :length_seconds, types.Int
-
-  field :owner, !Types::UserConProfileType do
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(EventProposal, :owner).load(obj)
+class Types::EventProposalType < Types::BaseObject
+  field :id, Integer, null: false
+  field :title, String, null: true
+  field :status, String, null: false
+  field :convention, Types::ConventionType, null: false
+  field :submitted_at, Types::DateType, null: false
+  field :created_at, Types::DateType, null: false
+  field :updated_at, Types::DateType, null: false
+  field :registration_policy, Types::RegistrationPolicyType, null: true
+  field :length_seconds, Integer, null: true
+  field :admin_notes, String, null: true do
+    guard -> (graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read_admin_notes, graphql_object.object)
     end
   end
 
-  field :event, Types::EventType do
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(EventProposal, :event).load(obj)
-    end
-  end
+  field :owner, Types::UserConProfileType, null: false
+  field :event, Types::EventType, null: true
+  field :event_category, Types::EventCategoryType, null: false
 
-  field :event_category, Types::EventCategoryType.to_non_null_type do
-    resolve -> (obj, _args, _ctx) do
-      AssociationLoader.for(EventProposal, :event_category).load(obj)
-    end
-  end
+  association_loaders EventProposal, :owner, :event, :event_category
 
-  field :admin_notes, types.String do
-    guard -> (obj, _args, ctx) do
-      ctx[:current_ability].can?(:read_admin_notes, obj)
+  field :form_response_attrs_json, String, null: true
+
+  def form_response_attrs_json
+    AssociationLoader.for(EventProposal, :event_category).load(object).then do |event_category|
+      AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category)
+    end.then do |event_proposal_form|
+      FormResponsePresenter.new(event_proposal_form, object).as_json.to_json
     end
   end
 end

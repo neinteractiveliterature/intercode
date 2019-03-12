@@ -1,14 +1,13 @@
-Mutations::UpdateStaffPosition = GraphQL::Relay::Mutation.define do
-  name 'UpdateStaffPosition'
-  return_field :staff_position, Types::StaffPositionType
+class Mutations::UpdateStaffPosition < Mutations::BaseMutation
+  field :staff_position, Types::StaffPositionType, null: false
 
-  input_field :id, !types.Int
-  input_field :staff_position, !Types::StaffPositionInputType
+  argument :id, Integer, required: true
+  argument :staff_position, Types::StaffPositionInputType, required: true, camelize: false
 
-  resolve ->(_obj, args, ctx) {
-    staff_position = ctx[:convention].staff_positions.find(args[:id])
+  def resolve(**args)
+    staff_position = convention.staff_positions.find(args[:id])
     staff_position.update!(args[:staff_position].to_h)
 
     { staff_position: staff_position }
-  }
+  end
 end

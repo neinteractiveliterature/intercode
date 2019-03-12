@@ -1,7 +1,5 @@
-Types::TimespanWithMoneyValueType = GraphQL::ObjectType.define do
-  name 'TimespanWithMoneyValue'
-
-  field :start, Types::DateType
-  field :finish, Types::DateType
-  field :value, !Types::MoneyType
+class Types::TimespanWithMoneyValueType < Types::BaseObject
+  field :start, Types::DateType, null: true
+  field :finish, Types::DateType, null: true
+  field :value, Types::MoneyType, null: false
 end

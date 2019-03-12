@@ -3,6 +3,7 @@
 mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
   createStaffPosition(input: $input) {
     staff_position {
+      id
       ...StaffPositionFields
     }
   }
@@ -11,6 +12,7 @@ mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
 mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
   updateStaffPosition(input: $input) {
     staff_position {
+      id
       ...StaffPositionFields
     }
   }
@@ -27,6 +29,7 @@ mutation UpdateStaffPositionPermissions(
     revoke_permissions: $revokePermissions
   }) {
     staff_position {
+      id
       ...StaffPositionFields
     }
   }

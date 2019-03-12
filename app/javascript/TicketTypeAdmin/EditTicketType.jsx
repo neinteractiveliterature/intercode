@@ -1,27 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { withRouter } from 'react-router-dom';
+
 import buildTicketTypeInput from './buildTicketTypeInput';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
 import TicketTypePropType from './TicketTypePropType';
-import { fragments } from './queries';
+import { UpdateTicketType } from './mutations.gql';
 
-const updateTicketTypeMutation = gql`
-mutation UpdateTicketType($input: UpdateTicketTypeInput!) {
-  updateTicketType(input: $input) {
-    ticket_type {
-      ...TicketTypeAdmin_TicketTypeFields
-    }
-  }
-}
-
-${fragments.ticketType}
-`;
-
-@graphql(updateTicketTypeMutation, {
+@graphql(UpdateTicketType, {
   props: ({ mutate }) => ({
     updateTicketType: ticketType => mutate({
       variables: {
@@ -83,7 +71,9 @@ type &quot;
         timezone={this.props.timezoneName}
         onChange={this.ticketTypeChanged}
       />
-      <button className="btn btn-primary" onClick={this.saveClicked}>Save changes</button>
+      <button type="button" className="btn btn-primary" onClick={this.saveClicked}>
+        Save changes
+      </button>
       <ErrorDisplay graphQLError={this.state.error} />
     </div>
   );

@@ -25,6 +25,7 @@ query FormAdminQuery {
     name
 
     forms {
+      id
       ...FormFields
     }
   }

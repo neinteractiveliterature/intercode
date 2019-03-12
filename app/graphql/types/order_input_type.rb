@@ -1,4 +1,3 @@
-Types::OrderInputType = GraphQL::InputObjectType.define do
-  name 'OrderInput'
-  input_field :payment_note, types.String
+class Types::OrderInputType < Types::BaseInputObject
+  argument :payment_note, String, required: false, camelize: false
 end

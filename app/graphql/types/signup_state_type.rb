@@ -1,6 +1,4 @@
-Types::SignupStateType = GraphQL::EnumType.define do
-  name 'SignupState'
-
+class Types::SignupStateType < Types::BaseEnum
   value('confirmed')
   value('waitlisted')
   value('withdrawn')

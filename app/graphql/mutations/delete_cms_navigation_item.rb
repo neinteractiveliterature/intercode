@@ -1,16 +1,15 @@
-Mutations::DeleteCmsNavigationItem = GraphQL::Relay::Mutation.define do
-  name 'DeleteCmsNavigationItem'
-  return_field :cms_navigation_item, Types::CmsNavigationItemType
+class Mutations::DeleteCmsNavigationItem < Mutations::BaseMutation
+  field :cms_navigation_item, Types::CmsNavigationItemType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    cms_navigation_item = if ctx[:convention]
-      ctx[:convention].cms_navigation_items.find(args[:id])
+  def resolve(**args)
+    cms_navigation_item = if convention
+      convention.cms_navigation_items.find(args[:id])
     else
       CmsNavigationItem.global.find(args[:id])
     end
     cms_navigation_item.destroy!
     { cms_navigation_item: cms_navigation_item }
-  }
+  end
 end

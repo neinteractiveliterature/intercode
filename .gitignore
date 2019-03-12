@@ -48,3 +48,6 @@ cookbooks
 
 # Hey, Threeman is pretty great.  Have you heard about it?  I recommend it a lot.
 /.threeman
+
+# eslint keeps a local cache of what's changed
+/.eslintcache

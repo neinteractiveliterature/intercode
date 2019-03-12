@@ -5,9 +5,11 @@
 mutation ChangeSignupBucket($signupId: Int!, $bucketKey: String!) {
   updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {
+      id
       ...SignupFields
 
       run {
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -18,9 +20,11 @@ mutation ChangeSignupBucket($signupId: Int!, $bucketKey: String!) {
 mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
   forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {
+      id
       ...SignupFields
 
       run {
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -31,9 +35,11 @@ mutation ForceConfirmSignup($signupId: Int!, $bucketKey: String!) {
 mutation UpdateSignupCounted($signupId: Int!, $counted: Boolean!) {
   updateSignupCounted(input: { id: $signupId, counted: $counted }) {
     signup {
+      id
       ...SignupFields
 
       run {
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }

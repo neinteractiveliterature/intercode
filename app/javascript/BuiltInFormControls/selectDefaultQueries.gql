@@ -1,0 +1,32 @@
+query DefaultEventsQuery($title: String) {
+  convention {
+    id
+    events_paginated(filters: { title: $title }, per_page: 50) {
+      entries {
+        id
+        title
+      }
+    }
+  }
+}
+
+query DefaultUserConProfilesQuery($name: String) {
+  convention {
+    id
+    user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
+      entries {
+        id
+        name_without_nickname
+      }
+    }
+  }
+}
+
+query DefaultUsersQuery($name: String) {
+  users_paginated(filters: { name: $name }, per_page: 50) {
+    entries {
+      id
+      name
+    }
+  }
+}

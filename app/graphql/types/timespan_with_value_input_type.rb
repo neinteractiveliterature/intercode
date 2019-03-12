@@ -1,9 +1,7 @@
-Types::TimespanWithValueInputType = GraphQL::InputObjectType.define do
-  name 'TimespanWithValueInput'
-
-  input_field :start, Types::DateType
-  input_field :finish, Types::DateType
+class Types::TimespanWithValueInputType < Types::BaseInputObject
+  argument :start, Types::DateType, required: false
+  argument :finish, Types::DateType, required: false
 
   # Add additional typed value fields here as appropriate
-  input_field :string_value, types.String
+  argument :string_value, String, required: false, camelize: false
 end

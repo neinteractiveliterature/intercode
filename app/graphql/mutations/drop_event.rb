@@ -1,12 +1,11 @@
-Mutations::DropEvent = GraphQL::Relay::Mutation.define do
-  name 'DropEvent'
-  return_field :event, Types::EventType
+class Mutations::DropEvent < Mutations::BaseMutation
+  field :event, Types::EventType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    event = ctx[:convention].events.find(args[:id])
+  def resolve(**args)
+    event = convention.events.find(args[:id])
     DropEventService.new(event: event).call!
     { event: event }
-  }
+  end
 end

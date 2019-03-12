@@ -1,21 +1,20 @@
-Mutations::CancelOrder = GraphQL::Relay::Mutation.define do
-  name 'CancelOrder'
-  return_field :order, Types::OrderType
+class Mutations::CancelOrder < Mutations::BaseMutation
+  field :order, Types::OrderType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    order = ctx[:convention].orders.find(args[:id])
+  def resolve(id:)
+    order = convention.orders.find(args[:id])
     raise 'Order is already cancelled' if order.status == 'cancelled'
 
     refund = nil
     if order.charge_id
-      charge = Stripe::Charge.retrieve(order.charge_id, api_key: ctx[:convention].stripe_secret_key)
+      charge = Stripe::Charge.retrieve(order.charge_id, api_key: convention.stripe_secret_key)
 
       if charge.refunded
         refund = charge.refunds.first
       else
-        refund = Stripe::Refund.create({ charge: order.charge_id }, api_key: ctx[:convention].stripe_secret_key)
+        refund = Stripe::Refund.create({ charge: order.charge_id }, api_key: convention.stripe_secret_key)
       end
     end
 
@@ -29,13 +28,13 @@ Mutations::CancelOrder = GraphQL::Relay::Mutation.define do
     order.update!(
       status: 'cancelled',
       payment_note: [
-        "#{action} by #{ctx[:user_con_profile].name_without_nickname} \
-on #{Time.now.in_time_zone(ctx[:convention].timezone).strftime('%B %-d, %Y at %l:%M%P')}",
+        "#{action} by #{user_con_profile.name_without_nickname} \
+on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}",
         order.payment_note.presence
       ].compact.join('; ')
     )
     OrdersMailer.cancelled(order, refund&.id).deliver_later
 
     { order: order }
-  }
+  end
 end

@@ -36,7 +36,7 @@ BucketCapacityBar.propTypes = {
   tickmarkCount: PropTypes.number.isRequired,
   tickmarkClass: PropTypes.string,
   startingTickmarkIndex: PropTypes.number,
-}
+};
 
 BucketCapacityBar.defaultProps = {
   className: '',

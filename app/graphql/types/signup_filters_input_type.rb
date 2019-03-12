@@ -1,8 +1,6 @@
-Types::SignupFiltersInputType = GraphQL::InputObjectType.define do
-  name 'SignupFiltersInput'
-
-  input_field :name, types.String
-  input_field :email, types.String
-  input_field :state, types[types.String]
-  input_field :bucket, types[types.String]
+class Types::SignupFiltersInputType < Types::BaseInputObject
+  argument :name, String, required: false
+  argument :email, String, required: false
+  argument :state, [String], required: false
+  argument :bucket, [String], required: false
 end

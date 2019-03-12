@@ -1,21 +1,19 @@
-Types::UserConProfileInputType = GraphQL::InputObjectType.define do
-  name 'UserConProfileInput'
-
-  input_field :first_name, types.String
-  input_field :last_name, types.String
-  input_field :nickname, types.String
-  input_field :privileges, types[types.String]
-  input_field :bio, types.String
-  input_field :show_nickname_in_bio, types.Boolean
-  input_field :form_response_attrs_json, types.String
-  input_field :birth_date, Types::DateType
-  input_field :address, types.String
-  input_field :city, types.String
-  input_field :state, types.String
-  input_field :zipcode, types.String
-  input_field :country, types.String
-  input_field :day_phone, types.String
-  input_field :evening_phone, types.String
-  input_field :best_call_time, types.String
-  input_field :preferred_contact, types.String
+class Types::UserConProfileInputType < Types::BaseInputObject
+  argument :first_name, String, required: false, camelize: false
+  argument :last_name, String, required: false, camelize: false
+  argument :nickname, String, required: false
+  argument :privileges, [String], required: false
+  argument :bio, String, required: false
+  argument :show_nickname_in_bio, Boolean, required: false, camelize: false
+  argument :form_response_attrs_json, String, required: false, camelize: false
+  argument :birth_date, Types::DateType, required: false, camelize: false
+  argument :address, String, required: false
+  argument :city, String, required: false
+  argument :state, String, required: false
+  argument :zipcode, String, required: false
+  argument :country, String, required: false
+  argument :day_phone, String, required: false, camelize: false
+  argument :evening_phone, String, required: false, camelize: false
+  argument :best_call_time, String, required: false, camelize: false
+  argument :preferred_contact, String, required: false, camelize: false
 end

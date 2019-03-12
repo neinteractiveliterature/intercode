@@ -1,19 +1,18 @@
-Mutations::UpdateRun = GraphQL::Relay::Mutation.define do
-  name 'UpdateRun'
-  return_field :run, Types::RunType
+class Mutations::UpdateRun < Mutations::BaseMutation
+  field :run, Types::RunType, null: false
 
-  input_field :id, !types.Int
-  input_field :run, !Types::RunInputType
+  argument :id, Integer, required: true
+  argument :run, Types::RunInputType, required: true
 
-  resolve ->(_obj, args, ctx) {
-    run = ctx[:convention].runs.find(args[:id])
+  def resolve(**args)
+    run = convention.runs.find(args[:id])
 
     run.update!(
       args[:run].to_h.merge(
-        updated_by: ctx[:user_con_profile].user
+        updated_by: user_con_profile.user
       )
     )
 
     { run: run }
-  }
+  end
 end

@@ -1,11 +1,10 @@
-Mutations::DeleteProduct = GraphQL::Relay::Mutation.define do
-  name 'DeleteProduct'
-  return_field :product, Types::ProductType
+class Mutations::DeleteProduct < Mutations::BaseMutation
+  field :product, Types::ProductType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    product = ctx[:convention].products.find(args[:id])
+  def resolve(**args)
+    product = convention.products.find(args[:id])
     if product.order_entries.any?
       raise StandardError, 'This product cannot be deleted because it has been ordered.'
     end
@@ -13,5 +12,5 @@ Mutations::DeleteProduct = GraphQL::Relay::Mutation.define do
     product.destroy!
 
     { product: product }
-  }
+  end
 end

@@ -1,8 +1,6 @@
-Types::RunInputType = GraphQL::InputObjectType.define do
-  name 'RunInput'
-
-  input_field :starts_at, Types::DateType
-  input_field :title_suffix, types.String
-  input_field :schedule_note, types.String
-  input_field :room_ids, types[types.Int]
+class Types::RunInputType < Types::BaseInputObject
+  argument :starts_at, Types::DateType, required: false, camelize: false
+  argument :title_suffix, String, required: false, camelize: false
+  argument :schedule_note, String, required: false, camelize: false
+  argument :room_ids, [Integer], required: false, camelize: false
 end

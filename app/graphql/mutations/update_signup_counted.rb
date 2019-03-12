@@ -1,12 +1,11 @@
-Mutations::UpdateSignupCounted = GraphQL::Relay::Mutation.define do
-  name 'UpdateSignupCounted'
-  return_field :signup, Types::Signup
+class Mutations::UpdateSignupCounted < Mutations::BaseMutation
+  field :signup, Types::SignupType, null: false
 
-  input_field :id, !types.Int
-  input_field :counted, !types.Boolean
+  argument :id, Integer, required: true
+  argument :counted, Boolean, required: true
 
-  resolve ->(_obj, args, ctx) do
-    signup = ctx[:convention].signups.find(args[:id])
+  def resolve(**args)
+    signup = convention.signups.find(args[:id])
     signup.update!(counted: args[:counted])
 
     if signup.counted_previously_changed? && !args[:counted] && signup.bucket_key

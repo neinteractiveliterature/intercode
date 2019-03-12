@@ -1,0 +1,13 @@
+query RoomsAdminQuery {
+  convention {
+    id
+    rooms {
+      id
+      name
+
+      runs {
+        id
+      }
+    }
+  }
+}

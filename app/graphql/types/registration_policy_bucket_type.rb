@@ -1,26 +1,19 @@
-Types::RegistrationPolicyBucketType = GraphQL::ObjectType.define do
-  name 'RegistrationPolicyBucket'
+class Types::RegistrationPolicyBucketType < Types::BaseObject
+  field :key, String, null: false
+  field :name, String, null: true
+  field :description, String, null: true
+  field :minimum_slots, Integer, null: true
+  field :preferred_slots, Integer, null: true
+  field :total_slots, Integer, null: true
 
-  field :key, !types.String
-  field :name, types.String
-  field :description, types.String
-  field :minimum_slots, types.Int
-  field :preferred_slots, types.Int
-  field :total_slots, types.Int
+  field :slots_limited, Boolean, null: false
+  field :anything, Boolean, null: false
+  field :not_counted, Boolean, null: false
+  field :expose_attendees, Boolean, null: false
 
-  field :slots_limited, !types.Boolean do
-    resolve ->(obj, _args, _ctx) { !!obj.slots_limited? }
-  end
-
-  field :anything, !types.Boolean do
-    resolve ->(obj, _args, _ctx) { !!obj.anything? }
-  end
-
-  field :not_counted, !types.Boolean do
-    resolve ->(obj, _args, _ctx) { !!obj.not_counted? }
-  end
-
-  field :expose_attendees, !types.Boolean do
-    resolve ->(obj, _args, _ctx) { !!obj.expose_attendees? }
+  %w[slots_limited anything not_counted expose_attendees].each do |field_name|
+    define_method field_name do
+      !!object.public_send(:"#{field_name}?")
+    end
   end
 end

@@ -9,6 +9,7 @@ mutation UpdateRootSite($siteName: String, $defaultLayoutId: Int, $rootPageId: I
     }
   }) {
     root_site {
+      id
       ...RootSiteFields
     }
   }

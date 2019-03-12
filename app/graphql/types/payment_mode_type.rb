@@ -1,6 +1,4 @@
-Types::PaymentModeType = GraphQL::EnumType.define do
-  name 'PaymentMode'
-
+class Types::PaymentModeType < Types::BaseEnum
   value('now')
   value('later')
 end

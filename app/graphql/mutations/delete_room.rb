@@ -1,12 +1,11 @@
-Mutations::DeleteRoom = GraphQL::Relay::Mutation.define do
-  name 'DeleteRoom'
-  return_field :room, Types::RoomType
+class Mutations::DeleteRoom < Mutations::BaseMutation
+  field :room, Types::RoomType, null: false
 
-  input_field :id, !types.Int
+  argument :id, Integer, required: true
 
-  resolve ->(_obj, args, ctx) {
-    room = ctx[:convention].rooms.find(args[:id])
+  def resolve(**args)
+    room = convention.rooms.find(args[:id])
     room.destroy!
     { room: room }
-  }
+  end
 end

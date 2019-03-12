@@ -1,5 +1,5 @@
-class Mutations::CreateEventProposal < GraphQL::Schema::RelayClassicMutation
-  field :event_proposal, Types::EventProposalType, null: false, camelize: false
+class Mutations::CreateEventProposal < Mutations::BaseMutation
+  field :event_proposal, Types::EventProposalType, null: false
 
   argument :event_category_id, Int, required: true, camelize: false
   argument :clone_event_proposal_id, Int, required: false, camelize: false
