@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+import NewOrganizationRole from './NewOrganizationRole';
 import OrganizationDisplay from './OrganizationDisplay';
 import OrganizationIndex from './OrganizationIndex';
 
@@ -9,6 +10,12 @@ function OrganizationAdmin({ basename }) {
   return (
     <BrowserRouter basename={basename}>
       <Switch>
+        <Route
+          path="/:organizationId/roles/new"
+          render={({ match: { params: { organizationId } } }) => (
+            <NewOrganizationRole organizationId={Number.parseInt(organizationId, 10)} />
+          )}
+        />
         <Route
           path="/:id"
           render={({ match: { params: { id } } }) => (
