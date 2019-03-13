@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
+import { Link } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
@@ -34,6 +35,10 @@ function OrganizationDisplay({ organizationId }) {
           ))}
         </tbody>
       </table>
+
+      <Link to={`/${organizationId}/roles/new`} className="btn btn-primary">
+        Add role
+      </Link>
     </>
   );
 }

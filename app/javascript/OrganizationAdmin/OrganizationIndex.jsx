@@ -8,7 +8,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
 
 function renderOrganizationConventions(organization) {
-  const sortedConventions = sortBy(organization.conventions, convention => convention.starts_at);
+  const sortedConventions = sortBy(organization.conventions, [convention => convention.starts_at]);
   sortedConventions.reverse();
 
   const conventionNames = sortedConventions.slice(0, 3).map(convention => convention.name);
