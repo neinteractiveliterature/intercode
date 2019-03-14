@@ -220,6 +220,7 @@ query AddAttendeeUsersQuery($name: String) {
     entries {
       id
       name
+      email
       first_name
       last_name
     }
