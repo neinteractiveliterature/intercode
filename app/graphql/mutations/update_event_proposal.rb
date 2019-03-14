@@ -6,7 +6,7 @@ class Mutations::UpdateEventProposal < Mutations::BaseMutation
 
   def resolve(**args)
     event_proposal = convention.event_proposals.find(args[:id])
-    event_proposal_attrs = args[:event_proposal].to_h
+    event_proposal_attrs = args[:event_proposal].to_h.stringify_keys
     event_proposal.assign_form_response_attributes(
       JSON.parse(event_proposal_attrs.delete('form_response_attrs_json'))
     )
