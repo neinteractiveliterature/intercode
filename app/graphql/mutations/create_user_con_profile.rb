@@ -18,7 +18,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
       )
     end
 
-    user_con_profile_attrs = args[:user_con_profile].to_h
+    user_con_profile_attrs = args[:user_con_profile].to_h.stringify_keys
     user_con_profile_attrs.merge!(
       JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json'))
     )
