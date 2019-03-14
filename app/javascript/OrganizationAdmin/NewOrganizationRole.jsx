@@ -6,15 +6,18 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import { Transforms, useMutator } from '../ComposableFormUtils';
+import { useChangeSetWithSelect } from '../ChangeSet';
+import UserSelect from '../BuiltInFormControls/UserSelect';
 
 function NewOrganizationRole({ organizationId }) {
   const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
   const [organizationRole, organizationRoleMutator] = useMutator(
-    { name: '' },
+    { name: '', users: [] },
     {
       name: Transforms.textInputChange,
     },
   );
+  const [usersChangeSet, onChangeUsers] = useChangeSetWithSelect();
 
   if (error) return <ErrorDisplay graphQLError={error} />;
 
@@ -34,6 +37,16 @@ function NewOrganizationRole({ organizationId }) {
         value={organizationRole.name}
         onChange={organizationRoleMutator.name}
       />
+
+      <div className="form-group">
+        <label htmlFor="users">Users</label>
+        <UserSelect
+          isMulti
+          inputId="users"
+          value={usersChangeSet.apply(organizationRole.users)}
+          onChange={onChangeUsers}
+        />
+      </div>
     </>
   );
 }
