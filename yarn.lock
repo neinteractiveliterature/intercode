@@ -1436,23 +1436,25 @@ apollo-link-dedup@^1.0.0:
   dependencies:
     apollo-link "^1.2.4"
 
-apollo-link-http-common@^0.2.11, apollo-link-http-common@^0.2.8:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.11.tgz#d4e494ed1e45ea0e0c0ed60f3df64541d0de682d"
+apollo-link-http-common@^0.2.12, apollo-link-http-common@^0.2.8:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.12.tgz#30cb42b6417076872d3e9e7699dbf79a9c9d7bee"
+  integrity sha512-jMgvp8ZURiaSivKLsB7J0uVKLNit5nPeFaxr85r6CsdS0HQB0tH+aqzblPQeMQ0zpR/EqX8YrogXFZ08y9kjYQ==
   dependencies:
-    apollo-link "^1.2.9"
+    apollo-link "^1.2.10"
     ts-invariant "^0.3.2"
     tslib "^1.9.3"
 
-apollo-link-http@^1.5.12:
-  version "1.5.12"
-  resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.5.12.tgz#878d48bf9d8ae091752710529a222c4a5548118e"
+apollo-link-http@^1.5.13:
+  version "1.5.13"
+  resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.5.13.tgz#f7d6e1fda0009e0b623df1cbd83902fd71d34f67"
+  integrity sha512-e8pU/omWPy3pI3v+UKktFuG5YcjbA4jT0jUHo59U51vKszqw5xsYjCOQhw7IPoixYN651vkn122CQEFgL6MuvA==
   dependencies:
-    apollo-link "^1.2.9"
-    apollo-link-http-common "^0.2.11"
+    apollo-link "^1.2.10"
+    apollo-link-http-common "^0.2.12"
     tslib "^1.9.3"
 
-apollo-link@^1.0.0, apollo-link@^1.2.10, apollo-link@^1.2.4, apollo-link@^1.2.6, apollo-link@^1.2.9:
+apollo-link@^1.0.0, apollo-link@^1.2.10, apollo-link@^1.2.4, apollo-link@^1.2.6:
   version "1.2.10"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.10.tgz#98cf24c46c0d75cb878804143e39dcf9813f0c20"
   integrity sha512-vQ5u+jEHyLJaV+eUoVKFYYiJcCY9dBNSNhf7Ve9YxeFf84ZDt5NNOPXQEygF39qdoqFRYJb7OkAOJptydteOvw==
