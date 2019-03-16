@@ -2,9 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 import { Link } from 'react-router-dom';
+import { titleize } from 'inflected';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
+import PermissionNames from '../../../config/permission_names.json';
+
+const OrganizationRolePermissions = PermissionNames.find(group => group.role_type === 'OrganizationRole').permissions;
+function getOrganizationRolePermissionName(permissionName) {
+  const permission = OrganizationRolePermissions.find(p => p.permission === permissionName);
+  return (permission || {}).name;
+}
 
 function OrganizationDisplay({ organizationId }) {
   const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
@@ -24,6 +32,7 @@ function OrganizationDisplay({ organizationId }) {
           <tr>
             <th>Name</th>
             <th>Users</th>
+            <th>Permissions</th>
           </tr>
         </thead>
         <tbody>
@@ -31,6 +40,11 @@ function OrganizationDisplay({ organizationId }) {
             <tr>
               <td>{organizationRole.name}</td>
               <td>{organizationRole.users.map(user => user.name).join(', ')}</td>
+              <td>
+                {organizationRole.permissions
+                  .map(permission => titleize(getOrganizationRolePermissionName(permission.permission)))
+                  .join(', ')}
+              </td>
             </tr>
           ))}
         </tbody>
