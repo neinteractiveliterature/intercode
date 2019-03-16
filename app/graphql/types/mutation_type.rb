@@ -247,6 +247,14 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
+  field :updateOrganizationRole, mutation: Mutations::UpdateOrganizationRole do
+    guard(guard_for_model_with_id(OrganizationRole, :update))
+  end
+
+  field :deleteOrganizationRole, mutation: Mutations::DeleteOrganizationRole do
+    guard(guard_for_model_with_id(OrganizationRole, :destroy))
+  end
+
   ### Page
 
   field :deletePage, mutation: Mutations::DeletePage do
