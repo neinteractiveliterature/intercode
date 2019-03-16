@@ -5,6 +5,10 @@
       {
         "permission": "read_convention_users",
         "name": "read convention users"
+      },
+      {
+        "permission": "manage_organization_access",
+        "name": "manage organization access"
       }
     ]
   },

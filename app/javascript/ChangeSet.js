@@ -83,7 +83,7 @@ export function useChangeSetWithSelect() {
     } else if (action === 'remove-value') {
       remove(removedValue.id);
     }
-  }
+  };
 
   return [changeSet, onChange];
 }

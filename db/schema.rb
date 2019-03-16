@@ -404,7 +404,7 @@ ActiveRecord::Schema.define(version: 2019_02_09_165241) do
     t.index ["organization_role_id"], name: "index_permissions_on_organization_role_id"
     t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_permissions_unique_join", unique: true
     t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
-    t.check_constraint :permissions_model_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = 1)"
+    t.check_constraint :permissions_model_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = ANY (ARRAY[0, 1]))"
     t.check_constraint :permissions_role_exclusive_arc, "((((staff_position_id IS NOT NULL))::integer + ((organization_role_id IS NOT NULL))::integer) = 1)"
   end
 
