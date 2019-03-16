@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import { Link } from 'react-router-dom';
 import { titleize } from 'inflected';
 
+import { DeleteOrganizationRole } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import PermissionNames from '../../../config/permission_names.json';
+import PopperDropdown from '../UIComponents/PopperDropdown';
+import { useConfirm } from '../ModalDialogs/Confirm';
 
 const OrganizationRolePermissions = PermissionNames.find(group => group.role_type === 'OrganizationRole').permissions;
 function getOrganizationRolePermissionName(permissionName) {
@@ -16,10 +19,36 @@ function getOrganizationRolePermissionName(permissionName) {
 
 function OrganizationDisplay({ organizationId }) {
   const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
+  const confirm = useConfirm();
+  const mutate = useMutation(DeleteOrganizationRole);
 
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   const organization = data.organizations.find(org => org.id === organizationId);
+
+  const deleteOrganizationRole = id => mutate({
+    variables: { id },
+    update: (proxy) => {
+      const storeData = proxy.readQuery({ query: OrganizationAdminOrganizationsQuery });
+      proxy.writeQuery({
+        query: OrganizationAdminOrganizationsQuery,
+        data: {
+          ...storeData,
+          organizations: storeData.organizations.map((org) => {
+            if (org.id === organizationId) {
+              return {
+                ...org,
+                organization_roles: org.organization_roles
+                  .filter(role => role.id !== id),
+              };
+            }
+
+            return org;
+          }),
+        },
+      });
+    },
+  });
 
   return (
     <>
@@ -33,6 +62,7 @@ function OrganizationDisplay({ organizationId }) {
             <th>Name</th>
             <th>Users</th>
             <th>Permissions</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -42,8 +72,35 @@ function OrganizationDisplay({ organizationId }) {
               <td>{organizationRole.users.map(user => user.name).join(', ')}</td>
               <td>
                 {organizationRole.permissions
-                  .map(permission => titleize(getOrganizationRolePermissionName(permission.permission)))
+                  .map(permission => titleize(
+                    getOrganizationRolePermissionName(permission.permission),
+                  ))
                   .join(', ')}
+              </td>
+              <td>
+                <PopperDropdown
+                  renderReference={({ ref, toggle }) => (
+                    <button type="button" className="btn btn-sm btn-primary" ref={ref} onClick={toggle}>
+                      <i className="fa fa-ellipsis-h" />
+                      <span className="sr-only">Options</span>
+                    </button>
+                  )}
+                >
+                  <Link to={`/${organization.id}/roles/${organizationRole.id}/edit`} className="dropdown-item">
+                    Edit settings
+                  </Link>
+                  <button
+                    className="dropdown-item cursor-pointer text-danger"
+                    type="button"
+                    onClick={() => confirm({
+                      prompt: `Are you sure you want to delete the role ${organizationRole.name}?`,
+                      action: () => deleteOrganizationRole(organizationRole.id),
+                      renderError: e => <ErrorDisplay graphQLError={e} />,
+                    })}
+                  >
+                    Delete
+                  </button>
+                </PopperDropdown>
               </td>
             </tr>
           ))}

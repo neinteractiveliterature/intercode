@@ -14,3 +14,33 @@ mutation CreateOrganizationRole($organizationId: Int!, $name: String!, $userIds:
     }
   }
 }
+
+mutation UpdateOrganizationRole(
+  $id: Int!,
+  $name: String,
+  $addUserIds: [Int!],
+  $removeUserIds: [Int!],
+  $addPermissions: [PermissionInput!],
+  $removePermissionIds: [Int!]
+) {
+  updateOrganizationRole(
+    input: {
+      id: $id,
+      organization_role: { name: $name },
+      add_user_ids: $addUserIds,
+      remove_user_ids: $removeUserIds,
+      add_permissions: $addPermissions,
+      remove_permission_ids: $removePermissionIds
+    }
+  ) {
+    organization_role {
+      ...OrganizationRoleFields
+    }
+  }
+}
+
+mutation DeleteOrganizationRole($id: Int!) {
+  deleteOrganizationRole(input: { id: $id }) {
+    clientMutationId
+  }
+}
