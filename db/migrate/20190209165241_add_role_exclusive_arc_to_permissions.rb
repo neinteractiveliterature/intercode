@@ -10,7 +10,7 @@ class AddRoleExclusiveArcToPermissions < ActiveRecord::Migration[5.2]
       ) = 1
     SQL
 
-    # Just renaming this
+    # Rename model arc and make model optional
     remove_check_constraint :permissions, 'permissions_exclusive_arc', <<~SQL
       (
         (event_category_id is not null)::integer
@@ -20,7 +20,7 @@ class AddRoleExclusiveArcToPermissions < ActiveRecord::Migration[5.2]
     add_check_constraint :permissions, 'permissions_model_exclusive_arc', <<~SQL
       (
         (event_category_id is not null)::integer
-      ) = 1
+      ) IN (0, 1)
     SQL
   end
 end

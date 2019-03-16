@@ -1,0 +1,16 @@
+#import "./queries.gql"
+
+mutation CreateOrganizationRole($organizationId: Int!, $name: String!, $userIds: [Int!]!, $permissions: [PermissionInput!]!) {
+  createOrganizationRole(
+    input: {
+      organization_id: $organizationId,
+      organization_role: { name: $name },
+      user_ids: $userIds,
+      permissions: $permissions
+    }
+  ) {
+    organization_role {
+      ...OrganizationRoleFields
+    }
+  }
+}

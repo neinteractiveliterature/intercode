@@ -238,6 +238,15 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(Order, :cancel))
   end
 
+  ### OrganizationRole
+
+  field :createOrganizationRole, mutation: Mutations::CreateOrganizationRole do
+    guard ->(_obj, args, ctx) {
+      organization = Organization.find(args[:organization_id])
+      ctx[:current_ability].can?(:create, OrganizationRole.new(organization: organization))
+    }
+  end
+
   ### Page
 
   field :deletePage, mutation: Mutations::DeletePage do

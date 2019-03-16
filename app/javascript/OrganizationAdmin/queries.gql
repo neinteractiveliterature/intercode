@@ -1,3 +1,19 @@
+fragment OrganizationRoleFields on OrganizationRole {
+  id
+  name
+
+  users {
+    id
+    name
+    email
+  }
+
+  permissions {
+    id
+    permission
+  }
+}
+
 query OrganizationAdminOrganizationsQuery {
   organizations {
     id
@@ -10,19 +26,7 @@ query OrganizationAdminOrganizationsQuery {
     }
 
     organization_roles {
-      id
-      name
-
-      users {
-        id
-        name
-        email
-      }
-
-      permissions {
-        id
-        permission
-      }
+      ...OrganizationRoleFields
     }
   }
 }
