@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PurchaseTicketServiceTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { FactoryBot.create(:convention, starts_at: 2.days.from_now, ends_at: 4.days.from_now) }
   let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
   let(:ticket_type) { FactoryBot.create(:paid_ticket_type, convention: convention) }
   let(:stripe_helper) { StripeMock.create_test_helper }
@@ -56,6 +56,18 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
       result = subject.call
       result.must_be :failure?
       assert_match(/sold out/, result.errors.full_messages.join(', '))
+    end
+  end
+
+  describe 'if the con is over' do
+    before do
+      convention.update!(ends_at: 5.minutes.ago)
+    end
+
+    it 'fails with an error' do
+      result = subject.call
+      result.must_be :failure?
+      assert_match(/is over/, result.errors.full_messages.join(', '))
     end
   end
 
