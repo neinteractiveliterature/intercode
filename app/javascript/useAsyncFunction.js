@@ -9,7 +9,7 @@ export default function useAsyncFunction(func) {
       setError(null);
       setInProgress(true);
       try {
-        await func(...args);
+        return await func(...args);
       } catch (e) {
         setError(e);
         throw e;
