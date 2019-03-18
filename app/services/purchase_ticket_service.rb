@@ -6,6 +6,7 @@ class PurchaseTicketService < CivilService::Service
 
   validate :check_existing_ticket
   validate :check_same_convention
+  validate :check_convention_is_not_over
   validate :check_convention_maximum
   validate :check_publicly_available
 
@@ -77,6 +78,12 @@ class PurchaseTicketService < CivilService::Service
     return if user_con_profile.convention == ticket_type.convention
 
     errors.add :base, 'User profile and ticket type are not from the same convention'
+  end
+
+  def check_convention_is_not_over
+    return if Time.now < convention.ends_at
+
+    errors.add :base, "#{convention.name} is over and is no longer selling tickets."
   end
 
   def check_convention_maximum

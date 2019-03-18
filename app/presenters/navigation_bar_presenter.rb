@@ -1,7 +1,4 @@
 class NavigationBarPresenter
-  # Bump this whenever we make changes, to invalidate caches
-  VERSION = 3
-
   include Rails.application.routes.url_helpers
 
   class NavigationItem
@@ -308,7 +305,7 @@ class NavigationBarPresenter
           *(
             if convention
               [
-                TicketPurchaseNavigationItem.new,
+                *(convention.ends_at > Time.now ? [TicketPurchaseNavigationItem.new] : []),
                 NavigationSection.new('Events', events_navigation_items)
               ]
             else
