@@ -208,8 +208,8 @@ class Types::QueryType < Types::BaseObject
     argument :markdown, String, required: true
   end
 
-  def preview_markdown(**args)
-    MarkdownPresenter.new('').render(args[:markdown])
+  def preview_markdown(markdown:)
+    MarkdownPresenter.new('').render(markdown)
   end
 
   field :preview_liquid, String, null: false do
@@ -227,8 +227,8 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
-  def preview_liquid(**args)
-    cadmus_renderer.render(Liquid::Template.parse(args['content']), :html)
+  def preview_liquid(content:)
+    cadmus_renderer.render(Liquid::Template.parse(content), :html)
   end
 
   field :product, Types::ProductType, null: false do
