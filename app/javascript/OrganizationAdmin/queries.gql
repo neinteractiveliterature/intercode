@@ -18,6 +18,7 @@ query OrganizationAdminOrganizationsQuery {
   organizations {
     id
     name
+    current_ability_can_manage_access
 
     conventions {
       id

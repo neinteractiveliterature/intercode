@@ -45,7 +45,13 @@ function OrganizationIndex() {
           {
             sortedOrganizations.map(organization => (
               <tr key={organization.id}>
-                <td><Link to={`/${organization.id}`}>{organization.name}</Link></td>
+                <td>
+                  {
+                    organization.current_ability_can_manage_access
+                      ? <Link to={`/${organization.id}`}>{organization.name}</Link>
+                      : organization.name
+                  }
+                </td>
                 <td>{renderOrganizationConventions(organization)}</td>
               </tr>
             ))

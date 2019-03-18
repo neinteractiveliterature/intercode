@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery, useMutation } from 'react-apollo-hooks';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { titleize } from 'inflected';
 
 import { DeleteOrganizationRole } from './mutations.gql';
@@ -25,6 +25,10 @@ function OrganizationDisplay({ organizationId }) {
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   const organization = data.organizations.find(org => org.id === organizationId);
+
+  if (!organization.current_ability_can_manage_access) {
+    return <Redirect to="/" />;
+  }
 
   const deleteOrganizationRole = id => mutate({
     variables: { id },

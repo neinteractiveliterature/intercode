@@ -281,7 +281,7 @@ class Types::QueryType < Types::BaseObject
 
   def users_paginated(**args)
     Tables::UsersTableResultsPresenter.new(
-      User,
+      User.accessible_by(current_ability),
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
