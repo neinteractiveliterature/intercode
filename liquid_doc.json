@@ -390,20 +390,6 @@
           ]
         },
         {
-          "name": "team_member_name",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "The name to use for \"team members\" in this event (e.g. \"GM\", \"panelist\")",
-              "types": [
-                "String"
-              ]
-            }
-          ]
-        },
-        {
           "name": "event_proposal",
           "docstring": "",
           "tags": [
@@ -453,20 +439,6 @@
               "tag_name": "return",
               "name": null,
               "text": "The contact email address for this event",
-              "types": [
-                "String"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "category",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "The category key of the event (e.g. \"larp\", \"party\", \"tabletop_rpg\")",
               "types": [
                 "String"
               ]
@@ -559,6 +531,46 @@
               "text": "The runs of this event",
               "types": [
                 "Array<RunDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "category",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Please use event_category.name instead.  (Note that the name field on\nEventCategoryDrop is formatted as plain English rather than an underscored lowercase\nstring.)",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The legacy category key of the event (e.g. \"larp\", \"party\", \"tabletop_rpg\")",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team_member_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Please use event_category.team_member_name instead",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name to use for \"team members\" in this event (e.g. \"GM\", \"panelist\")",
+              "types": [
+                "String"
               ]
             }
           ]
@@ -1322,6 +1334,12 @@
           "docstring": "",
           "tags": [
             {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
               "tag_name": "return",
               "name": null,
               "text": "Runs of non-volunteer events in this convention that have any available\nslots in limited buckets",
@@ -1350,14 +1368,6 @@
           "docstring": "",
           "tags": [
             {
-              "tag_name": "return",
-              "name": null,
-              "text": "A structure that lets you access just the events created since\na certain time.  This is much more efficient than using the\nevents method and filtering by created_at.",
-              "types": [
-                "EventsCreatedSinceDrop"
-              ]
-            },
-            {
               "tag_name": "example",
               "name": "Retrieving the events created since a certain date",
               "text": "{{ convention.events_created_since[\"2018-11-03T00:00:00-05:00\"] }}",
@@ -1368,6 +1378,14 @@
               "name": "Retrieving the events created since the last signup round opened",
               "text": "{{ convention.events_created_since[convention.maximum_event_signups.current_value_change] }}",
               "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A structure that lets you access just the events created since\na certain time.  This is much more efficient than using the\nevents method and filtering by created_at.",
+              "types": [
+                "EventsCreatedSinceDrop"
+              ]
             }
           ]
         },
@@ -1446,18 +1464,18 @@
           "docstring": "",
           "tags": [
             {
+              "tag_name": "example",
+              "name": "Retrieving the vendor liaison email address for a convention",
+              "text": "{{ convention.staff_positions_by_name.vendor_liaison.email }}",
+              "types": null
+            },
+            {
               "tag_name": "return",
               "name": null,
               "text": "All staff positions in this convention, indexed by\nname (all lowercase, spaces replaced with underscores)",
               "types": [
                 "Hash<String, StaffPositionDrop>"
               ]
-            },
-            {
-              "tag_name": "example",
-              "name": "Retrieving the vendor liaison email address for a convention",
-              "text": "{{ convention.staff_positions_by_name.vendor_liaison.email }}",
-              "types": null
             }
           ]
         },
@@ -1480,18 +1498,18 @@
           "docstring": "",
           "tags": [
             {
+              "tag_name": "example",
+              "name": "Retrieving the count of weekend tickets for a convention",
+              "text": "{{ convention.ticket_counts_by_type.weekend }}",
+              "types": null
+            },
+            {
               "tag_name": "return",
               "name": null,
               "text": "The number of tickets that have been issued in this convention,\nindexed by ticket type name",
               "types": [
                 "Hash<String, Integer>"
               ]
-            },
-            {
-              "tag_name": "example",
-              "name": "Retrieving the count of weekend tickets for a convention",
-              "text": "{{ convention.ticket_counts_by_type.weekend }}",
-              "types": null
             }
           ]
         },
@@ -1534,6 +1552,18 @@
               "types": [
                 "ActiveSupport::TimeWithZone"
               ]
+            }
+          ]
+        },
+        {
+          "name": "url",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "String The root URL for this convention",
+              "types": null
             }
           ]
         }
@@ -1704,6 +1734,180 @@
               "text": "The price this ticket type will next change to, if there is an upcoming change",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrganizationDrop",
+      "superclasses": [
+        "OrganizationDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "An organization that runs conventions",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "organization",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the organization",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "conventions",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "All the conventions run by this organization",
+              "types": [
+                "Array<ConventionDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of OrganizationDrop",
+              "types": [
+                "OrganizationDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EventCategoryDrop",
+      "superclasses": [
+        "EventCategoryDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A category for events in a convention.  Each event in a convention must belong to a category.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "event_category",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of the event category",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the event category (e.g. \"Panel\", \"LARP\", \"Tabletop RPG\")",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "scheduling_ui",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The type of scheduling UI used for this event category (e.g. \"regular\",\n\"single_run\", \"recurring\")",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team_member_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name to use for \"team members\" in this event (e.g. \"GM\", \"panelist\")",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of EventCategoryDrop",
+              "types": [
+                "EventCategoryDrop"
               ]
             }
           ]
@@ -2747,14 +2951,6 @@
           "docstring": "",
           "tags": [
             {
-              "tag_name": "return",
-              "name": null,
-              "text": "A human-readable description of the timespan and its value",
-              "types": [
-                "String"
-              ]
-            },
-            {
               "tag_name": "example",
               "name": "",
               "text": "\"$30.00 from January 3, 2018 up to January 9, 2018\"",
@@ -2777,6 +2973,14 @@
               "name": "",
               "text": "\"10 anytime\"",
               "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A human-readable description of the timespan and its value",
+              "types": [
+                "String"
+              ]
             }
           ]
         },
@@ -2784,14 +2988,6 @@
           "name": "description_without_value",
           "docstring": "",
           "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "A human-readable description of just the timespan without its value",
-              "types": [
-                "String"
-              ]
-            },
             {
               "tag_name": "example",
               "name": "",
@@ -2815,6 +3011,14 @@
               "name": "",
               "text": "\"anytime\"",
               "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A human-readable description of just the timespan without its value",
+              "types": [
+                "String"
+              ]
             }
           ]
         },
@@ -2822,14 +3026,6 @@
           "name": "short_description",
           "docstring": "",
           "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "A shorter format of the human-readable description of the timespan and its\nvalue",
-              "types": [
-                "String"
-              ]
-            },
             {
               "tag_name": "example",
               "name": "",
@@ -2853,6 +3049,14 @@
               "name": "",
               "text": "\"10\"",
               "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A shorter format of the human-readable description of the timespan and its\nvalue",
+              "types": [
+                "String"
+              ]
             }
           ]
         },
@@ -2860,14 +3064,6 @@
           "name": "short_description_without_value",
           "docstring": "",
           "tags": [
-            {
-              "tag_name": "return",
-              "name": null,
-              "text": "A shorter format of the human-readable description of the timespan, without its\nvalue",
-              "types": [
-                "String"
-              ]
-            },
             {
               "tag_name": "example",
               "name": "",
@@ -2891,6 +3087,14 @@
               "name": "Infinite timespans return an empty string",
               "text": "\"\"",
               "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A shorter format of the human-readable description of the timespan, without its\nvalue",
+              "types": [
+                "String"
+              ]
             }
           ]
         },
@@ -3166,15 +3370,15 @@
       "docstring": "Embeds a YouTube video.  The video ID must be provided.",
       "tags": [
         {
-          "tag_name": "liquid_tag_name",
-          "name": null,
-          "text": "youtube",
-          "types": null
-        },
-        {
           "tag_name": "example",
           "name": "Rickroll",
           "text": "{% youtube oHg5SJYRHA0 %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "youtube",
           "types": null
         }
       ],
@@ -3249,6 +3453,75 @@
               "name": null,
               "text": "",
               "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::AssignGraphqlResult",
+      "superclasses": [
+        "Intercode::Liquid::Tags::AssignGraphqlResult",
+        "Liquid::Tag"
+      ],
+      "docstring": "Runs a given GraphQL query (defined in the CMS tab \"GraphQL queries\") and assigns the\nresult to a variable.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "destination_variable",
+          "docstring": "Returns the value of attribute destination_variable",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "query_identifier",
+          "docstring": "Returns the value of attribute query_identifier",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "variable_defs",
+          "docstring": "Returns the value of attribute variable_defs",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of AssignGraphqlResult",
+              "types": [
+                "AssignGraphqlResult"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "blank?",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "",
+              "types": [
+                "Boolean"
+              ]
             }
           ]
         }
@@ -3372,12 +3645,6 @@
       "docstring": "Renders a \"Propose an event\" button.  This will automatically render as a\n\"Log in to propose\" button if the user is not logged in.  The button text and the button\nCSS classes can be customized.",
       "tags": [
         {
-          "tag_name": "liquid_tag_name",
-          "name": null,
-          "text": "new_event_proposal_button",
-          "types": null
-        },
-        {
           "tag_name": "example",
           "name": "Customizing the button text",
           "text": "{% new_event_proposal_button \"Propose, right now!\" %}",
@@ -3387,6 +3654,12 @@
           "tag_name": "example",
           "name": "Customizing the button text and the CSS class",
           "text": "{% new_event_proposal_button \"Propose, or don't\" btn-warning %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "new_event_proposal_button",
           "types": null
         }
       ],
@@ -3457,12 +3730,6 @@
       "docstring": "Renders a \"Withdraw\" button for an existing signup.  The button text and the button\nCSS classes can be customized.",
       "tags": [
         {
-          "tag_name": "liquid_tag_name",
-          "name": null,
-          "text": "withdraw_user_signup_button",
-          "types": null
-        },
-        {
           "tag_name": "example",
           "name": "Basic",
           "text": "{% withdraw_user_signup_button signup %}",
@@ -3478,6 +3745,12 @@
           "tag_name": "example",
           "name": "Customizing the button text and the CSS class",
           "text": "{% withdraw_user_signup_button \"Withdraw my signup\" btn-warning %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "withdraw_user_signup_button",
           "types": null
         }
       ],
@@ -3567,6 +3840,13 @@
               "types": null
             }
           ]
+        },
+        {
+          "name": "touch_parent",
+          "docstring": "",
+          "tags": [
+
+          ]
         }
       ]
     }
@@ -3576,6 +3856,18 @@
       "name": "pluralize",
       "docstring": "Can be used to either pluralize a singular noun, or to conditionally pluralize a noun based\non a count.",
       "tags": [
+        {
+          "tag_name": "example",
+          "name": "Pluralizing a noun unconditionally",
+          "text": "{{ \"goose\" | pluralize }} => \"geese\"",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "Pluralizing a count",
+          "text": "You are signed up for {{ user_con_profile.signups.length | pluralize \"game\" \"games\" }}\n=> \"You are signed up for 3 games\"",
+          "types": null
+        },
         {
           "tag_name": "param",
           "name": "input",
@@ -3606,18 +3898,6 @@
           "name": null,
           "text": "String",
           "types": null
-        },
-        {
-          "tag_name": "example",
-          "name": "Pluralizing a noun unconditionally",
-          "text": "{{ \"goose\" | pluralize }} => \"geese\"",
-          "types": null
-        },
-        {
-          "tag_name": "example",
-          "name": "Pluralizing a count",
-          "text": "You are signed up for {{ user_con_profile.signups.length | pluralize \"game\" \"games\" }}\n=> \"You are signed up for 3 games\"",
-          "types": null
         }
       ]
     },
@@ -3625,6 +3905,18 @@
       "name": "email_link",
       "docstring": "Outputs either a clickable mailto: link (if the user is currently logged in), or an\nobfuscated email (if the user is not logged in).  The intent of this is to be a spammer-safe\nway to link to email addresses.",
       "tags": [
+        {
+          "tag_name": "example",
+          "name": "When logged in",
+          "text": "{{ \"test@example.com\" | email_link }}\n=> <a href=\"mailto:test@example.com\">test@example.com</a>",
+          "types": null
+        },
+        {
+          "tag_name": "example",
+          "name": "When not logged in",
+          "text": "{{ \"test@example.com\" | email_link }}\n=> test AT example DOT com",
+          "types": null
+        },
         {
           "tag_name": "param",
           "name": "input",
@@ -3638,18 +3930,6 @@
           "name": null,
           "text": "String A spammer-safe HTML representation of the email address",
           "types": null
-        },
-        {
-          "tag_name": "example",
-          "name": "When logged in",
-          "text": "{{ \"test@example.com\" | email_link }}\n=> <a href=\"mailto:test@example.com\">test@example.com</a>",
-          "types": null
-        },
-        {
-          "tag_name": "example",
-          "name": "When not logged in",
-          "text": "{{ \"test@example.com\" | email_link }}\n=> test AT example DOT com",
-          "types": null
         }
       ]
     },
@@ -3657,20 +3937,6 @@
       "name": "to_sentence",
       "docstring": "Given an array of strings, outputs an English representation of that array.",
       "tags": [
-        {
-          "tag_name": "param",
-          "name": "input",
-          "text": "An array of strings",
-          "types": [
-            "Array<String>"
-          ]
-        },
-        {
-          "tag_name": "return",
-          "name": null,
-          "text": "String",
-          "types": null
-        },
         {
           "tag_name": "example",
           "name": "One string",
@@ -3687,6 +3953,20 @@
           "tag_name": "example",
           "name": "More than two strings",
           "text": "{{ [\"one fish\", \"two fish\", \"red fish\", \"blue fish\"] | to_sentence }}\n=> one fish, two fish, red fish, and blue fish",
+          "types": null
+        },
+        {
+          "tag_name": "param",
+          "name": "input",
+          "text": "An array of strings",
+          "types": [
+            "Array<String>"
+          ]
+        },
+        {
+          "tag_name": "return",
+          "name": null,
+          "text": "String",
           "types": null
         }
       ]

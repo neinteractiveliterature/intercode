@@ -15,7 +15,7 @@ function AssignDocHeader({ assign, prefix = null }) {
         </code>
       </h2>
       <h5>
-        {assignClass.name}
+        {assign.drop_class_name}
       </h5>
       <p className="mb-0">{assignClass.docstring}</p>
     </React.Fragment>

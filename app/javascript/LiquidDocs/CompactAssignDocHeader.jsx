@@ -16,7 +16,7 @@ function CompactAssignDocHeader({ assign, prefix = null, preAssignNameContent = 
         </code>
         <br />
         <strong>
-          {(assignClass || {}).name || assign.drop_class_name}
+          {assign.drop_class_name}
         </strong>
         {
           assign.cms_variable_value_json

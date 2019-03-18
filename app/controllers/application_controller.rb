@@ -120,7 +120,8 @@ class ApplicationController < ActionController::Base
       'user' => current_user,
       'convention' => convention,
       'user_con_profile' => user_con_profile,
-      'conventions' => convention ? nil : Convention.all.to_a
+      'conventions' => convention ? nil : Convention.all.to_a,
+      'organizations' => convention ? nil : Organization.all.to_a
     )
   end
 
