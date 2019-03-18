@@ -227,7 +227,7 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
-  def preview_liquid(**_args)
+  def preview_liquid(**args)
     cadmus_renderer.render(Liquid::Template.parse(args['content']), :html)
   end
 
