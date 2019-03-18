@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class TicketsControllerTest < ActionController::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { FactoryBot.create(:convention, starts_at: 2.days.from_now, ends_at: 4.days.from_now) }
   let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
   let(:ticket_type) { FactoryBot.create(:paid_ticket_type, convention: convention) }
 
