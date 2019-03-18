@@ -14,6 +14,7 @@ class LiquidAssignGraphqlPresenter
 
   def drop_class_name
     case assign
+    when Array then "Array<#{LiquidAssignGraphqlPresenter.new(nil, assign.first).drop_class_name}>"
     when CmsVariable then 'CmsVariable'
     else assign.to_liquid.class.name
     end
