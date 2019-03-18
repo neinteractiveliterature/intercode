@@ -1,16 +1,8 @@
-- if convention
-  = cache [current_user, convention, current_pending_order, assumed_identity_from_profile, :v2, NavigationBarPresenter::VERSION] do
-    %nav.navbar.navbar-fixed-top.navbar-expand-md.mb-4{class: navbar_classes, role: "navigation"}
-      .container
-        %button.navbar-toggler.navbar-toggler-right{type: "button", "data-toggle" => "collapse", "data-target" => "#navbarSupportedContent", "aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
-          %span.navbar-toggler-icon
-        = root_navigation_menus
-- else
-  %nav.navbar.navbar-fixed-top.navbar-expand-md.mb-4{class: navbar_classes, role: "navigation"}
-    .container
-      %button.navbar-toggler.navbar-toggler-right{type: "button", "data-toggle" => "collapse", "data-target" => "#navbarSupportedContent", "aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
-        %span.navbar-toggler-icon
-      = root_navigation_menus
+%nav.navbar.navbar-fixed-top.navbar-expand-md.mb-4{class: navbar_classes, role: "navigation"}
+  .container
+    %button.navbar-toggler.navbar-toggler-right{type: "button", "data-toggle" => "collapse", "data-target" => "#navbarSupportedContent", "aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
+      %span.navbar-toggler-icon
+    = root_navigation_menus
 
 - unless browser.bot?
   %noscript#no-javascript-warning
