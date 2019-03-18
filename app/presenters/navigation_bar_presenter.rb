@@ -308,7 +308,7 @@ class NavigationBarPresenter
           *(
             if convention
               [
-                TicketPurchaseNavigationItem.new,
+                *(convention.ends_at > Time.now ? [TicketPurchaseNavigationItem.new] : []),
                 NavigationSection.new('Events', events_navigation_items)
               ]
             else
