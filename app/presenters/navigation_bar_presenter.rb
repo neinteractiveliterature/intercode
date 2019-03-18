@@ -1,7 +1,4 @@
 class NavigationBarPresenter
-  # Bump this whenever we make changes, to invalidate caches
-  VERSION = 3
-
   include Rails.application.routes.url_helpers
 
   class NavigationItem
