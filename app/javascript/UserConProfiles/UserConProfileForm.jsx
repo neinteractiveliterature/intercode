@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { humanize } from 'inflected';
+
 import Form from '../Models/Form';
-import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
+import PrivilegesForm from './PrivilegesForm';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 import UserConProfilePropType from './UserConProfilePropType';
 
@@ -26,28 +26,6 @@ class UserConProfileForm extends React.Component {
     };
   }
 
-  getRegularPrivileges = () => this.props.userConProfile.privileges.filter((
-    priv => this.props.regularPrivilegeNames.includes(priv)
-  ))
-
-  getMailPrivileges = () => this.props.userConProfile.privileges.filter((
-    priv => this.props.mailPrivilegeNames.includes(priv)
-  ))
-
-  regularPrivilegesChanged = (newPrivs) => {
-    this.props.onChange({
-      ...this.props.userConProfile,
-      privileges: [...this.getMailPrivileges(), ...newPrivs],
-    });
-  }
-
-  mailPrivilegesChanged = (newPrivs) => {
-    this.props.onChange({
-      ...this.props.userConProfile,
-      privileges: [...this.getRegularPrivileges(), ...newPrivs],
-    });
-  }
-
   formResponseValuesChanged = (newResponseValues) => {
     this.props.onChange({
       ...this.props.userConProfile,
@@ -67,30 +45,11 @@ class UserConProfileForm extends React.Component {
 
   renderPrivileges = () => (
     <div>
-      <MultipleChoiceInput
-        name="regular_privileges"
-        caption="Privileges"
-        choices={
-          [...this.props.regularPrivilegeNames].sort()
-            .map(choice => ({ label: humanize(choice), value: choice }))
-        }
-        choiceClassName="form-check-inline"
-        value={this.getRegularPrivileges()}
-        multiple
-        onChange={this.regularPrivilegesChanged}
-      />
-
-      <MultipleChoiceInput
-        name="mail_privileges"
-        caption="Mail privileges"
-        choices={
-          [...this.props.mailPrivilegeNames].sort()
-            .map(choice => ({ label: humanize(choice), value: choice }))
-        }
-        choiceClassName="form-check-inline"
-        value={this.getMailPrivileges()}
-        multiple
-        onChange={this.mailPrivilegesChanged}
+      <PrivilegesForm
+        regularPrivilegeNames={this.props.regularPrivilegeNames}
+        mailPrivilegeNames={this.props.mailPrivilegeNames}
+        userConProfile={this.props.userConProfile}
+        onChange={this.props.onChange}
       />
     </div>
   )
