@@ -21,6 +21,7 @@ import MyProfileForm from '../UserConProfiles/MyProfileForm';
 import NavigationItemsAdmin from '../NavigationItemsAdmin';
 import OAuthPermissionsPrompt from '../OAuthPermissionsPrompt';
 import OrderHistory from '../Store/OrderHistory';
+import OrganizationAdmin from '../OrganizationAdmin';
 import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 import ProductOrderForm from '../Store/ProductOrderForm';
 import ProposeEventButton from '../EventProposals/ProposeEventButton';
@@ -59,6 +60,7 @@ const unwrappedComponents = {
   NavigationItemsAdmin,
   OAuthPermissionsPrompt,
   OrderHistory,
+  OrganizationAdmin,
   PageAdminDropdown,
   ProductOrderForm,
   ProposeEventButton,

@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { useState } from 'react';
 
 export function parseIntOrNull(stringValue) {
   const intValue = parseInt(stringValue, 10);
@@ -181,4 +182,16 @@ export function mutator(config = {}) {
     config.component ? state => config.component.setState(state) : config.setState,
     combineStateChangeCalculators(config.transforms),
   );
+}
+
+export function useMutator(initialState, transforms) {
+  const [state, setState] = useState(initialState);
+
+  const stateMutator = mutator({
+    getState: () => state,
+    setState,
+    transforms,
+  });
+
+  return [state, stateMutator];
 }

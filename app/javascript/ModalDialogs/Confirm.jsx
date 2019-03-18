@@ -61,13 +61,15 @@ export function useConfirm() {
   return confirm;
 }
 
-Confirm.Trigger = ({ children }) => {
+function ConfirmTrigger({ children }) {
   const confirm = useConfirm();
   return children(confirm);
-};
+}
 
-Confirm.Trigger.propTypes = {
+ConfirmTrigger.propTypes = {
   children: PropTypes.func.isRequired,
 };
+
+Confirm.Trigger = ConfirmTrigger;
 
 export default Confirm;

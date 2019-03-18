@@ -15,8 +15,12 @@ function LazyStripeProvider({ publishableKey, children }) {
 }
 
 LazyStripeProvider.propTypes = {
-  publishableKey: PropTypes.string.isRequired,
+  publishableKey: PropTypes.string,
   children: PropTypes.node.isRequired,
+};
+
+LazyStripeProvider.defaultProps = {
+  publishableKey: null,
 };
 
 class LazyStripeLoader extends React.Component {

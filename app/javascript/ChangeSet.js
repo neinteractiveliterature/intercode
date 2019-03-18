@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 class ChangeSet {
   constructor(changes = []) {
     this.changes = changes;
@@ -62,3 +64,26 @@ class ChangeSet {
 }
 
 export default ChangeSet;
+
+export function useChangeSet() {
+  const [changeSet, setChangeSet] = useState(new ChangeSet());
+
+  const add = (...addArgs) => { setChangeSet(changeSet.add(...addArgs)); };
+  const remove = (...removeArgs) => { setChangeSet(changeSet.remove(...removeArgs)); };
+
+  return [changeSet, add, remove];
+}
+
+export function useChangeSetWithSelect() {
+  const [changeSet, add, remove] = useChangeSet();
+
+  const onChange = (newValue, { action, option, removedValue }) => {
+    if (action === 'select-option') {
+      add(option);
+    } else if (action === 'remove-value') {
+      remove(removedValue.id);
+    }
+  };
+
+  return [changeSet, onChange];
+}
