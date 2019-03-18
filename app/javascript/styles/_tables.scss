@@ -1,0 +1,8 @@
+.table-hover-cell {
+  tbody td {
+    @include hover {
+      color: $table-hover-color;
+      background-color: $table-hover-bg;
+    }
+  }
+}

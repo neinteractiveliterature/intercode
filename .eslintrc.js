@@ -26,6 +26,7 @@ module.exports = {
   plugins: [
     'jest',
     'graphql',
+    'react-hooks',
   ],
 
   rules: {
@@ -60,5 +61,7 @@ module.exports = {
       },
     ],
     "no-restricted-imports": ['error', 'graphql-tag'],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
   }
 };

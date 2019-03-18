@@ -1,0 +1,33 @@
+fragment OrganizationRoleFields on OrganizationRole {
+  id
+  name
+
+  users {
+    id
+    name
+    email
+  }
+
+  permissions {
+    id
+    permission
+  }
+}
+
+query OrganizationAdminOrganizationsQuery {
+  organizations {
+    id
+    name
+    current_ability_can_manage_access
+
+    conventions {
+      id
+      name
+      starts_at
+    }
+
+    organization_roles {
+      ...OrganizationRoleFields
+    }
+  }
+}

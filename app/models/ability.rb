@@ -135,6 +135,7 @@ class Ability
 
   include CanCan::Ability
   include Ability::EventCategoryPermissions
+  include Ability::OrganizationPermissions
 
   attr_reader :user, :doorkeeper_token, :associated_records_loader
 
@@ -162,6 +163,7 @@ class Ability
       add_event_proposal_abilities
       add_team_member_abilities if team_member_event_ids.any?
       add_event_category_permission_abilities
+      add_organization_permission_abilities
     end
   end
 
@@ -256,6 +258,8 @@ class Ability
       can :read_personal_info, UserConProfile
     end
 
+    can :read, Organization if has_scope?(:read_organizations)
+
     can :manage, [Event, Run, Signup] if has_scope?(:manage_signups)
 
     if has_scope?(:manage_events)
@@ -267,6 +271,11 @@ class Ability
         Signup,
         TeamMember
       ]
+    end
+
+    if has_scope?(:manage_organizations)
+      can :manage, Organization
+      can :manage, OrganizationRole
     end
 
     return unless has_scope?(:manage_conventions)
@@ -473,5 +482,9 @@ class Ability
     sql = "#{model_class.table_name}.#{model_class.primary_key} IN (#{subquery})"
 
     can action, model_class, sql, &allow_model
+  end
+
+  def user_permission_scope
+    @user_permission_scope ||= Permission.for_user(user)
   end
 end

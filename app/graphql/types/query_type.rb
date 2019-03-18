@@ -249,6 +249,12 @@ class Types::QueryType < Types::BaseObject
     context[:current_pending_order]
   end
 
+  field :organizations, [Types::OrganizationType], null: false
+
+  def organizations
+    Organization.all
+  end
+
   field :root_site, Types::RootSiteType, null: false
 
   def root_site
@@ -275,7 +281,7 @@ class Types::QueryType < Types::BaseObject
 
   def users_paginated(**args)
     Tables::UsersTableResultsPresenter.new(
-      User,
+      User.accessible_by(current_ability),
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])

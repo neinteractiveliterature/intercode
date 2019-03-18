@@ -12,8 +12,8 @@ import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import UserConProfileForm from './UserConProfileForm';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
+import PrivilegesForm from './PrivilegesForm';
 
-@withRouter
 class AddAttendeeModal extends React.Component {
   static propTypes = {
     conventionName: PropTypes.string.isRequired,
@@ -55,17 +55,16 @@ class AddAttendeeModal extends React.Component {
 
   renderForm = () => (
     <div className="mt-4">
+      <p>Profile data will be copied from user&rsquo;s latest convention profile.</p>
+
       <QueryWithStateDisplay query={AddAttendeeUserConProfileFormQuery}>
         {({ data }) => (
-          <UserConProfileForm
-            canUpdatePrivileges
+          <PrivilegesForm
             userConProfile={this.state.userConProfile}
             regularPrivilegeNames={data.convention.privilege_names
               .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
             mailPrivilegeNames={data.convention.mail_privilege_names}
             onChange={this.userConProfileChanged}
-            form={deserializeForm(data.convention.user_con_profile_form)}
-            convention={data.convention}
           />
         )}
       </QueryWithStateDisplay>
@@ -150,4 +149,4 @@ class AddAttendeeModal extends React.Component {
   )
 }
 
-export default AddAttendeeModal;
+export default withRouter(AddAttendeeModal);
