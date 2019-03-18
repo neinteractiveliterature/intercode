@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
 import { flatMap } from 'lodash';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
@@ -8,7 +7,6 @@ import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
 import PermissionsTableInput from '../BuiltInFormControls/PermissionsTableInput';
-import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 
 const OrganizationRolePermissionNames = flatMap(
   PermissionNames.filter(
@@ -17,10 +15,9 @@ const OrganizationRolePermissionNames = flatMap(
   permissionNameGroup => permissionNameGroup.permissions,
 );
 
-export default function useOrganizationRoleForm(getInitialOrganizationRole) {
-  const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
+export default function useOrganizationRoleForm(initialOrganizationRole) {
   const [organizationRole, organizationRoleMutator] = useMutator(
-    error ? {} : getInitialOrganizationRole(data),
+    initialOrganizationRole || {},
     {
       name: Transforms.textInputChange,
     },
@@ -67,8 +64,6 @@ export default function useOrganizationRoleForm(getInitialOrganizationRole) {
   );
 
   return {
-    data,
-    error,
     renderForm,
     formState: {
       organizationRole,

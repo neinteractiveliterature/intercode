@@ -11,9 +11,23 @@ module Ability::OrganizationPermissions
         convention_id: conventions_with_organization_permission('read_convention_users').select(:id)
       ).any?
     end
+
+    manageable_organizations = organizations_with_permission('manage_organization_access')
+    can :read, Organization if manageable_organizations.any?
+
+    manageable_roles = OrganizationRole.where(organization_id: manageable_organizations.select(:id))
+    scope_authorization :manage, OrganizationRole, manageable_roles do |organization_role|
+      manageable_organizations.where(id: organization_role.organization_id).any?
+    end
   end
 
   private
+
+  def organizations_with_permission(permission)
+    Organization.where(
+      id: user_organization_roles_with_permission(permission).select(:organization_id)
+    )
+  end
 
   def user_organization_roles_with_permission(permission)
     OrganizationRole.where(

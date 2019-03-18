@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
-import { withRouter } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-apollo-hooks';
+import { Redirect, withRouter } from 'react-router-dom';
 
 import { CreateOrganizationRole } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -10,11 +10,8 @@ import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 
 function NewOrganizationRole({ organizationId, history }) {
-  const {
-    data, error, renderForm, formState,
-  } = useOrganizationRoleForm(
-    () => ({ name: '', users: [], permissions: [] }),
-  );
+  const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
+  const { renderForm, formState } = useOrganizationRoleForm({ name: '', users: [], permissions: [] });
   const [mutate, mutationError, mutationInProgress] = useAsyncFunction(
     useMutation(CreateOrganizationRole),
   );
@@ -22,6 +19,9 @@ function NewOrganizationRole({ organizationId, history }) {
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   const organization = data.organizations.find(org => org.id === organizationId);
+  if (!organization.current_ability_can_manage_access) {
+    return <Redirect to="/" />;
+  }
 
   const createOrganizationRole = async ({
     organizationRole, usersChangeSet, permissionsChangeSet,
