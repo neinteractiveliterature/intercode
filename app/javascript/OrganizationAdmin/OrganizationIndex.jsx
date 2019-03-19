@@ -1,11 +1,11 @@
 import React from 'react';
-import { useQuery } from 'react-apollo-hooks';
 import { sortBy } from 'lodash';
 import { Link } from 'react-router-dom';
 
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
+import useQuerySuspended from '../useQuerySuspended';
 
 function renderOrganizationConventions(organization) {
   const sortedConventions = sortBy(organization.conventions, [convention => convention.starts_at]);
@@ -20,7 +20,7 @@ function renderOrganizationConventions(organization) {
 }
 
 function OrganizationIndex() {
-  const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
+  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
 
   if (error) return <ErrorDisplay graphQLError={error} />;
 
