@@ -16,6 +16,12 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :conventions, [Types::ConventionType], null: false
+
+  def conventions
+    Convention.all.to_a
+  end
+
   field :event, Types::EventType, null: true do
     argument :id, Integer, required: true
   end
