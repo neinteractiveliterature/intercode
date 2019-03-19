@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import PlainTextDisplay from '../../PlainTextDisplay';
-import { previewMarkdownQuery } from '../../BuiltInFormControls/MarkdownInput';
+import { PreviewMarkdownQuery } from '../../BuiltInFormControls/previewQueries.gql';
 import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 
 function parseURL(value) {
@@ -37,7 +37,7 @@ class FreeTextItemDisplay extends React.PureComponent {
     const { formItem, value } = this.props;
     if (formItem.properties.format === 'markdown') {
       return (
-        <QueryWithStateDisplay query={previewMarkdownQuery} variables={{ markdown: value }}>
+        <QueryWithStateDisplay query={PreviewMarkdownQuery} variables={{ markdown: value }}>
           {({ data }) => (
             // eslint-disable-next-line react/no-danger
             <span dangerouslySetInnerHTML={{ __html: data.previewMarkdown }} />
