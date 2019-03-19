@@ -292,4 +292,16 @@ class Types::QueryType < Types::BaseObject
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
+
+  field :user, Types::UserType, null: false do
+    argument :id, Integer, required: true
+
+    guard ->(_obj, args, ctx) do
+      args[:id] == ctx[:current_user]&.id || ctx[:current_ability].can?(:read, User)
+    end
+  end
+
+  def user(id:)
+    User.find(id)
+  end
 end

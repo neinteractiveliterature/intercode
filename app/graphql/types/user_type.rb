@@ -16,5 +16,7 @@ class Types::UserType < Types::BaseObject
     end
   end
 
-  association_loaders User, :event_proposals
+  field :user_con_profiles, [Types::UserConProfileType], null: false
+
+  association_loaders User, :event_proposals, :user_con_profiles
 end
