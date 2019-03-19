@@ -13,6 +13,47 @@ const ColumnSelectionContext = React.createContext({
 
 export const ColumnSelectionConsumer = ColumnSelectionContext.Consumer;
 
+export function useColumnSelection({
+  alwaysVisibleColumns, defaultVisibleColumns, getPossibleColumns, history,
+}) {
+  const effectiveAlwaysVisibleColumns = alwaysVisibleColumns || [];
+
+  const getVisibleColumnIds = () => {
+    const params = new URLSearchParams(history.location.search);
+    if (params.get('columns')) {
+      return uniq([...effectiveAlwaysVisibleColumns, ...params.get('columns').split(',')]);
+    }
+
+    if (defaultVisibleColumns != null) {
+      return uniq([...effectiveAlwaysVisibleColumns, ...this.props.defaultVisibleColumns]);
+    }
+
+    return getPossibleColumns().map(column => column.id);
+  };
+
+  const getVisibleColumns = () => {
+    const visibleColumnIds = getVisibleColumnIds();
+    return getPossibleColumns().filter(column => visibleColumnIds.includes(column.id));
+  };
+
+  const setVisibleColumnIds = (columnIds) => {
+    const params = new URLSearchParams(history.location.search);
+    params.set('columns', columnIds.join(','));
+    history.replace(`${history.location.pathname}?${params.toString()}`);
+  };
+
+  return [
+    { columns: getVisibleColumns() }, // reactTableProps
+    {
+      alwaysVisibleColumns: effectiveAlwaysVisibleColumns,
+      getPossibleColumns,
+      getVisibleColumnIds,
+      getVisibleColumns,
+      setVisibleColumnIds,
+    },
+  ];
+}
+
 @withRouter
 class ColumnSelectionProvider extends React.PureComponent {
   static propTypes = {
