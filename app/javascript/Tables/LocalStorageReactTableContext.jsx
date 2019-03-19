@@ -7,6 +7,25 @@ const LocalStorageReactTableContext = React.createContext({
 
 export const LocalStorageReactTableConsumer = LocalStorageReactTableContext.Consumer;
 
+export function useLocalStorageReactTable(storageKeyPrefix) {
+  const pageSizeKey = `tables:${storageKeyPrefix}:pageSize`;
+  const pageSizeString = window.localStorage.getItem(pageSizeKey);
+  const pageSize = pageSizeString ? Number.parseInt(pageSizeString, 10) : null;
+
+  const setPageSize = (newPageSize) => {
+    if (newPageSize == null) {
+      window.localStorage.removeItem(pageSizeKey);
+    } else {
+      window.localStorage.setItem(pageSizeKey, newPageSize.toString());
+    }
+  };
+
+  return {
+    pageSize: pageSize || 20,
+    onPageSizeChange: setPageSize,
+  };
+}
+
 class LocalStorageReactTableProvider extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,

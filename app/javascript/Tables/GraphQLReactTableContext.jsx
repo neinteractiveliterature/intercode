@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import { debounce } from 'lodash';
 
+import { useApolloClient } from 'react-apollo-hooks';
 import ErrorDisplay from '../ErrorDisplay';
 
 import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
 } from './TableUtils';
+import useAsyncFunction from '../useAsyncFunction';
 
 const GraphQLReactTableContext = React.createContext({
   getData: () => [],
@@ -19,6 +21,41 @@ const GraphQLReactTableContext = React.createContext({
 });
 
 export const GraphQLReactTableConsumer = GraphQLReactTableContext.Consumer;
+
+export function useGraphQLReactTable({
+  getData, getPages, query, variables,
+}) {
+  const client = useApolloClient();
+  const [queryResult, setQueryResult] = useState(null);
+  const [pages, setPages] = useState(0);
+  const [asyncQuery, error, loading] = useAsyncFunction(client.query);
+
+  const fetchData = async (vars) => {
+    const result = asyncQuery({ query, variables: vars, fetchPolicy: 'network-only' });
+    setQueryResult(result);
+    setPages(getPages(queryResult));
+  };
+
+  const fetchFromTableState = tableState => fetchData({
+    ...variables,
+    page: tableState.page + 1,
+    perPage: tableState.pageSize,
+    filters: reactTableFiltersToTableResultsFilters(tableState.filtered),
+    sort: reactTableSortToTableResultsSort(tableState.sorted),
+  });
+
+  const dataAvailable = !(loading || error);
+  const reactTableProps = {
+    data: dataAvailable ? getData(queryResult) : [],
+    pages, // avoid flash of 0 during page transitions
+    manual: true,
+    filterable: true,
+    loading,
+    onFetchData: (tableState) => { fetchFromTableState(tableState); },
+  };
+
+  return [reactTableProps, queryResult, fetchFromTableState];
+}
 
 // TODO I'd like to use <Query> but it has a bug where if you refetch and it returns the exact
 // same data, you end up with {} in the data property.

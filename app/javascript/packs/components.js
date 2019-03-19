@@ -36,6 +36,7 @@ import UserActivityAlertsAdmin from '../UserActivityAlerts/UserActivityAlertsAdm
 import UserConProfileAdminDisplay from '../UserConProfiles/UserConProfileAdminDisplay';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import UserConProfilesAdmin from '../UserConProfiles/UserConProfilesAdmin';
+import UsersAdmin from '../Users/UsersAdmin';
 import WhosFreeForm from '../BuiltInForms/WhosFreeForm';
 import WithdrawMySignupButton from '../EventsApp/EventPage/WithdrawMySignupButton';
 
@@ -75,6 +76,7 @@ const unwrappedComponents = {
   UserConProfileAdminDisplay,
   UserConProfileSignupsCard,
   UserConProfilesAdmin,
+  UsersAdmin,
   WhosFreeForm,
   WithdrawMySignupButton,
 };

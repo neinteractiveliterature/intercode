@@ -243,12 +243,11 @@ class NavigationBarPresenter
       visible? { can?(:read, Organization) }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
-    # TODO: re-add this once we have a user management UI
-    # NavigationItem.define do
-    #   label 'Users'
-    #   url { users_path }
-    #   visible? { can?(:read, User) }
-    # end
+    NavigationItem.define do
+      label 'Users'
+      url { users_path }
+      visible? { can?(:read, User) }
+    end
   ]
 
   USER_NAVIGATION_ITEMS = [
