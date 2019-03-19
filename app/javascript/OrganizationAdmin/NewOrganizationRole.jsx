@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useMutation } from 'react-apollo-hooks';
 import { Redirect, withRouter } from 'react-router-dom';
 
 import { CreateOrganizationRole } from './mutations.gql';
@@ -8,9 +8,10 @@ import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
+import useQuerySuspended from '../useQuerySuspended';
 
 function NewOrganizationRole({ organizationId, history }) {
-  const { data, error } = useQuery(OrganizationAdminOrganizationsQuery);
+  const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
   const { renderForm, formState } = useOrganizationRoleForm({ name: '', users: [], permissions: [] });
   const [mutate, mutationError, mutationInProgress] = useAsyncFunction(
     useMutation(CreateOrganizationRole),
