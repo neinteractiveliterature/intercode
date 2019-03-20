@@ -16,6 +16,12 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :conventions, [Types::ConventionType], null: false
+
+  def conventions
+    Convention.all.to_a
+  end
+
   field :event, Types::EventType, null: true do
     argument :id, Integer, required: true
   end
@@ -285,5 +291,17 @@ class Types::QueryType < Types::BaseObject
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
+  field :user, Types::UserType, null: false do
+    argument :id, Integer, required: true
+
+    guard ->(_obj, args, ctx) do
+      args[:id] == ctx[:current_user]&.id || ctx[:current_ability].can?(:read, User)
+    end
+  end
+
+  def user(id:)
+    User.find(id)
   end
 end
