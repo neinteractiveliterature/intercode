@@ -1,7 +1,10 @@
 class Tables::UsersTableResultsPresenter < Tables::TableResultsPresenter
   def fields
     [
+      Tables::TableResultsPresenter::Field.new(:id, 'ID'),
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
+      Tables::TableResultsPresenter::Field.new(:first_name, 'First name'),
+      Tables::TableResultsPresenter::Field.new(:last_name, 'Last name'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:privileges, 'Privileges')
     ]
