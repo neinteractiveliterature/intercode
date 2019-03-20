@@ -1,221 +1,166 @@
-import React from 'react';
-import moment from 'moment-timezone';
-import Pagination from 'react-js-pagination';
-import classNames from 'classnames';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
-import CombinedReactTableConsumer from '../../Tables/CombinedReactTableConsumer';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
-import EventCard from './EventCard';
+import ErrorDisplay from '../../ErrorDisplay';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
 import { EventListCommonDataQuery, EventListEventsQuery } from './queries.gql';
+import EventListEvents from './EventListEvents';
+import EventListPageSizeControl from './EventListPageSizeControl';
+import EventListPagination from './EventListPagination';
 import EventListSortDropdown from './EventListSortDropdown';
-import getSortedRuns from './getSortedRuns';
-import { LocalStorageReactTableProvider, LocalStorageReactTableConsumer } from '../../Tables/LocalStorageReactTableContext';
-import QueryWithStateDisplay from '../../QueryWithStateDisplay';
-import { ReactRouterReactTableProvider, ReactRouterReactTableConsumer } from '../../Tables/ReactRouterReactTableContext';
+import LoadingIndicator from '../../LoadingIndicator';
+import useLocalStorageReactTable from '../../Tables/useLocalStorageReactTable';
+import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
 } from '../../Tables/TableUtils';
-import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
+import useQuerySuspended from '../../useQuerySuspended';
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
 });
 
-class EventList extends React.Component {
-  renderPagination = (eventsPaginated, onPageChange, extraClasses) => {
-    const {
-      current_page: currentPage,
-      total_pages: totalPages,
-    } = eventsPaginated;
+function EventListBody({ convention, currentAbility, history }) {
+  const {
+    page, sorted, filtered, onPageChange: reactTableOnPageChange, onSortedChange, onFilteredChange,
+  } = useReactRouterReactTable({ history, ...filterCodecs });
+  const { pageSize, onPageSizeChange } = useLocalStorageReactTable('eventList');
+  const { data, loading, error } = useQuery(
+    EventListEventsQuery,
+    {
+      variables: {
+        page: page + 1,
+        pageSize: (pageSize || 20),
+        sort: reactTableSortToTableResultsSort(
+          sorted && sorted.length > 0
+            ? sorted
+            : [{ id: 'title', desc: false }],
+        ),
+        filters: reactTableFiltersToTableResultsFilters(filtered),
+      },
+    },
+  );
+  const [cachedPageCount, setCachedPageCount] = useState(null);
+  const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
 
-    return (
-      <nav>
-        <Pagination
-          totalItemsCount={totalPages}
-          activePage={currentPage}
-          onChange={onPageChange}
-          itemsCountPerPage={1}
-          innerClass={classNames('pagination', extraClasses)}
-          itemClass="page-item"
-          linkClass="page-link"
-          hideNavigation
-          hideFirstLastPages
-          ellipsis
-        />
-      </nav>
-    );
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  renderEvents = (convention, eventsPaginated, sorted, canReadSchedule) => {
-    let previousConventionDay = null;
-    let conventionDayTimespans = [];
-    const conventionTimespan = timespanFromConvention(convention);
-    if (conventionTimespan.isFinite()) {
-      conventionDayTimespans = getConventionDayTimespans(conventionTimespan, convention.timezone_name);
-    }
+  const eventsPaginated = (loading ? { entries: [] } : data.convention.events_paginated);
 
-    return eventsPaginated.entries.map((event) => {
-      let preamble = null;
-      if (sorted.some(sort => sort.id === 'first_scheduled_run_start')) {
-        const runs = getSortedRuns(event);
-        if (runs.length > 0) {
-          const conventionDay = conventionDayTimespans.find(timespan => timespan.includesTime(
-            moment.tz(runs[0].starts_at, convention.timezone_name),
-          ));
-          if (
-            conventionDay
-            && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
-          ) {
-            preamble = (
-              <h3 className="mt-4">
-                {conventionDay.start.format('dddd, MMMM D')}
-              </h3>
-            );
-            previousConventionDay = conventionDay;
-          }
-        }
-      }
-
-      return (
-        <React.Fragment key={event.id}>
-          {preamble}
-          <EventCard
-            event={event}
-            sorted={sorted}
-            timezoneName={convention.timezone_name}
-            canReadSchedule={canReadSchedule}
-          />
-        </React.Fragment>
-      );
-    });
+  if (!loading && cachedPageCount !== eventsPaginated.total_pages) {
+    setCachedPageCount(eventsPaginated.total_pages);
   }
 
-  renderPageSizeControl = ({ pageSize, onPageSizeChange }) => (
-    <div className="form-inline align-items-start">
-      <select
-        className="form-control mx-1"
-        value={pageSize.toString()}
-        onChange={(event) => { onPageSizeChange(Number.parseInt(event.target.value, 10)); }}
-      >
-        {[10, 20, 50, 100, 200].map(pageSizeOption => (
-          <option value={pageSizeOption.toString()} key={pageSizeOption}>
-            {pageSizeOption}
-            {' '}
-            per page
-          </option>
-        ))}
-      </select>
-    </div>
-  )
+  const totalPages = (loading ? cachedPageCount : eventsPaginated.total_pages);
 
-  renderBottomPagination = ({
-    eventsPaginated, onPageChange, pageSize, onPageSizeChange,
-  }) => {
-    if (eventsPaginated.entries.length < 4) {
-      return null;
-    }
+  const renderPagination = () => (
+    <>
+      <EventListPagination
+        currentPage={page + 1}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+      />
+      <EventListPageSizeControl pageSize={pageSize} onPageSizeChange={onPageSizeChange} />
+    </>
+  );
 
-    return (
-      <div className="d-flex flex-wrap justify-content-center mt-4">
-        {this.renderPagination(eventsPaginated, onPageChange)}
-        {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
-      </div>
-    );
-  }
+  return (
+    <>
+      <div className="d-flex align-items-start flex-wrap mt-4">
+        <div className="flex-grow-1 d-flex">
+          {renderPagination()}
+        </div>
 
-  render = () => (
-    <QueryWithStateDisplay query={EventListCommonDataQuery}>
-      {({ data: { convention, currentAbility } }) => (
-        <ReactRouterReactTableProvider {...filterCodecs}>
-          <LocalStorageReactTableProvider storageKeyPrefix="eventList">
-            <CombinedReactTableConsumer
-              consumers={[ReactRouterReactTableConsumer, LocalStorageReactTableConsumer]}
-            >
-              {({
-                page,
-                sorted,
-                filtered,
-                pageSize,
-                onPageChange: reactTableOnPageChange,
-                onSortedChange,
-                onFilteredChange,
-                onPageSizeChange,
-              }) => {
-                const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
-
-                return (
-                  <React.Fragment>
-                    <h1 className="text-nowrap">
-                      Events at
-                      {' '}
-                      {convention.name}
-                    </h1>
-
-                    <QueryWithStateDisplay
-                      query={EventListEventsQuery}
-                      variables={{
-                        page: page + 1,
-                        pageSize: (pageSize || 20),
-                        sort: reactTableSortToTableResultsSort(
-                          sorted && sorted.length > 0
-                            ? sorted
-                            : [{ id: 'title', desc: false }],
-                        ),
-                        filters: reactTableFiltersToTableResultsFilters(filtered),
-                      }}
-                    >
-                      {({ data: { convention: { events_paginated: eventsPaginated } } }) => (
-                        <React.Fragment>
-                          <div className="d-flex align-items-start flex-wrap mt-4">
-                            <div className="flex-grow-1 d-flex">
-                              {this.renderPagination(eventsPaginated, onPageChange)}
-                              {this.renderPageSizeControl({ pageSize, onPageSizeChange })}
-                            </div>
-
-                            <div className="d-flex flex-wrap">
-                              <div className="mb-2">
-                                <EventListCategoryDropdown
-                                  eventCategories={convention.event_categories}
-                                  value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                                  onChange={(value) => {
-                                    onFilteredChange([
-                                      ...(filtered || []).filter(({ id }) => id !== 'category'),
-                                      { id: 'category', value },
-                                    ]);
-                                  }}
-                                />
-                              </div>
-
-                              <div className="ml-2">
-                                <EventListSortDropdown
-                                  showConventionOrder={currentAbility.can_read_schedule}
-                                  value={sorted}
-                                  onChange={onSortedChange}
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          {this.renderEvents(
-                            convention, eventsPaginated, sorted, currentAbility.can_read_schedule,
-                          )}
-                          {this.renderBottomPagination({
-                            eventsPaginated, onPageChange, pageSize, onPageSizeChange,
-                          })}
-                        </React.Fragment>
-                      )}
-                    </QueryWithStateDisplay>
-                  </React.Fragment>
-                );
+        <div className="d-flex flex-wrap">
+          <div className="mb-2">
+            <EventListCategoryDropdown
+              eventCategories={convention.event_categories}
+              value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+              onChange={(value) => {
+                onFilteredChange([
+                  ...(filtered || []).filter(({ id }) => id !== 'category'),
+                  { id: 'category', value },
+                ]);
               }}
-            </CombinedReactTableConsumer>
-          </LocalStorageReactTableProvider>
-        </ReactRouterReactTableProvider>
-      )}
-    </QueryWithStateDisplay>
-  )
+            />
+          </div>
+
+          <div className="ml-2">
+            <EventListSortDropdown
+              showConventionOrder={currentAbility.can_read_schedule}
+              value={sorted}
+              onChange={onSortedChange}
+            />
+          </div>
+        </div>
+      </div>
+
+      {
+        loading
+          ? <LoadingIndicator />
+          : (
+            <>
+              <EventListEvents
+                convention={convention}
+                eventsPaginated={eventsPaginated}
+                sorted={sorted}
+                canReadSchedule={currentAbility.can_read_schedule}
+              />
+              {
+                eventsPaginated.entries.length >= 4
+                  ? (
+                    <div className="d-flex flex-wrap justify-content-center mt-4">
+                      {renderPagination()}
+                    </div>
+                  )
+                  : null
+              }
+            </>
+          )
+      }
+    </>
+  );
 }
 
-export default EventList;
+EventListBody.propTypes = {
+  convention: PropTypes.shape({
+    event_categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  }).isRequired,
+  currentAbility: PropTypes.shape({
+    can_read_schedule: PropTypes.bool.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({}).isRequired,
+};
+
+const EventListBodyWithRouter = withRouter(EventListBody);
+
+function EventList() {
+  const {
+    data: { convention, currentAbility },
+    error,
+  } = useQuerySuspended(EventListCommonDataQuery);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <>
+      <h1 className="text-nowrap">
+        Events at
+        {' '}
+        {convention.name}
+      </h1>
+
+      <EventListBodyWithRouter convention={convention} currentAbility={currentAbility} />
+    </>
+  );
+}
+
+export default withRouter(EventList);
