@@ -63,7 +63,7 @@ const getPossibleColumns = () => [
   },
 ];
 
-function UsersTable({ history }) {
+function UsersTable({ exportUrl, history }) {
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns: ['id', 'first_name', 'last_name', 'email'],
@@ -82,7 +82,7 @@ function UsersTable({ history }) {
 
       <TableHeader
         {...tableHeaderProps}
-        exportUrl={'' /* todo */}
+        exportUrl={exportUrl}
       />
 
       <ReactTable
@@ -102,6 +102,7 @@ function UsersTable({ history }) {
 }
 
 UsersTable.propTypes = {
+  exportUrl: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
