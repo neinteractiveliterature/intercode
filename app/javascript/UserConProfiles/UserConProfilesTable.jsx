@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { humanize, titleize } from 'inflected';
 import moment from 'moment-timezone';
+import ReactTable from 'react-table';
 
 import AddAttendeeModal from './AddAttendeeModal';
 import BooleanChoiceSetFilter from '../Tables/BooleanChoiceSetFilter';
@@ -11,8 +12,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import { GraphQLReactTableConsumer } from '../Tables/GraphQLReactTableContext';
-import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import { UserConProfilesTableUserConProfilesQuery } from './queries.gql';
 import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
@@ -42,271 +42,259 @@ function formatTicketStatus(ticket, includePaymentAmount = true) {
   return ticketTypeName;
 }
 
-@withRouter
-class UserConProfilesTable extends React.Component {
-  static propTypes = {
-    defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string),
-    exportUrl: PropTypes.string.isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+const getPossibleColumns = (data) => {
+  const form = deserializeForm(data.convention.user_con_profile_form);
 
-  getPossibleColumns = (data) => {
-    const form = deserializeForm(data.convention.user_con_profile_form);
+  const columns = [
+    {
+      Header: 'ID',
+      id: 'id',
+      accessor: 'id',
+      filterable: false,
+      sortable: false,
+      width: 70,
+    },
+    {
+      Header: 'User ID',
+      id: 'user_id',
+      accessor: userConProfile => userConProfile.user.id,
+      filterable: false,
+      sortable: false,
+      width: 70,
+    },
+    {
+      Header: 'Name',
+      id: 'name',
+      accessor: userConProfile => userConProfile.name_inverted,
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'First name',
+      id: 'first_name',
+      accessor: 'first_name',
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Last name',
+      id: 'last_name',
+      accessor: 'last_name',
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Email',
+      id: 'email',
+      accessor: 'email',
+      Cell: ({ value }) => (
+        <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
+          {value}
+        </a>
+      ),
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: humanize(data.convention.ticket_name || 'ticket'),
+      id: 'ticket',
+      accessor: 'ticket',
+      width: 150,
+      Cell: ({ value }) => formatTicketStatus(value),
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSetFilter
+          name="ticketType"
+          choices={[
+            { label: 'Unpaid', value: 'none' },
+            ...(data.convention.ticket_types
+              .map(ticketType => ({
+                label: humanize(ticketType.name),
+                value: ticketType.id.toString(),
+              }))),
+          ]}
+          onChange={onChange}
+          filter={filter}
+        />
+      ),
+    },
+    {
+      Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
+      id: 'ticket_type',
+      accessor: 'ticket',
+      width: 150,
+      Cell: ({ value }) => formatTicketStatus(value, false),
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSetFilter
+          name="ticketType"
+          choices={[
+            { label: 'Unpaid', value: 'none' },
+            ...(data.convention.ticket_types
+              .map(ticketType => ({
+                label: humanize(ticketType.name),
+                value: ticketType.id.toString(),
+              }))),
+          ]}
+          onChange={onChange}
+          filter={filter}
+        />
+      ),
+    },
+    {
+      Header: 'Payment amount',
+      id: 'payment_amount',
+      accessor: 'ticket',
+      width: 150,
+      Cell: ({ value }) => formatMoney((value || {}).payment_amount),
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Event team member?',
+      id: 'is_team_member',
+      accessor: userConProfile => userConProfile.team_members.length > 0,
+      width: 150,
+      sortable: false,
+      Cell: ({ value }) => (value ? 'yes' : 'no'),
+      Filter: ({ filter, onChange }) => (
+        <BooleanChoiceSetFilter
+          name="isTeamMember"
+          filter={filter}
+          onChange={onChange}
+        />
+      ),
+    },
+    {
+      Header: 'Attending?',
+      id: 'attending',
+      accessor: 'ticket',
+      width: 150,
+      sortable: false,
+      Cell: ({ value }) => (value ? 'yes' : 'no'),
+      Filter: ({ filter, onChange }) => (
+        <BooleanChoiceSetFilter
+          name="attending"
+          filter={filter}
+          onChange={onChange}
+        />
+      ),
+    },
+    {
+      Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
+      id: 'ticket_updated_at',
+      accessor: userConProfile => (userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null),
+      filterable: false,
+      Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
+    },
+    {
+      Header: 'Privileges',
+      id: 'privileges',
+      accessor: 'privileges',
+      Cell: ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', '),
+      Filter: ({ filter, onChange }) => (
+        <ChoiceSetFilter
+          name="privileges"
+          choices={[
+            ...(data.convention.privilege_names
+              .map(privilegeName => ({
+                label: humanize(privilegeName),
+                value: privilegeName,
+              }))),
+          ]}
+          onChange={onChange}
+          filter={filter}
+        />
+      ),
+    },
+    {
+      Header: 'Order summary',
+      id: 'order_summary',
+      accessor: 'order_summary',
+      filterable: false,
+      sortable: false,
+    },
+  ];
 
-    const columns = [
-      {
-        Header: 'ID',
-        id: 'id',
-        accessor: 'id',
-        filterable: false,
-        sortable: false,
-        width: 70,
-      },
-      {
-        Header: 'User ID',
-        id: 'user_id',
-        accessor: userConProfile => userConProfile.user.id,
-        filterable: false,
-        sortable: false,
-        width: 70,
-      },
-      {
-        Header: 'Name',
-        id: 'name',
-        accessor: userConProfile => userConProfile.name_inverted,
-        Filter: ({ filter, onChange }) => (
-          <FreeTextFilter filter={filter} onChange={onChange} />
-        ),
-      },
-      {
-        Header: 'First name',
-        id: 'first_name',
-        accessor: 'first_name',
-        Filter: ({ filter, onChange }) => (
-          <FreeTextFilter filter={filter} onChange={onChange} />
-        ),
-      },
-      {
-        Header: 'Last name',
-        id: 'last_name',
-        accessor: 'last_name',
-        Filter: ({ filter, onChange }) => (
-          <FreeTextFilter filter={filter} onChange={onChange} />
-        ),
-      },
-      {
-        Header: 'Email',
-        id: 'email',
-        accessor: 'email',
-        Cell: ({ value }) => (
-          <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
-            {value}
-          </a>
-        ),
-        Filter: ({ filter, onChange }) => (
-          <FreeTextFilter filter={filter} onChange={onChange} />
-        ),
-      },
-      {
-        Header: humanize(data.convention.ticket_name || 'ticket'),
-        id: 'ticket',
-        accessor: 'ticket',
-        width: 150,
-        Cell: ({ value }) => formatTicketStatus(value),
-        Filter: ({ filter, onChange }) => (
-          <ChoiceSetFilter
-            name="ticketType"
-            choices={[
-              { label: 'Unpaid', value: 'none' },
-              ...(data.convention.ticket_types
-                .map(ticketType => ({
-                  label: humanize(ticketType.name),
-                  value: ticketType.id.toString(),
-                }))),
-            ]}
-            onChange={onChange}
-            filter={filter}
-          />
-        ),
-      },
-      {
-        Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
-        id: 'ticket_type',
-        accessor: 'ticket',
-        width: 150,
-        Cell: ({ value }) => formatTicketStatus(value, false),
-        Filter: ({ filter, onChange }) => (
-          <ChoiceSetFilter
-            name="ticketType"
-            choices={[
-              { label: 'Unpaid', value: 'none' },
-              ...(data.convention.ticket_types
-                .map(ticketType => ({
-                  label: humanize(ticketType.name),
-                  value: ticketType.id.toString(),
-                }))),
-            ]}
-            onChange={onChange}
-            filter={filter}
-          />
-        ),
-      },
-      {
-        Header: 'Payment amount',
-        id: 'payment_amount',
-        accessor: 'ticket',
-        width: 150,
-        Cell: ({ value }) => formatMoney((value || {}).payment_amount),
-        Filter: ({ filter, onChange }) => (
-          <FreeTextFilter filter={filter} onChange={onChange} />
-        ),
-      },
-      {
-        Header: 'Event team member?',
-        id: 'is_team_member',
-        accessor: userConProfile => userConProfile.team_members.length > 0,
-        width: 150,
-        sortable: false,
-        Cell: ({ value }) => (value ? 'yes' : 'no'),
-        Filter: ({ filter, onChange }) => (
-          <BooleanChoiceSetFilter
-            name="isTeamMember"
-            filter={filter}
-            onChange={onChange}
-          />
-        ),
-      },
-      {
-        Header: 'Attending?',
-        id: 'attending',
-        accessor: 'ticket',
-        width: 150,
-        sortable: false,
-        Cell: ({ value }) => (value ? 'yes' : 'no'),
-        Filter: ({ filter, onChange }) => (
-          <BooleanChoiceSetFilter
-            name="attending"
-            filter={filter}
-            onChange={onChange}
-          />
-        ),
-      },
-      {
-        Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
-        id: 'ticket_updated_at',
-        accessor: userConProfile => (userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null),
-        filterable: false,
-        Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
-      },
-      {
-        Header: 'Privileges',
-        id: 'privileges',
-        accessor: 'privileges',
-        Cell: ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', '),
-        Filter: ({ filter, onChange }) => (
-          <ChoiceSetFilter
-            name="privileges"
-            choices={[
-              ...(data.convention.privilege_names
-                .map(privilegeName => ({
-                  label: humanize(privilegeName),
-                  value: privilegeName,
-                }))),
-            ]}
-            onChange={onChange}
-            filter={filter}
-          />
-        ),
-      },
-      {
-        Header: 'Order summary',
-        id: 'order_summary',
-        accessor: 'order_summary',
-        filterable: false,
-        sortable: false,
-      },
-    ];
+  form.getAllItems().forEach((formItem) => {
+    const { identifier } = formItem;
+    if (!identifier || identifier === 'first_name' || identifier === 'last_name' || columns.some(column => column.id === identifier)) {
+      return;
+    }
 
-    form.getAllItems().forEach((formItem) => {
-      const { identifier } = formItem;
-      if (!identifier || identifier === 'first_name' || identifier === 'last_name' || columns.some(column => column.id === identifier)) {
-        return;
-      }
-
-      columns.push({
-        Header: formItem.admin_description || humanize(identifier),
-        id: identifier,
-        accessor: userConProfile => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
-        Cell: ({ value }) => <FormItemDisplay formItem={formItem} value={value} convention={data.convention} />,
-        sortable: false,
-        filterable: false,
-      });
+    columns.push({
+      Header: formItem.admin_description || humanize(identifier),
+      id: identifier,
+      accessor: userConProfile => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
+      Cell: ({ value }) => <FormItemDisplay formItem={formItem} value={value} convention={data.convention} />,
+      sortable: false,
+      filterable: false,
     });
+  });
 
-    return columns;
-  }
+  return columns;
+};
 
-  render = () => (
+function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
+  const [reactTableProps, { tableHeaderProps, queryResult }] = useReactTableWithTheWorks({
+    decodeFilterValue,
+    defaultVisibleColumns,
+    encodeFilterValue,
+    getData: ({ data }) => data.convention.user_con_profiles_paginated.entries,
+    getPages: ({ data }) => data.convention.user_con_profiles_paginated.total_pages,
+    getPossibleColumns,
+    history,
+    query: UserConProfilesTableUserConProfilesQuery,
+    storageKeyPrefix: 'userConProfiles',
+  });
+
+  return (
     <div className="mb-4">
-      <ReactTableWithTheWorks
-        decodeFilterValue={decodeFilterValue}
-        defaultVisibleColumns={this.props.defaultVisibleColumns}
-        encodeFilterValue={encodeFilterValue}
-        exportUrl={this.props.exportUrl}
-        getData={({ data }) => data.convention.user_con_profiles_paginated.entries}
-        getPages={({ data }) => data.convention.user_con_profiles_paginated.total_pages}
-        getPossibleColumns={this.getPossibleColumns}
-        query={UserConProfilesTableUserConProfilesQuery}
-        storageKeyPrefix="userConProfiles"
-        renderHeader={headerProps => (
-          <TableHeader
-            {...headerProps}
-            renderLeftContent={() => (
-              <GraphQLReactTableConsumer>
-                {({ queryResult: { data } }) => (
-                  data.currentAbility.can_create_user_con_profiles
-                    ? (
-                      <Link to="/new" className="btn btn-primary ml-2 mb-2">
-                        <i className="fa fa-plus" />
-                        {' '}
-                        Add attendee
-                      </Link>
-                    )
-                    : null
-                )}
-              </GraphQLReactTableConsumer>
-            )}
-          />
+      <TableHeader
+        {...tableHeaderProps}
+        exportUrl={exportUrl}
+        renderLeftContent={() => (
+          queryResult.data && (queryResult.data.currentAbility || {}).can_create_user_con_profiles
+            ? (
+              <Link to="/new" className="btn btn-primary ml-2 mb-2">
+                <i className="fa fa-plus" />
+                {' '}
+                Add attendee
+              </Link>
+            )
+            : null
         )}
-        renderFooter={() => (
-          <GraphQLReactTableConsumer>
-            {({ queryResult: { data } }) => (
-              <Route path="/new">
-                {({ match }) => (
-                  <AddAttendeeModal
-                    conventionName={data.convention.name}
-                    visible={match != null}
-                  />
-                )}
-              </Route>
-            )}
-          </GraphQLReactTableConsumer>
-        )}
+      />
+
+      <ReactTable
+        {...reactTableProps}
 
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            this.props.history.push(`${rowInfo.original.id}`);
+            history.push(`${rowInfo.original.id}`);
           },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
+
+      <Route path="/new">
+        {({ match }) => (
+          <AddAttendeeModal
+            conventionName={(queryResult.data && (queryResult.data.convention || {}).name) || ''}
+            visible={match != null}
+          />
+        )}
+      </Route>
     </div>
-  )
+  );
 }
 
-export default UserConProfilesTable;
+UserConProfilesTable.propTypes = {
+  defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string),
+  exportUrl: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+UserConProfilesTable.defaultProps = {
+  defaultVisibleColumns: null,
+};
+
+export default withRouter(UserConProfilesTable);

@@ -5,11 +5,9 @@ import ReactTable from 'react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import { useGraphQLReactTable } from '../Tables/GraphQLReactTableContext';
+import TableHeader from '../Tables/TableHeader';
 import { UsersTableUsersQuery } from './queries.gql';
-import { useColumnSelection } from '../Tables/ColumnSelectionContext';
-import { useLocalStorageReactTable } from '../Tables/LocalStorageReactTableContext';
-import { useReactRouterReactTable } from '../Tables/ReactRouterReactTableContext';
+import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
@@ -66,30 +64,29 @@ const getPossibleColumns = () => [
 ];
 
 function UsersTable({ history }) {
-  const [graphQLReactTableProps] = useGraphQLReactTable({
+  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+    decodeFilterValue,
+    defaultVisibleColumns: ['id', 'first_name', 'last_name', 'email'],
+    encodeFilterValue,
     getData: ({ data }) => data.users_paginated.entries,
     getPages: ({ data }) => data.users_paginated.total_pages,
-    query: UsersTableUsersQuery,
-  });
-  const [columnSelectionReactTableProps] = useColumnSelection({
-    defaultVisibleColumns: ['id', 'first_name', 'last_name', 'email'],
     getPossibleColumns,
     history,
-  });
-  const localStorageReactTableProps = useLocalStorageReactTable('users');
-  const reactRouterReactTableProps = useReactRouterReactTable({
-    decodeFilterValue, encodeFilterValue,
+    storageKeyPrefix: 'users',
+    query: UsersTableUsersQuery,
   });
 
   return (
     <div className="mb-4">
       <h1 className="mb-4">Users</h1>
 
+      <TableHeader
+        {...tableHeaderProps}
+        exportUrl={'' /* todo */}
+      />
+
       <ReactTable
-        {...graphQLReactTableProps}
-        {...columnSelectionReactTableProps}
-        {...localStorageReactTableProps}
-        {...reactRouterReactTableProps}
+        {...reactTableProps}
 
         className="-striped -highlight"
         getTrProps={(state, rowInfo) => ({

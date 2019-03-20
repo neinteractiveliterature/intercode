@@ -27,7 +27,7 @@ const PermissionNamePropType = PropTypes.shape({
 
 const ModelPropType = PropTypes.shape({
   __typename: PropTypes.string.isRequired,
-  id: PropTypes.oneOfType(PropTypes.number, PropTypes.string).isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 });
 
 const PermissionPropType = PropTypes.shape({

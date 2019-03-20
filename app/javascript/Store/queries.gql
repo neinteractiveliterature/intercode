@@ -75,6 +75,10 @@ fragment OrderEntryFields on OrderEntry {
 }
 
 query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
+  currentAbility {
+    can_update_orders
+  }
+
   convention {
     id
     timezone_name
