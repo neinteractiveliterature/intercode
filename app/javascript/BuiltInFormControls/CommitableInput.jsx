@@ -142,6 +142,24 @@ class CommitableInput extends React.Component {
           onFocus: this.beginEditing,
           disabled: this.props.disabled,
         })}
+        <div className="input-group-append">
+          {
+            this.props.value
+              ? (
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onMouseDown={() => { this.props.onChange(''); }}
+                  disabled={this.props.disabled || !this.props.value}
+                >
+                  <i className="fa fa-times-rectangle">
+                    <span className="sr-only">Clear</span>
+                  </i>
+                </button>
+              )
+              : null
+          }
+        </div>
       </div>
     );
   }

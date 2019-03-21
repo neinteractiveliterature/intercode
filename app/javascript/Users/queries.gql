@@ -1,0 +1,44 @@
+query UsersTableUsersQuery($page: Int, $perPage: Int, $filters: UserFiltersInput, $sort: [SortInput!]) {
+  users_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+    total_entries
+    total_pages
+    current_page
+    per_page
+
+    entries {
+      id
+      name_inverted
+      first_name
+      last_name
+      email
+      privileges
+    }
+  }
+
+  currentAbility {
+    can_create_user_con_profiles
+  }
+}
+
+query UserAdminQuery($id: Int!) {
+  user(id: $id) {
+    id
+    name
+    first_name
+    last_name
+    email
+    privileges
+
+    user_con_profiles {
+      id
+      privileges
+
+      convention {
+        id
+        name
+        domain
+        starts_at
+      }
+    }
+  }
+}
