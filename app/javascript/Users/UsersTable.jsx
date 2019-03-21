@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
+import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
 import { UsersTableUsersQuery } from './queries.gql';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
@@ -27,44 +28,72 @@ EmailCell.defaultProps = {
   value: null,
 };
 
-const getPossibleColumns = () => [
-  {
-    Header: 'ID',
-    id: 'id',
-    accessor: 'id',
-    filterable: false,
-    sortable: false,
-    width: 70,
-  },
-  {
-    Header: 'Name',
-    id: 'name',
-    accessor: user => user.name_inverted,
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'First name',
-    id: 'first_name',
-    accessor: 'first_name',
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Last name',
-    id: 'last_name',
-    accessor: 'last_name',
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Email',
-    id: 'email',
-    accessor: 'email',
-    Cell: EmailCell,
-    Filter: FreeTextFilter,
-  },
-];
-
 function UsersTable({ exportUrl, history }) {
+  const [checkedUserIds, setCheckedUserIds] = useState(new Set());
+
+  const getPossibleColumns = () => [
+    {
+      Header: '',
+      id: '_checkbox',
+      accessor: () => null,
+      filterable: false,
+      sortable: false,
+      width: 30,
+      Cell: ({ original }) => (
+        <input
+          type="checkbox"
+          value={original.id}
+          checked={checkedUserIds.has(original.id)}
+          onClick={(event) => { event.stopPropagation(); }}
+          onChange={() => {
+            const newCheckedUserIds = new Set(checkedUserIds);
+            if (checkedUserIds.has(original.id)) {
+              newCheckedUserIds.delete(original.id);
+            } else {
+              newCheckedUserIds.add(original.id);
+            }
+            setCheckedUserIds(newCheckedUserIds);
+          }}
+        />
+      ),
+    },
+    {
+      Header: 'ID',
+      id: 'id',
+      accessor: 'id',
+      filterable: false,
+      sortable: false,
+      width: 70,
+    },
+    {
+      Header: 'Name',
+      id: 'name',
+      accessor: user => user.name_inverted,
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'First name',
+      id: 'first_name',
+      accessor: 'first_name',
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Last name',
+      id: 'last_name',
+      accessor: 'last_name',
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Email',
+      id: 'email',
+      accessor: 'email',
+      Cell: EmailCell,
+      Filter: FreeTextFilter,
+    },
+  ];
+
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+    alwaysVisibleColumns: ['_checkbox'],
     decodeFilterValue,
     defaultVisibleColumns: ['id', 'first_name', 'last_name', 'email'],
     encodeFilterValue,
@@ -83,6 +112,11 @@ function UsersTable({ exportUrl, history }) {
       <TableHeader
         {...tableHeaderProps}
         exportUrl={exportUrl}
+        // renderLeftContent={() => (
+        //   <div className="ml-2 mb-2 d-inline-block align-top">
+        //     <MultiUserActionsDropdown selectedUserIds={[...checkedUserIds]} />
+        //   </div>
+        // )}
       />
 
       <ReactTable
@@ -95,6 +129,16 @@ function UsersTable({ exportUrl, history }) {
             history.push(`${rowInfo.original.id}`);
           },
         })}
+        getTdProps={(state, rowInfo, column) => {
+          if (column.id === '_checkbox') {
+            return {
+              style: { cursor: 'default' },
+              onClick: (e) => { e.stopPropagation(); },
+            };
+          }
+
+          return {};
+        }}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
     </div>
