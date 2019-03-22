@@ -38,22 +38,108 @@ const STATUS_OPTIONS = [
   { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'badge-warning' },
 ];
 
+function EventCategoryCell({ value }) {
+  return (
+    <span className="p-1 small rounded" style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}>
+      {value.name}
+    </span>
+  );
+}
+
+EventCategoryCell.propTypes = {
+  value: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+function CapacityCell({ value }) {
+  return (
+    <div className="text-nowrap text-right">
+      {formatCapacity(value)}
+    </div>
+  );
+}
+
+CapacityCell.propTypes = {
+  value: PropTypes.shape({}).isRequired,
+};
+
+function DurationCell({ value }) {
+  const unitQuantities = breakValueIntoUnitQuantities(value);
+  const hours = (unitQuantities.find(({ unit }) => unit.name === 'hour') || {}).quantity || 0;
+  const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;
+
+  return (
+    <div className="text-nowrap text-right">
+      {`${hours}:${minutes.toString().padStart(2, '0')}`}
+    </div>
+  );
+}
+
+DurationCell.propTypes = {
+  value: PropTypes.number.isRequired,
+};
+
+function StatusFilter({ filter, onChange }) {
+  return (
+    <ChoiceSetFilter
+      name="state"
+      choices={STATUS_OPTIONS}
+      onChange={onChange}
+      filter={filter}
+    />
+  );
+}
+
+StatusFilter.propTypes = {
+  filter: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func.isRequired,
+};
+
+StatusFilter.defaultProps = {
+  filter: null,
+};
+
+function StatusCell({ value }) {
+  return (
+    <div className={`badge ${(STATUS_OPTIONS.find(option => option.value === value) || {}).badgeClass}`}>
+      {value}
+    </div>
+  );
+}
+
+StatusCell.propTypes = {
+  value: PropTypes.string.isRequired,
+};
+
+function ExtraCell({ original }) {
+  return (
+    <Link to={`${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
+      <i className="fa fa-external-link">
+        <span className="sr-only">Open in new window</span>
+      </i>
+    </Link>
+  );
+}
+
+ExtraCell.propTypes = {
+  original: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
 const getPossibleColumns = data => [
   {
     Header: 'Category',
     id: 'event_category',
     accessor: 'event_category',
     width: 100,
-    Cell: ({ value }) => (
-      <span className="p-1 small rounded" style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}>
-        {value.name}
-      </span>
-    ),
+    Cell: EventCategoryCell,
     Filter: ({ filter, onChange }) => (
       <ChoiceSetFilter
         name="event_category"
         choices={data.convention.event_categories.map(eventCategory => ({
-          value: eventCategory.id,
+          value: eventCategory.id.toString(),
           label: eventCategory.name,
         }))}
         onChange={onChange}
@@ -66,6 +152,7 @@ const getPossibleColumns = data => [
     Header: 'Title',
     id: 'title',
     accessor: 'title',
+    Filter: FreeTextFilter,
   },
   {
     Header: 'Submitted by',
@@ -80,11 +167,7 @@ const getPossibleColumns = data => [
     accessor: eventProposal => eventProposal.registration_policy,
     filterable: false,
     sortable: false,
-    Cell: ({ value }) => (
-      <div className="text-nowrap text-right">
-        {formatCapacity(value)}
-      </div>
-    ),
+    Cell: CapacityCell,
   },
   {
     Header: 'Duration',
@@ -92,36 +175,15 @@ const getPossibleColumns = data => [
     accessor: 'length_seconds',
     width: 80,
     filterable: false,
-    Cell: ({ value }) => {
-      const unitQuantities = breakValueIntoUnitQuantities(value);
-      const hours = (unitQuantities.find(({ unit }) => unit.name === 'hour') || {}).quantity || 0;
-      const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;
-
-      return (
-        <div className="text-nowrap text-right">
-          {`${hours}:${minutes.toString().padStart(2, '0')}`}
-        </div>
-      );
-    },
+    Cell: DurationCell,
   },
   {
     Header: 'Status',
     id: 'status',
     accessor: 'status',
     width: 80,
-    Filter: ({ filter, onChange }) => (
-      <ChoiceSetFilter
-        name="state"
-        choices={STATUS_OPTIONS}
-        onChange={onChange}
-        filter={filter}
-      />
-    ),
-    Cell: ({ value }) => (
-      <div className={`badge ${(STATUS_OPTIONS.find(option => option.value === value) || {}).badgeClass}`}>
-        {value}
-      </div>
-    ),
+    Filter: StatusFilter,
+    Cell: StatusCell,
   },
   {
     Header: 'Submitted',
@@ -150,13 +212,7 @@ const getPossibleColumns = data => [
     width: 30,
     filterable: false,
     sortable: false,
-    Cell: ({ original }) => (
-      <Link to={`${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
-        <i className="fa fa-external-link">
-          <span className="sr-only">Open in new window</span>
-        </i>
-      </Link>
-    ),
+    Cell: ExtraCell,
   },
 ];
 
