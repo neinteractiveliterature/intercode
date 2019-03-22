@@ -4,7 +4,7 @@ import BootstrapFormCheckbox from './BootstrapFormCheckbox';
 
 class ChoiceSet extends React.Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     choices: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
       value: PropTypes.string.isRequired,
@@ -21,6 +21,7 @@ class ChoiceSet extends React.Component {
   };
 
   static defaultProps = {
+    name: null,
     value: null,
     multiple: false,
     choiceClassName: null,
@@ -44,7 +45,7 @@ class ChoiceSet extends React.Component {
 
     const options = this.props.choices.map(({ label, value, disabled = false }) => (
       <BootstrapFormCheckbox
-        key={`${this.props.name}_${value}`}
+        key={`${value}`}
         name={this.props.name}
         type={choiceType}
         className={this.props.choiceClassName}

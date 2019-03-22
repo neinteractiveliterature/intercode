@@ -6,9 +6,11 @@ import moment from 'moment-timezone';
 import ReactTable from 'react-table';
 
 import AddAttendeeModal from './AddAttendeeModal';
+import BooleanCell from '../Tables/BooleanCell';
 import BooleanChoiceSetFilter from '../Tables/BooleanChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
+import EmailCell from '../Tables/EmailCell';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -26,24 +28,119 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   payment_amount: FilterCodecs.float,
 });
 
-function formatTicketStatus(ticket, includePaymentAmount = true) {
-  if (!ticket) {
+function TicketStatusCell({ value }) {
+  if (!value) {
     return 'Unpaid';
   }
 
-  const ticketTypeName = humanize(ticket.ticket_type.name);
-
-  if (includePaymentAmount) {
-    if (ticket.payment_amount && ticket.payment_amount.fractional > 0) {
-      return `${ticketTypeName} ${formatMoney(ticket.payment_amount)}`;
-    }
-  }
-
-  return ticketTypeName;
+  return humanize(value.ticket_type.name);
 }
+
+TicketStatusCell.propTypes = {
+  value: PropTypes.shape({
+    ticket_type: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
+  }),
+};
+
+TicketStatusCell.defaultProps = {
+  value: null,
+};
+
+function TicketPaymentAmountCell({ value }) {
+  return formatMoney((value || {}).payment_amount);
+}
+
+TicketPaymentAmountCell.propTypes = {
+  value: PropTypes.shape({
+    payment_amount: PropTypes.shape({}),
+  }),
+};
+
+TicketPaymentAmountCell.defaultProps = {
+  value: null,
+};
+
+function TicketStatusWithPaymentAmountCell({ value }) {
+  return (
+    <>
+      <TicketStatusCell value={value} />
+      {' '}
+      <TicketPaymentAmountCell value={value} />
+    </>
+  );
+}
+
+TicketStatusWithPaymentAmountCell.propTypes = {
+  value: PropTypes.shape({}),
+};
+
+TicketStatusWithPaymentAmountCell.defaultProps = {
+  value: null,
+};
 
 const getPossibleColumns = (data) => {
   const form = deserializeForm(data.convention.user_con_profile_form);
+
+  const TicketTypeFilter = ({ filter, onChange }) => (
+    <ChoiceSetFilter
+      name="ticketType"
+      choices={[
+        { label: 'Unpaid', value: 'none' },
+        ...(data.convention.ticket_types
+          .map(ticketType => ({
+            label: humanize(ticketType.name),
+            value: ticketType.id.toString(),
+          }))),
+      ]}
+      onChange={onChange}
+      filter={filter}
+    />
+  );
+
+  TicketTypeFilter.propTypes = {
+    filter: PropTypes.arrayOf(PropTypes.string),
+    onChange: PropTypes.func.isRequired,
+  };
+
+  TicketTypeFilter.defaultProps = {
+    filter: null,
+  };
+
+  const PrivilegesCell = ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', ');
+
+  PrivilegesCell.propTypes = {
+    value: PropTypes.arrayOf(PropTypes.string),
+  };
+
+  PrivilegesCell.defaultProps = {
+    value: null,
+  };
+
+  const PrivilegesFilter = ({ filter, onChange }) => (
+    <ChoiceSetFilter
+      name="privileges"
+      choices={[
+        ...(data.convention.privilege_names
+          .map(privilegeName => ({
+            label: humanize(privilegeName),
+            value: privilegeName,
+          }))),
+      ]}
+      onChange={onChange}
+      filter={filter}
+    />
+  );
+
+  PrivilegesFilter.propTypes = {
+    filter: PropTypes.arrayOf(PropTypes.string),
+    onChange: PropTypes.func.isRequired,
+  };
+
+  PrivilegesFilter.defaultProps = {
+    filter: null,
+  };
 
   const columns = [
     {
@@ -84,11 +181,7 @@ const getPossibleColumns = (data) => {
       Header: 'Email',
       id: 'email',
       accessor: 'email',
-      Cell: ({ value }) => (
-        <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
-          {value}
-        </a>
-      ),
+      Cell: EmailCell,
       Filter: FreeTextFilter,
     },
     {
@@ -96,51 +189,23 @@ const getPossibleColumns = (data) => {
       id: 'ticket',
       accessor: 'ticket',
       width: 150,
-      Cell: ({ value }) => formatTicketStatus(value),
-      Filter: ({ filter, onChange }) => (
-        <ChoiceSetFilter
-          name="ticketType"
-          choices={[
-            { label: 'Unpaid', value: 'none' },
-            ...(data.convention.ticket_types
-              .map(ticketType => ({
-                label: humanize(ticketType.name),
-                value: ticketType.id.toString(),
-              }))),
-          ]}
-          onChange={onChange}
-          filter={filter}
-        />
-      ),
+      Cell: TicketStatusWithPaymentAmountCell,
+      Filter: TicketTypeFilter,
     },
     {
       Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
       id: 'ticket_type',
       accessor: 'ticket',
       width: 150,
-      Cell: ({ value }) => formatTicketStatus(value, false),
-      Filter: ({ filter, onChange }) => (
-        <ChoiceSetFilter
-          name="ticketType"
-          choices={[
-            { label: 'Unpaid', value: 'none' },
-            ...(data.convention.ticket_types
-              .map(ticketType => ({
-                label: humanize(ticketType.name),
-                value: ticketType.id.toString(),
-              }))),
-          ]}
-          onChange={onChange}
-          filter={filter}
-        />
-      ),
+      Cell: TicketStatusCell,
+      Filter: TicketTypeFilter,
     },
     {
       Header: 'Payment amount',
       id: 'payment_amount',
       accessor: 'ticket',
       width: 150,
-      Cell: ({ value }) => formatMoney((value || {}).payment_amount),
+      Cell: TicketPaymentAmountCell,
       Filter: FreeTextFilter,
     },
     {
@@ -149,14 +214,8 @@ const getPossibleColumns = (data) => {
       accessor: userConProfile => userConProfile.team_members.length > 0,
       width: 150,
       sortable: false,
-      Cell: ({ value }) => (value ? 'yes' : 'no'),
-      Filter: ({ filter, onChange }) => (
-        <BooleanChoiceSetFilter
-          name="isTeamMember"
-          filter={filter}
-          onChange={onChange}
-        />
-      ),
+      Cell: BooleanCell,
+      Filter: BooleanChoiceSetFilter,
     },
     {
       Header: 'Attending?',
@@ -164,19 +223,15 @@ const getPossibleColumns = (data) => {
       accessor: 'ticket',
       width: 150,
       sortable: false,
-      Cell: ({ value }) => (value ? 'yes' : 'no'),
-      Filter: ({ filter, onChange }) => (
-        <BooleanChoiceSetFilter
-          name="attending"
-          filter={filter}
-          onChange={onChange}
-        />
-      ),
+      Cell: BooleanCell,
+      Filter: BooleanChoiceSetFilter,
     },
     {
       Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
       id: 'ticket_updated_at',
-      accessor: userConProfile => (userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null),
+      accessor: userConProfile => (
+        userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null
+      ),
       filterable: false,
       Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
     },
@@ -184,21 +239,8 @@ const getPossibleColumns = (data) => {
       Header: 'Privileges',
       id: 'privileges',
       accessor: 'privileges',
-      Cell: ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', '),
-      Filter: ({ filter, onChange }) => (
-        <ChoiceSetFilter
-          name="privileges"
-          choices={[
-            ...(data.convention.privilege_names
-              .map(privilegeName => ({
-                label: humanize(privilegeName),
-                value: privilegeName,
-              }))),
-          ]}
-          onChange={onChange}
-          filter={filter}
-        />
-      ),
+      Cell: PrivilegesCell,
+      Filter: PrivilegesFilter,
     },
     {
       Header: 'Order summary',
@@ -215,11 +257,23 @@ const getPossibleColumns = (data) => {
       return;
     }
 
+    const FormItemCell = ({ value }) => (
+      <FormItemDisplay formItem={formItem} value={value} convention={data.convention} />
+    );
+
+    FormItemCell.propTypes = {
+      value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+    };
+
+    FormItemCell.defaultProps = {
+      value: null,
+    };
+
     columns.push({
       Header: formItem.admin_description || humanize(identifier),
       id: identifier,
       accessor: userConProfile => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
-      Cell: ({ value }) => <FormItemDisplay formItem={formItem} value={value} convention={data.convention} />,
+      Cell: FormItemCell,
       sortable: false,
       filterable: false,
     });
