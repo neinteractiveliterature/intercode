@@ -12,16 +12,18 @@ function sortChoices(choices) {
   ) => labelA.localeCompare(labelB, { sensitivity: 'base' }));
 }
 
+const ValueType = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
+
 class ChoiceSetFilter extends React.Component {
   static propTypes = {
     choices: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired,
+        value: ValueType.isRequired,
       }),
     ).isRequired,
     filter: PropTypes.shape({
-      value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
+      value: PropTypes.oneOfType([PropTypes.arrayOf(ValueType), ValueType]),
     }),
     filterCodec: PropTypes.shape({
       decode: PropTypes.func.isRequired,
@@ -104,7 +106,7 @@ class ChoiceSetFilter extends React.Component {
             choices.find(choice => choice.value === item)
             || { label: item }
           ),
-        ).map(({ label }) => <span className="mr-2">{label}</span>);
+        ).map(({ label }) => <span key={label} className="mr-2">{label}</span>);
       }
 
       return <span className="mr-2">Any</span>;
