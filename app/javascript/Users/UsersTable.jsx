@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
+import EmailCell from '../Tables/EmailCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
@@ -12,24 +13,34 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-function EmailCell({ value }) {
-  return (
-    <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
-      {value}
-    </a>
-  );
-}
-
-EmailCell.propTypes = {
-  value: PropTypes.string,
-};
-
-EmailCell.defaultProps = {
-  value: null,
-};
-
 function UsersTable({ exportUrl, history }) {
   const [checkedUserIds, setCheckedUserIds] = useState(new Set());
+
+  function CheckboxCell({ original }) {
+    return (
+      <input
+        type="checkbox"
+        value={original.id}
+        checked={checkedUserIds.has(original.id)}
+        onClick={(event) => { event.stopPropagation(); }}
+        onChange={() => {
+          const newCheckedUserIds = new Set(checkedUserIds);
+          if (checkedUserIds.has(original.id)) {
+            newCheckedUserIds.delete(original.id);
+          } else {
+            newCheckedUserIds.add(original.id);
+          }
+          setCheckedUserIds(newCheckedUserIds);
+        }}
+      />
+    );
+  }
+
+  CheckboxCell.propTypes = {
+    original: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+  };
 
   const getPossibleColumns = () => [
     {
@@ -39,23 +50,7 @@ function UsersTable({ exportUrl, history }) {
       filterable: false,
       sortable: false,
       width: 30,
-      Cell: ({ original }) => (
-        <input
-          type="checkbox"
-          value={original.id}
-          checked={checkedUserIds.has(original.id)}
-          onClick={(event) => { event.stopPropagation(); }}
-          onChange={() => {
-            const newCheckedUserIds = new Set(checkedUserIds);
-            if (checkedUserIds.has(original.id)) {
-              newCheckedUserIds.delete(original.id);
-            } else {
-              newCheckedUserIds.add(original.id);
-            }
-            setCheckedUserIds(newCheckedUserIds);
-          }}
-        />
-      ),
+      Cell: CheckboxCell,
     },
     {
       Header: 'ID',
