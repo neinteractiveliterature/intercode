@@ -128,93 +128,106 @@ ExtraCell.propTypes = {
   }).isRequired,
 };
 
-const getPossibleColumns = data => [
-  {
-    Header: 'Category',
-    id: 'event_category',
-    accessor: 'event_category',
-    width: 100,
-    Cell: EventCategoryCell,
-    Filter: ({ filter, onChange }) => (
-      <ChoiceSetFilter
-        name="event_category"
-        choices={data.convention.event_categories.map(eventCategory => ({
-          value: eventCategory.id.toString(),
-          label: eventCategory.name,
-        }))}
-        onChange={onChange}
-        filter={filter}
-        filterCodec={FilterCodecs.integer}
-      />
-    ),
-  },
-  {
-    Header: 'Title',
-    id: 'title',
-    accessor: 'title',
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Submitted by',
-    id: 'owner',
-    accessor: eventProposal => eventProposal.owner.name_inverted,
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: 'Capacity',
-    id: 'capacity',
-    width: 80,
-    accessor: eventProposal => eventProposal.registration_policy,
-    filterable: false,
-    sortable: false,
-    Cell: CapacityCell,
-  },
-  {
-    Header: 'Duration',
-    id: 'duration',
-    accessor: 'length_seconds',
-    width: 80,
-    filterable: false,
-    Cell: DurationCell,
-  },
-  {
-    Header: 'Status',
-    id: 'status',
-    accessor: 'status',
-    width: 80,
-    Filter: StatusFilter,
-    Cell: StatusCell,
-  },
-  {
-    Header: 'Submitted',
-    id: 'submitted_at',
-    accessor: 'submitted_at',
-    width: 150,
-    filterable: false,
-    Cell: ({ value }) => (
-      moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
-    ),
-  },
-  {
-    Header: 'Updated',
-    id: 'updated_at',
-    accessor: 'updated_at',
-    width: 150,
-    filterable: false,
-    Cell: ({ value }) => (
-      moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
-    ),
-  },
-  {
-    Header: '',
-    id: '_extra',
-    accessor: () => { },
-    width: 30,
-    filterable: false,
-    sortable: false,
-    Cell: ExtraCell,
-  },
-];
+const getPossibleColumns = (data) => {
+  const EventCategoryFilter = ({ filter, onChange }) => (
+    <ChoiceSetFilter
+      name="event_category"
+      choices={data.convention.event_categories.map(eventCategory => ({
+        value: eventCategory.id.toString(),
+        label: eventCategory.name,
+      }))}
+      onChange={onChange}
+      filter={filter}
+      filterCodec={FilterCodecs.integer}
+    />
+  );
+
+  EventCategoryFilter.propTypes = {
+    filter: PropTypes.arrayOf(PropTypes.string),
+    onChange: PropTypes.func.isRequired,
+  };
+
+  EventCategoryFilter.defaultProps = {
+    filter: null,
+  };
+
+  return [
+    {
+      Header: 'Category',
+      id: 'event_category',
+      accessor: 'event_category',
+      width: 100,
+      Cell: EventCategoryCell,
+      Filter: EventCategoryFilter,
+    },
+    {
+      Header: 'Title',
+      id: 'title',
+      accessor: 'title',
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Submitted by',
+      id: 'owner',
+      accessor: eventProposal => eventProposal.owner.name_inverted,
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Capacity',
+      id: 'capacity',
+      width: 80,
+      accessor: eventProposal => eventProposal.registration_policy,
+      filterable: false,
+      sortable: false,
+      Cell: CapacityCell,
+    },
+    {
+      Header: 'Duration',
+      id: 'duration',
+      accessor: 'length_seconds',
+      width: 80,
+      filterable: false,
+      Cell: DurationCell,
+    },
+    {
+      Header: 'Status',
+      id: 'status',
+      accessor: 'status',
+      width: 80,
+      Filter: StatusFilter,
+      Cell: StatusCell,
+    },
+    {
+      Header: 'Submitted',
+      id: 'submitted_at',
+      accessor: 'submitted_at',
+      width: 150,
+      filterable: false,
+      Cell: ({ value }) => (
+        moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
+      ),
+    },
+    {
+      Header: 'Updated',
+      id: 'updated_at',
+      accessor: 'updated_at',
+      width: 150,
+      filterable: false,
+      Cell: ({ value }) => (
+        moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
+      ),
+    },
+    {
+      Header: '',
+      id: '_extra',
+      accessor: () => { },
+      width: 30,
+      filterable: false,
+      sortable: false,
+      Cell: ExtraCell,
+    },
+  ];
+};
 
 function EventProposalsAdminTable({ defaultVisibleColumns, exportUrl, history }) {
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({

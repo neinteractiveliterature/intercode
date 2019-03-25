@@ -6,12 +6,14 @@ import ReactTable from 'react-table';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
+import EmailCell from '../../Tables/EmailCell';
 import { encodeStringArray, decodeStringArray } from '../../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
-import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
 import { RunSignupsTableSignupsQuery } from './queries.gql';
+import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
+import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
@@ -35,84 +37,106 @@ const STATE_OPTIONS = [
   { value: 'withdrawn', label: 'Withdrawn' },
 ];
 
-const getPossibleColumns = data => [
-  {
-    Header: 'Seq',
-    id: 'id',
-    accessor: 'id',
-    filterable: false,
-    width: 50,
-  },
-  {
-    Header: 'State',
-    id: 'state',
-    accessor: 'state',
-    width: 130,
-    Filter: ({ filter, onChange }) => (
-      <ChoiceSetFilter
-        name="state"
-        choices={STATE_OPTIONS}
-        onChange={onChange}
-        filter={filter}
-      />
-    ),
-    Cell: props => (
-      <div className={`badge bg-signup-state-color-${props.value}`}>
-        {props.value}
-      </div>
-    ),
-  },
-  {
-    Header: 'Name',
-    id: 'name',
-    accessor: signup => signup.user_con_profile.name_inverted,
-    Filter: ({ filter, onChange }) => (
-      <FreeTextFilter filter={filter} onChange={onChange} />
-    ),
-  },
-  {
-    Header: 'Bucket',
-    id: 'bucket',
-    accessor: signup => signup.bucket_key,
-    Cell: ({ original }) => formatBucket(original, data.event),
-    Filter: ({ filter, onChange }) => (
-      <ChoiceSetFilter
-        name="bucket"
-        choices={(
-          (data || {}).event
-            ? data.event.registration_policy.buckets
-              .map(bucket => ({ label: bucket.name, value: bucket.key }))
-            : []
-        )}
-        onChange={onChange}
-        filter={filter}
-      />
-    ),
-  },
-  {
-    Header: 'Age',
-    id: 'age',
-    width: 40,
-    accessor: signup => ageAsOf(
-      moment(signup.user_con_profile.birth_date),
-      moment(signup.run.starts_at),
-    ),
-    filterable: false,
-  },
-  {
-    Header: 'Email',
-    id: 'email',
-    accessor: signup => signup.user_con_profile.email,
-    Cell: ({ value }) => (
-      <a href={`mailto:${value}`} onClick={(event) => { event.stopPropagation(); }}>
-        {value}
-      </a>
-    ),
-    Filter: ({ filter, onChange }) => (
-      <FreeTextFilter filter={filter} onChange={onChange} />
-    ),
-  },
-];
+const SignupStateFilter = ({ filter, onChange }) => (
+  <ChoiceSetFilter
+    name="state"
+    choices={STATE_OPTIONS}
+    onChange={onChange}
+    filter={filter}
+  />
+);
+
+SignupStateFilter.propTypes = {
+  filter: PropTypes.shape({
+    value: PropTypes.arrayOf(PropTypes.string),
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+SignupStateFilter.defaultProps = {
+  filter: null,
+};
+
+const getPossibleColumns = (data) => {
+  const BucketCell = ({ original }) => formatBucket(original, data.event);
+
+  BucketCell.propTypes = {
+    original: PropTypes.shape({}).isRequired,
+  };
+
+  const BucketFilter = ({ filter, onChange }) => (
+    <ChoiceSetFilter
+      name="bucket"
+      choices={(
+        (data || {}).event
+          ? data.event.registration_policy.buckets
+            .map(bucket => ({ label: bucket.name, value: bucket.key }))
+          : []
+      )}
+      onChange={onChange}
+      filter={filter}
+    />
+  );
+
+  BucketFilter.propTypes = {
+    filter: PropTypes.shape({
+      value: PropTypes.arrayOf(PropTypes.string),
+    }),
+    onChange: PropTypes.func.isRequired,
+  };
+
+  BucketFilter.defaultProps = {
+    filter: null,
+  };
+
+  return [
+    {
+      Header: 'Seq',
+      id: 'id',
+      accessor: 'id',
+      filterable: false,
+      width: 50,
+    },
+    {
+      Header: 'State',
+      id: 'state',
+      accessor: 'state',
+      width: 130,
+      Filter: SignupStateFilter,
+      Cell: SignupStateCell,
+    },
+    {
+      Header: 'Name',
+      id: 'name',
+      accessor: signup => signup.user_con_profile.name_inverted,
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Bucket',
+      id: 'bucket',
+      accessor: signup => signup.bucket_key,
+      Cell: BucketCell,
+      Filter: BucketFilter,
+    },
+    {
+      Header: 'Age',
+      id: 'age',
+      width: 40,
+      accessor: signup => ageAsOf(
+        moment(signup.user_con_profile.birth_date),
+        moment(signup.run.starts_at),
+      ),
+      filterable: false,
+    },
+    {
+      Header: 'Email',
+      id: 'email',
+      accessor: signup => signup.user_con_profile.email,
+      Cell: EmailCell,
+      Filter: FreeTextFilter,
+    },
+  ];
+};
 
 function RunSignupsTable({
   defaultVisibleColumns, eventId, exportUrl, runId, runPath, history,
