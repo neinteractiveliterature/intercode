@@ -8,59 +8,79 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { SignupSpySignupsQuery } from './queries.gql';
 import TableHeader from '../Tables/TableHeader';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
+import SignupStateCell from '../Tables/SignupStateCell';
 
-const getPossibleColumns = data => [
-  {
-    Header: 'Name',
-    id: 'name',
-    accessor: signup => signup.user_con_profile.name_inverted,
-    sortable: false,
-    filterable: false,
-  },
-  {
-    Header: 'Event',
-    id: 'event_title',
-    accessor: signup => signup.run.event.title,
-    sortable: false,
-    filterable: false,
-  },
-  {
-    Header: 'State',
-    id: 'state',
-    accessor: 'state',
-    width: 130,
-    filterable: false,
-    sortable: false,
-    Cell: props => (
-      <div className={`badge bg-signup-state-color-${props.value}`}>
-        {props.value}
-      </div>
-    ),
-  },
-  {
-    Header: 'Timestamp',
-    id: 'created_at',
-    accessor: 'created_at',
-    sortable: false,
-    filterable: false,
-    Cell: props => moment.tz(props.value, data.convention.timezone_name).format('MMM D, YYYY [at] h:mm:ssa'),
-  },
-  {
-    Header: 'Choice',
-    id: 'choice',
-    width: 100,
-    accessor: 'choice',
-    sortable: false,
-    filterable: false,
-    Cell: (props) => {
-      if (props.original.counted) {
-        return props.value;
-      }
+const ChoiceCell = ({ value, original }) => {
+  if (original.counted) {
+    return value;
+  }
 
-      return 'N/C';
+  return 'N/C';
+};
+
+ChoiceCell.propTypes = {
+  value: PropTypes.number,
+  original: PropTypes.shape({
+    counted: PropTypes.bool,
+  }).isRequired,
+};
+
+ChoiceCell.defaultProps = {
+  value: null,
+};
+
+const getPossibleColumns = (data) => {
+  const TimestampCell = ({ value }) => (
+    moment.tz(value, data.convention.timezone_name).format('MMM D, YYYY [at] h:mm:ssa')
+  );
+
+  TimestampCell.propTypes = {
+    value: PropTypes.string.isRequired,
+  };
+
+  return [
+    {
+      Header: 'Name',
+      id: 'name',
+      accessor: signup => signup.user_con_profile.name_inverted,
+      sortable: false,
+      filterable: false,
     },
-  },
-];
+    {
+      Header: 'Event',
+      id: 'event_title',
+      accessor: signup => signup.run.event.title,
+      sortable: false,
+      filterable: false,
+    },
+    {
+      Header: 'State',
+      id: 'state',
+      accessor: 'state',
+      width: 130,
+      filterable: false,
+      sortable: false,
+      Cell: SignupStateCell,
+    },
+    {
+      Header: 'Timestamp',
+      id: 'created_at',
+      accessor: 'created_at',
+      sortable: false,
+      filterable: false,
+      Cell: TimestampCell,
+    },
+    {
+      Header: 'Choice',
+      id: 'choice',
+      width: 100,
+      accessor: 'choice',
+      sortable: false,
+      filterable: false,
+      Cell: ChoiceCell,
+    },
+  ];
+};
 
 function SignupSpyTableContent({ exportUrl, history }) {
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({

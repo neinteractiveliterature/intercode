@@ -1,75 +1,98 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import arrayToSentence from 'array-to-sentence';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 
+import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
 import AdminOrderModal from './AdminOrderModal';
 import { AdminOrdersQuery } from './queries.gql';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
-import formatMoney from '../formatMoney';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import MoneyCell from '../Tables/MoneyCell';
 import TableHeader from '../Tables/TableHeader';
+import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 
-const getPossibleColumns = data => [
-  {
-    Header: 'User',
-    id: 'user_name',
-    accessor: order => order.user_con_profile.name_without_nickname,
-    Filter: ({ filter, onChange }) => (
-      <FreeTextFilter filter={filter} onChange={onChange} />
-    ),
-  },
-  {
-    Header: 'Status',
-    id: 'status',
-    accessor: 'status',
-    Filter: ({ filter, onChange }) => (
-      <ChoiceSetFilter
-        name="status"
-        choices={[
-          { label: 'Paid', value: 'paid' },
-          { label: 'Unpaid', value: 'unpaid' },
-          { label: 'Cancelled', value: 'cancelled' },
-          { label: 'Any', value: '' },
-        ]}
-        onChange={onChange}
-        filter={filter}
-        multiple={false}
-      />
-    ),
-  },
-  {
-    Header: 'Submitted',
-    id: 'submitted_at',
-    accessor: 'submitted_at',
-    filterable: false,
-    Cell: props => (
-      props.value
-        ? moment(props.value).tz(data.convention.timezone_name)
-          .format('MMM D, YYYY h:mma')
-        : ''
-    ),
-  },
-  {
-    Header: 'Products',
-    id: 'describe_products',
-    filterable: false,
-    sortable: false,
-    accessor: order => order.order_entries.map(entry => entry.describe_products),
-    Cell: props => arrayToSentence(props.value),
-  },
-  {
-    Header: 'Price',
-    id: 'total_price',
-    accessor: 'total_price',
-    filterable: false,
-    sortable: false,
-    Cell: props => formatMoney(props.value),
-  },
-];
+const StatusFilter = ({ filter, onChange }) => (
+  <ChoiceSetFilter
+    name="status"
+    choices={[
+      { label: 'Paid', value: 'paid' },
+      { label: 'Unpaid', value: 'unpaid' },
+      { label: 'Cancelled', value: 'cancelled' },
+      { label: 'Any', value: '' },
+    ]}
+    onChange={onChange}
+    filter={filter}
+    multiple={false}
+  />
+);
+
+StatusFilter.propTypes = {
+  filter: PropTypes.shape({
+    value: PropTypes.string,
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+StatusFilter.defaultProps = {
+  filter: null,
+};
+
+const getPossibleColumns = (data) => {
+  const SubmittedAtCell = ({ value }) => (
+    value
+      ? moment(value).tz(data.convention.timezone_name)
+        .format('MMM D, YYYY h:mma')
+      : ''
+  );
+
+  SubmittedAtCell.propTypes = {
+    value: PropTypes.string,
+  };
+
+  SubmittedAtCell.defaultProps = {
+    value: null,
+  };
+
+  return [
+    {
+      Header: 'User',
+      id: 'user_name',
+      accessor: order => order.user_con_profile.name_without_nickname,
+      Filter: FreeTextFilter,
+    },
+    {
+      Header: 'Status',
+      id: 'status',
+      accessor: 'status',
+      Filter: StatusFilter,
+    },
+    {
+      Header: 'Submitted',
+      id: 'submitted_at',
+      accessor: 'submitted_at',
+      filterable: false,
+      Cell: SubmittedAtCell,
+    },
+    {
+      Header: 'Products',
+      id: 'describe_products',
+      filterable: false,
+      sortable: false,
+      accessor: order => order.order_entries.map(entry => entry.describe_products),
+      Cell: ArrayToSentenceCell,
+    },
+    {
+      Header: 'Price',
+      id: 'total_price',
+      accessor: 'total_price',
+      filterable: false,
+      sortable: false,
+      Cell: MoneyCell,
+    },
+  ];
+};
 
 function OrderAdmin({ exportUrl, history }) {
   const [editingOrder, setEditingOrder] = useState(null);
