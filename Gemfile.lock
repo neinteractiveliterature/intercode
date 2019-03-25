@@ -216,8 +216,8 @@ GEM
     ice_cube (0.16.3)
     ipaddress (0.8.3)
     jmespath (1.4.0)
-    json (2.1.0)
-    json (2.1.0-java)
+    json (2.2.0)
+    json (2.2.0-java)
     json-jwt (1.10.0)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -351,7 +351,7 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    recaptcha (4.13.1)
+    recaptcha (4.13.2)
       json
     redcarpet (3.4.0)
     responders (2.4.1)
