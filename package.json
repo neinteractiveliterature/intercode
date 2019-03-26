@@ -99,7 +99,7 @@
     "react-select-fast-filter-options": "^0.2.3",
     "react-stripe-elements": "^2.0.3",
     "react-table": "^6.9.2",
-    "reduce-reducers": "^0.4.3",
+    "reduce-reducers": "^1.0.0",
     "require-from-string": "^2.0.2",
     "resolve-url-loader": "^3.0.1",
     "rollbar-sourcemap-webpack-plugin": "^2.5.0",
