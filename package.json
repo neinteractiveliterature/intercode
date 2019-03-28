@@ -135,7 +135,7 @@
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "react-test-renderer": "^16.8.5",
+    "react-test-renderer": "^16.8.6",
     "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
