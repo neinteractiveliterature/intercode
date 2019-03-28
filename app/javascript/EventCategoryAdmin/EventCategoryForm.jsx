@@ -175,6 +175,7 @@ function EventCategoryForm({
         value={value.event_proposal_form}
         onChange={valueMutator.event_proposal_form}
         disabled={disabled}
+        isClearable
       />
 
       <BooleanInput
