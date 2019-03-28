@@ -304,4 +304,16 @@ class Types::QueryType < Types::BaseObject
   def user(id:)
     User.find(id)
   end
+
+  field :users, [Types::UserType], null: false do
+    argument :ids, [Integer], required: true
+
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(:read, User)
+    end
+  end
+
+  def users(ids:)
+    User.find(ids)
+  end
 end
