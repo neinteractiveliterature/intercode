@@ -10,11 +10,14 @@ import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
 import { UsersTableUsersQuery } from './queries.gql';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import useModal from '../ModalDialogs/useModal';
+import MergeUsersModal from './MergeUsersModal';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
 function UsersTable({ exportUrl, history }) {
   const [checkedUserIds, setCheckedUserIds] = useState(new Set());
+  const mergeModal = useModal();
 
   function CheckboxCell({ original }) {
     return (
@@ -107,11 +110,14 @@ function UsersTable({ exportUrl, history }) {
       <TableHeader
         {...tableHeaderProps}
         exportUrl={exportUrl}
-        // renderLeftContent={() => (
-        //   <div className="ml-2 mb-2 d-inline-block align-top">
-        //     <MultiUserActionsDropdown selectedUserIds={[...checkedUserIds]} />
-        //   </div>
-        // )}
+        renderLeftContent={() => (
+          <div className="ml-2 mb-2 d-inline-block align-top">
+            <MultiUserActionsDropdown
+              selectedUserIds={[...checkedUserIds]}
+              onClickMerge={() => mergeModal.open({ userIds: [...checkedUserIds] })}
+            />
+          </div>
+        )}
       />
 
       <ReactTable
@@ -135,6 +141,12 @@ function UsersTable({ exportUrl, history }) {
           return {};
         }}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+      />
+
+      <MergeUsersModal
+        visible={mergeModal.visible}
+        closeModal={mergeModal.close}
+        userIds={(mergeModal.state || {}).userIds}
       />
     </div>
   );

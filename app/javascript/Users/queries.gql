@@ -20,25 +20,35 @@ query UsersTableUsersQuery($page: Int, $perPage: Int, $filters: UserFiltersInput
   }
 }
 
-query UserAdminQuery($id: Int!) {
-  user(id: $id) {
+fragment DetailedUserFields on User {
+  id
+  name
+  first_name
+  last_name
+  email
+  privileges
+
+  user_con_profiles {
     id
-    name
-    first_name
-    last_name
-    email
     privileges
 
-    user_con_profiles {
+    convention {
       id
-      privileges
-
-      convention {
-        id
-        name
-        domain
-        starts_at
-      }
+      name
+      domain
+      starts_at
     }
+  }
+}
+
+query UserAdminQuery($id: Int!) {
+  user(id: $id) {
+    ...DetailedUserFields
+  }
+}
+
+query MergeUsersModalQuery($ids: [Int!]!) {
+  users(ids: $ids) {
+    ...DetailedUserFields
   }
 }
