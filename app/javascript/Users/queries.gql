@@ -37,6 +37,16 @@ fragment DetailedUserFields on User {
       name
       domain
       starts_at
+      ticket_name
+    }
+
+    signups {
+      id
+      state
+    }
+
+    ticket {
+      id
     }
   }
 }
