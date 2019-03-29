@@ -299,6 +299,7 @@ class Ability
       StaffPosition,
       Ticket,
       TicketType,
+      User,
       UserActivityAlert,
       UserConProfile
     ]

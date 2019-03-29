@@ -464,6 +464,14 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:user_activity_alerts, :update))
   end
 
+  ### User
+
+  field :mergeUsers, mutation: Mutations::MergeUsers do
+    guard ->(_obj, _args, ctx) {
+      ctx[:current_ability].can?(:merge, User)
+    }
+  end
+
   ### UserConProfile
 
   field :createUserConProfile, mutation: Mutations::CreateUserConProfile do
