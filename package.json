@@ -44,7 +44,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap.native": "^2.0.25",
     "cadmus-navbar-admin": "^2.0.0",
-    "caniuse-lite": "^1.0.30000954",
+    "caniuse-lite": "^1.0.30000955",
     "classnames": "^2.2.6",
     "clipboard": "^2.0.1",
     "codemirror": "^5.45.0",
@@ -77,8 +77,8 @@
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
     "query-string": "^5.1.1",
-    "rails-ujs": "^5.2.1",
-    "react": "^16.8.5",
+    "rails-ujs": "^5.2.3",
+    "react": "^16.8.6",
     "react-apollo": "^2.5.3",
     "react-apollo-hooks": "^0.4.4",
     "react-bootstrap4-modal": "^1.7.0",
@@ -135,7 +135,7 @@
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "react-test-renderer": "^16.8.5",
+    "react-test-renderer": "^16.8.6",
     "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
