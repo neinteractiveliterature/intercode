@@ -1,5 +1,5 @@
 export default function useReactRouterReactTable({
-  encodeFilterValue, decodeFilterValue, history,
+  encodeFilterValue, decodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
 }) {
   const encode = encodeFilterValue || ((field, value) => value);
   const decode = decodeFilterValue || ((field, value) => value);
@@ -84,13 +84,25 @@ export default function useReactRouterReactTable({
   };
 
   const tableState = decodeSearchParams(history.location.search);
+  const pageChangeCallback = onPageChange || (() => {});
+  const filteredChangeCallback = onFilteredChange || (() => { });
+  const sortedChangeCallback = onSortedChange || (() => { });
 
   return {
     page: tableState.page,
     filtered: tableState.filtered,
     sorted: tableState.sorted,
-    onPageChange: (page) => { updateSearch({ page }); },
-    onFilteredChange: (filtered) => { updateSearch({ filtered, page: 0 }); },
-    onSortedChange: (sorted) => { updateSearch({ sorted, page: 0 }); },
+    onPageChange: (page) => {
+      updateSearch({ page });
+      pageChangeCallback(page);
+    },
+    onFilteredChange: (filtered) => {
+      updateSearch({ filtered, page: 0 });
+      filteredChangeCallback(filtered);
+    },
+    onSortedChange: (sorted) => {
+      updateSearch({ sorted, page: 0 });
+      sortedChangeCallback(sorted);
+    },
   };
 }

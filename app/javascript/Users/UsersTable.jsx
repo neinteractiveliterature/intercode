@@ -90,7 +90,7 @@ function UsersTable({ exportUrl, history }) {
     },
   ];
 
-  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, { queryResult, tableHeaderProps }] = useReactTableWithTheWorks({
     alwaysVisibleColumns: ['_checkbox'],
     decodeFilterValue,
     defaultVisibleColumns: ['id', 'first_name', 'last_name', 'email'],
@@ -100,6 +100,7 @@ function UsersTable({ exportUrl, history }) {
     getPossibleColumns,
     history,
     storageKeyPrefix: 'users',
+    onFilteredChange: () => { setCheckedUserIds(new Set()); },
     query: UsersTableUsersQuery,
   });
 
@@ -145,7 +146,11 @@ function UsersTable({ exportUrl, history }) {
 
       <MergeUsersModal
         visible={mergeModal.visible}
-        closeModal={mergeModal.close}
+        closeModal={() => {
+          mergeModal.close();
+          queryResult.refetch();
+          setCheckedUserIds(new Set());
+        }}
         userIds={(mergeModal.state || {}).userIds}
       />
     </div>
