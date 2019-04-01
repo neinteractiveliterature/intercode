@@ -53,9 +53,13 @@ class MergeUsersService < CivilService::Service
       winning_profile_for_convention = winning_profiles_by_convention_id[profile.convention_id]
       next if winning_profile_for_convention.id == profile.id
 
-      profile.orders.update_all(user_con_profile_id: winning_profile_for_convention.id)
-      profile.destroy!
+      merge_losing_profile
     end
+  end
+
+  def merge_losing_profile(profile)
+    profile.orders.update_all(user_con_profile_id: winning_profile_for_convention.id)
+    profile.destroy!
   end
 
   def merge_record_keeping_fields
@@ -110,7 +114,7 @@ class MergeUsersService < CivilService::Service
 
   def profiles_by_convention_id
     @profiles_by_convention_id ||= conventions.index_by(&:id).transform_values do |convention|
-      users.flat_map(&:user_con_profiles).select { |profile| profile.convention_id == convention.id }
+      users.flat_map(&:user_con_profiles).select { |p| p.convention_id == convention.id }
     end
   end
 
