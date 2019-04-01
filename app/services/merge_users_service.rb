@@ -53,7 +53,7 @@ class MergeUsersService < CivilService::Service
       winning_profile_for_convention = winning_profiles_by_convention_id[profile.convention_id]
       next if winning_profile_for_convention.id == profile.id
 
-      merge_losing_profile
+      merge_losing_profile(profile)
     end
   end
 
