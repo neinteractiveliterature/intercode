@@ -133,6 +133,8 @@ class MergeUsersService < CivilService::Service
   end
 
   def winning_user_con_profiles
-    @winning_user_con_profiles ||= winning_profiles_by_convention_id.values.compact
+    @winning_user_con_profiles ||= winning_profiles_by_convention_id.map do |convention_id, profile|
+      profile || profiles_by_convention_id[convention_id].first
+    end
   end
 end

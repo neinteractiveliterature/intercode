@@ -63,10 +63,6 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       setWinningUserId(null);
       setWinningProfileIds({});
     }
-  } else if (winningUserId === null && data.users.length > 0) {
-    // loading just finished successfully
-    const usersSorted = [...data.users].sort(compareUsers);
-    setWinningUserId(usersSorted[usersSorted.length - 1].id.toString());
   }
 
   let allConventions = [];
