@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import PopperDropdown from '../UIComponents/PopperDropdown';
 
-function MultiUserActionsDropdown({ selectedUserIds }) {
+function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }) {
   return (
     <PopperDropdown
       renderReference={({ ref, toggle }) => (
@@ -12,7 +12,12 @@ function MultiUserActionsDropdown({ selectedUserIds }) {
         </button>
       )}
     >
-      <button type="button" className="dropdown-item" disabled={selectedUserIds.length < 2}>
+      <button
+        type="button"
+        className="dropdown-item"
+        disabled={selectedUserIds.length < 2}
+        onClick={onClickMerge}
+      >
         Merge users
       </button>
     </PopperDropdown>
@@ -20,6 +25,7 @@ function MultiUserActionsDropdown({ selectedUserIds }) {
 }
 
 MultiUserActionsDropdown.propTypes = {
+  onClickMerge: PropTypes.func.isRequired,
   selectedUserIds: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 

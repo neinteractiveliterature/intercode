@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-export default function useLocalStorageReactTable(storageKeyPrefix) {
+export default function useLocalStorageReactTable(storageKeyPrefix, { onPageSizeChange } = {}) {
   const pageSizeKey = `tables:${storageKeyPrefix}:pageSize`;
+  const pageSizeChangeCallback = onPageSizeChange || (() => {});
 
   const loadPageSize = () => {
     const pageSizeString = window.localStorage.getItem(pageSizeKey);
@@ -18,6 +19,8 @@ export default function useLocalStorageReactTable(storageKeyPrefix) {
     } else {
       window.localStorage.setItem(pageSizeKey, newPageSize.toString());
     }
+
+    pageSizeChangeCallback(newPageSize);
   };
 
 
