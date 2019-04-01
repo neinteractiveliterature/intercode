@@ -15,13 +15,17 @@ export default function useReactTableWithTheWorks({
   getPages,
   getPossibleColumns,
   history,
+  onPageChange,
+  onPageSizeChange,
+  onFilteredChange,
+  onSortedChange,
   query,
   storageKeyPrefix,
   variables,
 }) {
-  const localStorageReactTableProps = useLocalStorageReactTable(storageKeyPrefix);
+  const localStorageReactTableProps = useLocalStorageReactTable(storageKeyPrefix, { onPageSizeChange });
   const reactRouterReactTableProps = useReactRouterReactTable({
-    decodeFilterValue, encodeFilterValue, history,
+    decodeFilterValue, encodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
   });
   const [graphQLReactTableProps, queryResult] = useGraphQLReactTable({
     getData,
