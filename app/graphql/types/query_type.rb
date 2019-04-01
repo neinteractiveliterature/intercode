@@ -308,7 +308,7 @@ class Types::QueryType < Types::BaseObject
   field :users, [Types::UserType], null: false do
     argument :ids, [Integer], required: true
 
-    guard ->(_obj, args, ctx) do
+    guard ->(_obj, _args, ctx) do
       ctx[:current_ability].can?(:read, User)
     end
   end
