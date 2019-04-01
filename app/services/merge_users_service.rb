@@ -50,14 +50,14 @@ class MergeUsersService < CivilService::Service
     user.user_con_profiles.each do |profile|
       next if profiles_by_convention_id[profile.convention_id].size < 2
 
-      winning_profile_for_convention = winning_profiles_by_convention_id[profile.convention_id]
-      next if winning_profile_for_convention.id == profile.id
-
-      merge_losing_profile(profile)
+      merge_profile_if_losing(profile)
     end
   end
 
-  def merge_losing_profile(profile)
+  def merge_profile_if_losing(profile)
+    winning_profile_for_convention = winning_profiles_by_convention_id[profile.convention_id]
+    return if winning_profile_for_convention.id == profile.id
+
     profile.orders.update_all(user_con_profile_id: winning_profile_for_convention.id)
     profile.destroy!
   end
