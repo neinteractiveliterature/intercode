@@ -73,7 +73,6 @@ const unwrappedComponents = {
   TicketTypeAdmin,
   TicketPurchaseForm,
   UserActivityAlertsAdmin,
-  UserConProfileAdminDisplay,
   UserConProfileSignupsCard,
   UserConProfilesAdmin,
   UsersAdmin,
