@@ -31,7 +31,6 @@ import TicketTypeForm from './TicketTypeForm';
     }),
   },
 )
-@withRouter
 class NewTicketType extends React.Component {
   static propTypes = {
     createTicketType: PropTypes.func.isRequired,
@@ -93,4 +92,4 @@ class NewTicketType extends React.Component {
   );
 }
 
-export default NewTicketType;
+export default withRouter(NewTicketType);

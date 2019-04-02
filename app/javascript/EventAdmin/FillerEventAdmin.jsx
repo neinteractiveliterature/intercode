@@ -50,7 +50,6 @@ const buildRunInput = (run) => {
   };
 };
 
-@withRouter
 @flowRight([
   graphql(EventAdminEventsQuery),
   graphql(CreateFillerEvent, { name: 'createFillerEvent' }),
@@ -330,4 +329,4 @@ class FillerEventAdmin extends React.Component {
   )
 }
 
-export default FillerEventAdmin;
+export default withRouter(FillerEventAdmin);

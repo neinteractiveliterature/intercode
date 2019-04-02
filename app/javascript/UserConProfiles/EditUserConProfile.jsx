@@ -11,7 +11,6 @@ import UserConProfileForm from './UserConProfileForm';
 import { UserConProfileQuery, UserConProfileAdminQuery } from './queries.gql';
 import { UpdateUserConProfile } from './mutations.gql';
 
-@withRouter
 @graphql(UserConProfileQuery)
 @GraphQLQueryResultWrapper
 class EditUserConProfile extends React.Component {
@@ -113,4 +112,4 @@ class EditUserConProfile extends React.Component {
   );
 }
 
-export default EditUserConProfile;
+export default withRouter(EditUserConProfile);
