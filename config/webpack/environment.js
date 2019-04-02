@@ -4,7 +4,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const { config } = require('@rails/webpacker');
 const getStyleRule = require('@rails/webpacker/package/utils/get_style_rule');
 const threadLoader = require('thread-loader');
@@ -99,7 +98,6 @@ module.exports = {
     extensions: config.extensions,
   },
   plugins: [
-    new LodashModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
     new CaseSensitivePathsPlugin(),
     new MiniCssExtractPlugin({
