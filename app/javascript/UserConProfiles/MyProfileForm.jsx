@@ -1,15 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
-import { isEqual, flowRight } from 'lodash';
+import React, { useState, useCallback } from 'react';
+import { isEqual } from 'lodash';
+
 import buildFormStateFromData from './buildFormStateFromData';
-import FormController from '../FormPresenter/FormController';
 import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
 import { MyProfileQuery } from './queries.gql';
 import { UpdateUserConProfile } from './mutations.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
+import useAsyncFunction from '../useAsyncFunction';
+import useMutationCallback from '../useMutationCallback';
+import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -18,69 +19,76 @@ function parseResponseErrors(error) {
   return validationErrors;
 }
 
-@flowRight([
-  graphql(MyProfileQuery),
-  graphql(UpdateUserConProfile, {
-    props: ({ mutate }) => ({
-      updateUserConProfile: userConProfile => mutate({
-        variables: {
-          input: {
-            id: userConProfile.id,
-            user_con_profile: {
-              form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
-            },
-          },
-        },
-      }),
-    }),
-  }),
-])
-@GraphQLQueryResultWrapper
-class MyProfileForm extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(MyProfileQuery).isRequired,
-    updateUserConProfile: PropTypes.func.isRequired,
-  };
+function MyProfileForm() {
+  const { data, error } = useQuerySuspended(MyProfileQuery);
+  const [mutate, , mutationInProgress] = useAsyncFunction(
+    useMutationCallback(UpdateUserConProfile),
+  );
+  const [responseErrors, setResponseErrors] = useState({});
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...buildFormStateFromData(props.data.myProfile, props.data.convention),
-    };
-  }
+  const {
+    userConProfile: initialUserConProfile, convention, form,
+  } = buildFormStateFromData(data.myProfile, data.convention);
 
-  responseValuesChanged = (newResponseValues, callback) => {
-    this.setState({
-      userConProfile: {
-        ...this.state.userConProfile,
+  const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
+
+  const responseValuesChanged = useCallback(
+    (newResponseValues) => {
+      setUserConProfile(previousProfile => ({
+        ...previousProfile,
         form_response_attrs: {
-          ...this.state.userConProfile.form_response_attrs,
+          ...previousProfile.form_response_attrs,
           ...newResponseValues,
         },
-      },
-    }, callback);
+      }));
+    },
+    [],
+  );
+
+  const updateUserConProfile = useCallback(
+    async (profile) => {
+      try {
+        await mutate({
+          variables: {
+            input: {
+              id: profile.id,
+              user_con_profile: {
+                form_response_attrs_json: JSON.stringify(profile.form_response_attrs),
+              },
+            },
+          },
+        });
+      } catch (e) {
+        setResponseErrors(parseResponseErrors(e));
+      }
+    },
+    [mutate],
+  );
+
+  useAutocommitFormResponseOnChange(updateUserConProfile, userConProfile);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  updateUserConProfile = () => this.props.updateUserConProfile(this.state.userConProfile)
+  const formPresenterProps = {
+    form,
+    convention,
+    response: userConProfile.form_response_attrs,
+    responseErrors,
+    error,
+    isSubmittingResponse: false,
+    isUpdatingResponse: mutationInProgress,
+    responseValuesChanged,
+    currentSectionChanged: () => {},
+    submitForm: () => {},
+  };
 
-  render = () => (
-    <FormController
-      form={this.state.form}
-      convention={this.state.convention}
-      response={this.state.userConProfile.form_response_attrs}
-      responseValuesChanged={this.responseValuesChanged}
-      updateResponse={this.updateUserConProfile}
-      parseResponseErrors={parseResponseErrors}
-      submitForm={() => {}}
-      autocommit="change"
-
-      renderContent={formPresenterProps => (
-        <FormPresenterApp form={this.state.form}>
-          <FormPresenter {...formPresenterProps} />
-        </FormPresenterApp>
-      )}
-    />
-  )
+  return (
+    <FormPresenterApp form={form}>
+      <FormPresenter {...formPresenterProps} />
+    </FormPresenterApp>
+  );
 }
 
 export default MyProfileForm;

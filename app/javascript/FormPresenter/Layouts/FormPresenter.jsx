@@ -78,7 +78,7 @@ class FormPresenter extends React.Component {
           {' '}
           {sectionIndex + 1}
           {' '}
-of
+          of
           {' '}
           {form.getSections().length}
         </div>
