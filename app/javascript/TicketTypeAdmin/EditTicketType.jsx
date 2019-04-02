@@ -21,7 +21,6 @@ import { UpdateTicketType } from './mutations.gql';
     }),
   }),
 })
-@withRouter
 class EditTicketType extends React.Component {
   static propTypes = {
     initialTicketType: TicketTypePropType.isRequired,
@@ -79,4 +78,4 @@ type &quot;
   );
 }
 
-export default EditTicketType;
+export default withRouter(EditTicketType);

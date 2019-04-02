@@ -65,7 +65,6 @@ function renderPricingSchedule(ticketType, timezoneName) {
   return <ul className="mb-0">{timespanItems}</ul>;
 }
 
-@withRouter
 @graphql(DeleteTicketType, {
   props: ({ mutate }) => ({
     deleteTicketType: id => mutate({
@@ -238,4 +237,4 @@ class TicketTypesList extends React.Component {
   }
 }
 
-export default TicketTypesList;
+export default withRouter(TicketTypesList);
