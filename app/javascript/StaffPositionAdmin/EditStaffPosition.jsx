@@ -27,7 +27,6 @@ import { UpdateStaffPosition } from './mutations.gql';
     }),
   }),
 })
-@withRouter
 class EditStaffPosition extends React.Component {
   static propTypes = {
     initialStaffPosition: StaffPositionPropType.isRequired,
@@ -75,4 +74,4 @@ class EditStaffPosition extends React.Component {
   );
 }
 
-export default EditStaffPosition;
+export default withRouter(EditStaffPosition);

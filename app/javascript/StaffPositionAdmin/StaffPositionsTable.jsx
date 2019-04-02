@@ -62,7 +62,6 @@ function describePermissions(permissions) {
   });
 }
 
-@withRouter
 @graphql(DeleteStaffPosition, {
   props: ({ mutate }) => ({
     deleteStaffPosition: id => mutate({
@@ -174,4 +173,4 @@ class StaffPositionsTable extends React.Component {
   }
 }
 
-export default StaffPositionsTable;
+export default withRouter(StaffPositionsTable);

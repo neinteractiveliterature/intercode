@@ -9,7 +9,6 @@ import { EventAdminEventsQuery } from './queries.gql';
 import { CreateEvent } from './mutations.gql';
 import getFormForEventCategory from './getFormForEventCategory';
 
-@withRouter
 @graphql(CreateEvent, { name: 'createEvent' })
 class CreateVolunteerEventForm extends React.Component {
   static propTypes = {
@@ -114,4 +113,4 @@ class CreateVolunteerEventForm extends React.Component {
   )
 }
 
-export default CreateVolunteerEventForm;
+export default withRouter(CreateVolunteerEventForm);

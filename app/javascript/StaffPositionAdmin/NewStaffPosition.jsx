@@ -37,7 +37,6 @@ import { StaffPositionsQuery } from './queries.gql';
     }),
   },
 )
-@withRouter
 class NewStaffPosition extends React.Component {
   static propTypes = {
     createStaffPosition: PropTypes.func.isRequired,
@@ -86,4 +85,4 @@ class NewStaffPosition extends React.Component {
   );
 }
 
-export default NewStaffPosition;
+export default withRouter(NewStaffPosition);
