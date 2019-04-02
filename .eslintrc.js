@@ -63,5 +63,13 @@ module.exports = {
     "no-restricted-imports": ['error', 'graphql-tag'],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-  }
+  },
+
+  settings: {
+    'import/resolver': {
+      'webpack': {
+        config: './config/webpack/environment.js',
+      },
+    },
+  },
 };

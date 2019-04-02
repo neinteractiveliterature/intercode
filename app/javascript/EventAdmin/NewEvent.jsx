@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
 import { humanize } from 'inflected';
+import { useMutation } from 'react-apollo-hooks';
 
 import CommonEventFormFields from '../BuiltInForms/CommonEventFormFields';
 import getFormForEventCategory from './getFormForEventCategory';
@@ -11,29 +11,30 @@ import { CreateEvent } from './mutations.gql';
 import { getIncompleteItems } from '../FormPresenter/FormPresenterUtils';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import ItemInteractionTracker from '../FormPresenter/ItemInteractionTracker';
+import useAsyncFunction from '../useAsyncFunction';
 
 function NewEventForm({
   event, convention, setEvent, onExit,
 }) {
-  const [error, setError] = useState(null);
+  const [mutate, error] = useAsyncFunction(useMutation(CreateEvent));
 
   const form = getFormForEventCategory(event, convention);
 
-  const createEvent = async (mutate, interactWithItem) => {
-    const incompleteItems = getIncompleteItems(form.getAllItems(), event.form_response_attrs);
+  const createEvent = useCallback(
+    async (interactWithItem) => {
+      const incompleteItems = getIncompleteItems(form.getAllItems(), event.form_response_attrs);
 
-    if (incompleteItems.length > 0) {
-      incompleteItems.forEach((item) => {
-        if (item.identifier) {
-          interactWithItem(item.identifier);
-        }
-      });
-      return;
-    }
+      if (incompleteItems.length > 0) {
+        incompleteItems.forEach((item) => {
+          if (item.identifier) {
+            interactWithItem(item.identifier);
+          }
+        });
+        return;
+      }
 
-    const { total_slots: totalSlots, ...formResponseAttrs } = event.form_response_attrs;
+      const { total_slots: totalSlots, ...formResponseAttrs } = event.form_response_attrs;
 
-    try {
       await mutate({
         variables: {
           input: {
@@ -51,10 +52,9 @@ function NewEventForm({
       });
 
       onExit();
-    } catch (newError) {
-      setError(newError);
-    }
-  };
+    },
+    [event.event_category, event.form_response_attrs, form, onExit, mutate],
+  );
 
   return (
     <>
@@ -65,22 +65,18 @@ function NewEventForm({
         onChange={(newEventData) => { setEvent({ ...event, ...newEventData }); }}
       >
         <div>
-          <Mutation mutation={CreateEvent}>
-            {mutate => (
-              <ItemInteractionTracker.Interactor>
-                {({ interactWithItem }) => (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => createEvent(mutate, interactWithItem)}
-                    disabled={!(event.event_category || {}).id}
-                  >
-                    Create event
-                  </button>
-                )}
-              </ItemInteractionTracker.Interactor>
+          <ItemInteractionTracker.Interactor>
+            {({ interactWithItem }) => (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => createEvent(mutate, interactWithItem)}
+                disabled={!(event.event_category || {}).id}
+              >
+                Create event
+              </button>
             )}
-          </Mutation>
+          </ItemInteractionTracker.Interactor>
           <button className="btn btn-link" onClick={onExit} type="button">
             Cancel
           </button>
@@ -126,7 +122,7 @@ function NewEvent({ convention, onExit }) {
 
       <BootstrapFormSelect
         label="Category"
-        name="cagegory"
+        name="category"
         value={(event.event_category || {}).id}
         onChange={
           changeEvent => setEvent({
