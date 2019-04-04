@@ -101,7 +101,7 @@
     "react-table": "^6.9.2",
     "reduce-reducers": "^0.4.3",
     "require-from-string": "^2.0.2",
-    "resolve-url-loader": "^3.0.1",
+    "resolve-url-loader": "^3.1.0",
     "rollbar-sourcemap-webpack-plugin": "^2.5.0",
     "sass-loader": "^7.1.0",
     "source-map-support": "^0.5.11",
