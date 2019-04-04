@@ -8063,10 +8063,10 @@ react-dnd-touch-backend@^0.3.13:
     invariant "^2.2.2"
     react-dnd "^2.5.4"
 
-react-dnd@*, react-dnd@^7.4.4:
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-7.4.4.tgz#a4200c936b1b456a933ef10ef294d73cbd792d77"
-  integrity sha512-+fTq2092NoCdMmk4mG1wrsmd/hJf4ZZ1EXeNmQzbu1LdxGO8Y6jQDRcBi60qx/DwYrRImG/pZjFfN/f/JxE5TQ==
+react-dnd@*, react-dnd@^7.4.5:
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-7.4.5.tgz#cb4a2c97cd81f514d892c6cc2f020908ca7382a5"
+  integrity sha512-/689FECqmfNxHZJymC0Ge0Vt5A2oxXwcpVpFjM7O21ifzSh3YtZl83rre6Cosdc4Sx9ucrMq3sRxKMH9p/ekCg==
   dependencies:
     dnd-core "^7.4.4"
     hoist-non-react-statics "^3.3.0"
