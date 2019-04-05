@@ -80,7 +80,6 @@ function MyProfileForm() {
     isSubmittingResponse: false,
     isUpdatingResponse: mutationInProgress,
     responseValuesChanged,
-    currentSectionChanged: () => {},
     submitForm: () => {},
   };
 

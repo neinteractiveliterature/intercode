@@ -313,8 +313,8 @@ class Types::MutationType < Types::BaseObject
   field :createMultipleRuns, mutation: Mutations::CreateMultipleRuns do
     guard ->(_obj, args, ctx) {
       event = ctx[:convention].events.find(args[:event_id])
-      args.to_h['runs'].all? do |run_args|
-        ctx[:current_ability].can?(:create, event.runs.new(run_args))
+      args[:runs].all? do |run_args|
+        ctx[:current_ability].can?(:create, event.runs.new(run_args.to_h))
       end
     }
   end

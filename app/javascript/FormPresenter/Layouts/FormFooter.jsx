@@ -1,184 +1,166 @@
-import React from 'react';
+import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
+
 import Form from '../../Models/Form';
-import { getCurrentSection, getIncompleteItems } from '../FormPresenterUtils';
-import ItemInteractionTracker from '../ItemInteractionTracker';
-import SectionTraversalController from '../SectionTraversalController';
+import { SectionTraversalContext } from '../SectionTraversalContext';
+import useFormValidation from '../useFormValidation';
+import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 
-class FormFooter extends React.Component {
-  static propTypes = {
-    currentSectionId: PropTypes.number.isRequired,
-    currentSectionIndex: PropTypes.number.isRequired,
-    sectionCount: PropTypes.number.isRequired,
-    previousSection: PropTypes.func.isRequired,
-    nextSection: PropTypes.func.isRequired,
-    submitForm: PropTypes.func.isRequired,
-    currentSectionChanged: PropTypes.func,
-    isSubmittingResponse: PropTypes.bool.isRequired,
-    exitButton: PropTypes.node,
-    submitButton: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-    }),
-    form: Form.propType.isRequired,
-    response: PropTypes.shape({}).isRequired,
-    onInteract: PropTypes.func.isRequired,
-    scrollToItem: PropTypes.func.isRequired,
-    children: PropTypes.node,
-  };
-
-  static defaultProps = {
-    exitButton: null,
-    submitButton: null,
-    children: null,
-    currentSectionChanged: null,
-  };
-
-  validateContinue = () => {
-    const { form, currentSectionId, response } = this.props;
-    const incompleteItems = getIncompleteItems(form.getItemsInSection(currentSectionId), response);
-
-    if (incompleteItems.length === 0) {
-      return true;
-    }
-
-    incompleteItems.forEach((item) => {
-      if (item.identifier) {
-        this.props.onInteract(item.identifier);
-      }
-    });
-    this.props.scrollToItem(incompleteItems[0]);
-
-    return false;
-  }
-
-  previousSection = () => {
-    this.props.previousSection(this.props.currentSectionChanged);
-  }
-
-  tryNextSection = () => {
-    if (this.validateContinue()) {
-      this.props.nextSection(this.props.currentSectionChanged);
-    }
-  }
-
-  trySubmitForm = () => {
-    if (this.validateContinue()) {
-      this.props.submitForm();
-    }
-  }
-
-  renderBackButton = () => {
-    if (this.props.currentSectionIndex < 1) {
-      return null;
-    }
-
-    return (
-      <button className="btn btn-secondary" onClick={this.previousSection}>
-        <i className="fa fa-chevron-left" />
-        {' '}
-Back
-      </button>
-    );
-  }
-
-  renderContinueButton = () => {
-    if (this.props.currentSectionIndex >= this.props.sectionCount - 1) {
-      return null;
-    }
-
-    return (
-      <button
-        className="btn btn-primary"
-        onClick={this.tryNextSection}
-        type="button"
-      >
-        Continue
-        {' '}
-        <i className="fa fa-chevron-right" />
-      </button>
-    );
-  }
-
-  renderSubmitButton = () => {
-    if (!this.props.submitButton) {
-      return null;
-    }
-
-    if (this.props.currentSectionIndex < this.props.sectionCount - 1) {
-      return null;
-    }
-
-    return (
-      <button
-        className="btn btn-success"
-        onClick={this.trySubmitForm}
-        disabled={this.props.isSubmittingResponse}
-        type="button"
-      >
-        {this.props.submitButton.caption}
-      </button>
-    );
-  }
-
-  render = () => {
-    const backButton = this.renderBackButton();
-    const continueButton = this.renderContinueButton();
-    const { exitButton } = this.props;
-    const submitButton = this.renderSubmitButton();
-
-    if (
-      backButton == null
-      && continueButton == null
-      && exitButton == null
-      && submitButton == null
-    ) {
-      return <div />;
-    }
-
-    return (
-      <div className="card-footer">
-        <div className="d-flex justify-content-between">
-          <div>{backButton}</div>
-          <div>
-            {exitButton}
-            {continueButton}
-            {submitButton}
-          </div>
-        </div>
-        {this.props.children}
-      </div>
-    );
-  }
+function BackButton({ goToPreviousSection }) {
+  return (
+    <button className="btn btn-secondary" onClick={goToPreviousSection} type="button">
+      <i className="fa fa-chevron-left" />
+      {' '}
+      Back
+    </button>
+  );
 }
 
-const FormFooterTraversalWrapper = WrappedComponent => props => (
-  <SectionTraversalController.Traverser>
-    {({
-      currentSectionId,
-      currentSectionIndex,
-      previousSection,
-      nextSection,
-      sectionCount,
-    }) => (
-      <WrappedComponent
-        currentSectionId={currentSectionId}
-        currentSectionIndex={currentSectionIndex}
-        previousSection={previousSection}
-        nextSection={nextSection}
-        sectionCount={sectionCount}
-        {...props}
+BackButton.propTypes = {
+  goToPreviousSection: PropTypes.func.isRequired,
+};
+
+function ContinueButton({ tryNextSection }) {
+  return (
+    <button
+      className="btn btn-primary"
+      onClick={tryNextSection}
+      type="button"
+    >
+      Continue
+      {' '}
+      <i className="fa fa-chevron-right" />
+    </button>
+  );
+}
+
+ContinueButton.propTypes = {
+  tryNextSection: PropTypes.func.isRequired,
+};
+
+function SubmitButton({ submitButton, trySubmitForm, isSubmittingResponse }) {
+  return (
+    <button
+      className="btn btn-success"
+      onClick={trySubmitForm}
+      disabled={isSubmittingResponse}
+      type="button"
+    >
+      {submitButton.caption}
+    </button>
+  );
+}
+
+SubmitButton.propTypes = {
+  submitButton: PropTypes.shape({
+    caption: PropTypes.string.isRequired,
+  }).isRequired,
+  trySubmitForm: PropTypes.func.isRequired,
+  isSubmittingResponse: PropTypes.bool.isRequired,
+};
+
+function FormFooter({
+  submitForm, isSubmittingResponse, exitButton, submitButton, form,
+  response, scrollToItem, children,
+}) {
+  const {
+    currentSectionId, currentSectionIndex, sectionCount, previousSection, nextSection,
+  } = useContext(SectionTraversalContext);
+  const { interactWithItem } = useContext(ItemInteractionTrackerContext);
+  const validate = useFormValidation(scrollToItem, interactWithItem);
+
+  const validateContinue = useCallback(
+    () => validate(form.getItemsInSection(currentSectionId), response),
+    [currentSectionId, form, response, validate],
+  );
+
+  const goToPreviousSection = useCallback(
+    () => { previousSection(); },
+    [previousSection],
+  );
+
+  const tryNextSection = useCallback(
+    () => {
+      if (validateContinue()) {
+        nextSection();
+      }
+    },
+    [validateContinue, nextSection],
+  );
+
+  const trySubmitForm = useCallback(
+    () => {
+      if (validateContinue()) {
+        submitForm();
+      }
+    },
+    [validateContinue, submitForm],
+  );
+
+  let backButton;
+  let continueButton;
+  let submitButtonComponent;
+
+  if (currentSectionIndex >= 1) {
+    backButton = <BackButton goToPreviousSection={goToPreviousSection} />;
+  }
+
+  if (currentSectionIndex < sectionCount - 1) {
+    continueButton = <ContinueButton tryNextSection={tryNextSection} />;
+  }
+
+  if (submitButton && currentSectionIndex >= sectionCount - 1) {
+    submitButtonComponent = (
+      <SubmitButton
+        submitButton={submitButton}
+        trySubmitForm={trySubmitForm}
+        isSubmittingResponse={isSubmittingResponse}
+        key="submit"
       />
-    )}
-  </SectionTraversalController.Traverser>
-);
+    );
+  }
 
-const FormFooterInteractionWrapper = WrappedComponent => props => (
-  <ItemInteractionTracker.Interactor>
-    {({ interactWithItem }) => (
-      <WrappedComponent onInteract={interactWithItem} {...props} />
-    )}
-  </ItemInteractionTracker.Interactor>
-);
+  if (
+    backButton == null
+    && continueButton == null
+    && exitButton == null
+    && submitButtonComponent == null
+  ) {
+    return <div />;
+  }
 
-export default FormFooterTraversalWrapper(FormFooterInteractionWrapper(FormFooter));
-export { FormFooter as PureFormFooter };
+  return (
+    <div className="card-footer">
+      <div className="d-flex justify-content-between">
+        <div>{backButton}</div>
+        <div>
+          {exitButton}
+          {continueButton}
+          {submitButtonComponent}
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+FormFooter.propTypes = {
+  submitForm: PropTypes.func.isRequired,
+  isSubmittingResponse: PropTypes.bool.isRequired,
+  exitButton: PropTypes.node,
+  submitButton: PropTypes.shape({
+    caption: PropTypes.string.isRequired,
+  }),
+  form: Form.propType.isRequired,
+  response: PropTypes.shape({}).isRequired,
+  scrollToItem: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};
+
+FormFooter.defaultProps = {
+  exitButton: null,
+  submitButton: null,
+  children: null,
+};
+
+export default FormFooter;

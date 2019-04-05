@@ -9,13 +9,13 @@ import EventAdminEditEvent from './EventAdminEditEvent';
 import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import FillerEventAdmin from './FillerEventAdmin';
-import NewEvent from './NewEvent';
+import NewEventWithCategorySelection from './NewEventWithCategorySelection';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import VolunteerEventAdmin from './VolunteerEventAdmin';
+import RecurringEventAdmin from './RecurringEventAdmin';
 
 function ExitableNewEvent({ convention, history }) {
   return (
-    <NewEvent
+    <NewEventWithCategorySelection
       convention={convention}
       onExit={() => history.replace('/runs')}
     />
@@ -39,7 +39,7 @@ const EventAdminApp = ({ basename }) => (
           <NavLink className="nav-link" to="/runs">Regular events</NavLink>
         </li>
         <li className="nav-item">
-          <NavLink className="nav-link" to="/volunteer_events">Volunteer events</NavLink>
+          <NavLink className="nav-link" to="/recurring_events">Recurring events</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/filler_events">Single-run events</NavLink>
@@ -52,7 +52,7 @@ const EventAdminApp = ({ basename }) => (
       <Switch>
         <Route path="/runs" component={EventAdminRunsTable} />
         <Route path="/:eventId/runs" component={EventAdminRunsTable} />
-        <Route path="/volunteer_events" component={VolunteerEventAdmin} />
+        <Route path="/recurring_events" component={RecurringEventAdmin} />
         <Route path="/filler_events" component={FillerEventAdmin} />
         <Route path="/dropped_events" component={DroppedEventAdmin} />
         <Route path="/:id/edit" component={EventAdminEditEvent} />
