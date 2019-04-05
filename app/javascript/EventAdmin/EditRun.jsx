@@ -60,8 +60,8 @@ class EditRun extends React.Component {
   };
 
   cancelEditing = () => {
-    if (this.props.match.path === '/volunteer_events/:eventId/runs/:runId/edit') {
-      this.props.history.replace('/volunteer_events');
+    if (this.props.match.path === '/recurring_events/:eventId/runs/:runId/edit') {
+      this.props.history.replace('/recurring_events');
     } else {
       this.props.history.replace('/runs');
     }

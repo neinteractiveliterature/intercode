@@ -158,7 +158,6 @@ function EventProposalForm({
     isSubmittingResponse: submitInProgress,
     isUpdatingResponse: updateInProgress,
     responseValuesChanged,
-    currentSectionChanged: () => {},
     submitForm,
   };
 

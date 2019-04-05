@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { humanize } from 'inflected';
@@ -6,149 +6,128 @@ import { humanize } from 'inflected';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import CommonEventFormFields from './CommonEventFormFields';
 import RunFormFields from './RunFormFields';
-import getFormForEventCategory from '../EventAdmin/getFormForEventCategory';
+import { getFormForEventCategoryId } from '../EventAdmin/getFormForEventCategory';
+import ErrorDisplay from '../ErrorDisplay';
 
-class FillerEventForm extends React.Component {
-  static propTypes = {
-    initialEvent: PropTypes.shape({
-      id: PropTypes.number,
-      runs: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        rooms: PropTypes.arrayOf(PropTypes.shape({
-          id: PropTypes.number.isRequired,
-          name: PropTypes.string.isRequired,
-        }).isRequired).isRequired,
-      })).isRequired,
-    }).isRequired,
-    disabled: PropTypes.bool,
-    error: PropTypes.string,
+function FillerEventForm({
+  initialEvent, disabled, error, convention, cancelPath, onSave,
+}) {
+  const [event, setEvent] = useState(initialEvent);
+  const [run, setRun] = useState(initialEvent.runs[0] || {});
 
-    // The convention prop type we're using is already required
-    // eslint-disable-next-line react/require-default-props
-    convention: RunFormFields.propTypes.convention,
-    cancelPath: PropTypes.string,
-    onSave: PropTypes.func.isRequired,
-  };
+  const eventFieldChanged = useCallback(
+    eventData => setEvent(prevEvent => ({ ...prevEvent, ...eventData })),
+    [],
+  );
 
-  static defaultProps = {
-    cancelPath: null,
-    disabled: false,
-    error: null,
-  };
+  const runChanged = useCallback(
+    runData => setRun(prevRun => ({ ...prevRun, ...runData })),
+    [],
+  );
 
-  constructor(props) {
-    super(props);
+  const eventCategoryIdChanged = useCallback(
+    e => eventFieldChanged({ event_category: { id: Number.parseInt(e.target.value, 10) } }),
+    [eventFieldChanged],
+  );
 
-    this.state = {
-      event: props.initialEvent,
-      run: props.initialEvent.runs[0] || {},
-    };
+  const saveClicked = useCallback(
+    (browserEvent) => {
+      browserEvent.preventDefault();
+      onSave({ event, run });
+    },
+    [onSave, event, run],
+  );
+
+  const eventCategoryId = (event.event_category || {}).id;
+
+  const form = useMemo(
+    () => getFormForEventCategoryId(eventCategoryId, convention),
+    [eventCategoryId, convention],
+  );
+
+  const saveCaption = (event.id ? 'Save single-run event' : 'Create single-run event');
+  let cancelLink = null;
+  if (cancelPath) {
+    cancelLink = <Link to={cancelPath} className="btn btn-link">Cancel</Link>;
   }
 
-  isDataComplete = () => (
-    this.state.event.form_response_attrs.title != null
-    && this.state.event.form_response_attrs.length_seconds
-  )
+  const categoryOptions = convention.event_categories
+    .filter(category => category.scheduling_ui === 'single_run')
+    .map(category => (
+      <option value={category.id} key={category.id}>{humanize(category.name)}</option>
+    ));
 
-  eventFieldChanged = (eventData) => {
-    this.setState(prevState => ({
-      event: {
-        ...prevState.event,
-        ...eventData,
-      },
-    }));
-  }
+  return (
+    <form className="my-4">
+      <h3 className="mb-4">
+        {event.id ? 'Edit single-run event' : 'New single-run event'}
+      </h3>
 
-  runChanged = (runData) => {
-    this.setState(prevState => ({ run: { ...prevState.run, ...runData } }));
-  }
+      <BootstrapFormSelect
+        label="Category"
+        name="category"
+        value={event.event_category.id}
+        onChange={eventCategoryIdChanged}
+      >
+        {
+          event.id
+            ? null
+            : <option value={null} />
+        }
+        {categoryOptions}
+      </BootstrapFormSelect>
 
-  saveClicked = (event) => {
-    event.preventDefault();
-    this.props.onSave({
-      event: this.state.event,
-      run: this.state.run,
-    });
-  }
-
-  renderRunFormFields = () => {
-    if (!this.state.event.form_response_attrs.length_seconds) {
-      return null;
-    }
-
-    return (
-      <RunFormFields
-        run={this.state.run}
-        event={{ length_seconds: this.state.event.form_response_attrs.length_seconds }}
-        convention={this.props.convention}
-        onChange={this.runChanged}
+      <CommonEventFormFields
+        event={event}
+        convention={convention}
+        form={form}
+        onChange={eventFieldChanged}
       />
-    );
-  }
 
-  renderErrorDisplay = () => {
-    if (this.props.error) {
-      return <div className="alert alert-danger">{this.props.error}</div>;
-    }
-
-    return null;
-  }
-
-  render = () => {
-    const saveCaption = (this.state.event.id ? 'Save single-run event' : 'Create single-run event');
-    let cancelLink = null;
-    if (this.props.cancelPath) {
-      cancelLink = <Link to={this.props.cancelPath} className="btn btn-link">Cancel</Link>;
-    }
-
-    const categoryOptions = this.props.convention.event_categories
-      .filter(category => category.scheduling_ui === 'single_run')
-      .map(category => (
-        <option value={category.id} key={category.id}>{humanize(category.name)}</option>
-      ));
-
-    const disabled = this.props.disabled || !this.isDataComplete();
-
-    return (
-      <form className="my-4">
-        <h3 className="mb-4">
-          {this.state.event.id ? 'Edit single-run event' : 'New single-run event'}
-        </h3>
-
-        <BootstrapFormSelect
-          label="Category"
-          name="cagegory"
-          value={this.state.event.event_category.id}
-          onChange={event => this.eventFieldChanged({
-            event_category: { id: Number.parseInt(event.target.value, 10) },
-          })}
-        >
-          {
-            this.state.event.id
-              ? null
-              : <option value={null} />
-          }
-          {categoryOptions}
-        </BootstrapFormSelect>
-
-        <CommonEventFormFields
-          event={this.state.event}
-          convention={this.props.convention}
-          form={getFormForEventCategory(this.state.event, this.props.convention)}
-          onChange={this.eventFieldChanged}
+      {event.form_response_attrs.length_seconds && (
+        <RunFormFields
+          run={run}
+          event={{ length_seconds: event.form_response_attrs.length_seconds }}
+          convention={convention}
+          onChange={runChanged}
         />
+      )}
 
-        {this.renderRunFormFields()}
+      <ErrorDisplay error={error} />
 
-        {this.renderErrorDisplay()}
-
-        <button type="button" className="btn btn-primary" onClick={this.saveClicked} disabled={disabled}>
-          {saveCaption}
-        </button>
-        {cancelLink}
-      </form>
-    );
-  }
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={disabled}>
+        {saveCaption}
+      </button>
+      {cancelLink}
+    </form>
+  );
 }
+
+FillerEventForm.propTypes = {
+  initialEvent: PropTypes.shape({
+    id: PropTypes.number,
+    runs: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      rooms: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      }).isRequired).isRequired,
+    })).isRequired,
+  }).isRequired,
+  disabled: PropTypes.bool,
+  error: PropTypes.string,
+
+  // The convention prop type we're using is already required
+  // eslint-disable-next-line react/require-default-props
+  convention: RunFormFields.propTypes.convention,
+  cancelPath: PropTypes.string,
+  onSave: PropTypes.func.isRequired,
+};
+
+FillerEventForm.defaultProps = {
+  cancelPath: null,
+  disabled: false,
+  error: null,
+};
 
 export default FillerEventForm;
