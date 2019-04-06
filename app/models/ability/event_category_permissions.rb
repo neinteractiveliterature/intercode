@@ -18,10 +18,12 @@ module Ability::EventCategoryPermissions
     end
 
     if has_scope?(:read_conventions)
+      read_event_proposals_staff_positions = StaffPosition.where(
+        id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
+      )
+
       scope_authorization :view_event_proposals, Convention, Convention.where(
-        id: StaffPosition.where(
-          id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
-        ).select(:convention_id)
+        id: read_event_proposals_staff_positions.select(:convention_id)
       ) do |convention|
         convention.staff_positions.where(
           id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
@@ -29,6 +31,13 @@ module Ability::EventCategoryPermissions
       end
 
       event_category_authorization :read_admin_notes, Event, 'access_admin_notes'
+      scope_authorization [:read, :read_personal_info], UserConProfile, UserConProfile.where(
+        convention_id: read_event_proposals_staff_positions.select(:convention_id)
+      ) do |user_con_profile|
+        read_event_proposals_staff_positions.where(
+          convention_id: user_con_profile.convention_id
+        ).any?
+      end
 
       scope_authorization token_scope_action(:manage_conventions),
         MaximumEventProvidedTicketsOverride,
