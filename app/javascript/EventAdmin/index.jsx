@@ -8,14 +8,14 @@ import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
 import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
-import FillerEventAdmin from './FillerEventAdmin';
-import NewEventWithCategorySelection from './NewEventWithCategorySelection';
+import NewEventForm from './NewEventForm';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RecurringEventAdmin from './RecurringEventAdmin';
+import SingleRunEventAdmin from './SingleRunEventAdmin';
 
 function ExitableNewEvent({ convention, history }) {
   return (
-    <NewEventWithCategorySelection
+    <NewEventForm
       convention={convention}
       onExit={() => history.replace('/runs')}
     />
@@ -53,7 +53,7 @@ const EventAdminApp = ({ basename }) => (
         <Route path="/runs" component={EventAdminRunsTable} />
         <Route path="/:eventId/runs" component={EventAdminRunsTable} />
         <Route path="/recurring_events" component={RecurringEventAdmin} />
-        <Route path="/filler_events" component={FillerEventAdmin} />
+        <Route path="/filler_events" component={SingleRunEventAdmin} />
         <Route path="/dropped_events" component={DroppedEventAdmin} />
         <Route path="/:id/edit" component={EventAdminEditEvent} />
         <Route

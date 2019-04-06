@@ -5,26 +5,61 @@ const BLANK_FORM_API_JSON = JSON.stringify({
   form_items: [],
 });
 
-function getFormDataForEventCategoryId(eventCategoryId, convention) {
+function getFormDataForEventCategoryId(eventCategoryId, convention, getData) {
   if (!eventCategoryId) {
     return { form_api_json: BLANK_FORM_API_JSON };
   }
 
   const eventCategory = convention.event_categories.find(c => c.id === eventCategoryId);
   if (eventCategory) {
-    return eventCategory.event_form;
+    return getData(eventCategory) || { form_api_json: BLANK_FORM_API_JSON };
   }
   return { form_api_json: BLANK_FORM_API_JSON };
 }
 
-function getFormDataForEventCategory(event, convention) {
-  return getFormDataForEventCategoryId(((event || {}).event_category || {}).id, convention);
+function getEventFormDataForEventCategoryId(eventCategoryId, convention) {
+  return getFormDataForEventCategoryId(
+    eventCategoryId,
+    convention,
+    eventCategory => eventCategory.event_form,
+  );
+}
+
+function getProposalFormDataForEventCategoryId(eventCategoryId, convention) {
+  return getFormDataForEventCategoryId(
+    eventCategoryId,
+    convention,
+    eventCategory => eventCategory.event_proposal_form,
+  );
+}
+
+function getFormDataFromEvent(event, convention, getterForEventCategoryId) {
+  return getterForEventCategoryId(
+    ((event || {}).event_category || {}).id,
+    convention,
+  );
 }
 
 export default function getFormForEventCategory(event, convention) {
-  return deserializeForm(getFormDataForEventCategory(event, convention));
+  return deserializeForm(getFormDataFromEvent(
+    event,
+    convention,
+    getEventFormDataForEventCategoryId,
+  ));
 }
 
-export function getFormForEventCategoryId(event, convention) {
-  return deserializeForm(getFormDataForEventCategoryId(event, convention));
+export function getProposalFormForEventCategory(event, convention) {
+  return deserializeForm(getFormDataFromEvent(
+    event,
+    convention,
+    getProposalFormDataForEventCategoryId,
+  ));
+}
+
+export function getFormForEventCategoryId(eventCategoryId, convention) {
+  return deserializeForm(getEventFormDataForEventCategoryId(eventCategoryId, convention));
+}
+
+export function getProposalFormForEventCategoryId(eventCategoryId, convention) {
+  return deserializeForm(getProposalFormDataForEventCategoryId(eventCategoryId, convention));
 }

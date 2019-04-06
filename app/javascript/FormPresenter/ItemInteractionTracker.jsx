@@ -23,7 +23,16 @@ export function useItemInteractionTracking() {
     [interactedItemIds],
   );
 
-  return { interactWithItem, hasInteractedWithItem };
+  const renderItemInteractionProvider = useCallback(
+    children => (
+      <ItemInteractionTrackerContext.Provider value={{ interactWithItem, hasInteractedWithItem }}>
+        {children}
+      </ItemInteractionTrackerContext.Provider>
+    ),
+    [interactWithItem, hasInteractedWithItem],
+  );
+
+  return { interactWithItem, hasInteractedWithItem, renderItemInteractionProvider };
 }
 
 export function ItemInteractionProvider({ interactWithItem, hasInteractedWithItem, children }) {
