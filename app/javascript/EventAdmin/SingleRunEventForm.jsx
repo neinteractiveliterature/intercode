@@ -1,48 +1,38 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { humanize } from 'inflected';
 
-import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
-import CommonEventFormFields from './CommonEventFormFields';
-import RunFormFields from './RunFormFields';
-import { getFormForEventCategoryId } from '../EventAdmin/getFormForEventCategory';
+import RunFormFields from '../BuiltInForms/RunFormFields';
 import ErrorDisplay from '../ErrorDisplay';
+import useEventFormWithCategorySelection from './useEventFormWithCategorySelection';
 
-function FillerEventForm({
-  initialEvent, disabled, error, convention, cancelPath, onSave,
+function SingleRunEventForm({
+  convention, initialEvent, disabled, cancelPath, onSave, error,
 }) {
-  const [event, setEvent] = useState(initialEvent);
   const [run, setRun] = useState(initialEvent.runs[0] || {});
-
-  const eventFieldChanged = useCallback(
-    eventData => setEvent(prevEvent => ({ ...prevEvent, ...eventData })),
-    [],
-  );
 
   const runChanged = useCallback(
     runData => setRun(prevRun => ({ ...prevRun, ...runData })),
-    [],
+    [setRun],
   );
 
-  const eventCategoryIdChanged = useCallback(
-    e => eventFieldChanged({ event_category: { id: Number.parseInt(e.target.value, 10) } }),
-    [eventFieldChanged],
-  );
+  const {
+    event, eventCategoryId, validateForm, renderForm,
+  } = useEventFormWithCategorySelection({
+    convention,
+    initialEvent,
+    schedulingUi: 'single_run',
+  });
 
   const saveClicked = useCallback(
-    (browserEvent) => {
+    async (browserEvent) => {
       browserEvent.preventDefault();
-      onSave({ event, run });
+      if (!validateForm()) {
+        return;
+      }
+      await onSave({ event: { ...event, event_category: { id: eventCategoryId } }, run });
     },
-    [onSave, event, run],
-  );
-
-  const eventCategoryId = (event.event_category || {}).id;
-
-  const form = useMemo(
-    () => getFormForEventCategoryId(eventCategoryId, convention),
-    [eventCategoryId, convention],
+    [onSave, event, eventCategoryId, run, validateForm],
   );
 
   const saveCaption = (event.id ? 'Save single-run event' : 'Create single-run event');
@@ -51,38 +41,13 @@ function FillerEventForm({
     cancelLink = <Link to={cancelPath} className="btn btn-link">Cancel</Link>;
   }
 
-  const categoryOptions = convention.event_categories
-    .filter(category => category.scheduling_ui === 'single_run')
-    .map(category => (
-      <option value={category.id} key={category.id}>{humanize(category.name)}</option>
-    ));
-
   return (
     <form className="my-4">
       <h3 className="mb-4">
         {event.id ? 'Edit single-run event' : 'New single-run event'}
       </h3>
 
-      <BootstrapFormSelect
-        label="Category"
-        name="category"
-        value={event.event_category.id}
-        onChange={eventCategoryIdChanged}
-      >
-        {
-          event.id
-            ? null
-            : <option value={null} />
-        }
-        {categoryOptions}
-      </BootstrapFormSelect>
-
-      <CommonEventFormFields
-        event={event}
-        convention={convention}
-        form={form}
-        onChange={eventFieldChanged}
-      />
+      {renderForm()}
 
       {event.form_response_attrs.length_seconds && (
         <RunFormFields
@@ -103,7 +68,7 @@ function FillerEventForm({
   );
 }
 
-FillerEventForm.propTypes = {
+SingleRunEventForm.propTypes = {
   initialEvent: PropTypes.shape({
     id: PropTypes.number,
     runs: PropTypes.arrayOf(PropTypes.shape({
@@ -124,10 +89,10 @@ FillerEventForm.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-FillerEventForm.defaultProps = {
+SingleRunEventForm.defaultProps = {
   cancelPath: null,
   disabled: false,
   error: null,
 };
 
-export default FillerEventForm;
+export default SingleRunEventForm;

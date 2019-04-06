@@ -34,7 +34,7 @@ function EventsApp({ basename }) {
               <Switch>
                 <Route
                   path={`${eventPath}/edit`}
-                  render={() => <StandaloneEditEvent eventId={eventId} />}
+                  render={() => <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />}
                 />
                 <Route
                   path={`${eventPath}/team_members`}

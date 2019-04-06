@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Link, Switch, Route, withRouter,
-} from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 
 import EditRun from './EditRun';
 import RecurringEventSection from './RecurringEventSection';
 import { EventAdminEventsQuery } from './queries.gql';
-import NewEventWithCategorySelection from './NewEventWithCategorySelection';
+import NewEventForm from './NewEventForm';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 
@@ -19,12 +17,10 @@ function NewRecurringEvent({ history, ...props }) {
   }
 
   return (
-    <NewEventWithCategorySelection
+    <NewEventForm
       onExit={() => history.push('/recurring_events')}
       convention={data.convention}
-      selectableCategoryIds={data.convention.event_categories
-        .filter(category => category.scheduling_ui === 'recurring')
-        .map(category => category.id)}
+      schedulingUi="recurring"
       {...props}
     />
   );
@@ -35,8 +31,6 @@ NewRecurringEvent.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
-
-const NewRecurringEventWithRouter = withRouter(NewRecurringEvent);
 
 function RecurringEventAdminList() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
@@ -78,7 +72,7 @@ function RecurringEventAdminList() {
 function RecurringEventAdmin() {
   return (
     <Switch>
-      <Route path="/recurring_events/new" component={NewRecurringEventWithRouter} />
+      <Route path="/recurring_events/new" component={NewRecurringEvent} />
       <Route component={RecurringEventAdminList} />
     </Switch>
   );

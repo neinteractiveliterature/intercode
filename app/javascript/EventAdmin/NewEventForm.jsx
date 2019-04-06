@@ -1,32 +1,24 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
 
-import CommonEventFormFields from '../BuiltInForms/CommonEventFormFields';
-import getFormForEventCategory from './getFormForEventCategory';
 import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
 import { CreateEvent } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useFormValidation from '../FormPresenter/useFormValidation';
-import { useItemInteractionTracking, ItemInteractionProvider } from '../FormPresenter/ItemInteractionTracker';
+import useEventFormWithCategorySelection from './useEventFormWithCategorySelection';
 
 function NewEventForm({
-  event, convention, setEvent, onExit,
+  convention, onExit, schedulingUi,
 }) {
   const [mutate, error] = useAsyncFunction(useMutation(CreateEvent));
-  const formRef = useRef();
-  const { interactWithItem, hasInteractedWithItem } = useItemInteractionTracking();
-
-  const form = getFormForEventCategory(event, convention);
-  const validate = useFormValidation(
-    formRef.current ? formRef.current.scrollToItem : null,
-    interactWithItem,
-  );
+  const {
+    event, renderForm, eventCategoryId, validateForm,
+  } = useEventFormWithCategorySelection({ convention, schedulingUi });
 
   const createEvent = useCallback(
     async () => {
-      if (!validate(form.getAllItems(), event.form_response_attrs)) {
+      if (!validateForm()) {
         return;
       }
 
@@ -36,7 +28,7 @@ function NewEventForm({
         variables: {
           input: {
             event: {
-              event_category_id: event.event_category.id,
+              event_category_id: eventCategoryId,
               form_response_attrs_json: JSON.stringify(formResponseAttrs),
             },
           },
@@ -50,38 +42,28 @@ function NewEventForm({
 
       onExit();
     },
-    [event.event_category, event.form_response_attrs, form, onExit, mutate, validate],
+    [eventCategoryId, event.form_response_attrs, onExit, mutate, validateForm],
   );
 
   return (
     <>
-      <ItemInteractionProvider
-        interactWithItem={interactWithItem}
-        hasInteractedWithItem={hasInteractedWithItem}
-      >
-        <CommonEventFormFields
-          event={event}
-          convention={convention}
-          form={form}
-          onChange={(newEventData) => { setEvent({ ...event, ...newEventData }); }}
-          ref={formRef}
+      {renderForm()}
+
+      <ErrorDisplay graphQLError={error} />
+
+      <div>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={createEvent}
+          disabled={!(event.event_category || {}).id}
         >
-          <div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={createEvent}
-              disabled={!(event.event_category || {}).id}
-            >
-              Create event
-            </button>
-            <button className="btn btn-link" onClick={onExit} type="button">
-              Cancel
-            </button>
-            <ErrorDisplay graphQLError={error} />
-          </div>
-        </CommonEventFormFields>
-      </ItemInteractionProvider>
+          Create event
+        </button>
+        <button className="btn btn-link" onClick={onExit} type="button">
+          Cancel
+        </button>
+      </div>
     </>
   );
 }
@@ -92,7 +74,11 @@ NewEventForm.propTypes = {
   }).isRequired,
   onExit: PropTypes.func.isRequired,
   event: PropTypes.shape({}).isRequired,
-  setEvent: PropTypes.func.isRequired,
+  schedulingUi: PropTypes.string,
+};
+
+NewEventForm.defaultProps = {
+  schedulingUi: null,
 };
 
 export default NewEventForm;
