@@ -56,7 +56,7 @@ function NewEventForm({
           type="button"
           className="btn btn-primary"
           onClick={createEvent}
-          disabled={!(event.event_category || {}).id}
+          disabled={!eventCategoryId}
         >
           Create event
         </button>

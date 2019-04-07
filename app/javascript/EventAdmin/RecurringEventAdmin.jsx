@@ -17,12 +17,16 @@ function NewRecurringEvent({ history, ...props }) {
   }
 
   return (
-    <NewEventForm
-      onExit={() => history.push('/recurring_events')}
-      convention={data.convention}
-      schedulingUi="recurring"
-      {...props}
-    />
+    <>
+      <h3 className="my-4">New recurring event</h3>
+
+      <NewEventForm
+        onExit={() => history.push('/recurring_events')}
+        convention={data.convention}
+        schedulingUi="recurring"
+        {...props}
+      />
+    </>
   );
 }
 

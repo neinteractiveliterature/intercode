@@ -21,7 +21,7 @@ export default function useEventFormWithCategorySelection({
 
   const { renderSelect, eventCategoryId, eventForm } = useEventCategorySelection({
     convention,
-    initialEventCategoryId: (initialEvent.event_category || {}).id,
+    initialEventCategoryId: ((initialEvent || {}).event_category || {}).id,
     selectableCategoryIds,
   });
 

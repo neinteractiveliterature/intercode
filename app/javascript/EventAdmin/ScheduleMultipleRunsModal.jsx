@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
-import { graphql } from 'react-apollo';
 import Modal from 'react-bootstrap4-modal';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
@@ -11,173 +10,122 @@ import Timespan from '../Timespan';
 import { timespanFromConvention, timespanFromRun } from '../TimespanUtils';
 import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries.gql';
 import { CreateMultipleRuns } from './mutations.gql';
+import useMutationCallback from '../useMutationCallback';
+import useAsyncFunction from '../useAsyncFunction';
 
-@graphql(CreateMultipleRuns, { name: 'createMultipleRuns' })
-class ScheduleMultipleRunsModal extends React.Component {
-  static propTypes = {
-    convention: propType(ConventionFields).isRequired,
-    event: propType(EventFields).isRequired,
-    visible: PropTypes.bool.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    onFinish: PropTypes.func.isRequired,
-    createMultipleRuns: PropTypes.func.isRequired,
-  }
+function ScheduleMultipleRunsModal({
+  convention, event, visible, onCancel, onFinish,
+}) {
+  const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(
+    useMutationCallback(CreateMultipleRuns),
+  );
+  const [day, setDay] = useState(null);
+  const [start, setStart] = useState({ hour: null, minute: null });
+  const [finish, setFinish] = useState({ hour: null, minute: null });
 
-  constructor(props) {
-    super(props);
+  const dataComplete = useMemo(
+    () => (
+      day
+      && start.hour != null && start.minute != null
+      && finish.hour != null && finish.minute != null
+    ),
+    [day, start, finish],
+  );
 
-    this.state = {
-      day: null,
-      startHour: null,
-      startMinute: null,
-      finishHour: null,
-      finishMinute: null,
-      mutationInProgress: false,
-    };
-  }
+  const timespan = useMemo(
+    () => {
+      if (!dataComplete) {
+        return null;
+      }
 
-  getTimespan = () => {
-    if (!this.isDataComplete()) {
-      return null;
-    }
+      return new Timespan(day.clone().set(start), day.clone().set(finish));
+    },
+    [dataComplete, day, start, finish],
+  );
 
-    const {
-      startHour, startMinute, finishHour, finishMinute,
-    } = this.state;
+  const timespansWithinRange = useMemo(
+    () => {
+      if (!timespan) {
+        return [];
+      }
 
-    return new Timespan(
-      this.state.day.clone().set({ hour: startHour, minute: startMinute }),
-      this.state.day.clone().set({ hour: finishHour, minute: finishMinute }),
-    );
-  }
+      return timespan.getTimespansWithin(convention.timezone_name, 'hour');
+    },
+    [timespan, convention.timezone_name],
+  );
 
-  getTimespansWithinRange = () => {
-    const timespan = this.getTimespan();
-    if (!timespan) {
-      return [];
-    }
+  const existingRunTimespans = useMemo(
+    () => event.runs.map(run => timespanFromRun(convention, event, run)),
+    [event, convention],
+  );
 
-    return timespan.getTimespansWithin(
-      this.props.convention.timezone_name,
-      'hour',
-    );
-  }
-
-  getExistingRunTimespans = () => (
-    this.props.event.runs.map(run => (
-      timespanFromRun(this.props.convention, this.props.event, run)
-    ))
-  )
-
-  getNonConflictingTimespansWithinRange = () => {
-    const runTimespans = this.getTimespansWithinRange();
-    if (runTimespans.length < 1) {
-      return [];
-    }
-
-    const existingRunTimespans = this.getExistingRunTimespans();
-
-    return runTimespans.filter(runTimespan => (
+  const nonConflictingTimespansWithinRange = useMemo(
+    () => timespansWithinRange.filter(runTimespan => (
       !existingRunTimespans.some(existingTimespan => existingTimespan.overlapsTimespan(runTimespan))
-    ));
-  }
+    )),
+    [timespansWithinRange, existingRunTimespans],
+  );
 
-  isDataComplete = () => (
-    this.state.day
-    && this.state.startHour != null && this.state.startMinute != null
-    && this.state.finishHour != null && this.state.finishMinute != null
-  )
+  const scheduleRuns = useCallback(
+    async () => {
+      const runs = nonConflictingTimespansWithinRange.map(nonConflictingTimespan => ({
+        starts_at: nonConflictingTimespan.start.toISOString(),
+      }));
 
-  dayInputChanged = (newDay) => {
-    this.setState({ day: newDay });
-  }
-
-  startTimeInputChanged = ({ hour, minute }) => {
-    this.setState({ startHour: hour, startMinute: minute });
-  }
-
-  finishTimeInputChanged = ({ hour, minute }) => {
-    this.setState({ finishHour: hour, finishMinute: minute });
-  }
-
-  scheduleRuns = async () => {
-    const runs = this.getNonConflictingTimespansWithinRange().map(timespan => ({
-      starts_at: timespan.start.toISOString(),
-    }));
-
-    this.setState({ mutationInProgress: true });
-    try {
-      await this.props.createMultipleRuns({
+      await createMultipleRuns({
         variables: {
           input: {
-            event_id: this.props.event.id,
+            event_id: event.id,
             runs,
           },
         },
         update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
           const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-          const eventData = eventsData.events.find(event => event.id === this.props.event.id);
+          const eventData = eventsData.events.find(e => e.id === event.id);
           eventData.runs = [...eventData.runs, ...newRuns];
           store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
       });
-      this.setState({ mutationInProgress: false });
-      this.props.onFinish();
-    } catch (error) {
-      this.setState({ error, mutationInProgress: false });
-    }
-  }
+      onFinish();
+    },
+    [createMultipleRuns, event, nonConflictingTimespansWithinRange, onFinish],
+  );
 
-  renderTimeSelects = () => {
-    const { convention } = this.props;
-    const {
-      day, startHour, startMinute, finishHour, finishMinute,
-    } = this.state;
-
+  const renderTimeSelects = () => {
     if (!day) {
       return null;
     }
 
-    const timespan = new Timespan(
-      this.state.day.clone(),
-      this.state.day.clone().add(1, 'day'),
-    ).intersection(timespanFromConvention(convention));
+    const timespanForStart = new Timespan(day.clone(), day.clone().add(1, 'day'))
+      .intersection(timespanFromConvention(convention));
 
     const timespanForFinish = new Timespan(
-      timespan.start,
-      timespan.finish.clone().add(1, 'hour'),
+      timespanForStart.start,
+      timespanForStart.finish.clone().add(1, 'hour'),
     );
 
     return (
       <div>
         <fieldset className="form-group">
           <legend className="col-form-label">From</legend>
-          <TimeSelect
-            value={{ hour: startHour, minute: startMinute }}
-            onChange={this.startTimeInputChanged}
-            timespan={timespan}
-          />
+          <TimeSelect value={start} onChange={setStart} timespan={timespanForStart} />
         </fieldset>
 
         <fieldset className="form-group">
           <legend className="col-form-label">Until</legend>
-          <TimeSelect
-            value={{ hour: finishHour, minute: finishMinute }}
-            onChange={this.finishTimeInputChanged}
-            timespan={timespanForFinish}
-          />
+          <TimeSelect value={finish} onChange={setFinish} timespan={timespanForFinish} />
         </fieldset>
       </div>
     );
-  }
+  };
 
-  renderRunPreview = () => {
-    const runTimespans = this.getTimespansWithinRange();
+  const renderRunPreview = () => {
+    const runTimespans = timespansWithinRange;
     if (runTimespans.length < 1) {
       return null;
     }
 
-    const nonConflictingTimespans = this.getNonConflictingTimespansWithinRange();
+    const nonConflictingTimespans = nonConflictingTimespansWithinRange;
 
     const runTimespanItems = runTimespans.map((runTimespan) => {
       let description = runTimespan.start.format('h:mma');
@@ -203,52 +151,48 @@ class ScheduleMultipleRunsModal extends React.Component {
         {runTimespanItems}
       </ul>
     );
-  }
+  };
 
-  renderFormBody = () => (
-    <div className="modal-body">
-      <ConventionDaySelect
-        convention={this.props.convention}
-        value={this.state.day}
-        onChange={this.dayInputChanged}
-      />
-
-      {this.renderTimeSelects()}
-      {this.renderRunPreview()}
-
-      <ErrorDisplay graphQLError={this.state.error} />
-    </div>
-  );
-
-  render = () => (
+  return (
     <div>
-      <Modal visible={this.props.visible}>
+      <Modal visible={visible}>
         <div className="modal-header">
           <h5 className="modal-title">
             Schedule runs of
             {' '}
-            {this.props.event.title}
+            {event.title}
           </h5>
         </div>
-        {this.renderFormBody()}
+        <div className="modal-body">
+          <ConventionDaySelect
+            convention={convention}
+            value={day}
+            onChange={setDay}
+          />
+
+          {renderTimeSelects()}
+          {renderRunPreview()}
+
+          <ErrorDisplay graphQLError={createError} />
+        </div>
         <div className="modal-footer">
           <div className="d-flex w-100">
             <div className="col text-right pr-0">
               <button
                 type="button"
                 className="btn btn-secondary mr-2"
-                onClick={this.props.onCancel}
-                disabled={this.state.mutationInProgress}
+                onClick={onCancel}
+                disabled={createInProgress}
               >
                 Cancel
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={this.scheduleRuns}
+                onClick={scheduleRuns}
                 disabled={
-                  this.getNonConflictingTimespansWithinRange().length < 1
-                  || this.state.mutationInProgress
+                  nonConflictingTimespansWithinRange.length < 1
+                  || createInProgress
                 }
               >
                 Schedule runs
@@ -258,7 +202,15 @@ class ScheduleMultipleRunsModal extends React.Component {
         </div>
       </Modal>
     </div>
-  )
+  );
 }
+
+ScheduleMultipleRunsModal.propTypes = {
+  convention: propType(ConventionFields).isRequired,
+  event: propType(EventFields).isRequired,
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onFinish: PropTypes.func.isRequired,
+};
 
 export default ScheduleMultipleRunsModal;
