@@ -1,211 +1,163 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
-import { graphql } from 'react-apollo';
 import Modal from 'react-bootstrap4-modal';
-import { Elements } from 'react-stripe-elements';
+import { CardElement, injectStripe } from 'react-stripe-elements';
 
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
-import LazyStripe from '../LazyStripe';
+import { LazyStripeElementsWrapper } from '../LazyStripe';
 import { PurchaseTicket } from './ticketPurchaseFormMutations.gql';
-import TicketPurchasePaymentSection from './TicketPurchasePaymentSection';
+import useAsyncFunction from '../useAsyncFunction';
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
+import LoadingIndicator from '../LoadingIndicator';
+import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
+import useMutationCallback from '../useMutationCallback';
 
-@graphql(PurchaseTicket, {
-  props: ({ mutate }) => ({
-    purchaseTicket: (ticketTypeId, stripeToken) => mutate({
-      variables: {
-        input: {
-          ticket_type_id: ticketTypeId,
-          stripe_token: stripeToken,
+function TicketPurchaseForm({
+  ticketTypes, purchaseCompleteUrl, initialTicketTypeId, initialName, stripe,
+}) {
+  const [ticketTypeId, setTicketTypeId] = useState((initialTicketTypeId || '').toString());
+  const [name, setName] = useState(initialName);
+  const [ticket, setTicket] = useState(null);
+  const purchaseTicket = useMutationCallback(PurchaseTicket);
+
+  const [submitPayment, error, submitting] = useAsyncFunction(useCallback(
+    async () => {
+      const { token, error: stripeError } = await stripe.createToken({ name });
+
+      if (stripeError) {
+        throw stripeError;
+      }
+
+      const purchaseResponse = await purchaseTicket({
+        variables: {
+          ticketTypeId: Number.parseInt(ticketTypeId, 10),
+          stripeToken: token.id,
         },
-      },
-    }),
-  }),
-})
-class TicketPurchaseForm extends React.Component {
-  static propTypes = {
-    purchaseTicket: PropTypes.func.isRequired,
-    ticketTypes: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      formattedPrice: PropTypes.string.isRequired,
-      available: PropTypes.bool.isRequired,
-    })).isRequired,
-    purchaseCompleteUrl: PropTypes.string.isRequired,
-    ticketTypeId: PropTypes.number,
-    initialName: PropTypes.string,
-  };
-
-  static defaultProps = {
-    ticketTypeId: '',
-    initialName: '',
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      paymentError: null,
-      submitting: false,
-      ticketTypeId: (this.props.ticketTypeId || '').toString(),
-      name: props.initialName || '',
-    };
-
-    enableUniqueIds(this);
-  }
-
-  getTicketType = () => {
-    const ticketTypeId = Number.parseInt(this.state.ticketTypeId, 10);
-
-    return this.props.ticketTypes.find(ticketType => ticketType.id === ticketTypeId);
-  }
-
-  fieldChanged = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  }
-
-  handleStripeResponse = async (token) => {
-    const { ticketTypeId } = this.state;
-    this.setState({ paymentError: null, submitting: true });
-    try {
-      const purchaseResponse = await this.props.purchaseTicket(
-        Number.parseInt(ticketTypeId, 10),
-        token.id,
-      );
-      this.setState({
-        ticket: purchaseResponse.data.purchaseTicket.ticket,
-        submitting: false,
       });
-    } catch (error) {
-      this.setState({
-        graphQLError: error,
-        submitting: false,
-      });
-    }
-  }
+      setTicket(purchaseResponse.data.purchaseTicket.ticket);
+    },
+    [purchaseTicket, ticketTypeId, name, stripe],
+  ));
 
-  purchaseAcknowledged = () => {
-    window.location.href = this.props.purchaseCompleteUrl;
-  }
+  const purchaseAcknowledged = useCallback(
+    () => { window.location.href = purchaseCompleteUrl; },
+    [purchaseCompleteUrl],
+  );
 
-  isDisabled = () => ((!this.state.ticketTypeId) || this.state.submitting);
+  const disabled = (!ticketTypeId || submitting);
 
-  renderTicketTypeSelect = () => {
-    const options = this.props.ticketTypes.map((ticketType) => {
-      let description = `${ticketType.name} (${ticketType.formattedPrice})`;
+  const renderTicketTypeSelect = () => {
+    const choices = ticketTypes.map((ticketType) => {
+      let label = `${ticketType.name} (${ticketType.formattedPrice})`;
       if (!ticketType.available) {
-        description += ' - SOLD OUT';
+        label += ' - SOLD OUT';
       }
 
-      let formCheckClass = 'form-check';
-      if (!ticketType.available) {
-        formCheckClass += ' disabled';
-      }
-
-      const radioId = this.nextUniqueId();
-
-      return (
-        <div className={formCheckClass} key={ticketType.id}>
-          <label className="form-check-label" htmlFor={radioId}>
-            <input
-              type="radio"
-              className="form-check-input"
-              value={ticketType.id}
-              id={radioId}
-              name="ticketTypeId"
-              disabled={!ticketType.available}
-              checked={this.state.ticketTypeId === ticketType.id.toString()}
-              onChange={this.fieldChanged}
-            />
-            &nbsp;
-            {description}
-          </label>
-        </div>
-      );
+      return {
+        label,
+        value: ticketType.id.toString(),
+        disabled: !ticketType.available,
+      };
     });
 
-    return options;
-  }
+    return <ChoiceSet choices={choices} value={ticketTypeId} onChange={setTicketTypeId} />;
+  };
 
-  renderFormGroup = (name, label, type, value) => {
-    const inputId = this.nextUniqueId();
-
-    return (
-      <div className="form-group">
-        <label htmlFor={inputId}>{label}</label>
-        <input
-          className="form-control"
-          id={inputId}
-          name={name}
-          type={type}
-          value={value}
-          onChange={this.fieldChanged}
-          disabled={this.isDisabled()}
-        />
-      </div>
-    );
-  }
-
-  renderPaymentSection = () => (
+  const renderPaymentSection = () => (
     <div>
       <hr />
-      <ErrorDisplay
-        stringError={this.state.paymentError}
-        graphQLError={this.state.graphQLError}
+      <ErrorDisplay graphQLError={error} />
+
+      <BootstrapFormInput
+        name="name"
+        label="Name"
+        value={name}
+        onChange={setName}
       />
 
-      {this.renderFormGroup('name', 'Name', 'text', this.state.name)}
+      <div>
+        <CardElement
+          className="form-control mb-4"
+          disabled={disabled || submitting}
+          style={{
+            base: {
+              lineHeight: 1.5,
+              fontSize: '16px',
+            },
+          }}
+        />
 
-      <TicketPurchasePaymentSection
-        disabled={this.isDisabled()}
-        name={this.state.name}
-        onError={error => this.setState({ paymentError: error.message })}
-        onReceiveToken={this.handleStripeResponse}
-        submitting={this.state.submitting}
-      />
+        <div className="d-flex justify-content-end align-items-center">
+          <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="mr-4" />
+          <button
+            className="btn btn-primary"
+            onClick={submitPayment}
+            disabled={disabled}
+            type="submit"
+          >
+            {submitting ? <LoadingIndicator /> : 'Submit payment'}
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
 
-  render = () => (
-    <LazyStripe>
-      <Elements>
-        <React.Fragment>
-          {this.renderTicketTypeSelect()}
-          {this.renderPaymentSection()}
-          <Modal visible={this.state.ticket != null}>
-            <div className="modal-header"><h3>Thank you!</h3></div>
-            <div className="modal-body">
-              {
-                this.state.ticket
-                  ? (
-                    <div>
-                    Your purchase of a
-                      {' '}
-                      {this.state.ticket.ticket_type.description}
-                      {' '}
-    for
-                      {' '}
-                      {formatMoney(this.state.ticket.payment_amount)}
-                      {' '}
-                    was successful.  We&apos;ve emailed you a receipt.
-                    </div>
-                  )
-                  : null
-              }
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-primary" onClick={this.purchaseAcknowledged} type="button">
-                OK
-              </button>
-            </div>
-          </Modal>
-        </React.Fragment>
-      </Elements>
-    </LazyStripe>
+  return (
+    <>
+      {renderTicketTypeSelect()}
+      {renderPaymentSection()}
+      <Modal visible={ticket != null}>
+        <div className="modal-header"><h3>Thank you!</h3></div>
+        <div className="modal-body">
+          {
+            ticket
+              ? (
+                <div>
+                  Your purchase of a
+                  {' '}
+                  {ticket.ticket_type.description}
+                  {' '}
+                  for
+                  {' '}
+                  {formatMoney(ticket.payment_amount)}
+                  {' '}
+                  was successful.  We&apos;ve emailed you a receipt.
+                </div>
+              )
+              : null
+          }
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-primary" onClick={purchaseAcknowledged} type="button">
+            OK
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 }
 
-export default TicketPurchaseForm;
+TicketPurchaseForm.propTypes = {
+  ticketTypes: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    formattedPrice: PropTypes.string.isRequired,
+    available: PropTypes.bool.isRequired,
+  })).isRequired,
+  purchaseCompleteUrl: PropTypes.string.isRequired,
+  initialTicketTypeId: PropTypes.number,
+  initialName: PropTypes.string,
+  stripe: PropTypes.shape({
+    createToken: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+TicketPurchaseForm.defaultProps = {
+  initialTicketTypeId: null,
+  initialName: '',
+};
+
+export default LazyStripeElementsWrapper(injectStripe(TicketPurchaseForm));

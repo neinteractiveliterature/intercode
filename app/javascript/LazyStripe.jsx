@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StripeProvider } from 'react-stripe-elements';
+import { StripeProvider, Elements } from 'react-stripe-elements';
 
 const LazyStripeContext = React.createContext({
   publishableKey: null,
@@ -23,47 +23,41 @@ LazyStripeProvider.defaultProps = {
   publishableKey: null,
 };
 
-class LazyStripeLoader extends React.Component {
-  static propTypes = {
-    publishableKey: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
-  }
+function LazyStripeLoader({ publishableKey, children }) {
+  const [stripe, setStripe] = useState(null);
 
-  constructor(props) {
-    super(props);
+  useEffect(
+    () => {
+      if (window.Stripe) {
+        setStripe(window.Stripe(publishableKey));
+      } else {
+        document.querySelector('#stripe-js').addEventListener('load', () => {
+          // Create Stripe instance once Stripe.js loads
+          setStripe(window.Stripe(publishableKey));
+        });
+      }
+    },
+    [publishableKey],
+  );
 
-    this.state = {
-      stripe: null,
-    };
-  }
-
-  componentDidMount() {
-    if (window.Stripe) {
-      this.setState({ stripe: window.Stripe(this.props.publishableKey) });
-    } else {
-      document.querySelector('#stripe-js').addEventListener('load', () => {
-        // Create Stripe instance once Stripe.js loads
-        this.setState({ stripe: window.Stripe(this.props.publishableKey) });
-      });
-    }
-  }
-
-  render = () => (
-    <StripeProvider stripe={this.state.stripe}>
-      {this.props.children}
+  return (
+    <StripeProvider stripe={stripe}>
+      {children}
     </StripeProvider>
-  )
+  );
 }
 
+LazyStripeLoader.propTypes = {
+  publishableKey: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
 function LazyStripe({ children }) {
+  const { publishableKey } = useContext(LazyStripeContext);
   return (
-    <LazyStripeContext.Consumer>
-      {({ publishableKey }) => (
-        <LazyStripeLoader publishableKey={publishableKey}>
-          {children}
-        </LazyStripeLoader>
-      )}
-    </LazyStripeContext.Consumer>
+    <LazyStripeLoader publishableKey={publishableKey}>
+      {children}
+    </LazyStripeLoader>
   );
 }
 
@@ -71,5 +65,27 @@ LazyStripe.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export { LazyStripeProvider };
+function LazyStripeElements({ children }) {
+  const { publishableKey } = useContext(LazyStripeContext);
+  return (
+    <LazyStripeLoader publishableKey={publishableKey}>
+      <Elements>
+        {children}
+      </Elements>
+    </LazyStripeLoader>
+  );
+}
+
+LazyStripeElements.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+function LazyStripeElementsWrapper(WrappedComponent) {
+  const wrapper = props => LazyStripeElements({ children: <WrappedComponent {...props} /> });
+  wrapper.displayName = `LazyStripeWrapper(${WrappedComponent.displayName}`;
+
+  return wrapper;
+}
+
+export { LazyStripeProvider, LazyStripeElementsWrapper };
 export default LazyStripe;
