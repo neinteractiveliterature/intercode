@@ -1,5 +1,5 @@
-mutation PurchaseTicket($input: PurchaseTicketInput!) {
-  purchaseTicket(input: $input) {
+mutation PurchaseTicket($ticketTypeId: Int!, $stripeToken: String!) {
+  purchaseTicket(input: { ticket_type_id: $ticketTypeId, stripe_token: $stripeToken }) {
     ticket {
       id
 
