@@ -1,9 +1,23 @@
 import React, { useCallback, useState } from 'react';
 
-import { buildRegistrationPolicyForVolunteerEvent } from '../BuiltInForms/CommonEventFormFields';
 import useFormResponse from '../FormPresenter/useFormResponse';
 import useValidatableForm from '../FormPresenter/useValidatableForm';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
+
+const buildSingleBucketRegistrationPolicy = totalSlots => ({
+  buckets: [
+    {
+      key: 'signups',
+      name: 'Signups',
+      description: 'Signups for this event',
+      anything: false,
+      slots_limited: true,
+      minimum_slots: totalSlots,
+      preferred_slots: totalSlots,
+      total_slots: totalSlots,
+    },
+  ],
+});
 
 const BLANK_EVENT = {
   form_response_attrs: {
@@ -14,7 +28,7 @@ const BLANK_EVENT = {
     short_blurb: '',
     description: '',
     length_seconds: null,
-    registration_policy: buildRegistrationPolicyForVolunteerEvent(null),
+    registration_policy: buildSingleBucketRegistrationPolicy(null),
   },
 };
 
@@ -25,7 +39,7 @@ const processFormResponseValue = (key, value) => {
     case 'total_slots':
       return {
         total_slots: value,
-        registration_policy: buildRegistrationPolicyForVolunteerEvent(Number.parseInt(value, 10)),
+        registration_policy: buildSingleBucketRegistrationPolicy(Number.parseInt(value, 10)),
       };
     default:
       return { [key]: value };

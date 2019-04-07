@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  BrowserRouter, NavLink, Route, Switch, Redirect, withRouter,
+  BrowserRouter, NavLink, Route, Switch, Redirect,
 } from 'react-router-dom';
 
 import DroppedEventAdmin from './DroppedEventAdmin';
@@ -9,27 +9,31 @@ import EventAdminEditEvent from './EventAdminEditEvent';
 import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEventForm from './NewEventForm';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdmin from './SingleRunEventAdmin';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
-function ExitableNewEvent({ convention, history }) {
+function NewEvent({ history }) {
+  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
   return (
     <NewEventForm
-      convention={convention}
+      convention={data.convention}
       onExit={() => history.replace('/runs')}
     />
   );
 }
 
-ExitableNewEvent.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
+NewEvent.propTypes = {
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
   }).isRequired,
 };
-
-const ExitableNewEventWithRouter = withRouter(ExitableNewEvent);
 
 const EventAdminApp = ({ basename }) => (
   <BrowserRouter basename={basename}>
@@ -58,13 +62,7 @@ const EventAdminApp = ({ basename }) => (
         <Route path="/:id/edit" component={EventAdminEditEvent} />
         <Route
           path="/new"
-          render={() => (
-            <QueryWithStateDisplay query={EventAdminEventsQuery}>
-              {({ data: { convention } }) => (
-                <ExitableNewEventWithRouter convention={convention} />
-              )}
-            </QueryWithStateDisplay>
-          )}
+          render={({ history }) => <NewEvent history={history} />}
         />
         <Redirect to="/runs" />
       </Switch>

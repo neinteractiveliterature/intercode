@@ -32,8 +32,11 @@ function Confirm({ children }) {
     }
   };
 
+  const augmentedConfirm = (...args) => modal.open(...args);
+  augmentedConfirm.visible = modal.visible;
+
   return (
-    <ConfirmContext.Provider value={modal.open}>
+    <ConfirmContext.Provider value={augmentedConfirm}>
       {children}
       <ConfirmModal
         visible={modal.visible}
