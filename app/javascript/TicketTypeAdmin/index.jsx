@@ -1,71 +1,68 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import {
   BrowserRouter, Route, Switch, Redirect,
 } from 'react-router-dom';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
+
 import EditTicketType from './EditTicketType';
 import NewTicketType from './NewTicketType';
 import TicketTypesList from './TicketTypesList';
 import { AdminTicketTypesQuery } from './queries.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
-@graphql(AdminTicketTypesQuery)
-@GraphQLQueryResultWrapper
-class TicketTypeAdmin extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(AdminTicketTypesQuery).isRequired,
-    basename: PropTypes.string.isRequired,
+function TicketTypeAdmin({ basename }) {
+  const { data, error } = useQuerySuspended(AdminTicketTypesQuery);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  renderNewTicketType = () => (
-    <NewTicketType
-      timezoneName={this.props.data.convention.timezone_name}
-      ticketName={this.props.data.convention.ticket_name}
-    />
-  )
-
-  renderEditTicketType = ({ match: { params: { id } } }) => {
-    const ticketType = this.props.data.convention.ticket_types
-      .find(tt => tt.id.toString(10) === id);
-
-    return (
-      <EditTicketType
-        initialTicketType={ticketType}
-        timezoneName={this.props.data.convention.timezone_name}
-        ticketName={this.props.data.convention.ticket_name}
-      />
-    );
-  }
-
-  renderTicketTypesList = ({ match: { path, params: { id } } }) => {
-    let deleteId = null;
-    if (path === '/:id/delete') {
-      deleteId = Number.parseInt(id, 10);
-    }
-
-    return (
-      <TicketTypesList
-        ticketTypes={this.props.data.convention.ticket_types}
-        deleteId={deleteId}
-        ticketName={this.props.data.convention.ticket_name}
-        timezoneName={this.props.data.convention.timezone_name}
-      />
-    );
-  }
-
-  render = () => (
-    <BrowserRouter basename={this.props.basename}>
+  return (
+    <BrowserRouter basename={basename}>
       <Switch>
-        <Route path="/new" render={this.renderNewTicketType} />
-        <Route path="/:id/edit" render={this.renderEditTicketType} />
-        <Route path="/:id/delete" render={this.renderTicketTypesList} />
-        <Route path="/" render={this.renderTicketTypesList} />
+        <Route
+          path="/new"
+          render={() => (
+            <NewTicketType
+              timezoneName={data.convention.timezone_name}
+              ticketName={data.convention.ticket_name}
+            />
+          )}
+        />
+        <Route
+          path="/:id/edit"
+          render={({ match: { params: { id } } }) => {
+            const ticketType = data.convention.ticket_types
+              .find(tt => tt.id.toString(10) === id);
+
+            return (
+              <EditTicketType
+                initialTicketType={ticketType}
+                timezoneName={data.convention.timezone_name}
+                ticketName={data.convention.ticket_name}
+              />
+            );
+          }}
+        />
+        <Route
+          path="/"
+          render={() => (
+            <TicketTypesList
+              ticketTypes={data.convention.ticket_types}
+              ticketName={data.convention.ticket_name}
+              timezoneName={data.convention.timezone_name}
+            />
+          )}
+        />
         <Redirect to="/" />
       </Switch>
     </BrowserRouter>
-  )
+  );
 }
+
+TicketTypeAdmin.propTypes = {
+  basename: PropTypes.string.isRequired,
+};
 
 export default TicketTypeAdmin;
