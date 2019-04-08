@@ -1,87 +1,70 @@
-import React from 'react';
-import { graphql } from 'react-apollo';
+import React, { useState } from 'react';
+
 import AdminProductCard from './AdminProductCard';
 import { AdminProductsQuery } from './queries.gql';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
+import { sortByLocaleString } from '../ValueUtils';
 
-@graphql(AdminProductsQuery)
-@GraphQLQueryResultWrapper
-class ProductAdmin extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(AdminProductsQuery).isRequired,
+function ProductAdmin() {
+  const { data, error } = useQuerySuspended(AdminProductsQuery);
+  const [newProducts, setNewProducts] = useState([]);
+
+  const newProductClicked = () => setNewProducts(prevNewProducts => ([
+    ...prevNewProducts,
+    {
+      generatedId: new Date().getTime(),
+      name: '',
+      description: '',
+      image_url: null,
+      price: null,
+      product_variants: [],
+      available: true,
+    },
+  ]));
+
+  const removeNewProduct = product => setNewProducts(prevNewProducts => prevNewProducts
+    .filter(newProduct => newProduct.generatedId !== product.generatedId));
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      newProducts: [],
-    };
-  }
-
-  newProductClicked = () => {
-    this.setState(prevState => ({
-      newProducts: [
-        ...prevState.newProducts,
-        {
-          generatedId: new Date().getTime(),
-          name: '',
-          description: '',
-          image_url: null,
-          price: null,
-          product_variants: [],
-          available: true,
-        },
-      ],
-    }));
-  }
-
-  removeNewProduct = (product) => {
-    this.setState(prevState => ({
-      newProducts: prevState.newProducts
-        .filter(newProduct => newProduct.generatedId !== product.generatedId),
-    }));
-  }
-
-  renderProduct = product => (
+  const renderProduct = product => (
     <AdminProductCard
       key={product.id || product.generatedId}
       product={product}
       initialEditing={product.id == null}
-      currentAbility={this.props.data.currentAbility}
-      onSaveNewProduct={this.removeNewProduct}
-      onCancelNewProduct={this.removeNewProduct}
+      currentAbility={data.currentAbility}
+      onSaveNewProduct={removeNewProduct}
+      onCancelNewProduct={removeNewProduct}
     />
-  )
+  );
 
-  render = () => {
-    const products = [...this.props.data.convention.products]
-      .sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }))
-      .concat(this.state.newProducts)
-      .map(product => this.renderProduct(product));
+  const products = sortByLocaleString(data.convention.products, product => product.name)
+    .concat(newProducts)
+    .map(renderProduct);
 
-    return (
-      <div>
-        {products}
-        <div className="my-4">
-          {
-            this.props.data.currentAbility.can_update_products
-              ? (
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={this.newProductClicked}
-                >
-                  New product
-                </button>
-              )
-              : null
-          }
-        </div>
+  return (
+    <div>
+      {products}
+      <div className="my-4">
+        {
+          data.currentAbility.can_update_products
+            ? (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={newProductClicked}
+              >
+                New product
+              </button>
+            )
+            : null
+        }
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default ProductAdmin;

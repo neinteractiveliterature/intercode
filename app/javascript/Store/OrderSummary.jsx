@@ -1,11 +1,10 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
 import { flatten } from 'lodash';
 import { humanize } from 'inflected';
 
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
 import { OrderSummaryQuery } from './queries.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
 const ORDER_STATUSES = ['paid', 'unpaid', 'cancelled'];
 
@@ -18,19 +17,15 @@ function statusClass(status) {
   }
 }
 
-@graphql(OrderSummaryQuery)
-@GraphQLQueryResultWrapper
-class OrderSummary extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(OrderSummaryQuery).isRequired,
-  }
+function OrderSummary() {
+  const { data, error } = useQuerySuspended(OrderSummaryQuery);
 
-  renderQuantityCell = (quantitiesByStatus, status) => {
+  const renderQuantityCell = (quantitiesByStatus, status) => {
     const { quantity } = quantitiesByStatus.find(qbs => qbs.status === status);
     return <td key={status} className={statusClass(status)}>{quantity}</td>;
-  }
+  };
 
-  renderTotalToPurchaseCell = (quantitiesByStatus) => {
+  const renderTotalToPurchaseCell = (quantitiesByStatus) => {
     const total = quantitiesByStatus.reduce((acc, qbs) => {
       if (qbs.status === 'cancelled') {
         return acc;
@@ -40,65 +35,66 @@ class OrderSummary extends React.Component {
     }, 0);
 
     return <td key="total-to-purchase" className="table-primary font-weight-bold">{total}</td>;
-  }
+  };
 
-  renderVariant = (variant) => {
+  const renderVariant = (variant) => {
     const quantityCells = ORDER_STATUSES
-      .map(status => this.renderQuantityCell(variant.order_quantities_by_status, status));
+      .map(status => renderQuantityCell(variant.order_quantities_by_status, status));
 
     return (
       <tr key={`variant-${variant.id}`}>
         <th scope="row" className="font-weight-normal pl-4">{variant.name}</th>
-        {this.renderTotalToPurchaseCell(variant.order_quantities_by_status)}
+        {renderTotalToPurchaseCell(variant.order_quantities_by_status)}
         {quantityCells}
       </tr>
     );
-  }
+  };
 
-  renderProduct = (product) => {
+  const renderProduct = (product) => {
     if (product.product_variants.length > 0) {
       return [
         <tr key={`product-${product.id}`}>
           <th scope="row">{product.name}</th>
           <td colSpan={ORDER_STATUSES.length} />
         </tr>,
-        ...product.product_variants.map(variant => this.renderVariant(variant)),
+        ...product.product_variants.map(variant => renderVariant(variant)),
       ];
     }
 
     const quantityCells = ORDER_STATUSES
-      .map(status => this.renderQuantityCell(product.order_quantities_by_status, status));
+      .map(status => renderQuantityCell(product.order_quantities_by_status, status));
 
     return [
       <tr key={`product-${product.id}`}>
         <th scope="row">{product.name}</th>
-        {this.renderTotalToPurchaseCell(product.order_quantities_by_status)}
+        {renderTotalToPurchaseCell(product.order_quantities_by_status)}
         {quantityCells}
       </tr>,
     ];
+  };
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  render = () => {
-    const products = this.props.data.convention.products
-      .map(product => this.renderProduct(product));
+  const products = data.convention.products.map(product => renderProduct(product));
 
-    return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th className="table-primary">Total to purchase</th>
-            {ORDER_STATUSES.map(status => (
-              <th key={status} className={statusClass(status)}>{humanize(status)}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {flatten(products)}
-        </tbody>
-      </table>
-    );
-  }
+  return (
+    <table className="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th className="table-primary">Total to purchase</th>
+          {ORDER_STATUSES.map(status => (
+            <th key={status} className={statusClass(status)}>{humanize(status)}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {flatten(products)}
+      </tbody>
+    </table>
+  );
 }
 
 export default OrderSummary;
