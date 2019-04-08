@@ -11,7 +11,6 @@ function environmentWithBabelPresets(presets) {
       ...originalBabelLoader.options,
       presets,
       plugins: [
-        'transform-decorators-legacy',
         'transform-class-properties',
       ],
     },
