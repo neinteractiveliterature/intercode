@@ -11,6 +11,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
+import useFormResponse from '../FormPresenter/useFormResponse';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -31,19 +32,7 @@ function MyProfileForm() {
   } = buildFormStateFromData(data.myProfile, data.convention);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
-
-  const responseValuesChanged = useCallback(
-    (newResponseValues) => {
-      setUserConProfile(previousProfile => ({
-        ...previousProfile,
-        form_response_attrs: {
-          ...previousProfile.form_response_attrs,
-          ...newResponseValues,
-        },
-      }));
-    },
-    [],
-  );
+  const [response, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
 
   const updateUserConProfile = useCallback(
     async (profile) => {
@@ -74,7 +63,7 @@ function MyProfileForm() {
   const formPresenterProps = {
     form,
     convention,
-    response: userConProfile.form_response_attrs,
+    response,
     responseErrors,
     error,
     isSubmittingResponse: false,

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import {
   BrowserRouter, Route, Switch, Redirect,
 } from 'react-router-dom';
@@ -8,47 +7,24 @@ import {
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditStaffPosition from './EditStaffPosition';
 import EditStaffPositionPermissions from './EditStaffPositionPermissions';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
 import NewStaffPosition from './NewStaffPosition';
 import { StaffPositionsQuery } from './queries.gql';
 import StaffPositionsTable from './StaffPositionsTable';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
-@graphql(StaffPositionsQuery)
-@GraphQLQueryResultWrapper
-class StaffPositionAdmin extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(StaffPositionsQuery).isRequired,
-    basename: PropTypes.string.isRequired,
+function StaffPositionAdmin({ basename }) {
+  const { data, error } = useQuerySuspended(StaffPositionsQuery);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  renderEditStaffPosition = ({ match: { params: { id } } }) => {
-    const staffPosition = this.props.data.convention.staff_positions
-      .find(sp => sp.id.toString(10) === id);
+  const findStaffPosition = id => data.convention.staff_positions
+    .find(sp => sp.id.toString(10) === id);
 
-    return <EditStaffPosition initialStaffPosition={staffPosition} />;
-  }
-
-  renderStaffPositionsTable = () => (
-    <StaffPositionsTable
-      staffPositions={this.props.data.convention.staff_positions}
-    />
-  )
-
-  renderEditPermissions = ({ match: { params: { id } } }) => {
-    const staffPosition = this.props.data.convention.staff_positions
-      .find(sp => sp.id.toString(10) === id);
-
-    return (
-      <EditStaffPositionPermissions
-        staffPosition={staffPosition}
-        eventCategories={this.props.data.convention.event_categories}
-      />
-    );
-  }
-
-  render = () => (
-    <BrowserRouter basename={this.props.basename}>
+  return (
+    <BrowserRouter basename={basename}>
       <>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
@@ -92,14 +68,38 @@ class StaffPositionAdmin extends React.Component {
 
         <Switch>
           <Route path="/new" component={NewStaffPosition} />
-          <Route path="/:id/edit" render={this.renderEditStaffPosition} />
-          <Route path="/:id/edit_permissions" render={this.renderEditPermissions} />
-          <Route path="/" render={this.renderStaffPositionsTable} />
+          <Route
+            path="/:id/edit"
+            render={({ match: { params: { id } } }) => (
+              <EditStaffPosition initialStaffPosition={findStaffPosition(id)} />
+            )}
+          />
+          <Route
+            path="/:id/edit_permissions"
+            render={({ match: { params: { id } } }) => (
+              <EditStaffPositionPermissions
+                staffPosition={findStaffPosition(id)}
+                eventCategories={data.convention.event_categories}
+              />
+            )}
+          />
+          <Route
+            path="/"
+            render={() => (
+              <StaffPositionsTable
+                staffPositions={data.convention.staff_positions}
+              />
+            )}
+          />
           <Redirect to="/" />
         </Switch>
       </>
     </BrowserRouter>
-  )
+  );
 }
+
+StaffPositionAdmin.propTypes = {
+  basename: PropTypes.string.isRequired,
+};
 
 export default StaffPositionAdmin;

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { groupBy, flatMap } from 'lodash';
 
 import Confirm from '../ModalDialogs/Confirm';
@@ -12,6 +11,8 @@ import StaffPositionPropType from './StaffPositionPropType';
 import { StaffPositionsQuery } from './queries.gql';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
+import useMutationCallback from '../useMutationCallback';
+import { sortByLocaleString } from '../ValueUtils';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
@@ -62,9 +63,10 @@ function describePermissions(permissions) {
   });
 }
 
-@graphql(DeleteStaffPosition, {
-  props: ({ mutate }) => ({
-    deleteStaffPosition: id => mutate({
+function StaffPositionsTable({ staffPositions }) {
+  const deleteMutate = useMutationCallback(DeleteStaffPosition);
+  const deleteStaffPosition = useCallback(
+    id => deleteMutate({
       variables: { input: { id } },
       update: (proxy) => {
         const data = proxy.readQuery({ query: StaffPositionsQuery });
@@ -74,23 +76,10 @@ function describePermissions(permissions) {
         proxy.writeQuery({ query: StaffPositionsQuery, data });
       },
     }),
-  }),
-})
-class StaffPositionsTable extends React.Component {
-  static propTypes = {
-    staffPositions: PropTypes.arrayOf(StaffPositionPropType).isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-    deleteStaffPosition: PropTypes.func.isRequired,
-  };
+    [deleteMutate],
+  );
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  renderRow = staffPosition => (
+  const renderRow = staffPosition => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
       <td>{staffPosition.visible ? (<i className="fa fa-check" />) : null}</td>
@@ -127,7 +116,7 @@ class StaffPositionsTable extends React.Component {
                 type="button"
                 onClick={() => confirm({
                   prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
-                  action: () => this.props.deleteStaffPosition(staffPosition.id),
+                  action: () => deleteStaffPosition(staffPosition.id),
                   renderError: error => <ErrorDisplay graphQLError={error} />,
                 })}
               >
@@ -138,39 +127,38 @@ class StaffPositionsTable extends React.Component {
         </PopperDropdown>
       </td>
     </tr>
-  )
+  );
 
-  render = () => {
-    const sortedStaffPositions = [...this.props.staffPositions].sort((
-      (a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' })
-    ));
-    const staffPositionRows = sortedStaffPositions.map(this.renderRow);
+  const sortedStaffPositions = sortByLocaleString(staffPositions, position => position.name);
 
-    return (
-      <div>
-        <h1 className="mb-4">Staff positions</h1>
+  return (
+    <div>
+      <h1 className="mb-4">Staff positions</h1>
 
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Visible</th>
-              <th>People</th>
-              <th>Permissions</th>
-              <th>Email</th>
-              <th />
-            </tr>
-          </thead>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Visible</th>
+            <th>People</th>
+            <th>Permissions</th>
+            <th>Email</th>
+            <th />
+          </tr>
+        </thead>
 
-          <tbody>
-            {staffPositionRows}
-          </tbody>
-        </table>
+        <tbody>
+          {sortedStaffPositions.map(renderRow)}
+        </tbody>
+      </table>
 
-        <Link to="/new" className="btn btn-primary">New Staff Position</Link>
-      </div>
-    );
-  }
+      <Link to="/new" className="btn btn-primary">New Staff Position</Link>
+    </div>
+  );
 }
 
-export default withRouter(StaffPositionsTable);
+StaffPositionsTable.propTypes = {
+  staffPositions: PropTypes.arrayOf(StaffPositionPropType).isRequired,
+};
+
+export default StaffPositionsTable;
