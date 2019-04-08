@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { useState, useDebugValue } from 'react';
+import { useState } from 'react';
 
 export function parseIntOrNull(stringValue) {
   const intValue = parseInt(stringValue, 10);
@@ -184,16 +184,9 @@ export function mutator(config = {}) {
   );
 }
 
-export function useMutator(initialState, transforms) {
-  const [state, setState] = useState(initialState);
+export function useTransformedState(initialValue, transform) {
+  const [state, setState] = useState(initialValue);
+  const setStateWithTransform = untransformedValue => setState(transform(untransformedValue));
 
-  const stateMutator = mutator({
-    getState: () => state,
-    setState,
-    transforms,
-  });
-
-  useDebugValue(state, () => JSON.stringify(state));
-
-  return [state, stateMutator];
+  return [state, setStateWithTransform];
 }

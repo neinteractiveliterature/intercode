@@ -25,12 +25,12 @@ function NewOrganizationRole({ organizationId, history }) {
   }
 
   const createOrganizationRole = async ({
-    organizationRole, usersChangeSet, permissionsChangeSet,
+    name, usersChangeSet, permissionsChangeSet,
   }) => {
     await mutate({
       variables: {
         organizationId,
-        name: organizationRole.name,
+        name,
         userIds: usersChangeSet.getAddValues().map(user => user.id),
         permissions: permissionsChangeSet.getAddValues().map(permission => ({
           permission: permission.permission,

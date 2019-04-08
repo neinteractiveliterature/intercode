@@ -6,11 +6,13 @@ import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
 import { OrderFormProductQuery } from './queries.gql';
-import { useMutator, Transforms } from '../ComposableFormUtils';
+import { Transforms, useTransformedState } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
+
+const intInputChange = Transforms.inputChange(Transforms.integer);
 
 function ProductOrderForm({ productId, cartUrl }) {
   const { data, error } = useQuerySuspended(OrderFormProductQuery, { variables: { productId } });
@@ -18,13 +20,8 @@ function ProductOrderForm({ productId, cartUrl }) {
     AddOrderEntryToCurrentPendingOrder,
   );
 
-  const [{ productVariantId, quantity }, formMutator] = useMutator(
-    { productVariantId: null, quantity: 1 },
-    {
-      productVariantId: Transforms.inputChange(Transforms.integer),
-      quantity: Transforms.inputChange(Transforms.integer),
-    },
-  );
+  const [productVariantId, productVariantIdChanged] = useTransformedState(null, intInputChange);
+  const [quantity, quantityChanged] = useTransformedState(1, intInputChange);
 
   const dataComplete = useMemo(
     () => (
@@ -73,7 +70,7 @@ function ProductOrderForm({ productId, cartUrl }) {
       <select
         className="form-control mb-3"
         value={productVariantId || ''}
-        onChange={formMutator.productVariantId}
+        onChange={productVariantIdChanged}
       >
         <option disabled value="">Select...</option>
         {options}
@@ -89,7 +86,7 @@ function ProductOrderForm({ productId, cartUrl }) {
         min="1"
         className="form-control"
         value={quantity == null ? '' : quantity}
-        onChange={formMutator.quantity}
+        onChange={quantityChanged}
       />
     </label>
   );
@@ -117,6 +114,7 @@ function ProductOrderForm({ productId, cartUrl }) {
     return (
       <strong>
         Total:
+        {' '}
         {formatMoney(totalPrice)}
       </strong>
     );
