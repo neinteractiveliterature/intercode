@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { useState } from 'react';
+import { useState, useDebugValue } from 'react';
 
 export function parseIntOrNull(stringValue) {
   const intValue = parseInt(stringValue, 10);
@@ -192,6 +192,8 @@ export function useMutator(initialState, transforms) {
     setState,
     transforms,
   });
+
+  useDebugValue(state, () => JSON.stringify(state));
 
   return [state, stateMutator];
 }

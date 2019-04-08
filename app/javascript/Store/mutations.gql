@@ -80,8 +80,16 @@ mutation SubmitOrder($input: SubmitOrderInput!) {
   }
 }
 
-mutation AddOrderEntryToCurrentPendingOrder($input: AddOrderEntryToCurrentPendingOrderInput!) {
-  addOrderEntryToCurrentPendingOrder(input: $input) {
+mutation AddOrderEntryToCurrentPendingOrder($productId: Int!, $productVariantId: Int, $quantity: Int!) {
+  addOrderEntryToCurrentPendingOrder(
+    input: {
+      order_entry: {
+        product_id: $productId,
+        product_variant_id: $productVariantId,
+        quantity: $quantity
+      }
+    }
+  ) {
     order_entry {
       id
     }

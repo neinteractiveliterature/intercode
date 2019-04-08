@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
 
 import { ConventionAdminConventionQuery } from './queries.gql';
 import ConventionForm from './ConventionForm';
@@ -8,10 +7,11 @@ import ErrorDisplay from '../ErrorDisplay';
 import { UpdateConvention } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useQuerySuspended from '../useQuerySuspended';
+import useMutationCallback from '../useMutationCallback';
 
 function ConventionAdmin({ id }) {
   const { data, error } = useQuerySuspended(ConventionAdminConventionQuery, { variables: { id } });
-  const [mutate, mutationError] = useAsyncFunction(useMutation(UpdateConvention));
+  const [mutate, mutationError] = useAsyncFunction(useMutationCallback(UpdateConvention));
 
   const saveConvention = useCallback(
     async (convention) => {

@@ -32,7 +32,6 @@ const productVariantUpdaterForComponent = (component, variant, transforms) => mu
   transforms,
 });
 
-@DragDropContext(MultiBackend(HTML5toTouch))
 class AdminProductVariantsTable extends React.Component {
   static propTypes = {
     product: PropTypes.shape({
@@ -207,4 +206,4 @@ class AdminProductVariantsTable extends React.Component {
   }
 }
 
-export default AdminProductVariantsTable;
+export default DragDropContext(MultiBackend(HTML5toTouch))(AdminProductVariantsTable);
