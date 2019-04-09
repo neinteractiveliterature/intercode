@@ -104,7 +104,7 @@
     "resolve-url-loader": "^3.1.0",
     "rollbar-sourcemap-webpack-plugin": "^2.5.1",
     "sass-loader": "^7.1.0",
-    "source-map-support": "^0.5.11",
+    "source-map-support": "^0.5.12",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.3",
     "thread-loader": "^2.1.2",
