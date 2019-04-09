@@ -50,7 +50,7 @@
     "codemirror": "^5.45.0",
     "compression-webpack-plugin": "^2.0.0",
     "css-loader": "^2.1.1",
-    "custom-event-polyfill": "^1.0.6",
+    "custom-event-polyfill": "^1.0.7",
     "debounce-promise": "^3.1.0",
     "detect-browser": "^4.2.1",
     "exports-loader": "^0.7.0",
