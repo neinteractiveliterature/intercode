@@ -3298,10 +3298,10 @@ dnd-core@^7.4.4:
     invariant "^2.2.4"
     redux "^4.0.1"
 
-dnd-multi-backend@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-3.2.0.tgz#39d818b1f8457fff8dd9a5a7d599d3d916c6e040"
-  integrity sha512-tx6Po6twNoOJ+Lp858KAFdAutvX4bDvjaFhFReSNovKmoqnD61JVyQznP40EhX8+v5p1r02L3C2Douf29Nj94g==
+dnd-multi-backend@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-3.2.1.tgz#528c7624b831d1c23512cbed191b34fb506dcf93"
+  integrity sha512-A783JbrONpeufxX+jDMHOxR2AWh+gFv5Z/lLpDB3vdON6t0bb2fHSh8fKH2h8gOLRAJGD08m9xYXAJIWreTI5A==
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -8088,19 +8088,19 @@ react-dnd-multi-backend@^2.3.7:
     react-dnd-html5-backend "*"
     react-dnd-touch-backend "^0.3.13"
 
-react-dnd-multi-backend@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-3.2.0.tgz#fbae31da006960a03d7b614836c30af09adf26b0"
-  integrity sha512-NV1s0dKF2lwvqdklSPcshAWvuQrQ0aw5mdqVDj9SfTmnWKctJhq7pG5vGxBAa1mEc+M77bsxpZgdMyA1xzuRDg==
+react-dnd-multi-backend@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-3.2.1.tgz#bfda3b72b738704d638c56fd5e992c3fac556652"
+  integrity sha512-UrS1Ey4l80F6Fu+QAodZGX9OJYi4EB23nWhQP3L+DSyXXJkoQLPoX3JqoCYs/tUpH9Ztkr+sRORRBRj6D22WOg==
   dependencies:
-    dnd-multi-backend "^3.2.0"
+    dnd-multi-backend "^3.2.1"
     prop-types "^15.6.2"
-    react-dnd-preview "^3.1.14"
+    react-dnd-preview "^3.2.1"
 
-react-dnd-preview@^3.1.14:
-  version "3.1.14"
-  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-3.1.14.tgz#d7af4490688c1a9574e903bf5966fdcfe4894a96"
-  integrity sha512-N3PTYA/3STOfmcwgddcRMrX3hGyGkhgZlDNanw3q1CfjyfQn24PyMts0eC5bjTLE1HlSimafMjDFKvByawGA9A==
+react-dnd-preview@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-3.2.1.tgz#8067f146d58b2d8b4b15ca785fae4320dbdd0de0"
+  integrity sha512-LeLEwNhCrl33Di0qqUPou/NmXTbuq6kFO1CyiOvpa44ZOXk0a6a0ZDwCXGmqFV4qLEkbcRvjHzvIWqz983VBWg==
   dependencies:
     prop-types "^15.6.2"
 
