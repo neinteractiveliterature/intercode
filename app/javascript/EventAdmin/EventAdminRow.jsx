@@ -13,7 +13,6 @@ class EventAdminRow extends React.Component {
   static propTypes = {
     event: PropTypes.shape({
       id: PropTypes.number.isRequired,
-      category: PropTypes.string.isRequired,
       length_seconds: PropTypes.number.isRequired,
       runs: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,

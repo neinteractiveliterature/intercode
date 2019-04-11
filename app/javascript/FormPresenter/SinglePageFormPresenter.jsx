@@ -1,35 +1,36 @@
-import React from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import Form from '../Models/Form';
-import FormPresenterApp from '.';
-import FormSection from './Layouts/FormSection';
-import ItemInteractionTracker from './ItemInteractionTracker';
+import FormBody from './Layouts/FormBody';
 
-const SinglePageFormPresenter = (props) => {
-  const sectionContainers = props.form.getSections().map(section => (
-    <FormSection
-      key={section.id}
-      convention={props.convention}
-      form={props.form}
-      section={section}
-      errors={{}}
-      response={props.response}
-      responseValuesChanged={props.responseValuesChanged}
-    />
-  ));
+const SinglePageFormPresenter = (
+  {
+    // eslint-disable-next-line react/prop-types
+    form, children, convention, response, responseValuesChanged,
+  },
+  ref,
+) => {
+  const formItems = useMemo(() => form.getAllItems(), [form]);
 
   return (
-    <FormPresenterApp form={props.form}>
-      <ItemInteractionTracker>
-        {sectionContainers}
-        {props.children}
-      </ItemInteractionTracker>
-    </FormPresenterApp>
+    <>
+      <FormBody
+        convention={convention}
+        ref={ref}
+        formItems={formItems}
+        errors={{}}
+        response={response}
+        responseValuesChanged={responseValuesChanged}
+      />
+      {children}
+    </>
   );
 };
 
-SinglePageFormPresenter.propTypes = {
+const RefForwardingSinglePageFormPresenter = forwardRef(SinglePageFormPresenter);
+
+RefForwardingSinglePageFormPresenter.propTypes = {
   form: Form.propType.isRequired, // eslint-disable-line react/no-typos
   convention: PropTypes.shape({}).isRequired,
   response: PropTypes.shape({}).isRequired,
@@ -37,8 +38,8 @@ SinglePageFormPresenter.propTypes = {
   children: PropTypes.node,
 };
 
-SinglePageFormPresenter.defaultProps = {
+RefForwardingSinglePageFormPresenter.defaultProps = {
   children: null,
 };
 
-export default SinglePageFormPresenter;
+export default RefForwardingSinglePageFormPresenter;

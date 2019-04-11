@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { flatMap } from 'lodash';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
-import { Transforms, useMutator } from '../ComposableFormUtils';
+import { Transforms, useTransformedState } from '../ComposableFormUtils';
 import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
@@ -16,25 +16,31 @@ const OrganizationRolePermissionNames = flatMap(
 );
 
 export default function useOrganizationRoleForm(initialOrganizationRole) {
-  const [organizationRole, organizationRoleMutator] = useMutator(
-    initialOrganizationRole || {},
-    {
-      name: Transforms.textInputChange,
-    },
+  const [name, onNameChange] = useTransformedState(
+    initialOrganizationRole.name,
+    Transforms.textInputChange,
   );
   const [usersChangeSet, onChangeUsers] = useChangeSetWithSelect();
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
 
-  const initialPermissions = organizationRole.permissions
-    .map(permission => ({ ...permission, model: organizationRole }));
+  const initialPermissions = useMemo(
+    () => initialOrganizationRole.permissions
+      .map(permission => ({ ...permission, model: initialOrganizationRole })),
+    [initialOrganizationRole],
+  );
+
+  const users = useMemo(
+    () => usersChangeSet.apply(initialOrganizationRole.users),
+    [usersChangeSet, initialOrganizationRole],
+  );
 
   const renderForm = () => (
     <>
       <BootstrapFormInput
         name="name"
         label="Role name"
-        value={organizationRole.name}
-        onChange={organizationRoleMutator.name}
+        value={name}
+        onChange={onNameChange}
       />
 
       <div className="form-group">
@@ -42,7 +48,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         <UserSelect
           isMulti
           inputId="users"
-          value={usersChangeSet.apply(organizationRole.users)}
+          value={users}
           onChange={onChangeUsers}
         />
       </div>
@@ -53,7 +59,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         <PermissionsTableInput
           permissionNames={OrganizationRolePermissionNames}
           initialPermissions={initialPermissions}
-          models={[organizationRole]}
+          models={[initialOrganizationRole]}
           changeSet={permissionsChangeSet}
           add={addPermission}
           remove={removePermission}
@@ -66,7 +72,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
   return {
     renderForm,
     formState: {
-      organizationRole,
+      name,
       usersChangeSet,
       permissionsChangeSet,
     },

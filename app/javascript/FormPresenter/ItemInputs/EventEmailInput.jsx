@@ -126,7 +126,7 @@ class EventEmailInput extends React.Component {
           </React.Fragment>
         )}
         name={`${this.props.formItem.identifier}.email`}
-        value={(this.props.value || {}).email}
+        value={(this.props.value || {}).email || ''}
         onChange={this.valueMutator.email}
         disabled={this.state.emailBehavior == null}
       />

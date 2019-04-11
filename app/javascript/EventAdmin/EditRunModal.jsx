@@ -1,189 +1,155 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
-import { flowRight } from 'lodash';
 import { propType } from 'graphql-anywhere';
-import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
+import Modal from 'react-bootstrap4-modal';
 import {
   EventAdminEventsQuery, RunFields, EventFields, ConventionFields,
 } from './queries.gql';
 import { CreateRun, UpdateRun, DeleteRun } from './mutations.gql';
 import RunFormFields from '../BuiltInForms/RunFormFields';
+import useMutationCallback from '../useMutationCallback';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import ErrorDisplay from '../ErrorDisplay';
 
-@flowRight([
-  graphql(CreateRun, { name: 'createRun' }),
-  graphql(UpdateRun, { name: 'updateRun' }),
-  graphql(DeleteRun, { name: 'deleteRun' }),
-])
-class EditRunModal extends React.Component {
-  static propTypes = {
-    run: propType(RunFields),
-    event: propType(EventFields),
-    convention: propType(ConventionFields).isRequired,
-    editingRunChanged: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    onSaveStart: PropTypes.func.isRequired,
-    onSaveSucceeded: PropTypes.func.isRequired,
-    onSaveFailed: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    createRun: PropTypes.func.isRequired,
-    deleteRun: PropTypes.func.isRequired,
-    updateRun: PropTypes.func.isRequired,
-  }
+function EditRunModal({
+  run, event, convention, editingRunChanged,
+  onCancel, onSaveFailed, onSaveSucceeded, onSaveStart, onDelete,
+}) {
+  const createRun = useMutationCallback(CreateRun);
+  const updateRun = useMutationCallback(UpdateRun);
+  const deleteMutate = useMutationCallback(DeleteRun);
+  const confirm = useConfirm();
 
-  static defaultProps = {
-    run: null,
-    event: null,
-  }
+  const initiateSaveMutation = useCallback(
+    () => {
+      const commonProps = {
+        run: {
+          starts_at: run.starts_at,
+          title_suffix: run.title_suffix,
+          schedule_note: run.schedule_note,
+          room_ids: run.rooms.map(room => room.id),
+        },
+      };
 
-  constructor(props) {
-    super(props);
+      if (run.id) {
+        return updateRun({
+          variables: {
+            input: {
+              id: run.id,
+              ...commonProps,
+            },
+          },
+        });
+      }
 
-    this.state = {
-      day: null,
-      hour: null,
-      minute: null,
-      isConfirmingDelete: false,
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.run && !nextProps.run) {
-      // the run just cleared out; reset the form state
-      this.setState({ isConfirmingDelete: false });
-    }
-  }
-
-  initiateSaveMutation = () => {
-    const { run } = this.props;
-    const commonProps = {
-      run: {
-        starts_at: run.starts_at,
-        title_suffix: run.title_suffix,
-        schedule_note: run.schedule_note,
-        room_ids: run.rooms.map(room => room.id),
-      },
-    };
-
-    if (run.id) {
-      return this.props.updateRun({
+      return createRun({
         variables: {
           input: {
-            id: run.id,
+            event_id: event.id,
             ...commonProps,
           },
         },
+        update: (store, { data: { createRun: { run: newRun } } }) => {
+          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
+          const eventData = eventsData.events.find(e => e.id === event.id);
+          eventData.runs.push(newRun);
+          store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
+        },
       });
-    }
+    },
+    [createRun, event, run, updateRun],
+  );
 
-    return this.props.createRun({
-      variables: {
-        input: {
-          event_id: this.props.event.id,
-          ...commonProps,
+  const saveRun = useCallback(
+    async () => {
+      onSaveStart();
+
+      try {
+        const data = await initiateSaveMutation();
+        onSaveSucceeded(data.run);
+      } catch (error) {
+        onSaveFailed(error);
+      }
+    },
+    [onSaveSucceeded, onSaveFailed, onSaveStart, initiateSaveMutation],
+  );
+
+  const deleteRun = useCallback(
+    async () => {
+      const data = await deleteMutate({
+        variables: {
+          input: {
+            id: run.id,
+          },
         },
-      },
-      update: (store, { data: { createRun: { run: newRun } } }) => {
-        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-        const eventData = eventsData.events.find(event => event.id === this.props.event.id);
-        eventData.runs.push(newRun);
-        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
-      },
-    });
-  }
-
-  saveRun = () => {
-    this.props.onSaveStart();
-
-    this.initiateSaveMutation()
-      .then(data => this.props.onSaveSucceeded(data.run))
-      .catch(error => this.props.onSaveFailed(error));
-  }
-
-  deleteClicked = () => {
-    this.setState({ isConfirmingDelete: true });
-  }
-
-  deleteCanceled = () => {
-    this.setState({ isConfirmingDelete: false });
-  }
-
-  deleteConfirmed = () => {
-    this.props.deleteRun({
-      variables: {
-        input: {
-          id: this.props.run.id,
+        update: (store) => {
+          const eventsData = store.readQuery({ query: EventAdminEventsQuery });
+          const eventData = eventsData.events.find(e => e.id === event.id);
+          const runIndex = eventData.runs.findIndex(r => r.id === run.id);
+          eventData.runs.splice(runIndex, 1);
+          store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
-      },
-      update: (store) => {
-        const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-        const eventData = eventsData.events.find(event => event.id === this.props.event.id);
-        const runIndex = eventData.runs.findIndex(run => run.id === this.props.run.id);
-        eventData.runs.splice(runIndex, 1);
-        store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
-      },
-    }).then(() => {
-      this.setState(
-        { isConfirmingDelete: false },
-        this.props.onDelete,
-      );
-    });
-  }
+      });
+      onDelete(data);
+    },
+    [onDelete, deleteMutate, event, run],
+  );
 
-  renderTitle = () => {
-    const { run, event } = this.props;
+  const title = useMemo(
+    () => {
+      if (!run) {
+        return null;
+      }
 
-    if (!run) {
-      return null;
-    }
+      if (run.id != null) {
+        return `Edit run of ${event.title} `;
+      }
 
-    if (run.id != null) {
-      return `Edit run of ${event.title} `;
-    }
+      return `Add run of ${event.title}`;
+    },
+    [event, run],
+  );
 
-    return `Add run of ${event.title}`;
-  }
-
-  renderFormBody = () => {
-    if (!this.props.run) {
-      return <div className="modal-body" />;
-    }
-
-    return (
-      <div className="modal-body">
-        <RunFormFields
-          run={this.props.run}
-          event={this.props.event}
-          convention={this.props.convention}
-          onChange={this.props.editingRunChanged}
-        />
-      </div>
-    );
-  }
-
-  render = () => (
+  return (
     <div>
-      <Modal visible={this.props.run != null && !this.state.isConfirmingDelete} dialogClassName="modal-lg">
+      <Modal visible={run != null && !confirm.visible} dialogClassName="modal-lg">
         <div className="modal-header">
-          <h5 className="modal-title">{this.renderTitle()}</h5>
+          <h5 className="modal-title">{title}</h5>
         </div>
-        {this.renderFormBody()}
+        {run && (
+          <div className="modal-body">
+            <RunFormFields
+              run={run}
+              event={event}
+              convention={convention}
+              onChange={editingRunChanged}
+            />
+          </div>
+        )}
         <div className="modal-footer">
           <div className="d-flex w-100">
             <div>
-              <button type="button" className="btn btn-outline-danger" onClick={this.deleteClicked}>
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={() => confirm({
+                  prompt: `Are you sure you want to delete this run of ${event && event.title}?`,
+                  action: deleteRun,
+                  renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                })}
+              >
                 Delete
               </button>
             </div>
             <div className="col text-right pr-0">
-              <button type="button" className="btn btn-secondary mr-2" onClick={this.props.onCancel}>
+              <button type="button" className="btn btn-secondary mr-2" onClick={onCancel}>
                 Cancel
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={this.saveRun}
-                disabled={!this.props.run || this.props.run.starts_at == null}
+                onClick={saveRun}
+                disabled={!run || run.starts_at == null}
               >
                 Save
               </button>
@@ -191,18 +157,25 @@ class EditRunModal extends React.Component {
           </div>
         </div>
       </Modal>
-      <ConfirmModal
-        visible={this.state.isConfirmingDelete}
-        onCancel={this.deleteCanceled}
-        onOK={this.deleteConfirmed}
-      >
-        Are you sure you want to delete this run of
-        {' '}
-        {this.props.event && this.props.event.title}
-?
-      </ConfirmModal>
     </div>
-  )
+  );
 }
+
+EditRunModal.propTypes = {
+  run: propType(RunFields),
+  event: propType(EventFields),
+  convention: propType(ConventionFields).isRequired,
+  editingRunChanged: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSaveStart: PropTypes.func.isRequired,
+  onSaveSucceeded: PropTypes.func.isRequired,
+  onSaveFailed: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
+EditRunModal.defaultProps = {
+  run: null,
+  event: null,
+};
 
 export default EditRunModal;

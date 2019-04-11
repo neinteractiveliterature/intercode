@@ -14,7 +14,6 @@ import TicketAdminSection from './TicketAdminSection';
 import { UserConProfileAdminQuery } from './queries.gql';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 
-@withRouter
 class UserConProfileAdminDisplay extends React.Component {
   static propTypes = {
     userConProfileId: PropTypes.number.isRequired,
@@ -195,4 +194,4 @@ class UserConProfileAdminDisplay extends React.Component {
   )
 }
 
-export default UserConProfileAdminDisplay;
+export default withRouter(UserConProfileAdminDisplay);

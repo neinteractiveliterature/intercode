@@ -1,103 +1,195 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import EventForm from '../../../app/javascript/BuiltInForms/EventForm';
-import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
-import formFromExportJSON from '../formFromExportJSON';
+import {
+  render, act, fireEvent, wait,
+} from 'react-testing-library';
+import { renderHook } from 'react-hooks-testing-library';
+import { BrowserRouter } from 'react-router-dom';
 
-import RegularEventForm from '../../../cms_content_sets/standard/forms/regular_event_form.json';
+import { convention, initialEvent, minimalForm } from '../EventAdmin/formMockData';
+import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
+import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
+import Confirm from '../../../app/javascript/ModalDialogs/Confirm';
 
 describe('EditEvent', () => {
-  const renderEditEvent = props => shallow((
-    <EditEvent
-      event={{
-        id: 123,
-        event_category: {
-          id: 456,
-        },
-        form_response_attrs: {
-          registration_policy: {
-            buckets: [
-              { total_slots: 1 },
-            ],
-          },
-        },
-      }}
-      form={formFromExportJSON(RegularEventForm)}
-      convention={{
-        event_categories: [
-          { id: 456, name: 'Board game' },
-        ],
-      }}
-      updateEvent={() => {}}
-      dropEvent={() => {}}
-      onSave={() => {}}
-      onDrop={() => {}}
-      createMaximumEventProvidedTicketsOverride={() => {}}
-      deleteMaximumEventProvidedTicketsOverride={() => {}}
-      updateMaximumEventProvidedTicketsOverride={() => {}}
-      cancelPath={null}
-      showDropButton={false}
-      ticketTypes={[]}
-      {...props}
-    />
-  ));
+  const defaultProps = {
+    updateEvent: () => {},
+    onSave: () => {},
+  };
 
-  test('it renders an EventForm', () => {
-    const component = renderEditEvent();
-    expect(component.find(EventForm).length).toEqual(1);
+  const renderEventFormHook = (overrides = {}) => renderHook(() => useEventForm({
+    convention, initialEvent, eventForm: minimalForm, ...overrides,
+  }));
+
+  const renderEditEvent = (result, overrideProps = {}) => {
+    const getNodeToRender = (props) => {
+      const [formProps, { event, validateForm }] = result.current;
+      return (
+        <Confirm>
+          <BrowserRouter basename="/">
+            <EditEvent event={event} validateForm={validateForm} {...defaultProps} {...props}>
+              <EventForm {...formProps} />
+            </EditEvent>
+          </BrowserRouter>
+        </Confirm>
+      );
+    };
+
+    const renderResult = render(getNodeToRender(overrideProps));
+
+    return {
+      ...renderResult,
+      rerender: (props = {}) => renderResult.rerender(getNodeToRender(props)),
+    };
+  };
+
+  describe('header text', () => {
+    test('edit event', () => {
+      const { result } = renderEventFormHook();
+      const { getByText } = renderEditEvent(result);
+      expect(getByText('Edit event').tagName).toEqual('H3');
+    });
+
+    test('new event', () => {
+      const { result } = renderEventFormHook({ initialEvent: { ...initialEvent, id: null } });
+      const { getByText } = renderEditEvent(result);
+      expect(getByText('New event').tagName).toEqual('H3');
+    });
   });
 
-  describe('updateEvent', () => {
-    test('happy path', async () => {
+  describe('saving', () => {
+    test('the save button validates the form', async () => {
       const updateEvent = jest.fn();
       const onSave = jest.fn();
-      const component = renderEditEvent({ updateEvent, onSave });
-
-      await component.instance().updateEvent(component.instance().props.event);
-
-      expect(updateEvent.mock.calls.length).toEqual(1);
-      expect(updateEvent.mock.calls[0][0].variables.input.id).toEqual(123);
-      expect(onSave.mock.calls.length).toEqual(1);
+      const { result } = renderEventFormHook();
+      const { getByText, getByLabelText, rerender } = renderEditEvent(
+        result,
+        { updateEvent, onSave },
+      );
+      act(() => {
+        fireEvent.click(getByText('Save event'));
+      });
+      rerender({ updateEvent, onSave });
+      expect(getByLabelText('Title*')).toHaveClass('is-invalid');
+      expect(updateEvent).not.toHaveBeenCalled();
+      expect(onSave).not.toHaveBeenCalled();
     });
 
-    test('unhappy path', async () => {
-      const error = new Error('bad mojo');
-      const updateEvent = jest.fn(() => { throw error; });
+    test('the save button updates the event and calls onSave', async () => {
+      const updateEvent = jest.fn();
       const onSave = jest.fn();
-      const component = renderEditEvent({ updateEvent, onSave });
+      const { result } = renderEventFormHook({
+        initialEvent: {
+          ...initialEvent,
+          form_response_attrs: { title: 'An event' },
+        },
+      });
+      const { getByText, rerender } = renderEditEvent(
+        result,
+        { updateEvent, onSave },
+      );
+      fireEvent.click(getByText('Save event'));
+      rerender({ updateEvent, onSave });
+      await wait(() => expect(updateEvent).toHaveBeenCalled());
+      await wait(() => expect(onSave).toHaveBeenCalled());
+    });
 
-      await component.instance().updateEvent(component.instance().props.event);
-
-      expect(updateEvent.mock.calls.length).toEqual(1);
-      expect(onSave.mock.calls.length).toEqual(0);
-      expect(component.instance().state.error).toEqual(error);
+    test('if the save fails, it displays the error and does not call onSave', async () => {
+      const updateEvent = jest.fn(() => { throw new Error('blahhhh'); });
+      const onSave = jest.fn();
+      const { result } = renderEventFormHook({
+        initialEvent: {
+          ...initialEvent,
+          form_response_attrs: { title: 'An event' },
+        },
+      });
+      const { getByText, rerender } = renderEditEvent(
+        result,
+        { updateEvent, onSave },
+      );
+      fireEvent.click(getByText('Save event'));
+      rerender({ updateEvent, onSave });
+      await wait(() => expect(updateEvent).toHaveBeenCalled());
+      expect(getByText('blahhhh')).toBeVisible();
+      expect(onSave).not.toHaveBeenCalled();
     });
   });
 
-  describe('dropEvent', () => {
-    test('happy path', async () => {
-      const dropEvent = jest.fn();
-      const onDrop = jest.fn();
-      const component = renderEditEvent({ dropEvent, onDrop });
-
-      await component.instance().dropEvent();
-
-      expect(dropEvent.mock.calls.length).toEqual(1);
-      expect(dropEvent.mock.calls[0]).toEqual([{ variables: { input: { id: 123 } } }]);
-      expect(onDrop.mock.calls.length).toEqual(1);
+  describe('drop event workflow', () => {
+    test('no drop button by default', () => {
+      const { result } = renderEventFormHook();
+      const { queryByText } = renderEditEvent(result);
+      expect(queryByText('Drop event')).toBeNull();
     });
 
-    test('unhappy path', async () => {
-      const error = new Error('bad mojo');
-      const dropEvent = jest.fn(() => { throw error; });
+    test('showDropButton gets it to render a drop button', () => {
+      const { result } = renderEventFormHook();
+      const { queryAllByText } = renderEditEvent(result, { showDropButton: true });
+      expect(queryAllByText('Drop event')).toHaveLength(1);
+    });
+
+    test('if the event is already dropped, the drop button does not show up', () => {
+      const { result } = renderEventFormHook({ initialEvent: { ...initialEvent, status: 'dropped' } });
+      const { queryByText } = renderEditEvent(result, { showDropButton: true });
+      expect(queryByText('Drop event')).toBeNull();
+    });
+
+    test('if the event is not yet saved, the drop button does not show up', () => {
+      const { result } = renderEventFormHook({ initialEvent: { ...initialEvent, id: null } });
+      const { queryByText } = renderEditEvent(result, { showDropButton: true });
+      expect(queryByText('Drop event')).toBeNull();
+    });
+
+    test('dropping the event', async () => {
+      const dropEvent = jest.fn();
       const onDrop = jest.fn();
-      const component = renderEditEvent({ dropEvent, onDrop });
+      const { result } = renderEventFormHook();
+      const { getByText } = renderEditEvent(result, { showDropButton: true, dropEvent, onDrop });
+      act(() => { fireEvent.click(getByText('Drop event')); });
+      await wait(() => expect(getByText('OK')).toBeVisible());
+      act(() => { fireEvent.click(getByText('OK')); });
+      await wait(() => expect(dropEvent).toHaveBeenCalled());
+      await wait(() => expect(onDrop).toHaveBeenCalled());
+    });
 
-      await component.instance().dropEvent();
+    test('canceling the drop', async () => {
+      const dropEvent = jest.fn();
+      const onDrop = jest.fn();
+      const { result } = renderEventFormHook();
+      const { getByText } = renderEditEvent(result, { showDropButton: true, dropEvent, onDrop });
+      fireEvent.click(getByText('Drop event'));
+      await wait(() => expect(getByText('Cancel')).toBeVisible());
+      fireEvent.click(getByText('Cancel'));
+      expect(dropEvent).not.toHaveBeenCalled();
+      expect(onDrop).not.toHaveBeenCalled();
+    });
 
-      expect(dropEvent.mock.calls.length).toEqual(1);
-      expect(onDrop.mock.calls.length).toEqual(0);
-      expect(component.instance().state.error).toEqual(error);
+    test('if the drop fails, it displays the error and does not call onDrop', async () => {
+      const dropEvent = jest.fn(() => { throw new Error('fooey'); });
+      const onDrop = jest.fn();
+      const { result } = renderEventFormHook();
+      const { getByText } = renderEditEvent(result, { showDropButton: true, dropEvent, onDrop });
+      act(() => { fireEvent.click(getByText('Drop event')); });
+      await wait(() => expect(getByText('OK')).toBeVisible());
+      act(() => { fireEvent.click(getByText('OK')); });
+      await wait(() => expect(dropEvent).toHaveBeenCalled());
+      expect(getByText('fooey')).toBeVisible();
+      expect(onDrop).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('cancel link', () => {
+    test('no cancel link by default', () => {
+      const { result } = renderEventFormHook();
+      const { queryByText } = renderEditEvent(result);
+      expect(queryByText((content, element) => element.tagName === 'A' && content === 'Cancel'))
+        .toBeNull();
+    });
+
+    test('passing a cancelPath makes a cancel link show up', () => {
+      const { result } = renderEventFormHook();
+      const { queryAllByText } = renderEditEvent(result, { cancelPath: '/' });
+      expect(queryAllByText((content, element) => element.tagName === 'A' && content === 'Cancel'))
+        .toHaveLength(1);
     });
   });
 });

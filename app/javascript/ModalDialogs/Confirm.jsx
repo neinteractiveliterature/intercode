@@ -16,15 +16,15 @@ function Confirm({ children }) {
       await modal.state.action();
       modal.close();
     } catch (error) {
-      if (modal.state.onError) {
+      if (modal.state && modal.state.onError) {
         modal.state.onError(error);
       }
 
-      if (modal.state.renderError) {
+      if (modal.state && modal.state.renderError) {
         modal.setState({ ...modal.state, error });
       }
 
-      if (!modal.state.onError && !modal.state.renderError) {
+      if (!modal.state || (!modal.state.onError && !modal.state.renderError)) {
         throw error;
       }
     } finally {
@@ -32,8 +32,11 @@ function Confirm({ children }) {
     }
   };
 
+  const augmentedConfirm = (...args) => modal.open(...args);
+  augmentedConfirm.visible = modal.visible;
+
   return (
-    <ConfirmContext.Provider value={modal.open}>
+    <ConfirmContext.Provider value={augmentedConfirm}>
       {children}
       <ConfirmModal
         visible={modal.visible}

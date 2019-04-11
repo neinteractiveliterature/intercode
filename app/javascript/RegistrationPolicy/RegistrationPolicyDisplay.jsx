@@ -114,7 +114,7 @@ class RegistrationPolicyDisplay extends React.PureComponent {
   }
 
   renderTotals = () => {
-    if (!this.props.registrationPolicy.slots_limited) {
+    if (!this.props.registrationPolicy.buckets.some(bucket => bucket.slots_limited)) {
       return 'unlimited';
     }
 

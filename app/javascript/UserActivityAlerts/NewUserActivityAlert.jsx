@@ -10,7 +10,6 @@ import ErrorDisplay from '../ErrorDisplay';
 import { UserActivityAlertsAdminQuery } from './queries.gql';
 import UserActivityAlertForm from './UserActivityAlertForm';
 
-@withRouter
 class NewUserActivityAlert extends React.Component {
   static propTypes = {
     convention: PropTypes.shape({}).isRequired,
@@ -128,4 +127,4 @@ class NewUserActivityAlert extends React.Component {
   )
 }
 
-export default NewUserActivityAlert;
+export default withRouter(NewUserActivityAlert);

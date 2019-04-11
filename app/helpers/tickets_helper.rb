@@ -14,7 +14,7 @@ module TicketsHelper
 
     app_component 'TicketPurchaseForm',
       ticketPriceFormatted: ticket_type&.price&.format,
-      ticketTypeId: ticket_type&.id,
+      initialTicketTypeId: ticket_type&.id,
       createChargeUrl: ticket_path,
       purchaseCompleteUrl: root_path,
       ticketTypes: ticket_types_data,

@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import { CreateStaffPosition } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
 import { StaffPositionsQuery } from './queries.gql';
+import useMutationCallback from '../useMutationCallback';
+import useAsyncFunction from '../useAsyncFunction';
 
-@graphql(
-  CreateStaffPosition,
-  {
-    props: ({ mutate }) => ({
-      createStaffPosition: staffPosition => mutate({
+function NewStaffPosition({ history }) {
+  const [mutate, error, inProgress] = useAsyncFunction(useMutationCallback(CreateStaffPosition, {
+    update: (proxy, { data: { createStaffPosition: { staff_position: newStaffPosition } } }) => {
+      const data = proxy.readQuery({ query: StaffPositionsQuery });
+      data.convention.staff_positions.push(newStaffPosition);
+      proxy.writeQuery({ query: StaffPositionsQuery, data });
+    },
+  }));
+
+  const [staffPosition, setStaffPosition] = useState({
+    name: '',
+    email: '',
+    user_con_profiles: [],
+  });
+
+  const saveClicked = useCallback(
+    async () => {
+      const response = await mutate({
         variables: {
           input: {
             staff_position: {
@@ -25,65 +39,31 @@ import { StaffPositionsQuery } from './queries.gql';
             },
           },
         },
-        update: (
-          proxy,
-          { data: { createStaffPosition: { staff_position: newStaffPosition } } },
-        ) => {
-          const data = proxy.readQuery({ query: StaffPositionsQuery });
-          data.convention.staff_positions.push(newStaffPosition);
-          proxy.writeQuery({ query: StaffPositionsQuery, data });
-        },
-      }),
-    }),
-  },
-)
-@withRouter
-class NewStaffPosition extends React.Component {
-  static propTypes = {
-    createStaffPosition: PropTypes.func.isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+      });
+      history.replace(`/${response.data.createStaffPosition.staff_position.id}/edit_permissions`);
+    },
+    [history, mutate, staffPosition],
+  );
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      staffPosition: {
-        name: '',
-        email: '',
-        user_con_profiles: [],
-      },
-    };
-  }
-
-  staffPositionChanged = (staffPosition) => {
-    this.setState({ staffPosition });
-  }
-
-  saveClicked = async () => {
-    try {
-      const {
-        data: { createStaffPosition: { staff_position: { id } } },
-      } = await this.props.createStaffPosition(this.state.staffPosition);
-      this.props.history.replace(`/${id}/edit_permissions`);
-    } catch (error) {
-      this.setState({ error });
-    }
-  }
-
-  render = () => (
+  return (
     <div>
       <h1 className="mb-4">New staff position</h1>
       <StaffPositionForm
-        staffPosition={this.state.staffPosition}
-        onChange={this.staffPositionChanged}
+        staffPosition={staffPosition}
+        onChange={setStaffPosition}
       />
-      <button type="button" className="btn btn-primary" onClick={this.saveClicked}>Save</button>
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={error} />
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
+        Save
+      </button>
     </div>
   );
 }
 
-export default NewStaffPosition;
+NewStaffPosition.propTypes = {
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default withRouter(NewStaffPosition);

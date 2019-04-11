@@ -161,7 +161,7 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
           >
             <i className="fa fa-trash-o" />
             <span className="sr-only">
-Delete override for
+              Delete override for
               {override.ticket_type.description}
             </span>
           </button>

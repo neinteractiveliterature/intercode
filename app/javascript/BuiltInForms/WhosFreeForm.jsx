@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import moment from 'moment-timezone';
 import queryString from 'query-string';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
-import GraphQLResultPropType from '../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
+import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
+import useQuerySuspended from '../useQuerySuspended';
 import { WhosFreeFormConventionQuery } from './whosFreeFormQueries.gql';
 
 const momentToTimeObject = (momentValue) => {
@@ -25,105 +24,125 @@ const momentToTimeObject = (momentValue) => {
   };
 };
 
-@graphql(WhosFreeFormConventionQuery)
-@GraphQLQueryResultWrapper
-class WhosFreeForm extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(WhosFreeFormConventionQuery).isRequired,
-    initialStart: PropTypes.string,
-    initialFinish: PropTypes.string,
-    baseUrl: PropTypes.string.isRequired,
-  };
-
-  static defaultProps = {
-    initialStart: null,
-    initialFinish: null,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      day: props.initialStart ? moment.tz(props.initialStart, props.data.convention.timezone_name).startOf('day') : null,
-      start: props.initialStart ? moment(props.initialStart) : null,
-      finish: props.initialFinish ? moment(props.initialFinish) : null,
-    };
+function parseTimeInZone(timeString, timezoneName) {
+  if (timeString) {
+    return moment.tz(timeString, timezoneName);
   }
 
-  dayChanged = (day) => { this.setState({ day }); }
+  return null;
+}
 
-  timeChanged = (field, newTime) => {
-    this.setState(prevState => ({
-      [field]: (prevState[field] || prevState.day).clone().set(newTime),
-    }));
-  }
+function makeTimeOfDay(prevTime, day, newTime) {
+  return (prevTime || day).clone().set(newTime);
+}
 
-  search = (event) => {
-    event.preventDefault();
+function WhosFreeForm({ initialStart, initialFinish, baseUrl }) {
+  const { data: { convention }, error } = useQuerySuspended(WhosFreeFormConventionQuery);
+  const [start, setStart] = useState(parseTimeInZone(initialStart, convention.timezone_name));
+  const [finish, setFinish] = useState(parseTimeInZone(initialFinish, convention.timezone_name));
+  const [day, setDay] = useState(initialStart ? parseTimeInZone(initialStart, convention.timezone_name).startOf('day') : null);
 
-    const params = {
-      start: this.state.start.toISOString(),
-      finish: this.state.finish.toISOString(),
-    };
-    window.location.href = `${this.props.baseUrl}?${queryString.stringify(params)}`;
-  }
+  const renderTimeSelects = useCallback(
+    () => {
+      if (day == null) {
+        return null;
+      }
 
-  renderTimeSelects = () => {
-    if (this.state.day == null) {
-      return null;
-    }
+      const startTimespan = new Timespan(day, day.clone().add(1, 'day'));
+      const finishTimespan = new Timespan(start || day, startTimespan.finish);
 
-    const startTimespan = new Timespan(this.state.day, this.state.day.clone().add(1, 'day'));
-    const finishTimespan = new Timespan(this.state.start || this.state.day, startTimespan.finish);
-
-    return (
-      <div className="d-flex mb-4">
-        <div className="mr-4">
-          from
-          <TimeSelect
-            timespan={startTimespan}
-            value={momentToTimeObject(this.state.start)}
-            onChange={newTime => this.timeChanged('start', newTime)}
-          />
+      return (
+        <div className="d-flex mb-4">
+          <div className="mr-4">
+            from
+            <TimeSelect
+              timespan={startTimespan}
+              value={momentToTimeObject(start)}
+              onChange={newTime => setStart(makeTimeOfDay(start, day, newTime))}
+            />
+          </div>
+          <div>
+            until
+            <TimeSelect
+              timespan={finishTimespan}
+              value={momentToTimeObject(finish)}
+              onChange={newTime => setFinish(makeTimeOfDay(finish, day, newTime))}
+            />
+          </div>
         </div>
-        <div>
-          until
-          <TimeSelect
-            timespan={finishTimespan}
-            value={momentToTimeObject(this.state.finish)}
-            onChange={newTime => this.timeChanged('finish', newTime)}
-          />
-        </div>
-      </div>
-    );
+      );
+    },
+    [day, start, finish],
+  );
+
+  const dayChanged = useCallback(
+    (newDay) => {
+      setDay(newDay);
+      setStart(null);
+      setFinish(null);
+    },
+    [],
+  );
+
+  const search = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      const params = {
+        start: start.toISOString(),
+        finish: finish.toISOString(),
+      };
+      window.location.href = `${baseUrl}?${queryString.stringify(params)}`;
+    },
+    [baseUrl, start, finish],
+  );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  render = () => (
+  return (
     <div className="card bg-light mb-4">
       <div className="card-body">
         <h5>Timespan to search within</h5>
 
         <ConventionDaySelect
-          convention={this.props.data.convention}
-          value={this.state.day}
-          onChange={this.dayChanged}
+          convention={convention}
+          value={day}
+          onChange={dayChanged}
         />
 
-        {this.renderTimeSelects()}
+        {renderTimeSelects()}
 
         <p className="mb-0">
           <button
             type="button"
             className="btn btn-primary"
-            disabled={!(this.state.start && this.state.finish)}
-            onClick={this.search}
+            disabled={!(start && finish)}
+            onClick={search}
           >
             Search
           </button>
         </p>
       </div>
     </div>
-  )
+  );
 }
+
+WhosFreeForm.propTypes = {
+  initialStart: PropTypes.string,
+  initialFinish: PropTypes.string,
+  baseUrl: PropTypes.string.isRequired,
+  convention: PropTypes.shape({
+    starts_at: PropTypes.string.isRequired,
+    ends_at: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+WhosFreeForm.defaultProps = {
+  initialStart: null,
+  initialFinish: null,
+};
 
 export default WhosFreeForm;

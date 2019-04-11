@@ -29,7 +29,10 @@ class UserConProfileForm extends React.Component {
   formResponseValuesChanged = (newResponseValues) => {
     this.props.onChange({
       ...this.props.userConProfile,
-      form_response_attrs: { ...this.props.userConProfile.form_response_attrs, ...newResponseValues },
+      form_response_attrs: {
+        ...this.props.userConProfile.form_response_attrs,
+        ...newResponseValues,
+      },
     });
   }
 
@@ -74,7 +77,7 @@ class UserConProfileForm extends React.Component {
       <ul className="nav nav-tabs">
         <li className="nav-item">
           <a
-            href="#"
+            href="#profile"
             className={classNames('nav-link', { active: this.state.tab === 'profile' })}
             onClick={this.profileTabClicked}
           >
@@ -86,7 +89,7 @@ class UserConProfileForm extends React.Component {
             ? (
               <li className="nav-item">
                 <a
-                  href="#"
+                  href="#privileges"
                   className={classNames('nav-link', { active: this.state.tab === 'privileges' })}
                   onClick={this.privilegesTabClicked}
                 >

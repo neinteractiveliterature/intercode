@@ -2,14 +2,16 @@ module.exports = {
   presets: [
     [
       '@babel/preset-env',
-      { useBuiltIns: 'usage' },
+      {
+        corejs: 2,
+        useBuiltIns: 'usage',
+      },
     ],
     '@babel/preset-react',
     '@babel/preset-flow',
   ],
   plugins: [
     'lodash',
-    ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-proposal-object-rest-spread',
     '@babel/plugin-syntax-dynamic-import',
