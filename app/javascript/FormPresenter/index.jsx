@@ -2,19 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../Models/Form';
 import { SectionTraversalProvider } from './SectionTraversalContext';
-import { useItemInteractionTracking, ItemInteractionProvider } from './ItemInteractionTracker';
+import { useItemInteractionTracking, ItemInteractionTrackerContext } from './ItemInteractionTracker';
 
 const FormPresenterApp = ({ form, children }) => {
-  const { interactWithItem, hasInteractedWithItem } = useItemInteractionTracking();
+  const itemInteractionProps = useItemInteractionTracking();
 
   return (
     <SectionTraversalProvider form={form}>
-      <ItemInteractionProvider
-        interactWithItem={interactWithItem}
-        hasInteractedWithItem={hasInteractedWithItem}
-      >
+      <ItemInteractionTrackerContext.Provider value={itemInteractionProps}>
         {children}
-      </ItemInteractionProvider>
+      </ItemInteractionTrackerContext.Provider>
     </SectionTraversalProvider>
   );
 };

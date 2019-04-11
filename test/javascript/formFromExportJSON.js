@@ -16,11 +16,25 @@ export default function formFromExportJSON(exportJSON) {
     });
 
     sectionItems.forEach((item) => {
+      const {
+        item_type: itemType,
+        identifier,
+        admin_description: adminDescription,
+        public_description: publicDescription,
+        default_value: defaultValue,
+        ...properties
+      } = item;
+
       formItems.push({
-        ...item,
         id: formItemId,
         position: formItemId,
         form_section_id: formSectionId,
+        item_type: itemType,
+        identifier,
+        admin_description: adminDescription,
+        public_description: publicDescription,
+        default_value: defaultValue,
+        properties,
       });
       formItemId += 1;
     });

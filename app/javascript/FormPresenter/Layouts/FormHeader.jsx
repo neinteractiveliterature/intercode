@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import LoadingIndicator from '../../LoadingIndicator';
 import { SectionTraversalContext } from '../SectionTraversalContext';
 
-const FormHeader = forwardRef(({ isUpdatingResponse, isSubmittingResponse }, ref) => {
+const FormHeader = ({ isUpdatingResponse, isSubmittingResponse }, ref) => {
   const { currentSection } = useContext(SectionTraversalContext);
 
   let loadingIndicator = null;
@@ -20,11 +20,13 @@ const FormHeader = forwardRef(({ isUpdatingResponse, isSubmittingResponse }, ref
       </div>
     </div>
   );
-});
+};
+
+const RefForwardingFormHeader = forwardRef(FormHeader);
 
 FormHeader.propTypes = {
   isUpdatingResponse: PropTypes.bool.isRequired,
   isSubmittingResponse: PropTypes.bool.isRequired,
 };
 
-export default FormHeader;
+export default RefForwardingFormHeader;

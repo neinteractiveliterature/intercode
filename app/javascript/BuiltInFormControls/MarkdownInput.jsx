@@ -1,27 +1,27 @@
 import React from 'react';
-import { ApolloConsumer } from 'react-apollo';
 
+import { useApolloClient } from 'react-apollo-hooks';
 import CodeInput from './CodeInput';
 import { PreviewMarkdownQuery } from './previewQueries.gql';
 
-const MarkdownInput = props => (
-  <ApolloConsumer>
-    {client => (
-      <CodeInput
-        {...props}
-        mode="liquid-markdown"
-        getPreviewContent={async (markdown) => {
-          const response = await client.query({
-            query: PreviewMarkdownQuery,
-            variables: { markdown },
-            fetchPolicy: 'no-cache',
-          });
+const MarkdownInput = (props) => {
+  const client = useApolloClient();
 
-          return response.data.previewMarkdown;
-        }}
-      />
-    )}
-  </ApolloConsumer>
-);
+  return (
+    <CodeInput
+      {...props}
+      mode="liquid-markdown"
+      getPreviewContent={async (markdown) => {
+        const response = await client.query({
+          query: PreviewMarkdownQuery,
+          variables: { markdown },
+          fetchPolicy: 'no-cache',
+        });
+
+        return response.data.previewMarkdown;
+      }}
+    />
+  );
+};
 
 export default MarkdownInput;

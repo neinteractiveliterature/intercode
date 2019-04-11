@@ -26,17 +26,6 @@ export function useEventCategorySelection({
     [setEventCategoryId],
   );
 
-  const renderSelect = useCallback(
-    () => (
-      <EventCategorySelect
-        eventCategories={selectableCategories}
-        value={eventCategoryId}
-        onChange={eventCategorySelectChanged}
-      />
-    ),
-    [selectableCategories, eventCategoryId, eventCategorySelectChanged],
-  );
-
   const eventForm = useMemo(
     () => getFormForEventCategoryId(eventCategoryId, convention),
     [convention, eventCategoryId],
@@ -47,22 +36,27 @@ export function useEventCategorySelection({
     [convention, eventCategoryId],
   );
 
-  return {
-    renderSelect, eventCategoryId, setEventCategoryId, eventForm, eventProposalForm,
+  const selectProps = {
+    eventCategories: selectableCategories,
+    value: eventCategoryId,
+    onChange: eventCategorySelectChanged,
   };
+
+  return [selectProps, {
+    eventCategoryId, setEventCategoryId, eventForm, eventProposalForm,
+  }];
 }
 
 function EventCategorySelectionWrapper({
   convention, initialEventCategoryId, selectableCategoryIds, children,
 }) {
-  const { renderSelect, eventCategoryId } = useEventCategorySelection({
+  const [selectProps, { eventCategoryId }] = useEventCategorySelection({
     convention, initialEventCategoryId, selectableCategoryIds,
   });
 
   return (
     <>
-      {renderSelect()}
-
+      <EventCategorySelect {...selectProps} />
       {children({ eventCategoryId })}
     </>
   );

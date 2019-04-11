@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 export const ItemInteractionTrackerContext = React.createContext({
   interactWithItem: () => {},
   hasInteractedWithItem: () => false,
+  interactedItemIds: new Set(),
 });
 
 export function useItemInteractionTracking() {
@@ -23,16 +24,7 @@ export function useItemInteractionTracking() {
     [interactedItemIds],
   );
 
-  const renderItemInteractionProvider = useCallback(
-    children => (
-      <ItemInteractionTrackerContext.Provider value={{ interactWithItem, hasInteractedWithItem }}>
-        {children}
-      </ItemInteractionTrackerContext.Provider>
-    ),
-    [interactWithItem, hasInteractedWithItem],
-  );
-
-  return { interactWithItem, hasInteractedWithItem, renderItemInteractionProvider };
+  return { interactWithItem, hasInteractedWithItem, interactedItemIds };
 }
 
 export function ItemInteractionProvider({ interactWithItem, hasInteractedWithItem, children }) {

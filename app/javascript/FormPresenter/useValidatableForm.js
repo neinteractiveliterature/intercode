@@ -4,16 +4,14 @@ import useFormValidation from './useFormValidation';
 
 export default function useValidatableForm() {
   const formRef = useRef();
-  const {
-    interactWithItem, hasInteractedWithItem, renderItemInteractionProvider,
-  } = useItemInteractionTracking();
+  const itemInteractionTrackingProps = useItemInteractionTracking();
 
   const validate = useFormValidation(
-    formRef.current ? formRef.current.scrollToItem : null,
-    interactWithItem,
+    formRef.current ? formRef.current.scrollToItem : () => {},
+    itemInteractionTrackingProps.interactWithItem,
   );
 
   return {
-    formRef, interactWithItem, hasInteractedWithItem, renderItemInteractionProvider, validate,
+    formRef, itemInteractionTrackingProps, validate,
   };
 }
