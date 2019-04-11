@@ -13,10 +13,11 @@ import {
 } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
-import useMEPTOEditor from '../BuiltInFormControls/useMEPTOEditor';
-import useEventFormWithCategorySelection from './useEventFormWithCategorySelection';
-import useEventEditor from '../BuiltInForms/useEventEditor';
+import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
+import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import deserializeEvent from './deserializeEvent';
+import EditEvent from '../BuiltInForms/EditEvent';
+import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 
 function createUpdater(store, eventId, override) {
   const storeData = store.readQuery({ query: EventAdminEventsQuery });
@@ -40,13 +41,10 @@ function deleteUpdater(store, id) {
 
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
-
-  const renderMEPTOEditor = useMEPTOEditor({
+  const meptoMutations = useMEPTOMutations({
     createMutate: useMutationCallback(CreateMaximumEventProvidedTicketsOverride),
     updateMutate: useMutationCallback(UpdateMaximumEventProvidedTicketsOverride),
     deleteMutate: useMutationCallback(DeleteMaximumEventProvidedTicketsOverride),
-    createUpdater,
-    deleteUpdater,
   });
 
   const eventId = match.params.id;
@@ -55,9 +53,9 @@ function EventAdminEditEvent({ match, history }) {
     [data.events, error, eventId],
   );
 
-  const {
-    event, eventCategoryId, renderForm, validateForm,
-  } = useEventFormWithCategorySelection({
+  const [eventFormProps, {
+    event, eventCategoryId, validateForm,
+  }] = useEventFormWithCategorySelection({
     convention: data.convention, initialEvent,
   });
 
@@ -83,32 +81,34 @@ function EventAdminEditEvent({ match, history }) {
     [event.id, dropEventMutate],
   );
 
-  const renderEditor = useEventEditor({
-    event,
-    renderForm,
-    validateForm,
-    updateEvent,
-    dropEvent,
-    onSave: () => { history.push('/runs'); },
-    onDrop: () => { history.push('/runs'); },
-  });
-
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return renderEditor({
-    showDropButton: true,
-    cancelPath: '/runs',
-    children: (
-      data.currentAbility.can_override_maximum_event_provided_tickets && renderMEPTOEditor({
-        ticketTypes: data.convention.ticket_types,
-        ticketName: data.convention.ticket_name,
-        overrides: event.maximum_event_provided_tickets_overrides,
-        eventId: event.id,
-      })
-    ),
-  });
+  return (
+    <EditEvent
+      cancelPath="/runs"
+      showDropButton
+      event={event}
+      dropEvent={dropEvent}
+      validateForm={validateForm}
+      updateEvent={updateEvent}
+      onSave={() => { history.push('/runs'); }}
+      onDrop={() => { history.push('/runs'); }}
+    >
+      <EventFormWithCategorySelection {...eventFormProps}>
+        {data.currentAbility.can_override_maximum_event_provided_tickets && (
+          <MaximumEventProvidedTicketsOverrideEditor
+            {...meptoMutations}
+            ticketTypes={data.convention.ticket_types}
+            ticketName={data.convention.ticket_name}
+            overrides={event.maximum_event_provided_tickets_overrides}
+            eventId={event.id}
+          />
+        )}
+      </EventFormWithCategorySelection>
+    </EditEvent>
+  );
 }
 
 EventAdminEditEvent.propTypes = {

@@ -1,7 +1,9 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 
 import { useEventCategorySelection } from './EventCategorySelectionWrapper';
-import useEventForm from './useEventForm';
+import useEventForm, { EventForm } from './useEventForm';
+import EventCategorySelect from '../BuiltInFormControls/EventCategorySelect';
 
 export default function useEventFormWithCategorySelection({
   convention, initialEvent, schedulingUi,
@@ -19,27 +21,33 @@ export default function useEventFormWithCategorySelection({
     [convention.event_categories, schedulingUi],
   );
 
-  const { renderSelect, eventCategoryId, eventForm } = useEventCategorySelection({
+  const [selectProps, { eventCategoryId, eventForm }] = useEventCategorySelection({
     convention,
     initialEventCategoryId: ((initialEvent || {}).event_category || {}).id,
     selectableCategoryIds,
   });
 
-  const { renderForm: renderInnerForm, ...otherProps } = useEventForm({
+  const [eventFormProps, otherProps] = useEventForm({
     convention, initialEvent, eventForm,
   });
 
-  const renderForm = useCallback(
-    () => (
-      <>
-        {renderSelect()}
-        {renderInnerForm()}
-      </>
-    ),
-    [renderSelect, renderInnerForm],
-  );
+  const eventFormWithCategorySelectionProps = { selectProps, eventFormProps };
 
-  return {
-    renderForm, eventCategoryId, eventForm, ...otherProps,
-  };
+  return [eventFormWithCategorySelectionProps, {
+    eventCategoryId, eventForm, ...otherProps,
+  }];
 }
+
+export function EventFormWithCategorySelection({ selectProps, eventFormProps }) {
+  return (
+    <>
+      <EventCategorySelect {...selectProps} />
+      <EventForm {...eventFormProps} />
+    </>
+  );
+}
+
+EventFormWithCategorySelection.propTypes = {
+  selectProps: PropTypes.shape({}).isRequired,
+  eventFormProps: PropTypes.shape({}).isRequired,
+};

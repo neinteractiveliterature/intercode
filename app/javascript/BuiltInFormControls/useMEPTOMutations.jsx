@@ -1,11 +1,9 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
-import MaximumEventProvidedTicketsOverrideEditor from './MaximumEventProvidedTicketsOverrideEditor';
-
-export default function useMEPTOEditor({
+export default function useMEPTOMutations({
   createMutate, updateMutate, deleteMutate, createUpdater, deleteUpdater,
 }) {
-  const createMEPTO = useCallback(
+  const createOverride = useCallback(
     ({ eventId, ticketTypeId, overrideValue }) => createMutate({
       variables: {
         input: {
@@ -26,7 +24,7 @@ export default function useMEPTOEditor({
     [createMutate, createUpdater],
   );
 
-  const updateMEPTO = useCallback(
+  const updateOverride = useCallback(
     ({ id, overrideValue }) => updateMutate({
       variables: {
         input: {
@@ -38,7 +36,7 @@ export default function useMEPTOEditor({
     [updateMutate],
   );
 
-  const deleteMEPTO = useCallback(
+  const deleteOverride = useCallback(
     id => deleteMutate({
       variables: {
         input: {
@@ -51,17 +49,5 @@ export default function useMEPTOEditor({
     [deleteMutate, deleteUpdater],
   );
 
-  const renderMEPTOEditor = useCallback(
-    props => (
-      <MaximumEventProvidedTicketsOverrideEditor
-        createOverride={createMEPTO}
-        deleteOverride={deleteMEPTO}
-        updateOverride={updateMEPTO}
-        {...props}
-      />
-    ),
-    [createMEPTO, deleteMEPTO, updateMEPTO],
-  );
-
-  return renderMEPTOEditor;
+  return { createOverride, deleteOverride, updateOverride };
 }

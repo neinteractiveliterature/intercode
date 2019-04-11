@@ -1,12 +1,14 @@
 import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 import EditEventHeader from './EditEventHeader';
 
-export default function useEventEditor({
-  event, updateEvent, dropEvent, onSave, onDrop, renderForm, validateForm,
+export default function EditEvent({
+  children, cancelPath, showDropButton, event, dropEvent, validateForm,
+  updateEvent, onSave, onDrop,
 }) {
   const [updateEventCallback, updateError, updateInProgress] = useAsyncFunction(useCallback(
     async () => {
@@ -18,7 +20,7 @@ export default function useEventEditor({
       onSave();
     },
     [updateEvent, onSave, validateForm],
-  ));
+  ), { suppressError: true });
 
   const [dropEventCallback, , dropInProgress] = useAsyncFunction(useCallback(
     async () => {
@@ -30,7 +32,7 @@ export default function useEventEditor({
 
   const saveCaption = (event.id ? 'Save event' : 'Create event');
 
-  const renderEditor = ({ children, cancelPath, showDropButton }) => (
+  return (
     <form className="my-4">
       <EditEventHeader
         event={event}
@@ -38,7 +40,7 @@ export default function useEventEditor({
         dropEvent={dropEventCallback}
       />
 
-      {renderForm(children)}
+      {children}
 
       <ErrorDisplay graphQLError={updateError} />
 
@@ -54,6 +56,24 @@ export default function useEventEditor({
       {cancelPath && <Link to={cancelPath} className="btn btn-link">Cancel</Link>}
     </form>
   );
-
-  return renderEditor;
 }
+
+EditEvent.propTypes = {
+  children: PropTypes.node,
+  cancelPath: PropTypes.string,
+  showDropButton: PropTypes.bool,
+  event: PropTypes.shape({}).isRequired,
+  dropEvent: PropTypes.func,
+  validateForm: PropTypes.func.isRequired,
+  updateEvent: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onDrop: PropTypes.func,
+};
+
+EditEvent.defaultProps = {
+  children: null,
+  cancelPath: null,
+  showDropButton: false,
+  dropEvent: null,
+  onDrop: null,
+};

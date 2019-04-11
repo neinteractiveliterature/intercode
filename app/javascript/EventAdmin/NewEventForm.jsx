@@ -6,15 +6,15 @@ import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
 import { CreateEvent } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useEventFormWithCategorySelection from './useEventFormWithCategorySelection';
+import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 
 function NewEventForm({
   convention, onExit, schedulingUi,
 }) {
   const [mutate, error] = useAsyncFunction(useMutation(CreateEvent));
-  const {
-    event, renderForm, eventCategoryId, validateForm,
-  } = useEventFormWithCategorySelection({ convention, schedulingUi });
+  const [formProps, {
+    event, eventCategoryId, validateForm,
+  }] = useEventFormWithCategorySelection({ convention, schedulingUi });
 
   const createEvent = useCallback(
     async () => {
@@ -46,9 +46,7 @@ function NewEventForm({
   );
 
   return (
-    <>
-      {renderForm()}
-
+    <EventFormWithCategorySelection {...formProps}>
       <ErrorDisplay graphQLError={error} />
 
       <div>
@@ -64,7 +62,7 @@ function NewEventForm({
           Cancel
         </button>
       </div>
-    </>
+    </EventFormWithCategorySelection>
   );
 }
 

@@ -7,7 +7,6 @@ import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization'
 import ErrorDisplay from '../../ErrorDisplay';
 import { StandaloneEditEventQuery } from './queries.gql';
 import {
-  StandaloneDropEvent,
   StandaloneUpdateEvent,
   StandaloneCreateMaximumEventProvidedTicketsOverride,
   StandaloneDeleteMaximumEventProvidedTicketsOverride,
@@ -15,9 +14,10 @@ import {
 } from './mutations.gql';
 import useQuerySuspended from '../../useQuerySuspended';
 import useMutationCallback from '../../useMutationCallback';
-import useMEPTOEditor from '../../BuiltInFormControls/useMEPTOEditor';
-import useEventForm from '../../EventAdmin/useEventForm';
-import useEventEditor from '../../BuiltInForms/useEventEditor';
+import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
+import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
+import EditEvent from '../../BuiltInForms/EditEvent';
+import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 
 function StandaloneEditEvent({ eventId, eventPath, history }) {
   const queryOptions = { variables: { eventId } };
@@ -25,9 +25,7 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
 
   const initialEvent = deserializeEvent(data.event);
 
-  const {
-    event, renderForm, validateForm,
-  } = useEventForm({
+  const [eventFormProps, { event, validateForm }] = useEventForm({
     convention: data.convention,
     initialEvent,
     eventForm: deserializeForm(data.event.event_category.event_form),
@@ -48,23 +46,7 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
     [event, updateEventMutate],
   );
 
-  const dropEventMutate = useMutationCallback(StandaloneDropEvent);
-  const dropEvent = useCallback(
-    () => dropEventMutate({ variables: { input: { id: event.id } } }),
-    [event.id, dropEventMutate],
-  );
-
-  const renderEditor = useEventEditor({
-    event,
-    renderForm,
-    validateForm,
-    updateEvent,
-    dropEvent,
-    onSave: () => { history.push(eventPath); },
-    onDrop: () => { history.push('/'); },
-  });
-
-  const renderMEPTOEditor = useMEPTOEditor({
+  const meptoMutations = useMEPTOMutations({
     createMutate: useMutationCallback(StandaloneCreateMaximumEventProvidedTicketsOverride),
     updateMutate: useMutationCallback(StandaloneUpdateMaximumEventProvidedTicketsOverride),
     deleteMutate: useMutationCallback(StandaloneDeleteMaximumEventProvidedTicketsOverride),
@@ -109,22 +91,34 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return renderEditor({
-    showDropButton: data.currentAbility.can_delete_event,
-    cancelPath: eventPath,
-    children: (
-      data.currentAbility.can_override_maximum_event_provided_tickets && renderMEPTOEditor({
-        ticketTypes: data.convention.ticket_types,
-        ticketName: data.convention.ticket_name,
-        overrides: event.maximum_event_provided_tickets_overrides,
-        eventId: event.id,
-      })
-    ),
-  });
+  return (
+    <EditEvent
+      event={event}
+      validateForm={validateForm}
+      updateEvent={updateEvent}
+      onSave={() => { history.push(eventPath); }}
+    >
+      <EventForm {...eventFormProps}>
+        {data.currentAbility.can_override_maximum_event_provided_tickets && (
+          <MaximumEventProvidedTicketsOverrideEditor
+            {...meptoMutations}
+            ticketName={data.convention.ticket_name}
+            ticketTypes={data.convention.ticket_types}
+            overrides={event.maximum_event_provided_tickets_overrides}
+            eventId={event.id}
+          />
+        )}
+      </EventForm>
+    </EditEvent>
+  );
 }
 
 StandaloneEditEvent.propTypes = {
   eventId: PropTypes.number.isRequired,
+  eventPath: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default withRouter(StandaloneEditEvent);

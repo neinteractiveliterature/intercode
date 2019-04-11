@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import ErrorDisplay from '../ErrorDisplay';
-import useEventFormWithCategorySelection from './useEventFormWithCategorySelection';
+import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 
 function SingleRunEventForm({
   convention, initialEvent, disabled, cancelPath, onSave, error,
@@ -16,9 +16,9 @@ function SingleRunEventForm({
     [setRun],
   );
 
-  const {
-    event, eventCategoryId, validateForm, renderForm,
-  } = useEventFormWithCategorySelection({
+  const [formProps, {
+    event, eventCategoryId, validateForm,
+  }] = useEventFormWithCategorySelection({
     convention,
     initialEvent,
     schedulingUi: 'single_run',
@@ -47,7 +47,7 @@ function SingleRunEventForm({
         {event.id ? 'Edit single-run event' : 'New single-run event'}
       </h3>
 
-      {renderForm()}
+      <EventFormWithCategorySelection {...formProps} />
 
       {event.form_response_attrs.length_seconds && (
         <RunFormFields

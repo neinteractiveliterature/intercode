@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export default function useAsyncFunction(func) {
+export default function useAsyncFunction(func, { suppressError } = {}) {
   const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
 
@@ -13,12 +13,14 @@ export default function useAsyncFunction(func) {
           return await func(...args);
         } catch (e) {
           setError(e);
-          throw e;
+          if (!suppressError) {
+            throw e;
+          }
         } finally {
           setInProgress(false);
         }
       },
-      [func],
+      [func, suppressError],
     ),
     error,
     inProgress,
