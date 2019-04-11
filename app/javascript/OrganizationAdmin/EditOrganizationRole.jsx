@@ -26,12 +26,12 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
   }
 
   const updateOrganizationRole = async ({
-    organizationRole, usersChangeSet, permissionsChangeSet,
+    name, usersChangeSet, permissionsChangeSet,
   }) => {
     await mutate({
       variables: {
         id: organizationRoleId,
-        name: organizationRole.name,
+        name,
         addUserIds: usersChangeSet.getAddValues().map(user => user.id),
         removeUserIds: usersChangeSet.getRemoveIds(),
         addPermissions: permissionsChangeSet.getAddValues().map(permission => ({
@@ -48,7 +48,7 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
     <>
       <h1 className="mb-4">
         {'Edit role '}
-        {formState.organizationRole.name}
+        {formState.name}
       </h1>
 
       {renderForm()}

@@ -1,167 +1,129 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
-import { flowRight } from 'lodash';
-import { pluralize } from 'inflected';
-import { ConfirmModal } from 'react-bootstrap4-modal';
+import React, { useState } from 'react';
 
 import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { RoomsAdminQuery } from './queries.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import useAsyncFunction from '../useAsyncFunction';
+import useMutationCallback from '../useMutationCallback';
+import { sortByLocaleString } from '../ValueUtils';
+import pluralizeWithCount from '../pluralizeWithCount';
 
-@flowRight([
-  graphql(RoomsAdminQuery),
-  graphql(CreateRoom, { name: 'createRoom' }),
-  graphql(UpdateRoom, { name: 'updateRoom' }),
-  graphql(DeleteRoom, { name: 'deleteRoom' }),
-])
-@GraphQLQueryResultWrapper
-class RoomsAdmin extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(RoomsAdminQuery).isRequired,
-    createRoom: PropTypes.func.isRequired,
-    updateRoom: PropTypes.func.isRequired,
-    deleteRoom: PropTypes.func.isRequired,
-  };
+function RoomsAdmin() {
+  const { data, error } = useQuerySuspended(RoomsAdminQuery);
+  const [createRoom, createError] = useAsyncFunction(useMutationCallback(CreateRoom));
+  const [updateRoom, updateError] = useAsyncFunction(useMutationCallback(UpdateRoom));
+  const [deleteRoomMutate, deleteError] = useAsyncFunction(useMutationCallback(DeleteRoom));
+  const confirm = useConfirm();
 
-  constructor(props) {
-    super(props);
+  const [creatingRoomName, setCreatingRoomName] = useState('');
 
-    this.state = {
-      confirmingDeleteRoomId: null,
-      creatingRoomName: '',
-      error: null,
-    };
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  roomNameDidChange = (id, name) => {
-    this.props.updateRoom({ variables: { input: { id, room: { name } } } })
-      .catch((error) => { this.setState({ error }); });
-  }
+  const roomNameDidChange = (id, name) => updateRoom({
+    variables: { input: { id, room: { name } } },
+  });
 
-  creatingRoomNameDidChange = (event) => {
-    this.setState({ creatingRoomName: event.target.value });
-  }
-
-  keyDownInCreatingRoom = (event) => {
-    if (event.key === 'Enter') {
-      this.createRoomWasClicked(event);
-    }
-  }
-
-  createRoomWasClicked = (event) => {
+  const createRoomWasClicked = async (event) => {
     event.preventDefault();
-    this.props.createRoom({
-      variables: { input: { room: { name: this.state.creatingRoomName } } },
+    await createRoom({
+      variables: { input: { room: { name: creatingRoomName } } },
       update: (store, { data: { createRoom: { room: newRoom } } }) => {
         const roomsData = store.readQuery({ query: RoomsAdminQuery });
         roomsData.convention.rooms.push(newRoom);
         store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
       },
-    }).then(() => { this.setState({ creatingRoomName: '' }); })
-      .catch((error) => { this.setState({ error }); });
-  }
+    });
+    setCreatingRoomName('');
+  };
 
-  startDeletingRoom = (roomId) => {
-    this.setState({ confirmingDeleteRoomId: roomId });
-  }
+  const keyDownInCreatingRoom = (event) => {
+    if (event.key === 'Enter') {
+      createRoomWasClicked(event);
+    }
+  };
 
-  deleteRoomConfirmed = () => {
-    const roomId = this.state.confirmingDeleteRoomId;
-    this.props.deleteRoom({
-      variables: { input: { id: roomId } },
-      update: (store) => {
-        const roomsData = store.readQuery({ query: RoomsAdminQuery });
-        const roomIndex = roomsData.convention.rooms.findIndex(room => room.id === roomId);
-        roomsData.convention.rooms.splice(roomIndex, 1);
-        store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
-      },
-    }).then(() => { this.setState({ confirmingDeleteRoomId: null }); })
-      .catch((error) => { this.setState({ error }); });
-  }
+  const deleteRoom = roomId => deleteRoomMutate({
+    variables: { input: { id: roomId } },
+    update: (store) => {
+      const roomsData = store.readQuery({ query: RoomsAdminQuery });
+      const roomIndex = roomsData.convention.rooms.findIndex(room => room.id === roomId);
+      roomsData.convention.rooms.splice(roomIndex, 1);
+      store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
+    },
+  });
 
-  deleteRoomCanceled = () => {
-    this.setState({ confirmingDeleteRoomId: null });
-  }
+  const sortedRooms = sortByLocaleString(data.convention.rooms, room => room.name);
 
-  render = () => {
-    const sortedRooms = [...this.props.data.convention.rooms]
-      .sort((a, b) => a.name.localeCompare(b.name));
-    const roomRows = sortedRooms.map(room => (
-      <li className="list-group-item" key={room.id}>
-        <div className="row align-items-baseline">
-          <div className="ml-3">
-            <InPlaceEditor
-              value={room.name}
-              onChange={(newName) => { this.roomNameDidChange(room.id, newName); }}
-            />
-          </div>
-          <div className="col">
-            { room.runs.length > 0 ? (
-              <span className="text-muted">
-                (
-                {room.runs.length}
-                {' '}
-                {pluralize('event run', room.runs.length)}
-)
-              </span>
-            ) : null }
-          </div>
-          <button
-            className="btn btn-sm btn-outline-danger mr-3"
-            title="Delete room"
-            onClick={() => { this.startDeletingRoom(room.id); }}
-            type="button"
-          >
-            <i className="fa fa-trash" />
-          </button>
+  const roomRows = sortedRooms.map(room => (
+    <li className="list-group-item" key={room.id}>
+      <div className="row align-items-baseline">
+        <div className="ml-3">
+          <InPlaceEditor
+            value={room.name}
+            onChange={(newName) => { roomNameDidChange(room.id, newName); }}
+          />
         </div>
-      </li>
-    ));
-
-    return (
-      <div className="mb-4">
-        <ul className="list-group mb-4">
-          {roomRows}
-          <li className="list-group-item">
-            <div className="row align-items-baseline">
-              <div className="col">
-                <input
-                  type="text"
-                  placeholder="Room name"
-                  className="form-control"
-                  value={this.state.creatingRoomName}
-                  onChange={this.creatingRoomNameDidChange}
-                  onKeyDown={this.keyDownInCreatingRoom}
-                />
-              </div>
-              <button
-                className="btn btn-primary mr-2"
-                disabled={this.state.creatingRoomName === ''}
-                onClick={this.createRoomWasClicked}
-                type="button"
-              >
-                Add room
-              </button>
-            </div>
-          </li>
-        </ul>
-
-        <ErrorDisplay graphQLError={this.state.error} />
-        <ConfirmModal
-          visible={this.state.confirmingDeleteRoomId != null}
-          onOK={this.deleteRoomConfirmed}
-          onCancel={this.deleteRoomCanceled}
+        <div className="col">
+          {room.runs.length > 0 ? (
+            <span className="text-muted">
+              (
+              {pluralizeWithCount('event run', room.runs.length)}
+              )
+            </span>
+          ) : null}
+        </div>
+        <button
+          className="btn btn-sm btn-outline-danger mr-3"
+          title="Delete room"
+          onClick={() => confirm({
+            prompt: 'Are you sure you want to delete this room?',
+            action: () => deleteRoom(room.id),
+            renderError: e => <ErrorDisplay error={e} />,
+          })}
+          type="button"
         >
-          Are you sure you want to delete this room?
-          <ErrorDisplay graphQLError={this.state.error} />
-        </ConfirmModal>
+          <i className="fa fa-trash" />
+        </button>
       </div>
-    );
-  }
+    </li>
+  ));
+
+  return (
+    <div className="mb-4">
+      <ul className="list-group mb-4">
+        {roomRows}
+        <li className="list-group-item">
+          <div className="row align-items-baseline">
+            <div className="col">
+              <input
+                type="text"
+                placeholder="Room name"
+                className="form-control"
+                value={creatingRoomName}
+                onChange={event => setCreatingRoomName(event.target.value)}
+                onKeyDown={keyDownInCreatingRoom}
+              />
+            </div>
+            <button
+              className="btn btn-primary mr-2"
+              disabled={creatingRoomName === ''}
+              onClick={createRoomWasClicked}
+              type="button"
+            >
+              Add room
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <ErrorDisplay graphQLError={createError || updateError || deleteError} />
+    </div>
+  );
 }
 
 export default RoomsAdmin;

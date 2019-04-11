@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { graphql, Mutation } from 'react-apollo';
 import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
@@ -8,13 +7,14 @@ import classNames from 'classnames';
 import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
-import Confirm from '../../ModalDialogs/Confirm';
+import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import ForceConfirmSignupModal from './ForceConfirmSignupModal';
-import GraphQLQueryResultWrapper from '../../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../../GraphQLResultPropType';
 import Timespan from '../../Timespan';
 import { UpdateSignupCounted } from './mutations.gql';
+import useModal from '../../ModalDialogs/useModal';
+import useQuerySuspended from '../../useQuerySuspended';
+import useMutationCallback from '../../useMutationCallback';
 
 function cityState(userConProfile) {
   return [
@@ -39,7 +39,7 @@ function getMakeCountedConfirmPrompt(signup) {
         Are you sure?  This will make
         {' '}
         {userConProfile.name_without_nickname}
-&apos;s signup count
+        &apos;s signup count
         towards attendee totals for
         {' '}
         {run.event.title}
@@ -47,9 +47,9 @@ function getMakeCountedConfirmPrompt(signup) {
         {' '}
         {run.event.title}
         {' '}
-will also count towards
+        will also count towards
         {userConProfile.name_without_nickname}
-&apos;s signup limit if there is a signup cap in
+        &apos;s signup limit if there is a signup cap in
         place.
       </p>
       <p className="text-danger">
@@ -69,14 +69,14 @@ function getMakeNotCountedConfirmPrompt(signup) {
         Are you sure?  This will make
         {' '}
         {userConProfile.name_without_nickname}
-&apos;s signup not count
+        &apos;s signup not count
         towards attendee totals for
         {' '}
         {run.event.title}
-.  It will also allow
+        .  It will also allow
         {userConProfile.name_without_nickname}
         {' '}
-to sign up for an additional event if there is a
+        to sign up for an additional event if there is a
         signup cap in place.
       </p>
       <p className="text-danger">
@@ -87,6 +87,18 @@ to sign up for an additional event if there is a
   );
 }
 
+const renderAddressItem = (userConProfile) => {
+  const elements = [
+    ['header', 'Address:'],
+    ['address', userConProfile.address],
+    ['cityStateZip', cityStateZip(userConProfile)],
+    ['country', userConProfile.country],
+  ].filter(pair => pair[1] && pair[1].trim() !== '');
+
+  const listItems = elements.map(([key, element]) => <li key={key}>{element}</li>);
+  return <ul className="list-unstyled">{listItems}</ul>;
+};
+
 function getToggleCountedConfirmPrompt(signup) {
   if (signup.counted) {
     return getMakeNotCountedConfirmPrompt(signup);
@@ -95,38 +107,29 @@ function getToggleCountedConfirmPrompt(signup) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-@graphql(AdminSignupQuery)
-@GraphQLQueryResultWrapper
-class EditSignup extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(AdminSignupQuery).isRequired,
-    teamMembersUrl: PropTypes.string.isRequired,
+function EditSignup({ id, teamMembersUrl }) {
+  const { data, error } = useQuerySuspended(AdminSignupQuery, { variables: { id } });
+  const changeBucketModal = useModal();
+  const forceConfirmModal = useModal();
+  const updateCountedMutate = useMutationCallback(UpdateSignupCounted);
+  const confirm = useConfirm();
+
+  const toggleCounted = useCallback(
+    signup => updateCountedMutate({
+      variables: {
+        signupId: signup.id,
+        counted: !signup.counted,
+      },
+    }),
+    [updateCountedMutate],
+  );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      forceConfirmingSignup: false,
-    };
-  }
-
-  toggleCounted = () => {}
-
-  renderAddressItem = (userConProfile) => {
-    const elements = [
-      ['header', 'Address:'],
-      ['address', userConProfile.address],
-      ['cityStateZip', cityStateZip(userConProfile)],
-      ['country', userConProfile.country],
-    ].filter(pair => pair[1] && pair[1].trim() !== '');
-
-    const listItems = elements.map(([key, element]) => <li key={key}>{element}</li>);
-    return <ul className="list-unstyled">{listItems}</ul>;
-  }
-
-  renderUserSection = () => {
-    const { signup } = this.props.data;
+  const renderUserSection = () => {
+    const { signup } = data;
     const { user_con_profile: userConProfile } = signup;
 
     return (
@@ -144,7 +147,7 @@ class EditSignup extends React.Component {
             Age at
             {' '}
             {signup.run.event.title}
-:
+            :
             {' '}
             {ageAsOf(moment(userConProfile.birth_date), moment(signup.run.starts_at))}
           </li>
@@ -169,19 +172,19 @@ class EditSignup extends React.Component {
             <a href={`tel:${userConProfile.evening_phone}`}>{userConProfile.evening_phone}</a>
           </li>
           <li className="list-group-item">
-            {this.renderAddressItem(userConProfile)}
+            {renderAddressItem(userConProfile)}
           </li>
         </ul>
       </div>
     );
-  }
+  };
 
-  renderForceConfirmButton = () => {
-    if (!this.props.data.myProfile.ability.can_update_signup) {
+  const renderForceConfirmButton = () => {
+    if (!data.myProfile.ability.can_update_signup) {
       return null;
     }
 
-    const { signup } = this.props.data;
+    const { signup } = data;
 
     if (signup.state !== 'waitlisted') {
       return null;
@@ -189,57 +192,37 @@ class EditSignup extends React.Component {
 
     return (
       <div>
-        <button
-          className="btn btn-link"
-          onClick={() => this.setState({ forceConfirmingSignup: true })}
-        >
+        <button className="btn btn-link" onClick={forceConfirmModal.open} type="button">
           Force into run
         </button>
       </div>
     );
-  }
+  };
 
-  renderCountedToggle = () => {
-    if (!this.props.data.myProfile.ability.can_update_signup) {
-      return null;
-    }
-
-    const { signup } = this.props.data;
+  const renderCountedToggle = () => {
+    const { signup } = data;
 
     return (
-      <Confirm.Trigger>
-        {confirm => (
-          <Mutation mutation={UpdateSignupCounted}>
-            {updateCounted => (
-              <button
-                className="btn btn-link"
-                type="button"
-                onClick={() => confirm({
-                  prompt: getToggleCountedConfirmPrompt(signup),
-                  action: () => updateCounted({
-                    variables: {
-                      signupId: signup.id,
-                      counted: !signup.counted,
-                    },
-                  }),
-                  renderError: error => <ErrorDisplay graphQLError={error} />,
-                })}
-              >
-                {
-                  signup.counted
-                    ? <i className="fa fa-toggle-on"><span className="sr-only">Make not counted</span></i>
-                    : <i className="fa fa-toggle-off"><span className="sr-only">Make counted</span></i>
-                }
-              </button>
-            )}
-          </Mutation>
-        )}
-      </Confirm.Trigger>
+      <button
+        className="btn btn-link"
+        type="button"
+        onClick={() => confirm({
+          prompt: getToggleCountedConfirmPrompt(signup),
+          action: () => toggleCounted(signup),
+          renderError: updateCountedError => <ErrorDisplay graphQLError={updateCountedError} />,
+        })}
+      >
+        {
+          signup.counted
+            ? <i className="fa fa-toggle-on"><span className="sr-only">Make not counted</span></i>
+            : <i className="fa fa-toggle-off"><span className="sr-only">Make counted</span></i>
+        }
+      </button>
     );
-  }
+  };
 
-  renderRunSection = () => {
-    const { signup } = this.props.data;
+  const renderRunSection = () => {
+    const { signup } = data;
     const { run } = signup;
     const { event } = run;
     const { registration_policy: registrationPolicy } = event;
@@ -260,7 +243,7 @@ class EditSignup extends React.Component {
         <div className="card-header">
           {run.event.title}
           <br />
-          {timespan.humanizeInTimezone(this.props.data.convention.timezone_name)}
+          {timespan.humanizeInTimezone(data.convention.timezone_name)}
           <br />
           {run.rooms.map(room => room.name).sort().join(', ')}
         </div>
@@ -274,7 +257,7 @@ class EditSignup extends React.Component {
                 {signup.state}
               </strong>
             </div>
-            {this.renderForceConfirmButton()}
+            {renderForceConfirmButton()}
           </li>
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
@@ -297,7 +280,11 @@ class EditSignup extends React.Component {
             {(
               signup.state === 'confirmed'
                 ? (
-                  <button className="btn btn-link" onClick={() => this.setState({ changingSignupBucket: true })}>
+                  <button
+                    className="btn btn-link"
+                    onClick={changeBucketModal.open}
+                    type="button"
+                  >
                     <i className="fa fa-pencil"><span className="sr-only">Change</span></i>
                   </button>
                 )
@@ -309,15 +296,15 @@ class EditSignup extends React.Component {
               Counts towards totals:
               <strong>{signup.counted ? ' yes' : ' no'}</strong>
             </div>
-            {this.renderCountedToggle()}
+            {renderCountedToggle()}
           </li>
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
               {humanize(underscore(run.event.event_category.team_member_name))}
-:
+              :
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
-            <a href={this.props.teamMembersUrl} className="btn btn-link">
+            <a href={teamMembersUrl} className="btn btn-link">
               Go to
               {' '}
               {pluralize(run.event.event_category.team_member_name)}
@@ -326,39 +313,44 @@ class EditSignup extends React.Component {
         </ul>
       </div>
     );
-  }
+  };
 
-  render = () => (
-    <React.Fragment>
+  return (
+    <>
       <h1 className="mb-4">
         Edit signup for
         {' '}
-        {this.props.data.signup.run.event.title}
+        {data.signup.run.event.title}
       </h1>
 
       <div className="row">
         <div className="col col-md-6">
-          {this.renderUserSection()}
+          {renderUserSection()}
         </div>
 
         <div className="col col-md-6">
-          {this.renderRunSection()}
+          {renderRunSection()}
         </div>
       </div>
 
       <ForceConfirmSignupModal
-        signup={this.state.forceConfirmingSignup ? this.props.data.signup : null}
-        onComplete={() => this.setState({ forceConfirmingSignup: false })}
-        onCancel={() => this.setState({ forceConfirmingSignup: false })}
+        signup={forceConfirmModal.visible ? data.signup : null}
+        onComplete={forceConfirmModal.close}
+        onCancel={forceConfirmModal.close}
       />
 
       <ChangeBucketModal
-        signup={this.state.changingSignupBucket ? this.props.data.signup : null}
-        onComplete={() => this.setState({ changingSignupBucket: false })}
-        onCancel={() => this.setState({ changingSignupBucket: false })}
+        signup={changeBucketModal.visible ? data.signup : null}
+        onComplete={changeBucketModal.close}
+        onCancel={changeBucketModal.close}
       />
-    </React.Fragment>
-  )
+    </>
+  );
 }
+
+EditSignup.propTypes = {
+  id: PropTypes.number.isRequired,
+  teamMembersUrl: PropTypes.string.isRequired,
+};
 
 export default EditSignup;

@@ -1,14 +1,9 @@
-import React from 'react';
-import { graphql } from 'react-apollo';
-import { flowRight } from 'lodash';
+import React, { useCallback, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import EditEvent from '../BuiltInForms/EditEvent';
-import GraphQLResultPropType from '../GraphQLResultPropType';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import deserializeEvent from './deserializeEvent';
+
+import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
-import getFormForEventCategory from './getFormForEventCategory';
 import {
   UpdateEvent,
   DropEvent,
@@ -16,47 +11,107 @@ import {
   UpdateMaximumEventProvidedTicketsOverride,
   DeleteMaximumEventProvidedTicketsOverride,
 } from './mutations.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import useMutationCallback from '../useMutationCallback';
+import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
+import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
+import deserializeEvent from './deserializeEvent';
+import EditEvent from '../BuiltInForms/EditEvent';
+import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 
-const EventAdminEditEvent = (props) => {
-  const {
-    data,
-    match,
-    history,
-    updateEvent,
-    dropEvent,
-    createMaximumEventProvidedTicketsOverride,
-    updateMaximumEventProvidedTicketsOverride,
-    deleteMaximumEventProvidedTicketsOverride,
-  } = props;
+function createUpdater(store, eventId, override) {
+  const storeData = store.readQuery({ query: EventAdminEventsQuery });
+  const event = storeData.events.find(evt => evt.id === eventId);
+  event.maximum_event_provided_tickets_overrides.push(override);
+  store.writeQuery({ query: EventAdminEventsQuery, storeData });
+}
+
+function deleteUpdater(store, id) {
+  const storeData = store.readQuery({ query: EventAdminEventsQuery });
+  const event = storeData.events.find((
+    evt => evt.maximum_event_provided_tickets_overrides.some((
+      override => override.id === id
+    ))
+  ));
+  const newOverrides = event.maximum_event_provided_tickets_overrides
+    .filter(override => override.id !== id);
+  event.maximum_event_provided_tickets_overrides = newOverrides;
+  store.writeQuery({ query: EventAdminEventsQuery, storeData });
+}
+
+function EventAdminEditEvent({ match, history }) {
+  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const meptoMutations = useMEPTOMutations({
+    createMutate: useMutationCallback(CreateMaximumEventProvidedTicketsOverride),
+    updateMutate: useMutationCallback(UpdateMaximumEventProvidedTicketsOverride),
+    deleteMutate: useMutationCallback(DeleteMaximumEventProvidedTicketsOverride),
+  });
+
   const eventId = match.params.id;
-  const event = data.events.find(e => e.id.toString() === eventId);
+  const initialEvent = useMemo(
+    () => (error ? null : deserializeEvent(data.events.find(e => e.id.toString() === eventId))),
+    [data.events, error, eventId],
+  );
+
+  const [eventFormProps, {
+    event, eventCategoryId, validateForm,
+  }] = useEventFormWithCategorySelection({
+    convention: data.convention, initialEvent,
+  });
+
+  const updateEventMutate = useMutationCallback(UpdateEvent);
+  const updateEvent = useCallback(
+    () => updateEventMutate({
+      variables: {
+        input: {
+          id: event.id,
+          event: {
+            event_category_id: eventCategoryId,
+            form_response_attrs_json: JSON.stringify(event.form_response_attrs),
+          },
+        },
+      },
+    }),
+    [event, updateEventMutate, eventCategoryId],
+  );
+
+  const dropEventMutate = useMutationCallback(DropEvent);
+  const dropEvent = useCallback(
+    () => dropEventMutate({ variables: { input: { id: event.id } } }),
+    [event.id, dropEventMutate],
+  );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   return (
     <EditEvent
-      event={deserializeEvent(event)}
-      form={getFormForEventCategory(event, data.convention)}
-      convention={data.convention}
       cancelPath="/runs"
+      showDropButton
+      event={event}
+      dropEvent={dropEvent}
+      validateForm={validateForm}
+      updateEvent={updateEvent}
       onSave={() => { history.push('/runs'); }}
       onDrop={() => { history.push('/runs'); }}
-      updateEvent={updateEvent}
-      dropEvent={dropEvent}
-      createMaximumEventProvidedTicketsOverride={createMaximumEventProvidedTicketsOverride}
-      updateMaximumEventProvidedTicketsOverride={updateMaximumEventProvidedTicketsOverride}
-      deleteMaximumEventProvidedTicketsOverride={deleteMaximumEventProvidedTicketsOverride}
-      ticketTypes={data.convention.ticket_types}
-      ticketName={data.convention.ticket_name}
-      canOverrideMaximumEventProvidedTickets={
-        data.currentAbility.can_override_maximum_event_provided_tickets
-      }
-      showDropButton
-      showCategorySelect
-    />
+    >
+      <EventFormWithCategorySelection {...eventFormProps}>
+        {data.currentAbility.can_override_maximum_event_provided_tickets && (
+          <MaximumEventProvidedTicketsOverrideEditor
+            {...meptoMutations}
+            ticketTypes={data.convention.ticket_types}
+            ticketName={data.convention.ticket_name}
+            overrides={event.maximum_event_provided_tickets_overrides}
+            eventId={event.id}
+          />
+        )}
+      </EventFormWithCategorySelection>
+    </EditEvent>
   );
-};
+}
 
 EventAdminEditEvent.propTypes = {
-  data: GraphQLResultPropType(EventAdminEventsQuery).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -65,89 +120,6 @@ EventAdminEditEvent.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  updateEvent: PropTypes.func.isRequired,
-  dropEvent: PropTypes.func.isRequired,
-  createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
-  updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
-  deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
 };
 
-export default withRouter(flowRight([
-  graphql(EventAdminEventsQuery),
-  graphql(UpdateEvent, { name: 'updateEvent' }),
-  graphql(DropEvent, { name: 'dropEvent' }),
-  graphql(CreateMaximumEventProvidedTicketsOverride, {
-    props({ mutate }) {
-      return {
-        createMaximumEventProvidedTicketsOverride({ eventId, ticketTypeId, overrideValue }) {
-          return mutate({
-            variables: {
-              input: {
-                event_id: eventId,
-                ticket_type_id: ticketTypeId,
-                override_value: overrideValue,
-              },
-            },
-
-            update: (store, {
-              data: {
-                createMaximumEventProvidedTicketsOverride: {
-                  maximum_event_provided_tickets_override: override,
-                },
-              },
-            }) => {
-              const data = store.readQuery({ query: EventAdminEventsQuery });
-              const event = data.events.find(evt => evt.id === eventId);
-              event.maximum_event_provided_tickets_overrides.push(override);
-              store.writeQuery({ query: EventAdminEventsQuery, data });
-            },
-          });
-        },
-      };
-    },
-  }),
-  graphql(UpdateMaximumEventProvidedTicketsOverride, {
-    props({ mutate }) {
-      return {
-        updateMaximumEventProvidedTicketsOverride({ id, overrideValue }) {
-          return mutate({
-            variables: {
-              input: {
-                id,
-                override_value: overrideValue,
-              },
-            },
-          });
-        },
-      };
-    },
-  }),
-  graphql(DeleteMaximumEventProvidedTicketsOverride, {
-    props({ mutate }) {
-      return {
-        deleteMaximumEventProvidedTicketsOverride(id) {
-          return mutate({
-            variables: {
-              input: {
-                id,
-              },
-            },
-
-            update: (store) => {
-              const data = store.readQuery({ query: EventAdminEventsQuery });
-              const event = data.events.find((
-                evt => evt.maximum_event_provided_tickets_overrides.some((
-                  override => override.id === id
-                ))
-              ));
-              const newOverrides = event.maximum_event_provided_tickets_overrides
-                .filter(override => override.id !== id);
-              event.maximum_event_provided_tickets_overrides = newOverrides;
-              store.writeQuery({ query: EventAdminEventsQuery, data });
-            },
-          });
-        },
-      };
-    },
-  }),
-])(GraphQLQueryResultWrapper(EventAdminEditEvent)));
+export default withRouter(EventAdminEditEvent);

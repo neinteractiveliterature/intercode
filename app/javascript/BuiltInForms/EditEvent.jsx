@@ -1,112 +1,79 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import EventForm from './EventForm';
-import Form from '../Models/Form';
+import { Link } from 'react-router-dom';
 
-class EditEvent extends React.Component {
-  static propTypes = {
-    event: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    }).isRequired,
-    updateEvent: PropTypes.func.isRequired,
-    dropEvent: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
-    onDrop: PropTypes.func.isRequired,
-    createMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
-    deleteMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
-    updateMaximumEventProvidedTicketsOverride: PropTypes.func.isRequired,
-    cancelPath: PropTypes.string,
-    showDropButton: PropTypes.bool,
-    showCategorySelect: PropTypes.bool,
-    canOverrideMaximumEventProvidedTickets: PropTypes.bool,
-    ticketTypes: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      description: PropTypes.string.isRequired,
-      maximum_event_provided_tickets: PropTypes.number.isRequired,
-    }).isRequired).isRequired,
-    ticketName: PropTypes.string,
-    convention: PropTypes.shape({}).isRequired,
-    form: Form.propType.isRequired,
-  };
+import ErrorDisplay from '../ErrorDisplay';
+import useAsyncFunction from '../useAsyncFunction';
+import EditEventHeader from './EditEventHeader';
 
-  static defaultProps = {
-    cancelPath: null,
-    showDropButton: false,
-    showCategorySelect: false,
-    canOverrideMaximumEventProvidedTickets: false,
-    ticketName: null,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      requestInProgress: false,
-    };
-  }
-
-  updateEvent = (event) => {
-    const eventInput = {
-      id: event.id,
-      event: {
-        event_category_id: event.event_category.id,
-        form_response_attrs_json: JSON.stringify(event.form_response_attrs),
-      },
-    };
-
-    const afterSave = async () => {
-      try {
-        await this.props.updateEvent({ variables: { input: eventInput } });
-        this.setState({ requestInProgress: false }, this.props.onSave);
-      } catch (error) {
-        this.setState({ error, requestInProgress: false });
+export default function EditEvent({
+  children, cancelPath, showDropButton, event, dropEvent, validateForm,
+  updateEvent, onSave, onDrop,
+}) {
+  const [updateEventCallback, updateError, updateInProgress] = useAsyncFunction(useCallback(
+    async () => {
+      if (!validateForm()) {
+        return;
       }
-    };
 
-    this.setState({ requestInProgress: true }, afterSave);
-    return afterSave;
-  }
+      await updateEvent();
+      onSave();
+    },
+    [updateEvent, onSave, validateForm],
+  ), { suppressError: true });
 
-  dropEvent = () => {
-    const afterDrop = async () => {
-      try {
-        await this.props.dropEvent({ variables: { input: { id: this.props.event.id } } });
-        this.setState({ requestInProgress: false }, this.props.onDrop);
-      } catch (error) {
-        this.setState({ error, requestInProgress: false });
-      }
-    };
+  const [dropEventCallback, , dropInProgress] = useAsyncFunction(useCallback(
+    async () => {
+      await dropEvent();
+      onDrop();
+    },
+    [dropEvent, onDrop],
+  ));
 
-    this.setState({ requestInProgress: true }, afterDrop);
-    return afterDrop;
-  }
+  const saveCaption = (event.id ? 'Save event' : 'Create event');
 
-  render = () => (
-    <EventForm
-      disabled={this.state.requestInProgress}
-      error={this.state.error ? this.state.error.message : null}
-      initialEvent={this.props.event}
-      cancelPath={this.props.cancelPath}
-      onSave={this.updateEvent}
-      onDrop={this.dropEvent}
-      createMaximumEventProvidedTicketsOverride={
-        this.props.createMaximumEventProvidedTicketsOverride
-      }
-      deleteMaximumEventProvidedTicketsOverride={
-        this.props.deleteMaximumEventProvidedTicketsOverride
-      }
-      updateMaximumEventProvidedTicketsOverride={
-        this.props.updateMaximumEventProvidedTicketsOverride
-      }
-      showDropButton={this.props.showDropButton}
-      showCategorySelect={this.props.showCategorySelect}
-      canOverrideMaximumEventProvidedTickets={this.props.canOverrideMaximumEventProvidedTickets}
-      ticketTypes={this.props.ticketTypes}
-      ticketName={this.props.ticketName}
-      convention={this.props.convention}
-      form={this.props.form}
-    />
-  )
+  return (
+    <form className="my-4">
+      <EditEventHeader
+        event={event}
+        showDropButton={showDropButton}
+        dropEvent={dropEventCallback}
+      />
+
+      {children}
+
+      <ErrorDisplay graphQLError={updateError} />
+
+      <button
+        type="button"
+        className="btn btn-primary mt-4"
+        disabled={updateInProgress || dropInProgress}
+        onClick={updateEventCallback}
+      >
+        {saveCaption}
+      </button>
+
+      {cancelPath && <Link to={cancelPath} className="btn btn-link">Cancel</Link>}
+    </form>
+  );
 }
 
-export default EditEvent;
+EditEvent.propTypes = {
+  children: PropTypes.node,
+  cancelPath: PropTypes.string,
+  showDropButton: PropTypes.bool,
+  event: PropTypes.shape({}).isRequired,
+  dropEvent: PropTypes.func,
+  validateForm: PropTypes.func.isRequired,
+  updateEvent: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onDrop: PropTypes.func,
+};
+
+EditEvent.defaultProps = {
+  children: null,
+  cancelPath: null,
+  showDropButton: false,
+  dropEvent: null,
+  onDrop: null,
+};

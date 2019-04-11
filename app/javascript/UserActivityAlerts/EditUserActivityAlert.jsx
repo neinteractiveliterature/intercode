@@ -11,7 +11,6 @@ import ErrorDisplay from '../ErrorDisplay';
 import { UserActivityAlertsAdminQuery } from './queries.gql';
 import UserActivityAlertForm from './UserActivityAlertForm';
 
-@withRouter
 class EditUserActivityAlert extends React.Component {
   static propTypes = {
     initialUserActivityAlert: PropTypes.shape({
@@ -154,4 +153,4 @@ class EditUserActivityAlert extends React.Component {
   )
 }
 
-export default EditUserActivityAlert;
+export default withRouter(EditUserActivityAlert);

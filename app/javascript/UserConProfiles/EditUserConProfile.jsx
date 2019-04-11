@@ -1,116 +1,107 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { graphql, Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import ErrorDisplay from '../ErrorDisplay';
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
 import UserConProfileForm from './UserConProfileForm';
 import { UserConProfileQuery, UserConProfileAdminQuery } from './queries.gql';
 import { UpdateUserConProfile } from './mutations.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import useAsyncFunction from '../useAsyncFunction';
+import useMutationCallback from '../useMutationCallback';
 
-@withRouter
-@graphql(UserConProfileQuery)
-@GraphQLQueryResultWrapper
-class EditUserConProfile extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(UserConProfileQuery).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-    userConProfileId: PropTypes.number.isRequired,
-  };
+function EditUserConProfile({ history, id }) {
+  const { data, error } = useQuerySuspended(UserConProfileQuery, { variables: { id } });
 
-  constructor(props) {
-    super(props);
-    this.state = buildFormStateFromData(props.data.userConProfile, props.data.convention);
-  }
+  const {
+    userConProfile: initialUserConProfile, convention, form,
+  } = buildFormStateFromData(data.userConProfile, data.convention);
 
-  componentWillReceiveProps = (nextProps) => {
-    this.setState(buildFormStateFromData(nextProps.data.userConProfile, nextProps.data.convention));
-  }
+  const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
 
-  userConProfileChanged = (userConProfile) => {
-    this.setState({ userConProfile });
-  }
-
-  saveClicked = async (updateUserConProfile) => {
-    try {
-      const { userConProfile } = this.state;
-      await updateUserConProfile({
-        variables: {
-          input: {
-            id: userConProfile.id,
-            user_con_profile: {
-              ...(
-                this.props.data.currentAbility.can_update_privileges_user_con_profile
-                  ? { privileges: userConProfile.privileges }
-                  : {}
-              ),
-              form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
+  const mutate = useMutationCallback(UpdateUserConProfile, {
+    update: useCallback(
+      (cache, { data: { updateUserConProfile: { user_con_profile: updatedUserConProfile } } }) => {
+        const variables = { id };
+        const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
+        cache.writeQuery({
+          query: UserConProfileAdminQuery,
+          variables,
+          data: {
+            ...query,
+            userConProfile: {
+              ...query.userConProfile,
+              ...updatedUserConProfile,
             },
           },
-        },
-        update: (cache, { data: { updateUserConProfile: { user_con_profile: updatedUserConProfile } } }) => {
-          const variables = { id: this.props.userConProfileId };
-          const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
-          cache.writeQuery({
-            query: UserConProfileAdminQuery,
-            variables,
-            data: {
-              ...query,
-              userConProfile: {
-                ...query.userConProfile,
-                ...updatedUserConProfile,
+        });
+      },
+      [id],
+    ),
+  });
+
+  const canUpdatePrivileges = (
+    error ? false : data.currentAbility.can_update_privileges_user_con_profile
+  );
+
+  const [updateUserConProfile, updateError, updateInProgress] = useAsyncFunction(
+    useCallback(
+      async () => {
+        await mutate({
+          variables: {
+            input: {
+              id: userConProfile.id,
+              user_con_profile: {
+                ...(canUpdatePrivileges ? { privileges: userConProfile.privileges } : {}),
+                form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
               },
             },
-          });
-        },
-      });
+          },
+        });
 
-      this.props.history.push(`/${this.state.userConProfile.id}`);
-    } catch (error) {
-      this.setState({ error });
-    }
+        history.push(`/${userConProfile.id}`);
+      },
+      [mutate, history, userConProfile, canUpdatePrivileges],
+    ),
+  );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  render = () => (
+  return (
     <div>
       <h1 className="mb-4">
         Editing
         {' '}
-        {this.state.userConProfile.name}
+        {userConProfile.name}
       </h1>
       <UserConProfileForm
-        canUpdatePrivileges={
-          this.props.data.currentAbility.can_update_privileges_user_con_profile
-        }
-        userConProfile={this.state.userConProfile}
-        regularPrivilegeNames={this.props.data.convention.privilege_names
-          .filter(priv => priv !== 'site_admin' && !this.props.data.convention.mail_privilege_names.includes(priv))}
-        mailPrivilegeNames={this.props.data.convention.mail_privilege_names}
-        onChange={this.userConProfileChanged}
+        canUpdatePrivileges={canUpdatePrivileges}
+        userConProfile={userConProfile}
+        regularPrivilegeNames={data.convention.privilege_names
+          .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
+        mailPrivilegeNames={data.convention.mail_privilege_names}
+        onChange={setUserConProfile}
         footerContent={(
-          <Mutation mutation={UpdateUserConProfile}>
-            {updateUserConProfile => (
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={() => this.saveClicked(updateUserConProfile)}
-              >
-                Save changes
-              </button>
-            )}
-          </Mutation>
+          <button className="btn btn-primary" type="button" onClick={updateUserConProfile} disabled={updateInProgress}>
+            Save changes
+          </button>
         )}
-        form={this.state.form}
-        convention={this.state.convention}
+        form={form}
+        convention={convention}
       />
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={updateError} />
     </div>
   );
 }
 
-export default EditUserConProfile;
+EditUserConProfile.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  id: PropTypes.number.isRequired,
+};
+
+export default withRouter(EditUserConProfile);

@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import { Link, withRouter } from 'react-router-dom';
-import { ConfirmModal } from 'react-bootstrap4-modal';
 import { capitalize } from 'inflected';
 
 import { AdminTicketTypesQuery } from './queries.gql';
@@ -12,6 +10,8 @@ import TicketTypePropType from './TicketTypePropType';
 import Timespan from '../Timespan';
 import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
+import useMutationCallback from '../useMutationCallback';
+import { useConfirm } from '../ModalDialogs/Confirm';
 
 function cardClassForTicketType(ticketType) {
   if (ticketType.publicly_available) {
@@ -65,56 +65,29 @@ function renderPricingSchedule(ticketType, timezoneName) {
   return <ul className="mb-0">{timespanItems}</ul>;
 }
 
-@withRouter
-@graphql(DeleteTicketType, {
-  props: ({ mutate }) => ({
-    deleteTicketType: id => mutate({
-      variables: { input: { id } },
-      update: (proxy) => {
-        const data = proxy.readQuery({ query: AdminTicketTypesQuery });
-        data.convention.ticket_types = data.convention.ticket_types.filter((
-          ticketType => ticketType.id !== id
-        ));
-        proxy.writeQuery({ query: AdminTicketTypesQuery, data });
-      },
-    }),
-  }),
-})
-class TicketTypesList extends React.Component {
-  static propTypes = {
-    ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-    ticketName: PropTypes.string.isRequired,
-    timezoneName: PropTypes.string.isRequired,
-    deleteId: PropTypes.number,
-    deleteTicketType: PropTypes.func.isRequired,
-  };
+function TicketTypesList({
+  ticketTypes, history, ticketName, timezoneName,
+}) {
+  const confirm = useConfirm();
+  const deleteMutate = useMutationCallback(DeleteTicketType);
+  const deleteTicketType = useCallback(
+    async (id) => {
+      await deleteMutate({
+        variables: { input: { id } },
+        update: (proxy) => {
+          const data = proxy.readQuery({ query: AdminTicketTypesQuery });
+          data.convention.ticket_types = data.convention.ticket_types.filter((
+            ticketType => ticketType.id !== id
+          ));
+          proxy.writeQuery({ query: AdminTicketTypesQuery, data });
+        },
+      });
+      history.replace('/');
+    },
+    [deleteMutate, history],
+  );
 
-  static defaultProps = {
-    deleteId: null,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  deleteConfirmed = async () => {
-    try {
-      await this.props.deleteTicketType(this.props.deleteId);
-      this.props.history.replace('/');
-    } catch (error) {
-      this.setState({ error });
-    }
-  }
-
-  deleteCanceled = () => {
-    this.props.history.replace('/');
-  }
-
-  renderTicketTypeDisplay = ticketType => (
+  const renderTicketTypeDisplay = ticketType => (
     <div className={`card my-4 ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
       <div className="card-header">
         <div className="row">
@@ -122,16 +95,24 @@ class TicketTypesList extends React.Component {
             <strong>{ticketType.description}</strong>
             <tt>
               {' '}
-(
+              (
               {ticketType.name}
-)
+              )
             </tt>
           </div>
           <div className="col-md-4 text-right">
-            <Link to={`/${ticketType.id}/delete`} className="btn btn-danger btn-sm mx-1">
+            <button
+              type="button"
+              className="btn btn-danger btn-sm mx-1"
+              onClick={() => confirm({
+                prompt: `Are you sure you want to delete the ticket type “${ticketType.description}”?`,
+                action: () => deleteTicketType(ticketType.id),
+                renderError: error => <ErrorDisplay graphQLError={error} />,
+              })}
+            >
               <i className="fa fa-trash-o mr-1" />
               Delete
-            </Link>
+            </button>
             <Link to={`/${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
               <i className="fa fa-pencil-square-o mr-1" />
               Edit
@@ -142,7 +123,7 @@ class TicketTypesList extends React.Component {
         <p className="mb-0">
           <small>
             <em>
-              {describeTicketTypeOptions(ticketType, this.props.ticketName)}
+              {describeTicketTypeOptions(ticketType, ticketName)}
               {
                 ticketType.counts_towards_convention_maximum
                   ? null
@@ -159,39 +140,13 @@ class TicketTypesList extends React.Component {
       </div>
 
       <div className="card-body">
-        {renderPricingSchedule(ticketType, this.props.timezoneName)}
+        {renderPricingSchedule(ticketType, timezoneName)}
       </div>
     </div>
-  )
+  );
 
-  renderDeleteConfirmation = () => {
-    let ticketTypeDescription = null;
-    if (this.props.deleteId != null) {
-      const deleteTicketType = this.props.ticketTypes.find((
-        tt => tt.id === this.props.deleteId
-      ));
-      if (deleteTicketType != null) {
-        ticketTypeDescription = deleteTicketType.description;
-      }
-    }
-
-    return (
-      <ConfirmModal
-        visible={this.props.deleteId != null}
-        onOK={this.deleteConfirmed}
-        onCancel={this.deleteCanceled}
-      >
-        Are you sure you want to delete the ticket type &quot;
-        {ticketTypeDescription}
-        &quot;?
-
-        <ErrorDisplay graphQLError={this.state.error} />
-      </ConfirmModal>
-    );
-  }
-
-  render = () => {
-    const sortedTicketTypes = [...this.props.ticketTypes].sort((
+  const sortedTicketTypes = useMemo(
+    () => [...ticketTypes].sort((
       (a, b) => {
         if (a.publicly_available !== b.publicly_available) {
           if (a.publicly_available) {
@@ -211,31 +166,38 @@ class TicketTypesList extends React.Component {
 
         return a.name.localeCompare(b.name, { sensitivity: 'base' });
       }
-    ));
-    const ticketTypeDisplays = sortedTicketTypes.map(this.renderTicketTypeDisplay);
+    )),
+    [ticketTypes],
+  );
 
-    return (
-      <div>
-        <h1 className="mb-4">
-          {capitalize(this.props.ticketName)}
-          {' '}
-          types
-        </h1>
+  return (
+    <div>
+      <h1 className="mb-4">
+        {capitalize(ticketName)}
+        {' '}
+        types
+      </h1>
 
-        {ticketTypeDisplays}
+      {sortedTicketTypes.map(renderTicketTypeDisplay)}
 
-        <Link to="/new" className="btn btn-primary">
-          New
-          {' '}
-          {this.props.ticketName}
-          {' '}
-          type
-        </Link>
-
-        {this.renderDeleteConfirmation()}
-      </div>
-    );
-  }
+      <Link to="/new" className="btn btn-primary">
+        New
+        {' '}
+        {ticketName}
+        {' '}
+        type
+      </Link>
+    </div>
+  );
 }
 
-export default TicketTypesList;
+TicketTypesList.propTypes = {
+  ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+  ticketName: PropTypes.string.isRequired,
+  timezoneName: PropTypes.string.isRequired,
+};
+
+export default withRouter(TicketTypesList);

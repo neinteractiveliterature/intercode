@@ -1,44 +1,23 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
 import moment from 'moment-timezone';
 import { intersection } from 'lodash';
-import { Elements } from 'react-stripe-elements';
 
-import GraphQLQueryResultWrapper from '../GraphQLQueryResultWrapper';
-import GraphQLResultPropType from '../GraphQLResultPropType';
-import LazyStripe from '../LazyStripe';
 import { OrderHistoryQuery } from './queries.gql';
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
+import useModal from '../ModalDialogs/useModal';
 
-@graphql(OrderHistoryQuery)
-@GraphQLQueryResultWrapper
-class OrderHistory extends React.Component {
-  static propTypes = {
-    data: GraphQLResultPropType(OrderHistoryQuery).isRequired,
+function OrderHistory() {
+  const { data, error } = useQuerySuspended(OrderHistoryQuery);
+  const paymentModal = useModal();
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      payingForOrder: null,
-    };
-  }
-
-  payNowClicked = (order) => {
-    this.setState({ payingForOrder: order });
-  }
-
-  payNowCanceled = () => {
-    this.setState({ payingForOrder: null });
-  }
-
-  payNowComplete = () => {
-    this.setState({ payingForOrder: null });
-  }
-
-  renderOrderEntry = (orderEntry) => {
+  const renderOrderEntry = (orderEntry) => {
     const productVariant = orderEntry.product_variant || {};
     const name = orderEntry.product.name + (
       productVariant.name ? ` (${productVariant.name})` : ''
@@ -64,14 +43,14 @@ class OrderHistory extends React.Component {
         <hr />
       </div>
     );
-  }
+  };
 
-  renderOrderStatus = (order) => {
+  const renderOrderStatus = (order) => {
     if (order.status === 'paid') {
-      const opsPosition = this.props.data.convention.staff_positions
+      const opsPosition = data.convention.staff_positions
         .find(staffPosition => staffPosition.name === 'Operations Coordinator');
       const opsEmail = (opsPosition || {}).email;
-      const emailSubject = `[${this.props.data.convention.name}] Cancellation request: order ${order.id}`;
+      const emailSubject = `[${data.convention.name}] Cancellation request: order ${order.id}`;
       const emailBody = `I would like to request that order ${order.id} be canceled.`;
 
       return [
@@ -108,29 +87,29 @@ class OrderHistory extends React.Component {
         type="button"
         className="btn btn-sm btn-outline-success mt-2"
         key="pay-now-button"
-        onClick={() => { this.payNowClicked(order); }}
+        onClick={() => { paymentModal.open({ order }); }}
       >
         Pay now
       </button>,
     ];
-  }
+  };
 
-  renderOrder = (order) => {
-    const renderedOrderEntries = order.order_entries.map(entry => this.renderOrderEntry(entry));
-    const submittedTime = moment(order.submitted_at).tz(this.props.data.convention.timezone_name);
+  const renderOrder = (order) => {
+    const renderedOrderEntries = order.order_entries.map(entry => renderOrderEntry(entry));
+    const submittedTime = moment(order.submitted_at).tz(data.convention.timezone_name);
 
     return (
       <li key={order.id} className="card mb-4">
         <div className="d-flex card-header">
           <div className="col">
             <h3>
-Order #
+              Order #
               {order.id}
             </h3>
             <small>{submittedTime.format('dddd, MMMM D, YYYY, h:mma')}</small>
           </div>
           <div className="text-right">
-            {this.renderOrderStatus(order)}
+            {renderOrderStatus(order)}
           </div>
         </div>
         <div className="pl-4 card-body">
@@ -145,44 +124,38 @@ Order #
         </div>
       </li>
     );
-  }
+  };
 
-  render = () => {
-    const { orders } = this.props.data.myProfile;
+  const { orders } = data.myProfile;
 
-    if (orders.length > 0) {
-      const renderedOrders = orders.map(order => this.renderOrder(order));
-      return (
-        <ul className="list-unstyled">
-          {renderedOrders}
-
-          <LazyStripe>
-            <Elements>
-              <OrderPaymentModal
-                visible={this.state.payingForOrder != null}
-                onCancel={this.payNowCanceled}
-                initialName={this.props.data.myProfile.name_without_nickname}
-                orderId={(this.state.payingForOrder || { id: 0 }).id}
-                onComplete={this.payNowComplete}
-                paymentOptions={
-                  this.state.payingForOrder
-                    ? intersection(
-                      ...this.state.payingForOrder.order_entries
-                        .map(entry => entry.product.payment_options),
-                    ).filter(paymentOption => paymentOption !== 'pay_at_convention')
-                    : []
-                }
-              />
-            </Elements>
-          </LazyStripe>
-        </ul>
-      );
-    }
-
+  if (orders.length > 0) {
+    const renderedOrders = orders.map(order => renderOrder(order));
     return (
-      <div>No orders to display.</div>
+      <ul className="list-unstyled">
+        {renderedOrders}
+
+        <OrderPaymentModal
+          visible={paymentModal.visible}
+          onCancel={paymentModal.close}
+          initialName={data.myProfile.name_without_nickname}
+          orderId={(paymentModal.state || { order: { id: 0 } }).order.id}
+          onComplete={paymentModal.close}
+          paymentOptions={
+            paymentModal.state
+              ? intersection(
+                ...paymentModal.state.order.order_entries
+                  .map(entry => entry.product.payment_options),
+              ).filter(paymentOption => paymentOption !== 'pay_at_convention')
+              : []
+          }
+        />
+      </ul>
     );
   }
+
+  return (
+    <div>No orders to display.</div>
+  );
 }
 
 export default OrderHistory;

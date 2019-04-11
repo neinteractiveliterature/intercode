@@ -17,7 +17,7 @@ class RestoreDroppedEventService < CivilService::Service
   end
 
   def event_must_be_dropped
-    return unless event.status == 'dropped'
+    return if event.status == 'dropped'
     errors.add :base, "Can only restore dropped events; this event is #{event.status}"
   end
 end

@@ -1,87 +1,95 @@
-import React from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import EditRunModal from './EditRunModal';
 import { ConventionFields, EventFields } from './queries.gql';
 
-class EditRun extends React.Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      path: PropTypes.string,
-      params: PropTypes.shape({
-        eventId: PropTypes.string.isRequired,
-        runId: PropTypes.string.isRequired,
-      }).isRequired,
-    }),
-    convention: propType(ConventionFields).isRequired,
-    events: PropTypes.arrayOf(propType(EventFields)).isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+function EditRun({
+  match, convention, events, history,
+}) {
+  const event = useMemo(
+    () => {
+      if (!match) {
+        return null;
+      }
 
-  static defaultProps = {
-    match: null,
-  };
+      return events.find(e => e.id.toString() === match.params.eventId);
+    },
+    [match, events],
+  );
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    const { match } = nextProps;
-    if (!match) {
-      return { event: null, run: null };
-    }
+  const initialRun = useMemo(
+    () => {
+      if (!match) {
+        return null;
+      }
 
-    if (
-      prevState
-      && prevState.run
-      && prevState.run.id
-      && match.params.runId === prevState.run.id.toString()
-    ) {
-      return null;
-    }
+      if (match.path === '/:eventId/runs/new') {
+        return {
+          starts_at: null,
+          title_suffix: null,
+          schedule_note: null,
+          rooms: [],
+        };
+      }
 
-    const event = nextProps.events.find(e => e.id.toString() === match.params.eventId);
-    if (match.path === '/:eventId/runs/new') {
-      const run = prevState.run || {
-        starts_at: null,
-        title_suffix: null,
-        schedule_note: null,
-        rooms: [],
-      };
-      return { event, run };
-    }
+      return event.runs.find(r => r.id.toString() === match.params.runId);
+    },
+    [match, event],
+  );
 
-    const run = event.runs.find(r => r.id.toString() === match.params.runId);
-    return { event, run };
+  const cancelEditing = useCallback(
+    () => {
+      if (match.path === '/recurring_events/:eventId/runs/:runId/edit') {
+        history.replace('/recurring_events');
+      } else {
+        history.replace('/runs');
+      }
+    },
+    [match, history],
+  );
+
+  const [run, setRun] = useState(initialRun);
+  const [prevMatch, setPrevMatch] = useState(match);
+
+  if (prevMatch !== match) {
+    // navigation happened, reset the run state
+    setRun(initialRun);
+    setPrevMatch(match);
   }
 
-  state = {
-    event: null,
-    run: null,
-  };
-
-  cancelEditing = () => {
-    if (this.props.match.path === '/volunteer_events/:eventId/runs/:runId/edit') {
-      this.props.history.replace('/volunteer_events');
-    } else {
-      this.props.history.replace('/runs');
-    }
-  }
-
-  runChanged = (run) => { this.setState({ run }); }
-
-  render = () => (
+  return (
     <EditRunModal
-      convention={this.props.convention}
-      editingRunChanged={this.runChanged}
-      event={this.state.event}
-      onCancel={this.cancelEditing}
-      onDelete={this.cancelEditing}
-      onSaveStart={() => {}}
-      onSaveSucceeded={this.cancelEditing}
-      onSaveFailed={() => {}}
-      run={this.state.run}
+      convention={convention}
+      editingRunChanged={setRun}
+      event={event}
+      onCancel={cancelEditing}
+      onDelete={cancelEditing}
+      onSaveStart={() => { }}
+      onSaveSucceeded={cancelEditing}
+      onSaveFailed={() => { }}
+      run={run}
     />
-  )
+  );
 }
+
+EditRun.propTypes = {
+  match: PropTypes.shape({
+    path: PropTypes.string,
+    params: PropTypes.shape({
+      eventId: PropTypes.string.isRequired,
+      runId: PropTypes.string.isRequired,
+    }).isRequired,
+  }),
+  convention: propType(ConventionFields).isRequired,
+  events: PropTypes.arrayOf(propType(EventFields)).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+EditRun.defaultProps = {
+  match: null,
+};
 
 export default EditRun;
