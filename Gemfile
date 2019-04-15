@@ -100,7 +100,7 @@ gem 'oj', '~> 3.7.12'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development do
-  gem 'rack-mini-profiler'
+  gem 'rack-mini-profiler', require: false
 
   # For memory profiling (requires Ruby MRI 2.1+)
   gem 'memory_profiler'
