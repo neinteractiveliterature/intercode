@@ -78,7 +78,8 @@ Rails.application.configure do
   }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = "//#{config.action_mailer.default_url_options[:host]}"
+  asset_hostname = ENV['ASSETS_HOST'] || config.action_mailer.default_url_options[:host]
+  config.action_controller.asset_host = "//#{asset_hostname}"
 
   config.public_file_server.headers = {
     'Access-Control-Allow-Origin' => '*',
