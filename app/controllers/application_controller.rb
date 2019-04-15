@@ -196,7 +196,7 @@ into this convention before, so please take a moment to update your profile."
   end
 
   def ensure_assumed_identity_matches_convention
-    return unless assumed_identity_from_profile
+    return unless current_user && assumed_identity_from_profile
     return if assumed_identity_from_profile.convention == convention
 
     domain = assumed_identity_from_profile.convention.domain
