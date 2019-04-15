@@ -1,5 +1,4 @@
 ARG RUBY_VERSION=2.5.3
-ARG ASSETS_HOST
 
 ### build
 
@@ -26,13 +25,14 @@ WORKDIR /usr/src/build
 ### build-production
 
 FROM build AS build-production
+ARG ASSETS_HOST
 
 COPY --chown=www:www . /usr/src/build
 
 ENV RAILS_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
-ENV ASSETS_HOST=${ASSETS_HOST}
+ENV ASSETS_HOST ${ASSETS_HOST}
 
 USER www
 WORKDIR /usr/src/build
