@@ -2,7 +2,6 @@
 %title= page_title
 = stylesheet_pack_tag 'application', media: 'all'
 = stylesheet_link_tag 'application', :media => "all"
-= javascript_include_tag 'https://js.stripe.com/v3/', id: 'stripe-js', defer: true
 = javascript_pack_tag 'application', defer: true
 :javascript
   if (typeof(Rollbar) !== 'undefined') {

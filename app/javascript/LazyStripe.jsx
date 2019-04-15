@@ -31,10 +31,22 @@ function LazyStripeLoader({ publishableKey, children }) {
       if (window.Stripe) {
         setStripe(window.Stripe(publishableKey));
       } else {
-        document.querySelector('#stripe-js').addEventListener('load', () => {
+        let stripeScriptTag = document.querySelector('#stripe-js');
+        let createdDynamically = false;
+        if (!stripeScriptTag) {
+          stripeScriptTag = document.createElement('script');
+          createdDynamically = true;
+          stripeScriptTag.setAttribute('src', 'https://js.stripe.com/v3/');
+          stripeScriptTag.setAttribute('id', 'stripe-js');
+          stripeScriptTag.setAttribute('defer', 'true');
+        }
+        stripeScriptTag.addEventListener('load', () => {
           // Create Stripe instance once Stripe.js loads
           setStripe(window.Stripe(publishableKey));
         });
+        if (createdDynamically) {
+          document.body.appendChild(stripeScriptTag);
+        }
       }
     },
     [publishableKey],
