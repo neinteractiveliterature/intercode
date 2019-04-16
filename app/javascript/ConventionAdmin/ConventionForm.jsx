@@ -14,7 +14,7 @@ import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import CommitableInput from '../BuiltInFormControls/CommitableInput';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 
-const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
+export const MAXIMUM_EVENT_SIGNUPS_OPTIONS = [
   ['not_yet', 'No signups yet'],
   ['1', 'Up to 1 event'],
   ['2', 'Up to 2 events'],
