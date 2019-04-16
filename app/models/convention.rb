@@ -1,6 +1,8 @@
 require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
+  TICKET_MODES = %w[disabled required_for_signup]
+
   belongs_to :updated_by, class_name: 'User', optional: true
   belongs_to :organization, optional: true
 
@@ -38,6 +40,7 @@ class Convention < ApplicationRecord
   validates :timezone_name, presence: true
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
+  validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
