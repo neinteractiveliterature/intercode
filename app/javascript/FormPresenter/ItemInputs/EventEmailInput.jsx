@@ -34,9 +34,10 @@ class EventEmailInput extends React.Component {
   constructor(props) {
     super(props);
 
+    const teamMailingListName = (this.props.value || {}).team_mailing_list_name;
     this.state = {
       emailBehavior: (
-        (this.props.value || {}).team_mailing_list_name && this.props.convention.event_mailing_list_domain
+        teamMailingListName && this.props.convention.event_mailing_list_domain
           ? 'team_mailing_list'
           : (this.props.value || {}).con_mail_destination
       ),
@@ -61,8 +62,8 @@ class EventEmailInput extends React.Component {
         }
       },
       transforms: {
-        team_mailing_list_name: Transforms.textInputChange,
-        email: Transforms.textInputChange,
+        team_mailing_list_name: Transforms.identity,
+        email: Transforms.identity,
       },
     });
 
@@ -104,7 +105,9 @@ class EventEmailInput extends React.Component {
             <input
               className="form-control"
               value={(this.props.value || {}).team_mailing_list_name}
-              onChange={this.valueMutator.team_mailing_list_name}
+              onChange={(event) => {
+                this.valueMutator.team_mailing_list_name(event.target.value);
+              }}
             />
             <div className="input-group-append">
               <span className="input-group-text">
@@ -127,7 +130,7 @@ class EventEmailInput extends React.Component {
         )}
         name={`${this.props.formItem.identifier}.email`}
         value={(this.props.value || {}).email || ''}
-        onChange={this.valueMutator.email}
+        onChangeText={this.valueMutator.email}
         disabled={this.state.emailBehavior == null}
       />
     );

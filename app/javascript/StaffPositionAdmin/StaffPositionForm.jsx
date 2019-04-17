@@ -22,8 +22,8 @@ class StaffPositionForm extends React.Component {
       getState: () => this.props.staffPosition,
       setState: this.props.onChange,
       transforms: {
-        name: Transforms.textInputChange,
-        email: Transforms.textInputChange,
+        name: Transforms.identity,
+        email: Transforms.identity,
         visible: Transforms.identity,
         user_con_profiles: Transforms.identity,
       },
@@ -39,7 +39,7 @@ class StaffPositionForm extends React.Component {
           name="name"
           label="Position name"
           value={this.props.staffPosition.name || ''}
-          onChange={this.mutator.name}
+          onChangeText={this.mutator.name}
         />
 
         <BootstrapFormInput
@@ -47,7 +47,7 @@ class StaffPositionForm extends React.Component {
           type="email"
           label="Contact email"
           value={this.props.staffPosition.email || ''}
-          onChange={this.mutator.email}
+          onChangeText={this.mutator.email}
         />
 
         <BooleanInput

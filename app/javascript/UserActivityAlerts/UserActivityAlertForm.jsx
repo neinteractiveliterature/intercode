@@ -63,11 +63,11 @@ class UserActivityAlertForm extends React.Component {
       getState: () => this.props.userActivityAlert,
       setState: this.props.onChange,
       transforms: {
-        partial_name: Transforms.textInputChange,
-        email: Transforms.textInputChange,
+        partial_name: Transforms.identity,
+        email: Transforms.identity,
         user: Transforms.identity,
-        trigger_on_user_con_profile_create: Transforms.checkboxChange,
-        trigger_on_ticket_create: Transforms.checkboxChange,
+        trigger_on_user_con_profile_create: Transforms.identity,
+        trigger_on_ticket_create: Transforms.identity,
       },
     });
 
@@ -102,7 +102,7 @@ class UserActivityAlertForm extends React.Component {
             label="Partial name"
             helpText="If any part of the user's name matches this string, the alert will match.  Case insensitive."
             value={this.props.userActivityAlert.partial_name || ''}
-            onChange={this.userActivityAlertMutator.partial_name}
+            onChangeText={this.userActivityAlertMutator.partial_name}
             disabled={this.props.disabled}
           />
 
@@ -112,7 +112,7 @@ class UserActivityAlertForm extends React.Component {
             label="Email"
             helpText="If the user's email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."
             value={this.props.userActivityAlert.email || ''}
-            onChange={this.userActivityAlertMutator.email}
+            onChangeText={this.userActivityAlertMutator.email}
             disabled={this.props.disabled}
           />
 
@@ -140,7 +140,7 @@ class UserActivityAlertForm extends React.Component {
             label="Trigger on profile creation"
             type="checkbox"
             checked={this.props.userActivityAlert.trigger_on_user_con_profile_create}
-            onChange={this.userActivityAlertMutator.trigger_on_user_con_profile_create}
+            onChangeChecked={this.userActivityAlertMutator.trigger_on_user_con_profile_create}
             disabled={this.props.disabled}
           />
 
@@ -149,7 +149,7 @@ class UserActivityAlertForm extends React.Component {
             label={`Trigger on ${this.props.convention.ticket_name} creation`}
             type="checkbox"
             checked={this.props.userActivityAlert.trigger_on_ticket_create}
-            onChange={this.userActivityAlertMutator.trigger_on_ticket_create}
+            onChangeChecked={this.userActivityAlertMutator.trigger_on_ticket_create}
             disabled={this.props.disabled}
           />
         </div>

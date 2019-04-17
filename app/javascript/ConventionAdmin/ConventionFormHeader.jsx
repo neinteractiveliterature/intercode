@@ -112,8 +112,8 @@ ConventionFormHeader.propTypes = {
     maximum_event_signups: PropTypes.shape({
       timespans: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string.isRequired,
-        start: PropTypes.string.isRequired,
-        finish: PropTypes.string.isRequired,
+        start: PropTypes.string,
+        finish: PropTypes.string,
       })).isRequired,
     }).isRequired,
   }).isRequired,

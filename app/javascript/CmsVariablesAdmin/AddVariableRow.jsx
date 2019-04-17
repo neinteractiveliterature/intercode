@@ -31,8 +31,8 @@ class AddVariableRow extends React.Component {
       getState: () => this.props.variable,
       setState: this.props.onChange,
       transforms: {
-        key: Transforms.textInputChange,
-        value_json: Transforms.textInputChange,
+        key: Transforms.identity,
+        value_json: Transforms.identity,
       },
     });
   }
@@ -75,7 +75,7 @@ class AddVariableRow extends React.Component {
                 type="text"
                 className="form-control text-monospace"
                 value={this.props.variable.key}
-                onChange={this.mutator.key}
+                onChange={(event) => { this.mutator.key(event.target.value); }}
               />
             </td>
             <td>
@@ -83,7 +83,7 @@ class AddVariableRow extends React.Component {
                 type="text"
                 className="form-control text-monospace"
                 value={this.props.variable.value_json}
-                onChange={this.mutator.value_json}
+                onChange={(event) => { this.mutator.value_json(event.target.value); }}
                 onKeyDown={event => this.handleKeyDown(event, mutate)}
               />
             </td>
