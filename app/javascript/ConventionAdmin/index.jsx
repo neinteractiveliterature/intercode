@@ -31,6 +31,7 @@ function ConventionAdmin({ id }) {
               show_event_list: convention.show_event_list,
               maximum_tickets: convention.maximum_tickets,
               ticket_name: convention.ticket_name,
+              ticket_mode: convention.ticket_mode,
               maximum_event_signups: {
                 timespans: convention.maximum_event_signups.timespans.map(timespan => ({
                   start: timespan.start,

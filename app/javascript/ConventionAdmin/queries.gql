@@ -14,6 +14,7 @@ fragment ConventionAdminConventionFields on Convention {
   stripe_publishable_key
   masked_stripe_secret_key
   clickwrap_agreement
+  ticket_mode
 
   maximum_event_signups {
     timespans {
