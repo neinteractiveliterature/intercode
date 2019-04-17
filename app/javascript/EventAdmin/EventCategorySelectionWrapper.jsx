@@ -22,7 +22,7 @@ export function useEventCategorySelection({
   );
 
   const eventCategorySelectChanged = useCallback(
-    e => setEventCategoryId(Transforms.inputChange(Transforms.integer)(e)),
+    e => setEventCategoryId(Transforms.integer(e)),
     [setEventCategoryId],
   );
 
@@ -39,7 +39,7 @@ export function useEventCategorySelection({
   const selectProps = {
     eventCategories: selectableCategories,
     value: eventCategoryId,
-    onChange: eventCategorySelectChanged,
+    onChangeValue: eventCategorySelectChanged,
   };
 
   return [selectProps, {

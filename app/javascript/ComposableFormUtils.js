@@ -87,21 +87,6 @@ export const Transforms = {
   parseInt(func) { return namedFunction(value => Number.parseInt(func(value), 10), 'parseInt'); },
   booleanString(value) { return value === 'true'; },
   multiValue(choices) { return choices.map(choice => choice.value); },
-  eventTargetValue(event) { return event.target.value; },
-  eventTargetChecked(event) { return event.target.checked; },
-};
-
-Transforms.inputChange = function inputChange(wrappedTransform) {
-  return namedFunction(
-    event => wrappedTransform(Transforms.eventTargetValue(event)),
-    `inputChange('${wrappedTransform.name}')`,
-  );
-};
-Transforms.checkboxChange = function checkboxChange(event) {
-  return Transforms.eventTargetChecked(event);
-};
-Transforms.textInputChange = function textInputChange(event) {
-  return Transforms.eventTargetValue(event);
 };
 
 export function stateChangeCalculator(
@@ -189,4 +174,15 @@ export function useTransformedState(initialValue, transform) {
   const setStateWithTransform = untransformedValue => setState(transform(untransformedValue));
 
   return [state, setStateWithTransform];
+}
+
+export function transformsReducer(transforms) {
+  return (state, action) => {
+    switch (action.type) {
+      case 'change':
+        return { ...state, [action.key]: transforms[action.key](action.value) };
+      default:
+        return state;
+    }
+  };
 }

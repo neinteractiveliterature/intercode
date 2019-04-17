@@ -40,12 +40,12 @@ class RegistrationBucketRow extends React.Component {
       transforms: {
         name: Transforms.identity,
         description: Transforms.identity,
-        slots_limited: Transforms.negate(Transforms.checkboxChange),
-        not_counted: Transforms.negate(Transforms.checkboxChange),
-        expose_attendees: Transforms.checkboxChange,
-        minimum_slots: Transforms.parseInt(Transforms.textInputChange),
-        preferred_slots: Transforms.parseInt(Transforms.textInputChange),
-        total_slots: Transforms.parseInt(Transforms.textInputChange),
+        slots_limited: Transforms.negate(Transforms.identity),
+        not_counted: Transforms.negate(Transforms.identity),
+        expose_attendees: Transforms.identity,
+        minimum_slots: Transforms.integer,
+        preferred_slots: Transforms.integer,
+        total_slots: Transforms.integer,
       },
     });
   }
@@ -68,7 +68,7 @@ class RegistrationBucketRow extends React.Component {
               className="form-check-input"
               type="checkbox"
               checked={!this.props.registrationBucket.slots_limited}
-              onChange={this.mutator.slots_limited}
+              onChange={(event) => { this.mutator.slots_limited(event.target.checked); }}
             />
             {' '}
             Unlimited?
@@ -82,7 +82,7 @@ class RegistrationBucketRow extends React.Component {
               className="form-check-input"
               type="checkbox"
               checked={!this.props.registrationBucket.not_counted}
-              onChange={this.mutator.not_counted}
+              onChange={(event) => { this.mutator.not_counted(event.target.checked); }}
             />
             {' '}
             Counted?
@@ -97,15 +97,15 @@ class RegistrationBucketRow extends React.Component {
                 className="form-check-input"
                 type="checkbox"
                 checked={this.props.registrationBucket.expose_attendees}
-                onChange={this.mutator.expose_attendees}
+                onChange={(event) => { this.mutator.expose_attendees(event.target.checked); }}
               />
               {' '}
               Expose attendees?
             </label>
             <HelpPopover>
               If checked, attendees will be able to see which of their fellow attendees are in this
-              bucket via the signup summary page.  (The signup summary always lists fellow attendees&apos;
-              names, but normally doesn&apos;t show which bucket they&apos;re in.)
+              bucket via the signup summary page.  (The signup summary always lists fellow attendees&rsquo;
+              names, but normally doesn&rsquo;t show which bucket they&rsquo;re in.)
             </HelpPopover>
           </div>
         </div>
@@ -150,7 +150,7 @@ class RegistrationBucketRow extends React.Component {
             min={min}
             placeholder={label}
             value={bucket[field] || ''}
-            onChange={this.mutator[field]}
+            onChange={(event) => { this.mutator[field](event.target.value); }}
             style={{ width: '4em' }}
           />
         </div>
