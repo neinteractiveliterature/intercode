@@ -1,12 +1,12 @@
-import React, { useReducer, useCallback, useState } from 'react';
+import React, { useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import { Transforms, transformsReducer } from '../ComposableFormUtils';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
 import ConventionFormEventsSection from './ConventionFormEventsSection';
+import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 
 const conventionFormTransforms = {
   starts_at: Transforms.datetime,
@@ -69,37 +69,14 @@ function ConventionForm({
     },
   ];
 
-  const [selectedTab, setSelectedTab] = useState('general');
+  const tabProps = useTabs(tabs);
 
   return (
     <form>
-      <ul className="nav nav-tabs">
-        {
-          tabs.map(({ id, name }) => (
-            <li key={id} className="nav-item">
-              <a
-                className={classNames('nav-link', { active: id === selectedTab })}
-                href={`#${id}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  setSelectedTab(id);
-                }}
-              >
-                {name}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <TabList {...tabProps} />
 
       <div className="pt-3 pb-2 px-3 border border-top-0 mb-4">
-        {
-          tabs.map(({ id, renderContent }) => (
-            <div id={id} key={id} className={classNames({ 'd-none': id !== selectedTab })}>
-              {renderContent()}
-            </div>
-          ))
-        }
+        <TabBody {...tabProps} />
       </div>
 
       <button className="btn btn-primary" onClick={onClickSave} type="button">
