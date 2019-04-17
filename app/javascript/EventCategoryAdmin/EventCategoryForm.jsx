@@ -60,7 +60,7 @@ function EventCategoryForm({
         name="name"
         label="Name"
         value={value.name}
-        onChangeText={valueMutator.name}
+        onTextChange={valueMutator.name}
         disabled={disabled}
       />
 
@@ -68,7 +68,7 @@ function EventCategoryForm({
         name="team_member_name"
         label="Team member name"
         value={value.team_member_name || ''}
-        onChangeText={valueMutator.team_member_name}
+        onTextChange={valueMutator.team_member_name}
         helpText={`
           This is the word the site will use to refer to team members of this event, e.g.
           "GM", "facilitator", etc.

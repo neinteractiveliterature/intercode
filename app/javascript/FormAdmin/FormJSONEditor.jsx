@@ -103,7 +103,7 @@ class FormJSONEditor extends React.Component {
         label="Title"
         name="title"
         value={this.state.form.title}
-        onChangeText={this.mutator.form.title}
+        onTextChange={this.mutator.form.title}
       />
 
       <fieldset className="mb-4">

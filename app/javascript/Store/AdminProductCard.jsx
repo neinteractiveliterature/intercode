@@ -328,7 +328,7 @@ class AdminProductCard extends React.Component {
             name="available"
             label="Available for purchase"
             checked={this.state.editingProduct.available}
-            onChangeChecked={this.mutator.editingProduct.available}
+            onCheckedChange={this.mutator.editingProduct.available}
           />
           <MultipleChoiceInput
             name="payment_options"

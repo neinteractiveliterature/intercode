@@ -51,7 +51,7 @@ class EditRootSite extends React.Component {
         label="Site name"
         helpText="This will show on the left side of the navigation bar"
         value={this.state.rootSite.site_name}
-        onChangeText={this.mutator.rootSite.site_name}
+        onTextChange={this.mutator.rootSite.site_name}
       />
 
       <SelectWithLabel

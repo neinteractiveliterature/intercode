@@ -33,7 +33,7 @@ function TeamMemberForm({
             name={name}
             disabled={disabled}
             checked={value[name]}
-            onChangeChecked={formMutator[name]}
+            onCheckedChange={formMutator[name]}
           />
         ))
       }

@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 export function parseIntOrNull(stringValue) {
   const intValue = parseInt(stringValue, 10);
@@ -95,8 +95,12 @@ export function stateChangeCalculator(
   preprocessState = Transforms.identity,
   postprocessState = Transforms.identity,
 ) {
+  const actualTransform = transform || Transforms.identity;
   return namedFunction(
-    (state, value) => postprocessState({ ...preprocessState(state), [name]: transform(value) }),
+    (state, value) => postprocessState({
+      ...preprocessState(state),
+      [name]: actualTransform(value),
+    }),
     `stateChangeCalculator('${name}')`,
   );
 }
@@ -108,7 +112,7 @@ export function combineStateChangeCalculators(
 ) {
   return Object.keys(transformsByName).reduce(
     (acc, name) => {
-      if (typeof transformsByName[name] === 'function') {
+      if (transformsByName[name] == null || typeof transformsByName[name] === 'function') {
         return {
           ...acc,
           [name]: stateChangeCalculator(
@@ -180,9 +184,19 @@ export function transformsReducer(transforms) {
   return (state, action) => {
     switch (action.type) {
       case 'change':
-        return { ...state, [action.key]: transforms[action.key](action.value) };
+        return {
+          ...state,
+          [action.key]: (transforms[action.key] || Transforms.identity)(action.value),
+        };
       default:
         return state;
     }
   };
+}
+
+export function useChangeDispatchers(dispatch, keys) {
+  return useMemo(
+    () => keys.map(key => value => dispatch({ type: 'change', key, value })),
+    [dispatch, keys],
+  );
 }

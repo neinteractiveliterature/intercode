@@ -10,7 +10,7 @@ class BootstrapFormSelect extends React.Component {
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    onChangeValue: PropTypes.func,
+    onValueChange: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.node,
   };
@@ -19,7 +19,7 @@ class BootstrapFormSelect extends React.Component {
     children: null,
     disabled: false,
     onChange: null,
-    onChangeValue: null,
+    onValueChange: null,
   };
 
   constructor(props) {
@@ -29,8 +29,8 @@ class BootstrapFormSelect extends React.Component {
 
   render = () => {
     const inputId = this.nextUniqueId();
-    const { onChange, onChangeValue, ...otherProps } = this.props;
-    const onChangeProp = onChange || ((event) => { onChangeValue(event.target.value); });
+    const { onChange, onValueChange, ...otherProps } = this.props;
+    const onChangeProp = onChange || ((event) => { onValueChange(event.target.value); });
 
     return (
       <div className="form-group">
