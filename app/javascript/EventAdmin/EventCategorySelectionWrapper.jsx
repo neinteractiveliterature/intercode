@@ -39,7 +39,7 @@ export function useEventCategorySelection({
   const selectProps = {
     eventCategories: selectableCategories,
     value: eventCategoryId,
-    onChangeValue: eventCategorySelectChanged,
+    onValueChange: eventCategorySelectChanged,
   };
 
   return [selectProps, {

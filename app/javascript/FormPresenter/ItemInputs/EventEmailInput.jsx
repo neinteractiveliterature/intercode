@@ -130,7 +130,7 @@ class EventEmailInput extends React.Component {
         )}
         name={`${this.props.formItem.identifier}.email`}
         value={(this.props.value || {}).email || ''}
-        onChangeText={this.valueMutator.email}
+        onTextChange={this.valueMutator.email}
         disabled={this.state.emailBehavior == null}
       />
     );

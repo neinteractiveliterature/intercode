@@ -26,14 +26,14 @@ function SyncCmsGraphqlQueryForm({ value, onChange }) {
         label="Identifier"
         className="form-control text-monospace"
         value={value.identifier}
-        onChangeText={valueMutator.identifier}
+        onTextChange={valueMutator.identifier}
       />
 
       <BootstrapFormTextarea
         name="admin_notes"
         label="Admin notes"
         value={value.admin_notes}
-        onChangeText={valueMutator.admin_notes}
+        onTextChange={valueMutator.admin_notes}
       />
 
       <ApolloConsumer>

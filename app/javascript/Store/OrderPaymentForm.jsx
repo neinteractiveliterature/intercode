@@ -39,7 +39,7 @@ class OrderPaymentForm extends React.Component {
           name="name"
           label="Name"
           value={this.props.paymentDetails.name}
-          onChangeText={this.mutator.name}
+          onTextChange={this.mutator.name}
         />
 
         <CardElement

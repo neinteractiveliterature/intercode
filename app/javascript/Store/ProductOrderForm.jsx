@@ -68,7 +68,7 @@ function ProductOrderForm({ productId, cartUrl }) {
       <select
         className="form-control mb-3"
         value={productVariantId || ''}
-        onChangeValue={productVariantIdChanged}
+        onValueChange={productVariantIdChanged}
       >
         <option disabled value="">Select...</option>
         {options}
@@ -84,7 +84,7 @@ function ProductOrderForm({ productId, cartUrl }) {
         min="1"
         className="form-control"
         value={quantity == null ? '' : quantity}
-        onChangeText={quantityChanged}
+        onTextChange={quantityChanged}
       />
     </label>
   );

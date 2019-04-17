@@ -39,7 +39,7 @@ class StaffPositionForm extends React.Component {
           name="name"
           label="Position name"
           value={this.props.staffPosition.name || ''}
-          onChangeText={this.mutator.name}
+          onTextChange={this.mutator.name}
         />
 
         <BootstrapFormInput
@@ -47,7 +47,7 @@ class StaffPositionForm extends React.Component {
           type="email"
           label="Contact email"
           value={this.props.staffPosition.email || ''}
-          onChangeText={this.mutator.email}
+          onTextChange={this.mutator.email}
         />
 
         <BooleanInput

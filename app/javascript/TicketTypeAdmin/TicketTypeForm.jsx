@@ -68,7 +68,7 @@ class TicketTypeForm extends React.Component {
         type="text"
         style={{ fontFamily: 'monospace' }}
         value={this.props.ticketType.name}
-        onChangeText={this.ticketTypeMutator.name}
+        onTextChange={this.ticketTypeMutator.name}
       />
 
       <BootstrapFormInput
@@ -76,7 +76,7 @@ class TicketTypeForm extends React.Component {
         name="description"
         type="text"
         value={this.props.ticketType.description}
-        onChangeText={this.ticketTypeMutator.description}
+        onTextChange={this.ticketTypeMutator.description}
       />
 
       <BooleanInput
@@ -105,7 +105,7 @@ class TicketTypeForm extends React.Component {
         name="maximum_event_provided_tickets"
         type="number"
         value={this.props.ticketType.maximum_event_provided_tickets.toString()}
-        onChangeText={this.ticketTypeMutator.maximum_event_provided_tickets}
+        onTextChange={this.ticketTypeMutator.maximum_event_provided_tickets}
       />
 
       <fieldset>

@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 
 import pluralizeWithCount from '../pluralizeWithCount';
 import Timespan from '../Timespan';
-import { MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './ConventionForm';
+import { MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './ConventionFormEventsSection';
 
 function describeEventVisibility(visibility) {
   switch (visibility) {

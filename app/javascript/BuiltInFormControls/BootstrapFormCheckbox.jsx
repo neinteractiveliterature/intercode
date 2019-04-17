@@ -10,7 +10,7 @@ class BootstrapFormCheckbox extends React.Component {
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func,
-    onChangeChecked: PropTypes.func,
+    onCheckedChange: PropTypes.func,
     disabled: PropTypes.bool,
     type: PropTypes.oneOf(['radio', 'checkbox']),
     className: PropTypes.string,
@@ -24,7 +24,7 @@ class BootstrapFormCheckbox extends React.Component {
     inputClassName: '',
     name: null,
     onChange: null,
-    onChangeChecked: null,
+    onCheckedChange: null,
   };
 
   constructor(props) {
@@ -39,11 +39,11 @@ class BootstrapFormCheckbox extends React.Component {
       inputClassName,
       label,
       onChange,
-      onChangeChecked,
+      onCheckedChange,
       ...otherProps
     } = this.props;
 
-    const onChangeProp = onChange || ((event) => { onChangeChecked(event.target.checked); });
+    const onChangeProp = onChange || ((event) => { onCheckedChange(event.target.checked); });
 
     return (
       <div className={`form-check ${className}`}>

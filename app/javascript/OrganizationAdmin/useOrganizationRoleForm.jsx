@@ -36,7 +36,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         name="name"
         label="Role name"
         value={name}
-        onChangeText={onNameChange}
+        onTextChange={onNameChange}
       />
 
       <div className="form-group">
