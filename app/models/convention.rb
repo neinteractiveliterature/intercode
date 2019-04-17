@@ -57,6 +57,15 @@ class Convention < ApplicationRecord
     maximum_event_signups.value_at(Time.now) == 'not_now'
   end
 
+  def tickets_available_for_purchase?
+    return false if ended?
+    return false if ticket_mode == 'disabled'
+
+    ticket_types.publicly_available.any? do |ticket_type|
+      ticket_type.pricing_schedule.has_value_at?(Time.now)
+    end
+  end
+
   def length_seconds
     ends_at - starts_at
   end
