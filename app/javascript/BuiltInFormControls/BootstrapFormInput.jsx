@@ -10,7 +10,8 @@ class BootstrapFormInput extends React.Component {
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     type: PropTypes.string,
     value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    onTextChange: PropTypes.func,
     helpText: PropTypes.string,
     disabled: PropTypes.bool,
   };
@@ -19,6 +20,8 @@ class BootstrapFormInput extends React.Component {
     type: 'text',
     disabled: false,
     helpText: null,
+    onChange: null,
+    onTextChange: null,
   };
 
   constructor(props) {
@@ -29,7 +32,11 @@ class BootstrapFormInput extends React.Component {
   render = () => {
     const inputId = this.nextUniqueId();
 
-    const { helpText, label, ...otherProps } = this.props;
+    const {
+      helpText, label, onChange, onTextChange, ...otherProps
+    } = this.props;
+
+    const onChangeProp = onChange || ((event) => { onTextChange(event.target.value); });
 
     return (
       <div className="form-group">
@@ -37,6 +44,7 @@ class BootstrapFormInput extends React.Component {
         <input
           className="form-control"
           id={inputId}
+          onChange={onChangeProp}
           {...otherProps}
         />
         {

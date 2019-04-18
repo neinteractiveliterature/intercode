@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { flatMap } from 'lodash';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
-import { Transforms, useTransformedState } from '../ComposableFormUtils';
 import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
@@ -16,10 +15,7 @@ const OrganizationRolePermissionNames = flatMap(
 );
 
 export default function useOrganizationRoleForm(initialOrganizationRole) {
-  const [name, onNameChange] = useTransformedState(
-    initialOrganizationRole.name,
-    Transforms.textInputChange,
-  );
+  const [name, onNameChange] = useState(initialOrganizationRole.name);
   const [usersChangeSet, onChangeUsers] = useChangeSetWithSelect();
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
 
@@ -40,7 +36,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         name="name"
         label="Role name"
         value={name}
-        onChange={onNameChange}
+        onTextChange={onNameChange}
       />
 
       <div className="form-group">

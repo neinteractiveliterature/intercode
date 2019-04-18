@@ -68,9 +68,9 @@ class AdminProductCard extends React.Component {
       component: this,
       transforms: {
         editingProduct: {
-          available: Transforms.checkboxChange,
+          available: Transforms.identity,
           description: Transforms.identity,
-          name: Transforms.textInputChange,
+          name: Transforms.identity,
           payment_options: Transforms.identity,
           price: parseMoneyOrNull,
           product_variants: Transforms.identity,
@@ -328,7 +328,7 @@ class AdminProductCard extends React.Component {
             name="available"
             label="Available for purchase"
             checked={this.state.editingProduct.available}
-            onChange={this.mutator.editingProduct.available}
+            onCheckedChange={this.mutator.editingProduct.available}
           />
           <MultipleChoiceInput
             name="payment_options"
@@ -438,7 +438,7 @@ class AdminProductCard extends React.Component {
           placeholder="Product name"
           name="name"
           value={this.state.editingProduct.name}
-          onChange={this.mutator.editingProduct.name}
+          onChange={(event) => { this.mutator.editingProduct.name(event.target.value); }}
         />
       );
     }

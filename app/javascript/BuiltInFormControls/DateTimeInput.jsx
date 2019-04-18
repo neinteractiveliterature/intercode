@@ -14,10 +14,12 @@ class DateTimeInput extends React.Component {
     value: PropTypes.string,
     timezoneName: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    id: PropTypes.string,
   }
 
   static defaultProps = {
     value: null,
+    id: null,
   };
 
   constructor(props) {
@@ -72,6 +74,7 @@ class DateTimeInput extends React.Component {
         value={this.state.date || ''}
         onChange={this.dateChanged}
         pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        id={this.props.id}
       />
       <input
         type="time"

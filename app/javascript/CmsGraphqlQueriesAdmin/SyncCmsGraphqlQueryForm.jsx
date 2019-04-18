@@ -13,8 +13,8 @@ function SyncCmsGraphqlQueryForm({ value, onChange }) {
     getState: () => value,
     setState: onChange,
     transforms: {
-      identifier: Transforms.textInputChange,
-      admin_notes: Transforms.textInputChange,
+      identifier: Transforms.identity,
+      admin_notes: Transforms.identity,
       query: Transforms.identity,
     },
   });
@@ -26,14 +26,14 @@ function SyncCmsGraphqlQueryForm({ value, onChange }) {
         label="Identifier"
         className="form-control text-monospace"
         value={value.identifier}
-        onChange={valueMutator.identifier}
+        onTextChange={valueMutator.identifier}
       />
 
       <BootstrapFormTextarea
         name="admin_notes"
         label="Admin notes"
         value={value.admin_notes}
-        onChange={valueMutator.admin_notes}
+        onTextChange={valueMutator.admin_notes}
       />
 
       <ApolloConsumer>

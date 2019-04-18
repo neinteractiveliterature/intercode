@@ -25,6 +25,24 @@ mutation DeleteUserConProfile($userConProfileId: Int!) {
   }
 }
 
+mutation CreateTicket($userConProfileId: Int!, $ticket: TicketInput!) {
+  createTicket(input: { user_con_profile_id: $userConProfileId, ticket: $ticket }) {
+    ticket {
+      id
+      ...UserConProfileAdminTicketFields
+    }
+  }
+}
+
+mutation UpdateTicket($id: Int!, $ticket: TicketInput!) {
+  updateTicket(input: { id: $id, ticket: $ticket }) {
+    ticket {
+      id
+      ...UserConProfileAdminTicketFields
+    }
+  }
+}
+
 mutation ConvertTicketToEventProvided($eventId: Int!, $ticketTypeId: Int!, $userConProfileId: Int!) {
   convertTicketToEventProvided(input: { event_id: $eventId, ticket_type_id: $ticketTypeId, user_con_profile_id: $userConProfileId }) {
     ticket {

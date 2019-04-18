@@ -13,6 +13,7 @@ class EditEventCategory extends React.Component {
     initialEventCategory: PropTypes.shape({}).isRequired,
     forms: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     ticketName: PropTypes.string.isRequired,
+    ticketMode: PropTypes.string.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -37,6 +38,7 @@ class EditEventCategory extends React.Component {
         onChange={(eventCategory) => { this.setState({ eventCategory }); }}
         forms={this.props.forms}
         ticketName={this.props.ticketName}
+        ticketMode={this.props.ticketMode}
         disabled={this.state.mutationInProgress}
       />
 

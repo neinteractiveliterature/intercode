@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
 
+import { render, fireEvent } from '../../testUtils';
 import { convention, minimalForm } from '../../EventAdmin/formMockData';
 import FormBody from '../../../../app/javascript/FormPresenter/Layouts/FormBody';
 import { ItemInteractionTrackerContext } from '../../../../app/javascript/FormPresenter/ItemInteractionTracker';

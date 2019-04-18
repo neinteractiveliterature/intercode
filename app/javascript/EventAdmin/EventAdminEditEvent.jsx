@@ -19,26 +19,6 @@ import deserializeEvent from './deserializeEvent';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 
-function createUpdater(store, eventId, override) {
-  const storeData = store.readQuery({ query: EventAdminEventsQuery });
-  const event = storeData.events.find(evt => evt.id === eventId);
-  event.maximum_event_provided_tickets_overrides.push(override);
-  store.writeQuery({ query: EventAdminEventsQuery, storeData });
-}
-
-function deleteUpdater(store, id) {
-  const storeData = store.readQuery({ query: EventAdminEventsQuery });
-  const event = storeData.events.find((
-    evt => evt.maximum_event_provided_tickets_overrides.some((
-      override => override.id === id
-    ))
-  ));
-  const newOverrides = event.maximum_event_provided_tickets_overrides
-    .filter(override => override.id !== id);
-  event.maximum_event_provided_tickets_overrides = newOverrides;
-  store.writeQuery({ query: EventAdminEventsQuery, storeData });
-}
-
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
   const meptoMutations = useMEPTOMutations({
@@ -97,15 +77,17 @@ function EventAdminEditEvent({ match, history }) {
       onDrop={() => { history.push('/runs'); }}
     >
       <EventFormWithCategorySelection {...eventFormProps}>
-        {data.currentAbility.can_override_maximum_event_provided_tickets && (
-          <MaximumEventProvidedTicketsOverrideEditor
-            {...meptoMutations}
-            ticketTypes={data.convention.ticket_types}
-            ticketName={data.convention.ticket_name}
-            overrides={event.maximum_event_provided_tickets_overrides}
-            eventId={event.id}
-          />
-        )}
+        {data.currentAbility.can_override_maximum_event_provided_tickets
+          && data.convention.ticket_mode !== 'disabled'
+          && (
+            <MaximumEventProvidedTicketsOverrideEditor
+              {...meptoMutations}
+              ticketTypes={data.convention.ticket_types}
+              ticketName={data.convention.ticket_name}
+              overrides={event.maximum_event_provided_tickets_overrides}
+              eventId={event.id}
+            />
+          )}
       </EventFormWithCategorySelection>
     </EditEvent>
   );

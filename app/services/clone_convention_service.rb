@@ -14,6 +14,7 @@ class CloneConventionService < CivilService::Service
     }.merge(source_convention.attributes.symbolize_keys.slice(*%i[
       maximum_tickets
       ticket_name
+      ticket_mode
       timezone_name
       stripe_publishable_key
       stripe_secret_key

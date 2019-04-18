@@ -36,7 +36,7 @@ class EditRootSite extends React.Component {
       component: this,
       transforms: {
         rootSite: {
-          site_name: Transforms.textInputChange,
+          site_name: Transforms.identity,
           default_layout: Transforms.identity,
           root_page: Transforms.identity,
         },
@@ -51,7 +51,7 @@ class EditRootSite extends React.Component {
         label="Site name"
         helpText="This will show on the left side of the navigation bar"
         value={this.state.rootSite.site_name}
-        onChange={this.mutator.rootSite.site_name}
+        onTextChange={this.mutator.rootSite.site_name}
       />
 
       <SelectWithLabel

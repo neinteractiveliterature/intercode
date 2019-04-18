@@ -1,3 +1,4 @@
 %h1 My #{convention.ticket_name} for #{convention.name}
 
-= render 'tickets/ticket', ticket: user_con_profile.ticket
+%dl.dl-horizontal
+  = render 'tickets/ticket_data', ticket: user_con_profile.ticket

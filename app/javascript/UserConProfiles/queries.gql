@@ -91,10 +91,19 @@ query UserConProfileAdminQuery($id: Int!) {
     ends_at
     timezone_name
     ticket_name
+    ticket_mode
 
     user_con_profile_form {
       id
       form_api_json
+    }
+
+    ticket_types {
+      id
+      description
+      name
+      publicly_available
+      maximum_event_provided_tickets
     }
   }
 
@@ -157,6 +166,7 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
     ends_at
     timezone_name
     ticket_name
+    ticket_mode
 
     ticket_types {
       id

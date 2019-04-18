@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_09_165241) do
+ActiveRecord::Schema.define(version: 2019_04_15_164817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 2019_02_09_165241) do
     t.text "clickwrap_agreement"
     t.string "show_event_list", default: "no", null: false
     t.bigint "organization_id"
+    t.string "ticket_mode", default: "disabled", null: false
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["organization_id"], name: "index_conventions_on_organization_id"

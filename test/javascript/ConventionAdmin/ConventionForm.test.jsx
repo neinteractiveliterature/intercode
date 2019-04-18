@@ -1,14 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import moment from 'moment-timezone';
 
-import BooleanInput from '../../../app/javascript/BuiltInFormControls/BooleanInput';
-import BootstrapFormInput from '../../../app/javascript/BuiltInFormControls/BootstrapFormInput';
+import { render, fireEvent } from '../testUtils';
 import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
-import DateTimeInput from '../../../app/javascript/BuiltInFormControls/DateTimeInput';
-import MultipleChoiceInput from '../../../app/javascript/BuiltInFormControls/MultipleChoiceInput';
-import ScheduledValueEditor from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
-import TimezoneSelect from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
 describe('ConventionForm', () => {
   const defaultInitialConvention = {
@@ -31,19 +25,19 @@ describe('ConventionForm', () => {
     root_page_id: null,
   };
 
-  const renderConventionForm = (props, initialConventionProps) => shallow((
+  const renderConventionForm = (props, initialConventionProps) => render(
     <ConventionForm
       initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
       saveConvention={() => {}}
       cmsLayouts={[]}
       pages={[]}
       {...props}
-    />
-  ));
+    />,
+  );
 
   test('it renders the given values', () => {
-    const now = moment.tz({}, 'UTC').toISOString();
-    const component = renderConventionForm({}, {
+    const now = moment.tz('2019-04-18T18:34:04.283Z', 'UTC').toISOString();
+    const { getByLabelText, getByText, getMultipleChoiceInput } = renderConventionForm({}, {
       starts_at: now,
       ends_at: now,
       name: 'myName',
@@ -60,34 +54,39 @@ describe('ConventionForm', () => {
       maximum_tickets: 100,
     });
 
-    expect(component.find(DateTimeInput).at(0).prop('value')).toEqual(now);
-    expect(component.find(DateTimeInput).at(1).prop('value')).toEqual(now);
-    expect(component.find(BootstrapFormInput).filter({ name: 'name' }).prop('value')).toEqual('myName');
-    expect(component.find(BootstrapFormInput).filter({ name: 'domain' }).prop('value')).toEqual('myDomain');
-    expect(component.find(TimezoneSelect).prop('value')).toEqual('UTC');
-    expect(component.find(BooleanInput).filter({ name: 'accepting_proposals' }).prop('value')).toBeTruthy();
-    expect(component.find(MultipleChoiceInput).filter({ name: 'show_schedule' }).prop('value')).toEqual('gms');
-    expect(component.find(BootstrapFormInput).filter({ name: 'maximum_tickets' }).prop('value')).toEqual('100');
+    expect(getByLabelText('Convention starts').value).toEqual('2019-04-18');
+    expect(getByLabelText('Convention ends').value).toEqual('2019-04-18');
+    expect(getByLabelText('Name').value).toEqual('myName');
+    expect(getByLabelText('Convention domain name').value).toEqual('myDomain');
+    expect(getByLabelText('Time zone').closest('.form-group')).toHaveTextContent('Time zone[UTC-00:00] UTC');
 
-    expect(component.find(ScheduledValueEditor).prop('scheduledValue')).toEqual({
-      timespans: [
-        { start: null, finish: now, value: 'not_yet' },
-        { start: now, finish: null, value: 'unlimited' },
-      ],
-    });
+    fireEvent.click(getByText('Events'));
+
+    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
+    expect(getMultipleChoiceInput(
+      'Show event schedule',
+      'Only to event team members and users with any privileges',
+    ).checked).toBe(true);
+
+    fireEvent.click(getByText('Payments'));
+    expect(getByLabelText('Maximum tickets').value).toEqual('100');
   });
 
   test('mutating form fields', () => {
-    const component = renderConventionForm();
-    component.find(BooleanInput).filter({ name: 'accepting_proposals' })
-      .prop('onChange')(true);
-    expect(component.instance().state.convention.accepting_proposals).toBeTruthy();
+    const { getByText, getMultipleChoiceInput } = renderConventionForm();
+
+    fireEvent.click(getByText('Events'));
+    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(false);
+    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), { target: { checked: true } });
+    expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
   });
 
   test('onClickSave', () => {
     const saveConvention = jest.fn();
-    const component = renderConventionForm({ saveConvention });
-    component.find('.btn-primary').simulate('click', { preventDefault: () => {} });
-    expect(saveConvention.mock.calls[0][0]).toEqual(defaultInitialConvention);
+    const { getByText } = renderConventionForm({ saveConvention });
+
+    fireEvent.click(getByText('Save settings'), { selector: 'button' });
+    expect(saveConvention).toHaveBeenCalledTimes(1);
+    expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention);
   });
 });

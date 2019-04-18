@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+import EditTicket from './EditTicket';
 import EditUserConProfile from './EditUserConProfile';
+import NewTicket from './NewTicket';
 import UserConProfileAdminDisplay from './UserConProfileAdminDisplay';
 import UserConProfilesTable from './UserConProfilesTable';
 
@@ -24,6 +26,18 @@ const UserConProfilesAdmin = ({
     <BrowserRouter basename={basename}>
       <Switch>
         <Route path="/new" render={renderAttendeesTable} />
+        <Route
+          path="/:id/admin_ticket/new"
+          render={({ match }) => (
+            <NewTicket userConProfileId={Number.parseInt(match.params.id, 10)} />
+          )}
+        />
+        <Route
+          path="/:id/admin_ticket/edit"
+          render={({ match }) => (
+            <EditTicket userConProfileId={Number.parseInt(match.params.id, 10)} />
+          )}
+        />
         <Route
           path="/:id/edit"
           render={({ match }) => <EditUserConProfile id={Number.parseInt(match.params.id, 10)} />}

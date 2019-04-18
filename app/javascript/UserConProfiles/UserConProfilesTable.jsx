@@ -184,30 +184,36 @@ const getPossibleColumns = (data) => {
       Cell: EmailCell,
       Filter: FreeTextFilter,
     },
-    {
-      Header: humanize(data.convention.ticket_name || 'ticket'),
-      id: 'ticket',
-      accessor: 'ticket',
-      width: 150,
-      Cell: TicketStatusWithPaymentAmountCell,
-      Filter: TicketTypeFilter,
-    },
-    {
-      Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
-      id: 'ticket_type',
-      accessor: 'ticket',
-      width: 150,
-      Cell: TicketStatusCell,
-      Filter: TicketTypeFilter,
-    },
-    {
-      Header: 'Payment amount',
-      id: 'payment_amount',
-      accessor: 'ticket',
-      width: 150,
-      Cell: TicketPaymentAmountCell,
-      Filter: FreeTextFilter,
-    },
+    ...(
+      data.convention.ticket_mode === 'disabled'
+        ? []
+        : [
+          {
+            Header: humanize(data.convention.ticket_name || 'ticket'),
+            id: 'ticket',
+            accessor: 'ticket',
+            width: 150,
+            Cell: TicketStatusWithPaymentAmountCell,
+            Filter: TicketTypeFilter,
+          },
+          {
+            Header: `${humanize(data.convention.ticket_name || 'ticket')} type`,
+            id: 'ticket_type',
+            accessor: 'ticket',
+            width: 150,
+            Cell: TicketStatusCell,
+            Filter: TicketTypeFilter,
+          },
+          {
+            Header: 'Payment amount',
+            id: 'payment_amount',
+            accessor: 'ticket',
+            width: 150,
+            Cell: TicketPaymentAmountCell,
+            Filter: FreeTextFilter,
+          },
+        ]
+    ),
     {
       Header: 'Event team member?',
       id: 'is_team_member',
@@ -226,15 +232,21 @@ const getPossibleColumns = (data) => {
       Cell: BooleanCell,
       Filter: BooleanChoiceSetFilter,
     },
-    {
-      Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
-      id: 'ticket_updated_at',
-      accessor: userConProfile => (
-        userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null
-      ),
-      filterable: false,
-      Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
-    },
+    ...(
+      data.convention.ticket_mode === 'disabled'
+        ? []
+        : [
+          {
+            Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
+            id: 'ticket_updated_at',
+            accessor: userConProfile => (
+              userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null
+            ),
+            filterable: false,
+            Cell: ({ value }) => (value ? value.format('MMM D, YYYY H:mma') : null),
+          },
+        ]
+    ),
     {
       Header: 'Privileges',
       id: 'privileges',

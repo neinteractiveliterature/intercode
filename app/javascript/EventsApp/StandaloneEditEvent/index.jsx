@@ -99,15 +99,17 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
       onSave={() => { history.push(eventPath); }}
     >
       <EventForm {...eventFormProps}>
-        {data.currentAbility.can_override_maximum_event_provided_tickets && (
-          <MaximumEventProvidedTicketsOverrideEditor
-            {...meptoMutations}
-            ticketName={data.convention.ticket_name}
-            ticketTypes={data.convention.ticket_types}
-            overrides={event.maximum_event_provided_tickets_overrides}
-            eventId={event.id}
-          />
-        )}
+        {data.currentAbility.can_override_maximum_event_provided_tickets
+          && data.convention.ticket_mode !== 'disabled'
+          && (
+            <MaximumEventProvidedTicketsOverrideEditor
+              {...meptoMutations}
+              ticketName={data.convention.ticket_name}
+              ticketTypes={data.convention.ticket_types}
+              overrides={event.maximum_event_provided_tickets_overrides}
+              eventId={event.id}
+            />
+          )}
       </EventForm>
     </EditEvent>
   );

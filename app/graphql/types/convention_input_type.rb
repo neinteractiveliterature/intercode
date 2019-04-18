@@ -10,6 +10,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false
   argument :maximum_tickets, Integer, required: false, camelize: false
   argument :ticket_name, String, required: false, camelize: false
+  argument :ticket_mode, Types::TicketModeType, required: false, camelize: false
   argument :root_page_id, Integer, required: false, camelize: false
   argument :default_layout_id, Integer, required: false, camelize: false
   argument :stripe_publishable_key, String, required: false, camelize: false

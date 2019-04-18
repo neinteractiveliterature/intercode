@@ -49,13 +49,13 @@ class TicketTypeForm extends React.Component {
       getState: () => this.props.ticketType,
       setState: this.props.onChange,
       transforms: {
-        name: Transforms.textInputChange,
-        description: Transforms.textInputChange,
+        name: Transforms.identity,
+        description: Transforms.identity,
         pricing_schedule: Transforms.identity,
         publicly_available: Transforms.identity,
         counts_towards_convention_maximum: Transforms.identity,
         allows_event_signups: Transforms.identity,
-        maximum_event_provided_tickets: Transforms.inputChange(Transforms.integer),
+        maximum_event_provided_tickets: Transforms.integer,
       },
     });
   }
@@ -68,7 +68,7 @@ class TicketTypeForm extends React.Component {
         type="text"
         style={{ fontFamily: 'monospace' }}
         value={this.props.ticketType.name}
-        onChange={this.ticketTypeMutator.name}
+        onTextChange={this.ticketTypeMutator.name}
       />
 
       <BootstrapFormInput
@@ -76,7 +76,7 @@ class TicketTypeForm extends React.Component {
         name="description"
         type="text"
         value={this.props.ticketType.description}
-        onChange={this.ticketTypeMutator.description}
+        onTextChange={this.ticketTypeMutator.description}
       />
 
       <BooleanInput
@@ -105,7 +105,7 @@ class TicketTypeForm extends React.Component {
         name="maximum_event_provided_tickets"
         type="number"
         value={this.props.ticketType.maximum_event_provided_tickets.toString()}
-        onChange={this.ticketTypeMutator.maximum_event_provided_tickets}
+        onTextChange={this.ticketTypeMutator.maximum_event_provided_tickets}
       />
 
       <fieldset>

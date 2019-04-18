@@ -3,9 +3,9 @@ require 'test_helper'
 class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:event) { FactoryBot.create :event }
+  let(:convention) { FactoryBot.create :convention, ticket_mode: 'required_for_signup' }
+  let(:event) { FactoryBot.create :event, convention: convention }
   let(:the_run) { FactoryBot.create :run, event: event }
-  let(:convention) { event.convention }
   let(:user_con_profile) { FactoryBot.create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
   let(:ticket_type) { FactoryBot.create :free_ticket_type, convention: convention }
@@ -18,7 +18,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     it 'disallows signups' do
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /\AYou must have a valid ticket to #{Regexp.escape convention.name}/
+      result.errors.full_messages.join('\n').must_match(/\AYou must have a valid ticket to #{Regexp.escape convention.name}/)
     end
   end
 
@@ -34,7 +34,17 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     it 'disallows signups' do
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /\AYou have a #{Regexp.escape ticket_type.description}/
+      result.errors.full_messages.join('\n').must_match(/\AYou have a #{Regexp.escape ticket_type.description}/)
+    end
+  end
+
+  describe 'with a convention that does not require tickets' do
+    let(:convention) { FactoryBot.create :convention, ticket_mode: 'disabled' }
+
+    it 'signs the user up for an event' do
+      result = subject.call
+      result.must_be :success?
+      result.signup.must_be :confirmed?
     end
   end
 
