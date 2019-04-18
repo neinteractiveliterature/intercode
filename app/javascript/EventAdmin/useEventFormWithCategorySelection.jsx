@@ -38,11 +38,11 @@ export default function useEventFormWithCategorySelection({
   }];
 }
 
-export function EventFormWithCategorySelection({ selectProps, eventFormProps }) {
+export function EventFormWithCategorySelection({ selectProps, eventFormProps, children }) {
   return (
     <>
       <EventCategorySelect {...selectProps} />
-      <EventForm {...eventFormProps} />
+      <EventForm {...eventFormProps}>{children}</EventForm>
     </>
   );
 }
@@ -50,4 +50,9 @@ export function EventFormWithCategorySelection({ selectProps, eventFormProps }) 
 EventFormWithCategorySelection.propTypes = {
   selectProps: PropTypes.shape({}).isRequired,
   eventFormProps: PropTypes.shape({}).isRequired,
+  children: PropTypes.node,
+};
+
+EventFormWithCategorySelection.defaultProps = {
+  children: null,
 };

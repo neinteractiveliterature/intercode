@@ -52,10 +52,11 @@ function EventCategoryAdmin({ basename }) {
                     convention: {
                       forms,
                       ticket_name: ticketName,
+                      ticket_mode: ticketMode,
                     },
                   },
                 }) => (
-                  <NewEventCategory forms={forms} ticketName={ticketName} />
+                  <NewEventCategory forms={forms} ticketName={ticketName} ticketMode={ticketMode} />
                 )}
               </QueryWithStateDisplay>
             )}
@@ -71,6 +72,7 @@ function EventCategoryAdmin({ basename }) {
                       event_categories: eventCategories,
                       forms,
                       ticket_name: ticketName,
+                      ticket_mode: ticketMode,
                     },
                   },
                 }) => {
@@ -81,6 +83,7 @@ function EventCategoryAdmin({ basename }) {
                       initialEventCategory={eventCategory}
                       forms={forms}
                       ticketName={ticketName}
+                      ticketMode={ticketMode}
                     />
                   );
                 }}

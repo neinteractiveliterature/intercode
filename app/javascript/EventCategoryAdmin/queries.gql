@@ -27,6 +27,7 @@ query EventCategoryAdminQuery {
   convention {
     id
     ticket_name
+    ticket_mode
 
     event_categories {
       id

@@ -57,7 +57,7 @@ class UserActivityAlertsList extends React.PureComponent {
       triggers.push(<li key="user_con_profile_create">Profile creation</li>);
     }
 
-    if (userActivityAlert.trigger_on_ticket_create) {
+    if (userActivityAlert.trigger_on_ticket_create && convention.ticket_mode !== 'disabled') {
       triggers.push(
         <li key="ticket_create">
           {humanize(convention.ticket_name)}
