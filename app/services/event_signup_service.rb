@@ -12,7 +12,7 @@ class EventSignupService < CivilService::Service
   validate :signup_count_must_be_allowed
   validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
-  validate :must_have_ticket
+  validate :must_have_ticket_if_required
   validate :require_valid_bucket
   validate :require_no_bucket_for_team_member
 
@@ -82,7 +82,9 @@ class EventSignupService < CivilService::Service
 with #{event.title}."
   end
 
-  def must_have_ticket
+  def must_have_ticket_if_required
+    return unless convention.ticket_mode == 'required_for_signup'
+
     ticket = user_con_profile.ticket
     return if ticket&.allows_event_signups?
 
