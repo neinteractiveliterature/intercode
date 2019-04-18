@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
+import { Link } from 'react-router-dom';
 
 import Confirm from '../ModalDialogs/Confirm';
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
@@ -32,25 +33,17 @@ class TicketAdminSection extends React.Component {
     }).isRequired,
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      error: null,
-    };
-  }
-
   renderTicketControls = (ticketAbilityData) => {
     const buttons = [];
     const { currentAbility } = ticketAbilityData;
 
     if (this.props.userConProfile.ticket && currentAbility.can_update_ticket) {
       buttons.push(
-        <a href={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
+        <Link to={`/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
           Edit
           {' '}
           {this.props.convention.ticket_name}
-        </a>,
+        </Link>,
       );
 
       if (currentAbility.can_delete_ticket) {
@@ -178,11 +171,11 @@ class TicketAdminSection extends React.Component {
       }
     } else if (currentAbility.can_create_tickets) {
       buttons.push(
-        <a href={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
+        <Link to={`/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
           Create
           {' '}
           {this.props.convention.ticket_name}
-        </a>,
+        </Link>,
       );
     }
 

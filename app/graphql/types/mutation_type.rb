@@ -406,8 +406,16 @@ class Types::MutationType < Types::BaseObject
 
   ### Ticket
 
+  field :createTicket, mutation: Mutations::CreateTicket do
+    guard(guard_for_create_convention_associated_model(:tickets))
+  end
+
+  field :updateTicket, mutation: Mutations::UpdateTicket do
+    guard(guard_for_convention_associated_model(:tickets, :update))
+  end
+
   field :deleteTicket, mutation: Mutations::DeleteTicket do
-    guard(guard_for_model_with_id(Ticket, :destroy))
+    guard(guard_for_convention_associated_model(:tickets, :destroy))
   end
 
   field :purchaseTicket, mutation: Mutations::PurchaseTicket do
