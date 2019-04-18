@@ -20,9 +20,19 @@ engines:
       config: .eslintrc.js
     channel: "eslint-4"
     checks:
+      graphql/named-operations:
+        enabled: false
+      graphql/no-deprecated-fields:
+        enabled: false
+      graphql/required-fields:
+        enabled: false
       graphql/template-strings:
         enabled: false
       import/extensions:
+        enabled: false
+      react-hooks/rules-of-hooks:
+        enabled: false
+      react-hooks/exhaustive-deps:
         enabled: false
   fixme:
     enabled: true

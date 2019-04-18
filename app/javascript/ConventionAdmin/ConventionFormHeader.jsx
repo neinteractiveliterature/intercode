@@ -55,13 +55,8 @@ function ConventionFormHeader({ convention }) {
         return `ended ${pluralizeWithCount('day', now.diff(conventionEnd, 'day'))} ago`;
       }
 
-      // For multi-day conventions
-      if (conventionStart.isBefore(conventionEnd)) {
-        return 'ends today';
-      }
-
-      // For single-day conventions
-      return 'is today';
+      const isMultiDay = conventionStart.isBefore(conventionEnd);
+      return `${isMultiDay ? 'ends' : 'is'} today`;
     },
     [convention.starts_at, convention.ends_at, convention.timezone_name],
   );

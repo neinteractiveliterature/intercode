@@ -227,7 +227,10 @@ class NavigationBarPresenter
     NavigationItem.define do
       label { "#{convention.ticket_name.titleize} Types" }
       url { ticket_types_path }
-      visible? { convention.ticket_mode != 'disabled' && can?(:update, TicketType.new(convention: convention)) }
+      visible? do
+        convention.ticket_mode != 'disabled' &&
+          can?(:update, TicketType.new(convention: convention))
+      end
     end,
     NavigationItem.define do
       label 'User Activity Alerts'
@@ -296,17 +299,23 @@ class NavigationBarPresenter
     NavigationBar.new(navbar_classes, root_navigation_items)
   end
 
+  def ticket_purchase_navigation_items
+    if convention&.tickets_available_for_purchase?
+      [TicketPurchaseNavigationItem.new]
+    else
+      []
+    end
+  end
+
   def root_navigation_items
     [
       navbar_brand,
       NavigationCollapse.new([
         RootNavigationGroup.new([
+          *ticket_purchase_navigation_items,
           *(
             if convention
-              [
-                *(convention.tickets_available_for_purchase? ? [TicketPurchaseNavigationItem.new] : []),
-                NavigationSection.new('Events', events_navigation_items)
-              ]
+              [NavigationSection.new('Events', events_navigation_items)]
             else
               []
             end
