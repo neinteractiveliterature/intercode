@@ -40,7 +40,7 @@ class FormJSONEditor extends React.Component {
       component: this,
       transforms: {
         form: {
-          title: Transforms.textInputChange,
+          title: Transforms.identity,
           sectionsJSON: Transforms.identity,
         },
       },
@@ -103,7 +103,7 @@ class FormJSONEditor extends React.Component {
         label="Title"
         name="title"
         value={this.state.form.title}
-        onChange={this.mutator.form.title}
+        onTextChange={this.mutator.form.title}
       />
 
       <fieldset className="mb-4">

@@ -27,7 +27,7 @@ class AdminNotes extends React.Component {
     this.mutator = mutator({
       component: this,
       transforms: {
-        editingValue: Transforms.inputChange(Transforms.identity),
+        editingValue: Transforms.identity,
       },
     });
   }
@@ -86,7 +86,7 @@ class AdminNotes extends React.Component {
           <textarea
             className="form-control"
             value={this.state.editingValue}
-            onChange={this.mutator.editingValue}
+            onChange={(event) => { this.mutator.editingValue(event.target.value); }}
             ref={(element) => { this.textareaElement = element; }}
           />
           <ErrorDisplay graphQLError={this.state.error} />

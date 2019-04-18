@@ -28,6 +28,7 @@ query ConventionTicketNameQuery {
   convention {
     id
     ticket_name
+    ticket_mode
   }
 }
 
@@ -35,6 +36,7 @@ query UserActivityAlertQuery($id: Int!) {
   convention {
     id
     ticket_name
+    ticket_mode
 
     staff_positions {
       id
@@ -52,6 +54,7 @@ query UserActivityAlertsAdminQuery {
   convention {
     id
     ticket_name
+    ticket_mode
 
     user_activity_alerts {
       id

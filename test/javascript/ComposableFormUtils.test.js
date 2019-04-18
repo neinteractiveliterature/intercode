@@ -16,14 +16,12 @@ const state = { gizmo: initialGizmo };
 
 const transforms = {
   gizmo: {
-    shouldntChange: Transforms.inputChange(Transforms.integer),
-    intField: Transforms.inputChange(Transforms.integer),
-    stringField: Transforms.textInputChange,
-    booleanField: Transforms.inputChange(Transforms.booleanString),
-    checkboxField: Transforms.checkboxChange,
-    datetimeField: Transforms.inputChange(Transforms.datetime),
-    datetimeEasternField: Transforms.inputChange(Transforms.datetimeWithTimezone('US/Eastern')),
-    datetimeForceEasternField: Transforms.inputChange(Transforms.datetimeWithForcedTimezone('US/Eastern')),
+    shouldntChange: Transforms.integer,
+    intField: Transforms.integer,
+    booleanField: Transforms.booleanString,
+    datetimeField: Transforms.datetime,
+    datetimeEasternField: Transforms.datetimeWithTimezone('US/Eastern'),
+    datetimeForceEasternField: Transforms.datetimeWithForcedTimezone('US/Eastern'),
     selectMultipleField: Transforms.multiValue,
     objectField: Transforms.identity,
   },
@@ -35,54 +33,40 @@ describe('state change calculators', () => {
   test('it changes state properly for a boolean field', () => {
     expect(stateChangeCalculator.gizmo.booleanField(
       state,
-      { target: { name: 'booleanField', value: 'true' } },
+      'true',
     ).gizmo.booleanField).toEqual(true);
 
     expect(stateChangeCalculator.gizmo.booleanField(
       state,
-      { target: { name: 'booleanField', value: 'false' } },
+      'false',
     ).gizmo.booleanField).toEqual(false);
-  });
-
-  test('it changes state properly for a checkbox field', () => {
-    expect(stateChangeCalculator.gizmo.checkboxField(
-      state,
-      { target: { name: 'checkboxField', checked: true } },
-    ).gizmo.checkboxField).toEqual(true);
   });
 
   test('it changes state properly for an integer field', () => {
     expect(stateChangeCalculator.gizmo.intField(
       state,
-      { target: { name: 'intField', value: '8675309' } },
+      '8675309',
     ).gizmo.intField).toEqual(8675309);
-  });
-
-  test('it changes state properly for a string field', () => {
-    expect(stateChangeCalculator.gizmo.stringField(
-      state,
-      { target: { name: 'stringField', value: 'beef gyoza' } },
-    ).gizmo.stringField).toEqual('beef gyoza');
   });
 
   test('it changes state properly for a datetime field', () => {
     expect(stateChangeCalculator.gizmo.datetimeField(
       state,
-      { target: { name: 'datetimeField', value: '2017-01-01T17:00:00.000Z' } },
+      '2017-01-01T17:00:00.000Z',
     ).gizmo.datetimeField).toEqual('2017-01-01T17:00:00.000Z');
   });
 
   test('it changes state properly for a timezoned datetime field', () => {
     expect(stateChangeCalculator.gizmo.datetimeEasternField(
       state,
-      { target: { name: 'datetimeField', value: '2017-01-01T17:00:00.000Z' } },
+      '2017-01-01T17:00:00.000Z',
     ).gizmo.datetimeEasternField).toEqual('2017-01-01T12:00:00.000-05:00');
   });
 
   test('it changes state properly for a forced-timezone datetime field', () => {
     expect(stateChangeCalculator.gizmo.datetimeForceEasternField(
       state,
-      { target: { name: 'datetimeField', value: '2017-01-01T17:00:00.000Z' } },
+      '2017-01-01T17:00:00.000Z',
     ).gizmo.datetimeForceEasternField).toEqual('2017-01-01T17:00:00.000-05:00');
   });
 
@@ -107,7 +91,7 @@ describe('mutator', () => {
 
     const theMutator = mutator({
       getState: () => mutableState,
-      setState: (value) => { mutableState = { ...mutableState, ...value } },
+      setState: (value) => { mutableState = { ...mutableState, ...value }; },
       transforms,
     });
 
@@ -116,12 +100,12 @@ describe('mutator', () => {
     });
 
     test('it changes the appropriate state field', () => {
-      theMutator.gizmo.checkboxField({ target: { name: 'checkboxField', checked: true } });
-      expect(mutableState.gizmo.checkboxField).toEqual(true);
+      theMutator.gizmo.objectField({ cookie: 'monster' });
+      expect(mutableState.gizmo.objectField).toEqual({ cookie: 'monster' });
     });
 
     test('it does not change the others', () => {
-      theMutator.gizmo.checkboxField({ target: { name: 'checkboxField', checked: true } });
+      theMutator.gizmo.objectField({ big: 'bird' });
       expect(mutableState.gizmo.shouldntChange).toEqual(1);
     });
   });
@@ -143,12 +127,12 @@ describe('mutator', () => {
     });
 
     test('it changes the appropriate state field', () => {
-      theMutator.gizmo.checkboxField({ target: { name: 'checkboxField', checked: true } });
-      expect(component.state.gizmo.checkboxField).toEqual(true);
+      theMutator.gizmo.objectField({ cookie: 'monster' });
+      expect(component.state.gizmo.objectField).toEqual({ cookie: 'monster' });
     });
 
     test('it does not change the others', () => {
-      theMutator.gizmo.checkboxField({ target: { name: 'checkboxField', checked: true } });
+      theMutator.gizmo.objectField({ big: 'bird' });
       expect(component.state.gizmo.shouldntChange).toEqual(1);
     });
   });

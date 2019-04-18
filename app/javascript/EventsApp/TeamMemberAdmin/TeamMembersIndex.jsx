@@ -49,10 +49,14 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                             <th>Display email address</th>
                             <th>Receive email from con</th>
                             <th>Receive email on signup or withdrawal</th>
-                            <th>
-                              {titleize(convention.ticket_name)}
-                              {' from this event'}
-                            </th>
+                            {
+                              convention.ticket_mode !== 'disabled' && (
+                                <th>
+                                  {titleize(convention.ticket_name)}
+                                  {' from this event'}
+                                </th>
+                              )
+                            }
                             <th />
                           </tr>
                         </thead>
@@ -68,13 +72,18 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                               <td>
                                 {humanize(teamMember.receive_signup_email)}
                               </td>
-                              <td>
-                                <Checkmark
-                                  value={event.provided_tickets.some(ticket => (
-                                    ticket.user_con_profile.id === teamMember.user_con_profile.id
-                                  ))}
-                                />
-                              </td>
+                              {
+                                convention.ticket_mode !== 'disabled' && (
+                                  <td>
+                                    <Checkmark
+                                      value={event.provided_tickets.some(ticket => (
+                                        ticket.user_con_profile.id
+                                          === teamMember.user_con_profile.id
+                                      ))}
+                                    />
+                                  </td>
+                                )
+                              }
                               <td>
                                 <PopperDropdown
                                   renderReference={({ ref, toggle }) => (
@@ -90,7 +99,7 @@ function TeamMembersIndex({ eventId, eventPath, history }) {
                                     {' settings'}
                                   </Link>
                                   {
-                                    event.event_category.can_provide_tickets
+                                    event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled'
                                       ? (
                                         <button
                                           className="dropdown-item cursor-pointer"

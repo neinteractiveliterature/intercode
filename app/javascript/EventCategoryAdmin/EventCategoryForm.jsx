@@ -36,14 +36,14 @@ function autogenerateColors(eventCategory) {
 }
 
 function EventCategoryForm({
-  value, onChange, forms, disabled, ticketName,
+  value, onChange, forms, disabled, ticketName, ticketMode,
 }) {
   const valueMutator = mutator({
     getState: () => value,
     setState: onChange,
     transforms: {
-      name: Transforms.textInputChange,
-      team_member_name: Transforms.textInputChange,
+      name: Transforms.identity,
+      team_member_name: Transforms.identity,
       scheduling_ui: Transforms.identity,
       default_color: Transforms.identity,
       signed_up_color: Transforms.identity,
@@ -60,7 +60,7 @@ function EventCategoryForm({
         name="name"
         label="Name"
         value={value.name}
-        onChange={valueMutator.name}
+        onTextChange={valueMutator.name}
         disabled={disabled}
       />
 
@@ -68,7 +68,7 @@ function EventCategoryForm({
         name="team_member_name"
         label="Team member name"
         value={value.team_member_name || ''}
-        onChange={valueMutator.team_member_name}
+        onTextChange={valueMutator.team_member_name}
         helpText={`
           This is the word the site will use to refer to team members of this event, e.g.
           "GM", "facilitator", etc.
@@ -178,12 +178,16 @@ function EventCategoryForm({
         isClearable
       />
 
-      <BooleanInput
-        name="can_provide_tickets"
-        caption={`Can provide ${pluralize(ticketName)}?`}
-        value={value.can_provide_tickets}
-        onChange={valueMutator.can_provide_tickets}
-      />
+      {
+        ticketMode !== 'disabled' && (
+          <BooleanInput
+            name="can_provide_tickets"
+            caption={`Can provide ${pluralize(ticketName)}?`}
+            value={value.can_provide_tickets}
+            onChange={valueMutator.can_provide_tickets}
+          />
+        )
+      }
     </>
   );
 }
@@ -206,6 +210,7 @@ EventCategoryForm.propTypes = {
   })).isRequired,
   disabled: PropTypes.bool,
   ticketName: PropTypes.string.isRequired,
+  ticketMode: PropTypes.string.isRequired,
 };
 
 EventCategoryForm.defaultProps = {

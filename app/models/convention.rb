@@ -1,6 +1,8 @@
 require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
+  TICKET_MODES = %w[disabled required_for_signup]
+
   belongs_to :updated_by, class_name: 'User', optional: true
   belongs_to :organization, optional: true
 
@@ -38,6 +40,7 @@ class Convention < ApplicationRecord
   validates :timezone_name, presence: true
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
+  validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
@@ -52,6 +55,15 @@ class Convention < ApplicationRecord
 
   def registrations_frozen?
     maximum_event_signups.value_at(Time.now) == 'not_now'
+  end
+
+  def tickets_available_for_purchase?
+    return false if ended?
+    return false if ticket_mode == 'disabled'
+
+    ticket_types.publicly_available.any? do |ticket_type|
+      ticket_type.pricing_schedule.has_value_at?(Time.now)
+    end
   end
 
   def length_seconds

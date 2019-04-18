@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 export function parseIntOrNull(stringValue) {
   const intValue = parseInt(stringValue, 10);
@@ -87,21 +87,6 @@ export const Transforms = {
   parseInt(func) { return namedFunction(value => Number.parseInt(func(value), 10), 'parseInt'); },
   booleanString(value) { return value === 'true'; },
   multiValue(choices) { return choices.map(choice => choice.value); },
-  eventTargetValue(event) { return event.target.value; },
-  eventTargetChecked(event) { return event.target.checked; },
-};
-
-Transforms.inputChange = function inputChange(wrappedTransform) {
-  return namedFunction(
-    event => wrappedTransform(Transforms.eventTargetValue(event)),
-    `inputChange('${wrappedTransform.name}')`,
-  );
-};
-Transforms.checkboxChange = function checkboxChange(event) {
-  return Transforms.eventTargetChecked(event);
-};
-Transforms.textInputChange = function textInputChange(event) {
-  return Transforms.eventTargetValue(event);
 };
 
 export function stateChangeCalculator(
@@ -110,8 +95,12 @@ export function stateChangeCalculator(
   preprocessState = Transforms.identity,
   postprocessState = Transforms.identity,
 ) {
+  const actualTransform = transform || Transforms.identity;
   return namedFunction(
-    (state, value) => postprocessState({ ...preprocessState(state), [name]: transform(value) }),
+    (state, value) => postprocessState({
+      ...preprocessState(state),
+      [name]: actualTransform(value),
+    }),
     `stateChangeCalculator('${name}')`,
   );
 }
@@ -123,7 +112,7 @@ export function combineStateChangeCalculators(
 ) {
   return Object.keys(transformsByName).reduce(
     (acc, name) => {
-      if (typeof transformsByName[name] === 'function') {
+      if (transformsByName[name] == null || typeof transformsByName[name] === 'function') {
         return {
           ...acc,
           [name]: stateChangeCalculator(
@@ -189,4 +178,25 @@ export function useTransformedState(initialValue, transform) {
   const setStateWithTransform = untransformedValue => setState(transform(untransformedValue));
 
   return [state, setStateWithTransform];
+}
+
+export function transformsReducer(transforms) {
+  return (state, action) => {
+    switch (action.type) {
+      case 'change':
+        return {
+          ...state,
+          [action.key]: (transforms[action.key] || Transforms.identity)(action.value),
+        };
+      default:
+        return state;
+    }
+  };
+}
+
+export function useChangeDispatchers(dispatch, keys) {
+  return useMemo(
+    () => keys.map(key => value => dispatch({ type: 'change', key, value })),
+    [dispatch, keys],
+  );
 }

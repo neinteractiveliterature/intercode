@@ -12,9 +12,9 @@ function TeamMemberForm({
     getState: () => value,
     setState: onChange,
     transforms: {
-      display: Transforms.checkboxChange,
-      show_email: Transforms.checkboxChange,
-      receive_con_email: Transforms.checkboxChange,
+      display: Transforms.identity,
+      show_email: Transforms.identity,
+      receive_con_email: Transforms.identity,
       receive_signup_email: Transforms.identity,
     },
   });
@@ -33,7 +33,7 @@ function TeamMemberForm({
             name={name}
             disabled={disabled}
             checked={value[name]}
-            onChange={formMutator[name]}
+            onCheckedChange={formMutator[name]}
           />
         ))
       }

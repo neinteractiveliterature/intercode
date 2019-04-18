@@ -8,6 +8,7 @@ import { UpdateConvention } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
+import ConventionFormHeader from './ConventionFormHeader';
 
 function ConventionAdmin({ id }) {
   const { data, error } = useQuerySuspended(ConventionAdminConventionQuery, { variables: { id } });
@@ -30,6 +31,7 @@ function ConventionAdmin({ id }) {
               show_event_list: convention.show_event_list,
               maximum_tickets: convention.maximum_tickets,
               ticket_name: convention.ticket_name,
+              ticket_mode: convention.ticket_mode,
               maximum_event_signups: {
                 timespans: convention.maximum_event_signups.timespans.map(timespan => ({
                   start: timespan.start,
@@ -62,6 +64,8 @@ function ConventionAdmin({ id }) {
 
   return (
     <div className="mb-4">
+      <ConventionFormHeader convention={data.convention} />
+
       <ConventionForm
         initialConvention={{ ...data.convention }}
         saveConvention={saveConvention}

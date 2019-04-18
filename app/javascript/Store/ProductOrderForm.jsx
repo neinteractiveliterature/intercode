@@ -12,16 +12,14 @@ import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 
-const intInputChange = Transforms.inputChange(Transforms.integer);
-
 function ProductOrderForm({ productId, cartUrl }) {
   const { data, error } = useQuerySuspended(OrderFormProductQuery, { variables: { productId } });
   const addOrderEntryToCurrentPendingOrder = useMutationCallback(
     AddOrderEntryToCurrentPendingOrder,
   );
 
-  const [productVariantId, productVariantIdChanged] = useTransformedState(null, intInputChange);
-  const [quantity, quantityChanged] = useTransformedState(1, intInputChange);
+  const [productVariantId, productVariantIdChanged] = useTransformedState(null, Transforms.integer);
+  const [quantity, quantityChanged] = useTransformedState(1, Transforms.integer);
 
   const dataComplete = useMemo(
     () => (
@@ -70,7 +68,7 @@ function ProductOrderForm({ productId, cartUrl }) {
       <select
         className="form-control mb-3"
         value={productVariantId || ''}
-        onChange={productVariantIdChanged}
+        onValueChange={productVariantIdChanged}
       >
         <option disabled value="">Select...</option>
         {options}
@@ -86,7 +84,7 @@ function ProductOrderForm({ productId, cartUrl }) {
         min="1"
         className="form-control"
         value={quantity == null ? '' : quantity}
-        onChange={quantityChanged}
+        onTextChange={quantityChanged}
       />
     </label>
   );

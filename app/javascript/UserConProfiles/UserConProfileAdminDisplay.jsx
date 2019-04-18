@@ -178,10 +178,14 @@ class UserConProfileAdminDisplay extends React.Component {
               </tbody>
             </table>
 
-            <TicketAdminSection
-              userConProfile={data.userConProfile}
-              convention={data.convention}
-            />
+            {
+              data.convention.ticket_mode !== 'disabled' && (
+                <TicketAdminSection
+                  userConProfile={data.userConProfile}
+                  convention={data.convention}
+                />
+              )
+            }
           </div>
 
           <div className="col-lg-3">

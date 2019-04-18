@@ -1268,6 +1268,20 @@
           ]
         },
         {
+          "name": "ticket_mode",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "How tickets are handled in this convention (possible values are 'disabled'\nand 'required_for_signup')",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
           "name": "started",
           "docstring": "",
           "tags": [
