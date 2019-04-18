@@ -41,6 +41,7 @@ fragment ConventionFields on Convention {
     ...TicketTypeFields
   }
   ticket_name
+  ticket_mode
 }
 
 fragment RunFields on Run {

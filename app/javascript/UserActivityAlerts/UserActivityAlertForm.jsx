@@ -42,6 +42,7 @@ class UserActivityAlertForm extends React.Component {
         name: PropTypes.string.isRequired,
       })).isRequired,
       ticket_name: PropTypes.string.isRequired,
+      ticket_mode: PropTypes.string.isRequired,
     }).isRequired,
     disabled: PropTypes.bool,
   }
@@ -144,14 +145,18 @@ class UserActivityAlertForm extends React.Component {
             disabled={this.props.disabled}
           />
 
-          <BootstrapFormCheckbox
-            name="trigger_on_ticket_create"
-            label={`Trigger on ${this.props.convention.ticket_name} creation`}
-            type="checkbox"
-            checked={this.props.userActivityAlert.trigger_on_ticket_create}
-            onCheckedChange={this.userActivityAlertMutator.trigger_on_ticket_create}
-            disabled={this.props.disabled}
-          />
+          {
+            this.props.convention.ticket_mode !== 'disabled' && (
+              <BootstrapFormCheckbox
+                name="trigger_on_ticket_create"
+                label={`Trigger on ${this.props.convention.ticket_name} creation`}
+                type="checkbox"
+                checked={this.props.userActivityAlert.trigger_on_ticket_create}
+                onCheckedChange={this.userActivityAlertMutator.trigger_on_ticket_create}
+                disabled={this.props.disabled}
+              />
+            )
+          }
         </div>
       </div>
 

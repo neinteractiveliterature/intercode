@@ -5,6 +5,7 @@ fragment CommonConventionData on Convention {
   ends_at
   timezone_name
   ticket_name
+  ticket_mode
 
   event_categories {
     id
