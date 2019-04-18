@@ -1,14 +1,13 @@
 import React from 'react';
-import {
-  render, act, fireEvent, wait,
-} from 'react-testing-library';
 import { renderHook } from 'react-hooks-testing-library';
 import { BrowserRouter } from 'react-router-dom';
 
 import { convention, initialEvent, minimalForm } from '../EventAdmin/formMockData';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
-import Confirm from '../../../app/javascript/ModalDialogs/Confirm';
+import {
+  render, act, fireEvent, wait,
+} from '../testUtils';
 
 describe('EditEvent', () => {
   const defaultProps = {
@@ -24,13 +23,11 @@ describe('EditEvent', () => {
     const getNodeToRender = (props) => {
       const [formProps, { event, validateForm }] = result.current;
       return (
-        <Confirm>
-          <BrowserRouter basename="/">
-            <EditEvent event={event} validateForm={validateForm} {...defaultProps} {...props}>
-              <EventForm {...formProps} />
-            </EditEvent>
-          </BrowserRouter>
-        </Confirm>
+        <BrowserRouter basename="/">
+          <EditEvent event={event} validateForm={validateForm} {...defaultProps} {...props}>
+            <EventForm {...formProps} />
+          </EditEvent>
+        </BrowserRouter>
       );
     };
 

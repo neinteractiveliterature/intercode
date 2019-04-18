@@ -71,5 +71,8 @@ module.exports = {
         config: './config/webpack/environment.js',
       },
     },
+    'import/ignore': [
+      'test/javascript/testUtils.js',
+    ],
   },
 };

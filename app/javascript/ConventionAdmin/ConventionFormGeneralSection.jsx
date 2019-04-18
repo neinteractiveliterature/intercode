@@ -5,6 +5,7 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import { useChangeDispatchers } from '../ComposableFormUtils';
+import useUniqueId from '../useUniqueId';
 
 function ConventionFormGeneralSection({ convention, dispatch }) {
   const [
@@ -13,17 +14,20 @@ function ConventionFormGeneralSection({ convention, dispatch }) {
     dispatch,
     ['name', 'domain', 'timezone_name', 'starts_at', 'ends_at'],
   );
+  const startId = useUniqueId('starts-at-');
+  const endId = useUniqueId('ends-at-');
 
   const startEndFields = [
-    ['starts_at', 'Convention starts', changeStartsAt],
-    ['ends_at', 'Convention ends', changeEndsAt],
-  ].map(([name, label, onChange]) => (
+    ['starts_at', 'Convention starts', changeStartsAt, startId],
+    ['ends_at', 'Convention ends', changeEndsAt, endId],
+  ].map(([name, label, onChange, inputId]) => (
     <div className="col-md-6" key={name}>
-      {label}
+      <label htmlFor={inputId}>{label}</label>
       <DateTimeInput
         value={convention[name]}
         timezoneName={convention.timezone_name}
         onChange={onChange}
+        id={inputId}
       />
     </div>
   ));

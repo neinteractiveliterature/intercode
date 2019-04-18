@@ -88,7 +88,7 @@ class TimezoneSelect extends React.Component {
           {label}
         </label>
         <Select
-          id={selectId}
+          inputId={selectId}
           options={this.state.options}
           isClearable
           value={getTimezoneOptionsByName()[value]}
