@@ -96,6 +96,14 @@ query UserConProfileAdminQuery($id: Int!) {
       id
       form_api_json
     }
+
+    ticket_types {
+      id
+      description
+      name
+      publicly_available
+      maximum_event_provided_tickets
+    }
   }
 
   userConProfile(id: $id) {

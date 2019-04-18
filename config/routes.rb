@@ -69,8 +69,6 @@ Intercode::Application.routes.draw do
       member do
         post :become
       end
-
-      resource :admin_ticket, only: [:new, :create, :edit, :update]
     end
     get 'user_con_profiles/(*extra)' => 'user_con_profiles#index'
 
