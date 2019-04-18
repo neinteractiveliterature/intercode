@@ -50,8 +50,8 @@ function ConventionForm({
       ),
     },
     {
-      id: 'billing',
-      name: 'Billing',
+      id: 'payments',
+      name: 'Payments',
       renderContent: () => (
         <ConventionFormBillingSection
           convention={convention}

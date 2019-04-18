@@ -62,7 +62,7 @@ function ConventionFormWebsiteSection({
           before using the site)
         </legend>
         <LiquidInput
-          value={convention.clickwrap_agreement}
+          value={convention.clickwrap_agreement || ''}
           onChange={changeClickwrapAgreement}
         />
       </fieldset>

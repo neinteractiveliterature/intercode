@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, act, fireEvent } from 'react-testing-library';
 import { renderHook } from 'react-hooks-testing-library';
 
+import { render, act, fireEvent } from '../testUtils';
 import { convention, initialEvent, minimalForm } from './formMockData';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
 
