@@ -36,28 +36,34 @@ function describeMaximumEventSignups(scheduledValue) {
   return currentOption[1];
 }
 
+function describeConventionTiming(startsAt, endsAt, timezoneName) {
+  const now = moment.tz({}, timezoneName).startOf('day');
+  const conventionStart = moment.tz(startsAt, timezoneName).startOf('day');
+  const conventionEnd = moment.tz(endsAt, timezoneName).startOf('day');
+
+  if (now.isBefore(conventionStart)) {
+    return `starts in ${pluralizeWithCount('day', conventionStart.diff(now, 'day'))}`;
+  }
+
+  if (now.isBefore(conventionEnd)) {
+    return `ends in ${pluralizeWithCount('day', conventionEnd.diff(now, 'day'))}`;
+  }
+
+  if (conventionEnd.isBefore(now)) {
+    return `ended ${pluralizeWithCount('day', now.diff(conventionEnd, 'day'))} ago`;
+  }
+
+  const isMultiDay = conventionStart.isBefore(conventionEnd);
+  return `${isMultiDay ? 'ends' : 'is'} today`;
+}
+
 function ConventionFormHeader({ convention }) {
   const conventionTiming = useMemo(
-    () => {
-      const now = moment.tz({}, convention.timezone_name).startOf('day');
-      const conventionStart = moment.tz(convention.starts_at, convention.timezone_name).startOf('day');
-      const conventionEnd = moment.tz(convention.ends_at, convention.timezone_name).startOf('day');
-
-      if (now.isBefore(conventionStart)) {
-        return `starts in ${pluralizeWithCount('day', conventionStart.diff(now, 'day'))}`;
-      }
-
-      if (now.isBefore(conventionEnd)) {
-        return `ends in ${pluralizeWithCount('day', conventionEnd.diff(now, 'day'))}`;
-      }
-
-      if (conventionEnd.isBefore(now)) {
-        return `ended ${pluralizeWithCount('day', now.diff(conventionEnd, 'day'))} ago`;
-      }
-
-      const isMultiDay = conventionStart.isBefore(conventionEnd);
-      return `${isMultiDay ? 'ends' : 'is'} today`;
-    },
+    () => describeConventionTiming(
+      convention.starts_at,
+      convention.ends_at,
+      convention.timezone_name,
+    ),
     [convention.starts_at, convention.ends_at, convention.timezone_name],
   );
 
