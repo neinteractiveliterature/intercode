@@ -1,0 +1,101 @@
+{
+  "title": "Proposal form",
+  "sections": [
+    {
+      "title": "Larp Information",
+      "section_items": [
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "caption": "Event name",
+          "lines": 1,
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_name",
+          "caption": "Short name",
+          "lines": 1,
+          "required": false
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "lines": 15,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Description** for this event.  The description and blurb are the main advertising text for this event.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_blurb",
+          "admin_description": "Short Blurb",
+          "lines": 4,
+          "required": true,
+          "format": "markdown",
+          "caption": "**Blurb** for this event. In general, blurbs should be shorter than the description, as they will be used in things like brochures, flyers, and short advertising messages.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='fa fa-external-link' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "proposed_timing",
+          "admin_description": "Proposed Timing",
+          "lines": 4,
+          "required": true,
+          "caption": "What would you like the timing of this event to be? Please include the length of the event, and any preferences you have for when it should be held, if applicable."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "proposed_location",
+          "admin_description": "Proposed Location",
+          "lines": 4,
+          "required": true,
+          "caption": "Please tell us what sort of location or space you'd like for this event. Include as many details as possible."
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "can_play_concurrently",
+          "admin_description": "Can Play Concurrently?",
+          "default_value": "false",
+          "style": "radio_horizontal",
+          "caption": "Can players play in your larp and another event at the same time?",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "age_restrictions",
+          "admin_description": "Player Visible Age Restrictions",
+          "lines": 1,
+          "required": false,
+          "caption": "Age restrictions, if applicable"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "proposed_capacity_limits",
+          "admin_description": "Capacity limits",
+          "lines": 4,
+          "required": false,
+          "caption": "**Capacity Limits**<br>Does this event have a limited capacity for attendees? If so, please let us know the following things:<br><ul><li>How many attendees, at minimum, does it need to run?</li><li>How many attendees would you *prefer* to have?</li><li>What's the maximum number of attendees the event can take?</li></ul>If there are specific gender limitations for attendee slots, please let us know those here as well."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "proposal_comments",
+          "admin_description": "Additional comments",
+          "lines": 4,
+          "required": false,
+          "caption": "If there's anything else you'd like to tell us, please do so here:"
+        }
+      ]
+    }
+  ]
+}
