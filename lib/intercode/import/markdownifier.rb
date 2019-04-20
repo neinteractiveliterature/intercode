@@ -1,6 +1,6 @@
 require 'reverse_markdown'
 
-class Intercode::Import::Intercode1::Markdownifier
+class Intercode::Import::Markdownifier
   attr_reader :logger
 
   def initialize(logger)

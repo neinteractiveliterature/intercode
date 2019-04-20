@@ -1,5 +1,4 @@
-require 'sequel'
-require 'intercode/import/import_logger'
+require 'intercode/import'
 
 module Intercode
   module Import
@@ -7,7 +6,7 @@ module Intercode
       extend ActiveSupport::Autoload
 
       mattr_accessor :logger
-      self.logger = ImportLogger.new
+      self.logger = ImportLogger.instance
 
       autoload :Configuration
       autoload :DateHelpers

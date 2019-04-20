@@ -2,6 +2,7 @@ require 'tempfile'
 require 'open3'
 require 'parallel'
 require 'bcrypt'
+require 'sequel'
 
 class Intercode::Import::Intercode1::Importer
   attr_reader :connection, :constants_file, :config

@@ -3,6 +3,8 @@ require 'term/ansicolor'
 module Intercode
   module Import
     class ImportLogger < Logger
+      include Singleton
+
       SEVERITY_COLORS = {
         'FATAL' => [:black, :on_red],
         'ERROR' => [:bold, :red],
