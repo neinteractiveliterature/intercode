@@ -4,7 +4,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   def initialize(connection, con)
     super connection
     @con = con
-    @markdownifier = Intercode::Import::Intercode1::Markdownifier.new(logger)
+    @markdownifier = Intercode::Import::Markdownifier.new(logger)
     @registration_policy_factory = Intercode::Import::Intercode1::RegistrationPolicyFactory.new
   end
 

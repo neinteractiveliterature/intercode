@@ -21,6 +21,7 @@ gem 'cancancan'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'doorkeeper', '5.1.0'
 gem 'devise-doorkeeper'
+gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
 gem 'doorkeeper-openid_connect'
 

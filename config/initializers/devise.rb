@@ -1,4 +1,5 @@
 require 'intercode/strategies/legacy_md5'
+require 'intercode/strategies/legacy_sha1'
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
