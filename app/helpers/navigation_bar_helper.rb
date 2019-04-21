@@ -102,7 +102,7 @@ module NavigationBarHelper
 
   def navigation_bar_presenter
     @navigation_bar_presenter ||= NavigationBarPresenter.new(
-      'navbar-dark bg-intercode-blue',
+      ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
       request,
       current_ability,
       user_con_profile,
