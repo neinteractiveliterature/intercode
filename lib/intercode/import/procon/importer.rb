@@ -1,14 +1,17 @@
 require 'sequel'
 
 class Intercode::Import::Procon::Importer
-  attr_reader :procon_connection, :illyan_connection
+  attr_reader :procon_connection, :illyan_connection, :convention_domain_regex, :organization_name
 
-  def initialize(procon_db_url, illyan_db_url)
+  def initialize(procon_db_url, illyan_db_url, convention_domain_regex, organization_name)
     logger.info('Connecting to ProCon database')
     @procon_connection = Sequel.connect(procon_db_url)
 
     logger.info('Connecting to Illyan database')
     @illyan_connection = Sequel.connect(illyan_db_url)
+
+    @convention_domain_regex = Regexp.new(convention_domain_regex)
+    @organization_name = organization_name
   end
 
   def import!
@@ -45,8 +48,16 @@ class Intercode::Import::Procon::Importer
     end
   end
 
+  def organization
+    @organization ||= Organization.find_or_create_by!(name: organization_name)
+  end
+
   def conventions_table
-    @conventions_table ||= Intercode::Import::Procon::Tables::Conventions.new(procon_connection)
+    @conventions_table ||= Intercode::Import::Procon::Tables::Conventions.new(
+      procon_connection,
+      convention_domain_regex,
+      organization
+    )
   end
 
   def people_table

@@ -31,13 +31,15 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
       default_color: '#ffeeba',
       full_color: 'rgba(255, 238, 186, 0.6)',
       signed_up_color: '#d6a100',
-      event_form: convention.forms.find_by!(title: 'Filler event form'),
+      event_form: convention.forms.find_by!(title: 'Filler event form')
     )
   end
 
-  def initialize(connection)
+  def initialize(connection, convention_domain_regex, organization)
     super connection
     @markdownifier = Intercode::Import::Markdownifier.new(logger)
+    @convention_domain_regex = convention_domain_regex
+    @organization = organization
   end
 
   def table_name
@@ -51,6 +53,8 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
   private
 
   def build_record(row)
+    return nil unless convention_domain_regex_matches?(row[:id])
+
     domain = convention_domain(row[:id])
     unless domain
       logger.warn("Skipping #{row[:fullname]} because it has no virtual sites")
@@ -58,6 +62,7 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
     end
 
     Convention.new(
+      organization: @organization,
       name: row[:fullname],
       domain: convention_domain(row[:id]),
       timezone_name: 'America/New_York',
@@ -68,6 +73,11 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
       show_schedule: 'yes',
       show_event_list: 'yes'
     )
+  end
+
+  def convention_domain_regex_matches?(event_id)
+    all_domains = connection[:virtual_sites].where(event_id: event_id).map(:domain)
+    all_domains.any? { |domain| @convention_domain_regex.match?(domain) }
   end
 
   # Pick the longest domain on the theory that it's the least ambiguous

@@ -24,7 +24,7 @@ class Intercode::Import::Procon::Tables::Attendances < Intercode::Import::Procon
   end
 
   def dataset
-    super.exclude(event_id: @convention_id_map.keys)
+    super.where(event_id: @run_id_map.keys)
   end
 
   private

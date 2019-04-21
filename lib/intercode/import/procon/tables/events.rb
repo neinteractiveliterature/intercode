@@ -34,7 +34,7 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
   def dataset
     super.where(
       (Sequel.~(Sequel[{ type: 'ProposedEvent' }]) | Sequel[{ type: nil }]) &
-      Sequel.~(Sequel[{ parent_id: nil }])
+      Sequel[{ parent_id: @convention_id_map.keys }]
     )
   end
 
