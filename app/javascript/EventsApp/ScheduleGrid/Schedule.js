@@ -1,7 +1,22 @@
+import moment from 'moment-timezone';
+
 import EventRun from './PCSG/EventRun';
 import ScheduleBlock from './PCSG/ScheduleBlock';
 import ScheduleGridLayout from './ScheduleGridLayout';
 import { timespanFromConvention } from '../../TimespanUtils';
+import Timespan from '../../Timespan';
+
+function expandTimespanToNearestHour(timespan) {
+  const start = moment(timespan.start).set({ minute: 0, second: 0, millisecond: 0 });
+  const finish = moment(timespan.finish);
+
+  if (finish.minute() > 0 || finish.second() > 0 || finish.millisecond() > 0) {
+    finish.add(1, 'hours');
+  }
+  finish.set({ minute: 0, second: 0, millisecond: 0 });
+
+  return new Timespan(start, finish);
+}
 
 export default class Schedule {
   constructor(config, convention, events) {
@@ -102,10 +117,10 @@ export default class Schedule {
 
   buildLayoutForTimespanRange = (minTimespan, maxTimespan) => {
     const eventRuns = this.getEventRunsOverlapping(maxTimespan);
-    const actualTimespan = eventRuns.reduce(
+    const actualTimespan = expandTimespanToNearestHour(eventRuns.reduce(
       (currentMaxTimespan, eventRun) => currentMaxTimespan.expandedToFit(eventRun.timespan),
       minTimespan,
-    );
+    ));
 
     const groups = (
       this.config.groupEventsBy === 'room'

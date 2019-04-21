@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_15_164817) do
+ActiveRecord::Schema.define(version: 2019_04_20_154557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -626,6 +626,8 @@ ActiveRecord::Schema.define(version: 2019_04_15_164817) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text "legacy_password_md5"
+    t.text "legacy_password_sha1"
+    t.text "legacy_password_sha1_salt"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -183,7 +183,7 @@ class Types::QueryType < Types::BaseObject
     cms_layout = args[:cms_layout_id] ? CmsLayout.find(args[:cms_layout_id]) : nil
 
     NavigationBarPresenter.new(
-      cms_layout&.navbar_classes || 'navbar-dark bg-intercode-blue',
+      cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
       nil, # request
       context[:current_ability],
       context[:user_con_profile],

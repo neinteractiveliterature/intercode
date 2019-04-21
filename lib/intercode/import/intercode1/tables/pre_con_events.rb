@@ -3,7 +3,7 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
     super connection
     @con = con
     @user_con_profile_id_map = user_con_profile_id_map
-    @markdownifier = Intercode::Import::Intercode1::Markdownifier.new(logger)
+    @markdownifier = Intercode::Import::Markdownifier.new(logger)
   end
 
   def dataset
