@@ -22,12 +22,27 @@ class Intercode::Import::Procon::Importer
     ].each do |importer|
       send(importer).import!
     end
+
+    expand_conventions
   end
 
   private
 
   def logger
     Intercode::Import::ImportLogger.instance
+  end
+
+  def expand_conventions
+    logger.info 'Expanding convention times to fit all event runs'
+    @conventions_table.id_map.values.each do |convention|
+      next unless convention.runs.any?
+
+      min_start = [convention.starts_at, *convention.runs.map(&:starts_at)].min
+      max_end = [convention.ends_at, *convention.runs.map(&:ends_at)].max
+
+      logger.debug "Expanding #{convention.name}"
+      convention.update!(starts_at: min_start, ends_at: max_end)
+    end
   end
 
   def conventions_table

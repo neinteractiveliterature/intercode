@@ -86,29 +86,39 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
 
   def registration_policy(row)
     if row[:type] != 'LimitedCapacityEvent'
-      return event_registration_open?(row) ? RegistrationPolicy.unlimited : RegistrationPolicy.new
+      if event_registration_open?(row) || event_has_counted_attendances?(row)
+        return RegistrationPolicy.unlimited
+      end
+      return RegistrationPolicy.new
     end
 
-    buckets = connection[:attendee_slots].where(event_id: row[:id]).map do |attendee_slot_row|
-      bucket_for_attendee_slot_row(attendee_slot_row)
-    end
-
+    buckets = buckets_for_event(row)
     RegistrationPolicy.new(buckets: postprocess_buckets(buckets))
   end
 
   def postprocess_buckets(buckets)
-    buckets.reject! { |bucket| bucket.total_slots == 0 }
-    return buckets unless buckets.map(&:key) == ['flex']
+    return buckets unless buckets.select { |bucket| bucket.total_slots > 0 }.map(&:key) == ['flex']
 
     [
       RegistrationPolicy::Bucket.new(
-        buckets[0].attributes.merge(
+        buckets.find { |bucket| bucket.key == 'flex' }.attributes.merge(
           key: 'signups',
           name: 'Signups',
           description: 'Signups for this event',
           slots_limited: true,
           anything: false
         )
+      )
+    ]
+  end
+
+  def buckets_for_event(row)
+    [
+      *connection[:attendee_slots].where(event_id: row[:id]).map do |attendee_slot_row|
+        bucket_for_attendee_slot_row(attendee_slot_row)
+      end,
+      *buckets_for_registration_bucket_rows(
+        connection[:registration_buckets].where(event_id: row[:id]).to_a
       )
     ]
   end
@@ -121,6 +131,32 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
         total_slots: attendee_slot_row[:max]
       )
     )
+  end
+
+  def buckets_for_registration_bucket_rows(registration_bucket_rows)
+    registration_bucket_rows.map do |registration_bucket_row|
+      # When ProCon migrated away from the registration_bucket_rows table, the registration_rules
+      # rows backing these were lost, so we have to intuit the 'gender' of each signup bucket from
+      # the row's position in the list (which we can because the code that generated these was
+      # deterministic)
+      gender_for_row = if registration_bucket_rows.size == 1
+        'neutral'
+      else
+        case registration_bucket_row[:position]
+        when 1 then 'male'
+        when 2 then 'female'
+        when 3 then 'neutral'
+        end
+      end
+
+      RegistrationPolicy::Bucket.new(
+        BUCKET_ATTRS_BY_GENDER[gender_for_row].merge(
+          minimum_slots: registration_bucket_row[:min],
+          preferred_slots: registration_bucket_row[:preferred],
+          total_slots: registration_bucket_row[:max]
+        )
+      )
+    end
   end
 
   def event_category_name(row)
