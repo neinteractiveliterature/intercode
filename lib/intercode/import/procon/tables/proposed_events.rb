@@ -14,13 +14,13 @@ class Intercode::Import::Procon::Tables::ProposedEvents < Intercode::Import::Pro
   end
 
   def dataset
-    super.where(type: 'ProposedEvent').exclude(parent_id: nil)
+    super.where(type: 'ProposedEvent', parent_id: @convention_id_map.keys)
   end
 
   private
 
   def build_record(row)
-    convention = @convention_id_map[row[:parent_id]]
+    convention = @convention_id_map.fetch(row[:parent_id])
     proposal = convention.event_proposals.new(
       event_category: convention.event_categories.find_by!(name: 'Larp'),
       status: accepted?(row) ? 'accepted' : 'reviewing',

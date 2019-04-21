@@ -16,7 +16,9 @@ namespace :import do
 
     importer = Intercode::Import::Procon::Importer.new(
       fetch_env_param('PROCON_DB_URL'),
-      fetch_env_param('ILLYAN_DB_URL')
+      fetch_env_param('ILLYAN_DB_URL'),
+      fetch_env_param('CONVENTION_DOMAIN_REGEX'),
+      fetch_env_param('ORGANIZATION_NAME')
     )
 
     ActiveRecord::Base.connection.transaction do
