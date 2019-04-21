@@ -1,4 +1,6 @@
 module ApplicationHelper
+  DEFAULT_NAVBAR_CLASSES = 'navbar-fixed-top navbar-expand-md mb-4 navbar-dark bg-intercode-blue'
+
   def self.obfuscated_email(address)
     address.gsub('.', ' DOT ').gsub('@', ' AT ')
   end
@@ -14,7 +16,7 @@ module ApplicationHelper
 
   def navigation_bar(cms_layout = nil)
     render partial: 'layouts/navigation_bar', locals: {
-      navbar_classes: cms_layout&.navbar_classes || 'navbar-dark bg-intercode-blue'
+      navbar_classes: cms_layout&.navbar_classes || DEFAULT_NAVBAR_CLASSES
     }
   end
 

@@ -97,7 +97,7 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
 
     convention.default_layout.update!(
       name: site_template[:name],
-      navbar_classes: 'navbar-dark',
+      navbar_classes: 'row navbar-expand-md mt-4 bg-dark navbar-dark',
       content: content_for_layout(site_template)
     )
   end
@@ -126,12 +126,6 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
           {{ content_for_head }}
           <style type="text/css">
             #{process_css(site_template[:css] || site_template[:themeroller_css])}
-            .navbar a.nav-link, .navbar a.navbar-brand {
-              border-radius: 5px;
-              background-color: black;
-              padding-left: 5px;
-              padding-right: 5px;
-            }
           </style>
         <body>
           #{site_template[:header]}
