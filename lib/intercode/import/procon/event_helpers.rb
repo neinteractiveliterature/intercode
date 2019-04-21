@@ -29,6 +29,10 @@ module Intercode::Import::Procon::EventHelpers
       .count == 0
   end
 
+  def event_has_counted_attendances?(row)
+    connection[:attendances].where(event_id: row[:id], counts: true).any?
+  end
+
   def can_play_concurrently?(row)
     connection[:registration_rules].where(
       policy_id: row[:registration_policy_id],
