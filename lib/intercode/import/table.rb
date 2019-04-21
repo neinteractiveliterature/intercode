@@ -33,7 +33,7 @@ class Intercode::Import::Table
       record = build_record(row)
       next unless record
 
-      record.save! rescue binding.pry
+      record.save!
 
       id_map[row_id(row)] = record
 
