@@ -23,12 +23,6 @@ namespace :import do
 
     ActiveRecord::Base.connection.transaction do
       importer.import!
-      # raise ActiveRecord::Rollback
-      ActiveRecord::Base.connection.execute <<~SQL
-        UPDATE conventions
-        SET
-          domain = regexp_replace(lower(name), '[^a-z0-9]', '', 'g') || '.intercode.test';
-      SQL
     end
   end
 end
