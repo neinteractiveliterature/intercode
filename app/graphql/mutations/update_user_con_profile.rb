@@ -13,6 +13,7 @@ class Mutations::UpdateUserConProfile < Mutations::BaseMutation
       )
     end
     user_con_profile.assign_attributes(user_con_profile_attrs)
+    user_con_profile.needs_update = false
     user_con_profile.save!
 
     { user_con_profile: user_con_profile }
