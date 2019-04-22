@@ -71,6 +71,8 @@ Intercode::Application.routes.draw do
       end
     end
     get 'user_con_profiles/(*extra)' => 'user_con_profiles#index'
+    get 'my_profile/new' => 'my_profiles#new', as: :new_my_profile
+    get 'my_profile/edit' => 'my_profiles#show', as: :edit_my_profile # yes, really, show
     get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
 
     get 'reports' => 'reports#index'
