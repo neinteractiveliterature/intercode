@@ -18,7 +18,7 @@ const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../Eve
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ '../FormAdmin'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 import LiquidHTMLEditor from '../StandaloneFormControls/LiquidHTMLEditor';
-import MyProfileForm from '../UserConProfiles/MyProfileForm';
+const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ '../MyProfile'));
 // import NavigationBar from '../NavigationBar';
 const NavigationItemsAdmin = lazy(() => import(/* webpackChunkName: "navigation-items-admin" */ '../NavigationItemsAdmin'));
 import OAuthPermissionsPrompt from '../OAuthPermissionsPrompt';
@@ -56,7 +56,7 @@ const unwrappedComponents = {
   FormAdmin,
   LiquidDocs,
   LiquidHTMLEditor,
-  MyProfileForm,
+  MyProfile,
   // NavigationBar,
   NavigationItemsAdmin,
   OAuthPermissionsPrompt,

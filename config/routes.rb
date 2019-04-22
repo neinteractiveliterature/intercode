@@ -71,13 +71,7 @@ Intercode::Application.routes.draw do
       end
     end
     get 'user_con_profiles/(*extra)' => 'user_con_profiles#index'
-
-    resource :my_profile do
-      member do
-        get :edit_bio
-        patch :update_bio
-      end
-    end
+    get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
 
     get 'reports' => 'reports#index'
     namespace :reports do

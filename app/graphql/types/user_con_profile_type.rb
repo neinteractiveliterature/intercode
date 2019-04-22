@@ -23,8 +23,19 @@ class Types::UserConProfileType < Types::BaseObject
   field :first_name, String, null: true
   field :last_name, String, null: true
   field :nickname, String, null: true
+  field :gravatar_url, String, null: false
+  field :gravatar_enabled, Boolean, null: false
   field :bio, String, null: true
+  field :can_have_bio, Boolean, null: false, method: :can_have_bio?
+  field :bio_name, String, null: true
   field :show_nickname_in_bio, Boolean, null: true
+  field :bio_html, String, null: true
+
+  def bio_html
+    MarkdownLoader.for('user_con_profile', 'No bio provided')
+      .load([[object, 'bio_html'], object.bio])
+  end
+
   field :form_response_attrs_json, String, null: true
 
   def form_response_attrs_json
