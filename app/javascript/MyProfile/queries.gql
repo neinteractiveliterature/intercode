@@ -1,0 +1,27 @@
+query MyProfileQuery {
+  convention {
+    id
+    name
+    starts_at
+    ends_at
+    timezone_name
+
+    user_con_profile_form {
+      id
+      form_api_json
+    }
+  }
+
+  myProfile {
+    id
+    email
+    form_response_attrs_json
+    can_have_bio
+    gravatar_url
+    bio
+    show_nickname_in_bio
+    bio_name
+    bio_html
+    gravatar_enabled
+  }
+}

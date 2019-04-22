@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { isEqual } from 'lodash';
 
-import buildFormStateFromData from './buildFormStateFromData';
+import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import { MyProfileQuery } from './queries.gql';
-import { UpdateUserConProfile } from './mutations.gql';
+import { UpdateUserConProfile } from '../UserConProfiles/mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
@@ -73,9 +74,17 @@ function MyProfileForm() {
   };
 
   return (
-    <FormPresenterApp form={form}>
-      <FormPresenter {...formPresenterProps} />
-    </FormPresenterApp>
+    <>
+      <FormPresenterApp form={form}>
+        <FormPresenter {...formPresenterProps} />
+      </FormPresenterApp>
+
+      <div className="my-4">
+        <Link to="/" className="btn btn-primary">
+          Finish and return to my profile
+        </Link>
+      </div>
+    </>
   );
 }
 
