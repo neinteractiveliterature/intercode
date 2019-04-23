@@ -15,4 +15,8 @@ module Concerns::ContextAccessors
   end
 
   delegate :can?, to: :current_ability
+
+  def cms_parent
+    @cms_parent ||= convention || RootSite.instance
+  end
 end

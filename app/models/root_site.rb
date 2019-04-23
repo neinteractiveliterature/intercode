@@ -5,4 +5,20 @@ class RootSite < ApplicationRecord
   def self.instance
     RootSite.first
   end
+
+  def pages
+    Page.global
+  end
+
+  def cms_layouts
+    CmsLayout.global
+  end
+
+  def cms_partials
+    CmsPartial.global
+  end
+
+  def cms_variables
+    CmsVariable.global
+  end
 end

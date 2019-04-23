@@ -13,17 +13,14 @@ Intercode::Application.routes.draw do
   }
 
   # CMS stuff
-  cadmus_pages
+  get 'pages/*page_glob' => 'pages#show', as: :page
+  get 'cms_pages/(*extra)' => 'cms_admin#index', as: :cms_pages
   resources :cms_partials
   resources :cms_files
-  get 'cms_graphql_queries/(*extra)' => 'cms_graphql_queries#index', as: :cms_graphql_queries
-  resources :cms_navigation_items do
-    collection do
-      patch :sort
-    end
-  end
+  get 'cms_graphql_queries/(*extra)' => 'cms_admin#index', as: :cms_graphql_queries
+  get 'cms_navigation_items/(*extra)' => 'cms_admin#index', as: :cms_navigation_items
   resources :cms_layouts
-  resources :cms_variables, only: [:index]
+  get 'cms_variables/(*extra)' => 'cms_admin#index', as: :cms_variables
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
 
   # All of these pages must be within the virtual host

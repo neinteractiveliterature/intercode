@@ -89,6 +89,12 @@ class Types::QueryType < Types::BaseObject
     context[:current_user]
   end
 
+  field :cms_parent, Types::CmsParentType, null: false
+
+  def cms_parent
+    convention || root_site
+  end
+
   field :cms_pages, [Types::PageType], null: true
 
   def cms_pages
