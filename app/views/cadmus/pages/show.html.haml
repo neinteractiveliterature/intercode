@@ -1,7 +1,7 @@
 - admin_bar = capture do
   - if can? :update, @page
     .page-admin-dropdown
-      = app_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id
+      = app_component 'PageAdminDropdown', showDelete: can?(:destroy, @page), pageId: @page.id
 
 - if @page.invariant?
   - page_content = Rails.cache.fetch(cache_fragment_name([convention, @page])) { render_page_content }

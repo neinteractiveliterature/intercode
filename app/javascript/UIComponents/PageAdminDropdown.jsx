@@ -1,24 +1,22 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
 
-import { DeletePage } from './pageAdminDropdownMutations.gql';
+import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from './PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import useMutationCallback from '../useMutationCallback';
 
-function PageAdminDropdown({
-  editUrl, pageListUrl, showDelete, pageId,
-}) {
+function PageAdminDropdown({ showDelete, pageId }) {
   const confirm = useConfirm();
-  const deletePage = useMutation(DeletePage);
+  const deletePage = useMutationCallback(DeletePage);
 
   const deleteConfirmed = useCallback(
     async () => {
-      await deletePage({ variables: { input: { id: pageId } } });
-      window.location.href = pageListUrl;
+      await deletePage({ variables: { id: pageId } });
+      window.location.href = '/cms_pages';
     },
-    [deletePage, pageId, pageListUrl],
+    [deletePage, pageId],
   );
 
   return (
@@ -35,8 +33,8 @@ function PageAdminDropdown({
         )}
         placement="bottom-end"
       >
-        <a href={editUrl} className="dropdown-item">Edit page</a>
-        <a href={pageListUrl} className="dropdown-item">View all pages</a>
+        <a href={`/cms_pages/${pageId}/edit`} className="dropdown-item">Edit page</a>
+        <a href="/cms_pages" className="dropdown-item">View all pages</a>
         {
           showDelete ? (
             <button
@@ -58,8 +56,6 @@ function PageAdminDropdown({
 }
 
 PageAdminDropdown.propTypes = {
-  editUrl: PropTypes.string.isRequired,
-  pageListUrl: PropTypes.string.isRequired,
   showDelete: PropTypes.bool.isRequired,
   pageId: PropTypes.number.isRequired,
 };

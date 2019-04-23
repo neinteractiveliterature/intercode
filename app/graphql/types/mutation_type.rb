@@ -10,7 +10,7 @@ def guard_for_cms_model(model_class, action, find_by: :id)
 end
 
 def guard_for_create_cms_model(model_class)
-  ->(_obj, args, ctx) {
+  ->(_obj, _args, ctx) {
     model = model_class.new(parent: ctx[:convention])
     ctx[:current_ability].can?(:create, model)
   }
@@ -141,7 +141,6 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:event_categories, :update))
   end
 
-
   field :deleteEventCategory, mutation: Mutations::DeleteEventCategory do
     guard(guard_for_convention_associated_model(:event_categories, :destroy))
   end
@@ -256,6 +255,14 @@ class Types::MutationType < Types::BaseObject
   end
 
   ### Page
+
+  field :createPage, mutation: Mutations::CreatePage do
+    guard(guard_for_create_cms_model(Page))
+  end
+
+  field :updatePage, mutation: Mutations::UpdatePage do
+    guard(guard_for_cms_model(Page, :update))
+  end
 
   field :deletePage, mutation: Mutations::DeletePage do
     guard(guard_for_cms_model(Page, :destroy))

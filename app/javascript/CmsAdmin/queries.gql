@@ -1,0 +1,5 @@
+query ConventionExistsQuery {
+  convention {
+    id
+  }
+}

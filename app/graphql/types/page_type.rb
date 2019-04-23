@@ -8,4 +8,6 @@ class Types::PageType < Types::BaseObject
       ctx[:current_ability].can?(:update, graphql_object.object)
     end
   end
+  field :skip_clickwrap_agreement, Boolean, null: true
+  field :cms_layout, Types::CmsLayoutType, null: true
 end

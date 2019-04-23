@@ -26,18 +26,13 @@ class PagesController < ApplicationController
   # root URL.  Because pages should only have one canonical URL if possible, natch.
   before_action :redirect_if_root_page, only: [:show]
 
-  # We don't want to let the general public view the list of pages, so we'll use a special extra
-  # authorization filter here.
-  before_action :authorize_index, only: [:index]
-
   # Intercode's layout uses the @page_title instance variable for the <title> tag.
   before_action :set_page_title, only: :show
 
   # We're going to do our own slightly more complicated check here, because pages can explicitly
   # skip the clickwrap check
   skip_before_action :ensure_clickwrap_agreement_accepted
-  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it, only: [:show]
-  before_action :ensure_clickwrap_agreement_accepted, except: [:show]
+  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it
 
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
@@ -89,10 +84,6 @@ class PagesController < ApplicationController
 
   def set_page_title
     @page_title = @page&.name
-  end
-
-  def page_params
-    params.require(:page).permit(:name, :slug, :content, :admin_notes, :skip_clickwrap_agreement)
   end
 
   def render_page_content
