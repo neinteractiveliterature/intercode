@@ -1,0 +1,12 @@
+fragment CmsPartialFields on CmsPartial {
+  id
+  name
+  content
+  admin_notes
+}
+
+query CmsPartialsAdminQuery {
+  cmsPartials {
+    ...CmsPartialFields
+  }
+}

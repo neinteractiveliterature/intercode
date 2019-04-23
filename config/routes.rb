@@ -15,7 +15,7 @@ Intercode::Application.routes.draw do
   # CMS stuff
   get 'pages/*page_glob' => 'pages#show', as: :page
   get 'cms_pages/(*extra)' => 'cms_admin#index', as: :cms_pages
-  resources :cms_partials
+  get 'cms_partials/(*extra)' => 'cms_admin#index', as: :cms_partials
   resources :cms_files
   get 'cms_layouts/(*extra)' => 'cms_admin#index', as: :cms_layouts
   get 'cms_graphql_queries/(*extra)' => 'cms_admin#index', as: :cms_graphql_queries
