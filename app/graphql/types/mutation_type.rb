@@ -66,6 +66,20 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_cms_model(CmsGraphqlQuery, :destroy))
   end
 
+  ### CmsLayout
+
+  field :createCmsLayout, mutation: Mutations::CreateCmsLayout do
+    guard(guard_for_create_cms_model(CmsLayout))
+  end
+
+  field :updateCmsLayout, mutation: Mutations::UpdateCmsLayout do
+    guard(guard_for_cms_model(CmsLayout, :update))
+  end
+
+  field :deleteCmsLayout, mutation: Mutations::DeleteCmsLayout do
+    guard(guard_for_cms_model(CmsLayout, :destroy))
+  end
+
   ### CmsNavigationItem
 
   field :createCmsNavigationItem, mutation: Mutations::CreateCmsNavigationItem do

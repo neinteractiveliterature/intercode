@@ -11,6 +11,7 @@ import NavigationItemsAdmin from './NavigationItemsAdmin';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import CmsPagesAdmin from './CmsPagesAdmin';
+import CmsLayoutsAdmin from './CmsLayoutsAdmin';
 
 function CmsAdminNavTab({ path, children }) {
   return (
@@ -57,6 +58,7 @@ function CmsAdmin() {
         <Switch>
           <Route path="/cms_pages" component={CmsPagesAdmin} />
           <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
+          <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
           <Route path="/cms_variables" component={CmsVariablesAdmin} />
           <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />
         </Switch>

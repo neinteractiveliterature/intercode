@@ -1,23 +1,23 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 
-import buildPageInput from './buildPageInput';
-import CmsPageForm, { pageReducer } from './CmsPageForm';
-import { CmsPagesAdminQuery } from './queries.gql';
+import buildLayoutInput from './buildLayoutInput';
+import { CmsLayoutsAdminQuery } from './queries.gql';
+import { CreateLayout } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
-import { CreatePage } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
+import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
 
-function NewCmsPage({ history }) {
-  const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
-  const [page, dispatch] = useReducer(pageReducer, {});
-  const [createPage, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreatePage, {
-      query: CmsPagesAdminQuery,
-      arrayPath: ['cmsPages'],
-      newObjectPath: ['createPage', 'page'],
+function NewCmsLayout({ history }) {
+  const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
+  const [layout, dispatch] = useReducer(layoutReducer, {});
+  const [createLayout, createError, createInProgress] = useAsyncFunction(
+    useCreateMutation(CreateLayout, {
+      query: CmsLayoutsAdminQuery,
+      arrayPath: ['cmsLayouts'],
+      newObjectPath: ['createCmsLayout', 'cms_layout'],
     }),
   );
 
@@ -27,19 +27,19 @@ function NewCmsPage({ history }) {
 
   const formSubmitted = async (event) => {
     event.preventDefault();
-    await createPage({
+    await createLayout({
       variables: {
-        page: buildPageInput(page),
+        cmsLayout: buildLayoutInput(layout),
       },
     });
-    history.push('/cms_pages');
+    history.push('/cms_layouts');
   };
 
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsPageForm
-          page={page}
+        <CmsLayoutForm
+          layout={layout}
           dispatch={dispatch}
           cmsLayouts={data.cmsLayouts}
           cmsParent={data.cmsParent}
@@ -50,7 +50,7 @@ function NewCmsPage({ history }) {
         <input
           type="submit"
           className="btn btn-primary"
-          value="Create page"
+          value="Create layout"
           disabled={createInProgress}
         />
       </form>
@@ -58,10 +58,10 @@ function NewCmsPage({ history }) {
   );
 }
 
-NewCmsPage.propTypes = {
+NewCmsLayout.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-export default NewCmsPage;
+export default NewCmsLayout;
