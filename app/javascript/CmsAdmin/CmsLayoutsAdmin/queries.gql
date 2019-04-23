@@ -1,0 +1,13 @@
+fragment CmsLayoutFields on CmsLayout {
+  id
+  name
+  content
+  navbar_classes
+  admin_notes
+}
+
+query CmsLayoutsAdminQuery {
+  cmsLayouts {
+    ...CmsLayoutFields
+  }
+}

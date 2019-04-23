@@ -1,30 +1,30 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
-import { CmsPagesAdminQuery } from './queries.gql';
-import { DeletePage } from './mutations.gql';
+import { CmsLayoutsAdminQuery } from './queries.gql';
+import { DeleteLayout } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { sortByLocaleString } from '../../ValueUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 
-function CmsPagesAdminTable() {
-  const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
+function CmsLayoutsAdminTable() {
+  const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
   const confirm = useConfirm();
-  const deletePageMutate = useDeleteMutation(DeletePage, {
-    query: CmsPagesAdminQuery,
-    arrayPath: ['cmsPages'],
+  const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
+    query: CmsLayoutsAdminQuery,
+    arrayPath: ['cmsLayouts'],
     idVariablePath: ['id'],
   });
 
-  const pagesSorted = useMemo(
+  const layoutsSorted = useMemo(
     () => {
       if (error) {
         return [];
       }
 
-      return sortByLocaleString(data.cmsPages, page => page.name);
+      return sortByLocaleString(data.cmsLayouts, layout => layout.name);
     },
     [data, error],
   );
@@ -33,34 +33,34 @@ function CmsPagesAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deletePage = id => deletePageMutate({ variables: { id } });
+  const deleteLayout = id => deleteLayoutMutate({ variables: { id } });
 
   return (
     <>
       <table className="table table-striped">
         <tbody>
-          {pagesSorted.map(page => (
-            <tr key={page.id}>
+          {layoutsSorted.map(layout => (
+            <tr key={layout.id}>
               <td>
-                <a href={`/pages/${page.slug}`}>{page.name}</a>
+                {layout.name}
                 {
-                  page.admin_notes && page.admin_notes.trim() !== '' && (
+                  layout.admin_notes && layout.admin_notes.trim() !== '' && (
                     <>
                       <br />
-                      <small>{page.admin_notes}</small>
+                      <small>{layout.admin_notes}</small>
                     </>
                   )
                 }
               </td>
               <td className="text-right">
-                <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
+                <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
                   Edit
                 </Link>
                 <button
                   type="button"
                   onClick={() => confirm({
-                    prompt: `Are you sure you want to delete ${page.name}?`,
-                    action: () => deletePage(page.id),
+                    prompt: 'Are you sure you want to delete this layout?',
+                    action: () => deleteLayout(layout.id),
                     renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                   className="btn btn-danger btn-sm ml-1"
@@ -73,9 +73,9 @@ function CmsPagesAdminTable() {
         </tbody>
       </table>
 
-      <Link to="/cms_pages/new" className="btn btn-secondary">New Page</Link>
+      <Link to="/cms_layouts/new" className="btn btn-secondary">New layout</Link>
     </>
   );
 }
 
-export default CmsPagesAdminTable;
+export default CmsLayoutsAdminTable;

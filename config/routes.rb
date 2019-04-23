@@ -17,9 +17,9 @@ Intercode::Application.routes.draw do
   get 'cms_pages/(*extra)' => 'cms_admin#index', as: :cms_pages
   resources :cms_partials
   resources :cms_files
+  get 'cms_layouts/(*extra)' => 'cms_admin#index', as: :cms_layouts
   get 'cms_graphql_queries/(*extra)' => 'cms_admin#index', as: :cms_graphql_queries
   get 'cms_navigation_items/(*extra)' => 'cms_admin#index', as: :cms_navigation_items
-  resources :cms_layouts
   get 'cms_variables/(*extra)' => 'cms_admin#index', as: :cms_variables
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
 
