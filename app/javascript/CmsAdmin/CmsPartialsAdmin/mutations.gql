@@ -1,0 +1,23 @@
+#import './queries.gql'
+
+mutation CreatePartial($cmsPartial: CmsPartialInput!) {
+  createCmsPartial(input: { cms_partial: $cmsPartial }) {
+    cms_partial {
+      ...CmsPartialFields
+    }
+  }
+}
+
+mutation UpdatePartial($id: Int!, $cmsPartial: CmsPartialInput!) {
+  updateCmsPartial(input: { id: $id, cms_partial: $cmsPartial }) {
+    cms_partial {
+      ...CmsPartialFields
+    }
+  }
+}
+
+mutation DeletePartial($id: Int!) {
+  deleteCmsPartial(input: { id: $id }) {
+    clientMutationId
+  }
+}

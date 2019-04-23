@@ -100,6 +100,20 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
+  ### CmsPartial
+
+  field :createCmsPartial, mutation: Mutations::CreateCmsPartial do
+    guard(guard_for_create_cms_model(CmsPartial))
+  end
+
+  field :updateCmsPartial, mutation: Mutations::UpdateCmsPartial do
+    guard(guard_for_cms_model(CmsPartial, :update))
+  end
+
+  field :deleteCmsPartial, mutation: Mutations::DeleteCmsPartial do
+    guard(guard_for_cms_model(CmsPartial, :destroy))
+  end
+
   ### CmsVariable
 
   field :setCmsVariable, mutation: Mutations::SetCmsVariable do

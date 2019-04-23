@@ -115,6 +115,16 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :cms_partials, [Types::CmsPartialType], null: false
+
+  def cms_partials
+    if context[:convention]
+      context[:convention].cms_partials
+    else
+      CmsPartial.global
+    end
+  end
+
   field :cms_variables, [Types::CmsVariable], null: true
 
   def cms_variables
