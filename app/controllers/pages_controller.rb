@@ -11,7 +11,7 @@ class PagesController < ApplicationController
 
   include Cadmus::PagesController
 
-  layout :determine_layout
+  layout 'cms_page'
 
   # In the case of the root action, we'll need to load the root page from the database before
   # Authority has a chance to run its authorization checks.  So we use a before_action filter that
@@ -75,20 +75,12 @@ class PagesController < ApplicationController
     authorize! :create, Page
   end
 
-  def determine_layout
-    case params[:action]
-    when 'root', 'show' then 'cms_page'
-    else 'cms_admin'
-    end
-  end
-
   def set_page_title
     @page_title = @page&.name
   end
 
   def render_page_content
-    preload_cms_content
-    cadmus_renderer.render(@page.liquid_template, :html, assigns: { 'page' => @page })
+    cms_rendering_context.render_page_content(@page)
   end
   helper_method :render_page_content
 
@@ -98,14 +90,6 @@ class PagesController < ApplicationController
     else
       super
     end
-  end
-
-  def preload_cms_content
-    @cached_partials ||= {}
-    @cached_partials.update(@page.cms_partials.index_by(&:name).transform_values(&:liquid_template))
-
-    @cached_files ||= {}
-    @cached_files.update(@page.cms_files.index_by(&:filename))
   end
 
   def ensure_clickwrap_agreement_accepted_unless_page_skips_it
