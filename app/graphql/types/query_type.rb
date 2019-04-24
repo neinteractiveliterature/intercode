@@ -105,7 +105,7 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
-  field :cms_partials, [Types::CmsPartialType], null: false
+  field :cms_pages, [Types::PageType], null: false
 
   def cms_pages
     if context[:convention]
