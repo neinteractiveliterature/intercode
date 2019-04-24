@@ -13,6 +13,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import CmsPagesAdmin from './CmsPagesAdmin';
 import CmsLayoutsAdmin from './CmsLayoutsAdmin';
 import CmsPartialsAdmin from './CmsPartialsAdmin';
+import CmsFilesAdmin from './CmsFilesAdmin';
 
 function CmsAdminNavTab({ path, children }) {
   return (
@@ -59,6 +60,7 @@ function CmsAdmin() {
         <Switch>
           <Route path="/cms_pages" component={CmsPagesAdmin} />
           <Route path="/cms_partials" component={CmsPartialsAdmin} />
+          <Route path="/cms_files" component={CmsFilesAdmin} />
           <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
           <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
           <Route path="/cms_variables" component={CmsVariablesAdmin} />

@@ -1,0 +1,15 @@
+#import './queries.gql'
+
+mutation CreateCmsFile($file: Upload!) {
+  createCmsFile(input: { file: $file }) {
+    cms_file {
+      ...CmsFileFields
+    }
+  }
+}
+
+mutation DeleteCmsFile($id: Int!) {
+  deleteCmsFile(input: { id: $id }) {
+    clientMutationId
+  }
+}

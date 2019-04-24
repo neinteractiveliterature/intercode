@@ -4,7 +4,7 @@ class Mutations::DeleteCmsPartial < Mutations::BaseMutation
   argument :id, Integer, required: true
 
   def resolve(**args)
-    cms_partial = convention.cms_partials.find(args[:id])
+    cms_partial = cms_parent.cms_partials.find(args[:id])
     cms_partial.destroy!
     { cms_partial: cms_partial }
   end

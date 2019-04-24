@@ -21,4 +21,16 @@ class RootSite < ApplicationRecord
   def cms_variables
     CmsVariable.global
   end
+
+  def cms_files
+    CmsFile.global
+  end
+
+  def cms_navigation_items
+    CmsNavigationItem.global
+  end
+
+  def cms_grahql_queries
+    CmsGraphqlQuery.global
+  end
 end
