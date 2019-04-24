@@ -8407,9 +8407,10 @@ redent@^2.0.0:
     indent-string "^3.0.0"
     strip-indent "^2.0.0"
 
-reduce-reducers@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.4.3.tgz#8e052618801cd8fc2714b4915adaa8937eb6d66c"
+reduce-reducers@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-1.0.1.tgz#00735ff3dce986511bc3b86b1cd544822ce6d713"
+  integrity sha512-Nh5zvjF6o3mw/++hm+nq8eeDYQC0Go4dZIZjfXkfGLBhmFWbgvr6NFJw4ebu2OrUayXMzRZKcxU0vOo/nUAWyQ==
 
 redux@^3.7.1:
   version "3.7.2"
