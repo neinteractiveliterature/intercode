@@ -95,7 +95,7 @@
     "react-router-dom": "^5.0.0",
     "react-select": "^2.4.3",
     "react-select-fast-filter-options": "^0.2.3",
-    "react-stripe-elements": "^2.0.3",
+    "react-stripe-elements": "^3.0.0",
     "react-table": "^6.10.0",
     "reduce-reducers": "^0.4.3",
     "require-from-string": "^2.0.2",
