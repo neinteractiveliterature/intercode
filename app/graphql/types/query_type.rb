@@ -95,7 +95,17 @@ class Types::QueryType < Types::BaseObject
     convention || root_site
   end
 
-  field :cms_pages, [Types::PageType], null: true
+  field :cms_files, [Types::CmsFileType], null: true
+
+  def cms_files
+    if context[:convention]
+      context[:convention].cms_files
+    else
+      CmsFile.global
+    end
+  end
+
+  field :cms_partials, [Types::CmsPartialType], null: false
 
   def cms_pages
     if context[:convention]

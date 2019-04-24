@@ -4,7 +4,7 @@ class Mutations::DeletePage < Mutations::BaseMutation
   argument :id, Integer, required: true
 
   def resolve(**args)
-    page = convention.pages.find(args[:id])
+    page = cms_parent.pages.find(args[:id])
     page.destroy!
     { page: page }
   end

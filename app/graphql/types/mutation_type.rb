@@ -52,6 +52,16 @@ class Types::MutationType < Types::BaseObject
     raise ActionController::InvalidAuthenticityToken unless ctx[:verified_request]
   end
 
+  ### CmsFile
+
+  field :createCmsFile, mutation: Mutations::CreateCmsFile do
+    guard(guard_for_create_cms_model(CmsFile))
+  end
+
+  field :deleteCmsFile, mutation: Mutations::DeleteCmsFile do
+    guard(guard_for_cms_model(CmsFile, :destroy))
+  end
+
   ### CmsGraphqlQuery
 
   field :createCmsGraphqlQuery, mutation: Mutations::CreateCmsGraphqlQuery do

@@ -4,13 +4,7 @@ class Mutations::DeleteCmsVariable < Mutations::BaseMutation
   argument :key, String, required: true
 
   def resolve(key:)
-    variable_scope = if context[:convention]
-      context[:convention].cms_variables
-    else
-      CmsVariable.global
-    end
-
-    variable = variable_scope.find_by(key: key)
+    variable = cms_parent.cms_variables.find_by!(key: key)
     variable.destroy!
 
     { cms_variable: variable }
