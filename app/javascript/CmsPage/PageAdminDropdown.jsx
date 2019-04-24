@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import PopperDropdown from './PopperDropdown';
+import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useMutationCallback from '../useMutationCallback';
 
