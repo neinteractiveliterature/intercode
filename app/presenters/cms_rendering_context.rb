@@ -21,9 +21,14 @@ class CmsRenderingContext
     cadmus_renderer.render(page.liquid_template, :html, assigns: { 'page' => page })
   end
 
-  def preload_page_content(page)
-    cached_partials.update(page.cms_partials.index_by(&:name).transform_values(&:liquid_template))
-    cached_files.update(page.cms_files.index_by(&:filename))
+  def preload_page_content(*pages)
+    page_ids = pages.map(&:id)
+    cached_partials.update(
+      CmsPartial.joins(:pages).where(pages: { id: page_ids })
+        .index_by(&:name)
+        .transform_values(&:liquid_template)
+    )
+    cached_files.update(CmsFile.joins(:pages).where(pages: { id: page_ids }).index_by(&:filename))
   end
 
   def preload_cms_layout_content(cms_layout = nil)

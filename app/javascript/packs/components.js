@@ -6,6 +6,7 @@ import { mapValues } from 'lodash';
 import AppWrapper from '../AppWrapper';
 const Cart = lazy(() => import(/* webpackChunkName: "cart" */ '../Store/Cart'));
 const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ '../CmsAdmin'));
+import CmsPage from '../CmsPage';
 const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ '../ConventionAdmin'));
 const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ '../EventAdmin'));
@@ -17,28 +18,26 @@ const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ '../For
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ '../MyProfile'));
 // import NavigationBar from '../NavigationBar';
-import OAuthPermissionsPrompt from '../OAuthPermissionsPrompt';
+const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-permissions-prompt' */ '../OAuthPermissionsPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ '../Store/OrderHistory'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
-import PageAdminDropdown from '../UIComponents/PageAdminDropdown';
 const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
-import ProposeEventButton from '../EventProposals/ProposeEventButton';
 const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ '../RoomsAdmin'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
 const SignupSpyTable = lazy(() => import(/* webpackChunkName: "signup-spy-table" */ '../Reports/SignupSpyTable'));
 const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ '../StaffPositionAdmin'));
 const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ '../Store/StoreAdmin'));
 const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ '../TicketTypeAdmin'));
-import TicketPurchaseForm from '../BuiltInForms/TicketPurchaseForm';
+const TicketPurchaseForm = lazy(() => import(/* webpackChunkName: 'ticket-purchase-form' */ '../BuiltInForms/TicketPurchaseForm'));
 const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ '../UserActivityAlerts/UserActivityAlertsAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ '../UserConProfiles/UserConProfilesAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
 const WhosFreeForm = lazy(() => import(/* webpackChunkName: "whos-free-form" */ '../BuiltInForms/WhosFreeForm'));
-import WithdrawMySignupButton from '../EventsApp/EventPage/WithdrawMySignupButton';
 
 const unwrappedComponents = {
   Cart,
   CmsAdmin,
+  CmsPage,
   ConventionAdmin,
   EmailList,
   EventAdmin,
@@ -53,9 +52,7 @@ const unwrappedComponents = {
   OAuthPermissionsPrompt,
   OrderHistory,
   OrganizationAdmin,
-  PageAdminDropdown,
   ProductOrderForm,
-  ProposeEventButton,
   RoomsAdmin,
   RootSiteAdmin,
   SignupSpyTable,
@@ -67,7 +64,6 @@ const unwrappedComponents = {
   UserConProfilesAdmin,
   UsersAdmin,
   WhosFreeForm,
-  WithdrawMySignupButton,
 };
 
 const wrappedComponents = mapValues(unwrappedComponents, AppWrapper);

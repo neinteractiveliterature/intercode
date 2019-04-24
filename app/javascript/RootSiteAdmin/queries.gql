@@ -3,7 +3,7 @@ fragment PageFields on Page {
   name
 }
 
-fragment CmsLayoutFields on CmsLayout {
+fragment RootSiteAdminLayoutFields on CmsLayout {
   id
   name
 }
@@ -19,7 +19,7 @@ fragment RootSiteFields on RootSite {
 
   default_layout {
     id
-    ...CmsLayoutFields
+    ...RootSiteAdminLayoutFields
   }
 }
 
@@ -36,6 +36,6 @@ query RootSiteAdminQuery {
 
   cmsLayouts {
     id
-    ...CmsLayoutFields
+    ...RootSiteAdminLayoutFields
   }
 }

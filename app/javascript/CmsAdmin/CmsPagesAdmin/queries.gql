@@ -1,3 +1,8 @@
+fragment CmsPageAdminLayoutFields on CmsLayout {
+  id
+  name
+}
+
 fragment CmsPageFields on Page {
   id
   name
@@ -7,13 +12,8 @@ fragment CmsPageFields on Page {
   skip_clickwrap_agreement
 
   cms_layout {
-    ...CmsLayoutFields
+    ...CmsPageAdminLayoutFields
   }
-}
-
-fragment CmsLayoutFields on CmsLayout {
-  id
-  name
 }
 
 query CmsPagesAdminQuery {
@@ -26,7 +26,7 @@ query CmsPagesAdminQuery {
       id
 
       default_layout {
-        ...CmsLayoutFields
+        ...CmsPageAdminLayoutFields
       }
     }
 
@@ -34,12 +34,12 @@ query CmsPagesAdminQuery {
       id
 
       default_layout {
-        ...CmsLayoutFields
+        ...CmsPageAdminLayoutFields
       }
     }
   }
 
   cmsLayouts {
-    ...CmsLayoutFields
+    ...CmsPageAdminLayoutFields
   }
 }

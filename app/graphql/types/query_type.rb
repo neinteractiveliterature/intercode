@@ -115,6 +115,18 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :cms_page, Types::PageType, null: false do
+    argument :id, Int, required: false
+    argument :slug, String, required: false
+    argument :root_page, Boolean, required: false
+  end
+
+  def cms_page(id: nil, slug: nil, root_page: false)
+    return cms_parent.root_page if root_page
+    return cms_parent.pages.find(id) if id
+    cms_parent.pages.find_by!(slug: slug)
+  end
+
   field :cms_layouts, [Types::CmsLayoutType], null: false
 
   def cms_layouts
