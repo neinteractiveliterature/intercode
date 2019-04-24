@@ -5,21 +5,6 @@ module ApplicationHelper
     address.gsub('.', ' DOT ').gsub('@', ' AT ')
   end
 
-  # Cadmus checks for this when rendering a page
-  def liquid_assigns_for_layout(cms_layout)
-    head_content = render(partial: 'layouts/head')
-    {
-      'content_for_head' => head_content,
-      'content_for_navbar' => navigation_bar(cms_layout)
-    }
-  end
-
-  def navigation_bar(cms_layout = nil)
-    render partial: 'layouts/navigation_bar', locals: {
-      navbar_classes: cms_layout&.navbar_classes || DEFAULT_NAVBAR_CLASSES
-    }
-  end
-
   def react_navigation_bar(cms_layout = nil)
     context = {
       assumed_identity_from_profile: assumed_identity_from_profile,
@@ -159,32 +144,6 @@ module ApplicationHelper
       mail_to(address, name, html_options)
     else
       ApplicationHelper.obfuscated_email(address)
-    end
-  end
-
-  def check_mark_for(boolean)
-    return '' unless boolean
-
-    content_tag(:i, class: 'fa fa-check') do
-      content_tag(:span, '✓', class: 'sr-only')
-    end
-  end
-
-  def nav_link_to(name, url, html_options = nil, &block)
-    html_options = html_options.symbolize_keys
-    classes = [
-      html_options[:class],
-      'nav-link',
-      (html_options.delete(:active) ? 'active' : '')
-    ].compact.join(' ')
-    link_to(name, url, html_options.merge(class: classes), &block)
-  end
-
-  def beginning_of_convention_day(time)
-    if time.hour < 6
-      (time - 1.day).beginning_of_day.change(hour: 6)
-    else
-      time.beginning_of_day.change(hour: 6)
     end
   end
 
