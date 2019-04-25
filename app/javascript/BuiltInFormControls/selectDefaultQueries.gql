@@ -17,6 +17,7 @@ query DefaultUserConProfilesQuery($name: String) {
       entries {
         id
         name_without_nickname
+        email
       }
     }
   }

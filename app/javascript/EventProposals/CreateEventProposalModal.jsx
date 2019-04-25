@@ -84,7 +84,12 @@ class CreateEventProposalModal extends React.Component {
             Otherwise, leave this field blank.`
           }
           options={(this.props.userEventProposals || [])
-            .filter(eventProposal => eventProposal.status !== 'draft')}
+            .filter(eventProposal => eventProposal.status !== 'draft')
+            .filter(eventProposal => (
+              this.state.eventCategory
+              && eventProposal.event_category.name.toLowerCase()
+                === this.state.eventCategory.name.toLowerCase()
+            ))}
           isClearable
           isDisabled={this.state.mutationInProgress}
           value={this.state.cloneEventProposal}
