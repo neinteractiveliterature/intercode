@@ -16,6 +16,7 @@ const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-propos
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ '../FormAdmin'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
+const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ '../MailingLists'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ '../MyProfile'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
 // import NavigationBar from '../NavigationBar';
@@ -32,7 +33,6 @@ const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admi
 const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ '../UserActivityAlerts/UserActivityAlertsAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ '../UserConProfiles/UserConProfilesAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
-const WhosFreeForm = lazy(() => import(/* webpackChunkName: "whos-free-form" */ '../BuiltInForms/WhosFreeForm'));
 
 const unwrappedComponents = {
   Cart,
@@ -47,6 +47,7 @@ const unwrappedComponents = {
   EventProposalsAdmin,
   FormAdmin,
   LiquidDocs,
+  MailingLists,
   MyProfile,
   MyTicket,
   // NavigationBar,
@@ -63,7 +64,6 @@ const unwrappedComponents = {
   UserActivityAlertsAdmin,
   UserConProfilesAdmin,
   UsersAdmin,
-  WhosFreeForm,
 };
 
 const wrappedComponents = mapValues(unwrappedComponents, AppWrapper);

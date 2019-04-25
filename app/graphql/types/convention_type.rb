@@ -190,4 +190,14 @@ class Types::ConventionType < Types::BaseObject
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
+
+  field :mailing_lists, Types::MailingListsType, null: false do
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:mail_to_any, graphql_object.object)
+    end
+  end
+
+  def mailing_lists
+    MailingListsPresenter.new(object)
+  end
 end

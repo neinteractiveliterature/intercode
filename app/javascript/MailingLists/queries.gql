@@ -1,0 +1,117 @@
+fragment ContactEmailFields on ContactEmail {
+  email
+  formatted_address
+  name
+  metadata_json
+}
+
+fragment MailingListsResultFields on MailingListsResult {
+  emails {
+    ...ContactEmailFields
+  }
+  metadata_fields
+}
+
+query MailingListsMenuQuery {
+  convention {
+    id
+    ticket_mode
+    ticket_name
+  }
+}
+
+query TicketedAttendeesQuery {
+  convention {
+    id
+    name
+    ticket_name
+
+    mailing_lists {
+      ticketed_attendees {
+        ...MailingListsResultFields
+      }
+    }
+  }
+}
+
+query EventProposersQuery {
+  convention {
+    id
+
+    mailing_lists {
+      event_proposers {
+        ...MailingListsResultFields
+      }
+    }
+  }
+}
+
+query TeamMembersMailingListQuery {
+  convention {
+    id
+
+    mailing_lists {
+      team_members {
+        ...MailingListsResultFields
+      }
+    }
+  }
+}
+
+query UsersWithPendingBioQuery {
+  convention {
+    id
+
+    mailing_lists {
+      users_with_pending_bio {
+        ...MailingListsResultFields
+      }
+    }
+  }
+}
+
+query WaitlistMailingListsQuery {
+  convention {
+    id
+    timezone_name
+
+    mailing_lists {
+      waitlists {
+        emails {
+          ...ContactEmailFields
+        }
+        metadata_fields
+        run {
+          id
+          starts_at
+          title_suffix
+          event {
+            id
+            title
+          }
+        }
+      }
+    }
+  }
+}
+
+query WhosFreeFormConventionQuery {
+  convention {
+    id
+    starts_at
+    ends_at
+    timezone_name
+  }
+}
+
+query WhosFreeQuery($start: Date!, $finish: Date!) {
+  convention {
+    id
+
+    mailing_lists {
+      whos_free(start: $start, finish: $finish) {
+        ...MailingListsResultFields
+      }
+    }
+  }
+}
