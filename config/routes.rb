@@ -86,15 +86,7 @@ Intercode::Application.routes.draw do
       get :volunteer_events
     end
 
-    get 'mailing_lists' => 'mailing_lists#index'
-    namespace :mailing_lists do
-      get :event_proposers
-      get :team_members
-      get :ticketed_attendees
-      get :users_with_pending_bio
-      get :waitlists
-      get :whos_free
-    end
+    get 'mailing_lists/(*extra)' => 'mailing_lists#index', as: :mailing_lists
 
     resources :rooms, only: [:index]
     resource :clickwrap_agreement, only: [:show] do

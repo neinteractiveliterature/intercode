@@ -1,14 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import queryString from 'query-string';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import useQuerySuspended from '../useQuerySuspended';
-import { WhosFreeFormConventionQuery } from './whosFreeFormQueries.gql';
+import { WhosFreeFormConventionQuery } from './queries.gql';
 
 const momentToTimeObject = (momentValue) => {
   if (momentValue == null) {
@@ -24,23 +22,15 @@ const momentToTimeObject = (momentValue) => {
   };
 };
 
-function parseTimeInZone(timeString, timezoneName) {
-  if (timeString) {
-    return moment.tz(timeString, timezoneName);
-  }
-
-  return null;
-}
-
 function makeTimeOfDay(prevTime, day, newTime) {
   return (prevTime || day).clone().set(newTime);
 }
 
-function WhosFreeForm({ initialStart, initialFinish, baseUrl }) {
+function WhosFreeForm({ onSubmit }) {
   const { data: { convention }, error } = useQuerySuspended(WhosFreeFormConventionQuery);
-  const [start, setStart] = useState(parseTimeInZone(initialStart, convention.timezone_name));
-  const [finish, setFinish] = useState(parseTimeInZone(initialFinish, convention.timezone_name));
-  const [day, setDay] = useState(initialStart ? parseTimeInZone(initialStart, convention.timezone_name).startOf('day') : null);
+  const [start, setStart] = useState(null);
+  const [finish, setFinish] = useState(null);
+  const [day, setDay] = useState(null);
 
   const renderTimeSelects = useCallback(
     () => {
@@ -87,14 +77,9 @@ function WhosFreeForm({ initialStart, initialFinish, baseUrl }) {
   const search = useCallback(
     (event) => {
       event.preventDefault();
-
-      const params = {
-        start: start.toISOString(),
-        finish: finish.toISOString(),
-      };
-      window.location.href = `${baseUrl}?${queryString.stringify(params)}`;
+      onSubmit({ start, finish });
     },
-    [baseUrl, start, finish],
+    [onSubmit, start, finish],
   );
 
   if (error) {
@@ -130,19 +115,7 @@ function WhosFreeForm({ initialStart, initialFinish, baseUrl }) {
 }
 
 WhosFreeForm.propTypes = {
-  initialStart: PropTypes.string,
-  initialFinish: PropTypes.string,
-  baseUrl: PropTypes.string.isRequired,
-  convention: PropTypes.shape({
-    starts_at: PropTypes.string.isRequired,
-    ends_at: PropTypes.string.isRequired,
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-WhosFreeForm.defaultProps = {
-  initialStart: null,
-  initialFinish: null,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default WhosFreeForm;

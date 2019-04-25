@@ -1,6 +1,0 @@
-%h1 Who's free
-
-= app_component 'WhosFreeForm', initialStart: params[:start], initialFinish: params[:finish], baseUrl: mailing_lists_whos_free_path
-
-- if @emails
-  = render partial: 'mailing_lists/mailing_list', locals: { emails: @emails, csv_url: url_for(format: 'csv', start: params[:start], finish: params[:finish]) }

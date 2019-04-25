@@ -1,3 +1,0 @@
-%h1 Mail to #{params[:action].humanize.downcase}
-
-= render partial: 'mailing_lists/mailing_list', locals: { emails: @emails, csv_url: url_for(format: 'csv') }
