@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
-import pluralizeWithCount from '../pluralizeWithCount';
-import Timespan from '../Timespan';
+import { findCurrentValue } from '../ScheduledValueUtils';
 import { MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './ConventionFormEventsSection';
+import pluralizeWithCount from '../pluralizeWithCount';
 
 function describeEventVisibility(visibility) {
   switch (visibility) {
@@ -17,20 +17,16 @@ function describeEventVisibility(visibility) {
 }
 
 function describeMaximumEventSignups(scheduledValue) {
-  const now = moment();
-  const currentTimespan = scheduledValue.timespans.find((timespanObj) => {
-    const timespan = Timespan.fromStrings(timespanObj.start, timespanObj.finish);
-    return timespan.includesTime(now);
-  });
+  const currentValue = findCurrentValue(scheduledValue);
 
-  if (!currentTimespan) {
+  if (!currentValue) {
     return 'No signups yet';
   }
 
   const currentOption = MAXIMUM_EVENT_SIGNUPS_OPTIONS
-    .find(([option]) => currentTimespan.value === option);
+    .find(([option]) => currentValue === option);
   if (!currentOption) {
-    return currentTimespan.value;
+    return currentValue;
   }
 
   return currentOption[1];

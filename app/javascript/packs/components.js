@@ -17,6 +17,7 @@ const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../Eve
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ '../FormAdmin'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ '../MyProfile'));
+const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
 // import NavigationBar from '../NavigationBar';
 const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-permissions-prompt' */ '../OAuthPermissionsPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ '../Store/OrderHistory'));
@@ -28,7 +29,6 @@ const SignupSpyTable = lazy(() => import(/* webpackChunkName: "signup-spy-table"
 const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ '../StaffPositionAdmin'));
 const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ '../Store/StoreAdmin'));
 const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ '../TicketTypeAdmin'));
-const TicketPurchaseForm = lazy(() => import(/* webpackChunkName: 'ticket-purchase-form' */ '../BuiltInForms/TicketPurchaseForm'));
 const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ '../UserActivityAlerts/UserActivityAlertsAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ '../UserConProfiles/UserConProfilesAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
@@ -48,6 +48,7 @@ const unwrappedComponents = {
   FormAdmin,
   LiquidDocs,
   MyProfile,
+  MyTicket,
   // NavigationBar,
   OAuthPermissionsPrompt,
   OrderHistory,
@@ -59,7 +60,6 @@ const unwrappedComponents = {
   StaffPositionAdmin,
   StoreAdmin,
   TicketTypeAdmin,
-  TicketPurchaseForm,
   UserActivityAlertsAdmin,
   UserConProfilesAdmin,
   UsersAdmin,

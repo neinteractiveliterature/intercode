@@ -1,0 +1,68 @@
+query TicketPurchaseFormQuery {
+  convention {
+    id
+    name
+    ticket_name
+
+    ticket_types {
+      id
+      description
+      publicly_available
+      pricing_schedule {
+        timespans {
+          start
+          finish
+          value {
+            fractional
+            currency_code
+          }
+        }
+      }
+    }
+  }
+
+  myProfile {
+    id
+    name_without_nickname
+
+    ticket {
+      id
+    }
+  }
+}
+
+query MyTicketDisplayQuery {
+  convention {
+    id
+    name
+    ticket_name
+    timezone_name
+  }
+
+  myProfile {
+    id
+    name_without_nickname
+
+    ticket {
+      id
+      charge_id
+      created_at
+      updated_at
+
+      payment_amount {
+        fractional
+        currency_code
+      }
+
+      ticket_type {
+        id
+        description
+      }
+
+      provided_by_event {
+        id
+        title
+      }
+    }
+  }
+}
