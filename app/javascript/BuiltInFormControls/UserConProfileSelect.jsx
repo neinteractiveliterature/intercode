@@ -22,7 +22,15 @@ class UserConProfileSelect extends React.PureComponent {
       getOptions={data => data.convention.user_con_profiles_paginated.entries}
       getVariables={inputValue => ({ name: inputValue })}
       getOptionValue={option => option.id}
-      getOptionLabel={option => option.name_without_nickname}
+      formatOptionLabel={option => (
+        <>
+          {option.name_without_nickname}
+          {' '}
+          <small className="text-muted">
+            {option.email}
+          </small>
+        </>
+      )}
       query={this.props.userConProfilesQuery || DefaultUserConProfilesQuery}
       {...this.props}
     />

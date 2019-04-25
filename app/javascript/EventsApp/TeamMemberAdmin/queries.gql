@@ -22,6 +22,7 @@ fragment TeamMemberUserConProfileFields on UserConProfile {
   id
   name_without_nickname
   name_inverted
+  email
 
   ticket {
     id
