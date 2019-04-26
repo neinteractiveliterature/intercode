@@ -18,7 +18,7 @@ class Types::EventProposalType < Types::BaseObject
   field :event, Types::EventType, null: true
   field :event_category, Types::EventCategoryType, null: false
 
-  association_loaders EventProposal, :owner, :event, :event_category
+  association_loaders EventProposal, :convention, :owner, :event, :event_category
 
   field :form_response_attrs_json, String, null: true
 
