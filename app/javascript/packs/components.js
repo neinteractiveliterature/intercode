@@ -24,6 +24,7 @@ const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-per
 const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ '../Store/OrderHistory'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
 const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
+const Reports = lazy(() => import(/* webpackChunkName: "reports" */ '../Reports'));
 const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ '../RoomsAdmin'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
 const SignupSpyTable = lazy(() => import(/* webpackChunkName: "signup-spy-table" */ '../Reports/SignupSpyTable'));
@@ -55,6 +56,7 @@ const unwrappedComponents = {
   OrderHistory,
   OrganizationAdmin,
   ProductOrderForm,
+  Reports,
   RoomsAdmin,
   RootSiteAdmin,
   SignupSpyTable,

@@ -72,19 +72,17 @@ Intercode::Application.routes.draw do
     get 'my_profile/edit' => 'my_profiles#show', as: :edit_my_profile # yes, really, show
     get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
 
-    get 'reports' => 'reports#index'
+    get 'reports' => 'reports#index', as: :reports
     namespace :reports do
-      get :attendance_by_payment_amount
-      get :event_provided_tickets
-      get :events_by_choice
+      get :export_signup_spy
       get :events_by_time
       get :per_event
       get :per_user
       get :per_room
-      get :signup_spy
       get 'user_con_profiles/:user_con_profile_id' => :single_user_printable
       get :volunteer_events
     end
+    get 'reports/(*extra)' => 'reports#index'
 
     get 'mailing_lists/(*extra)' => 'mailing_lists#index', as: :mailing_lists
 

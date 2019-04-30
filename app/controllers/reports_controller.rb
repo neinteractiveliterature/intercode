@@ -23,6 +23,17 @@ class ReportsController < ApplicationController
     )
   end
 
+  def export_signup_spy
+    respond_to do |format|
+      format.csv do
+        send_table_presenter_csv(
+          Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention),
+          [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
+        )
+      end
+    end
+  end
+
   def event_provided_tickets
     @tickets = convention.tickets.where.not(provided_by_event_id: nil).includes(
       :provided_by_event,
@@ -106,18 +117,6 @@ class ReportsController < ApplicationController
           runs: [:rooms, signups: :user_con_profile]
         )
     )
-  end
-
-  def signup_spy
-    respond_to do |format|
-      format.html {}
-      format.csv do
-        send_table_presenter_csv(
-          Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention),
-          [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
-        )
-      end
-    end
   end
 
   def volunteer_events

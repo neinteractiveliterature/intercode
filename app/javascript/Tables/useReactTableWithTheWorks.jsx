@@ -23,7 +23,10 @@ export default function useReactTableWithTheWorks({
   storageKeyPrefix,
   variables,
 }) {
-  const localStorageReactTableProps = useLocalStorageReactTable(storageKeyPrefix, { onPageSizeChange });
+  const localStorageReactTableProps = useLocalStorageReactTable(
+    storageKeyPrefix,
+    { onPageSizeChange },
+  );
   const reactRouterReactTableProps = useReactRouterReactTable({
     decodeFilterValue, encodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
   });
