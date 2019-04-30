@@ -1,3 +1,21 @@
+query ReportsMenuQuery {
+  convention {
+    id
+    ticket_mode
+    ticket_name
+  }
+}
+
+query SignupCountsByStateQuery {
+  convention {
+    id
+    signup_counts_by_state {
+      state
+      count
+    }
+  }
+}
+
 query SignupSpySignupsQuery($page: Int, $perPage: Int) {
   convention {
     id

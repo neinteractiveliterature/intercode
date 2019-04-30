@@ -165,6 +165,18 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: page, per_page: per_page)
   end
 
+  field :signup_counts_by_state, [Types::SignupCountByStateType], null: false do
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:view_reports, graphql_object.object)
+    end
+  end
+
+  def signup_counts_by_state
+    object.signups.group(:state).count.map do |(state, count)|
+      { state: state, count: count }
+    end
+  end
+
   pagination_field :signup_spy_paginated, Types::SignupsPaginationType, Types::UserConProfileFiltersInputType, null: false do
     guard ->(graphql_object, _args, ctx) do
       ctx[:current_ability].can?(:view_reports, graphql_object.object)

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { BrowserRouter, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
@@ -83,7 +83,7 @@ const getPossibleColumns = (data) => {
 };
 
 function SignupSpyTableContent({ exportUrl, history }) {
-  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, { tableHeaderProps, queryResult }] = useReactTableWithTheWorks({
     defaultVisibleColumns: ['name', 'event_title', 'state', 'created_at', 'choice'],
     getData: ({ data }) => data.convention.signup_spy_paginated.entries,
     getPages: ({ data }) => data.convention.signup_spy_paginated.total_pages,
@@ -98,13 +98,13 @@ function SignupSpyTableContent({ exportUrl, history }) {
       {...reactTableProps}
       className="-striped -highlight"
     >
-      {(state, makeTable, instance) => (
+      {(state, makeTable) => (
         <div className="mb-4">
           <TableHeader
             {...tableHeaderProps}
             exportUrl={exportUrl}
             renderLeftContent={() => (
-              <RefreshButton refreshData={instance.fireFetchData} />
+              <RefreshButton refreshData={queryResult.refetch} />
             )}
           />
           {makeTable()}
@@ -119,19 +119,4 @@ SignupSpyTableContent.propTypes = {
   history: PropTypes.shape({}).isRequired,
 };
 
-const SignupSpyTableContentWithRouter = withRouter(SignupSpyTableContent);
-
-function SignupSpyTable({ basename, exportUrl }) {
-  return (
-    <BrowserRouter basename={basename}>
-      <SignupSpyTableContentWithRouter exportUrl={exportUrl} />
-    </BrowserRouter>
-  );
-}
-
-SignupSpyTable.propTypes = {
-  basename: PropTypes.string.isRequired,
-  exportUrl: PropTypes.string.isRequired,
-};
-
-export default SignupSpyTable;
+export default withRouter(SignupSpyTableContent);
