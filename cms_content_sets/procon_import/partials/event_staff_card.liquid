@@ -1,0 +1,24 @@
+{% assign staff_positions = convention.staff_positions | sort_natural:'name' %}
+
+{% if staff_positions.size > 0 %}
+  <div class="card mt-4">
+    <div class="card-header">Event staff</div>
+    <div class="card-body">
+      <ul class="mb-0">
+        {% if staff_positions.size == 1 %}
+          {% for user_con_profile in staff_positions[0].user_con_profiles %}
+            <li>{{ user_con_profile.name }}</li>
+          {% endfor %}
+        {% else %}
+          {% for staff_position in staff_positions %}
+            {% assign user_con_profiles = staff_position.user_con_profiles | sort_natural:'name_inverted' %}
+            <li>
+              <strong>{{ staff_position.name }}:</strong>
+              {{ user_con_profiles | map:'name' | join: ', ' }}
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
