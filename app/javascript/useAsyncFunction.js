@@ -16,6 +16,7 @@ export default function useAsyncFunction(func, { suppressError } = {}) {
           if (!suppressError) {
             throw e;
           }
+          return null;
         } finally {
           setInProgress(false);
         }

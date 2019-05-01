@@ -50,6 +50,11 @@ class Types::ConventionType < Types::BaseObject
       ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
     end
   end
+  field :reports, Types::ConventionReportsType, null: false do
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:view_reports, graphql_object.object)
+    end
+  end
 
   association_loaders(
     Convention,
@@ -211,5 +216,9 @@ class Types::ConventionType < Types::BaseObject
 
   def mailing_lists
     MailingListsPresenter.new(object)
+  end
+
+  def reports
+    object
   end
 end

@@ -3,7 +3,9 @@ class ReportsController < ApplicationController
 
   before_action :ensure_authorized
 
-  layout 'print_reports', only: %w[events_by_time per_event per_user per_room single_user_printable volunteer_events]
+  layout 'print_reports', only: %w[
+    events_by_time per_event per_user per_room single_user_printable volunteer_events
+  ]
 
   def index
   end
