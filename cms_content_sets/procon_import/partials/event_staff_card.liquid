@@ -6,7 +6,8 @@
     <div class="card-body">
       <ul class="mb-0">
         {% if staff_positions.size == 1 %}
-          {% for user_con_profile in staff_positions[0].user_con_profiles %}
+          {% assign user_con_profiles = staff_positions[0].user_con_profiles | sort_natural:'name_inverted' %}
+          {% for user_con_profile in user_con_profiles %}
             <li>{{ user_con_profile.name }}</li>
           {% endfor %}
         {% else %}
