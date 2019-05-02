@@ -53,6 +53,15 @@ class EventProposalsMailer < ApplicationMailer
           .where(permission: 'read_pending_event_proposals')
           .select(:staff_position_id)
       )
+      .sort_by do |staff_position|
+        # TODO kill this with fire
+        [
+          staff_position.name =~ /proposals? (chair|coordinator)/i ? 0 : 1,
+          staff_position.name =~ /bid (chair|coordinator)/i ? 0 : 1,
+          staff_position.name =~ /people/i ? 0 : 1,
+          staff_position.name
+        ]
+      end
   end
 
   def proposal_mail_destination(event_proposal)
