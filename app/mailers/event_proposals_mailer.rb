@@ -92,6 +92,11 @@ class EventProposalsMailer < ApplicationMailer
   end
   helper_method :event_proposal_url_for_convention
 
+  def edit_proposal_url_for_convention(event_proposal)
+    edit_event_proposal_url(event_proposal, host: event_proposal.convention.domain)
+  end
+  helper_method :edit_proposal_url_for_convention
+
   def event_proposal_mail(event_proposal, status_change)
     mail(
       from: from_address_for_convention(event_proposal.convention),
