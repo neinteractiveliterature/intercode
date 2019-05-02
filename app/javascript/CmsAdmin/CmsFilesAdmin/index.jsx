@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { chunk } from 'lodash';
+import chunk from 'lodash-es/chunk';
 import bytes from 'bytes';
 
 import { CmsFilesAdminQuery } from './queries.gql';

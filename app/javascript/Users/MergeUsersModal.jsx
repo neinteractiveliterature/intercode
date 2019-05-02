@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useQuery, useMutation } from 'react-apollo-hooks';
-import {
-  flatMap, keyBy, mapValues, pickBy, sortBy, uniq, uniqBy,
-} from 'lodash';
+import flatMap from 'lodash-es/flatMap';
+import keyBy from 'lodash-es/keyBy';
+import mapValues from 'lodash-es/mapValues';
+import pickBy from 'lodash-es/pickBy';
+import sortBy from 'lodash-es/sortBy';
+import uniq from 'lodash-es/uniq';
+import uniqBy from 'lodash-es/uniqBy';
 import { humanize } from 'inflected';
 
 import ChoiceSet from '../BuiltInFormControls/ChoiceSet';

@@ -1,7 +1,7 @@
 /* eslint-disable import/first, import/newline-after-import */
 
 import { lazy } from 'react';
-import { mapValues } from 'lodash';
+import mapValues from 'lodash-es/mapValues';
 
 import AppWrapper from '../AppWrapper';
 const Cart = lazy(() => import(/* webpackChunkName: "cart" */ '../Store/Cart'));

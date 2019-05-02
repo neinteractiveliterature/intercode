@@ -1,5 +1,5 @@
 import React from 'react';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash-es/sortBy';
 import { Link } from 'react-router-dom';
 
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';

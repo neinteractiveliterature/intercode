@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { camelCase } from 'lodash';
+import camelCase from 'lodash-es/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { get, set } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import set from 'lodash/fp/set';
 
 import useMutationCallback from './useMutationCallback';
 

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { intersection } from 'lodash';
+import intersection from 'lodash-es/intersection';
 
 import { CartQuery } from './queries.gql';
 import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';

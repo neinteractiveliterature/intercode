@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { flatMap } from 'lodash';
+import flatMap from 'lodash-es/flatMap';
 
 import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';

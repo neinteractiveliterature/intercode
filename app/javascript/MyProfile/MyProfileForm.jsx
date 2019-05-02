@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash-es/isEqual';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import FormPresenterApp from '../FormPresenter';
