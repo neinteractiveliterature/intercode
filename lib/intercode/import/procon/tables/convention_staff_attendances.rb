@@ -37,9 +37,12 @@ class Intercode::Import::Procon::Tables::ConventionStaffAttendances <
         name: staff_position_row[:name]
       ) do |pos|
         pos.email = staff_position_row[:email]
+        pos.visible = true
       end
     elsif !has_staff_positions?
-      convention.staff_positions.find_or_create_by!(name: 'Convention staff')
+      convention.staff_positions.find_or_create_by!(name: 'Convention staff') do |pos|
+        pos.visible = true
+      end
     end
   end
 
