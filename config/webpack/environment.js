@@ -3,6 +3,7 @@ const process = require('process');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { config } = require('@rails/webpacker');
 const getStyleRule = require('@rails/webpacker/package/utils/get_style_rule');
@@ -29,6 +30,7 @@ threadLoader.warmup({
 module.exports = {
   entry: {
     application: './app/javascript/packs/application.js',
+    'browser-warning': './app/javascript/displayBrowserWarning.jsx',
   },
   output: {
     filename: '[name]-[chunkhash].js',
@@ -64,6 +66,26 @@ module.exports = {
         },
       },
       {
+        test: /displayBrowserWarning\.jsx$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: path.join(config.cache_path, 'babel-loader'),
+              presets: [
+                ["@babel/env",
+                  {
+                    "targets": {
+                      "browsers": ["> 1%", "last 2 versions", "ie 8"]
+                    }
+                  }
+                ]
+              ]
+            }
+          }
+        ],
+      },
+      {
         test: /\.(mjs|js\.flow)$/,
         include: /node_modules/,
         type: "javascript/auto",
@@ -96,9 +118,15 @@ module.exports = {
   },
   resolve: {
     extensions: config.extensions,
+    alias: {
+      'lodash.isequal': 'lodash-es/isEqual'
+    },
   },
   plugins: [
     new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
+    new LodashModuleReplacementPlugin({
+      shorthands: true,
+    }),
     new CaseSensitivePathsPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash:8].css',

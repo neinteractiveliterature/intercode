@@ -7,12 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'custom-event-polyfill';
-import 'url-search-params-polyfill';
-
-// eslint-disable-next-line import/order
-import '../displayBrowserWarning'; // runs on import
-
 import Rails from 'rails-ujs';
 import 'bootstrap.native/dist/bootstrap-native-v4';
 

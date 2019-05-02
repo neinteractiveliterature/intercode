@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
-import { reverse, sortBy } from 'lodash';
+import reverse from 'lodash-es/reverse';
+import sortBy from 'lodash-es/sortBy';
 
 import ErrorDisplay from '../ErrorDisplay';
 import useQuerySuspended from '../useQuerySuspended';

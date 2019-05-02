@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { groupBy } from 'lodash';
+import groupBy from 'lodash-es/groupBy';
 
 function getGroupForScopeName(scopeName) {
   if (scopeName.startsWith('read_')) {

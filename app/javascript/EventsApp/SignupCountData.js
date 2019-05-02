@@ -1,4 +1,5 @@
-import { flatMap, sum } from 'lodash';
+import flatMap from 'lodash-es/flatMap';
+import sum from 'lodash-es/sum';
 
 export default class SignupCountData {
   static fromRun(run) {

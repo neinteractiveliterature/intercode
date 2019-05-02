@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { groupBy, flatMap } from 'lodash';
+import groupBy from 'lodash-es/groupBy';
+import flatMap from 'lodash-es/flatMap';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { DeleteStaffPosition } from './mutations.gql';
