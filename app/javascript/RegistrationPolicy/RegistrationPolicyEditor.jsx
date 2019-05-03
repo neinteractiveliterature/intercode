@@ -34,6 +34,7 @@ class RegistrationPolicyEditor extends React.Component {
       name: PropTypes.string.isRequired,
       policy: RegistrationPolicyPropType.isRequired,
     }).isRequired),
+    allowCustom: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -41,6 +42,7 @@ class RegistrationPolicyEditor extends React.Component {
     lockLimitedBuckets: null,
     lockDeleteBuckets: null,
     presets: null,
+    allowCustom: false,
   }
 
   constructor(props) {
@@ -264,6 +266,10 @@ class RegistrationPolicyEditor extends React.Component {
       return null;
     }
 
+    if (this.props.presets.length === 1 && !this.props.allowCustom) {
+      return null;
+    }
+
     let selectorValue;
     if (this.state.preset) {
       selectorValue = this.state.preset.name;
@@ -274,6 +280,11 @@ class RegistrationPolicyEditor extends React.Component {
     const presetOptions = this.props.presets.map(preset => (
       <option value={preset.name} key={preset.name}>{preset.name}</option>
     ));
+    if (this.props.allowCustom) {
+      presetOptions.push(
+        <option value="_custom" key="_custom">Custom registration policy (advanced)</option>
+      );
+    }
 
     const selectId = this.nextUniqueId();
 
@@ -289,7 +300,6 @@ class RegistrationPolicyEditor extends React.Component {
           >
             <option value="" disabled>Select one...</option>
             {presetOptions}
-            <option value="_custom">Custom registration policy (advanced)</option>
           </select>
         </label>
       </div>
