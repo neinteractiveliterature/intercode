@@ -56,7 +56,8 @@ class MultipleChoiceItemInput extends React.Component {
 
     if (this.isMultiple()) {
       const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
-      const providedValues = newValue.filter(choiceValue => choiceValues.some(providedValue => providedValue === choiceValue));
+      const providedValues = newValue
+        .filter(choiceValue => choiceValues.some(providedValue => providedValue === choiceValue));
       if (newValue.includes(OTHER_VALUE)) {
         this.props.onChange([...providedValues, this.state.otherValue]);
       } else {
