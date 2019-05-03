@@ -28,6 +28,8 @@ class FormItem < ApplicationRecord
     },
     registration_policy: {
       identifier: :required,
+      presets: :required,
+      allow_custom: :required,
       required: :optional
     },
     static_text: {
@@ -79,9 +81,8 @@ class FormItem < ApplicationRecord
     schema.each do |field, required|
       next unless required == :required
 
-      unless (respond_to?(field) && public_send(field)) || properties[field]
-        errors.add :properties, "does not include #{field}, which is required"
-      end
+      field_value = (respond_to?(field) && public_send(field)) || properties[field]
+      errors.add :properties, "does not include #{field}, which is required" if field_value.nil?
     end
   end
 
