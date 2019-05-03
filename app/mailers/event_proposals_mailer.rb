@@ -53,6 +53,15 @@ class EventProposalsMailer < ApplicationMailer
           .where(permission: 'read_pending_event_proposals')
           .select(:staff_position_id)
       )
+      .sort_by do |staff_position|
+        # TODO kill this with fire
+        [
+          staff_position.name =~ /proposals? (chair|coordinator)/i ? 0 : 1,
+          staff_position.name =~ /bid (chair|coordinator)/i ? 0 : 1,
+          staff_position.name =~ /people/i ? 0 : 1,
+          staff_position.name
+        ]
+      end
   end
 
   def proposal_mail_destination(event_proposal)
@@ -82,6 +91,11 @@ class EventProposalsMailer < ApplicationMailer
     "#{admin_event_proposals_url(host: event_proposal.convention.domain)}/#{event_proposal.id}"
   end
   helper_method :event_proposal_url_for_convention
+
+  def edit_proposal_url_for_convention(event_proposal)
+    edit_event_proposal_url(event_proposal, host: event_proposal.convention.domain)
+  end
+  helper_method :edit_proposal_url_for_convention
 
   def event_proposal_mail(event_proposal, status_change)
     mail(
