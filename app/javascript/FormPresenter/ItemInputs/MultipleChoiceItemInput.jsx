@@ -102,7 +102,7 @@ class MultipleChoiceItemInput extends React.Component {
     const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
 
     if (this.isMultiple()) {
-      return !this.props.value.every((
+      return !(this.props.value || []).every((
         selectedChoiceValue => choiceValues.includes(selectedChoiceValue)
       ));
     }
