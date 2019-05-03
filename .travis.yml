@@ -32,7 +32,7 @@ before_script:
 - docker build
   -f Dockerfile
   --target build
-  --build-arg ASSETS_HOST=neilhosting.net
+  --build-arg ASSETS_HOST="$ASSETS_HOST"
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
   --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
@@ -42,7 +42,7 @@ before_script:
 - docker build
   -f Dockerfile
   --target build-production
-  --build-arg ASSETS_HOST=assets.neilhosting.net
+  --build-arg ASSETS_HOST="$ASSETS_HOST"
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
   --cache-from neinteractiveliterature/intercode:local-build
@@ -54,7 +54,7 @@ before_script:
 - docker build
   -f Dockerfile
   --target production
-  --build-arg ASSETS_HOST=assets.neilhosting.net
+  --build-arg ASSETS_HOST="$ASSETS_HOST"
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
   --cache-from neinteractiveliterature/intercode:local-build
@@ -64,7 +64,7 @@ before_script:
 - docker build
   -f Dockerfile
   --target test
-  --build-arg ASSETS_HOST=assets.neilhosting.net
+  --build-arg ASSETS_HOST="$ASSETS_HOST"
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:local-build
@@ -93,6 +93,7 @@ env:
   - PATH=$HOME/.local/bin:$PATH
   - CC_TEST_REPORTER_ID=2ec5e525d523a261ed68d45eb18865e8ea7a5b32751290cabde2d44f39e78cce
   - DOCKER_COMPOSE_VERSION=1.23.0
+  - ASSETS_HOST=neilhosting.net
   - secure: FOqb5pEOm+aHRz10TYFnGWPw5q7lY+SPrRWiy3HHvq3UK1vpPzUG2bHI+XPShF/JyCyxdqbyOEgC4DLwLXGebG7wWDolf0yE5iHtUmUuPK68EePulltyG00LM361DkniVhu2cHwXFloH30e3BwSPbgcgQfypZA+ITJ3LGhwZ5+E=
   - secure: PNEoXEJTlUd0fLMJBg2mvusuOqFXH24ZWK3JBwtVt2nW8fco2ePw+ZPe+W5ajs3fHrrfTfY5yB484ZA2f91NvC8bxHHfrZ0sN2CgLepxkn4Ox67NbTIPPBPrAmjBdjF2nwMf3CQ//Yp4g+IXBqA4sPp/spW+b+BIyodqBQMRQ8U=
   - secure: bOZbyApoNrBQVTsrM2hQwuW7VwyIahNFtMrth2uJsq+CRO4zdDrwAba7CJe+us0cSUSKlgLpnPX0F8kgIMtriJkT7GF14CUYHbflRtvrOGzxREISTKhFuyzbfnoB+9pOfyZk4Vu9nXsRpVjWaIa7ySX28jBECQXJrZ1Lspyy2Eg=
