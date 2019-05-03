@@ -32,7 +32,7 @@ before_script:
 - docker build
   -f Dockerfile
   --target build
-  --build-arg ASSETS_HOST=assets.neilhosting.net
+  --build-arg ASSETS_HOST=neilhosting.net
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
   --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
