@@ -34,6 +34,7 @@ describe('RegistrationPolicyEditor', () => {
           lockNameAndDescription={false}
           lockLimitedBuckets={[]}
           lockDeleteBuckets={[]}
+          allowCustom
           {...props}
         />
       </Confirm>
