@@ -135,16 +135,12 @@ class RegistrationPolicyEditor extends React.Component {
       this.setState({ preset: undefined, custom: true });
     } else {
       const preset = this.props.presets.find(p => p.name === name);
-      this.setState(
-        { preset, custom: false },
-        () => {
-          if (preset) {
-            this.props.onChange(preset.policy);
-          } else {
-            this.props.onChange({ buckets: [], prevent_no_preference_signups: false });
-          }
-        },
-      );
+      this.setState({ preset, custom: false });
+      if (preset) {
+        this.props.onChange(preset.policy);
+      } else {
+        this.props.onChange({ buckets: [], prevent_no_preference_signups: false });
+      }
     }
   }
 
