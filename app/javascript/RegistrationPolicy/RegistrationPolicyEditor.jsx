@@ -53,7 +53,7 @@ class RegistrationPolicyEditor extends React.Component {
     const initiallyCustom = (
       this.props.presets
       && !initialPreset
-      && (this.props.registrationPolicy.buckets || []).length > 0
+      && ((this.props.registrationPolicy || {}).buckets || []).length > 0
     );
 
     this.state = {
