@@ -32,6 +32,10 @@ export function findPreset(registrationPolicy, presets) {
     return null;
   }
 
+  if (!registrationPolicy) {
+    return null;
+  }
+
   return presets.find(preset => presetMatchesPolicy(registrationPolicy, preset));
 }
 
