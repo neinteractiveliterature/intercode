@@ -41,11 +41,11 @@ function buildBucketSignupOption(bucket, index, hideLabel) {
 }
 
 function buildNoPreferenceOptions(event) {
-  if (event.registration_policy.prevent_no_preference_signups) {
+  if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
   }
 
-  const eligibleBuckets = event.registration_policy.buckets
+  const eligibleBuckets = ((event.registration_policy || {}).buckets || [])
     .filter(bucket => bucket.slots_limited && !bucket.not_counted);
 
   if (eligibleBuckets.length < 2) {
@@ -80,7 +80,7 @@ function allSignupOptions(event, userConProfile) {
     ];
   }
 
-  const buckets = sortBuckets(event.registration_policy.buckets);
+  const buckets = sortBuckets((event.registration_policy || {}).buckets || []);
   const nonAnythingBuckets = buckets.filter(bucket => !bucket.anything);
 
   return [
