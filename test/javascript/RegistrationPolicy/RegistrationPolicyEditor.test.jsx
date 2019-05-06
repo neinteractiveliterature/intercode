@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 import Confirm from '../../../app/javascript/ModalDialogs/Confirm';
-import defaultPresets from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyPresets';
+import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 
@@ -34,6 +34,7 @@ describe('RegistrationPolicyEditor', () => {
           lockNameAndDescription={false}
           lockLimitedBuckets={[]}
           lockDeleteBuckets={[]}
+          allowCustom
           {...props}
         />
       </Confirm>

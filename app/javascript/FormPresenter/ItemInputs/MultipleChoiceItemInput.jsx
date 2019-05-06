@@ -54,12 +54,15 @@ class MultipleChoiceItemInput extends React.Component {
   onChange = (newValue) => {
     this.userDidInteract();
 
-    if (this.props.formItem.properties.multiple) {
-      const actualValue = newValue.filter(choiceValue => choiceValue !== OTHER_VALUE);
+    if (this.isMultiple()) {
+      const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+      const providedValues = newValue
+        .filter(choiceValue => choiceValues.some(providedValue => providedValue === choiceValue));
       if (newValue.includes(OTHER_VALUE)) {
-        actualValue.push(this.state.otherValue);
+        this.props.onChange([...providedValues, this.state.otherValue]);
+      } else {
+        this.props.onChange(providedValues);
       }
-      this.props.onChange(actualValue);
     } else if (newValue === OTHER_VALUE) {
       this.props.onChange(this.state.otherValue);
     } else {
@@ -99,8 +102,8 @@ class MultipleChoiceItemInput extends React.Component {
 
     const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
 
-    if (this.props.formItem.properties.multiple) {
-      return !this.props.value.every((
+    if (this.isMultiple()) {
+      return !(this.props.value || []).every((
         selectedChoiceValue => choiceValues.includes(selectedChoiceValue)
       ));
     }

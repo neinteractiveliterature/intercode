@@ -54,9 +54,10 @@ module Concerns::CmsReferences
   end
 
   def referenced_files_recursive
-    CmsFile.where(file: (
-      referenced_file_names + referenced_partials_recursive.flat_map(&:referenced_file_names)
-    ))
+    CmsFile.where(
+      file: referenced_file_names + referenced_partials_recursive.flat_map(&:referenced_file_names),
+      parent: parent
+    )
   end
 
   def template_invariant?(cms_variable_names)

@@ -10,7 +10,7 @@ function RunCapacityGraph({ run, event, signupsAvailable }) {
 
   return (
     <div className="run-capacity bg-white rounded mb-2" style={{ overflow: 'hidden' }}>
-      {sortBuckets(event.registration_policy.buckets).map((bucket, bucketIndex) => (
+      {sortBuckets((event.registration_policy || {}).buckets || []).map((bucket, bucketIndex) => (
         <RunCapacityGraphBucket
           bucket={bucket}
           signupCountData={signupCountData}
