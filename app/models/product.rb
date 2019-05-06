@@ -5,6 +5,7 @@ class Product < ApplicationRecord
   has_many :product_variants, dependent: :destroy
   has_many :order_entries, dependent: :destroy
 
+  has_one_attached :image_activestorage
   mount_uploader :image, ProductImageUploader
   monetize :price_cents, with_model_currency: :price_currency, allow_nil: true
   serialize :payment_options, JSON
