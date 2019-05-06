@@ -1,4 +1,8 @@
 export default function buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy) {
+  if (!registrationPolicy || !registrationPolicy.buckets) {
+    return [];
+  }
+
   return registrationPolicy.buckets
     .reduce((signupCountByBucketAndCounted, bucket) => ({
       ...signupCountByBucketAndCounted,

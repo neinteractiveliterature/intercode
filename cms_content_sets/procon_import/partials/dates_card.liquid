@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="card-header">Dates</div>
+  <div class="card-body">
+    <ul class="list-unstyled mb-0">
+      <li>
+        <strong>Starts:</strong>
+        {{ convention.starts_at | date: "%a, %b %d, %Y at %l:%M%p" }}
+      </li>
+      <li>
+        <strong>Ends:</strong>
+        {{ convention.ends_at | date: "%a, %b %d, %Y at %l:%M%p" }}
+      </li>
+    </ul>
+  </div>
+</div>

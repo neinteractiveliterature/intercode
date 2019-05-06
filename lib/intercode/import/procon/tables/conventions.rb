@@ -6,7 +6,7 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
       parent: convention,
       slug: 'root',
       name: 'Root page',
-      content: descriptive_content(row)
+      content: root_page(row)
     )
 
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'procon_import').call!
@@ -144,6 +144,20 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
         </body>
       </html>
     HTML
+  end
+
+  def root_page(row)
+    <<~LIQUID
+      <div class="row">
+        <div class="col-md-8">
+          #{descriptive_content(row)}
+        </div>
+        <div class="col-md-4">
+          {% include 'dates_card' %}
+          {% include 'event_staff_card' %}
+        </div>
+      </div>
+    LIQUID
   end
 
   def process_css(css)
