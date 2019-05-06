@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import { pluralize } from 'inflected';
 
+import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
 import { ReportsMenuQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
@@ -84,6 +85,7 @@ function Reports() {
   return (
     <BrowserRouter basename="/reports">
       <Switch>
+        <Route path="/attendance_by_payment_amount" component={AttendanceByPaymentAmount} />
         <Route path="/signup_spy" component={SignupSpy} />
         <Route path="/" component={ReportsMenu} />
       </Switch>
