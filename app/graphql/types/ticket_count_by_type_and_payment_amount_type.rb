@@ -1,4 +1,5 @@
 class Types::TicketCountByTypeAndPaymentAmountType < Types::BaseObject
+  field :count, Integer, null: false
   field :ticket_type, Types::TicketTypeType, null: false
   field :payment_amount, Types::MoneyType, null: false
 

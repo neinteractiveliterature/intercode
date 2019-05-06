@@ -69,7 +69,12 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
         scope.where.not(id: TeamMember.select(:user_con_profile_id))
       end
     when :payment_amount
-      scope.left_joins(:ticket).where(tickets: { payment_amount_cents: (value.to_f * 100.0).to_i })
+      payment_amount_fractional = (value.to_f * 100.0).to_i
+      if payment_amount_fractional == 0
+        scope.left_joins(:ticket).where('tickets.payment_amount_cents = 0 OR tickets.payment_amount_cents IS NULL')
+      else
+        scope.left_joins(:ticket).where(tickets: { payment_amount_cents: payment_amount_fractional })
+      end
     when :ticket, :ticket_type
       ticket_type_ids = value.map do |id_value|
         if id_value == 'none'

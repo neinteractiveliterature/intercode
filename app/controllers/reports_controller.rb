@@ -10,21 +10,6 @@ class ReportsController < ApplicationController
   def index
   end
 
-  def attendance_by_payment_amount
-    raw_data = convention.tickets.group(
-      :ticket_type_id,
-      :payment_amount_cents,
-      :payment_amount_currency
-    ).count
-
-    ticket_types_by_id = convention.ticket_types.find(raw_data.keys.map(&:first)).index_by(&:id)
-    @count_by_ticket_type_and_payment_amount = (
-      raw_data.transform_keys do |(ticket_type_id, cents, currency)|
-        [ticket_types_by_id[ticket_type_id], Money.new(cents, currency)]
-      end
-    )
-  end
-
   def export_signup_spy
     respond_to do |format|
       format.csv do

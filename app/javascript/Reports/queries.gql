@@ -6,6 +6,44 @@ query ReportsMenuQuery {
   }
 }
 
+query AttendanceByPaymentAmountQuery {
+  convention {
+    id
+    ticket_name
+
+    reports {
+      ticket_count_by_type_and_payment_amount {
+        count
+
+        ticket_type {
+          id
+          name
+          description
+
+          pricing_schedule {
+            timespans {
+              value {
+                fractional
+                currency_code
+              }
+            }
+          }
+        }
+
+        payment_amount {
+          fractional
+          currency_code
+        }
+      }
+
+      total_revenue {
+        fractional
+        currency_code
+      }
+    }
+  }
+}
+
 query SignupCountsByStateQuery {
   convention {
     id
