@@ -100,7 +100,7 @@ function TicketPurchaseForm({ stripe }) {
         name="name"
         label="Name"
         value={name}
-        onChange={setName}
+        onTextChange={setName}
       />
 
       <div>

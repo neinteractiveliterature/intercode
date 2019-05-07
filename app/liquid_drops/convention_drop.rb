@@ -74,6 +74,11 @@ class ConventionDrop < Liquid::Drop
     @events ||= convention.runs.includes(:event).to_a
   end
 
+  # @return [Array<EventCategoryDrop>] Event categories at the convention
+  def event_categories
+    @event_categories ||= convention.event_categories.to_a
+  end
+
   # @return [Array<UserConProfileDrop>] UserConProfiles in this convention that can have a bio
   def bio_eligible_user_con_profiles
     convention.user_con_profiles.can_have_bio.to_a
