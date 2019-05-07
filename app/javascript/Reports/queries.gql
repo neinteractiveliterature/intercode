@@ -44,6 +44,30 @@ query AttendanceByPaymentAmountQuery {
   }
 }
 
+query EventProvidedTicketsQuery {
+  convention {
+    id
+    ticket_name
+
+    reports {
+      event_provided_tickets {
+        provided_by_event {
+          id
+          title
+        }
+
+        tickets {
+          id
+          user_con_profile {
+            id
+            name_inverted
+          }
+        }
+      }
+    }
+  }
+}
+
 query SignupCountsByStateQuery {
   convention {
     id
