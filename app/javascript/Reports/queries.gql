@@ -58,9 +58,15 @@ query EventProvidedTicketsQuery {
 
         tickets {
           id
+
           user_con_profile {
             id
             name_inverted
+          }
+
+          ticket_type {
+            id
+            description
           }
         }
       }
