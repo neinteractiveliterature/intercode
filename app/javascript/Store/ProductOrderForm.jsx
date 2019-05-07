@@ -51,8 +51,11 @@ function ProductOrderForm({ productId, cartUrl }) {
 
       let overridePriceDescription = '';
       if (overridePrice && overridePrice.fractional !== data.product.price.fractional) {
-        const diff = overridePrice.fractional - data.product.price.fractional;
-        const sign = Math.sign(diff) < 0 ? '-' : '+';
+        const diff = {
+          ...data.product.price,
+          fractional: overridePrice.fractional - data.product.price.fractional,
+        };
+        const sign = Math.sign(diff.fractional) < 0 ? '-' : '+';
         overridePriceDescription = ` (${sign}${formatMoney(diff)})`;
       }
 
@@ -68,7 +71,7 @@ function ProductOrderForm({ productId, cartUrl }) {
       <select
         className="form-control mb-3"
         value={productVariantId || ''}
-        onValueChange={productVariantIdChanged}
+        onChange={event => productVariantIdChanged(event.target.value)}
       >
         <option disabled value="">Select...</option>
         {options}
@@ -84,7 +87,7 @@ function ProductOrderForm({ productId, cartUrl }) {
         min="1"
         className="form-control"
         value={quantity == null ? '' : quantity}
-        onTextChange={quantityChanged}
+        onChange={event => quantityChanged(event.target.value)}
       />
     </label>
   );
