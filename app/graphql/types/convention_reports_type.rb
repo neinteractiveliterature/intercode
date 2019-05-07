@@ -7,6 +7,7 @@ class Types::ConventionReportsType < Types::BaseObject
   field :ticket_count_by_type_and_payment_amount, [Types::TicketCountByTypeAndPaymentAmountType],
     null: false
   field :total_revenue, Types::MoneyType, null: false
+  field :event_provided_tickets, [Types::EventProvidedTicketListType], null: false
 
   def ticket_count_by_type_and_payment_amount
     @ticket_count_by_type_and_payment_amount ||= begin
@@ -31,5 +32,15 @@ class Types::ConventionReportsType < Types::BaseObject
     ticket_count_by_type_and_payment_amount.map do |row|
       row[:payment_amount] * row[:count]
     end.sum
+  end
+
+  def event_provided_tickets
+    tickets = convention.tickets.where.not(provided_by_event_id: nil).includes(:provided_by_event)
+    tickets.to_a.group_by(&:provided_by_event).map do |provided_by_event, event_tickets|
+      {
+        provided_by_event: provided_by_event,
+        tickets: event_tickets
+      }
+    end
   end
 end
