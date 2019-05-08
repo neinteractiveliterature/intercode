@@ -1,25 +1,49 @@
-import React, { lazy, useMemo, useEffect } from 'react';
+import React, {
+  lazy, useMemo, useEffect, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import useQuerySuspended from '../useQuerySuspended';
 import parsePageContent from './parsePageContent';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
+function CustomLoadingIndicator({ visible }) {
+  return (
+    <div className="text-center mt-5 custom-loading-indicator" style={{ opacity: visible ? 1.0 : 0.0 }}>
+      <i className="fa fa-circle-o-notch fa-spin fa-fw" />
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
+}
+
+CustomLoadingIndicator.propTypes = {
+  visible: PropTypes.bool.isRequired,
+};
+
 function CmsPage({ slug, rootPage }) {
-  const { data, error } = useQuerySuspended(CmsPageQuery, { variables: { slug, rootPage } });
+  const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
+  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const content = useMemo(
     () => {
-      if (error) {
+      if (loading || error) {
         return null;
       }
 
       return parsePageContent(data.cmsPage.content_html);
     },
-    [data, error],
+    [data, loading, error],
+  );
+
+  useEffect(
+    () => {
+      const timeoutId = setTimeout(() => setShowLoadingIndicator(true), 250);
+      return () => clearTimeout(timeoutId);
+    },
+    [loading],
   );
 
   useEffect(() => {
@@ -27,21 +51,32 @@ function CmsPage({ slug, rootPage }) {
     window.BSN.initCallback();
   }, [content]);
 
+  if (loading) {
+    return <CustomLoadingIndicator visible={showLoadingIndicator} />;
+  }
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
   return (
     <>
-      {data.cmsPage.current_ability_can_update && (
-        <div className="page-admin-dropdown">
-          <PageAdminDropdown
-            pageId={data.cmsPage.id}
-            showDelete={data.cmsPage.current_ability_can_delete}
-          />
-        </div>
+      <CustomLoadingIndicator visible={loading && showLoadingIndicator} />
+      {!loading && (
+        <>
+          {
+            data.cmsPage.current_ability_can_update && (
+              <div className="page-admin-dropdown">
+                <PageAdminDropdown
+                  pageId={data.cmsPage.id}
+                  showDelete={data.cmsPage.current_ability_can_delete}
+                />
+              </div>
+            )
+          }
+          {content}
+        </>
       )}
-      {content}
     </>
   );
 }
