@@ -88,10 +88,10 @@ function EventsByChoice() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  // TODO mb-4 heading
   return (
     <>
-      <h1>Events by choice</h1>
+      <h1 className="mb-4">Events by choice</h1>
+
       <p>
         Numbers are presented as &ldquo;Confirmed / All Signups&rdquo;. All Signups include
         {' '}
