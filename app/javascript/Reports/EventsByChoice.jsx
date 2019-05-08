@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
-import {
-  flatMap, max, mapValues, groupBy, keyBy, sum,
-} from 'lodash-es';
+import flatMap from 'lodash-es/flatMap';
+import max from 'lodash-es/max';
+import mapValues from 'lodash-es/mapValues';
+import groupBy from 'lodash-es/groupBy';
+import keyBy from 'lodash-es/keyBy';
+import sum from 'lodash-es/sum';
 import { capitalize } from 'inflected';
 
 import ErrorDisplay from '../ErrorDisplay';

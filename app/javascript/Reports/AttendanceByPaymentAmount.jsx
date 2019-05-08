@@ -1,6 +1,6 @@
 import React from 'react';
 import { capitalize } from 'inflected';
-import { isEqual } from 'lodash-es';
+import isEqual from 'lodash-es/isEqual';
 
 import { AttendanceByPaymentAmountQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
