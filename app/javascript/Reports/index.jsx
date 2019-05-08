@@ -10,6 +10,7 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';
+import EventsByChoice from './EventsByChoice';
 
 function ReportsMenu() {
   const { data, error } = useQuerySuspended(ReportsMenuQuery);
@@ -88,6 +89,7 @@ function Reports() {
       <Switch>
         <Route path="/attendance_by_payment_amount" component={AttendanceByPaymentAmount} />
         <Route path="/event_provided_tickets" component={EventProvidedTickets} />
+        <Route path="/events_by_choice" component={EventsByChoice} />
         <Route path="/signup_spy" component={SignupSpy} />
         <Route path="/" component={ReportsMenu} />
       </Switch>

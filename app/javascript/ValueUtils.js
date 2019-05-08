@@ -28,3 +28,10 @@ export const preferNull = sortFunction => (a, b) => {
 export function sortByLocaleString(list, transform, options = { sensitivity: 'base' }) {
   return [...list].sort((a, b) => transform(a).localeCompare(transform(b), options));
 }
+
+export function titleSort(list, transform) {
+  return sortByLocaleString(
+    list,
+    element => (transform || (e => e))(element).replace(/^(the|a) /i, '').replace(/\W/, ''),
+  );
+}

@@ -21,44 +21,6 @@ class ReportsController < ApplicationController
     end
   end
 
-  def event_provided_tickets
-    @tickets = convention.tickets.where.not(provided_by_event_id: nil).includes(
-      :provided_by_event,
-      :ticket_type,
-      :user_con_profile
-    )
-
-    @tickets_by_event_id = @tickets.to_a.group_by(&:provided_by_event_id)
-    @events = Event.title_sort(@tickets.map(&:provided_by_event).uniq)
-  end
-
-  def events_by_choice
-    @events = Event.title_sort(convention.events.regular.active)
-    @choice_data_by_event_id = @events.map(&:id).map do |event_id|
-      [event_id, []]
-    end.to_h
-
-    raw_data = convention.signups.counted.pluck(
-      :user_con_profile_id,
-      :event_id,
-      :created_at,
-      :state
-    )
-    grouped_data = raw_data.group_by { |(user_con_profile_id, _, _, _)| user_con_profile_id }
-    grouped_data.transform_values do |user_con_profile_rows|
-      sorted_rows = user_con_profile_rows.sort_by { |(_, _, created_at, _)| created_at }
-      sorted_rows.each_with_index do |(_, event_id, _, state), index|
-        next unless @choice_data_by_event_id[event_id]
-        @choice_data_by_event_id[event_id][index] ||= {
-          'confirmed' => 0,
-          'waitlisted' => 0,
-          'withdrawn' => 0
-        }
-        @choice_data_by_event_id[event_id][index][state] += 1
-      end
-    end
-  end
-
   def events_by_time
     @runs = convention.runs.where(
       event_id: convention.events.joins(:event_category).where.not(event_categories: { name: 'Filler event' }).active.select(:id)
