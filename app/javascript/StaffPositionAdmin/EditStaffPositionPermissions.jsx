@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { flatMap } from 'lodash';
+import flatMap from 'lodash-es/flatMap';
 import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';

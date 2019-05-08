@@ -10,7 +10,7 @@ const MultipleChoiceInput = ({ caption, ...choiceSetProps }) => (
 );
 
 MultipleChoiceInput.propTypes = {
-  caption: PropTypes.string.isRequired,
+  caption: PropTypes.node.isRequired,
 };
 
 export default MultipleChoiceInput;

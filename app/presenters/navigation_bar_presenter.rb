@@ -147,11 +147,11 @@ class NavigationBarPresenter
 
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
-    url { pages_path }
+    url { cms_pages_path }
     visible? { can?(:update, Page.new(parent: convention)) }
     active? do |request|
       [
-        pages_path,
+        cms_pages_path,
         cms_partials_path,
         cms_layouts_path,
         cms_files_path,

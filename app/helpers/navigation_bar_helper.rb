@@ -53,7 +53,7 @@ module NavigationBarHelper
     return unless convention.ticket_types.publicly_available.any?
 
     content_tag(:li, class: 'nav-item my-auto') do
-      link_to new_ticket_path, class: 'btn btn-sm btn-primary' do
+      link_to ticket_path, class: 'btn btn-sm btn-primary' do
         safe_join([
           content_tag(
             :span,

@@ -1,13 +1,6 @@
-- admin_bar = capture do
-  - if can? :update, @page
-    .page-admin-dropdown
-      = app_component 'PageAdminDropdown', editUrl: edit_page_path(@page), pageListUrl: pages_path, showDelete: can?(:destroy, @page), pageId: @page.id
-
-- if @page.invariant?
-  - page_content = Rails.cache.fetch(cache_fragment_name([convention, @page])) { render_page_content }
-- else
-  - page_content = render_page_content
+- page_content = capture do
+  = app_component 'CmsPage'
 - flash_messages_content = render(partial: 'layouts/flash_messages')
-- all_content = safe_join([flash_messages_content, admin_bar, page_content.html_safe].compact, '')
+- all_content = safe_join([flash_messages_content, page_content.html_safe].compact, '')
 
-= render_in_cadmus_layout(all_content, @page.effective_cms_layout, 'page' => @page)
+= cms_rendering_context.render_in_cadmus_layout(all_content, @page.effective_cms_layout, 'page' => @page)

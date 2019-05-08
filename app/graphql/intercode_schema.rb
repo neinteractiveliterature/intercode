@@ -29,7 +29,10 @@ class IntercodeSchema < GraphQL::Schema
   )
   middleware better_rescue_middleware
 
-  def self.resolve_type(type, obj, ctx)
+  def self.resolve_type(_abstract_type, object, _context)
+    case object
+    when MailingListsPresenter then Types::MailingListsType
+    end
   end
 
   def self.object_from_id(node_id, ctx)

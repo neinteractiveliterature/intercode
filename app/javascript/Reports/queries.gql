@@ -1,3 +1,110 @@
+query ReportsMenuQuery {
+  convention {
+    id
+    ticket_mode
+    ticket_name
+  }
+}
+
+query AttendanceByPaymentAmountQuery {
+  convention {
+    id
+    ticket_name
+
+    reports {
+      ticket_count_by_type_and_payment_amount {
+        count
+
+        ticket_type {
+          id
+          name
+          description
+
+          pricing_schedule {
+            timespans {
+              value {
+                fractional
+                currency_code
+              }
+            }
+          }
+        }
+
+        payment_amount {
+          fractional
+          currency_code
+        }
+      }
+
+      total_revenue {
+        fractional
+        currency_code
+      }
+    }
+  }
+}
+
+query EventProvidedTicketsQuery {
+  convention {
+    id
+    ticket_name
+
+    reports {
+      event_provided_tickets {
+        provided_by_event {
+          id
+          title
+        }
+
+        tickets {
+          id
+
+          user_con_profile {
+            id
+            name_inverted
+          }
+
+          ticket_type {
+            id
+            description
+          }
+        }
+      }
+    }
+  }
+}
+
+query EventsByChoiceQuery {
+  convention {
+    id
+
+    reports {
+    	events_by_choice {
+        event {
+          id
+          title
+        }
+
+        choice_counts {
+          state
+        	choice
+          count
+        }
+      }
+    }
+  }
+}
+
+query SignupCountsByStateQuery {
+  convention {
+    id
+    signup_counts_by_state {
+      state
+      count
+    }
+  }
+}
+
 query SignupSpySignupsQuery($page: Int, $perPage: Int) {
   convention {
     id

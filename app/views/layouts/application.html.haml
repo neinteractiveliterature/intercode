@@ -6,16 +6,14 @@
   - else
     = yield
 
-- if convention&.default_layout
-  = render_in_cadmus_layout(page_content, convention.default_layout)
-- elsif !convention
-  = render_in_cadmus_layout(page_content, RootSite.instance.default_layout)
+- if cms_parent&.default_layout
+  = cms_rendering_context.render_in_cadmus_layout(page_content, cms_parent.default_layout)
 - else
   !!!
   %html
     %head
       = render partial: 'layouts/head'
     %body
-      = navigation_bar
+      = cms_rendering_context.navigation_bar
       .container
         = page_content

@@ -1,0 +1,49 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+function BioDisplay({ userConProfile }) {
+  return (
+    <section className="mt-4">
+      <h2 className="mb-4">My Bio</h2>
+
+      <div className="media">
+        <div className="mr-3">
+          <img src={`${userConProfile.gravatar_url}?s=64&r=pg&d=mm`} alt={`${userConProfile.bio_name}’s Gravatar`} />
+        </div>
+        <div className="media-body">
+          <h5 className="mt-0">{userConProfile.bio_name}</h5>
+          { /* eslint-disable-next-line react/no-danger */ }
+          <div dangerouslySetInnerHTML={{ __html: userConProfile.bio_html }} />
+        </div>
+      </div>
+
+      <div className="mb-4 mt-3">
+        {
+          userConProfile.bio && userConProfile.bio.trim() !== ''
+            ? (
+              <Link to="/edit_bio" className="btn btn-secondary">
+                Edit bio/avatar settings
+              </Link>
+            )
+            : (
+              <Link to="/edit_bio" className="btn btn-primary">
+                Add bio/avatar
+              </Link>
+            )
+        }
+      </div>
+    </section>
+  );
+}
+
+BioDisplay.propTypes = {
+  userConProfile: PropTypes.shape({
+    gravatar_url: PropTypes.string.isRequired,
+    bio: PropTypes.string,
+    bio_name: PropTypes.string,
+    bio_html: PropTypes.string,
+  }).isRequired,
+};
+
+export default BioDisplay;

@@ -1,0 +1,45 @@
+fragment CmsPageAdminLayoutFields on CmsLayout {
+  id
+  name
+}
+
+fragment CmsPageFields on Page {
+  id
+  name
+  slug
+  content
+  admin_notes
+  skip_clickwrap_agreement
+
+  cms_layout {
+    ...CmsPageAdminLayoutFields
+  }
+}
+
+query CmsPagesAdminQuery {
+  cmsPages {
+    ...CmsPageFields
+  }
+
+  cmsParent {
+    ...on RootSite {
+      id
+
+      default_layout {
+        ...CmsPageAdminLayoutFields
+      }
+    }
+
+    ...on Convention {
+      id
+
+      default_layout {
+        ...CmsPageAdminLayoutFields
+      }
+    }
+  }
+
+  cmsLayouts {
+    ...CmsPageAdminLayoutFields
+  }
+}

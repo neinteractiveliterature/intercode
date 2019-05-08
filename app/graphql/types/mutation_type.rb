@@ -10,7 +10,7 @@ def guard_for_cms_model(model_class, action, find_by: :id)
 end
 
 def guard_for_create_cms_model(model_class)
-  ->(_obj, args, ctx) {
+  ->(_obj, _args, ctx) {
     model = model_class.new(parent: ctx[:convention])
     ctx[:current_ability].can?(:create, model)
   }
@@ -52,6 +52,16 @@ class Types::MutationType < Types::BaseObject
     raise ActionController::InvalidAuthenticityToken unless ctx[:verified_request]
   end
 
+  ### CmsFile
+
+  field :createCmsFile, mutation: Mutations::CreateCmsFile do
+    guard(guard_for_create_cms_model(CmsFile))
+  end
+
+  field :deleteCmsFile, mutation: Mutations::DeleteCmsFile do
+    guard(guard_for_cms_model(CmsFile, :destroy))
+  end
+
   ### CmsGraphqlQuery
 
   field :createCmsGraphqlQuery, mutation: Mutations::CreateCmsGraphqlQuery do
@@ -64,6 +74,20 @@ class Types::MutationType < Types::BaseObject
 
   field :deleteCmsGraphqlQuery, mutation: Mutations::DeleteCmsGraphqlQuery do
     guard(guard_for_cms_model(CmsGraphqlQuery, :destroy))
+  end
+
+  ### CmsLayout
+
+  field :createCmsLayout, mutation: Mutations::CreateCmsLayout do
+    guard(guard_for_create_cms_model(CmsLayout))
+  end
+
+  field :updateCmsLayout, mutation: Mutations::UpdateCmsLayout do
+    guard(guard_for_cms_model(CmsLayout, :update))
+  end
+
+  field :deleteCmsLayout, mutation: Mutations::DeleteCmsLayout do
+    guard(guard_for_cms_model(CmsLayout, :destroy))
   end
 
   ### CmsNavigationItem
@@ -84,6 +108,20 @@ class Types::MutationType < Types::BaseObject
     guard ->(_obj, _args, ctx) {
       ctx[:current_ability].can?(:sort, CmsNavigationItem.new(parent: ctx[:convention]))
     }
+  end
+
+  ### CmsPartial
+
+  field :createCmsPartial, mutation: Mutations::CreateCmsPartial do
+    guard(guard_for_create_cms_model(CmsPartial))
+  end
+
+  field :updateCmsPartial, mutation: Mutations::UpdateCmsPartial do
+    guard(guard_for_cms_model(CmsPartial, :update))
+  end
+
+  field :deleteCmsPartial, mutation: Mutations::DeleteCmsPartial do
+    guard(guard_for_cms_model(CmsPartial, :destroy))
   end
 
   ### CmsVariable
@@ -140,7 +178,6 @@ class Types::MutationType < Types::BaseObject
   field :updateEventCategory, mutation: Mutations::UpdateEventCategory do
     guard(guard_for_convention_associated_model(:event_categories, :update))
   end
-
 
   field :deleteEventCategory, mutation: Mutations::DeleteEventCategory do
     guard(guard_for_convention_associated_model(:event_categories, :destroy))
@@ -256,6 +293,14 @@ class Types::MutationType < Types::BaseObject
   end
 
   ### Page
+
+  field :createPage, mutation: Mutations::CreatePage do
+    guard(guard_for_create_cms_model(Page))
+  end
+
+  field :updatePage, mutation: Mutations::UpdatePage do
+    guard(guard_for_cms_model(Page, :update))
+  end
 
   field :deletePage, mutation: Mutations::DeletePage do
     guard(guard_for_cms_model(Page, :destroy))

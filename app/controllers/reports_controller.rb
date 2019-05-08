@@ -3,60 +3,20 @@ class ReportsController < ApplicationController
 
   before_action :ensure_authorized
 
-  layout 'print_reports', only: %w[events_by_time per_event per_user per_room single_user_printable volunteer_events]
+  layout 'print_reports', only: %w[
+    events_by_time per_event per_user per_room single_user_printable volunteer_events
+  ]
 
   def index
   end
 
-  def attendance_by_payment_amount
-    raw_data = convention.tickets.group(
-      :ticket_type_id,
-      :payment_amount_cents,
-      :payment_amount_currency
-    ).count
-
-    ticket_types_by_id = convention.ticket_types.find(raw_data.keys.map(&:first)).index_by(&:id)
-    @count_by_ticket_type_and_payment_amount = (
-      raw_data.transform_keys do |(ticket_type_id, cents, currency)|
-        [ticket_types_by_id[ticket_type_id], Money.new(cents, currency)]
-      end
-    )
-  end
-
-  def event_provided_tickets
-    @tickets = convention.tickets.where.not(provided_by_event_id: nil).includes(
-      :provided_by_event,
-      :ticket_type,
-      :user_con_profile
-    )
-
-    @tickets_by_event_id = @tickets.to_a.group_by(&:provided_by_event_id)
-    @events = Event.title_sort(@tickets.map(&:provided_by_event).uniq)
-  end
-
-  def events_by_choice
-    @events = Event.title_sort(convention.events.regular.active)
-    @choice_data_by_event_id = @events.map(&:id).map do |event_id|
-      [event_id, []]
-    end.to_h
-
-    raw_data = convention.signups.counted.pluck(
-      :user_con_profile_id,
-      :event_id,
-      :created_at,
-      :state
-    )
-    grouped_data = raw_data.group_by { |(user_con_profile_id, _, _, _)| user_con_profile_id }
-    grouped_data.transform_values do |user_con_profile_rows|
-      sorted_rows = user_con_profile_rows.sort_by { |(_, _, created_at, _)| created_at }
-      sorted_rows.each_with_index do |(_, event_id, _, state), index|
-        next unless @choice_data_by_event_id[event_id]
-        @choice_data_by_event_id[event_id][index] ||= {
-          'confirmed' => 0,
-          'waitlisted' => 0,
-          'withdrawn' => 0
-        }
-        @choice_data_by_event_id[event_id][index][state] += 1
+  def export_signup_spy
+    respond_to do |format|
+      format.csv do
+        send_table_presenter_csv(
+          Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention),
+          [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
+        )
       end
     end
   end
@@ -106,18 +66,6 @@ class ReportsController < ApplicationController
           runs: [:rooms, signups: :user_con_profile]
         )
     )
-  end
-
-  def signup_spy
-    respond_to do |format|
-      format.html {}
-      format.csv do
-        send_table_presenter_csv(
-          Tables::SignupsTableResultsPresenter.signup_spy_for_convention(convention),
-          [convention.name, 'Signups', Date.today.iso8601].compact.join(' - ')
-        )
-      end
-    end
   end
 
   def volunteer_events

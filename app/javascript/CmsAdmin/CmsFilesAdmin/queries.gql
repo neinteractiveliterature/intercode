@@ -1,0 +1,13 @@
+fragment CmsFileFields on CmsFile {
+  id
+  filename
+  url
+  content_type
+  size
+}
+
+query CmsFilesAdminQuery {
+  cmsFiles {
+    ...CmsFileFields
+  }
+}

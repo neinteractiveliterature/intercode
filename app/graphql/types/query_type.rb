@@ -89,7 +89,23 @@ class Types::QueryType < Types::BaseObject
     context[:current_user]
   end
 
-  field :cms_pages, [Types::PageType], null: true
+  field :cms_parent, Types::CmsParentType, null: false
+
+  def cms_parent
+    convention || root_site
+  end
+
+  field :cms_files, [Types::CmsFileType], null: true
+
+  def cms_files
+    if context[:convention]
+      context[:convention].cms_files
+    else
+      CmsFile.global
+    end
+  end
+
+  field :cms_pages, [Types::PageType], null: false
 
   def cms_pages
     if context[:convention]
@@ -99,6 +115,18 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
+  field :cms_page, Types::PageType, null: false do
+    argument :id, Int, required: false
+    argument :slug, String, required: false
+    argument :root_page, Boolean, required: false
+  end
+
+  def cms_page(id: nil, slug: nil, root_page: false)
+    return cms_parent.root_page if root_page
+    return cms_parent.pages.find(id) if id
+    cms_parent.pages.find_by!(slug: slug)
+  end
+
   field :cms_layouts, [Types::CmsLayoutType], null: false
 
   def cms_layouts
@@ -106,6 +134,16 @@ class Types::QueryType < Types::BaseObject
       context[:convention].cms_layouts
     else
       CmsLayout.global
+    end
+  end
+
+  field :cms_partials, [Types::CmsPartialType], null: false
+
+  def cms_partials
+    if context[:convention]
+      context[:convention].cms_partials
+    else
+      CmsPartial.global
     end
   end
 

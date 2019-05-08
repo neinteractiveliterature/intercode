@@ -32,7 +32,7 @@ class ProposeEventButton extends React.Component {
     return (
       <ModalContainer>
         {({ modalVisible, openModal, closeModal }) => (
-          <>
+          <div>
             <button
               id={buttonId}
               className={this.props.className}
@@ -50,7 +50,7 @@ class ProposeEventButton extends React.Component {
               proposableEventCategories={data.convention.event_categories
                 .filter(category => category.proposable)}
             />
-          </>
+          </div>
         )}
       </ModalContainer>
     );
