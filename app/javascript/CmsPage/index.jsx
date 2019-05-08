@@ -1,5 +1,5 @@
 import React, {
-  lazy, useMemo, useEffect, useState,
+  lazy, useMemo, useEffect, useState, Suspense,
 } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -67,10 +67,12 @@ function CmsPage({ slug, rootPage }) {
           {
             data.cmsPage.current_ability_can_update && (
               <div className="page-admin-dropdown">
-                <PageAdminDropdown
-                  pageId={data.cmsPage.id}
-                  showDelete={data.cmsPage.current_ability_can_delete}
-                />
+                <Suspense fallback={<></>}>
+                  <PageAdminDropdown
+                    pageId={data.cmsPage.id}
+                    showDelete={data.cmsPage.current_ability_can_delete}
+                  />
+                </Suspense>
               </div>
             )
           }
