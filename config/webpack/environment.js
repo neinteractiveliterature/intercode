@@ -86,7 +86,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(mjs|js\.flow)$/,
+        test: /\.(mjs|js\.flow|jsx)$/,
         include: /node_modules/,
         type: "javascript/auto",
         use: [
