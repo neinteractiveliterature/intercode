@@ -56,7 +56,7 @@
     "font-awesome": "^4.7.0",
     "glob": "^7.1.4",
     "graphiql": "^0.13.0",
-    "graphql": "^14.2.1",
+    "graphql": "^14.3.0",
     "graphql-anywhere": "^4.2.1",
     "graphql-tag": "^2.10.1",
     "hypernova": "^2.5.0",
