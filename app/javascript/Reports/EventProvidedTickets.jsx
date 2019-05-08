@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, capitalize } from 'inflected';
-import { flatMap, sum } from 'lodash-es';
+import flatMap from 'lodash-es/flatMap';
+import sum from 'lodash-es/sum';
 
 import { EventProvidedTicketsQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
