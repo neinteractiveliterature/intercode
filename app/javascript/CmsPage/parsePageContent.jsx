@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import camelCase from 'lodash-es/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
@@ -102,7 +102,11 @@ function processReactComponentNode(node, children, index) {
   }
 
   const props = JSON.parse((node.attributes['data-react-props'] || { value: '{}' }).value);
-  return React.createElement(component, props);
+  return React.createElement(
+    Suspense,
+    { fallback: (<></>) },
+    React.createElement(component, props),
+  );
 }
 
 function traverseDom(node, isValidNode, processingInstructions, index) {
