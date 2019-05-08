@@ -74,6 +74,27 @@ query EventProvidedTicketsQuery {
   }
 }
 
+query EventsByChoiceQuery {
+  convention {
+    id
+
+    reports {
+    	events_by_choice {
+        event {
+          id
+          title
+        }
+
+        choice_counts {
+          state
+        	choice
+          count
+        }
+      }
+    }
+  }
+}
+
 query SignupCountsByStateQuery {
   convention {
     id

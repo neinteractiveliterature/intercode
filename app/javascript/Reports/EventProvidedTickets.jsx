@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { pluralize, capitalize } from 'inflected';
 import { flatMap, sum } from 'lodash-es';
 
 import { EventProvidedTicketsQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import { sortByLocaleString } from '../ValueUtils';
+import { sortByLocaleString, titleSort } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 
 function EventProvidedTicketsByEvent({ data }) {
-  const sortedRows = sortByLocaleString(
+  const sortedRows = titleSort(
     data.convention.reports.event_provided_tickets,
-    row => row.provided_by_event.title.replace(/^(the|a) /i, '').replace(/\W/, ''),
+    row => row.provided_by_event.title,
   );
 
   return sortedRows.map(row => (
@@ -35,6 +36,10 @@ function EventProvidedTicketsByEvent({ data }) {
     </section>
   ));
 }
+
+EventProvidedTicketsByEvent.propTypes = {
+  data: PropTypes.shape({}).isRequired,
+};
 
 function EventProvidedTicketsByUser({ data }) {
   const sortedRows = useMemo(
@@ -70,6 +75,10 @@ function EventProvidedTicketsByUser({ data }) {
     </table>
   );
 }
+
+EventProvidedTicketsByUser.propTypes = {
+  data: PropTypes.shape({}).isRequired,
+};
 
 function EventProvidedTickets() {
   const { data, error } = useQuerySuspended(EventProvidedTicketsQuery);
