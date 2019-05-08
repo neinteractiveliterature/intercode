@@ -29,8 +29,10 @@ before_install:
 before_script:
 - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - test/docker-pull.sh
+# --network=host works around Travis docker networking issue, apparently
 - docker build
   -f Dockerfile
+  --network=host
   --target build
   --build-arg ASSETS_HOST="$ASSETS_HOST"
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
@@ -42,6 +44,7 @@ before_script:
 - docker build
   -f Dockerfile
   --target build-production
+  --network=host
   --build-arg ASSETS_HOST="$ASSETS_HOST"
   --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
   --cache-from neinteractiveliterature/intercode:latest
