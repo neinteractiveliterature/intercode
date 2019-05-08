@@ -1,5 +1,5 @@
 import React from 'react';
-import { flatten } from 'lodash';
+import flatten from 'lodash-es/flatten';
 import { humanize } from 'inflected';
 
 import { OrderSummaryQuery } from './queries.gql';

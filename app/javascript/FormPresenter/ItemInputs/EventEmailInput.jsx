@@ -103,6 +103,7 @@ class EventEmailInput extends React.Component {
           </label>
           <div className="input-group">
             <input
+              id={inputId}
               className="form-control"
               value={(this.props.value || {}).team_mailing_list_name}
               onChange={(event) => {

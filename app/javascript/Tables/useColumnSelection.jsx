@@ -1,4 +1,4 @@
-import { uniq } from 'lodash';
+import uniq from 'lodash-es/uniq';
 
 export default function useColumnSelection({
   alwaysVisibleColumns, defaultVisibleColumns, possibleColumns, history,

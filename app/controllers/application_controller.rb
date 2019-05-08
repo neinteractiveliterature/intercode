@@ -1,7 +1,4 @@
 class ApplicationController < ActionController::Base
-  include Cadmus::Renderable
-  helper_method :cadmus_renderer
-
   # Turn on Rails' built-in CSRF protection (see
   # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   skip_forgery_protection if: :doorkeeper_token unless Rails.env.test?
@@ -27,6 +24,9 @@ class ApplicationController < ActionController::Base
   before_action :ensure_clickwrap_agreement_accepted, unless: :devise_controller?
 
   before_action :preload_cms_layout_content
+
+  delegate :cms_parent, :cadmus_renderer, :preload_cms_layout_content, to: :cms_rendering_context
+  helper_method :cms_parent, :cadmus_renderer, :cms_rendering_context
 
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
@@ -113,37 +113,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # These variables will automatically be made available to Cadmus CMS content.  For
-  # example, you'll be able to do {{ user.name }} in a page template.
-  def liquid_assigns
-    cms_variables.merge(
-      'user' => current_user,
-      'convention' => convention,
-      'user_con_profile' => user_con_profile,
-      'conventions' => -> { Convention.all.to_a },
-      'organizations' => -> { Organization.all.to_a }
-    )
-  end
-
-  # These variables aren't available from Cadmus CMS templates, but are available to
-  # custom Liquid filters and tags via the Liquid::Context object.  Exposing the
-  # controller is useful for generating URLs in templates.
-  def liquid_registers
-    liquid_assigns.merge(
-      'controller' => self,
-      :cached_partials => @cached_partials,
-      :cached_files => @cached_files,
-      :file_system => Cadmus::PartialFileSystem.new(convention)
-    )
-  end
-
-  def cms_variables
-    return {} unless convention
-    convention.cms_variables.pluck(:key, :value).each_with_object({}) do |(key, value), hash|
-      hash[key] = value
-    end
-  end
-
   # Devise is going to do some operations in its controllers that require writing to a
   # User object in the database.  For example, it handles the signup and forgot password
   # forms itself.  So, it needs to know about any special parameters we added onto those
@@ -220,16 +189,15 @@ sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option
     false
   end
 
-  def preload_cms_layout_content(cms_layout = nil)
-    cms_layout ||= convention&.default_layout
-    return unless convention&.default_layout
-
-    @cached_partials ||= {}
-    @cached_partials.update(
-      cms_layout.cms_partials.index_by(&:name).transform_values(&:liquid_template)
+  def cms_rendering_context
+    @cms_rendering_context ||= CmsRenderingContext.new(
+      cms_parent: convention || RootSite.instance,
+      controller: self,
+      assigns: {
+        'user' => current_user,
+        'convention' => convention,
+        'user_con_profile' => user_con_profile
+      }
     )
-
-    @cached_files ||= {}
-    @cached_files.update(cms_layout.cms_files.index_by(&:filename))
   end
 end

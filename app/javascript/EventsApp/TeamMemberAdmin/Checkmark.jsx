@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-function Checkmark({ value }) {
+function Checkmark({ value, className }) {
   if (!value) {
     return null;
   }
 
   return (
-    <i className="fa fa-check">
+    <i className={classNames('fa fa-check', className)}>
       <span className="sr-only">✓</span>
     </i>
   );
@@ -15,6 +16,11 @@ function Checkmark({ value }) {
 
 Checkmark.propTypes = {
   value: PropTypes.bool.isRequired,
+  className: PropTypes.string,
+};
+
+Checkmark.defaultProps = {
+  className: null,
 };
 
 export default Checkmark;

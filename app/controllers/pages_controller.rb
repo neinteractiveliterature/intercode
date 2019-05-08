@@ -11,7 +11,7 @@ class PagesController < ApplicationController
 
   include Cadmus::PagesController
 
-  layout :determine_layout
+  layout 'cms_page'
 
   # In the case of the root action, we'll need to load the root page from the database before
   # Authority has a chance to run its authorization checks.  So we use a before_action filter that
@@ -26,18 +26,13 @@ class PagesController < ApplicationController
   # root URL.  Because pages should only have one canonical URL if possible, natch.
   before_action :redirect_if_root_page, only: [:show]
 
-  # We don't want to let the general public view the list of pages, so we'll use a special extra
-  # authorization filter here.
-  before_action :authorize_index, only: [:index]
-
   # Intercode's layout uses the @page_title instance variable for the <title> tag.
   before_action :set_page_title, only: :show
 
   # We're going to do our own slightly more complicated check here, because pages can explicitly
   # skip the clickwrap check
   skip_before_action :ensure_clickwrap_agreement_accepted
-  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it, only: [:show]
-  before_action :ensure_clickwrap_agreement_accepted, except: [:show]
+  before_action :ensure_clickwrap_agreement_accepted_unless_page_skips_it
 
   # The actual root action implementation is exceedingly simple: since we've already loaded
   # @page in a before filter, we can just run the show action.  Sweet!
@@ -80,24 +75,12 @@ class PagesController < ApplicationController
     authorize! :create, Page
   end
 
-  def determine_layout
-    case params[:action]
-    when 'root', 'show' then 'cms_page'
-    else 'cms_admin'
-    end
-  end
-
   def set_page_title
     @page_title = @page&.name
   end
 
-  def page_params
-    params.require(:page).permit(:name, :slug, :content, :admin_notes, :skip_clickwrap_agreement)
-  end
-
   def render_page_content
-    preload_cms_content
-    cadmus_renderer.render(@page.liquid_template, :html, assigns: { 'page' => @page })
+    cms_rendering_context.render_page_content(@page)
   end
   helper_method :render_page_content
 
@@ -107,14 +90,6 @@ class PagesController < ApplicationController
     else
       super
     end
-  end
-
-  def preload_cms_content
-    @cached_partials ||= {}
-    @cached_partials.update(@page.cms_partials.index_by(&:name).transform_values(&:liquid_template))
-
-    @cached_files ||= {}
-    @cached_files.update(@page.cms_files.index_by(&:filename))
   end
 
   def ensure_clickwrap_agreement_accepted_unless_page_skips_it

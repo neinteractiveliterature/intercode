@@ -16,4 +16,5 @@ class Types::UserConProfileInputType < Types::BaseInputObject
   argument :evening_phone, String, required: false, camelize: false
   argument :best_call_time, String, required: false, camelize: false
   argument :preferred_contact, String, required: false, camelize: false
+  argument :gravatar_enabled, Boolean, required: false, camelize: false
 end

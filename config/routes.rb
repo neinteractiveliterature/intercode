@@ -13,24 +13,21 @@ Intercode::Application.routes.draw do
   }
 
   # CMS stuff
-  cadmus_pages
-  resources :cms_partials
-  resources :cms_files
-  get 'cms_graphql_queries/(*extra)' => 'cms_graphql_queries#index', as: :cms_graphql_queries
-  resources :cms_navigation_items do
-    collection do
-      patch :sort
-    end
-  end
-  resources :cms_layouts
-  resources :cms_variables, only: [:index]
+  get 'pages/*page_glob' => 'pages#show', as: :page
+  get 'cms_pages/(*extra)' => 'cms_admin#index', as: :cms_pages
+  get 'cms_partials/(*extra)' => 'cms_admin#index', as: :cms_partials
+  get 'cms_files/(*extra)' => 'cms_admin#index', as: :cms_files
+  get 'cms_layouts/(*extra)' => 'cms_admin#index', as: :cms_layouts
+  get 'cms_graphql_queries/(*extra)' => 'cms_admin#index', as: :cms_graphql_queries
+  get 'cms_navigation_items/(*extra)' => 'cms_admin#index', as: :cms_navigation_items
+  get 'cms_variables/(*extra)' => 'cms_admin#index', as: :cms_variables
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
     resource :convention, only: [:edit]
 
-    resource :ticket, only: [:new, :show, :create]
+    get 'ticket/(*extra)' => 'tickets#show', as: :ticket
     get 'ticket_types/(*extra)' => 'ticket_types#index', as: :ticket_types
 
     resources :events, only: [] do
@@ -71,37 +68,23 @@ Intercode::Application.routes.draw do
       end
     end
     get 'user_con_profiles/(*extra)' => 'user_con_profiles#index'
+    get 'my_profile/new' => 'my_profiles#new', as: :new_my_profile
+    get 'my_profile/edit' => 'my_profiles#show', as: :edit_my_profile # yes, really, show
+    get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
 
-    resource :my_profile do
-      member do
-        get :edit_bio
-        patch :update_bio
-      end
-    end
-
-    get 'reports' => 'reports#index'
+    get 'reports' => 'reports#index', as: :reports
     namespace :reports do
-      get :attendance_by_payment_amount
-      get :event_provided_tickets
-      get :events_by_choice
+      get :export_signup_spy
       get :events_by_time
       get :per_event
       get :per_user
       get :per_room
-      get :signup_spy
       get 'user_con_profiles/:user_con_profile_id' => :single_user_printable
       get :volunteer_events
     end
+    get 'reports/(*extra)' => 'reports#index'
 
-    get 'mailing_lists' => 'mailing_lists#index'
-    namespace :mailing_lists do
-      get :event_proposers
-      get :team_members
-      get :ticketed_attendees
-      get :users_with_pending_bio
-      get :waitlists
-      get :whos_free
-    end
+    get 'mailing_lists/(*extra)' => 'mailing_lists#index', as: :mailing_lists
 
     resources :rooms, only: [:index]
     resource :clickwrap_agreement, only: [:show] do

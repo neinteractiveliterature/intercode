@@ -6,7 +6,7 @@ import { enableUniqueIds } from 'react-html-id';
 
 class BootstrapFormInput extends React.Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     type: PropTypes.string,
     value: PropTypes.string.isRequired,
@@ -17,6 +17,7 @@ class BootstrapFormInput extends React.Component {
   };
 
   static defaultProps = {
+    name: null,
     type: 'text',
     disabled: false,
     helpText: null,

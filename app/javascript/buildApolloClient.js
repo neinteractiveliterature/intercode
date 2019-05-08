@@ -1,8 +1,12 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import fetch from 'unfetch';
+
+import introspectionQueryResultData from './fragmentTypes.json';
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
 function buildApolloClient(authenticityToken) {
   const AuthLink = (operation, next) => {
@@ -25,6 +29,7 @@ function buildApolloClient(authenticityToken) {
     ]),
     cache: new InMemoryCache({
       addTypename: true,
+      fragmentMatcher,
     }),
   });
 }

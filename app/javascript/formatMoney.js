@@ -3,11 +3,11 @@ export default function formatMoney(moneyValue, includeCurrency = true) {
     return '';
   }
 
-  const number = (moneyValue.fractional / 100.0).toFixed(2).toString();
+  const number = moneyValue.fractional / 100.0;
 
   if (includeCurrency) {
-    return `$${number}`;
+    return number.toLocaleString('en-US', { style: 'currency', currency: moneyValue.currency_code });
   }
 
-  return number;
+  return number.toLocaleString('en-US');
 }

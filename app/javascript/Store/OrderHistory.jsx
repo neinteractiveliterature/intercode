@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { intersection } from 'lodash';
+import intersection from 'lodash-es/intersection';
 
 import { OrderHistoryQuery } from './queries.gql';
 import OrderPaymentModal from './OrderPaymentModal';

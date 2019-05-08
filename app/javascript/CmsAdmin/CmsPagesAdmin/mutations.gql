@@ -1,0 +1,23 @@
+#import './queries.gql'
+
+mutation CreatePage($page: PageInput!) {
+  createPage(input: { page: $page }) {
+    page {
+      ...CmsPageFields
+    }
+  }
+}
+
+mutation UpdatePage($id: Int!, $page: PageInput!) {
+  updatePage(input: { id: $id, page: $page }) {
+    page {
+      ...CmsPageFields
+    }
+  }
+}
+
+mutation DeletePage($id: Int!) {
+  deletePage(input: { id: $id }) {
+    clientMutationId
+  }
+}

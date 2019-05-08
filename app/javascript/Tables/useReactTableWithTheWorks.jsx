@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash-es/isEqual';
 
 import useColumnSelection from './useColumnSelection';
 import useGraphQLReactTable from './useGraphQLReactTable';
@@ -23,7 +23,10 @@ export default function useReactTableWithTheWorks({
   storageKeyPrefix,
   variables,
 }) {
-  const localStorageReactTableProps = useLocalStorageReactTable(storageKeyPrefix, { onPageSizeChange });
+  const localStorageReactTableProps = useLocalStorageReactTable(
+    storageKeyPrefix,
+    { onPageSizeChange },
+  );
   const reactRouterReactTableProps = useReactRouterReactTable({
     decodeFilterValue, encodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
   });
