@@ -136,7 +136,7 @@
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "jest": "^24.8.0",
-    "jest-dom": "^3.2.1",
+    "jest-dom": "^3.2.2",
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
