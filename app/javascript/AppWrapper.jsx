@@ -19,6 +19,7 @@ export default (WrappedComponent) => {
     static propTypes = {
       authenticityToken: PropTypes.string.isRequired,
       signInAuthenticityToken: PropTypes.string.isRequired,
+      signOutAuthenticityToken: PropTypes.string.isRequired,
       stripePublishableKey: PropTypes.string,
     };
 
@@ -55,6 +56,7 @@ export default (WrappedComponent) => {
               value={{
                 graphql: this.props.authenticityToken,
                 signIn: this.props.signInAuthenticityToken,
+                signOut: this.props.signOutAuthenticityToken,
               }}
             >
               <AuthenticationModalContextProvider>
