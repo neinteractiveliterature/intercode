@@ -31,7 +31,7 @@ function describeCapacity(bucket, signupCount, signupsAvailable) {
     return pluralizeWithCount('slot', remainingCapacity);
   }
 
-  return `${remainingCapacity} / ${bucket.total_slots} available`;
+  return `${remainingCapacity > 0 ? remainingCapacity : 0} / ${bucket.total_slots} available`;
 }
 
 function RunCapacityGraphBucket({
