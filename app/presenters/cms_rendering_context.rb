@@ -53,7 +53,10 @@ class CmsRenderingContext
   # These variables will automatically be made available to Cadmus CMS content.  For
   # example, you'll be able to do {{ user.name }} in a page template.
   def liquid_assigns
-    cms_variables.merge(assigns)
+    cms_variables.merge(
+      'conventions' => -> { Convention.all.to_a },
+      'organizations' => -> { Organization.all.to_a }
+    ).merge(assigns)
   end
 
   # These variables aren't available from Cadmus CMS templates, but are available to
