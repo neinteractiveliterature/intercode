@@ -51,6 +51,7 @@ class ApplicationController < ActionController::Base
     {
       authenticityToken: graphql_authenticity_token,
       signInAuthenticityToken: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
+      signOutAuthenticityToken: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
       stripePublishableKey: convention&.stripe_publishable_key
     }
   end

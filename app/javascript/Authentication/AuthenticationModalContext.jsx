@@ -20,7 +20,7 @@ export function AuthenticationModalContextProvider({ children }) {
     visible,
     open,
     close,
-    currentView: () => (state || {}).currentView,
+    currentView: (state || {}).currentView,
     setCurrentView: view => setState({ ...state, currentView: view }),
   };
 
