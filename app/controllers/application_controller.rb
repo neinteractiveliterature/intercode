@@ -50,6 +50,7 @@ class ApplicationController < ActionController::Base
   def app_component_props
     {
       authenticityToken: graphql_authenticity_token,
+      signInAuthenticityToken: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
       stripePublishableKey: convention&.stripe_publishable_key
     }
   end

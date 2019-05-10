@@ -5,16 +5,20 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 
+import { AuthenticationModalContextProvider } from './Authentication/AuthenticationModalContext';
 import buildApolloClient from './buildApolloClient';
 import Confirm from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
 import { LazyStripeProvider } from './LazyStripe';
 import LoadingIndicator from './LoadingIndicator';
+import AuthenticationModal from './Authentication/AuthenticationModal';
+import AuthenticityTokensContext from './AuthenticityTokensContext';
 
 export default (WrappedComponent) => {
   const wrapper = class Wrapper extends React.Component {
     static propTypes = {
       authenticityToken: PropTypes.string.isRequired,
+      signInAuthenticityToken: PropTypes.string.isRequired,
       stripePublishableKey: PropTypes.string,
     };
 
@@ -47,15 +51,25 @@ export default (WrappedComponent) => {
       <ApolloProvider client={this.client}>
         <ApolloHooksProvider client={this.client}>
           <LazyStripeProvider publishableKey={this.props.stripePublishableKey}>
-            <Suspense fallback={<LoadingIndicator />}>
-              <Confirm>
-                {
-                  this.state.error
-                    ? <ErrorDisplay stringError={this.state.error.message} />
-                    : <WrappedComponent {...this.props} />
-                }
-              </Confirm>
-            </Suspense>
+            <AuthenticityTokensContext.Provider
+              value={{
+                graphql: this.props.authenticityToken,
+                signIn: this.props.signInAuthenticityToken,
+              }}
+            >
+              <AuthenticationModalContextProvider>
+                <Suspense fallback={<LoadingIndicator />}>
+                  <Confirm>
+                    {
+                      this.state.error
+                        ? <ErrorDisplay stringError={this.state.error.message} />
+                        : <WrappedComponent {...this.props} />
+                    }
+                  </Confirm>
+                </Suspense>
+                <AuthenticationModal />
+              </AuthenticationModalContextProvider>
+            </AuthenticityTokensContext.Provider>
           </LazyStripeProvider>
         </ApolloHooksProvider>
       </ApolloProvider>
