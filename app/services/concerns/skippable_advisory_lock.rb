@@ -5,7 +5,7 @@ module Concerns::SkippableAdvisoryLock
     if skip_locking
       yield
     else
-      ActiveRecord::Base.with_advisory_lock(name, &block)
+      ActiveRecord::Base.with_advisory_lock(name, transaction: true, &block)
     end
   end
 end
