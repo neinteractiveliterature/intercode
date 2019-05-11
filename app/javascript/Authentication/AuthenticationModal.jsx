@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap4-modal';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 
+const ForgotPasswordForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './ForgotPasswordForm'));
 const SignInForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './SignInForm'));
 const SignUpForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'));
 
@@ -10,15 +11,12 @@ function AuthenticationModal() {
   const { visible, currentView } = useContext(AuthenticationModalContext);
 
   const renderView = () => {
-    if (currentView === 'signIn') {
-      return <SignInForm />;
+    switch (currentView) {
+      case 'signIn': return <SignInForm />;
+      case 'signUp': return <SignUpForm />;
+      case 'forgotPassword': return <ForgotPasswordForm />;
+      default: return <></>;
     }
-
-    if (currentView === 'signUp') {
-      return <SignUpForm />;
-    }
-
-    return <></>;
   };
 
   return (

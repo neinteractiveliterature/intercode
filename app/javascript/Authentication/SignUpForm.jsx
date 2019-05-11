@@ -50,7 +50,13 @@ function SignUpForm() {
   const onSubmit = async (event) => {
     event.preventDefault();
     await signUpAsync(authenticityToken, formState, password, passwordConfirmation, captchaValue);
-    window.location.reload();
+    const destUrl = new URL(window.location.href);
+    destUrl.searchParams.delete('show_authentication');
+    if (destUrl.toString() === window.location.href) {
+      window.location.reload();
+    } else {
+      window.location.href = destUrl.toString();
+    }
   };
 
   return (
@@ -90,9 +96,9 @@ function SignUpForm() {
             sitekey={recaptchaSiteKey}
             onChange={setCaptchaValue}
           />
-        </div>
 
-        <ErrorDisplay stringError={(signUpError || {}).message} />
+          <ErrorDisplay stringError={(signUpError || {}).message} />
+        </div>
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1">

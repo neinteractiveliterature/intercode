@@ -46,7 +46,13 @@ function SignInForm() {
   const onSubmit = async (event) => {
     event.preventDefault();
     await signInAsync(authenticityToken, email, password, rememberMe);
-    window.location.reload();
+    const destUrl = new URL(window.location.href);
+    destUrl.searchParams.delete('show_authentication');
+    if (destUrl.toString() === window.location.href) {
+      window.location.reload();
+    } else {
+      window.location.href = destUrl.toString();
+    }
   };
 
   return (

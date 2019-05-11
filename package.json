@@ -114,7 +114,6 @@
     "thread-loader": "^2.1.2",
     "tinycolor2": "^1.4.1",
     "unfetch": "^4.1.0",
-    "url-search-params-polyfill": "^6.0.0",
     "webpack": "^4.31.0",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-manifest-plugin": "^2.0.4",

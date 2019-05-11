@@ -18,6 +18,7 @@ export default (WrappedComponent) => {
   const wrapper = class Wrapper extends React.Component {
     static propTypes = {
       authenticityToken: PropTypes.string.isRequired,
+      changePasswordAuthenticityToken: PropTypes.string.isRequired,
       signInAuthenticityToken: PropTypes.string.isRequired,
       signOutAuthenticityToken: PropTypes.string.isRequired,
       signUpAuthenticityToken: PropTypes.string.isRequired,
@@ -59,6 +60,7 @@ export default (WrappedComponent) => {
             <AuthenticityTokensContext.Provider
               value={{
                 graphql: this.props.authenticityToken,
+                changePassword: this.props.changePasswordAuthenticityToken,
                 signIn: this.props.signInAuthenticityToken,
                 signOut: this.props.signOutAuthenticityToken,
                 signUp: this.props.signUpAuthenticityToken,
