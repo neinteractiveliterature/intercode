@@ -52,6 +52,10 @@ class ApplicationController < ActionController::Base
       authenticityToken: graphql_authenticity_token,
       signInAuthenticityToken: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
       signOutAuthenticityToken: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
+      signUpAuthenticityToken: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
+      updateUserAuthenticityToken: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' }),
+      recaptchaSiteKey: Recaptcha.configuration.site_key,
+      resetPasswordAuthenticityToken: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
       stripePublishableKey: convention&.stripe_publishable_key
     }
   end

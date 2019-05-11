@@ -92,6 +92,7 @@
     "react-dnd-html5-backend": "^7.4.4",
     "react-dnd-multi-backend": "^3.2.1",
     "react-dom": "^16.8.6",
+    "react-google-recaptcha": "^1.0.5",
     "react-html-id": "^0.1.5",
     "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-moment-proptypes": "^1.6.0",
@@ -118,7 +119,8 @@
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.2.1",
-    "webpacker-react": "^0.3.2"
+    "webpacker-react": "^0.3.2",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",

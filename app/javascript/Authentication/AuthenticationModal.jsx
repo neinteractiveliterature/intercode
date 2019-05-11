@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
+import React, { lazy, Suspense, useContext } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
-import SignInForm from './SignInForm';
 import AuthenticationModalContext from './AuthenticationModalContext';
+
+const SignInForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './SignInForm'));
+const SignUpForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'));
 
 function AuthenticationModal() {
   const { visible, currentView } = useContext(AuthenticationModalContext);
@@ -12,12 +14,18 @@ function AuthenticationModal() {
       return <SignInForm />;
     }
 
+    if (currentView === 'signUp') {
+      return <SignUpForm />;
+    }
+
     return <></>;
   };
 
   return (
-    <Modal visible={visible}>
-      {renderView()}
+    <Modal visible={visible} dialogClassName="modal-lg">
+      <Suspense fallback={<></>}>
+        {renderView()}
+      </Suspense>
     </Modal>
   );
 }

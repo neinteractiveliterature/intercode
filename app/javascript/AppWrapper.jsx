@@ -20,6 +20,10 @@ export default (WrappedComponent) => {
       authenticityToken: PropTypes.string.isRequired,
       signInAuthenticityToken: PropTypes.string.isRequired,
       signOutAuthenticityToken: PropTypes.string.isRequired,
+      signUpAuthenticityToken: PropTypes.string.isRequired,
+      recaptchaSiteKey: PropTypes.string.isRequired,
+      updateUserAuthenticityToken: PropTypes.string.isRequired,
+      resetPasswordAuthenticityToken: PropTypes.string.isRequired,
       stripePublishableKey: PropTypes.string,
     };
 
@@ -57,9 +61,12 @@ export default (WrappedComponent) => {
                 graphql: this.props.authenticityToken,
                 signIn: this.props.signInAuthenticityToken,
                 signOut: this.props.signOutAuthenticityToken,
+                signUp: this.props.signUpAuthenticityToken,
+                updateUser: this.props.updateUserAuthenticityToken,
+                resetPassword: this.props.resetPasswordAuthenticityToken,
               }}
             >
-              <AuthenticationModalContextProvider>
+              <AuthenticationModalContextProvider recaptchaSiteKey={this.props.recaptchaSiteKey}>
                 <Suspense fallback={<LoadingIndicator />}>
                   <Confirm>
                     {
