@@ -9,9 +9,10 @@ const AuthenticationModalContext = React.createContext({
   setCurrentView: () => {},
   open: () => {},
   close: () => {},
+  recaptchaSiteKey: null,
 });
 
-export function AuthenticationModalContextProvider({ children }) {
+export function AuthenticationModalContextProvider({ children, recaptchaSiteKey }) {
   const {
     visible, state, setState, open, close,
   } = useModal();
@@ -22,6 +23,7 @@ export function AuthenticationModalContextProvider({ children }) {
     close,
     currentView: (state || {}).currentView,
     setCurrentView: view => setState({ ...state, currentView: view }),
+    recaptchaSiteKey,
   };
 
   return (

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import camelCase from 'lodash-es/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
+import SignInButton from '../Authentication/SignInButton';
 
 const ProposeEventButton = lazy(() => import(/* webpackChunkName: 'propose-event-button' */ '../EventProposals/ProposeEventButton'));
 const WithdrawMySignupButton = lazy(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ '../EventsApp/EventPage/WithdrawMySignupButton'));
@@ -95,6 +96,15 @@ function processDefaultNode(node, children, index) {
   return createElement(node, index, node.data, children);
 }
 
+function processSignInLinkNode(node) {
+  return (
+    <SignInButton
+      className={(node.attributes.class || {}).value || 'btn btn-link d-inline p-0'}
+      caption={node.textContent}
+    />
+  );
+}
+
 function processReactComponentNode(node, children, index) {
   const component = REACT_COMPONENTS_BY_NAME[node.attributes['data-react-class'].value];
   if (!component) {
@@ -149,6 +159,14 @@ export default function parsePageContent(content) {
     doc.body.children,
     IsValidNodeDefinitions.alwaysValid,
     [
+      {
+        shouldProcessNode: node => (
+          node.nodeType === Node.ELEMENT_NODE
+          && node.nodeName.toLowerCase() === 'a'
+          && node.attributes.href.value.endsWith('/users/sign_in')
+        ),
+        processNode: processSignInLinkNode,
+      },
       {
         shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
         processNode: processReactComponentNode,
