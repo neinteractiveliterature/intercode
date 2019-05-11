@@ -1,6 +1,14 @@
 class RegistrationsController < Devise::RegistrationsController
+  include Concerns::RedirectWithAuthentication
+
   prepend_before_action :check_captcha, only: [:create]
   prepend_before_action :disable_destroy, only: [:destroy]
+
+  def new
+    respond_to do |format|
+      format.html { redirect_with_authentication('signUp') }
+    end
+  end
 
   private
 

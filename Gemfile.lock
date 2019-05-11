@@ -94,9 +94,6 @@ GEM
       msgpack (~> 1.0)
     bootsnap (1.4.4-java)
       msgpack (~> 1.0)
-    bootstrap_form (4.2.0)
-      actionpack (>= 5.0)
-      activemodel (>= 5.0)
     browser (2.5.3)
     builder (3.2.3)
     bullet (6.0.0)
@@ -452,7 +449,6 @@ DEPENDENCIES
   aws-sdk-s3
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
-  bootstrap_form
   browser
   bullet
   cadmus (~> 0.7.0)

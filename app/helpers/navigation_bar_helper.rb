@@ -156,12 +156,10 @@ module NavigationBarHelper
   def logged_out_user_navigation_section
     safe_join([
       content_tag(:li, class: 'nav-item login') do
-        app_component 'SignInButton', className: 'btn btn-link nav-link'
+        app_component 'SignInButton', className: 'btn btn-link nav-link', initiallyOpen: params[:show_authentication] == 'signIn'
       end,
       content_tag(:li, class: 'nav-item my-auto') do
-        content_tag(:div, class: 'nav-link') do
-          link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary btn-sm'
-        end
+        app_component 'SignUpButton', className: 'btn btn-primary nav-link py-1 text-white', initiallyOpen: params[:show_authentication] == 'signUp'
       end
     ])
   end

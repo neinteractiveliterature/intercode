@@ -105,7 +105,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
                 aria-haspopup="dialog"
                 disabled={!hasFeedback || value.length === 0}
                 style={{ opacity: 1 }}
-                tabIndex={0}
+                tabIndex={100 /* eslint-disable-line jsx-a11y/tabindex-no-positive */}
                 ref={ref}
                 onClick={() => (hasFeedback ? toggle() : null)}
                 onKeyDown={(event) => {

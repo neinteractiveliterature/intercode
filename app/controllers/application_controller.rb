@@ -50,6 +50,7 @@ class ApplicationController < ActionController::Base
   def app_component_props
     {
       authenticityToken: graphql_authenticity_token,
+      changePasswordAuthenticityToken: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
       signInAuthenticityToken: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
       signOutAuthenticityToken: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
       signUpAuthenticityToken: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
