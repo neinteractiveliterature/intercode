@@ -7,7 +7,7 @@ class IntercodeSchema < GraphQL::Schema
   use GraphQL::Tracing::SkylightTracing, set_endpoint_name: true
 
   better_rescue_middleware = BetterRescueMiddleware.new
-  better_rescue_middleware.rescue_from ActiveRecord::RecordInvalid do |err|
+  better_rescue_middleware.rescue_from ActiveRecord::RecordInvalid do |err, _ctx|
     GraphQL::ExecutionError.new(
       "Validation failed for #{err.record.class.name}: \
 #{err.record.errors.full_messages.join(', ')}",
@@ -16,11 +16,26 @@ class IntercodeSchema < GraphQL::Schema
       }
     )
   end
-  better_rescue_middleware.rescue_from CivilService::ServiceFailure do |err|
+  better_rescue_middleware.rescue_from CivilService::ServiceFailure do |err, _ctx|
     err.result.errors.full_messages.join(', ')
   end
-  better_rescue_middleware.rescue_from GraphQL::Guard::NotAuthorizedError do |err|
-    "Unauthorized access: #{err.message}"
+  better_rescue_middleware.rescue_from GraphQL::Guard::NotAuthorizedError do |err, ctx|
+    if ctx[:current_user]
+      GraphQL::ExecutionError.new(
+        "Unauthorized access: #{err.message}",
+        extensions: {
+          code: 'NOT_AUTHORIZED',
+          current_user_id: ctx[:current_user]&.id
+        }
+      )
+    else
+      BetterRescueMiddleware::UnloggedError.new(
+        "Not logged in: #{err.message}",
+        extensions: {
+          code: 'NOT_AUTHENTICATED'
+        }
+      )
+    end
   end
   better_rescue_middleware.suppress_logs(
     ActiveRecord::RecordNotFound,

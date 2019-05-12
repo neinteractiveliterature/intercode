@@ -26,13 +26,11 @@ async function signIn(authenticityToken, email, password, rememberMe) {
     },
   });
 
-  const responseJson = await response.json();
-
   if (!response.ok) {
-    throw new Error(responseJson.error);
+    throw new Error((await response.json()).error);
   }
 
-  return responseJson;
+  return response.headers.get('Location');
 }
 
 function SignInForm() {
@@ -45,8 +43,8 @@ function SignInForm() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await signInAsync(authenticityToken, email, password, rememberMe);
-    const destUrl = new URL(window.location.href);
+    const location = await signInAsync(authenticityToken, email, password, rememberMe);
+    const destUrl = new URL(location || window.location.href);
     destUrl.searchParams.delete('show_authentication');
     if (destUrl.toString() === window.location.href) {
       window.location.reload();

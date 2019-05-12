@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useImperativeHandle, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import useModal from '../ModalDialogs/useModal';
@@ -12,10 +12,16 @@ const AuthenticationModalContext = React.createContext({
   recaptchaSiteKey: null,
 });
 
-export function AuthenticationModalContextProvider({ children, recaptchaSiteKey }) {
+// eslint-disable-next-line react/prop-types
+function AuthenticationModalContextProvider({ children, recaptchaSiteKey }, ref) {
   const {
     visible, state, setState, open, close,
   } = useModal();
+
+  useImperativeHandle(
+    ref,
+    () => ({ open, close, setState }),
+  );
 
   const contextValue = {
     visible,
@@ -33,8 +39,18 @@ export function AuthenticationModalContextProvider({ children, recaptchaSiteKey 
   );
 }
 
-AuthenticationModalContextProvider.propTypes = {
+const RefForwardingAuthenticationModalContextProvider = forwardRef(
+  AuthenticationModalContextProvider,
+);
+
+RefForwardingAuthenticationModalContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
+  recaptchaSiteKey: PropTypes.string,
+};
+
+RefForwardingAuthenticationModalContextProvider.defaultProps = {
+  recaptchaSiteKey: null,
 };
 
 export default AuthenticationModalContext;
+export { RefForwardingAuthenticationModalContextProvider as AuthenticationModalContextProvider };
