@@ -59,12 +59,24 @@ class ApplicationController < ActionController::Base
   def authenticity_token_props
     {
       graphql: graphql_authenticity_token,
-      changePassword: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
-      signIn: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
-      signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
-      signUp: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
-      updateUser: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' }),
-      resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
+      changePassword: form_authenticity_token(form_options: {
+        action: user_password_path, method: 'PUT'
+      }),
+      signIn: form_authenticity_token(form_options: {
+        action: user_session_path, method: 'POST'
+      }),
+      signOut: form_authenticity_token(form_options: {
+        action: destroy_user_session_path, method: 'DELETE'
+      }),
+      signUp: form_authenticity_token(form_options: {
+        action: user_registration_path, method: 'POST'
+      }),
+      updateUser: form_authenticity_token(form_options: {
+        action: user_registration_path, method: 'PATCH'
+      }),
+      resetPassword: form_authenticity_token(form_options: {
+        action: user_password_path, method: 'POST'
+      })
     }
   end
 
@@ -139,7 +151,9 @@ class ApplicationController < ActionController::Base
       user.permit(:email, :password, :password_confirmation, :remember_me, :first_name, :last_name)
     end
     devise_parameter_sanitizer.permit(:account_update) do |user|
-      user.permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name)
+      user.permit(
+        :email, :password, :password_confirmation, :current_password, :first_name, :last_name
+      )
     end
   end
 

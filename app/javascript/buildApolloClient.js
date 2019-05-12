@@ -9,7 +9,17 @@ import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
-function buildApolloClient(authenticityToken, openSignIn) {
+function buildErrorHandlerLink(onUnauthenticated) {
+  return onError(({ graphQLErrors }) => {
+    if (graphQLErrors) {
+      if (graphQLErrors.some(err => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
+        onUnauthenticated();
+      }
+    }
+  });
+}
+
+function buildApolloClient(authenticityToken, onUnauthenticated) {
   const AuthLink = (operation, next) => {
     operation.setContext(context => ({
       ...context,
@@ -26,13 +36,7 @@ function buildApolloClient(authenticityToken, openSignIn) {
   return new ApolloClient({
     link: ApolloLink.from([
       AuthLink,
-      onError(({ graphQLErrors }) => {
-        if (graphQLErrors) {
-          if (graphQLErrors.some(err => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
-            openSignIn();
-          }
-        }
-      }),
+      buildErrorHandlerLink(onUnauthenticated),
       createUploadLink({ uri: '/graphql', fetch }),
     ]),
     cache: new InMemoryCache({

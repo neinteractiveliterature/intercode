@@ -78,11 +78,11 @@ class NavigationBarPresenter
   end
 
   class SignOutNavigationItem < NavigationItem
-    def active?(*args)
+    def active?(*)
       false
     end
 
-    def url(*args)
+    def url(*)
       nil
     end
   end
