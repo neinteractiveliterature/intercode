@@ -44,7 +44,7 @@ function SignInForm() {
   const onSubmit = async (event) => {
     event.preventDefault();
     const location = await signInAsync(authenticityToken, email, password, rememberMe);
-    const destUrl = new URL(location || window.location.href);
+    const destUrl = new URL(location || window.location.href, window.location.href);
     destUrl.searchParams.delete('show_authentication');
     if (destUrl.toString() === window.location.href) {
       window.location.reload();
