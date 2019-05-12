@@ -32,8 +32,10 @@ class User < ApplicationRecord
     UserDrop.new(self)
   end
 
-  def serializable_hash(options = nil)
-    attributes.symbolize_keys.slice(:id, :email, :first_name, :last_name, :site_admin, :created_at, :updated_at)
+  def serializable_hash(_options = nil)
+    attributes.symbolize_keys.slice(
+      :id, :email, :first_name, :last_name, :site_admin, :created_at, :updated_at
+    )
   end
 
   protected

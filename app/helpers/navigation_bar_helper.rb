@@ -9,7 +9,9 @@ module NavigationBarHelper
   }
 
   def render_sign_out_navigation_item(item, navigation_section)
-    app_component 'SignOutButton', className: item.item_class(request, navigation_section), caption: item.label
+    app_component 'SignOutButton',
+      className: item.item_class(request, navigation_section),
+      caption: item.label
   end
 
   def render_navigation_item(item, navigation_section)
@@ -156,10 +158,14 @@ module NavigationBarHelper
   def logged_out_user_navigation_section
     safe_join([
       content_tag(:li, class: 'nav-item login') do
-        app_component 'SignInButton', className: 'btn btn-link nav-link', initiallyOpen: params[:show_authentication] == 'signIn'
+        app_component 'SignInButton',
+          className: 'btn btn-link nav-link',
+          initiallyOpen: params[:show_authentication] == 'signIn'
       end,
       content_tag(:li, class: 'nav-item my-auto') do
-        app_component 'SignUpButton', className: 'btn btn-primary nav-link py-1 text-white', initiallyOpen: params[:show_authentication] == 'signUp'
+        app_component 'SignUpButton',
+          className: 'btn btn-primary nav-link py-1 text-white',
+          initiallyOpen: params[:show_authentication] == 'signUp'
       end
     ])
   end
