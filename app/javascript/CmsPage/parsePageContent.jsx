@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import camelCase from 'lodash-es/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
+import { Link } from 'react-router-dom';
 
 import SignInButton from '../Authentication/SignInButton';
 import SignUpButton from '../Authentication/SignUpButton';
@@ -125,7 +126,7 @@ const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS = Object.entries(AUTHENTICATIO
     shouldProcessNode: node => (
       node.nodeType === Node.ELEMENT_NODE
       && node.nodeName.toLowerCase() === 'a'
-      && node.attributes.href.value.endsWith(path)
+      && ((node.attributes.href || {}).value || '').endsWith(path)
     ),
     processNode,
   }));
@@ -142,6 +143,18 @@ function processReactComponentNode(node, children, index) {
     { fallback: (<></>) },
     React.createElement(component, props),
   );
+}
+
+function processCmsLinkNode(node, children, index) {
+  const attributesObject = [...node.attributes]
+    .reduce((obj, { name, value }) => ({ ...obj, [name]: value }), {});
+  const { href, ...otherAttributes } = attributesObject;
+
+  if (href && (href === '/' || href.startsWith('/pages/'))) {
+    return <Link to={href} {...otherAttributes}>{children}</Link>;
+  }
+
+  return processDefaultNode(node, children, index);
 }
 
 function traverseDom(node, isValidNode, processingInstructions, index) {
@@ -185,6 +198,10 @@ export default function parsePageContent(content) {
     IsValidNodeDefinitions.alwaysValid,
     [
       ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
+      {
+        shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'a',
+        processNode: processCmsLinkNode,
+      },
       {
         shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
         processNode: processReactComponentNode,
