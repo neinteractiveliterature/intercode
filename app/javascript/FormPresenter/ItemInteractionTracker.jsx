@@ -42,8 +42,6 @@ ItemInteractionProvider.propTypes = {
 };
 
 export default class ItemInteractionTracker extends React.Component {
-  static Interactor = ItemInteractionTrackerContext.Consumer;
-
   static propTypes = {
     children: PropTypes.node.isRequired,
   };
