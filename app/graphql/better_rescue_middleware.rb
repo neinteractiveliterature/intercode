@@ -1,5 +1,5 @@
 class BetterRescueMiddleware
-  class UnloggedError < StandardError; end
+  class UnloggedError < GraphQL::ExecutionError; end
 
   attr_reader :rescue_table, :unlogged_error_classes
 
@@ -25,24 +25,27 @@ class BetterRescueMiddleware
     rescue_table.reject! { |error_class| remove_classes.include?(error_class) }
   end
 
-  def call(*)
+  def call(_parent_type, _parent_object, _field_definition, _field_args, query_context)
     yield
   rescue StandardError => err
-    unless unlogged_error_classes.any? { |klass| err.is_a?(klass) }
-      Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")
-      Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
-      Rollbar.error(err)
+    return_error = attempt_rescue(err, query_context)
+    if return_error.is_a?(UnloggedError) || unlogged_error_classes.any? { |klass| err.is_a?(klass) }
+      return return_error
     end
-    attempt_rescue(err)
+
+    Rails.logger.error Rails.backtrace_cleaner.clean(err.backtrace).reverse.join("\n")
+    Rails.logger.error "#{err.class.name} processing GraphQL query: #{err.message}"
+    Rollbar.error(err)
+    return_error
   end
 
   private
 
-  def attempt_rescue(err)
+  def attempt_rescue(err, query_context)
     handler = find_handler(err)
     return GraphQL::ExecutionError.new(err.message) unless handler
 
-    return_error = handler.call(err)
+    return_error = handler.call(err, query_context)
     if return_error.is_a?(String)
       GraphQL::ExecutionError.new(return_error)
     else

@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
       redirect_to root_url, alert: error.message
     else
       session[:user_return_to] = request.url
-      redirect_to new_user_session_url, alert: 'Please log in to view this page.'
+      redirect_to root_url(show_authentication: 'signIn')
     end
   end
 
@@ -49,18 +49,24 @@ class ApplicationController < ActionController::Base
 
   def app_component_props
     {
-      authenticityToken: graphql_authenticity_token,
-      changePasswordAuthenticityToken: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
-      signInAuthenticityToken: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
-      signOutAuthenticityToken: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
-      signUpAuthenticityToken: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
-      updateUserAuthenticityToken: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' }),
+      authenticityTokens: authenticity_token_props,
       recaptchaSiteKey: Recaptcha.configuration.site_key,
-      resetPasswordAuthenticityToken: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
       stripePublishableKey: convention&.stripe_publishable_key
     }
   end
   helper_method :app_component_props
+
+  def authenticity_token_props
+    {
+      graphql: graphql_authenticity_token,
+      changePassword: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
+      signIn: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
+      signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
+      signUp: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
+      updateUser: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' }),
+      resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
+    }
+  end
 
   protected
 
