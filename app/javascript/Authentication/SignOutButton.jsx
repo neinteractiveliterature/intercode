@@ -25,7 +25,7 @@ function SignOutButton({ className, caption }) {
   const onClick = async (event) => {
     event.preventDefault();
     await signOut(authenticityToken);
-    window.location.reload();
+    window.location.href = '/';
   };
 
   return (
