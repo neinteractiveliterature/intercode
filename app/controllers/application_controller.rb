@@ -23,8 +23,6 @@ class ApplicationController < ActionController::Base
   # Make sure the user accepts the clickwrap agreement if one exists
   before_action :ensure_clickwrap_agreement_accepted, unless: :devise_controller?
 
-  before_action :preload_cms_layout_content
-
   delegate :cms_parent, :cadmus_renderer, :preload_cms_layout_content, to: :cms_rendering_context
   helper_method :cms_parent, :cadmus_renderer, :cms_rendering_context
 

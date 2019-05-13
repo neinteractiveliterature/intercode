@@ -24,7 +24,7 @@ function EventCategoryIndex() {
         )}
       </QueryWithStateDisplay>
 
-      <Link to="/new" className="btn btn-primary">
+      <Link to="/event_categories/new" className="btn btn-primary">
         New event category
       </Link>
     </>

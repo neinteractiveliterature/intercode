@@ -10,7 +10,6 @@ const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ '../CmsAd
 const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ '../Authentication/EditUser'));
 const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ '../EventAdmin'));
-const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ '../EventCategoryAdmin'));
 const EventProposalForm = lazy(() => import(/* webpackChunkName: "event-proposal-form" */ '../EventProposals/EventProposalForm'));
 const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ '../EventProposals/EventProposalsAdmin'));
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
@@ -43,7 +42,6 @@ const unwrappedComponents = {
   EditUser,
   EmailList,
   EventAdmin,
-  EventCategoryAdmin,
   EventsApp,
   EventProposalForm,
   EventProposalsAdmin,

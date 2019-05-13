@@ -59,7 +59,7 @@ class EditEventCategory extends React.Component {
                   },
                 });
 
-                this.props.history.push('/');
+                this.props.history.push('/event_categories');
               } catch (error) {
                 this.setState({ mutationInProgress: false, error });
               }

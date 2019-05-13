@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import CmsPage from './CmsPage';
 const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'));
+const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'));
 const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
 
@@ -10,6 +11,7 @@ function AppRouter() {
   return (
     <Switch>
       <Route path="/convention/edit" component={ConventionAdmin} />
+      <Route path="/event_categories" component={EventCategoryAdmin} />
       <Route path="/ticket_types" component={TicketTypeAdmin} />
       <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
       <Route

@@ -97,7 +97,7 @@ function EventCategoryRow({ eventCategory }) {
             )
         }
         <Link
-          to={`/${eventCategory.id}/edit`}
+          to={`/event_categories/${eventCategory.id}/edit`}
           className="btn btn-primary btn-sm"
         >
           Edit

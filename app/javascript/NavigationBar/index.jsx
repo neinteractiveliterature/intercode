@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { useQuery } from 'react-apollo-hooks';
 
 import { NavigationBarQuery } from './queries.gql';
-import NavigationBarItem from './NavigationBarItem';
 import { NavigationProvider } from './NavigationContext';
 import ErrorDisplay from '../ErrorDisplay';
+import renderNavigationItems from './renderNavigationItems';
 
 function NavigationBar() {
   const { data, loading, error } = useQuery(NavigationBarQuery);
@@ -31,10 +31,7 @@ function NavigationBar() {
           <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon" />
           </button>
-          {data.navigationBar.items.map((item, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <NavigationBarItem key={i} item={item} />
-          ))}
+          {renderNavigationItems(data.navigationBar.items)}
         </div>
       </nav>
     </NavigationProvider>

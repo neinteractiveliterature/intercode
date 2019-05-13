@@ -17,10 +17,6 @@ class UserConProfilesController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:become, :revert_become]
   end
 
-  def index
-    @page_title = 'Attendees'
-  end
-
   def become
     identity_assumer = assumed_identity_from_profile || user_con_profile
     sign_in @subject_profile.user

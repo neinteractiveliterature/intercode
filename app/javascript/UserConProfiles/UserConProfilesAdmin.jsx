@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 
 import EditTicket from './EditTicket';
@@ -8,14 +7,12 @@ import NewTicket from './NewTicket';
 import UserConProfileAdminDisplay from './UserConProfileAdminDisplay';
 import UserConProfilesTable from './UserConProfilesTable';
 
-const UserConProfilesAdmin = ({
-  exportUrl,
-}) => {
+const UserConProfilesAdmin = () => {
   const renderAttendeesTable = () => (
     <React.Fragment>
       <h1>Attendees</h1>
       <UserConProfilesTable
-        exportUrl={exportUrl}
+        exportUrl="/user_con_profiles/export.csv"
         defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']}
       />
     </React.Fragment>
@@ -49,10 +46,6 @@ const UserConProfilesAdmin = ({
       <Route render={renderAttendeesTable} />
     </Switch>
   );
-};
-
-UserConProfilesAdmin.propTypes = {
-  exportUrl: PropTypes.string.isRequired,
 };
 
 export default UserConProfilesAdmin;
