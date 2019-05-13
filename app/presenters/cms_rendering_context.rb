@@ -1,6 +1,7 @@
 class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
+  include Webpacker::React::Helpers
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files
 
   def initialize(cms_parent:, controller:, assigns: {})
@@ -19,6 +20,15 @@ class CmsRenderingContext
   def render_page_content(page)
     preload_page_content(page)
     cadmus_renderer.render(page.liquid_template, :html, assigns: { 'page' => page })
+  end
+
+  def render_layout_content(cms_layout)
+    preload_cms_layout_content(cms_layout)
+    cadmus_renderer.render(
+      cms_layout.liquid_template,
+      :html,
+      assigns: liquid_assigns_for_layout(cms_layout)
+    )
   end
 
   def preload_page_content(*pages)
@@ -45,8 +55,9 @@ class CmsRenderingContext
   # Cadmus checks this when rendering a layout
   def liquid_assigns_for_layout(cms_layout)
     {
-      'content_for_head' => controller.render_to_string(partial: 'layouts/head'),
-      'content_for_navbar' => navigation_bar(cms_layout)
+      'content_for_head' => '',
+      'content_for_navbar' => react_component('NavigationBar', cmsLayoutId: cms_layout.id),
+      'content_for_layout' => react_component('AppRouter')
     }
   end
 
@@ -77,11 +88,5 @@ class CmsRenderingContext
         hash[key] = value
       end
     end
-  end
-
-  def navigation_bar(cms_layout = nil)
-    controller.render_to_string partial: 'layouts/navigation_bar', locals: {
-      navbar_classes: cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
-    }
   end
 end

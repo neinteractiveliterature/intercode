@@ -1,19 +1,6 @@
-- page_content = capture do
-  = render partial: 'layouts/flash_messages'
-
-  - if content_for?(:content)
-    = yield :content
-  - else
-    = yield
-
-- if cms_parent&.default_layout
-  = cms_rendering_context.render_in_cadmus_layout(page_content, cms_parent.default_layout)
-- else
-  !!!
-  %html
-    %head
-      = render partial: 'layouts/head'
-    %body
-      = cms_rendering_context.navigation_bar
-      .container
-        = page_content
+!!!
+%html
+  %head
+    = render partial: 'layouts/head'
+  %body
+    = app_component 'AppRoot'

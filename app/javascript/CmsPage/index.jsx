@@ -2,7 +2,6 @@ import React, {
   lazy, useMemo, useEffect, useState, Suspense,
 } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPageQuery } from './queries.gql';
@@ -39,7 +38,7 @@ function CmsPage({ slug, rootPage }) {
         return null;
       }
 
-      return parsePageContent(data.cmsPage.content_html);
+      return parsePageContent(data.cmsPage.content_html).bodyComponents;
     },
     [data, loading, error],
   );
@@ -98,26 +97,4 @@ CmsPage.defaultProps = {
   rootPage: false,
 };
 
-function CmsPageRouter() {
-  return (
-    <BrowserRouter basename="/">
-      <Switch>
-        <Route
-          path="/pages/:slug([a-zA-Z0-9\-/]+)"
-          render={routeProps => (
-            <CmsPage {...routeProps} slug={routeProps.match.params.slug} />
-          )}
-        />
-        <Route
-          path="/"
-          exact
-          render={routeProps => (
-            <CmsPage {...routeProps} rootPage />
-          )}
-        />
-      </Switch>
-    </BrowserRouter>
-  );
-}
-
-export default CmsPageRouter;
+export default CmsPage;

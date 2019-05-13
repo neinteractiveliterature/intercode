@@ -8,7 +8,7 @@ class NavigationBarPresenter
       end
     end
 
-    %i[label url visible? active? http_method].each do |method_name|
+    %i[label url visible? active?].each do |method_name|
       define_singleton_method(method_name) do |value = nil, &implementation|
         if value
           define_method(method_name) { value }
@@ -30,10 +30,6 @@ class NavigationBarPresenter
 
     def url
       raise 'Navigation items must define #url'
-    end
-
-    def http_method
-      'GET'
     end
 
     def visible?

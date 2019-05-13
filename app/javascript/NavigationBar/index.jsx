@@ -1,52 +1,40 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { NavigationBarQuery } from './queries.gql';
 import NavigationBarItem from './NavigationBarItem';
 import { NavigationProvider } from './NavigationContext';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
-class NavigationBar extends React.PureComponent {
-  static propTypes = {
-    assumedIdentityFromProfile: PropTypes.shape({}),
-    convention: PropTypes.shape({}),
-    currentPendingOrder: PropTypes.shape({}),
-    currentUser: PropTypes.shape({}),
-    myProfile: PropTypes.shape({}),
-    navigationBar: PropTypes.shape({
-      classes: PropTypes.string,
-      items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    }).isRequired,
+function NavigationBar() {
+  const { data, error } = useQuerySuspended(NavigationBarQuery);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  static defaultProps = {
-    assumedIdentityFromProfile: null,
-    convention: null,
-    currentPendingOrder: null,
-    currentUser: null,
-    myProfile: null,
-  }
-
-  render = () => (
+  return (
     <NavigationProvider
-      assumedIdentityFromProfile={this.props.assumedIdentityFromProfile}
-      convention={this.props.convention}
-      currentPendingOrder={this.props.currentPendingOrder}
-      currentUser={this.props.currentUser}
-      myProfile={this.props.myProfile}
+      assumedIdentityFromProfile={data.assumedIdentityFromProfile}
+      convention={data.convention}
+      currentPendingOrder={data.currentPendingOrder}
+      currentUser={data.currentUser}
+      myProfile={data.myProfile}
     >
-      <nav className={classNames('navbar navbar-fixed-top navbar-expand-md mb-4', this.props.navigationBar.classes)} role="navigation">
+      <nav className={classNames('navbar navbar-fixed-top navbar-expand-md mb-4', data.navigationBar.classes)} role="navigation">
         <div className="container">
           <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon" />
           </button>
-          {this.props.navigationBar.items.map((item, i) => (
+          {data.navigationBar.items.map((item, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <NavigationBarItem key={i} item={item} />
           ))}
         </div>
       </nav>
     </NavigationProvider>
-  )
+  );
 }
 
 export default NavigationBar;
