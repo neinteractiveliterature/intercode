@@ -1,8 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  BrowserRouter, Switch, Redirect, Route,
-} from 'react-router-dom';
+import { Switch, Redirect, Route } from 'react-router-dom';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditUserActivityAlert from './EditUserActivityAlert';
@@ -11,81 +8,75 @@ import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { ConventionTicketNameQuery, UserActivityAlertQuery } from './queries.gql';
 import UserActivityAlertsList from './UserActivityAlertsList';
 
-const UserActivityAlertsAdmin = ({ basename }) => (
-  <BrowserRouter basename={basename}>
-    <React.Fragment>
-      <nav aria-label="breadcrumb" className="mb-4">
-        <ol className="breadcrumb">
-          <BreadcrumbItemWithRoute
-            path="/"
-            to="/"
-            active={({ location }) => location.pathname === '/'}
-          >
-            User activity alerts
-          </BreadcrumbItemWithRoute>
+const UserActivityAlertsAdmin = () => (
+  <>
+    <nav aria-label="breadcrumb" className="mb-4">
+      <ol className="breadcrumb">
+        <BreadcrumbItemWithRoute
+          path="/user_activity_alerts"
+          to="/user_activity_alerts"
+          active={({ location }) => location.pathname === '/user_activity_alerts'}
+        >
+          User activity alerts
+        </BreadcrumbItemWithRoute>
 
-          <Route
-            path="/new"
-            render={({ location }) => (
-              <BreadcrumbItemWithRoute
-                path="/new"
-                to={location.pathname}
-              >
-                Create
-              </BreadcrumbItemWithRoute>
-            )}
-          />
-
-          <Route
-            path="/:id/edit"
-            render={({ location }) => (
-              <BreadcrumbItemWithRoute
-                path="/:id/edit"
-                to={location.pathname}
-              >
-                Edit
-              </BreadcrumbItemWithRoute>
-            )}
-          />
-        </ol>
-      </nav>
-
-      <Switch>
         <Route
-          path="/new"
-          render={() => (
-            <QueryWithStateDisplay query={ConventionTicketNameQuery}>
-              {({ data }) => (
-                <NewUserActivityAlert convention={data.convention} />
-              )}
-            </QueryWithStateDisplay>
-          )}
-        />
-        <Route
-          path="/:id/edit"
-          render={({ match }) => (
-            <QueryWithStateDisplay
-              query={UserActivityAlertQuery}
-              variables={{ id: Number.parseInt(match.params.id, 10) }}
+          path="/user_activity_alerts/new"
+          render={({ location }) => (
+            <BreadcrumbItemWithRoute
+              path="/user_activity_alerts/new"
+              to={location.pathname}
             >
-              {({ data }) => (
-                <EditUserActivityAlert
-                  initialUserActivityAlert={data.convention.user_activity_alert}
-                  convention={data.convention}
-                />
-              )}
-            </QueryWithStateDisplay>
+              Create
+            </BreadcrumbItemWithRoute>
           )}
         />
-        <Route path="/" exact component={UserActivityAlertsList} />
-        <Redirect to="/" />
-      </Switch>
-    </React.Fragment>
-  </BrowserRouter>
-);
 
-UserActivityAlertsAdmin.propTypes = {
-  basename: PropTypes.string.isRequired,
-};
+        <Route
+          path="/user_activity_alerts/:id/edit"
+          render={({ location }) => (
+            <BreadcrumbItemWithRoute
+              path="/user_activity_alerts/:id/edit"
+              to={location.pathname}
+            >
+              Edit
+            </BreadcrumbItemWithRoute>
+          )}
+        />
+      </ol>
+    </nav>
+
+    <Switch>
+      <Route
+        path="/user_activity_alerts/new"
+        render={() => (
+          <QueryWithStateDisplay query={ConventionTicketNameQuery}>
+            {({ data }) => (
+              <NewUserActivityAlert convention={data.convention} />
+            )}
+          </QueryWithStateDisplay>
+        )}
+      />
+      <Route
+        path="/user_activity_alerts/:id/edit"
+        render={({ match }) => (
+          <QueryWithStateDisplay
+            query={UserActivityAlertQuery}
+            variables={{ id: Number.parseInt(match.params.id, 10) }}
+          >
+            {({ data }) => (
+              <EditUserActivityAlert
+                initialUserActivityAlert={data.convention.user_activity_alert}
+                convention={data.convention}
+              />
+            )}
+          </QueryWithStateDisplay>
+        )}
+      />
+      <Route path="/user_activity_alerts" exact component={UserActivityAlertsList} />
+      <Redirect to="/user_activity_alerts" />
+    </Switch>
+  </>
+);
 
 export default UserActivityAlertsAdmin;

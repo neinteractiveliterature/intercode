@@ -66,7 +66,7 @@ class EditUserActivityAlert extends React.Component {
         },
       });
 
-      this.props.history.push('/');
+      this.props.history.push('/user_activity_alerts');
     } catch (error) {
       this.setState({ error, saveInProgress: false });
     }

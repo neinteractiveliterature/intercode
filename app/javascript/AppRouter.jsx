@@ -18,6 +18,7 @@ const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './Ro
 const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'));
 const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'));
 const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'));
+const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
 
 function AppRouter() {
@@ -42,6 +43,7 @@ function AppRouter() {
         <Route path="/rooms" component={RoomsAdmin} />
         <Route path="/staff_positions" component={StaffPositionAdmin} />
         <Route path="/ticket_types" component={TicketTypeAdmin} />
+        <Route path="/user_activity_alerts" component={UserActivityAlertsAdmin} />
         <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
         <Route
           path="/pages/:slug([a-zA-Z0-9\-/]+)"
