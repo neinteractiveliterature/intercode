@@ -1,5 +1,13 @@
 class SessionsController < Devise::SessionsController
-  prepend_before_action :set_return_to, only: [:create]
+  include Concerns::RedirectWithAuthentication
+
+  prepend_before_action :set_return_to, only: [:new, :create]
+
+  def new
+    respond_to do |format|
+      format.html { redirect_with_authentication('signIn') }
+    end
+  end
 
   private
 

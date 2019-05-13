@@ -32,6 +32,12 @@ class User < ApplicationRecord
     UserDrop.new(self)
   end
 
+  def serializable_hash(_options = nil)
+    attributes.symbolize_keys.slice(
+      :id, :email, :first_name, :last_name, :site_admin, :created_at, :updated_at
+    )
+  end
+
   protected
 
   def send_reset_password_instructions_notification(token)

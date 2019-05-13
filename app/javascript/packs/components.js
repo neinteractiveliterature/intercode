@@ -8,6 +8,7 @@ const Cart = lazy(() => import(/* webpackChunkName: "cart" */ '../Store/Cart'));
 const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ '../CmsAdmin'));
 import CmsPage from '../CmsPage';
 const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ '../ConventionAdmin'));
+const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ '../Authentication/EditUser'));
 const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ '../EventAdmin'));
 const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ '../EventCategoryAdmin'));
@@ -25,8 +26,12 @@ const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ '
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
 const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ '../Reports'));
+const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ '../Authentication/ResetPassword'));
 const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ '../RoomsAdmin'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
+import SignInButton from '../Authentication/SignInButton';
+import SignOutButton from '../Authentication/SignOutButton';
+import SignUpButton from '../Authentication/SignUpButton';
 const SignupSpyTable = lazy(() => import(/* webpackChunkName: "signup-spy-table" */ '../Reports/SignupSpyTable'));
 const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ '../StaffPositionAdmin'));
 const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ '../Store/StoreAdmin'));
@@ -40,6 +45,7 @@ const unwrappedComponents = {
   CmsAdmin,
   CmsPage,
   ConventionAdmin,
+  EditUser,
   EmailList,
   EventAdmin,
   EventCategoryAdmin,
@@ -57,8 +63,12 @@ const unwrappedComponents = {
   OrganizationAdmin,
   ProductOrderForm,
   Reports,
+  ResetPassword,
   RoomsAdmin,
   RootSiteAdmin,
+  SignInButton,
+  SignOutButton,
+  SignUpButton,
   SignupSpyTable,
   StaffPositionAdmin,
   StoreAdmin,

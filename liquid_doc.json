@@ -1418,6 +1418,20 @@
           ]
         },
         {
+          "name": "event_categories",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Event categories at the convention",
+              "types": [
+                "Array<EventCategoryDrop>"
+              ]
+            }
+          ]
+        },
+        {
           "name": "bio_eligible_user_con_profiles",
           "docstring": "",
           "tags": [
@@ -3423,51 +3437,6 @@
           "docstring": "",
           "tags": [
 
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Intercode::Liquid::Tags::LoginForm",
-      "superclasses": [
-        "Intercode::Liquid::Tags::LoginForm",
-        "Intercode::Liquid::Tags::RailsPartialRenderer",
-        "Liquid::Tag"
-      ],
-      "docstring": "Renders a login form for the site.",
-      "tags": [
-        {
-          "tag_name": "liquid_tag_name",
-          "name": null,
-          "text": "login_form",
-          "types": null
-        }
-      ],
-      "methods": [
-        {
-          "name": "partial",
-          "docstring": "",
-          "tags": [
-
-          ]
-        },
-        {
-          "name": "locals",
-          "docstring": "",
-          "tags": [
-
-          ]
-        },
-        {
-          "name": "render",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "api",
-              "name": null,
-              "text": "",
-              "types": null
-            }
           ]
         }
       ]
