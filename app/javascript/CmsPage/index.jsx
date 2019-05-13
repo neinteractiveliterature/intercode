@@ -13,7 +13,13 @@ const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dro
 
 function CustomLoadingIndicator({ visible }) {
   return (
-    <div className="text-center mt-5 custom-loading-indicator" style={{ opacity: visible ? 1.0 : 0.0 }}>
+    <div
+      className="text-center mt-5 custom-loading-indicator"
+      style={{
+        opacity: visible ? 1.0 : 0.0,
+        visibility: visible ? 'visible' : 'hidden',
+      }}
+    >
       <i className="fa fa-circle-o-notch fa-spin fa-fw" />
       <span className="sr-only">Loading...</span>
     </div>
