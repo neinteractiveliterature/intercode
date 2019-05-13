@@ -1,0 +1,82 @@
+fragment NavigationItemFields on NavigationItem {
+  label
+  url
+  visible
+}
+
+fragment SignOutNavigationItemFields on SignOutNavigationItem {
+  label
+  visible
+}
+
+query NavigationBarQuery($cms_layout_id: Int) {
+  convention {
+    ticket_name
+    ticket_types {
+      publicly_available
+    }
+  }
+  assumedIdentityFromProfile {
+    name_without_nickname
+  }
+  currentUser {
+    id
+  }
+  currentPendingOrder {
+    order_entries {
+      quantity
+    }
+  }
+  myProfile {
+    name
+    name_without_nickname
+    first_name
+    last_name
+    ticket {
+      id
+    }
+  }
+  navigationBar(cms_layout_id: $cms_layout_id) {
+    classes
+    items {
+      __typename
+      ... on NavigationBrand {
+        label
+      }
+      ... on NavigationCollapse {
+        groups {
+          expand
+          items {
+            __typename
+            ... on NavigationItem {
+              ...NavigationItemFields
+            }
+            ... on UserNavigationSection {
+              items {
+                __typename
+                ...on NavigationItem {
+                  ...NavigationItemFields
+                }
+                ...on SignOutNavigationItem {
+                  ...SignOutNavigationItemFields
+                }
+              }
+            }
+            ... on NavigationSection {
+              label
+              items {
+                __typename
+                ...on NavigationItem {
+                  ...NavigationItemFields
+                }
+                ...on SignOutNavigationItem {
+                  ...SignOutNavigationItemFields
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

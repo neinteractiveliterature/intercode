@@ -94,6 +94,7 @@
     "react-dnd-multi-backend": "^3.2.1",
     "react-dom": "^16.8.6",
     "react-google-recaptcha": "^1.0.5",
+    "react-helmet": "^5.2.1",
     "react-html-id": "^0.1.5",
     "react-js-pagination": "neinteractiveliterature/react-js-pagination#ellipsis",
     "react-moment-proptypes": "^1.6.0",

@@ -11,7 +11,7 @@ function AccountFormContent() {
     return <></>;
   }
 
-  return parsePageContent(data.accountFormContentHtml);
+  return parsePageContent(data.accountFormContentHtml).bodyComponents;
 }
 
 export default AccountFormContent;

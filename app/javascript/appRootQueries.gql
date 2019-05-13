@@ -1,0 +1,19 @@
+query AppRootQuery {
+  cmsParent {
+    __typename
+
+    ...on Convention {
+      default_layout {
+        id
+        content_html
+      }
+    }
+
+    ...on RootSite {
+      default_layout {
+        id
+        content_html
+      }
+    }
+  }
+}

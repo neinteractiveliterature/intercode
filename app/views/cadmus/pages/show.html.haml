@@ -1,6 +1,7 @@
 - page_content = capture do
-  = app_component 'CmsPage'
+  = app_component 'AppRouter'
 - flash_messages_content = render(partial: 'layouts/flash_messages')
 - all_content = safe_join([flash_messages_content, page_content.html_safe].compact, '')
 
-= cms_rendering_context.render_in_cadmus_layout(all_content, @page.effective_cms_layout, 'page' => @page)
+= all_content
+-# = cms_rendering_context.render_in_cadmus_layout(all_content, @page.effective_cms_layout, 'page' => @page)

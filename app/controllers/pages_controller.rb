@@ -11,8 +11,6 @@ class PagesController < ApplicationController
 
   include Cadmus::PagesController
 
-  layout 'cms_page'
-
   # In the case of the root action, we'll need to load the root page from the database before
   # Authority has a chance to run its authorization checks.  So we use a before_action filter that
   # comes before authorize_actions_for in the chain.

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
 import { NavigationConsumer } from './NavigationContext';
@@ -36,12 +37,12 @@ class UserNavigationSection extends React.PureComponent {
 
     return (
       <li className="nav-item">
-        <a href="/cart" className="btn btn-light mr-2" style={{ position: 'relative' }}>
+        <Link to="/cart" className="btn btn-light mr-2" style={{ position: 'relative' }}>
           <i className="fa fa-shopping-cart" title="My shopping cart" />
           <badge className="badge-pill badge-danger" style={{ position: 'absolute', right: '-9px', top: '-9px' }}>
             {totalQuantity}
           </badge>
-        </a>
+        </Link>
       </li>
     );
   }

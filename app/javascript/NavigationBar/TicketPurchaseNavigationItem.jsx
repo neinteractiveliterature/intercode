@@ -1,5 +1,6 @@
 import React from 'react';
 import { humanize } from 'inflected';
+import { Link } from 'react-router-dom';
 
 import { NavigationConsumer } from './NavigationContext';
 
@@ -20,7 +21,7 @@ const TicketPurchaseNavigationItem = () => (
 
       return (
         <li className="nav-item my-auto">
-          <a href="/ticket/new" className="btn btn-sm btn-primary">
+          <Link to="/ticket/new" className="btn btn-sm btn-primary">
             <span className="d-inline d-md-none d-lg-inline">
               Buy a
               {' '}
@@ -31,7 +32,7 @@ const TicketPurchaseNavigationItem = () => (
               {humanize(convention.ticket_name)}
               !
             </span>
-          </a>
+          </Link>
         </li>
       );
     }}

@@ -225,7 +225,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def navigation_bar(**args)
-    cms_layout = args[:cms_layout_id] ? CmsLayout.find(args[:cms_layout_id]) : nil
+    cms_layout = if args[:cms_layout_id]
+      CmsLayout.find(args[:cms_layout_id])
+    else
+      cms_parent.default_layout
+    end
 
     NavigationBarPresenter.new(
       cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
