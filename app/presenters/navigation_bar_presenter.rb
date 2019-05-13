@@ -211,12 +211,12 @@ class NavigationBarPresenter
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Staff Positions'
-      url { staff_positions_path }
+      url '/staff_positions'
       visible? { can?(:update, StaffPosition.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Store'
-      url { admin_store_path }
+      url '/admin_store'
       visible? do
         can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
       end

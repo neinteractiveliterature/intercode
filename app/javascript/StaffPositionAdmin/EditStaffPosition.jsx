@@ -32,7 +32,7 @@ function EditStaffPosition({ initialStaffPosition, history }) {
           },
         },
       });
-      history.push('/');
+      history.push('/staff_positions');
     },
     [mutate, staffPosition, history],
   );

@@ -15,6 +15,8 @@ const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ '
 // TODO OAuthAuthorizations
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
 const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'));
+const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'));
+const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'));
 const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
 
@@ -25,6 +27,7 @@ function AppRouter() {
         <Route path="/admin_event_proposals" component={EventProposalsAdmin} />
         <Route path="/admin_events" component={EventAdmin} />
         <Route path="/admin_forms" component={FormAdmin} />
+        <Route path="/admin_store" component={StoreAdmin} />
         <Route path="/cms_pages" component={CmsAdmin} />
         <Route path="/cms_partials" component={CmsAdmin} />
         <Route path="/cms_files" component={CmsAdmin} />
@@ -37,6 +40,7 @@ function AppRouter() {
         <Route path="/mailing_lists" component={MailingLists} />
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />
+        <Route path="/staff_positions" component={StaffPositionAdmin} />
         <Route path="/ticket_types" component={TicketTypeAdmin} />
         <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
         <Route

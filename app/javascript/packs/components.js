@@ -22,9 +22,6 @@ const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" *
 import SignInButton from '../Authentication/SignInButton';
 import SignOutButton from '../Authentication/SignOutButton';
 import SignUpButton from '../Authentication/SignUpButton';
-const SignupSpyTable = lazy(() => import(/* webpackChunkName: "signup-spy-table" */ '../Reports/SignupSpyTable'));
-const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ '../StaffPositionAdmin'));
-const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ '../Store/StoreAdmin'));
 const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ '../UserActivityAlerts/UserActivityAlertsAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
 
@@ -47,9 +44,6 @@ const unwrappedComponents = {
   SignInButton,
   SignOutButton,
   SignUpButton,
-  SignupSpyTable,
-  StaffPositionAdmin,
-  StoreAdmin,
   UserActivityAlertsAdmin,
   UsersAdmin,
 };
