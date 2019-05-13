@@ -231,7 +231,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'User Activity Alerts'
-      url { user_activity_alerts_path }
+      url '/user_activity_alerts'
       visible? { can?(:read, UserActivityAlert.new(convention: convention)) }
     end
   ]

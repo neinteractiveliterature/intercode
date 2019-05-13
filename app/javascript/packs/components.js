@@ -22,7 +22,6 @@ const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" *
 import SignInButton from '../Authentication/SignInButton';
 import SignOutButton from '../Authentication/SignOutButton';
 import SignUpButton from '../Authentication/SignUpButton';
-const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ '../UserActivityAlerts/UserActivityAlertsAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
 
 const unwrappedComponents = {
@@ -44,7 +43,6 @@ const unwrappedComponents = {
   SignInButton,
   SignOutButton,
   SignUpButton,
-  UserActivityAlertsAdmin,
   UsersAdmin,
 };
 

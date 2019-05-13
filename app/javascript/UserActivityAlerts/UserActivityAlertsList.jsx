@@ -103,7 +103,7 @@ class UserActivityAlertsList extends React.PureComponent {
                     <td>{this.renderAlertTriggers(data.convention, userActivityAlert)}</td>
                     <td>{this.renderAlertDestinations(userActivityAlert)}</td>
                     <td className="text-right">
-                      <Link to={`/${userActivityAlert.id}/edit`} className="btn btn-sm btn-primary">Edit</Link>
+                      <Link to={`/user_activity_alerts/${userActivityAlert.id}/edit`} className="btn btn-sm btn-primary">Edit</Link>
                     </td>
                   </tr>
                 ))
@@ -115,7 +115,7 @@ class UserActivityAlertsList extends React.PureComponent {
               }
             </tbody>
           </table>
-          <Link to="/new" className="btn btn-primary">Create user activity alert</Link>
+          <Link to="/user_activity_alerts/new" className="btn btn-primary">Create user activity alert</Link>
         </React.Fragment>
       )}
     </QueryWithStateDisplay>

@@ -66,8 +66,6 @@ Intercode::Application.routes.draw do
       post :accept
     end
 
-    get 'user_activity_alerts/(*extra)' => 'user_activity_alerts#index', as: :user_activity_alerts
-
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end
 
