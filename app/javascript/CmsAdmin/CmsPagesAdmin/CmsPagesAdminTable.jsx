@@ -42,7 +42,7 @@ function CmsPagesAdminTable() {
           {pagesSorted.map(page => (
             <tr key={page.id}>
               <td>
-                <a href={`/pages/${page.slug}`}>{page.name}</a>
+                <Link to={`/pages/${page.slug}`}>{page.name}</Link>
                 {
                   page.admin_notes && page.admin_notes.trim() !== '' && (
                     <>
