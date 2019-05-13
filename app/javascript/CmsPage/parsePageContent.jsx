@@ -62,8 +62,8 @@ function jsxAttributeKeyForHtmlKey(htmlKey) {
   return key;
 }
 
-function createElement(node, index, data, children) {
-  const attributeProps = [...node.attributes].reduce((result, attribute) => {
+function jsxAttributesFromHTMLAttributes(attributes) {
+  return attributes.reduce((result, attribute) => {
     const key = jsxAttributeKeyForHtmlKey(attribute.name);
     if (key === 'style') {
       return { ...result, [key]: createStyleJsonFromString(attribute.value) };
@@ -71,6 +71,10 @@ function createElement(node, index, data, children) {
 
     return { ...result, [key]: attribute.value || attribute.name };
   }, {});
+}
+
+function createElement(node, index, data, children) {
+  const attributeProps = jsxAttributesFromHTMLAttributes([...node.attributes]);
 
   const elementProps = {
     key: index,
@@ -146,12 +150,15 @@ function processReactComponentNode(node, children, index) {
 }
 
 function processCmsLinkNode(node, children, index) {
-  const attributesObject = [...node.attributes]
-    .reduce((obj, { name, value }) => ({ ...obj, [name]: value }), {});
-  const { href, ...otherAttributes } = attributesObject;
+  const attributesArray = [...node.attributes];
+  const hrefAttribute = attributesArray
+    .find(attribute => (attribute.name || '').toLowerCase() === 'href');
+  const otherAttributes = attributesArray
+    .filter(attribute => (attribute.name || '').toLowerCase() !== 'href');
+  const href = (hrefAttribute || {}).value;
 
   if (href && (href === '/' || href.startsWith('/pages/'))) {
-    return <Link to={href} {...otherAttributes}>{children}</Link>;
+    return <Link to={href} {...jsxAttributesFromHTMLAttributes(otherAttributes)}>{children}</Link>;
   }
 
   return processDefaultNode(node, children, index);
