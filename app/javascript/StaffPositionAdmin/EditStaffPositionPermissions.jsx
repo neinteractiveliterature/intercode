@@ -49,7 +49,7 @@ function EditStaffPositionPermissions({ staffPosition, eventCategories, history 
         },
       });
 
-      history.push('/');
+      history.push('/staff_positions');
     } catch (newError) {
       setError(newError);
       setMutationInProgress(false);

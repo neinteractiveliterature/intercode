@@ -37,7 +37,6 @@ Intercode::Application.routes.draw do
     resource :cart, only: [:show]
     resource :order_history, only: [:show]
     get 'admin_store/orders/export' => 'admin_orders#export', as: :export_admin_orders
-    get 'admin_store/(*extra)' => 'admin_store#index', as: :admin_store
 
     resources :user_con_profiles, only: [] do
       collection do
@@ -68,8 +67,6 @@ Intercode::Application.routes.draw do
     end
 
     get 'user_activity_alerts/(*extra)' => 'user_activity_alerts#index', as: :user_activity_alerts
-
-    get 'staff_positions/(*extra)' => 'staff_positions#index', as: :staff_positions
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end

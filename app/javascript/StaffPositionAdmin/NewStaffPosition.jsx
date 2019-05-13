@@ -40,7 +40,7 @@ function NewStaffPosition({ history }) {
           },
         },
       });
-      history.replace(`/${response.data.createStaffPosition.staff_position.id}/edit_permissions`);
+      history.replace(`/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`);
     },
     [history, mutate, staffPosition],
   );

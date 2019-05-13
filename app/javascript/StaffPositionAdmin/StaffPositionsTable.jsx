@@ -104,10 +104,10 @@ function StaffPositionsTable({ staffPositions }) {
             </button>
           )}
         >
-          <Link to={`/${staffPosition.id}/edit`} className="dropdown-item">
+          <Link to={`/staff_positions/${staffPosition.id}/edit`} className="dropdown-item">
             Edit settings
           </Link>
-          <Link to={`/${staffPosition.id}/edit_permissions`} className="dropdown-item">
+          <Link to={`/staff_positions/${staffPosition.id}/edit_permissions`} className="dropdown-item">
             Edit permissions
           </Link>
           <Confirm.Trigger>
@@ -153,7 +153,7 @@ function StaffPositionsTable({ staffPositions }) {
         </tbody>
       </table>
 
-      <Link to="/new" className="btn btn-primary">New Staff Position</Link>
+      <Link to="/staff_positions/new" className="btn btn-primary">New Staff Position</Link>
     </div>
   );
 }
