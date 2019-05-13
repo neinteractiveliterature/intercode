@@ -179,7 +179,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Event Categories'
-      url { event_categories_path }
+      url '/event_categories'
       visible? { can?(:update, EventCategory.new(convention: convention)) }
     end,
     NavigationItem.define do
@@ -189,7 +189,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Event Scheduling'
-      url { admin_events_path }
+      url '/admin_events'
       visible? { can?(:update, Run.new(event: Event.new(convention: convention))) }
     end,
     NavigationItem.define do

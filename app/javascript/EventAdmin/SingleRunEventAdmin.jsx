@@ -8,8 +8,8 @@ import SingleRunEventAdminList from './SingleRunEventAdminList';
 function SingleRunEventAdmin() {
   return (
     <Switch>
-      <Route path="/filler_events/new" component={NewSingleRunEvent} />
-      <Route path="/filler_events/:id/edit" component={EditSingleRunEvent} />
+      <Route path="/admin_events/filler_events/new" component={NewSingleRunEvent} />
+      <Route path="/admin_events/filler_events/:id/edit" component={EditSingleRunEvent} />
       <Route component={SingleRunEventAdminList} />
     </Switch>
   );

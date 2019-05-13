@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  BrowserRouter, NavLink, Route, Switch, Redirect,
+  NavLink, Route, Switch, Redirect,
 } from 'react-router-dom';
 
 import DroppedEventAdmin from './DroppedEventAdmin';
@@ -24,7 +24,7 @@ function NewEvent({ history }) {
   return (
     <NewEventForm
       convention={data.convention}
-      onExit={() => history.replace('/runs')}
+      onExit={() => history.replace('/admin_events/runs')}
     />
   );
 }
@@ -35,43 +35,38 @@ NewEvent.propTypes = {
   }).isRequired,
 };
 
-const EventAdminApp = ({ basename }) => (
-  <BrowserRouter basename={basename}>
-    <div>
-      <ul className="nav nav-tabs">
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/runs">Regular events</NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/recurring_events">Recurring events</NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/filler_events">Single-run events</NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/dropped_events">Dropped events</NavLink>
-        </li>
-      </ul>
+const EventAdmin = () => (
+  <>
+    <h1 className="mb-4">Event scheduling</h1>
+    <ul className="nav nav-tabs">
+      <li className="nav-item">
+        <NavLink className="nav-link" to="/admin_events/runs">Regular events</NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink className="nav-link" to="/admin_events/recurring_events">Recurring events</NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink className="nav-link" to="/admin_events/filler_events">Single-run events</NavLink>
+      </li>
+      <li className="nav-item">
+        <NavLink className="nav-link" to="/admin_events/dropped_events">Dropped events</NavLink>
+      </li>
+    </ul>
 
-      <Switch>
-        <Route path="/runs" component={EventAdminRunsTable} />
-        <Route path="/:eventId/runs" component={EventAdminRunsTable} />
-        <Route path="/recurring_events" component={RecurringEventAdmin} />
-        <Route path="/filler_events" component={SingleRunEventAdmin} />
-        <Route path="/dropped_events" component={DroppedEventAdmin} />
-        <Route path="/:id/edit" component={EventAdminEditEvent} />
-        <Route
-          path="/new"
-          render={({ history }) => <NewEvent history={history} />}
-        />
-        <Redirect to="/runs" />
-      </Switch>
-    </div>
-  </BrowserRouter>
+    <Switch>
+      <Route path="/admin_events/runs" component={EventAdminRunsTable} />
+      <Route path="/admin_events/:eventId/runs" component={EventAdminRunsTable} />
+      <Route path="/admin_events/recurring_events" component={RecurringEventAdmin} />
+      <Route path="/admin_events/filler_events" component={SingleRunEventAdmin} />
+      <Route path="/admin_events/dropped_events" component={DroppedEventAdmin} />
+      <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
+      <Route
+        path="/admin_events/new"
+        render={({ history }) => <NewEvent history={history} />}
+      />
+      <Redirect to="/admin_events/runs" />
+    </Switch>
+  </>
 );
 
-EventAdminApp.propTypes = {
-  basename: PropTypes.string.isRequired,
-};
-
-export default EventAdminApp;
+export default EventAdmin;

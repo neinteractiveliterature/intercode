@@ -81,7 +81,7 @@ function EditSingleRunEvent({ match, history }) {
   const updateSingleRunEvent = useCallback(
     async (options) => {
       await update(options);
-      history.push('/filler_events');
+      history.push('/admin_events/filler_events');
     },
     [update, history],
   );
@@ -99,7 +99,7 @@ function EditSingleRunEvent({ match, history }) {
         error={updateError ? updateError.message : null}
         initialEvent={deserializeEvent(event)}
         convention={data.convention}
-        cancelPath="/filler_events"
+        cancelPath="/admin_events/filler_events"
         onSave={updateSingleRunEvent}
       />
     </div>

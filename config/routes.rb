@@ -36,9 +36,6 @@ Intercode::Application.routes.draw do
     get 'events/:id/(*extra)' => 'events#show', as: :event, constraints: { id: /\d+(-[a-z0-9\-]*)?/ }
     get 'events/(*extra)' => 'events#index', as: :events
 
-    get 'event_categories/(*extra)' => 'event_categories#index', as: :event_categories
-    get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
-
     get(
       'admin_event_proposals/export' => 'admin_event_proposals#export',
       as: :export_admin_event_proposals
@@ -97,5 +94,7 @@ Intercode::Application.routes.draw do
   get 'users/export' => 'users#export', as: :export_users
   get 'users/(*extra)' => 'users#index', as: :users
 
-  get '/(*extra)' => 'single_page_app#root'
+  get '/(*extra)' => 'single_page_app#root', constraints: {
+    extra: %r{(?!(uploads|packs|assets)/).*}
+  }
 end
