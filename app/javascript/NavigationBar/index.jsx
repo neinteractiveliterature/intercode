@@ -1,14 +1,18 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useQuery } from 'react-apollo-hooks';
 
 import { NavigationBarQuery } from './queries.gql';
 import NavigationBarItem from './NavigationBarItem';
 import { NavigationProvider } from './NavigationContext';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 
 function NavigationBar() {
-  const { data, error } = useQuerySuspended(NavigationBarQuery);
+  const { data, loading, error } = useQuery(NavigationBarQuery);
+
+  if (loading) {
+    return <></>;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

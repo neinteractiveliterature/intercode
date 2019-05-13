@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import NavigationItem from './NavigationItem';
 import NavigationSection from './NavigationSection';
+import SignOutNavigationItem from './SignOutNavigationItem';
 import TicketPurchaseNavigationItem from './TicketPurchaseNavigationItem';
 import UserNavigationSection from './UserNavigationSection';
 
@@ -19,6 +20,8 @@ class RootNavigationGroupItem extends React.PureComponent {
         return <NavigationItem item={this.props.item} />;
       case 'NavigationSection':
         return <NavigationSection item={this.props.item} />;
+      case 'SignOutNavigationItem':
+        return <SignOutNavigationItem item={this.props.item} />;
       case 'TicketPurchaseNavigationItem':
         return <TicketPurchaseNavigationItem />;
       case 'UserNavigationSection':

@@ -39,7 +39,7 @@ function NewTicketType({ ticketName, timezoneName, history }) {
           },
         },
       });
-      history.replace('/');
+      history.replace('/ticket_types');
     },
     [mutate, ticketType, history],
   ));

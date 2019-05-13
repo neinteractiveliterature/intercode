@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
 import { NavigationConsumer } from './NavigationContext';
-import NavigationItem from './NavigationItem';
 import PopperDropdown from '../UIComponents/PopperDropdown';
+import RootNavigationGroupItem from './RootNavigationGroupItem';
+import SignInButton from '../Authentication/SignInButton';
+import SignUpButton from '../Authentication/SignUpButton';
 
 class UserNavigationSection extends React.PureComponent {
   static propTypes = {
@@ -117,7 +119,7 @@ class UserNavigationSection extends React.PureComponent {
             >
               {this.props.item.items.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <NavigationItem item={item} key={i} />
+                <RootNavigationGroupItem item={item} key={i} />
               ))}
             </PopperDropdown>
           </div>
@@ -130,12 +132,10 @@ class UserNavigationSection extends React.PureComponent {
   renderLoggedOutContent = () => (
     <React.Fragment>
       <li className="nav-item login my-auto">
-        <a href="/users/sign_in" className="nav-link">Log In</a>
+        <SignInButton className="btn btn-link nav-link" caption="Log in" />
       </li>
       <li className="nav-item my-auto">
-        <div className="nav-link">
-          <a href="/users/sign_up" className="btn btn-primary btn-sm">Sign Up</a>
-        </div>
+        <SignUpButton className="btn btn-primary nav-link py-1 text-white">Sign up</SignUpButton>
       </li>
     </React.Fragment>
   )
