@@ -146,24 +146,15 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Propose an Event'
-      url { page_path('new-proposal') }
+      url '/pages/new-proposal'
       visible? { convention.accepting_proposals }
     end
   ]
 
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
-    url { cms_pages_path }
+    url '/pages'
     visible? { can?(:update, Page.new(parent: convention)) }
-    active? do |request|
-      [
-        cms_pages_path,
-        cms_partials_path,
-        cms_layouts_path,
-        cms_files_path,
-        cms_navigation_items_path
-      ].include?(request.path)
-    end
   end
 
   ADMIN_NAVIGATION_ITEMS = [
@@ -385,7 +376,7 @@ class NavigationBarPresenter
   def cms_navigation_item_class(item)
     NavigationItem.define do
       label item.title
-      url { page_path(item.page) }
+      url "/pages/#{item.page.to_param}"
     end
   end
 

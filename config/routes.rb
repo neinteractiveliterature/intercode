@@ -14,14 +14,6 @@ Intercode::Application.routes.draw do
   get '/authenticity_tokens', to: 'authenticity_tokens#show'
 
   # CMS stuff
-  get 'pages/*page_glob' => 'pages#show', as: :page
-  get 'cms_pages/(*extra)' => 'cms_admin#index', as: :cms_pages
-  get 'cms_partials/(*extra)' => 'cms_admin#index', as: :cms_partials
-  get 'cms_files/(*extra)' => 'cms_admin#index', as: :cms_files
-  get 'cms_layouts/(*extra)' => 'cms_admin#index', as: :cms_layouts
-  get 'cms_graphql_queries/(*extra)' => 'cms_admin#index', as: :cms_graphql_queries
-  get 'cms_navigation_items/(*extra)' => 'cms_admin#index', as: :cms_navigation_items
-  get 'cms_variables/(*extra)' => 'cms_admin#index', as: :cms_variables
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
 
   # All of these pages must be within the virtual host
