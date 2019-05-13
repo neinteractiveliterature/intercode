@@ -114,7 +114,7 @@ StatusCell.propTypes = {
 
 function ExtraCell({ original }) {
   return (
-    <Link to={`${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
+    <Link to={`/admin_event_proposals/${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
       <i className="fa fa-external-link">
         <span className="sr-only">Open in new window</span>
       </i>
@@ -254,7 +254,7 @@ function EventProposalsAdminTable({ defaultVisibleColumns, exportUrl, history })
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            history.push(`${rowInfo.original.id}`);
+            history.push(`/admin_event_proposals/${rowInfo.original.id}`);
           },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}

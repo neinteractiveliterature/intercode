@@ -1,8 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  BrowserRouter, Link, Switch, Route,
-} from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
@@ -12,97 +9,87 @@ import { EventProposalQueryWithOwner } from './queries.gql';
 import EventProposalsAdminTable from './EventProposalsAdminTable';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 
-const EventProposalsAdmin = ({
-  basename,
-  exportUrl,
-}) => (
-  <BrowserRouter basename={basename}>
-    <React.Fragment>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <BreadcrumbItemWithRoute
-            path="/"
-            to="/?sort.status=asc&sort.submitted_at=desc"
-            active={({ location }) => location.pathname === '/'}
-          >
-            Event proposals
-          </BreadcrumbItemWithRoute>
+const EventProposalsAdmin = () => (
+  <React.Fragment>
+    <nav aria-label="breadcrumb">
+      <ol className="breadcrumb">
+        <BreadcrumbItemWithRoute
+          path="/admin_event_proposals"
+          to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
+          active={({ location }) => location.pathname === '/admin_event_proposals'}
+        >
+          Event proposals
+        </BreadcrumbItemWithRoute>
 
-          <Route
-            path="/:id"
-            render={({ match }) => (
-              <QueryWithStateDisplay
-                query={EventProposalQueryWithOwner}
-                variables={{ eventProposalId: Number.parseInt(match.params.id, 10) }}
+        <Route
+          path="/admin_event_proposals/:id"
+          render={({ match }) => (
+            <QueryWithStateDisplay
+              query={EventProposalQueryWithOwner}
+              variables={{ eventProposalId: Number.parseInt(match.params.id, 10) }}
+            >
+              {({ data }) => (
+                <React.Fragment>
+                  <BreadcrumbItemWithRoute
+                    path="/admin_event_proposals/:id"
+                    to={`/${match.params.id}`}
+                    exact
+                  >
+                    {data.eventProposal.title}
+                  </BreadcrumbItemWithRoute>
+                  <Route
+                    path="/admin_event_proposals/:id/edit"
+                    render={() => (
+                      <BreadcrumbItem to={`/${match.params.id}/edit`} active>
+                        Edit
+                      </BreadcrumbItem>
+                    )}
+                  />
+                </React.Fragment>
+              )}
+            </QueryWithStateDisplay>
+          )}
+        />
+      </ol>
+    </nav>
+
+    <Switch>
+      <Route
+        path="/admin_event_proposals/:id/edit"
+        render={({ match, history }) => (
+          <EventProposalForm
+            eventProposalId={Number.parseInt(match.params.id, 10)}
+            afterSubmit={() => { history.push(`/admin_event_proposals/${match.params.id}`); }}
+            exitButton={(
+              <Link
+                className="btn btn-outline-secondary mr-2"
+                to={`/admin_event_proposals/${match.params.id}`}
               >
-                {({ data }) => (
-                  <React.Fragment>
-                    <BreadcrumbItemWithRoute
-                      path="/:id"
-                      to={`/${match.params.id}`}
-                      exact
-                    >
-                      {data.eventProposal.title}
-                    </BreadcrumbItemWithRoute>
-                    <Route
-                      path="/:id/edit"
-                      render={() => (
-                        <BreadcrumbItem to={`/${match.params.id}/edit`} active>
-                          Edit
-                        </BreadcrumbItem>
-                      )}
-                    />
-                  </React.Fragment>
-                )}
-              </QueryWithStateDisplay>
+                Return to proposal
+              </Link>
             )}
           />
-        </ol>
-      </nav>
-
-      <Switch>
-        <Route
-          path="/:id/edit"
-          render={({ match, history }) => (
-            <EventProposalForm
-              eventProposalId={Number.parseInt(match.params.id, 10)}
-              afterSubmit={() => { history.push(`/${match.params.id}`); }}
-              exitButton={(
-                <Link
-                  className="btn btn-outline-secondary mr-2"
-                  to={`/${match.params.id}`}
-                >
-                  Return to proposal
-                </Link>
-              )}
+        )}
+      />
+      <Route
+        path="/admin_event_proposals/:id"
+        render={({ match }) => (
+          <EventProposalAdminDisplay eventProposalId={Number.parseInt(match.params.id, 10)} />
+        )}
+      />
+      <Route
+        render={() => (
+          <React.Fragment>
+            <h1>Event Proposals</h1>
+            <EventProposalsAdminTable
+              exportUrl="/admin_event_proposals/export.csv"
+              defaultVisibleColumns={['event_category', 'title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at']}
             />
-          )}
-        />
-        <Route
-          path="/:id"
-          render={({ match }) => (
-            <EventProposalAdminDisplay eventProposalId={Number.parseInt(match.params.id, 10)} />
-          )}
-        />
-        <Route
-          render={() => (
-            <React.Fragment>
-              <h1>Event Proposals</h1>
-              <EventProposalsAdminTable
-                exportUrl={exportUrl}
-                defaultVisibleColumns={['event_category', 'title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at']}
-              />
-            </React.Fragment>
-          )}
-        />
-      </Switch>
-    </React.Fragment>
-  </BrowserRouter>
+          </React.Fragment>
+        )}
+      />
+    </Switch>
+  </React.Fragment>
 );
-
-EventProposalsAdmin.propTypes = {
-  basename: PropTypes.string.isRequired,
-  exportUrl: PropTypes.string.isRequired,
-};
 
 export default EventProposalsAdmin;

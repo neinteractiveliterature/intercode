@@ -184,7 +184,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Event Proposals'
-      url { admin_event_proposals_path('sort.status' => 'asc', 'sort.submitted_at' => 'desc') }
+      url '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc'
       visible? { can?(:view_event_proposals, convention) }
     end,
     NavigationItem.define do

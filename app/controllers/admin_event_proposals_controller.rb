@@ -3,9 +3,6 @@ class AdminEventProposalsController < ApplicationController
 
   before_action :authorize_admin
 
-  def index
-  end
-
   def export
     respond_to do |format|
       format.csv do

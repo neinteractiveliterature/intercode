@@ -39,14 +39,9 @@ Intercode::Application.routes.draw do
     get 'event_categories/(*extra)' => 'event_categories#index', as: :event_categories
     get 'admin_events/(*extra)' => 'admin_events#index', as: :admin_events
 
-    resources :event_proposals, except: [:update]
     get(
       'admin_event_proposals/export' => 'admin_event_proposals#export',
       as: :export_admin_event_proposals
-    )
-    get(
-      'admin_event_proposals/(*extra)' => 'admin_event_proposals#index',
-      as: :admin_event_proposals
     )
 
     resources :products, only: [:show]

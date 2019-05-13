@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditEventCategory from './EditEventCategory';
@@ -9,102 +8,96 @@ import EventCategoryIndex from './EventCategoryIndex';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import NewEventCategory from './NewEventCategory';
 
-function EventCategoryAdmin({ basename }) {
+function EventCategoryAdmin() {
   return (
-    <BrowserRouter basename={basename}>
-      <>
-        <ol className="breadcrumb">
-          <BreadcrumbItemWithRoute
-            to="/event_categories"
-            path="/event_categories"
-            exact
-            pageTitleIfActive="Event categories"
-          >
-            Event categories
-          </BreadcrumbItemWithRoute>
+    <>
+      <ol className="breadcrumb">
+        <BreadcrumbItemWithRoute
+          to="/event_categories"
+          path="/event_categories"
+          exact
+          pageTitleIfActive="Event categories"
+        >
+          Event categories
+        </BreadcrumbItemWithRoute>
 
-          <BreadcrumbItemWithRoute
-            path="/event_categories/new"
-            to="/event_categories/new"
-            hideUnlessMatch
-            pageTitleIfActive="New event category"
-          >
-            New event category
-          </BreadcrumbItemWithRoute>
+        <BreadcrumbItemWithRoute
+          path="/event_categories/new"
+          to="/event_categories/new"
+          hideUnlessMatch
+          pageTitleIfActive="New event category"
+        >
+          New event category
+        </BreadcrumbItemWithRoute>
 
-          <BreadcrumbItemWithRoute
-            path="/event_categories/:id/edit"
-            to={({ match: { params } }) => `/${params.id}/edit`}
-            hideUnlessMatch
-            pageTitleIfActive="Edit event category"
-          >
-            Edit event category
-          </BreadcrumbItemWithRoute>
-        </ol>
+        <BreadcrumbItemWithRoute
+          path="/event_categories/:id/edit"
+          to={({ match: { params } }) => `/${params.id}/edit`}
+          hideUnlessMatch
+          pageTitleIfActive="Edit event category"
+        >
+          Edit event category
+        </BreadcrumbItemWithRoute>
+      </ol>
 
-        <Switch>
-          <Route
-            path="/event_categories/new"
-            render={() => (
-              <QueryWithStateDisplay query={EventCategoryAdminQuery}>
-                {({
-                  data: {
-                    convention: {
-                      forms,
-                      ticket_name: ticketName,
-                      ticket_mode: ticketMode,
-                    },
+      <Switch>
+        <Route
+          path="/event_categories/new"
+          render={() => (
+            <QueryWithStateDisplay query={EventCategoryAdminQuery}>
+              {({
+                data: {
+                  convention: {
+                    forms,
+                    ticket_name: ticketName,
+                    ticket_mode: ticketMode,
                   },
-                }) => (
-                  <NewEventCategory forms={forms} ticketName={ticketName} ticketMode={ticketMode} />
-                )}
-              </QueryWithStateDisplay>
-            )}
-          />
+                },
+              }) => (
+                <NewEventCategory forms={forms} ticketName={ticketName} ticketMode={ticketMode} />
+              )}
+            </QueryWithStateDisplay>
+          )}
+        />
 
-          <Route
-            path="/event_categories/:id/edit"
-            render={({ match: { params } }) => (
-              <QueryWithStateDisplay query={EventCategoryAdminQuery}>
-                {({
-                  data: {
-                    convention: {
-                      event_categories: eventCategories,
-                      forms,
-                      ticket_name: ticketName,
-                      ticket_mode: ticketMode,
-                    },
+        <Route
+          path="/event_categories/:id/edit"
+          render={({ match: { params } }) => (
+            <QueryWithStateDisplay query={EventCategoryAdminQuery}>
+              {({
+                data: {
+                  convention: {
+                    event_categories: eventCategories,
+                    forms,
+                    ticket_name: ticketName,
+                    ticket_mode: ticketMode,
                   },
-                }) => {
-                  const eventCategory = eventCategories.find(c => c.id.toString() === params.id);
+                },
+              }) => {
+                const eventCategory = eventCategories.find(c => c.id.toString() === params.id);
 
-                  return (
-                    <EditEventCategory
-                      initialEventCategory={eventCategory}
-                      forms={forms}
-                      ticketName={ticketName}
-                      ticketMode={ticketMode}
-                    />
-                  );
-                }}
-              </QueryWithStateDisplay>
-            )}
-          />
+                return (
+                  <EditEventCategory
+                    initialEventCategory={eventCategory}
+                    forms={forms}
+                    ticketName={ticketName}
+                    ticketMode={ticketMode}
+                  />
+                );
+              }}
+            </QueryWithStateDisplay>
+          )}
+        />
 
-          <Route
-            path="/event_categories"
-            render={() => (
-              <EventCategoryIndex />
-            )}
-          />
-        </Switch>
-      </>
-    </BrowserRouter>
+        <Route
+          path="/event_categories"
+          render={() => (
+            <EventCategoryIndex />
+          )}
+        />
+      </Switch>
+    </>
   );
 }
-
-EventCategoryAdmin.propTypes = {
-  basename: PropTypes.string.isRequired,
-};
 
 export default EventCategoryAdmin;
