@@ -56,7 +56,10 @@ class CmsRenderingContext
   def liquid_assigns_for_layout(cms_layout)
     {
       'content_for_head' => '',
-      'content_for_navbar' => react_component('NavigationBar', cmsLayoutId: cms_layout.id),
+      'content_for_navbar' => react_component(
+        'NavigationBar',
+        navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
+      ),
       'content_for_layout' => react_component('AppRouter')
     }
   end

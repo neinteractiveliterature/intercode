@@ -31,7 +31,7 @@ function EventAdminRunsTable() {
 
   return (
     <div>
-      <Link to="/new" className="btn btn-primary mt-4 mb-2">
+      <Link to="/admin_events/new" className="btn btn-primary mt-4 mb-2">
         New event
       </Link>
 
@@ -55,13 +55,13 @@ function EventAdminRunsTable() {
       </table>
 
       <Route
-        path="/:eventId/runs/:runId/edit"
+        path="/admin_events/:eventId/runs/:runId/edit"
         render={props => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
       />
       <Route
-        path="/:eventId/runs/new"
+        path="/admin_events/:eventId/runs/new"
         render={props => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}

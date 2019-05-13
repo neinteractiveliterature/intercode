@@ -67,14 +67,14 @@ function EventAdminEditEvent({ match, history }) {
 
   return (
     <EditEvent
-      cancelPath="/runs"
+      cancelPath="/admin_events/runs"
       showDropButton
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}
       updateEvent={updateEvent}
-      onSave={() => { history.push('/runs'); }}
-      onDrop={() => { history.push('/runs'); }}
+      onSave={() => { history.push('/admin_events/runs'); }}
+      onDrop={() => { history.push('/admin_events/runs'); }}
     >
       <EventFormWithCategorySelection {...eventFormProps}>
         {data.currentAbility.can_override_maximum_event_provided_tickets

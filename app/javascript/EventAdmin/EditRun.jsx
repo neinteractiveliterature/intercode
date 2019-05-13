@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
+
 import EditRunModal from './EditRunModal';
 import { ConventionFields, EventFields } from './queries.gql';
 
@@ -24,7 +25,7 @@ function EditRun({
         return null;
       }
 
-      if (match.path === '/:eventId/runs/new') {
+      if (match.path === '/admin_events/:eventId/runs/new') {
         return {
           starts_at: null,
           title_suffix: null,
@@ -40,10 +41,10 @@ function EditRun({
 
   const cancelEditing = useCallback(
     () => {
-      if (match.path === '/recurring_events/:eventId/runs/:runId/edit') {
-        history.replace('/recurring_events');
+      if (match.path === '/admin_events/recurring_events/:eventId/runs/:runId/edit') {
+        history.replace('/admin_events/recurring_events');
       } else {
-        history.replace('/runs');
+        history.replace('/admin_events/runs');
       }
     },
     [match, history],

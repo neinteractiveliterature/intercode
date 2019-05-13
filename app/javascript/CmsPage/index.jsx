@@ -1,37 +1,18 @@
 import React, {
-  lazy, useMemo, useEffect, useState, Suspense,
+  lazy, useMemo, useEffect, Suspense,
 } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 import parsePageContent from '../parsePageContent';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
-function CustomLoadingIndicator({ visible }) {
-  return (
-    <div
-      className="text-center mt-5 custom-loading-indicator"
-      style={{
-        opacity: visible ? 1.0 : 0.0,
-        visibility: visible ? 'visible' : 'hidden',
-      }}
-    >
-      <i className="fa fa-circle-o-notch fa-spin fa-fw" />
-      <span className="sr-only">Loading...</span>
-    </div>
-  );
-}
-
-CustomLoadingIndicator.propTypes = {
-  visible: PropTypes.bool.isRequired,
-};
-
 function CmsPage({ slug, rootPage }) {
   const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
-  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const content = useMemo(
     () => {
       if (loading || error) {
@@ -41,17 +22,6 @@ function CmsPage({ slug, rootPage }) {
       return parsePageContent(data.cmsPage.content_html).bodyComponents;
     },
     [data, loading, error],
-  );
-
-  useEffect(
-    () => {
-      if (!loading) {
-        setShowLoadingIndicator(false);
-      }
-      const timeoutId = setTimeout(() => setShowLoadingIndicator(loading), 250);
-      return () => clearTimeout(timeoutId);
-    },
-    [loading],
   );
 
   useEffect(() => {
@@ -65,7 +35,7 @@ function CmsPage({ slug, rootPage }) {
 
   return (
     <>
-      <CustomLoadingIndicator visible={showLoadingIndicator} />
+      <PageLoadingIndicator visible={loading} />
       {!loading && (
         <>
           {

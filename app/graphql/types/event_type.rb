@@ -24,7 +24,6 @@ class Types::EventType < Types::BaseObject
 
   association_loaders Event, :event_category, :team_members
 
-
   field :form_response_attrs_json, Types::Json, null: true
 
   def form_response_attrs_json

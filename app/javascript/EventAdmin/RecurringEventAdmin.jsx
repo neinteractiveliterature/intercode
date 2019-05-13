@@ -21,7 +21,7 @@ function NewRecurringEvent({ history, ...props }) {
       <h3 className="my-4">New recurring event</h3>
 
       <NewEventForm
-        onExit={() => history.push('/recurring_events')}
+        onExit={() => history.push('/admin_events/recurring_events')}
         convention={data.convention}
         schedulingUi="recurring"
         {...props}
@@ -59,12 +59,12 @@ function RecurringEventAdminList() {
 
   return (
     <div>
-      <Link className="btn btn-primary mt-4" to="/recurring_events/new">
+      <Link className="btn btn-primary mt-4" to="/admin_events/recurring_events/new">
         Create new recurring event
       </Link>
       <hr className="my-4" />
       {eventSections}
-      <Route path="/recurring_events/:eventId/runs/:runId/edit">
+      <Route path="/admin_events/recurring_events/:eventId/runs/:runId/edit">
         {props => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
@@ -76,7 +76,7 @@ function RecurringEventAdminList() {
 function RecurringEventAdmin() {
   return (
     <Switch>
-      <Route path="/recurring_events/new" component={NewRecurringEvent} />
+      <Route path="/admin_events/recurring_events/new" component={NewRecurringEvent} />
       <Route component={RecurringEventAdminList} />
     </Switch>
   );

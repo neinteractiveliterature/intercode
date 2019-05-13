@@ -48,7 +48,7 @@ function NewSingleRunEvent({ history }) {
   const createFillerEvent = useCallback(
     async ({ event, run }) => {
       await create({ event, run });
-      history.push('/filler_events');
+      history.push('/admin_events/filler_events');
     },
     [create, history],
   );
@@ -74,7 +74,7 @@ function NewSingleRunEvent({ history }) {
           runs: [{ rooms: [] }],
         }}
         convention={data.convention}
-        cancelPath="/filler_events"
+        cancelPath="/admin_events/filler_events"
         onSave={createFillerEvent}
       />
     </div>
