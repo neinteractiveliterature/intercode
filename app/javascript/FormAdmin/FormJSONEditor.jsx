@@ -83,7 +83,7 @@ class FormJSONEditor extends React.Component {
           },
         });
       }
-      this.props.history.push('/');
+      this.props.history.push('/admin_forms');
     } catch (error) {
       this.setState({ error, operationInProgress: false });
     }

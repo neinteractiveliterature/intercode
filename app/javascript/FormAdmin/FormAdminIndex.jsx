@@ -93,7 +93,7 @@ function FormAdminIndex() {
                         </Confirm.Trigger>
                       )}
                     </Mutation>
-                    <Link to={`/${form.id}/edit`} className="btn btn-sm btn-outline-primary">
+                    <Link to={`/admin_forms/${form.id}/edit`} className="btn btn-sm btn-outline-primary">
                       Edit
                     </Link>
                   </td>
@@ -102,7 +102,7 @@ function FormAdminIndex() {
             </tbody>
           </table>
 
-          <Link to="/new" className="btn btn-primary">
+          <Link to="/admin_forms/new" className="btn btn-primary">
             New form
           </Link>
         </>

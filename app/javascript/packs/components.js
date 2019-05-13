@@ -11,9 +11,7 @@ const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" *
 const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
 const EventProposalForm = lazy(() => import(/* webpackChunkName: "event-proposal-form" */ '../EventProposals/EventProposalForm'));
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
-const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ '../FormAdmin'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
-const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ '../MailingLists'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ '../MyProfile'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
 const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-permissions-prompt' */ '../OAuthPermissionsPrompt'));
@@ -41,9 +39,7 @@ const unwrappedComponents = {
   EmailList,
   EventsApp,
   EventProposalForm,
-  FormAdmin,
   LiquidDocs,
-  MailingLists,
   MyProfile,
   MyTicket,
   OAuthPermissionsPrompt,

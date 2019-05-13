@@ -73,8 +73,6 @@ Intercode::Application.routes.draw do
     end
     get 'reports/(*extra)' => 'reports#index'
 
-    get 'mailing_lists/(*extra)' => 'mailing_lists#index', as: :mailing_lists
-
     resources :rooms, only: [:index]
     resource :clickwrap_agreement, only: [:show] do
       post :accept
@@ -83,7 +81,6 @@ Intercode::Application.routes.draw do
     get 'user_activity_alerts/(*extra)' => 'user_activity_alerts#index', as: :user_activity_alerts
 
     get 'staff_positions/(*extra)' => 'staff_positions#index', as: :staff_positions
-    get 'admin_forms/(*extra)' => 'admin_forms#index', as: :admin_forms
 
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end
