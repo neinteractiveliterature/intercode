@@ -77,6 +77,16 @@ class NavigationBarPresenter
     end
   end
 
+  class SignOutNavigationItem < NavigationItem
+    def active?(*)
+      false
+    end
+
+    def url(*)
+      nil
+    end
+  end
+
   class NavigationBrand
     attr_reader :label
 
@@ -274,10 +284,8 @@ class NavigationBarPresenter
       url { oauth_authorized_applications_path }
       visible? { user_signed_in? }
     end,
-    NavigationItem.define do
+    SignOutNavigationItem.define do
       label 'Log Out'
-      url { destroy_user_session_path }
-      http_method 'DELETE'
       visible? { user_signed_in? }
     end
   ]

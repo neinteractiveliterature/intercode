@@ -189,6 +189,13 @@ class Types::QueryType < Types::BaseObject
     context[:assumed_identity_from_profile]
   end
 
+  field :account_form_content_html, String, null: true
+  def account_form_content_html
+    partial = CmsPartial.global.find_by(name: 'account_form_text')
+    return nil unless partial
+    context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
+  end
+
   field :user_con_profile, Types::UserConProfileType, null: true do
     argument :id, Integer, required: true
 

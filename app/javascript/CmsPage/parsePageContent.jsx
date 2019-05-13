@@ -2,6 +2,11 @@ import React, { lazy, Suspense } from 'react';
 import camelCase from 'lodash-es/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
+import { Link } from 'react-router-dom';
+
+import SignInButton from '../Authentication/SignInButton';
+import SignUpButton from '../Authentication/SignUpButton';
+import SignOutButton from '../Authentication/SignOutButton';
 
 const ProposeEventButton = lazy(() => import(/* webpackChunkName: 'propose-event-button' */ '../EventProposals/ProposeEventButton'));
 const WithdrawMySignupButton = lazy(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ '../EventsApp/EventPage/WithdrawMySignupButton'));
@@ -95,6 +100,37 @@ function processDefaultNode(node, children, index) {
   return createElement(node, index, node.data, children);
 }
 
+const AUTHENTICATION_LINK_REPLACEMENTS = {
+  '/users/sign_in': node => (
+    <SignInButton
+      className={(node.attributes.class || {}).value || 'btn btn-link d-inline p-0'}
+      caption={node.textContent}
+    />
+  ),
+  '/users/sign_up': node => (
+    <SignUpButton
+      className={(node.attributes.class || {}).value || 'btn btn-primary btn-sm'}
+      caption={node.textContent}
+    />
+  ),
+  '/users/sign_out': node => (
+    <SignOutButton
+      className={(node.attributes.class || {}).value}
+      caption={node.textContent}
+    />
+  ),
+};
+
+const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS = Object.entries(AUTHENTICATION_LINK_REPLACEMENTS)
+  .map(([path, processNode]) => ({
+    shouldProcessNode: node => (
+      node.nodeType === Node.ELEMENT_NODE
+      && node.nodeName.toLowerCase() === 'a'
+      && ((node.attributes.href || {}).value || '').endsWith(path)
+    ),
+    processNode,
+  }));
+
 function processReactComponentNode(node, children, index) {
   const component = REACT_COMPONENTS_BY_NAME[node.attributes['data-react-class'].value];
   if (!component) {
@@ -107,6 +143,18 @@ function processReactComponentNode(node, children, index) {
     { fallback: (<></>) },
     React.createElement(component, props),
   );
+}
+
+function processCmsLinkNode(node, children, index) {
+  const attributesObject = [...node.attributes]
+    .reduce((obj, { name, value }) => ({ ...obj, [name]: value }), {});
+  const { href, ...otherAttributes } = attributesObject;
+
+  if (href && (href === '/' || href.startsWith('/pages/'))) {
+    return <Link to={href} {...otherAttributes}>{children}</Link>;
+  }
+
+  return processDefaultNode(node, children, index);
 }
 
 function traverseDom(node, isValidNode, processingInstructions, index) {
@@ -149,6 +197,11 @@ export default function parsePageContent(content) {
     doc.body.children,
     IsValidNodeDefinitions.alwaysValid,
     [
+      ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
+      {
+        shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'a',
+        processNode: processCmsLinkNode,
+      },
       {
         shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
         processNode: processReactComponentNode,

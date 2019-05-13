@@ -50,6 +50,8 @@ module Intercode
 
       # Only Authorized Applications
       Doorkeeper::AuthorizedApplicationsController.layout 'application'
+
+      DeviseController.respond_to :html, :json
     end
   end
 end

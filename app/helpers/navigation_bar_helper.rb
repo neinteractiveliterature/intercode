@@ -8,7 +8,17 @@ module NavigationBarHelper
     'data-toggle' => 'dropdown'
   }
 
+  def render_sign_out_navigation_item(item, navigation_section)
+    app_component 'SignOutButton',
+      className: item.item_class(request, navigation_section),
+      caption: item.label
+  end
+
   def render_navigation_item(item, navigation_section)
+    if item.is_a?(NavigationBarPresenter::SignOutNavigationItem)
+      return render_sign_out_navigation_item(item, navigation_section)
+    end
+
     options = { class: item.item_class(request, navigation_section), method: item.http_method }
     options.delete(:method) if options[:method] && options[:method].to_s.downcase == 'get'
     link_to item.label, item.url, options.compact
@@ -148,12 +158,14 @@ module NavigationBarHelper
   def logged_out_user_navigation_section
     safe_join([
       content_tag(:li, class: 'nav-item login') do
-        link_to 'Log In', new_user_session_path, class: 'nav-link'
+        app_component 'SignInButton',
+          className: 'btn btn-link nav-link',
+          initiallyOpen: params[:show_authentication] == 'signIn'
       end,
       content_tag(:li, class: 'nav-item my-auto') do
-        content_tag(:div, class: 'nav-link') do
-          link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary btn-sm'
-        end
+        app_component 'SignUpButton',
+          className: 'btn btn-primary nav-link py-1 text-white',
+          initiallyOpen: params[:show_authentication] == 'signUp'
       end
     ])
   end

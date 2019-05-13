@@ -40,7 +40,10 @@ function CmsPage({ slug, rootPage }) {
 
   useEffect(
     () => {
-      const timeoutId = setTimeout(() => setShowLoadingIndicator(true), 250);
+      if (!loading) {
+        setShowLoadingIndicator(false);
+      }
+      const timeoutId = setTimeout(() => setShowLoadingIndicator(loading), 250);
       return () => clearTimeout(timeoutId);
     },
     [loading],
@@ -51,17 +54,13 @@ function CmsPage({ slug, rootPage }) {
     window.BSN.initCallback();
   }, [content]);
 
-  if (loading) {
-    return <CustomLoadingIndicator visible={showLoadingIndicator} />;
-  }
-
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
   return (
     <>
-      <CustomLoadingIndicator visible={loading && showLoadingIndicator} />
+      <CustomLoadingIndicator visible={showLoadingIndicator} />
       {!loading && (
         <>
           {

@@ -11,6 +11,7 @@ Intercode::Application.routes.draw do
     registrations: 'registrations',
     sessions: 'sessions'
   }
+  get '/authenticity_tokens', to: 'authenticity_tokens#show'
 
   # CMS stuff
   get 'pages/*page_glob' => 'pages#show', as: :page

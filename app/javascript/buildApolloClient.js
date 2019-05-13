@@ -1,5 +1,6 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
+import { onError } from 'apollo-link-error';
 import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import fetch from 'unfetch';
@@ -8,7 +9,17 @@ import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({ introspectionQueryResultData });
 
-function buildApolloClient(authenticityToken) {
+function buildErrorHandlerLink(onUnauthenticated) {
+  return onError(({ graphQLErrors }) => {
+    if (graphQLErrors) {
+      if (graphQLErrors.some(err => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
+        onUnauthenticated();
+      }
+    }
+  });
+}
+
+function buildApolloClient(authenticityToken, onUnauthenticated) {
   const AuthLink = (operation, next) => {
     operation.setContext(context => ({
       ...context,
@@ -25,6 +36,7 @@ function buildApolloClient(authenticityToken) {
   return new ApolloClient({
     link: ApolloLink.from([
       AuthLink,
+      buildErrorHandlerLink(onUnauthenticated),
       createUploadLink({ uri: '/graphql', fetch }),
     ]),
     cache: new InMemoryCache({
