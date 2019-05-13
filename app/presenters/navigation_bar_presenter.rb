@@ -169,7 +169,7 @@ class NavigationBarPresenter
   ADMIN_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Attendees'
-      url { user_con_profiles_path }
+      url '/user_con_profiles'
       visible? { can?(:view_attendees, convention) }
     end,
     NavigationItem.define do

@@ -15,8 +15,8 @@ function EventCategoryAdmin({ basename }) {
       <>
         <ol className="breadcrumb">
           <BreadcrumbItemWithRoute
-            to="/"
-            path="/"
+            to="/event_categories"
+            path="/event_categories"
             exact
             pageTitleIfActive="Event categories"
           >
@@ -24,8 +24,8 @@ function EventCategoryAdmin({ basename }) {
           </BreadcrumbItemWithRoute>
 
           <BreadcrumbItemWithRoute
-            path="/new"
-            to="/new"
+            path="/event_categories/new"
+            to="/event_categories/new"
             hideUnlessMatch
             pageTitleIfActive="New event category"
           >
@@ -33,7 +33,7 @@ function EventCategoryAdmin({ basename }) {
           </BreadcrumbItemWithRoute>
 
           <BreadcrumbItemWithRoute
-            path="/:id/edit"
+            path="/event_categories/:id/edit"
             to={({ match: { params } }) => `/${params.id}/edit`}
             hideUnlessMatch
             pageTitleIfActive="Edit event category"
@@ -44,7 +44,7 @@ function EventCategoryAdmin({ basename }) {
 
         <Switch>
           <Route
-            path="/new"
+            path="/event_categories/new"
             render={() => (
               <QueryWithStateDisplay query={EventCategoryAdminQuery}>
                 {({
@@ -63,7 +63,7 @@ function EventCategoryAdmin({ basename }) {
           />
 
           <Route
-            path="/:id/edit"
+            path="/event_categories/:id/edit"
             render={({ match: { params } }) => (
               <QueryWithStateDisplay query={EventCategoryAdminQuery}>
                 {({
@@ -92,7 +92,7 @@ function EventCategoryAdmin({ basename }) {
           />
 
           <Route
-            path="/"
+            path="/event_categories"
             render={() => (
               <EventCategoryIndex />
             )}

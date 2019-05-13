@@ -11,19 +11,24 @@ fragment SignOutNavigationItemFields on SignOutNavigationItem {
 
 query NavigationBarQuery($cms_layout_id: Int) {
   convention {
+    id
     ticket_name
     ticket_types {
+      id
       publicly_available
     }
   }
   assumedIdentityFromProfile {
+    id
     name_without_nickname
   }
   currentUser {
     id
   }
   currentPendingOrder {
+    id
     order_entries {
+      id
       quantity
     }
   }

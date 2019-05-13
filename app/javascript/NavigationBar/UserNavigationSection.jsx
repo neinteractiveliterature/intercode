@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import htmlFetch from './htmlFetch';
 import { NavigationConsumer } from './NavigationContext';
 import PopperDropdown from '../UIComponents/PopperDropdown';
-import RootNavigationGroupItem from './RootNavigationGroupItem';
 import SignInButton from '../Authentication/SignInButton';
 import SignUpButton from '../Authentication/SignUpButton';
 
@@ -14,6 +13,7 @@ class UserNavigationSection extends React.PureComponent {
     item: PropTypes.shape({
       items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     }).isRequired,
+    renderNavigationItems: PropTypes.func.isRequired,
   }
 
   revertAssumedIdentity = async () => {
@@ -117,10 +117,7 @@ class UserNavigationSection extends React.PureComponent {
               })}
               style={{ zIndex: 1100 }}
             >
-              {this.props.item.items.map((item, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <RootNavigationGroupItem item={item} key={i} />
-              ))}
+              {this.props.renderNavigationItems(this.props.item.items)}
             </PopperDropdown>
           </div>
           {this.renderRevertAssumedIdentityButton(assumedIdentityFromProfile)}

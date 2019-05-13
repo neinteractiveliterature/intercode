@@ -1,38 +1,47 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import PopperDropdown from '../UIComponents/PopperDropdown';
-import RootNavigationGroupItem from './RootNavigationGroupItem';
 
-class NavigationSection extends React.PureComponent {
-  static propTypes = {
-    item: PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    }).isRequired,
+function NavigationSection({ item, location, renderNavigationItems }) {
+  const dropdownRef = useRef(null);
+
+  useEffect(
+    () => {
+      if (dropdownRef.current) {
+        dropdownRef.current.setVisible(false);
+      }
+    },
+    [location],
+  );
+
+  if (!item.items || item.items.length === 0) {
+    return null;
   }
 
-  render = () => {
-    if (!this.props.item.items || this.props.item.items.length === 0) {
-      return null;
-    }
-
-    return (
-      <PopperDropdown
-        renderReference={({ ref, toggle }) => (
-          <li className="nav-item dropdown" role="presentation" ref={ref}>
-            <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">{this.props.item.label}</button>
-          </li>
-        )}
-        style={{ zIndex: 1100 }}
-      >
-        {this.props.item.items.map((item, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <RootNavigationGroupItem item={item} key={i} />
-        ))}
-      </PopperDropdown>
-    );
-  }
+  return (
+    <PopperDropdown
+      ref={dropdownRef}
+      renderReference={({ ref, toggle }) => (
+        <li className="nav-item dropdown" role="presentation" ref={ref}>
+          <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">{item.label}</button>
+        </li>
+      )}
+      style={{ zIndex: 1100 }}
+    >
+      {renderNavigationItems(item.items)}
+    </PopperDropdown>
+  );
 }
 
-export default NavigationSection;
+NavigationSection.propTypes = {
+  item: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  }).isRequired,
+  location: PropTypes.shape({}).isRequired,
+  renderNavigationItems: PropTypes.func.isRequired,
+};
+
+export default withRouter(NavigationSection);

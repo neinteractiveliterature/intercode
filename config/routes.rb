@@ -55,7 +55,7 @@ Intercode::Application.routes.draw do
     get 'admin_store/orders/export' => 'admin_orders#export', as: :export_admin_orders
     get 'admin_store/(*extra)' => 'admin_store#index', as: :admin_store
 
-    resources :user_con_profiles, only: [:index] do
+    resources :user_con_profiles, only: [] do
       collection do
         get :export
         post :revert_become
@@ -65,7 +65,6 @@ Intercode::Application.routes.draw do
         post :become
       end
     end
-    get 'user_con_profiles/(*extra)' => 'user_con_profiles#index'
     get 'my_profile/new' => 'my_profiles#new', as: :new_my_profile
     get 'my_profile/edit' => 'my_profiles#show', as: :edit_my_profile # yes, really, show
     get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
@@ -102,5 +101,6 @@ Intercode::Application.routes.draw do
   get 'organizations/(*extra)' => 'organizations#index', as: :organizations
   get 'users/export' => 'users#export', as: :export_users
   get 'users/(*extra)' => 'users#index', as: :users
-  root to: 'pages#root'
+
+  get '/(*extra)' => 'single_page_app#root'
 end
