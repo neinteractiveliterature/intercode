@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -7,16 +8,16 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useMutationCallback from '../useMutationCallback';
 
-function PageAdminDropdown({ showDelete, pageId }) {
+function PageAdminDropdown({ showDelete, pageId, history }) {
   const confirm = useConfirm();
   const deletePage = useMutationCallback(DeletePage);
 
   const deleteConfirmed = useCallback(
     async () => {
       await deletePage({ variables: { id: pageId } });
-      window.location.href = '/cms_pages';
+      history.replace('/cms_pages');
     },
-    [deletePage, pageId],
+    [deletePage, pageId, history],
   );
 
   return (
@@ -33,8 +34,8 @@ function PageAdminDropdown({ showDelete, pageId }) {
         )}
         placement="bottom-end"
       >
-        <a href={`/cms_pages/${pageId}/edit`} className="dropdown-item">Edit page</a>
-        <a href="/cms_pages" className="dropdown-item">View all pages</a>
+        <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">Edit page</Link>
+        <Link to="/cms_pages" className="dropdown-item">View all pages</Link>
         {
           showDelete ? (
             <button

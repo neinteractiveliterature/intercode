@@ -209,12 +209,12 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Reports'
-      url { reports_path }
+      url '/reports'
       visible? { can?(:view_reports, convention) }
     end,
     NavigationItem.define do
       label 'Rooms'
-      url { rooms_path }
+      url '/rooms'
       visible? { can?(:update, Room.new(convention: convention)) }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,

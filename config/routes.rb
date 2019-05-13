@@ -61,7 +61,6 @@ Intercode::Application.routes.draw do
     get 'my_profile/edit' => 'my_profiles#show', as: :edit_my_profile # yes, really, show
     get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
 
-    get 'reports' => 'reports#index', as: :reports
     namespace :reports do
       get :export_signup_spy
       get :events_by_time
@@ -71,9 +70,7 @@ Intercode::Application.routes.draw do
       get 'user_con_profiles/:user_con_profile_id' => :single_user_printable
       get :volunteer_events
     end
-    get 'reports/(*extra)' => 'reports#index'
 
-    resources :rooms, only: [:index]
     resource :clickwrap_agreement, only: [:show] do
       post :accept
     end
@@ -91,7 +88,7 @@ Intercode::Application.routes.draw do
   get 'users/export' => 'users#export', as: :export_users
   get 'users/(*extra)' => 'users#index', as: :users
 
-  get '/(*extra)' => 'single_page_app#root', constraints: {
+  get '/(*extra)' => 'single_page_app#root', as: :root, constraints: {
     extra: %r{(?!(uploads|packs|assets)/).*}
   }
 end

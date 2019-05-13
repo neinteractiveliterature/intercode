@@ -4,12 +4,17 @@ import { Switch, Route } from 'react-router-dom';
 import CmsPage from './CmsPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
+const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'));
 const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'));
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin'));
 const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'));
 const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin'));
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin'));
 const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
+// TODO OAuthApplications
+// TODO OAuthAuthorizations
+const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
+const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'));
 const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'));
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
 
@@ -20,9 +25,18 @@ function AppRouter() {
         <Route path="/admin_event_proposals" component={EventProposalsAdmin} />
         <Route path="/admin_events" component={EventAdmin} />
         <Route path="/admin_forms" component={FormAdmin} />
+        <Route path="/cms_pages" component={CmsAdmin} />
+        <Route path="/cms_partials" component={CmsAdmin} />
+        <Route path="/cms_files" component={CmsAdmin} />
+        <Route path="/cms_navigation_items" component={CmsAdmin} />
+        <Route path="/cms_layouts" component={CmsAdmin} />
+        <Route path="/cms_variables" component={CmsAdmin} />
+        <Route path="/cms_graphql_queries" component={CmsAdmin} />
         <Route path="/convention/edit" component={ConventionAdmin} />
         <Route path="/event_categories" component={EventCategoryAdmin} />
         <Route path="/mailing_lists" component={MailingLists} />
+        <Route path="/reports" component={Reports} />
+        <Route path="/rooms" component={RoomsAdmin} />
         <Route path="/ticket_types" component={TicketTypeAdmin} />
         <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
         <Route

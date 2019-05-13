@@ -11,7 +11,7 @@ import parsePageContent from '../parsePageContent';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
-function CmsPage({ slug, rootPage }) {
+function CmsPage({ slug, rootPage, history }) {
   const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
   const content = useMemo(
     () => {
@@ -43,6 +43,7 @@ function CmsPage({ slug, rootPage }) {
               <div className="page-admin-dropdown">
                 <Suspense fallback={<></>}>
                   <PageAdminDropdown
+                    history={history}
                     pageId={data.cmsPage.id}
                     showDelete={data.cmsPage.current_ability_can_delete}
                   />
@@ -60,6 +61,7 @@ function CmsPage({ slug, rootPage }) {
 CmsPage.propTypes = {
   slug: PropTypes.string,
   rootPage: PropTypes.bool,
+  history: PropTypes.shape({}).isRequired,
 };
 
 CmsPage.defaultProps = {
