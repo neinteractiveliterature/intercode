@@ -59,6 +59,9 @@ function PageAdminDropdown({ showDelete, pageId, history }) {
 PageAdminDropdown.propTypes = {
   showDelete: PropTypes.bool.isRequired,
   pageId: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default PageAdminDropdown;
