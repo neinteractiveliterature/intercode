@@ -65,7 +65,7 @@ class EventProposalAdminDisplay extends React.PureComponent {
               !data.eventProposal.event && data.currentAbility.can_update_event_proposal
                 ? (
                   <Link
-                    to={`/${this.props.eventProposalId}/edit`}
+                    to={`/admin_event_proposals/${this.props.eventProposalId}/edit`}
                     className="btn btn-outline-primary"
                   >
                     Edit proposal

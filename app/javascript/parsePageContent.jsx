@@ -4,18 +4,14 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
 
-import AppRouter from '../AppRouter';
-import NavigationBar from '../NavigationBar';
-import SignInButton from '../Authentication/SignInButton';
-import SignOutButton from '../Authentication/SignOutButton';
-import SignUpButton from '../Authentication/SignUpButton';
+import SignInButton from './Authentication/SignInButton';
+import SignOutButton from './Authentication/SignOutButton';
+import SignUpButton from './Authentication/SignUpButton';
 
-const ProposeEventButton = lazy(() => import(/* webpackChunkName: 'propose-event-button' */ '../EventProposals/ProposeEventButton'));
-const WithdrawMySignupButton = lazy(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ '../EventsApp/EventPage/WithdrawMySignupButton'));
+const ProposeEventButton = lazy(() => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'));
+const WithdrawMySignupButton = lazy(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'));
 
-const REACT_COMPONENTS_BY_NAME = {
-  AppRouter,
-  NavigationBar,
+export const DEFAULT_COMPONENT_MAP = {
   ProposeEventButton,
   SignInButton,
   SignOutButton,
@@ -142,8 +138,8 @@ const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS = Object.entries(AUTHENTICATIO
     processNode,
   }));
 
-function processReactComponentNode(node, children, index) {
-  const component = REACT_COMPONENTS_BY_NAME[node.attributes['data-react-class'].value];
+function processReactComponentNode(node, children, index, componentMap) {
+  const component = componentMap[node.attributes['data-react-class'].value];
   if (!component) {
     return processDefaultNode(node, children, index);
   }
@@ -204,34 +200,39 @@ function traverseWithInstructions(nodes, isValidNode, processingInstructions) {
   return list.length <= 1 ? list[0] : list;
 }
 
-const PROCESSING_INSTRUCTIONS = [
-  ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
-  {
-    shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'a',
-    processNode: processCmsLinkNode,
-  },
-  {
-    shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
-    processNode: processReactComponentNode,
-  },
-  {
-    shouldProcessNode: () => true,
-    processNode: processDefaultNode,
-  },
-];
+function buildProcessingInstructions(componentMap) {
+  return [
+    ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
+    {
+      shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'a',
+      processNode: processCmsLinkNode,
+    },
+    {
+      shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
+      processNode: (node, children, index) => (
+        processReactComponentNode(node, children, index, componentMap)
+      ),
+    },
+    {
+      shouldProcessNode: () => true,
+      processNode: processDefaultNode,
+    },
+  ];
+}
 
-export default function parsePageContent(content) {
+export default function parsePageContent(content, componentMap = DEFAULT_COMPONENT_MAP) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/html');
+  const processingInstructions = buildProcessingInstructions(componentMap);
   const bodyComponents = traverseWithInstructions(
     doc.body.children,
     IsValidNodeDefinitions.alwaysValid,
-    PROCESSING_INSTRUCTIONS,
+    processingInstructions,
   );
   const headComponents = traverseWithInstructions(
     doc.head.children,
     IsValidNodeDefinitions.alwaysValid,
-    PROCESSING_INSTRUCTIONS,
+    processingInstructions,
   );
   return { bodyComponents, headComponents };
 }

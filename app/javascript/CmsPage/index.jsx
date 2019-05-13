@@ -6,7 +6,7 @@ import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import parsePageContent from './parsePageContent';
+import parsePageContent from '../parsePageContent';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 

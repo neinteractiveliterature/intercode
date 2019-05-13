@@ -3,9 +3,11 @@ import { Helmet } from 'react-helmet';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AppRootQuery } from './appRootQueries.gql';
-import useQuerySuspended from './useQuerySuspended';
+import AppRouter from './AppRouter';
 import ErrorDisplay from './ErrorDisplay';
-import parsePageContent from './CmsPage/parsePageContent';
+import NavigationBar from './NavigationBar';
+import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
+import useQuerySuspended from './useQuerySuspended';
 
 function AppRoot() {
   const { data, error } = useQuerySuspended(AppRootQuery);
@@ -16,6 +18,7 @@ function AppRoot() {
 
   const { bodyComponents, headComponents } = parsePageContent(
     data.cmsParent.default_layout.content_html,
+    { ...DEFAULT_COMPONENT_MAP, AppRouter, NavigationBar },
   );
 
   return (

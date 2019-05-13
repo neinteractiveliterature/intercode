@@ -9,44 +9,6 @@ import ModalContainer from '../ModalDialogs/ModalContainer';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { TransitionEventProposal } from './mutations.gql';
 
-// <select
-// id={selectId}
-// className="form-control-sm ml-1 mr-2"
-// value={this.state.status}
-// onChange={this.mutator.status}
-// disabled={this.state.mutating}
-// >
-// {
-//   ['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map(status => (
-//     <option value={status} key={status}>{status}</option>
-//   ))
-// }
-// </select>
-
-/* <Mutation mutation={TransitionEventProposal}>
-  {mutate => (
-    <button
-      type="button"
-      className="btn btn-sm btn-primary"
-      disabled={this.state.mutating}
-      onClick={async () => {
-        this.setState({ mutating: true });
-
-        try {
-          const { eventProposalId } = this.props;
-          const { status } = this.state;
-          await mutate({ variables: { eventProposalId, status } });
-          this.setState({ mutating: false });
-        } catch (error) {
-          this.setState({ mutating: false, error });
-        }
-      }}
-    >
-      Update
-    </button>
-  )}
-</Mutation> */
-
 const STATUSES = [
   { key: 'proposed', transitionLabel: 'Update', buttonClass: 'btn-primary' },
   { key: 'reviewing', transitionLabel: 'Update', buttonClass: 'btn-primary' },
