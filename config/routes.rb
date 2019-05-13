@@ -26,10 +26,7 @@ Intercode::Application.routes.draw do
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
-    resource :convention, only: [:edit]
-
     get 'ticket/(*extra)' => 'tickets#show', as: :ticket
-    get 'ticket_types/(*extra)' => 'ticket_types#index', as: :ticket_types
 
     resources :events, only: [] do
       resources :runs, only: [] do

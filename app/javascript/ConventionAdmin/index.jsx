@@ -79,7 +79,11 @@ function ConventionAdmin({ id }) {
 }
 
 ConventionAdmin.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.number,
+};
+
+ConventionAdmin.defaultProps = {
+  id: null,
 };
 
 export default ConventionAdmin;

@@ -25,7 +25,7 @@ function EditTicketType({
           },
         },
       });
-      history.push('/');
+      history.push('/ticket_types');
     },
     [mutate, history, ticketType],
   ));

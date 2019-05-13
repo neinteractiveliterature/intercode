@@ -7,7 +7,6 @@ import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';
 const Cart = lazy(() => import(/* webpackChunkName: "cart" */ '../Store/Cart'));
 const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ '../CmsAdmin'));
-const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ '../ConventionAdmin'));
 const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ '../Authentication/EditUser'));
 const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ '../EventAdmin'));
@@ -34,16 +33,13 @@ import SignUpButton from '../Authentication/SignUpButton';
 const SignupSpyTable = lazy(() => import(/* webpackChunkName: "signup-spy-table" */ '../Reports/SignupSpyTable'));
 const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ '../StaffPositionAdmin'));
 const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ '../Store/StoreAdmin'));
-const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ '../TicketTypeAdmin'));
 const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ '../UserActivityAlerts/UserActivityAlertsAdmin'));
-const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ '../UserConProfiles/UserConProfilesAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
 
 const unwrappedComponents = {
   AppRoot,
   Cart,
   CmsAdmin,
-  ConventionAdmin,
   EditUser,
   EmailList,
   EventAdmin,
@@ -70,9 +66,7 @@ const unwrappedComponents = {
   SignupSpyTable,
   StaffPositionAdmin,
   StoreAdmin,
-  TicketTypeAdmin,
   UserActivityAlertsAdmin,
-  UserConProfilesAdmin,
   UsersAdmin,
 };
 

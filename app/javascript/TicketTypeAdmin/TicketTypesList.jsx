@@ -114,7 +114,7 @@ function TicketTypesList({
               <i className="fa fa-trash-o mr-1" />
               Delete
             </button>
-            <Link to={`/${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
+            <Link to={`/ticket_types/${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
               <i className="fa fa-pencil-square-o mr-1" />
               Edit
             </Link>
@@ -161,7 +161,7 @@ function TicketTypesList({
 
       {sortedTicketTypes.map(renderTicketTypeDisplay)}
 
-      <Link to="/new" className="btn btn-primary">
+      <Link to="/ticket_types/new" className="btn btn-primary">
         New
         {' '}
         {ticketName}

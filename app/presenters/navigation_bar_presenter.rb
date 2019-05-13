@@ -174,7 +174,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Convention Settings'
-      url { edit_convention_path }
+      url '/convention/edit'
       visible? { can?(:update, convention) }
     end,
     NavigationItem.define do
@@ -232,7 +232,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label { "#{convention.ticket_name.titleize} Types" }
-      url { ticket_types_path }
+      url '/ticket_types'
       visible? do
         convention.ticket_mode != 'disabled' &&
           can?(:update, TicketType.new(convention: convention))

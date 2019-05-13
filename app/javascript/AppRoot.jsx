@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -22,7 +22,9 @@ function AppRoot() {
     <BrowserRouter basename="/">
       <>
         <Helmet>{headComponents}</Helmet>
-        {bodyComponents}
+        <Suspense fallback={<></>}>
+          {bodyComponents}
+        </Suspense>
       </>
     </BrowserRouter>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import NavigationItem from './NavigationItem';
 import PopperDropdown from '../UIComponents/PopperDropdown';
+import RootNavigationGroupItem from './RootNavigationGroupItem';
 
 class NavigationSection extends React.PureComponent {
   static propTypes = {
@@ -28,7 +28,7 @@ class NavigationSection extends React.PureComponent {
       >
         {this.props.item.items.map((item, i) => (
           // eslint-disable-next-line react/no-array-index-key
-          <NavigationItem item={item} key={i} />
+          <RootNavigationGroupItem item={item} key={i} />
         ))}
       </PopperDropdown>
     );
