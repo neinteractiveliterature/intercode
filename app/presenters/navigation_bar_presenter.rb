@@ -194,12 +194,12 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Forms'
-      url { admin_forms_path }
+      url '/admin_forms'
       visible? { can?(:update, Form.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Mailing Lists'
-      url { mailing_lists_path }
+      url '/mailing_lists'
       visible? { can?(:mail_to_any, convention) }
     end,
     NavigationItem.define do
