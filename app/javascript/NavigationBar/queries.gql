@@ -33,6 +33,7 @@ query NavigationBarQuery($cms_layout_id: Int) {
     }
   }
   myProfile {
+    id
     name
     name_without_nickname
     first_name
@@ -42,6 +43,7 @@ query NavigationBarQuery($cms_layout_id: Int) {
     }
   }
   navigationBar(cms_layout_id: $cms_layout_id) {
+    id
     classes
     items {
       __typename
