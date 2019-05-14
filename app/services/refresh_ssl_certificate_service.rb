@@ -20,25 +20,41 @@ class RefreshSSLCertificateService < CivilService::Service
   private
 
   def inner_call
-    Rails.logger.info 'Connecting to Heroku Platform API'
-    heroku = PlatformAPI.connect_oauth(heroku_api_token)
+    install_acme
+    request_certificate
+  end
 
-    Rails.logger.info 'Getting app domains'
-    all_domains = heroku.domain.list(heroku_app_name).map { |domain| domain['hostname'] }
-    ssl_domains = ['neilhosting.net'] + all_domains.map do |domain|
-      ssl_domain(domain)
-    end.compact.uniq
+  def heroku
+    @heroku ||= begin
+      Rails.logger.info 'Connecting to Heroku Platform API'
+      PlatformAPI.connect_oauth(heroku_api_token)
+    end
+  end
+
+  def install_acme
+    Rails.logger.info 'Installing acme.sh'
+    sh 'curl https://get.acme.sh | sh'
+  end
+
+  def request_certificate
     domain_args = ssl_domains.map do |domain|
       "-d #{Shellwords.escape domain}"
     end
-
-    Rails.logger.info 'Installing acme.sh'
-    sh 'curl https://get.acme.sh | sh'
 
     Rails.logger.info 'Requesting certificates'
     sh "~/.acme.sh/acme.sh #{staging ? '--staging ' : ''}\
 --issue --challenge-alias neilhosting.net --dns dns_aws \
 #{domain_args.join(' ')}"
+  end
+
+  def ssl_domains
+    @ssl_domains || begin
+      Rails.logger.info 'Getting app domains'
+      all_domains = heroku.domain.list(heroku_app_name).map { |domain| domain['hostname'] }
+      (['neilhosting.net'] + all_domains).map do |domain|
+        ssl_domain(domain)
+      end.compact.uniq
+    end
   end
 
   def ssl_domain(host)
