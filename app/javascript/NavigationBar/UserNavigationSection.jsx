@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
 import { NavigationBarQuery } from './queries.gql';
@@ -8,6 +8,7 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import SignInButton from '../Authentication/SignInButton';
 import SignUpButton from '../Authentication/SignUpButton';
 import useQuerySuspended from '../useQuerySuspended';
+import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 
 function CurrentPendingOrderButton() {
   const { data, error } = useQuerySuspended(NavigationBarQuery);
@@ -115,8 +116,9 @@ function RevertAssumedIdentityButton() {
   );
 }
 
-function UserNavigationSection({ item, renderNavigationItems }) {
+function UserNavigationSection({ item, location, renderNavigationItems }) {
   const { data, error } = useQuerySuspended(NavigationBarQuery);
+  const dropdownRef = useAutoClosingDropdownRef(location);
 
   if (error) {
     return null;
@@ -129,6 +131,7 @@ function UserNavigationSection({ item, renderNavigationItems }) {
         <div className="btn-group" role="group">
           <div className="btn-group" role="group">
             <PopperDropdown
+              ref={dropdownRef}
               renderReference={({ ref, toggle }) => (
                 <RefForwardingLoggedInDropdownTarget ref={ref} toggle={toggle} />
               )}
@@ -164,4 +167,4 @@ UserNavigationSection.propTypes = {
   renderNavigationItems: PropTypes.func.isRequired,
 };
 
-export default UserNavigationSection;
+export default withRouter(UserNavigationSection);

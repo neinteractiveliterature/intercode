@@ -9,10 +9,8 @@ const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../Eve
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
 const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-permissions-prompt' */ '../OAuthPermissionsPrompt'));
-const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ '../Store/OrderHistory'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
 const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
-const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ '../Authentication/ResetPassword'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
 import SignInButton from '../Authentication/SignInButton';
 import SignOutButton from '../Authentication/SignOutButton';
@@ -25,10 +23,8 @@ const unwrappedComponents = {
   LiquidDocs,
   MyTicket,
   OAuthPermissionsPrompt,
-  OrderHistory,
   OrganizationAdmin,
   ProductOrderForm,
-  ResetPassword,
   RootSiteAdmin,
   SignInButton,
   SignOutButton,
