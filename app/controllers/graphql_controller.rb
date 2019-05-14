@@ -19,7 +19,9 @@ class GraphqlController < ApplicationController
 
     def [](key)
       key = key.to_sym
-      if METHODS.key?(key)
+      if key == :controller
+        @controller
+      elsif METHODS.key?(key)
         @values[key] ||= METHODS[key].bind(@controller).call
         @values[key]
       else
