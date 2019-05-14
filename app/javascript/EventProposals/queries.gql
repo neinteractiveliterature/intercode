@@ -28,6 +28,10 @@ fragment EventProposalFormData on Convention {
 }
 
 query EventProposalQuery($eventProposalId: Int!) {
+  currentAbility {
+    can_delete_event_proposal(event_proposal_id: $eventProposalId)
+  }
+
   convention {
     id
     ...EventProposalFormData

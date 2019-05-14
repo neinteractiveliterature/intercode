@@ -258,7 +258,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label { "My #{convention.name} Profile" }
-      url { my_profile_path }
+      url '/my_profile'
       visible? { user_con_profile }
     end,
     NavigationItem.define do

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -31,7 +31,11 @@ async function changePassword(
   }
 }
 
-function ResetPassword({ resetPasswordToken }) {
+function ResetPassword({ location }) {
+  const resetPasswordToken = useMemo(
+    () => new URLSearchParams(location.search).get('reset_password_token'),
+    [location.search],
+  );
   const authenticityToken = useContext(AuthenticityTokensContext).changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -84,7 +88,9 @@ function ResetPassword({ resetPasswordToken }) {
 }
 
 ResetPassword.propTypes = {
-  resetPasswordToken: PropTypes.string.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }).isRequired,
 };
 
 export default ResetPassword;

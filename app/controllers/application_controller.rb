@@ -172,7 +172,7 @@ class ApplicationController < ActionController::Base
     return if user_con_profile && !user_con_profile.needs_update?
 
     if user_con_profile
-      redirect_to edit_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
+      redirect_to '/my_profile/edit', notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
     else
       redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
