@@ -17,7 +17,9 @@ const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ '
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
 // TODO OAuthApplications
 // TODO OAuthAuthorizations
+const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ './Store/OrderHistory'));
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
+const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'));
 const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'));
 const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'));
 const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'));
@@ -47,6 +49,7 @@ function AppRouter() {
         <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} />
         <Route path="/mailing_lists" component={MailingLists} />
         <Route path="/my_profile" component={MyProfile} />
+        <Route path="/order_history" component={OrderHistory} />
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />
         <Route path="/staff_positions" component={StaffPositionAdmin} />
@@ -54,6 +57,7 @@ function AppRouter() {
         <Route path="/user_activity_alerts" component={UserActivityAlertsAdmin} />
         <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
         <Route path="/users/edit" component={EditUser} />
+        <Route path="/users/password/edit" component={ResetPassword} />
         <Route
           path="/pages/:slug([a-zA-Z0-9\-/]+)"
           render={routeProps => (

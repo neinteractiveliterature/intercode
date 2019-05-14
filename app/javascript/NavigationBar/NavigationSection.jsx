@@ -1,20 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import PopperDropdown from '../UIComponents/PopperDropdown';
+import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 
 function NavigationSection({ item, location, renderNavigationItems }) {
-  const dropdownRef = useRef(null);
-
-  useEffect(
-    () => {
-      if (dropdownRef.current) {
-        dropdownRef.current.setVisible(false);
-      }
-    },
-    [location],
-  );
+  const dropdownRef = useAutoClosingDropdownRef(location);
 
   if (!item.items || item.items.length === 0) {
     return null;

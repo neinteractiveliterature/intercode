@@ -263,7 +263,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'My Order History'
-      url { order_history_path }
+      url '/order_history'
       visible? { user_con_profile }
     end,
     NavigationItem.define do
