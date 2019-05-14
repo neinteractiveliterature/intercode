@@ -86,9 +86,7 @@ gem 'skylight'
 gem 'icalendar'
 gem 'dalli'
 gem 'browser'
-
-# Heroku prod fix
-gem 'rails_12factor', group: 'stage'
+gem 'platform-api'
 
 gem 'faker', group: 'development', require: false
 
