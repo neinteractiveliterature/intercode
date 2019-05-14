@@ -160,7 +160,7 @@ function processCmsLinkNode(node, children, index) {
     .filter(attribute => (attribute.name || '').toLowerCase() !== 'href');
   const href = (hrefAttribute || {}).value;
 
-  if (href && (new URL(href, window.location.href).origin === window.location.origin)) {
+  if (href && !href.startsWith('#') && (new URL(href, window.location.href).origin === window.location.origin)) {
     return <Link to={href} {...jsxAttributesFromHTMLAttributes(otherAttributes)}>{children}</Link>;
   }
 

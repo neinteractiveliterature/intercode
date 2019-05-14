@@ -5,7 +5,6 @@ import mapValues from 'lodash-es/mapValues';
 
 import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';
-const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
@@ -22,7 +21,6 @@ const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../U
 
 const unwrappedComponents = {
   AppRoot,
-  EmailList,
   EventsApp,
   LiquidDocs,
   MyTicket,
