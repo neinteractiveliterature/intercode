@@ -5,13 +5,9 @@ import mapValues from 'lodash-es/mapValues';
 
 import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';
-const Cart = lazy(() => import(/* webpackChunkName: "cart" */ '../Store/Cart'));
-const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ '../Authentication/EditUser'));
 const EmailList = lazy(() => import(/* webpackChunkName: "email-list" */ '../UIComponents/EmailList'));
-const EventProposalForm = lazy(() => import(/* webpackChunkName: "event-proposal-form" */ '../EventProposals/EventProposalForm'));
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
-const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ '../MyProfile'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
 const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-permissions-prompt' */ '../OAuthPermissionsPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ '../Store/OrderHistory'));
@@ -26,13 +22,9 @@ const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../U
 
 const unwrappedComponents = {
   AppRoot,
-  Cart,
-  EditUser,
   EmailList,
   EventsApp,
-  EventProposalForm,
   LiquidDocs,
-  MyProfile,
   MyTicket,
   OAuthPermissionsPrompt,
   OrderHistory,

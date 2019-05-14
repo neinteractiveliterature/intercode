@@ -1,14 +1,8 @@
 class MyProfilesController < ApplicationController
-  include Concerns::FormResponseController
-
   skip_before_action :ensure_user_con_profile_exists
-  before_action :ensure_user_con_profile, except: [:new]
   authorize_resource :user_con_profile
 
   respond_to :html
-
-  def show
-  end
 
   def new
     new_profile = build_user_con_profile
@@ -18,18 +12,6 @@ class MyProfilesController < ApplicationController
   end
 
   private
-
-  def ensure_user_con_profile
-    return if user_con_profile
-
-    if user_signed_in?
-      respond_to do |format|
-        format.html { redirect_to new_my_profile_path }
-      end
-    else
-      redirect_to new_user_registration_url
-    end
-  end
 
   def build_user_con_profile
     new_profile = current_user.user_con_profiles.build(

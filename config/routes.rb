@@ -34,7 +34,6 @@ Intercode::Application.routes.draw do
     )
 
     resources :products, only: [:show]
-    resource :cart, only: [:show]
     resource :order_history, only: [:show]
     get 'admin_store/orders/export' => 'admin_orders#export', as: :export_admin_orders
 
@@ -49,8 +48,6 @@ Intercode::Application.routes.draw do
       end
     end
     get 'my_profile/new' => 'my_profiles#new', as: :new_my_profile
-    get 'my_profile/edit' => 'my_profiles#show', as: :edit_my_profile # yes, really, show
-    get 'my_profile/(*extra)' => 'my_profiles#show', as: :my_profile
 
     namespace :reports do
       get :export_signup_spy

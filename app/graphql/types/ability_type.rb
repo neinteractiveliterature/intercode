@@ -70,6 +70,14 @@ class Types::AbilityType < Types::BaseObject
     ModelPermissionLoader.for(EventProposal).load([object, :update, args[:event_proposal_id]])
   end
 
+  field :can_delete_event_proposal, Boolean, null: false do
+    argument :event_proposal_id, Integer, required: true, camelize: false
+  end
+
+  def can_delete_event_proposal(**args)
+    ModelPermissionLoader.for(EventProposal).load([object, :destroy, args[:event_proposal_id]])
+  end
+
   field :can_update_orders, Boolean, null: false
 
   def can_update_orders

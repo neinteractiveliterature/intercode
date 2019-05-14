@@ -78,7 +78,7 @@ function MyProfileDisplay() {
             ))}
           </dl>
 
-          <Link to="/edit" className="btn btn-secondary">
+          <Link to="/my_profile/edit" className="btn btn-secondary">
             Edit my profile
           </Link>
         </section>

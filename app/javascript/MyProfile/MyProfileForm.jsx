@@ -80,7 +80,7 @@ function MyProfileForm() {
       </FormPresenterApp>
 
       <div className="my-4">
-        <Link to="/" className="btn btn-primary">
+        <Link to="/my_profile" className="btn btn-primary">
           Finish and return to my profile
         </Link>
       </div>

@@ -1,16 +1,20 @@
 import React, { lazy, Suspense } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import CmsPage from './CmsPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
+const Cart = lazy(() => import(/* webpackChunkName: "cart" */ './Store/Cart'));
 const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'));
 const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'));
+const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'));
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin'));
 const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'));
 const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin'));
+const EditEventProposal = lazy(() => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'));
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin'));
 const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
+const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
 // TODO OAuthApplications
 // TODO OAuthAuthorizations
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
@@ -29,6 +33,7 @@ function AppRouter() {
         <Route path="/admin_events" component={EventAdmin} />
         <Route path="/admin_forms" component={FormAdmin} />
         <Route path="/admin_store" component={StoreAdmin} />
+        <Route path="/cart" component={Cart} />
         <Route path="/cms_pages" component={CmsAdmin} />
         <Route path="/cms_partials" component={CmsAdmin} />
         <Route path="/cms_files" component={CmsAdmin} />
@@ -38,13 +43,17 @@ function AppRouter() {
         <Route path="/cms_graphql_queries" component={CmsAdmin} />
         <Route path="/convention/edit" component={ConventionAdmin} />
         <Route path="/event_categories" component={EventCategoryAdmin} />
+        <Route path="/event_proposals/:id/edit" component={EditEventProposal} />
+        <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} />
         <Route path="/mailing_lists" component={MailingLists} />
+        <Route path="/my_profile" component={MyProfile} />
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />
         <Route path="/staff_positions" component={StaffPositionAdmin} />
         <Route path="/ticket_types" component={TicketTypeAdmin} />
         <Route path="/user_activity_alerts" component={UserActivityAlertsAdmin} />
         <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
+        <Route path="/users/edit" component={EditUser} />
         <Route
           path="/pages/:slug([a-zA-Z0-9\-/]+)"
           render={routeProps => (
