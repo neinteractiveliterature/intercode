@@ -154,6 +154,7 @@ GEM
       dotenv (= 2.7.2)
       railties (>= 3.2, < 6.1)
     erubi (1.8.0)
+    erubis (2.7.0)
     eu_central_bank (1.4.2)
       money (~> 6.13)
       nokogiri (~> 1.8)
@@ -206,6 +207,11 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
+    heroics (0.0.25)
+      erubis (~> 2.0)
+      excon
+      moneta
+      multi_json (>= 1.9.2)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (1.6.0)
@@ -264,6 +270,7 @@ GEM
     minitest-spec-rails (5.5.0)
       minitest (~> 5.0)
       rails (>= 4.1)
+    moneta (1.0.0)
     monetize (1.9.1)
       money (~> 6.12)
     money (6.13.3)
@@ -290,6 +297,9 @@ GEM
     orm_adapter (0.5.0)
     parallel (1.17.0)
     pg (1.1.4)
+    platform-api (2.2.0)
+      heroics (~> 0.0.25)
+      moneta (~> 1.0.0)
     promise.rb (0.7.4)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -335,11 +345,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
-    rails_serve_static_assets (0.0.5)
-    rails_stdout_logging (0.0.5)
     railties (5.2.3)
       actionpack (= 5.2.3)
       activesupport (= 5.2.3)
@@ -493,13 +498,13 @@ DEPENDENCIES
   oj (~> 3.7.12)
   parallel
   pg
+  platform-api
   pry-rails
   pry-remote
   puma
   rack-mini-profiler
   rails (= 5.2.3)
   rails-controller-testing
-  rails_12factor
   recaptcha
   redcarpet
   reverse_markdown
