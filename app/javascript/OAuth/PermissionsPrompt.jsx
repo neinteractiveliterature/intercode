@@ -26,12 +26,24 @@ const SCOPE_GROUP_DESCRIPTIONS = {
   manage: 'Read/write access to personal data',
 };
 
-class OAuthPermissionsPrompt extends React.Component {
+const SCOPE_DESCRIPTIONS = {
+  public: 'Access your public data, and public data about conventions you are signed up for',
+  openid: 'Authenticate you using your account',
+  read_profile: 'Access your personal profile data',
+  read_signups: 'Access data about your signups',
+  read_events: 'Access data about the events and event proposals you manage',
+  read_conventions: 'Access privileged data about the conventions you manage (e.g. user profiles)',
+  read_organizations: 'Access privileged data about organizations on the site',
+  manage_profile: 'Update your personal profile data',
+  manage_signups: 'Sign you up and withdraw you from events',
+  manage_events: 'Update events and event proposals you manage',
+  manage_conventions: 'Update conventions you manage',
+  manage_organizations: 'Update privileged data about organizations on the site',
+};
+
+class PermissionsPrompt extends React.Component {
   static propTypes = {
-    scopes: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-    })).isRequired,
+    scopeNames: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
   state = {
@@ -39,8 +51,8 @@ class OAuthPermissionsPrompt extends React.Component {
   }
 
   render = () => {
-    const { scopes } = this.props;
-    const groupedScopes = groupBy(scopes, scope => getGroupForScopeName(scope.name));
+    const { scopeNames } = this.props;
+    const groupedScopes = groupBy(scopeNames, scopeName => getGroupForScopeName(scopeName));
 
     return ['readPublic', 'readPrivate', 'manage'].map((scopeGroup) => {
       if (!groupedScopes[scopeGroup]) {
@@ -82,8 +94,8 @@ class OAuthPermissionsPrompt extends React.Component {
                 <div className="card-body">
                   <p>This application will be able to:</p>
                   <ul className="mb-0">
-                    {groupedScopes[scopeGroup].map(scope => (
-                      <li key={scope.name}>{scope.description}</li>
+                    {groupedScopes[scopeGroup].map(scopeName => (
+                      <li key={scopeName}>{SCOPE_DESCRIPTIONS[scopeName]}</li>
                     ))}
                   </ul>
                 </div>
@@ -96,4 +108,4 @@ class OAuthPermissionsPrompt extends React.Component {
   }
 }
 
-export default OAuthPermissionsPrompt;
+export default PermissionsPrompt;

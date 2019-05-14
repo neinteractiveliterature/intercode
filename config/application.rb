@@ -43,7 +43,7 @@ module Intercode
 
     config.to_prepare do
       # Only Applications list
-      Doorkeeper::ApplicationsController.layout 'application'
+      Doorkeeper::ApplicationsController.layout 'doorkeeper/admin'
 
       # Only Authorization endpoint
       Doorkeeper::AuthorizationsController.layout 'application'

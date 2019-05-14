@@ -1,0 +1,3 @@
+query OAuthAuthorizationPromptQuery($queryParams: Json!) {
+  oauthPreAuth(queryParams: $queryParams)
+}

@@ -60,6 +60,15 @@ class ApplicationController < ActionController::Base
       changePassword: form_authenticity_token(form_options: {
         action: user_password_path, method: 'PUT'
       }),
+      denyAuthorization: form_authenticity_token(form_options: {
+        action: oauth_authorization_path, method: 'DELETE'
+      }),
+      grantAuthorization: form_authenticity_token(form_options: {
+        action: oauth_authorization_path, method: 'POST'
+      }),
+      resetPassword: form_authenticity_token(form_options: {
+        action: user_password_path, method: 'POST'
+      }),
       signIn: form_authenticity_token(form_options: {
         action: user_session_path, method: 'POST'
       }),
@@ -71,9 +80,6 @@ class ApplicationController < ActionController::Base
       }),
       updateUser: form_authenticity_token(form_options: {
         action: user_registration_path, method: 'PATCH'
-      }),
-      resetPassword: form_authenticity_token(form_options: {
-        action: user_password_path, method: 'POST'
       })
     }
   end

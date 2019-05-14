@@ -298,6 +298,18 @@ class Types::QueryType < Types::BaseObject
     convention.products.find(args[:id])
   end
 
+  field :oauth_pre_auth, Types::Json, null: false do
+    argument :query_params, Types::Json, required: true
+  end
+
+  def oauth_pre_auth(query_params:)
+    Doorkeeper::OAuth::PreAuthorization.new(
+      Doorkeeper.configuration,
+      Doorkeeper::OAuth::Client.find(query_params['client_id']),
+      ActionController::Parameters.new(query_params)
+    ).as_json({})
+  end
+
   field :current_pending_order, Types::OrderType, null: true
 
   def current_pending_order

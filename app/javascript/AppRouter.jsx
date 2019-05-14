@@ -16,7 +16,7 @@ const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './Form
 const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
 // TODO OAuthApplications
-// TODO OAuthAuthorizations
+const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ './Store/OrderHistory'));
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
 const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'));
@@ -49,6 +49,7 @@ function AppRouter() {
         <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} />
         <Route path="/mailing_lists" component={MailingLists} />
         <Route path="/my_profile" component={MyProfile} />
+        <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} />
         <Route path="/order_history" component={OrderHistory} />
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />
