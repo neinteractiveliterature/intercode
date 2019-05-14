@@ -124,9 +124,9 @@ module.exports = {
   },
   plugins: [
     new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
-    new LodashModuleReplacementPlugin({
-      shorthands: true,
-    }),
+    // new LodashModuleReplacementPlugin({
+    //   shorthands: true,
+    // }),
     new CaseSensitivePathsPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash:8].css',
