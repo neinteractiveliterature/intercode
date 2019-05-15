@@ -1,7 +1,8 @@
 require 'English'
 
 class RefreshSSLCertificateService < CivilService::Service
-  attr_reader :heroku_api_token, :heroku_app_name, :root_domain, :no_wildcard_domains, :skip_domains, :staging
+  attr_reader :heroku_api_token, :heroku_app_name, :root_domain, :no_wildcard_domains,
+    :skip_domains, :staging
 
   def initialize(
     heroku_api_token:,
@@ -36,7 +37,7 @@ class RefreshSSLCertificateService < CivilService::Service
   def existing_certificate_needs_renewal?
     return true unless usable_endpoint
     uri = URI::HTTPS.build(host: "www.#{root_domain}")
-    Rails.logger.info "Checking #{uri.to_s} certificate"
+    Rails.logger.info "Checking #{uri} certificate"
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
     cert = response.peer_cert
     Time.now >= (cert.not_after - 2.weeks)
@@ -77,23 +78,33 @@ class RefreshSSLCertificateService < CivilService::Service
     end
   end
 
+  def update_endpoint(endpoint, body)
+    Rails.logger.info("Updating SNI endpoint #{endpoint['name']}")
+    heroku.sni_endpoint.update(heroku_app_name, endpoint['id'], body)
+  end
+
+  def replace_endpoint(body)
+    sni_endpoints.each do |endpoint|
+      Rails.logger.info("Deleting unusable SNI endpoint #{endpoint['name']}")
+      heroku.sni_endpoint.delete(heroku_app_name, endpoint['id'])
+    end
+
+    Rails.logger.info('Creating SNI endpoint')
+    new_endpoint = heroku.sni_endpoint.create(heroku_app_name, body)
+    Rails.logger.info("Endpoint #{new_endpoint['name']} created")
+  end
+
   def install_certificate
     certs_dir = File.expand_path(".acme.sh/#{root_domain}", Dir.home)
     body = {
-      certificate_chain: File.read(File.expand_path("fullchain.cer", certs_dir)),
+      certificate_chain: File.read(File.expand_path('fullchain.cer', certs_dir)),
       private_key: File.read(File.expand_path("#{root_domain}.key", certs_dir)),
     }
+
     if usable_endpoint
-      Rails.logger.info("Updating SNI endpoint #{usable_endpoint['name']}")
-      heroku.sni_endpoint.update(heroku_app_name, usable_endpoint['id'], body)
+      update_endpoint(usable_endpoint, body)
     else
-      sni_endpoints.each do |endpoint|
-        Rails.logger.info("Deleting unusable SNI endpoint #{endpoint['name']}")
-        heroku.sni_endpoint.delete(heroku_app_name, endpoint['id'])
-      end
-      Rails.logger.info("Creating SNI endpoint")
-      new_endpoint = heroku.sni_endpoint.create(heroku_app_name, body)
-      Rails.logger.info("Endpoint #{new_endpoint['name']} created")
+      replace_endpoint(body)
     end
   end
 
