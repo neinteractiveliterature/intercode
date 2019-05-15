@@ -11,6 +11,9 @@ class Types::CmsLayoutType < Types::BaseObject
   end
 
   def content_html
-    cms_rendering_context.render_layout_content(object)
+    cms_rendering_context.render_layout_content(
+      object,
+      cms_rendering_context.liquid_assigns_for_single_page_app(object)
+    )
   end
 end
