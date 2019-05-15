@@ -22,10 +22,22 @@ class RefreshSSLCertificateService < CivilService::Service
   private
 
   def inner_call
+    return success unless existing_certificate_needs_renewal?
     install_acme
     request_certificate
     install_certificate
     success
+  end
+
+  def existing_certificate_needs_renewal?
+    return true unless usable_endpoint
+    uri = URI::HTTPS.build(host: "www.#{root_domain}")
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
+    cert = response.peer_cert
+    Time.now >= (cert.not_after - 2.weeks)
+  rescue StandardError => e
+    Rails.logger.warn(e)
+    true
   end
 
   def heroku
@@ -47,27 +59,28 @@ class RefreshSSLCertificateService < CivilService::Service
     end
   end
 
-  def find_usable_endpoint
-    sni_endpoints.find do |endpoint|
-      pem = endpoint['certificate_chain']
-      cert = OpenSSL::X509::Certificate.new(pem)
-      alt_names_extension = cert.extensions.map(&:to_h).find do |ext_hash|
-        ext_hash['oid'] == 'subjectAltName'
+  def usable_endpoint
+    @usable_endpoint ||= begin
+      sni_endpoints.find do |endpoint|
+        pem = endpoint['certificate_chain']
+        cert = OpenSSL::X509::Certificate.new(pem)
+        alt_names_extension = cert.extensions.map(&:to_h).find do |ext_hash|
+          ext_hash['oid'] == 'subjectAltName'
+        end
+        alt_names_extension && alt_names_extension['value'].include?("DNS:*.#{root_domain}")
       end
-      alt_names_extension && alt_names_extension['value'].include?("DNS:*.#{root_domain}")
     end
   end
 
   def install_certificate
-    existing_endpoint = find_usable_endpoint
     certs_dir = File.expand_path(".acme.sh/#{root_domain}", Dir.home)
     body = {
       certificate_chain: File.read(File.expand_path("fullchain.cer", certs_dir)),
       private_key: File.read(File.expand_path("#{root_domain}.key", certs_dir)),
     }
-    if existing_endpoint
-      Rails.logger.info("Updating SNI endpoint #{existing_endpoint['name']}")
-      heroku.sni_endpoint.update(heroku_app_name, existing_endpoint['id'], body)
+    if usable_endpoint
+      Rails.logger.info("Updating SNI endpoint #{usable_endpoint['name']}")
+      heroku.sni_endpoint.update(heroku_app_name, usable_endpoint['id'], body)
     else
       sni_endpoints.each do |endpoint|
         Rails.logger.info("Deleting unusable SNI endpoint #{endpoint['name']}")
