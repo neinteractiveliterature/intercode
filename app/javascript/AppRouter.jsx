@@ -11,6 +11,7 @@ const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" *
 const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin'));
 const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'));
 const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin'));
+const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp'));
 const EditEventProposal = lazy(() => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'));
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin'));
 const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
@@ -49,6 +50,7 @@ function AppRouter() {
         <Route path="/event_categories" component={EventCategoryAdmin} />
         <Route path="/event_proposals/:id/edit" component={EditEventProposal} />
         <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} />
+        <Route path="/events" component={EventsApp} />
         <Route path="/mailing_lists" component={MailingLists} />
         <Route path="/my_profile" component={MyProfile} />
         <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} />

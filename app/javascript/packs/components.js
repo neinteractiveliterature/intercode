@@ -5,7 +5,6 @@ import mapValues from 'lodash-es/mapValues';
 
 import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';
-const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
@@ -13,7 +12,6 @@ const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../U
 
 const unwrappedComponents = {
   AppRoot,
-  EventsApp,
   LiquidDocs,
   OrganizationAdmin,
   RootSiteAdmin,

@@ -123,25 +123,22 @@ class NavigationBarPresenter
   EVENTS_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Con Schedule'
-      url { "#{events_path}/schedule" }
+      url '/events/schedule'
       visible? { can?(:schedule, convention) }
-      active? { |request| request.path == "#{events_path}/schedule" }
     end,
     NavigationItem.define do
       label 'Con Schedule by Room'
-      url { "#{events_path}/schedule_by_room" }
+      url '/events/schedule_by_room'
       visible? { can?(:schedule, convention) }
-      active? { |request| request.path == "#{events_path}/schedule_by_room" }
     end,
     NavigationItem.define do
       label 'List of Events'
-      url { events_path }
+      url '/events'
       visible? { can?(:list_events, convention) }
-      active? { |request| request.path == events_path }
     end,
     NavigationItem.define do
       label 'Schedule With Counts'
-      url { "#{events_path}/schedule_with_counts" }
+      url '/events/schedule_with_counts'
       visible? { can?(:schedule_with_counts, convention) }
     end,
     NavigationItem.define do
@@ -153,7 +150,7 @@ class NavigationBarPresenter
 
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
-    url '/pages'
+    url '/cms_pages'
     visible? { can?(:update, Page.new(parent: convention)) }
   end
 

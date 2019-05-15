@@ -179,6 +179,14 @@ class Types::QueryType < Types::BaseObject
 
   field :current_ability, Types::AbilityType, null: false
 
+  field :effective_cms_layout, Types::CmsLayoutType, null: false do
+    argument :path, String, required: true
+  end
+
+  def effective_cms_layout(path:)
+    context[:controller].send(:effective_cms_layout, path)
+  end
+
   def current_ability
     context[:current_ability]
   end

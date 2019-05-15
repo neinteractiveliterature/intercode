@@ -25,7 +25,7 @@ function NavigationBar({ navbarClasses }) {
   }
 
   return (
-    <nav className={classNames('navbar', data.navigationBar.classes)} role="navigation">
+    <nav className={classNames('navbar', navbarClasses)} role="navigation">
       <div className="container">
         <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon" />

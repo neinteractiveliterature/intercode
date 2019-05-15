@@ -2,6 +2,7 @@ class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
   include Webpacker::React::Helpers
+  include ApplicationHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files
 
   def initialize(cms_parent:, controller:, assigns: {})
@@ -22,12 +23,32 @@ class CmsRenderingContext
     cadmus_renderer.render(page.liquid_template, :html, assigns: { 'page' => page })
   end
 
-  def render_layout_content(cms_layout)
+  def render_layout_content(cms_layout, assigns)
     preload_cms_layout_content(cms_layout)
     cadmus_renderer.render(
       cms_layout.liquid_template,
       :html,
-      assigns: liquid_assigns_for_layout(cms_layout)
+      assigns: assigns
+    )
+  end
+
+  # We do this so that the doc that gets rendered will end up with the right stuff in <head>, but
+  # not have its body content duplicated
+  def render_app_root_content(cms_layout, assigns)
+    layout_html = render_layout_content(cms_layout, assigns)
+    doc = Nokogiri::HTML.parse(layout_html)
+    doc.xpath('//body/*').remove
+    doc.xpath('//body').first.inner_html = react_component(
+      'AppRoot',
+      controller.app_component_props
+    )
+    doc.to_s.html_safe
+  rescue StandardError => e
+    Rollbar.warn(e)
+    Rails.logger.warn e
+    render_layout_content(
+      cms_layout,
+      liquid_assigns_for_single_page_app(cms_layout).merge(assigns)
     )
   end
 
@@ -52,16 +73,15 @@ class CmsRenderingContext
     cached_files.update(cms_layout.cms_files.index_by(&:filename))
   end
 
-  # Cadmus checks this when rendering a layout
-  def liquid_assigns_for_layout(cms_layout)
-    {
+  def liquid_assigns_for_single_page_app(cms_layout)
+    liquid_assigns.merge(
       'content_for_head' => '',
       'content_for_navbar' => react_component(
         'NavigationBar',
         navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
       ),
       'content_for_layout' => react_component('AppRouter')
-    }
+    )
   end
 
   # These variables will automatically be made available to Cadmus CMS content.  For
