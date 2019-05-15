@@ -8,11 +8,7 @@ import AppWrapper from '../AppWrapper';
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
-const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
-import SignInButton from '../Authentication/SignInButton';
-import SignOutButton from '../Authentication/SignOutButton';
-import SignUpButton from '../Authentication/SignUpButton';
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ '../Users/UsersAdmin'));
 
 const unwrappedComponents = {
@@ -20,11 +16,7 @@ const unwrappedComponents = {
   EventsApp,
   LiquidDocs,
   OrganizationAdmin,
-  ProductOrderForm,
   RootSiteAdmin,
-  SignInButton,
-  SignOutButton,
-  SignUpButton,
   UsersAdmin,
 };
 
