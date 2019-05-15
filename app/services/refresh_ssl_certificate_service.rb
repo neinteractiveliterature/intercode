@@ -40,9 +40,15 @@ class RefreshSSLCertificateService < CivilService::Service
     sh 'curl https://get.acme.sh | sh'
   end
 
-  def find_sni_endpoint
-    Rails.logger.info 'Requesting existing SNI endpoints'
-    heroku.sni_endpoint.list(heroku_app_name).find do |endpoint|
+  def sni_endpoints
+    @sni_endpoints ||= begin
+      Rails.logger.info 'Requesting existing SNI endpoints'
+      heroku.sni_endpoint.list(heroku_app_name)
+    end
+  end
+
+  def find_usable_endpoint
+    sni_endpoints.find do |endpoint|
       pem = endpoint['certificate_chain']
       cert = OpenSSL::X509::Certificate.new(pem)
       alt_names_extension = cert.extensions.map(&:to_h).find do |ext_hash|
@@ -53,7 +59,7 @@ class RefreshSSLCertificateService < CivilService::Service
   end
 
   def install_certificate
-    existing_endpoint = find_sni_endpoint
+    existing_endpoint = find_usable_endpoint
     certs_dir = File.expand_path(".acme.sh/#{root_domain}", Dir.home)
     body = {
       certificate_chain: File.read(File.expand_path("fullchain.cer", certs_dir)),
@@ -63,6 +69,10 @@ class RefreshSSLCertificateService < CivilService::Service
       Rails.logger.info("Updating SNI endpoint #{existing_endpoint['name']}")
       heroku.sni_endpoint.update(heroku_app_name, existing_endpoint['id'], body)
     else
+      sni_endpoints.each do |endpoint|
+        Rails.logger.info("Deleting unusable SNI endpoint #{endpoint['name']}")
+        heroku.sni_endpoint.delete(heroku_app_name, existing_endpoint['id'])
+      end
       Rails.logger.info("Creating SNI endpoint")
       new_endpoint = heroku.sni_endpoint.create(heroku_app_name, body)
       Rails.logger.info("Endpoint #{new_endpoint['name']} created")
