@@ -71,7 +71,7 @@ class RefreshSSLCertificateService < CivilService::Service
     else
       sni_endpoints.each do |endpoint|
         Rails.logger.info("Deleting unusable SNI endpoint #{endpoint['name']}")
-        heroku.sni_endpoint.delete(heroku_app_name, existing_endpoint['id'])
+        heroku.sni_endpoint.delete(heroku_app_name, endpoint['id'])
       end
       Rails.logger.info("Creating SNI endpoint")
       new_endpoint = heroku.sni_endpoint.create(heroku_app_name, body)
