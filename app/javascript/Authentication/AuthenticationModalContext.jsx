@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, forwardRef } from 'react';
+import React, { useImperativeHandle, useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import useModal from '../ModalDialogs/useModal';
@@ -17,6 +17,7 @@ function AuthenticationModalContextProvider({ children, recaptchaSiteKey }, ref)
   const {
     visible, state, setState, open, close,
   } = useModal();
+  const [afterSignInPath, setAfterSignInPath] = useState(null);
 
   useImperativeHandle(
     ref,
@@ -27,6 +28,8 @@ function AuthenticationModalContextProvider({ children, recaptchaSiteKey }, ref)
     visible,
     open,
     close,
+    afterSignInPath,
+    setAfterSignInPath,
     currentView: (state || {}).currentView,
     setCurrentView: view => setState({ ...state, currentView: view }),
     recaptchaSiteKey,

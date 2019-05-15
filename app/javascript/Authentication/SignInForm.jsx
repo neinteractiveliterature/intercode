@@ -34,7 +34,9 @@ async function signIn(authenticityToken, email, password, rememberMe) {
 }
 
 function SignInForm() {
-  const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
+  const {
+    close: closeModal, setCurrentView, afterSignInPath,
+  } = useContext(AuthenticationModalContext);
   const authenticityToken = useContext(AuthenticityTokensContext).signIn;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +46,10 @@ function SignInForm() {
   const onSubmit = async (event) => {
     event.preventDefault();
     const location = await signInAsync(authenticityToken, email, password, rememberMe);
-    const destUrl = new URL(location || window.location.href, window.location.href);
+    const destUrl = new URL(
+      afterSignInPath || location || window.location.href,
+      window.location.href,
+    );
     destUrl.searchParams.delete('show_authentication');
     if (destUrl.toString() === window.location.href) {
       window.location.reload();
