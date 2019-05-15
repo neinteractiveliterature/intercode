@@ -1,12 +1,12 @@
 import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
-import fetch from 'unfetch';
 
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import { OAuthAuthorizationPromptQuery } from './queries.gql';
 import PermissionsPrompt from './PermissionsPrompt';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 
 function AuthorizationPrompt({ location }) {
   const preAuthParamsJSON = useMemo(
@@ -48,40 +48,58 @@ function AuthorizationPrompt({ location }) {
         return null;
       }
 
-      return ['client_id', 'redirect_uri', 'state', 'response_type', 'scope', 'nonce', 'code_challenge', 'code_challenge_method'].reduce((params, field) => {
-        if (preAuth[field]) {
-          params.set(field, preAuth[field]);
-        }
-        return params;
-      }, new URLSearchParams());
+      return ['client_id', 'redirect_uri', 'state', 'response_type', 'scope', 'nonce', 'code_challenge', 'code_challenge_method'].reduce((params, field) => ({
+        ...params, [field]: preAuth[field],
+      }), {});
     },
     [preAuth],
   );
+  const authenticationModal = useContext(AuthenticationModalContext);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const grantAuthorization = async () => {
-    await fetch('/oauth/authorize', {
-      method: 'POST',
-      body: authorizationParams,
-      credentials: 'same-origin',
-      headers: {
-        'X-CSRF-Token': authenticityTokens.grantAuthorization,
-      },
+  if (!data.currentUser) {
+    if (!authenticationModal.visible) {
+      authenticationModal.open({ currentView: 'signIn' });
+      authenticationModal.setAfterSignInPath(window.location.href);
+    }
+
+    return null;
+  }
+
+  // doing this with a hidden form we create and submit because fetch will try to follow the
+  // redirect and probably fail because of CORS
+  const buildHiddenInput = (name, value) => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', name);
+    input.setAttribute('value', value);
+    return input;
+  };
+
+  const buildAndSubmitForm = (method, authenticityToken, params) => {
+    const form = document.createElement('form');
+    form.setAttribute('method', 'POST');
+    form.setAttribute('action', '/oauth/authorize');
+    form.appendChild(buildHiddenInput('_method', method));
+    form.appendChild(buildHiddenInput('authenticity_token', authenticityToken));
+    Object.entries(params).forEach(([field, value]) => {
+      if (value != null) {
+        form.appendChild(buildHiddenInput(field, value));
+      }
     });
+    document.body.appendChild(form);
+    form.submit();
+  };
+
+  const grantAuthorization = () => {
+    buildAndSubmitForm('POST', authenticityTokens.grantAuthorization, authorizationParams);
   };
 
   const denyAuthorization = async () => {
-    await fetch('/oauth/authorize', {
-      method: 'DELETE',
-      body: authorizationParams,
-      credentials: 'same-origin',
-      headers: {
-        'X-CSRF-Token': authenticityTokens.denyAuthorization,
-      },
-    });
+    buildAndSubmitForm('DELETE', authenticityTokens.denyAuthorization, authorizationParams);
   };
 
   return (

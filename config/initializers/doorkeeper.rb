@@ -1,3 +1,9 @@
+# Fake out Doorkeeper so it will render the authorization screen even if not logged in, so that
+# the React code can show a login prompt
+class NullResourceOwner
+  def id; nil; end
+end
+
 Doorkeeper.configure do
   Devise::Doorkeeper.configure_doorkeeper(self)
 
@@ -9,8 +15,7 @@ Doorkeeper.configure do
     if user_signed_in?
       current_user
     else
-      redirect_to(new_user_session_url)
-      nil
+      NullResourceOwner.new
     end
   end
 
