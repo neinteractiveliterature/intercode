@@ -74,7 +74,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.default_url_options = {
-    host: ENV['INTERCODE_HOST'] || '2.interconlarp.org'
+    host: ENV['INTERCODE_HOST'] || 'neilhosting.net'
   }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
