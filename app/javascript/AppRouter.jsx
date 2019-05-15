@@ -15,6 +15,7 @@ const EditEventProposal = lazy(() => import(/* webpackChunkName: "edit-event-pro
 const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin'));
 const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
+const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'));
 // TODO OAuthApplications
 const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory'));
@@ -56,6 +57,7 @@ function AppRouter() {
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />
         <Route path="/staff_positions" component={StaffPositionAdmin} />
+        <Route path="/ticket" component={MyTicket} />
         <Route path="/ticket_types" component={TicketTypeAdmin} />
         <Route path="/user_activity_alerts" component={UserActivityAlertsAdmin} />
         <Route path="/user_con_profiles" component={UserConProfilesAdmin} />

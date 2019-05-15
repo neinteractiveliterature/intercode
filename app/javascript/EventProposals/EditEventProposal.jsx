@@ -60,7 +60,7 @@ function EditEventProposal({ match, history }) {
       </div>
       <EventProposalForm
         eventProposalId={eventProposalId}
-        afterSubmitUrl="/pages/new-proposal"
+        afterSubmit={() => history.push('/pages/new-proposal')}
         exitButton={{ caption: 'Return to proposals page', url: '/pages/new-proposal' }}
       />
     </>
