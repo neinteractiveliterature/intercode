@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import CmsPage from './CmsPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
-const Cart = lazy(() => import(/* webpackChunkName: "cart" */ './Store/Cart'));
+const Cart = lazy(() => import(/* webpackChunkName: "store" */ './Store/Cart'));
 const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'));
 const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'));
 const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'));
@@ -17,7 +17,8 @@ const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ '
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
 // TODO OAuthApplications
 const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
-const OrderHistory = lazy(() => import(/* webpackChunkName: "order-history" */ './Store/OrderHistory'));
+const OrderHistory = lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory'));
+const ProductPage = lazy(() => import(/* webpackChunkName: "store" */ './Store/ProductPage'));
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
 const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'));
 const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'));
@@ -51,6 +52,7 @@ function AppRouter() {
         <Route path="/my_profile" component={MyProfile} />
         <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} />
         <Route path="/order_history" component={OrderHistory} />
+        <Route path="/products/:id" component={ProductPage} />
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />
         <Route path="/staff_positions" component={StaffPositionAdmin} />

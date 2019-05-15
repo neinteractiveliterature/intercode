@@ -33,8 +33,6 @@ Intercode::Application.routes.draw do
       as: :export_admin_event_proposals
     )
 
-    resources :products, only: [:show]
-    resource :order_history, only: [:show]
     get 'admin_store/orders/export' => 'admin_orders#export', as: :export_admin_orders
 
     resources :user_con_profiles, only: [] do

@@ -122,6 +122,8 @@ function Cart({ afterCompleteUrl }) {
 
   return (
     <div>
+      <h1 className="mb-4">Shopping cart</h1>
+
       <ErrorDisplay graphQLError={changeQuantityError} />
 
       <table className="table">

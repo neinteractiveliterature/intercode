@@ -227,11 +227,17 @@ query OrderSummaryQuery {
 }
 
 query OrderFormProductQuery($productId: Int!) {
+  currentUser {
+    id
+  }
+
   product(id: $productId) {
     id
+    image_url
     price {
       fractional
     }
+    description_html
 
     product_variants {
       id
