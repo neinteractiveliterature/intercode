@@ -22,7 +22,11 @@ class RefreshSSLCertificateService < CivilService::Service
   private
 
   def inner_call
-    return success unless existing_certificate_needs_renewal?
+    unless existing_certificate_needs_renewal?
+      Rails.logger.info 'Not refreshing certificates because expiration is over 2 weeks away'
+      return success
+    end
+
     install_acme
     request_certificate
     install_certificate
@@ -32,6 +36,7 @@ class RefreshSSLCertificateService < CivilService::Service
   def existing_certificate_needs_renewal?
     return true unless usable_endpoint
     uri = URI::HTTPS.build(host: "www.#{root_domain}")
+    Rails.logger.info "Checking #{uri.to_s} certificate"
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
     cert = response.peer_cert
     Time.now >= (cert.not_after - 2.weeks)
