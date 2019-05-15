@@ -35,9 +35,9 @@ function CurrentPendingOrderButton() {
     <li className="nav-item">
       <Link to="/cart" className="btn btn-light mr-2" style={{ position: 'relative' }}>
         <i className="fa fa-shopping-cart" title="My shopping cart" />
-        <badge className="badge-pill badge-danger" style={{ position: 'absolute', right: '-9px', top: '-9px' }}>
+        <div className="badge badge-pill badge-danger" style={{ position: 'absolute', right: '-9px', top: '-9px' }}>
           {totalQuantity}
-        </badge>
+        </div>
       </Link>
     </li>
   );

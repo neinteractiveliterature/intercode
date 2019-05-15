@@ -18,8 +18,6 @@ Intercode::Application.routes.draw do
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
-    get 'ticket/(*extra)' => 'tickets#show', as: :ticket
-
     resources :events, only: [] do
       resources :runs, only: [] do
         get 'admin_signups/export' => 'admin_signups#export', as: :export_admin_signups

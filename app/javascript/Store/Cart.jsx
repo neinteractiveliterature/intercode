@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import intersection from 'lodash-es/intersection';
+import { withRouter } from 'react-router-dom';
 
 import { CartQuery } from './queries.gql';
 import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';
@@ -14,7 +15,7 @@ import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 import { useConfirm } from '../ModalDialogs/Confirm';
 
-function Cart({ afterCompleteUrl }) {
+function Cart({ history }) {
   const { data, error } = useQuerySuspended(CartQuery);
   const updateMutate = useMutationCallback(UpdateOrderEntry);
   const deleteMutate = useMutationCallback(DeleteOrderEntry);
@@ -57,10 +58,7 @@ function Cart({ afterCompleteUrl }) {
     [deleteOrderEntry, updateOrderEntry],
   ));
 
-  const checkOutComplete = useCallback(
-    () => { window.location.href = afterCompleteUrl; },
-    [afterCompleteUrl],
-  );
+  const checkOutComplete = () => { history.push('/order_history'); };
 
   if (error) {
     return <ErrorDisplay error={error} />;
@@ -175,7 +173,9 @@ function Cart({ afterCompleteUrl }) {
 }
 
 Cart.propTypes = {
-  afterCompleteUrl: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-export default Cart;
+export default withRouter(Cart);

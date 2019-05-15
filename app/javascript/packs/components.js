@@ -7,7 +7,6 @@ import AppRoot from '../AppRoot';
 import AppWrapper from '../AppWrapper';
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
-const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
 const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
@@ -20,7 +19,6 @@ const unwrappedComponents = {
   AppRoot,
   EventsApp,
   LiquidDocs,
-  MyTicket,
   OrganizationAdmin,
   ProductOrderForm,
   RootSiteAdmin,
