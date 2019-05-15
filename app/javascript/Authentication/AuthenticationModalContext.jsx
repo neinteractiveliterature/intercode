@@ -6,6 +6,8 @@ import useModal from '../ModalDialogs/useModal';
 const AuthenticationModalContext = React.createContext({
   visible: false,
   currentView: null,
+  afterSignInPath: null,
+  setAfterSignInPath: () => {},
   setCurrentView: () => {},
   open: () => {},
   close: () => {},

@@ -1,21 +1,23 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
+import { CartQuery, OrderFormProductQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
 import LoadingIndicator from '../LoadingIndicator';
-import { OrderFormProductQuery } from './queries.gql';
 import { Transforms, useTransformedState } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 
-function ProductOrderForm({ productId, cartUrl }) {
+function ProductOrderForm({ productId, history }) {
   const { data, error } = useQuerySuspended(OrderFormProductQuery, { variables: { productId } });
   const addOrderEntryToCurrentPendingOrder = useMutationCallback(
     AddOrderEntryToCurrentPendingOrder,
+    { refetchQueries: [{ query: CartQuery }] },
   );
 
   const [productVariantId, productVariantIdChanged] = useTransformedState(null, Transforms.integer);
@@ -37,7 +39,7 @@ function ProductOrderForm({ productId, cartUrl }) {
     await addOrderEntryToCurrentPendingOrder({
       variables: { productId, productVariantId, quantity },
     });
-    window.location.href = cartUrl;
+    history.push('/cart');
   });
 
   const renderVariantSelect = () => {
@@ -155,7 +157,9 @@ function ProductOrderForm({ productId, cartUrl }) {
 
 ProductOrderForm.propTypes = {
   productId: PropTypes.number.isRequired,
-  cartUrl: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-export default ProductOrderForm;
+export default withRouter(ProductOrderForm);

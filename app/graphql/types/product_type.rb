@@ -9,8 +9,8 @@ class Types::ProductType < Types::BaseObject
   association_loaders Product, :product_variants
 
   def description_html
-    return unless object.description
-    context[:cadmus_renderer].render(object.description, :html)
+    return unless object.description_template
+    context[:cadmus_renderer].render(object.description_template, :html)
   end
 
   field :image_url, String, null: true

@@ -8,7 +8,6 @@ import AppWrapper from '../AppWrapper';
 const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ '../EventsApp'));
 const LiquidDocs = lazy(() => import(/* webpackChunkName: "liquid-docs" */ '../LiquidDocs'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ '../MyTicket'));
-const OAuthPermissionsPrompt = lazy(() => import(/* webpackChunkName: 'oauth-permissions-prompt' */ '../OAuth/PermissionsPrompt'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ '../OrganizationAdmin'));
 const ProductOrderForm = lazy(() => import(/* webpackChunkName: "product-order-form" */ '../Store/ProductOrderForm'));
 const RootSiteAdmin = lazy(() => import(/* webpackChunkName: "root-site-admin" */ '../RootSiteAdmin'));
@@ -22,7 +21,6 @@ const unwrappedComponents = {
   EventsApp,
   LiquidDocs,
   MyTicket,
-  OAuthPermissionsPrompt,
   OrganizationAdmin,
   ProductOrderForm,
   RootSiteAdmin,
