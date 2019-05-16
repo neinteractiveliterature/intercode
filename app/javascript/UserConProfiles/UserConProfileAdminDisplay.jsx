@@ -68,7 +68,7 @@ class UserConProfileAdminDisplay extends React.Component {
             ability.can_update_user_con_profile
               ? (
                 <li className="list-group-item">
-                  <Link to={`/${this.props.userConProfileId}/edit`}>
+                  <Link to={`/user_con_profiles/${this.props.userConProfileId}/edit`}>
                     Edit profile/privileges
                   </Link>
                 </li>
@@ -121,7 +121,7 @@ class UserConProfileAdminDisplay extends React.Component {
                             prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
                             action: async () => {
                               await deleteUserConProfile();
-                              this.props.history.replace('/');
+                              this.props.history.replace('/user_con_profiles');
                             },
                           })}
                         >
