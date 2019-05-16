@@ -1,12 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import ScheduleGridEventRun from './ScheduleGridEventRun';
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWithoutSpanning';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
+import { ScheduleGridContext } from './ScheduleGridContext';
 
 function ScheduleBlock({ scheduleBlock, rowHeader }) {
+  const { visibleRunDetailsIds } = useContext(ScheduleGridContext);
+
   const layoutResult = useMemo(
     () => computeRunDimensionsWithoutSpanning(scheduleBlock),
     [scheduleBlock],
@@ -28,6 +31,7 @@ function ScheduleBlock({ scheduleBlock, rowHeader }) {
               key={runDimensions.eventRun.runId}
               layoutResult={layoutResult}
               runDimensions={runDimensions}
+              detailsVisible={visibleRunDetailsIds.has(runDimensions.eventRun.runId)}
             />
           ))}
         </div>

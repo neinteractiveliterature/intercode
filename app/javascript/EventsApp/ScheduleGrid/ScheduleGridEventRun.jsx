@@ -9,7 +9,7 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import { userSignupStatus, getRunClassName, getRunStyle } from './StylingUtils';
 import SignupCountData from '../SignupCountData';
 
-function describeAvailability(event, run, signupCountData) {
+function describeAvailability(event, signupCountData) {
   if (signupCountData.runFull(event)) {
     return `Full, waitlist: ${signupCountData.getWaitlistCount()}`;
   }
@@ -146,8 +146,8 @@ function RunDetails({
   const { timespan } = runDimensions.eventRun;
 
   const availabilityDescription = useMemo(
-    () => describeAvailability(event, run, signupCountData),
-    [event, run, signupCountData],
+    () => describeAvailability(event, signupCountData),
+    [event, signupCountData],
   );
   const roomsDescription = useMemo(
     () => run.room_names.sort().join(', '),
@@ -236,10 +236,8 @@ function RunDetails({
 
 const RefForwardingRunDetails = React.forwardRef(RunDetails);
 
-function ScheduleGridEventRun({ runDimensions, layoutResult }) {
-  const {
-    schedule, isRunDetailsVisible, toggleRunDetailsVisibility,
-  } = useContext(ScheduleGridContext);
+function ScheduleGridEventRun({ runDimensions, detailsVisible, layoutResult }) {
+  const { schedule, toggleRunDetailsVisibility } = useContext(ScheduleGridContext);
 
   const { eventRun } = runDimensions;
   const run = useMemo(
@@ -275,8 +273,8 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
   return (
     <PopperDropdown
       placement="bottom"
-      visible={isRunDetailsVisible(run.id)}
-      onToggle={() => toggleRunDetailsVisibility(schedule, run.id)}
+      visible={detailsVisible}
+      onToggle={() => toggleRunDetailsVisibility(run.id)}
       renderReference={({ ref, toggle }) => (
         <RefForwardingRunDisplay
           event={event}
@@ -322,6 +320,7 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
 ScheduleGridEventRun.propTypes = {
   runDimensions: PropTypes.shape({}).isRequired,
   layoutResult: PropTypes.shape({}).isRequired,
+  detailsVisible: PropTypes.bool.isRequired,
 };
 
 export default ScheduleGridEventRun;
