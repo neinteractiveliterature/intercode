@@ -236,13 +236,13 @@ class NavigationBarPresenter
   ROOT_SITE_ADMIN_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Organizations'
-      url { organizations_path }
+      url '/organizations'
       visible? { can?(:read, Organization) }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Users'
-      url { users_path }
+      url '/users'
       visible? { can?(:read, User) }
     end
   ]

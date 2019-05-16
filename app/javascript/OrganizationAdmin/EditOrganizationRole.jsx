@@ -22,7 +22,7 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
 
   if (error) return <ErrorDisplay graphQLError={error} />;
   if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/" />;
+    return <Redirect to="/organizations" />;
   }
 
   const updateOrganizationRole = async ({
@@ -41,7 +41,7 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
       },
     });
 
-    history.push(`/${organizationId}`);
+    history.push(`/organizations/${organizationId}`);
   };
 
   return (

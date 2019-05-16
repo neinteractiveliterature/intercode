@@ -28,7 +28,7 @@ function OrganizationDisplay({ organizationId }) {
   const organization = data.organizations.find(org => org.id === organizationId);
 
   if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/" />;
+    return <Redirect to="/organizations" />;
   }
 
   const deleteOrganizationRole = id => mutate({
@@ -91,7 +91,7 @@ function OrganizationDisplay({ organizationId }) {
                     </button>
                   )}
                 >
-                  <Link to={`/${organization.id}/roles/${organizationRole.id}/edit`} className="dropdown-item">
+                  <Link to={`/organizations/${organization.id}/roles/${organizationRole.id}/edit`} className="dropdown-item">
                     Edit settings
                   </Link>
                   <button
@@ -112,7 +112,7 @@ function OrganizationDisplay({ organizationId }) {
         </tbody>
       </table>
 
-      <Link to={`/${organizationId}/roles/new`} className="btn btn-primary">
+      <Link to={`/organizations/${organizationId}/roles/new`} className="btn btn-primary">
         Add role
       </Link>
     </>

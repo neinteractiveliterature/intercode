@@ -48,7 +48,7 @@ function OrganizationIndex() {
                 <td>
                   {
                     organization.current_ability_can_manage_access
-                      ? <Link to={`/${organization.id}`}>{organization.name}</Link>
+                      ? <Link to={`/organizations/${organization.id}`}>{organization.name}</Link>
                       : organization.name
                   }
                 </td>

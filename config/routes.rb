@@ -62,7 +62,6 @@ Intercode::Application.routes.draw do
 
   # the following routes apply only when we're not in a virtual host
   resource :root_site, only: [:show]
-  get 'organizations/(*extra)' => 'organizations#index', as: :organizations
   get 'users/export' => 'users#export', as: :export_users
   get 'users/(*extra)' => 'users#index', as: :users
 
