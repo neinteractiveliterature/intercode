@@ -55,9 +55,9 @@ class EventProposalAdminDisplay extends React.PureComponent {
             {
               data.eventProposal.event
                 ? (
-                  <a href={`/events/${data.eventProposal.event.id}`} className="btn btn-outline-primary">
+                  <Link to={`/events/${data.eventProposal.event.id}`} className="btn btn-outline-primary">
                     Go to event
-                  </a>
+                  </Link>
                 )
                 : null
             }

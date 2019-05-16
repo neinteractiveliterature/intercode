@@ -10,6 +10,7 @@ import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import { timespanFromRun } from '../../TimespanUtils';
 import { UserConProfileSignupsQuery } from './queries.gql';
 import { WithdrawAllUserConProfileSignups } from './mutations.gql';
+import buildEventUrl from '../buildEventUrl';
 
 function filterAndSortSignups(signups) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
@@ -24,7 +25,7 @@ class UserConProfileSignupsCard extends React.Component {
   }
 
   renderEventLink = event => (
-    <Link to={`/events/${event.id}`}>
+    <Link to={buildEventUrl(event)}>
       {event.title}
     </Link>
   )
