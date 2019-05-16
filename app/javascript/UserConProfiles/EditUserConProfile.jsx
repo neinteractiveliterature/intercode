@@ -60,7 +60,7 @@ function EditUserConProfile({ history, id }) {
           },
         });
 
-        history.push(`/${userConProfile.id}`);
+        history.push(`/user_con_profiles/${userConProfile.id}`);
       },
       [mutate, history, userConProfile, canUpdatePrivileges],
     ),

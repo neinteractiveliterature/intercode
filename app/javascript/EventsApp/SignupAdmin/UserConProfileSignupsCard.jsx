@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Mutation } from 'react-apollo';
+import { Link } from 'react-router-dom';
 
 import Confirm from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
@@ -23,9 +24,9 @@ class UserConProfileSignupsCard extends React.Component {
   }
 
   renderEventLink = event => (
-    <a href={`/events/${event.id}`}>
+    <Link to={`/events/${event.id}`}>
       {event.title}
-    </a>
+    </Link>
   )
 
   renderSignup = (signup, convention) => (
