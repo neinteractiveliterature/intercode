@@ -135,6 +135,7 @@ function UserNavigationSection({ item, location, renderNavigationItems }) {
               renderReference={({ ref, toggle }) => (
                 <RefForwardingLoggedInDropdownTarget ref={ref} toggle={toggle} />
               )}
+              placement="bottom-end"
               style={{ zIndex: 1100 }}
             >
               {renderNavigationItems(item.items)}

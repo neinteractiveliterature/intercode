@@ -60,10 +60,7 @@ Intercode::Application.routes.draw do
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end
 
-  # the following routes apply only when we're not in a virtual host
-  resource :root_site, only: [:show]
   get 'users/export' => 'users#export', as: :export_users
-  get 'users/(*extra)' => 'users#index', as: :users
 
   get '/(*extra)' => 'single_page_app#root', as: :root, constraints: {
     extra: %r{(?!(uploads|packs|assets)/).*}

@@ -12,6 +12,7 @@ import CmsPagesAdmin from './CmsPagesAdmin';
 import CmsLayoutsAdmin from './CmsLayoutsAdmin';
 import CmsPartialsAdmin from './CmsPartialsAdmin';
 import CmsFilesAdmin from './CmsFilesAdmin';
+import RootSiteAdmin from '../RootSiteAdmin';
 
 function CmsAdminNavTab({ path, children }) {
   return (
@@ -62,6 +63,7 @@ function CmsAdmin() {
         <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
         <Route path="/cms_variables" component={CmsVariablesAdmin} />
         <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />
+        <Route path="/root_site" component={RootSiteAdmin} />
       </Switch>
     </>
   );
