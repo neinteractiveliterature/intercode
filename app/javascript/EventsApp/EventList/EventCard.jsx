@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 import { capitalize } from 'inflected';
+import { Link } from 'react-router-dom';
 
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
+import buildEventUrl from '../buildEventUrl';
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
@@ -129,7 +131,7 @@ const EventCard = ({
         <div className="d-flex flex-wrap mb-3">
           <div className="d-flex flex-grow-1">
             <h4 className="m-0">
-              <a href={`/events/${event.id}`}>{event.title}</a>
+              <Link to={buildEventUrl(event)}>{event.title}</Link>
             </h4>
             {
               event.category !== 'filler'

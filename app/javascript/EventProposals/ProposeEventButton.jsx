@@ -7,6 +7,7 @@ import CreateEventProposalModal from './CreateEventProposalModal';
 import ModalContainer from '../ModalDialogs/ModalContainer';
 import { ProposeEventButtonQuery } from './queries.gql';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
+import SignInButton from '../Authentication/SignInButton';
 
 class ProposeEventButton extends React.Component {
   static propTypes = {
@@ -61,9 +62,11 @@ class ProposeEventButton extends React.Component {
   }
 
   renderLoginButton = () => (
-    <a href={`/users/sign_in?user_return_to=${window.location.href}`} className={this.props.className}>
-      Log in to propose an event
-    </a>
+    <SignInButton
+      afterSignInPath={window.location.href}
+      className={this.props.className}
+      caption="Log in to propose an event"
+    />
   )
 
   render = () => (
