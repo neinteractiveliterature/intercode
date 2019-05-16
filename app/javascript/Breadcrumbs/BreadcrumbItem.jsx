@@ -1,49 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-class BreadcrumbItem extends React.PureComponent {
-  static propTypes = {
-    active: PropTypes.bool,
-    children: PropTypes.node.isRequired,
-    to: PropTypes.string.isRequired,
-    pageTitleIfActive: PropTypes.string,
-  }
-
-  static defaultProps = {
-    active: false,
-    pageTitleIfActive: null,
-  }
-
-  componentDidMount = () => {
-    if (this.props.active && this.props.pageTitleIfActive) {
-      window.document.title = this.props.pageTitleIfActive;
+function useSetPageTitleIfPresentAndActive(title, active) {
+  useEffect(() => {
+    if (title && active) {
+      window.document.title = title;
     }
-  }
+  }, [active, title]);
+}
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.active && this.props.pageTitleIfActive) {
-      window.document.title = this.props.pageTitleIfActive;
-    }
-  }
+function BreadcrumbItem({
+  active, children, to, pageTitleIfActive,
+}) {
+  useSetPageTitleIfPresentAndActive(pageTitleIfActive, active);
 
-  render = () => {
-    if (this.props.active) {
-      return (
-        <li className="breadcrumb-item active">
-          {this.props.children}
-        </li>
-      );
-    }
-
+  if (active) {
     return (
-      <li className="breadcrumb-item">
-        <Link to={this.props.to}>
-          {this.props.children}
-        </Link>
+      <li className="breadcrumb-item active">
+        {children}
       </li>
     );
   }
+
+  return (
+    <li className="breadcrumb-item">
+      <Link to={to}>
+        {children}
+      </Link>
+    </li>
+  );
 }
+
+BreadcrumbItem.propTypes = {
+  active: PropTypes.bool,
+  children: PropTypes.node.isRequired,
+  to: PropTypes.string.isRequired,
+  pageTitleIfActive: PropTypes.string,
+};
+
+BreadcrumbItem.defaultProps = {
+  active: false,
+  pageTitleIfActive: null,
+};
 
 export default BreadcrumbItem;

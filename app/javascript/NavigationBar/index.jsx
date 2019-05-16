@@ -7,6 +7,26 @@ import { NavigationBarQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import renderNavigationItems from './renderNavigationItems';
 
+function NavigationBarContent({ navbarClasses, items }) {
+  return (
+    <nav className={classNames('navbar', navbarClasses)} role="navigation">
+      <div className="container">
+        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon" />
+        </button>
+        {renderNavigationItems(items)}
+      </div>
+    </nav>
+  );
+}
+
+NavigationBarContent.propTypes = {
+  navbarClasses: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
+
+const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
+
 function NavigationBar({ navbarClasses }) {
   const { data, loading, error } = useQuery(NavigationBarQuery);
 
@@ -25,14 +45,7 @@ function NavigationBar({ navbarClasses }) {
   }
 
   return (
-    <nav className={classNames('navbar', navbarClasses)} role="navigation">
-      <div className="container">
-        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon" />
-        </button>
-        {renderNavigationItems(data.navigationBar.items)}
-      </div>
-    </nav>
+    <MemoizedNavigationBarContent items={data.navigationBar.items} navbarClasses={navbarClasses} />
   );
 }
 
