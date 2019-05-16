@@ -24,6 +24,7 @@ query NavigationBarQuery($cms_layout_id: Int) {
   }
   currentUser {
     id
+    name
   }
   currentPendingOrder {
     id

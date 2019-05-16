@@ -3,9 +3,6 @@ class UsersController < ApplicationController
 
   before_action :authorize_read_users
 
-  def index
-  end
-
   def export
     respond_to do |format|
       format.csv do

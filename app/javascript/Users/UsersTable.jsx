@@ -128,7 +128,7 @@ function UsersTable({ exportUrl, history }) {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            history.push(`${rowInfo.original.id}`);
+            history.push(`/users/${rowInfo.original.id}`);
           },
         })}
         getTdProps={(state, rowInfo, column) => {
