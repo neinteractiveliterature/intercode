@@ -12,10 +12,19 @@ import NavigationBar from './NavigationBar';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
 
+// Avoid unnecessary layout checks when moving between pages that can't change layout
+function normalizePathForLayout(path) {
+  if (path.startsWith('/pages/') || path === '/') {
+    return path;
+  }
+
+  return '/events'; // arbitrary path that's not a CMS page
+}
+
 function AppLayout({ location }) {
   const { data, loading, error } = useQuery(
     AppRootQuery,
-    { variables: { path: location.pathname } },
+    { variables: { path: normalizePathForLayout(location.pathname) } },
   );
 
   const [cachedBodyComponents, setCachedBodyComponents] = useState(null);
