@@ -3,25 +3,28 @@ import PropTypes from 'prop-types';
 
 import EventPageDisplay from './EventPageDisplay';
 import { EventPageQuery } from './queries.gql';
-import QueryWithStateDisplay from '../../QueryWithStateDisplay';
+import useQuerySuspended from '../../useQuerySuspended';
+import ErrorDisplay from '../../ErrorDisplay';
 
 function EventPage({ eventId, eventPath }) {
+  const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const {
+    convention, currentAbility, myProfile, event,
+  } = data;
+
   return (
-    <QueryWithStateDisplay query={EventPageQuery} variables={{ eventId }}>
-      {({
-        data: {
-          convention, currentAbility, myProfile, event,
-        },
-      }) => (
-        <EventPageDisplay
-          convention={convention}
-          currentAbility={currentAbility}
-          myProfile={myProfile}
-          event={event}
-          eventPath={eventPath}
-        />
-      )}
-    </QueryWithStateDisplay>
+    <EventPageDisplay
+      convention={convention}
+      currentAbility={currentAbility}
+      myProfile={myProfile}
+      event={event}
+      eventPath={eventPath}
+    />
   );
 }
 

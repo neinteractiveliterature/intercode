@@ -87,7 +87,9 @@ class RunEmailList extends React.Component {
 
                     return [...currentIncludes].sort().map((include) => {
                       if (include === 'teamMembers') {
-                        return humanize(underscore(pluralize(data.event.event_category.team_member_name)));
+                        return humanize(underscore(pluralize(
+                          data.event.event_category.team_member_name,
+                        )));
                       }
 
                       return humanize(underscore(include));
