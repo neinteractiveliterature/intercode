@@ -21,7 +21,7 @@ function NewOrganizationRole({ organizationId, history }) {
 
   const organization = data.organizations.find(org => org.id === organizationId);
   if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/" />;
+    return <Redirect to="/organizations" />;
   }
 
   const createOrganizationRole = async ({
@@ -56,7 +56,7 @@ function NewOrganizationRole({ organizationId, history }) {
         });
       },
     });
-    history.push(`/${organizationId}`);
+    history.push(`/organizations/${organizationId}`);
   };
 
   return (

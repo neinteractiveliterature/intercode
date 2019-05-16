@@ -20,6 +20,7 @@ const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTick
 // TODO OAuthApplications
 const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory'));
+const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin'));
 const ProductPage = lazy(() => import(/* webpackChunkName: "store" */ './Store/ProductPage'));
 const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
 const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'));
@@ -55,6 +56,7 @@ function AppRouter() {
         <Route path="/my_profile" component={MyProfile} />
         <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} />
         <Route path="/order_history" component={OrderHistory} />
+        <Route path="/organizations" component={OrganizationAdmin} />
         <Route path="/products/:id" component={ProductPage} />
         <Route path="/reports" component={Reports} />
         <Route path="/rooms" component={RoomsAdmin} />

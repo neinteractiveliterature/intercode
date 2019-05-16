@@ -245,7 +245,7 @@ sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option
   end
 
   def cms_parent
-    convention || root_site
+    convention || RootSite.instance
   end
 
   def current_cms_page(path)
