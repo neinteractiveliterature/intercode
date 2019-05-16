@@ -5,9 +5,9 @@ import CategoryLegend from './CategoryLegend';
 import FullnessLegend from './FullnessLegend';
 import ScheduleGrid from './ScheduleGrid';
 import ScheduleGridConfig from './ScheduleGridConfig';
-import { ScheduleGridConsumer, ScheduleGridProvider } from './ScheduleGridContext';
+import { ScheduleGridProvider } from './ScheduleGridContext';
 
-const ScheduleGridApp = ({ configKey, ...otherProps }) => {
+function ScheduleGridApp({ configKey }) {
   const config = ScheduleGridConfig.get(configKey);
 
   return (
@@ -20,19 +20,7 @@ const ScheduleGridApp = ({ configKey, ...otherProps }) => {
         </ol>
       </nav>
       <ScheduleGridProvider config={config}>
-        {timespan => (
-          <ScheduleGridConsumer>
-            {({ schedule, convention }) => (
-              <ScheduleGrid
-                config={config}
-                schedule={schedule}
-                timespan={timespan}
-                convention={convention}
-                {...otherProps}
-              />
-            )}
-          </ScheduleGridConsumer>
-        )}
+        {timespan => <ScheduleGrid timespan={timespan} />}
       </ScheduleGridProvider>
       {
         (config.legends || []).map((legend, i) => {
@@ -56,7 +44,7 @@ const ScheduleGridApp = ({ configKey, ...otherProps }) => {
       }
     </>
   );
-};
+}
 
 ScheduleGridApp.propTypes = {
   configKey: PropTypes.string.isRequired,
