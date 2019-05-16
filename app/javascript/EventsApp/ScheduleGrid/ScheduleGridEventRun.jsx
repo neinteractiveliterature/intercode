@@ -1,10 +1,10 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Manager, Reference, Popper } from 'react-popper';
 
 import AvailabilityBar from './AvailabilityBar';
 import buildEventUrl from '../buildEventUrl';
-import PopperDropdown from '../../UIComponents/PopperDropdown';
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { userSignupStatus, getRunClassName, getRunStyle } from './StylingUtils';
 import SignupCountData from '../SignupCountData';
@@ -266,54 +266,57 @@ function ScheduleGridEventRun({ runDimensions, detailsVisible, layoutResult }) {
     [run],
   );
 
+  const toggleVisibility = useCallback(
+    () => toggleRunDetailsVisibility((run || {}).id),
+    [run, toggleRunDetailsVisibility],
+  );
+
   if (event == null || run == null) {
     return null;
   }
 
   return (
-    <PopperDropdown
-      placement="bottom"
-      visible={detailsVisible}
-      onToggle={() => toggleRunDetailsVisibility(run.id)}
-      renderReference={({ ref, toggle }) => (
-        <RefForwardingRunDisplay
-          event={event}
-          run={run}
-          signupCountData={signupCountData}
-          ref={ref}
-          toggle={toggle}
-          runDimensions={runDimensions}
-          layoutResult={layoutResult}
-        />
-      )}
-    >
-      {({
-        ref,
-        placement,
-        arrowProps,
-        style: popperStyle,
-        toggle,
-        visible,
-      }) => {
-        if (!visible) {
-          return <React.Fragment />;
-        }
-
-        return (
-          <RefForwardingRunDetails
-            ref={ref}
-            placement={placement}
-            arrowProps={arrowProps}
-            popperStyle={popperStyle}
-            toggle={toggle}
+    <Manager>
+      <Reference>
+        {({ ref }) => (
+          <RefForwardingRunDisplay
             event={event}
             run={run}
-            runDimensions={runDimensions}
             signupCountData={signupCountData}
+            ref={ref}
+            toggle={toggleVisibility}
+            runDimensions={runDimensions}
+            layoutResult={layoutResult}
           />
-        );
-      }}
-    </PopperDropdown>
+        )}
+      </Reference>
+      <Popper placement={detailsVisible ? 'bottom' : 'invalid'}>
+        {({
+          ref,
+          placement,
+          arrowProps,
+          style: popperStyle,
+        }) => {
+          if (!detailsVisible) {
+            return <React.Fragment />;
+          }
+
+          return (
+            <RefForwardingRunDetails
+              ref={ref}
+              placement={placement}
+              arrowProps={arrowProps}
+              popperStyle={popperStyle}
+              toggle={toggleVisibility}
+              event={event}
+              run={run}
+              runDimensions={runDimensions}
+              signupCountData={signupCountData}
+            />
+          );
+        }}
+      </Popper>
+    </Manager>
   );
 }
 
