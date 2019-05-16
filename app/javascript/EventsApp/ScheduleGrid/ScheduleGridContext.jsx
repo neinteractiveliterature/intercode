@@ -50,8 +50,9 @@ function useScheduleGridProvider(config, convention, events) {
       let newVisibility;
 
       setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
+        const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
+
         if (prevVisibleRunDetailsIds.has(runId)) {
-          const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
           newVisibleRunDetailsIds.delete(runId);
           newVisibility = false;
           return newVisibleRunDetailsIds;
@@ -61,7 +62,6 @@ function useScheduleGridProvider(config, convention, events) {
         const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
           .map(eventRun => eventRun.runId);
 
-        const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
         concurrentRunIds.forEach((concurrentRunId) => {
           newVisibleRunDetailsIds.delete(concurrentRunId);
         });
