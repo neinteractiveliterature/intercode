@@ -78,6 +78,21 @@ function AppRouter() {
             <CmsPage {...routeProps} rootPage />
           )}
         />
+        <Route
+          path="/"
+          render={({ location }) => (
+            <div className="alert alert-warning">
+              <h1>Oops!</h1>
+
+              <p className="mb-0">
+                We couldn&rsquo;t find a page at the location
+                {' '}
+                {location.pathname}
+                .
+              </p>
+            </div>
+          )}
+        />
       </Switch>
     </Suspense>
   );
