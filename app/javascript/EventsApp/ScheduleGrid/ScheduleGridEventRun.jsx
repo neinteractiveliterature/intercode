@@ -30,6 +30,7 @@ function describeAvailability(event, signupCountData) {
 }
 
 function RunDisplay({
+  // eslint-disable-next-line react/prop-types
   event, run, signupCountData, toggle, runDimensions, layoutResult,
 }, ref) {
   const { config } = useContext(ScheduleGridContext);
@@ -140,6 +141,7 @@ function RunDisplay({
 const RefForwardingRunDisplay = React.memo(React.forwardRef(RunDisplay));
 
 function RunDetails({
+  // eslint-disable-next-line react/prop-types
   popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData,
 }, ref) {
   const { schedule } = useContext(ScheduleGridContext);

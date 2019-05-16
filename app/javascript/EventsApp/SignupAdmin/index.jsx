@@ -57,7 +57,7 @@ const SignupAdmin = ({
           render={({ match }) => (
             <EditSignup
               id={Number.parseInt(match.params.id, 10)}
-              teamMembersUrl={`/events${runPath}/team_members`}
+              teamMembersUrl={`${eventPath}/team_members`}
             />
           )}
         />
@@ -68,7 +68,7 @@ const SignupAdmin = ({
               runId={runId}
               eventId={eventId}
               runPath={runPath}
-              exportSignupsUrl={`/events${runPath}/admin_signups/export.csv`}
+              exportSignupsUrl={`${runPath}/admin_signups/export.csv`}
             />
           )}
         />

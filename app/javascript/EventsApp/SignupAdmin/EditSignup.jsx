@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../../TimeUtils';
@@ -304,11 +305,11 @@ function EditSignup({ id, teamMembersUrl }) {
               :
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
-            <a href={teamMembersUrl} className="btn btn-link">
+            <Link to={teamMembersUrl} className="btn btn-link">
               Go to
               {' '}
               {pluralize(run.event.event_category.team_member_name)}
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

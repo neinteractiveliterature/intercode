@@ -7,7 +7,6 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import eventIdRegexp from '../eventIdRegexp';
 import RunEmailList from './RunEmailList';
 import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
@@ -88,6 +87,7 @@ SignupsIndex.propTypes = {
   runId: PropTypes.number.isRequired,
   eventId: PropTypes.number.isRequired,
   exportSignupsUrl: PropTypes.string.isRequired,
+  runPath: PropTypes.string.isRequired,
 };
 
 export default SignupsIndex;
