@@ -22,42 +22,12 @@ export const ScheduleGridContext = React.createContext({
   config: {},
   convention: {},
   isRunDetailsVisible: () => false,
+  visibleRunDetailsIds: new Set(),
   toggleRunDetailsVisibility: () => {},
 });
 
 function useScheduleGridProvider(config, convention, events) {
   const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
-
-  const toggleRunDetailsVisibility = useCallback(
-    (schedule, runId) => {
-      if (visibleRunDetailsIds.has(runId)) {
-        setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
-          const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
-          newVisibleRunDetailsIds.delete(runId);
-          return newVisibleRunDetailsIds;
-        });
-
-        return false;
-      }
-
-      const runTimespan = schedule.getRunTimespan(runId);
-      const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
-        .map(eventRun => eventRun.runId);
-
-      setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
-        const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
-        concurrentRunIds.forEach((concurrentRunId) => {
-          newVisibleRunDetailsIds.delete(concurrentRunId);
-        });
-        newVisibleRunDetailsIds.add(runId);
-
-        return newVisibleRunDetailsIds;
-      });
-
-      return true;
-    },
-    [visibleRunDetailsIds],
-  );
 
   const isRunDetailsVisible = useMemo(
     () => runId => visibleRunDetailsIds.has(runId),
@@ -75,11 +45,43 @@ function useScheduleGridProvider(config, convention, events) {
     [config, convention, events],
   );
 
+  const toggleRunDetailsVisibility = useCallback(
+    (runId) => {
+      let newVisibility;
+
+      setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
+        if (prevVisibleRunDetailsIds.has(runId)) {
+          const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
+          newVisibleRunDetailsIds.delete(runId);
+          newVisibility = false;
+          return newVisibleRunDetailsIds;
+        }
+
+        const runTimespan = schedule.getRunTimespan(runId);
+        const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
+          .map(eventRun => eventRun.runId);
+
+        const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
+        concurrentRunIds.forEach((concurrentRunId) => {
+          newVisibleRunDetailsIds.delete(concurrentRunId);
+        });
+        newVisibleRunDetailsIds.add(runId);
+        newVisibility = true;
+
+        return newVisibleRunDetailsIds;
+      });
+
+      return newVisibility;
+    },
+    [schedule],
+  );
+
   return {
     schedule,
     convention,
     config,
     isRunDetailsVisible,
+    visibleRunDetailsIds,
     toggleRunDetailsVisibility,
   };
 }
