@@ -332,7 +332,7 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            history.push(`${rowInfo.original.id}`);
+            history.push(`/user_con_profiles/${rowInfo.original.id}`);
           },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
