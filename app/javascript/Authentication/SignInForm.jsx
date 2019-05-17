@@ -21,16 +21,15 @@ async function signIn(authenticityToken, email, password, rememberMe) {
     body: formData,
     credentials: 'include',
     headers: {
-      Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,
     },
   });
 
   if (!response.ok) {
-    throw new Error((await response.json()).error);
+    throw new Error((await response.text()).error);
   }
 
-  return response.headers.get('Location');
+  return response.url;
 }
 
 function SignInForm() {
