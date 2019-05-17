@@ -11,7 +11,6 @@ export function AuthenticityTokensContextProvider({ tokens, children }) {
     async () => {
       const response = await fetch('/authenticity_tokens', {
         method: 'GET',
-        credentials: 'same-origin',
         headers: {
           Accept: 'application/json',
         },

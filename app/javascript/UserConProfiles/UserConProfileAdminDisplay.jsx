@@ -25,7 +25,7 @@ class UserConProfileAdminDisplay extends React.Component {
   becomeUser = async () => {
     await fetch(`/user_con_profiles/${this.props.userConProfileId}/become`, {
       method: 'POST',
-      credentials: 'same-origin',
+      credentials: 'include',
     });
 
     window.location.href = '/';
