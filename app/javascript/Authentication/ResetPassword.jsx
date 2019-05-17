@@ -19,7 +19,7 @@ async function changePassword(
   const response = await fetch('/users/password', {
     method: 'PUT',
     body: formData,
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,
