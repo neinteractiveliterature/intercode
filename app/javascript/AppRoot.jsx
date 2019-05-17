@@ -21,7 +21,7 @@ function normalizePathForLayout(path) {
   return '/events'; // arbitrary path that's not a CMS page
 }
 
-function AppLayout({ location }) {
+function AppLayout({ location, history }) {
   const { data, loading, error } = useQuery(
     AppRootQuery,
     { variables: { path: normalizePathForLayout(location.pathname) } },
@@ -69,6 +69,21 @@ function AppLayout({ location }) {
     [loading, error, cachedCmsLayoutId, data],
   );
 
+  useEffect(
+    () => {
+      if (
+        !loading && !error
+        && data.myProfile
+        && ((data.convention || {}).clickwrap_agreement || '').trim() !== ''
+        && !data.myProfile.accepted_clickwrap_agreement
+        && location.pathname !== '/clickwrap_agreement'
+      ) {
+        history.replace('/clickwrap_agreement');
+      }
+    },
+    [data, error, history, loading, location],
+  );
+
   if (layoutChanged) {
     return null;
   }
@@ -89,6 +104,9 @@ function AppLayout({ location }) {
 AppLayout.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
   }).isRequired,
 };
 

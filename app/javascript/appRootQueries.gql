@@ -3,4 +3,14 @@ query AppRootQuery($path: String!) {
     id
     content_html
   }
+
+  myProfile {
+    id
+    accepted_clickwrap_agreement
+  }
+
+  convention {
+    id
+    clickwrap_agreement
+  }
 }
