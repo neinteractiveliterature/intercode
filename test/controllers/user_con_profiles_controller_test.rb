@@ -13,8 +13,8 @@ describe UserConProfilesController do
     user_con_profile
   end
 
-  test 'should get index' do
-    get :index
+  test 'should get export' do
+    get :export, format: :csv
     assert_response :success
   end
 end
