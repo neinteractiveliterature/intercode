@@ -11,7 +11,7 @@ class Types::RootNavigationGroupItemType < Types::BaseUnion
     when NavigationBarPresenter::NavigationItem then Types::NavigationItemType
     when NavigationBarPresenter::UserNavigationSection then Types::UserNavigationSectionType
     when NavigationBarPresenter::NavigationSection then Types::NavigationSectionType
-    when NavigationBarPresenter::TicketPurchaseNavigationItemType
+    when NavigationBarPresenter::TicketPurchaseNavigationItem
       Types::TicketPurchaseNavigationItemType
     end
   end
