@@ -200,9 +200,12 @@ class ApplicationController < ActionController::Base
   end
 
   def most_recent_profile
-    @most_recent_profile ||= current_user.user_con_profiles.joins(:convention).order(
-      Arel.sql('conventions.starts_at DESC')
-    ).first
+    return nil unless convention.organization_id
+
+    @most_recent_profile ||= current_user.user_con_profiles.joins(:convention)
+      .where(conventions: { organization_id: convention.organization_id })
+      .order(Arel.sql('conventions.starts_at DESC'))
+      .first
   end
 
   def redirect_if_user_con_profile_needs_update
