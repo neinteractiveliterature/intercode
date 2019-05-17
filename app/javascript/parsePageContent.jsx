@@ -225,12 +225,12 @@ export default function parsePageContent(content, componentMap = DEFAULT_COMPONE
   const doc = parser.parseFromString(content, 'text/html');
   const processingInstructions = buildProcessingInstructions(componentMap);
   const bodyComponents = traverseWithInstructions(
-    doc.body.children,
+    doc.body.childNodes,
     IsValidNodeDefinitions.alwaysValid,
     processingInstructions,
   );
   const headComponents = traverseWithInstructions(
-    doc.head.children,
+    doc.head.childNodes,
     IsValidNodeDefinitions.alwaysValid,
     processingInstructions,
   );
