@@ -1,0 +1,7 @@
+query ClickwrapAgreementQuery {
+  convention {
+    id
+    name
+    clickwrap_agreement_html
+  }
+}

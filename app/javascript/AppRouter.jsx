@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import CmsPage from './CmsPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
+import ClickwrapAgreement from './ClickwrapAgreement';
 
 const Cart = lazy(() => import(/* webpackChunkName: "store" */ './Store/Cart'));
 const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'));
@@ -41,6 +42,7 @@ function AppRouter() {
         <Route path="/admin_forms" component={FormAdmin} />
         <Route path="/admin_store" component={StoreAdmin} />
         <Route path="/cart" component={Cart} />
+        <Route path="/clickwrap_agreement" component={ClickwrapAgreement} />
         <Route path="/cms_pages" component={CmsAdmin} />
         <Route path="/cms_partials" component={CmsAdmin} />
         <Route path="/cms_files" component={CmsAdmin} />

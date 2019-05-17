@@ -71,6 +71,12 @@ class Types::ConventionType < Types::BaseObject
     :user_activity_alerts
   )
 
+  field :clickwrap_agreement_html, String, null: true
+  def clickwrap_agreement_html
+    return nil unless object.clickwrap_agreement
+    cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
+  end
+
   field :event_categories, [Types::EventCategoryType], null: false do
     argument :current_ability_can_read_event_proposals, Boolean, required: false, camelize: false
   end
