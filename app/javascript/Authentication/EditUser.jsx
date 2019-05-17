@@ -32,7 +32,7 @@ async function updateUser(
   const response = await fetch('/users', {
     method: 'PATCH',
     body: formData,
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,
