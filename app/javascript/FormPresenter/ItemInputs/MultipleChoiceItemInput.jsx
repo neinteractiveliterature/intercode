@@ -6,6 +6,32 @@ import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 
 const OTHER_VALUE = '_OTHER_VALUE';
 
+function castSingleValue(value) {
+  if (Array.isArray(value)) {
+    return value.length > 0 ? value[0].toString() : null;
+  }
+
+  if (value == null) {
+    return null;
+  }
+
+  return value.toString();
+}
+
+function castMultipleValue(value) {
+  let arrayValue;
+
+  if (Array.isArray(value)) {
+    arrayValue = value;
+  } else if (value == null) {
+    arrayValue = [];
+  } else {
+    arrayValue = [value];
+  }
+
+  return arrayValue.map(item => item.toString());
+}
+
 class MultipleChoiceItemInput extends React.Component {
   static propTypes = {
     formItem: PropTypes.shape({
@@ -40,11 +66,11 @@ class MultipleChoiceItemInput extends React.Component {
     if (this.isOtherSelected()) {
       if (this.isMultiple()) {
         const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
-        otherValue = this.props.value.find((
+        otherValue = castMultipleValue(this.props.value).find((
           selectedChoiceValue => !choiceValues.includes(selectedChoiceValue)
         ));
       } else {
-        otherValue = this.props.value;
+        otherValue = castSingleValue(this.props.value);
       }
     }
 
@@ -72,9 +98,7 @@ class MultipleChoiceItemInput extends React.Component {
 
   getValueForChoiceSet = () => {
     if (this.isMultiple()) {
-      const originalValue = this.props.value || [];
-      const typecastValue = (Array.isArray(originalValue) ? originalValue : [originalValue])
-        .map(singleValue => singleValue.toString());
+      const typecastValue = castMultipleValue(this.props.value);
       if (this.isOtherSelected()) {
         typecastValue.push(OTHER_VALUE);
       }
@@ -86,11 +110,7 @@ class MultipleChoiceItemInput extends React.Component {
       return OTHER_VALUE;
     }
 
-    if (this.props.value != null) {
-      return this.props.value.toString();
-    }
-
-    return null;
+    return castSingleValue(this.props.value);
   }
 
   isMultiple = () => ['checkbox_horizontal', 'checkbox_vertical'].includes(this.props.formItem.properties.style)
@@ -103,7 +123,7 @@ class MultipleChoiceItemInput extends React.Component {
     const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
 
     if (this.isMultiple()) {
-      return !(this.props.value || []).every((
+      return !castMultipleValue(this.props.value).every((
         selectedChoiceValue => choiceValues.includes(selectedChoiceValue)
       ));
     }
