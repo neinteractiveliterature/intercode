@@ -8,7 +8,7 @@ class MyProfilesController < ApplicationController
     new_profile = build_user_con_profile
     new_profile.needs_update = true
     new_profile.save!
-    redirect_to edit_my_profile_path
+    redirect_to '/my_profiles/edit'
   end
 
   private

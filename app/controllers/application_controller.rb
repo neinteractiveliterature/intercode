@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
 
   # Make the user create their profile for this con if they haven't got one
   before_action :ensure_user_con_profile_exists, unless: :devise_controller?
+  before_action :redirect_if_user_con_profile_needs_update, unless: :devise_controller?
 
   # Make sure the user accepts the clickwrap agreement if one exists
   before_action :ensure_clickwrap_agreement_accepted, unless: :devise_controller?
@@ -175,15 +176,41 @@ class ApplicationController < ActionController::Base
 
   def ensure_user_con_profile_exists
     return unless convention && user_signed_in?
-    return if user_con_profile && !user_con_profile.needs_update?
+    return if user_con_profile
 
-    if user_con_profile
-      redirect_to '/my_profile/edit', notice: "Welcome to #{convention.name}!  You haven't signed \
+    @user_con_profile = current_user.user_con_profiles.build(
+      first_name: current_user.first_name,
+      last_name: current_user.last_name,
+      convention_id: convention.id,
+      needs_update: true
+    )
+    @user_con_profile.assign_default_values_from_form_items(
+      convention.user_con_profile_form.form_items
+    )
+    copy_most_recent_profile_attributes(@user_con_profile)
+    @user_con_profile.save!
+  end
+
+  def copy_most_recent_profile_attributes(destination_profile)
+    return unless most_recent_profile
+
+    destination_profile.assign_form_response_attributes(
+      FormResponsePresenter.new(convention.user_con_profile_form, most_recent_profile).as_json
+    )
+  end
+
+  def most_recent_profile
+    @most_recent_profile ||= current_user.user_con_profiles.joins(:convention).order(
+      Arel.sql('conventions.starts_at DESC')
+    ).first
+  end
+
+  def redirect_if_user_con_profile_needs_update
+    return unless user_con_profile&.needs_update?
+    return if request.path == '/my_profile/edit'
+
+    redirect_to '/my_profile/edit', notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
-    else
-      redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
-into this convention before, so please take a moment to update your profile."
-    end
   end
 
   def ensure_clickwrap_agreement_accepted
