@@ -160,7 +160,10 @@ lower(user_con_profiles.first_name) #{direction}")
     when :name then user_con_profile.name_inverted
     when :ticket then describe_ticket(user_con_profile.ticket)
     when :ticket_type then describe_ticket(user_con_profile.ticket, include_payment_amount: false)
-    when :payment_amount then user_con_profile.ticket.payment_amount_cents / 100.0
+    when :payment_amount
+      if user_con_profile.ticket&.payment_amount_cents
+        user_con_profile.ticket.payment_amount_cents / 100.0
+      end
     when :attending then user_con_profile.ticket ? 'yes' : 'no'
     when :is_team_member then user_con_profile.team_members.any? ? 'yes' : 'no'
     when :ticket_updated_at then user_con_profile.ticket&.updated_at&.iso8601

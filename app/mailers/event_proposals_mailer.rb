@@ -88,12 +88,18 @@ class EventProposalsMailer < ApplicationMailer
   end
 
   def event_proposal_url_for_convention(event_proposal)
-    "#{admin_event_proposals_url(host: event_proposal.convention.domain)}/#{event_proposal.id}"
+    url_with_convention_host(
+      "/admin_event_proposals/#{event_proposal.to_param}",
+      event_proposal.convention
+    )
   end
   helper_method :event_proposal_url_for_convention
 
   def edit_proposal_url_for_convention(event_proposal)
-    edit_event_proposal_url(event_proposal, host: event_proposal.convention.domain)
+    url_with_convention_host(
+      "/event_proposals/#{event_proposal.to_param}/edit",
+      event_proposal.convention
+    )
   end
   helper_method :edit_proposal_url_for_convention
 
