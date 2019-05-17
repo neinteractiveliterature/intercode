@@ -14,7 +14,7 @@ async function resetPassword(authenticityToken, email) {
   const response = await fetch('/users/password', {
     method: 'POST',
     body: formData,
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,

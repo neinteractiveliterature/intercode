@@ -23,7 +23,7 @@ async function signUp(authenticityToken, formState, password, passwordConfirmati
   const response = await fetch('/users', {
     method: 'POST',
     body: formData,
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,

@@ -19,7 +19,7 @@ async function signIn(authenticityToken, email, password, rememberMe) {
   const response = await fetch('/users/sign_in', {
     method: 'POST',
     body: formData,
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,

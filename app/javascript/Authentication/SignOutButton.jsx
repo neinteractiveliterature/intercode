@@ -6,7 +6,7 @@ import AuthenticityTokensContext from '../AuthenticityTokensContext';
 async function signOut(authenticityToken) {
   const response = await fetch('/users/sign_out', {
     method: 'DELETE',
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,
