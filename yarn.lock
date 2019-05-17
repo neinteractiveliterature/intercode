@@ -1903,10 +1903,10 @@ babel-plugin-emotion@^9.2.11:
     source-map "^0.5.7"
     touch "^2.0.1"
 
-babel-plugin-graphql-tag@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-2.2.0.tgz#3d7186c628a789d89b454bb9299f14641ce723f3"
-  integrity sha512-+5eJCFt0Ap41mwkukfZASuEAC0uaBjKLmjkDIu5MAW4T83G36zNNbKpZQmL2irkHjTdP6lWoxBbkRBt/wts12w==
+babel-plugin-graphql-tag@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-2.4.0.tgz#22e64f52917cc8dc8b376a7d1db8dec433f8b059"
+  integrity sha512-7wlwh3o2WP+Q6s0lNU7Wk3qPFOqMrEP23RZESoZ7gwSFVuNP1nyQWbIW8fPnisNUzzNI6Qqd/GsKeTH2GCP0SQ==
   dependencies:
     "@babel/parser" "^7.3.2"
     babel-literal-to-ast "^2.1.0"
