@@ -77,7 +77,10 @@ function CreateEventProposalModal({
         {
           (
             cloneEventProposal && eventCategory
-            && cloneEventProposal.event_category.name !== eventCategory.name
+            && (
+              cloneEventProposal.event_category.name.toLowerCase()
+              !== eventCategory.name.toLowerCase()
+            )
           )
             ? (
               <div className="mt-4 alert alert-warning">
