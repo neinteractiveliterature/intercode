@@ -10,6 +10,8 @@ import { EventProposalQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function EditEventProposal({ match, history }) {
   const eventProposalId = Number.parseInt(match.params.id, 10);
@@ -17,6 +19,11 @@ function EditEventProposal({ match, history }) {
   const deleteProposal = useMutationCallback(DeleteEventProposal);
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
+
+  usePageTitle(
+    useValueUnless(() => `Editing “${data.eventProposal.title}”`, error),
+    useValueUnless(() => data.convention, error),
+  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
