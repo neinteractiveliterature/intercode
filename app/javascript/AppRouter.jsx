@@ -1,4 +1,5 @@
-import React, { lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
+import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import CmsPage from './CmsPage';
@@ -33,9 +34,20 @@ const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-act
 const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
 const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin'));
 
-function AppRouter() {
+function AppRouter({ alert }) {
+  const [showAlert, setShowAlert] = useState(alert != null);
+
   return (
     <Suspense fallback={<PageLoadingIndicator visible />}>
+      {showAlert && (
+        <div className="alert alert-danger" role="alert">
+          <button type="button" className="close" onClick={() => setShowAlert(false)} aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          {alert}
+        </div>
+      )}
+
       <Switch>
         <Route path="/admin_event_proposals" component={EventProposalsAdmin} />
         <Route path="/admin_events" component={EventAdmin} />
@@ -104,5 +116,13 @@ function AppRouter() {
     </Suspense>
   );
 }
+
+AppRouter.propTypes = {
+  alert: PropTypes.string,
+};
+
+AppRouter.defaultProps = {
+  alert: null,
+};
 
 export default AppRouter;

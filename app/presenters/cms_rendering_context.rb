@@ -80,7 +80,7 @@ class CmsRenderingContext
         'NavigationBar',
         navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
       ),
-      'content_for_layout' => react_component('AppRouter')
+      'content_for_layout' => react_component('AppRouter', alert: controller.flash.alert)
     )
   end
 
