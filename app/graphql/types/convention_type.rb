@@ -44,6 +44,7 @@ class Types::ConventionType < Types::BaseObject
       ctx[:current_ability].can?(:read, TicketType.new(convention: graphql_object.object))
     end
   end
+  field :organization, Types::OrganizationType, null: true
   field :products, [Types::ProductType], null: true
   field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true do
     guard ->(graphql_object, _args, ctx) do
@@ -62,6 +63,7 @@ class Types::ConventionType < Types::BaseObject
     :cms_navigation_items,
     :default_layout,
     :forms,
+    :organization,
     :pages,
     :products,
     :rooms,
