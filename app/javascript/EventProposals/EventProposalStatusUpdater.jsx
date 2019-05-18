@@ -31,7 +31,7 @@ class EventProposalStatusUpdater extends React.Component {
       id: PropTypes.number.isRequired,
       title: PropTypes.string,
       status: PropTypes.string.isRequired,
-      event: PropTypes.shape({}).isRequired,
+      event: PropTypes.shape({}),
     }).isRequired,
   }
 

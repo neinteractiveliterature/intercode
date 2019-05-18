@@ -11,6 +11,7 @@ query AppRootQuery($path: String!) {
 
   convention {
     id
+    name
     clickwrap_agreement
   }
 }
