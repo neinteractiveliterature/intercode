@@ -10,6 +10,7 @@ function MyProfile() {
     <Switch>
       <Route path="/my_profile/edit_bio" component={EditBio} />
       <Route path="/my_profile/edit" component={MyProfileForm} />
+      <Route path="/my_profile/setup" render={() => <MyProfileForm initialSetup />} />
       <Route path="/my_profile" component={MyProfileDisplay} />
     </Switch>
   );

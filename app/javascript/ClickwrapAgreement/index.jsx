@@ -1,12 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
+import { AcceptClickwrapAgreement } from './mutations.gql';
 import { ClickwrapAgreementQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import parsePageContent from '../parsePageContent';
+import useMutationCallback from '../useMutationCallback';
+import useAsyncFunction from '../useAsyncFunction';
 
-function ClickwrapAgreement() {
+function ClickwrapAgreement({ history }) {
   const { data, error } = useQuerySuspended(ClickwrapAgreementQuery);
+  const [accept, acceptError, acceptInProgress] = useAsyncFunction(
+    useMutationCallback(AcceptClickwrapAgreement),
+  );
+
+  const acceptClicked = async () => {
+    await accept();
+    history.push('/my_profile/setup');
+  };
 
   if (error) {
     return <ErrorDisplay graphqlError={error} />;
@@ -33,9 +45,16 @@ function ClickwrapAgreement() {
           </div>
           <div className="card-body">
             {parsePageContent(convention.clickwrap_agreement_html).bodyComponents}
+
+            <ErrorDisplay graphQLError={acceptError} />
           </div>
           <div className="card-footer text-right">
-            <button className="btn btn-primary" type="button">
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={acceptClicked}
+              disabled={acceptInProgress}
+            >
               I agree
             </button>
           </div>
@@ -44,5 +63,11 @@ function ClickwrapAgreement() {
     </>
   );
 }
+
+ClickwrapAgreement.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default ClickwrapAgreement;
