@@ -1,4 +1,8 @@
 class ApplicationController < ActionController::Base
+  include Concerns::CmsContentHelpers
+  include Concerns::ProfileSetupWorkflow
+  helper_method :effective_cms_layout
+
   # Turn on Rails' built-in CSRF protection (see
   # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   skip_forgery_protection if: :doorkeeper_token unless Rails.env.test?
@@ -174,60 +178,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def ensure_user_con_profile_exists
-    return unless convention && user_signed_in?
-    return if user_con_profile
-
-    @user_con_profile = current_user.user_con_profiles.build(
-      first_name: current_user.first_name,
-      last_name: current_user.last_name,
-      convention_id: convention.id,
-      needs_update: true
-    )
-    @user_con_profile.assign_default_values_from_form_items(
-      convention.user_con_profile_form.form_items
-    )
-    copy_most_recent_profile_attributes(@user_con_profile)
-    @user_con_profile.save!
-  end
-
-  def copy_most_recent_profile_attributes(destination_profile)
-    return unless most_recent_profile
-
-    destination_profile.assign_form_response_attributes(
-      FormResponsePresenter.new(convention.user_con_profile_form, most_recent_profile).as_json
-    )
-  end
-
-  def most_recent_profile
-    return nil unless convention.organization_id
-
-    @most_recent_profile ||= current_user.user_con_profiles.joins(:convention)
-      .where(conventions: { organization_id: convention.organization_id })
-      .order(Arel.sql('conventions.starts_at DESC'))
-      .first
-  end
-
-  def redirect_if_user_con_profile_needs_update
-    return unless user_con_profile&.needs_update?
-    return if assumed_identity_from_profile
-    return if request.path == '/my_profile/edit' || request.path == '/clickwrap_agreement'
-    return if current_cms_page(request.path)&.skip_clickwrap_agreement?
-
-    redirect_to '/my_profile/edit', notice: "Welcome to #{convention.name}!  You haven't signed \
-into this convention before, so please take a moment to update your profile."
-  end
-
-  def ensure_clickwrap_agreement_accepted
-    return unless convention && convention.clickwrap_agreement.present?
-    return if assumed_identity_from_profile
-    return unless user_con_profile && !user_con_profile.accepted_clickwrap_agreement?
-    return if current_cms_page(request.path)&.skip_clickwrap_agreement?
-
-    flash.clear
-    redirect_to clickwrap_agreement_path
-  end
-
   def ensure_assumed_identity_matches_convention
     return unless current_user && assumed_identity_from_profile
     return if assumed_identity_from_profile.convention == convention
@@ -235,10 +185,10 @@ into this convention before, so please take a moment to update your profile."
     domain = assumed_identity_from_profile.convention.domain
     domain << ":#{request.port}"
 
-    redirect_to "#{request.protocol}#{domain}#{request.path}", alert: "You used \"become user\" \
+    redirect_to "#{request.protocol}#{domain}#{request.path}", alert: "You used “become user” \
 on the #{assumed_identity_from_profile.convention.name} site to assume the identity of \
-#{current_user.name} for this session.  In order to visit other conventions' \
-sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option above."
+#{current_user.name} for this session.  In order to visit other conventions’ \
+sites, please use the “Revert to #{assumed_identity_from_profile.name}” option above."
   end
 
   def no_cache
@@ -253,19 +203,6 @@ sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option
     false
   end
 
-  def cms_rendering_context
-    @cms_rendering_context ||= CmsRenderingContext.new(
-      cms_parent: convention || RootSite.instance,
-      controller: self,
-      assigns: {
-        'user' => current_user,
-        'convention' => convention,
-        'user_con_profile' => user_con_profile,
-        'event' => event_for_path
-      }
-    )
-  end
-
   def event_for_path
     return unless convention
     return @event_for_path if defined?(@event_for_path)
@@ -276,21 +213,4 @@ sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option
       end
     end
   end
-
-  def cms_parent
-    convention || RootSite.instance
-  end
-
-  def current_cms_page(path)
-    if (match = (%r{\A/pages/(.*)}.match(path)))
-      cms_parent.pages.find_by(slug: match[1])
-    elsif path == '/'
-      cms_parent.root_page
-    end
-  end
-
-  def effective_cms_layout(path)
-    current_cms_page(path)&.cms_layout || cms_parent.default_layout
-  end
-  helper_method :effective_cms_layout
 end
