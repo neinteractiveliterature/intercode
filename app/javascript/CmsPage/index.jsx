@@ -8,6 +8,8 @@ import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import parsePageContent from '../parsePageContent';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
@@ -44,6 +46,11 @@ function CmsPage({
       }
     },
     [data, error, history, loading, location],
+  );
+
+  usePageTitle(
+    useValueUnless(() => (location.pathname === '/' ? null : data.cmsPage.name), error || loading),
+    useValueUnless(() => data.convention, error || loading),
   );
 
   if (error) {

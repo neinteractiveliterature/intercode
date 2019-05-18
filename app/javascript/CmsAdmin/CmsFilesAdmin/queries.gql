@@ -7,6 +7,11 @@ fragment CmsFileFields on CmsFile {
 }
 
 query CmsFilesAdminQuery {
+  convention {
+    id
+    name
+  }
+
   cmsFiles {
     ...CmsFileFields
   }

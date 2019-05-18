@@ -9,6 +9,8 @@ import { CreatePage } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function NewCmsPage({ history }) {
   const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
@@ -20,6 +22,8 @@ function NewCmsPage({ history }) {
       newObjectPath: ['createPage', 'page'],
     }),
   );
+
+  usePageTitle(useValueUnless(() => 'New page', error), useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

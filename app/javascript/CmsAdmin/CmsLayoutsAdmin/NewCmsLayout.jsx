@@ -9,6 +9,8 @@ import useAsyncFunction from '../../useAsyncFunction';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
 import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function NewCmsLayout({ history }) {
   const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
@@ -20,6 +22,8 @@ function NewCmsLayout({ history }) {
       newObjectPath: ['createCmsLayout', 'cms_layout'],
     }),
   );
+
+  usePageTitle('New Layout', useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

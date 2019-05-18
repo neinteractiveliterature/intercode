@@ -1,80 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
-import { withRouter } from 'react-router-dom';
 
+import { CmsGraphqlQueriesQuery } from './queries.gql';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { UpdateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
+import useAsyncFunction from '../../useAsyncFunction';
+import useMutationCallback from '../../useMutationCallback';
+import useQuerySuspended from '../../useQuerySuspended';
+import usePageTitle from '../../usePageTitle';
+import useValueUnless from '../../useValueUnless';
 
 import 'graphiql/graphiql.css';
 
-class EditCmsGraphqlQuery extends React.Component {
-  static propTypes = {
-    initialQuery: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-      admin_notes: PropTypes.string.isRequired,
-      query: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+function EditCmsGraphqlQuery({ initialQuery, history }) {
+  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
+  const [query, setQuery] = useState(initialQuery);
+  const [update, updateError, updateInProgress] = useAsyncFunction(
+    useMutationCallback(UpdateCmsGraphqlQuery),
+  );
+
+  usePageTitle(`Editing “${initialQuery.identifier}”`, useValueUnless(() => data.convention, error));
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: props.initialQuery,
-      mutationInProgress: false,
-      error: null,
-    };
-  }
+  const saveClicked = async () => {
+    await update({
+      variables: {
+        id: query.id,
+        query: {
+          identifier: query.identifier,
+          admin_notes: query.admin_notes,
+          query: query.query,
+        },
+      },
+    });
 
-  render = () => (
+    history.push('/cms_graphql_queries');
+  };
+
+  return (
     <>
       <h2 className="mb-4">Edit GraphQL query</h2>
 
       <div className="mb-4">
-        <CmsGraphqlQueryForm
-          value={this.state.query}
-          onChange={(query) => { this.setState({ query }); }}
-        />
+        <CmsGraphqlQueryForm value={query} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={updateError} />
 
-      <Mutation mutation={UpdateCmsGraphqlQuery}>
-        {mutate => (
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={this.state.mutationInProgress}
-            onClick={async () => {
-              try {
-                this.setState({ mutationInProgress: true });
-                await mutate({
-                  variables: {
-                    id: this.state.query.id,
-                    query: {
-                      identifier: this.state.query.identifier,
-                      admin_notes: this.state.query.admin_notes,
-                      query: this.state.query.query,
-                    },
-                  },
-                });
-
-                this.props.history.push('/cms_graphql_queries');
-              } catch (error) {
-                this.setState({ error, mutationInProgress: false });
-              }
-            }}
-          >
-            Save GraphQL query
-          </button>
-        )}
-      </Mutation>
+      <button
+        type="button"
+        className="btn btn-primary"
+        disabled={updateInProgress}
+        onClick={saveClicked}
+      >
+        Save GraphQL query
+      </button>
     </>
-  )
+  );
 }
 
-export default withRouter(EditCmsGraphqlQuery);
+EditCmsGraphqlQuery.propTypes = {
+  initialQuery: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+    admin_notes: PropTypes.string.isRequired,
+    query: PropTypes.string.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default EditCmsGraphqlQuery;
