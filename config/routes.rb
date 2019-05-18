@@ -53,10 +53,6 @@ Intercode::Application.routes.draw do
       get :volunteer_events
     end
 
-    resource :clickwrap_agreement, only: [:show] do
-      post :accept
-    end
-
     get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
   end
 

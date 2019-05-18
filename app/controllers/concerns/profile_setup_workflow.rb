@@ -40,8 +40,8 @@ module Concerns::ProfileSetupWorkflow
   def redirect_if_user_con_profile_needs_update
     return unless user_con_profile&.needs_update?
     return if assumed_identity_from_profile
-    return if request.path == '/my_profile/setup' || request.path == '/clickwrap_agreement'
-    return if current_cms_page(request.path)&.skip_clickwrap_agreement?
+    return if request.path == '/my_profile/setup'
+    return if current_page_skips_clickwrap_agreement?
 
     redirect_to '/my_profile/setup'
   end
@@ -50,13 +50,18 @@ module Concerns::ProfileSetupWorkflow
     return unless clickwrap_agreement_present?
     return if assumed_identity_from_profile
     return unless user_con_profile && !user_con_profile.accepted_clickwrap_agreement?
-    return if current_cms_page(request.path)&.skip_clickwrap_agreement?
+    return if current_page_skips_clickwrap_agreement?
 
     flash.clear
-    redirect_to clickwrap_agreement_path
+    redirect_to '/clickwrap_agreement'
   end
 
   def clickwrap_agreement_present?
     convention && convention.clickwrap_agreement.present?
+  end
+
+  def current_page_skips_clickwrap_agreement?
+    return true if request.path == '/clickwrap_agreement'
+    current_cms_page(request.path)&.skip_clickwrap_agreement?
   end
 end
