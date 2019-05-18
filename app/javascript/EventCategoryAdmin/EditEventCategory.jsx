@@ -1,77 +1,85 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { Mutation } from 'react-apollo';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
+import { EventCategoryAdminQuery } from './queries.gql';
 import EventCategoryForm from './EventCategoryForm';
 import ErrorDisplay from '../ErrorDisplay';
 import { UpdateEventCategory } from './mutations.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import useAsyncFunction from '../useAsyncFunction';
+import useMutationCallback from '../useMutationCallback';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
-class EditEventCategory extends React.Component {
-  static propTypes = {
-    initialEventCategory: PropTypes.shape({}).isRequired,
-    forms: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    ticketName: PropTypes.string.isRequired,
-    ticketMode: PropTypes.string.isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+function EditEventCategory({ match, history }) {
+  const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
+  const [update, updateError, updateInProgress] = useAsyncFunction(
+    useMutationCallback(UpdateEventCategory),
+  );
+
+  const { id: eventCategoryId } = match.params;
+  const initialEventCategory = useMemo(
+    () => (error
+      ? null
+      : data.convention.event_categories.find(c => c.id.toString() === eventCategoryId)),
+    [data, error, eventCategoryId],
+  );
+  const [eventCategory, setEventCategory] = useState(initialEventCategory);
+
+  usePageTitle(useValueUnless(() => `Editing “${initialEventCategory.name}”`, error), useValueUnless(() => data.convention, error));
+
+  const updateClicked = async () => {
+    await update({
+      variables: {
+        id: eventCategory.id,
+        eventCategory: buildEventCategoryInput(eventCategory),
+      },
+    });
+
+    history.push('/event_categories');
+  };
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      error: null,
-      eventCategory: props.initialEventCategory,
-      mutationInProgress: false,
-    };
-  }
-
-  render = () => (
+  return (
     <>
       <h1 className="mb-4">Edit event category</h1>
 
       <EventCategoryForm
-        value={this.state.eventCategory}
-        onChange={(eventCategory) => { this.setState({ eventCategory }); }}
-        forms={this.props.forms}
-        ticketName={this.props.ticketName}
-        ticketMode={this.props.ticketMode}
-        disabled={this.state.mutationInProgress}
+        value={eventCategory}
+        onChange={setEventCategory}
+        forms={data.convention.forms}
+        ticketName={data.convention.ticket_name}
+        ticketMode={data.convention.ticket_mode}
+        disabled={updateInProgress}
       />
 
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={updateError} />
 
-      <Mutation mutation={UpdateEventCategory}>
-        {mutate => (
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={async () => {
-              this.setState({ mutationInProgress: true, error: null });
-              try {
-                await mutate({
-                  variables: {
-                    id: this.state.eventCategory.id,
-                    eventCategory: buildEventCategoryInput(this.state.eventCategory),
-                  },
-                });
-
-                this.props.history.push('/event_categories');
-              } catch (error) {
-                this.setState({ mutationInProgress: false, error });
-              }
-            }}
-            disabled={this.state.mutationInProgress}
-          >
-            Save changes
-          </button>
-        )}
-      </Mutation>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={updateClicked}
+        disabled={updateInProgress}
+      >
+        Save changes
+      </button>
     </>
-  )
+  );
 }
 
-export default withRouter(EditEventCategory);
+EditEventCategory.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default EditEventCategory;
