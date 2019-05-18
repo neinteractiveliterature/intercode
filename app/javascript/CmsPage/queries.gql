@@ -1,6 +1,7 @@
 query CmsPageQuery($slug: String, $rootPage: Boolean) {
   convention {
     id
+    name
     clickwrap_agreement
   }
 

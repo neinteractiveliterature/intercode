@@ -9,6 +9,8 @@ import { UpdateLayout } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import useMutationCallback from '../../useMutationCallback';
 import useQuerySuspended from '../../useQuerySuspended';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function EditCmsLayout({ match, history }) {
   const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
@@ -19,6 +21,8 @@ function EditCmsLayout({ match, history }) {
   const [updateLayout, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateLayout),
   );
+
+  usePageTitle(useValueUnless(() => `Editing “${initialLayout.name}”`, error), useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
