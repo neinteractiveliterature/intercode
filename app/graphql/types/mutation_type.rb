@@ -551,4 +551,6 @@ class Types::MutationType < Types::BaseObject
   field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile do
     guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
+
+  field :acceptClickwrapAgreement, mutation: Mutations::AcceptClickwrapAgreement
 end

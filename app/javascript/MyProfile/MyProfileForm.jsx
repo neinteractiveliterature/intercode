@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash-es/isEqual';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
-import FormPresenterApp from '../FormPresenter';
-import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
+import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 import { MyProfileQuery } from './queries.gql';
 import { UpdateUserConProfile } from '../UserConProfiles/mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
@@ -13,6 +13,8 @@ import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
+import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
+import LoadingIndicator from '../LoadingIndicator';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -21,7 +23,7 @@ function parseResponseErrors(error) {
   return validationErrors;
 }
 
-function MyProfileForm() {
+function MyProfileForm({ initialSetup }) {
   const { data, error } = useQuerySuspended(MyProfileQuery);
   const [mutate, , mutationInProgress] = useAsyncFunction(
     useMutationCallback(UpdateUserConProfile),
@@ -54,6 +56,7 @@ function MyProfileForm() {
     },
     [mutate],
   );
+  const itemInteractionProps = useItemInteractionTracking();
 
   useAutocommitFormResponseOnChange(updateUserConProfile, userConProfile);
 
@@ -75,17 +78,49 @@ function MyProfileForm() {
 
   return (
     <>
-      <FormPresenterApp form={form}>
-        <FormPresenter {...formPresenterProps} />
-      </FormPresenterApp>
+      <h1 className="mb-4">
+        {`My ${convention.name} profile`}
+      </h1>
+
+      {initialSetup && (
+        <div className="alert alert-success mb-4">
+          Welcome to
+          {' '}
+          {convention.name}
+          !  You haven&rsquo;t signed
+          into this convention before, so please take a moment to update your profile.
+        </div>
+      )}
+      <ItemInteractionTrackerContext.Provider value={itemInteractionProps}>
+        <SinglePageFormPresenter {...formPresenterProps} />
+      </ItemInteractionTrackerContext.Provider>
 
       <div className="my-4">
-        <Link to="/my_profile" className="btn btn-primary">
-          Finish and return to my profile
-        </Link>
+        {
+          initialSetup
+            ? (
+              <Link to="/" className="btn btn-primary">
+                Finish
+              </Link>
+            )
+            : (
+              <Link to="/my_profile" className="btn btn-primary">
+                Finish and return to my profile
+              </Link>
+            )
+        }
+        {mutationInProgress && <span className="ml-2"><LoadingIndicator /></span>}
       </div>
     </>
   );
 }
+
+MyProfileForm.propTypes = {
+  initialSetup: PropTypes.bool,
+};
+
+MyProfileForm.defaultProps = {
+  initialSetup: false,
+};
 
 export default MyProfileForm;
