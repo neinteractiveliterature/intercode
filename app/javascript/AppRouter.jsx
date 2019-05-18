@@ -19,7 +19,7 @@ const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './Form
 const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
 const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
 const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'));
-// TODO OAuthApplications
+const OAuthApplications = lazy(() => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications'));
 const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
 const OrderHistory = lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory'));
 const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin'));
@@ -69,6 +69,7 @@ function AppRouter({ alert }) {
         <Route path="/events" component={EventsApp} />
         <Route path="/mailing_lists" component={MailingLists} />
         <Route path="/my_profile" component={MyProfile} />
+        <Route path="/oauth/applications-embed" component={OAuthApplications} />
         <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} />
         <Route path="/order_history" component={OrderHistory} />
         <Route path="/organizations" component={OrganizationAdmin} />

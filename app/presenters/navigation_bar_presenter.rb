@@ -192,7 +192,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'OAuth2 Applications'
-      url { oauth_applications_path }
+      url '/oauth/applications-embed'
       visible? { can?(:manage, Doorkeeper::Application) }
     end,
     NavigationItem.define do
