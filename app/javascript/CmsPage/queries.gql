@@ -1,9 +1,20 @@
 query CmsPageQuery($slug: String, $rootPage: Boolean) {
+  convention {
+    id
+    clickwrap_agreement
+  }
+
+  myProfile {
+    id
+    accepted_clickwrap_agreement
+  }
+
   cmsPage(slug: $slug, rootPage: $rootPage) {
     id
     name
     content_html
     current_ability_can_update
     current_ability_can_delete
+    skip_clickwrap_agreement
   }
 }
