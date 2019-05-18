@@ -11,7 +11,9 @@ import parsePageContent from '../parsePageContent';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
-function CmsPage({ slug, rootPage, history }) {
+function CmsPage({
+  slug, rootPage, history, location,
+}) {
   const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
   const content = useMemo(
     () => {
@@ -28,6 +30,21 @@ function CmsPage({ slug, rootPage, history }) {
     // reinitialize Bootstrap Native whenever content changes
     window.BSN.initCallback();
   }, [content]);
+
+  useEffect(
+    () => {
+      if (
+        !loading && !error
+        && data.myProfile
+        && ((data.convention || {}).clickwrap_agreement || '').trim() !== ''
+        && !data.myProfile.accepted_clickwrap_agreement
+        && !data.cmsPage.skip_clickwrap_agreement
+      ) {
+        history.replace('/clickwrap_agreement');
+      }
+    },
+    [data, error, history, loading, location],
+  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -62,6 +79,9 @@ CmsPage.propTypes = {
   slug: PropTypes.string,
   rootPage: PropTypes.bool,
   history: PropTypes.shape({}).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 CmsPage.defaultProps = {

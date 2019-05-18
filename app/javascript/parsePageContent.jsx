@@ -161,7 +161,16 @@ function processCmsLinkNode(node, children, index) {
   const href = (hrefAttribute || {}).value;
 
   if (href && !href.startsWith('#') && (new URL(href, window.location.href).origin === window.location.origin)) {
-    return <Link to={href} {...jsxAttributesFromHTMLAttributes(otherAttributes)}>{children}</Link>;
+    return (
+      <Link
+        to={href}
+        key={index}
+        {...jsxAttributesFromHTMLAttributes(otherAttributes)}
+      >
+        {children}
+
+      </Link>
+    );
   }
 
   return processDefaultNode(node, children, index);

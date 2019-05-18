@@ -77,6 +77,8 @@ function AppLayout({ location, history }) {
         && ((data.convention || {}).clickwrap_agreement || '').trim() !== ''
         && !data.myProfile.accepted_clickwrap_agreement
         && location.pathname !== '/clickwrap_agreement'
+        && location.pathname !== '/'
+        && !location.pathname.startsWith('/pages')
       ) {
         history.replace('/clickwrap_agreement');
       }

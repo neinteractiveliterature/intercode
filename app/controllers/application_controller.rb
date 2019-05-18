@@ -212,6 +212,7 @@ class ApplicationController < ActionController::Base
     return unless user_con_profile&.needs_update?
     return if assumed_identity_from_profile
     return if request.path == '/my_profile/edit' || request.path == '/clickwrap_agreement'
+    return if current_cms_page(request.path)&.skip_clickwrap_agreement?
 
     redirect_to '/my_profile/edit', notice: "Welcome to #{convention.name}!  You haven't signed \
 into this convention before, so please take a moment to update your profile."
