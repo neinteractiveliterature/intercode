@@ -21,6 +21,7 @@ fragment RoomFields on Room {
 
 fragment ConventionFields on Convention {
   id
+  name
   starts_at
   ends_at
   timezone_name

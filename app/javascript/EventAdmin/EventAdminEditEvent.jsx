@@ -18,6 +18,8 @@ import useEventFormWithCategorySelection, { EventFormWithCategorySelection } fro
 import deserializeEvent from './deserializeEvent';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
@@ -60,6 +62,8 @@ function EventAdminEditEvent({ match, history }) {
     () => dropEventMutate({ variables: { input: { id: event.id } } }),
     [event.id, dropEventMutate],
   );
+
+  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error), useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

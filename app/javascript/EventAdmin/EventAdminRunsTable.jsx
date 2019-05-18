@@ -7,6 +7,8 @@ import { EventAdminEventsQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import { sortByLocaleString } from '../ValueUtils';
 import ErrorDisplay from '../ErrorDisplay';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 const getNormalizedEventTitle = event => event.title
   .replace(/^(the|a|) /i, '')
@@ -15,6 +17,8 @@ const getNormalizedEventTitle = event => event.title
 
 function EventAdminRunsTable() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+
+  usePageTitle('Regular Events', useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

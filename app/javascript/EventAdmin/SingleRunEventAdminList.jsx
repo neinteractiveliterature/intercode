@@ -9,11 +9,15 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 function SingleRunEventAdminList() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
   const drop = useMutationCallback(DropEvent);
   const confirm = useConfirm();
+
+  usePageTitle('Single-Run Events', useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
