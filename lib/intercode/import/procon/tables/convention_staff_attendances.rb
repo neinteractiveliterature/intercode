@@ -25,6 +25,7 @@ class Intercode::Import::Procon::Tables::ConventionStaffAttendances <
 
     user_con_profile.update!(staff: true)
     pos = staff_position(row, convention)
+    return unless pos
     pos.save!
     pos.user_con_profiles << user_con_profile
     pos
