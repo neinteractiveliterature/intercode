@@ -26,7 +26,11 @@ async function signIn(authenticityToken, email, password, rememberMe) {
   });
 
   if (!response.ok) {
-    throw new Error((await response.text()).error);
+    if (response.headers.get('Content-type').startsWith('application/json')) {
+      throw new Error((await response.json()).error || response.statusText);
+    }
+
+    throw new Error((await response.text()) || response.statusText);
   }
 
   return response.url;
