@@ -79,7 +79,7 @@ function EventsApp() {
           );
         }}
       />
-      <Route path="/events" render={() => <EventList />} />
+      <Route path="/events" component={EventList} />
     </Switch>
   );
 }

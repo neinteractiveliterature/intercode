@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -18,12 +18,19 @@ import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
 import EditEvent from '../../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
+import usePageTitle from '../../usePageTitle';
+import useValueUnless from '../../useValueUnless';
 
 function StandaloneEditEvent({ eventId, eventPath, history }) {
   const queryOptions = { variables: { eventId } };
   const { data, error } = useQuerySuspended(StandaloneEditEventQuery, queryOptions);
 
   const initialEvent = deserializeEvent(data.event);
+
+  usePageTitle(
+    useValueUnless(() => `Editing “${initialEvent.title}”`, error),
+    useValueUnless(() => data.convention, error),
+  );
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
     convention: data.convention,
@@ -75,17 +82,6 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
       [queryOptions],
     ),
   });
-
-  useEffect(
-    () => {
-      if (error) {
-        return;
-      }
-
-      window.document.title = `Edit ${data.event.title} - ${data.convention.name}`;
-    },
-    [data, error],
-  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

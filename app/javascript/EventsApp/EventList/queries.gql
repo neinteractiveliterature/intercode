@@ -1,17 +1,10 @@
 #import "../queries.gql"
 
-query EventListCommonDataQuery {
-  convention {
-    id
-    ...CommonConventionData
-  }
-
+query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
   currentAbility {
     can_read_schedule
   }
-}
 
-query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
   convention {
     id
     ...CommonConventionData

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -6,13 +6,12 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 import ScheduleGridHeaderBlock from './ScheduleGridHeaderBlock';
 import ScheduleBlock from './ScheduleBlock';
+import usePageTitle from '../../usePageTitle';
 
 function ScheduleGrid({ timespan }) {
   const { config, convention, schedule } = useContext(ScheduleGridContext);
 
-  useEffect(() => {
-    window.document.title = `${config.title} - ${convention.name}`;
-  }, [config.title, convention.name]);
+  usePageTitle(config.title, convention);
 
   const minTimespan = useMemo(
     () => {
