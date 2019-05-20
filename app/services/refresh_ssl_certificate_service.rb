@@ -23,8 +23,11 @@ class RefreshSSLCertificateService < CivilService::Service
   private
 
   def inner_call
-    unless existing_certificate_needs_renewal?
-      Rails.logger.info 'Not refreshing certificates because expiration is over 2 weeks away'
+    if existing_certificate_matches_domains? && !existing_certificate_needs_renewal?
+      Rails.logger.info <<~TEXT
+        Not refreshing certificates because domains have not changed and expiration is over
+        2 weeks away
+      TEXT
       return success
     end
 
@@ -34,16 +37,30 @@ class RefreshSSLCertificateService < CivilService::Service
     success
   end
 
+  def existing_certificate
+    @existing_certificate ||= begin
+      uri = URI::HTTPS.build(host: "www.#{root_domain}")
+      Rails.logger.info "Checking #{uri} certificate"
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
+      response.peer_cert
+    end
+  end
+
   def existing_certificate_needs_renewal?
-    return true unless usable_endpoint
-    uri = URI::HTTPS.build(host: "www.#{root_domain}")
-    Rails.logger.info "Checking #{uri} certificate"
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
-    cert = response.peer_cert
-    Time.now >= (cert.not_after - 2.weeks)
+    return true unless usable_endpoint && existing_certificate
+    Time.now >= (existing_certificate.not_after - 2.weeks)
   rescue StandardError => e
     Rails.logger.warn(e)
     true
+  end
+
+  def existing_certificate_matches_domains?
+    return false unless usable_endpoint && existing_certificate
+    existing_domains = parse_domains(existing_certificate)
+    existing_domains.sort == ssl_domains.sort
+  rescue StandardError => e
+    Rails.logger.warn(e)
+    false
   end
 
   def heroku
@@ -70,11 +87,19 @@ class RefreshSSLCertificateService < CivilService::Service
       sni_endpoints.find do |endpoint|
         pem = endpoint['certificate_chain']
         cert = OpenSSL::X509::Certificate.new(pem)
-        alt_names_extension = cert.extensions.map(&:to_h).find do |ext_hash|
-          ext_hash['oid'] == 'subjectAltName'
-        end
-        alt_names_extension && alt_names_extension['value'].include?("DNS:*.#{root_domain}")
+        parse_domains(cert).include?(root_domain)
       end
+    end
+  end
+
+  def parse_domains(cert)
+    alt_names_extension = cert.extensions.map(&:to_h).find do |ext_hash|
+      ext_hash['oid'] == 'subjectAltName'
+    end
+    if alt_names_extension
+      alt_names_extension['value'].split(',').map(&:strip).map { |entry| entry.gsub(/\ADNS:/, '') }
+    else
+      []
     end
   end
 
