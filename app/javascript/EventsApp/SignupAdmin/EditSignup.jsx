@@ -16,6 +16,8 @@ import { UpdateSignupCounted } from './mutations.gql';
 import useModal from '../../ModalDialogs/useModal';
 import useQuerySuspended from '../../useQuerySuspended';
 import useMutationCallback from '../../useMutationCallback';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function cityState(userConProfile) {
   return [
@@ -114,6 +116,11 @@ function EditSignup({ id, teamMembersUrl }) {
   const forceConfirmModal = useModal();
   const updateCountedMutate = useMutationCallback(UpdateSignupCounted);
   const confirm = useConfirm();
+
+  usePageTitle(
+    useValueUnless(() => `Editing signup for “${data.signup.user_con_profile.name_without_nickname}” - ${data.signup.run.event.title}`, error),
+    useValueUnless(() => data.convention, error),
+  );
 
   const toggleCounted = useCallback(
     signup => updateCountedMutate({
