@@ -13,6 +13,7 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
+import usePageTitle from '../usePageTitle';
 
 function cardClassForTicketType(ticketType) {
   if (ticketType.publicly_available) {
@@ -69,6 +70,8 @@ function renderPricingSchedule(ticketType, timezoneName) {
 function TicketTypesList({
   ticketTypes, history, ticketName, timezoneName,
 }) {
+  usePageTitle(`${capitalize(ticketName)} types`);
+
   const confirm = useConfirm();
   const deleteMutate = useMutationCallback(DeleteTicketType);
   const deleteTicketType = useCallback(

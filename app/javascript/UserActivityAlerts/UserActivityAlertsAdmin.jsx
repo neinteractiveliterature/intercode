@@ -5,7 +5,7 @@ import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditUserActivityAlert from './EditUserActivityAlert';
 import NewUserActivityAlert from './NewUserActivityAlert';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import { ConventionTicketNameQuery, UserActivityAlertQuery } from './queries.gql';
+import { UserActivityAlertQuery } from './queries.gql';
 import UserActivityAlertsList from './UserActivityAlertsList';
 
 const UserActivityAlertsAdmin = () => (
@@ -47,30 +47,14 @@ const UserActivityAlertsAdmin = () => (
     </nav>
 
     <Switch>
-      <Route
-        path="/user_activity_alerts/new"
-        render={() => (
-          <QueryWithStateDisplay query={ConventionTicketNameQuery}>
-            {({ data }) => (
-              <NewUserActivityAlert convention={data.convention} />
-            )}
-          </QueryWithStateDisplay>
-        )}
-      />
+      <Route path="/user_activity_alerts/new" component={NewUserActivityAlert} />
       <Route
         path="/user_activity_alerts/:id/edit"
-        render={({ match }) => (
-          <QueryWithStateDisplay
-            query={UserActivityAlertQuery}
-            variables={{ id: Number.parseInt(match.params.id, 10) }}
-          >
-            {({ data }) => (
-              <EditUserActivityAlert
-                initialUserActivityAlert={data.convention.user_activity_alert}
-                convention={data.convention}
-              />
-            )}
-          </QueryWithStateDisplay>
+        render={({ match, history }) => (
+          <EditUserActivityAlert
+            userActivityAlertId={Number.parseInt(match.params.id, 10)}
+            history={history}
+          />
         )}
       />
       <Route path="/user_activity_alerts" exact component={UserActivityAlertsList} />

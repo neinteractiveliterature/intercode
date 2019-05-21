@@ -8,6 +8,7 @@ import StaffPositionForm from './StaffPositionForm';
 import { StaffPositionsQuery } from './queries.gql';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
+import usePageTitle from '../usePageTitle';
 
 function NewStaffPosition({ history }) {
   const [mutate, error, inProgress] = useAsyncFunction(useMutationCallback(CreateStaffPosition, {
@@ -44,6 +45,8 @@ function NewStaffPosition({ history }) {
     },
     [history, mutate, staffPosition],
   );
+
+  usePageTitle('New staff position');
 
   return (
     <div>

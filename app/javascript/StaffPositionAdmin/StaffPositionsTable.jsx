@@ -14,6 +14,7 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import useMutationCallback from '../useMutationCallback';
 import { sortByLocaleString } from '../ValueUtils';
+import usePageTitle from '../usePageTitle';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
@@ -79,6 +80,8 @@ function StaffPositionsTable({ staffPositions }) {
     }),
     [deleteMutate],
   );
+
+  usePageTitle('Staff positions');
 
   const renderRow = staffPosition => (
     <tr key={staffPosition.id}>

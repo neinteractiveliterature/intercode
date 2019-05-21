@@ -10,6 +10,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import { sortByLocaleString } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
+import usePageTitle from '../usePageTitle';
 
 function RoomsAdmin() {
   const { data, error } = useQuerySuspended(RoomsAdminQuery);
@@ -19,6 +20,8 @@ function RoomsAdmin() {
   const confirm = useConfirm();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
+
+  usePageTitle('Rooms');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
