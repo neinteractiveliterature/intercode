@@ -4,9 +4,13 @@ import ErrorDisplay from '../ErrorDisplay';
 import { TeamMembersMailingListQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function TeamMembers() {
   const { data, error } = useQuerySuspended(TeamMembersMailingListQuery);
+
+  usePageTitle('Event team members', useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

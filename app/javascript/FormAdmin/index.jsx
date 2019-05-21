@@ -5,9 +5,16 @@ import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import FormAdminIndex from './FormAdminIndex';
 import { FormAdminQuery } from './queries.gql';
 import FormJSONEditor from './FormJSONEditor';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
 function FormAdmin() {
+  const { data, error } = useQuerySuspended(FormAdminQuery);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
   return (
     <>
       <nav aria-label="breadcrumb">
@@ -41,8 +48,10 @@ function FormAdmin() {
       <Switch>
         <Route
           path="/admin_forms/new"
-          render={() => (
+          render={({ history }) => (
             <FormJSONEditor
+              history={history}
+              convention={data.convention}
               initialForm={{
                 id: null,
                 export_json: '{ "title": "", "sections": [] }',
@@ -52,15 +61,13 @@ function FormAdmin() {
         />
         <Route
           path="/admin_forms/:id/edit"
-          render={({ match }) => (
-            <QueryWithStateDisplay query={FormAdminQuery}>
-              {({ data }) => (
-                <FormJSONEditor
-                  initialForm={data.convention.forms
-                    .find(form => form.id.toString(10) === match.params.id)}
-                />
-              )}
-            </QueryWithStateDisplay>
+          render={({ match, history }) => (
+            <FormJSONEditor
+              history={history}
+              convention={data.convention}
+              initialForm={data.convention.forms
+                .find(form => form.id.toString(10) === match.params.id)}
+            />
           )}
         />
         <Route path="/admin_forms" render={() => <FormAdminIndex />} />
