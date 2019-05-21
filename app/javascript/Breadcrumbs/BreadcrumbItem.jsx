@@ -1,20 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-function useSetPageTitleIfPresentAndActive(title, active) {
-  useEffect(() => {
-    if (title && active) {
-      window.document.title = title;
-    }
-  }, [active, title]);
-}
-
-function BreadcrumbItem({
-  active, children, to, pageTitleIfActive,
-}) {
-  useSetPageTitleIfPresentAndActive(pageTitleIfActive, active);
-
+function BreadcrumbItem({ active, children, to }) {
   if (active) {
     return (
       <li className="breadcrumb-item active">
@@ -36,12 +24,10 @@ BreadcrumbItem.propTypes = {
   active: PropTypes.bool,
   children: PropTypes.node.isRequired,
   to: PropTypes.string.isRequired,
-  pageTitleIfActive: PropTypes.string,
 };
 
 BreadcrumbItem.defaultProps = {
   active: false,
-  pageTitleIfActive: null,
 };
 
 export default BreadcrumbItem;
