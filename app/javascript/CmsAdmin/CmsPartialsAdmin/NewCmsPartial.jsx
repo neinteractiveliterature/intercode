@@ -9,7 +9,6 @@ import useAsyncFunction from '../../useAsyncFunction';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
 function NewCmsPartial({ history }) {
@@ -23,7 +22,7 @@ function NewCmsPartial({ history }) {
     }),
   );
 
-  usePageTitle(useValueUnless(() => 'New Partial', error), useValueUnless(() => data.convention, error));
+  usePageTitle('New Partial');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

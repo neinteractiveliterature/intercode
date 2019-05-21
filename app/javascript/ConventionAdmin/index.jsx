@@ -11,14 +11,13 @@ import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 
 function ConventionAdmin({ id, history }) {
   const { data, error } = useQuerySuspended(ConventionAdminConventionQuery, { variables: { id } });
   const [mutate, mutationError] = useAsyncFunction(useMutationCallback(UpdateConvention));
   const apolloClient = useApolloClient();
 
-  usePageTitle('Convention Settings', useValueUnless(() => data.convention, error));
+  usePageTitle('Convention Settings');
 
   const saveConvention = async (convention) => {
     await mutate({

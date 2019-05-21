@@ -64,7 +64,6 @@ function EventProposalAdminDisplay({ match }) {
   });
   usePageTitle(
     useValueUnless(() => data.eventProposal.title, error),
-    useValueUnless(() => data.convention, error),
   );
 
   if (error) {

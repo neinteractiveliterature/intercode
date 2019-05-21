@@ -9,12 +9,11 @@ import NewEventForm from './NewEventForm';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 
 function NewRecurringEvent({ history, ...props }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
 
-  usePageTitle('New Recurring Event', useValueUnless(() => data.convention, error));
+  usePageTitle('New Recurring Event');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -43,7 +42,7 @@ NewRecurringEvent.propTypes = {
 function RecurringEventAdminList() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
 
-  usePageTitle('Recurring Events', useValueUnless(() => data.convention, error));
+  usePageTitle('Recurring Events');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

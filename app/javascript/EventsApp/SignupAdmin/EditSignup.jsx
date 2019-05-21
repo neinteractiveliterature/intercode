@@ -119,7 +119,6 @@ function EditSignup({ id, teamMembersUrl }) {
 
   usePageTitle(
     useValueUnless(() => `Editing signup for “${data.signup.user_con_profile.name_without_nickname}” - ${data.signup.run.event.title}`, error),
-    useValueUnless(() => data.convention, error),
   );
 
   const toggleCounted = useCallback(

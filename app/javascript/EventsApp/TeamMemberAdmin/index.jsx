@@ -18,7 +18,7 @@ function TeamMemberAdmin({ eventId, eventPath }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { event, convention } = data;
+  const { event } = data;
 
   return (
     <>
@@ -64,7 +64,6 @@ function TeamMemberAdmin({ eventId, eventPath }) {
             <NewTeamMember
               event={event}
               eventPath={eventPath}
-              convention={convention}
               history={history}
             />
           )}
@@ -74,7 +73,6 @@ function TeamMemberAdmin({ eventId, eventPath }) {
           render={({ match, history }) => (
             <EditTeamMember
               event={event}
-              convention={convention}
               eventPath={eventPath}
               teamMemberId={Number.parseInt(match.params.teamMemberId, 10)}
               history={history}

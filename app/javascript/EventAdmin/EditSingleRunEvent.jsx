@@ -90,7 +90,7 @@ function EditSingleRunEvent({ match, history }) {
 
   const event = error ? null : data.events.find(e => e.id.toString() === match.params.id);
 
-  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

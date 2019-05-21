@@ -19,7 +19,7 @@ function formDataFromJSON(json) {
   };
 }
 
-function FormJSONEditor({ initialForm, history, convention }) {
+function FormJSONEditor({ initialForm, history }) {
   const initialFormData = useMemo(
     () => formDataFromJSON(initialForm.export_json),
     [initialForm.export_json],
@@ -36,10 +36,7 @@ function FormJSONEditor({ initialForm, history, convention }) {
     useMutationCallback(UpdateFormWithJSON),
   );
 
-  usePageTitle(
-    (initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form'),
-    convention,
-  );
+  usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 
   const save = async () => {
     const formJSON = JSON.stringify({
@@ -110,7 +107,6 @@ FormJSONEditor.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  convention: PropTypes.shape({}).isRequired,
 };
 
 export default FormJSONEditor;

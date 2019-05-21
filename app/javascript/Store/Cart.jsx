@@ -15,7 +15,6 @@ import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 
 function Cart({ history }) {
   const { data, error } = useQuerySuspended(CartQuery);
@@ -24,7 +23,7 @@ function Cart({ history }) {
   const checkOutModal = useModal();
   const confirm = useConfirm();
 
-  usePageTitle('Cart', useValueUnless(() => data.convention, error));
+  usePageTitle('Cart');
 
   const updateOrderEntry = useCallback(
     (id, quantity) => updateMutate({

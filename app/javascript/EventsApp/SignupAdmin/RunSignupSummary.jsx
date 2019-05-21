@@ -49,10 +49,7 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
     variables: { eventId, runId },
   });
 
-  usePageTitle(
-    useValueUnless(() => `Signup summary - ${data.event.title}`, error),
-    useValueUnless(() => data.convention, error),
-  );
+  usePageTitle(useValueUnless(() => `Signup summary - ${data.event.title}`, error));
 
   const sortedSignups = useMemo(
     () => (error

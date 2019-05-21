@@ -9,9 +9,9 @@ import ScheduleBlock from './ScheduleBlock';
 import usePageTitle from '../../usePageTitle';
 
 function ScheduleGrid({ timespan }) {
-  const { config, convention, schedule } = useContext(ScheduleGridContext);
+  const { config, schedule } = useContext(ScheduleGridContext);
 
-  usePageTitle(config.title, convention);
+  usePageTitle(config.title);
 
   const minTimespan = useMemo(
     () => {

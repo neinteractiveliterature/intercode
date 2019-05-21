@@ -11,6 +11,7 @@ import ErrorDisplay from './ErrorDisplay';
 import NavigationBar from './NavigationBar';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
+import AppRootContext from './AppRootContext';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
@@ -99,7 +100,9 @@ function AppLayout({ location, history }) {
   }
 
   return (
-    <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
+    <AppRootContext.Provider value={{ conventionName: (data.convention || {}).name }}>
+      <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
+    </AppRootContext.Provider>
   );
 }
 

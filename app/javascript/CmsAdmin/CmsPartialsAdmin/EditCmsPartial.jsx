@@ -22,7 +22,7 @@ function EditCmsPartial({ match, history }) {
     useMutationCallback(UpdatePartial),
   );
 
-  usePageTitle(useValueUnless(() => `Editing “${initialPartial.name}”`, error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => `Editing “${initialPartial.name}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

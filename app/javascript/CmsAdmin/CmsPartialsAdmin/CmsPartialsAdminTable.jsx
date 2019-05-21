@@ -8,7 +8,6 @@ import { sortByLocaleString } from '../../ValueUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
 function CmsPartialsAdminTable() {
@@ -20,7 +19,7 @@ function CmsPartialsAdminTable() {
     idVariablePath: ['id'],
   });
 
-  usePageTitle(useValueUnless(() => 'CMS Partials', error), useValueUnless(() => data.convention, error));
+  usePageTitle('CMS Partials');
 
   const partialsSorted = useMemo(
     () => {

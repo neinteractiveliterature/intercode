@@ -14,7 +14,7 @@ import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 
 function NewTeamMember({
-  event, eventPath, convention, history,
+  event, eventPath, history,
 }) {
   const [teamMember, setTeamMember] = useState({
     user_con_profile: null,
@@ -33,10 +33,7 @@ function NewTeamMember({
     }),
   );
 
-  usePageTitle(
-    `Add ${event.event_category.team_member_name} - ${event.title}`,
-    convention,
-  );
+  usePageTitle(`Add ${event.event_category.team_member_name} - ${event.title}`);
 
   const userConProfileChanged = userConProfile => setTeamMember(prevTeamMember => ({
     ...prevTeamMember,

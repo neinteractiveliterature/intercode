@@ -10,7 +10,6 @@ import useQuerySuspended from '../../useQuerySuspended';
 import { useDeleteMutation } from '../../MutationUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
 function CmsFilesAdmin() {
@@ -22,7 +21,7 @@ function CmsFilesAdmin() {
   });
   const confirm = useConfirm();
 
-  usePageTitle('CMS Files', useValueUnless(() => data.convention, error));
+  usePageTitle('CMS Files');
 
   const fileChunks = useMemo(
     () => {

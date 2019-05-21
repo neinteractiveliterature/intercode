@@ -11,7 +11,7 @@ import useMutationCallback from '../../useMutationCallback';
 import usePageTitle from '../../usePageTitle';
 
 function EditTeamMember({
-  event, eventPath, teamMemberId, history, convention,
+  event, eventPath, teamMemberId, history,
 }) {
   const [teamMember, setTeamMember] = useState(
     event.team_members.find(tm => tm.id === teamMemberId),
@@ -22,7 +22,6 @@ function EditTeamMember({
 
   usePageTitle(
     `Editing ${event.event_category.team_member_name} “${teamMember.user_con_profile.name_without_nickname}” - ${event.title}`,
-    convention,
   );
 
   const updateClicked = async () => {

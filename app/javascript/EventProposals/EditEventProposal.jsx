@@ -22,7 +22,6 @@ function EditEventProposal({ match, history }) {
 
   usePageTitle(
     useValueUnless(() => `Editing “${data.eventProposal.title}”`, error),
-    useValueUnless(() => data.convention, error),
   );
 
   if (error) {

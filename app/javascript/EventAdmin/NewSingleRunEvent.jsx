@@ -10,7 +10,6 @@ import SingleRunEventForm from './SingleRunEventForm';
 import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
-import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 
 function useCreateSingleRunEvent() {
@@ -55,7 +54,7 @@ function NewSingleRunEvent({ history }) {
     [create, history],
   );
 
-  usePageTitle('New Single-Run Event', useValueUnless(() => data.convention, error));
+  usePageTitle('New Single-Run Event');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

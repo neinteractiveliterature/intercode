@@ -20,7 +20,7 @@ function CmsPagesAdminTable() {
     idVariablePath: ['id'],
   });
 
-  usePageTitle(useValueUnless(() => 'CMS Pages', error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => 'CMS Pages', error));
 
   const pagesSorted = useMemo(
     () => {

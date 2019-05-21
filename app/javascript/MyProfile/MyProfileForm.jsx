@@ -15,6 +15,7 @@ import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFor
 import useFormResponse from '../FormPresenter/useFormResponse';
 import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
 import LoadingIndicator from '../LoadingIndicator';
+import usePageTitle from '../usePageTitle';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
@@ -59,6 +60,8 @@ function MyProfileForm({ initialSetup }) {
   const itemInteractionProps = useItemInteractionTracking();
 
   useAutocommitFormResponseOnChange(updateUserConProfile, userConProfile);
+
+  usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

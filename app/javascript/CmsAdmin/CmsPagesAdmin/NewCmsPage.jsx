@@ -9,7 +9,6 @@ import { CreatePage } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
 function NewCmsPage({ history }) {
@@ -23,7 +22,7 @@ function NewCmsPage({ history }) {
     }),
   );
 
-  usePageTitle(useValueUnless(() => 'New page', error), useValueUnless(() => data.convention, error));
+  usePageTitle('New page');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

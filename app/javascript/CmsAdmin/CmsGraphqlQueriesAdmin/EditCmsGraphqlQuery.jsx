@@ -1,30 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { CmsGraphqlQueriesQuery } from './queries.gql';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { UpdateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import useMutationCallback from '../../useMutationCallback';
-import useQuerySuspended from '../../useQuerySuspended';
 import usePageTitle from '../../usePageTitle';
-import useValueUnless from '../../useValueUnless';
 
 import 'graphiql/graphiql.css';
 
 function EditCmsGraphqlQuery({ initialQuery, history }) {
-  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
   const [query, setQuery] = useState(initialQuery);
   const [update, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateCmsGraphqlQuery),
   );
 
-  usePageTitle(`Editing “${initialQuery.identifier}”`, useValueUnless(() => data.convention, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle(`Editing “${initialQuery.identifier}”`);
 
   const saveClicked = async () => {
     await update({

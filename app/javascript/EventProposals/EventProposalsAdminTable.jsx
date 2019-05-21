@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 import { withRouter, Link } from 'react-router-dom';
 import ReactTable from 'react-table';
 
-import { AppRootQuery } from '../appRootQueries.gql';
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -14,9 +13,6 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
-import useQuerySuspended from '../useQuerySuspended';
-import ErrorDisplay from '../ErrorDisplay';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -234,13 +230,7 @@ const getPossibleColumns = (data) => {
   ];
 };
 
-function EventProposalsAdminTable({ history, location }) {
-  const { data, error } = useQuerySuspended(AppRootQuery, {
-    variables: {
-      path: location.pathname,
-    },
-  });
-
+function EventProposalsAdminTable({ history }) {
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: ['event_category', 'title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at'],
@@ -254,11 +244,7 @@ function EventProposalsAdminTable({ history, location }) {
     storageKeyPrefix: 'eventProposalsAdmin',
   });
 
-  usePageTitle('Event Proposals', useValueUnless(() => data.convention, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle('Event Proposals');
 
   return (
     <>
@@ -287,9 +273,6 @@ EventProposalsAdminTable.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
-  }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
   }).isRequired,
 };
 

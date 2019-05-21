@@ -160,10 +160,7 @@ function RunSignupsTable({
     variables: { eventId, runId },
   });
 
-  usePageTitle(
-    useValueUnless(() => `Signups - ${data.event.title}`, error),
-    useValueUnless(() => data.convention, error),
-  );
+  usePageTitle(useValueUnless(() => `Signups - ${data.event.title}`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

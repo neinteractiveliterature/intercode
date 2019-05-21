@@ -17,7 +17,6 @@ import {
   reactTableSortToTableResultsSort,
 } from '../../Tables/TableUtils';
 import usePageTitle from '../../usePageTitle';
-import useValueUnless from '../../useValueUnless';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 const filterCodecs = buildFieldFilterCodecs({
@@ -59,7 +58,7 @@ function EventList({ history }) {
     [data, loading, error],
   );
 
-  usePageTitle('List of Events', useValueUnless(() => data.convention, loading || error));
+  usePageTitle('List of Events');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

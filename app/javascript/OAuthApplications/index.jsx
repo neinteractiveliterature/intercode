@@ -1,7 +1,10 @@
 import React from 'react';
+import usePageTitle from '../usePageTitle';
 
 function OAuthApplications() {
   // cop-out?  maybe.
+
+  usePageTitle('OAuth2 applications');
 
   return (
     <iframe

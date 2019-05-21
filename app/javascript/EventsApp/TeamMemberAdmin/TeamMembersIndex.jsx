@@ -105,7 +105,6 @@ function TeamMembersIndex({ eventId, eventPath }) {
 
   usePageTitle(
     useValueUnless(() => `${titleizedTeamMemberName} - ${data.event.title}`, error),
-    useValueUnless(() => data.convention, error),
   );
 
   if (error) {

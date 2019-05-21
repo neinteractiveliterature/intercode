@@ -20,7 +20,7 @@ function EditCmsPage({ match, history }) {
     useMutationCallback(UpdatePage),
   );
 
-  usePageTitle(useValueUnless(() => `Edit “${initialPage.name}”`, error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => `Edit “${initialPage.name}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
