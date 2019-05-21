@@ -8,10 +8,13 @@ import formatMoney from '../formatMoney';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useModal from '../ModalDialogs/useModal';
+import usePageTitle from '../usePageTitle';
 
 function OrderHistory() {
   const { data, error } = useQuerySuspended(OrderHistoryQuery);
   const paymentModal = useModal();
+
+  usePageTitle('My order history');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -9,9 +9,12 @@ import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';
 import EventsByChoice from './EventsByChoice';
+import usePageTitle from '../usePageTitle';
 
 function ReportsMenu() {
   const { data, error } = useQuerySuspended(ReportsMenuQuery);
+
+  usePageTitle('Reports');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

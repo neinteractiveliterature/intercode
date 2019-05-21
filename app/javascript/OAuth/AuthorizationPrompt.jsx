@@ -7,6 +7,7 @@ import PermissionsPrompt from './PermissionsPrompt';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
+import usePageTitle from '../usePageTitle';
 
 function AuthorizationPrompt({ location }) {
   const preAuthParamsJSON = useMemo(
@@ -55,6 +56,8 @@ function AuthorizationPrompt({ location }) {
     [preAuth],
   );
   const authenticationModal = useContext(AuthenticationModalContext);
+
+  usePageTitle('Authorization required');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

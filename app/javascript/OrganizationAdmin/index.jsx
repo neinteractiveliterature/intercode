@@ -24,7 +24,6 @@ function OrganizationAdmin() {
           to="/organizations"
           path="/organizations"
           exact
-          pageTitleIfActive="Organizations"
         >
           Organizations
         </BreadcrumbItemWithRoute>
@@ -40,7 +39,6 @@ function OrganizationAdmin() {
                   path="/organizations/:id"
                   to={({ match: { params } }) => `/${params.id}`}
                   active={({ match }) => match.isExact}
-                  pageTitleIfActive={organization.name}
                 >
                   {organization.name}
                 </BreadcrumbItemWithRoute>
@@ -49,7 +47,6 @@ function OrganizationAdmin() {
                   path="/organizations/:id/roles/new"
                   to={({ match: { params } }) => `/${params.id}/roles/new`}
                   hideUnlessMatch
-                  pageTitleIfActive="New organization role"
                 >
                   New organization role
                 </BreadcrumbItemWithRoute>
@@ -58,7 +55,6 @@ function OrganizationAdmin() {
                   path="/organizations/:id/roles/:roleId/edit"
                   to={({ match: { params } }) => `/${params.id}/roles/${params.roleId}/edit`}
                   hideUnlessMatch
-                  pageTitleIfActive="Edit organization role"
                 >
                   Edit organization role
                 </BreadcrumbItemWithRoute>
