@@ -73,6 +73,11 @@ class Types::ConventionType < Types::BaseObject
     :user_activity_alerts
   )
 
+  field :bio_eligible_user_con_profiles, [Types::UserConProfileType], null: false
+  def bio_eligible_user_con_profiles
+    object.user_con_profiles.can_have_bio
+  end
+
   field :clickwrap_agreement_html, String, null: true
   def clickwrap_agreement_html
     return nil unless object.clickwrap_agreement

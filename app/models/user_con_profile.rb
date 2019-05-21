@@ -35,19 +35,10 @@ class UserConProfile < ApplicationRecord
     where(sql_clauses.join(' OR '), *sql_clauses.map { |_clause| true })
   }
 
-  scope :is_team_member, -> {
-    where(<<-SQL)
-    id IN (
-      select team_members.user_con_profile_id
-      from team_members
-      inner join events on team_members.event_id = events.id
-      where events.convention_id = user_con_profiles.convention_id
-    )
-    SQL
-  }
+  scope :is_team_member, -> { joins(:team_members).distinct }
 
   scope :can_have_bio, -> {
-    has_any_privileges.or(is_team_member)
+    where(id: has_any_privileges.select(:id)).or(where(id: is_team_member.select(:id)))
   }
 
   register_form_response_attrs :first_name,

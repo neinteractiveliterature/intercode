@@ -44,8 +44,16 @@ class Types::UserConProfileType < Types::BaseObject
 
   personal_info_field :user, Types::UserType, null: true
   personal_info_field :email, String, null: true
+  field :staff_positions, [Types::StaffPositionType], null: false
 
-  association_loaders UserConProfile, :convention, :user, :orders, :signups, :team_members, :ticket
+  association_loaders UserConProfile,
+    :convention,
+    :orders,
+    :signups,
+    :staff_positions,
+    :team_members,
+    :ticket,
+    :user
 
   def email
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
