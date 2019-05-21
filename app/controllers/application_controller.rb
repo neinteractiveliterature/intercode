@@ -205,7 +205,7 @@ sites, please use the “Revert to #{assumed_identity_from_profile.name}” opti
 
     @event_for_path = begin
       if (match = (%r{\A/events/(\d+)}.match(request.path)))
-        convention.events.active.find(match[1])
+        convention.events.active.find_by(id: match[1])
       end
     end
   end
