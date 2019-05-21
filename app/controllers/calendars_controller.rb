@@ -1,6 +1,8 @@
 require 'icalendar/tzinfo'
 
 class CalendarsController < ApplicationController
+  include Concerns::AbsoluteUrls
+
   skip_authorization_check
 
   def user_schedule
@@ -42,7 +44,10 @@ class CalendarsController < ApplicationController
     event.summary = event_summary_from_signup(signup)
     event.location = event_location_from_signup(signup)
     event.description = signup.event.short_blurb
-    event.url = event_url(signup.event)
+    event.url = url_with_convention_host(
+      "/events/#{signup.event.to_param}",
+      signup.event.convention,
+    )
   end
 
   def event_summary_from_signup(signup)
