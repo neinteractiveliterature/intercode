@@ -28,7 +28,6 @@ function StaffPositionAdmin() {
             path="/staff_positions"
             to="/staff_positions"
             exact
-            pageTitleIfActive="Staff positions"
           >
             Staff positions
           </BreadcrumbItemWithRoute>
@@ -36,7 +35,6 @@ function StaffPositionAdmin() {
           <BreadcrumbItemWithRoute
             path="/staff_positions/new"
             to="/staff_positions/new"
-            pageTitleIfActive="New staff position"
             hideUnlessMatch
           >
             New staff position
@@ -45,7 +43,6 @@ function StaffPositionAdmin() {
           <BreadcrumbItemWithRoute
             path="/staff_positions/:id/edit"
             to={({ match }) => `/${match.params.id}/edit`}
-            pageTitleIfActive="Edit staff position settings"
             hideUnlessMatch
           >
             Edit settings
@@ -54,7 +51,6 @@ function StaffPositionAdmin() {
           <BreadcrumbItemWithRoute
             path="/staff_positions/:id/edit_permissions"
             to={({ match }) => `/${match.params.id}/edit_permissions`}
-            pageTitleIfActive="Edit staff position permissions"
             hideUnlessMatch
           >
             Edit permissions

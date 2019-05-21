@@ -1,3 +1,14 @@
+fragment UserActivityAlertsAdminConventionFields on Convention {
+  id
+  ticket_name
+  ticket_mode
+
+  staff_positions {
+    id
+    name
+  }
+}
+
 fragment UserActivityAlertFields on UserActivityAlert {
   id
   email
@@ -27,21 +38,14 @@ fragment UserActivityAlertFields on UserActivityAlert {
 query ConventionTicketNameQuery {
   convention {
     id
-    ticket_name
-    ticket_mode
+    ...UserActivityAlertsAdminConventionFields
   }
 }
 
 query UserActivityAlertQuery($id: Int!) {
   convention {
     id
-    ticket_name
-    ticket_mode
-
-    staff_positions {
-      id
-      name
-    }
+    ...UserActivityAlertsAdminConventionFields
 
     user_activity_alert(id: $id) {
       id

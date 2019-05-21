@@ -5,6 +5,7 @@ import { humanize } from 'inflected';
 import { OrderSummaryQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import usePageTitle from '../usePageTitle';
 
 const ORDER_STATUSES = ['paid', 'unpaid', 'cancelled'];
 
@@ -18,6 +19,7 @@ function statusClass(status) {
 }
 
 function OrderSummary() {
+  usePageTitle('Order summary');
   const { data, error } = useQuerySuspended(OrderSummaryQuery);
 
   const renderQuantityCell = (quantitiesByStatus, status) => {
