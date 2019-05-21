@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-apollo-hooks';
 import { Link, Redirect } from 'react-router-dom';
@@ -11,6 +11,8 @@ import PermissionNames from '../../../config/permission_names.json';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 const OrganizationRolePermissions = PermissionNames.find(group => group.role_type === 'OrganizationRole').permissions;
 function getOrganizationRolePermissionName(permissionName) {
@@ -22,10 +24,14 @@ function OrganizationDisplay({ organizationId }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
   const confirm = useConfirm();
   const mutate = useMutation(DeleteOrganizationRole);
+  const organization = useMemo(
+    () => (error ? null : data.organizations.find(org => org.id === organizationId)),
+    [data, error, organizationId],
+  );
+
+  usePageTitle(useValueUnless(() => organization.name, error));
 
   if (error) return <ErrorDisplay graphQLError={error} />;
-
-  const organization = data.organizations.find(org => org.id === organizationId);
 
   if (!organization.current_ability_can_manage_access) {
     return <Redirect to="/organizations" />;

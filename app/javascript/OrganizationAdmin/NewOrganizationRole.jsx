@@ -9,6 +9,7 @@ import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
 
 function NewOrganizationRole({ organizationId, history }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
@@ -16,6 +17,8 @@ function NewOrganizationRole({ organizationId, history }) {
   const [mutate, mutationError, mutationInProgress] = useAsyncFunction(
     useMutation(CreateOrganizationRole),
   );
+
+  usePageTitle('New organization role');
 
   if (error) return <ErrorDisplay graphQLError={error} />;
 

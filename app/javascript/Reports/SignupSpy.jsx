@@ -4,6 +4,7 @@ import { SignupCountsByStateQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import SignupSpyTable from './SignupSpyTable';
+import usePageTitle from '../usePageTitle';
 
 function SignupSpy() {
   const { data, error } = useQuerySuspended(SignupCountsByStateQuery);
@@ -18,6 +19,8 @@ function SignupSpy() {
       || { count: 0 }
     ).count;
   };
+
+  usePageTitle('Signup spy');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

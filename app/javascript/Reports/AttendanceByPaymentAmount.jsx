@@ -6,6 +6,7 @@ import { AttendanceByPaymentAmountQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
+import usePageTitle from '../usePageTitle';
 
 function describeRow(ticketType, paymentAmount) {
   if (paymentAmount.fractional > 0) {
@@ -36,6 +37,8 @@ function descriptionCell(ticketType, paymentAmount) {
 
 function AttendanceByPaymentAmount() {
   const { data, error } = useQuerySuspended(AttendanceByPaymentAmountQuery);
+
+  usePageTitle('Attendance by payment amount');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

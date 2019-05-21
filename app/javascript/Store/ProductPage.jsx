@@ -8,12 +8,16 @@ import formatMoney from '../formatMoney';
 import parsePageContent from '../parsePageContent';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function ProductPage({ match }) {
   const { data, error } = useQuerySuspended(
     OrderFormProductQuery,
     { variables: { productId: Number.parseInt(match.params.id, 10) } },
   );
+
+  usePageTitle(useValueUnless(() => data.product.name, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
