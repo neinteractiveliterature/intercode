@@ -41,7 +41,6 @@ Intercode::Application.routes.draw do
         post :become
       end
     end
-    get 'my_profile/new' => 'my_profiles#new', as: :new_my_profile
 
     namespace :reports do
       get :export_signup_spy

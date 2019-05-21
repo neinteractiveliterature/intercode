@@ -166,11 +166,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_sign_in_path_for(resource)
-    if convention && convention.user_con_profiles.where(user_id: resource.id).none?
-      return new_my_profile_path
-    end
-
+  def after_sign_in_path_for(_resource)
     if session[:user_return_to]
       session[:user_return_to]
     else
