@@ -16,11 +16,7 @@ function UserBreadcrumbItem({ id }) {
   }
 
   return (
-    <BreadcrumbItemWithRoute
-      path="/users/:id"
-      to={`/users/${id}`}
-      pageTitleIfActive={data.user.name}
-    >
+    <BreadcrumbItemWithRoute path="/users/:id" to={`/users/${id}`}>
       {data.user.name}
     </BreadcrumbItemWithRoute>
   );
