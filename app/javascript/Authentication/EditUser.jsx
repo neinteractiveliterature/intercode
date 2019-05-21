@@ -14,7 +14,6 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import UserFormFields from './UserFormFields';
 import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 
 async function updateUser(
   authenticityToken, formState, password, passwordConfirmation, currentPassword,
@@ -133,7 +132,7 @@ EditUserForm.propTypes = {
 function EditUser() {
   const { data, error } = useQuerySuspended(EditUserQuery);
 
-  usePageTitle('Update Your Account', useValueUnless(() => data.convention, error));
+  usePageTitle('Update Your Account');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

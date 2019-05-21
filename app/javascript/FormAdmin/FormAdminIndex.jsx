@@ -9,7 +9,6 @@ import { FormAdminQuery } from './queries.gql';
 import { sortByLocaleString } from '../ValueUtils';
 import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import { useDeleteMutation } from '../MutationUtils';
 
 function describeFormUsers(form) {
@@ -35,7 +34,7 @@ function FormAdminIndex() {
     [data, error],
   );
 
-  usePageTitle('Forms', useValueUnless(() => data.convention, error));
+  usePageTitle('Forms');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

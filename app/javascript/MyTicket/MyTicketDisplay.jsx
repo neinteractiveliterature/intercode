@@ -6,11 +6,15 @@ import { MyTicketDisplayQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 const dateFormat = 'dddd, MMMM D, YYYY [at] h:mma z';
 
 function MyTicketDisplay() {
   const { data, error } = useQuerySuspended(MyTicketDisplayQuery);
+
+  usePageTitle(useValueUnless(() => `My ${data.convention.ticket_name} receipt`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

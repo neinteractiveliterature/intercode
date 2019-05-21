@@ -50,7 +50,6 @@ function CmsPage({
 
   usePageTitle(
     useValueUnless(() => (location.pathname === '/' ? null : data.cmsPage.name), error || loading),
-    useValueUnless(() => data.convention, error || loading),
   );
 
   if (error) {

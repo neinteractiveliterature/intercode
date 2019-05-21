@@ -6,7 +6,6 @@ import { RestoreDroppedEvent } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 
 function DroppedEventAdmin() {
@@ -14,7 +13,7 @@ function DroppedEventAdmin() {
   const restoreDroppedEvent = useMutationCallback(RestoreDroppedEvent);
   const confirm = useConfirm();
 
-  usePageTitle('Dropped Events', useValueUnless(() => data.convention, error));
+  usePageTitle('Dropped Events');
 
   if (error) {
     return <ErrorDisplay error={error} />;

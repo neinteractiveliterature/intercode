@@ -9,6 +9,7 @@ import Form from '../Models/Form';
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import BioDisplay from './BioDisplay';
+import usePageTitle from '../usePageTitle';
 
 function MyProfileDisplay() {
   const { data, error } = useQuerySuspended(MyProfileQuery);
@@ -46,6 +47,8 @@ function MyProfileDisplay() {
     [form],
   );
 
+  usePageTitle('My profile');
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
@@ -57,7 +60,7 @@ function MyProfileDisplay() {
           <h1 className="mb-4">
             {'My '}
             {data.convention.name}
-            {' Profile'}
+            {' profile'}
           </h1>
 
           <dl className="row">

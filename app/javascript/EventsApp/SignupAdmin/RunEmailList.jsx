@@ -58,7 +58,6 @@ function RunEmailList({ runId, eventId, separator }) {
 
   usePageTitle(
     useValueUnless(() => `Emails (${separator === '; ' ? 'semicolon-separated' : 'comma-separated'}) - ${data.event.title}`, error),
-    useValueUnless(() => data.convention, error),
   );
 
   return (

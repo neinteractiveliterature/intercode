@@ -10,10 +10,7 @@ import useValueUnless from '../useValueUnless';
 function TicketedAttendees() {
   const { data, error } = useQuerySuspended(TicketedAttendeesQuery);
 
-  usePageTitle(
-    useValueUnless(() => `All attendees with ${data.convention.ticket_name}`, error),
-    useValueUnless(() => data.convention, error),
-  );
+  usePageTitle(useValueUnless(() => `All attendees with ${data.convention.ticket_name}`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -63,7 +63,7 @@ function EventAdminEditEvent({ match, history }) {
     [event.id, dropEventMutate],
   );
 
-  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -7,12 +7,11 @@ import { sortByLocaleString } from '../ValueUtils';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 
 function EventCategoryIndex() {
   const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
 
-  usePageTitle('Event Categories', useValueUnless(() => data.convention, error));
+  usePageTitle('Event Categories');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

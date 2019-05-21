@@ -6,15 +6,12 @@ import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CreateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
-import useQuerySuspended from '../../useQuerySuspended';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
 import { useCreateMutation } from '../../MutationUtils';
 
 function NewCmsGraphqlQuery({ history }) {
-  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
   const [create, createError, createInProgress] = useAsyncFunction(
     useCreateMutation(CreateCmsGraphqlQuery, {
@@ -24,11 +21,7 @@ function NewCmsGraphqlQuery({ history }) {
     }),
   );
 
-  usePageTitle('CMS GraphQL Queries', useValueUnless(() => data.convention, error));
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  usePageTitle('CMS GraphQL Queries');
 
   const createClicked = async () => {
     await create({

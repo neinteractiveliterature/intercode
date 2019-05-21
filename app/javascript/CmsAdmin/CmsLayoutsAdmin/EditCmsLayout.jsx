@@ -22,7 +22,7 @@ function EditCmsLayout({ match, history }) {
     useMutationCallback(UpdateLayout),
   );
 
-  usePageTitle(useValueUnless(() => `Editing “${initialLayout.name}”`, error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => `Editing “${initialLayout.name}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

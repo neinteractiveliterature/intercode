@@ -9,7 +9,6 @@ import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
-import useValueUnless from '../../useValueUnless';
 
 function CmsLayoutsAdminTable() {
   const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
@@ -31,7 +30,7 @@ function CmsLayoutsAdminTable() {
     [data, error],
   );
 
-  usePageTitle('CMS Layouts', useValueUnless(() => data.convention, error));
+  usePageTitle('CMS Layouts');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

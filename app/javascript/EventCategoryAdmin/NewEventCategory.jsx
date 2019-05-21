@@ -10,7 +10,6 @@ import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 
 function NewEventCategory({ history }) {
   const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
@@ -39,7 +38,7 @@ function NewEventCategory({ history }) {
     history.push('/event_categories');
   };
 
-  usePageTitle('New Event Category', useValueUnless(() => data.convention, error));
+  usePageTitle('New Event Category');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

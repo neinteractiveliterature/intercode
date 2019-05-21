@@ -57,7 +57,6 @@ function AdminEditEventProposal({ match, history }) {
 
   usePageTitle(
     useValueUnless(() => `Editing “${data.eventProposal.title}”`, error),
-    useValueUnless(() => data.convention, error),
   );
 
   return (

@@ -1,14 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import compact from 'lodash-es/compact';
 
-export default function usePageTitle(title, convention) {
+import AppRootContext from './AppRootContext';
+
+export default function usePageTitle(title) {
+  const { conventionName } = useContext(AppRootContext);
+
   useEffect(
     () => {
-      if (title || convention) {
-        const titleParts = [title, (convention || {}).name];
+      if (title) {
+        const titleParts = [title, conventionName];
         document.title = compact(titleParts).join(' - ');
       }
     },
-    [convention, title],
+    [conventionName, title],
   );
 }

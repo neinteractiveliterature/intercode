@@ -27,7 +27,7 @@ function EditEventCategory({ match, history }) {
   );
   const [eventCategory, setEventCategory] = useState(initialEventCategory);
 
-  usePageTitle(useValueUnless(() => `Editing “${initialEventCategory.name}”`, error), useValueUnless(() => data.convention, error));
+  usePageTitle(useValueUnless(() => `Editing “${initialEventCategory.name}”`, error));
 
   const updateClicked = async () => {
     await update({

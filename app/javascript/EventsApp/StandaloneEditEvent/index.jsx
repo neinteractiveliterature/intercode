@@ -27,10 +27,7 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
 
   const initialEvent = deserializeEvent(data.event);
 
-  usePageTitle(
-    useValueUnless(() => `Editing “${initialEvent.title}”`, error),
-    useValueUnless(() => data.convention, error),
-  );
+  usePageTitle(useValueUnless(() => `Editing “${initialEvent.title}”`, error));
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
     convention: data.convention,

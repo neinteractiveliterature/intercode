@@ -4,7 +4,6 @@ import AddVariableRow from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import { CmsVariablesQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
-import useValueUnless from '../../useValueUnless';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 
@@ -42,7 +41,7 @@ function CmsVariablesAdmin() {
     [],
   );
 
-  usePageTitle('CMS Variables', useValueUnless(() => data.convention, error));
+  usePageTitle('CMS Variables');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -38,7 +38,7 @@ function EditRootSite() {
   );
   const [rootPage, setRootPage] = useDirtyState(error ? null : data.rootSite.root_page, setDirty);
 
-  usePageTitle('Root Site Settings', null);
+  usePageTitle('Root Site Settings');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

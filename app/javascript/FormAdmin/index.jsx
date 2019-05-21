@@ -51,7 +51,6 @@ function FormAdmin() {
           render={({ history }) => (
             <FormJSONEditor
               history={history}
-              convention={data.convention}
               initialForm={{
                 id: null,
                 export_json: '{ "title": "", "sections": [] }',
@@ -64,7 +63,6 @@ function FormAdmin() {
           render={({ match, history }) => (
             <FormJSONEditor
               history={history}
-              convention={data.convention}
               initialForm={data.convention.forms
                 .find(form => form.id.toString(10) === match.params.id)}
             />

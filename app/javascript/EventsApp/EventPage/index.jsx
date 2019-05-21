@@ -52,7 +52,6 @@ function EventPage({ eventId, eventPath }) {
 
   usePageTitle(
     useValueUnless(() => data.event.title, error),
-    useValueUnless(() => data.convention, error),
   );
 
   if (error) {

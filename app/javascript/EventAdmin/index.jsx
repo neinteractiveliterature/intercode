@@ -13,13 +13,12 @@ import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdmin from './SingleRunEventAdmin';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 
 function NewEvent({ history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
 
-  usePageTitle('New Event', useValueUnless(() => data.convention, error));
+  usePageTitle('New Event');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

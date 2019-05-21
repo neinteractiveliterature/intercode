@@ -7,13 +7,12 @@ import Confirm from '../../ModalDialogs/Confirm';
 import { DeleteCmsGraphqlQuery } from './mutations.gql';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
 function CmsGraphqlQueriesAdminTable() {
   const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
 
-  usePageTitle('CMS GraphQL Queries', useValueUnless(() => data.convention, error));
+  usePageTitle('CMS GraphQL Queries');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
