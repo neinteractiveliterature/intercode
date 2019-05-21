@@ -10,6 +10,7 @@ import useQuerySuspended from '../../useQuerySuspended';
 import { useDeleteMutation } from '../../MutationUtils';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
+import usePageTitle from '../../usePageTitle';
 
 function CmsFilesAdmin() {
   const { data, error } = useQuerySuspended(CmsFilesAdminQuery);
@@ -19,6 +20,8 @@ function CmsFilesAdmin() {
     idVariablePath: ['id'],
   });
   const confirm = useConfirm();
+
+  usePageTitle('CMS Files');
 
   const fileChunks = useMemo(
     () => {

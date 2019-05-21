@@ -1,25 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import EditBio from './EditBio';
 import MyProfileDisplay from './MyProfileDisplay';
 import MyProfileForm from './MyProfileForm';
 
-function MyProfile({ basename }) {
+function MyProfile() {
   return (
-    <BrowserRouter basename={basename}>
-      <Switch>
-        <Route path="/edit_bio" component={EditBio} />
-        <Route path="/edit" component={MyProfileForm} />
-        <Route path="/" component={MyProfileDisplay} />
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route path="/my_profile/edit_bio" component={EditBio} />
+      <Route path="/my_profile/edit" component={MyProfileForm} />
+      <Route path="/my_profile/setup" render={() => <MyProfileForm initialSetup />} />
+      <Route path="/my_profile" component={MyProfileDisplay} />
+    </Switch>
   );
 }
-
-MyProfile.propTypes = {
-  basename: PropTypes.string.isRequired,
-};
 
 export default MyProfile;

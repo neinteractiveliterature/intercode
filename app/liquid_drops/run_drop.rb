@@ -27,7 +27,7 @@ class RunDrop < Liquid::Drop
 
   # @return [String] The relative URL to use for linking to the event's page on the convention site
   def event_url
-    "#{events_path}/#{event.to_param}"
+    "/events/#{event.to_param}"
   end
 
   def room_names

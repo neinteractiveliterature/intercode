@@ -1,0 +1,17 @@
+query AppRootQuery($path: String!) {
+  effectiveCmsLayout(path: $path) {
+    id
+    content_html
+  }
+
+  myProfile {
+    id
+    accepted_clickwrap_agreement
+  }
+
+  convention {
+    id
+    name
+    clickwrap_agreement
+  }
+}

@@ -66,10 +66,10 @@ TeamMemberForm.propTypes = {
   }).isRequired,
   disabled: PropTypes.bool,
   value: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    user_con_profile: PropTypes.shape({
-      ticket: PropTypes.shape({}),
-    }),
+    display: PropTypes.bool,
+    show_email: PropTypes.bool,
+    receive_con_email: PropTypes.bool,
+    receive_signup_email: PropTypes.oneOf(['ALL_SIGNUPS', 'NON_WAITLIST_SIGNUPS', 'NO']),
   }).isRequired,
   onChange: PropTypes.func.isRequired,
 };

@@ -8,12 +8,15 @@ import StaffPositionPropType from './StaffPositionPropType';
 import { UpdateStaffPosition } from './mutations.gql';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
+import usePageTitle from '../usePageTitle';
 
 function EditStaffPosition({ initialStaffPosition, history }) {
   const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
   const [mutate, error, requestInProgress] = useAsyncFunction(
     useMutationCallback(UpdateStaffPosition),
   );
+
+  usePageTitle(`Editing “${initialStaffPosition.name}”`);
 
   const saveClicked = useCallback(
     async () => {
@@ -32,7 +35,7 @@ function EditStaffPosition({ initialStaffPosition, history }) {
           },
         },
       });
-      history.push('/');
+      history.push('/staff_positions');
     },
     [mutate, staffPosition, history],
   );

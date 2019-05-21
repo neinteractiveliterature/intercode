@@ -10,6 +10,8 @@ import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString, titleSort } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function EventProvidedTicketsByEvent({ data }) {
   const sortedRows = titleSort(
@@ -95,6 +97,8 @@ function EventProvidedTickets() {
       renderContent: () => !error && <EventProvidedTicketsByUser data={data} />,
     },
   ]);
+
+  usePageTitle(useValueUnless(() => `Event-provided ${pluralize(data.convention.ticket_name)}`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

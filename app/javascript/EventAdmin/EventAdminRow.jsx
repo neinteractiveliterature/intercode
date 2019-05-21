@@ -64,7 +64,7 @@ class EventAdminRow extends React.Component {
 
     return (
       <Link
-        to={`/${event.id}/runs/${run.id}/edit`}
+        to={`/admin_events/${event.id}/runs/${run.id}/edit`}
         className="btn btn-secondary m-1 p-2 text-left"
         key={run.id}
       >
@@ -83,7 +83,7 @@ class EventAdminRow extends React.Component {
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
           {sortedRuns.map(run => this.renderRun(event, run))}
-          <Link className="btn btn-primary btn-sm m-1" to={`/${event.id}/runs/new`}>
+          <Link className="btn btn-primary btn-sm m-1" to={`/admin_events/${event.id}/runs/new`}>
             <i className="fa fa-plus" />
           </Link>
         </div>
@@ -111,7 +111,7 @@ class EventAdminRow extends React.Component {
       <tr>
         <td>
           <Link
-            to={`/${event.id}/edit`}
+            to={`/admin_events/${event.id}/edit`}
             className="rounded p-1 text-dark"
             style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
           >

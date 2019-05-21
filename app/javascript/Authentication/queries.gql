@@ -3,6 +3,11 @@ query AccountFormContentQuery {
 }
 
 query EditUserQuery {
+  convention {
+    id
+    name
+  }
+
   currentUser {
     id
     first_name

@@ -315,7 +315,7 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
         renderLeftContent={() => (
           queryResult.data && (queryResult.data.currentAbility || {}).can_create_user_con_profiles
             ? (
-              <Link to="/new" className="btn btn-primary ml-2 mb-2">
+              <Link to="/user_con_profiles/new" className="btn btn-primary ml-2 mb-2">
                 <i className="fa fa-plus" />
                 {' '}
                 Add attendee
@@ -332,13 +332,13 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            history.push(`${rowInfo.original.id}`);
+            history.push(`/user_con_profiles/${rowInfo.original.id}`);
           },
         })}
         getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
       />
 
-      <Route path="/new">
+      <Route path="/user_con_profiles/new">
         {({ match }) => (
           <AddAttendeeModal
             conventionName={(queryResult.data && (queryResult.data.convention || {}).name) || ''}

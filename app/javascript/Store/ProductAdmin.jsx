@@ -5,10 +5,13 @@ import { AdminProductsQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
+import usePageTitle from '../usePageTitle';
 
 function ProductAdmin() {
   const { data, error } = useQuerySuspended(AdminProductsQuery);
   const [newProducts, setNewProducts] = useState([]);
+
+  usePageTitle('Products');
 
   const newProductClicked = () => setNewProducts(prevNewProducts => ([
     ...prevNewProducts,

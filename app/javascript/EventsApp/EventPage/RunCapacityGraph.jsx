@@ -36,7 +36,7 @@ RunCapacityGraph.propTypes = {
     registration_policy: PropTypes.shape({
       buckets: PropTypes.arrayOf(PropTypes.shape({
         slots_limited: PropTypes.bool.isRequired,
-        anything: PropTypes.bool.isRequired,
+        anything: PropTypes.bool,
         name: PropTypes.string.isRequired,
       }).isRequired).isRequired,
     }).isRequired,

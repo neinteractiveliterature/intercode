@@ -1,0 +1,6 @@
+query OAuthAuthorizationPromptQuery($queryParams: Json!) {
+  currentUser {
+    id
+  }
+  oauthPreAuth(queryParams: $queryParams)
+}

@@ -10,6 +10,7 @@ import SingleRunEventForm from './SingleRunEventForm';
 import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
 
 function useCreateSingleRunEvent() {
   const mutate = useMutationCallback(CreateFillerEvent);
@@ -48,10 +49,12 @@ function NewSingleRunEvent({ history }) {
   const createFillerEvent = useCallback(
     async ({ event, run }) => {
       await create({ event, run });
-      history.push('/filler_events');
+      history.push('/admin_events/filler_events');
     },
     [create, history],
   );
+
+  usePageTitle('New Single-Run Event');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -74,7 +77,7 @@ function NewSingleRunEvent({ history }) {
           runs: [{ rooms: [] }],
         }}
         convention={data.convention}
-        cancelPath="/filler_events"
+        cancelPath="/admin_events/filler_events"
         onSave={createFillerEvent}
       />
     </div>

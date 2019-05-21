@@ -179,6 +179,14 @@ class Types::QueryType < Types::BaseObject
 
   field :current_ability, Types::AbilityType, null: false
 
+  field :effective_cms_layout, Types::CmsLayoutType, null: false do
+    argument :path, String, required: true
+  end
+
+  def effective_cms_layout(path:)
+    context[:controller].send(:effective_cms_layout, path)
+  end
+
   def current_ability
     context[:current_ability]
   end
@@ -225,7 +233,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def navigation_bar(**args)
-    cms_layout = args[:cms_layout_id] ? CmsLayout.find(args[:cms_layout_id]) : nil
+    cms_layout = if args[:cms_layout_id]
+      CmsLayout.find(args[:cms_layout_id])
+    else
+      cms_parent.default_layout
+    end
 
     NavigationBarPresenter.new(
       cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
@@ -292,6 +304,18 @@ class Types::QueryType < Types::BaseObject
 
   def product(**args)
     convention.products.find(args[:id])
+  end
+
+  field :oauth_pre_auth, Types::Json, null: false do
+    argument :query_params, Types::Json, required: true
+  end
+
+  def oauth_pre_auth(query_params:)
+    Doorkeeper::OAuth::PreAuthorization.new(
+      Doorkeeper.configuration,
+      Doorkeeper::OAuth::Client.find(query_params['client_id']),
+      ActionController::Parameters.new(query_params)
+    ).as_json({})
   end
 
   field :current_pending_order, Types::OrderType, null: true

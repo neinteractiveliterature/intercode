@@ -9,8 +9,11 @@ import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
+import usePageTitle from '../usePageTitle';
 
 function NewTicketType({ ticketName, timezoneName, history }) {
+  usePageTitle(`New ${ticketName} type`);
+
   const [ticketType, setTicketType] = useState({
     name: '',
     description: '',
@@ -39,7 +42,7 @@ function NewTicketType({ ticketName, timezoneName, history }) {
           },
         },
       });
-      history.replace('/');
+      history.replace('/ticket_types');
     },
     [mutate, ticketType, history],
   ));

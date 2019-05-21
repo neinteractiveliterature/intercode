@@ -1,80 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { Mutation } from 'react-apollo';
-import { enableUniqueIds } from 'react-html-id';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import { CreateEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
+import useAsyncFunction from '../useAsyncFunction';
+import useMutationCallback from '../useMutationCallback';
 
-class CreateEventProposalModal extends React.Component {
-  static propTypes = {
-    onCreate: PropTypes.func.isRequired,
-    cancel: PropTypes.func.isRequired,
-    visible: PropTypes.bool.isRequired,
-    userEventProposals: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      status: PropTypes.string.isRequired,
-      created_at: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      convention: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-    })).isRequired,
-    proposableEventCategories: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      proposable: PropTypes.bool.isRequired,
-    })).isRequired,
+function CreateEventProposalModal({
+  onCreate, cancel, visible, userEventProposals, proposableEventCategories,
+}) {
+  const [cloneEventProposal, setCloneEventProposal] = useState(null);
+  const [eventCategory, setEventCategory] = useState(
+    proposableEventCategories.length > 1 ? null : proposableEventCategories[0],
+  );
+  const [createProposal, createError, createInProgress] = useAsyncFunction(
+    useMutationCallback(CreateEventProposal),
+  );
+  const apolloClient = useApolloClient();
+
+  const createClicked = async () => {
+    const {
+      data: { createEventProposal: { event_proposal: eventProposal } },
+    } = await createProposal({
+      variables: {
+        cloneEventProposalId: (cloneEventProposal || {}).id,
+        eventCategoryId: eventCategory.id,
+      },
+    });
+    await apolloClient.clearStore();
+
+    onCreate(eventProposal);
   };
 
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
-
-    this.state = {
-      cloneEventProposal: null,
-      eventCategory: (
-        props.proposableEventCategories.length > 1
-          ? null
-          : props.proposableEventCategories[0]
-      ),
-      error: null,
-    };
-  }
-
-  createEventProposal = async (mutate) => {
-    this.setState({ mutationInProgress: true });
-    try {
-      const { data: { createEventProposal: { event_proposal: eventProposal } } } = await mutate({
-        variables: {
-          cloneEventProposalId: (this.state.cloneEventProposal || {}).id,
-          eventCategoryId: this.state.eventCategory.id,
-        },
-      });
-
-      this.props.onCreate(eventProposal);
-    } catch (error) {
-      this.setState({ mutationInProgress: false, error });
-    }
-  }
-
-  render = () => (
-    <Modal visible={this.props.visible} dialogClassName="modal-lg" className="text-body">
+  return (
+    <Modal visible={visible} dialogClassName="modal-lg" className="text-body">
       <div className="modal-header">
         New event proposal
       </div>
       <div className="modal-body text-left">
         <SelectWithLabel
           label="What category of event would you like to propose?"
-          options={this.props.proposableEventCategories}
-          isClearable={this.props.proposableEventCategories.length > 1}
-          isDisabled={this.state.mutationInProgress}
-          value={this.state.eventCategory}
+          options={proposableEventCategories}
+          isClearable={proposableEventCategories.length > 1}
+          isDisabled={createInProgress}
+          value={eventCategory}
           getOptionValue={option => option.id}
           getOptionLabel={option => option.name}
-          onChange={(eventCategory) => { this.setState({ eventCategory }); }}
+          onChange={(category) => { setEventCategory(category); }}
         />
 
         <SelectWithLabel
@@ -83,34 +59,37 @@ class CreateEventProposalModal extends React.Component {
             please select it here to have its information copied into the proposal form.
             Otherwise, leave this field blank.`
           }
-          options={(this.props.userEventProposals || [])
+          options={(userEventProposals || [])
             .filter(eventProposal => eventProposal.status !== 'draft')
             .filter(eventProposal => (
-              this.state.eventCategory
+              eventCategory
               && eventProposal.event_category.name.toLowerCase()
-                === this.state.eventCategory.name.toLowerCase()
+              === eventCategory.name.toLowerCase()
             ))}
           isClearable
-          isDisabled={this.state.mutationInProgress}
-          value={this.state.cloneEventProposal}
+          isDisabled={createInProgress}
+          value={cloneEventProposal}
           getOptionValue={option => option.id}
           getOptionLabel={option => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
-          onChange={(cloneEventProposal) => { this.setState({ cloneEventProposal }); }}
+          onChange={(proposal) => { setCloneEventProposal(proposal); }}
         />
 
         {
           (
-            this.state.cloneEventProposal && this.state.eventCategory
-            && this.state.cloneEventProposal.event_category.name !== this.state.eventCategory.name
+            cloneEventProposal && eventCategory
+            && (
+              cloneEventProposal.event_category.name.toLowerCase()
+              !== eventCategory.name.toLowerCase()
+            )
           )
             ? (
               <div className="mt-4 alert alert-warning">
                 {'You are proposing a '}
-                {this.state.eventCategory.name}
+                {eventCategory.name}
                 {', but copying information from '}
-                {this.state.cloneEventProposal.title}
+                {cloneEventProposal.title}
                 {', which is a '}
-                {this.state.cloneEventProposal.event_category.name}
+                {cloneEventProposal.event_category.name}
                 {'. '}
                 Make sure this is what you want before continuing.  You will not be able to change
                 {' '}
@@ -120,14 +99,14 @@ class CreateEventProposalModal extends React.Component {
             : null
         }
 
-        <ErrorDisplay graphQLError={this.state.error} />
+        <ErrorDisplay graphQLError={createError} />
       </div>
       <div className="modal-footer">
         <button
           className="btn btn-secondary"
           type="button"
-          disabled={this.state.mutationInProgress}
-          onClick={this.props.cancel}
+          disabled={createInProgress}
+          onClick={cancel}
         >
           Cancel
         </button>
@@ -136,8 +115,8 @@ class CreateEventProposalModal extends React.Component {
             <button
               className="btn btn-primary"
               type="button"
-              disabled={!this.state.eventCategory || this.state.mutationInProgress}
-              onClick={() => this.createEventProposal(mutate)}
+              disabled={!eventCategory || createInProgress}
+              onClick={() => createClicked(mutate)}
             >
               Create proposal
             </button>
@@ -145,7 +124,27 @@ class CreateEventProposalModal extends React.Component {
         </Mutation>
       </div>
     </Modal>
-  )
+  );
 }
+
+CreateEventProposalModal.propTypes = {
+  onCreate: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+  userEventProposals: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    status: PropTypes.string.isRequired,
+    created_at: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    convention: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  })).isRequired,
+  proposableEventCategories: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    proposable: PropTypes.bool.isRequired,
+  })).isRequired,
+};
 
 export default CreateEventProposalModal;

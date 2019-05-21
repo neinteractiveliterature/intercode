@@ -10,23 +10,20 @@ import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 function CmsGraphqlQueriesAdmin() {
   return (
     <Switch>
-      <Route path="/cms_graphql_queries/new" render={() => <NewCmsGraphqlQuery />} />
+      <Route path="/cms_graphql_queries/new" component={NewCmsGraphqlQuery} />
       <Route
         path="/cms_graphql_queries/:id/edit"
-        render={({ match: { params: { id } } }) => (
+        render={({ match: { params: { id } }, history }) => (
           <QueryWithStateDisplay query={CmsGraphqlQueriesQuery}>
             {({ data }) => {
               const query = data.cmsGraphqlQueries.find(q => q.id.toString() === id);
 
-              return <EditCmsGraphqlQuery initialQuery={query} />;
+              return <EditCmsGraphqlQuery initialQuery={query} history={history} />;
             }}
           </QueryWithStateDisplay>
         )}
       />
-      <Route
-        path="/cms_graphql_queries"
-        render={() => <CmsGraphqlQueriesAdminTable />}
-      />
+      <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdminTable} />
     </Switch>
   );
 }

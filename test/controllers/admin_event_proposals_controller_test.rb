@@ -8,8 +8,8 @@ class AdminEventProposalsControllerTest < ActionDispatch::IntegrationTest
     sign_in user_con_profile.user
   end
 
-  test 'should get index' do
-    get admin_event_proposals_url
+  test 'should get export' do
+    get export_admin_event_proposals_url(format: 'csv')
     assert_response :success
   end
 end

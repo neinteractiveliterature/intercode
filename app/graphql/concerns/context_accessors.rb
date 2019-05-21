@@ -1,5 +1,6 @@
 module Concerns::ContextAccessors
   %i[
+    controller
     current_user
     current_ability
     user_con_profile

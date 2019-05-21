@@ -5,9 +5,12 @@ import ErrorDisplay from '../ErrorDisplay';
 import { WaitlistMailingListsQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
+import usePageTitle from '../usePageTitle';
 
 function WaitlistMailingLists() {
   const { data, error } = useQuerySuspended(WaitlistMailingListsQuery);
+
+  usePageTitle('Waitlists');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

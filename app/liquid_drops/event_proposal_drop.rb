@@ -54,6 +54,6 @@ class EventProposalDrop < Liquid::Drop
 
   # @return [String] The relative URL for linking to edit the proposal
   def edit_url
-    edit_event_proposal_path(event_proposal)
+    "/event_proposals/#{event_proposal.id}/edit"
   end
 end

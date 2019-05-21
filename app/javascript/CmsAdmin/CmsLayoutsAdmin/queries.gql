@@ -7,6 +7,11 @@ fragment CmsLayoutFields on CmsLayout {
 }
 
 query CmsLayoutsAdminQuery {
+  convention {
+    id
+    name
+  }
+
   cmsLayouts {
     ...CmsLayoutFields
   }

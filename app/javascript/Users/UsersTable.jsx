@@ -12,12 +12,14 @@ import { UsersTableUsersQuery } from './queries.gql';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import useModal from '../ModalDialogs/useModal';
 import MergeUsersModal from './MergeUsersModal';
+import usePageTitle from '../usePageTitle';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
 function UsersTable({ exportUrl, history }) {
   const [checkedUserIds, setCheckedUserIds] = useState(new Set());
   const mergeModal = useModal();
+  usePageTitle('Users');
 
   function CheckboxCell({ original }) {
     return (
@@ -128,7 +130,7 @@ function UsersTable({ exportUrl, history }) {
         getTrProps={(state, rowInfo) => ({
           style: { cursor: 'pointer' },
           onClick: () => {
-            history.push(`${rowInfo.original.id}`);
+            history.push(`/users/${rowInfo.original.id}`);
           },
         })}
         getTdProps={(state, rowInfo, column) => {

@@ -9,6 +9,7 @@ import Timespan from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
 import { WhosFreeQuery } from './queries.gql';
 import LoadingIndicator from '../LoadingIndicator';
+import usePageTitle from '../usePageTitle';
 
 function WhosFreeResults({ timespan }) {
   const { data, error } = useQuerySuspended(WhosFreeQuery, {
@@ -37,6 +38,8 @@ WhosFreeResults.propTypes = {
 
 function WhosFree() {
   const [timespan, setTimespan] = useState(null);
+
+  usePageTitle('Who‘s free');
 
   return (
     <>

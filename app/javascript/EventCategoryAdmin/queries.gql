@@ -26,6 +26,7 @@ fragment EventCategoryFields on EventCategory {
 query EventCategoryAdminQuery {
   convention {
     id
+    name
     ticket_name
     ticket_mode
 

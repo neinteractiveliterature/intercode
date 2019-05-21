@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../../TimeUtils';
@@ -15,6 +16,8 @@ import { UpdateSignupCounted } from './mutations.gql';
 import useModal from '../../ModalDialogs/useModal';
 import useQuerySuspended from '../../useQuerySuspended';
 import useMutationCallback from '../../useMutationCallback';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function cityState(userConProfile) {
   return [
@@ -113,6 +116,10 @@ function EditSignup({ id, teamMembersUrl }) {
   const forceConfirmModal = useModal();
   const updateCountedMutate = useMutationCallback(UpdateSignupCounted);
   const confirm = useConfirm();
+
+  usePageTitle(
+    useValueUnless(() => `Editing signup for “${data.signup.user_con_profile.name_without_nickname}” - ${data.signup.run.event.title}`, error),
+  );
 
   const toggleCounted = useCallback(
     signup => updateCountedMutate({
@@ -304,11 +311,11 @@ function EditSignup({ id, teamMembersUrl }) {
               :
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
-            <a href={teamMembersUrl} className="btn btn-link">
+            <Link to={teamMembersUrl} className="btn btn-link">
               Go to
               {' '}
               {pluralize(run.event.event_category.team_member_name)}
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

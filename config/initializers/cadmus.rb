@@ -5,5 +5,5 @@ CadmusFiles.file_model = 'CmsFile'
 CadmusNavbar.navigation_item_model = 'CmsNavigationItem'
 
 Cadmus::Tags::PageUrl.define_page_path_method do |page_name, _parent|
-  page_path(page_name)
+  "/pages/#{page_name}"
 end

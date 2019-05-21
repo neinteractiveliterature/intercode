@@ -12,6 +12,7 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import MoneyCell from '../Tables/MoneyCell';
 import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import usePageTitle from '../usePageTitle';
 
 const StatusFilter = ({ filter, onChange }) => (
   <ChoiceSetFilter
@@ -96,6 +97,8 @@ const getPossibleColumns = (data) => {
 
 function OrderAdmin({ exportUrl, history }) {
   const [editingOrder, setEditingOrder] = useState(null);
+  usePageTitle('Orders');
+
   const [reactTableProps, { tableHeaderProps, queryResult }] = useReactTableWithTheWorks({
     getData: ({ data }) => data.convention.orders_paginated.entries,
     getPages: ({ data }) => data.convention.orders_paginated.total_pages,

@@ -11,6 +11,8 @@ import { UpdateEvent, UpdateRun, CreateRun } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 function useUpdateSingleRunEvent() {
   const updateEvent = useMutationCallback(UpdateEvent);
@@ -81,16 +83,18 @@ function EditSingleRunEvent({ match, history }) {
   const updateSingleRunEvent = useCallback(
     async (options) => {
       await update(options);
-      history.push('/filler_events');
+      history.push('/admin_events/filler_events');
     },
     [update, history],
   );
 
+  const event = error ? null : data.events.find(e => e.id.toString() === match.params.id);
+
+  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error));
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
-
-  const event = data.events.find(e => e.id.toString() === match.params.id);
 
   return (
     <div>
@@ -99,7 +103,7 @@ function EditSingleRunEvent({ match, history }) {
         error={updateError ? updateError.message : null}
         initialEvent={deserializeEvent(event)}
         convention={data.convention}
-        cancelPath="/filler_events"
+        cancelPath="/admin_events/filler_events"
         onSave={updateSingleRunEvent}
       />
     </div>

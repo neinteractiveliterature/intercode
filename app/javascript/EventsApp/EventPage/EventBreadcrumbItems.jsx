@@ -43,14 +43,14 @@ function EventBreadcrumbItems({
             ? (
               <Link
                 to={
-                  `/schedule/${conventionDayStart.format('dddd').toLowerCase()}`
+                  `/events/schedule/${conventionDayStart.format('dddd').toLowerCase()}`
                 }
               >
                 Con schedule
               </Link>
             )
             : (
-              <Link to="/">
+              <Link to="/events">
                 List of events
               </Link>
             )
@@ -71,10 +71,10 @@ EventBreadcrumbItems.propTypes = {
   event: PropTypes.shape({
     title: PropTypes.string.isRequired,
     runs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }),
+  }).isRequired,
   convention: PropTypes.shape({
     timezone_name: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
   currentAbility: PropTypes.shape({
     can_read_schedule: PropTypes.bool.isRequired,
   }).isRequired,

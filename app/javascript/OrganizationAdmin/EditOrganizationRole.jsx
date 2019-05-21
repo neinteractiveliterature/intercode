@@ -9,6 +9,8 @@ import { UpdateOrganizationRole } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
@@ -20,9 +22,11 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
     useMutation(UpdateOrganizationRole),
   );
 
+  usePageTitle(useValueUnless(() => `Editing “${initialOrganizationRole.name}”`, error));
+
   if (error) return <ErrorDisplay graphQLError={error} />;
   if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/" />;
+    return <Redirect to="/organizations" />;
   }
 
   const updateOrganizationRole = async ({
@@ -41,7 +45,7 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
       },
     });
 
-    history.push(`/${organizationId}`);
+    history.push(`/organizations/${organizationId}`);
   };
 
   return (

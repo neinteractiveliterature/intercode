@@ -61,6 +61,7 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :evening_phone, String, null: true
   personal_info_field :best_call_time, String, null: true
   personal_info_field :preferred_contact, String, null: true
+  personal_info_field :accepted_clickwrap_agreement, Boolean, null: false
 
   field :ticket, Types::TicketType, null: true do
     guard -> (graphql_object, _args, ctx) {

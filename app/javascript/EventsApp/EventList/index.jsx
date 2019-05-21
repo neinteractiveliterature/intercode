@@ -1,30 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import ErrorDisplay from '../../ErrorDisplay';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
-import { EventListCommonDataQuery, EventListEventsQuery } from './queries.gql';
+import { EventListEventsQuery } from './queries.gql';
 import EventListEvents from './EventListEvents';
 import EventListPageSizeControl from './EventListPageSizeControl';
 import EventListPagination from './EventListPagination';
 import EventListSortDropdown from './EventListSortDropdown';
-import LoadingIndicator from '../../LoadingIndicator';
 import useLocalStorageReactTable from '../../Tables/useLocalStorageReactTable';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
 } from '../../Tables/TableUtils';
-import useQuerySuspended from '../../useQuerySuspended';
+import usePageTitle from '../../usePageTitle';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
 });
 
-function EventListBody({ convention, currentAbility, history }) {
+function EventList({ history }) {
   const {
     page, sorted, filtered, onPageChange: reactTableOnPageChange, onSortedChange, onFilteredChange,
   } = useReactRouterReactTable({ history, ...filterCodecs });
@@ -44,8 +43,22 @@ function EventListBody({ convention, currentAbility, history }) {
       },
     },
   );
+  const [cachedConventionName, setCachedConventionName] = useState(null);
+  const [cachedEventCategories, setCachedEventCategories] = useState(null);
   const [cachedPageCount, setCachedPageCount] = useState(null);
   const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
+
+  useEffect(
+    () => {
+      if (!loading && !error) {
+        setCachedConventionName(data.convention.name);
+        setCachedEventCategories(data.convention.event_categories);
+      }
+    },
+    [data, loading, error],
+  );
+
+  usePageTitle('List of Events');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -72,6 +85,11 @@ function EventListBody({ convention, currentAbility, history }) {
 
   return (
     <>
+      <h1 className="text-nowrap">
+        Events
+        {cachedConventionName && ` at ${cachedConventionName}`}
+      </h1>
+
       <div className="d-flex align-items-start flex-wrap mt-4">
         <div className="flex-grow-1 d-flex">
           {renderPagination()}
@@ -79,21 +97,23 @@ function EventListBody({ convention, currentAbility, history }) {
 
         <div className="d-flex flex-wrap">
           <div className="mb-2">
-            <EventListCategoryDropdown
-              eventCategories={convention.event_categories}
-              value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-              onChange={(value) => {
-                onFilteredChange([
-                  ...(filtered || []).filter(({ id }) => id !== 'category'),
-                  { id: 'category', value },
-                ]);
-              }}
-            />
+            {cachedEventCategories && (
+              <EventListCategoryDropdown
+                eventCategories={cachedEventCategories}
+                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+                onChange={(value) => {
+                  onFilteredChange([
+                    ...(filtered || []).filter(({ id }) => id !== 'category'),
+                    { id: 'category', value },
+                  ]);
+                }}
+              />
+            )}
           </div>
 
           <div className="ml-2">
             <EventListSortDropdown
-              showConventionOrder={currentAbility.can_read_schedule}
+              showConventionOrder={!loading && data.currentAbility.can_read_schedule}
               value={sorted}
               onChange={onSortedChange}
             />
@@ -101,16 +121,17 @@ function EventListBody({ convention, currentAbility, history }) {
         </div>
       </div>
 
+      <PageLoadingIndicator visible={loading} />
       {
         loading
-          ? <LoadingIndicator />
+          ? null
           : (
             <>
               <EventListEvents
-                convention={convention}
+                convention={data.convention}
                 eventsPaginated={eventsPaginated}
                 sorted={sorted}
-                canReadSchedule={currentAbility.can_read_schedule}
+                canReadSchedule={data.currentAbility.can_read_schedule}
               />
               {
                 eventsPaginated.entries.length >= 4
@@ -128,7 +149,7 @@ function EventListBody({ convention, currentAbility, history }) {
   );
 }
 
-EventListBody.propTypes = {
+EventList.propTypes = {
   convention: PropTypes.shape({
     event_categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
@@ -138,29 +159,4 @@ EventListBody.propTypes = {
   history: PropTypes.shape({}).isRequired,
 };
 
-const EventListBodyWithRouter = withRouter(EventListBody);
-
-function EventList() {
-  const {
-    data: { convention, currentAbility },
-    error,
-  } = useQuerySuspended(EventListCommonDataQuery);
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <>
-      <h1 className="text-nowrap">
-        Events at
-        {' '}
-        {convention.name}
-      </h1>
-
-      <EventListBodyWithRouter convention={convention} currentAbility={currentAbility} />
-    </>
-  );
-}
-
-export default withRouter(EventList);
+export default EventList;

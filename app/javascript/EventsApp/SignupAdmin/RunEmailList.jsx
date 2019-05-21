@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, underscore, humanize } from 'inflected';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import { RunSignupsTableSignupsQuery } from './queries.gql';
-import QueryWithStateDisplay from '../../QueryWithStateDisplay';
+import useQuerySuspended from '../../useQuerySuspended';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function getEmails({ data, includes }) {
   const teamMemberUserConProfileIds = data.event.team_members
@@ -38,75 +40,64 @@ function getEmails({ data, includes }) {
   }));
 }
 
-class RunEmailList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      includes: ['teamMembers', 'confirmed'],
-    };
-  }
+function RunEmailList({ runId, eventId, separator }) {
+  const [includes, setIncludes] = useState(['teamMembers', 'confirmed']);
+  const { data, error } = useQuerySuspended(RunSignupsTableSignupsQuery, {
+    variables: {
+      runId,
+      eventId,
+      filters: {
+        state: ['confirmed', 'waitlisted'],
+      },
+      sort: [
+        { field: 'id', desc: false },
+      ],
+      perPage: 100,
+    },
+  });
 
-  render = () => {
-    const { runId, eventId } = this.props;
-    const { includes } = this.state;
+  usePageTitle(
+    useValueUnless(() => `Emails (${separator === '; ' ? 'semicolon-separated' : 'comma-separated'}) - ${data.event.title}`, error),
+  );
 
-    // TODO figure out how to handle more than 100 signups
-    return (
-      <QueryWithStateDisplay
-        query={RunSignupsTableSignupsQuery}
-        variables={{
-          runId,
-          eventId,
-          filters: {
-            state: ['confirmed', 'waitlisted'],
-          },
-          sort: [
-            { field: 'id', desc: false },
-          ],
-          perPage: 100,
-        }}
-      >
-        {({ data }) => (
-          <>
-            <EmailList
-              emails={getEmails({ data, includes })}
-              separator={this.props.separator}
-              renderToolbarContent={() => (
-                <ChoiceSetFilter
-                  choices={[
-                    { label: `Include ${pluralize(data.event.event_category.team_member_name)}`, value: 'teamMembers' },
-                    { label: 'Include confirmed', value: 'confirmed' },
-                    { label: 'Include waitlisted', value: 'waitlisted' },
-                  ]}
-                  filter={{ value: includes }}
-                  onChange={(nextIncludes) => { this.setState({ includes: nextIncludes }); }}
-                  renderHeaderCaption={(currentIncludes) => {
-                    if (currentIncludes.length === 0) {
-                      return 'Nobody';
-                    }
+  return (
+    <EmailList
+      emails={getEmails({ data, includes })}
+      separator={separator}
+      renderToolbarContent={() => (
+        <ChoiceSetFilter
+          choices={[
+            { label: `Include ${pluralize(data.event.event_category.team_member_name)}`, value: 'teamMembers' },
+            { label: 'Include confirmed', value: 'confirmed' },
+            { label: 'Include waitlisted', value: 'waitlisted' },
+          ]}
+          filter={{ value: includes }}
+          onChange={setIncludes}
+          renderHeaderCaption={(currentIncludes) => {
+            if (currentIncludes.length === 0) {
+              return 'Nobody';
+            }
 
-                    return [...currentIncludes].sort().map((include) => {
-                      if (include === 'teamMembers') {
-                        return humanize(underscore(pluralize(data.event.event_category.team_member_name)));
-                      }
+            return [...currentIncludes].sort().map((include) => {
+              if (include === 'teamMembers') {
+                return humanize(underscore(pluralize(
+                  data.event.event_category.team_member_name,
+                )));
+              }
 
-                      return humanize(underscore(include));
-                    }).join(', ');
-                  }}
-                />
-              )}
-            />
-          </>
-        )}
-      </QueryWithStateDisplay>
-    );
-  }
+              return humanize(underscore(include));
+            }).join(', ');
+          }}
+        />
+      )}
+    />
+  );
 }
 
 RunEmailList.propTypes = {
   runId: PropTypes.number.isRequired,
   eventId: PropTypes.number.isRequired,
-  separator: PropTypes.string.isRequired,
+  separator: PropTypes.oneOf([', ', '; ']).isRequired,
 };
 
 export default RunEmailList;

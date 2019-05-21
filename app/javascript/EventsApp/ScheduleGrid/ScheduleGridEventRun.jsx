@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Manager, Reference, Popper } from 'react-popper';
 
 import AvailabilityBar from './AvailabilityBar';
 import buildEventUrl from '../buildEventUrl';
-import PopperDropdown from '../../UIComponents/PopperDropdown';
-import { ScheduleGridConsumer } from './ScheduleGridContext';
+import { ScheduleGridContext } from './ScheduleGridContext';
 import { userSignupStatus, getRunClassName, getRunStyle } from './StylingUtils';
+import SignupCountData from '../SignupCountData';
 
-function describeAvailability(event, run, signupCountData) {
+function describeAvailability(event, signupCountData) {
   if (signupCountData.runFull(event)) {
     return `Full, waitlist: ${signupCountData.getWaitlistCount()}`;
   }
@@ -28,18 +29,14 @@ function describeAvailability(event, run, signupCountData) {
   return `${availableSlots}/${event.registration_policy.total_slots} slots available`;
 }
 
-class ScheduleGridEventRun extends React.Component {
-  static propTypes = {
-    event: PropTypes.shape({}).isRequired,
-    run: PropTypes.shape({}).isRequired,
-    runDimensions: PropTypes.shape({}).isRequired,
-    layoutResult: PropTypes.shape({}).isRequired,
-    signupCountData: PropTypes.shape({}).isRequired,
-  };
+function RunDisplay({
+  // eslint-disable-next-line react/prop-types
+  event, run, signupCountData, toggle, runDimensions, layoutResult,
+}, ref) {
+  const { config } = useContext(ScheduleGridContext);
+  const signupStatus = userSignupStatus(run);
 
-  renderAvailabilityBar = () => {
-    const { event, signupCountData } = this.props;
-
+  const renderAvailabilityBar = () => {
     if (
       event.registration_policy.slots_limited
       && event.registration_policy.total_slots_including_not_counted === 0
@@ -70,14 +67,12 @@ class ScheduleGridEventRun extends React.Component {
         unlimited={!event.registration_policy.slots_limited}
       />
     );
-  }
+  };
 
-  renderExtendedCounts = (config) => {
+  const renderExtendedCounts = () => {
     if (!config.showExtendedCounts) {
       return null;
     }
-
-    const { signupCountData } = this.props;
 
     return (
       <div className="event-extended-counts p-1">
@@ -94,9 +89,9 @@ class ScheduleGridEventRun extends React.Component {
         </span>
       </div>
     );
-  }
+  };
 
-  renderSignupStatusBadge = (signupStatus, config) => {
+  const renderSignupStatusBadge = () => {
     if (!config.showSignupStatusBadge) {
       return null;
     }
@@ -110,147 +105,227 @@ class ScheduleGridEventRun extends React.Component {
     }
 
     return null;
-  }
+  };
 
-  render = () => {
-    const {
-      layoutResult, runDimensions, event, run, signupCountData,
-    } = this.props;
-    const { timespan } = runDimensions.eventRun;
-
-    const signupStatus = userSignupStatus(run);
-    const availabilityDescription = describeAvailability(event, run, signupCountData);
-    const roomsDescription = run.room_names.sort().join(', ');
-
-    return (
-      <ScheduleGridConsumer>
-        {({
-          schedule, isRunDetailsVisible, toggleRunDetailsVisibility, config,
-        }) => (
-          <PopperDropdown
-            placement="bottom"
-            visible={isRunDetailsVisible(run.id)}
-            onToggle={() => toggleRunDetailsVisibility(schedule, run.id)}
-            renderReference={({ ref, toggle }) => (
-              <div
-                tabIndex={0}
-                className={getRunClassName({
-                  event, signupStatus, config, signupCountData,
-                })}
-                style={getRunStyle({
-                  event, signupStatus, config, signupCountData, runDimensions, layoutResult,
-                })}
-                role="button"
-                onClick={toggle}
-                onKeyDown={(keyEvent) => {
-                  if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
-                    keyEvent.preventDefault();
-                    toggle();
-                  }
-                }}
-                ref={ref}
-              >
-                {this.renderAvailabilityBar(signupCountData)}
-                <div className="d-flex">
-                  {this.renderExtendedCounts(config, signupCountData)}
-                  <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {this.renderSignupStatusBadge(signupStatus, config)}
-                    {event.title}
-                  </div>
-                </div>
-              </div>
-            )}
-          >
-            {({
-              ref,
-              placement,
-              arrowProps,
-              style: popperStyle,
-              toggle,
-              visible,
-            }) => {
-              if (!visible) {
-                return <React.Fragment />;
-              }
-
-              return (
-                <div className={`popover bs-popover-${placement} show`} ref={ref} style={popperStyle} role="tooltip">
-                  <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
-                  <div className="popover-header">
-                    <div className="row align-items-center">
-                      <div className="col">
-                        <strong>
-                          {event.title}
-                        </strong>
-                        {
-                          run.title_suffix
-                            ? [
-                              <span key="mdash">
-                                &mdash;
-                              </span>,
-                              <em key="title-suffix">
-                                {run.title_suffix}
-                              </em>,
-                            ]
-                            : []
-                        }
-                      </div>
-                      <button type="button" className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={toggle}>
-                        <i className="fa fa-close" title="Close" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="popover-body">
-                    <table className="mb-2">
-                      <tbody>
-                        <tr>
-                          <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
-                          <td>{timespan.humanizeInTimezone(schedule.timezoneName)}</td>
-                        </tr>
-                        {
-                          roomsDescription
-                            ? (
-                              <tr>
-                                <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
-                                <td>{roomsDescription}</td>
-                              </tr>
-                            )
-                            : null
-                        }
-                        {
-                          availabilityDescription
-                            ? (
-                              <tr>
-                                <td className="text-center pr-1"><i className="fa fa-users" /></td>
-                                <td>{availabilityDescription}</td>
-                              </tr>
-                            )
-                            : null
-                        }
-                      </tbody>
-                    </table>
-
-                    <Link
-                      to={`${buildEventUrl(event)}#run-${run.id}`}
-                      className="btn btn-primary btn-sm mb-2"
-                    >
-                      Go to event &raquo;
-                    </Link>
-
-                    <div
-                      className="small"
-                      style={{ overflowY: 'auto', maxHeight: '200px' }}
-                      dangerouslySetInnerHTML={{ __html: event.short_blurb_html }}
-                    />
-                  </div>
-                </div>
-              );
-            }}
-          </PopperDropdown>
-        )}
-      </ScheduleGridConsumer>
-    );
-  }
+  return (
+    <div
+      tabIndex={0}
+      className={getRunClassName({
+        event, signupStatus, config, signupCountData,
+      })}
+      style={getRunStyle({
+        event, signupStatus, config, signupCountData, runDimensions, layoutResult,
+      })}
+      role="button"
+      onClick={toggle}
+      onKeyDown={(keyEvent) => {
+        if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
+          keyEvent.preventDefault();
+          toggle();
+        }
+      }}
+      ref={ref}
+    >
+      {renderAvailabilityBar(signupCountData)}
+      <div className="d-flex">
+        {renderExtendedCounts(config, signupCountData)}
+        <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {renderSignupStatusBadge(signupStatus, config)}
+          {event.title}
+        </div>
+      </div>
+    </div>
+  );
 }
+
+const RefForwardingRunDisplay = React.memo(React.forwardRef(RunDisplay));
+
+function RunDetails({
+  // eslint-disable-next-line react/prop-types
+  popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData,
+}, ref) {
+  const { schedule } = useContext(ScheduleGridContext);
+  const { timespan } = runDimensions.eventRun;
+
+  const availabilityDescription = useMemo(
+    () => describeAvailability(event, signupCountData),
+    [event, signupCountData],
+  );
+  const roomsDescription = useMemo(
+    () => run.room_names.sort().join(', '),
+    [run.room_names],
+  );
+
+  return (
+    <div
+      className={`popover bs-popover-${placement} show`}
+      ref={ref}
+      style={popperStyle}
+      role="tooltip"
+    >
+      <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
+      <div className="popover-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <strong>
+              {event.title}
+            </strong>
+            {
+              run.title_suffix
+                ? [
+                  <span key="mdash">
+                    &mdash;
+                  </span>,
+                  <em key="title-suffix">
+                    {run.title_suffix}
+                  </em>,
+                ]
+                : []
+            }
+          </div>
+          <button type="button" className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={toggle}>
+            <i className="fa fa-close" title="Close" />
+          </button>
+        </div>
+      </div>
+      <div className="popover-body">
+        <table className="mb-2">
+          <tbody>
+            <tr>
+              <td className="text-center pr-1"><i className="fa fa-clock-o" /></td>
+              <td>{timespan.humanizeInTimezone(schedule.timezoneName)}</td>
+            </tr>
+            {
+              roomsDescription
+                ? (
+                  <tr>
+                    <td className="text-center pr-1"><i className="fa fa-map-marker" /></td>
+                    <td>{roomsDescription}</td>
+                  </tr>
+                )
+                : null
+            }
+            {
+              availabilityDescription
+                ? (
+                  <tr>
+                    <td className="text-center pr-1"><i className="fa fa-users" /></td>
+                    <td>{availabilityDescription}</td>
+                  </tr>
+                )
+                : null
+            }
+          </tbody>
+        </table>
+
+        <Link
+          to={`${buildEventUrl(event)}#run-${run.id}`}
+          className="btn btn-primary btn-sm mb-2"
+        >
+          Go to event &raquo;
+        </Link>
+
+        <div
+          className="small"
+          style={{ overflowY: 'auto', maxHeight: '200px' }}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: event.short_blurb_html }}
+        />
+      </div>
+    </div>
+  );
+}
+
+const RefForwardingRunDetails = React.forwardRef(RunDetails);
+
+function ScheduleGridEventRun({ runDimensions, detailsVisible, layoutResult }) {
+  const { schedule, toggleRunDetailsVisibility } = useContext(ScheduleGridContext);
+
+  const { eventRun } = runDimensions;
+  const run = useMemo(
+    () => schedule.getRun(eventRun.runId),
+    [schedule, eventRun.runId],
+  );
+  const event = useMemo(
+    () => {
+      if (!run) {
+        return null;
+      }
+
+      return schedule.getEvent(run.event_id);
+    },
+    [schedule, run],
+  );
+
+  const signupCountData = useMemo(
+    () => {
+      if (!run) {
+        return null;
+      }
+
+      return SignupCountData.fromRun(run);
+    },
+    [run],
+  );
+
+  const toggleVisibility = useCallback(
+    () => toggleRunDetailsVisibility((run || {}).id),
+    [run, toggleRunDetailsVisibility],
+  );
+
+  if (event == null || run == null) {
+    return null;
+  }
+
+  return (
+    <Manager>
+      <Reference>
+        {({ ref }) => (
+          <RefForwardingRunDisplay
+            event={event}
+            run={run}
+            signupCountData={signupCountData}
+            ref={ref}
+            toggle={toggleVisibility}
+            runDimensions={runDimensions}
+            layoutResult={layoutResult}
+          />
+        )}
+      </Reference>
+      <Popper placement={detailsVisible ? 'bottom' : 'invalid'}>
+        {({
+          ref,
+          placement,
+          arrowProps,
+          style: popperStyle,
+        }) => {
+          if (!detailsVisible) {
+            return <React.Fragment />;
+          }
+
+          return (
+            <RefForwardingRunDetails
+              ref={ref}
+              placement={placement}
+              arrowProps={arrowProps}
+              popperStyle={popperStyle}
+              toggle={toggleVisibility}
+              event={event}
+              run={run}
+              runDimensions={runDimensions}
+              signupCountData={signupCountData}
+            />
+          );
+        }}
+      </Popper>
+    </Manager>
+  );
+}
+
+ScheduleGridEventRun.propTypes = {
+  runDimensions: PropTypes.shape({}).isRequired,
+  layoutResult: PropTypes.shape({}).isRequired,
+  detailsVisible: PropTypes.bool.isRequired,
+};
 
 export default ScheduleGridEventRun;

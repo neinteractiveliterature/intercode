@@ -1,7 +1,8 @@
 import moment from 'moment-timezone';
 
 class ScheduleBlock {
-  constructor(timespan, eventRuns = []) {
+  constructor(id, timespan, eventRuns = []) {
+    this.id = id;
     this.eventRuns = [];
     this.timespan = timespan;
     this.interval = moment.duration(1, 'hour');

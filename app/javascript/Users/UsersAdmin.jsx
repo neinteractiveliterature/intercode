@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import UsersTable from './UsersTable';
 import UserAdminDisplay from './UserAdminDisplay';
@@ -16,11 +16,7 @@ function UserBreadcrumbItem({ id }) {
   }
 
   return (
-    <BreadcrumbItemWithRoute
-      path="/:id"
-      to={`/${id}`}
-      pageTitleIfActive={data.user.name}
-    >
+    <BreadcrumbItemWithRoute path="/users/:id" to={`/users/${id}`}>
       {data.user.name}
     </BreadcrumbItemWithRoute>
   );
@@ -30,21 +26,20 @@ UserBreadcrumbItem.propTypes = {
   id: PropTypes.number.isRequired,
 };
 
-function UsersAdmin({ basename, exportUrl }) {
+function UsersAdmin() {
   return (
-    <BrowserRouter basename={basename}>
+    <>
       <ol className="breadcrumb">
         <BreadcrumbItemWithRoute
-          path="/"
-          to="/"
+          path="/users"
+          to="/users"
           active={({ match }) => match.isExact}
-          pageTitleIfActive="Users"
         >
           Users
         </BreadcrumbItemWithRoute>
 
         <Route
-          path="/:id"
+          path="/users/:id"
           render={({ match: { params: { id } } }) => (
             <UserBreadcrumbItem id={Number.parseInt(id, 10)} />
           )}
@@ -52,16 +47,11 @@ function UsersAdmin({ basename, exportUrl }) {
       </ol>
 
       <Switch>
-        <Route path="/:id" render={({ match: { params: { id } } }) => <UserAdminDisplay userId={Number.parseInt(id, 10)} />} />
-        <Route path="/" render={() => <UsersTable exportUrl={exportUrl} />} />
+        <Route path="/users/:id" render={({ match: { params: { id } } }) => <UserAdminDisplay userId={Number.parseInt(id, 10)} />} />
+        <Route path="/users" render={() => <UsersTable exportUrl="/users/export.csv" />} />
       </Switch>
-    </BrowserRouter>
+    </>
   );
 }
-
-UsersAdmin.propTypes = {
-  basename: PropTypes.string.isRequired,
-  exportUrl: PropTypes.string.isRequired,
-};
 
 export default UsersAdmin;

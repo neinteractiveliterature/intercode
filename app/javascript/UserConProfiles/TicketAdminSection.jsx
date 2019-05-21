@@ -39,7 +39,7 @@ class TicketAdminSection extends React.Component {
 
     if (this.props.userConProfile.ticket && currentAbility.can_update_ticket) {
       buttons.push(
-        <Link to={`/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
+        <Link to={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
           Edit
           {' '}
           {this.props.convention.ticket_name}
@@ -171,7 +171,7 @@ class TicketAdminSection extends React.Component {
       }
     } else if (currentAbility.can_create_tickets) {
       buttons.push(
-        <Link to={`/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
+        <Link to={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
           Create
           {' '}
           {this.props.convention.ticket_name}

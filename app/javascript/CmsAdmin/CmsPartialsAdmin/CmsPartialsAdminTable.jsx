@@ -8,6 +8,7 @@ import { sortByLocaleString } from '../../ValueUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
+import usePageTitle from '../../usePageTitle';
 
 function CmsPartialsAdminTable() {
   const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
@@ -17,6 +18,8 @@ function CmsPartialsAdminTable() {
     arrayPath: ['cmsPartials'],
     idVariablePath: ['id'],
   });
+
+  usePageTitle('CMS Partials');
 
   const partialsSorted = useMemo(
     () => {

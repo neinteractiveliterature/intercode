@@ -6,6 +6,11 @@ fragment CmsPartialFields on CmsPartial {
 }
 
 query CmsPartialsAdminQuery {
+  convention {
+    id
+    name
+  }
+
   cmsPartials {
     ...CmsPartialFields
   }

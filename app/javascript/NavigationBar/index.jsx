@@ -1,52 +1,60 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { useQuery } from 'react-apollo-hooks';
 
-import NavigationBarItem from './NavigationBarItem';
-import { NavigationProvider } from './NavigationContext';
+import { NavigationBarQuery } from './queries.gql';
+import ErrorDisplay from '../ErrorDisplay';
+import renderNavigationItems from './renderNavigationItems';
 
-class NavigationBar extends React.PureComponent {
-  static propTypes = {
-    assumedIdentityFromProfile: PropTypes.shape({}),
-    convention: PropTypes.shape({}),
-    currentPendingOrder: PropTypes.shape({}),
-    currentUser: PropTypes.shape({}),
-    myProfile: PropTypes.shape({}),
-    navigationBar: PropTypes.shape({
-      classes: PropTypes.string,
-      items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    }).isRequired,
-  }
+function NavigationBarContent({ navbarClasses, items }) {
+  return (
+    <nav className={classNames('navbar', navbarClasses)} role="navigation">
+      <div className="container">
+        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon" />
+        </button>
+        {renderNavigationItems(items)}
+      </div>
+    </nav>
+  );
+}
 
-  static defaultProps = {
-    assumedIdentityFromProfile: null,
-    convention: null,
-    currentPendingOrder: null,
-    currentUser: null,
-    myProfile: null,
-  }
+NavigationBarContent.propTypes = {
+  navbarClasses: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
 
-  render = () => (
-    <NavigationProvider
-      assumedIdentityFromProfile={this.props.assumedIdentityFromProfile}
-      convention={this.props.convention}
-      currentPendingOrder={this.props.currentPendingOrder}
-      currentUser={this.props.currentUser}
-      myProfile={this.props.myProfile}
-    >
-      <nav className={classNames('navbar navbar-fixed-top navbar-expand-md mb-4', this.props.navigationBar.classes)} role="navigation">
+const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
+
+function NavigationBar({ navbarClasses }) {
+  const { data, loading, error } = useQuery(NavigationBarQuery);
+
+  if (loading) {
+    return (
+      <nav className={classNames('navbar', navbarClasses)} role="navigation">
         <div className="container">
-          <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon" />
-          </button>
-          {this.props.navigationBar.items.map((item, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <NavigationBarItem key={i} item={item} />
-          ))}
+          <div className="navbar-brand">&nbsp;</div>
         </div>
       </nav>
-    </NavigationProvider>
-  )
+    );
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <MemoizedNavigationBarContent items={data.navigationBar.items} navbarClasses={navbarClasses} />
+  );
 }
+
+NavigationBar.propTypes = {
+  navbarClasses: PropTypes.string,
+};
+
+NavigationBar.defaultProps = {
+  navbarClasses: null,
+};
 
 export default NavigationBar;

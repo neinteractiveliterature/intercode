@@ -12,6 +12,7 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
+import usePageTitle from '../usePageTitle';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -114,7 +115,7 @@ StatusCell.propTypes = {
 
 function ExtraCell({ original }) {
   return (
-    <Link to={`${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
+    <Link to={`/admin_event_proposals/${original.id}`} target="_blank" rel="noopener" onClick={(event) => { event.stopPropagation(); }}>
       <i className="fa fa-external-link">
         <span className="sr-only">Open in new window</span>
       </i>
@@ -229,43 +230,46 @@ const getPossibleColumns = (data) => {
   ];
 };
 
-function EventProposalsAdminTable({ defaultVisibleColumns, exportUrl, history }) {
+function EventProposalsAdminTable({ history }) {
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-    defaultVisibleColumns,
+    defaultVisibleColumns: ['event_category', 'title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at'],
     alwaysVisibleColumns: ['_extra'],
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data.convention.event_proposals_paginated.entries,
-    getPages: ({ data }) => data.convention.event_proposals_paginated.total_pages,
+    getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
+    getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages,
     getPossibleColumns,
     history,
     query: EventProposalsAdminQuery,
     storageKeyPrefix: 'eventProposalsAdmin',
   });
 
+  usePageTitle('Event Proposals');
+
   return (
-    <div className="mb-4">
-      <TableHeader {...tableHeaderProps} exportUrl={exportUrl} />
+    <>
+      <h1 className="mb-4">Event Proposals</h1>
+      <div className="mb-4">
+        <TableHeader {...tableHeaderProps} exportUrl="/admin_event_proposals/export.csv" />
 
-      <ReactTable
-        {...reactTableProps}
+        <ReactTable
+          {...reactTableProps}
 
-        className="-striped -highlight"
-        getTrProps={(state, rowInfo) => ({
-          style: { cursor: 'pointer' },
-          onClick: () => {
-            history.push(`${rowInfo.original.id}`);
-          },
-        })}
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-      />
-    </div>
+          className="-striped -highlight"
+          getTrProps={(state, rowInfo) => ({
+            style: { cursor: 'pointer' },
+            onClick: () => {
+              history.push(`/admin_event_proposals/${rowInfo.original.id}`);
+            },
+          })}
+          getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+        />
+      </div>
+    </>
   );
 }
 
 EventProposalsAdminTable.propTypes = {
-  defaultVisibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  exportUrl: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,

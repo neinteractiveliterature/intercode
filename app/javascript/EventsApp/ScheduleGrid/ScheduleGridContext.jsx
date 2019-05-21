@@ -1,138 +1,229 @@
-import React from 'react';
+import React, {
+  Suspense, useState, useMemo, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import ConfigPropType from './ConfigPropType';
 import ConventionDayTabContainer from './ConventionDayTabContainer';
-import QueryWithStateDisplay from '../../QueryWithStateDisplay';
+import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
 import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery, ScheduleGridCombinedQuery } from './queries.gql';
 import { timespanFromConvention } from '../../TimespanUtils';
+import useQuerySuspended from '../../useQuerySuspended';
+import PageLoadingIndicator from '../../PageLoadingIndicator';
+import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect().os);
 
-const ScheduleGridContext = React.createContext({
+export const ScheduleGridContext = React.createContext({
   schedule: {},
   config: {},
+  convention: {},
   isRunDetailsVisible: () => false,
+  visibleRunDetailsIds: new Set(),
   toggleRunDetailsVisibility: () => {},
 });
 
-export const ScheduleGridConsumer = ScheduleGridContext.Consumer;
+function useScheduleGridProvider(config, convention, events) {
+  const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
 
-export class ScheduleGridProvider extends React.Component {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    config: ConfigPropType.isRequired,
+  const isRunDetailsVisible = useMemo(
+    () => runId => visibleRunDetailsIds.has(runId),
+    [visibleRunDetailsIds],
+  );
+
+  const schedule = useMemo(
+    () => {
+      if (config && convention && events) {
+        return new Schedule(config, convention, events);
+      }
+
+      return {};
+    },
+    [config, convention, events],
+  );
+
+  const toggleRunDetailsVisibility = useCallback(
+    (runId) => {
+      let newVisibility;
+
+      setVisibleRunDetailsIds((prevVisibleRunDetailsIds) => {
+        const newVisibleRunDetailsIds = new Set(prevVisibleRunDetailsIds);
+
+        if (prevVisibleRunDetailsIds.has(runId)) {
+          newVisibleRunDetailsIds.delete(runId);
+          newVisibility = false;
+          return newVisibleRunDetailsIds;
+        }
+
+        const runTimespan = schedule.getRunTimespan(runId);
+        const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
+          .map(eventRun => eventRun.runId);
+
+        concurrentRunIds.forEach((concurrentRunId) => {
+          newVisibleRunDetailsIds.delete(concurrentRunId);
+        });
+        newVisibleRunDetailsIds.add(runId);
+        newVisibility = true;
+
+        return newVisibleRunDetailsIds;
+      });
+
+      return newVisibility;
+    },
+    [schedule],
+  );
+
+  return {
+    schedule,
+    convention,
+    config,
+    isRunDetailsVisible,
+    visibleRunDetailsIds,
+    toggleRunDetailsVisibility,
+  };
+}
+
+function ScheduleGridSkeleton() {
+  return (
+    <div className="schedule-grid mb-4 bg-light">
+      <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
+        <PageLoadingIndicator visible />
+      </div>
+    </div>
+  );
+}
+
+function MobileScheduleGridProvider({ config, children }) {
+  const combinedQueryParams = {
+    query: ScheduleGridCombinedQuery,
+    variables: { extendedCounts: config.showExtendedCounts || false },
   };
 
-  constructor(props) {
-    super(props);
+  const { data, error } = useQuerySuspended(combinedQueryParams.query, {
+    variables: combinedQueryParams.variables,
+  });
+  const { convention, events } = (data || {});
+  const providerValue = useScheduleGridProvider(config, convention, events);
 
-    this.state = {
-      visibleRunDetailsIds: new Set(),
-    };
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  getEventsQueryParams = timespan => ({
-    query: ScheduleGridEventsQuery,
-    variables: {
-      start: timespan.start.toISOString(),
-      finish: timespan.finish.toISOString(),
-      extendedCounts: this.props.config.showExtendedCounts || false,
-    },
-  })
-
-  toggleRunDetailsVisibility = (schedule, runId) => {
-    if (this.state.visibleRunDetailsIds.has(runId)) {
-      this.setState((prevState) => {
-        const newVisibleRunDetailsIds = new Set(prevState.visibleRunDetailsIds);
-        newVisibleRunDetailsIds.delete(runId);
-        return { visibleRunDetailsIds: newVisibleRunDetailsIds };
-      });
-
-      return false;
-    }
-
-    const runTimespan = schedule.getRunTimespan(runId);
-    const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
-      .map(eventRun => eventRun.runId);
-
-    this.setState((prevState) => {
-      const newVisibleRunDetailsIds = new Set(prevState.visibleRunDetailsIds);
-      concurrentRunIds.forEach((concurrentRunId) => {
-        newVisibleRunDetailsIds.delete(concurrentRunId);
-      });
-      newVisibleRunDetailsIds.add(runId);
-
-      return { visibleRunDetailsIds: newVisibleRunDetailsIds };
-    });
-
-    return true;
-  }
-
-  renderProvider = (convention, events, timespan) => {
-    const schedule = new Schedule(this.props.config, convention, events);
-
-    return (
-      <ScheduleGridContext.Provider
-        value={{
-          schedule,
-          convention,
-          config: this.props.config,
-          isRunDetailsVisible: runId => this.state.visibleRunDetailsIds.has(runId),
-          toggleRunDetailsVisibility: this.toggleRunDetailsVisibility,
-        }}
-      >
-        {this.props.children(timespan)}
-      </ScheduleGridContext.Provider>
-    );
-  }
-
-  render = () => {
-    const combinedQueryParams = {
-      query: ScheduleGridCombinedQuery,
-      variables: { extendedCounts: this.props.config.showExtendedCounts || false },
-    };
-
-    if (IS_MOBILE) {
-      // We can't detect hovers on mobile, so prefetching isn't an option - just fetch all
-      // the data on the first request
-
-      return (
-        <QueryWithStateDisplay {...combinedQueryParams}>
-          {({ data: { convention, events }, client }) => (
-            <ConventionDayTabContainer
-              basename={this.props.config.basename}
-              conventionTimespan={timespanFromConvention(convention)}
-              timezoneName={convention.timezone_name}
-              refreshData={() => client.query({ ...combinedQueryParams, fetchPolicy: 'network-only' })}
-            >
-              {timespan => this.renderProvider(convention, events, timespan)}
-            </ConventionDayTabContainer>
-          )}
-        </QueryWithStateDisplay>
-      );
-    }
-
-    return (
-      <QueryWithStateDisplay query={ScheduleGridConventionDataQuery}>
-        {({ data: { convention }, client }) => (
-          <ConventionDayTabContainer
-            basename={this.props.config.basename}
-            conventionTimespan={timespanFromConvention(convention)}
-            timezoneName={convention.timezone_name}
-            prefetchTimespan={timespan => client.query(this.getEventsQueryParams(timespan))}
-            refreshData={() => client.query({ ...combinedQueryParams, fetchPolicy: 'network-only' })}
-          >
-            {timespan => (
-              <QueryWithStateDisplay {...this.getEventsQueryParams(timespan)}>
-                {({ data: { events } }) => this.renderProvider(convention, events, timespan)}
-              </QueryWithStateDisplay>
-            )}
-          </ConventionDayTabContainer>
-        )}
-      </QueryWithStateDisplay>
-    );
-  }
+  return (
+    <ConventionDayTabContainer
+      basename={config.basename}
+      conventionTimespan={timespanFromConvention(convention)}
+      timezoneName={convention.timezone_name}
+    >
+      {timespan => (
+        <ScheduleGridContext.Provider value={providerValue}>
+          {children(timespan)}
+        </ScheduleGridContext.Provider>
+      )}
+    </ConventionDayTabContainer>
+  );
 }
+
+MobileScheduleGridProvider.propTypes = {
+  config: ConfigPropType.isRequired,
+  children: PropTypes.func.isRequired,
+};
+
+function getEventsQueryVariables(timespan, showExtendedCounts) {
+  return {
+    start: timespan.start.toISOString(),
+    finish: timespan.finish.toISOString(),
+    extendedCounts: showExtendedCounts || false,
+  };
+}
+
+function DesktopScheduleGridProviderTabContent({
+  config, convention, children, timespan,
+}) {
+  const { data: { events }, error } = useQuerySuspended(ScheduleGridEventsQuery, {
+    variables: getEventsQueryVariables(timespan, config.showExtendedCounts),
+  });
+  const providerValue = useScheduleGridProvider(config, convention, events);
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return (
+    <ScheduleGridContext.Provider value={providerValue}>
+      {children(timespan)}
+    </ScheduleGridContext.Provider>
+  );
+}
+
+DesktopScheduleGridProviderTabContent.propTypes = {
+  config: ConfigPropType.isRequired,
+  children: PropTypes.func.isRequired,
+  timespan: PropTypes.shape({}).isRequired,
+  convention: PropTypes.shape({}).isRequired,
+};
+
+function DesktopScheduleGridProvider({ config, children }) {
+  const { data, error } = useQuerySuspended(ScheduleGridConventionDataQuery);
+  const client = useApolloClient();
+
+  const prefetchTimespan = useCallback(
+    timespan => client.query({
+      query: ScheduleGridEventsQuery,
+      variables: getEventsQueryVariables(timespan, config.showExtendedCounts),
+    }),
+    [client, config.showExtendedCounts],
+  );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const { convention } = data;
+
+  return (
+    <ConventionDayTabContainer
+      basename={config.basename}
+      conventionTimespan={timespanFromConvention(convention)}
+      timezoneName={convention.timezone_name}
+      prefetchTimespan={prefetchTimespan}
+    >
+      {timespan => (
+        <Suspense fallback={<ScheduleGridSkeleton />}>
+          <DesktopScheduleGridProviderTabContent
+            config={config}
+            convention={convention}
+            timespan={timespan}
+          >
+            {children}
+          </DesktopScheduleGridProviderTabContent>
+        </Suspense>
+      )}
+    </ConventionDayTabContainer>
+  );
+}
+
+DesktopScheduleGridProvider.propTypes = {
+  config: ConfigPropType.isRequired,
+  children: PropTypes.func.isRequired,
+};
+
+export function ScheduleGridProvider({ config, children }) {
+  if (IS_MOBILE) {
+    return <MobileScheduleGridProvider config={config}>{children}</MobileScheduleGridProvider>;
+  }
+
+  return (
+    <DesktopScheduleGridProvider config={config}>
+      {children}
+    </DesktopScheduleGridProvider>
+  );
+}
+
+ScheduleGridProvider.propTypes = {
+  config: ConfigPropType.isRequired,
+  children: PropTypes.func.isRequired,
+};

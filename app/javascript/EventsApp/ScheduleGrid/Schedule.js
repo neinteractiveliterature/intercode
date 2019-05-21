@@ -99,6 +99,7 @@ export default class Schedule {
       .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' }));
 
     return roomNames.map(roomName => ({
+      id: roomName,
       rowHeader: roomName,
       eventRuns: runsByRoomMap.get(roomName),
     }));
@@ -106,7 +107,9 @@ export default class Schedule {
 
   buildScheduleBlocksFromGroups = (groups, actualTimespan) => {
     const blocks = groups
-      .map(({ eventRuns, ...props }) => [new ScheduleBlock(actualTimespan, eventRuns), props]);
+      .map(({ eventRuns, id, ...props }) => [
+        new ScheduleBlock(id, actualTimespan, eventRuns), props,
+      ]);
 
     if (this.config.filterEmptyGroups) {
       return blocks.filter(scheduleBlock => scheduleBlock[0].eventRuns.length > 0);

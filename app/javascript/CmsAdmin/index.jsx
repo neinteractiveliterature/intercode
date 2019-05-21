@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  BrowserRouter, NavLink, Switch, Route,
-} from 'react-router-dom';
+import { NavLink, Switch, Route } from 'react-router-dom';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
@@ -14,6 +12,7 @@ import CmsPagesAdmin from './CmsPagesAdmin';
 import CmsLayoutsAdmin from './CmsLayoutsAdmin';
 import CmsPartialsAdmin from './CmsPartialsAdmin';
 import CmsFilesAdmin from './CmsFilesAdmin';
+import RootSiteAdmin from '../RootSiteAdmin';
 
 function CmsAdminNavTab({ path, children }) {
   return (
@@ -36,38 +35,37 @@ function CmsAdmin() {
   }
 
   return (
-    <BrowserRouter basename="/">
-      <>
-        <h1>CMS</h1>
+    <>
+      <h1>CMS</h1>
 
-        <ul className="nav nav-tabs" role="tablist">
-          <CmsAdminNavTab path="/cms_pages">Pages</CmsAdminNavTab>
-          <CmsAdminNavTab path="/cms_partials">Partials</CmsAdminNavTab>
-          <CmsAdminNavTab path="/cms_files">Files</CmsAdminNavTab>
-          <CmsAdminNavTab path="/cms_navigation_items">Navigation</CmsAdminNavTab>
-          <CmsAdminNavTab path="/cms_layouts">Layouts</CmsAdminNavTab>
-          <CmsAdminNavTab path="/cms_variables">Variables</CmsAdminNavTab>
-          <CmsAdminNavTab path="/cms_graphql_queries">GraphQL queries</CmsAdminNavTab>
-          {
-            !data.convention && (
-              <CmsAdminNavTab path="/root_site">Root site settings</CmsAdminNavTab>
-            )
-          }
-        </ul>
+      <ul className="nav nav-tabs" role="tablist">
+        <CmsAdminNavTab path="/cms_pages">Pages</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_partials">Partials</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_files">Files</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_navigation_items">Navigation</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_layouts">Layouts</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_variables">Variables</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_graphql_queries">GraphQL queries</CmsAdminNavTab>
+        {
+          !data.convention && (
+            <CmsAdminNavTab path="/root_site">Root site settings</CmsAdminNavTab>
+          )
+        }
+      </ul>
 
-        <br />
+      <br />
 
-        <Switch>
-          <Route path="/cms_pages" component={CmsPagesAdmin} />
-          <Route path="/cms_partials" component={CmsPartialsAdmin} />
-          <Route path="/cms_files" component={CmsFilesAdmin} />
-          <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
-          <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
-          <Route path="/cms_variables" component={CmsVariablesAdmin} />
-          <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />
-        </Switch>
-      </>
-    </BrowserRouter>
+      <Switch>
+        <Route path="/cms_pages" component={CmsPagesAdmin} />
+        <Route path="/cms_partials" component={CmsPartialsAdmin} />
+        <Route path="/cms_files" component={CmsFilesAdmin} />
+        <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
+        <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
+        <Route path="/cms_variables" component={CmsVariablesAdmin} />
+        <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />
+        <Route path="/root_site" component={RootSiteAdmin} />
+      </Switch>
+    </>
   );
 }
 

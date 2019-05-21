@@ -14,6 +14,7 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import useMutationCallback from '../useMutationCallback';
 import { sortByLocaleString } from '../ValueUtils';
+import usePageTitle from '../usePageTitle';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
@@ -80,6 +81,8 @@ function StaffPositionsTable({ staffPositions }) {
     [deleteMutate],
   );
 
+  usePageTitle('Staff positions');
+
   const renderRow = staffPosition => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
@@ -104,10 +107,10 @@ function StaffPositionsTable({ staffPositions }) {
             </button>
           )}
         >
-          <Link to={`/${staffPosition.id}/edit`} className="dropdown-item">
+          <Link to={`/staff_positions/${staffPosition.id}/edit`} className="dropdown-item">
             Edit settings
           </Link>
-          <Link to={`/${staffPosition.id}/edit_permissions`} className="dropdown-item">
+          <Link to={`/staff_positions/${staffPosition.id}/edit_permissions`} className="dropdown-item">
             Edit permissions
           </Link>
           <Confirm.Trigger>
@@ -153,7 +156,7 @@ function StaffPositionsTable({ staffPositions }) {
         </tbody>
       </table>
 
-      <Link to="/new" className="btn btn-primary">New Staff Position</Link>
+      <Link to="/staff_positions/new" className="btn btn-primary">New Staff Position</Link>
     </div>
   );
 }

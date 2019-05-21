@@ -31,14 +31,6 @@ function renderIfQueryReady(render, { loading, error }) {
   return render();
 }
 
-function getMostRecentConventionDate(user) {
-  return user.user_con_profiles.map(profile => new Date(profile.convention.starts_at).getTime());
-}
-
-function compareUsers(a, b) {
-  return getMostRecentConventionDate(a) - getMostRecentConventionDate(b);
-}
-
 function MergeUsersModal({ closeModal, visible, userIds }) {
   const { data, loading, error } = useQuery(MergeUsersModalQuery, {
     variables: { ids: userIds || [] },

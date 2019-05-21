@@ -22,12 +22,12 @@ function BioDisplay({ userConProfile }) {
         {
           userConProfile.bio && userConProfile.bio.trim() !== ''
             ? (
-              <Link to="/edit_bio" className="btn btn-secondary">
+              <Link to="/my_profile/edit_bio" className="btn btn-secondary">
                 Edit bio/avatar settings
               </Link>
             )
             : (
-              <Link to="/edit_bio" className="btn btn-primary">
+              <Link to="/my_profile/edit_bio" className="btn btn-primary">
                 Add bio/avatar
               </Link>
             )

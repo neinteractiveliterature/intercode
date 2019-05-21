@@ -9,6 +9,8 @@ import { UpdatePartial } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import useMutationCallback from '../../useMutationCallback';
 import useQuerySuspended from '../../useQuerySuspended';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function EditCmsPartial({ match, history }) {
   const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
@@ -19,6 +21,8 @@ function EditCmsPartial({ match, history }) {
   const [updatePartial, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdatePartial),
   );
+
+  usePageTitle(useValueUnless(() => `Editing “${initialPartial.name}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

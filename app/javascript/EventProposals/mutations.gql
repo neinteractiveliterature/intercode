@@ -20,6 +20,12 @@ mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   }
 }
 
+mutation DeleteEventProposal($id: Int!) {
+  deleteEventProposal(input: { id: $id }) {
+    clientMutationId
+  }
+}
+
 mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
   submitEventProposal(input: $input) {
     event_proposal {

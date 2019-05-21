@@ -1,43 +1,47 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
+import useUniqueId from '../useUniqueId';
 
-class BootstrapFormTextarea extends React.Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    disabled: PropTypes.bool,
-  };
+function BootstrapFormTextarea(props) {
+  const {
+    name, value, label, disabled, onChange, onTextChange, ...otherProps
+  } = props;
+  const inputId = useUniqueId(`${name}-`);
 
-  static defaultProps = {
-    disabled: false,
-  };
+  const onChangeProp = useMemo(
+    () => onChange || ((event) => { onTextChange(event.target.value); }),
+    [onChange, onTextChange],
+  );
 
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
-  }
-
-  render = () => {
-    const inputId = this.nextUniqueId();
-
-    return (
-      <div className="form-group">
-        <label htmlFor={inputId}>{this.props.label}</label>
-        <textarea
-          className="form-control"
-          id={inputId}
-          name={this.props.name}
-          value={this.props.value}
-          onChange={this.props.onChange}
-          disabled={this.props.disabled}
-          {...this.props}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="form-group">
+      <label htmlFor={inputId}>{label}</label>
+      <textarea
+        className="form-control"
+        id={inputId}
+        name={name}
+        value={value}
+        onChange={onChangeProp}
+        disabled={disabled}
+        {...otherProps}
+      />
+    </div>
+  );
 }
+
+BootstrapFormTextarea.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  onTextChange: PropTypes.func,
+  disabled: PropTypes.bool,
+};
+
+BootstrapFormTextarea.defaultProps = {
+  disabled: false,
+  onChange: null,
+  onTextChange: null,
+};
 
 export default BootstrapFormTextarea;

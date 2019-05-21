@@ -193,6 +193,10 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:event_proposals, :update))
   end
 
+  field :deleteEventProposal, mutation: Mutations::DeleteEventProposal do
+    guard(guard_for_convention_associated_model(:event_proposals, :destroy))
+  end
+
   field :submitEventProposal, mutation: Mutations::SubmitEventProposal do
     guard(guard_for_convention_associated_model(:event_proposals, :submit))
   end
@@ -547,4 +551,6 @@ class Types::MutationType < Types::BaseObject
   field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile do
     guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
+
+  field :acceptClickwrapAgreement, mutation: Mutations::AcceptClickwrapAgreement
 end

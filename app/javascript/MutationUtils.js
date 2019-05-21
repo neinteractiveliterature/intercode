@@ -33,24 +33,25 @@ export function useCreateMutation(mutation, {
 }
 
 export function useDeleteMutation(mutation, {
-  query, queryVariables: variables, arrayPath, idVariablePath, ...options
+  query, variables, arrayPath, idVariablePath, queryVariables, ...options
 }) {
-  const mutate = useMutationCallback(mutation, options);
+  const mutate = useMutationCallback(mutation, { variables, ...options });
   return useCallback(
     (mutateOptions) => {
-      const id = get(idVariablePath, mutateOptions.variables);
+      const mutateVariables = (mutateOptions || {}).variables || variables;
+      const id = get(idVariablePath, mutateVariables);
       return mutate({
         update: (store) => {
-          const data = store.readQuery({ query, variables });
+          const data = store.readQuery({ query, variables: queryVariables });
           store.writeQuery({
             query,
-            variables,
+            variables: queryVariables,
             data: set(arrayPath, get(arrayPath, data).filter(object => object.id !== id), data),
           });
         },
         ...mutateOptions,
       });
     },
-    [arrayPath, idVariablePath, mutate, query, variables],
+    [arrayPath, idVariablePath, mutate, query, queryVariables, variables],
   );
 }

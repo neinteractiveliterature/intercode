@@ -17,6 +17,11 @@ fragment CmsPageFields on Page {
 }
 
 query CmsPagesAdminQuery {
+  convention {
+    id
+    name
+  }
+
   cmsPages {
     ...CmsPageFields
   }

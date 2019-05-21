@@ -17,15 +17,11 @@ class UserConProfilesController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:become, :revert_become]
   end
 
-  def index
-    @page_title = 'Attendees'
-  end
-
   def become
     identity_assumer = assumed_identity_from_profile || user_con_profile
     sign_in @subject_profile.user
     session[:assumed_identity_from_profile_id] = identity_assumer.id
-    redirect_to root_url, notice: "You are now signed in as #{@subject_profile.user.name}."
+    redirect_to root_url
   end
 
   def revert_become
@@ -37,7 +33,7 @@ back to your normal identity (since you already are your normal identity).")
     regular_user_con_profile = assumed_identity_from_profile
     sign_in regular_user_con_profile.user
     session.delete(:assumed_identity_from_profile_id)
-    redirect_to root_url, notice: "Reverted to #{regular_user_con_profile.name}."
+    redirect_to root_url
   end
 
   def export

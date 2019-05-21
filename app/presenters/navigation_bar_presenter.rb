@@ -8,7 +8,7 @@ class NavigationBarPresenter
       end
     end
 
-    %i[label url visible? active? http_method].each do |method_name|
+    %i[label url visible? active?].each do |method_name|
       define_singleton_method(method_name) do |value = nil, &implementation|
         if value
           define_method(method_name) { value }
@@ -30,10 +30,6 @@ class NavigationBarPresenter
 
     def url
       raise 'Navigation items must define #url'
-    end
-
-    def http_method
-      'GET'
     end
 
     def visible?
@@ -127,116 +123,104 @@ class NavigationBarPresenter
   EVENTS_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Con Schedule'
-      url { "#{events_path}/schedule" }
+      url '/events/schedule'
       visible? { can?(:schedule, convention) }
-      active? { |request| request.path == "#{events_path}/schedule" }
     end,
     NavigationItem.define do
       label 'Con Schedule by Room'
-      url { "#{events_path}/schedule_by_room" }
+      url '/events/schedule_by_room'
       visible? { can?(:schedule, convention) }
-      active? { |request| request.path == "#{events_path}/schedule_by_room" }
     end,
     NavigationItem.define do
       label 'List of Events'
-      url { events_path }
+      url '/events'
       visible? { can?(:list_events, convention) }
-      active? { |request| request.path == events_path }
     end,
     NavigationItem.define do
       label 'Schedule With Counts'
-      url { "#{events_path}/schedule_with_counts" }
+      url '/events/schedule_with_counts'
       visible? { can?(:schedule_with_counts, convention) }
     end,
     NavigationItem.define do
       label 'Propose an Event'
-      url { page_path('new-proposal') }
+      url '/pages/new-proposal'
       visible? { convention.accepting_proposals }
     end
   ]
 
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
-    url { cms_pages_path }
+    url '/cms_pages'
     visible? { can?(:update, Page.new(parent: convention)) }
-    active? do |request|
-      [
-        cms_pages_path,
-        cms_partials_path,
-        cms_layouts_path,
-        cms_files_path,
-        cms_navigation_items_path
-      ].include?(request.path)
-    end
   end
 
   ADMIN_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Attendees'
-      url { user_con_profiles_path }
+      url '/user_con_profiles'
       visible? { can?(:view_attendees, convention) }
     end,
     NavigationItem.define do
       label 'Convention Settings'
-      url { edit_convention_path }
+      url '/convention/edit'
       visible? { can?(:update, convention) }
     end,
     NavigationItem.define do
       label 'Event Categories'
-      url { event_categories_path }
+      url '/event_categories'
       visible? { can?(:update, EventCategory.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Event Proposals'
-      url { admin_event_proposals_path('sort.status' => 'asc', 'sort.submitted_at' => 'desc') }
+      url '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc'
       visible? { can?(:view_event_proposals, convention) }
     end,
     NavigationItem.define do
       label 'Event Scheduling'
-      url { admin_events_path }
+      url '/admin_events'
       visible? { can?(:update, Run.new(event: Event.new(convention: convention))) }
     end,
     NavigationItem.define do
       label 'Forms'
-      url { admin_forms_path }
+      url '/admin_forms'
       visible? { can?(:update, Form.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Mailing Lists'
-      url { mailing_lists_path }
+      url '/mailing_lists'
       visible? { can?(:mail_to_any, convention) }
     end,
     NavigationItem.define do
       label 'OAuth2 Applications'
-      url { oauth_applications_path }
+      url '/oauth/applications-embed'
       visible? { can?(:manage, Doorkeeper::Application) }
     end,
     NavigationItem.define do
       label 'Reports'
-      url { reports_path }
+      url '/reports'
       visible? { can?(:view_reports, convention) }
     end,
     NavigationItem.define do
       label 'Rooms'
-      url { rooms_path }
+      url '/rooms'
       visible? { can?(:update, Room.new(convention: convention)) }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Staff Positions'
-      url { staff_positions_path }
+      url '/staff_positions'
       visible? { can?(:update, StaffPosition.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Store'
-      url { admin_store_path }
+      url '/admin_store'
       visible? do
         can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
       end
     end,
     NavigationItem.define do
       label { "#{convention.ticket_name.titleize} Types" }
-      url { ticket_types_path }
+      url '/ticket_types'
       visible? do
         convention.ticket_mode != 'disabled' &&
           can?(:update, TicketType.new(convention: convention))
@@ -244,7 +228,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'User Activity Alerts'
-      url { user_activity_alerts_path }
+      url '/user_activity_alerts'
       visible? { can?(:read, UserActivityAlert.new(convention: convention)) }
     end
   ]
@@ -252,13 +236,13 @@ class NavigationBarPresenter
   ROOT_SITE_ADMIN_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Organizations'
-      url { organizations_path }
+      url '/organizations'
       visible? { can?(:read, Organization) }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Users'
-      url { users_path }
+      url '/users'
       visible? { can?(:read, User) }
     end
   ]
@@ -271,12 +255,12 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label { "My #{convention.name} Profile" }
-      url { my_profile_path }
+      url '/my_profile'
       visible? { user_con_profile }
     end,
     NavigationItem.define do
       label 'My Order History'
-      url { order_history_path }
+      url '/order_history'
       visible? { user_con_profile }
     end,
     NavigationItem.define do
@@ -389,7 +373,7 @@ class NavigationBarPresenter
   def cms_navigation_item_class(item)
     NavigationItem.define do
       label item.title
-      url { page_path(item.page) }
+      url "/pages/#{item.page.to_param}"
     end
   end
 
