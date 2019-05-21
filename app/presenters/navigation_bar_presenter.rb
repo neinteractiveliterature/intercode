@@ -168,12 +168,12 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Event Categories'
       url '/event_categories'
-      visible? { can?(:update, EventCategory.new(convention: convention)) }
+      visible? { convention.site_mode != 'single_event' && can?(:update, EventCategory.new(convention: convention)) }
     end,
     NavigationItem.define do
       label 'Event Proposals'
       url '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc'
-      visible? { can?(:view_event_proposals, convention) }
+      visible? { convention.site_mode != 'single_event' && can?(:view_event_proposals, convention) }
     end,
     NavigationItem.define do
       label 'Event Scheduling'
@@ -292,7 +292,7 @@ class NavigationBarPresenter
   end
 
   def ticket_purchase_navigation_items
-    if convention&.tickets_available_for_purchase?
+    if convention&.tickets_available_for_purchase? && convention.site_mode != 'single_event'
       [TicketPurchaseNavigationItem.new]
     else
       []
@@ -306,7 +306,7 @@ class NavigationBarPresenter
         RootNavigationGroup.new([
           *ticket_purchase_navigation_items,
           *(
-            if convention
+            if convention && convention.site_mode != 'single_event'
               [NavigationSection.new('Events', events_navigation_items)]
             else
               []
