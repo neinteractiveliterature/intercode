@@ -34,7 +34,6 @@ function UsersAdmin() {
           path="/users"
           to="/users"
           active={({ match }) => match.isExact}
-          pageTitleIfActive="Users"
         >
           Users
         </BreadcrumbItemWithRoute>
