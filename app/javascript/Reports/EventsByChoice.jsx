@@ -11,6 +11,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import { EventsByChoiceQuery } from './queries.gql';
 import { titleSort } from '../ValueUtils';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
 
 function renderChoiceCounts(choiceData) {
   if (!choiceData) {
@@ -86,6 +87,8 @@ function EventsByChoice() {
     })),
     [sortedRows],
   );
+
+  usePageTitle('Events by choice');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

@@ -9,9 +9,7 @@ import { CreateUserConProfile } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import UserConProfileForm from './UserConProfileForm';
 import UserSelect from '../BuiltInFormControls/UserSelect';
-import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
 import PrivilegesForm from './PrivilegesForm';
 
 class AddAttendeeModal extends React.Component {
@@ -34,7 +32,7 @@ class AddAttendeeModal extends React.Component {
 
   cancel = () => {
     this.setState({ user: null, userId: null, userConProfile: null });
-    this.props.history.replace('/');
+    this.props.history.replace('/user_con_profiles');
   }
 
   userSelected = (user) => {
@@ -133,7 +131,7 @@ class AddAttendeeModal extends React.Component {
                     userId: null,
                     userConProfile: null,
                   });
-                  this.props.history.replace('/');
+                  this.props.history.replace('/user_con_profiles');
                 } catch (error) {
                   this.setState({ error, mutationInProgress: false });
                 }

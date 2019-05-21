@@ -1,42 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
-  BrowserRouter, NavLink, Redirect, Route, Switch,
+  NavLink, Redirect, Route, Switch,
 } from 'react-router-dom';
 import OrderAdmin from './OrderAdmin';
 import OrderSummary from './OrderSummary';
 import ProductAdmin from './ProductAdmin';
 
-function StoreAdmin({ basename, exportOrdersUrl }) {
+function StoreAdmin() {
   return (
-    <BrowserRouter basename={basename}>
-      <div>
-        <ul className="nav nav-tabs mb-4">
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/products">Products</NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/orders">Orders</NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/order_summary">Order summary</NavLink>
-          </li>
-        </ul>
+    <>
+      <h1 className="mb-4">Store administration</h1>
+      <ul className="nav nav-tabs mb-4">
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_store/products">Products</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_store/orders">Orders</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_store/order_summary">Order summary</NavLink>
+        </li>
+      </ul>
 
-        <Switch>
-          <Route path="/products" component={ProductAdmin} />
-          <Route path="/orders" render={() => <OrderAdmin exportUrl={exportOrdersUrl} />} />
-          <Route path="/order_summary" component={OrderSummary} />
-          <Redirect to="/products" />
-        </Switch>
-      </div>
-    </BrowserRouter>
+      <Switch>
+        <Route path="/admin_store/products" component={ProductAdmin} />
+        <Route path="/admin_store/orders" render={() => <OrderAdmin exportUrl="/admin_store/orders/export.csv" />} />
+        <Route path="/admin_store/order_summary" component={OrderSummary} />
+        <Redirect to="/admin_store/products" />
+      </Switch>
+    </>
   );
 }
-
-StoreAdmin.propTypes = {
-  basename: PropTypes.string.isRequired,
-  exportOrdersUrl: PropTypes.string.isRequired,
-};
 
 export default StoreAdmin;

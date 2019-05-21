@@ -9,6 +9,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useCreateMutation } from '../../MutationUtils';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
+import usePageTitle from '../../usePageTitle';
 
 function NewCmsPartial({ history }) {
   const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
@@ -20,6 +21,8 @@ function NewCmsPartial({ history }) {
       newObjectPath: ['createCmsPartial', 'cms_partial'],
     }),
   );
+
+  usePageTitle('New Partial');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

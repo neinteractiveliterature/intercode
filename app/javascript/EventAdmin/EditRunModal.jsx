@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
+
 import {
   EventAdminEventsQuery, RunFields, EventFields, ConventionFields,
 } from './queries.gql';

@@ -10,6 +10,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import { sortByLocaleString } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
+import usePageTitle from '../usePageTitle';
 
 function RoomsAdmin() {
   const { data, error } = useQuerySuspended(RoomsAdminQuery);
@@ -19,6 +20,8 @@ function RoomsAdmin() {
   const confirm = useConfirm();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
+
+  usePageTitle('Rooms');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -94,35 +97,38 @@ function RoomsAdmin() {
   ));
 
   return (
-    <div className="mb-4">
-      <ul className="list-group mb-4">
-        {roomRows}
-        <li className="list-group-item">
-          <div className="row align-items-baseline">
-            <div className="col">
-              <input
-                type="text"
-                placeholder="Room name"
-                className="form-control"
-                value={creatingRoomName}
-                onChange={event => setCreatingRoomName(event.target.value)}
-                onKeyDown={keyDownInCreatingRoom}
-              />
+    <>
+      <h1 className="mb-4">Rooms</h1>
+      <div className="mb-4">
+        <ul className="list-group mb-4">
+          {roomRows}
+          <li className="list-group-item">
+            <div className="row align-items-baseline">
+              <div className="col">
+                <input
+                  type="text"
+                  placeholder="Room name"
+                  className="form-control"
+                  value={creatingRoomName}
+                  onChange={event => setCreatingRoomName(event.target.value)}
+                  onKeyDown={keyDownInCreatingRoom}
+                />
+              </div>
+              <button
+                className="btn btn-primary mr-2"
+                disabled={creatingRoomName === ''}
+                onClick={createRoomWasClicked}
+                type="button"
+              >
+                Add room
+              </button>
             </div>
-            <button
-              className="btn btn-primary mr-2"
-              disabled={creatingRoomName === ''}
-              onClick={createRoomWasClicked}
-              type="button"
-            >
-              Add room
-            </button>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
 
-      <ErrorDisplay graphQLError={createError || updateError || deleteError} />
-    </div>
+        <ErrorDisplay graphQLError={createError || updateError || deleteError} />
+      </div>
+    </>
   );
 }
 

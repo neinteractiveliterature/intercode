@@ -1,4 +1,8 @@
 class ApplicationController < ActionController::Base
+  include Concerns::CmsContentHelpers
+  include Concerns::ProfileSetupWorkflow
+  helper_method :effective_cms_layout
+
   # Turn on Rails' built-in CSRF protection (see
   # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   skip_forgery_protection if: :doorkeeper_token unless Rails.env.test?
@@ -19,11 +23,10 @@ class ApplicationController < ActionController::Base
 
   # Make the user create their profile for this con if they haven't got one
   before_action :ensure_user_con_profile_exists, unless: :devise_controller?
+  before_action :redirect_if_user_con_profile_needs_update, unless: :devise_controller?
 
   # Make sure the user accepts the clickwrap agreement if one exists
   before_action :ensure_clickwrap_agreement_accepted, unless: :devise_controller?
-
-  before_action :preload_cms_layout_content
 
   delegate :cms_parent, :cadmus_renderer, :preload_cms_layout_content, to: :cms_rendering_context
   helper_method :cms_parent, :cadmus_renderer, :cms_rendering_context
@@ -62,6 +65,15 @@ class ApplicationController < ActionController::Base
       changePassword: form_authenticity_token(form_options: {
         action: user_password_path, method: 'PUT'
       }),
+      denyAuthorization: form_authenticity_token(form_options: {
+        action: oauth_authorization_path, method: 'DELETE'
+      }),
+      grantAuthorization: form_authenticity_token(form_options: {
+        action: oauth_authorization_path, method: 'POST'
+      }),
+      resetPassword: form_authenticity_token(form_options: {
+        action: user_password_path, method: 'POST'
+      }),
       signIn: form_authenticity_token(form_options: {
         action: user_session_path, method: 'POST'
       }),
@@ -73,9 +85,6 @@ class ApplicationController < ActionController::Base
       }),
       updateUser: form_authenticity_token(form_options: {
         action: user_registration_path, method: 'PATCH'
-      }),
-      resetPassword: form_authenticity_token(form_options: {
-        action: user_password_path, method: 'POST'
       })
     }
   end
@@ -157,38 +166,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_sign_in_path_for(resource)
-    if convention && convention.user_con_profiles.where(user_id: resource.id).none?
-      return new_my_profile_path
-    end
-
+  def after_sign_in_path_for(_resource)
     if session[:user_return_to]
       session[:user_return_to]
     else
       root_path
     end
-  end
-
-  def ensure_user_con_profile_exists
-    return unless convention && user_signed_in?
-    return if user_con_profile && !user_con_profile.needs_update?
-
-    if user_con_profile
-      redirect_to edit_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
-into this convention before, so please take a moment to update your profile."
-    else
-      redirect_to new_my_profile_path, notice: "Welcome to #{convention.name}!  You haven't signed \
-into this convention before, so please take a moment to update your profile."
-    end
-  end
-
-  def ensure_clickwrap_agreement_accepted
-    return unless convention && convention.clickwrap_agreement.present?
-    return if assumed_identity_from_profile
-    return unless user_con_profile && !user_con_profile.accepted_clickwrap_agreement?
-
-    flash.clear
-    redirect_to clickwrap_agreement_path
   end
 
   def ensure_assumed_identity_matches_convention
@@ -198,10 +181,10 @@ into this convention before, so please take a moment to update your profile."
     domain = assumed_identity_from_profile.convention.domain
     domain << ":#{request.port}"
 
-    redirect_to "#{request.protocol}#{domain}#{request.path}", alert: "You used \"become user\" \
+    redirect_to "#{request.protocol}#{domain}#{request.path}", alert: "You used “become user” \
 on the #{assumed_identity_from_profile.convention.name} site to assume the identity of \
-#{current_user.name} for this session.  In order to visit other conventions' \
-sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option above."
+#{current_user.name} for this session.  In order to visit other conventions’ \
+sites, please use the “Revert to #{assumed_identity_from_profile.name}” option above."
   end
 
   def no_cache
@@ -216,15 +199,14 @@ sites, please use the \"Revert to #{assumed_identity_from_profile.name}\" option
     false
   end
 
-  def cms_rendering_context
-    @cms_rendering_context ||= CmsRenderingContext.new(
-      cms_parent: convention || RootSite.instance,
-      controller: self,
-      assigns: {
-        'user' => current_user,
-        'convention' => convention,
-        'user_con_profile' => user_con_profile
-      }
-    )
+  def event_for_path
+    return unless convention
+    return @event_for_path if defined?(@event_for_path)
+
+    @event_for_path = begin
+      if (match = (%r{\A/events/(\d+)}.match(request.path)))
+        convention.events.active.find(match[1])
+      end
+    end
   end
 end

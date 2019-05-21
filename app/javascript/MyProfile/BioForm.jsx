@@ -32,7 +32,7 @@ function BioForm({ userConProfile, history }) {
       },
     });
 
-    history.push('/');
+    history.push('/my_profile');
   };
 
   return (

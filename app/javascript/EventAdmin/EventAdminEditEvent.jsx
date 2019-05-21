@@ -18,6 +18,8 @@ import useEventFormWithCategorySelection, { EventFormWithCategorySelection } fro
 import deserializeEvent from './deserializeEvent';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
@@ -61,20 +63,22 @@ function EventAdminEditEvent({ match, history }) {
     [event.id, dropEventMutate],
   );
 
+  usePageTitle(useValueUnless(() => `Editing “${event.title}”`, error));
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
   return (
     <EditEvent
-      cancelPath="/runs"
+      cancelPath="/admin_events/runs"
       showDropButton
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}
       updateEvent={updateEvent}
-      onSave={() => { history.push('/runs'); }}
-      onDrop={() => { history.push('/runs'); }}
+      onSave={() => { history.push('/admin_events/runs'); }}
+      onDrop={() => { history.push('/admin_events/runs'); }}
     >
       <EventFormWithCategorySelection {...eventFormProps}>
         {data.currentAbility.can_override_maximum_event_provided_tickets

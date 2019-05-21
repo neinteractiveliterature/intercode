@@ -1,0 +1,129 @@
+import React, { useState, lazy, Suspense } from 'react';
+import PropTypes from 'prop-types';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+import CmsPage from './CmsPage';
+import PageLoadingIndicator from './PageLoadingIndicator';
+import ClickwrapAgreement from './ClickwrapAgreement';
+
+const Cart = lazy(() => import(/* webpackChunkName: "store" */ './Store/Cart'));
+const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'));
+const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'));
+const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'));
+const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin'));
+const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'));
+const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin'));
+const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp'));
+const EditEventProposal = lazy(() => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'));
+const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin'));
+const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
+const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
+const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'));
+const OAuthApplications = lazy(() => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications'));
+const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
+const OrderHistory = lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory'));
+const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin'));
+const ProductPage = lazy(() => import(/* webpackChunkName: "store" */ './Store/ProductPage'));
+const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
+const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'));
+const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'));
+const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'));
+const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'));
+const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'));
+const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin'));
+const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
+const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin'));
+
+function AppRouter({ alert }) {
+  const [showAlert, setShowAlert] = useState(alert != null);
+
+  return (
+    <Suspense fallback={<PageLoadingIndicator visible />}>
+      {showAlert && (
+        <div className="alert alert-danger" role="alert">
+          <button type="button" className="close" onClick={() => setShowAlert(false)} aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          {alert}
+        </div>
+      )}
+
+      <Switch>
+        <Route path="/admin_event_proposals" component={EventProposalsAdmin} />
+        <Route path="/admin_events" component={EventAdmin} />
+        <Route path="/admin_forms" component={FormAdmin} />
+        <Route path="/admin_store" component={StoreAdmin} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/clickwrap_agreement" component={ClickwrapAgreement} />
+        <Route path="/cms_pages" component={CmsAdmin} />
+        <Route path="/cms_partials" component={CmsAdmin} />
+        <Route path="/cms_files" component={CmsAdmin} />
+        <Route path="/cms_navigation_items" component={CmsAdmin} />
+        <Route path="/cms_layouts" component={CmsAdmin} />
+        <Route path="/cms_variables" component={CmsAdmin} />
+        <Route path="/cms_graphql_queries" component={CmsAdmin} />
+        <Route path="/convention/edit" component={ConventionAdmin} />
+        <Route path="/event_categories" component={EventCategoryAdmin} />
+        <Route path="/event_proposals/:id/edit" component={EditEventProposal} />
+        <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} />
+        <Route path="/events" component={EventsApp} />
+        <Route path="/mailing_lists" component={MailingLists} />
+        <Route path="/my_profile" component={MyProfile} />
+        <Route path="/oauth/applications-embed" component={OAuthApplications} />
+        <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} />
+        <Route path="/order_history" component={OrderHistory} />
+        <Route path="/organizations" component={OrganizationAdmin} />
+        <Route path="/products/:id" component={ProductPage} />
+        <Route path="/reports" component={Reports} />
+        <Route path="/rooms" component={RoomsAdmin} />
+        <Route path="/root_site" component={CmsAdmin} />
+        <Route path="/staff_positions" component={StaffPositionAdmin} />
+        <Route path="/ticket" component={MyTicket} />
+        <Route path="/ticket_types" component={TicketTypeAdmin} />
+        <Route path="/user_activity_alerts" component={UserActivityAlertsAdmin} />
+        <Route path="/user_con_profiles" component={UserConProfilesAdmin} />
+        <Route path="/users/edit" component={EditUser} />
+        <Route path="/users/password/edit" component={ResetPassword} />
+        <Route path="/users" component={UsersAdmin} />
+        <Route
+          path="/pages/:slug([a-zA-Z0-9\-/]+)"
+          render={routeProps => (
+            <CmsPage {...routeProps} slug={routeProps.match.params.slug} />
+          )}
+        />
+        <Route
+          path="/"
+          exact
+          render={routeProps => (
+            <CmsPage {...routeProps} rootPage />
+          )}
+        />
+        <Route
+          path="/"
+          render={({ location }) => (
+            <div className="alert alert-warning">
+              <h1>Oops!</h1>
+
+              <p className="mb-0">
+                We couldn&rsquo;t find a page at the location
+                {' '}
+                {location.pathname}
+                .
+              </p>
+            </div>
+          )}
+        />
+      </Switch>
+    </Suspense>
+  );
+}
+
+AppRouter.propTypes = {
+  alert: PropTypes.string,
+};
+
+AppRouter.defaultProps = {
+  alert: null,
+};
+
+export default AppRouter;

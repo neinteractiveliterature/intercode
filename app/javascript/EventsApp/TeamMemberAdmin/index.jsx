@@ -6,76 +6,85 @@ import { humanize, underscore, pluralize } from 'inflected';
 import BreadcrumbItemWithRoute from '../../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';
-import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import TeamMembersIndex from './TeamMembersIndex';
 import { TeamMembersQuery } from './queries.gql';
+import useQuerySuspended from '../../useQuerySuspended';
+import ErrorDisplay from '../../ErrorDisplay';
 
 function TeamMemberAdmin({ eventId, eventPath }) {
+  const { data, error } = useQuerySuspended(TeamMembersQuery, { variables: { eventId } });
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const { event } = data;
+
   return (
-    <QueryWithStateDisplay query={TeamMembersQuery} variables={{ eventId }}>
-      {({ data: { event, convention } }) => (
-        <>
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to={eventPath}>
-                  {event.title}
-                </Link>
-              </li>
-              <BreadcrumbItemWithRoute
-                path={`${eventPath}/team_members`}
-                to={`${eventPath}/team_members`}
-                pageTitleIfActive={`${pluralize(humanize(underscore(event.event_category.team_member_name)))} - ${event.title} - ${convention.name}`}
-                exact
-              >
-                {pluralize(humanize(underscore(event.event_category.team_member_name)))}
-              </BreadcrumbItemWithRoute>
-              <BreadcrumbItemWithRoute
-                path={`${eventPath}/team_members/new`}
-                to={`${eventPath}/team_members/new`}
-                pageTitleIfActive={`Add ${event.event_category.team_member_name} - ${event.title} - ${convention.name}`}
-                hideUnlessMatch
-              >
-                {'Add '}
-                {event.event_category.team_member_name}
-              </BreadcrumbItemWithRoute>
-              <BreadcrumbItemWithRoute
-                path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-                to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-                pageTitleIfActive={`Edit ${event.event_category.team_member_name} - ${event.title} - ${convention.name}`}
-                hideUnlessMatch
-              >
-                {({ match }) => event.team_members
-                  .find(teamMember => teamMember.id.toString() === match.params.teamMemberId)
-                  .user_con_profile
-                  .name_without_nickname
-                }
-              </BreadcrumbItemWithRoute>
-            </ol>
-          </nav>
-          <Switch>
-            <Route
-              path={`${eventPath}/team_members/new`}
-              render={() => <NewTeamMember event={event} eventPath={eventPath} />}
+    <>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
+            <Link to={eventPath}>
+              {event.title}
+            </Link>
+          </li>
+          <BreadcrumbItemWithRoute
+            path={`${eventPath}/team_members`}
+            to={`${eventPath}/team_members`}
+            exact
+          >
+            {pluralize(humanize(underscore(event.event_category.team_member_name)))}
+          </BreadcrumbItemWithRoute>
+          <BreadcrumbItemWithRoute
+            path={`${eventPath}/team_members/new`}
+            to={`${eventPath}/team_members/new`}
+            hideUnlessMatch
+          >
+            {'Add '}
+            {event.event_category.team_member_name}
+          </BreadcrumbItemWithRoute>
+          <BreadcrumbItemWithRoute
+            path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
+            to={`${eventPath}/team_members/:teamMemberId(\\d+)`}
+            hideUnlessMatch
+          >
+            {({ match }) => event.team_members
+              .find(teamMember => teamMember.id.toString() === match.params.teamMemberId)
+              .user_con_profile
+              .name_without_nickname
+            }
+          </BreadcrumbItemWithRoute>
+        </ol>
+      </nav>
+      <Switch>
+        <Route
+          path={`${eventPath}/team_members/new`}
+          render={({ history }) => (
+            <NewTeamMember
+              event={event}
+              eventPath={eventPath}
+              history={history}
             />
-            <Route
-              path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
-              render={({ match }) => (
-                <EditTeamMember
-                  event={event}
-                  eventPath={eventPath}
-                  teamMemberId={Number.parseInt(match.params.teamMemberId, 10)}
-                />
-              )}
+          )}
+        />
+        <Route
+          path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
+          render={({ match, history }) => (
+            <EditTeamMember
+              event={event}
+              eventPath={eventPath}
+              teamMemberId={Number.parseInt(match.params.teamMemberId, 10)}
+              history={history}
             />
-            <Route
-              path={`${eventPath}/team_members`}
-              render={() => <TeamMembersIndex eventId={eventId} eventPath={eventPath} />}
-            />
-          </Switch>
-        </>
-      )}
-    </QueryWithStateDisplay>
+          )}
+        />
+        <Route
+          path={`${eventPath}/team_members`}
+          render={() => <TeamMembersIndex eventId={eventId} eventPath={eventPath} />}
+        />
+      </Switch>
+    </>
   );
 }
 

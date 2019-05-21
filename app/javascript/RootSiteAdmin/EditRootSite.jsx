@@ -1,121 +1,112 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import React, { useState } from 'react';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
-import { mutator, Transforms } from '../ComposableFormUtils';
+import { RootSiteAdminQuery } from './queries.gql';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { UpdateRootSite } from './mutations.gql';
+import useQuerySuspended from '../useQuerySuspended';
+import useAsyncFunction from '../useAsyncFunction';
+import useMutationCallback from '../useMutationCallback';
+import usePageTitle from '../usePageTitle';
 
-class EditRootSite extends React.Component {
-  static propTypes = {
-    initialRootSite: PropTypes.shape({
-      site_name: PropTypes.string,
-      default_layout: PropTypes.shape({}),
-      root_page: PropTypes.shape({}),
-    }).isRequired,
-    cmsPages: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
-    cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })).isRequired,
+function useDirtyState(initialState, setDirty) {
+  const [value, setValue] = useState(initialState);
+  return [value, (newValue) => {
+    setValue(newValue);
+    setDirty();
+  }];
+}
+
+function EditRootSite() {
+  const { data, error } = useQuerySuspended(RootSiteAdminQuery);
+  const [update, updateError, updateInProgress] = useAsyncFunction(
+    useMutationCallback(UpdateRootSite),
+  );
+
+  const [edited, setEdited] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const setDirty = () => {
+    setSuccess(false);
+    setEdited(true);
+  };
+
+  const [siteName, setSiteName] = useDirtyState(error ? null : data.rootSite.site_name, setDirty);
+  const [defaultLayout, setDefaultLayout] = useDirtyState(
+    error ? null : data.rootSite.default_layout,
+    setDirty,
+  );
+  const [rootPage, setRootPage] = useDirtyState(error ? null : data.rootSite.root_page, setDirty);
+
+  usePageTitle('Root Site Settings');
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  constructor(props) {
-    super(props);
+  const saveClicked = async () => {
+    setSuccess(false);
 
-    this.state = {
-      rootSite: props.initialRootSite,
-    };
-
-    this.mutator = mutator({
-      component: this,
-      transforms: {
-        rootSite: {
-          site_name: Transforms.identity,
-          default_layout: Transforms.identity,
-          root_page: Transforms.identity,
-        },
+    await update({
+      variables: {
+        siteName,
+        rootPageId: rootPage.id,
+        defaultLayoutId: defaultLayout.id,
       },
     });
-  }
 
-  render = () => (
+    setSuccess(true);
+    setEdited(false);
+  };
+
+  return (
     <>
       <BootstrapFormInput
         name="site_name"
         label="Site name"
         helpText="This will show on the left side of the navigation bar"
-        value={this.state.rootSite.site_name}
-        onTextChange={this.mutator.rootSite.site_name}
+        value={siteName}
+        onTextChange={setSiteName}
       />
 
       <SelectWithLabel
         name="default_layout_id"
         label="Default layout for pages"
-        value={this.state.rootSite.default_layout}
+        value={defaultLayout}
         isClearable
         getOptionValue={option => option.id}
         getOptionLabel={option => option.name}
-        options={this.props.cmsLayouts}
-        onChange={this.mutator.rootSite.default_layout}
-        disabled={this.state.mutationInProgress}
+        options={data.cmsLayouts}
+        onChange={setDefaultLayout}
+        disabled={updateInProgress}
       />
 
       <SelectWithLabel
         name="root_page_id"
         label="Root page"
-        value={this.state.rootSite.root_page}
+        value={rootPage}
         isClearable
         getOptionValue={option => option.id}
         getOptionLabel={option => option.name}
-        options={this.props.cmsPages}
-        onChange={this.mutator.rootSite.root_page}
-        disabled={this.state.mutationInProgress}
+        options={data.cmsPages}
+        onChange={setRootPage}
+        disabled={updateInProgress}
       />
 
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={updateError} />
 
-      <Mutation mutation={UpdateRootSite}>
-        {mutate => (
-          <>
-            <button
-              className="btn btn-primary"
-              type="button"
-              disabled={this.state.mutationInProgress}
-              onClick={async () => {
-                this.setState({ success: false, error: null, mutationInProgress: true });
-                try {
-                  await mutate({
-                    variables: {
-                      siteName: this.state.rootSite.site_name,
-                      rootPageId: this.state.rootSite.root_page.id,
-                      defaultLayoutId: this.state.rootSite.default_layout.id,
-                    },
-                  });
+      <button
+        className="btn btn-primary"
+        type="button"
+        disabled={!edited || updateInProgress}
+        onClick={saveClicked}
+      >
+        Save changes
+      </button>
 
-                  this.setState({ success: true, mutationInProgress: false });
-                } catch (error) {
-                  this.setState({ error, mutationInProgress: false });
-                }
-              }}
-            >
-              Save settings
-            </button>
-            {
-              this.state.success
-                ? ' Saved!'
-                : null
-            }
-          </>
-        )}
-      </Mutation>
+      {success ? ' Saved!' : null}
     </>
-  )
+  );
 }
 
 export default EditRootSite;

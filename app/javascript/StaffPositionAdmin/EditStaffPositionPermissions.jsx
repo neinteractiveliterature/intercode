@@ -10,6 +10,7 @@ import { UpdateStaffPositionPermissions } from './mutations.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsTableInput from '../BuiltInFormControls/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
+import usePageTitle from '../usePageTitle';
 
 function buildPermissionInput(permission) {
   return {
@@ -32,6 +33,8 @@ function EditStaffPositionPermissions({ staffPosition, eventCategories, history 
   const [mutationInProgress, setMutationInProgress] = useState(false);
   const mutate = useMutation(UpdateStaffPositionPermissions);
 
+  usePageTitle(`Editing permissions for “${staffPosition.name}”`);
+
   const saveChangesClicked = async () => {
     setMutationInProgress(true);
     try {
@@ -49,7 +52,7 @@ function EditStaffPositionPermissions({ staffPosition, eventCategories, history 
         },
       });
 
-      history.push('/');
+      history.push('/staff_positions');
     } catch (newError) {
       setError(newError);
       setMutationInProgress(false);

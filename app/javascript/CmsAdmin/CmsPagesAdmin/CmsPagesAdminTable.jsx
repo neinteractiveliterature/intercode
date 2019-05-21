@@ -8,6 +8,8 @@ import { sortByLocaleString } from '../../ValueUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../../MutationUtils';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function CmsPagesAdminTable() {
   const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
@@ -17,6 +19,8 @@ function CmsPagesAdminTable() {
     arrayPath: ['cmsPages'],
     idVariablePath: ['id'],
   });
+
+  usePageTitle(useValueUnless(() => 'CMS Pages', error));
 
   const pagesSorted = useMemo(
     () => {
@@ -42,7 +46,7 @@ function CmsPagesAdminTable() {
           {pagesSorted.map(page => (
             <tr key={page.id}>
               <td>
-                <a href={`/pages/${page.slug}`}>{page.name}</a>
+                <Link to={`/pages/${page.slug}`}>{page.name}</Link>
                 {
                   page.admin_notes && page.admin_notes.trim() !== '' && (
                     <>

@@ -9,11 +9,14 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import usePageTitle from '../usePageTitle';
 
 function SingleRunEventAdminList() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
   const drop = useMutationCallback(DropEvent);
   const confirm = useConfirm();
+
+  usePageTitle('Single-Run Events');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -62,7 +65,7 @@ function SingleRunEventAdminList() {
           {timespan && timespan.humanizeInTimezone(data.convention.timezone_name)}
         </td>
         <td>
-          <Link className="btn btn-secondary btn-sm" to={`/filler_events/${event.id}/edit`}>
+          <Link className="btn btn-secondary btn-sm" to={`/admin_events/filler_events/${event.id}/edit`}>
             Edit
           </Link>
           {' '}
@@ -84,7 +87,7 @@ function SingleRunEventAdminList() {
 
   return (
     <div>
-      <Link className="btn btn-primary my-4" to="/filler_events/new">
+      <Link className="btn btn-primary my-4" to="/admin_events/filler_events/new">
         Create new single-run event
       </Link>
       <table className="table table-striped">

@@ -44,6 +44,7 @@ class Types::ConventionType < Types::BaseObject
       ctx[:current_ability].can?(:read, TicketType.new(convention: graphql_object.object))
     end
   end
+  field :organization, Types::OrganizationType, null: true
   field :products, [Types::ProductType], null: true
   field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true do
     guard ->(graphql_object, _args, ctx) do
@@ -62,6 +63,7 @@ class Types::ConventionType < Types::BaseObject
     :cms_navigation_items,
     :default_layout,
     :forms,
+    :organization,
     :pages,
     :products,
     :rooms,
@@ -70,6 +72,12 @@ class Types::ConventionType < Types::BaseObject
     :ticket_types,
     :user_activity_alerts
   )
+
+  field :clickwrap_agreement_html, String, null: true
+  def clickwrap_agreement_html
+    return nil unless object.clickwrap_agreement
+    cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
+  end
 
   field :event_categories, [Types::EventCategoryType], null: false do
     argument :current_ability_can_read_event_proposals, Boolean, required: false, camelize: false

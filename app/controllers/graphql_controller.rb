@@ -19,7 +19,9 @@ class GraphqlController < ApplicationController
 
     def [](key)
       key = key.to_sym
-      if METHODS.key?(key)
+      if key == :controller
+        @controller
+      elsif METHODS.key?(key)
         @values[key] ||= METHODS[key].bind(@controller).call
         @values[key]
       else
@@ -39,8 +41,8 @@ class GraphqlController < ApplicationController
 
   skip_authorization_check
   skip_before_action :verify_authenticity_token # We're doing this in MutationType's guard instead
-  skip_before_action :preload_cms_layout_content
   skip_before_action :ensure_user_con_profile_exists
+  skip_before_action :redirect_if_user_con_profile_needs_update
   skip_before_action :ensure_clickwrap_agreement_accepted
 
   def execute

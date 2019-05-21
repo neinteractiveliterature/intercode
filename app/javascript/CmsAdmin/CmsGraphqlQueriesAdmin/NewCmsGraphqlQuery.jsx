@@ -1,93 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
-import { withRouter } from 'react-router-dom';
 
 import { CmsGraphqlQueriesQuery } from './queries.gql';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CreateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
+import useAsyncFunction from '../../useAsyncFunction';
+import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
+import { useCreateMutation } from '../../MutationUtils';
 
-class NewCmsGraphqlQuery extends React.Component {
-  static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-  }
+function NewCmsGraphqlQuery({ history }) {
+  const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
+  const [create, createError, createInProgress] = useAsyncFunction(
+    useCreateMutation(CreateCmsGraphqlQuery, {
+      query: CmsGraphqlQueriesQuery,
+      arrayPath: ['cmsGraphqlQueries'],
+      newObjectPath: ['createCmsGraphqlQuery', 'query'],
+    }),
+  );
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: {
-        identifier: '',
-        admin_notes: '',
-        query: '',
+  usePageTitle('CMS GraphQL Queries');
+
+  const createClicked = async () => {
+    await create({
+      variables: {
+        query: {
+          identifier: query.identifier,
+          admin_notes: query.admin_notes,
+          query: query.query,
+        },
       },
-      mutationInProgress: false,
-      error: null,
-    };
-  }
+    });
 
-  render = () => (
+    history.push('/cms_graphql_queries');
+  };
+
+  return (
     <>
       <h2 className="mb-4">New GraphQL query</h2>
 
       <div className="mb-4">
-        <CmsGraphqlQueryForm
-          value={this.state.query}
-          onChange={(query) => { this.setState({ query }); }}
-        />
+        <CmsGraphqlQueryForm value={query} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={createError} />
 
-      <Mutation mutation={CreateCmsGraphqlQuery}>
-        {mutate => (
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={this.state.mutationInProgress}
-            onClick={async () => {
-              try {
-                this.setState({ mutationInProgress: true });
-                await mutate({
-                  variables: {
-                    query: {
-                      identifier: this.state.query.identifier,
-                      admin_notes: this.state.query.admin_notes,
-                      query: this.state.query.query,
-                    },
-                  },
-                  update: (cache, { data: { createCmsGraphqlQuery: { query } } }) => {
-                    const data = cache.readQuery({ query: CmsGraphqlQueriesQuery });
-
-                    cache.writeQuery({
-                      query: CmsGraphqlQueriesQuery,
-                      data: {
-                        ...data,
-                        cmsGraphqlQueries: [
-                          ...data.cmsGraphqlQueries,
-                          query,
-                        ],
-                      },
-                    });
-                  },
-                });
-
-                this.props.history.push('/cms_graphql_queries');
-              } catch (error) {
-                this.setState({ error, mutationInProgress: false });
-              }
-            }}
-          >
-            Create GraphQL query
-          </button>
-        )}
-      </Mutation>
+      <button
+        type="button"
+        className="btn btn-primary"
+        disabled={createInProgress}
+        onClick={createClicked}
+      >
+        Create GraphQL query
+      </button>
     </>
-  )
+  );
 }
 
-export default withRouter(NewCmsGraphqlQuery);
+NewCmsGraphqlQuery.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default NewCmsGraphqlQuery;

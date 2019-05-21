@@ -4,9 +4,13 @@ import ErrorDisplay from '../ErrorDisplay';
 import { EventProposersQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function EventProposers() {
   const { data, error } = useQuerySuspended(EventProposersQuery);
+
+  usePageTitle('Event proposers', useValueUnless(() => data.convention, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

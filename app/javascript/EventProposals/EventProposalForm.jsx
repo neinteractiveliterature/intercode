@@ -54,7 +54,7 @@ ExitButton.defaultProps = {
 };
 
 function EventProposalForm({
-  eventProposalId, afterSubmitUrl, afterSubmit, exitButton,
+  eventProposalId, afterSubmit, exitButton,
 }) {
   const { data, error } = useQuerySuspended(EventProposalQuery, { variables: { eventProposalId } });
   const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(
@@ -123,13 +123,11 @@ function EventProposalForm({
 
   const formSubmitted = useCallback(
     () => {
-      if (afterSubmitUrl) {
-        window.location.href = afterSubmitUrl;
-      } else if (afterSubmit) {
+      if (afterSubmit) {
         afterSubmit();
       }
     },
-    [afterSubmitUrl, afterSubmit],
+    [afterSubmit],
   );
 
   const submitForm = useCallback(
@@ -183,13 +181,11 @@ function EventProposalForm({
 EventProposalForm.propTypes = {
   eventProposalId: PropTypes.number.isRequired,
   afterSubmit: PropTypes.func,
-  afterSubmitUrl: PropTypes.string,
   exitButton: PropTypes.shape({}),
 };
 
 EventProposalForm.defaultProps = {
   afterSubmit: null,
-  afterSubmitUrl: null,
   exitButton: null,
 };
 

@@ -41,7 +41,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
 
       return (
         <li key={run.id} className="my-2">
-          <Link className="btn btn-secondary" to={`/recurring_events/${event.id}/runs/${run.id}/edit`}>
+          <Link className="btn btn-secondary" to={`/admin_events/recurring_events/${event.id}/runs/${run.id}/edit`}>
             {runStart.format(format)}
           </Link>
         </li>
@@ -138,7 +138,7 @@ function RecurringEventSection({ event, convention }) {
         </div>
 
         <div>
-          <Link className="btn btn-outline-primary" to={`/${event.id}/edit`}>
+          <Link className="btn btn-outline-primary" to={`/admin_events/${event.id}/edit`}>
             Edit
           </Link>
         </div>

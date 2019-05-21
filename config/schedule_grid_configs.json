@@ -1,22 +1,28 @@
 [
   {
     "key": "con_schedule",
-    "basename": "/schedule",
+    "basename": "/events/schedule",
     "title": "Con schedule",
     "classifyEventsBy": "category",
     "showSignedUp": true,
     "showSignupStatusBadge": true,
     "groupEventsBy": "category",
     "categoryGroups": [
-      { "match": [{ "allRemaining": true }] },
       {
+        "id": "catchAll",
+        "match": [{ "allRemaining": true }]
+      },
+      {
+        "id": "games",
         "flexGrow": 1,
         "match": [{ "categoryName": "Larp" }, { "categoryName": "Tabletop RPG" }, { "categoryName": "Board game" }]
       },
       {
+        "id": "conServices",
         "match": [{ "categoryName": "Con services" }]
       },
       {
+        "id": "volunteerEvents",
         "match": [{ "categoryName": "Volunteer event" }]
       }
     ],
@@ -27,7 +33,7 @@
   },
   {
     "key": "con_schedule_by_room",
-    "basename": "/schedule_by_room",
+    "basename": "/events/schedule_by_room",
     "title": "Con schedule by room",
     "classifyEventsBy": "category",
     "showSignupStatusBadge": true,
@@ -44,21 +50,27 @@
   },
   {
     "key": "schedule_with_counts",
-    "basename": "/schedule_with_counts",
+    "basename": "/events/schedule_with_counts",
     "title": "Schedule with counts",
     "classifyEventsBy": "fullness",
     "showExtendedCounts": true,
     "groupEventsBy": "category",
     "categoryGroups": [
-      { "match": [{ "allRemaining": true }] },
       {
+        "id": "catchAll",
+        "match": [{ "allRemaining": true }]
+      },
+      {
+        "id": "games",
         "flexGrow": 1,
         "match": [{ "categoryName": "Larp" }, { "categoryName": "Tabletop RPG" }, { "categoryName": "Board game" }]
       },
       {
+        "id": "conServices",
         "match": [{ "categoryName": "Con services" }]
       },
       {
+        "id": "volunteerEvents",
         "match": [{ "categoryName": "Volunteer event" }]
       }
     ],

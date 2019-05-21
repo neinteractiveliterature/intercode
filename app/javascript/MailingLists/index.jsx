@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter, Link, Route, Switch,
-} from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposers from './EventProposers';
@@ -27,7 +25,7 @@ function MailingListsMenu() {
       <ul>
         {data.convention.ticket_mode !== 'disabled' && (
           <li>
-            <Link to="/ticketed_attendees">
+            <Link to="/mailing_lists/ticketed_attendees">
               All attendees with
               {' '}
               {data.convention.ticket_name}
@@ -35,19 +33,19 @@ function MailingListsMenu() {
           </li>
         )}
         <li>
-          <Link to="/event_proposers">Event proposers</Link>
+          <Link to="/mailing_lists/event_proposers">Event proposers</Link>
         </li>
         <li>
-          <Link to="/team_members">Event team members</Link>
+          <Link to="/mailing_lists/team_members">Event team members</Link>
         </li>
         <li>
-          <Link to="/users_with_pending_bio">Users with pending bio</Link>
+          <Link to="/mailing_lists/users_with_pending_bio">Users with pending bio</Link>
         </li>
         <li>
-          <Link to="/waitlists">Waitlists</Link>
+          <Link to="/mailing_lists/waitlists">Waitlists</Link>
         </li>
         <li>
-          <Link to="/whos_free">Who&rsquo;s free</Link>
+          <Link to="/mailing_lists/whos_free">Who&rsquo;s free</Link>
         </li>
       </ul>
     </>
@@ -56,17 +54,15 @@ function MailingListsMenu() {
 
 function MailingLists() {
   return (
-    <BrowserRouter basename="/mailing_lists">
-      <Switch>
-        <Route path="/ticketed_attendees" component={TicketedAttendees} />
-        <Route path="/event_proposers" component={EventProposers} />
-        <Route path="/team_members" component={TeamMembers} />
-        <Route path="/users_with_pending_bio" component={UsersWithPendingBio} />
-        <Route path="/waitlists" component={WaitlistMailingLists} />
-        <Route path="/whos_free" component={WhosFree} />
-        <Route path="/" component={MailingListsMenu} />
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route path="/mailing_lists/ticketed_attendees" component={TicketedAttendees} />
+      <Route path="/mailing_lists/event_proposers" component={EventProposers} />
+      <Route path="/mailing_lists/team_members" component={TeamMembers} />
+      <Route path="/mailing_lists/users_with_pending_bio" component={UsersWithPendingBio} />
+      <Route path="/mailing_lists/waitlists" component={WaitlistMailingLists} />
+      <Route path="/mailing_lists/whos_free" component={WhosFree} />
+      <Route path="/mailing_lists/" component={MailingListsMenu} />
+    </Switch>
   );
 }
 

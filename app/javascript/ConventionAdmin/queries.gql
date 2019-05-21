@@ -45,7 +45,7 @@ fragment ConventionAdminConventionFields on Convention {
   }
 }
 
-query ConventionAdminConventionQuery($id: Int!) {
+query ConventionAdminConventionQuery($id: Int) {
   convention(id: $id) {
     id
     ...ConventionAdminConventionFields

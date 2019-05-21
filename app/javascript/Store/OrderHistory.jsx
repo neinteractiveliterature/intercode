@@ -8,10 +8,13 @@ import formatMoney from '../formatMoney';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useModal from '../ModalDialogs/useModal';
+import usePageTitle from '../usePageTitle';
 
 function OrderHistory() {
   const { data, error } = useQuerySuspended(OrderHistoryQuery);
   const paymentModal = useModal();
+
+  usePageTitle('My order history');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -131,30 +134,36 @@ function OrderHistory() {
   if (orders.length > 0) {
     const renderedOrders = orders.map(order => renderOrder(order));
     return (
-      <ul className="list-unstyled">
-        {renderedOrders}
+      <>
+        <h1 className="mb-4">My order history</h1>
+        <ul className="list-unstyled">
+          {renderedOrders}
 
-        <OrderPaymentModal
-          visible={paymentModal.visible}
-          onCancel={paymentModal.close}
-          initialName={data.myProfile.name_without_nickname}
-          orderId={(paymentModal.state || { order: { id: 0 } }).order.id}
-          onComplete={paymentModal.close}
-          paymentOptions={
-            paymentModal.state
-              ? intersection(
-                ...paymentModal.state.order.order_entries
-                  .map(entry => entry.product.payment_options),
-              ).filter(paymentOption => paymentOption !== 'pay_at_convention')
-              : []
-          }
-        />
-      </ul>
+          <OrderPaymentModal
+            visible={paymentModal.visible}
+            onCancel={paymentModal.close}
+            initialName={data.myProfile.name_without_nickname}
+            orderId={(paymentModal.state || { order: { id: 0 } }).order.id}
+            onComplete={paymentModal.close}
+            paymentOptions={
+              paymentModal.state
+                ? intersection(
+                  ...paymentModal.state.order.order_entries
+                    .map(entry => entry.product.payment_options),
+                ).filter(paymentOption => paymentOption !== 'pay_at_convention')
+                : []
+            }
+          />
+        </ul>
+      </>
     );
   }
 
   return (
-    <div>No orders to display.</div>
+    <>
+      <h1 className="mb-4">My order history</h1>
+      <p>No orders to display.</p>
+    </>
   );
 }
 

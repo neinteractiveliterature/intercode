@@ -9,10 +9,12 @@ import TicketTypePropType from './TicketTypePropType';
 import { UpdateTicketType } from './mutations.gql';
 import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
+import usePageTitle from '../usePageTitle';
 
 function EditTicketType({
   initialTicketType, ticketName, timezoneName, history,
 }) {
+  usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState(initialTicketType);
   const mutate = useMutationCallback(UpdateTicketType);
   const [saveClicked, error, inProgress] = useAsyncFunction(useCallback(
@@ -25,7 +27,7 @@ function EditTicketType({
           },
         },
       });
-      history.push('/');
+      history.push('/ticket_types');
     },
     [mutate, history, ticketType],
   ));

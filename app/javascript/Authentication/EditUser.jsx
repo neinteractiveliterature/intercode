@@ -13,6 +13,7 @@ import AccountFormContent from './AccountFormContent';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import UserFormFields from './UserFormFields';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
 
 async function updateUser(
   authenticityToken, formState, password, passwordConfirmation, currentPassword,
@@ -130,6 +131,8 @@ EditUserForm.propTypes = {
 
 function EditUser() {
   const { data, error } = useQuerySuspended(EditUserQuery);
+
+  usePageTitle('Update Your Account');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

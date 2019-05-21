@@ -4,9 +4,12 @@ import ErrorDisplay from '../ErrorDisplay';
 import { UsersWithPendingBioQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
+import usePageTitle from '../usePageTitle';
 
 function UsersWithPendingBio() {
   const { data, error } = useQuerySuspended(UsersWithPendingBioQuery);
+
+  usePageTitle('Users with pending bio');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

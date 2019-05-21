@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter, Switch, Route, Link,
-} from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
@@ -11,9 +9,12 @@ import ErrorDisplay from '../ErrorDisplay';
 import SignupSpy from './SignupSpy';
 import EventProvidedTickets from './EventProvidedTickets';
 import EventsByChoice from './EventsByChoice';
+import usePageTitle from '../usePageTitle';
 
 function ReportsMenu() {
   const { data, error } = useQuerySuspended(ReportsMenuQuery);
+
+  usePageTitle('Reports');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -31,9 +32,9 @@ function ReportsMenu() {
           <ul className="mb-0">
             {data.convention.ticket_mode !== 'disabled' && (
               <>
-                <li><Link to="/attendance_by_payment_amount">Attendance by payment amount</Link></li>
+                <li><Link to="/reports/attendance_by_payment_amount">Attendance by payment amount</Link></li>
                 <li>
-                  <Link to="/event_provided_tickets">
+                  <Link to="/reports/event_provided_tickets">
                     Event-provided
                     {' '}
                     {pluralize(data.convention.ticket_name)}
@@ -41,8 +42,8 @@ function ReportsMenu() {
                 </li>
               </>
             )}
-            <li><Link to="/events_by_choice">Events by choice</Link></li>
-            <li><Link to="/signup_spy">Signup spy</Link></li>
+            <li><Link to="/reports/events_by_choice">Events by choice</Link></li>
+            <li><Link to="/reports/signup_spy">Signup spy</Link></li>
           </ul>
         </div>
       </div>
@@ -85,15 +86,13 @@ function ReportsMenu() {
 
 function Reports() {
   return (
-    <BrowserRouter basename="/reports">
-      <Switch>
-        <Route path="/attendance_by_payment_amount" component={AttendanceByPaymentAmount} />
-        <Route path="/event_provided_tickets" component={EventProvidedTickets} />
-        <Route path="/events_by_choice" component={EventsByChoice} />
-        <Route path="/signup_spy" component={SignupSpy} />
-        <Route path="/" component={ReportsMenu} />
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route path="/reports/attendance_by_payment_amount" component={AttendanceByPaymentAmount} />
+      <Route path="/reports/event_provided_tickets" component={EventProvidedTickets} />
+      <Route path="/reports/events_by_choice" component={EventsByChoice} />
+      <Route path="/reports/signup_spy" component={SignupSpy} />
+      <Route path="/reports" component={ReportsMenu} />
+    </Switch>
   );
 }
 

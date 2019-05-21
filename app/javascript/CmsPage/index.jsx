@@ -1,58 +1,31 @@
 import React, {
-  lazy, useMemo, useEffect, useState, Suspense,
+  lazy, useMemo, useEffect, Suspense,
 } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
 import { CmsPageQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
-import parsePageContent from './parsePageContent';
+import PageLoadingIndicator from '../PageLoadingIndicator';
+import parsePageContent from '../parsePageContent';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
-function CustomLoadingIndicator({ visible }) {
-  return (
-    <div
-      className="text-center mt-5 custom-loading-indicator"
-      style={{
-        opacity: visible ? 1.0 : 0.0,
-        visibility: visible ? 'visible' : 'hidden',
-      }}
-    >
-      <i className="fa fa-circle-o-notch fa-spin fa-fw" />
-      <span className="sr-only">Loading...</span>
-    </div>
-  );
-}
-
-CustomLoadingIndicator.propTypes = {
-  visible: PropTypes.bool.isRequired,
-};
-
-function CmsPage({ slug, rootPage }) {
+function CmsPage({
+  slug, rootPage, history, location,
+}) {
   const { data, loading, error } = useQuery(CmsPageQuery, { variables: { slug, rootPage } });
-  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const content = useMemo(
     () => {
       if (loading || error) {
         return null;
       }
 
-      return parsePageContent(data.cmsPage.content_html);
+      return parsePageContent(data.cmsPage.content_html).bodyComponents;
     },
     [data, loading, error],
-  );
-
-  useEffect(
-    () => {
-      if (!loading) {
-        setShowLoadingIndicator(false);
-      }
-      const timeoutId = setTimeout(() => setShowLoadingIndicator(loading), 250);
-      return () => clearTimeout(timeoutId);
-    },
-    [loading],
   );
 
   useEffect(() => {
@@ -60,13 +33,32 @@ function CmsPage({ slug, rootPage }) {
     window.BSN.initCallback();
   }, [content]);
 
+  useEffect(
+    () => {
+      if (
+        !loading && !error
+        && data.myProfile
+        && ((data.convention || {}).clickwrap_agreement || '').trim() !== ''
+        && !data.myProfile.accepted_clickwrap_agreement
+        && !data.cmsPage.skip_clickwrap_agreement
+      ) {
+        history.replace('/clickwrap_agreement');
+      }
+    },
+    [data, error, history, loading, location],
+  );
+
+  usePageTitle(
+    useValueUnless(() => (location.pathname === '/' ? null : data.cmsPage.name), error || loading),
+  );
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
   return (
     <>
-      <CustomLoadingIndicator visible={showLoadingIndicator} />
+      <PageLoadingIndicator visible={loading} />
       {!loading && (
         <>
           {
@@ -74,6 +66,7 @@ function CmsPage({ slug, rootPage }) {
               <div className="page-admin-dropdown">
                 <Suspense fallback={<></>}>
                   <PageAdminDropdown
+                    history={history}
                     pageId={data.cmsPage.id}
                     showDelete={data.cmsPage.current_ability_can_delete}
                   />
@@ -91,6 +84,10 @@ function CmsPage({ slug, rootPage }) {
 CmsPage.propTypes = {
   slug: PropTypes.string,
   rootPage: PropTypes.bool,
+  history: PropTypes.shape({}).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 CmsPage.defaultProps = {
@@ -98,26 +95,4 @@ CmsPage.defaultProps = {
   rootPage: false,
 };
 
-function CmsPageRouter() {
-  return (
-    <BrowserRouter basename="/">
-      <Switch>
-        <Route
-          path="/pages/:slug([a-zA-Z0-9\-/]+)"
-          render={routeProps => (
-            <CmsPage {...routeProps} slug={routeProps.match.params.slug} />
-          )}
-        />
-        <Route
-          path="/"
-          exact
-          render={routeProps => (
-            <CmsPage {...routeProps} rootPage />
-          )}
-        />
-      </Switch>
-    </BrowserRouter>
-  );
-}
-
-export default CmsPageRouter;
+export default CmsPage;

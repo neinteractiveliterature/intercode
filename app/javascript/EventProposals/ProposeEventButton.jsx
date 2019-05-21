@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { enableUniqueIds } from 'react-html-id';
+import { withRouter } from 'react-router-dom';
 
 import CreateEventProposalModal from './CreateEventProposalModal';
 import ModalContainer from '../ModalDialogs/ModalContainer';
 import { ProposeEventButtonQuery } from './queries.gql';
 import QueryWithStateDisplay from '../QueryWithStateDisplay';
+import SignInButton from '../Authentication/SignInButton';
 
 class ProposeEventButton extends React.Component {
   static propTypes = {
     caption: PropTypes.node.isRequired,
     className: PropTypes.string,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -23,7 +28,7 @@ class ProposeEventButton extends React.Component {
   }
 
   newProposalCreated = (eventProposal) => {
-    window.location.href = `/event_proposals/${eventProposal.id}/edit`;
+    this.props.history.push(`/event_proposals/${eventProposal.id}/edit`);
   }
 
   renderProposeButton = (data) => {
@@ -57,9 +62,11 @@ class ProposeEventButton extends React.Component {
   }
 
   renderLoginButton = () => (
-    <a href={`/users/sign_in?user_return_to=${window.location.href}`} className={this.props.className}>
-      Log in to propose an event
-    </a>
+    <SignInButton
+      afterSignInPath={window.location.href}
+      className={this.props.className}
+      caption="Log in to propose an event"
+    />
   )
 
   render = () => (
@@ -73,4 +80,4 @@ class ProposeEventButton extends React.Component {
   )
 }
 
-export default ProposeEventButton;
+export default withRouter(ProposeEventButton);

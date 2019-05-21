@@ -1,63 +1,78 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize } from 'inflected';
 import fetch from 'unfetch';
-import { Mutation } from 'react-apollo';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import Confirm from '../ModalDialogs/Confirm';
+import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserConProfile } from './mutations.gql';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import { UserConProfileAdminQuery } from './queries.gql';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
+import useMutationCallback from '../useMutationCallback';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
-class UserConProfileAdminDisplay extends React.Component {
-  static propTypes = {
-    userConProfileId: PropTypes.number.isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-  }
+function UserConProfileAdminDisplay({ userConProfileId, history }) {
+  const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
+    variables: { id: userConProfileId },
+  });
+  const form = useMemo(
+    () => (error ? null : deserializeForm(data.convention.user_con_profile_form)),
+    [data, error],
+  );
+  const formResponse = useMemo(
+    () => (error ? null : deserializeFormResponseModel(data.userConProfile)),
+    [data, error],
+  );
+  const confirm = useConfirm();
+  const deleteUserConProfile = useMutationCallback(DeleteUserConProfile);
 
-  becomeUser = async () => {
-    await fetch(`/user_con_profiles/${this.props.userConProfileId}/become`, {
-      method: 'POST',
-      credentials: 'include',
-    });
+  usePageTitle(useValueUnless(() => data.userConProfile.name, error));
 
-    window.location.href = '/';
-  }
+  const becomeUser = useCallback(
+    () => async () => {
+      await fetch(`/user_con_profiles/${userConProfileId}/become`, {
+        method: 'POST',
+        credentials: 'include',
+      });
 
-  renderFormItems = (data) => {
-    const form = deserializeForm(data.convention.user_con_profile_form);
-    const formResponse = deserializeFormResponseModel(data.userConProfile);
+      window.location.href = '/';
+    },
+    [userConProfileId],
+  );
 
-    return form.getAllItems().map((item) => {
-      if (item.item_type === 'static_text') {
-        return null;
-      }
+  const deleteConfirmed = async () => {
+    await deleteUserConProfile({ variables: { userConProfileId: data.userConProfile.id } });
+    history.replace('/user_con_profiles');
+  };
 
-      return (
-        <tr key={item.identifier}>
-          <th scope="row" className="pr-2">
-            {humanize(item.identifier)}
-          </th>
-          <td className="col-md-9">
-            <FormItemDisplay
-              formItem={item}
-              convention={data.convention}
-              value={formResponse.formResponseAttrs[item.identifier]}
-            />
-          </td>
-        </tr>
-      );
-    });
-  }
+  const renderFormItems = () => form.getAllItems().map((item) => {
+    if (item.item_type === 'static_text') {
+      return null;
+    }
 
-  renderUserAdminSection = (data) => {
+    return (
+      <tr key={item.identifier}>
+        <th scope="row" className="pr-2">
+          {humanize(item.identifier)}
+        </th>
+        <td className="col-md-9">
+          <FormItemDisplay
+            formItem={item}
+            convention={data.convention}
+            value={formResponse.formResponseAttrs[item.identifier]}
+          />
+        </td>
+      </tr>
+    );
+  });
+
+  const renderUserAdminSection = () => {
     const { ability } = data.myProfile;
 
     return (
@@ -68,7 +83,7 @@ class UserConProfileAdminDisplay extends React.Component {
             ability.can_update_user_con_profile
               ? (
                 <li className="list-group-item">
-                  <Link to={`/${this.props.userConProfileId}/edit`}>
+                  <Link to={`/user_con_profiles/${userConProfileId}/edit`}>
                     Edit profile/privileges
                   </Link>
                 </li>
@@ -77,7 +92,7 @@ class UserConProfileAdminDisplay extends React.Component {
           }
           <li className="list-group-item">
             <a
-              href={`/reports/user_con_profiles/${this.props.userConProfileId}`}
+              href={`/reports/user_con_profiles/${userConProfileId}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -87,115 +102,102 @@ class UserConProfileAdminDisplay extends React.Component {
           {ability.can_become_user_con_profile
             ? (
               <li className="list-group-item">
-                <Confirm.Trigger>
-                  {confirm => (
-                    <button
-                      type="button"
-                      className="btn btn-link p-0"
-                      onClick={() => confirm({
-                        prompt: `Are you sure you want to become ${data.userConProfile.name} for the duration of this session?`,
-                        action: this.becomeUser,
-                      })}
-                    >
-                      Become user
-                    </button>
-                  )}
-                </Confirm.Trigger>
+                <button
+                  type="button"
+                  className="btn btn-link p-0"
+                  onClick={() => confirm({
+                    prompt: `Are you sure you want to become ${data.userConProfile.name} for the duration of this session?`,
+                    action: becomeUser,
+                  })}
+                >
+                  Become user
+                </button>
               </li>
             )
             : null}
           {ability.can_delete_user_con_profile
             ? (
               <li className="list-group-item">
-                <Mutation
-                  mutation={DeleteUserConProfile}
-                  variables={{ userConProfileId: data.userConProfile.id }}
+                <button
+                  type="button"
+                  className="btn btn-link p-0 text-danger"
+                  onClick={() => confirm({
+                    prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
+                    action: deleteConfirmed,
+                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                  })}
                 >
-                  {deleteUserConProfile => (
-                    <Confirm.Trigger>
-                      {confirm => (
-                        <button
-                          type="button"
-                          className="btn btn-link p-0 text-danger"
-                          onClick={() => confirm({
-                            prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
-                            action: async () => {
-                              await deleteUserConProfile();
-                              this.props.history.replace('/');
-                            },
-                          })}
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </Confirm.Trigger>
-                  )}
-                </Mutation>
+                  Delete
+                </button>
               </li>
             )
             : null}
         </ul>
       </div>
     );
-  }
+  };
 
-  renderSignupsSection = (data) => {
+  const renderSignupsSection = () => {
     if (!data.myProfile.ability.can_read_signups) {
       return null;
     }
 
     return <UserConProfileSignupsCard userConProfileId={data.userConProfile.id} />;
+  };
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  render = () => (
-    <QueryWithStateDisplay
-      query={UserConProfileAdminQuery}
-      variables={{ id: this.props.userConProfileId }}
-    >
-      {({ data }) => (
-        <div className="row">
-          <div className="col-lg-9">
-            <h1>{data.userConProfile.name}</h1>
-            <table className="table table-sm table-striped my-4">
-              <tbody>
-                <tr>
-                  <th scope="row" className="pr-2">Email</th>
-                  <td className="col-md-9">
-                    {data.userConProfile.user.email}
-                  </td>
-                </tr>
+  return (
+    <div className="row">
+      <div className="col-lg-9">
+        <h1>{data.userConProfile.name}</h1>
+        <table className="table table-sm table-striped my-4">
+          <tbody>
+            <tr>
+              <th scope="row" className="pr-2">Email</th>
+              <td className="col-md-9">
+                {data.userConProfile.user.email}
+              </td>
+            </tr>
 
-                {this.renderFormItems(data)}
+            {renderFormItems()}
 
-                <tr>
-                  <th scope="row" className="pr-2">Privileges</th>
-                  <td>
-                    {data.userConProfile.privileges.length > 0
-                      ? data.userConProfile.privileges.map(priv => titleize(priv)).join(', ')
-                      : 'none'}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <tr>
+              <th scope="row" className="pr-2">Privileges</th>
+              <td>
+                {data.userConProfile.privileges.length > 0
+                  ? data.userConProfile.privileges.map(priv => titleize(priv)).join(', ')
+                  : 'none'}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-            {
-              data.convention.ticket_mode !== 'disabled' && (
-                <TicketAdminSection
-                  userConProfile={data.userConProfile}
-                  convention={data.convention}
-                />
-              )
-            }
-          </div>
+        {
+          data.convention.ticket_mode !== 'disabled' && (
+            <TicketAdminSection
+              userConProfile={data.userConProfile}
+              convention={data.convention}
+            />
+          )
+        }
+      </div>
 
-          <div className="col-lg-3">
-            {this.renderUserAdminSection(data)}
-            {this.renderSignupsSection(data)}
-          </div>
-        </div>
-      )}
-    </QueryWithStateDisplay>
-  )
+      <div className="col-lg-3">
+        {renderUserAdminSection()}
+        {renderSignupsSection()}
+      </div>
+    </div>
+  );
 }
 
-export default withRouter(UserConProfileAdminDisplay);
+UserConProfileAdminDisplay.propTypes = {
+  userConProfileId: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default UserConProfileAdminDisplay;

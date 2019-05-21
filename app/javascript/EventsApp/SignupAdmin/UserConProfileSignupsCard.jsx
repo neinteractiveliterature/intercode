@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Mutation } from 'react-apollo';
+import { Link } from 'react-router-dom';
 
 import Confirm from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
@@ -9,6 +10,7 @@ import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import { timespanFromRun } from '../../TimespanUtils';
 import { UserConProfileSignupsQuery } from './queries.gql';
 import { WithdrawAllUserConProfileSignups } from './mutations.gql';
+import buildEventUrl from '../buildEventUrl';
 
 function filterAndSortSignups(signups) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
@@ -23,9 +25,9 @@ class UserConProfileSignupsCard extends React.Component {
   }
 
   renderEventLink = event => (
-    <a href={`/events/${event.id}`}>
+    <Link to={buildEventUrl(event)}>
       {event.title}
-    </a>
+    </Link>
   )
 
   renderSignup = (signup, convention) => (

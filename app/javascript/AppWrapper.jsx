@@ -12,9 +12,9 @@ import buildApolloClient from './buildApolloClient';
 import Confirm from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
 import { LazyStripeProvider } from './LazyStripe';
-import LoadingIndicator from './LoadingIndicator';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { AuthenticityTokensContextProvider } from './AuthenticityTokensContext';
+import PageLoadingIndicator from './PageLoadingIndicator';
 
 class ErrorBoundary extends React.Component {
   static propTypes = {
@@ -97,7 +97,7 @@ export default (WrappedComponent) => {
       <LazyStripeProvider publishableKey={stripePublishableKey}>
         <AuthenticityTokensContextProvider tokens={authenticityTokens}>
           <ApolloAndAuthenticationProvider recaptchaSiteKey={recaptchaSiteKey}>
-            <Suspense fallback={<LoadingIndicator />}>
+            <Suspense fallback={<PageLoadingIndicator visible />}>
               <Confirm>
                 <ErrorBoundary>
                   <WrappedComponent {...otherProps} />

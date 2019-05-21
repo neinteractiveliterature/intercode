@@ -10,10 +10,14 @@ import EmailCell from '../../Tables/EmailCell';
 import { encodeStringArray, decodeStringArray } from '../../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
-import { RunSignupsTableSignupsQuery } from './queries.gql';
+import { RunSignupsTableSignupsQuery, SignupAdminEventQuery } from './queries.gql';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
+import useQuerySuspended from '../../useQuerySuspended';
+import ErrorDisplay from '../../ErrorDisplay';
+import usePageTitle from '../../usePageTitle';
+import useValueUnless from '../../useValueUnless';
 
 function encodeFilterValue(field, value) {
   if (field === 'state' || field === 'bucket') {
@@ -141,18 +145,26 @@ const getPossibleColumns = (data) => {
 function RunSignupsTable({
   defaultVisibleColumns, eventId, exportUrl, runId, runPath, history,
 }) {
+  const { data, error } = useQuerySuspended(SignupAdminEventQuery, { variables: { eventId } });
+
   const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
-    getData: ({ data }) => data.event.run.signups_paginated.entries,
-    getPages: ({ data }) => data.event.run.signups_paginated.total_pages,
+    getData: ({ data: tableData }) => tableData.event.run.signups_paginated.entries,
+    getPages: ({ data: tableData }) => tableData.event.run.signups_paginated.total_pages,
     getPossibleColumns,
     history,
     query: RunSignupsTableSignupsQuery,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId, runId },
   });
+
+  usePageTitle(useValueUnless(() => `Signups - ${data.event.title}`, error));
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   return (
     <div className="mb-4">

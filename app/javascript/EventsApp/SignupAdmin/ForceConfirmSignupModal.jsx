@@ -105,10 +105,11 @@ class ForceConfirmSignupModal extends React.Component {
           {this.renderBody()}
         </div>
         <div className="modal-footer">
-          <button className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
+          <button type="button" className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
           <Mutation mutation={ForceConfirmSignup}>
             {forceConfirm => (
               <button
+                type="button"
                 className="btn btn-primary"
                 onClick={() => this.onClickOK(forceConfirm)}
                 disabled={disableOK}

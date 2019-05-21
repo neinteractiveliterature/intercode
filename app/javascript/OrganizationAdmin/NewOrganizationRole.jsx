@@ -9,6 +9,7 @@ import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
 
 function NewOrganizationRole({ organizationId, history }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
@@ -17,11 +18,13 @@ function NewOrganizationRole({ organizationId, history }) {
     useMutation(CreateOrganizationRole),
   );
 
+  usePageTitle('New organization role');
+
   if (error) return <ErrorDisplay graphQLError={error} />;
 
   const organization = data.organizations.find(org => org.id === organizationId);
   if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/" />;
+    return <Redirect to="/organizations" />;
   }
 
   const createOrganizationRole = async ({
@@ -56,7 +59,7 @@ function NewOrganizationRole({ organizationId, history }) {
         });
       },
     });
-    history.push(`/${organizationId}`);
+    history.push(`/organizations/${organizationId}`);
   };
 
   return (

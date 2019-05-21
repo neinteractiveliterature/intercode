@@ -39,7 +39,7 @@ class EventsMailer < ApplicationMailer
   end
 
   def event_url_for_convention(event)
-    event_url(event, host: event.convention.domain)
+    url_with_convention_host("/events/#{event.to_param}", event.convention)
   end
   helper_method :event_url_for_convention
 

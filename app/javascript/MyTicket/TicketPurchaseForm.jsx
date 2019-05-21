@@ -18,6 +18,8 @@ import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
 import { findCurrentValue } from '../ScheduledValueUtils';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function TicketPurchaseForm({ stripe }) {
   const { data, error: queryError } = useQuerySuspended(TicketPurchaseFormQuery);
@@ -49,6 +51,8 @@ function TicketPurchaseForm({ stripe }) {
     },
     [purchaseTicket, ticketType, name, stripe],
   ));
+
+  usePageTitle(useValueUnless(() => `Buy a ${data.convention.ticket_name}`, queryError));
 
   if (queryError) {
     return <ErrorDisplay graphQLError={queryError} />;

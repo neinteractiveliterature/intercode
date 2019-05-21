@@ -23,6 +23,10 @@ fragment TeamMemberUserConProfileFields on UserConProfile {
   name_without_nickname
   name_inverted
   email
+  day_phone
+  evening_phone
+  best_call_time
+  preferred_contact
 
   ticket {
     id

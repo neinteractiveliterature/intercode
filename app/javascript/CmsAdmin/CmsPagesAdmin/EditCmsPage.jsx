@@ -9,6 +9,8 @@ import { UpdatePage } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import useMutationCallback from '../../useMutationCallback';
 import useQuerySuspended from '../../useQuerySuspended';
+import useValueUnless from '../../useValueUnless';
+import usePageTitle from '../../usePageTitle';
 
 function EditCmsPage({ match, history }) {
   const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
@@ -17,6 +19,8 @@ function EditCmsPage({ match, history }) {
   const [updatePage, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdatePage),
   );
+
+  usePageTitle(useValueUnless(() => `Edit “${initialPage.name}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

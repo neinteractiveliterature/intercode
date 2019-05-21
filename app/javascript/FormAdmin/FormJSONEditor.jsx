@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
-import { withRouter } from 'react-router-dom';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import CodeInput from '../BuiltInFormControls/CodeInput';
 import { CreateFormWithJSON, UpdateFormWithJSON } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { FormAdminQuery } from './queries.gql';
-import { mutator, Transforms } from '../ComposableFormUtils';
+import useAsyncFunction from '../useAsyncFunction';
+import { useCreateMutation } from '../MutationUtils';
+import useMutationCallback from '../useMutationCallback';
+import usePageTitle from '../usePageTitle';
 
 function formDataFromJSON(json) {
   const { title, sections } = JSON.parse(json);
@@ -18,83 +19,50 @@ function formDataFromJSON(json) {
   };
 }
 
-class FormJSONEditor extends React.Component {
-  static propTypes = {
-    initialForm: PropTypes.shape({
-      id: PropTypes.number,
-      export_json: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+function FormJSONEditor({ initialForm, history }) {
+  const initialFormData = useMemo(
+    () => formDataFromJSON(initialForm.export_json),
+    [initialForm.export_json],
+  );
+  const [form, setForm] = useState(initialFormData);
+  const [createForm, createError, createInProgress] = useAsyncFunction(
+    useCreateMutation(CreateFormWithJSON, {
+      query: FormAdminQuery,
+      arrayPath: ['convention', 'forms'],
+      newObjectPath: ['createFormWithJSON', 'form'],
+    }),
+  );
+  const [updateForm, updateError, updateInProgress] = useAsyncFunction(
+    useMutationCallback(UpdateFormWithJSON),
+  );
+
+  usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
+
+  const save = async () => {
+    const formJSON = JSON.stringify({
+      title: form.title,
+      sections: JSON.parse(form.sectionsJSON),
+    });
+
+    if (initialForm.id) {
+      await updateForm({
+        variables: {
+          id: initialForm.id,
+          formJSON,
+        },
+      });
+    } else {
+      await createForm({ variables: { formJSON } });
+    }
+    history.push('/admin_forms');
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      form: formDataFromJSON(this.props.initialForm.export_json),
-    };
-
-    this.mutator = mutator({
-      component: this,
-      transforms: {
-        form: {
-          title: Transforms.identity,
-          sectionsJSON: Transforms.identity,
-        },
-      },
-    });
-  }
-
-  save = async (createForm, updateForm) => {
-    const formJSON = JSON.stringify({
-      title: this.state.form.title,
-      sections: JSON.parse(this.state.form.sectionsJSON),
-    });
-
-    this.setState({ error: null, operationInProgress: true });
-    try {
-      if (this.props.initialForm.id) {
-        await updateForm({
-          variables: {
-            id: this.props.initialForm.id,
-            formJSON,
-          },
-        });
-      } else {
-        await createForm({
-          variables: { formJSON },
-          update: (store, { data: { createFormWithJSON: { form } } }) => {
-            const data = store.readQuery({ query: FormAdminQuery });
-            store.writeQuery({
-              query: FormAdminQuery,
-              data: {
-                ...data,
-                convention: {
-                  ...data.convention,
-                  forms: [
-                    ...data.convention.forms,
-                    form,
-                  ],
-                },
-              },
-            });
-          },
-        });
-      }
-      this.props.history.push('/');
-    } catch (error) {
-      this.setState({ error, operationInProgress: false });
-    }
-  }
-
-  render = () => (
+  return (
     <div>
       <h1 className="mb-4">
         {
-          this.props.initialForm.id
-            ? `Editing ${this.state.form.title}`
+          initialForm.id
+            ? `Editing ${form.title}`
             : 'New form'
         }
       </h1>
@@ -102,41 +70,43 @@ class FormJSONEditor extends React.Component {
       <BootstrapFormInput
         label="Title"
         name="title"
-        value={this.state.form.title}
-        onTextChange={this.mutator.form.title}
+        value={form.title}
+        onTextChange={title => setForm(prevForm => ({ ...prevForm, title }))}
       />
 
       <fieldset className="mb-4">
         <legend className="col-form-label">Content</legend>
         <CodeInput
-          value={this.state.form.sectionsJSON}
+          value={form.sectionsJSON}
           mode="application/json"
-          onChange={this.mutator.form.sectionsJSON}
+          onChange={sectionsJSON => setForm(prevForm => ({ ...prevForm, sectionsJSON }))}
         />
       </fieldset>
 
       <div className="mb-4">
-        <Mutation mutation={CreateFormWithJSON}>
-          {createForm => (
-            <Mutation mutation={UpdateFormWithJSON}>
-              {updateForm => (
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => this.save(createForm, updateForm)}
-                  disabled={this.state.operationInProgress}
-                >
-                  Save changes
-                </button>
-              )}
-            </Mutation>
-          )}
-        </Mutation>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={save}
+          disabled={createInProgress || updateInProgress}
+        >
+          Save changes
+        </button>
       </div>
 
-      <ErrorDisplay graphQLError={this.state.error} />
+      <ErrorDisplay graphQLError={createError || updateError} />
     </div>
-  )
+  );
 }
 
-export default withRouter(FormJSONEditor);
+FormJSONEditor.propTypes = {
+  initialForm: PropTypes.shape({
+    id: PropTypes.number,
+    export_json: PropTypes.string.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default FormJSONEditor;

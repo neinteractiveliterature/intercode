@@ -8,9 +8,12 @@ import { EventAdminEventsQuery } from './queries.gql';
 import NewEventForm from './NewEventForm';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import usePageTitle from '../usePageTitle';
 
 function NewRecurringEvent({ history, ...props }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+
+  usePageTitle('New Recurring Event');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -21,7 +24,7 @@ function NewRecurringEvent({ history, ...props }) {
       <h3 className="my-4">New recurring event</h3>
 
       <NewEventForm
-        onExit={() => history.push('/recurring_events')}
+        onExit={() => history.push('/admin_events/recurring_events')}
         convention={data.convention}
         schedulingUi="recurring"
         {...props}
@@ -38,6 +41,8 @@ NewRecurringEvent.propTypes = {
 
 function RecurringEventAdminList() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+
+  usePageTitle('Recurring Events');
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -59,12 +64,12 @@ function RecurringEventAdminList() {
 
   return (
     <div>
-      <Link className="btn btn-primary mt-4" to="/recurring_events/new">
+      <Link className="btn btn-primary mt-4" to="/admin_events/recurring_events/new">
         Create new recurring event
       </Link>
       <hr className="my-4" />
       {eventSections}
-      <Route path="/recurring_events/:eventId/runs/:runId/edit">
+      <Route path="/admin_events/recurring_events/:eventId/runs/:runId/edit">
         {props => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
@@ -76,7 +81,7 @@ function RecurringEventAdminList() {
 function RecurringEventAdmin() {
   return (
     <Switch>
-      <Route path="/recurring_events/new" component={NewRecurringEvent} />
+      <Route path="/admin_events/recurring_events/new" component={NewRecurringEvent} />
       <Route component={RecurringEventAdminList} />
     </Switch>
   );

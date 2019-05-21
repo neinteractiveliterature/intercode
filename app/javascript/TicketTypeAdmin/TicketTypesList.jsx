@@ -13,6 +13,7 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
+import usePageTitle from '../usePageTitle';
 
 function cardClassForTicketType(ticketType) {
   if (ticketType.publicly_available) {
@@ -69,6 +70,8 @@ function renderPricingSchedule(ticketType, timezoneName) {
 function TicketTypesList({
   ticketTypes, history, ticketName, timezoneName,
 }) {
+  usePageTitle(`${capitalize(ticketName)} types`);
+
   const confirm = useConfirm();
   const deleteMutate = useMutationCallback(DeleteTicketType);
   const deleteTicketType = useCallback(
@@ -114,7 +117,7 @@ function TicketTypesList({
               <i className="fa fa-trash-o mr-1" />
               Delete
             </button>
-            <Link to={`/${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
+            <Link to={`/ticket_types/${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
               <i className="fa fa-pencil-square-o mr-1" />
               Edit
             </Link>
@@ -161,7 +164,7 @@ function TicketTypesList({
 
       {sortedTicketTypes.map(renderTicketTypeDisplay)}
 
-      <Link to="/new" className="btn btn-primary">
+      <Link to="/ticket_types/new" className="btn btn-primary">
         New
         {' '}
         {ticketName}
