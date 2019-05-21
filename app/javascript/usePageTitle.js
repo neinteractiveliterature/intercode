@@ -8,8 +8,8 @@ export default function usePageTitle(title) {
 
   useEffect(
     () => {
-      if (title) {
-        const titleParts = [title, conventionName];
+      if (title != null) {
+        const titleParts = [title === '' ? null : title, conventionName];
         document.title = compact(titleParts).join(' - ');
       }
     },
