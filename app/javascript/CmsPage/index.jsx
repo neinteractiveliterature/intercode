@@ -49,7 +49,7 @@ function CmsPage({
   );
 
   usePageTitle(
-    useValueUnless(() => (location.pathname === '/' ? null : data.cmsPage.name), error || loading),
+    useValueUnless(() => (location.pathname === '/' ? '' : data.cmsPage.name), error || loading),
   );
 
   if (error) {
