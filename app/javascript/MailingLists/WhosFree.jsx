@@ -7,8 +7,10 @@ import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
 import Timespan from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
-import { WhosFreeQuery } from './queries.gql';
+import { WhosFreeQuery, WhosFreeFormConventionQuery } from './queries.gql';
 import LoadingIndicator from '../LoadingIndicator';
+import useValueUnless from '../useValueUnless';
+import usePageTitle from '../usePageTitle';
 
 function WhosFreeResults({ timespan }) {
   const { data, error } = useQuerySuspended(WhosFreeQuery, {
@@ -36,7 +38,10 @@ WhosFreeResults.propTypes = {
 };
 
 function WhosFree() {
+  const { data, error } = useQuerySuspended(WhosFreeFormConventionQuery);
   const [timespan, setTimespan] = useState(null);
+
+  usePageTitle('Who‘s free', useValueUnless(() => data.convention, error));
 
   return (
     <>

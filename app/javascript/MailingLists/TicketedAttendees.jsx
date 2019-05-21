@@ -4,9 +4,16 @@ import ErrorDisplay from '../ErrorDisplay';
 import { TicketedAttendeesQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import TabbedMailingList from './TabbedMailingList';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function TicketedAttendees() {
   const { data, error } = useQuerySuspended(TicketedAttendeesQuery);
+
+  usePageTitle(
+    useValueUnless(() => `All attendees with ${data.convention.ticket_name}`, error),
+    useValueUnless(() => data.convention, error),
+  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

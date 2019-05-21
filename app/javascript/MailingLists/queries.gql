@@ -37,6 +37,7 @@ query TicketedAttendeesQuery {
 query EventProposersQuery {
   convention {
     id
+    name
 
     mailing_lists {
       event_proposers {
@@ -49,6 +50,7 @@ query EventProposersQuery {
 query TeamMembersMailingListQuery {
   convention {
     id
+    name
 
     mailing_lists {
       team_members {
@@ -61,6 +63,7 @@ query TeamMembersMailingListQuery {
 query UsersWithPendingBioQuery {
   convention {
     id
+    name
 
     mailing_lists {
       users_with_pending_bio {
@@ -73,6 +76,7 @@ query UsersWithPendingBioQuery {
 query WaitlistMailingListsQuery {
   convention {
     id
+    name
     timezone_name
 
     mailing_lists {
@@ -98,6 +102,7 @@ query WaitlistMailingListsQuery {
 query WhosFreeFormConventionQuery {
   convention {
     id
+    name
     starts_at
     ends_at
     timezone_name
