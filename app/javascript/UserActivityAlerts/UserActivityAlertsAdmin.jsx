@@ -4,8 +4,6 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import EditUserActivityAlert from './EditUserActivityAlert';
 import NewUserActivityAlert from './NewUserActivityAlert';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
-import { UserActivityAlertQuery } from './queries.gql';
 import UserActivityAlertsList from './UserActivityAlertsList';
 
 const UserActivityAlertsAdmin = () => (
