@@ -6,13 +6,14 @@ import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import { useChangeDispatchers } from '../ComposableFormUtils';
 import useUniqueId from '../useUniqueId';
+import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 
-function ConventionFormGeneralSection({ convention, dispatch }) {
+function ConventionFormGeneralSection({ convention, dispatch, disabled }) {
   const [
-    changeName, changeDomain, changeTimezoneName, changeStartsAt, changeEndsAt,
+    changeName, changeSiteMode, changeDomain, changeTimezoneName, changeStartsAt, changeEndsAt,
   ] = useChangeDispatchers(
     dispatch,
-    ['name', 'domain', 'timezone_name', 'starts_at', 'ends_at'],
+    ['name', 'site_mode', 'domain', 'timezone_name', 'starts_at', 'ends_at'],
   );
   const startId = useUniqueId('starts-at-');
   const endId = useUniqueId('ends-at-');
@@ -28,6 +29,7 @@ function ConventionFormGeneralSection({ convention, dispatch }) {
         timezoneName={convention.timezone_name}
         onChange={onChange}
         id={inputId}
+        disabled={disabled}
       />
     </div>
   ));
@@ -39,6 +41,24 @@ function ConventionFormGeneralSection({ convention, dispatch }) {
         label="Name"
         value={convention.name || ''}
         onTextChange={changeName}
+        disabled={disabled}
+      />
+
+      <MultipleChoiceInput
+        caption="Site mode"
+        choices={[
+          {
+            value: 'convention',
+            label: 'Site behaves as a convention with multiple events',
+          },
+          {
+            value: 'single_event',
+            label: 'Site behaves as a single standalone event',
+          },
+        ]}
+        value={convention.site_mode}
+        onChange={changeSiteMode}
+        disabled={disabled}
       />
 
       <BootstrapFormInput
@@ -46,6 +66,7 @@ function ConventionFormGeneralSection({ convention, dispatch }) {
         label="Convention domain name"
         value={convention.domain || ''}
         onTextChange={changeDomain}
+        disabled={disabled}
       />
 
       <TimezoneSelect
@@ -53,6 +74,7 @@ function ConventionFormGeneralSection({ convention, dispatch }) {
         label="Time zone"
         value={convention.timezone_name}
         onChange={changeTimezoneName}
+        disabled={disabled}
       />
 
       <div className="row form-group">
@@ -71,6 +93,11 @@ ConventionFormGeneralSection.propTypes = {
     ends_at: PropTypes.string,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+ConventionFormGeneralSection.defaultProps = {
+  disabled: false,
 };
 
 export default ConventionFormGeneralSection;

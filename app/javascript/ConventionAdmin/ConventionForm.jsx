@@ -7,6 +7,8 @@ import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
 import ConventionFormEventsSection from './ConventionFormEventsSection';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
+import useAsyncFunction from '../useAsyncFunction';
+import ErrorDisplay from '../ErrorDisplay';
 
 const conventionFormTransforms = {
   starts_at: Transforms.datetime,
@@ -20,30 +22,30 @@ function ConventionForm({
   initialConvention, cmsLayouts, pages, saveConvention,
 }) {
   const [convention, dispatch] = useReducer(conventionFormReducer, initialConvention);
+  const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
 
   const onClickSave = useCallback(
     (event) => {
       event.preventDefault();
-      saveConvention(convention);
+      save(convention);
     },
-    [convention, saveConvention],
+    [convention, save],
   );
+
+  const commonProps = { convention, dispatch, disabled: saveInProgress };
 
   const tabs = [
     {
       id: 'general',
       name: 'General',
-      renderContent: () => (
-        <ConventionFormGeneralSection convention={convention} dispatch={dispatch} />
-      ),
+      renderContent: () => <ConventionFormGeneralSection {...commonProps} />,
     },
     {
       id: 'website',
       name: 'Website',
       renderContent: () => (
         <ConventionFormWebsiteSection
-          convention={convention}
-          dispatch={dispatch}
+          {...commonProps}
           cmsLayouts={cmsLayouts}
           pages={pages}
         />
@@ -54,8 +56,7 @@ function ConventionForm({
       name: 'Payments',
       renderContent: () => (
         <ConventionFormBillingSection
-          convention={convention}
-          dispatch={dispatch}
+          {...commonProps}
           maskedStripeSecretKey={initialConvention.masked_stripe_secret_key}
         />
       ),
@@ -63,9 +64,7 @@ function ConventionForm({
     {
       id: 'events',
       name: 'Events',
-      renderContent: () => (
-        <ConventionFormEventsSection convention={convention} dispatch={dispatch} />
-      ),
+      renderContent: () => <ConventionFormEventsSection {...commonProps} />,
     },
   ];
 
@@ -78,6 +77,8 @@ function ConventionForm({
       <div className="pt-3 pb-2 px-3 border border-top-0 mb-4">
         <TabBody {...tabProps} />
       </div>
+
+      <ErrorDisplay graphQLError={saveError} />
 
       <button className="btn btn-primary" onClick={onClickSave} type="button">
         Save settings
