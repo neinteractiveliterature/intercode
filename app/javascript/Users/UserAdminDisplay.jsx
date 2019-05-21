@@ -7,6 +7,8 @@ import sortBy from 'lodash-es/sortBy';
 import ErrorDisplay from '../ErrorDisplay';
 import useQuerySuspended from '../useQuerySuspended';
 import { UserAdminQuery } from './queries.gql';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function sortByConventionDate(profiles) {
   return reverse(sortBy(profiles, profile => profile.convention.starts_at));
@@ -14,6 +16,8 @@ function sortByConventionDate(profiles) {
 
 function UserAdminDisplay({ userId }) {
   const { data, error } = useQuerySuspended(UserAdminQuery, { variables: { id: userId } });
+
+  usePageTitle(useValueUnless(() => data.user.name, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
