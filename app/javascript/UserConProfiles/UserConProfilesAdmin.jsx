@@ -6,21 +6,26 @@ import EditUserConProfile from './EditUserConProfile';
 import NewTicket from './NewTicket';
 import UserConProfileAdminDisplay from './UserConProfileAdminDisplay';
 import UserConProfilesTable from './UserConProfilesTable';
+import usePageTitle from '../usePageTitle';
 
-const UserConProfilesAdmin = () => {
-  const renderAttendeesTable = () => (
-    <React.Fragment>
-      <h1>Attendees</h1>
+function AttendeesPage() {
+  usePageTitle('Attendees');
+
+  return (
+    <>
+      <h1 className="mb-4">Attendees</h1>
       <UserConProfilesTable
         exportUrl="/user_con_profiles/export.csv"
         defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']}
       />
-    </React.Fragment>
+    </>
   );
+}
 
+function UserConProfilesAdmin() {
   return (
     <Switch>
-      <Route path="/user_con_profiles/new" render={renderAttendeesTable} />
+      <Route path="/user_con_profiles/new" component={AttendeesPage} />
       <Route
         path="/user_con_profiles/:id/admin_ticket/new"
         render={({ match }) => (
@@ -43,9 +48,9 @@ const UserConProfilesAdmin = () => {
           <UserConProfileAdminDisplay userConProfileId={Number.parseInt(match.params.id, 10)} />
         )}
       />
-      <Route render={renderAttendeesTable} />
+      <Route component={AttendeesPage} />
     </Switch>
   );
-};
+}
 
 export default UserConProfilesAdmin;

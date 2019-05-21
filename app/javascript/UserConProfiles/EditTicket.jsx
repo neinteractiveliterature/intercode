@@ -8,6 +8,8 @@ import { UpdateTicket } from './mutations.gql';
 import { UserConProfileAdminQuery } from './queries.gql';
 import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function EditTicket({ userConProfileId, history }) {
   const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
@@ -23,10 +25,12 @@ function EditTicket({ userConProfileId, history }) {
           ticket: ticketInput,
         },
       });
-      history.push(`/${userConProfileId}`);
+      history.push(`/user_con_profiles/${userConProfileId}`);
     },
     [updateTicket, history, userConProfileId, data],
   );
+
+  usePageTitle(useValueUnless(() => `Editing ${data.convention.ticket_name} for ${data.userConProfile.name}`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

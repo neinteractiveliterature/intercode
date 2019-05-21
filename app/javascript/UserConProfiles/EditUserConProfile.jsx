@@ -10,6 +10,8 @@ import { UpdateUserConProfile } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function EditUserConProfile({ history, id }) {
   const { data, error } = useQuerySuspended(UserConProfileQuery, { variables: { id } });
@@ -65,6 +67,8 @@ function EditUserConProfile({ history, id }) {
       [mutate, history, userConProfile, canUpdatePrivileges],
     ),
   );
+
+  usePageTitle(useValueUnless(() => `Editing “${initialUserConProfile.name}”`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

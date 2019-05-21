@@ -8,6 +8,8 @@ import TicketForm from './TicketForm';
 import { UserConProfileAdminQuery } from './queries.gql';
 import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
 
 function NewTicket({ userConProfileId, history }) {
   const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
@@ -41,10 +43,12 @@ function NewTicket({ userConProfileId, history }) {
           ticket: ticketInput,
         },
       });
-      history.push(`/${userConProfileId}`);
+      history.push(`/user_con_profiles/${userConProfileId}`);
     },
     [createTicket, history, userConProfileId],
   );
+
+  usePageTitle(useValueUnless(() => `New ${data.convention.ticket_name} for ${data.userConProfile.name}`, error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
