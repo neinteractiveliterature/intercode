@@ -21,6 +21,7 @@ import 'codemirror/addon/fold/foldgutter.css';
 import defaultCodeMirrorOptions from '../defaultCodeMirrorOptions';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
+import parsePageContent from '../parsePageContent';
 
 import '../Codemirror/LiquidMultiplexModes';
 
@@ -84,9 +85,7 @@ class SyncCodeInput extends React.Component {
 
       this.props.getPreviewContent(this.props.value).then((html) => {
         this.setState({
-          previewContent: (
-            <div dangerouslySetInnerHTML={{ __html: html }} />
-          ),
+          previewContent: parsePageContent(html).bodyComponents,
         });
       }).catch(({ error }) => {
         this.setState({
@@ -140,22 +139,22 @@ class SyncCodeInput extends React.Component {
     return (
       <ul className="nav nav-pills bg-light p-1">
         <li className="nav-item">
-          <a
-            href="#"
-            className={classNames('nav-link py-0 px-2', { active: !this.state.previewing })}
+          <button
+            type="button"
+            className={classNames('btn btn-link nav-link py-0 px-2', { active: !this.state.previewing })}
             onClick={this.editTabClicked}
           >
             Edit
-          </a>
+          </button>
         </li>
         <li className="nav-item">
-          <a
-            href="#"
-            className={classNames('nav-link py-0 px-2', { active: this.state.previewing })}
+          <button
+            type="button"
+            className={classNames('btn btn-link nav-link py-0 px-2', { active: this.state.previewing })}
             onClick={this.previewTabClicked}
           >
             Preview
-          </a>
+          </button>
         </li>
         {this.props.extraNavControls}
       </ul>
