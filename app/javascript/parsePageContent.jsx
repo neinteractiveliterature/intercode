@@ -7,12 +7,21 @@ import { Link } from 'react-router-dom';
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';
+import ErrorBoundary from './ErrorBoundary';
 
+const EventAdminMenu = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'));
+const LongFormEventDetails = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'));
 const ProposeEventButton = lazy(() => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'));
+const RunsSection = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/RunsSection'));
+const ShortFormEventDetails = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/ShortFormEventDetails'));
 const WithdrawMySignupButton = lazy(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'));
 
 export const DEFAULT_COMPONENT_MAP = {
+  EventAdminMenu,
+  LongFormEventDetails,
   ProposeEventButton,
+  RunsSection,
+  ShortFormEventDetails,
   SignInButton,
   SignOutButton,
   SignUpButton,
@@ -148,7 +157,11 @@ function processReactComponentNode(node, children, index, componentMap) {
   return React.createElement(
     Suspense,
     { fallback: (<></>) },
-    React.createElement(component, props),
+    React.createElement(
+      ErrorBoundary,
+      { errorType: 'graphql' },
+      React.createElement(component, props),
+    ),
   );
 }
 

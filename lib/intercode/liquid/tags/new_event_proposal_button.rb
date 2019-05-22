@@ -27,7 +27,7 @@ module Intercode
 
         def props(_context)
           {
-            caption: button_text.presence || "Propose an event",
+            caption: button_text.presence || 'Propose an event',
             className: button_class.presence || 'btn btn-secondary'
           }
         end
