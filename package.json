@@ -62,7 +62,7 @@
     "glob": "^7.1.4",
     "graphiql": "^0.13.0",
     "graphql": "^14.3.0",
-    "graphql-anywhere": "^4.2.1",
+    "graphql-anywhere": "^4.2.2",
     "graphql-tag": "^2.10.1",
     "html-to-react": "^1.3.4",
     "hypernova": "^2.5.0",
