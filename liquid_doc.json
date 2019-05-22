@@ -3442,6 +3442,150 @@
       ]
     },
     {
+      "name": "Intercode::Liquid::Tags::EventAdminMenu",
+      "superclasses": [
+        "Intercode::Liquid::Tags::EventAdminMenu",
+        "Intercode::Liquid::Tags::AppComponentRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders an event's admin menu, if the user is permitted to administer the event.\nRequires specifying an event ID.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "",
+          "text": "{% event_admin_menu 1234 %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "event_admin_menu",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "event_id",
+          "docstring": "Returns the value of attribute event_id",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of EventAdminMenu",
+              "types": [
+                "EventAdminMenu"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::EventRunsSection",
+      "superclasses": [
+        "Intercode::Liquid::Tags::EventRunsSection",
+        "Intercode::Liquid::Tags::AppComponentRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders an event's runs section, which includes the capacity graphs and signup buttons.\nRequires specifying an event ID.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "",
+          "text": "{% event_runs_section 1234 %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "event_runs_section",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "event_id",
+          "docstring": "Returns the value of attribute event_id",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of EventRunsSection",
+              "types": [
+                "EventRunsSection"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Intercode::Liquid::Tags::AssignGraphqlResult",
       "superclasses": [
         "Intercode::Liquid::Tags::AssignGraphqlResult",
@@ -3565,21 +3709,63 @@
       ]
     },
     {
-      "name": "Intercode::Liquid::Tags::RailsPartialRenderer",
+      "name": "Intercode::Liquid::Tags::LongFormEventDetails",
       "superclasses": [
-        "Intercode::Liquid::Tags::RailsPartialRenderer",
+        "Intercode::Liquid::Tags::LongFormEventDetails",
+        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
-      "docstring": "",
+      "docstring": "Renders the long-form event details section (usually including stuff like the event's\ndescription, content warnings, etc.)  Requires specifying an event ID.",
       "tags": [
         {
-          "tag_name": "api",
+          "tag_name": "example",
+          "name": "",
+          "text": "{% long_form_event_details 1234 %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
           "name": null,
-          "text": "",
+          "text": "long_form_event_details",
           "types": null
         }
       ],
       "methods": [
+        {
+          "name": "event_id",
+          "docstring": "Returns the value of attribute event_id",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of LongFormEventDetails",
+              "types": [
+                "LongFormEventDetails"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
         {
           "name": "render",
           "docstring": "",
@@ -3591,21 +3777,69 @@
               "types": null
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::ShortFormEventDetails",
+      "superclasses": [
+        "Intercode::Liquid::Tags::ShortFormEventDetails",
+        "Intercode::Liquid::Tags::AppComponentRenderer",
+        "Liquid::Tag"
+      ],
+      "docstring": "Renders the short-form event details list (usually including stuff like the event's team\nmembers, contact email, authors, etc.)  Requires specifying an event ID.",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "",
+          "text": "{% short_form_event_details 1234 %}",
+          "types": null
         },
         {
-          "name": "partial",
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "short_form_event_details",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "event_id",
+          "docstring": "Returns the value of attribute event_id",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
           "docstring": "",
           "tags": [
             {
-              "tag_name": "api",
+              "tag_name": "return",
               "name": null,
-              "text": "",
-              "types": null
+              "text": "a new instance of ShortFormEventDetails",
+              "types": [
+                "ShortFormEventDetails"
+              ]
             }
           ]
         },
         {
-          "name": "locals",
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
           "docstring": "",
           "tags": [
             {

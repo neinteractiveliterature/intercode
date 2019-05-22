@@ -35,7 +35,7 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
   usePageTitle(useValueUnless(() => data.userConProfile.name, error));
 
   const becomeUser = useCallback(
-    () => async () => {
+    async () => {
       await fetch(`/user_con_profiles/${userConProfileId}/become`, {
         method: 'POST',
         credentials: 'include',
