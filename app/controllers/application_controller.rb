@@ -198,15 +198,4 @@ sites, please use the “Revert to #{assumed_identity_from_profile.name}” opti
     return true if self.class.name =~ /\ADoorkeeper::/
     false
   end
-
-  def event_for_path
-    return unless convention
-    return @event_for_path if defined?(@event_for_path)
-
-    @event_for_path = begin
-      if (match = (%r{\A/events/(\d+)}.match(request.path)))
-        convention.events.active.find_by(id: match[1])
-      end
-    end
-  end
 end
