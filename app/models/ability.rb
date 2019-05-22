@@ -221,6 +221,7 @@ class Ability
     can [:read, :root], Page
     can :read, Product
     can :read, Room
+    can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
     can :read, StaffPosition
     can :read, TicketType
