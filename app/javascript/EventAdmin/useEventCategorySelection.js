@@ -1,11 +1,8 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-
-import EventCategorySelect from '../BuiltInFormControls/EventCategorySelect';
+import { useMemo, useState, useCallback } from 'react';
 import { Transforms } from '../ComposableFormUtils';
 import { getFormForEventCategoryId, getProposalFormForEventCategoryId } from './getFormForEventCategory';
 
-export function useEventCategorySelection({
+export default function useEventCategorySelection({
   convention, initialEventCategoryId, selectableCategoryIds,
 }) {
   const selectableCategories = useMemo(
@@ -19,6 +16,13 @@ export function useEventCategorySelection({
     initialEventCategoryId || (
       selectableCategories.length === 1 ? selectableCategories[0].id : null
     ),
+  );
+
+  const eventCategory = useMemo(
+    () => (eventCategoryId
+      ? convention.event_categories.find(category => category.id === eventCategoryId)
+      : null),
+    [convention.event_categories, eventCategoryId],
   );
 
   const eventCategorySelectChanged = useCallback(
@@ -43,39 +47,6 @@ export function useEventCategorySelection({
   };
 
   return [selectProps, {
-    eventCategoryId, setEventCategoryId, eventForm, eventProposalForm,
+    eventCategoryId, setEventCategoryId, eventCategory, eventForm, eventProposalForm,
   }];
 }
-
-function EventCategorySelectionWrapper({
-  convention, initialEventCategoryId, selectableCategoryIds, children,
-}) {
-  const [selectProps, { eventCategoryId }] = useEventCategorySelection({
-    convention, initialEventCategoryId, selectableCategoryIds,
-  });
-
-  return (
-    <>
-      <EventCategorySelect {...selectProps} />
-      {children({ eventCategoryId })}
-    </>
-  );
-}
-
-EventCategorySelectionWrapper.propTypes = {
-  convention: PropTypes.shape({
-    event_categories: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })).isRequired,
-  }).isRequired,
-  initialEventCategoryId: PropTypes.number,
-  selectableCategoryIds: PropTypes.arrayOf(PropTypes.number),
-  children: PropTypes.func.isRequired,
-};
-
-EventCategorySelectionWrapper.defaultProps = {
-  initialEventCategoryId: null,
-  selectableCategoryIds: null,
-};
-
-export default EventCategorySelectionWrapper;
