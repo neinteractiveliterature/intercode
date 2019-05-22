@@ -44,16 +44,18 @@ export default function EditEvent({
 
       <ErrorDisplay graphQLError={updateError} />
 
-      <button
-        type="button"
-        className="btn btn-primary mt-4"
-        disabled={updateInProgress || dropInProgress}
-        onClick={updateEventCallback}
-      >
-        {saveCaption}
-      </button>
+      <div className="d-flex align-items-center mt-4">
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={updateInProgress || dropInProgress}
+          onClick={updateEventCallback}
+        >
+          {saveCaption}
+        </button>
 
-      {cancelPath && <Link to={cancelPath} className="btn btn-link">Cancel</Link>}
+        {cancelPath && <Link to={cancelPath} className="btn btn-link">Cancel</Link>}
+      </div>
     </form>
   );
 }

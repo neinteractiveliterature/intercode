@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { useEventCategorySelection } from './EventCategorySelectionWrapper';
+import useEventCategorySelection from './useEventCategorySelection';
 import useEventForm, { EventForm } from './useEventForm';
 import EventCategorySelect from '../BuiltInFormControls/EventCategorySelect';
 
@@ -21,20 +21,27 @@ export default function useEventFormWithCategorySelection({
     [convention.event_categories, schedulingUi],
   );
 
-  const [selectProps, { eventCategoryId, eventForm }] = useEventCategorySelection({
+  const [selectProps, { eventCategoryId, eventForm, eventCategory }] = useEventCategorySelection({
     convention,
     initialEventCategoryId: ((initialEvent || {}).event_category || {}).id,
     selectableCategoryIds,
   });
 
-  const [eventFormProps, otherProps] = useEventForm({
+  const [eventFormProps, { setEvent, ...otherProps }] = useEventForm({
     convention, initialEvent, eventForm,
   });
+
+  useEffect(
+    () => {
+      setEvent(prevEvent => ({ ...prevEvent, event_category: eventCategory }));
+    },
+    [eventCategory, setEvent],
+  );
 
   const eventFormWithCategorySelectionProps = { selectProps, eventFormProps };
 
   return [eventFormWithCategorySelectionProps, {
-    eventCategoryId, eventForm, ...otherProps,
+    eventCategoryId, eventCategory, eventForm, ...otherProps,
   }];
 }
 
