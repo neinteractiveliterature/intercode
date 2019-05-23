@@ -89,6 +89,14 @@ table.no-top-border thead th {
 
 .run-card {
   min-width: 250px;
-  width: max-content;
   max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.run-card-deck {
+  display: grid;
+  justify-content: center;
+  grid-gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
