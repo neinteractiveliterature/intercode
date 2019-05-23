@@ -19,7 +19,7 @@ function LongFormEventDetails({ eventId }) {
   return longFormItems.map(item => (
     formResponse[item.identifier] && formResponse[item.identifier].trim() !== ''
       ? (
-        <section className="my-4" key={item.identifier}>
+        <section className="my-4 event-details" id={item.identifier} key={item.identifier}>
           <hr />
 
           {

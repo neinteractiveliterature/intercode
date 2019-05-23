@@ -75,27 +75,23 @@ function RunsSection({ eventId }) {
   );
 
   return (
-    <section className="my-4">
-      <hr />
-
-      <div className="d-flex flex-wrap justify-content-center">
-        {showFakeRun
-          ? <FakeRun event={event} />
-          : sortedRuns.map(run => (
-            <RunCard
-              event={event}
-              eventPath={eventPath}
-              run={run}
-              timezoneName={convention.timezone_name}
-              key={run.id}
-              myProfile={myProfile}
-              currentAbility={currentAbility}
-              signupOptions={signupOptions}
-            />
-          ))
-        }
-      </div>
-    </section>
+    <div className="d-flex flex-wrap justify-content-center">
+      {showFakeRun
+        ? <FakeRun event={event} />
+        : sortedRuns.map(run => (
+          <RunCard
+            event={event}
+            eventPath={eventPath}
+            run={run}
+            timezoneName={convention.timezone_name}
+            key={run.id}
+            myProfile={myProfile}
+            currentAbility={currentAbility}
+            signupOptions={signupOptions}
+          />
+        ))
+      }
+    </div>
   );
 }
 

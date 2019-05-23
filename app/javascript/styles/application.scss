@@ -86,3 +86,9 @@ table.no-top-border thead th {
   margin-left: -19vh;
   transition: all 250ms ease-in-out;
 }
+
+.run-card {
+  min-width: 250px;
+  width: max-content;
+  max-width: 340px;
+}
