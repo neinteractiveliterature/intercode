@@ -2,9 +2,6 @@
 inherit: []
 navigation_items:
 - item_type: link
-  title: Food
-  page_slug: food
-- item_type: link
   title: Team and Contact Info
   page_slug: team-contact
 - item_type: link
