@@ -1,0 +1,16 @@
+---
+name: Main landing page
+invariant: false
+skip_clickwrap_agreement: false
+---
+<div className="d-block d-md-flex">
+  <div className="flex-grow-md-1">
+    {% long_form_event_details event.id %}
+  </div>
+
+  <div class="mt-4 mt-md-0 ml-md-4">
+    {% include "info_box" %}
+    {% event_runs_section event.id %}
+    {% event_admin_menu event.id %}
+  </div>
+</div>

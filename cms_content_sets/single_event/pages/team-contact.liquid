@@ -1,0 +1,53 @@
+---
+name: Team and Contact Info
+invariant: false
+skip_clickwrap_agreement: false
+---
+<h1>Team</h1>
+
+<table class="table text-white">
+  <tbody>
+    <tr>
+      <th scope="row">
+        {{ event.team_member_name | pluralize }}
+      </th>
+      <td>
+        <ul class="list-unstyled mb-0">
+          {% for user_con_profile in event.team_member_user_con_profiles %}
+            <li>{{ user_con_profile.name_without_nickname }}</li>
+          {% endfor %}
+          </ul>
+      </td>
+      <td>
+        {{ event.email | email_link }}
+      </td>
+    </tr>
+    {% if event.author %}
+      <tr>
+        <th scope="row">Authors</th>
+        <td>
+          {{ event.author }}
+        </td>
+        <td></td>
+      </tr>
+    {% endif %}
+    {% for staff_position in staff_positions %}
+      {% assign user_con_profiles = staff_position.user_con_profiles | sort_natural:'name_inverted' %}
+      <tr>
+        <th scope="row">{{ staff_position.name }}</th>
+        <td>
+          <ul class="list-unstyled mb-0">
+            {% for user_con_profile in user_con_profiles %}
+              <li>{{ user_con_profile.name_without_nickname }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td>{{ staff_position.email | email_link }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h1>Contact us</h1>
+
+<p>Questions?  Please email {{ event.email | email_link }} and we'll get back to you as soon as we can.  Thank you!</p>
