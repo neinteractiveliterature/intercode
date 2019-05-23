@@ -42,43 +42,69 @@ NewEvent.propTypes = {
   }).isRequired,
 };
 
-const EventAdmin = () => (
-  <>
-    <h1 className="mb-4">Event scheduling</h1>
-    <ul className="nav nav-tabs">
-      <li className="nav-item">
-        <NavLink
-          className="nav-link"
-          to="/admin_events/runs"
-          isActive={(match, location) => (
-            location.pathname === '/admin_events/runs' || location.pathname === '/admin_events/new'
-          )}
-        >
-          Regular events
-        </NavLink>
-      </li>
-      <li className="nav-item">
-        <NavLink className="nav-link" to="/admin_events/recurring_events">Recurring events</NavLink>
-      </li>
-      <li className="nav-item">
-        <NavLink className="nav-link" to="/admin_events/filler_events">Single-run events</NavLink>
-      </li>
-      <li className="nav-item">
-        <NavLink className="nav-link" to="/admin_events/dropped_events">Dropped events</NavLink>
-      </li>
-    </ul>
+function EventAdmin() {
+  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
 
-    <Switch>
-      <Route path="/admin_events/runs" component={EventAdminRunsTable} />
-      <Route path="/admin_events/:eventId/runs" component={EventAdminRunsTable} />
-      <Route path="/admin_events/recurring_events" component={RecurringEventAdmin} />
-      <Route path="/admin_events/filler_events" component={SingleRunEventAdmin} />
-      <Route path="/admin_events/dropped_events" component={DroppedEventAdmin} />
-      <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
-      <Route path="/admin_events/new" component={NewEvent} />
-      <Redirect to="/admin_events/runs" />
-    </Switch>
-  </>
-);
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  if (data.convention.site_mode === 'single_event') {
+    if (data.events.length === 0) {
+      return (
+        <Switch>
+          <Route path="/admin_events/new" component={NewEvent} />
+          <Redirect to="/admin_events/new" />
+        </Switch>
+      );
+    }
+
+    return (
+      <Switch>
+        <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
+        <Redirect to={`/admin_events/${data.events[0].id}/edit`} />
+      </Switch>
+    );
+  }
+
+  return (
+    <>
+      <h1 className="mb-4">Event scheduling</h1>
+      <ul className="nav nav-tabs">
+        <li className="nav-item">
+          <NavLink
+            className="nav-link"
+            to="/admin_events/runs"
+            isActive={(match, location) => (
+              location.pathname === '/admin_events/runs' || location.pathname === '/admin_events/new'
+            )}
+          >
+            Regular events
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_events/recurring_events">Recurring events</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_events/filler_events">Single-run events</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/admin_events/dropped_events">Dropped events</NavLink>
+        </li>
+      </ul>
+
+      <Switch>
+        <Route path="/admin_events/runs" component={EventAdminRunsTable} />
+        <Route path="/admin_events/:eventId/runs" component={EventAdminRunsTable} />
+        <Route path="/admin_events/recurring_events" component={RecurringEventAdmin} />
+        <Route path="/admin_events/filler_events" component={SingleRunEventAdmin} />
+        <Route path="/admin_events/dropped_events" component={DroppedEventAdmin} />
+        <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
+        <Route path="/admin_events/new" component={NewEvent} />
+        <Redirect to="/admin_events/runs" />
+      </Switch>
+    </>
+  );
+}
 
 export default EventAdmin;

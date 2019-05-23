@@ -1,0 +1,63 @@
+{
+  "title": "User con profile form",
+  "sections": [
+    {
+      "title": "Your {{ convention.name }} profile",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "<div class=\"mb-4\">Your contact information will be made available to {{ convention.name }} staff. Supplying the contact information is optional. If you have concerns about sharing this information, <strong>please do not enter it</strong>. But if you do not provide it, organizers may not be able to send you event-related materials.</div>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "first_name",
+          "caption": "First name",
+          "lines": 1
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "last_name",
+          "caption": "Last name",
+          "lines": 1
+        },
+        {
+          "item_type": "static_text",
+          "style": "normal",
+          "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email }}</li><li>Password: <em>not shown</em></li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "pronouns",
+          "caption": "Pronouns",
+          "style": "radio_vertical",
+          "choices": [
+            {
+              "caption": "She/Her/Hers",
+              "value": "She/Her/Hers"
+            },
+            {
+              "caption": "He/Him/His",
+              "value": "He/Him/His"
+            },
+            {
+              "caption": "They/Them/Theirs",
+              "value": "They/Them/Theirs"
+            },
+            {
+              "caption": "Don't use pronouns, use my name",
+              "value": "Don't use pronouns, use my name"
+            }
+          ],
+          "other": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "how_heard",
+          "caption": "How did you hear about {{ convention.name }}?",
+          "lines": 1
+        }
+      ]
+    }
+  ]
+}

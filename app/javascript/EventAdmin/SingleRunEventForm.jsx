@@ -11,11 +11,6 @@ function SingleRunEventForm({
 }) {
   const [run, setRun] = useState(initialEvent.runs[0] || {});
 
-  const runChanged = useCallback(
-    runData => setRun(prevRun => ({ ...prevRun, ...runData })),
-    [setRun],
-  );
-
   const [formProps, {
     event, eventCategoryId, validateForm,
   }] = useEventFormWithCategorySelection({
@@ -54,7 +49,7 @@ function SingleRunEventForm({
           run={run}
           event={{ length_seconds: event.form_response_attrs.length_seconds }}
           convention={convention}
-          onChange={runChanged}
+          onChange={setRun}
         />
       )}
 

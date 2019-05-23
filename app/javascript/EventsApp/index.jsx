@@ -1,6 +1,7 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
+import AppRootContext from '../AppRootContext';
 import eventIdRegexp from './eventIdRegexp';
 import EventList from './EventList';
 import EventPage from './EventPage';
@@ -10,18 +11,32 @@ import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 
+function renderScheduleRoutes() {
+  return [
+    <Route
+      path="/events/schedule"
+      render={() => <ScheduleGridApp configKey="con_schedule" />}
+      key="conSchedule"
+    />,
+    <Route
+      path="/events/schedule_by_room"
+      render={() => <ScheduleGridApp configKey="con_schedule_by_room" />}
+      key="conScheduleByRoom"
+    />,
+    <Route
+      path="/events/schedule_with_counts"
+      render={() => <ScheduleGridApp configKey="schedule_with_counts" />}
+      key="scheduleWithCounts"
+    />,
+  ];
+}
+
 function EventsApp() {
+  const { siteMode } = useContext(AppRootContext);
+
   return (
     <Switch>
-      <Route path="/events/schedule" render={() => <ScheduleGridApp configKey="con_schedule" />} />
-      <Route
-        path="/events/schedule_by_room"
-        render={() => <ScheduleGridApp configKey="con_schedule_by_room" />}
-      />
-      <Route
-        path="/events/schedule_with_counts"
-        render={() => <ScheduleGridApp configKey="schedule_with_counts" />}
-      />
+      {siteMode !== 'single_event' && renderScheduleRoutes()}
       <Route
         path={`/events/:eventId(${eventIdRegexp})`}
         render={({ match: { params: { eventId: eventIdSegment } } }) => {
@@ -32,7 +47,10 @@ function EventsApp() {
             <Switch>
               <Route
                 path={`${eventPath}/edit`}
-                render={() => <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />}
+                render={() => (siteMode === 'single_event'
+                  ? <Redirect to="/admin_events" />
+                  : <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />
+                )}
               />
               <Route
                 path={`${eventPath}/team_members`}
@@ -73,13 +91,17 @@ function EventsApp() {
 
               <Route
                 path={eventPath}
-                render={() => <EventPage eventId={eventId} eventPath={eventPath} />}
+                render={() => (
+                  siteMode === 'single_event'
+                    ? <Redirect to="/" />
+                    : <EventPage eventId={eventId} eventPath={eventPath} />
+                )}
               />
             </Switch>
           );
         }}
       />
-      <Route path="/events" component={EventList} />
+      {siteMode !== 'single_event' && <Route path="/events" component={EventList} />}
     </Switch>
   );
 }

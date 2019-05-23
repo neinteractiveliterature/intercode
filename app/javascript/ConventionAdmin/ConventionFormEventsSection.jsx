@@ -33,7 +33,7 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
   );
 };
 
-function ConventionFormEventsSection({ convention, dispatch }) {
+function ConventionFormEventsSection({ convention, dispatch, disabled }) {
   const [
     changeAcceptingProposals, changeShowEventList, changeShowSchedule, changeMaximumEventSignups,
   ] = useChangeDispatchers(
@@ -48,6 +48,7 @@ function ConventionFormEventsSection({ convention, dispatch }) {
         caption="Accepting event proposals"
         value={convention.accepting_proposals}
         onChange={changeAcceptingProposals}
+        disabled={disabled || convention.site_mode === 'single_event'}
       />
 
       <MultipleChoiceInput
@@ -61,6 +62,7 @@ function ConventionFormEventsSection({ convention, dispatch }) {
         ]}
         value={convention.show_event_list}
         onChange={changeShowEventList}
+        disabled={disabled || convention.site_mode === 'single_event'}
       />
 
       <MultipleChoiceInput
@@ -74,6 +76,7 @@ function ConventionFormEventsSection({ convention, dispatch }) {
         ]}
         value={convention.show_schedule}
         onChange={changeShowSchedule}
+        disabled={disabled || convention.site_mode === 'single_event'}
       />
 
       <fieldset>
@@ -83,6 +86,7 @@ function ConventionFormEventsSection({ convention, dispatch }) {
           setScheduledValue={changeMaximumEventSignups}
           timezone={convention.timezone_name}
           buildValueInput={buildMaximumEventSignupsInput}
+          disabled={disabled}
         />
       </fieldset>
     </>
@@ -103,6 +107,11 @@ ConventionFormEventsSection.propTypes = {
     }).isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+ConventionFormEventsSection.defaultProps = {
+  disabled: false,
 };
 
 export default ConventionFormEventsSection;

@@ -78,16 +78,28 @@ function ConventionFormHeader({ convention }) {
         </span>
       </h1>
       <div className="row">
-        <div className="col-md-4">
-          <strong>Event list:</strong>
-          {' '}
-          {describeEventVisibility(convention.show_event_list)}
-        </div>
-        <div className="col-md-4">
-          <strong>Schedule:</strong>
-          {' '}
-          {describeEventVisibility(convention.show_schedule)}
-        </div>
+        {
+          convention.site_mode === 'single_event'
+            ? (
+              <div className="col-md-8">
+                <strong>Single event</strong>
+              </div>
+            )
+            : (
+              <>
+                <div className="col-md-4">
+                  <strong>Event list:</strong>
+                  {' '}
+                  {describeEventVisibility(convention.show_event_list)}
+                </div>
+                <div className="col-md-4">
+                  <strong>Schedule:</strong>
+                  {' '}
+                  {describeEventVisibility(convention.show_schedule)}
+                </div>
+              </>
+            )
+        }
         <div className="col-md-4">
           <strong>Signups:</strong>
           {' '}
@@ -106,6 +118,7 @@ ConventionFormHeader.propTypes = {
     timezone_name: PropTypes.string.isRequired,
     show_event_list: PropTypes.string.isRequired,
     show_schedule: PropTypes.string.isRequired,
+    site_mode: PropTypes.string.isRequired,
     maximum_event_signups: PropTypes.shape({
       timespans: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string.isRequired,

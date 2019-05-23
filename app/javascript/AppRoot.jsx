@@ -99,8 +99,13 @@ function AppLayout({ location, history }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  const appRootContextValue = {
+    conventionName: (data.convention || {}).name,
+    siteMode: (data.convention || {}).site_mode,
+  };
+
   return (
-    <AppRootContext.Provider value={{ conventionName: (data.convention || {}).name }}>
+    <AppRootContext.Provider value={appRootContextValue}>
       <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
     </AppRootContext.Provider>
   );

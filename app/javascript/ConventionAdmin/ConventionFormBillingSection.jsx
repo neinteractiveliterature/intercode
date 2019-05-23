@@ -8,7 +8,9 @@ import CommitableInput from '../BuiltInFormControls/CommitableInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 
-function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecretKey }) {
+function ConventionFormBillingSection({
+  convention, dispatch, maskedStripeSecretKey, disabled,
+}) {
   const [
     changeStripePublishableKey, changeStripeSecretKey, changeTicketName, changeMaximumTickets,
     changeTicketMode,
@@ -36,6 +38,7 @@ function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecret
                 'text-monospace',
                 { 'bg-warning-light': inputProps.onFocus != null },
               )}
+              disabled={disabled}
             />
           )}
         />
@@ -60,6 +63,7 @@ function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecret
                   ? (inputProps.value || maskedStripeSecretKey)
                   : inputProps.value
               }
+              disabled={disabled}
             />
           )}
         />
@@ -79,6 +83,7 @@ function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecret
         ]}
         value={convention.ticket_mode}
         onChange={changeTicketMode}
+        disabled={disabled}
       />
 
       <BootstrapFormInput
@@ -87,7 +92,7 @@ function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecret
         type="text"
         value={convention.ticket_name || ''}
         onTextChange={changeTicketName}
-        disabled={convention.ticket_mode === 'disabled'}
+        disabled={disabled || convention.ticket_mode === 'disabled'}
       />
 
       <BootstrapFormInput
@@ -96,7 +101,7 @@ function ConventionFormBillingSection({ convention, dispatch, maskedStripeSecret
         type="number"
         value={(convention.maximum_tickets || '').toString()}
         onTextChange={changeMaximumTickets}
-        disabled={convention.ticket_mode === 'disabled'}
+        disabled={disabled || convention.ticket_mode === 'disabled'}
       />
     </>
   );
@@ -112,10 +117,12 @@ ConventionFormBillingSection.propTypes = {
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   maskedStripeSecretKey: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 ConventionFormBillingSection.defaultProps = {
   maskedStripeSecretKey: '',
+  disabled: false,
 };
 
 export default ConventionFormBillingSection;
