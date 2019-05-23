@@ -2,6 +2,7 @@ require 'carrierwave/orm/activerecord'
 
 class Convention < ApplicationRecord
   TICKET_MODES = %w[disabled required_for_signup]
+  SITE_MODES = %w[convention single_event]
 
   belongs_to :updated_by, class_name: 'User', optional: true
   belongs_to :organization, optional: true
@@ -41,9 +42,11 @@ class Convention < ApplicationRecord
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
   validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
+  validates :site_mode, inclusion: { in: SITE_MODES }, presence: true
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
+  validate :site_mode_must_be_possible
 
   def started?
     starts_at && starts_at <= Time.now
@@ -105,5 +108,19 @@ class Convention < ApplicationRecord
     return unless timezone_name.present?
 
     errors.add(:timezone_name, 'must refer to a valid POSIX timezone') unless timezone
+  end
+
+  def site_mode_must_be_possible
+    return unless site_mode
+
+    if site_mode == 'single_event' && ticket_mode != 'disabled'
+      errors.add(:base, 'Single-event sites cannot sell tickets (yet)')
+    end
+
+    return unless site_mode == 'single_event' && events.count > 1
+    errors.add(
+      :site_mode,
+      'single_event is not valid because this convention has multiple events already'
+    )
   end
 end

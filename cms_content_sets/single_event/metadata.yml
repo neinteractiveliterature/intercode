@@ -1,0 +1,12 @@
+---
+inherit: []
+navigation_items:
+- item_type: link
+  title: Team and Contact Info
+  page_slug: team-contact
+- item_type: link
+  title: Code of Conduct
+  page_slug: conduct
+root_page_slug: root
+default_layout_name: Default
+variables: {}

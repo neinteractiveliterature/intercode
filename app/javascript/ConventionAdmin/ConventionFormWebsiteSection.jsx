@@ -13,7 +13,7 @@ const selectStyles = {
 };
 
 function ConventionFormWebsiteSection({
-  convention, dispatch, cmsLayouts, pages,
+  convention, dispatch, cmsLayouts, pages, disabled,
 }) {
   const [
     changeEventMailingListDomain, changeDefaultLayout, changeRootPage, changeClickwrapAgreement,
@@ -30,6 +30,7 @@ function ConventionFormWebsiteSection({
         value={convention.event_mailing_list_domain || ''}
         helpText="If present, event teams can use this domain name to create automatically-managed mailing lists for their team."
         onTextChange={changeEventMailingListDomain}
+        disabled={disabled}
       />
 
       <SelectWithLabel
@@ -42,6 +43,7 @@ function ConventionFormWebsiteSection({
         options={cmsLayouts}
         onChange={changeDefaultLayout}
         styles={selectStyles}
+        disabled={disabled}
       />
 
       <SelectWithLabel
@@ -54,6 +56,7 @@ function ConventionFormWebsiteSection({
         options={pages}
         onChange={changeRootPage}
         styles={selectStyles}
+        disabled={disabled}
       />
 
       <fieldset className="mb-4">
@@ -64,6 +67,7 @@ function ConventionFormWebsiteSection({
         <LiquidInput
           value={convention.clickwrap_agreement || ''}
           onChange={changeClickwrapAgreement}
+          disabled={disabled}
         />
       </fieldset>
     </>
@@ -92,6 +96,11 @@ ConventionFormWebsiteSection.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired).isRequired,
+  disabled: PropTypes.bool,
+};
+
+ConventionFormWebsiteSection.defaultProps = {
+  disabled: false,
 };
 
 export default ConventionFormWebsiteSection;

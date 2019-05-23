@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
 import {
-  UpdateEvent,
   DropEvent,
   CreateMaximumEventProvidedTicketsOverride,
   UpdateMaximumEventProvidedTicketsOverride,
@@ -20,6 +19,8 @@ import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
+import useUpdateEvent from './useUpdateEvent';
+import RunFormFields from '../BuiltInForms/RunFormFields';
 
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
@@ -35,27 +36,15 @@ function EventAdminEditEvent({ match, history }) {
     [data.events, error, eventId],
   );
 
-  const [eventFormProps, {
-    event, eventCategoryId, validateForm,
+  const [run, setRun] = useState(initialEvent.runs[0] || {});
+
+  const [eventFormWithCategorySelectionProps, {
+    event, eventCategory, validateForm,
   }] = useEventFormWithCategorySelection({
     convention: data.convention, initialEvent,
   });
 
-  const updateEventMutate = useMutationCallback(UpdateEvent);
-  const updateEvent = useCallback(
-    () => updateEventMutate({
-      variables: {
-        input: {
-          id: event.id,
-          event: {
-            event_category_id: eventCategoryId,
-            form_response_attrs_json: JSON.stringify(event.form_response_attrs),
-          },
-        },
-      },
-    }),
-    [event, updateEventMutate, eventCategoryId],
-  );
+  const updateEvent = useUpdateEvent();
 
   const dropEventMutate = useMutationCallback(DropEvent);
   const dropEvent = useCallback(
@@ -69,20 +58,23 @@ function EventAdminEditEvent({ match, history }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  const donePath = data.convention.site_mode === 'single_event' ? '/' : '/admin_events/runs';
+
   return (
     <EditEvent
-      cancelPath="/admin_events/runs"
-      showDropButton
+      cancelPath={donePath}
+      showDropButton={data.convention.site_mode !== 'single_event'}
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}
-      updateEvent={updateEvent}
-      onSave={() => { history.push('/admin_events/runs'); }}
-      onDrop={() => { history.push('/admin_events/runs'); }}
+      updateEvent={() => updateEvent({ event, run })}
+      onSave={() => { history.push(donePath); }}
+      onDrop={() => { history.push(donePath); }}
     >
-      <EventFormWithCategorySelection {...eventFormProps}>
+      <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps}>
         {data.currentAbility.can_override_maximum_event_provided_tickets
           && data.convention.ticket_mode !== 'disabled'
+          && data.convention.site_mode === 'convention'
           && (
             <MaximumEventProvidedTicketsOverrideEditor
               {...meptoMutations}
@@ -93,6 +85,15 @@ function EventAdminEditEvent({ match, history }) {
             />
           )}
       </EventFormWithCategorySelection>
+
+      {eventCategory.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
+        <RunFormFields
+          run={run}
+          event={{ length_seconds: event.form_response_attrs.length_seconds }}
+          convention={data.convention}
+          onChange={setRun}
+        />
+      )}
     </EditEvent>
   );
 }

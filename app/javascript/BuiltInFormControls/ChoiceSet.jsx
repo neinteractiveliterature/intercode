@@ -18,6 +18,7 @@ class ChoiceSet extends React.Component {
     multiple: PropTypes.bool,
     choiceClassName: PropTypes.string,
     inputClassName: PropTypes.string,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -26,6 +27,7 @@ class ChoiceSet extends React.Component {
     multiple: false,
     choiceClassName: null,
     inputClassName: null,
+    disabled: false,
   };
 
   onChange = (event) => {
@@ -58,7 +60,7 @@ class ChoiceSet extends React.Component {
             : this.props.value === value
         )}
         onChange={this.onChange}
-        disabled={disabled}
+        disabled={this.props.disabled || disabled}
       />
     ));
 

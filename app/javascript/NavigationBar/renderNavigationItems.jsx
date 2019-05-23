@@ -10,7 +10,7 @@ import UserNavigationSection from './UserNavigationSection';
 
 let renderNavigationItems;
 
-export function renderNavigationItem(item, key) {
+export function renderNavigationItem(item, key, inSection) {
   switch (item.__typename) {
     case 'NavigationBrand':
       return <NavigationBrand item={item} key={key} />;
@@ -23,7 +23,7 @@ export function renderNavigationItem(item, key) {
         />
       );
     case 'NavigationItem':
-      return <NavigationItem item={item} key={key} />;
+      return <NavigationItem item={item} key={key} inSection={inSection} />;
     case 'NavigationSection':
       return (
         <NavigationSection
@@ -49,7 +49,9 @@ export function renderNavigationItem(item, key) {
   }
 }
 
-renderNavigationItems = items => items.map(renderNavigationItem);
+renderNavigationItems = (items, inSection) => items.map(
+  (item, key) => renderNavigationItem(item, key, inSection),
+);
 const exportableRenderNavigationItems = renderNavigationItems;
 
 export default exportableRenderNavigationItems;

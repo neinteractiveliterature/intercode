@@ -1,175 +1,148 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import moment from 'moment-timezone';
+
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';
+import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 
 const roomPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 });
 
-class RunFormFields extends React.Component {
-  static propTypes = {
-    run: PropTypes.shape({
-      starts_at: PropTypes.string,
-      title_suffix: PropTypes.string,
-      schedule_note: PropTypes.string,
-      rooms: PropTypes.arrayOf(roomPropType).isRequired,
-    }).isRequired,
-    event: PropTypes.shape({
-      length_seconds: PropTypes.number.isRequired,
-    }).isRequired,
-    convention: PropTypes.shape({
-      starts_at: PropTypes.string.isRequired,
-      ends_at: PropTypes.string.isRequired,
-      timezone_name: PropTypes.string.isRequired,
-      rooms: PropTypes.arrayOf(roomPropType).isRequired,
-    }).isRequired,
-    onChange: PropTypes.func.isRequired,
+function RunFormFields({
+  run, event, convention, onChange,
+}) {
+  const startsAt = useMemo(
+    () => (run && run.starts_at
+      ? moment(run.starts_at).tz(convention.timezone_name)
+      : null
+    ),
+    [convention.timezone_name, run],
+  );
+  const conventionTimespan = useMemo(
+    () => timespanFromConvention(convention),
+    [convention],
+  );
+  const [day, setDay] = useState(startsAt ? startsAt.clone().startOf('day') : null);
+  const [hour, setHour] = useState(startsAt ? startsAt.hour() : null);
+  const [minute, setMinute] = useState(startsAt ? startsAt.minute() : null);
+  const startTime = useMemo(
+    () => {
+      if (day == null || hour == null || minute == null) {
+        return null;
+      }
+
+      return day.clone().set({
+        hour,
+        minute,
+      });
+    },
+    [day, hour, minute],
+  );
+
+  useEffect(
+    () => {
+      onChange(
+        prevRun => ({ ...prevRun, starts_at: (startTime ? startTime.toISOString() : null) }),
+      );
+    },
+    [onChange, startTime],
+  );
+
+  const timeInputChanged = ({ hour: newHour, minute: newMinute }) => {
+    setHour(newHour);
+    setMinute(newMinute);
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      day: null,
-      hour: null,
-      minute: null,
-    };
-  }
-
-  componentWillMount = () => {
-    this.componentWillReceiveProps(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.conventionTimespan = timespanFromConvention(nextProps.convention);
-
-    if (nextProps.run && nextProps.run.starts_at) {
-      const startsAt = moment(nextProps.run.starts_at).tz(nextProps.convention.timezone_name);
-      this.setState({
-        day: startsAt.clone().startOf('day'),
-        hour: startsAt.hour(),
-        minute: startsAt.minute(),
-      });
-    }
-  }
-
-  getStartTime = () => {
-    if (this.state.day == null || this.state.hour == null || this.state.minute == null) {
-      return null;
-    }
-
-    return this.state.day.clone().set({
-      hour: this.state.hour,
-      minute: this.state.minute,
-    });
-  }
-
-  recalculateStartsAt = () => {
-    const startTime = this.getStartTime();
-    const startsAtString = (startTime ? startTime.toISOString() : null);
-
-    this.props.onChange({
-      ...this.props.run,
-      starts_at: startsAtString,
-    });
-  }
-
-  dayInputChanged = (day) => {
-    this.setState({ day }, this.recalculateStartsAt);
-  }
-
-  roomsInputChanged = (rooms) => {
-    this.props.onChange({
-      ...this.props.run,
-      rooms,
-    });
-  }
-
-  textInputChanged = (event) => {
-    this.props.onChange({
-      ...this.props.run,
-      [event.target.name]: event.target.value,
-    });
-  }
-
-  timeInputChanged = ({ hour, minute }) => {
-    this.setState({ hour, minute }, this.recalculateStartsAt);
-  }
-
-  renderTimeSelect = () => {
-    const { day, hour, minute } = this.state;
-
+  const renderTimeSelect = () => {
     if (!day) {
       return null;
     }
 
     const timespan = new Timespan(
-      this.state.day.clone(),
-      this.state.day.clone().add(1, 'day'),
-    ).intersection(this.conventionTimespan);
-
-    const startTime = this.getStartTime();
+      day.clone(),
+      day.clone().add(1, 'day'),
+    ).intersection(conventionTimespan);
 
     return (
       <fieldset className="form-group">
         <legend className="col-form-label">Time</legend>
         <TimeSelect
           value={{ hour, minute }}
-          onChange={this.timeInputChanged}
+          onChange={timeInputChanged}
           timespan={timespan}
         >
           {
             startTime
-            && `- ${startTime.clone().add(this.props.event.length_seconds, 'seconds').format('H:mm')}`
+            && `- ${startTime.clone().add(event.length_seconds, 'seconds').format('H:mm')}`
           }
         </TimeSelect>
       </fieldset>
     );
-  }
+  };
 
-  render = () => (
+  return (
     <div>
       <ConventionDaySelect
-        convention={this.props.convention}
-        value={this.state.day}
-        onChange={this.dayInputChanged}
+        convention={convention}
+        value={day}
+        onChange={setDay}
       />
-      {this.renderTimeSelect()}
+      {renderTimeSelect()}
 
       <BootstrapFormInput
         name="title_suffix"
         label="Title suffix"
-        value={this.props.run.title_suffix || ''}
-        onChange={this.textInputChanged}
+        value={run.title_suffix || ''}
+        onTextChange={titleSuffix => onChange(prevRun => ({
+          ...prevRun, title_suffix: titleSuffix,
+        }))}
       />
       <BootstrapFormInput
         name="schedule_note"
         label="Schedule note"
-        value={this.props.run.schedule_note || ''}
-        onChange={this.textInputChanged}
+        value={run.schedule_note || ''}
+        onTextChange={scheduleNote => onChange(prevRun => ({
+          ...prevRun, schedule_note: scheduleNote,
+        }))}
       />
 
-      <div className="form-group">
-        <label>Room(s)</label>
-        <Select
-          name="room_ids"
-          options={this.props.convention.rooms}
-          getOptionValue={room => room.id}
-          getOptionLabel={room => room.name}
-          isMulti
-          value={this.props.run.rooms}
-          onChange={this.roomsInputChanged}
-        />
-      </div>
+      <SelectWithLabel
+        label="Room(s)"
+        name="room_ids"
+        options={convention.rooms}
+        getOptionValue={room => room.id}
+        getOptionLabel={room => room.name}
+        isMulti
+        value={run.rooms}
+        onChange={rooms => onChange(prevRun => ({ ...prevRun, rooms }))}
+      />
     </div>
   );
 }
+
+RunFormFields.propTypes = {
+  run: PropTypes.shape({
+    starts_at: PropTypes.string,
+    title_suffix: PropTypes.string,
+    schedule_note: PropTypes.string,
+    rooms: PropTypes.arrayOf(roomPropType).isRequired,
+  }).isRequired,
+  event: PropTypes.shape({
+    length_seconds: PropTypes.number.isRequired,
+  }).isRequired,
+  convention: PropTypes.shape({
+    starts_at: PropTypes.string.isRequired,
+    ends_at: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+    rooms: PropTypes.arrayOf(roomPropType).isRequired,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default RunFormFields;

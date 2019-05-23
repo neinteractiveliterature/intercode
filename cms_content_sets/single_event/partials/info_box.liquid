@@ -1,0 +1,16 @@
+---
+name: info_box
+admin_notes: The short information box on the root page
+invariant: false
+---
+<div class="card text-center mb-3">
+  <div class="card-body">
+    <h3>{{ event.runs[0].starts_at | date: "%B %-d, %Y" }}</h3>
+    <p class="mb-0">
+      <em>
+        {{ event.runs[0].starts_at | date: "%-l:%M%P" }} - {{ event.runs[0].ends_at | date: "%-l:%M%P" }}<br/>
+        <strong>Edit the partial <code>info_box</code> and add any other info you want here</strong>
+      </em>
+    </p>
+  </div>
+</div>
