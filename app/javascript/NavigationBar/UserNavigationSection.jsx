@@ -138,7 +138,7 @@ function UserNavigationSection({ item, location, renderNavigationItems }) {
               placement="bottom-end"
               style={{ zIndex: 1100 }}
             >
-              {renderNavigationItems(item.items)}
+              {renderNavigationItems(item.items, true)}
             </PopperDropdown>
           </div>
           <RevertAssumedIdentityButton />

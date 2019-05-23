@@ -9,33 +9,48 @@ import PageLoadingIndicator from './PageLoadingIndicator';
 import ClickwrapAgreement from './ClickwrapAgreement';
 import AppRootContext from './AppRootContext';
 
-const Cart = lazy(() => import(/* webpackChunkName: "store" */ './Store/Cart'));
-const CmsAdmin = lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'));
-const ConventionAdmin = lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'));
-const EditUser = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'));
-const EventAdmin = lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin'));
-const EventCategoryAdmin = lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'));
-const EventProposalsAdmin = lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin'));
-const EventsApp = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp'));
-const EditEventProposal = lazy(() => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'));
-const FormAdmin = lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin'));
-const MailingLists = lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'));
-const MyProfile = lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile'));
-const MyTicket = lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'));
-const OAuthApplications = lazy(() => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications'));
-const OAuthAuthorizationPrompt = lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'));
-const OrderHistory = lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory'));
-const OrganizationAdmin = lazy(() => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin'));
-const ProductPage = lazy(() => import(/* webpackChunkName: "store" */ './Store/ProductPage'));
-const Reports = lazy(() => import(/* webpackChunkName: "reports" */ './Reports'));
-const ResetPassword = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'));
-const RoomsAdmin = lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'));
-const StaffPositionAdmin = lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'));
-const StoreAdmin = lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'));
-const TicketTypeAdmin = lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'));
-const UserActivityAlertsAdmin = lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin'));
-const UserConProfilesAdmin = lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'));
-const UsersAdmin = lazy(() => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin'));
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
+function NonCMSPageWrapper(WrappedComponent) {
+  const wrapper = props => (
+    <div className="non-cms-page">
+      <WrappedComponent {...props} />
+    </div>
+  );
+  wrapper.displayName = `NonCMSPageWrapper(${getDisplayName(WrappedComponent)})`;
+  return wrapper;
+}
+
+const Cart = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store" */ './Store/Cart')));
+const CmsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin')));
+const ConventionAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin')));
+const EditUser = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser')));
+const EventAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin')));
+const EventCategoryAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin')));
+const EventProposalsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin')));
+const EventsApp = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp')));
+const EditEventProposal = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal')));
+const FormAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin')));
+const MailingLists = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists')));
+const MyProfile = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile')));
+const MyTicket = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTicket')));
+const OAuthApplications = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications')));
+const OAuthAuthorizationPrompt = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt')));
+const OrderHistory = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory')));
+const OrganizationAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin')));
+const ProductPage = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store" */ './Store/ProductPage')));
+const Reports = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "reports" */ './Reports')));
+const ResetPassword = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword')));
+const RoomsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin')));
+const StaffPositionAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin')));
+const StoreAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin')));
+const TicketTypeAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin')));
+const UserActivityAlertsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin')));
+const UserConProfilesAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin')));
+const UsersAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin')));
+const WrappedClickwrapAgreement = NonCMSPageWrapper(ClickwrapAgreement);
 
 function renderCommonRoutes() {
   return [
@@ -74,7 +89,7 @@ function renderCommonInConventionRoutes() {
     <Route path="/admin_forms" component={FormAdmin} key="adminForms" />,
     <Route path="/admin_store" component={StoreAdmin} key="adminStore" />,
     <Route path="/cart" component={Cart} key="cart" />,
-    <Route path="/clickwrap_agreement" component={ClickwrapAgreement} key="clickwrapAgreement" />,
+    <Route path="/clickwrap_agreement" component={WrappedClickwrapAgreement} key="clickwrapAgreement" />,
     <Route path="/convention/edit" component={ConventionAdmin} key="conventionAdmin" />,
     <Route path="/events" component={EventsApp} />,
     <Route path="/mailing_lists" component={MailingLists} key="mailingLists" />,
