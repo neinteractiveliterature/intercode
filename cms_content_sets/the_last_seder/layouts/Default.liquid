@@ -1,0 +1,62 @@
+---
+name: Default
+navbar_classes: navbar-fixed-top navbar-expand-md mb-4 navbar-dark bg-dark
+---
+<!DOCTYPE html>
+<html>
+  <head>
+    {{ content_for_head }}
+    <link href="https://fonts.googleapis.com/css?family=Cinzel|Vollkorn:400,400i,700,700i&display=swap" rel="stylesheet">
+    <style type="text/css">
+      body {
+        font-family: Vollkorn;
+        background-color: #000000;
+        color: #ddd;
+      }
+
+      h1, .navbar-brand, h2, h3, h4, .card-header, .modal-header { 
+        font-family: Cinzel; 
+        font-weight: normal;
+      }
+
+      .navbar-brand {
+        font-size: 1.25rem;
+      }
+      
+      .navbar-nav .nav-link {
+        font-size: 1.15rem;
+      }
+
+      .blockquote {
+        border-left: none;
+      }
+      
+      .card, .modal {
+        color: #212529;
+      }
+      
+      .event-details#content_warnings {
+        background-color: #343a40;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+      }
+      
+      .event-details hr {
+        display: none;
+      }
+      
+      .non-cms-page {
+        background-color: white;
+        color: #212529;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    {{ content_for_navbar }}
+    <div class="container mb-4">
+      {{ content_for_layout }}
+    </div>
+  </body>
+</html>
