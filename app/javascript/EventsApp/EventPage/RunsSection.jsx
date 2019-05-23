@@ -75,7 +75,7 @@ function RunsSection({ eventId }) {
   );
 
   return (
-    <div className="d-flex flex-wrap justify-content-center">
+    <div className="run-card-deck">
       {showFakeRun
         ? <FakeRun event={event} />
         : sortedRuns.map(run => (
