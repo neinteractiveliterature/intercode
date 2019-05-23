@@ -32,16 +32,25 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
   end
 
   def dataset
+    not_a_proposal = (Sequel.~(Sequel[{ type: 'ProposedEvent' }]) | Sequel[{ type: nil }])
     super.where(
-      (Sequel.~(Sequel[{ type: 'ProposedEvent' }]) | Sequel[{ type: nil }]) &
-      Sequel[{ parent_id: @convention_id_map.keys }]
+      not_a_proposal &
+      Sequel[{
+        parent_id: @convention_id_map.select { |_id, con| con.site_mode == 'convention' }.keys
+      }]
+    ).or(
+      not_a_proposal &
+      Sequel[{
+        id: @convention_id_map.select { |_id, con| con.site_mode == 'single_event' }.keys
+      }]
     )
   end
 
   private
 
   def build_record(row)
-    convention = @convention_id_map[row[:parent_id]]
+    convention_id = row[:parent_id] || row[:id]
+    convention = @convention_id_map[convention_id]
     event = convention.events.find_or_create_by(title: row[:fullname]) do |evt|
       evt.assign_attributes(
         event_category: convention.event_categories.find_by!(name: event_category_name(row)),

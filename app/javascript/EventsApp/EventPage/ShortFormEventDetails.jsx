@@ -26,7 +26,7 @@ function ShortFormEventDetails({ eventId }) {
   );
 
   return (
-    <dl className="row">
+    <dl className="row mb-0">
       {shortFormItems.map(item => (
         <React.Fragment key={item.identifier}>
           <dt className="col-md-3">{item.public_description}</dt>
@@ -76,7 +76,7 @@ function ShortFormEventDetails({ eventId }) {
           ? (
             <>
               <dt className="col-md-3">Capacity</dt>
-              <dd className="col-md-9"><EventCapacityDisplay event={event} /></dd>
+              <dd className="col-md-9 mb-0"><EventCapacityDisplay event={event} /></dd>
             </>
           )
           : null

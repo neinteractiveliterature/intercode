@@ -17,7 +17,7 @@ function describeBucketCapacity(bucket) {
 
 function EventCapacityDisplay({ event }) {
   return (
-    <ul className="list-inline">
+    <ul className="list-inline mb-0">
       {sortBuckets(event.registration_policy.buckets).map(bucket => (
         <li className="list-inline-item mr-4" key={bucket.key}>
           <strong>

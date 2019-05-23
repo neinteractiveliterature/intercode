@@ -2,37 +2,52 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
   include Intercode::Import::Procon::EventHelpers
 
   after_create_record do |row, convention|
-    convention.create_root_page!(
-      parent: convention,
-      slug: 'root',
-      name: 'Root page',
-      content: root_page(row)
-    )
+    if convention.site_mode == 'convention'
+      convention.create_root_page!(
+        parent: convention,
+        slug: 'root',
+        name: 'Root page',
+        content: root_page(row)
+      )
 
-    LoadCmsContentSetService.new(convention: convention, content_set_name: 'procon_import').call!
-    overwrite_layout_if_applicable(convention)
-    convention.reload
+      LoadCmsContentSetService.new(convention: convention, content_set_name: 'procon_import').call!
+      overwrite_layout_if_applicable(convention)
+      convention.reload
 
-    convention.event_categories.create!(
-      name: 'Larp',
-      team_member_name: 'GM',
-      scheduling_ui: 'regular',
-      default_color: '#d2b9fb',
-      full_color: 'rgba(210, 185, 251, 0.6)',
-      signed_up_color: '#6610f2',
-      event_form: convention.forms.find_by!(title: 'Regular event form'),
-      event_proposal_form: convention.forms.find_by!(title: 'Proposal form')
-    )
+      convention.event_categories.create!(
+        name: 'Larp',
+        team_member_name: 'GM',
+        scheduling_ui: 'regular',
+        default_color: '#d2b9fb',
+        full_color: 'rgba(210, 185, 251, 0.6)',
+        signed_up_color: '#6610f2',
+        event_form: convention.forms.find_by!(title: 'Regular event form'),
+        event_proposal_form: convention.forms.find_by!(title: 'Proposal form')
+      )
 
-    convention.event_categories.create!(
-      name: 'Con services',
-      team_member_name: 'team member',
-      scheduling_ui: 'single_run',
-      default_color: '#ffeeba',
-      full_color: 'rgba(255, 238, 186, 0.6)',
-      signed_up_color: '#d6a100',
-      event_form: convention.forms.find_by!(title: 'Filler event form')
-    )
+      convention.event_categories.create!(
+        name: 'Con services',
+        team_member_name: 'team member',
+        scheduling_ui: 'single_run',
+        default_color: '#ffeeba',
+        full_color: 'rgba(255, 238, 186, 0.6)',
+        signed_up_color: '#d6a100',
+        event_form: convention.forms.find_by!(title: 'Filler event form')
+      )
+    else
+      LoadCmsContentSetService.new(convention: convention, content_set_name: 'single_event').call!
+      convention.reload
+
+      convention.event_categories.create!(
+        name: 'Larp',
+        team_member_name: 'GM',
+        scheduling_ui: 'regular',
+        default_color: '#d2b9fb',
+        full_color: 'rgba(210, 185, 251, 0.6)',
+        signed_up_color: '#6610f2',
+        event_form: convention.forms.find_by!(title: 'Regular event form')
+      )
+    end
   end
 
   def initialize(connection, convention_domain_regex, organization)
@@ -67,12 +82,18 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
       domain: convention_domain(row[:id]),
       timezone_name: 'America/New_York',
       ticket_mode: 'disabled',
+      site_mode: site_mode(row[:id]),
       maximum_event_signups: ScheduledValue::ScheduledValue.always(maximum_event_signups(row)),
       starts_at: force_timezone(row[:start], 'America/New_York'),
       ends_at: force_timezone(row[:end], 'America/New_York'),
       show_schedule: 'yes',
       show_event_list: 'yes'
     )
+  end
+
+  def site_mode(convention_id)
+    return 'convention' if connection[:events].where(parent_id: convention_id).any?
+    'single_event'
   end
 
   def convention_domain_regex_matches?(event_id)
