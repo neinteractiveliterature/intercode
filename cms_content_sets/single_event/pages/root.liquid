@@ -12,7 +12,9 @@ skip_clickwrap_agreement: false
 
   <div class="mt-4 mt-md-0 ml-md-4">
     {% include "info_box" %}
-    {% event_runs_section event.id %}
+    <div class="mb-3">
+      {% event_runs_section event.id %}
+    </div>
     {% event_admin_menu event.id %}
   </div>
 </div>
