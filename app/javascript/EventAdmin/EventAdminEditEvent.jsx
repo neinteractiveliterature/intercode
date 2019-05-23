@@ -63,7 +63,7 @@ function EventAdminEditEvent({ match, history }) {
   return (
     <EditEvent
       cancelPath={donePath}
-      showDropButton
+      showDropButton={data.convention.site_mode !== 'single_event'}
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}

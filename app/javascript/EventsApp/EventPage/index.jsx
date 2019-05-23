@@ -52,7 +52,11 @@ function EventPage({ eventId, eventPath }) {
         </div>
       </div>
 
-      <RunsSection eventId={eventId} />
+      <section className="my-4">
+        <hr />
+
+        <RunsSection eventId={eventId} />
+      </section>
 
       <LongFormEventDetails eventId={eventId} />
     </>
