@@ -8,7 +8,7 @@ function NavigationCollapse({ item, renderNavigationItems }) {
       {item.groups.map((group, i) => (
         // eslint-disable-next-line react/no-array-index-key
         <ul className={classNames('navbar-nav', { 'mr-auto': group.expand })} key={i}>
-          {renderNavigationItems(group.items)}
+          {renderNavigationItems(group.items, false)}
         </ul>
       ))}
     </div>

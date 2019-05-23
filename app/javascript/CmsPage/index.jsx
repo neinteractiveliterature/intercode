@@ -74,7 +74,9 @@ function CmsPage({
               </div>
             )
           }
-          {content}
+          <div className="cms-page">
+            {content}
+          </div>
         </>
       )}
     </>
