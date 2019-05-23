@@ -113,6 +113,10 @@ class Convention < ApplicationRecord
   def site_mode_must_be_possible
     return unless site_mode
 
+    if site_mode == 'single_event' && ticket_mode != 'disabled'
+      errors.add(:base, 'Single-event sites cannot sell tickets (yet)')
+    end
+
     return unless site_mode == 'single_event' && events.count > 1
     errors.add(
       :site_mode,
