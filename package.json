@@ -85,7 +85,7 @@
     "rails-ujs": "^5.2.3",
     "react": "^16.8.6",
     "react-apollo": "^2.5.5",
-    "react-apollo-hooks": "^0.4.4",
+    "react-apollo-hooks": "^0.4.5",
     "react-bootstrap4-modal": "^1.7.1",
     "react-clipboard.js": "^2.0.7",
     "react-codemirror2": "^6.0.0",
