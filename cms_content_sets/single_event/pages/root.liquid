@@ -3,8 +3,10 @@ name: Main landing page
 invariant: false
 skip_clickwrap_agreement: false
 ---
-<div className="d-block d-md-flex">
-  <div className="flex-grow-md-1">
+<h1 class="mb-4">{{ event.title }}</h1>
+
+<div class="d-block d-md-flex">
+  <div class="flex-grow-md-1">
     {% long_form_event_details event.id %}
   </div>
 

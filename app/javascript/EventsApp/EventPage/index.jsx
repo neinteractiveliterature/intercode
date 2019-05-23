@@ -53,8 +53,6 @@ function EventPage({ eventId, eventPath }) {
       </div>
 
       <section className="my-4">
-        <hr />
-
         <RunsSection eventId={eventId} />
       </section>
 

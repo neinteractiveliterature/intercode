@@ -146,7 +146,7 @@ function RunCard({
     <div
       ref={cardRef}
       className={classNames(
-        'card run-card mb-3',
+        'card run-card',
         { 'glow-success': history.location.hash === `#run-${run.id}` },
       )}
       id={`run-${run.id}`}

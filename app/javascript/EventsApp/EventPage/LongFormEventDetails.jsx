@@ -16,12 +16,11 @@ function LongFormEventDetails({ eventId }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return longFormItems.map(item => (
+  return longFormItems.map((item, index) => (
     formResponse[item.identifier] && formResponse[item.identifier].trim() !== ''
       ? (
-        <section className="my-4 event-details" id={item.identifier} key={item.identifier}>
-          <hr />
-
+        <section className="mb-4 event-details" id={item.identifier} key={item.identifier}>
+          {index > 0 && <hr />}
           {
             item.identifier === 'description'
               ? null
