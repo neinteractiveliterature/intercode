@@ -6,7 +6,8 @@ class Mutations::ForceConfirmSignup < Mutations::BaseMutation
 
   def resolve(**args)
     signup = convention.signups.find(args[:id])
-    signup.update!(state: 'confirmed', bucket_key: args[:bucket_key])
+    bucket = signup.run.event.registration_policy.bucket_with_key(args[:bucket_key])
+    signup.update!(state: 'confirmed', bucket_key: bucket.key, counted: bucket.counted?)
     { signup: signup }
   end
 end

@@ -16,6 +16,30 @@ class Types::AbilityType < Types::BaseObject
     ModelPermissionLoader.for(Signup).load([object, :update, args[:signup_id]])
   end
 
+  field :can_update_counted_signup, Boolean, null: false do
+    argument :signup_id, Integer, required: true, camelize: false
+  end
+
+  def can_update_counted_signup(**args)
+    ModelPermissionLoader.for(Signup).load([object, :update_counted, args[:signup_id]])
+  end
+
+  field :can_force_confirm_signup, Boolean, null: false do
+    argument :signup_id, Integer, required: true, camelize: false
+  end
+
+  def can_force_confirm_signup(**args)
+    ModelPermissionLoader.for(Signup).load([object, :force_confirm, args[:signup_id]])
+  end
+
+  field :can_update_bucket_signup, Boolean, null: false do
+    argument :signup_id, Integer, required: true, camelize: false
+  end
+
+  def can_update_bucket_signup(**args)
+    ModelPermissionLoader.for(Signup).load([object, :update_bucket, args[:signup_id]])
+  end
+
   field :can_update_event, Boolean, null: false do
     argument :event_id, Integer, required: true, camelize: false
   end
