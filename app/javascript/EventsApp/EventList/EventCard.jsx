@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
+import teamMembersForDisplay from '../teamMembersForDisplay';
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
@@ -36,15 +37,6 @@ function renderFirstRunTime(event, timezoneName) {
   return 'Unscheduled';
 }
 
-function teamMemberSortKey(teamMember) {
-  return `${teamMember.user_con_profile.last_name}-${teamMember.user_con_profile.name_without_nickname}`;
-}
-
-function sortTeamMembers(event) {
-  return [...event.team_members]
-    .sort((a, b) => teamMemberSortKey(a).localeCompare(teamMemberSortKey(b), { sensitivity: 'base' }));
-}
-
 function teamIsAllAuthors(author, teamMembers) {
   if (!author || !teamMembers) {
     return false;
@@ -70,7 +62,11 @@ const EventCard = ({
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
 
-  const teamMemberNames = sortTeamMembers(event)
+  const displayTeamMembers = useMemo(
+    () => teamMembersForDisplay(event),
+    [event],
+  );
+  const teamMemberNames = displayTeamMembers
     .map(teamMember => teamMember.user_con_profile.name_without_nickname).join(', ');
 
   if (teamMemberNames) {
