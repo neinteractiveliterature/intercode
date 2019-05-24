@@ -153,7 +153,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
                       <td>
                         {teamMember.user_con_profile.name_inverted}
                       </td>
-                      <td><Checkmark value={teamMember.display} /></td>
+                      <td><Checkmark value={teamMember.display_team_member} /></td>
                       <td><Checkmark value={teamMember.show_email} /></td>
                       <td><Checkmark value={teamMember.receive_con_email} /></td>
                       <td>

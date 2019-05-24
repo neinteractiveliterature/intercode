@@ -12,7 +12,7 @@ function TeamMemberForm({
     getState: () => value,
     setState: onChange,
     transforms: {
-      display: Transforms.identity,
+      display_team_member: Transforms.identity,
       show_email: Transforms.identity,
       receive_con_email: Transforms.identity,
       receive_signup_email: Transforms.identity,
@@ -23,7 +23,7 @@ function TeamMemberForm({
     <>
       {
         [
-          { name: 'display', label: `Display as ${event.event_category.team_member_name}` },
+          { name: 'display_team_member', label: `Display as ${event.event_category.team_member_name}` },
           { name: 'show_email', label: 'Show email address' },
           { name: 'receive_con_email', label: 'Receive email from convention' },
         ].map(({ name, label }) => (
@@ -66,7 +66,7 @@ TeamMemberForm.propTypes = {
   }).isRequired,
   disabled: PropTypes.bool,
   value: PropTypes.shape({
-    display: PropTypes.bool,
+    display_team_member: PropTypes.bool,
     show_email: PropTypes.bool,
     receive_con_email: PropTypes.bool,
     receive_signup_email: PropTypes.oneOf(['ALL_SIGNUPS', 'NON_WAITLIST_SIGNUPS', 'NO']),

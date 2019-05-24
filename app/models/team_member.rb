@@ -33,6 +33,14 @@ class TeamMember < ApplicationRecord
     write_attribute(:receive_signup_email, value&.downcase)
   end
 
+  def display_team_member
+    display
+  end
+
+  def display_team_member=(value)
+    self.display = value
+  end
+
   private
 
   def user_con_profile_and_event_must_belong_to_same_convention

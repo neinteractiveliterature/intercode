@@ -62,6 +62,7 @@ query EventPageQuery($eventId: Int!) {
     team_members {
       id
       email
+      display_team_member
       user_con_profile {
         id
         name_without_nickname

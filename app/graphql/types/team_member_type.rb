@@ -2,7 +2,8 @@ class Types::TeamMemberType < Types::BaseObject
   graphql_name 'TeamMember'
 
   field :id, Int, null: false
-  field :display, Boolean, null: false
+  field :display, Boolean, null: false, deprecation_reason: 'Use display_team_member instead'
+  field :display_team_member, Boolean, null: false
   field :show_email, Boolean, null: false, camelize: false
   field :receive_con_email, Boolean, null: false, camelize: false
   field :receive_signup_email, Types::ReceiveSignupEmailType, null: false, camelize: false
@@ -22,7 +23,7 @@ class Types::TeamMemberType < Types::BaseObject
     object.receive_signup_email.upcase
   end
 
-  def display
+  def display_team_member
     !!object.display
   end
 

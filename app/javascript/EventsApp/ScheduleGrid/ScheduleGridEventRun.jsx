@@ -11,7 +11,20 @@ import SignupCountData from '../SignupCountData';
 
 function describeAvailability(event, signupCountData) {
   if (signupCountData.runFull(event)) {
-    return `Full, waitlist: ${signupCountData.getWaitlistCount()}`;
+    return (
+      <>
+        <strong>Full</strong>
+        <span className="text-muted">
+          {' ('}
+          {event.registration_policy.total_slots}
+          {' slots)'}
+        </span>
+        {', '}
+        <strong>Waitlist:</strong>
+        {' '}
+        {signupCountData.getWaitlistCount()}
+      </>
+    );
   }
 
   if (!event.registration_policy.slots_limited) {
