@@ -41,7 +41,7 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
       convention.event_categories.create!(
         name: 'Larp',
         team_member_name: 'GM',
-        scheduling_ui: 'regular',
+        scheduling_ui: 'single_run',
         default_color: '#d2b9fb',
         full_color: 'rgba(210, 185, 251, 0.6)',
         signed_up_color: '#6610f2',
