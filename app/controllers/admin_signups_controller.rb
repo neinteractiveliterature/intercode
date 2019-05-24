@@ -1,10 +1,24 @@
 class AdminSignupsController < ApplicationController
+  def self.format_run_start_day(run)
+    run.starts_at.strftime('%a')
+  end
+
+  def self.format_run_start_time(run)
+    run.starts_at.strftime('%a %-l:%M%P')
+  end
+
+  def self.format_run_rooms(run)
+    run.rooms.map(&:name).sort.to_sentence
+  end
+
   PRIORITIZED_FILENAME_GENERATORS = [
     ->(run) { run.event.title },
     ->(run) { "#{run.event.title} (#{run.title_suffix})" },
-    ->(run) { "#{run.event.title} (#{run.starts_at.strftime('%a %-l:%M%P')})" },
-    ->(run) { "#{run.event.title} (#{run.rooms.map(&:name).sort.to_sentence})" },
-    ->(run) { "#{run.event.title} (#{run.starts_at.strftime('%a %-l:%M%P')} in #{run.rooms.map(:name).sort.to_sentence})" },
+    ->(run) { "#{run.event.title} (#{format_run_start_day(run)})" },
+    ->(run) { "#{run.event.title} (#{format_run_start_time(run)})" },
+    ->(run) { "#{run.event.title} (#{format_run_rooms(run)})" },
+    ->(run) { "#{run.event.title} (#{format_run_start_day(run)} in #{format_run_rooms(run)})" },
+    ->(run) { "#{run.event.title} (#{format_run_start_time(run)} in #{format_run_rooms(run)})" },
     ->(run) { "#{run.event.title} (run #{run.id})" }
   ]
 
@@ -17,12 +31,6 @@ class AdminSignupsController < ApplicationController
   def export
     respond_to do |format|
       format.csv do
-        title_suffix = if @run.title_suffix.present?
-          " (#{@run.title_suffix})"
-        else
-          ''
-        end
-
         send_table_presenter_csv(
           Tables::SignupsTableResultsPresenter.for_run(
             @run,
