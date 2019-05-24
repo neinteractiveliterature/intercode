@@ -131,11 +131,10 @@ query AdminSignupQuery($id: Int!) {
     ...CommonConventionData
   }
 
-  myProfile {
-    id
-    ability {
-      can_update_signup(signup_id: $id)
-    }
+  currentAbility {
+    can_update_bucket_signup(signup_id: $id)
+    can_force_confirm_signup(signup_id: $id)
+    can_update_counted_signup(signup_id: $id)
   }
 
   signup(id: $id) {
