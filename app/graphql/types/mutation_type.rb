@@ -399,7 +399,7 @@ class Types::MutationType < Types::BaseObject
   end
 
   field :forceConfirmSignup, mutation: Mutations::ForceConfirmSignup do
-    guard(guard_for_convention_associated_model(:signups, :update))
+    guard(guard_for_convention_associated_model(:signups, :force_confirm))
   end
 
   field :updateSignupBucket, mutation: Mutations::UpdateSignupBucket do
@@ -407,7 +407,7 @@ class Types::MutationType < Types::BaseObject
   end
 
   field :updateSignupCounted, mutation: Mutations::UpdateSignupCounted do
-    guard(guard_for_convention_associated_model(:signups, :update))
+    guard(guard_for_convention_associated_model(:signups, :update_counted))
   end
 
   ### StaffPosition

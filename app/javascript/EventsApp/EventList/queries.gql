@@ -35,6 +35,7 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
 
         team_members {
           id
+          display_team_member
 
           user_con_profile {
             id

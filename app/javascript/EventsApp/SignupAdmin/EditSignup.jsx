@@ -187,7 +187,7 @@ function EditSignup({ id, teamMembersUrl }) {
   };
 
   const renderForceConfirmButton = () => {
-    if (!data.myProfile.ability.can_update_signup) {
+    if (!data.currentAbility.can_force_confirm_signup) {
       return null;
     }
 
@@ -213,6 +213,7 @@ function EditSignup({ id, teamMembersUrl }) {
       <button
         className="btn btn-link"
         type="button"
+        disabled={!data.currentAbility.can_update_counted_signup}
         onClick={() => confirm({
           prompt: getToggleCountedConfirmPrompt(signup),
           action: () => toggleCounted(signup),
@@ -285,7 +286,7 @@ function EditSignup({ id, teamMembersUrl }) {
               </strong>
             </div>
             {(
-              signup.state === 'confirmed'
+              signup.state === 'confirmed' && data.currentAbility.can_update_bucket_signup
                 ? (
                   <button
                     className="btn btn-link"

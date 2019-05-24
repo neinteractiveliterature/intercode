@@ -36,7 +36,7 @@ fragment TeamMemberUserConProfileFields on UserConProfile {
 
 fragment TeamMemberFields on TeamMember {
   id
-  display
+  display_team_member
   show_email
   receive_con_email
   receive_signup_email
