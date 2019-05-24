@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { pluralize, humanize, underscore } from 'inflected';
 
@@ -8,11 +8,17 @@ import { EventPageQuery } from './queries.gql';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import useQuerySuspended from '../../useQuerySuspended';
 import useSectionizedFormItems from './useSectionizedFormItems';
+import teamMembersForDisplay from '../teamMembersForDisplay';
 
 function ShortFormEventDetails({ eventId }) {
   const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
 
   const { shortFormItems, formResponse } = useSectionizedFormItems(error ? null : data.event);
+
+  const displayTeamMembers = useMemo(
+    () => (error ? [] : teamMembersForDisplay(data.event)),
+    [data, error],
+  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -41,13 +47,13 @@ function ShortFormEventDetails({ eventId }) {
         </React.Fragment>
       ))}
       {
-        event.team_members.length > 0
+        displayTeamMembers.length > 0
           ? (
             <>
               <dt className="col-md-3">{pluralize(humanize(underscore(event.event_category.team_member_name)))}</dt>
               <dd className="col-md-9">
                 <ul className="list-unstyled mb-0">
-                  {event.team_members.map(teamMember => (
+                  {displayTeamMembers.map(teamMember => (
                     <li key={teamMember.id}>
                       {teamMember.user_con_profile.name_without_nickname}
                       {
