@@ -278,7 +278,7 @@ class RegistrationPolicyEditor extends React.Component {
     ));
     if (this.props.allowCustom) {
       presetOptions.push(
-        <option value="_custom" key="_custom">Custom registration policy (advanced)</option>
+        <option value="_custom" key="_custom">Custom registration policy (advanced)</option>,
       );
     }
 
