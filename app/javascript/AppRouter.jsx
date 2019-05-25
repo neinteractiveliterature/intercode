@@ -63,8 +63,8 @@ function renderCommonRoutes() {
     <Route path="/cms_graphql_queries" component={CmsAdmin} key="cmsGraphqlQueries" />,
     <Route path="/oauth/applications-embed" component={OAuthApplications} key="oauthApplications" />,
     <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} key="oauthAuthorization" />,
-    <Route path="/users/edit" component={EditUser} />,
-    <Route path="/users/password/edit" component={ResetPassword} />,
+    <Route path="/users/edit" component={EditUser} key="editUser" />,
+    <Route path="/users/password/edit" component={ResetPassword} key="resetPassword" />,
     <Route
       path="/pages/:slug([a-zA-Z0-9\-/]+)"
       render={routeProps => (
@@ -91,7 +91,7 @@ function renderCommonInConventionRoutes() {
     <Route path="/cart" component={Cart} key="cart" />,
     <Route path="/clickwrap_agreement" component={WrappedClickwrapAgreement} key="clickwrapAgreement" />,
     <Route path="/convention/edit" component={ConventionAdmin} key="conventionAdmin" />,
-    <Route path="/events" component={EventsApp} />,
+    <Route path="/events" component={EventsApp} key="eventsApp" />,
     <Route path="/mailing_lists" component={MailingLists} key="mailingLists" />,
     <Route path="/my_profile" component={MyProfile} key="myProfile" />,
     <Route path="/order_history" component={OrderHistory} key="orderHistory" />,
@@ -125,9 +125,9 @@ function renderSingleEventModeRoutes() {
 
 function renderRootSiteRoutes() {
   return [
-    <Route path="/organizations" component={OrganizationAdmin} />,
-    <Route path="/root_site" component={CmsAdmin} />,
-    <Route path="/users" component={UsersAdmin} />,
+    <Route path="/organizations" component={OrganizationAdmin} key="organizations" />,
+    <Route path="/root_site" component={CmsAdmin} key="rootSite" />,
+    <Route path="/users" component={UsersAdmin} key="usersAdmin" />,
     ...renderCommonRoutes(),
   ];
 }

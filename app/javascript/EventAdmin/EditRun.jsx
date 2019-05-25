@@ -1,9 +1,10 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 
 import EditRunModal from './EditRunModal';
 import { ConventionFields, EventFields } from './queries.gql';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 
 function EditRun({
   match, convention, events, history,
@@ -25,7 +26,7 @@ function EditRun({
         return null;
       }
 
-      if (match.path === '/admin_events/:eventId/runs/new') {
+      if (match.path.endsWith('/new')) {
         return {
           starts_at: null,
           title_suffix: null,
@@ -39,16 +40,9 @@ function EditRun({
     [match, event],
   );
 
-  const cancelEditing = useCallback(
-    () => {
-      if (match.path === '/admin_events/recurring_events/:eventId/runs/:runId/edit') {
-        history.replace('/admin_events/recurring_events');
-      } else {
-        history.replace('/admin_events/runs');
-      }
-    },
-    [match, history],
-  );
+  const cancelEditing = () => {
+    history.replace(buildEventCategoryUrl(event.event_category));
+  };
 
   const [run, setRun] = useState(initialRun);
   const [prevMatch, setPrevMatch] = useState(match);

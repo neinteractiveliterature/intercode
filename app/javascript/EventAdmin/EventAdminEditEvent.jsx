@@ -21,6 +21,7 @@ import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 import useUpdateEvent from './useUpdateEvent';
 import RunFormFields from '../BuiltInForms/RunFormFields';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
@@ -58,7 +59,7 @@ function EventAdminEditEvent({ match, history }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const donePath = data.convention.site_mode === 'single_event' ? '/' : '/admin_events/runs';
+  const donePath = data.convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory);
 
   return (
     <EditEvent

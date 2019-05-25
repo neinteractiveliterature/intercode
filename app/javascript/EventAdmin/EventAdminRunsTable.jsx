@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
+import { pluralize } from 'inflected';
 
 import EditRun from './EditRun';
 import EventAdminRow from './EventAdminRow';
@@ -8,33 +10,39 @@ import useQuerySuspended from '../useQuerySuspended';
 import { sortByLocaleString } from '../ValueUtils';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
+import useValueUnless from '../useValueUnless';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 
 const getNormalizedEventTitle = event => event.title
   .replace(/^(the|a|) /i, '')
   .replace(/[^A-Za-z0-9]/g, '')
   .toLocaleLowerCase();
 
-function EventAdminRunsTable() {
+function EventAdminRunsTable({ eventCategoryId }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
 
-  usePageTitle('Regular Events');
+  const filteredEvents = useMemo(
+    () => (error ? [] : data.events.filter(event => event.event_category.id === eventCategoryId)),
+    [data, error, eventCategoryId],
+  );
+  const sortedEvents = useMemo(
+    () => sortByLocaleString(filteredEvents, getNormalizedEventTitle),
+    [filteredEvents],
+  );
+  const eventCategory = useMemo(
+    () => (error ? null : data.convention.event_categories.find(c => c.id === eventCategoryId)),
+    [data, error, eventCategoryId],
+  );
+
+  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const filteredEvents = data.events.filter((event) => {
-    const eventCategory = data.convention.event_categories
-      .find(c => c.id === event.event_category.id);
-
-    return eventCategory.scheduling_ui === 'regular' && event.status === 'active';
-  });
-
-  const sortedEvents = sortByLocaleString(filteredEvents, getNormalizedEventTitle);
-
   return (
     <div>
-      <Link to="/admin_events/new" className="btn btn-primary mt-4 mb-2">
+      <Link to={`${buildEventCategoryUrl(eventCategory)}/new`} className="btn btn-primary mt-4 mb-2">
         New event
       </Link>
 
@@ -58,13 +66,13 @@ function EventAdminRunsTable() {
       </table>
 
       <Route
-        path="/admin_events/:eventId/runs/:runId/edit"
+        path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
         render={props => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
       />
       <Route
-        path="/admin_events/:eventId/runs/new"
+        path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}
         render={props => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
@@ -72,5 +80,9 @@ function EventAdminRunsTable() {
     </div>
   );
 }
+
+EventAdminRunsTable.propTypes = {
+  eventCategoryId: PropTypes.number.isRequired,
+};
 
 export default EventAdminRunsTable;
