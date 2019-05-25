@@ -1,45 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Link, Switch, Route } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 import EditRun from './EditRun';
 import RecurringEventSection from './RecurringEventSection';
 import { EventAdminEventsQuery } from './queries.gql';
-import NewEventForm from './NewEventForm';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 
-function NewRecurringEvent({ history, ...props }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
-
-  usePageTitle('New Recurring Event');
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <>
-      <h3 className="my-4">New recurring event</h3>
-
-      <NewEventForm
-        onExit={() => history.push('/admin_events/recurring_events')}
-        convention={data.convention}
-        schedulingUi="recurring"
-        {...props}
-      />
-    </>
-  );
-}
-
-NewRecurringEvent.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-function RecurringEventAdminList() {
+function RecurringEventAdmin() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
 
   usePageTitle('Recurring Events');
@@ -75,15 +44,6 @@ function RecurringEventAdminList() {
         )}
       </Route>
     </div>
-  );
-}
-
-function RecurringEventAdmin() {
-  return (
-    <Switch>
-      <Route path="/admin_events/recurring_events/new" component={NewRecurringEvent} />
-      <Route component={RecurringEventAdminList} />
-    </Switch>
   );
 }
 

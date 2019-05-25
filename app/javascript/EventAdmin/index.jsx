@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   NavLink, Route, Switch, Redirect,
@@ -8,42 +8,33 @@ import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
 import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
-import NewEventForm from './NewEventForm';
+import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdmin from './SingleRunEventAdmin';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import usePageTitle from '../usePageTitle';
+import sortEventCategories from './sortEventCategories';
+import PopperDropdown from '../UIComponents/PopperDropdown';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
+import useAutoClosingDropdownRef from '../NavigationBar/useAutoClosingDropdownRef';
 
-function NewEvent({ history }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
-  usePageTitle('New Event');
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <>
-      <h1 className="mb-4 mt-2">New event</h1>
-
-      <NewEventForm
-        convention={data.convention}
-        onExit={() => history.replace('/admin_events/runs')}
-      />
-    </>
-  );
-}
-
-NewEvent.propTypes = {
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
+const adminComponentsBySchedulingUi = {
+  regular: EventAdminRunsTable,
+  recurring: RecurringEventAdmin,
+  single_run: SingleRunEventAdmin,
 };
 
-function EventAdmin() {
+function EventAdmin({ location }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+
+  const eventCategories = useMemo(
+    () => (error ? null : sortEventCategories(data.convention.event_categories)),
+    [data, error],
+  );
+
+  const dropdownRef = useAutoClosingDropdownRef(location);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -71,40 +62,49 @@ function EventAdmin() {
     <>
       <h1 className="mb-4">Event scheduling</h1>
       <ul className="nav nav-tabs">
-        <li className="nav-item">
-          <NavLink
-            className="nav-link"
-            to="/admin_events/runs"
-            isActive={(match, location) => (
-              location.pathname === '/admin_events/runs' || location.pathname === '/admin_events/new'
-            )}
-          >
-            Regular events
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/admin_events/recurring_events">Recurring events</NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/admin_events/filler_events">Single-run events</NavLink>
-        </li>
+        <PopperDropdown
+          ref={dropdownRef}
+          renderReference={({ ref, toggle }) => (
+            <li className="nav-item dropdown" role="presentation" ref={ref}>
+              <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">
+                Event categories
+              </button>
+            </li>
+          )}
+        >
+          {eventCategories.map(eventCategory => (
+            <NavLink className="dropdown-item" key={eventCategory.id} to={buildEventCategoryUrl(eventCategory)}>
+              {eventCategory.name}
+            </NavLink>
+          ))}
+        </PopperDropdown>
         <li className="nav-item">
           <NavLink className="nav-link" to="/admin_events/dropped_events">Dropped events</NavLink>
         </li>
       </ul>
 
       <Switch>
-        <Route path="/admin_events/runs" component={EventAdminRunsTable} />
-        <Route path="/admin_events/:eventId/runs" component={EventAdminRunsTable} />
-        <Route path="/admin_events/recurring_events" component={RecurringEventAdmin} />
-        <Route path="/admin_events/filler_events" component={SingleRunEventAdmin} />
-        <Route path="/admin_events/dropped_events" component={DroppedEventAdmin} />
+        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`} component={NewEvent} />
+        {eventCategories.map(eventCategory => (
+          <Route
+            key={eventCategory.id}
+            path={buildEventCategoryUrl(eventCategory)}
+            render={(routeProps) => {
+              const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
+              return <AdminComponent {...routeProps} eventCategoryId={eventCategory.id} />;
+            }}
+          />
+        ))}
         <Route path="/admin_events/:id/edit" component={EventAdminEditEvent} />
-        <Route path="/admin_events/new" component={NewEvent} />
-        <Redirect to="/admin_events/runs" />
+        <Route path="/admin_events/dropped_events" component={DroppedEventAdmin} />
+        <Redirect to={buildEventCategoryUrl(eventCategories[0])} />
       </Switch>
     </>
   );
 }
+
+EventAdmin.propTypes = {
+  location: PropTypes.shape({}).isRequired,
+};
 
 export default EventAdmin;
