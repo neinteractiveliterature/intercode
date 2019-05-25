@@ -10,7 +10,7 @@ class Types::FormType < Types::BaseObject
   association_loaders Form, :event_categories, :proposal_event_categories, :user_con_profile_conventions
 
   def form_api_json
-    FormApiPresenter.new(object, cadmus_renderer).as_json
+    FormApiJsonLoader.for(cadmus_renderer).load(object)
   end
 
   def export_json
