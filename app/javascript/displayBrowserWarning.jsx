@@ -114,6 +114,14 @@ function renderRecommendation(browser) {
   }
 }
 
+function getWarningMessage(browser) {
+  if (includes(SUPPORTED_BROWSERS, browser.name)) {
+    return 'This version is out of date and might not work correctly with this site.';
+  }
+
+  return 'This browser is unsupported on this site.';
+}
+
 function setDontShowCookie() {
   document.cookie = 'suppressBrowserWarning=true';
   window.location.reload();
@@ -140,11 +148,7 @@ function renderBrowserWarning(browser) {
                 ${browserName}
                 ${getMajorVersion(browser.version)}
               </strong>.
-              ${
-                includes(SUPPORTED_BROWSERS, browser.name)
-                  ? 'This version is out of date and might not work correctly with this site.'
-                  : 'This browser is unsupported on this site.'
-              }
+              ${getWarningMessage(browser)}
             </p>
 
             <div class="text-right mt-4">
