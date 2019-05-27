@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import useModal from '../ModalDialogs/useModal';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 
 function DisclosureTriangle({ expanded }) {
   if (expanded) {
@@ -41,7 +42,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
 
       return (
         <li key={run.id} className="my-2">
-          <Link className="btn btn-secondary" to={`/admin_events/recurring_events/${event.id}/runs/${run.id}/edit`}>
+          <Link className="btn btn-secondary" to={`${buildEventCategoryUrl(event.event_category)}/${event.id}/runs/${run.id}/edit`}>
             {runStart.format(format)}
           </Link>
         </li>
