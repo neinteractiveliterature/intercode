@@ -10,20 +10,20 @@ import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
-import SingleRunEventAdmin from './SingleRunEventAdmin';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import sortEventCategories from './sortEventCategories';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAutoClosingDropdownRef from '../NavigationBar/useAutoClosingDropdownRef';
+import SingleRunEventAdminList from './SingleRunEventAdminList';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
 const adminComponentsBySchedulingUi = {
   regular: EventAdminRunsTable,
   recurring: RecurringEventAdmin,
-  single_run: SingleRunEventAdmin,
+  single_run: SingleRunEventAdminList,
 };
 
 function EventAdmin({ location }) {
