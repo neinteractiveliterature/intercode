@@ -10,7 +10,6 @@ function FakeEventRun({
 }) {
   const config = { classifyEventsBy: 'category', showSignedUp: true };
   const signupCountData = { runFull: () => runFull };
-  const event = { event_category: eventCategory || {} };
   const clickableProps = (
     onClick
       ? {
@@ -26,14 +25,14 @@ function FakeEventRun({
       className={classNames(
         'px-1 pb-1 schedule-grid-event small',
         getRunClassName({
-          config, signupCountData, signupStatus, event,
+          config, signupCountData, signupStatus, event: {},
         }),
       )}
       style={{
         zIndex: 0,
         position: 'relative',
         ...getRunClassificationStyles({
-          config, signupCountData, signupStatus, event,
+          config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
         }),
       }}
       ref={withRef}

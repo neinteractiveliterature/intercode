@@ -41,7 +41,8 @@ function EditRun({
   );
 
   const cancelEditing = () => {
-    history.replace(buildEventCategoryUrl(event.event_category));
+    const eventCategory = convention.event_categories.find(c => c.id === event.event_category.id);
+    history.replace(buildEventCategoryUrl(eventCategory));
   };
 
   const [run, setRun] = useState(initialRun);

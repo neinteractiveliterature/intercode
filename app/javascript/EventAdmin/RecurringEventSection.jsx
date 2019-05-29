@@ -39,10 +39,11 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
       if (runStart.day() !== conventionDay.start.day()) {
         format = 'ddd h:mma';
       }
+      const eventCategory = convention.event_categories.find(c => c.id === event.event_category.id);
 
       return (
         <li key={run.id} className="my-2">
-          <Link className="btn btn-secondary" to={`${buildEventCategoryUrl(event.event_category)}/${event.id}/runs/${run.id}/edit`}>
+          <Link className="btn btn-secondary" to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}>
             {runStart.format(format)}
           </Link>
         </li>

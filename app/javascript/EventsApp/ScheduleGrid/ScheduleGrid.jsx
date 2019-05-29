@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -7,35 +7,15 @@ import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 import ScheduleGridHeaderBlock from './ScheduleGridHeaderBlock';
 import ScheduleBlock from './ScheduleBlock';
 import usePageTitle from '../../usePageTitle';
+import useLayoutForTimespan from './useLayoutForTimespan';
+import ScheduleGridEventRun from './ScheduleGridEventRun';
 
 function ScheduleGrid({ timespan }) {
   const { config, schedule } = useContext(ScheduleGridContext);
 
   usePageTitle(config.title);
 
-  const minTimespan = useMemo(
-    () => {
-      const min = timespan.clone();
-      min.start.add(3, 'hours'); // start grid at 9am unless something is earlier
-      min.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
-      return min;
-    },
-    [timespan],
-  );
-
-  const layout = useMemo(
-    () => schedule.buildLayoutForTimespanRange(
-      minTimespan,
-      timespan,
-    ),
-    [minTimespan, schedule, timespan],
-  );
-
-  const scheduleBlockDivs = layout.blocksWithOptions.map(([scheduleBlock, options]) => (
-    <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={scheduleBlock.id}>
-      <ScheduleBlock scheduleBlock={scheduleBlock} rowHeader={options.rowHeader} />
-    </div>
-  ));
+  const layout = useLayoutForTimespan(schedule, timespan);
 
   return (
     <div className="schedule-grid mb-4 bg-light" style={{ overflowX: 'auto' }}>
@@ -48,7 +28,20 @@ function ScheduleGrid({ timespan }) {
           }
           <ScheduleGridHeaderBlock timespan={layout.timespan} eventRuns={layout.eventRuns} />
         </div>
-        {scheduleBlockDivs}
+        {layout.blocksWithOptions.map(([scheduleBlock, options]) => (
+          <div className={classNames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={scheduleBlock.id}>
+            <ScheduleBlock
+              scheduleBlock={scheduleBlock}
+              rowHeader={options.rowHeader}
+              renderEventRun={({ layoutResult, runDimensions }) => (
+                <ScheduleGridEventRun
+                  layoutResult={layoutResult}
+                  runDimensions={runDimensions}
+                />
+              )}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
