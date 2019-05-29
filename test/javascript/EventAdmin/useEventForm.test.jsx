@@ -48,7 +48,7 @@ describe('useEventForm', () => {
     it('takes the given event if provided', () => {
       const { result } = renderEventFormHook();
       const [, { event }] = result.current;
-      expect(event).toBe(initialEvent);
+      expect(event).toEqual(initialEvent);
     });
   });
 
