@@ -90,7 +90,7 @@ function EventAdminEditEvent({ match, history }) {
       {eventCategory.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
         <RunFormFields
           run={run}
-          event={{ length_seconds: event.form_response_attrs.length_seconds }}
+          event={{ id: event.id, length_seconds: event.form_response_attrs.length_seconds }}
           convention={data.convention}
           onChange={setRun}
         />

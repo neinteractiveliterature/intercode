@@ -107,7 +107,7 @@ function ProspectiveRunSchedule({
           if (e.id === event.id) {
             return {
               ...e,
-              runs: [...e.runs, fakeRun],
+              runs: [...e.runs.filter(r => run.id !== r.id), fakeRun],
             };
           }
 
