@@ -22,13 +22,27 @@ function normalizePathForLayout(path) {
   return '/events'; // arbitrary path that's not a CMS page
 }
 
+function useCachedLoadableValue(loading, error, getValue, dependencies = []) {
+  const [cachedValue, setCachedValue] = useState(null);
+
+  useEffect(
+    () => {
+      if (!loading && !error) {
+        setCachedValue(getValue());
+      }
+    },
+    [error, getValue, loading, ...dependencies],
+  );
+
+  return cachedValue;
+}
+
 function AppLayout({ location, history }) {
   const { data, loading, error } = useQuery(
     AppRootQuery,
     { variables: { path: normalizePathForLayout(location.pathname) } },
   );
 
-  const [cachedBodyComponents, setCachedBodyComponents] = useState(null);
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState(null);
   const [layoutChanged, setLayoutChanged] = useState(false);
 
@@ -46,13 +60,18 @@ function AppLayout({ location, history }) {
     [data, error, loading],
   );
 
-  useEffect(
-    () => {
-      if (!loading && cachedBodyComponents !== bodyComponents) {
-        setCachedBodyComponents(bodyComponents);
-      }
-    },
-    [loading, cachedBodyComponents, bodyComponents],
+  const cachedBodyComponents = useCachedLoadableValue(
+    loading, error,
+    () => bodyComponents,
+    [bodyComponents],
+  );
+  const appRootContextValue = useCachedLoadableValue(
+    loading, error,
+    () => ({
+      conventionName: (data.convention || {}).name,
+      siteMode: (data.convention || {}).site_mode,
+    }),
+    [data],
   );
 
   useEffect(
@@ -98,11 +117,6 @@ function AppLayout({ location, history }) {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
-
-  const appRootContextValue = {
-    conventionName: (data.convention || {}).name,
-    siteMode: (data.convention || {}).site_mode,
-  };
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
