@@ -43,16 +43,6 @@ function registrationPolicyValueIsComplete(value) {
       return false;
     }
 
-    if (
-      bucket.slots_limited && !(
-        typeof bucket.minimum_slots === 'number' && bucket.minimum_slots >= 0
-        && typeof bucket.preferred_slots === 'number' && bucket.preferred_slots >= 0
-        && typeof bucket.total_slots === 'number' && bucket.total_slots >= 0
-      )
-    ) {
-      return false;
-    }
-
     return true;
   });
 }
