@@ -1,44 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
 
-import Confirm from '../../ModalDialogs/Confirm';
+import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
 import { WithdrawMySignup } from './mutations.gql';
+import useMutationCallback from '../../useMutationCallback';
 
 function WithdrawMySignupButton({
   run, event, buttonClass, buttonText, reloadOnSuccess,
 }) {
+  const withdrawMySignup = useMutationCallback(WithdrawMySignup);
+  const confirm = useConfirm();
+
   return (
-    <Mutation mutation={WithdrawMySignup}>
-      {mutate => (
-        <Confirm.Trigger>
-          {confirm => (
-            <button
-              className={`btn ${buttonClass || 'btn-outline-danger'}`}
-              type="button"
-              onClick={() => confirm({
-                prompt: `Are you sure you want to withdraw from ${event.title}?`,
-                action: async () => {
-                  const mutationResult = await mutate({
-                    variables: { runId: run.id },
-                  });
+    <button
+      className={`btn ${buttonClass || 'btn-outline-danger'}`}
+      type="button"
+      onClick={() => confirm({
+        prompt: `Are you sure you want to withdraw from ${event.title}?`,
+        action: async () => {
+          const mutationResult = await withdrawMySignup({
+            variables: { runId: run.id },
+          });
 
-                  if (reloadOnSuccess) {
-                    window.location.reload();
-                  }
+          if (reloadOnSuccess) {
+            window.location.reload();
+          }
 
-                  return mutationResult;
-                },
-                renderError: error => <ErrorDisplay graphQLError={error} />,
-              })}
-            >
-              {buttonText || 'Withdraw'}
-            </button>
-          )}
-        </Confirm.Trigger>
-      )}
-    </Mutation>
+          return mutationResult;
+        },
+        renderError: error => <ErrorDisplay graphQLError={error} />,
+      })}
+    >
+      {buttonText || 'Withdraw'}
+    </button>
   );
 }
 

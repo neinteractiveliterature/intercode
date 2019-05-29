@@ -2,15 +2,16 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
-import { Mutation } from 'react-apollo';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import Timespan from '../Timespan';
 import { UpdateEventAdminNotes } from './mutations.gql';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
+import useMutationCallback from '../useMutationCallback';
 
 function EventAdminRow({ event, convention }) {
+  const updateEventAdminNotes = useMutationCallback(UpdateEventAdminNotes);
   const [expanded, setExpanded] = useState(false);
 
   const length = useMemo(
@@ -100,16 +101,12 @@ function EventAdminRow({ event, convention }) {
           )
         </small>
         <div className="mt-2">
-          <Mutation mutation={UpdateEventAdminNotes}>
-            {mutate => (
-              <AdminNotes
-                value={event.admin_notes}
-                mutate={(adminNotes) => {
-                  mutate({ variables: { eventId: event.id, adminNotes } });
-                }}
-              />
-            )}
-          </Mutation>
+          <AdminNotes
+            value={event.admin_notes}
+            mutate={(adminNotes) => {
+              updateEventAdminNotes({ variables: { eventId: event.id, adminNotes } });
+            }}
+          />
         </div>
       </td>
       <td>
