@@ -20,19 +20,8 @@ UserNameLabel.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-class UserSelect extends React.PureComponent {
-  static propTypes = {
-    usersQuery: PropTypes.shape({
-      kind: PropTypes.string.isRequired,
-      definitions: PropTypes.array.isRequired,
-    }),
-  };
-
-  static defaultProps = {
-    usersQuery: null,
-  };
-
-  render = () => (
+function UserSelect({ usersQuery, ...otherProps }) {
+  return (
     <GraphQLAsyncSelect
       isClearable
       getOptions={data => data.users_paginated.entries}
@@ -47,11 +36,22 @@ class UserSelect extends React.PureComponent {
           </small>
         </>
       )}
-      query={this.props.usersQuery || DefaultUsersQuery}
+      query={usersQuery || DefaultUsersQuery}
       components={{ MultiValueLabel: UserNameLabel }}
-      {...this.props}
+      {...otherProps}
     />
-  )
+  );
 }
+
+UserSelect.propTypes = {
+  usersQuery: PropTypes.shape({
+    kind: PropTypes.string.isRequired,
+    definitions: PropTypes.array.isRequired,
+  }),
+};
+
+UserSelect.defaultProps = {
+  usersQuery: null,
+};
 
 export default UserSelect;
