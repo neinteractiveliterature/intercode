@@ -1,16 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mutation } from 'react-apollo';
 
 import { CmsGraphqlQueriesQuery } from './queries.gql';
-import Confirm from '../../ModalDialogs/Confirm';
+import { useConfirm } from '../../ModalDialogs/Confirm';
 import { DeleteCmsGraphqlQuery } from './mutations.gql';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
+import { useDeleteMutation } from '../../MutationUtils';
 
 function CmsGraphqlQueriesAdminTable() {
   const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
+  const deleteCmsGraphqlQuery = useDeleteMutation(DeleteCmsGraphqlQuery, {
+    query: CmsGraphqlQueriesQuery,
+    idVariablePath: ['id'],
+    arrayPath: ['cmsGraphqlQueries'],
+  });
+  const confirm = useConfirm();
 
   usePageTitle('CMS GraphQL Queries');
 
@@ -39,39 +45,19 @@ function CmsGraphqlQueriesAdminTable() {
               </td>
               <td className="text-right">
                 <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary mr-2">Edit</Link>
-                <Mutation mutation={DeleteCmsGraphqlQuery}>
-                  {mutate => (
-                    <Confirm.Trigger>
-                      {confirm => (
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-danger"
-                          onClick={() => confirm({
-                            prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
-                            action: () => mutate({
-                              variables: { id: query.id },
-                              update: (cache) => {
-                                const cachedData = cache.readQuery({
-                                  query: CmsGraphqlQueriesQuery,
-                                });
-                                cache.writeQuery({
-                                  query: CmsGraphqlQueriesQuery,
-                                  data: {
-                                    ...cachedData,
-                                    cmsGraphqlQueries: data.cmsGraphqlQueries
-                                      .filter(q => q.id !== query.id),
-                                  },
-                                });
-                              },
-                            }),
-                          })}
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </Confirm.Trigger>
-                  )}
-                </Mutation>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger"
+                  onClick={() => confirm({
+                    prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
+                    action: () => deleteCmsGraphqlQuery({
+                      variables: { id: query.id },
+                    }),
+                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                  })}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
