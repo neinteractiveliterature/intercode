@@ -1,73 +1,72 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-class EventEmailDisplay extends React.PureComponent {
-  static propTypes = {
-    convention: PropTypes.shape({
-      event_mailing_list_domain: PropTypes.string,
-    }).isRequired,
-    value: PropTypes.shape({
-      con_mail_destination: PropTypes.oneOf(['event_email', 'gms']),
-      email: PropTypes.string,
-      team_mailing_list_name: PropTypes.string,
-    }).isRequired,
-    displayMode: PropTypes.oneOf(['admin', 'public']),
-  };
+function EventEmailDisplay({ convention, value, displayMode }) {
+  const address = useMemo(
+    () => {
+      if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
+        return `${value.team_mailing_list_name}@${convention.event_mailing_list_domain}`;
+      }
 
-  static defaultProps = {
-    displayMode: 'admin',
+      return value.email;
+    },
+    [convention.event_mailing_list_domain, value.email, value.team_mailing_list_name],
+  );
+
+  if (displayMode === 'public') {
+    return <a href={`mailto:${address}`}>{address}</a>;
   }
 
-  getAddress = () => {
-    const { convention, value } = this.props;
-    if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
-      return `${value.team_mailing_list_name}@${convention.event_mailing_list_domain}`;
-    }
-
-    return value.email;
-  }
-
-  render = () => {
-    const { convention, value, displayMode } = this.props;
-    if (displayMode === 'public') {
-      return <a href={`mailto:${this.getAddress()}`}>{this.getAddress()}</a>;
-    }
-
-    if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
-      return (
-        <ul className="list-unstyled m-0">
-          <li>
-            <strong>Auto-managed mailing list:</strong>
-            {' '}
-            {this.getAddress()}
-          </li>
-        </ul>
-      );
-    }
-
-    if (value.con_mail_destination === 'gms') {
-      return (
-        <ul className="list-unstyled m-0">
-          <li>
-            <strong>Attendee contact email:</strong>
-            {' '}
-            {this.getAddress()}
-          </li>
-          <li>
-            <strong>Convention will email team members individually</strong>
-          </li>
-        </ul>
-      );
-    }
-
+  if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
     return (
       <ul className="list-unstyled m-0">
         <li>
-          {this.getAddress()}
+          <strong>Auto-managed mailing list:</strong>
+          {' '}
+          {address}
         </li>
       </ul>
     );
   }
+
+  if (value.con_mail_destination === 'gms') {
+    return (
+      <ul className="list-unstyled m-0">
+        <li>
+          <strong>Attendee contact email:</strong>
+          {' '}
+          {address}
+        </li>
+        <li>
+          <strong>Convention will email team members individually</strong>
+        </li>
+      </ul>
+    );
+  }
+
+  return (
+    <ul className="list-unstyled m-0">
+      <li>
+        {address}
+      </li>
+    </ul>
+  );
 }
+
+EventEmailDisplay.propTypes = {
+  convention: PropTypes.shape({
+    event_mailing_list_domain: PropTypes.string,
+  }).isRequired,
+  value: PropTypes.shape({
+    con_mail_destination: PropTypes.oneOf(['event_email', 'gms']),
+    email: PropTypes.string,
+    team_mailing_list_name: PropTypes.string,
+  }).isRequired,
+  displayMode: PropTypes.oneOf(['admin', 'public']),
+};
+
+EventEmailDisplay.defaultProps = {
+  displayMode: 'admin',
+};
 
 export default EventEmailDisplay;

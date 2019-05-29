@@ -9,28 +9,26 @@ const NO_PREFERENCE_HELP_TEXT = 'For events that have more than one registration
 + ' using that option will be placed in whatever limited-slot bucket has availability, and moved '
 + 'between buckets to make space as necessary.';
 
-class NoPreferenceHelpPopover extends React.PureComponent {
-  static propTypes = {
-    registrationPolicy: RegistrationPolicyPropType.isRequired,
-  }
-
-  render = () => {
-    if (!isPreventNoPreferenceSignupsApplicable(this.props.registrationPolicy)) {
-      return (
-        <HelpPopover className="ml-1">
-          <p>{NO_PREFERENCE_HELP_TEXT}</p>
-          <p className="mb-0">
-            This event doesn&apos;t have more than one registration bucket with limited slots, so
-            that option doesn&apos;t apply.
-          </p>
-        </HelpPopover>
-      );
-    }
-
+function NoPreferenceHelpPopover({ registrationPolicy }) {
+  if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
     return (
-      <HelpPopover>{NO_PREFERENCE_HELP_TEXT}</HelpPopover>
+      <HelpPopover className="ml-1">
+        <p>{NO_PREFERENCE_HELP_TEXT}</p>
+        <p className="mb-0">
+          This event doesn&apos;t have more than one registration bucket with limited slots, so
+          that option doesn&apos;t apply.
+        </p>
+      </HelpPopover>
     );
   }
+
+  return (
+    <HelpPopover>{NO_PREFERENCE_HELP_TEXT}</HelpPopover>
+  );
 }
+
+NoPreferenceHelpPopover.propTypes = {
+  registrationPolicy: RegistrationPolicyPropType.isRequired,
+};
 
 export default NoPreferenceHelpPopover;

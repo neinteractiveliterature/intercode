@@ -4,22 +4,22 @@ import PropTypes from 'prop-types';
 import { RegistrationPolicyPropType } from '../../RegistrationPolicy/RegistrationPolicy';
 import RegistrationPolicyDisplay from '../../RegistrationPolicy/RegistrationPolicyDisplay';
 
-class RegistrationPolicyItemDisplay extends React.PureComponent {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      properties: PropTypes.shape({
-        presets: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-      }).isRequired,
-    }).isRequired,
-    value: RegistrationPolicyPropType.isRequired,
-  };
-
-  render = () => (
+function RegistrationPolicyItemDisplay({ formItem, value }) {
+  return (
     <RegistrationPolicyDisplay
-      registrationPolicy={this.props.value}
-      presets={this.props.formItem.properties.presets}
+      registrationPolicy={value}
+      presets={formItem.properties.presets}
     />
-  )
+  );
 }
+
+RegistrationPolicyItemDisplay.propTypes = {
+  formItem: PropTypes.shape({
+    properties: PropTypes.shape({
+      presets: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    }).isRequired,
+  }).isRequired,
+  value: RegistrationPolicyPropType.isRequired,
+};
 
 export default RegistrationPolicyItemDisplay;
