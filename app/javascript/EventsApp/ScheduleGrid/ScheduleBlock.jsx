@@ -1,15 +1,11 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import ScheduleGridEventRun from './ScheduleGridEventRun';
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import computeRunDimensionsWithoutSpanning from './PCSG/computeRunDimensionsWithoutSpanning';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
-import { ScheduleGridContext } from './ScheduleGridContext';
 
-function ScheduleBlock({ scheduleBlock, rowHeader }) {
-  const { visibleRunDetailsIds } = useContext(ScheduleGridContext);
-
+function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }) {
   const layoutResult = useMemo(
     () => computeRunDimensionsWithoutSpanning(scheduleBlock),
     [scheduleBlock],
@@ -27,12 +23,9 @@ function ScheduleBlock({ scheduleBlock, rowHeader }) {
       <div className="schedule-grid-block">
         <div style={blockContentStyle}>
           {layoutResult.runDimensions.map(runDimensions => (
-            <ScheduleGridEventRun
-              key={runDimensions.eventRun.runId}
-              layoutResult={layoutResult}
-              runDimensions={runDimensions}
-              detailsVisible={visibleRunDetailsIds.has(runDimensions.eventRun.runId)}
-            />
+            <React.Fragment key={runDimensions.eventRun.runId}>
+              {renderEventRun({ layoutResult, runDimensions })}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -47,6 +40,7 @@ ScheduleBlock.propTypes = {
     }).isRequired,
   }).isRequired,
   rowHeader: PropTypes.string,
+  renderEventRun: PropTypes.func.isRequired,
 };
 
 ScheduleBlock.defaultProps = {

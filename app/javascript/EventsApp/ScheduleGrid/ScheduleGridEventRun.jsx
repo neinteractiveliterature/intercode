@@ -127,7 +127,13 @@ function RunDisplay({
         event, signupStatus, config, signupCountData,
       })}
       style={getRunStyle({
-        event, signupStatus, config, signupCountData, runDimensions, layoutResult,
+        event,
+        eventCategory: event.event_category,
+        signupStatus,
+        config,
+        signupCountData,
+        runDimensions,
+        layoutResult,
       })}
       role="button"
       onClick={toggle}
@@ -251,8 +257,11 @@ function RunDetails({
 
 const RefForwardingRunDetails = React.forwardRef(RunDetails);
 
-function ScheduleGridEventRun({ runDimensions, detailsVisible, layoutResult }) {
-  const { schedule, toggleRunDetailsVisibility } = useContext(ScheduleGridContext);
+function ScheduleGridEventRun({ runDimensions, layoutResult }) {
+  const {
+    schedule, toggleRunDetailsVisibility, visibleRunDetailsIds,
+  } = useContext(ScheduleGridContext);
+  const detailsVisible = visibleRunDetailsIds.has(runDimensions.eventRun.runId);
 
   const { eventRun } = runDimensions;
   const run = useMemo(
@@ -338,7 +347,6 @@ function ScheduleGridEventRun({ runDimensions, detailsVisible, layoutResult }) {
 ScheduleGridEventRun.propTypes = {
   runDimensions: PropTypes.shape({}).isRequired,
   layoutResult: PropTypes.shape({}).isRequired,
-  detailsVisible: PropTypes.bool.isRequired,
 };
 
 export default ScheduleGridEventRun;

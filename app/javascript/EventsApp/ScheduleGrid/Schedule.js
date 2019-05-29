@@ -81,8 +81,12 @@ export default class Schedule {
       (eventRunsByRoom, eventRun) => {
         const { runId } = eventRun;
         const run = this.runsById.get(runId);
+        let roomNames = run.room_names || (run.rooms || []).map(room => room.name);
+        if (roomNames.length === 0) {
+          roomNames = ['-'];
+        }
 
-        run.room_names.forEach((roomName) => {
+        roomNames.forEach((roomName) => {
           if (!eventRunsByRoom.has(roomName)) {
             eventRunsByRoom.set(roomName, []);
           }

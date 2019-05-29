@@ -47,7 +47,9 @@ function NewEvent({ history, match }) {
       return;
     }
 
-    await createMutate({ event, eventCategoryId, setRun });
+    await createMutate({
+      event, eventCategory, eventCategoryId, setRun,
+    });
     history.push(donePath);
   };
 

@@ -54,8 +54,8 @@ export default function useCreateEvent() {
   const createSingleRunEvent = useCreateSingleRunEvent();
 
   const createEvent = useCallback(
-    ({ event, ...args }) => {
-      if (event.event_category.scheduling_ui === 'single_run') {
+    ({ event, eventCategory, ...args }) => {
+      if (eventCategory.scheduling_ui === 'single_run') {
         return createSingleRunEvent({ event, ...args });
       }
 

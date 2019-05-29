@@ -68,7 +68,7 @@ function EventAdminEditEvent({ match, history }) {
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}
-      updateEvent={() => updateEvent({ event, run })}
+      updateEvent={() => updateEvent({ event, eventCategory, run })}
       onSave={() => { history.push(donePath); }}
       onDrop={() => { history.push(donePath); }}
     >

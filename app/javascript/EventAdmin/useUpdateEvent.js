@@ -89,8 +89,8 @@ export default function useUpdateEvent() {
   const updateSingleRunEvent = useUpdateSingleRunEvent();
 
   const updateEvent = useCallback(
-    ({ event, ...args }) => {
-      if (event.event_category.scheduling_ui === 'single_run') {
+    ({ event, eventCategory, ...args }) => {
+      if (eventCategory.scheduling_ui === 'single_run') {
         return updateSingleRunEvent({ event, ...args });
       }
 
