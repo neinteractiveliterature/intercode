@@ -7,7 +7,7 @@ import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import { timespanFromConvention, timespanFromRun } from '../TimespanUtils';
+import { timespanFromConvention, timespanFromRun, getConventionDayTimespans } from '../TimespanUtils';
 import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries.gql';
 import { CreateMultipleRuns } from './mutations.gql';
 import useMutationCallback from '../useMutationCallback';
@@ -22,6 +22,18 @@ function ScheduleMultipleRunsModal({
   const [day, setDay] = useState(null);
   const [start, setStart] = useState({ hour: null, minute: null });
   const [finish, setFinish] = useState({ hour: null, minute: null });
+  const conventionTimespan = useMemo(
+    () => timespanFromConvention(convention),
+    [convention],
+  );
+  const conventionDayTimespans = useMemo(
+    () => getConventionDayTimespans(conventionTimespan, convention.timezone_name),
+    [convention.timezone_name, conventionTimespan],
+  );
+  const conventionDayTimespan = useMemo(
+    () => (day ? conventionDayTimespans.find(cdt => cdt.includesTime(day)) : null),
+    [conventionDayTimespans, day],
+  );
 
   const dataComplete = useMemo(
     () => (
@@ -96,19 +108,16 @@ function ScheduleMultipleRunsModal({
       return null;
     }
 
-    const timespanForStart = new Timespan(day.clone(), day.clone().add(1, 'day'))
-      .intersection(timespanFromConvention(convention));
-
     const timespanForFinish = new Timespan(
-      timespanForStart.start,
-      timespanForStart.finish.clone().add(1, 'hour'),
+      conventionDayTimespan.start,
+      conventionDayTimespan.finish.clone().add(1, 'hour'),
     );
 
     return (
       <div>
         <fieldset className="form-group">
           <legend className="col-form-label">From</legend>
-          <TimeSelect value={start} onChange={setStart} timespan={timespanForStart} />
+          <TimeSelect value={start} onChange={setStart} timespan={conventionDayTimespan} />
         </fieldset>
 
         <fieldset className="form-group">
