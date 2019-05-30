@@ -20,7 +20,7 @@ describe('TimeSelect', () => {
     const component = renderTimeSelect();
     expect(component.find('select').at(0).find('option').map(option => option.text())).toEqual([
       '',
-      ...([...Array(24).keys()].map(hour => hour.toString())),
+      ...([...Array(24).keys()].map(hour => moment().set({ hour }).format('ha'))),
     ]);
     expect(component.find('select').at(1).find('option').map(option => option.text())).toEqual([
       '', '00', '15', '30', '45',
@@ -36,9 +36,9 @@ describe('TimeSelect', () => {
     });
     expect(component.find('select').at(0).find('option').map(option => option.text())).toEqual([
       '',
-      ...([...Array(24).keys()].map(hour => hour.toString())),
-      ...([...Array(24).keys()].map(hour => `${hour} (+1 day)`)),
-      ...([...Array(24).keys()].map(hour => `${hour} (+2 days)`)),
+      ...([...Array(24).keys()].map(hour => moment().set({ hour }).format('ha'))),
+      ...([...Array(24).keys()].map(hour => `${moment().set({ hour }).format('ha')} (+1 day)`)),
+      ...([...Array(24).keys()].map(hour => `${moment().set({ hour }).format('ha')} (+2 days)`)),
     ]);
   });
 
