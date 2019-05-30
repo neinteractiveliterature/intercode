@@ -6,6 +6,7 @@ set -x
 docker push neinteractiveliterature/intercode:${TRAVIS_COMMIT}
 docker tag neinteractiveliterature/intercode:${TRAVIS_COMMIT} neinteractiveliterature/intercode:${BRANCH_TAG}
 docker push neinteractiveliterature/intercode:${BRANCH_TAG}
+docker push neinteractiveliterature/intercode:build-production-${BRANCH_TAG} # for cacheability in future builds
 
 if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
   docker tag neinteractiveliterature/intercode:$TRAVIS_COMMIT neinteractiveliterature/intercode:latest
