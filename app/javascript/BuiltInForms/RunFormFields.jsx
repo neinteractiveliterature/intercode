@@ -7,7 +7,7 @@ import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import { EventAdminEventsQuery } from '../EventAdmin/queries.gql';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import { timespanFromConvention } from '../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
@@ -32,9 +32,21 @@ function RunFormFields({ run, event, onChange }) {
     () => (error ? null : timespanFromConvention(data.convention)),
     [error, data],
   );
-  const [day, setDay] = useState(startsAt ? startsAt.clone().startOf('day') : null);
-  const [hour, setHour] = useState(startsAt ? startsAt.hour() : null);
-  const [minute, setMinute] = useState(startsAt ? startsAt.minute() : null);
+  const conventionDayTimespans = useMemo(
+    () => (error
+      ? null
+      : getConventionDayTimespans(conventionTimespan, data.convention.timezone_name)),
+    [conventionTimespan, data, error],
+  );
+  const [day, setDay] = useState(startsAt
+    ? conventionDayTimespans.find(timespan => timespan.includesTime(startsAt)).start
+    : null);
+  const [hour, setHour] = useState(startsAt && day
+    ? startsAt.diff(day.clone().startOf('day'), 'hours')
+    : null);
+  const [minute, setMinute] = useState(startsAt && (hour != null)
+    ? startsAt.diff(day.clone().startOf('day').add(hour, 'hours'), 'minutes')
+    : null);
   const startTime = useMemo(
     () => {
       if (day == null || hour == null || minute == null) {
@@ -72,10 +84,7 @@ function RunFormFields({ run, event, onChange }) {
       return null;
     }
 
-    const timespan = new Timespan(
-      day.clone(),
-      day.clone().add(1, 'day'),
-    ).intersection(conventionTimespan);
+    const timespan = conventionDayTimespans.find(cdt => cdt.includesTime(day));
 
     return (
       <fieldset className="form-group">

@@ -48,7 +48,7 @@ class TimeSelect extends React.Component {
     while (timespan.start.clone().add(hourOffset, 'hours').isBefore(timespan.finish)) {
       const now = timespan.start.clone().add(hourOffset, 'hours');
       const dayDiff = now.diff(timespan.start.clone().startOf('day'), 'days');
-      let description = `${now.hour()}`;
+      let description = `${now.format('ha')}`;
       if (dayDiff > 0) {
         description += ` (+${dayDiff} ${dayDiff > 1 ? 'days' : 'day'})`;
       }

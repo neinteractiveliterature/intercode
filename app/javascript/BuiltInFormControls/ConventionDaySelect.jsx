@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
 import moment from 'moment-timezone';
-import { timespanFromConvention } from '../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 
 class ConventionDaySelect extends React.Component {
   static propTypes = {
@@ -28,7 +28,8 @@ class ConventionDaySelect extends React.Component {
   render = () => {
     const { convention } = this.props;
     const conventionTimespan = timespanFromConvention(convention);
-    const conventionDays = conventionTimespan.getTimeHopsWithin(convention.timezone_name, 'day');
+    const conventionDays = getConventionDayTimespans(conventionTimespan, convention.timezone_name)
+      .map(timespan => timespan.start);
 
     const options = conventionDays.map(day => (
       <div className="form-check form-check-inline" key={day.toISOString()}>
