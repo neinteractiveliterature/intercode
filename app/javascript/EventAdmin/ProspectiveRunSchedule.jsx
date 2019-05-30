@@ -1,5 +1,7 @@
 import React, { useMemo, useContext } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import MomentPropTypes from 'react-moment-proptypes';
 
 import { ScheduleGridContext, useScheduleGridProvider } from '../EventsApp/ScheduleGrid/ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from '../EventsApp/ScheduleGrid/LayoutConstants';
@@ -28,7 +30,9 @@ const FAKE_SIGNUP_COUNT_DATA = {
   runFull: () => false,
 };
 
-function MinimalEventRun({ convention, runDimensions, layoutResult }) {
+const PROSPECTIVE_RUN_ID = 'prospective-run';
+
+function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResult }) {
   const { schedule } = useContext(ScheduleGridContext);
   const { eventRun } = runDimensions;
   const run = useMemo(
@@ -54,7 +58,7 @@ function MinimalEventRun({ convention, runDimensions, layoutResult }) {
     <div
       className={getRunClassName({
         event,
-        signupStatus: (run.id === 'prospective-run' ? 'confirmed' : null),
+        signupStatus: (run.id === PROSPECTIVE_RUN_ID ? 'confirmed' : null),
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
       })}
@@ -62,14 +66,14 @@ function MinimalEventRun({ convention, runDimensions, layoutResult }) {
         ...getRunStyle({
           event,
           eventCategory: convention.event_categories.find(c => c.id === event.event_category.id),
-          signupStatus: (run.id === 'prospective-run' ? 'confirmed' : null),
+          signupStatus: (run.id === PROSPECTIVE_RUN_ID ? 'confirmed' : null),
           config: SCHEDULE_GRID_CONFIG,
           signupCountData: FAKE_SIGNUP_COUNT_DATA,
           runDimensions,
           layoutResult,
         }),
-        borderStyle: (run.id === 'prospective-run' ? 'dashed' : 'auto'),
-        fontWeight: (run.id === 'prospective-run' ? 'bold' : 'auto'),
+        borderStyle: (run.id === PROSPECTIVE_RUN_ID ? 'dashed' : 'auto'),
+        fontWeight: (run.id === PROSPECTIVE_RUN_ID ? 'bold' : 'auto'),
       }}
     >
       <div className="d-flex">
@@ -80,6 +84,20 @@ function MinimalEventRun({ convention, runDimensions, layoutResult }) {
     </div>
   );
 }
+
+ProspectiveRunScheduleEventRun.propTypes = {
+  convention: PropTypes.shape({
+    event_categories: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    })).isRequired,
+  }).isRequired,
+  runDimensions: PropTypes.shape({
+    eventRun: PropTypes.shape({
+      runId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    }).isRequired,
+  }).isRequired,
+  layoutResult: PropTypes.shape({}).isRequired,
+};
 
 function ProspectiveRunSchedule({
   day, startTime, run, event,
@@ -97,17 +115,28 @@ function ProspectiveRunSchedule({
         return null;
       }
 
+      const filteredEvents = data.events.map((e) => {
+        if (e.id === event.id) {
+          return {
+            ...e,
+            runs: [...e.runs.filter(r => run.id !== r.id)],
+          };
+        }
+
+        return e;
+      });
+
       if (startTime) {
         const fakeRun = {
-          id: 'prospective-run',
+          id: PROSPECTIVE_RUN_ID,
           starts_at: startTime.toISOString(),
           rooms: run.rooms,
         };
-        return data.events.map((e) => {
+        return filteredEvents.map((e) => {
           if (e.id === event.id) {
             return {
               ...e,
-              runs: [...e.runs.filter(r => run.id !== r.id), fakeRun],
+              runs: [...e.runs, fakeRun],
             };
           }
 
@@ -115,7 +144,7 @@ function ProspectiveRunSchedule({
         });
       }
 
-      return data.events;
+      return filteredEvents;
     },
     [data.events, error, event.id, run, startTime],
   );
@@ -128,10 +157,13 @@ function ProspectiveRunSchedule({
   );
 
   const conventionDayTimespan = useMemo(
-    () => (day
-      ? conventionDayTimespans.find(cdt => cdt.overlapsTimespan(new Timespan(day.clone().add(6, 'hours'), day.clone().endOf('day'))))
-      : null
-    ),
+    () => {
+      if (!day) {
+        return null;
+      }
+      const dayTimespan = new Timespan(day, day.clone().endOf('day'));
+      return conventionDayTimespans.find(cdt => cdt.overlapsTimespan(dayTimespan));
+    },
     [conventionDayTimespans, day],
   );
 
@@ -162,7 +194,7 @@ function ProspectiveRunSchedule({
                 scheduleBlock={scheduleBlock}
                 rowHeader={options.rowHeader}
                 renderEventRun={({ layoutResult, runDimensions }) => (
-                  <MinimalEventRun
+                  <ProspectiveRunScheduleEventRun
                     convention={data.convention}
                     layoutResult={layoutResult}
                     runDimensions={runDimensions}
@@ -176,5 +208,16 @@ function ProspectiveRunSchedule({
     </ScheduleGridContext.Provider>
   );
 }
+
+ProspectiveRunSchedule.propTypes = {
+  day: MomentPropTypes.momentObj.isRequired,
+  startTime: MomentPropTypes.momentObj.isRequired,
+  run: PropTypes.shape({
+    rooms: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+  event: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+};
 
 export default ProspectiveRunSchedule;
