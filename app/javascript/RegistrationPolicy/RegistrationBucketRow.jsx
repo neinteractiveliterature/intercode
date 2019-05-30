@@ -76,7 +76,7 @@ class RegistrationBucketRow extends React.Component {
         </div>
 
         <div className="form-check">
-          <label className="form-check-label text-nowrap" htmlFor={countedId}>
+          <label className="form-check-label text-nowrap mr-1" htmlFor={countedId}>
             <input
               id={countedId}
               className="form-check-input"
@@ -87,6 +87,11 @@ class RegistrationBucketRow extends React.Component {
             {' '}
             Counted?
           </label>
+          <HelpPopover>
+            If checked, this bucket will not count towards the attendee&rsquo;s number of signups,
+            and will exclude this bucket from the &ldquo;No Preference&rdquo; option (so, any
+            attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this bucket).
+          </HelpPopover>
         </div>
 
         <div className="form-check">
@@ -104,8 +109,9 @@ class RegistrationBucketRow extends React.Component {
             </label>
             <HelpPopover>
               If checked, attendees will be able to see which of their fellow attendees are in this
-              bucket via the signup summary page.  (The signup summary always lists fellow attendees&rsquo;
-              names, but normally doesn&rsquo;t show which bucket they&rsquo;re in.)
+              bucket via the signup summary page.  (The signup summary always lists fellow
+              attendees&rsquo; names, but normally doesn&rsquo;t show which bucket they&rsquo;re
+              in.)
             </HelpPopover>
           </div>
         </div>
