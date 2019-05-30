@@ -73,8 +73,10 @@ class EventVacancyFillService < CivilService::Service
       run.signups.reload
       run.signups.where.not(state: 'withdrawn').where.not(id: team_member_signups.map(&:id)).to_a.sort_by do |signup|
         [
-          # don't move no-preference signups unless necessary
-          signup.requested_bucket_key.nil? ? 1 : 0,
+          # try not to move signups that are in the bucket they wanted
+          (signup.bucket_key == signup.requested_bucket_key && signup.confirmed?) ? 1 : 0,
+          # don't move confirmed no-preference signups unless necessary
+          (signup.requested_bucket_key.nil? && signup.confirmed?) ? 1 : 0,
           signup.created_at
         ]
       end
