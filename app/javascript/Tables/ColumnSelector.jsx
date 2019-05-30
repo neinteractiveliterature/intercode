@@ -5,12 +5,12 @@ import ChoiceSet from '../BuiltInFormControls/ChoiceSet';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 
 function ColumnSelector({
-  alwaysVisibleColumns, possibleColumns, getVisibleColumnIds, setVisibleColumnIds,
+  alwaysVisibleColumns, possibleColumns, visibleColumnIds, setVisibleColumnIds,
 }) {
   const renderHiddenColumnCount = () => {
     const count = (
       possibleColumns.length
-      - getVisibleColumnIds().filter(columnId => !alwaysVisibleColumns.includes(columnId)).length
+      - visibleColumnIds.filter(columnId => !alwaysVisibleColumns.includes(columnId)).length
       - alwaysVisibleColumns.length
     );
 
@@ -47,7 +47,7 @@ function ColumnSelector({
               .filter(column => !alwaysVisibleColumns.includes(column.id))
               .map(column => ({ label: column.Header, value: column.id }))
           }
-          value={getVisibleColumnIds()}
+          value={visibleColumnIds}
           onChange={setVisibleColumnIds}
         />
       </div>
@@ -60,7 +60,7 @@ ColumnSelector.propTypes = {
   possibleColumns: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
   })).isRequired,
-  getVisibleColumnIds: PropTypes.func.isRequired,
+  visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setVisibleColumnIds: PropTypes.func.isRequired,
 };
 

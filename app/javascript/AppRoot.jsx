@@ -12,6 +12,7 @@ import NavigationBar from './NavigationBar';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
 import AppRootContext from './AppRootContext';
+import useCachedLoadableValue from './useCachedLoadableValue';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
@@ -20,21 +21,6 @@ function normalizePathForLayout(path) {
   }
 
   return '/events'; // arbitrary path that's not a CMS page
-}
-
-function useCachedLoadableValue(loading, error, getValue, dependencies = []) {
-  const [cachedValue, setCachedValue] = useState(null);
-
-  useEffect(
-    () => {
-      if (!loading && !error) {
-        setCachedValue(getValue());
-      }
-    },
-    [error, getValue, loading, ...dependencies],
-  );
-
-  return cachedValue;
 }
 
 function AppLayout({ location, history }) {
