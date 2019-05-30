@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import uniq from 'lodash-es/uniq';
 
 export default function useColumnSelection({
@@ -5,23 +6,26 @@ export default function useColumnSelection({
 }) {
   const effectiveAlwaysVisibleColumns = alwaysVisibleColumns || [];
 
-  const getVisibleColumnIds = () => {
-    const params = new URLSearchParams(history.location.search);
-    if (params.get('columns')) {
-      return uniq([...effectiveAlwaysVisibleColumns, ...params.get('columns').split(',')]);
-    }
+  const visibleColumnIds = useMemo(
+    () => {
+      const params = new URLSearchParams(history.location.search);
+      if (params.get('columns')) {
+        return uniq([...effectiveAlwaysVisibleColumns, ...params.get('columns').split(',')]);
+      }
 
-    if (defaultVisibleColumns != null) {
-      return uniq([...effectiveAlwaysVisibleColumns, ...defaultVisibleColumns]);
-    }
+      if (defaultVisibleColumns != null) {
+        return uniq([...effectiveAlwaysVisibleColumns, ...defaultVisibleColumns]);
+      }
 
-    return possibleColumns.map(column => column.id);
-  };
+      return possibleColumns.map(column => column.id);
+    },
+    [defaultVisibleColumns, effectiveAlwaysVisibleColumns, history.location, possibleColumns],
+  );
 
-  const getVisibleColumns = () => {
-    const visibleColumnIds = getVisibleColumnIds();
-    return possibleColumns.filter(column => visibleColumnIds.includes(column.id));
-  };
+  const visibleColumns = useMemo(
+    () => possibleColumns.filter(column => visibleColumnIds.includes(column.id)),
+    [possibleColumns, visibleColumnIds],
+  );
 
   const setVisibleColumnIds = (columnIds) => {
     const params = new URLSearchParams(history.location.search);
@@ -30,12 +34,12 @@ export default function useColumnSelection({
   };
 
   return [
-    { columns: getVisibleColumns() }, // reactTableProps
+    { columns: visibleColumns }, // reactTableProps
     {
       alwaysVisibleColumns: effectiveAlwaysVisibleColumns,
       possibleColumns,
-      getVisibleColumnIds,
-      getVisibleColumns,
+      visibleColumnIds,
+      visibleColumns,
       setVisibleColumnIds,
     },
   ];

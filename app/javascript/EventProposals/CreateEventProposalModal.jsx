@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { Mutation } from 'react-apollo';
 import { useApolloClient } from 'react-apollo-hooks';
 
 import { CreateEventProposal } from './mutations.gql';
@@ -110,18 +109,14 @@ function CreateEventProposalModal({
         >
           Cancel
         </button>
-        <Mutation mutation={CreateEventProposal}>
-          {mutate => (
-            <button
-              className="btn btn-primary"
-              type="button"
-              disabled={!eventCategory || createInProgress}
-              onClick={() => createClicked(mutate)}
-            >
-              Create proposal
-            </button>
-          )}
-        </Mutation>
+        <button
+          className="btn btn-primary"
+          type="button"
+          disabled={!eventCategory || createInProgress}
+          onClick={createClicked}
+        >
+          Create proposal
+        </button>
       </div>
     </Modal>
   );

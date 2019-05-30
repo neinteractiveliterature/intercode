@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { pluralize } from 'inflected';
 
 import { EventAdminEventsQuery } from './queries.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -10,46 +12,29 @@ import ErrorDisplay from '../ErrorDisplay';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
+import useEventAdminCategory from './useEventAdminCategory';
+import useValueUnless from '../useValueUnless';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 
-function SingleRunEventAdminList() {
+function SingleRunEventAdminList({ eventCategoryId }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const [eventCategory, sortedEvents] = useEventAdminCategory(data, error, eventCategoryId);
+
   const drop = useMutationCallback(DropEvent);
   const confirm = useConfirm();
 
-  usePageTitle('Single-Run Events');
+  usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const singleRunEvents = data.events.filter((event) => {
-    const eventCategory = data.convention.event_categories
-      .find(c => c.id === event.event_category.id);
-    return eventCategory.scheduling_ui === 'single_run' && event.status === 'active';
-  });
-  singleRunEvents.sort((a, b) => {
-    if (!a.runs[0]) {
-      return -1;
-    }
-
-    if (!b.runs[0]) {
-      return 1;
-    }
-
-    const timespanA = timespanFromRun(data.convention, a, a.runs[0]);
-    const timespanB = timespanFromRun(data.convention, b, b.runs[0]);
-
-    return timespanA.start.diff(timespanB.start);
-  });
-  const eventRows = singleRunEvents.map((event) => {
+  const eventRows = sortedEvents.map((event) => {
     const run = event.runs[0];
     let timespan;
     if (run) {
       timespan = timespanFromRun(data.convention, event, run);
     }
-
-    const eventCategory = data.convention.event_categories
-      .find(c => c.id === event.event_category.id);
 
     return (
       <tr className={event.id}>
@@ -65,7 +50,7 @@ function SingleRunEventAdminList() {
           {timespan && timespan.humanizeInTimezone(data.convention.timezone_name)}
         </td>
         <td>
-          <Link className="btn btn-secondary btn-sm" to={`/admin_events/filler_events/${event.id}/edit`}>
+          <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
             Edit
           </Link>
           {' '}
@@ -87,8 +72,9 @@ function SingleRunEventAdminList() {
 
   return (
     <div>
-      <Link className="btn btn-primary my-4" to="/admin_events/filler_events/new">
-        Create new single-run event
+      <Link className="btn btn-primary my-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
+        {'Create new '}
+        {eventCategory.name.toLowerCase()}
       </Link>
       <table className="table table-striped">
         <tbody>
@@ -98,5 +84,9 @@ function SingleRunEventAdminList() {
     </div>
   );
 }
+
+SingleRunEventAdminList.propTypes = {
+  eventCategoryId: PropTypes.number.isRequired,
+};
 
 export default SingleRunEventAdminList;

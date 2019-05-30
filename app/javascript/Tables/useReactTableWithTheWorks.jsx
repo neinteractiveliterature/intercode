@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import isEqual from 'lodash-es/isEqual';
+import React from 'react';
 
 import useColumnSelection from './useColumnSelection';
 import useGraphQLReactTable from './useGraphQLReactTable';
 import useLocalStorageReactTable from './useLocalStorageReactTable';
 import useReactRouterReactTable from './useReactRouterReactTable';
+import useCachedLoadableValue from '../useCachedLoadableValue';
+
+export const QueryDataContext = React.createContext({});
 
 export default function useReactTableWithTheWorks({
   alwaysVisibleColumns,
@@ -30,7 +32,7 @@ export default function useReactTableWithTheWorks({
   const reactRouterReactTableProps = useReactRouterReactTable({
     decodeFilterValue, encodeFilterValue, history, onPageChange, onFilteredChange, onSortedChange,
   });
-  const [graphQLReactTableProps, queryResult] = useGraphQLReactTable({
+  const [graphQLReactTableProps, { queryResult, queryData }] = useGraphQLReactTable({
     getData,
     getPages,
     query,
@@ -41,19 +43,17 @@ export default function useReactTableWithTheWorks({
     sorted: reactRouterReactTableProps.sorted,
   });
 
-  const [cachedPossibleColumns, setCachedPossibleColumns] = useState([]);
-  let possibleColumns = cachedPossibleColumns;
-  if (!queryResult.loading && !queryResult.error) {
-    possibleColumns = getPossibleColumns(queryResult.data);
-    if (!isEqual(possibleColumns.map(c => c.id), cachedPossibleColumns.map(c => c.id))) {
-      setCachedPossibleColumns(possibleColumns);
-    }
-  }
+  const possibleColumns = useCachedLoadableValue(
+    queryResult.loading,
+    queryResult.error,
+    () => getPossibleColumns(queryResult.data),
+    [getPossibleColumns, queryResult],
+  );
 
   const [columnSelectionReactTableProps, columnSelectionProps] = useColumnSelection({
     alwaysVisibleColumns,
     defaultVisibleColumns,
-    possibleColumns,
+    possibleColumns: possibleColumns || [],
     history,
   });
 
@@ -71,5 +71,7 @@ export default function useReactTableWithTheWorks({
     sorted: reactTableProps.sorted,
   };
 
-  return [reactTableProps, { tableHeaderProps, columnSelectionProps, queryResult }];
+  return [reactTableProps, {
+    tableHeaderProps, columnSelectionProps, queryResult, queryData,
+  }];
 }

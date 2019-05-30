@@ -4,19 +4,8 @@ import PropTypes from 'prop-types';
 import { DefaultUserConProfilesQuery } from './selectDefaultQueries.gql';
 import GraphQLAsyncSelect from './GraphQLAsyncSelect';
 
-class UserConProfileSelect extends React.PureComponent {
-  static propTypes = {
-    userConProfilesQuery: PropTypes.shape({
-      kind: PropTypes.string.isRequired,
-      definitions: PropTypes.array.isRequired,
-    }),
-  };
-
-  static defaultProps = {
-    userConProfilesQuery: null,
-  };
-
-  render = () => (
+function UserConProfileSelect({ userConProfilesQuery, ...otherProps }) {
+  return (
     <GraphQLAsyncSelect
       isClearable
       getOptions={data => data.convention.user_con_profiles_paginated.entries}
@@ -31,10 +20,21 @@ class UserConProfileSelect extends React.PureComponent {
           </small>
         </>
       )}
-      query={this.props.userConProfilesQuery || DefaultUserConProfilesQuery}
-      {...this.props}
+      query={userConProfilesQuery || DefaultUserConProfilesQuery}
+      {...otherProps}
     />
-  )
+  );
 }
+
+UserConProfileSelect.propTypes = {
+  userConProfilesQuery: PropTypes.shape({
+    kind: PropTypes.string.isRequired,
+    definitions: PropTypes.array.isRequired,
+  }),
+};
+
+UserConProfileSelect.defaultProps = {
+  userConProfilesQuery: null,
+};
 
 export default UserConProfileSelect;
