@@ -14,7 +14,7 @@ function TableHeader({
           exportUrl={exportUrl}
           filtered={filtered}
           sorted={sorted}
-          columns={columnSelectionProps.getVisibleColumnIds()}
+          columns={columnSelectionProps.visibleColumnIds}
         />
         {(renderLeftContent || (() => null))()}
       </div>
@@ -28,7 +28,7 @@ function TableHeader({
 
 TableHeader.propTypes = {
   columnSelectionProps: PropTypes.shape({
-    getVisibleColumnIds: PropTypes.func.isRequired,
+    visibleColumnIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   exportUrl: PropTypes.string.isRequired,
   filtered: PropTypes.arrayOf(PropTypes.shape({})),

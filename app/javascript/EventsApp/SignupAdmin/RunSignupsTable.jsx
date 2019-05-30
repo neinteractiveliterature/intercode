@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
@@ -13,7 +13,7 @@ import FreeTextFilter from '../../Tables/FreeTextFilter';
 import { RunSignupsTableSignupsQuery, SignupAdminEventQuery } from './queries.gql';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
-import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
 import usePageTitle from '../../usePageTitle';
@@ -61,93 +61,102 @@ SignupStateFilter.defaultProps = {
   filter: null,
 };
 
-const getPossibleColumns = (data) => {
-  const BucketCell = ({ original }) => formatBucket(original, data.event);
+const BucketCell = ({ original }) => {
+  const data = useContext(QueryDataContext);
+  return formatBucket(original, data.event);
+};
 
-  BucketCell.propTypes = {
-    original: PropTypes.shape({}).isRequired,
-  };
+BucketCell.propTypes = {
+  original: PropTypes.shape({}).isRequired,
+};
 
-  const BucketFilter = ({ filter, onChange }) => (
+const BucketFilter = ({ filter, onChange }) => {
+  const data = useContext(QueryDataContext);
+  const choices = useMemo(
+    () => (
+      (data || {}).event
+        ? data.event.registration_policy.buckets
+          .map(bucket => ({ label: bucket.name, value: bucket.key }))
+        : []
+    ),
+    [data],
+  );
+
+  return (
     <ChoiceSetFilter
       name="bucket"
-      choices={(
-        (data || {}).event
-          ? data.event.registration_policy.buckets
-            .map(bucket => ({ label: bucket.name, value: bucket.key }))
-          : []
-      )}
+      choices={choices}
       onChange={onChange}
       filter={filter}
     />
   );
-
-  BucketFilter.propTypes = {
-    filter: PropTypes.shape({
-      value: PropTypes.arrayOf(PropTypes.string),
-    }),
-    onChange: PropTypes.func.isRequired,
-  };
-
-  BucketFilter.defaultProps = {
-    filter: null,
-  };
-
-  return [
-    {
-      Header: 'Seq',
-      id: 'id',
-      accessor: 'id',
-      filterable: false,
-      width: 50,
-    },
-    {
-      Header: 'State',
-      id: 'state',
-      accessor: 'state',
-      width: 130,
-      Filter: SignupStateFilter,
-      Cell: SignupStateCell,
-    },
-    {
-      Header: 'Name',
-      id: 'name',
-      accessor: signup => signup.user_con_profile.name_inverted,
-      Filter: FreeTextFilter,
-    },
-    {
-      Header: 'Bucket',
-      id: 'bucket',
-      accessor: signup => signup.bucket_key,
-      Cell: BucketCell,
-      Filter: BucketFilter,
-    },
-    {
-      Header: 'Age',
-      id: 'age',
-      width: 40,
-      accessor: signup => ageAsOf(
-        moment(signup.user_con_profile.birth_date),
-        moment(signup.run.starts_at),
-      ),
-      filterable: false,
-    },
-    {
-      Header: 'Email',
-      id: 'email',
-      accessor: signup => signup.user_con_profile.email,
-      Cell: EmailCell,
-      Filter: FreeTextFilter,
-    },
-  ];
 };
+
+BucketFilter.propTypes = {
+  filter: PropTypes.shape({
+    value: PropTypes.arrayOf(PropTypes.string),
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+BucketFilter.defaultProps = {
+  filter: null,
+};
+
+const getPossibleColumns = () => [
+  {
+    Header: 'Seq',
+    id: 'id',
+    accessor: 'id',
+    filterable: false,
+    width: 50,
+  },
+  {
+    Header: 'State',
+    id: 'state',
+    accessor: 'state',
+    width: 130,
+    Filter: SignupStateFilter,
+    Cell: SignupStateCell,
+  },
+  {
+    Header: 'Name',
+    id: 'name',
+    accessor: signup => signup.user_con_profile.name_inverted,
+    Filter: FreeTextFilter,
+  },
+  {
+    Header: 'Bucket',
+    id: 'bucket',
+    accessor: signup => signup.bucket_key,
+    Cell: BucketCell,
+    Filter: BucketFilter,
+  },
+  {
+    Header: 'Age',
+    id: 'age',
+    width: 40,
+    accessor: signup => ageAsOf(
+      moment(signup.user_con_profile.birth_date),
+      moment(signup.run.starts_at),
+    ),
+    filterable: false,
+  },
+  {
+    Header: 'Email',
+    id: 'email',
+    accessor: signup => signup.user_con_profile.email,
+    Cell: EmailCell,
+    Filter: FreeTextFilter,
+  },
+];
 
 function RunSignupsTable({
   defaultVisibleColumns, eventId, exportUrl, runId, runPath, history,
 }) {
   const { data, error } = useQuerySuspended(SignupAdminEventQuery, { variables: { eventId } });
 
-  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -167,21 +176,23 @@ function RunSignupsTable({
   }
 
   return (
-    <div className="mb-4">
-      <TableHeader {...tableHeaderProps} exportUrl={exportUrl} />
-      <ReactTable
-        {...reactTableProps}
+    <QueryDataContext.Provider value={queryData}>
+      <div className="mb-4">
+        <TableHeader {...tableHeaderProps} exportUrl={exportUrl} />
+        <ReactTable
+          {...reactTableProps}
 
-        className="-striped -highlight"
-        getTrProps={(state, rowInfo) => ({
-          style: { cursor: 'pointer' },
-          onClick: () => {
-            history.push(`${runPath}/admin_signups/${rowInfo.original.id}/edit`);
-          },
-        })}
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-      />
-    </div>
+          className="-striped -highlight"
+          getTrProps={(state, rowInfo) => ({
+            style: { cursor: 'pointer' },
+            onClick: () => {
+              history.push(`${runPath}/admin_signups/${rowInfo.original.id}/edit`);
+            },
+          })}
+          getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+        />
+      </div>
+    </QueryDataContext.Provider>
   );
 }
 
