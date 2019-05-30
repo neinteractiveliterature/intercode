@@ -1,4 +1,6 @@
-import React, { useMemo, useContext } from 'react';
+import React, {
+  useMemo, useContext, useRef, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MomentPropTypes from 'react-moment-proptypes';
@@ -39,6 +41,7 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
     () => schedule.getRun(eventRun.runId),
     [schedule, eventRun.runId],
   );
+  const runRef = useRef(null);
   const event = useMemo(
     () => {
       if (!run) {
@@ -50,12 +53,22 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
     [schedule, run],
   );
 
+  useEffect(
+    () => {
+      if (run.id === PROSPECTIVE_RUN_ID && runRef.current) {
+        runRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    },
+    [run.id, runDimensions],
+  );
+
   if (!event) {
     return null;
   }
 
   return (
     <div
+      ref={runRef}
       className={getRunClassName({
         event,
         signupStatus: (run.id === PROSPECTIVE_RUN_ID ? 'confirmed' : null),
@@ -109,6 +122,21 @@ function ProspectiveRunSchedule({
     [error, data],
   );
 
+  const prospectiveRun = useMemo(
+    () => {
+      if (!startTime) {
+        return null;
+      }
+
+      return {
+        id: PROSPECTIVE_RUN_ID,
+        starts_at: startTime.toISOString(),
+        rooms: run.rooms,
+      };
+    },
+    [run, startTime],
+  );
+
   const eventsForSchedule = useMemo(
     () => {
       if (error) {
@@ -126,17 +154,12 @@ function ProspectiveRunSchedule({
         return e;
       });
 
-      if (startTime) {
-        const fakeRun = {
-          id: PROSPECTIVE_RUN_ID,
-          starts_at: startTime.toISOString(),
-          rooms: run.rooms,
-        };
+      if (prospectiveRun) {
         return filteredEvents.map((e) => {
           if (e.id === event.id) {
             return {
               ...e,
-              runs: [...e.runs, fakeRun],
+              runs: [...e.runs, prospectiveRun],
             };
           }
 
@@ -146,7 +169,7 @@ function ProspectiveRunSchedule({
 
       return filteredEvents;
     },
-    [data.events, error, event.id, run, startTime],
+    [data.events, error, event.id, prospectiveRun, run.id],
   );
 
   const conventionDayTimespans = useMemo(
