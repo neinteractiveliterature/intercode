@@ -62,7 +62,7 @@ export function getEventCategoryStyles({ eventCategory, variant }) {
 }
 
 export function getRunClassificationStyles({
-  config, signupCountData, event, signupStatus,
+  config, eventCategory, signupCountData, event, signupStatus,
 }) {
   if (config.classifyEventsBy === 'category') {
     let variant = 'default';
@@ -72,20 +72,20 @@ export function getRunClassificationStyles({
       variant = 'full';
     }
 
-    return getEventCategoryStyles({ eventCategory: event.event_category, variant });
+    return getEventCategoryStyles({ eventCategory, variant });
   }
 
   return {};
 }
 
 export function getRunStyle({
-  event, signupStatus, config, signupCountData, runDimensions, layoutResult,
+  event, eventCategory, signupStatus, config, signupCountData, runDimensions, layoutResult,
 }) {
   return {
     cursor: 'pointer',
     ...getRunPositioningStyles({ runDimensions, layoutResult }),
     ...getRunClassificationStyles({
-      event, signupStatus, config, signupCountData,
+      event, eventCategory, signupStatus, config, signupCountData,
     }),
   };
 }

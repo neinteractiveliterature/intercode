@@ -80,7 +80,6 @@ fragment EventFields on Event {
 
   event_category {
     id
-    ...EventPageEventCategoryFields
   }
 
   registration_policy {
@@ -113,6 +112,8 @@ fragment EventPageEventCategoryFields on EventCategory {
   name
   scheduling_ui
   default_color
+  full_color
+  signed_up_color
 
   event_form {
     id

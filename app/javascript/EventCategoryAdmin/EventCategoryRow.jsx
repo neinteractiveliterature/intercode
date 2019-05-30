@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
 import { DeleteEventCategory } from './mutations.gql';
@@ -11,9 +10,15 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import Tooltip from '../UIComponents/Tooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import { useDeleteMutation } from '../MutationUtils';
 
 function EventCategoryRow({ eventCategory }) {
   const confirm = useConfirm();
+  const deleteEventCategory = useDeleteMutation(DeleteEventCategory, {
+    query: EventCategoryAdminQuery,
+    idVariablePath: ['id'],
+    arrayPath: ['convention', 'event_categories'],
+  });
 
   return (
     <tr>
@@ -60,40 +65,20 @@ function EventCategoryRow({ eventCategory }) {
               </PopperDropdown>
             )
             : (
-              <Mutation mutation={DeleteEventCategory}>
-                {mutate => (
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger btn-sm mr-2"
-                    onClick={() => confirm({
-                      prompt: 'Are you sure you want to delete this event category?',
-                      renderError: error => <ErrorDisplay graphQLError={error} />,
-                      action: () => mutate({
-                        variables: { id: eventCategory.id },
-                        update: (store) => {
-                          const data = store.readQuery({
-                            query: EventCategoryAdminQuery,
-                          });
-                          store.writeQuery({
-                            query: EventCategoryAdminQuery,
-                            data: {
-                              ...data,
-                              convention: {
-                                ...data.convention,
-                                event_categories: data.convention.event_categories
-                                  .filter(c => c.id !== eventCategory.id),
-                              },
-                            },
-                          });
-                        },
-                      }),
-                    })}
-                  >
-                    <i className="fa fa-trash-o" />
-                    <span className="sr-only">Delete event category</span>
-                  </button>
-                )}
-              </Mutation>
+              <button
+                type="button"
+                className="btn btn-outline-danger btn-sm mr-2"
+                onClick={() => confirm({
+                  prompt: 'Are you sure you want to delete this event category?',
+                  renderError: error => <ErrorDisplay graphQLError={error} />,
+                  action: () => deleteEventCategory({
+                    variables: { id: eventCategory.id },
+                  }),
+                })}
+              >
+                <i className="fa fa-trash-o" />
+                <span className="sr-only">Delete event category</span>
+              </button>
             )
         }
         <Link

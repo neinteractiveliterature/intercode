@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import QueryString from 'query-string';
 
@@ -59,37 +59,32 @@ function getExportUrl(baseUrl, { filtered, sorted, columns }) {
   return `${baseUrl}?${queryString}`;
 }
 
-class ReactTableExportButton extends React.PureComponent {
-  static propTypes = {
-    exportUrl: PropTypes.string.isRequired,
-    filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    columns: PropTypes.arrayOf(PropTypes.string),
-  }
+function ReactTableExportButton({
+  exportUrl, filtered, sorted, columns,
+}) {
+  const href = useMemo(
+    () => getExportUrl(exportUrl, { filtered, sorted, columns }),
+    [columns, exportUrl, filtered, sorted],
+  );
 
-  static defaultProps = {
-    columns: null,
-  };
-
-  render = () => (
-    <a
-      className="btn btn-outline-primary mb-2"
-      href={
-        getExportUrl(
-          this.props.exportUrl,
-          {
-            filtered: this.props.filtered,
-            sorted: this.props.sorted,
-            columns: this.props.columns,
-          },
-        )
-      }
-    >
+  return (
+    <a className="btn btn-outline-primary mb-2" href={href}>
       <i className="fa fa-file-excel-o" />
       {' '}
       Export CSV
     </a>
-  )
+  );
 }
+
+ReactTableExportButton.propTypes = {
+  exportUrl: PropTypes.string.isRequired,
+  filtered: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  sorted: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.string),
+};
+
+ReactTableExportButton.defaultProps = {
+  columns: null,
+};
 
 export default ReactTableExportButton;

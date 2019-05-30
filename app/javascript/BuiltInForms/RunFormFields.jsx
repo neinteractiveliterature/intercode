@@ -4,29 +4,33 @@ import moment from 'moment-timezone';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
+import { EventAdminEventsQuery } from '../EventAdmin/queries.gql';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import { timespanFromConvention } from '../TimespanUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
+import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
 
 const roomPropType = PropTypes.shape({
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 });
 
-function RunFormFields({
-  run, event, convention, onChange,
-}) {
+function RunFormFields({ run, event, onChange }) {
+  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+
   const startsAt = useMemo(
-    () => (run && run.starts_at
-      ? moment(run.starts_at).tz(convention.timezone_name)
+    () => (!error && run && run.starts_at
+      ? moment(run.starts_at).tz(data.convention.timezone_name)
       : null
     ),
-    [convention.timezone_name, run],
+    [data, error, run],
   );
   const conventionTimespan = useMemo(
-    () => timespanFromConvention(convention),
-    [convention],
+    () => (error ? null : timespanFromConvention(data.convention)),
+    [error, data],
   );
   const [day, setDay] = useState(startsAt ? startsAt.clone().startOf('day') : null);
   const [hour, setHour] = useState(startsAt ? startsAt.hour() : null);
@@ -53,6 +57,10 @@ function RunFormFields({
     },
     [onChange, startTime],
   );
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   const timeInputChanged = ({ hour: newHour, minute: newMinute }) => {
     setHour(newHour);
@@ -89,11 +97,32 @@ function RunFormFields({
   return (
     <div>
       <ConventionDaySelect
-        convention={convention}
+        convention={data.convention}
         value={day}
         onChange={setDay}
       />
       {renderTimeSelect()}
+
+      <SelectWithLabel
+        label="Room(s)"
+        name="room_ids"
+        options={data.convention.rooms}
+        getOptionValue={room => room.id}
+        getOptionLabel={room => room.name}
+        isMulti
+        styles={{
+          menu: provided => ({ ...provided, zIndex: 25 }),
+        }}
+        value={run.rooms}
+        onChange={rooms => onChange(prevRun => ({ ...prevRun, rooms }))}
+      />
+
+      <ProspectiveRunSchedule
+        day={day}
+        startTime={startTime}
+        run={run}
+        event={event}
+      />
 
       <BootstrapFormInput
         name="title_suffix"
@@ -110,17 +139,6 @@ function RunFormFields({
         onTextChange={scheduleNote => onChange(prevRun => ({
           ...prevRun, schedule_note: scheduleNote,
         }))}
-      />
-
-      <SelectWithLabel
-        label="Room(s)"
-        name="room_ids"
-        options={convention.rooms}
-        getOptionValue={room => room.id}
-        getOptionLabel={room => room.name}
-        isMulti
-        value={run.rooms}
-        onChange={rooms => onChange(prevRun => ({ ...prevRun, rooms }))}
       />
     </div>
   );

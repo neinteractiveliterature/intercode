@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { humanize, titleize } from 'inflected';
@@ -14,7 +14,7 @@ import EmailCell from '../Tables/EmailCell';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import { UserConProfilesTableUserConProfilesQuery } from './queries.gql';
 import { deserializeForm } from '../FormPresenter/GraphQLFormDeserialization';
@@ -80,67 +80,91 @@ TicketStatusWithPaymentAmountCell.defaultProps = {
   value: null,
 };
 
-const getPossibleColumns = (data) => {
-  const form = deserializeForm(data.convention.user_con_profile_form);
-
-  const TicketTypeFilter = ({ filter, onChange }) => (
-    <ChoiceSetFilter
-      name="ticketType"
-      choices={[
+const TicketTypeFilter = ({ filter, onChange }) => {
+  const data = useContext(QueryDataContext);
+  const choices = useMemo(
+    () => (data
+      ? [
         { label: 'Unpaid', value: 'none' },
         ...(data.convention.ticket_types
           .map(ticketType => ({
             label: humanize(ticketType.name),
             value: ticketType.id.toString(),
           }))),
-      ]}
-      onChange={onChange}
-      filter={filter}
-    />
+      ]
+      : []
+    ),
+    [data],
   );
 
-  TicketTypeFilter.propTypes = {
-    filter: PropTypes.arrayOf(PropTypes.string),
-    onChange: PropTypes.func.isRequired,
-  };
-
-  TicketTypeFilter.defaultProps = {
-    filter: null,
-  };
-
-  const PrivilegesCell = ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', ');
-
-  PrivilegesCell.propTypes = {
-    value: PropTypes.arrayOf(PropTypes.string),
-  };
-
-  PrivilegesCell.defaultProps = {
-    value: null,
-  };
-
-  const PrivilegesFilter = ({ filter, onChange }) => (
+  return (
     <ChoiceSetFilter
-      name="privileges"
-      choices={[
+      name="ticketType"
+      choices={choices}
+      onChange={onChange}
+      filter={filter}
+      multiple
+    />
+  );
+};
+
+TicketTypeFilter.propTypes = {
+  filter: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func.isRequired,
+};
+
+TicketTypeFilter.defaultProps = {
+  filter: null,
+};
+
+const PrivilegesCell = ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', ');
+
+PrivilegesCell.propTypes = {
+  value: PropTypes.arrayOf(PropTypes.string),
+};
+
+PrivilegesCell.defaultProps = {
+  value: null,
+};
+
+const PrivilegesFilter = ({ filter, onChange }) => {
+  const data = useContext(QueryDataContext);
+  const choices = useMemo(
+    () => (data
+      ? [
         ...(data.convention.privilege_names
           .map(privilegeName => ({
             label: humanize(privilegeName),
             value: privilegeName,
           }))),
-      ]}
-      onChange={onChange}
-      filter={filter}
-    />
+      ]
+      : []
+    ),
+    [data],
   );
 
-  PrivilegesFilter.propTypes = {
-    filter: PropTypes.arrayOf(PropTypes.string),
-    onChange: PropTypes.func.isRequired,
-  };
+  return (
+    <ChoiceSetFilter
+      name="privileges"
+      choices={choices}
+      onChange={onChange}
+      filter={filter}
+      multiple
+    />
+  );
+};
 
-  PrivilegesFilter.defaultProps = {
-    filter: null,
-  };
+PrivilegesFilter.propTypes = {
+  filter: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func.isRequired,
+};
+
+PrivilegesFilter.defaultProps = {
+  filter: null,
+};
+
+const getPossibleColumns = (data) => {
+  const form = deserializeForm(data.convention.user_con_profile_form);
 
   const columns = [
     {
@@ -295,7 +319,7 @@ const getPossibleColumns = (data) => {
 };
 
 function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
-  const [reactTableProps, { tableHeaderProps, queryResult }] = useReactTableWithTheWorks({
+  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -308,45 +332,47 @@ function UserConProfilesTable({ defaultVisibleColumns, exportUrl, history }) {
   });
 
   return (
-    <div className="mb-4">
-      <TableHeader
-        {...tableHeaderProps}
-        exportUrl={exportUrl}
-        renderLeftContent={() => (
-          queryResult.data && (queryResult.data.currentAbility || {}).can_create_user_con_profiles
-            ? (
-              <Link to="/user_con_profiles/new" className="btn btn-primary ml-2 mb-2">
-                <i className="fa fa-plus" />
-                {' '}
-                Add attendee
-              </Link>
-            )
-            : null
-        )}
-      />
+    <QueryDataContext.Provider value={queryData}>
+      <div className="mb-4">
+        <TableHeader
+          {...tableHeaderProps}
+          exportUrl={exportUrl}
+          renderLeftContent={() => (
+            queryData && (queryData.currentAbility || {}).can_create_user_con_profiles
+              ? (
+                <Link to="/user_con_profiles/new" className="btn btn-primary ml-2 mb-2">
+                  <i className="fa fa-plus" />
+                  {' '}
+                  Add attendee
+                </Link>
+              )
+              : null
+          )}
+        />
 
-      <ReactTable
-        {...reactTableProps}
+        <ReactTable
+          {...reactTableProps}
 
-        className="-striped -highlight"
-        getTrProps={(state, rowInfo) => ({
-          style: { cursor: 'pointer' },
-          onClick: () => {
-            history.push(`/user_con_profiles/${rowInfo.original.id}`);
-          },
-        })}
-        getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
-      />
+          className="-striped -highlight"
+          getTrProps={(state, rowInfo) => ({
+            style: { cursor: 'pointer' },
+            onClick: () => {
+              history.push(`/user_con_profiles/${rowInfo.original.id}`);
+            },
+          })}
+          getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
+        />
 
-      <Route path="/user_con_profiles/new">
-        {({ match }) => (
-          <AddAttendeeModal
-            conventionName={(queryResult.data && (queryResult.data.convention || {}).name) || ''}
-            visible={match != null}
-          />
-        )}
-      </Route>
-    </div>
+        <Route path="/user_con_profiles/new">
+          {({ match }) => (
+            <AddAttendeeModal
+              conventionName={(queryData && (queryData.convention || {}).name) || ''}
+              visible={match != null}
+            />
+          )}
+        </Route>
+      </div>
+    </QueryDataContext.Provider>
   );
 }
 

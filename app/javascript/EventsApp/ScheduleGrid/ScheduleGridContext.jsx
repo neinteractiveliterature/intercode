@@ -26,7 +26,7 @@ export const ScheduleGridContext = React.createContext({
   toggleRunDetailsVisibility: () => {},
 });
 
-function useScheduleGridProvider(config, convention, events) {
+export function useScheduleGridProvider(config, convention, events) {
   const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
 
   const isRunDetailsVisible = useMemo(

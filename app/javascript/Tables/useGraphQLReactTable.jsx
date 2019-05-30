@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 
 import {
   reactTableFiltersToTableResultsFilters,
   reactTableSortToTableResultsSort,
 } from './TableUtils';
+import useCachedLoadableValue from '../useCachedLoadableValue';
 
 export default function useGraphQLReactTable({
   getData, getPages, query, variables, filtered, sorted, page, pageSize,
@@ -19,21 +19,33 @@ export default function useGraphQLReactTable({
     },
     fetchPolicy: 'network-only',
   });
-  const [cachedPageCount, setCachedPageCount] = useState(null);
   const { error, loading } = queryResult;
-  const dataAvailable = !(loading || error);
-  const pages = (dataAvailable ? getPages(queryResult) : cachedPageCount);
-  if (dataAvailable && cachedPageCount !== pages) {
-    setCachedPageCount(pages);
-  }
+  const pages = useCachedLoadableValue(
+    loading,
+    error,
+    () => getPages(queryResult),
+    [getPages, queryResult],
+  );
+  const queryData = useCachedLoadableValue(
+    loading,
+    error,
+    () => queryResult.data,
+    [queryResult.data],
+  );
+  const tableData = useCachedLoadableValue(
+    loading,
+    error,
+    () => getData(queryResult),
+    [queryResult],
+  );
 
   const reactTableProps = {
-    data: dataAvailable ? getData(queryResult) : [],
+    data: tableData || [],
     pages,
     manual: true,
     filterable: true,
     loading,
   };
 
-  return [reactTableProps, queryResult];
+  return [reactTableProps, { queryResult, queryData }];
 }

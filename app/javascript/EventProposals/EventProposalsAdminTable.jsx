@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { withRouter, Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import { EventProposalsAdminQuery } from './queries.gql';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
@@ -129,109 +129,119 @@ ExtraCell.propTypes = {
   }).isRequired,
 };
 
-const getPossibleColumns = (data) => {
-  const EventCategoryFilter = ({ filter, onChange }) => (
+const EventCategoryFilter = ({ filter, onChange }) => {
+  const data = useContext(QueryDataContext);
+  const choices = useMemo(
+    () => (
+      data
+        ? data.convention.event_categories.map(eventCategory => ({
+          value: eventCategory.id.toString(),
+          label: eventCategory.name,
+        }))
+        : []
+    ),
+    [data],
+  );
+
+  return (
     <ChoiceSetFilter
       name="event_category"
-      choices={data.convention.event_categories.map(eventCategory => ({
-        value: eventCategory.id.toString(),
-        label: eventCategory.name,
-      }))}
+      choices={choices}
       onChange={onChange}
       filter={filter}
       filterCodec={FilterCodecs.integer}
     />
   );
-
-  EventCategoryFilter.propTypes = {
-    filter: PropTypes.arrayOf(PropTypes.string),
-    onChange: PropTypes.func.isRequired,
-  };
-
-  EventCategoryFilter.defaultProps = {
-    filter: null,
-  };
-
-  return [
-    {
-      Header: 'Category',
-      id: 'event_category',
-      accessor: 'event_category',
-      width: 100,
-      Cell: EventCategoryCell,
-      Filter: EventCategoryFilter,
-    },
-    {
-      Header: 'Title',
-      id: 'title',
-      accessor: 'title',
-      Filter: FreeTextFilter,
-    },
-    {
-      Header: 'Submitted by',
-      id: 'owner',
-      accessor: eventProposal => eventProposal.owner.name_inverted,
-      Filter: FreeTextFilter,
-    },
-    {
-      Header: 'Capacity',
-      id: 'capacity',
-      width: 80,
-      accessor: eventProposal => eventProposal.registration_policy,
-      filterable: false,
-      sortable: false,
-      Cell: CapacityCell,
-    },
-    {
-      Header: 'Duration',
-      id: 'duration',
-      accessor: 'length_seconds',
-      width: 80,
-      filterable: false,
-      Cell: DurationCell,
-    },
-    {
-      Header: 'Status',
-      id: 'status',
-      accessor: 'status',
-      width: 80,
-      Filter: StatusFilter,
-      Cell: StatusCell,
-    },
-    {
-      Header: 'Submitted',
-      id: 'submitted_at',
-      accessor: 'submitted_at',
-      width: 150,
-      filterable: false,
-      Cell: ({ value }) => (
-        moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
-      ),
-    },
-    {
-      Header: 'Updated',
-      id: 'updated_at',
-      accessor: 'updated_at',
-      width: 150,
-      filterable: false,
-      Cell: ({ value }) => (
-        moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
-      ),
-    },
-    {
-      Header: '',
-      id: '_extra',
-      accessor: () => { },
-      width: 30,
-      filterable: false,
-      sortable: false,
-      Cell: ExtraCell,
-    },
-  ];
 };
 
+EventCategoryFilter.propTypes = {
+  filter: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func.isRequired,
+};
+
+EventCategoryFilter.defaultProps = {
+  filter: null,
+};
+
+const getPossibleColumns = data => [
+  {
+    Header: 'Category',
+    id: 'event_category',
+    accessor: 'event_category',
+    width: 100,
+    Cell: EventCategoryCell,
+    Filter: EventCategoryFilter,
+  },
+  {
+    Header: 'Title',
+    id: 'title',
+    accessor: 'title',
+    Filter: FreeTextFilter,
+  },
+  {
+    Header: 'Submitted by',
+    id: 'owner',
+    accessor: eventProposal => eventProposal.owner.name_inverted,
+    Filter: FreeTextFilter,
+  },
+  {
+    Header: 'Capacity',
+    id: 'capacity',
+    width: 80,
+    accessor: eventProposal => eventProposal.registration_policy,
+    filterable: false,
+    sortable: false,
+    Cell: CapacityCell,
+  },
+  {
+    Header: 'Duration',
+    id: 'duration',
+    accessor: 'length_seconds',
+    width: 80,
+    filterable: false,
+    Cell: DurationCell,
+  },
+  {
+    Header: 'Status',
+    id: 'status',
+    accessor: 'status',
+    width: 80,
+    Filter: StatusFilter,
+    Cell: StatusCell,
+  },
+  {
+    Header: 'Submitted',
+    id: 'submitted_at',
+    accessor: 'submitted_at',
+    width: 150,
+    filterable: false,
+    Cell: ({ value }) => (
+      moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
+    ),
+  },
+  {
+    Header: 'Updated',
+    id: 'updated_at',
+    accessor: 'updated_at',
+    width: 150,
+    filterable: false,
+    Cell: ({ value }) => (
+      moment.tz(value, data.convention.timezone_name).format('YYYY-MM-DD HH:mm')
+    ),
+  },
+  {
+    Header: '',
+    id: '_extra',
+    accessor: () => { },
+    width: 30,
+    filterable: false,
+    sortable: false,
+    Cell: ExtraCell,
+  },
+];
+
 function EventProposalsAdminTable({ history }) {
-  const [reactTableProps, { tableHeaderProps }] = useReactTableWithTheWorks({
+  const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns: ['event_category', 'title', 'owner', 'capacity', 'duration', 'status', 'submitted_at', 'updated_at'],
     alwaysVisibleColumns: ['_extra'],
@@ -247,7 +257,7 @@ function EventProposalsAdminTable({ history }) {
   usePageTitle('Event Proposals');
 
   return (
-    <>
+    <QueryDataContext.Provider value={queryData}>
       <h1 className="mb-4">Event Proposals</h1>
       <div className="mb-4">
         <TableHeader {...tableHeaderProps} exportUrl="/admin_event_proposals/export.csv" />
@@ -265,7 +275,7 @@ function EventProposalsAdminTable({ history }) {
           getTheadFilterThProps={() => ({ className: 'text-left', style: { overflow: 'visible' } })}
         />
       </div>
-    </>
+    </QueryDataContext.Provider>
   );
 }
 

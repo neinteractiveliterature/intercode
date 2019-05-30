@@ -1,33 +1,9 @@
 import { useCallback } from 'react';
 
+import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventAdminEventsQuery } from './queries.gql';
 import { UpdateEvent, CreateRun, UpdateRun } from './mutations.gql';
 import useMutationCallback from '../useMutationCallback';
-
-const buildEventInput = (event, defaultFormResponseAttrs = {}) => ({
-  event: {
-    event_category_id: event.event_category.id,
-    form_response_attrs_json: JSON.stringify({
-      ...defaultFormResponseAttrs,
-      ...event.form_response_attrs,
-    }),
-  },
-});
-
-const buildRunInput = (run) => {
-  if (!run.starts_at) {
-    return null;
-  }
-
-  return {
-    run: {
-      starts_at: run.starts_at,
-      schedule_note: run.schedule_note,
-      title_suffix: run.title_suffix,
-      room_ids: (run.rooms || []).map(room => room.id),
-    },
-  };
-};
 
 function useUpdateRegularEvent() {
   const updateEventMutate = useMutationCallback(UpdateEvent);
@@ -113,8 +89,8 @@ export default function useUpdateEvent() {
   const updateSingleRunEvent = useUpdateSingleRunEvent();
 
   const updateEvent = useCallback(
-    ({ event, ...args }) => {
-      if (event.event_category.scheduling_ui === 'single_run') {
+    ({ event, eventCategory, ...args }) => {
+      if (eventCategory.scheduling_ui === 'single_run') {
         return updateSingleRunEvent({ event, ...args });
       }
 

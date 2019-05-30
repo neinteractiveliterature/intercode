@@ -21,6 +21,7 @@ import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 import useUpdateEvent from './useUpdateEvent';
 import RunFormFields from '../BuiltInForms/RunFormFields';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
@@ -58,7 +59,7 @@ function EventAdminEditEvent({ match, history }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const donePath = data.convention.site_mode === 'single_event' ? '/' : '/admin_events/runs';
+  const donePath = data.convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory);
 
   return (
     <EditEvent
@@ -67,7 +68,7 @@ function EventAdminEditEvent({ match, history }) {
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}
-      updateEvent={() => updateEvent({ event, run })}
+      updateEvent={() => updateEvent({ event, eventCategory, run })}
       onSave={() => { history.push(donePath); }}
       onDrop={() => { history.push(donePath); }}
     >
@@ -89,7 +90,7 @@ function EventAdminEditEvent({ match, history }) {
       {eventCategory.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
         <RunFormFields
           run={run}
-          event={{ length_seconds: event.form_response_attrs.length_seconds }}
+          event={{ id: event.id, length_seconds: event.form_response_attrs.length_seconds }}
           convention={data.convention}
           onChange={setRun}
         />
