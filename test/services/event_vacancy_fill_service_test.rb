@@ -36,10 +36,23 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   let(:waitlist_signup) do
     FactoryBot.create(
       :signup,
-      user_con_profile: anything_user_con_profile,
+      user_con_profile: waitlist_user_con_profile,
       run: the_run,
       state: 'waitlisted',
       requested_bucket_key: bucket_key
+    )
+  end
+
+  let(:waitlist_no_pref_user_con_profile) do
+    FactoryBot.create(:user_con_profile, convention: convention)
+  end
+  let(:waitlist_no_pref_signup) do
+    FactoryBot.create(
+      :signup,
+      user_con_profile: waitlist_no_pref_user_con_profile,
+      run: the_run,
+      state: 'waitlisted',
+      requested_bucket_key: nil
     )
   end
 
@@ -120,6 +133,29 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     no_pref_signup.reload.bucket_key.must_equal 'cats'
   end
 
+  it 'handles waitlisted signups in strictly chronological order, regardless of no-pref status' do
+    travel(-2.seconds) do
+      anything_signup
+    end
+    travel(-1.second) do
+      waitlist_no_pref_signup
+    end
+    waitlist_signup
+
+    result = EventVacancyFillService.new(the_run, 'anything').call
+    result.must_be :success?
+
+    result.move_results.size.must_equal 1
+    waitlist_no_pref_move_result = result.move_results.first
+    waitlist_no_pref_move_result.signup_id.must_equal waitlist_no_pref_signup.id
+    waitlist_no_pref_move_result.prev_state.must_equal 'waitlisted'
+    waitlist_no_pref_move_result.prev_bucket_key.must_be_nil
+    waitlist_no_pref_move_result.state.must_equal 'confirmed'
+    waitlist_no_pref_move_result.bucket_key.must_equal 'anything'
+
+    waitlist_no_pref_signup.reload.bucket_key.must_equal 'anything'
+  end
+
   it 'cascades vacancy filling chronologically' do
     travel(-1.second) do
       anything_signup
@@ -154,7 +190,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
       ActionMailer::Base.deliveries.size.must_equal 1
       recipients = ActionMailer::Base.deliveries.map(&:to)
-      recipients.must_equal [[anything_signup.user_con_profile.email]]
+      recipients.must_equal [[waitlist_signup.user_con_profile.email]]
     end
   end
 
