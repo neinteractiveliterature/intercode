@@ -6,7 +6,6 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import { EventAdminEventsQuery } from '../EventAdmin/queries.gql';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
-import Timespan from '../Timespan';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useQuerySuspended from '../useQuerySuspended';
