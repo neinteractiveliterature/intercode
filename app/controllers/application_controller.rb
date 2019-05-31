@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   # Turn on Rails' built-in CSRF protection (see
   # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
+  protect_from_forgery
   skip_forgery_protection if: :doorkeeper_token unless Rails.env.test?
 
   # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
