@@ -146,7 +146,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react-hooks-testing-library": "^0.5.0",
     "react-test-renderer": "^16.8.6",
-    "react-testing-library": "^7.0.1",
+    "react-testing-library": "^8.0.1",
     "webpack-dev-server": "^3.4.1"
   },
   "scripts": {
