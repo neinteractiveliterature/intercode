@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
-import { render, queries } from 'react-testing-library';
+import { render, queries } from '@testing-library/react';
 
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';
 import { LazyStripeProvider } from '../../app/javascript/LazyStripe';
@@ -54,7 +54,7 @@ function customRender(ui, options = {}) {
 }
 
 // re-export everything
-export * from 'react-testing-library';
+export * from '@testing-library/react';
 
 // override render method
 export { customRender as render };
