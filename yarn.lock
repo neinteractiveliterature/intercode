@@ -1113,10 +1113,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
-"@rails/webpacker@^4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-4.0.4.tgz#802761597c66c9f85732497d81cd0fb57cba47ee"
-  integrity sha512-r8cQAU88PCiUM3JJqVL6fum/lVGTaTyG+pdAC6mm2oo5CzoIukH4/KGI+hZnCid0bq98rN0z/beKQurfJiZ+Pg==
+"@rails/webpacker@^4.0.6":
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-4.0.6.tgz#10c3dc85404a43102640e10ba2518de2cb43e4f3"
+  integrity sha512-WFqR23eUGrlnU8f3sIaMeK+x2ykv3SI3cycpzWMlL/0VwvxKw7/o22rlE9EDCowvzry4zVWKK88oBzqSGRqngA==
   dependencies:
     "@babel/core" "^7.4.5"
     "@babel/plugin-proposal-class-properties" "^7.4.4"
