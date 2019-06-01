@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_212001) do
+ActiveRecord::Schema.define(version: 2019_06_01_161948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_212001) do
     t.bigint "organization_id"
     t.string "ticket_mode", default: "disabled", null: false
     t.string "site_mode", default: "convention", null: false
+    t.string "signup_mode", default: "self_service", null: false
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["organization_id"], name: "index_conventions_on_organization_id"

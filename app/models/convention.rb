@@ -1,8 +1,7 @@
-require 'carrierwave/orm/activerecord'
-
 class Convention < ApplicationRecord
   TICKET_MODES = %w[disabled required_for_signup]
   SITE_MODES = %w[convention single_event]
+  SIGNUP_MODES = %w[self_service moderated]
 
   belongs_to :updated_by, class_name: 'User', optional: true
   belongs_to :organization, optional: true
@@ -42,6 +41,7 @@ class Convention < ApplicationRecord
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
   validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
+  validates :signup_mode, inclusion: { in: SIGNUP_MODES }, presence: true
   validates :site_mode, inclusion: { in: SITE_MODES }, presence: true
   validates :maximum_event_signups, presence: true
   validate :maximum_event_signups_must_cover_all_time
