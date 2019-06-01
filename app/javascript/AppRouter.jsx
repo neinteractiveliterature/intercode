@@ -44,6 +44,7 @@ const ProductPage = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "st
 const Reports = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "reports" */ './Reports')));
 const ResetPassword = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword')));
 const RoomsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin')));
+const SignupModeration = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "signup-moderation" */ './SignupModeration')));
 const StaffPositionAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin')));
 const StoreAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin')));
 const TicketTypeAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin')));
@@ -83,7 +84,7 @@ function renderCommonRoutes() {
   ];
 }
 
-function renderCommonInConventionRoutes() {
+function renderCommonInConventionRoutes({ signupMode }) {
   return [
     <Route path="/admin_events" component={EventAdmin} key="adminEvents" />,
     <Route path="/admin_forms" component={FormAdmin} key="adminForms" />,
@@ -98,6 +99,10 @@ function renderCommonInConventionRoutes() {
     <Route path="/products/:id" component={ProductPage} key="productPage" />,
     <Route path="/reports" component={Reports} key="reports" />,
     <Route path="/rooms" component={RoomsAdmin} key="rooms" />,
+    ...(signupMode === 'moderated'
+      ? [<Route path="/signup_moderation" component={SignupModeration} key="signupModeration" />]
+      : []
+    ),
     <Route path="/staff_positions" component={StaffPositionAdmin} key="staffPositions" />,
     <Route path="/ticket" component={MyTicket} key="myTicket" />,
     <Route path="/ticket_types" component={TicketTypeAdmin} key="ticketTypes" />,
@@ -107,13 +112,13 @@ function renderCommonInConventionRoutes() {
   ];
 }
 
-function renderConventionModeRoutes() {
+function renderConventionModeRoutes({ signupMode }) {
   return [
     <Route path="/admin_event_proposals" component={EventProposalsAdmin} key="adminEventProposals" />,
     <Route path="/event_categories" component={EventCategoryAdmin} key="eventCategories" />,
     <Route path="/event_proposals/:id/edit" component={EditEventProposal} key="editEventProposal" />,
     <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} key="eventProposals" />,
-    ...renderCommonInConventionRoutes(),
+    ...renderCommonInConventionRoutes({ signupMode }),
   ];
 }
 
@@ -133,7 +138,7 @@ function renderRootSiteRoutes() {
 }
 
 function AppRouter({ alert }) {
-  const { conventionName, siteMode } = useContext(AppRootContext);
+  const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
 
   const renderRoutes = () => {
@@ -145,7 +150,7 @@ function AppRouter({ alert }) {
       return renderSingleEventModeRoutes();
     }
 
-    return renderConventionModeRoutes();
+    return renderConventionModeRoutes({ signupMode });
   };
 
   return (

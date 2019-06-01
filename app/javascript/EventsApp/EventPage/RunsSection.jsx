@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
 import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
-import buildSignupOptions from './buildSignupOptions';
 import { EventPageQuery } from './queries.gql';
 import RunCapacityGraph from './RunCapacityGraph';
-import RunCard from './RunCard';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
-import buildEventUrl from '../buildEventUrl';
+import EventPageRunCard from './EventPageRunCard';
 
 function FakeRun({ event }) {
   const blankSignupCountsByBucketKeyAndCounted = buildBlankSignupCountsFromRegistrationPolicy(
@@ -55,10 +53,6 @@ function RunsSection({ eventId }) {
     ),
     [data, error],
   );
-  const signupOptions = useMemo(
-    () => (error ? null : buildSignupOptions(data.event, data.myProfile)),
-    [data, error],
-  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -67,7 +61,6 @@ function RunsSection({ eventId }) {
   const {
     currentAbility, myProfile, convention, event,
   } = data;
-  const eventPath = buildEventUrl(event);
 
   const showFakeRun = (
     sortedRuns.length === 0
@@ -79,15 +72,13 @@ function RunsSection({ eventId }) {
       {showFakeRun
         ? <FakeRun event={event} />
         : sortedRuns.map(run => (
-          <RunCard
+          <EventPageRunCard
             event={event}
-            eventPath={eventPath}
             run={run}
             timezoneName={convention.timezone_name}
             key={run.id}
             myProfile={myProfile}
             currentAbility={currentAbility}
-            signupOptions={signupOptions}
           />
         ))
       }

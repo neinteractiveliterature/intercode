@@ -13,6 +13,8 @@ query AppRootQuery($path: String!) {
     id
     name
     site_mode
+    signup_mode
+    timezone_name
     clickwrap_agreement
   }
 }
