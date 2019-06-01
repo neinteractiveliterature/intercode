@@ -1,39 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useConfirm } from '../../ModalDialogs/Confirm';
-import ErrorDisplay from '../../ErrorDisplay';
 import { WithdrawMySignup } from './mutations.gql';
 import useMutationCallback from '../../useMutationCallback';
+import WithdrawSignupButton from './WithdrawSignupButton';
 
 function WithdrawMySignupButton({
-  run, event, buttonClass, buttonText, reloadOnSuccess,
+  run, event, reloadOnSuccess, ...otherProps
 }) {
-  const withdrawMySignup = useMutationCallback(WithdrawMySignup);
-  const confirm = useConfirm();
+  const withdrawMutate = useMutationCallback(WithdrawMySignup);
+  const withdrawSignup = async (...args) => {
+    await withdrawMutate(...args);
+    if (reloadOnSuccess) {
+      window.location.reload();
+    }
+  };
 
   return (
-    <button
-      className={`btn ${buttonClass || 'btn-outline-danger'}`}
-      type="button"
-      onClick={() => confirm({
-        prompt: `Are you sure you want to withdraw from ${event.title}?`,
-        action: async () => {
-          const mutationResult = await withdrawMySignup({
-            variables: { runId: run.id },
-          });
-
-          if (reloadOnSuccess) {
-            window.location.reload();
-          }
-
-          return mutationResult;
-        },
-        renderError: error => <ErrorDisplay graphQLError={error} />,
-      })}
-    >
-      {buttonText || 'Withdraw'}
-    </button>
+    <WithdrawSignupButton
+      run={run}
+      event={event}
+      withdrawSignup={withdrawSignup}
+      {...otherProps}
+    />
   );
 }
 
@@ -44,14 +33,10 @@ WithdrawMySignupButton.propTypes = {
   event: PropTypes.shape({
     title: PropTypes.string.isRequired,
   }).isRequired,
-  buttonClass: PropTypes.string,
-  buttonText: PropTypes.string,
   reloadOnSuccess: PropTypes.bool,
 };
 
 WithdrawMySignupButton.defaultProps = {
-  buttonClass: null,
-  buttonText: null,
   reloadOnSuccess: false,
 };
 

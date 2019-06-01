@@ -24,6 +24,23 @@ fragment EventPageRunFields on Run {
   }
 }
 
+fragment RunCardRegistrationPolicyFields on RegistrationPolicy {
+  slots_limited
+  prevent_no_preference_signups
+  total_slots_including_not_counted
+
+  buckets {
+    key
+    name
+    description
+    not_counted
+    slots_limited
+    anything
+    minimum_slots
+    total_slots
+  }
+}
+
 query EventPageQuery($eventId: Int!) {
   __typename
 
@@ -70,20 +87,7 @@ query EventPageQuery($eventId: Int!) {
     }
 
     registration_policy {
-      slots_limited
-      prevent_no_preference_signups
-      total_slots_including_not_counted
-
-      buckets {
-        key
-        name
-        description
-        not_counted
-        slots_limited
-        anything
-        minimum_slots
-        total_slots
-      }
+      ...RunCardRegistrationPolicyFields
     }
 
     runs {

@@ -205,6 +205,14 @@ class NavigationBarPresenter
       url '/rooms'
       visible? { can?(:update, Room.new(convention: convention)) }
     end,
+    NavigationItem.define do
+      label 'Signup Moderation'
+      url '/signup_moderation'
+      visible? do
+        convention.signup_mode == 'moderated' &&
+          can?(:create, Signup.new(run: Run.new(event: Event.new(convention: convention))))
+      end
+    end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Staff Positions'
