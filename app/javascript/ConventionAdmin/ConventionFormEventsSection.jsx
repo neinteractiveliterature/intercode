@@ -35,14 +35,29 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
 
 function ConventionFormEventsSection({ convention, dispatch, disabled }) {
   const [
-    changeAcceptingProposals, changeShowEventList, changeShowSchedule, changeMaximumEventSignups,
+    changeSignupMode,
+    changeAcceptingProposals,
+    changeShowEventList,
+    changeShowSchedule,
+    changeMaximumEventSignups,
   ] = useChangeDispatchers(
     dispatch,
-    ['accepting_proposals', 'show_event_list', 'show_schedule', 'maximum_event_signups'],
+    ['signup_mode', 'accepting_proposals', 'show_event_list', 'show_schedule', 'maximum_event_signups'],
   );
 
   return (
     <>
+      <MultipleChoiceInput
+        name="signup_mode"
+        caption="Signup mode"
+        choices={[
+          { value: 'self_service', label: 'Self-service (attendees can sign themselves up for events)' },
+          { value: 'moderated', label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)' },
+        ]}
+        value={convention.signup_mode}
+        onChange={changeSignupMode}
+        disabled={disabled}
+      />
       <BooleanInput
         name="accepting_proposals"
         caption="Accepting event proposals"
