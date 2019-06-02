@@ -1,5 +1,4 @@
-import React, { useImperativeHandle, useState, forwardRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useMemo } from 'react';
 
 import useModal from '../ModalDialogs/useModal';
 
@@ -14,48 +13,27 @@ const AuthenticationModalContext = React.createContext({
   recaptchaSiteKey: null,
 });
 
-// eslint-disable-next-line react/prop-types
-function AuthenticationModalContextProvider({ children, recaptchaSiteKey }, ref) {
+export function useAuthenticationModalProvider(recaptchaSiteKey) {
   const {
     visible, state, setState, open, close,
   } = useModal();
   const [afterSignInPath, setAfterSignInPath] = useState(null);
 
-  useImperativeHandle(
-    ref,
-    () => ({ open, close, setState }),
+  const contextValue = useMemo(
+    () => ({
+      visible,
+      open,
+      close,
+      afterSignInPath,
+      setAfterSignInPath,
+      currentView: (state || {}).currentView,
+      setCurrentView: view => setState({ ...state, currentView: view }),
+      recaptchaSiteKey,
+    }),
+    [afterSignInPath, close, open, recaptchaSiteKey, setState, state, visible],
   );
 
-  const contextValue = {
-    visible,
-    open,
-    close,
-    afterSignInPath,
-    setAfterSignInPath,
-    currentView: (state || {}).currentView,
-    setCurrentView: view => setState({ ...state, currentView: view }),
-    recaptchaSiteKey,
-  };
-
-  return (
-    <AuthenticationModalContext.Provider value={contextValue}>
-      {children}
-    </AuthenticationModalContext.Provider>
-  );
+  return contextValue;
 }
 
-const RefForwardingAuthenticationModalContextProvider = forwardRef(
-  AuthenticationModalContextProvider,
-);
-
-RefForwardingAuthenticationModalContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-  recaptchaSiteKey: PropTypes.string,
-};
-
-RefForwardingAuthenticationModalContextProvider.defaultProps = {
-  recaptchaSiteKey: null,
-};
-
 export default AuthenticationModalContext;
-export { RefForwardingAuthenticationModalContextProvider as AuthenticationModalContextProvider };

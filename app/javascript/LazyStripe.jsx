@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 
-const LazyStripeContext = React.createContext({
+export const LazyStripeContext = React.createContext({
   publishableKey: null,
 });
 
