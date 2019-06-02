@@ -13,7 +13,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 
 function RunCard({
-  run, event, history, eventPath, signupOptions, timezoneName, currentAbility, myProfile, mySignup,
+  run, event, history, signupOptions, timezoneName, currentAbility, myProfile, mySignup,
   showViewSignups, createSignup, withdrawSignup,
 }) {
   const { siteMode } = useContext(AppRootContext);
@@ -149,7 +149,6 @@ function RunCard({
               {showViewSignups && (
                 <ViewSignupsOptions
                   event={event}
-                  eventPath={eventPath}
                   run={run}
                   currentAbility={currentAbility}
                 />
@@ -182,7 +181,6 @@ RunCard.propTypes = {
       hash: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  eventPath: PropTypes.string.isRequired,
   signupOptions: PropTypes.shape({
     mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
