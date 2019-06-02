@@ -1,11 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useCallback, useMemo } from 'react';
 import fetch from 'unfetch';
 
 const AuthenticityTokensContext = React.createContext({});
 
-export function AuthenticityTokensContextProvider({ tokens, children }) {
-  const [value, setValue] = useState(tokens);
+export function useAuthenticityTokens(initialTokens) {
+  const [tokens, setTokens] = useState(initialTokens);
 
   const refresh = useCallback(
     async () => {
@@ -17,21 +16,17 @@ export function AuthenticityTokensContextProvider({ tokens, children }) {
       });
 
       const json = await response.json();
-      setValue(prevValue => ({ ...prevValue, ...json }));
+      setTokens(prevTokens => ({ ...prevTokens, ...json }));
     },
     [],
   );
 
-  return (
-    <AuthenticityTokensContext.Provider value={{ ...value, refresh }}>
-      {children}
-    </AuthenticityTokensContext.Provider>
+  const value = useMemo(
+    () => ({ ...tokens, refresh }),
+    [refresh, tokens],
   );
-}
 
-AuthenticityTokensContextProvider.propTypes = {
-  tokens: PropTypes.shape({}).isRequired,
-  children: PropTypes.node.isRequired,
-};
+  return value;
+}
 
 export default AuthenticityTokensContext;
