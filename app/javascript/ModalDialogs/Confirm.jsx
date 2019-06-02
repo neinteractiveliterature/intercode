@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
@@ -32,11 +32,17 @@ function Confirm({ children }) {
     }
   };
 
-  const augmentedConfirm = (...args) => modal.open(...args);
-  augmentedConfirm.visible = modal.visible;
+  const contextValue = useMemo(
+    () => {
+      const augmentedConfirm = (...args) => modal.open(...args);
+      augmentedConfirm.visible = modal.visible;
+      return augmentedConfirm;
+    },
+    [modal],
+  );
 
   return (
-    <ConfirmContext.Provider value={augmentedConfirm}>
+    <ConfirmContext.Provider value={contextValue}>
       {children}
       <ConfirmModal
         visible={modal.visible}

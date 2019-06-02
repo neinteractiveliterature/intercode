@@ -1,19 +1,19 @@
 /* global Rollbar */
 
 import React, {
-  Suspense, useContext, useMemo, useRef, useState, useCallback,
+  Suspense, useMemo, useState, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 
-import { AuthenticationModalContextProvider } from './Authentication/AuthenticationModalContext';
+import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
 import buildApolloClient from './buildApolloClient';
 import Confirm from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
-import { LazyStripeProvider } from './LazyStripe';
+import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
-import AuthenticityTokensContext, { AuthenticityTokensContextProvider } from './AuthenticityTokensContext';
+import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
 import PageLoadingIndicator from './PageLoadingIndicator';
 
 class ErrorBoundary extends React.Component {
@@ -36,8 +36,8 @@ class ErrorBoundary extends React.Component {
     }
 
     if (typeof console !== 'undefined') {
-      console.log(error);
-      console.log(info);
+      console.log(error); // eslint-disable-line no-console
+      console.log(info); // eslint-disable-line no-console
     }
   }
 
@@ -50,63 +50,53 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-function ApolloAndAuthenticationProvider({ recaptchaSiteKey, children }) {
-  const authenticationModalContextProvider = useRef(null);
-  const { graphql: authenticityToken, refresh } = useContext(AuthenticityTokensContext);
-  const [unauthenticatedError, setUnauthenticatedError] = useState(false);
-  const openSignIn = useCallback(
-    async () => {
-      setUnauthenticatedError(true);
-      await refresh();
-      authenticationModalContextProvider.current.open({ currentView: 'signIn' });
-    },
-    [refresh],
-  );
-  const apolloClient = useMemo(
-    () => buildApolloClient(authenticityToken, openSignIn),
-    [authenticityToken, openSignIn],
-  );
-
-  return (
-    <ApolloProvider client={apolloClient}>
-      <ApolloHooksProvider client={apolloClient}>
-        <AuthenticationModalContextProvider
-          recaptchaSiteKey={recaptchaSiteKey}
-          ref={authenticationModalContextProvider}
-        >
-          <>
-            {!unauthenticatedError && children}
-            <AuthenticationModal />
-          </>
-        </AuthenticationModalContextProvider>
-      </ApolloHooksProvider>
-    </ApolloProvider>
-  );
-}
-
-ApolloAndAuthenticationProvider.propTypes = {
-  recaptchaSiteKey: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
-
 export default (WrappedComponent) => {
   function Wrapper({
     authenticityTokens, recaptchaSiteKey, stripePublishableKey, ...otherProps
   }) {
+    const lazyStripeProviderValue = useMemo(
+      () => ({ publishableKey: stripePublishableKey }),
+      [stripePublishableKey],
+    );
+    const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
+    const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
+    const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
+    const [unauthenticatedError, setUnauthenticatedError] = useState(false);
+    const openSignIn = useCallback(
+      async () => {
+        setUnauthenticatedError(true);
+        await refresh();
+        authenticationModalContextValue.open({ currentView: 'signIn' });
+      },
+      [authenticationModalContextValue, refresh],
+    );
+    const apolloClient = useMemo(
+      () => buildApolloClient(authenticityToken, openSignIn),
+      [authenticityToken, openSignIn],
+    );
     return (
-      <LazyStripeProvider publishableKey={stripePublishableKey}>
-        <AuthenticityTokensContextProvider tokens={authenticityTokens}>
-          <ApolloAndAuthenticationProvider recaptchaSiteKey={recaptchaSiteKey}>
-            <Suspense fallback={<PageLoadingIndicator visible />}>
-              <Confirm>
-                <ErrorBoundary>
-                  <WrappedComponent {...otherProps} />
-                </ErrorBoundary>
-              </Confirm>
-            </Suspense>
-          </ApolloAndAuthenticationProvider>
-        </AuthenticityTokensContextProvider>
-      </LazyStripeProvider>
+      <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+        <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+          <ApolloProvider client={apolloClient}>
+            <ApolloHooksProvider client={apolloClient}>
+              <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                <>
+                  {!unauthenticatedError && (
+                    <Suspense fallback={<PageLoadingIndicator visible />}>
+                      <Confirm>
+                        <ErrorBoundary>
+                          <WrappedComponent {...otherProps} />
+                        </ErrorBoundary>
+                      </Confirm>
+                    </Suspense>
+                  )}
+                  <AuthenticationModal />
+                </>
+              </AuthenticationModalContext.Provider>
+            </ApolloHooksProvider>
+          </ApolloProvider>
+        </AuthenticityTokensContext.Provider>
+      </LazyStripeContext.Provider>
     );
   }
 
