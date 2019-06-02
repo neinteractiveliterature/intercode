@@ -75,7 +75,6 @@ function RunsSection({ eventId }) {
           <EventPageRunCard
             event={event}
             run={run}
-            timezoneName={convention.timezone_name}
             key={run.id}
             myProfile={myProfile}
             currentAbility={currentAbility}

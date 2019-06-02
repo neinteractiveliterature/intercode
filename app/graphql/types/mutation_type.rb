@@ -386,6 +386,27 @@ class Types::MutationType < Types::BaseObject
     guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
+  field :createUserSignup, mutation: Mutations::CreateUserSignup do
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(
+        :create,
+        Signup.new(
+          user_con_profile: ctx[:convention].user_con_profiles.find(args[:user_con_profile_id]),
+          run: ctx[:convention].runs.find(args[:run_id])
+        )
+      )
+    end
+  end
+
+  field :withdrawUserSignup, mutation: Mutations::WithdrawUserSignup do
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(
+        :update,
+        Signup.find_by(run_id: args[:run_id], user_con_profile_id: args[:user_con_profile_id])
+      )
+    end
+  end
+
   field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(

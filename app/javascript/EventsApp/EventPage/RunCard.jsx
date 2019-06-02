@@ -13,10 +13,10 @@ import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 
 function RunCard({
-  run, event, history, signupOptions, timezoneName, currentAbility, myProfile, mySignup,
+  run, event, history, signupOptions, currentAbility, myProfile, mySignup,
   showViewSignups, createSignup, withdrawSignup,
 }) {
-  const { siteMode } = useContext(AppRootContext);
+  const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef(null);
   useEffect(() => {
     if (history.location.hash === `#run-${run.id}`) {
@@ -186,7 +186,6 @@ RunCard.propTypes = {
     mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     auxiliary: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
-  timezoneName: PropTypes.string.isRequired,
   currentAbility: PropTypes.shape({}).isRequired,
   myProfile: PropTypes.shape({}),
   mySignup: PropTypes.shape({
