@@ -4,5 +4,5 @@
 Rails.application.config.session_store :active_record_store,
   key: '_intercode_session',
   domain: :all,
-  same_site: :strict,
+  same_site: :lax, # attempt to work around https://bugzilla.mozilla.org/show_bug.cgi?id=1465402
   expire_after: 2.weeks
