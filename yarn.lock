@@ -8474,10 +8474,10 @@ react-select-fast-filter-options@^0.2.3:
   dependencies:
     js-search "^1.3.1"
 
-react-select@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-select/-/react-select-3.0.3.tgz#f570b7b00e9b8b5bc938c3c834fdac0240e305d8"
-  integrity sha512-/WmzNDvATL2mFMLtZYlfUBHzg6YywglkmwJ52TCuvj2ALNu8gRKSlhkivPfKUWxxWKbolVCXSAh+xuwOQZJykg==
+react-select@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-3.0.4.tgz#16bde37c24fd4f6444914d4681e78f15ffbc86d3"
+  integrity sha512-fbVISKa/lSUlLsltuatfUiKcWCNvdLXxFFyrzVQCBUsjxJZH/m7UMPdw/ywmRixAmwXAP++MdbNNZypOsiDEfA==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@emotion/cache" "^10.0.9"
