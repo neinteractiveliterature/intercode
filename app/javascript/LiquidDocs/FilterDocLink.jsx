@@ -6,7 +6,7 @@ import FilterDocHeader from './FilterDocHeader';
 
 function FilterDocLink({ filter }) {
   return (
-    <Link to={`/filters/${filter.name}`} className="card-link m-0 text-body">
+    <Link to={`/liquid_docs/filters/${filter.name}`} className="card-link m-0 text-body">
       <div className="card mb-2">
         <div className="card-header">
           <FilterDocHeader filter={filter} />

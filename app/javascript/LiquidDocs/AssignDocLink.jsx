@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
+import findClass from './findClass';
 
 function AssignDocLink({
   assign, compact = false, prefix = null, preAssignNameContent = null,
@@ -26,12 +27,13 @@ function AssignDocLink({
     </div>
   );
 
-  if (assign.drop_class_name === 'NilClass') {
+  const assignClass = findClass(assign.drop_class_name);
+  if (!assignClass) {
     return renderCard();
   }
 
   return (
-    <Link to={`/assigns/${prefix || ''}${assign.name}`} className="card-link m-0 text-body">
+    <Link to={`/liquid_docs/assigns/${prefix || ''}${assign.name}`} className="card-link m-0 text-body">
       {renderCard()}
     </Link>
   );

@@ -19,87 +19,85 @@ function AssignDoc({ assign, prefix = null }) {
   const prefixParts = (prefix || '').split('.').filter(part => part.length > 0);
 
   return (
-    <React.Fragment>
-      <Switch>
-        {
-          sortedMethods.map((method) => {
-            const { returnClassName, assignName } = findMethodReturnClass(method);
-            const returnClass = findClass(returnClassName);
+    <Switch>
+      {
+        sortedMethods.map((method) => {
+          const { returnClassName, assignName } = findMethodReturnClass(method);
+          const returnClass = findClass(returnClassName);
 
-            if (returnClass) {
-              return (
-                <Route
-                  path={`/assigns/${escapeRegExp(prefix || '')}${assign.name}\\.${escapeRegExp(assignName)}(\\..*)?`}
-                  key={method.name}
-                  render={() => (
-                    <AssignDoc
-                      assign={{ name: assignName, drop_class_name: returnClassName }}
-                      prefix={buildMemberPrefix(assign.name, prefix)}
-                    />
-                  )}
-                />
-              );
-            }
+          if (returnClass) {
+            return (
+              <Route
+                path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}\\.${escapeRegExp(assignName)}(\\..*)?`}
+                key={method.name}
+                render={() => (
+                  <AssignDoc
+                    assign={{ name: assignName, drop_class_name: returnClassName }}
+                    prefix={buildMemberPrefix(assign.name, prefix)}
+                  />
+                )}
+              />
+            );
+          }
 
-            return null;
-          })
-        }
+          return null;
+        })
+      }
 
-        <Route
-          path={`/assigns/${escapeRegExp(prefix || '')}${assign.name}`}
-          exact
-          render={() => (
-            <React.Fragment>
-              <nav aria-label="breadcrumb mb-4">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Documentation home</Link>
-                  </li>
-                  {
-                    prefixParts.map((part, i) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <li className="breadcrumb-item text-nowrap" key={i}>
-                        <Link to={`/assigns/${prefixParts.slice(0, i + 1).join('.')}`}>
-                          {part}
-                        </Link>
-                      </li>
-                    ))
-                  }
-                  <li className="breadcrumb-item active" aria-current="page">{assign.name}</li>
-                </ol>
-              </nav>
-
-              <section id={assignClass.name} className="card my-4">
-                <div className="card-header">
-                  <AssignDocHeader assign={assign} prefix={prefix} />
-                </div>
-
+      <Route
+        path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}`}
+        exact
+        render={() => (
+          <>
+            <nav aria-label="breadcrumb mb-4">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="/liquid_docs">Documentation home</Link>
+                </li>
                 {
-                  assign.cms_variable_value_json
-                    ? (
-                      <div className="card-body">
-                        <h4>Value</h4>
-                        <code>{assign.cms_variable_value_json}</code>
-                      </div>
-                    )
-                    : null
+                  prefixParts.map((part, i) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <li className="breadcrumb-item text-nowrap" key={i}>
+                      <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}`}>
+                        {part}
+                      </Link>
+                    </li>
+                  ))
                 }
+                <li className="breadcrumb-item active" aria-current="page">{assign.name}</li>
+              </ol>
+            </nav>
 
-                <ul className="list-group list-group-flush">
-                  {sortedMethods.map(method => (
-                    <MethodDoc
-                      method={method}
-                      prefix={buildMemberPrefix(assign.name, prefix)}
-                      key={method.name}
-                    />
-                  ))}
-                </ul>
-              </section>
-            </React.Fragment>
-          )}
-        />
-      </Switch>
-    </React.Fragment>
+            <section id={assignClass.name} className="card my-4">
+              <div className="card-header">
+                <AssignDocHeader assign={assign} prefix={prefix} />
+              </div>
+
+              {
+                assign.cms_variable_value_json
+                  ? (
+                    <div className="card-body">
+                      <h4>Value</h4>
+                      <code>{assign.cms_variable_value_json}</code>
+                    </div>
+                  )
+                  : null
+              }
+
+              <ul className="list-group list-group-flush">
+                {sortedMethods.map(method => (
+                  <MethodDoc
+                    method={method}
+                    prefix={buildMemberPrefix(assign.name, prefix)}
+                    key={method.name}
+                  />
+                ))}
+              </ul>
+            </section>
+          </>
+        )}
+      />
+    </Switch>
   );
 }
 

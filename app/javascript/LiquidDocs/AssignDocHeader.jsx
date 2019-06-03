@@ -8,7 +8,7 @@ function AssignDocHeader({ assign, prefix = null }) {
   const assignClass = findClass(assign.drop_class_name);
 
   return (
-    <React.Fragment>
+    <>
       <h2>
         <code>
           <AssignName assign={assign} prefix={prefix} />
@@ -18,7 +18,7 @@ function AssignDocHeader({ assign, prefix = null }) {
         {assign.drop_class_name}
       </h5>
       <p className="mb-0">{assignClass.docstring}</p>
-    </React.Fragment>
+    </>
   );
 }
 
