@@ -8,23 +8,31 @@ import CompactAssignDocHeader from './CompactAssignDocHeader';
 function AssignDocLink({
   assign, compact = false, prefix = null, preAssignNameContent = null,
 }) {
+  const renderCard = () => (
+    <div className="card mb-2">
+      <div className="card-header">
+        {
+          compact
+            ? (
+              <CompactAssignDocHeader
+                assign={assign}
+                prefix={prefix}
+                preAssignNameContent={preAssignNameContent}
+              />
+            )
+            : <AssignDocHeader assign={assign} prefix={prefix} />
+        }
+      </div>
+    </div>
+  );
+
+  if (assign.drop_class_name === 'NilClass') {
+    return renderCard();
+  }
+
   return (
     <Link to={`/assigns/${prefix || ''}${assign.name}`} className="card-link m-0 text-body">
-      <div className="card mb-2">
-        <div className="card-header">
-          {
-            compact
-              ? (
-                <CompactAssignDocHeader
-                  assign={assign}
-                  prefix={prefix}
-                  preAssignNameContent={preAssignNameContent}
-                />
-              )
-              : <AssignDocHeader assign={assign} prefix={prefix} />
-          }
-        </div>
-      </div>
+      {renderCard()}
     </Link>
   );
 }
