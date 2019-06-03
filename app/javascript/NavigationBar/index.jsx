@@ -44,6 +44,10 @@ function NavigationBar({ navbarClasses }) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data.navigationBar) {
+    return null;
+  }
+
   return (
     <MemoizedNavigationBarContent items={data.navigationBar.items} navbarClasses={navbarClasses} />
   );

@@ -53,6 +53,11 @@ function LoggedInDropdownTarget({ toggle }, ref) {
 
   const { currentUser, myProfile, assumedIdentityFromProfile } = data;
 
+  if (!currentUser) {
+    // this can happen in the middle of a resetStore
+    return null;
+  }
+
   if (assumedIdentityFromProfile) {
     return (
       <button className="btn btn-warning dropdown-toggle" onClick={toggle} ref={ref} type="button">
