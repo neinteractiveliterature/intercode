@@ -6,11 +6,11 @@ import MethodDoc from './MethodDoc';
 
 function FilterDoc({ filter }) {
   return (
-    <React.Fragment>
+    <>
       <nav aria-label="breadcrumb mb-4">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            <Link to="/">Documentation home</Link>
+            <Link to="/liquid_docs">Documentation home</Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page">{filter.name}</li>
         </ol>
@@ -24,7 +24,7 @@ function FilterDoc({ filter }) {
           }}
         />
       </section>
-    </React.Fragment>
+    </>
   );
 }
 
