@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'unfetch';
+import { withRouter } from 'react-router-dom';
+
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
+import useAfterSessionChange from './useAfterSessionChange';
 
 async function signOut(authenticityToken) {
   const response = await fetch('/users/sign_out', {
     method: 'DELETE',
     credentials: 'include',
     headers: {
-      Accept: 'application/json',
+      // Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,
     },
   });
@@ -19,13 +22,14 @@ async function signOut(authenticityToken) {
   }
 }
 
-function SignOutButton({ className, caption }) {
-  const authenticityToken = useContext(AuthenticityTokensContext).signOut;
+function SignOutButton({ className, caption, history }) {
+  const { signOut: authenticityToken } = useContext(AuthenticityTokensContext);
+  const afterSessionChange = useAfterSessionChange(history);
 
   const onClick = async (event) => {
     event.preventDefault();
     await signOut(authenticityToken);
-    window.location.href = '/';
+    await afterSessionChange('/');
   };
 
   return (
@@ -38,6 +42,9 @@ function SignOutButton({ className, caption }) {
 SignOutButton.propTypes = {
   className: PropTypes.string,
   caption: PropTypes.string,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 SignOutButton.defaultProps = {
@@ -45,4 +52,4 @@ SignOutButton.defaultProps = {
   caption: 'Log out',
 };
 
-export default SignOutButton;
+export default withRouter(SignOutButton);

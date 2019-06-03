@@ -1,5 +1,8 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import ReCAPTCHA from 'react-google-recaptcha';
+import arrayToSentence from 'array-to-sentence';
+import { humanize } from 'inflected';
 
 import useAsyncFunction from '../useAsyncFunction';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -10,6 +13,7 @@ import UserFormFields from './UserFormFields';
 import useUniqueId from '../useUniqueId';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
+import useAfterSessionChange from './useAfterSessionChange';
 
 async function signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue) {
   const formData = new FormData();
@@ -31,11 +35,18 @@ async function signUp(authenticityToken, formState, password, passwordConfirmati
   });
 
   if (!response.ok) {
-    throw new Error((await response.json()).error);
+    const responseJson = await response.json();
+    if (responseJson.errors) {
+      throw new Error(Object.entries(responseJson.errors).map(([key, errors]) => `${humanize(key)} ${arrayToSentence(errors)}`).join(', '));
+    } else if (responseJson.error) {
+      throw new Error((await response.json()).error);
+    }
+
+    throw new Error(response.statusText);
   }
 }
 
-function SignUpForm() {
+function SignUpForm({ history }) {
   const {
     close: closeModal, setCurrentView, recaptchaSiteKey,
   } = useContext(AuthenticationModalContext);
@@ -44,31 +55,27 @@ function SignUpForm() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [captchaValue, setCaptchaValue] = useState(null);
-  const [signUpAsync, signUpError, signUpInProgress] = useAsyncFunction(signUp);
   const passwordFieldId = useUniqueId('password-');
+  const afterSessionChange = useAfterSessionChange(history);
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await signUpAsync(authenticityToken, formState, password, passwordConfirmation, captchaValue);
-    const destUrl = new URL(window.location.href);
-    destUrl.searchParams.delete('show_authentication');
-    if (destUrl.toString() === window.location.href) {
-      window.location.reload();
-    } else {
-      window.location.href = destUrl.toString();
-    }
+    await signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue);
+    await afterSessionChange(window.location.href);
   };
+
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">Sign up</div>
           <div>
             <button
               type="button"
               className="btn btn-sm btn-secondary"
-              disabled={signUpInProgress}
+              disabled={submitInProgress}
               onClick={() => { setCurrentView('signIn'); }}
             >
               Log in
@@ -97,7 +104,7 @@ function SignUpForm() {
             onChange={setCaptchaValue}
           />
 
-          <ErrorDisplay stringError={(signUpError || {}).message} />
+          <ErrorDisplay stringError={(submitError || {}).message} />
         </div>
 
         <div className="modal-footer bg-light">
@@ -110,7 +117,7 @@ function SignUpForm() {
             <button
               type="button"
               className="btn btn-secondary mr-2"
-              disabled={signUpInProgress}
+              disabled={submitInProgress}
               onClick={closeModal}
             >
               Cancel
@@ -118,7 +125,7 @@ function SignUpForm() {
             <input
               type="submit"
               className="btn btn-primary"
-              disabled={signUpInProgress}
+              disabled={submitInProgress}
               value="Sign up"
             />
           </div>
@@ -127,5 +134,9 @@ function SignUpForm() {
     </>
   );
 }
+
+SignUpForm.propTypes = {
+  history: PropTypes.shape({}).isRequired,
+};
 
 export default SignUpForm;

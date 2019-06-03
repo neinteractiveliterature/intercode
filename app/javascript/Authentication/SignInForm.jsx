@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import fetch from 'unfetch';
+import { withRouter } from 'react-router-dom';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -7,6 +9,7 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import useAfterSessionChange from './useAfterSessionChange';
 
 async function signIn(authenticityToken, email, password, rememberMe) {
   const formData = new FormData();
@@ -36,41 +39,34 @@ async function signIn(authenticityToken, email, password, rememberMe) {
   return response.url;
 }
 
-function SignInForm() {
+function SignInForm({ history }) {
   const {
     close: closeModal, setCurrentView, afterSignInPath,
   } = useContext(AuthenticationModalContext);
-  const authenticityToken = useContext(AuthenticityTokensContext).signIn;
+  const { signIn: authenticityToken } = useContext(AuthenticityTokensContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [signInAsync, signInError, signInInProgress] = useAsyncFunction(signIn);
+  const afterSessionChange = useAfterSessionChange(history);
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const location = await signInAsync(authenticityToken, email, password, rememberMe);
-    const destUrl = new URL(
-      afterSignInPath || location || window.location.href,
-      window.location.href,
-    );
-    destUrl.searchParams.delete('show_authentication');
-    if (destUrl.toString() === window.location.href) {
-      window.location.reload();
-    } else {
-      window.location.href = destUrl.toString();
-    }
+    const location = await signIn(authenticityToken, email, password, rememberMe);
+    await afterSessionChange(afterSignInPath || location);
   };
+
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">Log in</div>
           <div>
             <button
               type="button"
               className="btn btn-sm btn-secondary"
-              disabled={signInInProgress}
+              disabled={submitInProgress}
               onClick={() => { setCurrentView('signUp'); }}
             >
               Sign up
@@ -84,7 +80,7 @@ function SignInForm() {
             label="Email"
             value={email}
             onTextChange={setEmail}
-            disabled={signInInProgress}
+            disabled={submitInProgress}
           />
 
           <BootstrapFormInput
@@ -92,18 +88,18 @@ function SignInForm() {
             label="Password"
             value={password}
             onTextChange={setPassword}
-            disabled={signInInProgress}
+            disabled={submitInProgress}
           />
 
           <BootstrapFormCheckbox
             label="Remember me"
             checked={rememberMe}
             onCheckedChange={setRememberMe}
-            disabled={signInInProgress}
+            disabled={submitInProgress}
           />
         </div>
 
-        <ErrorDisplay stringError={(signInError || {}).message} />
+        <ErrorDisplay stringError={(submitError || {}).message} />
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1">
@@ -115,7 +111,7 @@ function SignInForm() {
             <button
               type="button"
               className="btn btn-secondary mr-2"
-              disabled={signInInProgress}
+              disabled={submitInProgress}
               onClick={closeModal}
             >
               Cancel
@@ -123,7 +119,7 @@ function SignInForm() {
             <input
               type="submit"
               className="btn btn-primary"
-              disabled={signInInProgress}
+              disabled={submitInProgress}
               value="Log in"
             />
           </div>
@@ -133,4 +129,10 @@ function SignInForm() {
   );
 }
 
-export default SignInForm;
+SignInForm.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default withRouter(SignInForm);
