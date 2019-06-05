@@ -17,7 +17,8 @@ class Mutations::WithdrawUserSignup < Mutations::BaseMutation
     EventWithdrawService.new(
       signup,
       context[:current_user],
-      suppress_notifications: suppress_notifications
+      suppress_notifications: suppress_notifications,
+      allow_non_self_service_signups: true
     ).call!
 
     { signup: signup }
