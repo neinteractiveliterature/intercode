@@ -22,7 +22,8 @@ class Mutations::CreateUserSignup < Mutations::BaseMutation
       run,
       should_have_requested_bucket_key ? requested_bucket_key : nil,
       context[:current_user],
-      suppress_notifications: suppress_notifications
+      suppress_notifications: suppress_notifications,
+      allow_non_self_service_signups: true
     ).call
 
     if result.failure?
