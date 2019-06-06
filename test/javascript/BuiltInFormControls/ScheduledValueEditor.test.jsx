@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import moment from 'moment';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
-import ScheduledValueEditor from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, { scheduledValueIsValid } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
 import ScheduledValueTimespanRow from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
 
 describe('ScheduledValueEditor', () => {
@@ -75,19 +75,19 @@ describe('ScheduledValueEditor', () => {
     });
   });
 
-  describe('isValid', () => {
+  describe('scheduledValueIsValid', () => {
     test('it requires at least one timespan', () => {
-      expect(ScheduledValueEditor.isValid({ timespans: null })).toBeFalsy();
-      expect(ScheduledValueEditor.isValid({ timespans: [] })).toBeFalsy();
-      expect(ScheduledValueEditor.isValid({})).toBeFalsy();
+      expect(scheduledValueIsValid({ timespans: null })).toBeFalsy();
+      expect(scheduledValueIsValid({ timespans: [] })).toBeFalsy();
+      expect(scheduledValueIsValid({})).toBeFalsy();
     });
 
     test('it requires every timespan have a value', () => {
-      expect(ScheduledValueEditor.isValid({
+      expect(scheduledValueIsValid({
         timespans: [{ start: null, finish: null, value: null }],
       })).toBeFalsy();
 
-      expect(ScheduledValueEditor.isValid({
+      expect(scheduledValueIsValid({
         timespans: [
           { start: null, finish: null, value: null },
           { start: null, finish: null, value: 6 },
@@ -96,7 +96,7 @@ describe('ScheduledValueEditor', () => {
     });
 
     test('it passes if every timespan has a value', () => {
-      expect(ScheduledValueEditor.isValid({
+      expect(scheduledValueIsValid({
         timespans: [
           { start: null, finish: null, value: 6 },
         ],

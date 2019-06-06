@@ -1,32 +1,39 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+
 import DateTimeInput from './DateTimeInput';
+import { convertDatetimeValue } from '../ComposableFormUtils';
+import { TimespanPropType } from '../ScheduledValuePropTypes';
 
-class ScheduledValueTimespanRowDatepicker extends React.Component {
-  static propTypes = {
-    fieldName: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    timezoneName: PropTypes.string.isRequired,
-  };
+function ScheduledValueTimespanRowDatepicker({
+  fieldName, timespan, rowAttributeDidChange, timezoneName,
+}) {
+  const stringValue = useMemo(
+    () => convertDatetimeValue(timespan[fieldName], timezoneName),
+    [fieldName, timespan, timezoneName],
+  );
 
-  static defaultProps = {
-    value: null,
-  };
+  const datetimeValueChanged = useCallback(
+    newValue => rowAttributeDidChange(fieldName, newValue),
+    [fieldName, rowAttributeDidChange],
+  );
 
-  datetimeValueChanged = (newValue) => {
-    this.props.onChange(this.props.fieldName, newValue);
-  }
-
-  render = () => (
+  return (
     <div className="d-flex">
       <DateTimeInput
-        value={this.props.value}
-        timezoneName={this.props.timezoneName}
-        onChange={this.datetimeValueChanged}
+        value={stringValue}
+        timezoneName={timezoneName}
+        onChange={datetimeValueChanged}
       />
     </div>
-  )
+  );
 }
 
-export default ScheduledValueTimespanRowDatepicker;
+ScheduledValueTimespanRowDatepicker.propTypes = {
+  fieldName: PropTypes.string.isRequired,
+  timespan: TimespanPropType.isRequired,
+  rowAttributeDidChange: PropTypes.func.isRequired,
+  timezoneName: PropTypes.string.isRequired,
+};
+
+export default React.memo(ScheduledValueTimespanRowDatepicker);

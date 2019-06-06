@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { useChangeDispatchers } from '../ComposableFormUtils';
@@ -26,7 +26,7 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
   ));
 
   return (
-    <select className="form-control" value={value} onChange={processChangeEvent}>
+    <select className="form-control custom-select" value={value} onChange={processChangeEvent}>
       <option />
       {options}
     </select>
@@ -39,10 +39,14 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
     changeAcceptingProposals,
     changeShowEventList,
     changeShowSchedule,
-    changeMaximumEventSignups,
   ] = useChangeDispatchers(
     dispatch,
-    ['signup_mode', 'accepting_proposals', 'show_event_list', 'show_schedule', 'maximum_event_signups'],
+    ['signup_mode', 'accepting_proposals', 'show_event_list', 'show_schedule'],
+  );
+
+  const dispatchMaximumEventSignups = useCallback(
+    action => dispatch({ type: 'dispatchMaximumEventSignups', action }),
+    [dispatch],
   );
 
   return (
@@ -98,7 +102,7 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         <legend className="col-form-label">Event signup schedule</legend>
         <ScheduledValueEditor
           scheduledValue={convention.maximum_event_signups}
-          setScheduledValue={changeMaximumEventSignups}
+          dispatch={dispatchMaximumEventSignups}
           timezone={convention.timezone_name}
           buildValueInput={buildMaximumEventSignupsInput}
           disabled={disabled}
