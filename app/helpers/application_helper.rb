@@ -37,8 +37,4 @@ module ApplicationHelper
       ApplicationHelper.obfuscated_email(address)
     end
   end
-
-  def app_component(name, props = {})
-    react_component(name, props.merge(app_component_props))
-  end
 end

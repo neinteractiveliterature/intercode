@@ -2,7 +2,7 @@ import React, {
   Suspense, useMemo, useState, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
 import { AppRootQuery } from './appRootQueries.gql';
@@ -122,14 +122,5 @@ AppLayout.propTypes = {
   }).isRequired,
 };
 
-const AppLayoutWithRouter = withRouter(AppLayout);
-
-function AppRoot() {
-  return (
-    <BrowserRouter basename="/">
-      <AppLayoutWithRouter />
-    </BrowserRouter>
-  );
-}
-
+const AppRoot = withRouter(AppLayout);
 export default AppRoot;
