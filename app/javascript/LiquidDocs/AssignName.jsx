@@ -11,9 +11,9 @@ function AssignName({ assign, prefix = null }) {
       {
         i < rawParts.length - 1
           ? (
-            <React.Fragment>
+            <>
               &#8203;.
-            </React.Fragment>
+            </>
           )
           : null
       }
@@ -21,11 +21,11 @@ function AssignName({ assign, prefix = null }) {
   ));
 
   return (
-    <React.Fragment>
+    <>
       <span className="text-nowrap">{'{{ '}</span>
       {parts}
       <span className="text-nowrap">{' }}'}</span>
-    </React.Fragment>
+    </>
   );
 }
 

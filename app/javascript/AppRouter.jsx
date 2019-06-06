@@ -132,6 +132,11 @@ function renderRootSiteRoutes() {
   return [
     <Route path="/organizations" component={OrganizationAdmin} key="organizations" />,
     <Route path="/root_site" component={CmsAdmin} key="rootSite" />,
+
+    // these are duplicates of ones in common routes, but we need them to be above the /users route
+    <Route path="/users/edit" component={EditUser} key="editUser" />,
+    <Route path="/users/password/edit" component={ResetPassword} key="resetPassword" />,
+
     <Route path="/users" component={UsersAdmin} key="usersAdmin" />,
     ...renderCommonRoutes(),
   ];

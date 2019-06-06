@@ -11,7 +11,7 @@ function LiquidTagDoc({ liquidTag }) {
       <nav aria-label="breadcrumb mb-4">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            <Link to="/">Documentation home</Link>
+            <Link to="/liquid_docs">Documentation home</Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page">{liquidTag.name}</li>
         </ol>

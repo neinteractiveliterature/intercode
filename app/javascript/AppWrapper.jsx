@@ -6,6 +6,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
+import { BrowserRouter } from 'react-router-dom';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
 import buildApolloClient from './buildApolloClient';
@@ -75,28 +76,30 @@ export default (WrappedComponent) => {
       [authenticityToken, openSignIn],
     );
     return (
-      <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-        <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-          <ApolloProvider client={apolloClient}>
-            <ApolloHooksProvider client={apolloClient}>
-              <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                <>
-                  {!unauthenticatedError && (
-                    <Suspense fallback={<PageLoadingIndicator visible />}>
-                      <Confirm>
-                        <ErrorBoundary>
-                          <WrappedComponent {...otherProps} />
-                        </ErrorBoundary>
-                      </Confirm>
-                    </Suspense>
-                  )}
-                  <AuthenticationModal />
-                </>
-              </AuthenticationModalContext.Provider>
-            </ApolloHooksProvider>
-          </ApolloProvider>
-        </AuthenticityTokensContext.Provider>
-      </LazyStripeContext.Provider>
+      <BrowserRouter basename="/">
+        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+          <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+            <ApolloProvider client={apolloClient}>
+              <ApolloHooksProvider client={apolloClient}>
+                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                  <>
+                    {!unauthenticatedError && (
+                      <Suspense fallback={<PageLoadingIndicator visible />}>
+                        <Confirm>
+                          <ErrorBoundary>
+                            <WrappedComponent {...otherProps} />
+                          </ErrorBoundary>
+                        </Confirm>
+                      </Suspense>
+                    )}
+                    <AuthenticationModal />
+                  </>
+                </AuthenticationModalContext.Provider>
+              </ApolloHooksProvider>
+            </ApolloProvider>
+          </AuthenticityTokensContext.Provider>
+        </LazyStripeContext.Provider>
+      </BrowserRouter>
     );
   }
 
