@@ -62,6 +62,7 @@ query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
 
   userConProfile(id: $userConProfileId) {
     id
+    name_without_nickname
 
     signups {
       id

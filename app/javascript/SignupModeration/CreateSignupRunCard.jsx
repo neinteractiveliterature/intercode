@@ -9,9 +9,11 @@ import ErrorDisplay from '../ErrorDisplay';
 import RunCard from '../EventsApp/EventPage/RunCard';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
+import { useConfirm } from '../ModalDialogs/Confirm';
 
 function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   const apolloClient = useApolloClient();
+  const confirm = useConfirm();
 
   const { data, error } = useQuerySuspended(CreateSignupRunCardQuery, {
     variables: { userConProfileId, eventId },
@@ -32,19 +34,17 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   };
 
   const withdrawSignupMutate = useMutationCallback(WithdrawUserSignup);
-  const withdrawSignup = async () => {
-    await withdrawSignupMutate({
-      variables: {
-        runId,
-        userConProfileId,
-      },
-    });
-
-    await apolloClient.resetStore();
-  };
+  const withdrawSignup = () => confirm({
+    prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from ${data.event.title}?`,
+    action: async () => {
+      await withdrawSignupMutate({ variables: { runId, userConProfileId } });
+      await apolloClient.resetStore();
+    },
+    renderError: withdrawError => <ErrorDisplay graphQLError={withdrawError} />,
+  });
 
   const signupOptions = useMemo(
-    () => (error ? null : buildSignupOptions(data.event, data.myProfile)),
+    () => (error ? null : buildSignupOptions(data.event, data.userConProfile)),
     [data, error],
   );
 

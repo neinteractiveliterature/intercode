@@ -9,6 +9,7 @@ import ConventionFormEventsSection from './ConventionFormEventsSection';
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import { scheduledValueReducer } from '../BuiltInFormControls/ScheduledValueEditor';
 
 const conventionFormTransforms = {
   starts_at: Transforms.datetime,
@@ -16,7 +17,26 @@ const conventionFormTransforms = {
   maximum_tickets: Transforms.integer,
 };
 
-const conventionFormReducer = transformsReducer(conventionFormTransforms);
+const conventionFormTransformsReducer = transformsReducer(conventionFormTransforms);
+
+function conventionFormMaximumEventSignupsReducer(state, action) {
+  switch (action.type) {
+    case 'dispatchMaximumEventSignups':
+      return {
+        ...state,
+        maximum_event_signups: scheduledValueReducer(state.maximum_event_signups, action.action),
+      };
+    default:
+      return state;
+  }
+}
+
+function conventionFormReducer(state, action) {
+  return conventionFormTransformsReducer(
+    conventionFormMaximumEventSignupsReducer(state, action),
+    action,
+  );
+}
 
 function ConventionForm({
   initialConvention, cmsLayouts, pages, saveConvention,

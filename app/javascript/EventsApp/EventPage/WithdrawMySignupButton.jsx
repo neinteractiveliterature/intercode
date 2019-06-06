@@ -4,17 +4,24 @@ import PropTypes from 'prop-types';
 import { WithdrawMySignup } from './mutations.gql';
 import useMutationCallback from '../../useMutationCallback';
 import WithdrawSignupButton from './WithdrawSignupButton';
+import { useConfirm } from '../../ModalDialogs/Confirm';
+import ErrorDisplay from '../../ErrorDisplay';
 
 function WithdrawMySignupButton({
   run, event, reloadOnSuccess, ...otherProps
 }) {
   const withdrawMutate = useMutationCallback(WithdrawMySignup);
-  const withdrawSignup = async (...args) => {
-    await withdrawMutate(...args);
-    if (reloadOnSuccess) {
-      window.location.reload();
-    }
-  };
+  const confirm = useConfirm();
+  const withdrawSignup = () => confirm({
+    prompt: `Are you sure you want to withdraw from ${event.title}?`,
+    action: async () => {
+      await withdrawMutate({ variables: { runId: run.id } });
+      if (reloadOnSuccess) {
+        window.location.reload();
+      }
+    },
+    renderError: error => <ErrorDisplay graphQLError={error} />,
+  });
 
   return (
     <WithdrawSignupButton
