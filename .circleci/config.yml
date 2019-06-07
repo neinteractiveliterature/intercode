@@ -6,12 +6,11 @@ orbs:
 jobs:
   build:
     executor: docker-publish/machine
-    docker:
-      - image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
     steps:
       - checkout
       - docker/check
-      - docker/build
+      - docker/build:
+        - image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
