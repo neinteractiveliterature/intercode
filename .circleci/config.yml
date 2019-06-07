@@ -1,19 +1,15 @@
 version: 2.1
 
-orbs:
-  docker: circleci/docker@0.5.0
-
 jobs:
-  build:
-    executor: docker-publish/machine
+  check-and-build-only:
     steps:
       - checkout
-      - docker/check
-      - docker/build:
-        - image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+      - setup_remote_docker
+      - run: |
+        docker build .
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   build:
     jobs:
-      - build
+      - check-and-build-only
