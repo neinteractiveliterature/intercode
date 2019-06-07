@@ -146,7 +146,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react-hooks-testing-library": "^0.5.1",
     "react-test-renderer": "^16.8.6",
-    "webpack-dev-server": "^3.6.0"
+    "webpack-dev-server": "^3.7.0"
   },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
