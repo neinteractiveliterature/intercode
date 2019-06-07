@@ -2,6 +2,8 @@ version: 2.1
 
 jobs:
   check-and-build-only:
+    docker:
+      - image: docker-18.09.3
     steps:
       - checkout
       - setup_remote_docker
