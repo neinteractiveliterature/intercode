@@ -12,10 +12,10 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
-            export BRANCH_TAG=$(echo ${CIRCLE_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g')
+            export BRANCH_TAG=$(echo ${CIRCLE_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g') ; echo $BRANCH_TAG
       - run:
           command: |
-            test/docker-pull.sh
+            bash test/docker-pull.sh
       - run:
           command: |
             docker build
