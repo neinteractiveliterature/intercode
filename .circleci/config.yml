@@ -83,10 +83,7 @@ jobs:
     steps:
       - run:
           name: Install Docker Compose
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+          command: apk add --no-cache docker-compose
       - run:
           name: Run tests
           command: |
@@ -105,4 +102,7 @@ workflows:
   build:
     jobs:
       - check-and-build-only
-      - test
+      - test:
+          requires:
+            - check-and-build-only
+
