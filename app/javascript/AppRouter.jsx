@@ -1,75 +1,28 @@
-import React, {
-  useState, useContext, lazy, Suspense,
-} from 'react';
+import React, { useState, useContext, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import CmsPage from './CmsPage';
 import PageLoadingIndicator from './PageLoadingIndicator';
-import ClickwrapAgreement from './ClickwrapAgreement';
 import AppRootContext from './AppRootContext';
-
-function getDisplayName(WrappedComponent) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-}
-
-function NonCMSPageWrapper(WrappedComponent) {
-  const wrapper = props => (
-    <div className="non-cms-page">
-      <WrappedComponent {...props} />
-    </div>
-  );
-  wrapper.displayName = `NonCMSPageWrapper(${getDisplayName(WrappedComponent)})`;
-  return wrapper;
-}
-
-const Cart = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store" */ './Store/Cart')));
-const CmsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin')));
-const ConventionAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin')));
-const EditUser = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser')));
-const EventAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "event-admin" */ './EventAdmin')));
-const EventCategoryAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin')));
-const EventProposalsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin')));
-const EventsApp = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp')));
-const EditEventProposal = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal')));
-const FormAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "form-admin" */ './FormAdmin')));
-const MailingLists = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "mailing-lists" */ './MailingLists')));
-const MyProfile = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "my-profile" */ './MyProfile')));
-const MyTicket = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: 'my-ticket' */ './MyTicket')));
-const OAuthApplications = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications')));
-const OAuthAuthorizationPrompt = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt')));
-const OrderHistory = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store" */ './Store/OrderHistory')));
-const OrganizationAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin')));
-const ProductPage = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store" */ './Store/ProductPage')));
-const Reports = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "reports" */ './Reports')));
-const ResetPassword = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword')));
-const RoomsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin')));
-const SignupModeration = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "signup-moderation" */ './SignupModeration')));
-const StaffPositionAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin')));
-const StoreAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin')));
-const TicketTypeAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin')));
-const UserActivityAlertsAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin')));
-const UserConProfilesAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin')));
-const UsersAdmin = NonCMSPageWrapper(lazy(() => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin')));
-const WrappedClickwrapAgreement = NonCMSPageWrapper(ClickwrapAgreement);
+import PageComponents from './PageComponents';
 
 function renderCommonRoutes() {
   return [
-    <Route path="/cms_pages" component={CmsAdmin} key="cmsPages" />,
-    <Route path="/cms_partials" component={CmsAdmin} key="cmsPartials" />,
-    <Route path="/cms_files" component={CmsAdmin} key="cmsFiles" />,
-    <Route path="/cms_navigation_items" component={CmsAdmin} key="cmsNavigationItems" />,
-    <Route path="/cms_layouts" component={CmsAdmin} key="cmsLayouts" />,
-    <Route path="/cms_variables" component={CmsAdmin} key="cmsVariables" />,
-    <Route path="/cms_graphql_queries" component={CmsAdmin} key="cmsGraphqlQueries" />,
-    <Route path="/oauth/applications-embed" component={OAuthApplications} key="oauthApplications" />,
-    <Route path="/oauth/authorize" component={OAuthAuthorizationPrompt} key="oauthAuthorization" />,
-    <Route path="/users/edit" component={EditUser} key="editUser" />,
-    <Route path="/users/password/edit" component={ResetPassword} key="resetPassword" />,
+    <Route path="/cms_pages" component={PageComponents.CmsAdmin} key="cmsPages" />,
+    <Route path="/cms_partials" component={PageComponents.CmsAdmin} key="cmsPartials" />,
+    <Route path="/cms_files" component={PageComponents.CmsAdmin} key="cmsFiles" />,
+    <Route path="/cms_navigation_items" component={PageComponents.CmsAdmin} key="cmsNavigationItems" />,
+    <Route path="/cms_layouts" component={PageComponents.CmsAdmin} key="cmsLayouts" />,
+    <Route path="/cms_variables" component={PageComponents.CmsAdmin} key="cmsVariables" />,
+    <Route path="/cms_graphql_queries" component={PageComponents.CmsAdmin} key="cmsGraphqlQueries" />,
+    <Route path="/oauth/applications-embed" component={PageComponents.OAuthApplications} key="oauthApplications" />,
+    <Route path="/oauth/authorize" component={PageComponents.OAuthAuthorizationPrompt} key="oauthAuthorization" />,
+    <Route path="/users/edit" component={PageComponents.EditUser} key="editUser" />,
+    <Route path="/users/password/edit" component={PageComponents.ResetPassword} key="resetPassword" />,
     <Route
       path="/pages/:slug([a-zA-Z0-9\-/]+)"
       render={routeProps => (
-        <CmsPage {...routeProps} slug={routeProps.match.params.slug} />
+        <PageComponents.CmsPage {...routeProps} slug={routeProps.match.params.slug} />
       )}
       key="cmsPage"
     />,
@@ -77,7 +30,7 @@ function renderCommonRoutes() {
       path="/"
       exact
       render={routeProps => (
-        <CmsPage {...routeProps} rootPage />
+        <PageComponents.CmsPage {...routeProps} rootPage />
       )}
       key="cmsRootPage"
     />,
@@ -86,37 +39,37 @@ function renderCommonRoutes() {
 
 function renderCommonInConventionRoutes({ signupMode }) {
   return [
-    <Route path="/admin_events" component={EventAdmin} key="adminEvents" />,
-    <Route path="/admin_forms" component={FormAdmin} key="adminForms" />,
-    <Route path="/admin_store" component={StoreAdmin} key="adminStore" />,
-    <Route path="/cart" component={Cart} key="cart" />,
-    <Route path="/clickwrap_agreement" component={WrappedClickwrapAgreement} key="clickwrapAgreement" />,
-    <Route path="/convention/edit" component={ConventionAdmin} key="conventionAdmin" />,
-    <Route path="/events" component={EventsApp} key="eventsApp" />,
-    <Route path="/mailing_lists" component={MailingLists} key="mailingLists" />,
-    <Route path="/my_profile" component={MyProfile} key="myProfile" />,
-    <Route path="/order_history" component={OrderHistory} key="orderHistory" />,
-    <Route path="/products/:id" component={ProductPage} key="productPage" />,
-    <Route path="/reports" component={Reports} key="reports" />,
-    <Route path="/rooms" component={RoomsAdmin} key="rooms" />,
+    <Route path="/admin_events" component={PageComponents.EventAdmin} key="adminEvents" />,
+    <Route path="/admin_forms" component={PageComponents.FormAdmin} key="adminForms" />,
+    <Route path="/admin_store" component={PageComponents.StoreAdmin} key="adminStore" />,
+    <Route path="/cart" component={PageComponents.Cart} key="cart" />,
+    <Route path="/clickwrap_agreement" component={PageComponents.WrappedClickwrapAgreement} key="clickwrapAgreement" />,
+    <Route path="/convention/edit" component={PageComponents.ConventionAdmin} key="conventionAdmin" />,
+    <Route path="/events" component={PageComponents.EventsApp} key="eventsApp" />,
+    <Route path="/mailing_lists" component={PageComponents.MailingLists} key="mailingLists" />,
+    <Route path="/my_profile" component={PageComponents.MyProfile} key="myProfile" />,
+    <Route path="/order_history" component={PageComponents.OrderHistory} key="orderHistory" />,
+    <Route path="/products/:id" component={PageComponents.ProductPage} key="productPage" />,
+    <Route path="/reports" component={PageComponents.Reports} key="reports" />,
+    <Route path="/rooms" component={PageComponents.RoomsAdmin} key="rooms" />,
     ...(signupMode === 'moderated'
-      ? [<Route path="/signup_moderation" component={SignupModeration} key="signupModeration" />]
+      ? [<Route path="/signup_moderation" component={PageComponents.SignupModeration} key="signupModeration" />]
       : []
     ),
-    <Route path="/staff_positions" component={StaffPositionAdmin} key="staffPositions" />,
-    <Route path="/ticket" component={MyTicket} key="myTicket" />,
-    <Route path="/ticket_types" component={TicketTypeAdmin} key="ticketTypes" />,
-    <Route path="/user_activity_alerts" component={UserActivityAlertsAdmin} key="userActivityAlerts" />,
-    <Route path="/user_con_profiles" component={UserConProfilesAdmin} key="userConProfiles" />,
+    <Route path="/staff_positions" component={PageComponents.StaffPositionAdmin} key="staffPositions" />,
+    <Route path="/ticket" component={PageComponents.MyTicket} key="myTicket" />,
+    <Route path="/ticket_types" component={PageComponents.TicketTypeAdmin} key="ticketTypes" />,
+    <Route path="/user_activity_alerts" component={PageComponents.UserActivityAlertsAdmin} key="userActivityAlerts" />,
+    <Route path="/user_con_profiles" component={PageComponents.UserConProfilesAdmin} key="userConProfiles" />,
     ...renderCommonRoutes(),
   ];
 }
 
 function renderConventionModeRoutes({ signupMode }) {
   return [
-    <Route path="/admin_event_proposals" component={EventProposalsAdmin} key="adminEventProposals" />,
-    <Route path="/event_categories" component={EventCategoryAdmin} key="eventCategories" />,
-    <Route path="/event_proposals/:id/edit" component={EditEventProposal} key="editEventProposal" />,
+    <Route path="/admin_event_proposals" component={PageComponents.EventProposalsAdmin} key="adminEventProposals" />,
+    <Route path="/event_categories" component={PageComponents.EventCategoryAdmin} key="eventCategories" />,
+    <Route path="/event_proposals/:id/edit" component={PageComponents.EditEventProposal} key="editEventProposal" />,
     <Route path="/event_proposals" render={() => <Redirect to="/pages/new-proposal" />} key="eventProposals" />,
     ...renderCommonInConventionRoutes({ signupMode }),
   ];
@@ -130,14 +83,14 @@ function renderSingleEventModeRoutes() {
 
 function renderRootSiteRoutes() {
   return [
-    <Route path="/organizations" component={OrganizationAdmin} key="organizations" />,
-    <Route path="/root_site" component={CmsAdmin} key="rootSite" />,
+    <Route path="/organizations" component={PageComponents.OrganizationAdmin} key="organizations" />,
+    <Route path="/root_site" component={PageComponents.CmsAdmin} key="rootSite" />,
 
     // these are duplicates of ones in common routes, but we need them to be above the /users route
-    <Route path="/users/edit" component={EditUser} key="editUser" />,
-    <Route path="/users/password/edit" component={ResetPassword} key="resetPassword" />,
+    <Route path="/users/edit" component={PageComponents.EditUser} key="editUser" />,
+    <Route path="/users/password/edit" component={PageComponents.ResetPassword} key="resetPassword" />,
 
-    <Route path="/users" component={UsersAdmin} key="usersAdmin" />,
+    <Route path="/users" component={PageComponents.UsersAdmin} key="usersAdmin" />,
     ...renderCommonRoutes(),
   ];
 }
