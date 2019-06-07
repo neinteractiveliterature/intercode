@@ -11,24 +11,24 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-        command: |
-          export BRANCH_TAG=$(echo ${CIRCLE_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g')
+          command: |
+            export BRANCH_TAG=$(echo ${CIRCLE_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g')
       - run:
-        command: |
-          test/docker-pull.sh
+          command: |
+            test/docker-pull.sh
       - run:
-        command: |
-          docker build
-            -f Dockerfile
-            --network=host
-            --target build
-            --build-arg ASSETS_HOST="$ASSETS_HOST"
-            --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
-            --cache-from neinteractiveliterature/intercode:latest
-            --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
-            --cache-from neinteractiveliterature/intercode:build-production-master
-            -t neinteractiveliterature/intercode:local-build
-              .
+          command: |
+            docker build
+              -f Dockerfile
+              --network=host
+              --target build
+              --build-arg ASSETS_HOST="$ASSETS_HOST"
+              --cache-from neinteractiveliterature/intercode:${BRANCH_TAG}
+              --cache-from neinteractiveliterature/intercode:latest
+              --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+              --cache-from neinteractiveliterature/intercode:build-production-master
+              -t neinteractiveliterature/intercode:local-build
+                .
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
