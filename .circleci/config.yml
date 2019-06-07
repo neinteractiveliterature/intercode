@@ -77,9 +77,32 @@ jobs:
               --cache-from neinteractiveliterature/intercode:${CIRCLE_SHA1} \
               -t neinteractiveliterature/intercode:test-${CIRCLE_SHA1} \
               .
+  test:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - run:
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: Run tests
+          command: |
+            docker-compose -f docker-compose.test.yml run \
+            -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+            -e CI=$CI -e CIRCLE_SHA1=$CIRCLE_SHA1 \
+            -e CIRCLE_BRANCH=$CIRCLE_BRANCH \
+            -e CIRCLE_BUILD_NUM=$CIRCLE_BUILD_NUM
+            -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID \
+            -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct) \
+            web \
+            test/travis-complete.sh
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   build:
     jobs:
       - check-and-build-only
+      - test
