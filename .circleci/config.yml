@@ -15,7 +15,7 @@ jobs:
             export BRANCH_TAG=$(echo ${CIRCLE_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g') ; echo $BRANCH_TAG
       - run:
           command: |
-            bash test/docker-pull.sh
+            sh test/docker-pull.sh
       - run:
           command: |
             docker build
