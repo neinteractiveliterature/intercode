@@ -15,7 +15,10 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
   before do
     ClearCmsContentService.new(convention: convention).call!
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
-    event_category.update!(event_proposal_form: convention.forms.find_by(title: 'Proposal form'))
+    event_category.update!(
+      event_proposal_form: convention.forms.find_by!(title: 'Proposal form'),
+      event_form: convention.forms.find_by!(title: 'Regular event form')
+    )
   end
 
   it 'creates an event' do
@@ -34,6 +37,26 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
     event = AcceptEventProposalService.new(event_proposal: event_proposal).call!.event
     assert_equal 'Alexander Graham Bell', event.author
     assert_equal 'ahoy hoy!', event.participant_communications
+  end
+
+  it 'copies fields that are not explicitly mapped' do
+    event_category.event_proposal_form.form_sections.first.form_items.create!(
+      identifier: 'secret_password',
+      item_type: 'free_text',
+      properties: { caption: 'Secret password', lines: 1 }
+    )
+    event_category.event_form.form_sections.first.form_items.create!(
+      identifier: 'secret_password',
+      item_type: 'free_text',
+      properties: { caption: 'Secret password', lines: 1 }
+    )
+    event_proposal.assign_form_response_attributes(
+      secret_password: 'swordfish'
+    )
+    event_proposal.save!
+
+    event = AcceptEventProposalService.new(event_proposal: event_proposal).call!.event
+    assert_equal 'swordfish', event.read_form_response_attribute(:secret_password)
   end
 
   it 'copies event_email correctly' do

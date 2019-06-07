@@ -53,7 +53,8 @@ class AcceptEventProposalService < CivilService::Service
 
   def event_attributes
     @event_attributes ||= begin
-      event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, proposal_attr), hash|
+      event_attributes = event_form_item_identifiers.each_with_object({}) do |event_attr, hash|
+        proposal_attr = EVENT_ATTRIBUTE_MAP[event_attr.to_sym] || event_attr.to_s
         next unless proposal_form_item_identifiers.include?(proposal_attr)
         hash[event_attr] = event_proposal.read_form_response_attribute(proposal_attr)
       end
@@ -70,6 +71,10 @@ class AcceptEventProposalService < CivilService::Service
 
   def event_proposal_form
     @event_proposal_form ||= event_proposal.event_category.event_proposal_form
+  end
+
+  def event_form_item_identifiers
+    @event_form_item_identifiers ||= event_form.form_items.pluck(:identifier)
   end
 
   def proposal_form_item_identifiers
