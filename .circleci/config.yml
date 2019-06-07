@@ -82,15 +82,13 @@ jobs:
       - image: docker:stable-git
     steps:
       - run:
-          name: Install Docker Compose
+          name: Install Docker Compose and run tests
           command: |
             apk add --no-cache curl
             curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
             chmod +x ~/docker-compose
-      - run:
-          name: Run tests
-          command: |
-            ~/docker-compose -f docker-compose.test.yml run \
+            mv ~/docker-compose /usr/local/bin
+            docker-compose -f docker-compose.test.yml run \
             -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
             -e CI=$CI -e CIRCLE_SHA1=$CIRCLE_SHA1 \
             -e CIRCLE_BRANCH=$CIRCLE_BRANCH \
