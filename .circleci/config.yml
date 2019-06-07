@@ -83,7 +83,7 @@ jobs:
     steps:
       - run:
           name: Install Docker Compose
-          command: apk add --no-cache docker-compose
+          command: apk add docker-compose --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
       - run:
           name: Run tests
           command: |
