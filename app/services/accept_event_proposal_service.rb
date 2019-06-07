@@ -4,21 +4,11 @@ class AcceptEventProposalService < CivilService::Service
   end
   self.result_class = Result
 
+  # Attributes that are differently named between the event and event_proposal schemas
+  # (Attributes that have the same name will be mapped automatically.)
   EVENT_ATTRIBUTE_MAP = {
-    title: 'title',
     author: 'authors',
-    email: 'email',
-    event_email: 'event_email',
-    organization: 'organization',
-    url: 'url',
-    length_seconds: 'length_seconds',
-    can_play_concurrently: 'can_play_concurrently',
-    description: 'description',
-    short_blurb: 'short_blurb',
-    registration_policy: 'registration_policy',
-    participant_communications: 'player_communications',
-    age_restrictions: 'age_restrictions',
-    content_warnings: 'content_warnings'
+    participant_communications: 'player_communications'
   }
 
   attr_reader :event_proposal, :event_category
