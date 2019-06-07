@@ -11,12 +11,15 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Set BRANCH_TAG
           command: |
             export BRANCH_TAG=$(echo ${CIRCLE_BRANCH:-master} | sed 's/[^[:alnum:]]/-/g') ; echo $BRANCH_TAG
       - run:
+          name: Pull docker images
           command: |
             sh test/docker-pull.sh
       - run:
+          name: docker build --target build
           command: |
             docker build \
               -f Dockerfile \
@@ -28,7 +31,52 @@ jobs:
               --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG} \
               --cache-from neinteractiveliterature/intercode:build-production-master \
               -t neinteractiveliterature/intercode:local-build \
-                .
+              .
+      - run:
+          name: docker build --target build-production
+          command: |
+            docker build \
+              -f Dockerfile \
+              --target build-production \
+              --network=host \
+              --build-arg ASSETS_HOST="$ASSETS_HOST" \
+              --cache-from neinteractiveliterature/intercode:${BRANCH_TAG} \
+              --cache-from neinteractiveliterature/intercode:latest \
+              --cache-from neinteractiveliterature/intercode:local-build \
+              --cache-from neinteractiveliterature/intercode:build-production-${BRANCH_TAG} \
+              --cache-from neinteractiveliterature/intercode:build-production-master \
+              -t neinteractiveliterature/intercode:build-production-${CIRCLE_SHA1} \
+              .
+      - run:
+          name: tag build-production
+          command: docker tag neinteractiveliterature/intercode:build-production-${CIRCLE_SHA1} neinteractiveliterature/intercode:build-production-${BRANCH_TAG}
+      - run:
+          name: docker build --target production
+          command: |
+            docker build \
+              -f Dockerfile \
+              --target production \
+              --build-arg ASSETS_HOST="$ASSETS_HOST" \
+              --cache-from neinteractiveliterature/intercode:${BRANCH_TAG} \
+              --cache-from neinteractiveliterature/intercode:latest \
+              --cache-from neinteractiveliterature/intercode:local-build \
+              --cache-from neinteractiveliterature/intercode:build-production-${CIRCLE_SHA1} \
+              -t neinteractiveliterature/intercode:${CIRCLE_SHA1} \
+              .
+      - run:
+          name: docker build --target test
+          command: |
+            docker build \
+              -f Dockerfile \
+              --target test \
+              --build-arg ASSETS_HOST="$ASSETS_HOST" \
+              --cache-from neinteractiveliterature/intercode:${BRANCH_TAG} \
+              --cache-from neinteractiveliterature/intercode:test-${BRANCH_TAG} \
+              --cache-from neinteractiveliterature/intercode:local-build \
+              --cache-from neinteractiveliterature/intercode:build-production-${CIRCLE_SHA1} \
+              --cache-from neinteractiveliterature/intercode:${CIRCLE_SHA1} \
+              -t neinteractiveliterature/intercode:test-${CIRCLE_SHA1} \
+              .
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
