@@ -171,7 +171,7 @@ GEM
     ffi (1.9.25)
     ffi (1.9.25-java)
     flamegraph (0.9.5)
-    fog-aws (3.5.0)
+    fog-aws (3.5.1)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
       fog-xml (~> 0.1)
