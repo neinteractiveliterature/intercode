@@ -4,21 +4,11 @@ class AcceptEventProposalService < CivilService::Service
   end
   self.result_class = Result
 
+  # Attributes that are differently named between the event and event_proposal schemas
+  # (Attributes that have the same name will be mapped automatically.)
   EVENT_ATTRIBUTE_MAP = {
-    title: 'title',
     author: 'authors',
-    email: 'email',
-    event_email: 'event_email',
-    organization: 'organization',
-    url: 'url',
-    length_seconds: 'length_seconds',
-    can_play_concurrently: 'can_play_concurrently',
-    description: 'description',
-    short_blurb: 'short_blurb',
-    registration_policy: 'registration_policy',
-    participant_communications: 'player_communications',
-    age_restrictions: 'age_restrictions',
-    content_warnings: 'content_warnings'
+    participant_communications: 'player_communications'
   }
 
   attr_reader :event_proposal, :event_category
@@ -53,7 +43,8 @@ class AcceptEventProposalService < CivilService::Service
 
   def event_attributes
     @event_attributes ||= begin
-      event_attributes = EVENT_ATTRIBUTE_MAP.each_with_object({}) do |(event_attr, proposal_attr), hash|
+      event_attributes = event_form_item_identifiers.each_with_object({}) do |event_attr, hash|
+        proposal_attr = EVENT_ATTRIBUTE_MAP[event_attr.to_sym] || event_attr.to_s
         next unless proposal_form_item_identifiers.include?(proposal_attr)
         hash[event_attr] = event_proposal.read_form_response_attribute(proposal_attr)
       end
@@ -70,6 +61,10 @@ class AcceptEventProposalService < CivilService::Service
 
   def event_proposal_form
     @event_proposal_form ||= event_proposal.event_category.event_proposal_form
+  end
+
+  def event_form_item_identifiers
+    @event_form_item_identifiers ||= event_form.form_items.pluck(:identifier)
   end
 
   def proposal_form_item_identifiers
