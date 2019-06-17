@@ -367,7 +367,7 @@ GEM
       netrc (~> 0.8)
     reverse_markdown (1.1.0)
       nokogiri
-    rollbar (2.20.1)
+    rollbar (2.20.2)
       multi_json
     rollbar-shoryuken (0.1.2)
       rollbar
