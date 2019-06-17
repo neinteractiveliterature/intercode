@@ -2,7 +2,7 @@ class Mutations::CreateTeamMember < Mutations::BaseMutation
   field :team_member, Types::TeamMemberType, null: false
   field :ticket, Types::TicketType, null: true
   field :converted_signups, [Types::SignupType], null: false
-  field :moved_signups, [Types::SignupMoveResultType], null: false
+  field :move_results, [Types::SignupMoveResultType], null: false
 
   argument :event_id, Integer, required: true, camelize: false
   argument :user_con_profile_id, Integer, required: true, camelize: false
@@ -23,7 +23,7 @@ class Mutations::CreateTeamMember < Mutations::BaseMutation
       team_member: result.team_member,
       ticket: result.ticket,
       converted_signups: result.converted_signups,
-      moved_signups: result.moved_signups
+      move_results: result.move_results
     }
   end
 end
