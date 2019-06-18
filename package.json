@@ -31,7 +31,7 @@
     "@testing-library/react": "^8.0.1",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
-    "apollo-link": "^1.2.11",
+    "apollo-link": "^1.2.12",
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.14",
     "apollo-upload-client": "^10.0.1",
