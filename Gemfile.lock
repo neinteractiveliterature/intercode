@@ -401,7 +401,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.12)
-    stripe (4.18.1)
+    stripe (4.19.0)
       faraday (~> 0.13)
       net-http-persistent (~> 3.0)
     stripe-ruby-mock (2.5.7)
