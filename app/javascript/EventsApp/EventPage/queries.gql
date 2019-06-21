@@ -96,3 +96,26 @@ query EventPageQuery($eventId: Int!) {
     }
   }
 }
+
+query CreateModeratedSignupModalQuery {
+  myProfile {
+    id
+
+    signups {
+      id
+      state
+
+      run {
+        id
+        starts_at
+
+        event {
+          id
+          title
+          length_seconds
+          can_play_concurrently
+        }
+      }
+    }
+  }
+}

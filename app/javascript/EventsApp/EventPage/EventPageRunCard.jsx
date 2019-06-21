@@ -10,6 +10,8 @@ import useMutationCallback from '../../useMutationCallback';
 import AppRootContext from '../../AppRootContext';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
+import useModal from '../../ModalDialogs/useModal';
+import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 
 function updateCacheAfterSignup(cache, event, run, signup) {
   const data = cache.readQuery({ query: EventPageQuery, variables: { eventId: event.id } });
@@ -32,6 +34,7 @@ function EventPageRunCard({
     [event, myProfile],
   );
   const confirm = useConfirm();
+  const createModeratedSignupModal = useModal();
   const eventPath = buildEventUrl(event);
   const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
   const createMySignupMutate = useMutationCallback(CreateMySignup);
@@ -61,30 +64,48 @@ function EventPageRunCard({
   );
 
   const createSignup = (signupOption) => {
-    if (signupMode === 'self_service') {
+    if (signupMode === 'self_service' || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
     }
+
+    if (signupMode === 'moderated') {
+      createModeratedSignupModal.open({ signupOption });
+    }
+
+    return null;
   };
 
   const withdrawSignup = () => {
     if (signupMode === 'self_service') {
       return selfServiceWithdraw();
     }
+
+    return null;
   };
 
   return (
-    <RunCard
-      run={run}
-      event={event}
-      eventPath={eventPath}
-      mySignup={mySignup}
-      myProfile={myProfile}
-      signupOptions={signupOptions}
-      showViewSignups
-      createSignup={createSignup}
-      withdrawSignup={withdrawSignup}
-      {...otherProps}
-    />
+    <div>
+      <RunCard
+        run={run}
+        event={event}
+        eventPath={eventPath}
+        mySignup={mySignup}
+        myProfile={myProfile}
+        signupOptions={signupOptions}
+        showViewSignups
+        createSignup={createSignup}
+        withdrawSignup={withdrawSignup}
+        {...otherProps}
+      />
+
+      <CreateModeratedSignupModal
+        close={createModeratedSignupModal.close}
+        visible={createModeratedSignupModal.visible}
+        signupOption={(createModeratedSignupModal.state || {}).signupOption}
+        event={event}
+        run={run}
+      />
+    </div>
   );
 }
 
