@@ -33,3 +33,18 @@ mutation WithdrawMySignup($runId: Int!) {
     }
   }
 }
+
+mutation CreateSignupRequest($targetRunId: Int!, $requestedBucketKey: String, $replaceSignupId: Int) {
+  createSignupRequest(input: { target_run_id: $targetRunId, requested_bucket_key: $requestedBucketKey, replace_signup_id: $replaceSignupId }) {
+    signup_request {
+      id
+      target_run {
+        id
+      }
+      requested_bucket_key
+      replace_signup {
+        id
+      }
+    }
+  }
+}

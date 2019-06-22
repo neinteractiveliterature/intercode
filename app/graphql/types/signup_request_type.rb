@@ -1,0 +1,11 @@
+class Types::SignupRequestType < Types::BaseObject
+  field :id, Int, null: false
+  field :state, Types::SignupRequestStateType, null: false
+  field :requested_bucket_key, String, null: true
+  field :user_con_profile, Types::UserConProfileType, null: false
+  field :target_run, Types::RunType, null: false
+  field :replace_signup, Types::SignupType, null: true
+  field :result_signup, Types::SignupType, null: true
+
+  association_loaders SignupRequest, :user_con_profile, :target_run, :replace_signup, :result_signup
+end
