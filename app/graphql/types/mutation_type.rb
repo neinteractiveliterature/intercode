@@ -434,7 +434,11 @@ class Types::MutationType < Types::BaseObject
   ### SignupRequest
 
   field :createSignupRequest, mutation: Mutations::CreateSignupRequest do
-    guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
+    guard ->(_obj, _args, ctx) { ctx[:current_ability].can?(:create, SignupRequest) }
+  end
+
+  field :withdrawSignupRequest, mutation: Mutations::WithdrawSignupRequest do
+    guard(guard_for_model_with_id(SignupRequest, :withdraw))
   end
 
   ### StaffPosition

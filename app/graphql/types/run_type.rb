@@ -75,6 +75,13 @@ class Types::RunType < Types::BaseObject
     context[:user_con_profile].signups.select { |signup| signup.run_id == object.id }
   end
 
+  field :my_signup_requests, [Types::SignupRequestType], null: false
+
+  def my_signup_requests
+    return [] unless context[:user_con_profile]
+    context[:user_con_profile].signup_requests.select { |signup_request| signup_request.target_run_id == object.id }
+  end
+
   field :current_ability_can_signup_summary_run, Boolean, null: false
 
   def current_ability_can_signup_summary_run

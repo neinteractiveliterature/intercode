@@ -13,8 +13,8 @@ import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 
 function RunCard({
-  run, event, history, signupOptions, currentAbility, myProfile, mySignup,
-  showViewSignups, createSignup, withdrawSignup,
+  run, event, history, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
+  showViewSignups, createSignup, withdrawSignup, withdrawPendingSignupRequest,
 }) {
   const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef(null);
@@ -54,6 +54,23 @@ function RunCard({
           </em>
           <p className="mb-0">
             <WithdrawSignupButton run={run} event={event} withdrawSignup={withdrawSignup} />
+          </p>
+        </>
+      );
+    }
+
+    if (myPendingSignupRequest) {
+      return (
+        <>
+          <em>You have requested to sign up for this event.</em>
+          <p className="mb-0">
+            <button
+              className="btn btn-outline-danger"
+              type="button"
+              onClick={withdrawPendingSignupRequest}
+            >
+              Withdraw signup request
+            </button>
           </p>
         </>
       );
@@ -191,14 +208,19 @@ RunCard.propTypes = {
   mySignup: PropTypes.shape({
     state: PropTypes.string.isRequired,
   }),
+  myPendingSignupRequest: PropTypes.shape({
+    state: PropTypes.string.isRequired,
+  }),
   showViewSignups: PropTypes.bool,
   createSignup: PropTypes.func.isRequired,
   withdrawSignup: PropTypes.func.isRequired,
+  withdrawPendingSignupRequest: PropTypes.func.isRequired,
 };
 
 RunCard.defaultProps = {
   myProfile: null,
   mySignup: null,
+  myPendingSignupRequest: null,
   showViewSignups: false,
 };
 

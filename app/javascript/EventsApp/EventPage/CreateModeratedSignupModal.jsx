@@ -5,7 +5,7 @@ import { useQuery } from 'react-apollo-hooks';
 import classnames from 'classnames';
 
 import AppRootContext from '../../AppRootContext';
-import { CreateModeratedSignupModalQuery } from './queries.gql';
+import { CreateModeratedSignupModalQuery, EventPageQuery } from './queries.gql';
 import { CreateSignupRequest } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
@@ -19,7 +19,11 @@ function CreateModeratedSignupModal({
   const { conventionName, timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(CreateModeratedSignupModalQuery);
   const [createSignupRequest, createError, createInProgress] = useAsyncFunction(
-    useMutationCallback(CreateSignupRequest),
+    useMutationCallback(CreateSignupRequest, {
+      refetchQueries: () => [
+        { query: EventPageQuery, variables: { eventId: event.id } },
+      ],
+    }),
   );
   const runTimespan = useMemo(
     () => timespanFromRun({ timezone_name: timezoneName }, event, run),

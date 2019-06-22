@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { CreateMySignup, WithdrawMySignup } from './mutations.gql';
+import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations.gql';
 import { EventPageQuery } from './queries.gql';
 import RunCard from './RunCard';
 import buildEventUrl from '../buildEventUrl';
@@ -37,8 +37,10 @@ function EventPageRunCard({
   const createModeratedSignupModal = useModal();
   const eventPath = buildEventUrl(event);
   const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
+  const myPendingSignupRequest = run.my_signup_requests.find(signupRequest => signupRequest.state === 'pending');
   const createMySignupMutate = useMutationCallback(CreateMySignup);
   const withdrawMySignupMutate = useMutationCallback(WithdrawMySignup);
+  const withdrawSignupRequestMutate = useMutationCallback(WithdrawSignupRequest);
 
   const selfServiceSignup = useCallback(
     signupOption => createMySignupMutate({
@@ -83,6 +85,12 @@ function EventPageRunCard({
     return null;
   };
 
+  const withdrawPendingSignupRequest = () => confirm({
+    prompt: `Are you sure you want to withdraw your request to sign up for ${event.title}?`,
+    action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
+    renderError: error => <ErrorDisplay graphQLError={error} />,
+  });
+
   return (
     <div>
       <RunCard
@@ -90,11 +98,13 @@ function EventPageRunCard({
         event={event}
         eventPath={eventPath}
         mySignup={mySignup}
+        myPendingSignupRequest={myPendingSignupRequest}
         myProfile={myProfile}
         signupOptions={signupOptions}
         showViewSignups
         createSignup={createSignup}
         withdrawSignup={withdrawSignup}
+        withdrawPendingSignupRequest={withdrawPendingSignupRequest}
         {...otherProps}
       />
 

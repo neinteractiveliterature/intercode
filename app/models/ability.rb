@@ -339,6 +339,11 @@ class Ability
       can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
     end
 
+    if has_scope?(:manage_signups)
+      can :create, SignupRequest
+      can :withdraw, SignupRequest, user_con_profile_id: { user_id: user.id }, status: %w[pending]
+    end
+
     return unless has_scope?(:read_signups)
     can :read, Signup, user_con_profile: { user_id: user.id }
   end
