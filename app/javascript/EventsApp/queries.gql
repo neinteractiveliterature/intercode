@@ -26,6 +26,11 @@ fragment RunBasicSignupData on Run {
     id
     state
   }
+
+  my_signup_requests {
+    id
+    state
+  }
 }
 
 query CommonConventionDataQuery {

@@ -11,6 +11,10 @@ export function userSignupStatus(run) {
     return 'waitlisted';
   }
 
+  if (run.my_signup_requests.some(signupRequest => signupRequest.state === 'pending')) {
+    return 'request_pending';
+  }
+
   return null;
 }
 
