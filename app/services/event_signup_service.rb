@@ -61,6 +61,7 @@ class EventSignupService < CivilService::Service
   def convention_must_allow_self_service_signups
     return if allow_non_self_service_signups
     return if convention.signup_mode == 'self_service'
+    return if team_member?
 
     errors.add :base, "#{convention.name} does not allow self-service signups."
   end

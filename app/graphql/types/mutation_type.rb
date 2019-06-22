@@ -431,6 +431,12 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_convention_associated_model(:signups, :update_counted))
   end
 
+  ### SignupRequest
+
+  field :createSignupRequest, mutation: Mutations::CreateSignupRequest do
+    guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
+  end
+
   ### StaffPosition
 
   field :createStaffPosition, mutation: Mutations::CreateStaffPosition do

@@ -3,31 +3,36 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 import { useQuery } from 'react-apollo-hooks';
 import classnames from 'classnames';
-import arrayToSentence from 'array-to-sentence';
 
 import AppRootContext from '../../AppRootContext';
 import { CreateModeratedSignupModalQuery } from './queries.gql';
+import { CreateSignupRequest } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';
+import useAsyncFunction from '../../useAsyncFunction';
+import useMutationCallback from '../../useMutationCallback';
 
 function CreateModeratedSignupModal({
   visible, close, run, event, signupOption,
 }) {
   const { conventionName, timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(CreateModeratedSignupModalQuery);
+  const [createSignupRequest, createError, createInProgress] = useAsyncFunction(
+    useMutationCallback(CreateSignupRequest),
+  );
   const runTimespan = useMemo(
     () => timespanFromRun({ timezone_name: timezoneName }, event, run),
     [timezoneName, event, run],
   );
 
-  const conflictingSignups = useMemo(
+  const conflictingSignup = useMemo(
     () => {
       if (loading || error) {
         return [];
       }
 
-      return data.myProfile.signups.filter((signup) => {
+      return data.myProfile.signups.find((signup) => {
         const timespan = timespanFromRun(
           { timezone_name: timezoneName },
           signup.run.event,
@@ -42,6 +47,17 @@ function CreateModeratedSignupModal({
     },
     [data, error, event.can_play_concurrently, loading, runTimespan, timezoneName],
   );
+
+  const confirmClicked = async () => {
+    await createSignupRequest({
+      variables: {
+        targetRunId: run.id,
+        requestedBucketKey: (signupOption.bucket || {}).key,
+        replaceSignupId: (conflictingSignup || {}).id,
+      },
+    });
+    close();
+  };
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -59,34 +75,33 @@ function CreateModeratedSignupModal({
             ? <LoadingIndicator />
             : (
               <>
-                <p className={classnames({ 'm-0': conflictingSignups.length === 0 })}>
+                <p className={classnames({ 'm-0': !conflictingSignup })}>
                   {conventionName}
                   {' uses signup moderation.  Your request to sign up will go to a staff member for '}
                   review, and you’ll be notified of the result by email.  To continue, choose
                   “confirm” below.
                 </p>
 
-                {conflictingSignups.length > 0 && (
+                {conflictingSignup && (
                   <div className="alert alert-danger">
                     You are currently signed up for
                     {' '}
-                    <strong>
-                      {arrayToSentence(conflictingSignups.map(signup => signup.run.event.title))}
-                    </strong>
+                    <strong>{conflictingSignup.run.event.title}</strong>
                     {'. '}
                     If you continue, and your signup request is approved, you will be automatically
-                    withdrawn from
-                    {conflictingSignups.length > 1 ? ' these conflicting events.' : ' this conflicting event.'}
+                    withdrawn from this conflicting event.
                   </div>
                 )}
               </>
             )
         }
+
+        <ErrorDisplay graphQLError={createError} />
       </div>
 
       <div className="modal-footer">
-        <button className="btn btn-secondary" type="button" onClick={close}>Cancel</button>
-        <button className="btn btn-primary" type="button">Confirm</button>
+        <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>Cancel</button>
+        <button className="btn btn-primary" type="button" onClick={confirmClicked} disabled={createInProgress}>Confirm</button>
       </div>
     </Modal>
   );
@@ -95,6 +110,21 @@ function CreateModeratedSignupModal({
 CreateModeratedSignupModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
+  run: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+  event: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  signupOption: PropTypes.shape({
+    bucket: PropTypes.shape({
+      key: PropTypes.string,
+    }).isRequired,
+  }),
+};
+
+CreateModeratedSignupModal.defaultProps = {
+  signupOption: null,
 };
 
 export default CreateModeratedSignupModal;
