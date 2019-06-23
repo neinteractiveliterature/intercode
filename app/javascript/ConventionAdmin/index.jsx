@@ -35,6 +35,7 @@ function ConventionAdmin({ id, history }) {
             show_event_list: convention.show_event_list,
             maximum_tickets: convention.maximum_tickets,
             signup_mode: convention.signup_mode,
+            signup_requests_open: convention.signup_requests_open,
             site_mode: convention.site_mode,
             ticket_name: convention.ticket_name,
             ticket_mode: convention.ticket_mode,

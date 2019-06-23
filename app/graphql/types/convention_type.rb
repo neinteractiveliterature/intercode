@@ -14,6 +14,7 @@ class Types::ConventionType < Types::BaseObject
   field :maximum_tickets, Integer, null: true
   field :maximum_event_signups, Types::ScheduledValueType, null: true
   field :signup_mode, Types::SignupModeType, null: false
+  field :signup_requests_open, Boolean, null: false
   field :site_mode, Types::SiteModeType, null: false
   field :ticket_name, String, null: false
   field :ticket_mode, Types::TicketModeType, null: false

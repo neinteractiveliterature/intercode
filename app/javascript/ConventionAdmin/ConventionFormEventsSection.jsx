@@ -36,12 +36,13 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
 function ConventionFormEventsSection({ convention, dispatch, disabled }) {
   const [
     changeSignupMode,
+    changeSignupRequestsOpen,
     changeAcceptingProposals,
     changeShowEventList,
     changeShowSchedule,
   ] = useChangeDispatchers(
     dispatch,
-    ['signup_mode', 'accepting_proposals', 'show_event_list', 'show_schedule'],
+    ['signup_mode', 'signup_requests_open', 'accepting_proposals', 'show_event_list', 'show_schedule'],
   );
 
   const dispatchMaximumEventSignups = useCallback(
@@ -62,6 +63,15 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         onChange={changeSignupMode}
         disabled={disabled}
       />
+
+      <BooleanInput
+        name="signup_requests_open"
+        caption="Signup requests open"
+        value={convention.signup_requests_open}
+        onChange={changeSignupRequestsOpen}
+        disabled={disabled || convention.signup_mode !== 'moderated'}
+      />
+
       <BooleanInput
         name="accepting_proposals"
         caption="Accepting event proposals"
