@@ -1,5 +1,59 @@
 #import '../EventsApp/EventPage/queries.gql'
 
+fragment SignupModerationRunFields on Run {
+  id
+  title_suffix
+  starts_at
+
+  event {
+    id
+    title
+    length_seconds
+  }
+}
+
+fragment SignupModerationSignupRequestFields on SignupRequest {
+  id
+  state
+  requested_bucket_key
+  created_at
+
+  user_con_profile {
+    id
+    name
+  }
+
+  replace_signup {
+    id
+
+    run {
+      id
+      ...SignupModerationRunFields
+    }
+  }
+
+  target_run {
+    id
+    ...SignupModerationRunFields
+
+    event {
+      id
+      registration_policy {
+        buckets {
+          key
+          name
+        }
+      }
+    }
+  }
+
+  result_signup {
+    id
+    state
+    waitlist_position
+  }
+}
+
 query CreateSignupEventsQuery($title: String) {
   convention {
     id
@@ -71,6 +125,28 @@ query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
 
       run {
         id
+      }
+    }
+
+    signup_requests {
+      id
+      state
+
+      target_run {
+        id
+      }
+    }
+  }
+}
+
+query SignupModerationQueueQuery($page: Int) {
+  convention {
+    id
+
+    signup_requests_paginated(sort: [{ field: "state", desc: false }, { field: "created_at", desc: false }], page: $page) {
+      entries {
+        id
+        ...SignupModerationSignupRequestFields
       }
     }
   }

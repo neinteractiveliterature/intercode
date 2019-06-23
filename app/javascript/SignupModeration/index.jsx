@@ -2,10 +2,11 @@ import React from 'react';
 
 import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 import CreateSignup from './CreateSignup';
+import SignupModerationQueue from './SignupModerationQueue';
 
 function SignupModeration() {
   const tabProps = useTabs([
-    { id: 'moderation-queue', name: 'Moderation queue', renderContent: () => 'hi' },
+    { id: 'moderation-queue', name: 'Moderation queue', renderContent: () => <SignupModerationQueue /> },
     { id: 'create-signups', name: 'Create signups', renderContent: () => <CreateSignup /> },
   ]);
 
