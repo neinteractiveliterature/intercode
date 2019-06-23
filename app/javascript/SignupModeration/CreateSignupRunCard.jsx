@@ -10,10 +10,12 @@ import RunCard from '../EventsApp/EventPage/RunCard';
 import useQuerySuspended from '../useQuerySuspended';
 import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
+import { useAlert } from '../ModalDialogs/Alert';
 
 function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   const apolloClient = useApolloClient();
   const confirm = useConfirm();
+  const alert = useAlert();
 
   const { data, error } = useQuerySuspended(CreateSignupRunCardQuery, {
     variables: { userConProfileId, eventId },
@@ -53,6 +55,11 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
     [data, error, runId],
   );
 
+  const myPendingSignupRequest = useMemo(
+    () => (error ? null : data.userConProfile.signup_requests.find(sr => sr.target_run.id === runId && sr.state === 'pending')),
+    [data, error, runId],
+  );
+
   const run = useMemo(
     () => (error ? null : data.event.runs.find(r => r.id === runId)),
     [data, error, runId],
@@ -69,9 +76,11 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
       currentAbility={data.currentAbility}
       signupOptions={signupOptions}
       mySignup={mySignup}
+      myPendingSignupRequest={myPendingSignupRequest}
       myProfile={data.userConProfile}
       createSignup={createSignup}
       withdrawSignup={withdrawSignup}
+      withdrawPendingSignupRequest={() => alert('Admins cannot withdraw other users’ pending signup requests.  To accept or reject this request, go to the Moderation Queue tab.')}
     />
   );
 }

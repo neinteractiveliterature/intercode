@@ -198,7 +198,22 @@ class Types::ConventionType < Types::BaseObject
     end
   end
 
-  pagination_field :signup_spy_paginated, Types::SignupsPaginationType, Types::UserConProfileFiltersInputType, null: false do
+  pagination_field :signup_requests_paginated, Types::SignupRequestsPaginationType, Types::SignupRequestFiltersInputType, null: false do
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read, SignupRequest.new(target_run: Run.new(event: Event.new(convention: graphql_object.object))))
+    end
+  end
+
+  def signup_requests_paginated(**args)
+    Tables::SignupRequestsTableResultsPresenter.for_convention(
+      convention: object,
+      ability: current_ability,
+      filters: args[:filters].to_h,
+      sort: args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
+  pagination_field :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType, null: false do
     guard ->(graphql_object, _args, ctx) do
       ctx[:current_ability].can?(:view_reports, graphql_object.object)
     end

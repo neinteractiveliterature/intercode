@@ -16,6 +16,7 @@ import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
 import PageLoadingIndicator from './PageLoadingIndicator';
+import { AlertProvider } from './ModalDialogs/Alert';
 
 class ErrorBoundary extends React.Component {
   static propTypes = {
@@ -86,9 +87,11 @@ export default (WrappedComponent) => {
                     {!unauthenticatedError && (
                       <Suspense fallback={<PageLoadingIndicator visible />}>
                         <Confirm>
-                          <ErrorBoundary>
-                            <WrappedComponent {...otherProps} />
-                          </ErrorBoundary>
+                          <AlertProvider>
+                            <ErrorBoundary>
+                              <WrappedComponent {...otherProps} />
+                            </ErrorBoundary>
+                          </AlertProvider>
                         </Confirm>
                       </Suspense>
                     )}
