@@ -1733,7 +1733,7 @@ apollo-upload-client@^10.0.1:
     apollo-link-http-common "^0.2.13"
     extract-files "^5.0.1"
 
-apollo-utilities@1.3.2, apollo-utilities@^1.2.1, apollo-utilities@^1.3.0, apollo-utilities@^1.3.2:
+apollo-utilities@1.3.2, apollo-utilities@^1.3.0, apollo-utilities@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.3.2.tgz#8cbdcf8b012f664cd6cb5767f6130f5aed9115c9"
   integrity sha512-JWNHj8XChz7S4OZghV6yc9FNnzEXj285QYp/nLNh943iObycI5GTDO3NGR9Dth12LRrSFMeDOConPfPln+WGfg==
@@ -8579,16 +8579,17 @@ react-apollo-hooks@^0.4.4:
   dependencies:
     lodash "^4.17.11"
 
-react-apollo@^2.5.5:
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.5.5.tgz#0f27079a8fa9d9ceea8b29a5977eb42885f88fb9"
-  integrity sha512-zoJYlkI3i7+f1ejCbFtWU2GLCxjrmB3Es6RANyEZcbl0yetf5TI6ofMjBzILTvwoqp6tiQHH/8q66vQF0KcLmQ==
+react-apollo@^2.5.8:
+  version "2.5.8"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.5.8.tgz#c7a593b027efeefdd8399885e0ac6bec3b32623c"
+  integrity sha512-60yOQrnNosxU/tRbOxGDaYNLFcOKmQqxHPhxyvKTlGIaF/rRCXQRKixUgWVffpEupSHHD7psY5k5ZOuZsdsSGQ==
   dependencies:
-    apollo-utilities "^1.2.1"
+    apollo-utilities "^1.3.0"
+    fast-json-stable-stringify "^2.0.0"
     hoist-non-react-statics "^3.3.0"
     lodash.isequal "^4.5.0"
     prop-types "^15.7.2"
-    ts-invariant "^0.4.0"
+    ts-invariant "^0.4.2"
     tslib "^1.9.3"
 
 react-async-script@^1.0.0:
@@ -10295,10 +10296,10 @@ ts-invariant@^0.3.2:
   dependencies:
     tslib "^1.9.3"
 
-ts-invariant@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.0.tgz#5b98ddc2b8a067ba400c13d99b808357e4ee9c2e"
-  integrity sha512-dI1qXTqHx/QP6SvwSCen4sEza+CtB9KvHQREdpMVRzt05VlSPEfNxus4PsJWdK9ZfiI4yJnAB8j3+jcD3ct21g==
+ts-invariant@^0.4.0, ts-invariant@^0.4.2:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
+  integrity sha512-uEtWkFM/sdZvRNNDL3Ehu4WVpwaulhwQszV8mrtcdeE8nN00BV9mAmQ88RkrBhFgl9gMgvjJLAQcZbnPXI9mlA==
   dependencies:
     tslib "^1.9.3"
 
