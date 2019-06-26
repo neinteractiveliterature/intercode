@@ -490,10 +490,12 @@ ActiveRecord::Schema.define(version: 2019_06_22_195919) do
     t.bigint "target_run_id", null: false
     t.string "requested_bucket_key", null: false
     t.bigint "replace_signup_id"
+    t.bigint "result_signup_id"
     t.bigint "updated_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["replace_signup_id"], name: "index_signup_requests_on_replace_signup_id"
+    t.index ["result_signup_id"], name: "index_signup_requests_on_result_signup_id"
     t.index ["state"], name: "index_signup_requests_on_state"
     t.index ["target_run_id"], name: "index_signup_requests_on_target_run_id"
     t.index ["updated_by_id"], name: "index_signup_requests_on_updated_by_id"
@@ -701,6 +703,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_195919) do
   add_foreign_key "runs", "users", column: "updated_by_id"
   add_foreign_key "signup_requests", "runs", column: "target_run_id"
   add_foreign_key "signup_requests", "signups", column: "replace_signup_id"
+  add_foreign_key "signup_requests", "signups", column: "result_signup_id"
   add_foreign_key "signup_requests", "user_con_profiles"
   add_foreign_key "signup_requests", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
