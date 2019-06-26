@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 import moment from 'moment-timezone';
 
@@ -32,7 +33,11 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
           <small>
             <strong>Bucket:</strong>
             {' '}
-            {run.event.registration_policy.buckets.find(bucket => bucket.key === requestedBucketKey)}
+            {(
+              run.event.registration_policy.buckets
+                .find(bucket => bucket.key === requestedBucketKey)
+              || {}
+            ).name || 'No preference'}
           </small>
         </>
       )}
@@ -42,6 +47,22 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
     </>
   );
 }
+
+SignupModerationRunDetails.propTypes = {
+  run: PropTypes.shape({
+    event: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+    }).isRequired,
+    title_suffix: PropTypes.string,
+  }).isRequired,
+  showRequestedBucket: PropTypes.bool,
+  requestedBucketKey: PropTypes.string,
+};
+
+SignupModerationRunDetails.defaultProps = {
+  showRequestedBucket: false,
+  requestedBucketKey: null,
+};
 
 function SignupModerationQueue() {
   const { timezoneName } = useContext(AppRootContext);
