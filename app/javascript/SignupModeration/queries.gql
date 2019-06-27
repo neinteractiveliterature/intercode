@@ -152,7 +152,9 @@ query SignupModerationQueueQuery($page: Int) {
   convention {
     id
 
-    signup_requests_paginated(sort: [{ field: "state", desc: false }, { field: "created_at", desc: false }], page: $page) {
+    signup_requests_paginated(sort: [{ field: "state", desc: false }, { field: "created_at", desc: false }], page: $page, per_page: 10) {
+      total_pages
+
       entries {
         id
         ...SignupModerationSignupRequestFields
