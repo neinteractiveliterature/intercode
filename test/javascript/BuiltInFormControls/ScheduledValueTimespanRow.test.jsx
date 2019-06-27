@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
-import ScheduledValueTimespanRow from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
+import ScheduledValueTimespanRow, { scheduledValueTimespanIsValid } from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
 
 describe('ScheduledValueTimespanRow', () => {
   const attributeDidChange = jest.fn();
@@ -55,13 +55,13 @@ describe('ScheduledValueTimespanRow', () => {
 
   describe('isValid', () => {
     test('it requires a value', () => {
-      expect(ScheduledValueTimespanRow.isValid({})).toBeFalsy();
-      expect(ScheduledValueTimespanRow.isValid({ value: null })).toBeFalsy();
-      expect(ScheduledValueTimespanRow.isValid({ value: 6 })).toBeTruthy();
+      expect(scheduledValueTimespanIsValid({})).toBeFalsy();
+      expect(scheduledValueTimespanIsValid({ value: null })).toBeFalsy();
+      expect(scheduledValueTimespanIsValid({ value: 6 })).toBeTruthy();
     });
 
     test('it does not require a start or a finish', () => {
-      expect(ScheduledValueTimespanRow.isValid({
+      expect(scheduledValueTimespanIsValid({
         value: 6,
         start: null,
         finish: null,

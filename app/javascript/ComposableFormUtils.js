@@ -50,11 +50,12 @@ export function convertDatetimeValue(value, timezoneName = null) {
     return value;
   }
 
-  if (timezoneName) {
-    return moment.tz(value, timezoneName).toISOString(true);
+  const momentValue = timezoneName ? moment.tz(value, timezoneName) : moment(value);
+  if (momentValue.isValid()) {
+    return momentValue.toISOString(!!timezoneName);
   }
 
-  return moment(value).toISOString();
+  return null;
 }
 
 function namedFunction(func, name) {

@@ -1,65 +1,31 @@
-import React, {
-  useContext, useRef, useEffect, useCallback,
-} from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 
-import { CreateMySignup } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
-import { EventPageQuery } from './queries.gql';
 import RunCapacityGraph from './RunCapacityGraph';
 import SignupButtons from './SignupButtons';
 import { timespanFromRun } from '../../TimespanUtils';
 import ViewSignupsOptions from './ViewSignupsOptions';
-import WithdrawMySignupButton from './WithdrawMySignupButton';
 import AppRootContext from '../../AppRootContext';
-import useMutationCallback from '../../useMutationCallback';
 import useAsyncFunction from '../../useAsyncFunction';
-
-function updateCacheAfterSignup(cache, event, run, signup) {
-  const data = cache.readQuery({ query: EventPageQuery, variables: { eventId: event.id } });
-  const runData = data.event.runs.find(eventRun => eventRun.id === run.id);
-  runData.my_signups.push(signup);
-
-  cache.writeQuery({
-    query: EventPageQuery,
-    variables: { eventId: event.id },
-    data,
-  });
-}
+import WithdrawSignupButton from './WithdrawSignupButton';
 
 function RunCard({
-  run, event, history, eventPath, signupOptions, timezoneName, currentAbility, myProfile,
+  run, event, history, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
+  showViewSignups, createSignup, withdrawSignup, withdrawPendingSignupRequest,
 }) {
-  const { siteMode } = useContext(AppRootContext);
+  const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef(null);
   useEffect(() => {
     if (history.location.hash === `#run-${run.id}`) {
       cardRef.current.scrollIntoView(false);
     }
   }, [history.location.hash, run.id]);
-  const [createMySignupMutate, signupError, mutationInProgress] = useAsyncFunction(
-    useMutationCallback(CreateMySignup),
-  );
-
-  const signupButtonClicked = useCallback(
-    signupOption => createMySignupMutate({
-      variables: {
-        runId: run.id,
-        requestedBucketKey: (signupOption.bucket || {}).key,
-        noRequestedBucket: signupOption.bucket == null,
-      },
-      update: (cache, { data: { createMySignup: { signup } } }) => {
-        updateCacheAfterSignup(cache, event, run, signup);
-      },
-    }),
-    [createMySignupMutate, event, run],
-  );
+  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup);
 
   const renderMainSignupSection = () => {
-    const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
-
     if (!myProfile) {
       return (
         <a
@@ -87,7 +53,24 @@ function RunCard({
             }
           </em>
           <p className="mb-0">
-            <WithdrawMySignupButton run={run} event={event} />
+            <WithdrawSignupButton run={run} event={event} withdrawSignup={withdrawSignup} />
+          </p>
+        </>
+      );
+    }
+
+    if (myPendingSignupRequest) {
+      return (
+        <>
+          <em>You have requested to sign up for this event.</em>
+          <p className="mb-0">
+            <button
+              className="btn btn-outline-danger"
+              type="button"
+              onClick={withdrawPendingSignupRequest}
+            >
+              Withdraw signup request
+            </button>
           </p>
         </>
       );
@@ -115,8 +98,6 @@ function RunCard({
   };
 
   const renderAuxiliarySignupSection = () => {
-    const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
-
     if (!myProfile || mySignup || signupOptions.auxiliary.length === 0) {
       return null;
     }
@@ -182,12 +163,13 @@ function RunCard({
 
               {renderAuxiliarySignupSection(signupButtonClicked)}
 
-              <ViewSignupsOptions
-                event={event}
-                eventPath={eventPath}
-                run={run}
-                currentAbility={currentAbility}
-              />
+              {showViewSignups && (
+                <ViewSignupsOptions
+                  event={event}
+                  run={run}
+                  currentAbility={currentAbility}
+                />
+              )}
             </>
           )
           : (
@@ -204,9 +186,6 @@ RunCard.propTypes = {
   run: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title_suffix: PropTypes.string,
-    my_signups: PropTypes.arrayOf(PropTypes.shape({
-      state: PropTypes.string.isRequired,
-    })).isRequired,
     rooms: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
     })).isRequired,
@@ -219,19 +198,30 @@ RunCard.propTypes = {
       hash: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  eventPath: PropTypes.string.isRequired,
   signupOptions: PropTypes.shape({
     mainPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     mainNoPreference: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     auxiliary: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
-  timezoneName: PropTypes.string.isRequired,
   currentAbility: PropTypes.shape({}).isRequired,
   myProfile: PropTypes.shape({}),
+  mySignup: PropTypes.shape({
+    state: PropTypes.string.isRequired,
+  }),
+  myPendingSignupRequest: PropTypes.shape({
+    state: PropTypes.string.isRequired,
+  }),
+  showViewSignups: PropTypes.bool,
+  createSignup: PropTypes.func.isRequired,
+  withdrawSignup: PropTypes.func.isRequired,
+  withdrawPendingSignupRequest: PropTypes.func.isRequired,
 };
 
 RunCard.defaultProps = {
   myProfile: null,
+  mySignup: null,
+  myPendingSignupRequest: null,
+  showViewSignups: false,
 };
 
 export default withRouter(RunCard);

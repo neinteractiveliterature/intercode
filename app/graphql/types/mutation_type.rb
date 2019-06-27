@@ -386,6 +386,27 @@ class Types::MutationType < Types::BaseObject
     guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
+  field :createUserSignup, mutation: Mutations::CreateUserSignup do
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(
+        :create,
+        Signup.new(
+          user_con_profile: ctx[:convention].user_con_profiles.find(args[:user_con_profile_id]),
+          run: ctx[:convention].runs.find(args[:run_id])
+        )
+      )
+    end
+  end
+
+  field :withdrawUserSignup, mutation: Mutations::WithdrawUserSignup do
+    guard ->(_obj, args, ctx) do
+      ctx[:current_ability].can?(
+        :update,
+        Signup.find_by(run_id: args[:run_id], user_con_profile_id: args[:user_con_profile_id])
+      )
+    end
+  end
+
   field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups do
     guard ->(_obj, args, ctx) {
       ctx[:current_ability].can?(
@@ -408,6 +429,24 @@ class Types::MutationType < Types::BaseObject
 
   field :updateSignupCounted, mutation: Mutations::UpdateSignupCounted do
     guard(guard_for_convention_associated_model(:signups, :update_counted))
+  end
+
+  ### SignupRequest
+
+  field :createSignupRequest, mutation: Mutations::CreateSignupRequest do
+    guard ->(_obj, _args, ctx) { ctx[:current_ability].can?(:create, SignupRequest) }
+  end
+
+  field :withdrawSignupRequest, mutation: Mutations::WithdrawSignupRequest do
+    guard(guard_for_model_with_id(SignupRequest, :withdraw))
+  end
+
+  field :acceptSignupRequest, mutation: Mutations::AcceptSignupRequest do
+    guard(guard_for_model_with_id(SignupRequest, :accept))
+  end
+
+  field :rejectSignupRequest, mutation: Mutations::RejectSignupRequest do
+    guard(guard_for_model_with_id(SignupRequest, :reject))
   end
 
   ### StaffPosition

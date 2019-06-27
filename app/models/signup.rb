@@ -6,6 +6,7 @@ class Signup < ApplicationRecord
   belongs_to :run
   has_one :event, through: :run
   has_one :convention, through: :event
+  has_one :signup_request, foreign_key: 'result_signup_id', dependent: :destroy
   belongs_to :updated_by, class_name: 'User', optional: true
 
   validates :state, inclusion: { in: STATES }

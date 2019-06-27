@@ -2,9 +2,10 @@ class Run < ApplicationRecord
   belongs_to :event
   belongs_to :updated_by, class_name: 'User', optional: true
   has_many :signups, dependent: :destroy
+  has_many :signup_requests, foreign_key: 'target_run_id', dependent: :destroy
   has_and_belongs_to_many :rooms
 
-  delegate :length_seconds, :registration_policy, to: :event
+  delegate :length_seconds, :registration_policy, :convention, to: :event
   delegate :bucket_with_key, to: :registration_policy
 
   def ends_at

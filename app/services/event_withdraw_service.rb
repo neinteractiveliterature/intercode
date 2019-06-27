@@ -4,7 +4,7 @@ class EventWithdrawService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :signup, :whodunit
+  attr_reader :signup, :whodunit, :suppress_notifications, :allow_non_self_service_signups
   delegate :run, to: :signup
   delegate :event, to: :run
   delegate :convention, to: :event
@@ -12,10 +12,14 @@ class EventWithdrawService < CivilService::Service
   include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(signup, whodunit, skip_locking: false)
+  def initialize(
+    signup, whodunit,
+    skip_locking: false, suppress_notifications: false
+  )
     @signup = signup
     @whodunit = whodunit
     @skip_locking = skip_locking
+    @suppress_notifications = suppress_notifications
   end
 
   private
@@ -46,6 +50,8 @@ class EventWithdrawService < CivilService::Service
   end
 
   def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
+    return if suppress_notifications
+
     event.team_members.find_each do |team_member|
       next if team_member.receive_signup_email == 'no'
       next if team_member.receive_signup_email == 'non_waitlist_signups' && prev_state == 'waitlisted'

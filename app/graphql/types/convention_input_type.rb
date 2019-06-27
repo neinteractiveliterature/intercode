@@ -9,6 +9,8 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false
   argument :maximum_tickets, Integer, required: false, camelize: false
+  argument :signup_mode, Types::SignupModeType, required: false, camelize: false
+  argument :signup_requests_open, Boolean, required: false, camelize: false
   argument :site_mode, Types::SiteModeType, required: false, camelize: false
   argument :ticket_name, String, required: false, camelize: false
   argument :ticket_mode, Types::TicketModeType, required: false, camelize: false

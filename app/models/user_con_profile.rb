@@ -15,6 +15,7 @@ class UserConProfile < ApplicationRecord
   has_one :ticket, dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
+  has_many :signup_requests, dependent: :destroy
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
   has_many :orders, dependent: :destroy
   has_and_belongs_to_many :staff_positions

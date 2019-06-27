@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_212001) do
+ActiveRecord::Schema.define(version: 2019_06_22_195919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,8 @@ ActiveRecord::Schema.define(version: 2019_05_21_212001) do
     t.bigint "organization_id"
     t.string "ticket_mode", default: "disabled", null: false
     t.string "site_mode", default: "convention", null: false
+    t.string "signup_mode", default: "self_service", null: false
+    t.boolean "signup_requests_open", default: false, null: false
     t.index ["default_layout_id"], name: "index_conventions_on_default_layout_id"
     t.index ["domain"], name: "index_conventions_on_domain", unique: true
     t.index ["organization_id"], name: "index_conventions_on_organization_id"
@@ -482,6 +484,24 @@ ActiveRecord::Schema.define(version: 2019_05_21_212001) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
+  create_table "signup_requests", force: :cascade do |t|
+    t.string "state", default: "pending", null: false
+    t.bigint "user_con_profile_id", null: false
+    t.bigint "target_run_id", null: false
+    t.string "requested_bucket_key", null: false
+    t.bigint "replace_signup_id"
+    t.bigint "result_signup_id"
+    t.bigint "updated_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["replace_signup_id"], name: "index_signup_requests_on_replace_signup_id"
+    t.index ["result_signup_id"], name: "index_signup_requests_on_result_signup_id"
+    t.index ["state"], name: "index_signup_requests_on_state"
+    t.index ["target_run_id"], name: "index_signup_requests_on_target_run_id"
+    t.index ["updated_by_id"], name: "index_signup_requests_on_updated_by_id"
+    t.index ["user_con_profile_id"], name: "index_signup_requests_on_user_con_profile_id"
+  end
+
   create_table "signups", id: :serial, force: :cascade do |t|
     t.integer "run_id"
     t.string "bucket_key"
@@ -681,6 +701,11 @@ ActiveRecord::Schema.define(version: 2019_05_21_212001) do
   add_foreign_key "root_sites", "pages", column: "root_page_id"
   add_foreign_key "runs", "events"
   add_foreign_key "runs", "users", column: "updated_by_id"
+  add_foreign_key "signup_requests", "runs", column: "target_run_id"
+  add_foreign_key "signup_requests", "signups", column: "replace_signup_id"
+  add_foreign_key "signup_requests", "signups", column: "result_signup_id"
+  add_foreign_key "signup_requests", "user_con_profiles"
+  add_foreign_key "signup_requests", "users", column: "updated_by_id"
   add_foreign_key "signups", "runs"
   add_foreign_key "signups", "user_con_profiles"
   add_foreign_key "signups", "users", column: "updated_by_id"
