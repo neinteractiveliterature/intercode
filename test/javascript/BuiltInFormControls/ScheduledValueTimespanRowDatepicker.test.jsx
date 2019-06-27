@@ -5,29 +5,29 @@ import DateTimeInput from '../../../app/javascript/BuiltInFormControls/DateTimeI
 import ScheduledValueTimespanRowDatepicker from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRowDatepicker';
 
 describe('ScheduledValueTimespanRowDatepicker', () => {
-  const onChange = jest.fn();
-  beforeEach(onChange.mockReset);
+  const timespan = { nonsense: moment.tz({}, 'UTC').toISOString(true) };
 
-  const renderScheduledValueTimespanRowDatepicker = props =>
-    (shallow(<ScheduledValueTimespanRowDatepicker
+  const renderScheduledValueTimespanRowDatepicker = props => shallow(
+    <ScheduledValueTimespanRowDatepicker
       fieldName="nonsense"
       value={null}
-      onChange={onChange}
       validateDate={() => true}
       timezoneName="UTC"
+      timespan={timespan}
       {...props}
-    />));
+    />,
+  );
 
   test('it renders with a value', () => {
-    const value = moment().toISOString();
-    const component = renderScheduledValueTimespanRowDatepicker({ value });
-    expect(component.find(DateTimeInput).prop('value')).toEqual(value);
+    const component = renderScheduledValueTimespanRowDatepicker();
+    expect(component.find(DateTimeInput).prop('value')).toEqual(timespan.nonsense);
   });
 
   test('onChange', () => {
+    const rowAttributeDidChange = jest.fn();
     const newValue = moment().toISOString();
-    const component = renderScheduledValueTimespanRowDatepicker();
+    const component = renderScheduledValueTimespanRowDatepicker({ rowAttributeDidChange });
     component.find(DateTimeInput).prop('onChange')(newValue);
-    expect(onChange).toHaveBeenCalledWith('nonsense', newValue);
+    expect(rowAttributeDidChange).toHaveBeenCalledWith('nonsense', newValue);
   });
 });
