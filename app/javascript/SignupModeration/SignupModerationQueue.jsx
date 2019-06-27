@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import moment from 'moment-timezone';
 
+import { AcceptSignupRequest, RejectSignupRequest } from './mutations.gql';
 import AppRootContext from '../AppRootContext';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import { SignupModerationQueueQuery } from './queries.gql';
 import { timespanFromRun } from '../TimespanUtils';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 
 function signupRequestStateBadgeClass(state) {
   switch (state) {
@@ -17,6 +20,17 @@ function signupRequestStateBadgeClass(state) {
     case 'withdrawn': return 'badge-dark';
     default: return 'badge-light';
   }
+}
+
+function describeRequestedBucket(signupRequest) {
+  return (
+    signupRequest.requested_bucket_key
+      ? (
+        signupRequest.target_run.event.registration_policy.buckets
+          .find(bucket => bucket.key === signupRequest.requested_bucket_key)
+        || {}).name
+      : 'No preference'
+  );
 }
 
 function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }) {
@@ -67,6 +81,58 @@ SignupModerationRunDetails.defaultProps = {
 function SignupModerationQueue() {
   const { timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(SignupModerationQueueQuery);
+  const acceptSignupRequest = useMutation(AcceptSignupRequest);
+  const rejectSignupRequest = useMutation(RejectSignupRequest);
+  const confirm = useConfirm();
+
+  const acceptClicked = signupRequest => confirm({
+    prompt: (
+      <>
+        <p>
+          Please confirm you want to accept this signup request.  This will attempt to sign
+          {' '}
+          {signupRequest.user_con_profile.name}
+          {' up for '}
+          {signupRequest.target_run.event.title}
+          {' as '}
+          {describeRequestedBucket(signupRequest)}
+          .  If there is no space in the requested bucket, the attendee will either be signed up
+          in a  flex bucket, if possible, or waitlisted.
+        </p>
+
+        <div className="mb-2">
+          <strong>Current space availability in this event run:</strong>
+          <RunCapacityGraph
+            event={signupRequest.target_run.event}
+            run={signupRequest.target_run}
+            signupsAvailable
+          />
+        </div>
+
+        <p className="mb-0">
+          This will automatically email both the attendee and the event team to let them know about
+          the signup.
+        </p>
+      </>
+    ),
+    action: () => acceptSignupRequest({ variables: { id: signupRequest.id } }),
+    renderError: acceptError => <ErrorDisplay graphQLError={acceptError} />,
+  });
+
+  const rejectClicked = signupRequest => confirm({
+    prompt: (
+      <p className="mb-0">
+        Please confirm you want to reject this signup request.  This will
+        {' '}
+        <strong>not</strong>
+        {' '}
+        automatically email anyone.  After doing this, you may wish to email the attendee to let
+        them know.
+      </p>
+    ),
+    action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),
+    renderError: acceptError => <ErrorDisplay graphQLError={acceptError} />,
+  });
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -108,13 +174,7 @@ function SignupModerationQueue() {
               <small>
                 <strong>Requested bucket:</strong>
                 {' '}
-                {signupRequest.requested_bucket_key
-                  ? (
-                    signupRequest.target_run.event.registration_policy.buckets
-                      .find(bucket => bucket.key === signupRequest.requested_bucket_key)
-                    || {}).name
-                  : 'No preference'
-                }
+                {describeRequestedBucket(signupRequest)}
               </small>
             </td>
             <td>
@@ -130,14 +190,19 @@ function SignupModerationQueue() {
             <td className="text-right">
               {signupRequest.state === 'pending' && (
                 <>
-                  <button className="btn btn-sm btn-danger mr-2" type="button">
+                  <button className="btn btn-sm btn-danger mr-2" type="button" onClick={() => rejectClicked(signupRequest)}>
                     Reject
                   </button>
 
-                  <button className="btn btn-sm btn-success" type="button">
+                  <button className="btn btn-sm btn-success" type="button" onClick={() => acceptClicked(signupRequest)}>
                     Accept
                   </button>
                 </>
+              )}
+              {signupRequest.state === 'rejected' && (
+                <button className="btn btn-sm btn-warning" type="button" onClick={() => acceptClicked(signupRequest)}>
+                  Accept after all
+                </button>
               )}
             </td>
           </tr>

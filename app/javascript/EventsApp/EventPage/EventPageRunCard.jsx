@@ -65,6 +65,33 @@ function EventPageRunCard({
     [confirm, event.title, run.id, withdrawMySignupMutate],
   );
 
+  const moderatedWithdraw = useCallback(
+    () => confirm({
+      prompt: (
+        <>
+          <p>
+            <strong>
+              If you’re thinking of signing up for a different event instead, please
+              go to that event’s page and request to sign up for it.
+            </strong>
+            {' '}
+            If the request is
+            accepted, you’ll automatically be withdrawn from this event.
+          </p>
+          <p className="mb-0">
+            Are you sure you want to withdraw from
+            {' '}
+            {event.title}
+            {'? '}
+          </p>
+        </>
+      ),
+      action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),
+      renderError: error => <ErrorDisplay graphQLError={error} />,
+    }),
+    [confirm, event.title, run.id, withdrawMySignupMutate],
+  );
+
   const createSignup = (signupOption) => {
     if (signupMode === 'self_service' || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
@@ -80,6 +107,10 @@ function EventPageRunCard({
   const withdrawSignup = () => {
     if (signupMode === 'self_service') {
       return selfServiceWithdraw();
+    }
+
+    if (signupMode === 'moderated') {
+      return moderatedWithdraw();
     }
 
     return null;

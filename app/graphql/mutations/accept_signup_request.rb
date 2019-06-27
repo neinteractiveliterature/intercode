@@ -1,5 +1,6 @@
 class Mutations::AcceptSignupRequest < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
+  field :signup_request, Types::SignupRequestType, null: false
 
   argument :id, Int, required: true, camelize: false
 
@@ -15,6 +16,6 @@ class Mutations::AcceptSignupRequest < Mutations::BaseMutation
       raise BetterRescueMiddleware::UnloggedError, result.errors.full_messages.join(', ')
     end
 
-    { signup: result.signup }
+    { signup: result.signup, signup_request: signup_request }
   end
 end

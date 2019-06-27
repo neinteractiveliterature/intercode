@@ -9,20 +9,17 @@ class EventWithdrawService < CivilService::Service
   delegate :event, to: :run
   delegate :convention, to: :event
 
-  validate :convention_must_allow_self_service_signups
-
   include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
   def initialize(
     signup, whodunit,
-    skip_locking: false, suppress_notifications: false, allow_non_self_service_signups: false
+    skip_locking: false, suppress_notifications: false
   )
     @signup = signup
     @whodunit = whodunit
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
-    @allow_non_self_service_signups = allow_non_self_service_signups
   end
 
   private
@@ -68,12 +65,5 @@ class EventWithdrawService < CivilService::Service
         team_member
       ).deliver_later(wait: 30.seconds)
     end
-  end
-
-  def convention_must_allow_self_service_signups
-    return if allow_non_self_service_signups
-    return if convention.signup_mode == 'self_service'
-
-    errors.add :base, "#{convention.name} does not allow self-service signups."
   end
 end

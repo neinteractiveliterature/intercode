@@ -34,6 +34,7 @@ fragment SignupModerationSignupRequestFields on SignupRequest {
 
   target_run {
     id
+    signup_count_by_state_and_bucket_key_and_counted
     ...SignupModerationRunFields
 
     event {
@@ -42,6 +43,9 @@ fragment SignupModerationSignupRequestFields on SignupRequest {
         buckets {
           key
           name
+          total_slots
+          slots_limited
+          anything
         }
       }
     }
@@ -99,6 +103,11 @@ query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
       user_con_profile {
         id
       }
+    }
+
+    event_category {
+      id
+      team_member_name
     }
 
     runs {
