@@ -56,6 +56,8 @@ function AppLayout({ location, history }) {
     () => ({
       conventionName: (data.convention || {}).name,
       siteMode: (data.convention || {}).site_mode,
+      signupMode: (data.convention || {}).signup_mode,
+      timezoneName: (data.convention || {}).timezone_name,
     }),
     [data],
   );

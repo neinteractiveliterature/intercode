@@ -6,6 +6,18 @@ fragment MySignupFields on Signup {
   waitlist_position
 }
 
+fragment MySignupRequestFields on SignupRequest {
+  id
+  state
+  target_run {
+    id
+  }
+  requested_bucket_key
+  replace_signup {
+    id
+  }
+}
+
 fragment EventPageRunFields on Run {
   id
   title_suffix
@@ -21,6 +33,28 @@ fragment EventPageRunFields on Run {
   my_signups {
     id
     ...MySignupFields
+  }
+
+  my_signup_requests {
+    id
+    ...MySignupRequestFields
+  }
+}
+
+fragment RunCardRegistrationPolicyFields on RegistrationPolicy {
+  slots_limited
+  prevent_no_preference_signups
+  total_slots_including_not_counted
+
+  buckets {
+    key
+    name
+    description
+    not_counted
+    slots_limited
+    anything
+    minimum_slots
+    total_slots
   }
 }
 
@@ -70,25 +104,35 @@ query EventPageQuery($eventId: Int!) {
     }
 
     registration_policy {
-      slots_limited
-      prevent_no_preference_signups
-      total_slots_including_not_counted
-
-      buckets {
-        key
-        name
-        description
-        not_counted
-        slots_limited
-        anything
-        minimum_slots
-        total_slots
-      }
+      ...RunCardRegistrationPolicyFields
     }
 
     runs {
       id
       ...EventPageRunFields
+    }
+  }
+}
+
+query CreateModeratedSignupModalQuery {
+  myProfile {
+    id
+
+    signups {
+      id
+      state
+
+      run {
+        id
+        starts_at
+
+        event {
+          id
+          title
+          length_seconds
+          can_play_concurrently
+        }
+      }
     }
   }
 }

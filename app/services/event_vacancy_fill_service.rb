@@ -4,18 +4,19 @@ class EventVacancyFillService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :run, :bucket_key, :move_results
+  attr_reader :run, :bucket_key, :move_results, :suppress_notifications
   delegate :event, to: :run
   delegate :convention, to: :event
 
   include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(run, bucket_key, skip_locking: false)
+  def initialize(run, bucket_key, skip_locking: false, suppress_notifications: false)
     @run = run
     @bucket_key = bucket_key
     @skip_locking = skip_locking
     @move_results = []
+    @suppress_notifications = suppress_notifications
   end
 
   private
@@ -90,6 +91,8 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def notify_moved_signup(result)
+    return if suppress_notifications
+
     # Wait 30 seconds because the transaction hasn't been committed yet
     EventSignupMailer.user_signup_moved(result.to_h).deliver_later(wait: 30.seconds)
   end

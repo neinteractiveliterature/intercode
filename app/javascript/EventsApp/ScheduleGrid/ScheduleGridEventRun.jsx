@@ -117,6 +117,10 @@ function RunDisplay({
       return <i className="fa fa-hourglass-half mr-1" title="Waitlisted" />;
     }
 
+    if (signupStatus === 'request_pending') {
+      return <i className="fa fa-pause-circle mr-1" title="Signup request pending" />;
+    }
+
     return null;
   };
 

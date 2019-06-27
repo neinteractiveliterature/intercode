@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { render, queries } from '@testing-library/react';
 
 import Confirm from '../../app/javascript/ModalDialogs/Confirm';
-import { LazyStripeProvider } from '../../app/javascript/LazyStripe';
+import { LazyStripeContext } from '../../app/javascript/LazyStripe';
 
 function TestWrapper({ apolloClient, stripePublishableKey, children }) {
+  const lazyStripeProviderValue = useMemo(
+    () => ({ publishableKey: stripePublishableKey }),
+    [stripePublishableKey],
+  );
   return (
     <ApolloProvider client={apolloClient}>
       <ApolloHooksProvider client={apolloClient}>
-        <LazyStripeProvider publishableKey={stripePublishableKey}>
+        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>
             {children}
           </Confirm>
-        </LazyStripeProvider>
+        </LazyStripeContext.Provider>
       </ApolloHooksProvider>
     </ApolloProvider>
   );

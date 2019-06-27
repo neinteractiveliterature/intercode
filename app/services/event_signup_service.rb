@@ -4,12 +4,14 @@ class EventSignupService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit
+  attr_reader :user_con_profile, :run, :requested_bucket_key, :max_signups_allowed, :whodunit,
+    :suppress_notifications, :allow_non_self_service_signups
   delegate :event, to: :run
   delegate :convention, to: :event
 
   self.validate_manually = true
   validate :signup_count_must_be_allowed
+  validate :convention_must_allow_self_service_signups
   validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket_if_required
@@ -19,12 +21,17 @@ class EventSignupService < CivilService::Service
   include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(user_con_profile, run, requested_bucket_key, whodunit, skip_locking: false)
+  def initialize(
+    user_con_profile, run, requested_bucket_key, whodunit,
+    skip_locking: false, suppress_notifications: false, allow_non_self_service_signups: false
+  )
     @user_con_profile = user_con_profile
     @run = run
     @requested_bucket_key = requested_bucket_key
     @whodunit = whodunit
     @skip_locking = skip_locking
+    @suppress_notifications = suppress_notifications
+    @allow_non_self_service_signups = allow_non_self_service_signups
   end
 
   private
@@ -49,6 +56,14 @@ class EventSignupService < CivilService::Service
 
     notify_team_members(signup)
     success(signup: signup)
+  end
+
+  def convention_must_allow_self_service_signups
+    return if allow_non_self_service_signups
+    return if convention.signup_mode == 'self_service'
+    return if team_member?
+
+    errors.add :base, "#{convention.name} does not allow self-service signups."
   end
 
   def signup_count_must_be_allowed
@@ -209,6 +224,8 @@ sign up for events."
   end
 
   def notify_team_members(signup)
+    return if suppress_notifications
+
     event.team_members.find_each do |team_member|
       next if team_member.receive_signup_email == 'no'
       next if team_member.receive_signup_email == 'non_waitlist_signups' && signup.waitlisted?

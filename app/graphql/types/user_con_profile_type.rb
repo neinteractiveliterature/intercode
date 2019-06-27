@@ -50,6 +50,7 @@ class Types::UserConProfileType < Types::BaseObject
     :convention,
     :orders,
     :signups,
+    :signup_requests,
     :staff_positions,
     :team_members,
     :ticket,
@@ -108,6 +109,12 @@ class Types::UserConProfileType < Types::BaseObject
   field :signups, [Types::SignupType], null: false do
     guard -> (graphql_object, _args, ctx) {
       ctx[:current_ability].can?(:read, Signup.new(user_con_profile: graphql_object.object, run: graphql_object.object.convention.events.new.runs.new))
+    }
+  end
+
+  field :signup_requests, [Types::SignupRequestType], null: false do
+    guard -> (graphql_object, _args, ctx) {
+      ctx[:current_ability].can?(:read, SignupRequest.new(user_con_profile: graphql_object.object, target_run: graphql_object.object.convention.events.new.runs.new))
     }
   end
 

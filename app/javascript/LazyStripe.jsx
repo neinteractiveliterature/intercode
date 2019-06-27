@@ -1,29 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 
 export const LazyStripeContext = React.createContext({
   publishableKey: null,
 });
 
-function LazyStripeProvider({ publishableKey, children }) {
-  return (
-    <LazyStripeContext.Provider value={{ publishableKey }}>
-      {children}
-    </LazyStripeContext.Provider>
-  );
-}
-
-LazyStripeProvider.propTypes = {
-  publishableKey: PropTypes.string,
-  children: PropTypes.node.isRequired,
-};
-
-LazyStripeProvider.defaultProps = {
-  publishableKey: null,
-};
-
-function LazyStripeLoader({ publishableKey, children }) {
+function useLazyStripe() {
+  const { publishableKey } = useContext(LazyStripeContext);
   const [stripe, setStripe] = useState(null);
 
   useEffect(
@@ -52,52 +35,21 @@ function LazyStripeLoader({ publishableKey, children }) {
     [publishableKey],
   );
 
-  return (
-    <StripeProvider stripe={stripe}>
-      {children}
-    </StripeProvider>
-  );
+  return stripe;
 }
 
-LazyStripeLoader.propTypes = {
-  publishableKey: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
+export function LazyStripeElementsWrapper(WrappedComponent) {
+  const Wrapper = (props) => {
+    const stripe = useLazyStripe();
+    return (
+      <StripeProvider stripe={stripe}>
+        <Elements>
+          <WrappedComponent {...props} />
+        </Elements>
+      </StripeProvider>
+    );
+  };
+  Wrapper.displayName = `LazyStripeWrapper(${WrappedComponent.displayName}`;
 
-function LazyStripe({ children }) {
-  const { publishableKey } = useContext(LazyStripeContext);
-  return (
-    <LazyStripeLoader publishableKey={publishableKey}>
-      {children}
-    </LazyStripeLoader>
-  );
+  return Wrapper;
 }
-
-LazyStripe.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-function LazyStripeElements({ children }) {
-  const { publishableKey } = useContext(LazyStripeContext);
-  return (
-    <LazyStripeLoader publishableKey={publishableKey}>
-      <Elements>
-        {children}
-      </Elements>
-    </LazyStripeLoader>
-  );
-}
-
-LazyStripeElements.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-function LazyStripeElementsWrapper(WrappedComponent) {
-  const wrapper = props => LazyStripeElements({ children: <WrappedComponent {...props} /> });
-  wrapper.displayName = `LazyStripeWrapper(${WrappedComponent.displayName}`;
-
-  return wrapper;
-}
-
-export { LazyStripeProvider, LazyStripeElementsWrapper };
-export default LazyStripe;

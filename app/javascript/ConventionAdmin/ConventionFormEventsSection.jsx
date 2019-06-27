@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { useChangeDispatchers } from '../ComposableFormUtils';
@@ -26,7 +26,7 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
   ));
 
   return (
-    <select className="form-control" value={value} onChange={processChangeEvent}>
+    <select className="form-control custom-select" value={value} onChange={processChangeEvent}>
       <option />
       {options}
     </select>
@@ -35,14 +35,43 @@ const buildMaximumEventSignupsInput = (value, onChange) => {
 
 function ConventionFormEventsSection({ convention, dispatch, disabled }) {
   const [
-    changeAcceptingProposals, changeShowEventList, changeShowSchedule, changeMaximumEventSignups,
+    changeSignupMode,
+    changeSignupRequestsOpen,
+    changeAcceptingProposals,
+    changeShowEventList,
+    changeShowSchedule,
   ] = useChangeDispatchers(
     dispatch,
-    ['accepting_proposals', 'show_event_list', 'show_schedule', 'maximum_event_signups'],
+    ['signup_mode', 'signup_requests_open', 'accepting_proposals', 'show_event_list', 'show_schedule'],
+  );
+
+  const dispatchMaximumEventSignups = useCallback(
+    action => dispatch({ type: 'dispatchMaximumEventSignups', action }),
+    [dispatch],
   );
 
   return (
     <>
+      <MultipleChoiceInput
+        name="signup_mode"
+        caption="Signup mode"
+        choices={[
+          { value: 'self_service', label: 'Self-service (attendees can sign themselves up for events)' },
+          { value: 'moderated', label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)' },
+        ]}
+        value={convention.signup_mode}
+        onChange={changeSignupMode}
+        disabled={disabled}
+      />
+
+      <BooleanInput
+        name="signup_requests_open"
+        caption="Signup requests open"
+        value={convention.signup_requests_open}
+        onChange={changeSignupRequestsOpen}
+        disabled={disabled || convention.signup_mode !== 'moderated'}
+      />
+
       <BooleanInput
         name="accepting_proposals"
         caption="Accepting event proposals"
@@ -83,7 +112,7 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         <legend className="col-form-label">Event signup schedule</legend>
         <ScheduledValueEditor
           scheduledValue={convention.maximum_event_signups}
-          setScheduledValue={changeMaximumEventSignups}
+          dispatch={dispatchMaximumEventSignups}
           timezone={convention.timezone_name}
           buildValueInput={buildMaximumEventSignupsInput}
           disabled={disabled}

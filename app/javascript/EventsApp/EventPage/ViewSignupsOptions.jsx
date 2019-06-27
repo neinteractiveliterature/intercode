@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import buildEventUrl from '../buildEventUrl';
 
 function ViewSignupsOptions({
-  event, eventPath, run, currentAbility,
+  event, run, currentAbility,
 }) {
+  const eventPath = buildEventUrl(event);
+
   if (currentAbility.can_read_event_signups) {
     return (
       <div className="card-footer text-center">
@@ -46,7 +49,6 @@ ViewSignupsOptions.propTypes = {
     title: PropTypes.string.isRequired,
     private_signup_list: PropTypes.bool.isRequired,
   }).isRequired,
-  eventPath: PropTypes.string.isRequired,
   run: PropTypes.shape({
     id: PropTypes.number.isRequired,
     current_ability_can_signup_summary_run: PropTypes.bool.isRequired,
