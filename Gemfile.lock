@@ -117,7 +117,7 @@ GEM
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
     chronic (0.10.2)
-    civil_service (1.0.0)
+    civil_service (2.0.0)
       activemodel (>= 3.0.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
