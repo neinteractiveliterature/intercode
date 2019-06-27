@@ -10,7 +10,7 @@ describe('ScheduledValueEditor', () => {
     <ScheduledValueEditor
       scheduledValue={{ timespans: [] }}
       timezone="UTC"
-      setScheduledValue={() => {}}
+      dispatch={() => {}}
       buildValueInput={buildTestScheduledValueInput}
       {...props}
     />
@@ -32,46 +32,43 @@ describe('ScheduledValueEditor', () => {
   });
 
   test('adding a row', () => {
-    const setScheduledValue = jest.fn();
-    const component = renderScheduledValueEditor({ setScheduledValue });
+    const dispatch = jest.fn();
+    const component = renderScheduledValueEditor({ dispatch });
     const button = component.find('button').filterWhere(b => b.text() === 'Add row');
     button.simulate('click');
-    expect(setScheduledValue).toHaveBeenCalledWith({
-      timespans: [
-        { value: null, start: null, finish: null },
-      ],
-    });
+    expect(dispatch).toHaveBeenCalledWith({ type: 'addTimespan' });
   });
 
   test('deleting a row', () => {
-    const setScheduledValue = jest.fn();
+    const dispatch = jest.fn();
     const component = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
           { value: 'something', start: null, finish: null },
         ],
       },
-      setScheduledValue,
+      dispatch,
     });
     component.find('.btn-danger').simulate('click');
-    expect(setScheduledValue).toHaveBeenCalledWith({ timespans: [] });
+    expect(dispatch).toHaveBeenCalledWith({ type: 'deleteTimespan', index: 0 });
   });
 
   test('changing something in a row', () => {
-    const setScheduledValue = jest.fn();
+    const dispatch = jest.fn();
     const component = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
           { value: 'something', start: null, finish: null },
         ],
       },
-      setScheduledValue,
+      dispatch,
     });
     component.find('input.testInput').simulate('change', { target: { value: 'something else' } });
-    expect(setScheduledValue).toHaveBeenCalledWith({
-      timespans: [
-        { value: 'something else', start: null, finish: null },
-      ],
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'updateTimespanField',
+      index: 0,
+      field: 'value',
+      value: 'something else',
     });
   });
 

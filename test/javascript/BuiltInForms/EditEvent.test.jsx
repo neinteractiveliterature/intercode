@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderHook } from 'react-hooks-testing-library';
+import { renderHook } from '@testing-library/react-hooks';
 import { BrowserRouter } from 'react-router-dom';
 
 import { convention, initialEvent, minimalForm } from '../EventAdmin/formMockData';
