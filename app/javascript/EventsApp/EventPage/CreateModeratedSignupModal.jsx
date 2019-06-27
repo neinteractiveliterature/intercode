@@ -46,6 +46,7 @@ function CreateModeratedSignupModal({
         return (
           !(event.can_play_concurrently || signup.run.event.can_play_concurrently)
           && timespan.overlapsTimespan(runTimespan)
+          && signup.state !== 'withdrawn'
         );
       });
     },
@@ -82,17 +83,16 @@ function CreateModeratedSignupModal({
                 <p className={classnames({ 'm-0': !conflictingSignup })}>
                   {conventionName}
                   {' uses signup moderation.  Your request to sign up will go to a staff member for '}
-                  review, and you’ll be notified of the result by email.  To continue, choose
-                  “confirm” below.
+                  review, and you’ll be notified by email when it’s approved.
                 </p>
 
                 {conflictingSignup && (
-                  <div className="alert alert-danger">
+                  <div className="alert alert-warning">
                     You are currently signed up for
                     {' '}
                     <strong>{conflictingSignup.run.event.title}</strong>
                     {'. '}
-                    If you continue, and your signup request is approved, you will be automatically
+                    If you continue, and your signup request is approved, you’ll be automatically
                     withdrawn from this conflicting event.
                   </div>
                 )}

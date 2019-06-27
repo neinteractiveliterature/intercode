@@ -26,6 +26,8 @@ class AcceptSignupRequestService < CivilService::Service
       signup_result = create_signup
     end
 
+    signup_request.update!(state: 'accepted', result_signup: signup_result.signup)
+
     notify_user
     success(signup: signup_result.signup, withdraw_result: withdraw_result)
   end
@@ -51,7 +53,6 @@ class AcceptSignupRequestService < CivilService::Service
       signup_request.replace_signup,
       whodunit,
       skip_locking: true,
-      allow_non_self_service_signups: true,
       suppress_notifications: suppress_notifications
     ).call!
   end
@@ -70,6 +71,7 @@ class AcceptSignupRequestService < CivilService::Service
 
   def notify_user
     return if suppress_notifications
-    SignupRequestsMailer.request_accepted(signup_request).deliver_later
+    # 30-second delay to let the transaction commit
+    SignupRequestsMailer.request_accepted(signup_request).deliver_later(wait: 30.seconds)
   end
 end

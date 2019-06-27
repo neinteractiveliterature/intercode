@@ -6,6 +6,17 @@ class SignupRequestsMailer < ApplicationMailer
     end
   end
 
+  def request_accepted(signup_request)
+    @signup_request = signup_request
+    use_convention_timezone(@signup_request.convention) do
+      mail(
+        from: from_address_for_convention(signup_request.convention),
+        to: signup_request.user_con_profile.email,
+        subject: "#{subject_prefix(signup_request)} Request accepted: #{signup_request.target_run.event.title}"
+      )
+    end
+  end
+
   private
 
   def signup_moderators_mail_destination(signup_request)

@@ -441,6 +441,14 @@ class Types::MutationType < Types::BaseObject
     guard(guard_for_model_with_id(SignupRequest, :withdraw))
   end
 
+  field :acceptSignupRequest, mutation: Mutations::AcceptSignupRequest do
+    guard(guard_for_model_with_id(SignupRequest, :accept))
+  end
+
+  field :rejectSignupRequest, mutation: Mutations::RejectSignupRequest do
+    guard(guard_for_model_with_id(SignupRequest, :reject))
+  end
+
   ### StaffPosition
 
   field :createStaffPosition, mutation: Mutations::CreateStaffPosition do
