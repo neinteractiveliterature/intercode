@@ -256,7 +256,7 @@ class Ability
         :view_attendees
       ], Convention
       can :read, [Permission, Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
-      can :read_personal_info, UserConProfile
+      can [:read_email, :read_personal_info], UserConProfile
     end
 
     can :read, Organization if has_scope?(:read_organizations)
@@ -312,7 +312,7 @@ class Ability
     can :revert_become, UserConProfile
 
     if has_scope?(:read_profile)
-      can :read_personal_info, UserConProfile, user_id: user.id
+      can [:read_email, :read_personal_info], UserConProfile, user_id: user.id
       can :read, Order, user_con_profile: { user_id: user.id }
     end
 
@@ -385,7 +385,7 @@ class Ability
 
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can [:read, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
+    can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Permission, staff_position: { convention_id: staff_con_ids }
     can :read, Order, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
@@ -483,8 +483,8 @@ class Ability
     return unless has_scope?(:read_conventions)
     can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
     can :list_events, Convention, id: team_member_convention_ids, show_event_list: %w[gms yes]
-    can :read, UserConProfile, convention_id: team_member_convention_ids
-    can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
+    can [:read, :read_email], UserConProfile, convention_id: team_member_convention_ids
+    can :read_personal_info, UserConProfile, convention_id: team_member_signed_up_user_con_profile_ids
   end
 
   def token_scope_action(manage_scope, read_action = :read, manage_action = :manage)

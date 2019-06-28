@@ -43,7 +43,11 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   personal_info_field :user, Types::UserType, null: true
-  personal_info_field :email, String, null: true
+  field :email, String, null: true do
+    guard ->(graphql_object, _args, ctx) do
+      ctx[:current_ability].can?(:read_email, graphql_object.object)
+    end
+  end
   field :staff_positions, [Types::StaffPositionType], null: false
 
   association_loaders UserConProfile,
