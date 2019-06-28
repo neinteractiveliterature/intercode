@@ -34,6 +34,18 @@ fragment TeamMemberUserConProfileFields on UserConProfile {
   }
 }
 
+fragment TeamMemberUserConProfileSearchFields on UserConProfile {
+  id
+  name_without_nickname
+  name_inverted
+  email
+
+  ticket {
+    id
+    ...TeamMemberTicketFields
+  }
+}
+
 fragment TeamMemberFields on TeamMember {
   id
   display_team_member
@@ -44,6 +56,19 @@ fragment TeamMemberFields on TeamMember {
   user_con_profile {
     id
     ...TeamMemberUserConProfileFields
+  }
+}
+
+fragment TeamMemberFieldsWithoutPersonalInfo on TeamMember {
+  id
+  display_team_member
+  show_email
+  receive_con_email
+  receive_signup_email
+
+  user_con_profile {
+    id
+    ...TeamMemberUserConProfileSearchFields
   }
 }
 
@@ -90,18 +115,6 @@ query TeamMembersQuery($eventId: Int!) {
         email
       }
     }
-  }
-}
-
-fragment TeamMemberUserConProfileSearchFields on UserConProfile {
-  id
-  name_without_nickname
-  name_inverted
-  email
-
-  ticket {
-    id
-    ...TeamMemberTicketFields
   }
 }
 

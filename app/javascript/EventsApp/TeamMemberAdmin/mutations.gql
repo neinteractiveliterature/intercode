@@ -4,7 +4,7 @@ mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
     team_member {
       id
-      ...TeamMemberFields
+      ...TeamMemberUserConProfileSearchFields
     }
   }
 }
@@ -13,7 +13,7 @@ mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
   deleteTeamMember(input: $input) {
     team_member {
       id
-      ...TeamMemberFields
+      ...TeamMemberFieldsWithoutPersonalInfo
     }
   }
 }
@@ -22,7 +22,7 @@ mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
   updateTeamMember(input: $input) {
     team_member {
       id
-      ...TeamMemberFields
+      ...TeamMemberFieldsWithoutPersonalInfo
     }
   }
 }
