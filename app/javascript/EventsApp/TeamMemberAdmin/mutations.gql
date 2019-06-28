@@ -4,7 +4,7 @@ mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
     team_member {
       id
-      ...TeamMemberUserConProfileSearchFields
+      ...TeamMemberFieldsWithoutPersonalInfo
     }
   }
 }
