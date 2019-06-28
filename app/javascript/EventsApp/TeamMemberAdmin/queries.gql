@@ -93,13 +93,25 @@ query TeamMembersQuery($eventId: Int!) {
   }
 }
 
+fragment TeamMemberUserConProfileSearchFields on UserConProfile {
+  id
+  name_without_nickname
+  name_inverted
+  email
+
+  ticket {
+    id
+    ...TeamMemberTicketFields
+  }
+}
+
 query TeamMemberUserConProfilesQuery($name: String) {
   convention {
     id
     user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
       entries {
         id
-        ...TeamMemberUserConProfileFields
+        ...TeamMemberUserConProfileSearchFields
       }
     }
   }
