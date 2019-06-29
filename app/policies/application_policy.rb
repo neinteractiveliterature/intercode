@@ -1,5 +1,13 @@
 class ApplicationPolicy
   AuthorizationInfo = Struct.new(:user, :doorkeeper_token) do
+    def self.cast(authorization_info_or_user)
+      if authorization_info_or_user.is_a?(AuthorizationInfo)
+        authorization_info_or_user
+      else
+        AuthorizationInfo.new(authorization_info_or_user, nil)
+      end
+    end
+
     def site_admin?
       user&.site_admin?
     end
@@ -12,16 +20,12 @@ class ApplicationPolicy
   attr_reader :authorization_info, :record
   delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?, to: :authorization_info
 
-  def initialize(authorization_info, record)
-    @authorization_info = authorization_info
+  def initialize(authorization_info_or_user, record)
+    @authorization_info = AuthorizationInfo.cast(authorization_info_or_user)
     @record = record
   end
 
-  def index?
-    site_admin?
-  end
-
-  def show?
+  def read?
     site_admin?
   end
 
@@ -61,8 +65,8 @@ class ApplicationPolicy
     attr_reader :authorization_info, :scope
     delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?, to: :authorization_info
 
-    def initialize(authorization_info, scope)
-      @authorization_info = authorization_info
+    def initialize(authorization_info_or_user, scope)
+      @authorization_info = AuthorizationInfo.cast(authorization_info_or_user)
       @scope = scope
     end
 
