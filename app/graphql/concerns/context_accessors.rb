@@ -2,6 +2,7 @@ module Concerns::ContextAccessors
   %i[
     controller
     current_user
+    pundit_user
     current_ability
     user_con_profile
     convention

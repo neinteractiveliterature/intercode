@@ -171,10 +171,10 @@ class Types::ConventionType < Types::BaseObject
 
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType do
     guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
+      OrderPolicy.new(
+        ctx[:pundit_user],
         Order.new(user_con_profile: UserConProfile.new(convention: graphql_object.object))
-      )
+      ).read?
     end
   end
 

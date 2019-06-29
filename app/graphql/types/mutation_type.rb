@@ -264,19 +264,27 @@ class Types::MutationType < Types::BaseObject
   end
 
   field :submitOrder, mutation: Mutations::SubmitOrder do
-    guard(guard_for_model_with_id(Order, :submit))
+    guard -> (_obj, args, ctx) do
+      Pundit.policy(ctx[:pundit_user], Order.find(args[:id])).submit?
+    end
   end
 
   field :markOrderPaid, mutation: Mutations::MarkOrderPaid do
-    guard(guard_for_model_with_id(Order, :update))
+    guard -> (_obj, args, ctx) do
+      Pundit.policy(ctx[:pundit_user], Order.find(args[:id])).update?
+    end
   end
 
   field :updateOrder, mutation: Mutations::UpdateOrder do
-    guard(guard_for_model_with_id(Order, :update))
+    guard -> (_obj, args, ctx) do
+      Pundit.policy(ctx[:pundit_user], Order.find(args[:id])).update?
+    end
   end
 
   field :cancelOrder, mutation: Mutations::CancelOrder do
-    guard(guard_for_model_with_id(Order, :cancel))
+    guard -> (_obj, args, ctx) do
+      Pundit.policy(ctx[:pundit_user], Order.find(args[:id])).cancel?
+    end
   end
 
   ### OrganizationRole
