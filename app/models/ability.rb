@@ -484,7 +484,7 @@ class Ability
     can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
     can :list_events, Convention, id: team_member_convention_ids, show_event_list: %w[gms yes]
     can [:read, :read_email], UserConProfile, convention_id: team_member_convention_ids
-    can :read_personal_info, UserConProfile, convention_id: team_member_signed_up_user_con_profile_ids
+    can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
   end
 
   def token_scope_action(manage_scope, read_action = :read, manage_action = :manage)
