@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Pundit
   include Concerns::CmsContentHelpers
   include Concerns::ProfileSetupWorkflow
   helper_method :effective_cms_layout
@@ -35,7 +36,7 @@ class ApplicationController < ActionController::Base
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
   # logged in, or throw them back to the root URL with an error if they are.
-  rescue_from CanCan::AccessDenied do |error|
+  rescue_from CanCan::AccessDenied, Pundit::NotAuthorizedError do |error|
     Rails.logger.warn(error.message)
 
     if user_signed_in?
@@ -94,6 +95,10 @@ class ApplicationController < ActionController::Base
 
   def current_ability
     @current_ability ||= Ability.new(current_user, doorkeeper_token)
+  end
+
+  def pundit_user
+    @pundit_user ||= ApplicationPolicy::AuthorizationInfo.new(current_user, doorkeeper_token)
   end
 
   # Returns the appropriate Convention object for the domain name of the request.  This relies on

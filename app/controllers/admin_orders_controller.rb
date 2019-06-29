@@ -1,6 +1,7 @@
 class AdminOrdersController < ApplicationController
   include Concerns::SendCsv
   before_action :authorize_read_orders
+  skip_authorization_check
 
   def export
     respond_to do |format|
@@ -20,6 +21,6 @@ class AdminOrdersController < ApplicationController
   private
 
   def authorize_read_orders
-    authorize! :read, Order.new(user_con_profile: UserConProfile.new(convention: convention))
+    authorize Order.new(user_con_profile: UserConProfile.new(convention: convention)), :read?
   end
 end

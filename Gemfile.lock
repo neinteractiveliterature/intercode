@@ -325,6 +325,8 @@ GEM
     public_suffix (3.0.3)
     puma (3.12.1)
     puma (3.12.1-java)
+    pundit (2.0.1)
+      activesupport (>= 3.0.0)
     rack (2.0.7)
     rack-mini-profiler (1.0.2)
       rack (>= 1.2.0)
@@ -526,6 +528,7 @@ DEPENDENCIES
   pry-rails
   pry-remote
   puma
+  pundit
   rack-mini-profiler
   rails (= 5.2.3)
   rails-controller-testing

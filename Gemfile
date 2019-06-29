@@ -14,9 +14,11 @@ gem 'webpacker-react', '~> 0.3.2'
 
 gem 'with_advisory_lock'
 
-# Devise for authentication, cancancan for authorization, doorkeeper for OAuth providership
+# Devise for authentication, cancancan and pundit for authorization (eventually just pundit),
+# doorkeeper for OAuth providership
 gem 'devise'
 gem 'cancancan'
+gem 'pundit'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'doorkeeper', '5.1.0'
 gem 'devise-doorkeeper'
