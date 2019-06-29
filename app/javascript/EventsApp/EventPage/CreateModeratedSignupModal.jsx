@@ -36,7 +36,7 @@ function CreateModeratedSignupModal({
         return [];
       }
 
-      return data.myProfile.signups.find((signup) => {
+      return ((data.myProfile || {}).signups || []).find((signup) => {
         const timespan = timespanFromRun(
           { timezone_name: timezoneName },
           signup.run.event,
