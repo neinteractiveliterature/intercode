@@ -15,7 +15,7 @@ function FakeRun({ event }) {
   );
 
   return (
-    <div className="col-lg-4 col-md-6 col-sm-12">
+    <div className="run-card col-lg-4 col-md-6 col-sm-12">
       <RunCapacityGraph
         event={event}
         run={{
