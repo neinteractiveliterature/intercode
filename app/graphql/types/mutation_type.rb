@@ -255,13 +255,8 @@ class Types::MutationType < Types::BaseObject
     guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
   end
 
-  field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry do
-    guard(guard_for_model_with_id(OrderEntry, :update))
-  end
-
-  field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry do
-    guard(guard_for_model_with_id(OrderEntry, :destroy))
-  end
+  field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry
+  field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry
 
   field :submitOrder, mutation: Mutations::SubmitOrder
   field :markOrderPaid, mutation: Mutations::MarkOrderPaid
