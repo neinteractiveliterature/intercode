@@ -26,11 +26,11 @@ class ApplicationPolicy
   end
 
   def read?
-    site_admin?
+    oauth_scope?(:read_conventions) && site_admin?
   end
 
   def manage?
-    site_admin?
+    oauth_scope?(:manage_conventions) && site_admin?
   end
 
   def create?

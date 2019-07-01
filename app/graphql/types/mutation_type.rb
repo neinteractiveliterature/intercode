@@ -217,17 +217,9 @@ class Types::MutationType < Types::BaseObject
 
   ### Form
 
-  field :createFormWithJSON, mutation: Mutations::CreateFormWithJSON do
-    guard(guard_for_create_convention_associated_model(:forms))
-  end
-
-  field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON do
-    guard(guard_for_convention_associated_model(:forms, :update))
-  end
-
-  field :deleteForm, mutation: Mutations::DeleteForm do
-    guard(guard_for_convention_associated_model(:forms, :destroy))
-  end
+  field :createFormWithJSON, mutation: Mutations::CreateFormWithJSON
+  field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON
+  field :deleteForm, mutation: Mutations::DeleteForm
 
   ### MaximumEventProvidedTicketsOverride
 
