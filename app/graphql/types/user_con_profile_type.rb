@@ -96,13 +96,13 @@ class Types::UserConProfileType < Types::BaseObject
 
   field :orders, [Types::OrderType, null: true], null: false do
     guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
+      OrderPolicy.new(ctx[:pundit_user], Order.new(user_con_profile: graphql_object.object)).read?
     }
   end
 
   field :order_summary, String, null: false do
     guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
+      OrderPolicy.new(ctx[:pundit_user], Order.new(user_con_profile: graphql_object.object)).read?
     }
   end
 

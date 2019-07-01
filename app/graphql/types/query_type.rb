@@ -243,6 +243,7 @@ class Types::QueryType < Types::BaseObject
       cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
       nil, # request
       context[:current_ability],
+      context[:pundit_user],
       context[:user_con_profile],
       !context[:current_user].nil?,
       context[:convention]
