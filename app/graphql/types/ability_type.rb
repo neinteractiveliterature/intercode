@@ -105,7 +105,10 @@ class Types::AbilityType < Types::BaseObject
   field :can_update_orders, Boolean, null: false
 
   def can_update_orders
-    object.can?(:update, Order.new(user_con_profile: UserConProfile.new(convention: context[:convention])))
+    OrderPolicy.new(
+      pundit_user,
+      Order.new(user_con_profile: UserConProfile.new(convention: convention))
+    ).update?
   end
 
   field :can_create_tickets, Boolean, null: false

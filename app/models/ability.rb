@@ -255,7 +255,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Permission, Order, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
+      can :read, [Permission, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
       can [:read_email, :read_personal_info], UserConProfile
     end
 
@@ -295,7 +295,6 @@ class Ability
       Product,
       Room,
       RootSite,
-      Order,
       OrderEntry,
       SignupRequest,
       StaffPosition,
@@ -313,12 +312,10 @@ class Ability
 
     if has_scope?(:read_profile)
       can [:read_email, :read_personal_info], UserConProfile, user_id: user.id
-      can :read, Order, user_con_profile: { user_id: user.id }
     end
 
     if has_scope?(:manage_profile)
       can [:create, :update], UserConProfile, user_id: user.id
-      can :submit, Order, user_con_profile: { user_id: user.id }, status: %w[pending unpaid]
       can :manage, OrderEntry, order: { user_con_profile: { user_id: user.id }, status: 'pending' }
       can :read, Ticket, user_con_profile: { user_id: user.id }
     end
@@ -388,7 +385,6 @@ class Ability
     can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Permission, staff_position: { convention_id: staff_con_ids }
-    can :read, Order, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
@@ -426,7 +422,6 @@ class Ability
     can :manage, StaffPosition, convention_id: staff_con_ids
     can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can :manage, Order, user_con_profile: { convention_id: staff_con_ids }
   end
 
   def add_event_proposal_abilities

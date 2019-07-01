@@ -223,7 +223,10 @@ class NavigationBarPresenter
       label 'Store'
       url '/admin_store'
       visible? do
-        can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
+        OrderPolicy.new(
+          pundit_user,
+          Order.new(user_con_profile: UserConProfile.new(convention: convention))
+        ).read?
       end
     end,
     NavigationItem.define do
@@ -282,14 +285,15 @@ class NavigationBarPresenter
     end
   ]
 
-  attr_reader :navbar_classes, :request, :current_ability, :user_con_profile, :user_signed_in, :convention
+  attr_reader :navbar_classes, :request, :current_ability, :user_con_profile, :pundit_user, :user_signed_in, :convention
   alias user_signed_in? user_signed_in
   delegate :can?, to: :current_ability
 
-  def initialize(navbar_classes, request, current_ability, user_con_profile, user_signed_in, convention)
+  def initialize(navbar_classes, request, current_ability, pundit_user, user_con_profile, user_signed_in, convention)
     @navbar_classes = navbar_classes
     @request = request
     @current_ability = current_ability
+    @pundit_user = pundit_user
     @user_con_profile = user_con_profile
     @user_signed_in = user_signed_in
     @convention = convention

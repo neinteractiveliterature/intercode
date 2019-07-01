@@ -5,9 +5,9 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
   argument :payment_mode, Types::PaymentModeType, required: true, camelize: false
   argument :stripe_token, String, required: false, camelize: false
 
-  def resolve(**args)
-    order = Order.find(args[:id])
+  load_and_authorize_model_with_id Order, :id, :submit
 
+  def resolve(**args)
     if args[:payment_mode] == 'now'
       order.update!(submitted_at: Time.now)
 

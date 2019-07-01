@@ -4,8 +4,9 @@ class Mutations::UpdateOrder < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :order, Types::OrderInputType, required: true
 
+  load_and_authorize_model_with_id Order, :id, :update
+
   def resolve(**args)
-    order = Order.find(args[:id])
     order.update!(args[:order].to_h)
 
     { order: order }
