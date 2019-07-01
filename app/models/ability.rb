@@ -255,7 +255,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Permission, OrderEntry, Ticket, UserConProfile, User, UserActivityAlert]
+      can :read, [Permission, Ticket, UserConProfile, User, UserActivityAlert]
       can [:read_email, :read_personal_info], UserConProfile
     end
 
@@ -295,7 +295,6 @@ class Ability
       Product,
       Room,
       RootSite,
-      OrderEntry,
       SignupRequest,
       StaffPosition,
       Ticket,
@@ -316,7 +315,6 @@ class Ability
 
     if has_scope?(:manage_profile)
       can [:create, :update], UserConProfile, user_id: user.id
-      can :manage, OrderEntry, order: { user_con_profile: { user_id: user.id }, status: 'pending' }
       can :read, Ticket, user_con_profile: { user_id: user.id }
     end
 
