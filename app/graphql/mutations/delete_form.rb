@@ -3,10 +3,10 @@ class Mutations::DeleteForm < Mutations::BaseMutation
 
   argument :id, Int, required: true, camelize: false
 
-  def resolve(id:)
-    form = context[:convention].forms.find(id)
-    form.destroy!
+  load_and_authorize_convention_associated_model :forms, :id, :destroy
 
+  def resolve(**_args)
+    form.destroy!
     { form: form }
   end
 end

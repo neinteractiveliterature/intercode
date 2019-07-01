@@ -217,7 +217,6 @@ class Ability
     can :list_events, Convention, show_event_list: 'yes'
     can :read, Event, status: 'active'
     can :read, EventCategory
-    can :read, Form
     can [:read, :root], Page
     can :read, Product
     can :read, Room
@@ -289,7 +288,6 @@ class Ability
       CmsVariable,
       Convention,
       EventCategory,
-      Form,
       Page,
       Permission,
       Product,
@@ -418,7 +416,6 @@ class Ability
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
     can :manage, StaffPosition, convention_id: staff_con_ids
-    can :manage, Form, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
   end
 
