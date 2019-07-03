@@ -5,7 +5,7 @@ class TicketPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) { has_privilege_in_convention?(convention, :con_com) }
-      d.add(:read_events) { has_privilege_in_convention?(convention) }
+      d.add(:read_events) { team_member_in_convention?(convention) }
       d.add(:read_profile) { user.id == user_con_profile.user_id }
     end
 
