@@ -51,21 +51,23 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
       my_orders = FactoryBot.create_list(:order, 3, user_con_profile: me)
       my_order_entries = my_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
       other_orders = FactoryBot.create_list(:order, 3)
-      other_order_entries = other_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
+      other_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
       resolved_order_entries = OrderEntryPolicy::Scope.new(me.user, OrderEntry.all).resolve.to_a
 
       assert_equal my_order_entries.sort, resolved_order_entries.sort
     end
 
-    it "lets con staff see all the order entries in the con" do
+    it 'lets con staff see all the order entries in the con' do
       me = FactoryBot.create(:staff_user_con_profile)
       my_orders = FactoryBot.create_list(:order, 3, user_con_profile: me)
       my_order_entries = my_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
       someone = FactoryBot.create(:user_con_profile, convention: me.convention)
       someones_orders = FactoryBot.create_list(:order, 3, user_con_profile: someone)
-      someones_order_entries = someones_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
+      someones_order_entries = someones_orders.map do |order|
+        FactoryBot.create(:order_entry, order: order)
+      end
       other_orders = FactoryBot.create_list(:order, 3)
-      other_order_entries = other_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
+      other_orders.map { |order| FactoryBot.create(:order_entry, order: order) }
       resolved_order_entries = OrderEntryPolicy::Scope.new(me.user, OrderEntry.all).resolve.to_a
 
       assert_equal (my_order_entries + someones_order_entries).sort, resolved_order_entries.sort
