@@ -65,18 +65,18 @@ class OrderPolicyTest < ActiveSupport::TestCase
     it "lets me see my own orders but not other people's" do
       me = FactoryBot.create(:user_con_profile)
       my_orders = FactoryBot.create_list(:order, 3, user_con_profile: me)
-      other_orders = FactoryBot.create_list(:order, 3)
+      FactoryBot.create_list(:order, 3)
       resolved_orders = OrderPolicy::Scope.new(me.user, Order.all).resolve.to_a
 
       assert_equal my_orders.sort, resolved_orders.sort
     end
 
-    it "lets con staff see all the orders in the con" do
+    it 'lets con staff see all the orders in the con' do
       me = FactoryBot.create(:staff_user_con_profile)
       my_orders = FactoryBot.create_list(:order, 3, user_con_profile: me)
       someone = FactoryBot.create(:user_con_profile, convention: me.convention)
       someones_orders = FactoryBot.create_list(:order, 3, user_con_profile: someone)
-      other_orders = FactoryBot.create_list(:order, 3)
+      FactoryBot.create_list(:order, 3)
       resolved_orders = OrderPolicy::Scope.new(me.user, Order.all).resolve.to_a
 
       assert_equal (my_orders + someones_orders).sort, resolved_orders.sort
