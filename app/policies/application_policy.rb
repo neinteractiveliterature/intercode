@@ -1,24 +1,9 @@
 class ApplicationPolicy
-  AuthorizationInfo = Struct.new(:user, :doorkeeper_token) do
-    def self.cast(authorization_info_or_user)
-      if authorization_info_or_user.is_a?(AuthorizationInfo)
-        authorization_info_or_user
-      else
-        AuthorizationInfo.new(authorization_info_or_user, nil)
-      end
-    end
-
-    def site_admin?
-      user&.site_admin?
-    end
-
-    def oauth_scope?(scope)
-      doorkeeper_token.nil? || doorkeeper_token.scopes.exists?(scope)
-    end
-  end
-
   attr_reader :authorization_info, :record
-  delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?, to: :authorization_info
+  delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?,
+    :user_con_profile_for_convention, :team_member_in_convention?,
+    :oauth_scoped_disjunction,
+    to: :authorization_info
 
   def initialize(authorization_info_or_user, record)
     @authorization_info = AuthorizationInfo.cast(authorization_info_or_user)
@@ -48,7 +33,7 @@ class ApplicationPolicy
   private
 
   def has_privilege_in_convention?(convention, *privileges)
-    user_con_profile = convention.user_con_profiles.find_by(user_id: user.id)
+    user_con_profile = user_con_profile_for_convention(convention)
     return false unless user_con_profile
 
     (
@@ -87,6 +72,15 @@ class ApplicationPolicy
         .has_privileges(['staff', *privileges.map(&:to_s)])
 
       Convention.where(user_con_profiles: user_con_profile_scope)
+    end
+
+    def conventions_where_team_member
+      Convention.where(
+        id: TeamMember
+          .joins(:user_con_profile)
+          .where(user_con_profiles: { user_id: user.id })
+          .select(:convention_id)
+      )
     end
   end
 end

@@ -470,17 +470,9 @@ class Types::MutationType < Types::BaseObject
 
   ### Ticket
 
-  field :createTicket, mutation: Mutations::CreateTicket do
-    guard(guard_for_create_convention_associated_model(:tickets))
-  end
-
-  field :updateTicket, mutation: Mutations::UpdateTicket do
-    guard(guard_for_convention_associated_model(:tickets, :update))
-  end
-
-  field :deleteTicket, mutation: Mutations::DeleteTicket do
-    guard(guard_for_convention_associated_model(:tickets, :destroy))
-  end
+  field :createTicket, mutation: Mutations::CreateTicket
+  field :updateTicket, mutation: Mutations::UpdateTicket
+  field :deleteTicket, mutation: Mutations::DeleteTicket
 
   field :purchaseTicket, mutation: Mutations::PurchaseTicket do
     guard -> (_obj, _args, ctx) do
@@ -495,13 +487,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :convertTicketToEventProvided, mutation: Mutations::ConvertTicketToEventProvided do
-    guard -> (_obj, args, ctx) {
-      event = ctx[:convention].events.find(args[:event_id])
-      user_con_profile = ctx[:convention].user_con_profiles.find(args[:user_con_profile_id])
-      ctx[:current_ability].can?(:destroy, user_con_profile.ticket) && ctx[:current_ability].can?(:update, event.team_members.new)
-    }
-  end
+  field :convertTicketToEventProvided, mutation: Mutations::ConvertTicketToEventProvided
 
   ### TicketType
 

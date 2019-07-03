@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
   end
 
   def pundit_user
-    @pundit_user ||= ApplicationPolicy::AuthorizationInfo.new(current_user, doorkeeper_token)
+    @pundit_user ||= AuthorizationInfo.new(current_user, doorkeeper_token)
   end
 
   # Returns the appropriate Convention object for the domain name of the request.  This relies on

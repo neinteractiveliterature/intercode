@@ -4,6 +4,8 @@ class Mutations::CreateTicket < Mutations::BaseMutation
   argument :user_con_profile_id, Int, required: true, camelize: false
   argument :ticket, Types::TicketInputType, required: true
 
+  authorize_create_convention_associated_model :tickets
+
   def resolve(user_con_profile_id:, ticket:)
     ticket_profile = convention.user_con_profiles.find(user_con_profile_id)
     ticket_attrs = ticket.to_h

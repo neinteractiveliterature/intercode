@@ -254,7 +254,7 @@ class Ability
         :view_reports,
         :view_attendees
       ], Convention
-      can :read, [Permission, Ticket, UserConProfile, User, UserActivityAlert]
+      can :read, [Permission, UserConProfile, User, UserActivityAlert]
       can [:read_email, :read_personal_info], UserConProfile
     end
 
@@ -295,7 +295,6 @@ class Ability
       RootSite,
       SignupRequest,
       StaffPosition,
-      Ticket,
       TicketType,
       User,
       UserActivityAlert,
@@ -311,10 +310,7 @@ class Ability
       can [:read_email, :read_personal_info], UserConProfile, user_id: user.id
     end
 
-    if has_scope?(:manage_profile)
-      can [:create, :update], UserConProfile, user_id: user.id
-      can :read, Ticket, user_con_profile: { user_id: user.id }
-    end
+    can [:create, :update], UserConProfile, user_id: user.id if has_scope?(:manage_profile)
 
     if has_scope?(:read_events)
       can :read, EventProposal, id: own_event_proposal_ids
@@ -381,7 +377,6 @@ class Ability
     can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Permission, staff_position: { convention_id: staff_con_ids }
-    can :read, Ticket, user_con_profile: { convention_id: con_ids_with_privilege(:con_com) }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
     can token_scope_action(:manage_conventions), MaximumEventProvidedTicketsOverride,
@@ -405,7 +400,6 @@ class Ability
     can :update, Convention, id: staff_con_ids
 
     can :manage, UserConProfile, convention_id: staff_con_ids
-    can :manage, Ticket, user_con_profile: { convention_id: staff_con_ids }
     can :manage, TicketType, convention_id: staff_con_ids
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
@@ -461,7 +455,6 @@ class Ability
         Signup,
         run: { event_id: team_member_event_ids }
       )
-      can :read, Ticket, user_con_profile: { convention_id: team_member_convention_ids }
       can token_scope_action(:manage_events), TeamMember, event_id: team_member_event_ids
     end
 

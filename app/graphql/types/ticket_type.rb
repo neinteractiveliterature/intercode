@@ -1,4 +1,8 @@
 class Types::TicketType < Types::BaseObject
+  def self.authorized?(record, context)
+    Pundit.policy(context[:pundit_user], record).read?
+  end
+
   field :id, Integer, null: false
   field :convention, Types::ConventionType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false
