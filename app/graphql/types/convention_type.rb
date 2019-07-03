@@ -31,11 +31,7 @@ class Types::ConventionType < Types::BaseObject
   field :default_layout, Types::CmsLayoutType, null: true
   field :cms_navigation_items, [Types::CmsNavigationItemType], null: true
   field :pages, [Types::PageType], null: true
-  field :rooms, [Types::RoomType], null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, Room.new(convention: graphql_object.object))
-    end
-  end
+  field :rooms, [Types::RoomType], null: true
   field :root_page, Types::PageType, null: true
   field :staff_positions, [Types::StaffPositionType], null: true do
     guard ->(graphql_object, _args, ctx) do

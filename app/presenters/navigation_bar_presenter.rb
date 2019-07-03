@@ -203,7 +203,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Rooms'
       url '/rooms'
-      visible? { can?(:update, Room.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, Room.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Signup Moderation'

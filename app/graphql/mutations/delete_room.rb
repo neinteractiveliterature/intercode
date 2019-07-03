@@ -3,8 +3,9 @@ class Mutations::DeleteRoom < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
+  load_and_authorize_convention_associated_model :rooms, :id, :destroy
+
   def resolve(**args)
-    room = convention.rooms.find(args[:id])
     room.destroy!
     { room: room }
   end
