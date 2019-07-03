@@ -223,7 +223,6 @@ class Ability
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
     can :read, StaffPosition
-    can :read, TicketType
   end
 
   def add_site_admin_abilities
@@ -295,7 +294,6 @@ class Ability
       RootSite,
       SignupRequest,
       StaffPosition,
-      TicketType,
       User,
       UserActivityAlert,
       UserConProfile
@@ -400,7 +398,6 @@ class Ability
     can :update, Convention, id: staff_con_ids
 
     can :manage, UserConProfile, convention_id: staff_con_ids
-    can :manage, TicketType, convention_id: staff_con_ids
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, EventCategory, convention_id: staff_con_ids

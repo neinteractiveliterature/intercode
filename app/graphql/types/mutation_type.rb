@@ -491,22 +491,9 @@ class Types::MutationType < Types::BaseObject
 
   ### TicketType
 
-  field :createTicketType, mutation: Mutations::CreateTicketType do
-    guard ->(_obj, args, ctx) {
-      ctx[:current_ability].can?(
-        :create,
-        TicketType.new(args[:ticket_type].to_h.merge(convention: ctx[:convention]))
-      )
-    }
-  end
-
-  field :deleteTicketType, mutation: Mutations::DeleteTicketType do
-    guard(guard_for_convention_associated_model(:ticket_types, :destroy))
-  end
-
-  field :updateTicketType, mutation: Mutations::UpdateTicketType do
-    guard(guard_for_convention_associated_model(:ticket_types, :update))
-  end
+  field :createTicketType, mutation: Mutations::CreateTicketType
+  field :deleteTicketType, mutation: Mutations::DeleteTicketType
+  field :updateTicketType, mutation: Mutations::UpdateTicketType
 
   ### UserActivityAlert
 
