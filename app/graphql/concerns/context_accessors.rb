@@ -27,7 +27,7 @@ module Concerns::ContextAccessors
     Pundit.policy(pundit_user, model)
   end
 
-  def policy_scope(model)
-    Pundit.policy_scope(pundit_user, model)
+  def policy_scope(scope)
+    Pundit.policy_scope(pundit_user, scope)
   end
 end

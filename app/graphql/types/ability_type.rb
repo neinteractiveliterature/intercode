@@ -157,7 +157,7 @@ class Types::AbilityType < Types::BaseObject
   field :can_update_products, Boolean, null: false
 
   def can_update_products
-    object.can?(:update, Product.new(convention: context[:convention]))
+    policy(Product.new(convention: context[:convention])).update?
   end
 
   field :can_create_user_con_profiles, Boolean, null: false

@@ -288,19 +288,9 @@ class Types::MutationType < Types::BaseObject
 
   ### Product
 
-  field :createProduct, mutation: Mutations::CreateProduct do
-    guard ->(_obj, _args, ctx) {
-      ctx[:current_ability].can?(:create, Product.new(convention: ctx[:convention]))
-    }
-  end
-
-  field :updateProduct, mutation: Mutations::UpdateProduct do
-    guard(guard_for_convention_associated_model(:products, :update))
-  end
-
-  field :deleteProduct, mutation: Mutations::DeleteProduct do
-    guard(guard_for_convention_associated_model(:products, :destroy))
-  end
+  field :createProduct, mutation: Mutations::CreateProduct
+  field :updateProduct, mutation: Mutations::UpdateProduct
+  field :deleteProduct, mutation: Mutations::DeleteProduct
 
   ### Room
 
