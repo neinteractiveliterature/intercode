@@ -218,7 +218,6 @@ class Ability
     can :read, Event, status: 'active'
     can :read, EventCategory
     can [:read, :root], Page
-    can :read, Room
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
   end
@@ -287,7 +286,6 @@ class Ability
       EventCategory,
       Page,
       Permission,
-      Room,
       RootSite,
       SignupRequest,
       User,
@@ -401,7 +399,6 @@ class Ability
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
-    can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
   end
 
   def add_event_proposal_abilities

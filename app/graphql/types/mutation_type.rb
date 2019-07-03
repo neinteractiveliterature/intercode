@@ -294,22 +294,9 @@ class Types::MutationType < Types::BaseObject
 
   ### Room
 
-  field :createRoom, mutation: Mutations::CreateRoom do
-    guard ->(_obj, args, ctx) {
-      ctx[:current_ability].can?(
-        :create,
-        Room.new({ convention: ctx[:convention] }.merge(args[:room].to_h))
-      )
-    }
-  end
-
-  field :updateRoom, mutation: Mutations::UpdateRoom do
-    guard(guard_for_convention_associated_model(:rooms, :update))
-  end
-
-  field :deleteRoom, mutation: Mutations::DeleteRoom do
-    guard(guard_for_convention_associated_model(:rooms, :destroy))
-  end
+  field :createRoom, mutation: Mutations::CreateRoom
+  field :updateRoom, mutation: Mutations::UpdateRoom
+  field :deleteRoom, mutation: Mutations::DeleteRoom
 
   ### RootSite
 
