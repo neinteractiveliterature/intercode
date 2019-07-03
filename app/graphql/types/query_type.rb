@@ -252,14 +252,10 @@ class Types::QueryType < Types::BaseObject
 
   field :staff_position, Types::StaffPositionType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].staff_positions.find(args[:id]))
-    end
   end
 
-  def staff_position(**args)
-    convention.staff_positions.find(args[:id])
+  def staff_position(id:)
+    convention.staff_positions.find(id)
   end
 
   field :liquid_assigns, [Types::LiquidAssign], null: true

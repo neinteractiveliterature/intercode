@@ -222,7 +222,6 @@ class Ability
     can :read, Room
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
-    can :read, StaffPosition
   end
 
   def add_site_admin_abilities
@@ -293,7 +292,6 @@ class Ability
       Room,
       RootSite,
       SignupRequest,
-      StaffPosition,
       User,
       UserActivityAlert,
       UserConProfile
@@ -406,7 +404,6 @@ class Ability
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
-    can :manage, StaffPosition, convention_id: staff_con_ids
     can :manage, Room, convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
   end
 

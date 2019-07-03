@@ -427,18 +427,8 @@ class Types::MutationType < Types::BaseObject
 
   ### StaffPosition
 
-  field :createStaffPosition, mutation: Mutations::CreateStaffPosition do
-    guard ->(_obj, args, ctx) {
-      ctx[:current_ability].can?(
-        :create,
-        StaffPosition.new(args[:staff_position].to_h.merge(convention: ctx[:convention]))
-      )
-    }
-  end
-
-  field :updateStaffPosition, mutation: Mutations::UpdateStaffPosition do
-    guard(guard_for_convention_associated_model(:staff_positions, :update))
-  end
+  field :createStaffPosition, mutation: Mutations::CreateStaffPosition
+  field :updateStaffPosition, mutation: Mutations::UpdateStaffPosition
 
   field :updateStaffPositionPermissions, mutation: Mutations::UpdateStaffPositionPermissions do
     guard ->(_obj, args, ctx) {
@@ -450,9 +440,7 @@ class Types::MutationType < Types::BaseObject
     }
   end
 
-  field :deleteStaffPosition, mutation: Mutations::DeleteStaffPosition do
-    guard(guard_for_convention_associated_model(:staff_positions, :destroy))
-  end
+  field :deleteStaffPosition, mutation: Mutations::DeleteStaffPosition
 
   ### TeamMember
 
