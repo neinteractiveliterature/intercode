@@ -6,7 +6,9 @@ class FormPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scope?(:manage_conventions) && staff_in_convention?(convention)
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:manage_conventions) { staff_in_convention?(convention) }
+    end
 
     super
   end

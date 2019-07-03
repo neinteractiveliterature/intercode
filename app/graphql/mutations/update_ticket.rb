@@ -4,8 +4,10 @@ class Mutations::UpdateTicket < Mutations::BaseMutation
   argument :id, Int, required: true, camelize: false
   argument :ticket, Types::TicketInputType, required: true
 
-  def resolve(id:, ticket:)
-    ticket_model = convention.tickets.find(id)
+  load_and_authorize_convention_associated_model :tickets, :id, :update
+
+  def resolve(ticket:, **_args)
+    ticket_model = @ticket
     ticket_attrs = ticket.to_h
     ticket_attrs[:payment_amount] = MoneyHelper.coerce_money_input(ticket_attrs[:payment_amount])
     ticket_model.update!(ticket_attrs)

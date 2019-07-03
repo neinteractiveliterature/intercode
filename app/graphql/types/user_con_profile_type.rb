@@ -76,14 +76,7 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :preferred_contact, String, null: true
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: false
 
-  field :ticket, Types::TicketType, null: true do
-    guard -> (graphql_object, _args, ctx) {
-      # Using the actual user_con_profile object here will set the ticket association on that object
-      # which will cause problems if we try to actually read it
-      ctx[:current_ability].can?(:read, Ticket.new(user_con_profile_id: graphql_object.object.id))
-    }
-  end
-
+  field :ticket, Types::TicketType, null: true
   field :ability, Types::AbilityType, null: true
 
   def ability

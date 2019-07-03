@@ -114,7 +114,7 @@ class Types::AbilityType < Types::BaseObject
   field :can_create_tickets, Boolean, null: false
 
   def can_create_tickets
-    object.can?(:create, Ticket.new(user_con_profile: UserConProfile.new(convention: context[:convention])))
+    policy(Ticket.new(user_con_profile: UserConProfile.new(convention: convention))).create?
   end
 
   field :can_update_ticket, Boolean, null: false do

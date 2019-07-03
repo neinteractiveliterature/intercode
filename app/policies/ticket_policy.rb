@@ -1,10 +1,11 @@
-class OrderPolicy < ApplicationPolicy
+class TicketPolicy < ApplicationPolicy
   delegate :user_con_profile, to: :record
   delegate :convention, to: :user_con_profile
 
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) { has_privilege_in_convention?(convention, :con_com) }
+      d.add(:read_events) { has_privilege_in_convention?(convention) }
       d.add(:read_profile) { user.id == user_con_profile.user_id }
     end
 
@@ -12,25 +13,9 @@ class OrderPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { staff_in_convention?(convention) }
-    end
+    return true if oauth_scope?(:manage_conventions) && staff_in_convention?(convention)
 
     super
-  end
-
-  def submit?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_profile) do
-        %w[pending unpaid].include?(record.status) && user.id == user_con_profile.user_id
-      end
-    end
-
-    manage?
-  end
-
-  def cancel?
-    manage?
   end
 
   class Scope < Scope
@@ -39,11 +24,11 @@ class OrderPolicy < ApplicationPolicy
 
       disjunctive_where do |dw|
         if oauth_scope?(:read_conventions)
-          dw.add(
-            user_con_profile_id: UserConProfile.where(
-              convention: conventions_with_privilege(:con_com)
-            )
-          )
+          dw.add(user_con_profile_id: UserConProfile.where(convention: conventions_with_privilege(:con_com)))
+        end
+
+        if oauth_scope?(:read_events)
+          dw.add(user_con_profile_id: UserConProfile.where(convention: conventions_where_team_member))
         end
 
         if oauth_scope?(:read_profile)
