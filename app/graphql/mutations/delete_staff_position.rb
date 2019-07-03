@@ -3,8 +3,9 @@ class Mutations::DeleteStaffPosition < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    staff_position = convention.staff_positions.find(args[:id])
+  load_and_authorize_convention_associated_model :staff_positions, :id, :destroy
+
+  def resolve(**_args)
     staff_position.destroy!
 
     { staff_position: staff_position }
