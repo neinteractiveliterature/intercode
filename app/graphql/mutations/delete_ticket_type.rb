@@ -5,8 +5,9 @@ class Mutations::DeleteTicketType < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    ticket_type = convention.ticket_types.find(args[:id])
+  load_and_authorize_convention_associated_model :ticket_types, :id, :destroy
+
+  def resolve(**_args)
     if ticket_type.tickets.any?
       return GraphQL::ExecutionError.new("#{ticket_type.description} can't be deleted because \
 #{convention.ticket_name.pluralize} have already been purchased using this \

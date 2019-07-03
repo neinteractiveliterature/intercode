@@ -223,7 +223,7 @@ class NavigationBarPresenter
       label 'Store'
       url '/admin_store'
       visible? do
-        OrderPolicy.new(
+        Pundit.policy(
           pundit_user,
           Order.new(user_con_profile: UserConProfile.new(convention: convention))
         ).read?
@@ -234,7 +234,7 @@ class NavigationBarPresenter
       url '/ticket_types'
       visible? do
         convention.ticket_mode != 'disabled' &&
-          can?(:update, TicketType.new(convention: convention))
+          Pundit.policy(pundit_user, TicketType.new(convention: convention)).update?
       end
     end,
     NavigationItem.define do
