@@ -293,14 +293,10 @@ class Types::QueryType < Types::BaseObject
 
   field :product, Types::ProductType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].products.find(args[:id]))
-    end
   end
 
-  def product(**args)
-    convention.products.find(args[:id])
+  def product(id:)
+    policy_scope(convention.products).find(id)
   end
 
   field :oauth_pre_auth, Types::Json, null: false do
