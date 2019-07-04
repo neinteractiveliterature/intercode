@@ -3,8 +3,9 @@ class Mutations::DeletePage < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    page = cms_parent.pages.find(args[:id])
+  load_and_authorize_cms_model :pages, :id, :destroy
+
+  def resolve(**_args)
     page.destroy!
     { page: page }
   end

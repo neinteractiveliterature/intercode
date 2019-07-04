@@ -216,7 +216,6 @@ class Ability
     can :schedule, Convention, show_schedule: 'yes'
     can :list_events, Convention, show_event_list: 'yes'
     can :read, Event, status: 'active'
-    can [:read, :root], Page
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
   end
@@ -274,14 +273,7 @@ class Ability
 
     return unless has_scope?(:manage_conventions)
     can :manage, [
-      CmsFile,
-      CmsGraphqlQuery,
-      CmsLayout,
-      CmsNavigationItem,
-      CmsPartial,
-      CmsVariable,
       Convention,
-      Page,
       Permission,
       RootSite,
       SignupRequest,
@@ -381,10 +373,6 @@ class Ability
     end
 
     return unless has_scope?(:manage_conventions)
-
-    can :manage,
-      [Page, CmsPartial, CmsFile, CmsGraphqlQuery, CmsNavigationItem, CmsLayout, CmsVariable],
-      parent_type: 'Convention', parent_id: staff_con_ids
 
     can :update, Convention, id: staff_con_ids
 

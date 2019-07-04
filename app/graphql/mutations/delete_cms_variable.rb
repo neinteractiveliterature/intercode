@@ -3,10 +3,11 @@ class Mutations::DeleteCmsVariable < Mutations::BaseMutation
 
   argument :key, String, required: true
 
-  def resolve(key:)
-    variable = cms_parent.cms_variables.find_by!(key: key)
-    variable.destroy!
+  load_and_authorize_cms_model :cms_variables, :key, :destroy
 
-    { cms_variable: variable }
+  def resolve(**_args)
+    cms_variable.destroy!
+
+    { cms_variable: cms_variable }
   end
 end

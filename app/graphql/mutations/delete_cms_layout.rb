@@ -3,8 +3,9 @@ class Mutations::DeleteCmsLayout < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    cms_layout = cms_parent.cms_layouts.find(args[:id])
+  load_and_authorize_cms_model :cms_layouts, :id, :destroy
+
+  def resolve(**_args)
     cms_layout.destroy!
     { cms_layout: cms_layout }
   end
