@@ -3,8 +3,9 @@ class Mutations::DeleteEventCategory < Mutations::BaseMutation
 
   argument :id, Int, required: true, camelize: false
 
-  def resolve(id:)
-    event_category = context[:convention].event_categories.find(id)
+  load_and_authorize_convention_associated_model :event_categories, :id, :destroy
+
+  def resolve(**_args)
     event_category.destroy!
 
     { event_category: event_category }

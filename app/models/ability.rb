@@ -216,7 +216,6 @@ class Ability
     can :schedule, Convention, show_schedule: 'yes'
     can :list_events, Convention, show_event_list: 'yes'
     can :read, Event, status: 'active'
-    can :read, EventCategory
     can [:read, :root], Page
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
@@ -232,7 +231,6 @@ class Ability
     if has_scope?(:read_events)
       can :read, [
         Event,
-        EventCategory,
         EventProposal,
         MaximumEventProvidedTicketsOverride,
         Run,
@@ -283,7 +281,6 @@ class Ability
       CmsPartial,
       CmsVariable,
       Convention,
-      EventCategory,
       Page,
       Permission,
       RootSite,
@@ -394,7 +391,6 @@ class Ability
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can :manage, EventCategory, convention_id: staff_con_ids
     can :manage, Permission, staff_position: { convention_id: staff_con_ids }
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }

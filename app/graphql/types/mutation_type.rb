@@ -171,17 +171,9 @@ class Types::MutationType < Types::BaseObject
 
   ### EventCategory
 
-  field :createEventCategory, mutation: Mutations::CreateEventCategory do
-    guard(guard_for_create_convention_associated_model(:event_categories))
-  end
-
-  field :updateEventCategory, mutation: Mutations::UpdateEventCategory do
-    guard(guard_for_convention_associated_model(:event_categories, :update))
-  end
-
-  field :deleteEventCategory, mutation: Mutations::DeleteEventCategory do
-    guard(guard_for_convention_associated_model(:event_categories, :destroy))
-  end
+  field :createEventCategory, mutation: Mutations::CreateEventCategory
+  field :updateEventCategory, mutation: Mutations::UpdateEventCategory
+  field :deleteEventCategory, mutation: Mutations::DeleteEventCategory
 
   ### EventProposal
 
