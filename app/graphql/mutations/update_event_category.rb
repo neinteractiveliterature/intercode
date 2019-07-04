@@ -4,10 +4,11 @@ class Mutations::UpdateEventCategory < Mutations::BaseMutation
   argument :id, Int, required: true, camelize: false
   argument :event_category, Types::EventCategoryInputType, required: true, camelize: false
 
-  def resolve(id:, event_category:)
-    event_category_model = context[:convention].event_categories.find(id)
-    event_category_model.update!(event_category.to_h)
+  load_and_authorize_convention_associated_model :event_categories, :id, :update
 
-    { event_category: event_category_model }
+  def resolve(**args)
+    event_category.update!(args[:event_category].to_h)
+
+    { event_category: event_category }
   end
 end
