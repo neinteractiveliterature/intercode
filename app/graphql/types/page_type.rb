@@ -5,9 +5,7 @@ class Types::PageType < Types::BaseObject
   field :content, String, null: true
   field :content_html, String, null: false
   field :admin_notes, String, null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:update, graphql_object.object)
-    end
+    authorize_action :update
   end
   field :skip_clickwrap_agreement, Boolean, null: true
   field :cms_layout, Types::CmsLayoutType, null: true

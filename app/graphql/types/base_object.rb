@@ -24,5 +24,11 @@ class Types::BaseObject < GraphQL::Schema::Object
     end
   end
 
+  def self.authorize_record
+    define_singleton_method :authorized? do |record, context|
+      Pundit.policy(context[:pundit_user], record).read?
+    end
+  end
+
   field_class Types::BaseField
 end

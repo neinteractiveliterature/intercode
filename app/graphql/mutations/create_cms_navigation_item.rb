@@ -3,6 +3,8 @@ class Mutations::CreateCmsNavigationItem < Mutations::BaseMutation
 
   argument :cms_navigation_item, Types::CmsNavigationItemInputType, required: true, camelize: false
 
+  authorize_create_cms_model :cms_navigation_items
+
   def resolve(**args)
     cms_navigation_item = CmsNavigationItem
       .create!(args[:cms_navigation_item].to_h.merge(parent: convention))

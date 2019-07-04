@@ -55,12 +55,16 @@ class AuthorizationInfo
   end
 
   def user_con_profile_for_convention(convention)
+    return nil unless convention
+
     @user_con_profiles.get(convention.id) do
       convention.user_con_profiles.find_by(convention_id: convention.id, user_id: user.id)
     end
   end
 
   def team_member_in_convention?(convention)
+    return false unless convention
+
     @team_member_in_convention.get(convention.id) do
       TeamMember.joins(:user_con_profile)
         .where(user_con_profiles: { user_id: user.id, convention_id: convention.id })

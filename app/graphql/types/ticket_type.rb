@@ -1,8 +1,4 @@
 class Types::TicketType < Types::BaseObject
-  def self.authorized?(record, context)
-    Pundit.policy(context[:pundit_user], record).read?
-  end
-
   field :id, Integer, null: false
   field :convention, Types::ConventionType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false
@@ -15,4 +11,6 @@ class Types::TicketType < Types::BaseObject
   field :updated_at, Types::DateType, null: false
 
   association_loaders Ticket, :ticket_type, :provided_by_event, :user_con_profile
+
+  authorize_record
 end

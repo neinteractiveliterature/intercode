@@ -3,6 +3,8 @@ class Mutations::SetCmsVariable < Mutations::BaseMutation
 
   argument :cms_variable, Types::CmsVariableInput, required: true, camelize: false
 
+  authorize_create_cms_model :cms_variables
+
   def resolve(cms_variable:)
     begin
       value = JSON.parse(cms_variable['value_json'])

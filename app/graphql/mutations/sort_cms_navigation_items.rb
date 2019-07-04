@@ -1,6 +1,8 @@
 class Mutations::SortCmsNavigationItems < Mutations::BaseMutation
   argument :sort_items, [Mutations::UpdateCmsNavigationItem.input_type], required: true, camelize: false
 
+  authorize_arbitrary_cms_model :cms_navigation_items, :update
+
   def resolve(**args)
     args[:sort_items].each do |sort_item|
       cms_navigation_item_attrs = sort_item[:cms_navigation_item].to_h.symbolize_keys

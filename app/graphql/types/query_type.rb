@@ -218,10 +218,6 @@ class Types::QueryType < Types::BaseObject
 
   field :form, Types::FormType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].forms.find(args[:id]))
-    end
   end
 
   def form(**args)

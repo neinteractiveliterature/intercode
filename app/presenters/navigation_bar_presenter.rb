@@ -151,7 +151,7 @@ class NavigationBarPresenter
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
     url '/cms_pages'
-    visible? { can?(:update, Page.new(parent: convention)) }
+    visible? { Pundit.policy(pundit_user, Page.new(parent: convention)).update? }
   end
 
   ADMIN_NAVIGATION_ITEMS = [
