@@ -1,40 +1,13 @@
 class AuthorizationInfo
-  class NilSafeCache
-    def initialize
-      @values = {}
-    end
+  QUERY_MANAGER_CLASSES = [
+    Queries::PermissionsQueryManager,
+    Queries::TeamMemberQueryManager,
+    Queries::UserConProfileQueryManager
+  ]
 
-    def get(key, &block)
-      return @values[key] if @values.key?(key)
-      @values[key] = block.call
-    end
-  end
-
-  class OAuthScopedDisjunction
-    def self.evaluate(authorization_info)
-      disjunction = new(authorization_info)
-      yield disjunction
-      disjunction.value
-    end
-
-    attr_reader :authorization_info
-
-    def initialize(authorization_info)
-      @authorization_info = authorization_info
-      @clauses = []
-    end
-
-    def add_clause(&block)
-      @clauses << block
-    end
-
-    def add(scope, &block)
-      add_clause { authorization_info.oauth_scope?(scope) && block.call }
-    end
-
-    def value
-      @clauses.any?(&:call)
-    end
+  module QueryMethods
+    METHODS = AuthorizationInfo::QUERY_MANAGER_CLASSES.flat_map(&:query_methods)
+    delegate(*METHODS, to: :authorization_info)
   end
 
   def self.cast(authorization_info_or_user)
@@ -46,29 +19,21 @@ class AuthorizationInfo
   end
 
   attr_reader :user, :doorkeeper_token
+  QUERY_MANAGER_CLASSES.each do |query_manager_class|
+    instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
+    attr_reader instance_variable_name
+
+    query_manager_class.query_methods.each do |query_method|
+      delegate query_method, to: instance_variable_name
+    end
+  end
 
   def initialize(user, doorkeeper_token)
     @user = user
     @doorkeeper_token = doorkeeper_token
-    @user_con_profiles = NilSafeCache.new
-    @team_member_in_convention = NilSafeCache.new
-  end
-
-  def user_con_profile_for_convention(convention)
-    return nil unless convention && user
-
-    @user_con_profiles.get(convention.id) do
-      convention.user_con_profiles.find_by(convention_id: convention.id, user_id: user.id)
-    end
-  end
-
-  def team_member_in_convention?(convention)
-    return false unless convention && user
-
-    @team_member_in_convention.get(convention.id) do
-      TeamMember.joins(:user_con_profile)
-        .where(user_con_profiles: { user_id: user.id, convention_id: convention.id })
-        .any?
+    QUERY_MANAGER_CLASSES.each do |query_manager_class|
+      instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
+      instance_variable_set(:"@#{instance_variable_name}", query_manager_class.new(user: user))
     end
   end
 
@@ -81,10 +46,6 @@ class AuthorizationInfo
   end
 
   def oauth_scoped_disjunction(&block)
-    OAuthScopedDisjunction.evaluate(self, &block)
-  end
-
-  def user_permission_scope
-    @user_permission_scope ||= user ? Permission.for_user(user) : Permission.none
+    Queries::OAuthScopedDisjunction.evaluate(self, &block)
   end
 end
