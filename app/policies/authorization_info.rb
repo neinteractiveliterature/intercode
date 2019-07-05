@@ -8,6 +8,7 @@ class AuthorizationInfo
   module QueryMethods
     METHODS = AuthorizationInfo::QUERY_MANAGER_CLASSES.flat_map(&:query_methods)
     delegate(*METHODS, to: :authorization_info)
+    delegate :site_admin?, to: :authorization_info
   end
 
   def self.cast(authorization_info_or_user)
