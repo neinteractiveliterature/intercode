@@ -2,7 +2,7 @@ class ApplicationPolicy
   attr_reader :authorization_info, :record
   delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?,
     :user_con_profile_for_convention, :team_member_in_convention?,
-    :oauth_scoped_disjunction,
+    :oauth_scoped_disjunction, :user_permission_scope,
     to: :authorization_info
 
   def initialize(authorization_info_or_user, record)
@@ -10,12 +10,20 @@ class ApplicationPolicy
     @record = record
   end
 
-  def read?
+  def site_admin_read?
     oauth_scope?(:read_conventions) && site_admin?
   end
 
-  def manage?
+  def site_admin_manage?
     oauth_scope?(:manage_conventions) && site_admin?
+  end
+
+  def read?
+    site_admin_read?
+  end
+
+  def manage?
+    site_admin_manage?
   end
 
   def create?

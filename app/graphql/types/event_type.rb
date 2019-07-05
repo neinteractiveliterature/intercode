@@ -65,14 +65,14 @@ class Types::EventType < Types::BaseObject
   end
 
   field :provided_tickets, [Types::TicketType], null: false do
-    guard -> (graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
+    authorize do |value, context|
+      Pundit.policy(
+        context[:pundit_user],
         Ticket.new(
           user_con_profile: UserConProfile.new(convention: ctx[:convention]),
-          provided_by_event: graphql_object.object
+          provided_by_event: value
         )
-      )
+      ).read?
     end
   end
   field :can_provide_tickets, Boolean, deprecation_reason: 'Plaese use event_category.can_provide_tickets instead', null: false

@@ -5,7 +5,7 @@ class OrderPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) { has_privilege_in_convention?(convention, :con_com) }
-      d.add(:read_profile) { user.id == user_con_profile.user_id }
+      d.add(:read_profile) { user && user.id == user_con_profile.user_id }
     end
 
     super
@@ -22,7 +22,7 @@ class OrderPolicy < ApplicationPolicy
   def submit?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_profile) do
-        %w[pending unpaid].include?(record.status) && user.id == user_con_profile.user_id
+        %w[pending unpaid].include?(record.status) && user && user.id == user_con_profile.user_id
       end
     end
 
@@ -46,7 +46,7 @@ class OrderPolicy < ApplicationPolicy
           )
         end
 
-        if oauth_scope?(:read_profile)
+        if user && oauth_scope?(:read_profile)
           dw.add(user_con_profile_id: UserConProfile.where(user_id: user.id))
         end
       end

@@ -213,8 +213,6 @@ class Ability
   def add_public_abilities
     # Here's what the general public can do...
     can :read, Convention
-    can :schedule, Convention, show_schedule: 'yes'
-    can :list_events, Convention, show_event_list: 'yes'
     can :read, Event, status: 'active'
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
@@ -321,7 +319,6 @@ class Ability
   def add_con_staff_abilities
     return unless has_scope?(:read_conventions)
 
-    can :view_reports, Convention, id: con_ids_with_privilege(:con_com)
     can [:schedule, :schedule_with_counts], Convention,
       id: con_ids_with_privilege(:scheduling, :gm_liaison),
       show_schedule: %w[priv gms yes]
@@ -356,7 +353,6 @@ class Ability
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
-    can :view_attendees, Convention, id: con_ids_with_privilege(:con_com)
     can :read, Permission, staff_position: { convention_id: staff_con_ids }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
@@ -366,15 +362,7 @@ class Ability
       }
     can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
-    # Mail privileges (smash the patriarchy)
-    can :mail_to_any, Convention, id: con_ids_with_privilege(*UserConProfile::MAIL_PRIV_NAMES)
-    UserConProfile::MAIL_PRIV_NAMES.each do |mail_priv_name|
-      can mail_priv_name.to_sym, Convention, id: con_ids_with_privilege(mail_priv_name)
-    end
-
     return unless has_scope?(:manage_conventions)
-
-    can :update, Convention, id: staff_con_ids
 
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :manage, Event,
@@ -394,7 +382,6 @@ class Ability
     can :read, EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison),
       status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
-    can :view_event_proposals, Convention, id: con_ids_with_privilege(:gm_liaison)
     can token_scope_action(:manage_events, :read_admin_notes, :update_admin_notes), EventProposal,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
 
@@ -436,8 +423,6 @@ class Ability
     end
 
     return unless has_scope?(:read_conventions)
-    can :schedule, Convention, id: team_member_convention_ids, show_schedule: %w[gms yes]
-    can :list_events, Convention, id: team_member_convention_ids, show_event_list: %w[gms yes]
     can [:read, :read_email], UserConProfile, convention_id: team_member_convention_ids
     can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
   end

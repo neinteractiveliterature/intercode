@@ -23,6 +23,10 @@ class Types::TeamMemberType < Types::BaseObject
     object.receive_signup_email.upcase
   end
 
+  def display
+    display_team_member
+  end
+
   def display_team_member
     !!object.display
   end

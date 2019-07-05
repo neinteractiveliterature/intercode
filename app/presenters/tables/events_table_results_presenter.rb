@@ -1,22 +1,24 @@
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_convention(convention:, ability:, filters: {}, sort: nil, visible_field_ids: nil)
+  def self.for_convention(convention:, ability:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     scope = convention.events.where(status: 'active').accessible_by(ability)
     new(
       base_scope: scope,
       convention: convention,
       ability: ability,
+      pundit_user: pundit_user,
       filters: filters,
       sort: sort,
       visible_field_ids: visible_field_ids
     )
   end
 
-  attr_reader :ability, :convention
+  attr_reader :ability, :pundit_user, :convention
 
-  def initialize(base_scope:, convention:, ability:, filters: {}, sort: nil, visible_field_ids: nil)
+  def initialize(base_scope:, convention:, ability:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @ability = ability
+    @pundit_user = pundit_user
   end
 
   def fields
@@ -39,7 +41,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def expand_scope_for_sort(scope, sort_field)
     case sort_field
     when :first_scheduled_run_start
-      ability.authorize!(:schedule, convention)
+      Pundit.authorize(pundit_user, convention, :schedule?)
       scope.joins(<<~SQL)
         LEFT JOIN runs ON (
           runs.event_id = events.id AND
