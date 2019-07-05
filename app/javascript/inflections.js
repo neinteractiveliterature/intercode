@@ -5,6 +5,7 @@ inflections('en', (inflector) => {
   inflector.acronym('LARPs');
   inflector.acronym('GM');
   inflector.acronym('GMs');
+  inflector.acronym('OAuth');
   inflector.acronym('RPG');
   inflector.acronym('RPGs');
   inflector.acronym('NPC');

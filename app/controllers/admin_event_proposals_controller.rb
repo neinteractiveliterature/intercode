@@ -2,6 +2,7 @@ class AdminEventProposalsController < ApplicationController
   include Concerns::SendCsv
 
   before_action :authorize_admin
+  skip_authorization_check
 
   def export
     respond_to do |format|
@@ -25,6 +26,6 @@ class AdminEventProposalsController < ApplicationController
   # Even if the user can manage some event proposals (i.e. their own), only
   # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
-    authorize convention, :view_event_proposals
+    authorize convention, :view_event_proposals?
   end
 end

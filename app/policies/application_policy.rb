@@ -1,8 +1,8 @@
 class ApplicationPolicy
+  include AuthorizationInfo::QueryMethods
+
   attr_reader :authorization_info, :record
-  delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?,
-    :user_con_profile_for_convention, :team_member_in_convention?,
-    :oauth_scoped_disjunction, :user_permission_scope,
+  delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?, :oauth_scoped_disjunction,
     to: :authorization_info
 
   def initialize(authorization_info_or_user, record)
@@ -55,6 +55,8 @@ class ApplicationPolicy
   end
 
   class Scope
+    include AuthorizationInfo::QueryMethods
+
     attr_reader :authorization_info, :scope
     delegate :user, :doorkeeper_token, :site_admin?, :oauth_scope?, to: :authorization_info
 
@@ -80,15 +82,6 @@ class ApplicationPolicy
         .has_privileges(['staff', *privileges.map(&:to_s)])
 
       Convention.where(user_con_profiles: user_con_profile_scope)
-    end
-
-    def conventions_where_team_member
-      Convention.where(
-        id: TeamMember
-          .joins(:user_con_profile)
-          .where(user_con_profiles: { user_id: user.id })
-          .select(:convention_id)
-      )
     end
   end
 end
