@@ -229,7 +229,6 @@ class Ability
       can :read, [
         Event,
         EventProposal,
-        MaximumEventProvidedTicketsOverride,
         Run,
         Signup,
         TeamMember
@@ -257,7 +256,6 @@ class Ability
       can :manage, [
         Event,
         EventProposal,
-        MaximumEventProvidedTicketsOverride,
         Run,
         Signup,
         TeamMember
@@ -356,10 +354,6 @@ class Ability
     can :read, Permission, staff_position: { convention_id: staff_con_ids }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
-    can token_scope_action(:manage_conventions), MaximumEventProvidedTicketsOverride,
-      event: {
-        convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-      }
     can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     return unless has_scope?(:manage_conventions)
@@ -404,7 +398,6 @@ class Ability
           show_schedule: %w[gms yes]
         }
       }
-      can :read, MaximumEventProvidedTicketsOverride, event_id: team_member_event_ids
       can(
         token_scope_action(
           :manage_events,

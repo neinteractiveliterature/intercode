@@ -2,10 +2,10 @@ class Types::AbilityType < Types::BaseObject
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
-    override = Event.new(convention: context[:convention])
-      .maximum_event_provided_tickets_overrides
-      .new
-    object.can?(:create, override)
+    override = MaximumEventProvidedTicketsOverride.new(
+      event: Event.new(convention: convention)
+    )
+    policy(override).create?
   end
 
   field :can_update_signup, Boolean, null: false do
@@ -105,10 +105,7 @@ class Types::AbilityType < Types::BaseObject
   field :can_update_orders, Boolean, null: false
 
   def can_update_orders
-    OrderPolicy.new(
-      pundit_user,
-      Order.new(user_con_profile: UserConProfile.new(convention: convention))
-    ).update?
+    policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).update?
   end
 
   field :can_create_tickets, Boolean, null: false
