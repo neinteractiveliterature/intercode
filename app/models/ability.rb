@@ -269,7 +269,6 @@ class Ability
 
     return unless has_scope?(:manage_conventions)
     can :manage, [
-      Convention,
       Permission,
       RootSite,
       SignupRequest,
@@ -317,12 +316,6 @@ class Ability
   def add_con_staff_abilities
     return unless has_scope?(:read_conventions)
 
-    can [:schedule, :schedule_with_counts], Convention,
-      id: con_ids_with_privilege(:scheduling, :gm_liaison),
-      show_schedule: %w[priv gms yes]
-    can :list_events, Convention,
-      id: con_ids_with_privilege(:scheduling, :gm_liaison),
-      show_event_list: %w[priv gms yes]
     can :read, Run, event: {
       status: 'active',
       convention: {
@@ -330,12 +323,6 @@ class Ability
         show_schedule: %w[priv gms yes]
       }
     }
-    can [:schedule, :schedule_with_counts], Convention,
-      id: con_ids_with_privilege(:con_com),
-      show_schedule: %w[gms yes]
-    can :list_events, Convention,
-      id: con_ids_with_privilege(:con_com),
-      show_event_list: %w[gms yes]
     can :read, Run, event: {
       status: 'active',
       convention: {
