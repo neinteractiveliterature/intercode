@@ -212,7 +212,6 @@ class Ability
 
   def add_public_abilities
     # Here's what the general public can do...
-    can :read, Convention
     can :read, Event, status: 'active'
     can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
     can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
@@ -236,14 +235,6 @@ class Ability
     end
 
     if has_scope?(:read_conventions)
-      can [
-        :mail_to_any,
-        :schedule,
-        :schedule_with_counts,
-        :list_events,
-        :view_reports,
-        :view_attendees
-      ], Convention
       can :read, [Permission, UserConProfile, User, UserActivityAlert]
       can [:read_email, :read_personal_info], UserConProfile
     end
