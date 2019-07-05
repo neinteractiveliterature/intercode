@@ -27,7 +27,7 @@ class Queries::UserConProfileQueryManager < Queries::QueryManager
   end
 
   def conventions_with_privilege(*privileges)
-    return Convention.all if site_admin?
+    return Convention.all if user&.site_admin?
 
     user_con_profile_scope = UserConProfile.where(user_id: user.id)
       .has_privileges(['staff', *privileges.map(&:to_s)])
