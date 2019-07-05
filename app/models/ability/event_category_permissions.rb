@@ -30,21 +30,6 @@ module Ability::EventCategoryPermissions
           convention_id: user_con_profile.convention_id
         ).any?
       end
-
-      scope_authorization token_scope_action(:manage_conventions),
-        MaximumEventProvidedTicketsOverride,
-        MaximumEventProvidedTicketsOverride.where(
-          event_id: Event.where(
-            event_category_id: user_permission_scope.where(
-              permission: 'override_event_tickets'
-            ).select(:event_category_id)
-          ).select(:id)
-        ) do |maximum_event_provided_tickets_override|
-          user_permission_scope.where(
-            event_category_id: maximum_event_provided_tickets_override.event.event_category_id,
-            permission: 'override_event_tickets'
-          ).any?
-        end
     end
 
     if has_scope?(:manage_conventions)

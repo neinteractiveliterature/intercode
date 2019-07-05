@@ -146,23 +146,12 @@ class Types::MutationType < Types::BaseObject
 
   ### MaximumEventProvidedTicketsOverride
 
-  create_override = Mutations::CreateMaximumEventProvidedTicketsOverride
-  field :createMaximumEventProvidedTicketsOverride, mutation: create_override do
-    guard -> (_obj, args, ctx) {
-      event = ctx[:convention].events.find(args[:event_id])
-      ctx[:current_ability].can?(:create, event.maximum_event_provided_tickets_overrides.new)
-    }
-  end
-
-  update_override = Mutations::UpdateMaximumEventProvidedTicketsOverride
-  field :updateMaximumEventProvidedTicketsOverride, mutation: update_override do
-    guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :update))
-  end
-
-  delete_override = Mutations::DeleteMaximumEventProvidedTicketsOverride
-  field :deleteMaximumEventProvidedTicketsOverride, mutation: delete_override do
-    guard(guard_for_model_with_id(MaximumEventProvidedTicketsOverride, :destroy))
-  end
+  field :createMaximumEventProvidedTicketsOverride,
+    mutation: Mutations::CreateMaximumEventProvidedTicketsOverride
+  field :updateMaximumEventProvidedTicketsOverride,
+    mutation: Mutations::UpdateMaximumEventProvidedTicketsOverride
+  field :deleteMaximumEventProvidedTicketsOverride,
+    mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
 
   ### Order / OrderEntry
 

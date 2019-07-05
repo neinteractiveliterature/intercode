@@ -5,10 +5,11 @@ class Mutations::DeleteMaximumEventProvidedTicketsOverride < Mutations::BaseMuta
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    override = MaximumEventProvidedTicketsOverride.find(args[:id])
-    override.destroy!
+  load_and_authorize_model_with_id MaximumEventProvidedTicketsOverride, :id, :destroy
 
-    { maximum_event_provided_tickets_override: override }
+  def resolve(**_args)
+    maximum_event_provided_tickets_override.destroy!
+
+    { maximum_event_provided_tickets_override: maximum_event_provided_tickets_override }
   end
 end
