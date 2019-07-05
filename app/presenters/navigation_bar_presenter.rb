@@ -124,22 +124,22 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Con Schedule'
       url '/events/schedule'
-      visible? { can?(:schedule, convention) }
+      visible? { Pundit.policy(pundit_user, convention).schedule? }
     end,
     NavigationItem.define do
       label 'Con Schedule by Room'
       url '/events/schedule_by_room'
-      visible? { can?(:schedule, convention) }
+      visible? { Pundit.policy(pundit_user, convention).schedule? }
     end,
     NavigationItem.define do
       label 'List of Events'
       url '/events'
-      visible? { can?(:list_events, convention) }
+      visible? { Pundit.policy(pundit_user, convention).list_events? }
     end,
     NavigationItem.define do
       label 'Schedule With Counts'
       url '/events/schedule_with_counts'
-      visible? { can?(:schedule_with_counts, convention) }
+      visible? { Pundit.policy(pundit_user, convention).schedule_with_counts? }
     end,
     NavigationItem.define do
       label 'Propose an Event'
@@ -158,22 +158,22 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Attendees'
       url '/user_con_profiles'
-      visible? { can?(:view_attendees, convention) }
+      visible? { Pundit.policy(pundit_user, convention).view_attendees? }
     end,
     NavigationItem.define do
       label 'Convention Settings'
       url '/convention/edit'
-      visible? { can?(:update, convention) }
+      visible? { Pundit.policy(pundit_user, convention).update? }
     end,
     NavigationItem.define do
       label 'Event Categories'
       url '/event_categories'
-      visible? { convention.site_mode != 'single_event' && can?(:update, EventCategory.new(convention: convention)) }
+      visible? { convention.site_mode != 'single_event' && Pundit.policy(pundit_user, EventCategory.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Event Proposals'
       url '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc'
-      visible? { convention.site_mode != 'single_event' && can?(:view_event_proposals, convention) }
+      visible? { convention.site_mode != 'single_event' && Pundit.policy(pundit_user, convention).view_event_proposals? }
     end,
     NavigationItem.define do
       label 'Event Scheduling'
@@ -183,12 +183,12 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Forms'
       url '/admin_forms'
-      visible? { can?(:update, Form.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, Form.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Mailing Lists'
       url '/mailing_lists'
-      visible? { can?(:mail_to_any, convention) }
+      visible? { Pundit.policy(pundit_user, MailingListsPresenter.new(convention)).mail_to_any? }
     end,
     NavigationItem.define do
       label 'OAuth2 Applications'
@@ -198,7 +198,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Reports'
       url '/reports'
-      visible? { can?(:view_reports, convention) }
+      visible? { Pundit.policy(pundit_user, convention).view_reports? }
     end,
     NavigationItem.define do
       label 'Rooms'
@@ -217,7 +217,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Staff Positions'
       url '/staff_positions'
-      visible? { can?(:update, StaffPosition.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, StaffPosition.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Store'

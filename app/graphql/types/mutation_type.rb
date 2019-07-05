@@ -30,8 +30,9 @@ class Types::MutationType < Types::BaseObject
   graphql_name 'Mutation'
 
   # CSRF verification, but only for mutations
-  guard do |_obj, _args, ctx|
-    raise ActionController::InvalidAuthenticityToken unless ctx[:verified_request]
+  def self.authorized?(_value, context)
+    raise ActionController::InvalidAuthenticityToken unless context[:verified_request]
+    true
   end
 
   ### CmsFile
@@ -71,12 +72,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Convention
 
-  field :updateConvention, mutation: Mutations::UpdateConvention do
-    guard ->(_obj, args, ctx) {
-      convention = args[:id] ? Convention.find(args[:id]) : ctx[:convention]
-      ctx[:current_ability].can?(:update, convention)
-    }
-  end
+  field :updateConvention, mutation: Mutations::UpdateConvention
 
   ### Event
 

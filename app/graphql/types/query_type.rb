@@ -1,5 +1,5 @@
 class Types::QueryType < Types::BaseObject
-  field_class GraphQL::Schema::Field # Camelize fields in this type
+  field_class Types::BaseField # Camelize fields in this type
 
   # Add root-level fields here.
   # They will be entry points for queries on your schema.
@@ -271,14 +271,14 @@ class Types::QueryType < Types::BaseObject
   field :preview_liquid, String, null: false do
     argument :content, String, required: true
 
-    guard ->(_obj, _args, ctx) do
+    authorize do |_value, context|
       # TODO maybe better permission for this?  Not sure, but for now I'm using con_com as a proxy
       # for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary Liquid
       # drop data)"
-      if ctx[:convention]
-        ctx[:current_ability].can?(:view_reports, ctx[:convention])
+      if context[:convention]
+        Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
       else
-        ctx[:current_user].site_admin?
+        context[:current_user].site_admin?
       end
     end
   end

@@ -59,7 +59,7 @@ class Types::AbilityType < Types::BaseObject
   field :can_read_schedule, Boolean, null: false
 
   def can_read_schedule
-    object.can?(:schedule, context[:convention])
+    policy(convention).schedule?
   end
 
   field :can_read_admin_notes_on_event_proposal, Boolean, null: false do

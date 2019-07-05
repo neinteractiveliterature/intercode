@@ -10,19 +10,19 @@ module Intercode
 
         def initialize(tag_name, args, _options)
           super
-          if args =~ Syntax
-            @destination_variable = $1
-            @query_identifier = $2
-            if $3
-              @variable_defs = $3.split(',').each_with_object({}) do |variable_def, hash|
-                variable_name, from = variable_def.split(':').map(&:strip)
-                hash[variable_name] = from
-              end
-            else
-              @variable_defs = {}
+
+          match = Syntax.match(args)
+          raise SyntaxError, 'Invalid assign_graphql_result syntax' unless match
+
+          @destination_variable = match[1]
+          @query_identifier = match[2]
+          if match[3]
+            @variable_defs = match[3].split(',').each_with_object({}) do |variable_def, hash|
+              variable_name, from = variable_def.split(':').map(&:strip)
+              hash[variable_name] = from
             end
           else
-            raise SyntaxError.new('Invalid assign_graphql_result syntax')
+            @variable_defs = {}
           end
         end
 

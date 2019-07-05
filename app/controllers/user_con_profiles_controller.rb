@@ -59,6 +59,6 @@ back to your normal identity (since you already are your normal identity).")
   # controller. In other words, users shouldn't be able to access even their own profile here
   # (because they could use this controller to escalate their privileges).
   def authorize_admin_profiles
-    authorize! :view_attendees, convention
+    authorize convention, :view_attendees?
   end
 end

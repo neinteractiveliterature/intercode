@@ -22,14 +22,6 @@ module Ability::EventCategoryPermissions
         id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
       )
 
-      scope_authorization :view_event_proposals, Convention, Convention.where(
-        id: read_event_proposals_staff_positions.select(:convention_id)
-      ) do |convention|
-        convention.staff_positions.where(
-          id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
-        ).any?
-      end
-
       event_category_authorization :read_admin_notes, Event, 'access_admin_notes'
       scope_authorization [:read, :read_personal_info], UserConProfile, UserConProfile.where(
         convention_id: read_event_proposals_staff_positions.select(:convention_id)

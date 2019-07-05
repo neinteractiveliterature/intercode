@@ -17,6 +17,10 @@ class MailingListsPresenter
     end
   end
 
+  def self.policy_class
+    MailingListsPolicy
+  end
+
   attr_reader :convention
 
   def initialize(convention)

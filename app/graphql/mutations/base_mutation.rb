@@ -1,7 +1,7 @@
 class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   include Concerns::ContextAccessors
 
-  field_class Types::BaseField
+  field_class Types::UncamelizedField
 
   def self.load_and_authorize_model_with_id(model_class, id_field, action)
     field_name = model_class.name.underscore

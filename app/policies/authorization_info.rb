@@ -55,7 +55,7 @@ class AuthorizationInfo
   end
 
   def user_con_profile_for_convention(convention)
-    return nil unless convention
+    return nil unless convention && user
 
     @user_con_profiles.get(convention.id) do
       convention.user_con_profiles.find_by(convention_id: convention.id, user_id: user.id)
@@ -82,5 +82,9 @@ class AuthorizationInfo
 
   def oauth_scoped_disjunction(&block)
     OAuthScopedDisjunction.evaluate(self, &block)
+  end
+
+  def user_permission_scope
+    @user_permission_scope ||= user ? Permission.for_user(user) : Permission.none
   end
 end

@@ -30,5 +30,5 @@ class Types::BaseObject < GraphQL::Schema::Object
     end
   end
 
-  field_class Types::BaseField
+  field_class Types::UncamelizedField
 end

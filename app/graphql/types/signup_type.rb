@@ -12,8 +12,8 @@ class Types::SignupType < Types::BaseObject
   field :run, Types::RunType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
   field :choice, Int, null: true do
-    guard ->(_signup, _args, ctx) do
-      ctx[:current_ability].can?(:view_reports, ctx[:convention])
+    authorize do |_value, context|
+      Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
     end
   end
   field :waitlist_position, Int, null: true, camelize: false
