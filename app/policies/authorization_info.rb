@@ -63,7 +63,7 @@ class AuthorizationInfo
   end
 
   def team_member_in_convention?(convention)
-    return false unless convention
+    return false unless convention && user
 
     @team_member_in_convention.get(convention.id) do
       TeamMember.joins(:user_con_profile)
