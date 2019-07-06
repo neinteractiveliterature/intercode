@@ -4,14 +4,19 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   argument :grant_permissions, [Types::PermissionInputType], required: true, camelize: false
   argument :revoke_permissions, [Types::PermissionInputType], required: true, camelize: false
 
-  def resolve(staff_position_id:, grant_permissions:, revoke_permissions:)
-    staff_position = context[:convention].staff_positions.find(staff_position_id)
+  attr_reader :staff_position
 
-    grant_permissions.each do |permission_input|
+  def authorized?(args)
+    @staff_position = convention.staff_positions.find(args[:staff_position_id])
+    policy(Permission.new(model: staff_position)).create?
+  end
+
+  def resolve(**args)
+    args[:grant_permissions].each do |permission_input|
       staff_position.permissions.find_or_create_by!(permission_attrs_for_input(permission_input))
     end
 
-    revoke_permissions.each do |permission_input|
+    args[:revoke_permissions].each do |permission_input|
       staff_position.permissions.where(permission_attrs_for_input(permission_input)).destroy_all
     end
 

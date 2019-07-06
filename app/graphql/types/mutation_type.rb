@@ -299,17 +299,7 @@ class Types::MutationType < Types::BaseObject
 
   field :createStaffPosition, mutation: Mutations::CreateStaffPosition
   field :updateStaffPosition, mutation: Mutations::UpdateStaffPosition
-
-  field :updateStaffPositionPermissions, mutation: Mutations::UpdateStaffPositionPermissions do
-    guard ->(_obj, args, ctx) {
-      staff_position = ctx[:convention].staff_positions.find(args[:staff_position_id])
-      ctx[:current_ability].can?(
-        :create,
-        Permission.new(staff_position: staff_position)
-      )
-    }
-  end
-
+  field :updateStaffPositionPermissions, mutation: Mutations::UpdateStaffPositionPermissions
   field :deleteStaffPosition, mutation: Mutations::DeleteStaffPosition
 
   ### TeamMember
