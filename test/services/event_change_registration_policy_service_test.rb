@@ -3,8 +3,8 @@ require 'test_helper'
 class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:event) { FactoryBot.create :event }
-  let(:the_run) { FactoryBot.create :run, event: event }
+  let(:event) { create :event }
+  let(:the_run) { create :run, event: event }
   let(:convention) { event.convention }
   let(:new_registration_policy) do
     RegistrationPolicy.new(
@@ -15,8 +15,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       ]
     )
   end
-  let(:whodunit) { FactoryBot.create :user_con_profile, convention: convention }
-  let(:team_member) { FactoryBot.create :team_member, event: event, receive_signup_email: 'all_signups' }
+  let(:whodunit) { create :user_con_profile, convention: convention }
+  let(:team_member) { create :team_member, event: event, receive_signup_email: 'all_signups' }
 
   subject { EventChangeRegistrationPolicyService.new(event, new_registration_policy, whodunit) }
 
@@ -40,9 +40,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   end
 
   describe 'with existing signups in buckets that will be removed' do
-    let(:user_con_profile) { FactoryBot.create :user_con_profile, convention: convention }
+    let(:user_con_profile) { create :user_con_profile, convention: convention }
     let(:signup) do
-      FactoryBot.create(
+      create(
         :signup,
         user_con_profile: user_con_profile,
         requested_bucket_key: 'unlimited',
@@ -81,7 +81,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
   describe 'with existing signups in buckets that will shrink' do
     let(:event) do
-      FactoryBot.create(
+      create(
         :event,
         registration_policy: RegistrationPolicy.new(
           buckets: [
@@ -93,11 +93,11 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
 
-    let(:user_con_profile1) { FactoryBot.create :user_con_profile, convention: convention }
-    let(:user_con_profile2) { FactoryBot.create :user_con_profile, convention: convention }
+    let(:user_con_profile1) { create :user_con_profile, convention: convention }
+    let(:user_con_profile2) { create :user_con_profile, convention: convention }
 
     let(:signup1) do
-      FactoryBot.create(
+      create(
         :signup,
         user_con_profile: user_con_profile1,
         requested_bucket_key: 'dogs',
@@ -106,7 +106,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
     let(:signup2) do
-      FactoryBot.create(
+      create(
         :signup,
         user_con_profile: user_con_profile2,
         requested_bucket_key: 'dogs',
@@ -147,7 +147,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
     describe 'with no-preference signups' do
       let(:signup2) do
-        FactoryBot.create(
+        create(
           :signup,
           user_con_profile: user_con_profile2,
           requested_bucket_key: nil,
@@ -156,9 +156,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         )
       end
 
-      let(:user_con_profile3) { FactoryBot.create :user_con_profile, convention: convention }
+      let(:user_con_profile3) { create :user_con_profile, convention: convention }
       let(:signup3) do
-        FactoryBot.create(
+        create(
           :signup,
           user_con_profile: user_con_profile3,
           requested_bucket_key: nil,
@@ -201,9 +201,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     end
 
     describe 'with an impossible situation' do
-      let(:user_con_profile3) { FactoryBot.create :user_con_profile, convention: convention }
+      let(:user_con_profile3) { create :user_con_profile, convention: convention }
       let(:signup3) do
-        FactoryBot.create(
+        create(
           :signup,
           user_con_profile: user_con_profile3,
           requested_bucket_key: 'dogs',
@@ -235,7 +235,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
   describe 'with existing signups in buckets that will grow' do
     let(:event) do
-      FactoryBot.create(
+      create(
         :event,
         registration_policy: RegistrationPolicy.new(
           buckets: [
@@ -247,11 +247,11 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
 
-    let(:user_con_profile1) { FactoryBot.create :user_con_profile, convention: convention }
-    let(:user_con_profile2) { FactoryBot.create :user_con_profile, convention: convention }
+    let(:user_con_profile1) { create :user_con_profile, convention: convention }
+    let(:user_con_profile2) { create :user_con_profile, convention: convention }
 
     let(:signup1) do
-      FactoryBot.create(
+      create(
         :signup,
         user_con_profile: user_con_profile1,
         requested_bucket_key: 'dogs',
@@ -260,7 +260,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
     let(:signup2) do
-      FactoryBot.create(
+      create(
         :signup,
         user_con_profile: user_con_profile2,
         state: 'waitlisted',

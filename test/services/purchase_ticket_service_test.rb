@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class PurchaseTicketServiceTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention, starts_at: 2.days.from_now, ends_at: 4.days.from_now) }
-  let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
-  let(:ticket_type) { FactoryBot.create(:paid_ticket_type, convention: convention) }
+  let(:convention) { create(:convention, starts_at: 2.days.from_now, ends_at: 4.days.from_now) }
+  let(:user_con_profile) { create(:user_con_profile, convention: convention) }
+  let(:ticket_type) { create(:paid_ticket_type, convention: convention) }
   let(:stripe_helper) { StripeMock.create_test_helper }
   let(:stripe_token) { stripe_helper.generate_card_token }
 
@@ -34,7 +34,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
   describe 'if you already have a ticket' do
     before do
-      FactoryBot.create(:ticket, ticket_type: ticket_type, user_con_profile: user_con_profile)
+      create(:ticket, ticket_type: ticket_type, user_con_profile: user_con_profile)
     end
 
     it 'fails with an error' do
@@ -45,11 +45,11 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
   end
 
   describe 'if the con is sold out' do
-    let(:lucky_winner) { FactoryBot.create(:user_con_profile, convention: convention) }
+    let(:lucky_winner) { create(:user_con_profile, convention: convention) }
 
     before do
       convention.update!(maximum_tickets: 1)
-      FactoryBot.create(:ticket, ticket_type: ticket_type, user_con_profile: lucky_winner)
+      create(:ticket, ticket_type: ticket_type, user_con_profile: lucky_winner)
     end
 
     it 'fails with an error' do
@@ -73,7 +73,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
   describe 'if the ticket type is not publicly available' do
     let(:ticket_type) do
-      FactoryBot.create(
+      create(
         :paid_ticket_type,
         convention: convention,
         name: 'unavailable',

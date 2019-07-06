@@ -1,11 +1,11 @@
 require 'test_helper'
 
 class CreateTeamMemberServiceTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create :convention }
-  let(:event_category) { FactoryBot.create(:event_category, convention: convention, can_provide_tickets: true) }
-  let(:event) { FactoryBot.create :event, convention: convention, event_category: event_category }
-  let(:the_run) { FactoryBot.create :run, event: event }
-  let(:user_con_profile) { FactoryBot.create :user_con_profile, convention: convention }
+  let(:convention) { create :convention }
+  let(:event_category) { create(:event_category, convention: convention, can_provide_tickets: true) }
+  let(:event) { create :event, convention: convention, event_category: event_category }
+  let(:the_run) { create :run, event: event }
+  let(:user_con_profile) { create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
   let(:team_member_attrs) { {} }
   let(:provide_ticket_type_id) { nil }
@@ -28,7 +28,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
   end
 
   describe 'providing tickets' do
-    let(:ticket_type) { FactoryBot.create(:event_provided_ticket_type, convention: convention) }
+    let(:ticket_type) { create(:event_provided_ticket_type, convention: convention) }
     let(:provide_ticket_type_id) { ticket_type.id }
 
     it 'provides a ticket if requested' do
@@ -43,7 +43,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
   describe 'with existing signup' do
     let(:signup) do
-      FactoryBot.create(
+      create(
         :signup,
         run: the_run, user_con_profile: user_con_profile,
         state: 'confirmed', bucket_key: 'unlimited', counted: true
@@ -64,7 +64,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
     describe 'limited buckets' do
       let(:event) do
-        FactoryBot.create(
+        create(
           :event, convention: convention, event_category: event_category,
           registration_policy: {
             buckets: [
@@ -77,7 +77,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
       describe 'waitlisted' do
         let(:signup) do
-          FactoryBot.create(
+          create(
             :signup,
             run: the_run, user_con_profile: user_con_profile,
             state: 'waitlisted', requested_bucket_key: 'dogs', counted: false
@@ -97,14 +97,14 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
       describe 'blocking someone in the waitlist' do
         let(:signup) do
-          FactoryBot.create(
+          create(
             :signup,
             run: the_run, user_con_profile: user_con_profile,
             state: 'confirmed', bucket_key: 'dogs', requested_bucket_key: 'dogs', counted: true
           )
         end
         let(:waitlist_signup) do
-          FactoryBot.create(
+          create(
             :signup,
             run: the_run,
             state: 'waitlisted', requested_bucket_key: 'dogs', counted: false
@@ -113,7 +113,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
         before do
           signup
-          FactoryBot.create_list(
+          create_list(
             :signup, 2,
             run: the_run, state: 'confirmed', bucket_key: 'dogs', requested_bucket_key: 'dogs', counted: true
           )

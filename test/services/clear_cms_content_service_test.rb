@@ -1,13 +1,13 @@
 require 'test_helper'
 
 describe ClearCmsContentService do
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { create(:convention) }
   let(:service) { ClearCmsContentService.new(convention: convention) }
 
   before do
-    convention.update!(root_page: FactoryBot.build(:page, parent: convention))
-    FactoryBot.create(:page, parent: convention)
-    FactoryBot.create(:cms_partial, parent: convention)
+    convention.update!(root_page: build(:page, parent: convention))
+    create(:page, parent: convention)
+    create(:cms_partial, parent: convention)
   end
 
   describe 'successfully running' do

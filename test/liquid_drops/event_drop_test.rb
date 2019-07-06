@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe EventDrop do
-  let(:event) { FactoryBot.create(:event) }
+  let(:event) { create(:event) }
   let(:event_drop) { EventDrop.new(event) }
 
   it "returns the title of the event" do
@@ -13,7 +13,7 @@ describe EventDrop do
   end
 
   describe 'with team members' do
-    let(:team_members) { 5.times.map { FactoryBot.create(:team_member, event: event) } }
+    let(:team_members) { 5.times.map { create(:team_member, event: event) } }
 
     before do
       team_members

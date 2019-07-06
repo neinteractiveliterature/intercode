@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class CloneConventionServiceTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { create(:convention) }
   let(:new_convention_attributes) {
     {
       name: 'CopyCon',
@@ -54,7 +54,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   it 'clones event categories' do
     ClearCmsContentService.new(convention: convention).call!
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
-    FactoryBot.create(:event_category, convention: convention)
+    create(:event_category, convention: convention)
     result = service.call
     assert result.success?
     result.convention.reload
@@ -62,14 +62,14 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones rooms' do
-    FactoryBot.create_list(:room, 5, convention: convention)
+    create_list(:room, 5, convention: convention)
     result = service.call
     result.convention.reload
     assert_equal 5, result.convention.rooms.count
   end
 
   it 'clones ticket types' do
-    FactoryBot.create(
+    create(
       :paid_ticket_type,
       convention: convention,
       pricing_schedule: ScheduledMoneyValue.new(
@@ -91,8 +91,8 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   it 'clones staff positions' do
     ClearCmsContentService.new(convention: convention).call!
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
-    event_category = FactoryBot.create(:event_category, convention: convention)
-    staff_position = FactoryBot.create(:staff_position, convention: convention)
+    event_category = create(:event_category, convention: convention)
+    staff_position = create(:staff_position, convention: convention)
     staff_position.permissions.create!(model: event_category, permission: 'read_event_proposals')
 
     result = service.call
@@ -105,9 +105,9 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones store content' do
-    FactoryBot.create(:product, convention: convention)
-    product_with_variants = FactoryBot.create(:product, convention: convention)
-    FactoryBot.create_list(:product_variant, 5, product: product_with_variants)
+    create(:product, convention: convention)
+    product_with_variants = create(:product, convention: convention)
+    create_list(:product_variant, 5, product: product_with_variants)
 
     result = service.call
     result.convention.reload
@@ -117,8 +117,8 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones user activity alerts' do
-    alert = FactoryBot.create(:user_activity_alert, convention: convention)
-    staff_position = FactoryBot.create(:staff_position, convention: convention)
+    alert = create(:user_activity_alert, convention: convention)
+    staff_position = create(:staff_position, convention: convention)
     alert.alert_destinations.create!(staff_position: staff_position)
 
     result = service.call

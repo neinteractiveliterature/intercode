@@ -11,7 +11,7 @@ FactoryBot.define do
     con_mail_destination { 'event_email' }
 
     after(:build) do |event|
-      event.event_category ||= FactoryBot.build(:event_category, convention: event.convention)
+      event.event_category ||= build(:event_category, convention: event.convention)
     end
   end
 end

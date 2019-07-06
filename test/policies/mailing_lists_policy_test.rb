@@ -1,13 +1,13 @@
 require 'test_helper'
 
 class MailingListsPolicyTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { create(:convention) }
   let(:mailing_lists_presenter) { MailingListsPresenter.new(convention) }
 
   UserConProfile::MAIL_PRIV_NAMES.each do |priv_name|
     describe "users with #{priv_name}" do
       let(:user_con_profile) do
-        FactoryBot.create(:user_con_profile, convention: convention, priv_name => true)
+        create(:user_con_profile, convention: convention, priv_name => true)
       end
       let(:policy) { MailingListsPolicy.new(user_con_profile.user, mailing_lists_presenter) }
 
@@ -28,7 +28,7 @@ class MailingListsPolicyTest < ActiveSupport::TestCase
   end
 
   describe 'regular attendees' do
-    let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+    let(:user_con_profile) { create(:user_con_profile, convention: convention) }
     let(:policy) { MailingListsPolicy.new(user_con_profile.user, mailing_lists_presenter) }
 
     UserConProfile::MAIL_PRIV_NAMES.each do |priv_name|

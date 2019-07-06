@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class CmsGraphqlQueryTest < ActiveSupport::TestCase
-  let(:parent) { FactoryBot.create(:convention) }
+  let(:parent) { create(:convention) }
 
   describe 'query execution' do
     it 'executes a query' do

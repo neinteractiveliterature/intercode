@@ -3,13 +3,13 @@ require 'test_helper'
 class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:convention) { FactoryBot.create :convention, ticket_mode: 'required_for_signup' }
-  let(:event) { FactoryBot.create :event, convention: convention }
-  let(:the_run) { FactoryBot.create :run, event: event }
-  let(:user_con_profile) { FactoryBot.create :user_con_profile, convention: convention }
+  let(:convention) { create :convention, ticket_mode: 'required_for_signup' }
+  let(:event) { create :event, convention: convention }
+  let(:the_run) { create :run, event: event }
+  let(:user_con_profile) { create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
-  let(:ticket_type) { FactoryBot.create :free_ticket_type, convention: convention }
-  let(:ticket) { FactoryBot.create :ticket, ticket_type: ticket_type, user_con_profile: user_con_profile }
+  let(:ticket_type) { create :free_ticket_type, convention: convention }
+  let(:ticket) { create :ticket, ticket_type: ticket_type, user_con_profile: user_con_profile }
   let(:requested_bucket_key) { :unlimited }
 
   subject { EventSignupService.new(user_con_profile, the_run, requested_bucket_key, user) }
@@ -24,7 +24,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
   describe 'with a ticket that does not allow signups' do
     let(:ticket_type) do
-      FactoryBot.create :free_ticket_type, convention: convention, allows_event_signups: false
+      create :free_ticket_type, convention: convention, allows_event_signups: false
     end
 
     setup do
@@ -39,7 +39,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe 'with a convention that does not require tickets' do
-    let(:convention) { FactoryBot.create :convention, ticket_mode: 'disabled' }
+    let(:convention) { create :convention, ticket_mode: 'disabled' }
 
     it 'signs the user up for an event' do
       result = subject.call
@@ -60,9 +60,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it 'emails the team members who have requested it' do
-      email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
-      email_team_member2 = FactoryBot.create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
-      no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'no')
+      email_team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
+      email_team_member2 = create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
+      no_email_team_member = create(:team_member, event: event, receive_signup_email: 'no')
 
       perform_enqueued_jobs do
         result = subject.call
@@ -77,7 +77,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it 'disallows signups when the user is already signed up' do
-      FactoryBot.create(
+      create(
         :signup,
         run: the_run,
         user_con_profile: user_con_profile,
@@ -96,7 +96,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       let(:requested_bucket_key) { nil }
 
       setup do
-        FactoryBot.create(:team_member, event: event, user_con_profile: user_con_profile)
+        create(:team_member, event: event, user_con_profile: user_con_profile)
       end
 
       it 'signs up a team member as not counted' do
@@ -158,9 +158,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           ]
         )
       )
-      another_event = FactoryBot.create(:event, convention: convention)
-      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
-      FactoryBot.create(
+      another_event = create(:event, convention: convention)
+      another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
+      create(
         :signup,
         counted: false,
         user_con_profile: user_con_profile,
@@ -185,9 +185,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
       )
 
-      another_event = FactoryBot.create(:event, convention: convention)
-      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
-      FactoryBot.create(
+      another_event = create(:event, convention: convention)
+      another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
+      create(
         :signup,
         state: 'waitlisted',
         user_con_profile: user_con_profile,
@@ -211,9 +211,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           ]
         )
       )
-      another_event = FactoryBot.create(:event, convention: convention)
-      another_run = FactoryBot.create(:run, event: another_event, starts_at: the_run.ends_at)
-      FactoryBot.create(
+      another_event = create(:event, convention: convention)
+      another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
+      create(
         :signup,
         state: 'withdrawn',
         user_con_profile: user_con_profile,
@@ -238,8 +238,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
       )
 
-      other_event = FactoryBot.create(:event, length_seconds: event.length_seconds)
-      other_run = FactoryBot.create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
+      other_event = create(:event, length_seconds: event.length_seconds)
+      other_run = create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
       other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
       other_signup_service.call.must_be :success?
 
@@ -285,11 +285,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     describe 'with a conflicting event' do
-      let(:other_event) { FactoryBot.create(:event, length_seconds: event.length_seconds) }
-      let(:other_run) { FactoryBot.create(:run, event: other_event, starts_at: the_run.starts_at) }
+      let(:other_event) { create(:event, length_seconds: event.length_seconds) }
+      let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }
 
       it 'disallows signups with conflicting waitlist games' do
-        waitlist_signup1 = FactoryBot.create(
+        waitlist_signup1 = create(
           :signup,
           user_con_profile: user_con_profile,
           run: other_run,
@@ -337,7 +337,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     describe 'with limited buckets' do
       let(:event) do
-        FactoryBot.create(
+        create(
           :event,
           registration_policy: {
             buckets: [
@@ -381,8 +381,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
 
       it 'emails only the team members who have requested waitlist emails' do
-        email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'all_signups')
-        no_email_team_member = FactoryBot.create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
+        email_team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
+        no_email_team_member = create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
         2.times { create_other_signup 'cats' }
         4.times { create_other_signup 'anything' }
 
@@ -440,7 +440,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         describe 'but the registration policy does not allow it' do
           let(:event) do
-            FactoryBot.create(
+            create(
               :event,
               registration_policy: {
                 buckets: [
@@ -516,7 +516,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     describe 'with not-counted buckets' do
       let(:event) do
-        FactoryBot.create(
+        create(
           :event,
           registration_policy: {
             buckets: [
@@ -566,8 +566,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   private
 
   def create_other_signup(bucket_key, **attributes)
-    signup_user_con_profile = FactoryBot.create(:user_con_profile, convention: convention)
-    FactoryBot.create(
+    signup_user_con_profile = create(:user_con_profile, convention: convention)
+    create(
       :signup,
       {
         user_con_profile: signup_user_con_profile,
