@@ -68,6 +68,7 @@ GEM
       graphql (>= 1.8)
       rails (>= 4.2)
     arel (9.0.0)
+    ast (2.4.0)
     aws-eventstream (1.0.3)
     aws-partitions (1.176.0)
     aws-sdk-core (3.56.0)
@@ -87,6 +88,7 @@ GEM
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
+    backport (1.1.1)
     bcrypt (3.1.12)
     bcrypt (3.1.12-java)
     bindata (2.4.4)
@@ -218,6 +220,7 @@ GEM
       excon
       moneta
       multi_json (>= 1.9.2)
+    htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (1.6.0)
@@ -226,6 +229,8 @@ GEM
       ice_cube (~> 0.16)
     ice_cube (0.16.3)
     ipaddress (0.8.3)
+    jaro_winkler (1.5.3)
+    jaro_winkler (1.5.3-java)
     jmespath (1.4.0)
     json (2.2.0)
     json (2.2.0-java)
@@ -234,6 +239,7 @@ GEM
       aes_key_wrap
       bindata
     jwt (2.1.0)
+    kramdown (1.17.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     launchy (2.4.3-java)
@@ -302,6 +308,8 @@ GEM
     oj (3.7.12)
     orm_adapter (0.5.0)
     parallel (1.17.0)
+    parser (2.6.3.0)
+      ast (~> 2.4.0)
     pastel (0.7.3)
       equatable (~> 0.6)
       tty-color (~> 0.5)
@@ -362,6 +370,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
+    rainbow (3.0.0)
     rake (12.3.2)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
@@ -384,6 +393,13 @@ GEM
       rollbar
       shoryuken
     rouge (3.3.0)
+    rubocop (0.72.0)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.6)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     scheduled_value (1.2.2)
@@ -402,6 +418,18 @@ GEM
     skylight-core (4.1.2)
       activesupport (>= 4.2.0)
     slop (3.6.0)
+    solargraph (0.34.2)
+      backport (~> 1.1)
+      bundler (>= 1.17.2)
+      htmlentities (~> 4.3, >= 4.3.4)
+      jaro_winkler (~> 1.5)
+      kramdown (~> 1.16)
+      parser (~> 2.3)
+      reverse_markdown (~> 1.0, >= 1.0.5)
+      rubocop (~> 0.52)
+      thor (~> 0.19, >= 0.19.4)
+      tilt (~> 2.0)
+      yard (~> 0.9)
     spoon (0.0.6)
       ffi
     sprockets (3.7.2)
@@ -542,6 +570,7 @@ DEPENDENCIES
   shoryuken
   simplecov
   skylight
+  solargraph
   stackprof
   stripe
   stripe-ruby-mock
