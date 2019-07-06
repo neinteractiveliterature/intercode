@@ -319,7 +319,6 @@ class Ability
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
-    can :read, Permission, staff_position: { convention_id: staff_con_ids }
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can :read, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
     can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
@@ -329,7 +328,6 @@ class Ability
     can :manage, UserConProfile, convention_id: staff_con_ids
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can :manage, Permission, staff_position: { convention_id: staff_con_ids }
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
     can :manage, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
