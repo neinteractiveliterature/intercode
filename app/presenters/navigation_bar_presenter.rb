@@ -193,7 +193,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'OAuth2 Applications'
       url '/oauth/applications-embed'
-      visible? { can?(:manage, Doorkeeper::Application) }
+      visible? { Pundit.policy(pundit_user, Doorkeeper::Application.new).manage? }
     end,
     NavigationItem.define do
       label 'Reports'

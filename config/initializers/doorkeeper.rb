@@ -25,7 +25,7 @@ Doorkeeper.configure do
   # every time somebody will try to access the admin web interface.
   #
   admin_authenticator do
-    authorize!(:manage, Doorkeeper::Application)
+    authorize Doorkeeper::Application.new, :manage?
   end
 
   # If you are planning to use Doorkeeper in Rails 5 API-only application, then you might

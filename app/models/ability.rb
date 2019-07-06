@@ -218,9 +218,6 @@ class Ability
   end
 
   def add_site_admin_abilities
-    # only allow managing OAuth apps via actual cookie session
-    can :manage, Doorkeeper::Application unless doorkeeper_token
-
     can :read, [Event, Run, Signup] if has_scope?(:read_signups)
     can :signup_summary, Run, event: { private_signup_list: false }
 
