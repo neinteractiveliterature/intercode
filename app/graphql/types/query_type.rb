@@ -316,7 +316,7 @@ class Types::QueryType < Types::BaseObject
   field :organizations, [Types::OrganizationType], null: false
 
   def organizations
-    Organization.all
+    policy_scope(Organization.all)
   end
 
   field :root_site, Types::RootSiteType, null: false
