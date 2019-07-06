@@ -3,8 +3,9 @@ class Mutations::WithdrawSignupRequest < Mutations::BaseMutation
 
   argument :id, Int, required: true
 
-  def resolve(id:)
-    signup_request = SignupRequest.find(id)
+  load_and_authorize_model_with_id SignupRequest, :id, :withdraw
+
+  def resolve(**_args)
     signup_request.update!(state: 'withdrawn', updated_by: current_user)
 
     { signup_request: signup_request }

@@ -4,9 +4,9 @@ class Mutations::AcceptSignupRequest < Mutations::BaseMutation
 
   argument :id, Int, required: true, camelize: false
 
-  def resolve(id:)
-    signup_request = convention.signup_requests.find(id)
+  load_and_authorize_model_with_id SignupRequest, :id, :accept
 
+  def resolve(**_args)
     result = AcceptSignupRequestService.new(
       signup_request: signup_request,
       whodunit: current_user
