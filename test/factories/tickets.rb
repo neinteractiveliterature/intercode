@@ -8,7 +8,7 @@ FactoryBot.define do
     payment_note { 'MyText' }
 
     after(:build) do |ticket|
-      ticket.ticket_type ||= FactoryBot.create(:free_ticket_type, convention: ticket.user_con_profile.convention)
+      ticket.ticket_type ||= create(:free_ticket_type, convention: ticket.user_con_profile.convention)
     end
   end
 end

@@ -12,28 +12,28 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
     describe model_class.name do
       describe '#read?' do
         it "lets anyone read any #{cms_model_name}" do
-          model = FactoryBot.create(cms_model_name)
+          model = create(cms_model_name)
           assert policy_class.new(nil, model).read?
         end
       end
 
       describe '#manage?' do
         it "lets con staff manage #{cms_model_name.to_s.pluralize}" do
-          model = FactoryBot.create(cms_model_name)
-          user_con_profile = FactoryBot.create(:staff_user_con_profile, convention: model.parent)
+          model = create(cms_model_name)
+          user_con_profile = create(:staff_user_con_profile, convention: model.parent)
           assert policy_class.new(user_con_profile.user, model).manage?
         end
 
         it "does not let non-staff manage #{cms_model_name.to_s.pluralize}" do
-          model = FactoryBot.create(cms_model_name)
-          user_con_profile = FactoryBot.create(:user_con_profile, convention: model.parent)
+          model = create(cms_model_name)
+          user_con_profile = create(:user_con_profile, convention: model.parent)
           refute policy_class.new(user_con_profile.user, model).manage?
         end
       end
 
       describe 'Scope' do
         it "always returns all #{cms_model_name.to_s.pluralize}" do
-          FactoryBot.create_list(cms_model_name, 3)
+          create_list(cms_model_name, 3)
           assert_equal 3, scope_class.new(nil, model_class.all).resolve.count
         end
       end

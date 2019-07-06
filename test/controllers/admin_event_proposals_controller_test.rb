@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class AdminEventProposalsControllerTest < ActionDispatch::IntegrationTest
-  let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile) }
+  let(:user_con_profile) { create(:staff_user_con_profile) }
 
   before do
     set_convention user_con_profile.convention

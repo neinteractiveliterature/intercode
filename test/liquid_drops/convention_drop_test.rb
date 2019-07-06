@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe ConventionDrop do
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { create(:convention) }
   let(:convention_drop) { ConventionDrop.new(convention) }
 
   it "returns the convention's name" do
@@ -19,27 +19,27 @@ describe ConventionDrop do
       }
     end
     let(:event_with_openings) do
-      FactoryBot.create(
+      create(
         :event,
         convention: convention,
         registration_policy: limited_registration_policy
       )
     end
-    let(:run_with_openings) { FactoryBot.create(:run, event: event_with_openings) }
-    let(:unlimited_event_with_openings) { FactoryBot.create(:event, convention: convention) }
-    let(:unlimited_run_with_openings) { FactoryBot.create(:run, event: unlimited_event_with_openings) }
-    let(:volunteer_event_category) { FactoryBot.create(:event_category, convention: convention, name: 'Volunteer event') }
+    let(:run_with_openings) { create(:run, event: event_with_openings) }
+    let(:unlimited_event_with_openings) { create(:event, convention: convention) }
+    let(:unlimited_run_with_openings) { create(:run, event: unlimited_event_with_openings) }
+    let(:volunteer_event_category) { create(:event_category, convention: convention, name: 'Volunteer event') }
     let(:volunteer_event_with_openings) do
-      FactoryBot.create(
+      create(
         :event,
         convention: convention,
         event_category: volunteer_event_category,
         registration_policy: limited_registration_policy
       )
     end
-    let(:volunteer_run_with_openings) { FactoryBot.create(:run, event: volunteer_event_with_openings) }
-    let(:event_without_openings) { FactoryBot.create(:event, convention: convention, registration_policy: RegistrationPolicy.new) }
-    let(:run_without_openings) { FactoryBot.create(:run, event: event_without_openings) }
+    let(:volunteer_run_with_openings) { create(:run, event: volunteer_event_with_openings) }
+    let(:event_without_openings) { create(:event, convention: convention, registration_policy: RegistrationPolicy.new) }
+    let(:run_without_openings) { create(:run, event: event_without_openings) }
 
     before do
       run_with_openings

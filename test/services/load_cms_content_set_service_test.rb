@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe LoadCmsContentSetService do
-  let(:convention) { FactoryBot.create(:convention) }
+  let(:convention) { create(:convention) }
   let(:service) { LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard') }
 
   before do

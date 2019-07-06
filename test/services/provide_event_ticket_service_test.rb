@@ -1,11 +1,11 @@
 require 'test_helper'
 
 describe ProvideEventTicketService do
-  let(:convention) { FactoryBot.create(:convention) }
-  let(:event_category) { FactoryBot.create(:event_category, convention: convention, can_provide_tickets: true) }
-  let(:event) { FactoryBot.create(:event, convention: convention, event_category: event_category) }
-  let(:ticket_type) { FactoryBot.create(:event_provided_ticket_type, convention: convention) }
-  let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+  let(:convention) { create(:convention) }
+  let(:event_category) { create(:event_category, convention: convention, can_provide_tickets: true) }
+  let(:event) { create(:event, convention: convention, event_category: event_category) }
+  let(:ticket_type) { create(:event_provided_ticket_type, convention: convention) }
+  let(:user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:service) { ProvideEventTicketService.new(event, user_con_profile, ticket_type) }
 
   it 'provides a ticket' do
@@ -19,7 +19,7 @@ describe ProvideEventTicketService do
   end
 
   describe 'if the user already has a ticket' do
-    let(:paid_ticket_type) { FactoryBot.create(:paid_ticket_type, convention: convention) }
+    let(:paid_ticket_type) { create(:paid_ticket_type, convention: convention) }
 
     before do
       user_con_profile.create_ticket!(ticket_type: paid_ticket_type)
@@ -33,7 +33,7 @@ describe ProvideEventTicketService do
   end
 
   describe 'if the event cannot provide tickets' do
-    let(:event_category) { FactoryBot.create(:event_category, convention: convention, can_provide_tickets: false) }
+    let(:event_category) { create(:event_category, convention: convention, can_provide_tickets: false) }
 
     it 'fails' do
       result = service.call
@@ -43,7 +43,7 @@ describe ProvideEventTicketService do
   end
 
   describe 'if the ticket type is not event-providable' do
-    let(:ticket_type) { FactoryBot.create(:paid_ticket_type, convention: convention) }
+    let(:ticket_type) { create(:paid_ticket_type, convention: convention) }
 
     it 'fails' do
       result = service.call
@@ -55,8 +55,8 @@ describe ProvideEventTicketService do
   describe 'if the event has already provided all the tickets it can' do
     before do
       2.times do
-        other_user_con_profile = FactoryBot.create(:user_con_profile, convention: convention)
-        FactoryBot.create(:ticket, user_con_profile: other_user_con_profile, ticket_type: ticket_type, provided_by_event: event)
+        other_user_con_profile = create(:user_con_profile, convention: convention)
+        create(:ticket, user_con_profile: other_user_con_profile, ticket_type: ticket_type, provided_by_event: event)
       end
     end
 

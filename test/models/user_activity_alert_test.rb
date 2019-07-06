@@ -3,7 +3,7 @@ require 'test_helper'
 class UserActivityAlertTest < ActiveSupport::TestCase
   describe 'event triggers' do
     it 'triggers on specified events' do
-      alert = FactoryBot.create(
+      alert = create(
         :user_activity_alert,
         trigger_on_ticket_create: true,
         trigger_on_user_con_profile_create: true
@@ -14,14 +14,14 @@ class UserActivityAlertTest < ActiveSupport::TestCase
     end
 
     it 'does not trigger if the field for the event is false' do
-      alert = FactoryBot.create(:user_activity_alert)
+      alert = create(:user_activity_alert)
 
       refute alert.trigger_on_event?(:ticket_create)
       refute alert.trigger_on_event?(:user_con_profile_create)
     end
 
     it 'does not trigger if the event is unknown' do
-      alert = FactoryBot.create(
+      alert = create(
         :user_activity_alert,
         trigger_on_ticket_create: true,
         trigger_on_user_con_profile_create: true
@@ -33,7 +33,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
 
   describe 'user matching' do
     let(:bowser) do
-      FactoryBot.create(
+      create(
         :user,
         first_name: 'Bowser',
         last_name: 'Koopa',
@@ -41,7 +41,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
       )
     end
     let(:peach) do
-      FactoryBot.create(
+      create(
         :user,
         first_name: 'Princess',
         last_name: 'Peach',
@@ -49,7 +49,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
       )
     end
     let(:user_activity_alert) do
-      FactoryBot.create(
+      create(
         :user_activity_alert,
         partial_name: 'bowser',
         email: 'bowser@koopakingdom.com',
@@ -82,7 +82,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
           user_activity_alert
           bowser.destroy! # Sorry, but the princess is in another castle
           profile = create_profile(
-            FactoryBot.create(:user, email: email),
+            create(:user, email: email),
             convention,
             copy_user: true
           )
@@ -97,17 +97,17 @@ class UserActivityAlertTest < ActiveSupport::TestCase
   end
 
   describe 'destinations' do
-    let(:user_activity_alert) { FactoryBot.create(:user_activity_alert) }
+    let(:user_activity_alert) { create(:user_activity_alert) }
     let(:convention) { user_activity_alert.convention }
 
     it 'figures out the destinations correctly' do
-      staff_member = FactoryBot.create(:user_con_profile, convention: convention)
-      staff_position = FactoryBot.create(
+      staff_member = create(:user_con_profile, convention: convention)
+      staff_position = create(
         :staff_position,
         convention: convention,
         user_con_profiles: [staff_member]
       )
-      other_user_con_profile = FactoryBot.create(:user_con_profile, convention: convention)
+      other_user_con_profile = create(:user_con_profile, convention: convention)
       user_activity_alert.alert_destinations.create!(staff_position: staff_position)
       user_activity_alert.alert_destinations.create!(user_con_profile: other_user_con_profile)
 
@@ -125,10 +125,10 @@ class UserActivityAlertTest < ActiveSupport::TestCase
   end
 
   def create_profile(user, convention, copy_user: false, copy_name: false, **attrs)
-    FactoryBot.create(
+    create(
       :user_con_profile,
       convention: convention,
-      user: copy_user ? user : FactoryBot.create(:user),
+      user: copy_user ? user : create(:user),
       first_name: copy_name ? user.first_name : 'Benign',
       last_name: copy_name ? user.last_name : 'User',
       **attrs

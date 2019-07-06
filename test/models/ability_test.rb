@@ -1,15 +1,15 @@
 require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
-  let(:user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+  let(:convention) { create(:convention) }
+  let(:user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:ability) { Ability.new(user_con_profile.user, nil) }
-  let(:event_category) { FactoryBot.create(:event_category, convention: convention) }
+  let(:event_category) { create(:event_category, convention: convention) }
 
   describe 'EventProposal' do
-    let(:user_con_profile) { FactoryBot.create(:staff_user_con_profile, convention: convention) }
+    let(:user_con_profile) { create(:staff_user_con_profile, convention: convention) }
     let(:event_proposal) do
-      FactoryBot.build(:event_proposal, convention: convention, event_category: event_category, status: 'proposed').tap do |proposal|
+      build(:event_proposal, convention: convention, event_category: event_category, status: 'proposed').tap do |proposal|
         proposal.assign_default_values_from_form_items(event_category.event_proposal_form.form_items)
         proposal.save!
       end
@@ -22,7 +22,7 @@ class AbilityTest < ActiveSupport::TestCase
     end
 
     it 'should not allow viewing drafts' do
-      draft = FactoryBot.create(:event_proposal, convention: convention, status: 'draft')
+      draft = create(:event_proposal, convention: convention, status: 'draft')
       refute ability.can?(:read, draft)
     end
 

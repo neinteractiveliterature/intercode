@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class AcceptEventProposalServiceTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
-  let(:event_category) { FactoryBot.create(:event_category, convention: convention) }
+  let(:convention) { create(:convention) }
+  let(:event_category) { create(:event_category, convention: convention) }
   let(:event_proposal) do
-    FactoryBot.build(:event_proposal, event_category: event_category, convention: convention).tap do |proposal|
+    build(:event_proposal, event_category: event_category, convention: convention).tap do |proposal|
       proposal.assign_default_values_from_form_items(
         proposal.event_category.event_proposal_form.form_items
       )
