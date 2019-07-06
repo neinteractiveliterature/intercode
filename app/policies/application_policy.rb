@@ -50,7 +50,11 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      if oauth_scope?(:read_conventions) && site_admin?
+        scope.all
+      else
+        scope.none
+      end
     end
 
     private
