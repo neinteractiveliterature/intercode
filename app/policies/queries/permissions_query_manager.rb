@@ -2,6 +2,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
   def initialize(user:)
     super(user: user)
     @has_event_category_permission = Queries::NilSafeCache.new
+    @has_organization_permission = Queries::NilSafeCache.new
   end
 
   def has_event_category_permission?(event_category_id, permission)
@@ -18,6 +19,14 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
         permission: permission
       ).select(:event_category_id)
     )
+  end
+
+  def has_organization_permission?(organization_id, permission)
+    return false unless organization_id && permission && user
+
+    @has_organization_permission.get([organization_id, permission]) do
+      organizations_with_permission(permission).where(id: organization_id).any?
+    end
   end
 
   def organizations_with_permission(permission)

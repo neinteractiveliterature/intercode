@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'organization_policy_test_helper'
 
 class OrganizationPolicyTest < ActiveSupport::TestCase
+  include OrganizationPolicyTestHelper
+
   let(:organization) { create(:organization) }
 
   describe '#read?' do
@@ -62,20 +65,10 @@ class OrganizationPolicyTest < ActiveSupport::TestCase
 
     it 'returns nothing for other users' do
       user = create(:user)
+      organizations
       resolved_organizations = OrganizationPolicy::Scope.new(user, Organization.all).resolve
 
       assert_equal [], resolved_organizations.sort
     end
-  end
-
-  private
-
-  def create_organization_with_managing_user
-    user = create(:user)
-    user_organization = create(:organization)
-    role = user_organization.organization_roles.create!(users: [user])
-    role.permissions.create!(permission: 'manage_organization_access')
-
-    [user_organization, user]
   end
 end

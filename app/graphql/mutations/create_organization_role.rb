@@ -6,11 +6,17 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
   argument :user_ids, [Integer], required: true, camelize: false
   argument :permissions, [Types::PermissionInputType], required: true
 
-  def resolve(organization_id:, organization_role:, user_ids:, permissions:)
-    organization = Organization.find(organization_id)
-    new_role = organization.organization_roles.create!(organization_role.to_h)
-    new_role.update!(user_ids: user_ids)
-    permissions.each do |permission|
+  attr_reader :organization
+
+  def authorized?(args)
+    @organization = Organization.find(args[:organization_id])
+    policy(OrganizationRole.new(organization: organization)).create?
+  end
+
+  def resolve(**args)
+    new_role = organization.organization_roles.create!(args[:organization_role].to_h)
+    new_role.update!(user_ids: args[:user_ids])
+    args[:permissions].each do |permission|
       new_role.permissions.create!(permission.to_h)
     end
     new_role.reload # not sure why, but if I don't do this it seems like permissions get returned twice
