@@ -236,8 +236,6 @@ class Ability
       can [:read_email, :read_personal_info], UserConProfile
     end
 
-    can :read, Organization if has_scope?(:read_organizations)
-
     can :manage, [Event, Run, Signup] if has_scope?(:manage_signups)
 
     if has_scope?(:manage_events)
@@ -251,7 +249,6 @@ class Ability
     end
 
     if has_scope?(:manage_organizations)
-      can :manage, Organization
       can :manage, OrganizationRole
     end
 
