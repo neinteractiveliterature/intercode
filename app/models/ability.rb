@@ -232,7 +232,7 @@ class Ability
     end
 
     if has_scope?(:read_conventions)
-      can :read, [Permission, UserConProfile, User, UserActivityAlert]
+      can :read, [UserConProfile, User, UserActivityAlert]
       can [:read_email, :read_personal_info], UserConProfile
     end
 
@@ -250,7 +250,6 @@ class Ability
 
     return unless has_scope?(:manage_conventions)
     can :manage, [
-      Permission,
       RootSite,
       SignupRequest,
       User,
