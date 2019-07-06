@@ -13,7 +13,6 @@ module Ability::OrganizationPermissions
     end
 
     manageable_organizations = organizations_with_permission('manage_organization_access')
-    can :read, Organization if manageable_organizations.any?
 
     manageable_roles = OrganizationRole.where(organization_id: manageable_organizations.select(:id))
     scope_authorization :manage, OrganizationRole, manageable_roles do |organization_role|

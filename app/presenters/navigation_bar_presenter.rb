@@ -248,7 +248,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Organizations'
       url '/organizations'
-      visible? { can?(:read, Organization) }
+      visible? { Pundit.policy(pundit_user, Organization.new).read? }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do

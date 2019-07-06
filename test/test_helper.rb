@@ -24,6 +24,8 @@ DatabaseCleaner.allow_remote_database_url = true
 DatabaseCleaner.strategy = :transaction
 
 class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
+
   before do
     DatabaseCleaner.start
     ActionMailer::Base.deliveries.clear # TODO: remove once Rails merges PR #24688 to do this itself

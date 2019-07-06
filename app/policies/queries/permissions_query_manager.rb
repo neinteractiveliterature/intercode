@@ -20,6 +20,26 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     )
   end
 
+  def organizations_with_permission(permission)
+    Organization.where(
+      id: user_organization_roles_with_permission(permission).select(:organization_id)
+    )
+  end
+
+  def user_organization_roles_with_permission(permission)
+    OrganizationRole.where(
+      id: user_permission_scope.where(permission: permission)
+        .where.not(organization_role_id: nil)
+        .select(:organization_role_id)
+    )
+  end
+
+  def conventions_with_organization_permission(permission)
+    Convention.where(
+      organization_id: user_organization_roles_with_permission(permission).select(:organization_id)
+    )
+  end
+
   def user_permission_scope
     @user_permission_scope ||= user ? Permission.for_user(user) : Permission.none
   end
