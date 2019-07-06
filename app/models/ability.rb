@@ -251,7 +251,6 @@ class Ability
     return unless has_scope?(:manage_conventions)
     can :manage, [
       RootSite,
-      SignupRequest,
       User,
       UserActivityAlert,
       UserConProfile
@@ -284,11 +283,6 @@ class Ability
       can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
     end
 
-    if has_scope?(:manage_signups)
-      can :create, SignupRequest
-      can :withdraw, SignupRequest, user_con_profile_id: { user_id: user.id }, status: %w[pending]
-    end
-
     return unless has_scope?(:read_signups)
     can :read, Signup, user_con_profile: { user_id: user.id }
   end
@@ -319,7 +313,6 @@ class Ability
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
-    can :read, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
     can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     return unless has_scope?(:manage_conventions)
@@ -329,7 +322,6 @@ class Ability
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
     can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
-    can :manage, SignupRequest, target_run: { event: { convention: { id: staff_con_ids, signup_mode: 'moderated' } } }
   end
 
   def add_event_proposal_abilities
