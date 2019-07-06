@@ -25,10 +25,10 @@ DatabaseCleaner.strategy = :transaction
 
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
+  include ActionMailer::TestCase::ClearTestDeliveries
 
   before do
     DatabaseCleaner.start
-    ActionMailer::Base.deliveries.clear # TODO: remove once Rails merges PR #24688 to do this itself
   end
   after { DatabaseCleaner.clean }
 end
