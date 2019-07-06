@@ -248,10 +248,6 @@ class Ability
       ]
     end
 
-    if has_scope?(:manage_organizations)
-      can :manage, OrganizationRole
-    end
-
     return unless has_scope?(:manage_conventions)
     can :manage, [
       Permission,
