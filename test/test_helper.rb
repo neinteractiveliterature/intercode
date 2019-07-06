@@ -36,7 +36,7 @@ end
 class ActionController::TestCase
   include Devise::Test::ControllerHelpers
 
-  def set_convention(convention)
+  def set_convention(convention) # rubocop:disable Naming/AccessorMethodName
     @request.host = convention.domain
     @controller.request.env['intercode.convention'] = convention
   end
@@ -45,7 +45,7 @@ end
 class ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  def set_convention(convention)
+  def set_convention(convention) # rubocop:disable Naming/AccessorMethodName
     self.default_url_options = { host: convention.domain }
   end
 end
