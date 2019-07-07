@@ -206,10 +206,6 @@ class Types::QueryType < Types::BaseObject
 
   field :user_con_profile, Types::UserConProfileType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].user_con_profiles.find(args[:id]))
-    end
   end
 
   def user_con_profile(**args)

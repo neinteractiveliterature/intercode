@@ -1,6 +1,6 @@
 class Types::TeamMemberType < Types::BaseObject
   graphql_name 'TeamMember'
-  authorize_record
+  #authorize_record
 
   field :id, Int, null: false
   field :display, Boolean, null: false, deprecation_reason: 'Use display_team_member instead'

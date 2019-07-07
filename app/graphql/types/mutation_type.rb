@@ -311,28 +311,9 @@ class Types::MutationType < Types::BaseObject
 
   ### UserConProfile
 
-  field :createUserConProfile, mutation: Mutations::CreateUserConProfile do
-    guard ->(_obj, _args, ctx) {
-      ctx[:current_ability].can?(:create, UserConProfile.new(convention: ctx[:convention]))
-    }
-  end
-
-  field :updateUserConProfile, mutation: Mutations::UpdateUserConProfile do
-    guard ->(_obj, args, ctx) {
-      user_con_profile = ctx[:convention].user_con_profiles.find(args[:id])
-      if args[:user_con_profile][:privileges]
-        return false unless ctx[:current_ability].can?(:update_privileges, user_con_profile)
-      end
-
-      ctx[:current_ability].can?(:update, user_con_profile)
-    }
-  end
-
-  field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile do
-    guard(guard_for_model_with_id(UserConProfile, :destroy))
-  end
-
+  field :createUserConProfile, mutation: Mutations::CreateUserConProfile
+  field :updateUserConProfile, mutation: Mutations::UpdateUserConProfile
+  field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile
   field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups
-
   field :acceptClickwrapAgreement, mutation: Mutations::AcceptClickwrapAgreement
 end

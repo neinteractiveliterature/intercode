@@ -4,8 +4,18 @@ class Mutations::UpdateUserConProfile < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
 
+  attr_reader :user_con_profile
+
+  def authorized?(args)
+    @user_con_profile = convention.user_con_profiles.find(args[:id])
+    if args[:user_con_profile][:privileges]
+      policy(user_con_profile).update_privileges?
+    else
+      policy(user_con_profile).update?
+    end
+  end
+
   def resolve(**args)
-    user_con_profile = convention.user_con_profiles.find(args[:id])
     user_con_profile_attrs = args[:user_con_profile].to_h.stringify_keys
     if user_con_profile_attrs.key?('form_response_attrs_json')
       user_con_profile.assign_form_response_attributes(
