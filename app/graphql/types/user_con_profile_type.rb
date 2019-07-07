@@ -103,24 +103,9 @@ class Types::UserConProfileType < Types::BaseObject
     OrderSummaryLoader.for().load(object)
   end
 
-  field :signups, [Types::SignupType], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: graphql_object.object, run: graphql_object.object.convention.events.new.runs.new))
-    }
-  end
-
-  field :signup_requests, [Types::SignupRequestType], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, SignupRequest.new(user_con_profile: graphql_object.object, target_run: graphql_object.object.convention.events.new.runs.new))
-    }
-  end
-
-  field :team_members, [Types::TeamMemberType], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: graphql_object.object, event: graphql_object.object.convention.events.new))
-    }
-  end
-
+  field :signups, [Types::SignupType], null: false
+  field :signup_requests, [Types::SignupRequestType], null: false
+  field :team_members, [Types::TeamMemberType], null: false
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets

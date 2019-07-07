@@ -133,7 +133,7 @@ class Types::AbilityType < Types::BaseObject
   field :can_read_signups, Boolean, null: false
 
   def can_read_signups
-    object.can?(:read, Signup.new(run: Run.new(event: Event.new(convention: context[:convention]))))
+    policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).read?
   end
 
   field :can_read_event_signups, Boolean, null: false do
@@ -142,13 +142,13 @@ class Types::AbilityType < Types::BaseObject
 
   def can_read_event_signups(**args)
     event = context[:convention].events.find(args[:event_id])
-    object.can?(:read, Signup.new(run: Run.new(event: event)))
+    policy(Signup.new(run: Run.new(event: event))).read?
   end
 
   field :can_update_signups, Boolean, null: false
 
   def can_update_signups
-    object.can?(:update, Signup.new(run: Run.new(event: Event.new(convention: context[:convention]))))
+    policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).update?
   end
 
   field :can_update_products, Boolean, null: false

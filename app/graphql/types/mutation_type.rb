@@ -224,58 +224,13 @@ class Types::MutationType < Types::BaseObject
 
   ### Signup
 
-  field :createMySignup, mutation: Mutations::CreateMySignup do
-    guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
-  end
-
-  field :withdrawMySignup, mutation: Mutations::WithdrawMySignup do
-    guard ->(_obj, _args, ctx) { ctx[:user_con_profile] }
-  end
-
-  field :createUserSignup, mutation: Mutations::CreateUserSignup do
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(
-        :create,
-        Signup.new(
-          user_con_profile: ctx[:convention].user_con_profiles.find(args[:user_con_profile_id]),
-          run: ctx[:convention].runs.find(args[:run_id])
-        )
-      )
-    end
-  end
-
-  field :withdrawUserSignup, mutation: Mutations::WithdrawUserSignup do
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(
-        :update,
-        Signup.find_by(run_id: args[:run_id], user_con_profile_id: args[:user_con_profile_id])
-      )
-    end
-  end
-
-  field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups do
-    guard ->(_obj, args, ctx) {
-      ctx[:current_ability].can?(
-        :update,
-        Signup.new(
-          user_con_profile: ctx[:convention].user_con_profiles.find(args[:user_con_profile_id]),
-          run: Run.new(event: Event.new(convention: ctx[:convention]))
-        )
-      )
-    }
-  end
-
-  field :forceConfirmSignup, mutation: Mutations::ForceConfirmSignup do
-    guard(guard_for_convention_associated_model(:signups, :force_confirm))
-  end
-
-  field :updateSignupBucket, mutation: Mutations::UpdateSignupBucket do
-    guard(guard_for_convention_associated_model(:signups, :update_bucket))
-  end
-
-  field :updateSignupCounted, mutation: Mutations::UpdateSignupCounted do
-    guard(guard_for_convention_associated_model(:signups, :update_counted))
-  end
+  field :createMySignup, mutation: Mutations::CreateMySignup
+  field :withdrawMySignup, mutation: Mutations::WithdrawMySignup
+  field :createUserSignup, mutation: Mutations::CreateUserSignup
+  field :withdrawUserSignup, mutation: Mutations::WithdrawUserSignup
+  field :forceConfirmSignup, mutation: Mutations::ForceConfirmSignup
+  field :updateSignupBucket, mutation: Mutations::UpdateSignupBucket
+  field :updateSignupCounted, mutation: Mutations::UpdateSignupCounted
 
   ### SignupRequest
 
@@ -376,6 +331,8 @@ class Types::MutationType < Types::BaseObject
   field :deleteUserConProfile, mutation: Mutations::DeleteUserConProfile do
     guard(guard_for_model_with_id(UserConProfile, :destroy))
   end
+
+  field :withdrawAllUserConProfileSignups, mutation: Mutations::WithdrawAllUserConProfileSignups
 
   field :acceptClickwrapAgreement, mutation: Mutations::AcceptClickwrapAgreement
 end

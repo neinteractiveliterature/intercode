@@ -327,10 +327,6 @@ class Types::QueryType < Types::BaseObject
 
   field :signup, Types::SignupType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].signups.find(args[:id]))
-    end
   end
 
   def signup(**args)

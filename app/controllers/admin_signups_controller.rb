@@ -24,11 +24,11 @@ class AdminSignupsController < ApplicationController
 
   include Concerns::SendCsv
 
-  load_resource :event, through: :convention
-  load_resource :run, through: :event
-  load_and_authorize_resource class: Signup
-
   def export
+    event = convention.events.find(params[:event_id])
+    run = event.runs.find(params[:run_id])
+    authorize Signup.new(run: run).read?
+
     respond_to do |format|
       format.csv do
         send_table_presenter_csv(

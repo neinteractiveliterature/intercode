@@ -1,12 +1,12 @@
 class Types::SignupType < Types::BaseObject
+  authorize_record
+
   field :id, Int, null: false
   field :state, Types::SignupStateType, null: false
   field :counted, Boolean, null: false
   field :bucket_key, String, null: true, camelize: false
   field :requested_bucket_key, String, null: true, camelize: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, graphql_object.object)
-    end
+    authorize_action :read_requested_bucket_key
   end
 
   field :run, Types::RunType, null: false
@@ -24,7 +24,7 @@ class Types::SignupType < Types::BaseObject
   # Why not just do this as a guard?  We need it to be safe to ask for this data even if you can't
   # actually read it
   def bucket_key
-    return unless can?(:read, object) || object.bucket&.expose_attendees?
+    return unless object.bucket&.expose_attendees? || policy(object).read_requested_bucket_key?
     object.bucket_key
   end
 

@@ -21,8 +21,40 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert SignupPolicy.new(signup.user_con_profile.user, signup).read?
     end
 
+    it 'lets users read signups of other attendes of the same run' do
+      my_signup = create(:signup, run: signup.run)
+      assert SignupPolicy.new(my_signup.user_con_profile.user, signup).read?
+    end
+
     it "does not let users read other users' signups" do
       refute SignupPolicy.new(create(:user), signup).read?
+    end
+  end
+
+  describe '#read_requested_bucket_key?' do
+    %w[outreach con_com staff].each do |priv|
+      it "lets #{priv} users read requested bucket key for signups in their convention" do
+        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
+        assert SignupPolicy.new(user_con_profile.user, signup).read_requested_bucket_key?
+      end
+    end
+
+    it 'lets team members read requested bucket key for signups in their events' do
+      team_member = create(:team_member, event: signup.run.event)
+      assert SignupPolicy.new(team_member.user_con_profile.user, signup).read_requested_bucket_key?
+    end
+
+    it 'lets users read requested bucket key for their own signups' do
+      assert SignupPolicy.new(signup.user_con_profile.user, signup).read_requested_bucket_key?
+    end
+
+    it 'does not let users read requested bucket key of other attendes of the same run' do
+      my_signup = create(:signup, run: signup.run)
+      refute SignupPolicy.new(my_signup.user_con_profile.user, signup).read_requested_bucket_key?
+    end
+
+    it "does not let users read requested bucket key for other users' signups" do
+      refute SignupPolicy.new(create(:user), signup).read_requested_bucket_key?
     end
   end
 
@@ -118,6 +150,14 @@ class SignupPolicyTest < ActiveSupport::TestCase
     it 'returns your own signups' do
       resolved_signups = SignupPolicy::Scope.new(signup.user_con_profile.user, Signup.all).resolve
       assert_equal [signup], resolved_signups.sort
+    end
+
+    it 'returns signups of other attendes of the same run' do
+      my_signup = create(:signup, run: signup.run)
+      resolved_signups = SignupPolicy::Scope.new(
+        my_signup.user_con_profile.user, Signup.all
+      ).resolve
+      assert_equal [my_signup, signup].sort, resolved_signups.sort
     end
 
     it 'returns no signups by default' do

@@ -1,6 +1,6 @@
 class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_run(run, filters, sort, visible_field_ids = nil)
-    scope = run.signups
+    scope = run.signups.includes(:user_con_profile)
     new(scope, filters, sort, visible_field_ids)
   end
 

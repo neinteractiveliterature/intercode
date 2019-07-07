@@ -177,11 +177,8 @@ class Types::ConventionType < Types::BaseObject
     end
   end
 
-  pagination_field :signup_requests_paginated, Types::SignupRequestsPaginationType, Types::SignupRequestFiltersInputType, null: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, SignupRequest.new(target_run: Run.new(event: Event.new(convention: graphql_object.object))))
-    end
-  end
+  pagination_field :signup_requests_paginated, Types::SignupRequestsPaginationType,
+    Types::SignupRequestFiltersInputType, null: false
 
   def signup_requests_paginated(**args)
     Tables::SignupRequestsTableResultsPresenter.for_convention(

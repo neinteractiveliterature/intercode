@@ -93,17 +93,10 @@ class Types::RunType < Types::BaseObject
     argument :per_page, Integer, required: false, camelize: false
     argument :filters, Types::SignupFiltersInputType, required: false
     argument :sort, [Types::SortInputType, null: true], required: false
-
-    guard ->(graphql_object, _args, ctx) do
-      (
-        ctx[:current_ability].can?(:read, Signup.new(run: graphql_object.object)) ||
-        ctx[:current_ability].can?(:signup_summary, graphql_object.object)
-      )
-    end
   end
 
   def signups_paginated(**args)
-    scope = object.signups
+    scope = object.signups.includes(:user_con_profile)
 
     Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])

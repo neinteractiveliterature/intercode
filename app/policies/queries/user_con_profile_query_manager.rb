@@ -1,7 +1,13 @@
 class Queries::UserConProfileQueryManager < Queries::QueryManager
-  def initialize(user:)
+  def initialize(user:, known_user_con_profiles: [])
     super(user: user)
     @user_con_profiles = Queries::NilSafeCache.new
+
+    known_user_con_profiles.each do |user_con_profile|
+      @user_con_profiles.get(user_con_profile.convention_id) do
+        user_con_profile
+      end
+    end
   end
 
   def user_con_profile_for_convention(convention)
