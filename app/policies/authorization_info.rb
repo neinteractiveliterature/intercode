@@ -1,6 +1,7 @@
 class AuthorizationInfo
   QUERY_MANAGER_CLASSES = [
     Queries::PermissionsQueryManager,
+    Queries::SignupQueryManager,
     Queries::TeamMemberQueryManager,
     Queries::UserConProfileQueryManager
   ]
@@ -29,12 +30,17 @@ class AuthorizationInfo
     end
   end
 
-  def initialize(user, doorkeeper_token)
+  def initialize(user, doorkeeper_token, known_user_con_profiles: [])
     @user = user
     @doorkeeper_token = doorkeeper_token
+    possible_query_manager_params = { user: user, known_user_con_profiles: known_user_con_profiles }
+
     QUERY_MANAGER_CLASSES.each do |query_manager_class|
       instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
-      instance_variable_set(:"@#{instance_variable_name}", query_manager_class.new(user: user))
+      accepted_params = query_manager_class.instance_method(:initialize).parameters.map(&:second)
+      init_params = possible_query_manager_params.slice(*accepted_params)
+      query_manager = query_manager_class.new(**init_params)
+      instance_variable_set(:"@#{instance_variable_name}", query_manager)
     end
   end
 

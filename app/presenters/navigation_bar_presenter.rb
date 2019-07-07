@@ -210,7 +210,10 @@ class NavigationBarPresenter
       url '/signup_moderation'
       visible? do
         convention.signup_mode == 'moderated' &&
-          can?(:create, Signup.new(run: Run.new(event: Event.new(convention: convention))))
+          Pundit.policy(
+            pundit_user,
+            Signup.new(run: Run.new(event: Event.new(convention: convention)))
+          ).manage?
       end
     end,
     SITE_CONTENT_NAVIGATION_ITEM,

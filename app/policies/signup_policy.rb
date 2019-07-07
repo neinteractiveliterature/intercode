@@ -5,12 +5,21 @@ class SignupPolicy < ApplicationPolicy
 
   def read?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_signups) { user && record.user_con_profile.user_id == user.id }
+      d.add(:read_events) { signed_up_for_run?(run) }
+    end
+    return true if read_requested_bucket_key?
+
+    super
+  end
+
+  def read_requested_bucket_key?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
       d.add(:read_events) { team_member_for_event?(event) }
       d.add(:read_conventions) { has_privilege_in_convention?(convention, :outreach, :con_com) }
     end
 
-    super
+    site_admin_read?
   end
 
   def manage?
@@ -55,7 +64,10 @@ class SignupPolicy < ApplicationPolicy
           dw.add(user_con_profile: UserConProfile.where(user_id: user.id))
         end
 
-        dw.add(run: Run.where(event: events_where_team_member)) if oauth_scope?(:read_events)
+        if oauth_scope?(:read_events)
+          dw.add(run: Run.where(event: events_where_team_member))
+          dw.add(run: runs_where_signed_up)
+        end
 
         if oauth_scope?(:read_conventions)
           dw.add(run: runs_in_conventions_with_privilege(:outreach, :con_com))
