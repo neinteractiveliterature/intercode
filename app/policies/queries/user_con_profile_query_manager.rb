@@ -4,6 +4,8 @@ class Queries::UserConProfileQueryManager < Queries::QueryManager
     @user_con_profiles = Queries::NilSafeCache.new
 
     known_user_con_profiles.each do |user_con_profile|
+      next if user_con_profile.nil?
+
       @user_con_profiles.get(user_con_profile.convention_id) do
         user_con_profile
       end
