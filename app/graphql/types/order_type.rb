@@ -1,4 +1,6 @@
 class Types::OrderType < Types::BaseObject
+  authorize_record
+
   field :id, Integer, null: true
   field :user_con_profile, Types::UserConProfileType, null: false
   field :status, String, null: false

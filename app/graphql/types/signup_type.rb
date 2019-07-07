@@ -33,7 +33,7 @@ class Types::SignupType < Types::BaseObject
   end
 
   def user_con_profile
-    RecordLoader.for(UserConProfile).load(object.user_con_profile_id)
+    RecordLoader.for(UserConProfile, includes: [:convention]).load(object.user_con_profile_id)
   end
 
   def choice
