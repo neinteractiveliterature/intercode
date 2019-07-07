@@ -1,9 +1,10 @@
 class RecordLoader < GraphQL::Batch::Loader
-  def initialize(model, column: model.primary_key, where: nil)
+  def initialize(model, column: model.primary_key, where: nil, includes: nil)
     @model = model
     @column = column.to_s
     @column_type = model.type_for_attribute(@column)
     @where = where
+    @includes = includes
   end
 
   def load(key)
@@ -20,6 +21,7 @@ class RecordLoader < GraphQL::Batch::Loader
   def query(keys)
     scope = @model
     scope = scope.where(@where) if @where
+    scope = scope.includes(@includes) if @includes
     scope.where(@column => keys)
   end
 end

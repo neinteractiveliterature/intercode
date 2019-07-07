@@ -1,9 +1,7 @@
 class Types::UserConProfileType < Types::BaseObject
   def self.personal_info_field(*args, **kwargs, &block)
     field(*args, **kwargs) do
-      guard ->(graphql_object, _args, ctx) do
-        ctx[:current_ability].can?(:read_personal_info, graphql_object.object)
-      end
+      authorize_action :read_personal_info
       instance_eval(&block) if block
     end
   end
@@ -46,9 +44,7 @@ class Types::UserConProfileType < Types::BaseObject
 
   personal_info_field :user, Types::UserType, null: true
   field :email, String, null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read_email, graphql_object.object)
-    end
+    authorize_action :read_email
   end
   field :staff_positions, [Types::StaffPositionType], null: false
 
@@ -89,20 +85,15 @@ class Types::UserConProfileType < Types::BaseObject
     end
   end
 
-  field :orders, [Types::OrderType, null: true], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      OrderPolicy.new(ctx[:pundit_user], Order.new(user_con_profile: graphql_object.object)).read?
-    }
-  end
-
+  field :orders, [Types::OrderType, null: true], null: false
   field :order_summary, String, null: false do
-    guard -> (graphql_object, _args, ctx) {
-      OrderPolicy.new(ctx[:pundit_user], Order.new(user_con_profile: graphql_object.object)).read?
-    }
+    authorize do |value, context|
+      OrderPolicy.new(context[:pundit_user], Order.new(user_con_profile: value)).read?
+    end
   end
 
   def order_summary
-    OrderSummaryLoader.for().load(object)
+    OrderSummaryLoader.for.load(object)
   end
 
   field :signups, [Types::SignupType], null: false
