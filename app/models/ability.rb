@@ -218,7 +218,7 @@ class Ability
   end
 
   def add_site_admin_abilities
-    can :read, [Event, Run, Signup] if has_scope?(:read_signups)
+    can :read, [Event, Run] if has_scope?(:read_signups)
     can :signup_summary, Run, event: { private_signup_list: false }
 
     if has_scope?(:read_events)
@@ -226,7 +226,6 @@ class Ability
         Event,
         EventProposal,
         Run,
-        Signup,
         TeamMember
       ]
     end
@@ -236,14 +235,13 @@ class Ability
       can [:read_email, :read_personal_info], UserConProfile
     end
 
-    can :manage, [Event, Run, Signup] if has_scope?(:manage_signups)
+    can :manage, [Event, Run] if has_scope?(:manage_signups)
 
     if has_scope?(:manage_events)
       can :manage, [
         Event,
         EventProposal,
         Run,
-        Signup,
         TeamMember
       ]
     end
@@ -282,9 +280,6 @@ class Ability
         status: %w[draft proposed reviewing]
       can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
     end
-
-    return unless has_scope?(:read_signups)
-    can :read, Signup, user_con_profile: { user_id: user.id }
   end
 
   def add_con_staff_abilities
@@ -312,7 +307,6 @@ class Ability
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
-    can :read, Signup, run: { event: { convention_id: con_ids_with_privilege(:outreach, :con_com) } }
     can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     return unless has_scope?(:manage_conventions)
@@ -321,7 +315,6 @@ class Ability
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
-    can :manage, Signup, run: { event: { convention_id: staff_con_ids } }
   end
 
   def add_event_proposal_abilities
@@ -355,15 +348,6 @@ class Ability
           show_schedule: %w[gms yes]
         }
       }
-      can(
-        token_scope_action(
-          :manage_events,
-          :read,
-          [:read, :update_bucket, :force_confirm, :update_counted]
-        ),
-        Signup,
-        run: { event_id: team_member_event_ids }
-      )
       can token_scope_action(:manage_events), TeamMember, event_id: team_member_event_ids
     end
 
