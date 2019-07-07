@@ -10,7 +10,8 @@ class UserConProfilesController < ApplicationController
     parent: false,
     class: 'UserConProfile',
     through: :convention,
-    through_association: :user_con_profiles
+    through_association: :user_con_profiles,
+    except: [:revert_become]
   before_action :authorize_admin_profiles, except: [:revert_become]
 
   unless Rails.env.test?

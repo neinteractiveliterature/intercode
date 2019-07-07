@@ -8,6 +8,8 @@ class Types::UserConProfileType < Types::BaseObject
     end
   end
 
+  authorize_record
+
   field :id, Integer, null: false
   field :convention, Types::ConventionType, null: true
   field :privileges, [String, null: true], null: true
@@ -36,7 +38,7 @@ class Types::UserConProfileType < Types::BaseObject
       .load([[object, 'bio_html'], object.bio])
   end
 
-  field :form_response_attrs_json, String, null: true
+  personal_info_field :form_response_attrs_json, String, null: true
 
   def form_response_attrs_json
     FormResponsePresenter.new(context[:convention].user_con_profile_form, object).as_json.to_json

@@ -231,8 +231,7 @@ class Ability
     end
 
     if has_scope?(:read_conventions)
-      can :read, [UserConProfile, User, UserActivityAlert]
-      can [:read_email, :read_personal_info], UserConProfile
+      can :read, [User, UserActivityAlert]
     end
 
     can :manage, [Event, Run] if has_scope?(:manage_signups)
@@ -250,21 +249,11 @@ class Ability
     can :manage, [
       RootSite,
       User,
-      UserActivityAlert,
-      UserConProfile
+      UserActivityAlert
     ]
   end
 
   def add_authenticated_user_abilities
-    can :read, UserConProfile, user_id: user.id
-    can :revert_become, UserConProfile
-
-    if has_scope?(:read_profile)
-      can [:read_email, :read_personal_info], UserConProfile, user_id: user.id
-    end
-
-    can [:create, :update], UserConProfile, user_id: user.id if has_scope?(:manage_profile)
-
     if has_scope?(:read_events)
       can :read, EventProposal, id: own_event_proposal_ids
       can :read, EventProposal, owner: { user_id: user.id }
@@ -306,12 +295,10 @@ class Ability
 
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can [:read, :read_email, :read_personal_info], UserConProfile, convention_id: con_ids_with_privilege(:con_com)
     can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     return unless has_scope?(:manage_conventions)
 
-    can :manage, UserConProfile, convention_id: staff_con_ids
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
     can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
@@ -355,10 +342,6 @@ class Ability
       can :update, Event, id: team_member_event_ids
       can :update, EventProposal, event_id: team_member_event_ids
     end
-
-    return unless has_scope?(:read_conventions)
-    can [:read, :read_email], UserConProfile, convention_id: team_member_convention_ids
-    can :read_personal_info, UserConProfile, id: team_member_signed_up_user_con_profile_ids
   end
 
   def token_scope_action(manage_scope, read_action = :read, manage_action = :manage)
