@@ -245,7 +245,6 @@ class Ability
 
     return unless has_scope?(:manage_conventions)
     can :manage, [
-      RootSite,
       User,
       UserActivityAlert
     ]
