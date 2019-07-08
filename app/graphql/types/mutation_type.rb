@@ -193,11 +193,7 @@ class Types::MutationType < Types::BaseObject
 
   ### RootSite
 
-  field :updateRootSite, mutation: Mutations::UpdateRootSite do
-    guard ->(_obj, _args, ctx) {
-      ctx[:current_ability].can?(:update, RootSite)
-    }
-  end
+  field :updateRootSite, mutation: Mutations::UpdateRootSite
 
   ### Run
 
