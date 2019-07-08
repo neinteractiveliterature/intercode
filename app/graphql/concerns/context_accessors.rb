@@ -24,10 +24,10 @@ module Concerns::ContextAccessors
   end
 
   def policy(model)
-    Pundit.policy(pundit_user, model)
+    Pundit.policy(context[:pundit_user], model)
   end
 
   def policy_scope(scope)
-    Pundit.policy_scope(pundit_user, scope)
+    Pundit.policy_scope(context[:pundit_user], scope)
   end
 end

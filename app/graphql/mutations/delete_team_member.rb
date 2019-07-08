@@ -3,8 +3,9 @@ class Mutations::DeleteTeamMember < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
+  load_and_authorize_model_with_id TeamMember, :id, :destroy
+
   def resolve(**args)
-    team_member = TeamMember.find(args[:id])
     team_member.destroy!
     { team_member: team_member }
   end
