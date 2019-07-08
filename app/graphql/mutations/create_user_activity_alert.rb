@@ -6,6 +6,8 @@ class Mutations::CreateUserActivityAlert < Mutations::BaseMutation
     required: true,
     camelize: false
 
+  authorize_create_convention_associated_model :user_activity_alerts
+
   def resolve(user_activity_alert:, alert_destinations:)
     alert = context[:convention].user_activity_alerts.create!(user_activity_alert.to_h)
 

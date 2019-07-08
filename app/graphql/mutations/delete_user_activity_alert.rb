@@ -3,10 +3,11 @@ class Mutations::DeleteUserActivityAlert < Mutations::BaseMutation
 
   argument :id, Int, required: true
 
-  def resolve(id:)
-    alert = context[:convention].user_activity_alerts.find(id)
-    alert.destroy!
+  load_and_authorize_convention_associated_model :user_activity_alerts, :id, :destroy
 
-    { user_activity_alert: alert }
+  def resolve(**_args)
+    user_activity_alert.destroy!
+
+    { user_activity_alert: user_activity_alert }
   end
 end

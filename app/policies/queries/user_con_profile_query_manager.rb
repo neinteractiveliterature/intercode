@@ -42,4 +42,8 @@ class Queries::UserConProfileQueryManager < Queries::QueryManager
 
     Convention.where(user_con_profiles: user_con_profile_scope)
   end
+
+  def conventions_where_staff
+    conventions_with_privilege # staff is implicitly included
+  end
 end

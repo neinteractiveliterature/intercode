@@ -243,7 +243,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'User Activity Alerts'
       url '/user_activity_alerts'
-      visible? { can?(:read, UserActivityAlert.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, UserActivityAlert.new(convention: convention)).read? }
     end
   ]
 
