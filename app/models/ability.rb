@@ -225,8 +225,7 @@ class Ability
       can :read, [
         Event,
         EventProposal,
-        Run,
-        TeamMember
+        Run
       ]
     end
 
@@ -240,8 +239,7 @@ class Ability
       can :manage, [
         Event,
         EventProposal,
-        Run,
-        TeamMember
+        Run
       ]
     end
 
@@ -258,7 +256,6 @@ class Ability
       can :read, EventProposal, id: own_event_proposal_ids
       can :read, EventProposal, owner: { user_id: user.id }
       can :signup_summary, Run, id: signed_up_run_ids, event: { private_signup_list: false }
-      can :read, TeamMember, user_con_profile: { user_id: user.id }
     end
 
     if has_scope?(:manage_events)
@@ -288,7 +285,6 @@ class Ability
         show_schedule: %w[gms yes]
       }
     }
-    can token_scope_action(:manage_conventions), TeamMember, event: { convention_id: con_ids_with_privilege(:gm_liaison, :con_com) }
 
     # TODO: Re-enable this once Organizations exist
     # can :read, User if staff_con_ids.any?
@@ -335,7 +331,6 @@ class Ability
           show_schedule: %w[gms yes]
         }
       }
-      can token_scope_action(:manage_events), TeamMember, event_id: team_member_event_ids
     end
 
     if has_scope?(:manage_events)

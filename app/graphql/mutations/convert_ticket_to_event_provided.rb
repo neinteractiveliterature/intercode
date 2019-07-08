@@ -9,23 +9,22 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
   argument :ticket_type_id, Int, required: true, camelize: false
   argument :user_con_profile_id, Int, required: true, camelize: false
 
-  attr_reader :convention, :user_con_profile
+  attr_reader :event, :subject_profile
 
   def authorized?(args)
     @event = convention.events.find(args[:event_id])
-    @user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
-    policy(user_con_profile.ticket).destroy? &&
-      current_ability.can?(:update, event.team_members.new)
+    @subject_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    policy(user_con_profile.ticket).destroy? && policy(TeamMember.new(event: event)).update?
   end
 
   def resolve(**args)
     ticket_type = convention.ticket_types.find(args[:ticket_type_id])
-    existing_ticket = user_con_profile.ticket
-    raise "#{user_con_profile.name_without_nickname} has no #{convention.ticket_name}" unless existing_ticket
+    existing_ticket = subject_profile.ticket
+    raise "#{subject_profile.name_without_nickname} has no #{convention.ticket_name}" unless existing_ticket
 
     delete_result = DeleteTicketService.new(ticket: existing_ticket, refund: existing_ticket.charge_id.present?).call!
-    user_con_profile.reload
-    result = ProvideEventTicketService.new(event, user_con_profile, ticket_type).call!
+    subject_profile.reload
+    result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!
 
     {
       ticket: result.ticket,
