@@ -230,7 +230,7 @@ class Ability
     end
 
     if has_scope?(:read_conventions)
-      can :read, [User, UserActivityAlert]
+      can :read, [User]
     end
 
     can :manage, [Event, Run] if has_scope?(:manage_signups)
@@ -244,10 +244,7 @@ class Ability
     end
 
     return unless has_scope?(:manage_conventions)
-    can :manage, [
-      User,
-      UserActivityAlert
-    ]
+    can :manage, [User]
   end
 
   def add_authenticated_user_abilities
@@ -290,7 +287,6 @@ class Ability
 
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can token_scope_action(:manage_conventions), UserActivityAlert, convention_id: staff_con_ids
 
     return unless has_scope?(:manage_conventions)
 

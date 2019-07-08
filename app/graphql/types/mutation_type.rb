@@ -271,17 +271,9 @@ class Types::MutationType < Types::BaseObject
 
   ### UserActivityAlert
 
-  field :createUserActivityAlert, mutation: Mutations::CreateUserActivityAlert do
-    guard(guard_for_create_convention_associated_model(:user_activity_alerts))
-  end
-
-  field :deleteUserActivityAlert, mutation: Mutations::DeleteUserActivityAlert do
-    guard(guard_for_convention_associated_model(:user_activity_alerts, :destroy))
-  end
-
-  field :updateUserActivityAlert, mutation: Mutations::UpdateUserActivityAlert do
-    guard(guard_for_convention_associated_model(:user_activity_alerts, :update))
-  end
+  field :createUserActivityAlert, mutation: Mutations::CreateUserActivityAlert
+  field :deleteUserActivityAlert, mutation: Mutations::DeleteUserActivityAlert
+  field :updateUserActivityAlert, mutation: Mutations::UpdateUserActivityAlert
 
   ### User
 

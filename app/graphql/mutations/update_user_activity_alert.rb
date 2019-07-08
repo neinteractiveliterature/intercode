@@ -8,18 +8,19 @@ class Mutations::UpdateUserActivityAlert < Mutations::BaseMutation
     camelize: false
   argument :remove_alert_destination_ids, [Int], required: true, camelize: false
 
-  def resolve(id:, user_activity_alert:, add_alert_destinations:, remove_alert_destination_ids:)
-    alert = context[:convention].user_activity_alerts.find(id)
-    alert.update!(user_activity_alert.to_h)
+  load_and_authorize_convention_associated_model :user_activity_alerts, :id, :update
 
-    add_alert_destinations.each do |add_alert_destination|
-      alert.alert_destinations.create!(add_alert_destination.to_h)
+  def resolve(**args)
+    user_activity_alert.update!(args[:user_activity_alert].to_h)
+
+    args[:add_alert_destinations].each do |add_alert_destination|
+      user_activity_alert.alert_destinations.create!(add_alert_destination.to_h)
     end
 
-    remove_alert_destination_ids.each do |remove_id|
-      alert.alert_destinations.find(remove_id).destroy!
+    args[:remove_alert_destination_ids].each do |remove_id|
+      user_activity_alert.alert_destinations.find(remove_id).destroy!
     end
 
-    { user_activity_alert: alert.reload }
+    { user_activity_alert: user_activity_alert.reload }
   end
 end

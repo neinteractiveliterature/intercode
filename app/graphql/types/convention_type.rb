@@ -35,11 +35,7 @@ class Types::ConventionType < Types::BaseObject
   field :ticket_types, [Types::TicketTypeType], null: true
   field :organization, Types::OrganizationType, null: true
   field :products, [Types::ProductType], null: true
-  field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
-    end
-  end
+  field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end
