@@ -17,4 +17,9 @@ query AppRootQuery($path: String!) {
     timezone_name
     clickwrap_agreement
   }
+
+  rootSite {
+    id
+    site_name
+  }
 }
