@@ -6,6 +6,7 @@ import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { sortByLocaleString } from '../ValueUtils';
 import useQuerySuspended from '../useQuerySuspended';
+import usePageTitle from '../usePageTitle';
 
 function renderOrganizationConventions(organization) {
   const sortedConventions = sortBy(organization.conventions, [convention => convention.starts_at]);
@@ -21,6 +22,8 @@ function renderOrganizationConventions(organization) {
 
 function OrganizationIndex() {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
+
+  usePageTitle('Organizations');
 
   if (error) return <ErrorDisplay graphQLError={error} />;
 
