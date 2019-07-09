@@ -50,14 +50,11 @@ class Types::EventType < Types::BaseObject
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], context[:current_ability]).load(object)
+    EventRunsLoader.for(args[:start], args[:finish], context[:pundit_user]).load(object)
   end
 
   field :run, Types::RunType, null: false do
     argument :id, Integer, required: true
-    guard -> (graphql_object, args, ctx) do
-      ctx[:current_ability].can?(:read, graphql_object.object.runs.find(args[:id]))
-    end
   end
 
   def run(**args)

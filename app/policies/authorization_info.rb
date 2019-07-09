@@ -45,7 +45,7 @@ class AuthorizationInfo
   end
 
   def site_admin?
-    user&.site_admin?
+    !!(user && user.site_admin?)
   end
 
   def oauth_scope?(scope)

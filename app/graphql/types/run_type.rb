@@ -1,4 +1,6 @@
 class Types::RunType < Types::BaseObject
+  authorize_record
+
   field :id, Integer, null: false
   field :event, Types::EventType, null: true
 
@@ -85,7 +87,7 @@ class Types::RunType < Types::BaseObject
   field :current_ability_can_signup_summary_run, Boolean, null: false
 
   def current_ability_can_signup_summary_run
-    ModelPermissionLoader.for(Run).load([context[:current_ability], :signup_summary, object.id])
+    ModelPermissionLoader.for(Run).load([pundit_user, :signup_summary, object.id])
   end
 
   field :signups_paginated, Types::SignupsPaginationType, null: false do

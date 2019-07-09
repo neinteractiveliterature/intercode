@@ -1,4 +1,6 @@
 class ConventionPolicy < ApplicationPolicy
+  include Concerns::ScheduleRelease
+
   def read?
     true
   end
@@ -6,7 +8,9 @@ class ConventionPolicy < ApplicationPolicy
   def schedule?
     return true if oauth_scoped_disjunction do |d|
       d.add_clause { record.show_schedule == 'yes' }
-      d.add(:read_conventions) { has_schedule_release_permissions?(record.show_schedule) }
+      d.add(:read_conventions) do
+        has_schedule_release_permissions?(record, record.show_schedule)
+      end
     end
 
     site_admin_read?
@@ -15,7 +19,9 @@ class ConventionPolicy < ApplicationPolicy
   def list_events?
     return true if oauth_scoped_disjunction do |d|
       d.add_clause { record.show_event_list == 'yes' }
-      d.add(:read_conventions) { has_schedule_release_permissions?(record.show_event_list) }
+      d.add(:read_conventions) do
+        has_schedule_release_permissions?(record, record.show_event_list)
+      end
     end
 
     site_admin_read?
@@ -71,19 +77,6 @@ class ConventionPolicy < ApplicationPolicy
   end
 
   private
-
-  def has_schedule_release_permissions?(schedule_release_value)
-    case schedule_release_value
-    when 'yes' then true
-    when 'gms'
-      has_privilege_in_convention?(record, :con_com, :scheduling, :gm_liaison) ||
-        team_member_in_convention?(record)
-    when 'priv'
-      has_privilege_in_convention?(record, :scheduling, :gm_liaison)
-    else
-      false
-    end
-  end
 
   class Scope < Scope
     def resolve

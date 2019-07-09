@@ -21,6 +21,8 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
         has_event_category_permission?(event.event_category_id, 'override_event_tickets')
       end
     end
+
+    super
   end
 
   class Scope < Scope

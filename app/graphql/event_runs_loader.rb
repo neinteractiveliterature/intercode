@@ -1,14 +1,17 @@
 class EventRunsLoader < GraphQL::Batch::Loader
-  attr_reader :start, :finish, :ability
+  attr_reader :start, :finish, :pundit_user
 
-  def initialize(start, finish, ability)
+  def initialize(start, finish, pundit_user)
     @start = start
     @finish = finish
-    @ability = ability
+    @pundit_user = pundit_user
   end
 
   def perform(keys)
-    run_scope = Run.includes(:event).where(event_id: keys.map(&:id)).accessible_by(ability)
+    run_scope = RunPolicy::Scope.new(
+      pundit_user,
+      Run.includes(:event).where(event_id: keys.map(&:id))
+    ).resolve
     run_scope = run_scope.where('runs.starts_at >= ?', start) if start
     run_scope = run_scope.where('runs.starts_at < ?', finish) if finish
 
