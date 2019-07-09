@@ -1,5 +1,5 @@
 class Types::MaximumEventProvidedTicketsOverrideType < Types::BaseObject
-  guard ->(graphql_object, _args, ctx) { ctx[:current_ability].can?(:read, graphql_object.object) }
+  authorize_record
 
   field :id, Integer, null: false
   field :event, Types::EventType, null: false

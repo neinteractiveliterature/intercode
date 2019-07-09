@@ -175,7 +175,7 @@ class Types::ConventionType < Types::BaseObject
   def signup_requests_paginated(**args)
     Tables::SignupRequestsTableResultsPresenter.for_convention(
       convention: object,
-      ability: current_ability,
+      pundit_user: pundit_user,
       filters: args[:filters].to_h,
       sort: args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
