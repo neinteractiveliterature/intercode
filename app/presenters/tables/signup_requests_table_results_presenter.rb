@@ -1,22 +1,22 @@
 class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_convention(convention:, ability:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = convention.signup_requests.accessible_by(ability)
+  def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
+    scope = SignupRequestPolicy::Scope.new(pundit_user, convention.signup_requests)
     new(
       base_scope: scope,
       convention: convention,
-      ability: ability,
+      pundit_user: pundit_user,
       filters: filters,
       sort: sort,
       visible_field_ids: visible_field_ids
     )
   end
 
-  attr_reader :ability, :convention
+  attr_reader :pundit_user, :convention
 
-  def initialize(base_scope:, convention:, ability:, filters: {}, sort: nil, visible_field_ids: nil)
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
-    @ability = ability
+    @pundit_user = pundit_user
   end
 
   def fields

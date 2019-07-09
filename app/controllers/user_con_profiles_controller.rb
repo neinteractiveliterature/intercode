@@ -43,7 +43,7 @@ back to your normal identity (since you already are your normal identity).")
         send_table_presenter_csv(
           Tables::UserConProfilesTableResultsPresenter.for_convention(
             convention,
-            current_ability,
+            pundit_user,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]
