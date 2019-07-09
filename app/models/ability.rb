@@ -135,7 +135,6 @@ class Ability
 
   include CanCan::Ability
   include Ability::EventCategoryPermissions
-  include Ability::OrganizationPermissions
 
   attr_reader :user, :doorkeeper_token, :associated_records_loader
 
@@ -163,7 +162,6 @@ class Ability
       add_event_proposal_abilities
       add_team_member_abilities if team_member_event_ids.any?
       add_event_category_permission_abilities
-      add_organization_permission_abilities
     end
   end
 
@@ -229,10 +227,6 @@ class Ability
       ]
     end
 
-    if has_scope?(:read_conventions)
-      can :read, [User]
-    end
-
     can :manage, [Event, Run] if has_scope?(:manage_signups)
 
     if has_scope?(:manage_events)
@@ -242,9 +236,6 @@ class Ability
         Run
       ]
     end
-
-    return unless has_scope?(:manage_conventions)
-    can :manage, [User]
   end
 
   def add_authenticated_user_abilities
@@ -281,9 +272,6 @@ class Ability
         show_schedule: %w[gms yes]
       }
     }
-
-    # TODO: Re-enable this once Organizations exist
-    # can :read, User if staff_con_ids.any?
 
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)

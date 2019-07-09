@@ -1,8 +1,8 @@
 require 'test_helper'
-require_relative 'organization_policy_test_helper'
+require_relative 'organization_role_test_helper'
 
 class OrganizationPolicyTest < ActiveSupport::TestCase
-  include OrganizationPolicyTestHelper
+  include OrganizationRoleTestHelper
 
   let(:organization) { create(:organization) }
 

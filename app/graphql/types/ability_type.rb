@@ -13,7 +13,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_signup(**args)
-    ModelPermissionLoader.for(Signup).load([object, :update, args[:signup_id]])
+    ModelPermissionLoader.for(Signup).load([pundit_user, :update, args[:signup_id]])
   end
 
   field :can_update_counted_signup, Boolean, null: false do
@@ -21,7 +21,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_counted_signup(**args)
-    ModelPermissionLoader.for(Signup).load([object, :update_counted, args[:signup_id]])
+    ModelPermissionLoader.for(Signup).load([pundit_user, :update_counted, args[:signup_id]])
   end
 
   field :can_force_confirm_signup, Boolean, null: false do
@@ -29,7 +29,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_force_confirm_signup(**args)
-    ModelPermissionLoader.for(Signup).load([object, :force_confirm, args[:signup_id]])
+    ModelPermissionLoader.for(Signup).load([pundit_user, :force_confirm, args[:signup_id]])
   end
 
   field :can_update_bucket_signup, Boolean, null: false do
@@ -37,7 +37,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_bucket_signup(**args)
-    ModelPermissionLoader.for(Signup).load([object, :update_bucket, args[:signup_id]])
+    ModelPermissionLoader.for(Signup).load([pundit_user, :update_bucket, args[:signup_id]])
   end
 
   field :can_update_event, Boolean, null: false do
@@ -45,7 +45,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_event(**args)
-    ModelPermissionLoader.for(Event).load([object, :update, args[:event_id]])
+    ModelPermissionLoader.for(Event).load([pundit_user, :update, args[:event_id]])
   end
 
   field :can_delete_event, Boolean, null: false do
@@ -53,7 +53,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_delete_event(**args)
-    ModelPermissionLoader.for(Event).load([object, :destroy, args[:event_id]])
+    ModelPermissionLoader.for(Event).load([pundit_user, :destroy, args[:event_id]])
   end
 
   field :can_read_schedule, Boolean, null: false
@@ -68,7 +68,7 @@ class Types::AbilityType < Types::BaseObject
 
   def can_read_admin_notes_on_event_proposal(**args)
     ModelPermissionLoader.for(EventProposal).load([
-      object,
+      pundit_user,
       :read_admin_notes,
       args[:event_proposal_id]
     ])
@@ -80,7 +80,7 @@ class Types::AbilityType < Types::BaseObject
 
   def can_update_admin_notes_on_event_proposal(**args)
     ModelPermissionLoader.for(EventProposal).load([
-      object,
+      pundit_user,
       :update_admin_notes,
       args[:event_proposal_id]
     ])
@@ -91,7 +91,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([object, :update, args[:event_proposal_id]])
+    ModelPermissionLoader.for(EventProposal).load([pundit_user, :update, args[:event_proposal_id]])
   end
 
   field :can_delete_event_proposal, Boolean, null: false do
@@ -99,7 +99,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_delete_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([object, :destroy, args[:event_proposal_id]])
+    ModelPermissionLoader.for(EventProposal).load([pundit_user, :destroy, args[:event_proposal_id]])
   end
 
   field :can_update_orders, Boolean, null: false
@@ -119,7 +119,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_ticket(**args)
-    ModelPermissionLoader.for(Ticket).load([object, :update, args[:ticket_id]])
+    ModelPermissionLoader.for(Ticket).load([pundit_user, :update, args[:ticket_id]])
   end
 
   field :can_delete_ticket, Boolean, null: false do
@@ -127,7 +127,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_delete_ticket(**args)
-    ModelPermissionLoader.for(Ticket).load([object, :destroy, args[:ticket_id]])
+    ModelPermissionLoader.for(Ticket).load([pundit_user, :destroy, args[:ticket_id]])
   end
 
   field :can_read_signups, Boolean, null: false
@@ -160,7 +160,7 @@ class Types::AbilityType < Types::BaseObject
   field :can_create_user_con_profiles, Boolean, null: false
 
   def can_create_user_con_profiles
-    object.can?(:create, UserConProfile.new(convention: context[:convention]))
+    policy(UserConProfile.new(convention: context[:convention])).create?
   end
 
   field :can_update_user_con_profile, Boolean, null: false do
@@ -168,7 +168,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([object, :update, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update, args[:user_con_profile_id]])
   end
 
   field :can_update_privileges_user_con_profile, Boolean, null: false do
@@ -176,7 +176,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_update_privileges_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([object, :update_privileges, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update_privileges, args[:user_con_profile_id]])
   end
 
   field :can_delete_user_con_profile, Boolean, null: false do
@@ -184,7 +184,7 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_delete_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([object, :destroy, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :destroy, args[:user_con_profile_id]])
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
@@ -192,6 +192,6 @@ class Types::AbilityType < Types::BaseObject
   end
 
   def can_become_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([object, :become, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :become, args[:user_con_profile_id]])
   end
 end

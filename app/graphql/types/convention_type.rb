@@ -99,10 +99,6 @@ class Types::ConventionType < Types::BaseObject
 
   field :user_activity_alert, Types::UserActivityAlert, null: false do
     argument :id, Integer, required: true
-
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
-    end
   end
 
   def user_activity_alert(id:)
@@ -194,16 +190,12 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType, Types::UserConProfileFiltersInputType do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserConProfile.new(convention: graphql_object.object))
-    end
-  end
+  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType, Types::UserConProfileFiltersInputType
 
   def user_con_profiles_paginated(**args)
     Tables::UserConProfilesTableResultsPresenter.for_convention(
       object,
-      context[:current_ability],
+      pundit_user,
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])

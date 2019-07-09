@@ -277,11 +277,7 @@ class Types::MutationType < Types::BaseObject
 
   ### User
 
-  field :mergeUsers, mutation: Mutations::MergeUsers do
-    guard ->(_obj, _args, ctx) {
-      ctx[:current_ability].can?(:merge, User)
-    }
-  end
+  field :mergeUsers, mutation: Mutations::MergeUsers
 
   ### UserConProfile
 
