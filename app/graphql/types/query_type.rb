@@ -329,15 +329,11 @@ class Types::QueryType < Types::BaseObject
     convention.signups.find(args[:id])
   end
 
-  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false do
-    guard ->(_obj, _args, ctx) do
-      ctx[:current_ability].can?(:read, User)
-    end
-  end
+  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false
 
   def users_paginated(**args)
     Tables::UsersTableResultsPresenter.new(
-      User.accessible_by(current_ability),
+      policy_scope(User.all),
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
@@ -345,10 +341,6 @@ class Types::QueryType < Types::BaseObject
 
   field :user, Types::UserType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      args[:id] == ctx[:current_user]&.id || ctx[:current_ability].can?(:read, User)
-    end
   end
 
   def user(id:)
@@ -357,10 +349,6 @@ class Types::QueryType < Types::BaseObject
 
   field :users, [Types::UserType], null: false do
     argument :ids, [Integer], required: true
-
-    guard ->(_obj, _args, ctx) do
-      ctx[:current_ability].can?(:read, User)
-    end
   end
 
   def users(ids:)

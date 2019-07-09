@@ -257,7 +257,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Users'
       url '/users'
-      visible? { can?(:read, User) }
+      visible? { Pundit.policy(pundit_user, User.new).read? }
     end
   ]
 

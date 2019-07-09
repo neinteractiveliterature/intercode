@@ -1,4 +1,6 @@
 class Types::UserType < Types::BaseObject
+  authorize_record
+
   field :id, Integer, null: false
   field :privileges, [String, null: true], null: true
   field :name, String, null: true

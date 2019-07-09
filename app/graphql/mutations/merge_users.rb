@@ -5,6 +5,11 @@ class Mutations::MergeUsers < Mutations::BaseMutation
   argument :winning_user_id, Integer, required: true
   argument :winning_user_con_profiles, [Types::WinningUserConProfileInputType], required: true
 
+  def authorized?(args)
+    users = User.find(args[:user_ids])
+    users.all? { |user| policy(user).merge? }
+  end
+
   def resolve(user_ids:, winning_user_id:, winning_user_con_profiles:)
     winning_profile_ids_by_convention_id = winning_user_con_profiles
       .index_by { |winning_profile| winning_profile[:convention_id] }

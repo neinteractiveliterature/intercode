@@ -3,8 +3,8 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
 
   attr_reader :convention
 
-  def self.for_convention(convention, current_ability, *args)
-    new(convention, convention.user_con_profiles.accessible_by(current_ability), *args)
+  def self.for_convention(convention, pundit_user, *args)
+    new(convention, Pundit.policy_scope(pundit_user, convention.user_con_profiles).resolve, *args)
   end
 
   def initialize(convention, *args)
