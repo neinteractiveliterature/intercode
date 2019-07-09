@@ -21,9 +21,15 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert SignupPolicy.new(signup.user_con_profile.user, signup).read?
     end
 
-    it 'lets users read signups of other attendes of the same run' do
+    it 'lets users read signups of other attendees of the same run' do
       my_signup = create(:signup, run: signup.run)
       assert SignupPolicy.new(my_signup.user_con_profile.user, signup).read?
+    end
+
+    it 'does not let users read signups of other attendees of the same run if private_signup_list is set' do
+      signup.run.event.update!(private_signup_list: true)
+      my_signup = create(:signup, run: signup.run)
+      refute SignupPolicy.new(my_signup.user_con_profile.user, signup).read?
     end
 
     it "does not let users read other users' signups" do
@@ -152,12 +158,21 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert_equal [signup], resolved_signups.sort
     end
 
-    it 'returns signups of other attendes of the same run' do
+    it 'returns signups of other attendees of the same run' do
       my_signup = create(:signup, run: signup.run)
       resolved_signups = SignupPolicy::Scope.new(
         my_signup.user_con_profile.user, Signup.all
       ).resolve
       assert_equal [my_signup, signup].sort, resolved_signups.sort
+    end
+
+    it 'does not return signups of other attendees of the same run if private_signup_list is set' do
+      signup.run.event.update!(private_signup_list: true)
+      my_signup = create(:signup, run: signup.run)
+      resolved_signups = SignupPolicy::Scope.new(
+        my_signup.user_con_profile.user, Signup.all
+      ).resolve
+      assert_equal [my_signup].sort, resolved_signups.sort
     end
 
     it 'returns no signups by default' do

@@ -211,29 +211,22 @@ class Ability
   def add_public_abilities
     # Here's what the general public can do...
     can :read, Event, status: 'active'
-    can :read, Run, event: { status: 'active', convention: { site_mode: 'single_event' } }
-    can :read, Run, event: { status: 'active', convention: { show_schedule: 'yes' } }
   end
 
   def add_site_admin_abilities
-    can :read, [Event, Run] if has_scope?(:read_signups)
-    can :signup_summary, Run, event: { private_signup_list: false }
-
     if has_scope?(:read_events)
       can :read, [
         Event,
-        EventProposal,
-        Run
+        EventProposal
       ]
     end
 
-    can :manage, [Event, Run] if has_scope?(:manage_signups)
+    can :manage, [Event] if has_scope?(:manage_signups)
 
     if has_scope?(:manage_events)
       can :manage, [
         Event,
-        EventProposal,
-        Run
+        EventProposal
       ]
     end
   end
@@ -242,7 +235,6 @@ class Ability
     if has_scope?(:read_events)
       can :read, EventProposal, id: own_event_proposal_ids
       can :read, EventProposal, owner: { user_id: user.id }
-      can :signup_summary, Run, id: signed_up_run_ids, event: { private_signup_list: false }
     end
 
     if has_scope?(:manage_events)
@@ -258,21 +250,6 @@ class Ability
   def add_con_staff_abilities
     return unless has_scope?(:read_conventions)
 
-    can :read, Run, event: {
-      status: 'active',
-      convention: {
-        id: con_ids_with_privilege(:scheduling, :gm_liaison),
-        show_schedule: %w[priv gms yes]
-      }
-    }
-    can :read, Run, event: {
-      status: 'active',
-      convention: {
-        id: con_ids_with_privilege(:con_com),
-        show_schedule: %w[gms yes]
-      }
-    }
-
     can :read_admin_notes, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
 
@@ -280,7 +257,6 @@ class Ability
 
     can :manage, Event,
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-    can :manage, Run, event: { convention_id: con_ids_with_privilege(:gm_liaison, :scheduling) }
   end
 
   def add_event_proposal_abilities
@@ -306,16 +282,6 @@ class Ability
   end
 
   def add_team_member_abilities
-    if has_scope?(:read_events)
-      can :read, Run, event: {
-        status: 'active',
-        convention: {
-          id: team_member_convention_ids,
-          show_schedule: %w[gms yes]
-        }
-      }
-    end
-
     if has_scope?(:manage_events)
       can :update, Event, id: team_member_event_ids
       can :update, EventProposal, event_id: team_member_event_ids

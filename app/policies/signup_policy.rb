@@ -5,7 +5,7 @@ class SignupPolicy < ApplicationPolicy
 
   def read?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) { signed_up_for_run?(run) }
+      d.add(:read_events) { signed_up_for_run?(run) && !event.private_signup_list? }
     end
     return true if read_requested_bucket_key?
 
@@ -66,7 +66,10 @@ class SignupPolicy < ApplicationPolicy
 
         if oauth_scope?(:read_events)
           dw.add(run: Run.where(event: events_where_team_member))
-          dw.add(run: runs_where_signed_up)
+          dw.add(run: Run.where(
+            id: runs_where_signed_up,
+            event: Event.where(private_signup_list: false)
+          ))
         end
 
         if oauth_scope?(:read_conventions)

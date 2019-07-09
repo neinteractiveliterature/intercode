@@ -197,26 +197,10 @@ class Types::MutationType < Types::BaseObject
 
   ### Run
 
-  field :createRun, mutation: Mutations::CreateRun do
-    guard(guard_for_create_event_associated_model(:runs, :run))
-  end
-
-  field :createMultipleRuns, mutation: Mutations::CreateMultipleRuns do
-    guard ->(_obj, args, ctx) {
-      event = ctx[:convention].events.find(args[:event_id])
-      args[:runs].all? do |run_args|
-        ctx[:current_ability].can?(:create, event.runs.new(run_args.to_h))
-      end
-    }
-  end
-
-  field :deleteRun, mutation: Mutations::DeleteRun do
-    guard(guard_for_convention_associated_model(:runs, :destroy))
-  end
-
-  field :updateRun, mutation: Mutations::UpdateRun do
-    guard(guard_for_convention_associated_model(:runs, :update))
-  end
+  field :createRun, mutation: Mutations::CreateRun
+  field :createMultipleRuns, mutation: Mutations::CreateMultipleRuns
+  field :deleteRun, mutation: Mutations::DeleteRun
+  field :updateRun, mutation: Mutations::UpdateRun
 
   ### Signup
 

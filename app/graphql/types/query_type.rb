@@ -51,10 +51,14 @@ class Types::QueryType < Types::BaseObject
     events = convention.events
     events = events.active unless include_dropped
     if start || finish
-      run_scope = Run
-      run_scope = run_scope.where('starts_at >= ?', start) if start
-      run_scope = run_scope.where('starts_at < ?', finish) if finish
-      events = events.where(id: run_scope.select(:event_id))
+      if policy(Run.new(event: Event.new(convention: convention))).read?
+        run_scope = convention.runs
+        run_scope = run_scope.where('starts_at >= ?', start) if start
+        run_scope = run_scope.where('starts_at < ?', finish) if finish
+        events = events.where(id: run_scope.select(:event_id))
+      else
+        events = Event.none
+      end
     end
     events
   end

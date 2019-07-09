@@ -43,6 +43,8 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
   end
 
   def conventions_where_team_member
+    return Convention.none unless user
+
     Convention.where(
       id: TeamMember
         .joins(:user_con_profile)
@@ -52,6 +54,8 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
   end
 
   def events_where_team_member
+    return Event.none unless user
+
     Event.where(
       id: TeamMember.joins(:user_con_profile)
         .where(user_con_profiles: { user_id: user.id })
