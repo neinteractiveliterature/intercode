@@ -153,13 +153,10 @@ class Ability
     # Anonymous user permissions end here.
     return unless user
 
-    add_authenticated_user_abilities
-
     if user.site_admin?
       add_site_admin_abilities
     else
       add_con_staff_abilities
-      add_event_proposal_abilities
       add_team_member_abilities if team_member_event_ids.any?
       add_event_category_permission_abilities
     end
@@ -215,35 +212,13 @@ class Ability
 
   def add_site_admin_abilities
     if has_scope?(:read_events)
-      can :read, [
-        Event,
-        EventProposal
-      ]
+      can :read, [Event]
     end
 
     can :manage, [Event] if has_scope?(:manage_signups)
 
     if has_scope?(:manage_events)
-      can :manage, [
-        Event,
-        EventProposal
-      ]
-    end
-  end
-
-  def add_authenticated_user_abilities
-    if has_scope?(:read_events)
-      can :read, EventProposal, id: own_event_proposal_ids
-      can :read, EventProposal, owner: { user_id: user.id }
-    end
-
-    if has_scope?(:manage_events)
-      can :create, EventProposal
-      can :submit, EventProposal, id: own_event_proposal_ids
-      can :update, EventProposal,
-        id: own_event_proposal_ids,
-        status: %w[draft proposed reviewing]
-      can :destroy, EventProposal, id: own_event_proposal_ids, status: 'draft'
+      can :manage, [Event]
     end
   end
 
@@ -259,32 +234,9 @@ class Ability
       convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
   end
 
-  def add_event_proposal_abilities
-    return unless has_scope?(:read_events)
-
-    can :read, EventProposal,
-      convention_id: staff_con_ids,
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :read, EventProposal,
-      convention_id: con_ids_with_privilege(:gm_liaison),
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
-    can token_scope_action(:manage_events, :read_admin_notes, :update_admin_notes), EventProposal,
-      convention_id: con_ids_with_privilege(:gm_liaison, :scheduling)
-
-    return unless has_scope?(:manage_events)
-
-    can :update, EventProposal,
-      convention_id: staff_con_ids,
-      status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
-    can :update, EventProposal,
-      convention_id: con_ids_with_privilege(:gm_liaison),
-      status: %w[accepted withdrawn]
-  end
-
   def add_team_member_abilities
     if has_scope?(:manage_events)
       can :update, Event, id: team_member_event_ids
-      can :update, EventProposal, event_id: team_member_event_ids
     end
   end
 

@@ -65,10 +65,6 @@ class Types::QueryType < Types::BaseObject
 
   field :event_proposal, Types::EventProposalType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].event_proposals.find(args[:id]))
-    end
   end
 
   def event_proposal(**args)
