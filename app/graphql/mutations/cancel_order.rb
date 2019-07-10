@@ -3,7 +3,7 @@ class Mutations::CancelOrder < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(id:)
+  def resolve(**args)
     order = convention.orders.find(args[:id])
     raise 'Order is already cancelled' if order.status == 'cancelled'
 
