@@ -1,10 +1,9 @@
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_convention(convention:, ability:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = convention.events.where(status: 'active').accessible_by(ability)
+  def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
+    scope = Pundit.policy_scope(pundit_user, convention.events.where(status: 'active'))
     new(
       base_scope: scope,
       convention: convention,
-      ability: ability,
       pundit_user: pundit_user,
       filters: filters,
       sort: sort,
@@ -12,12 +11,11 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     )
   end
 
-  attr_reader :ability, :pundit_user, :convention
+  attr_reader :pundit_user, :convention
 
-  def initialize(base_scope:, convention:, ability:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
-    @ability = ability
     @pundit_user = pundit_user
   end
 

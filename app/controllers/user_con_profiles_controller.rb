@@ -5,13 +5,6 @@ class UserConProfilesController < ApplicationController
   # @user_con_profile, which is unsafe for us to use because ApplicationController uses it to mean
   # the current user, and we use that for authorization checking.  So instead, we'll call the user
   # con profile we're working on the "subject profile" (as in the subject of our actions).
-  load_and_authorize_resource :subject_profile,
-    id_param: :id,
-    parent: false,
-    class: 'UserConProfile',
-    through: :convention,
-    through_association: :user_con_profiles,
-    except: [:revert_become]
   before_action :authorize_admin_profiles, except: [:revert_become]
 
   unless Rails.env.test?
@@ -20,7 +13,9 @@ class UserConProfilesController < ApplicationController
 
   def become
     identity_assumer = assumed_identity_from_profile || user_con_profile
-    sign_in @subject_profile.user
+    subject_profile = convention.user_con_profiles.find(params[:id])
+    authorize subject_profile, :become?
+    sign_in subject_profile.user
     session[:assumed_identity_from_profile_id] = identity_assumer.id
     redirect_to root_url
   end

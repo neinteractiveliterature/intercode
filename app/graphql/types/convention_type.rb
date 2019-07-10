@@ -137,7 +137,6 @@ class Types::ConventionType < Types::BaseObject
   def events_paginated(**args)
     Tables::EventsTableResultsPresenter.for_convention(
       convention: object,
-      ability: context[:current_ability],
       pundit_user: pundit_user,
       filters: args[:filters].to_h,
       sort: args[:sort]

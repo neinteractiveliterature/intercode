@@ -3,7 +3,6 @@ module Concerns::ContextAccessors
     controller
     current_user
     pundit_user
-    current_ability
     user_con_profile
     convention
     cadmus_renderer
@@ -16,8 +15,6 @@ module Concerns::ContextAccessors
       context[context_attribute]
     end
   end
-
-  delegate :can?, to: :current_ability
 
   def cms_parent
     @cms_parent ||= convention || RootSite.instance

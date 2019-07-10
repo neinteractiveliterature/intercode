@@ -4,7 +4,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   attr_reader :convention
 
   def self.for_convention(convention, pundit_user, *args)
-    new(convention, Pundit.policy_scope(pundit_user, convention.user_con_profiles).resolve, *args)
+    new(convention, Pundit.policy_scope(pundit_user, convention.user_con_profiles), *args)
   end
 
   def initialize(convention, *args)

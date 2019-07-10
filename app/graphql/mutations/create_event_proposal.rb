@@ -45,7 +45,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
 
   def find_template_proposal(id)
     proposal = EventProposal.find(id)
-    context[:current_ability].authorize! :read, proposal
+    Pundit.authorize(pundit_user, proposal, :read?)
     proposal
   end
 end

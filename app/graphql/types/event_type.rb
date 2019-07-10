@@ -1,4 +1,6 @@
 class Types::EventType < Types::BaseObject
+  authorize_record
+
   field :id, Integer, null: false
 
   field :title, String, null: true
@@ -112,9 +114,7 @@ class Types::EventType < Types::BaseObject
   end
 
   field :admin_notes, String, null: true do
-    guard -> (graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read_admin_notes, graphql_object.object)
-    end
+    authorize_action :read_admin_notes
   end
 
   field :category, String, deprecation_reason: 'Please use event_category instead', null: false
