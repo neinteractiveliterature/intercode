@@ -9,7 +9,9 @@ FactoryBot.define do
     updated_by { nil }
 
     after(:build) do |signup|
-      signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key
+      if signup.confirmed?
+        signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key
+      end
     end
   end
 end
