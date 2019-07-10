@@ -113,7 +113,6 @@ GEM
       acts_as_list
       cadmus
       rails (>= 5.0.0)
-    cancancan (2.3.0)
     carrierwave (1.3.1)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -490,7 +489,6 @@ DEPENDENCIES
   cadmus (~> 0.7.0)
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)
-  cancancan
   carrierwave
   civil_service (~> 2.0.0)
   dalli

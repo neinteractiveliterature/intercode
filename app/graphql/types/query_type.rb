@@ -35,16 +35,6 @@ class Types::QueryType < Types::BaseObject
     argument :include_dropped, Boolean, required: false
     argument :start, Types::DateType, required: false
     argument :finish, Types::DateType, required: false
-
-    guard ->(_obj, args, ctx) do
-      current_ability = ctx[:current_ability]
-      convention = ctx[:convention]
-      if args[:includeDropped]
-        return false unless current_ability.can?(:manage, Event.new(convention: convention))
-      end
-
-      true
-    end
   end
 
   def events(include_dropped: false, start: nil, finish: nil, **args)
@@ -188,7 +178,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def current_ability
-    context[:current_ability]
+    pundit_user
   end
 
   field :assumed_identity_from_profile, Types::UserConProfileType, null: true

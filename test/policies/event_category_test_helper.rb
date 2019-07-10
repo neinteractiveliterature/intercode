@@ -18,6 +18,7 @@ module EventCategoryTestHelper
     read_event_proposals
     read_pending_event_proposals
     update_event_proposals
+    update_events
     access_admin_notes
   ].each do |permission|
     define_method "create_user_with_#{permission}_in_event_category" do |event_category|

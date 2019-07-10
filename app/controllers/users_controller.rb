@@ -22,6 +22,6 @@ class UsersController < ApplicationController
   private
 
   def authorize_read_users
-    authorize! :read, User
+    authorize User.new, :read?
   end
 end

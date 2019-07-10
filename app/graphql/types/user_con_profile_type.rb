@@ -79,9 +79,9 @@ class Types::UserConProfileType < Types::BaseObject
 
   def ability
     if object == context[:user_con_profile]
-      current_ability
+      pundit_user
     else
-      AbilityLoader.for(UserConProfile).load(object)
+      AuthorizationInfoLoader.for(UserConProfile).load(object)
     end
   end
 
@@ -102,13 +102,13 @@ class Types::UserConProfileType < Types::BaseObject
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
-    ability = if object == context[:user_con_profile]
-      current_ability
+    user = if object == context[:user_con_profile]
+      pundit_user
     else
-      Ability.new(object.user)
+      AuthorizationInfo.new(object.user, nil)
     end
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
-    ability.can?(:create, override)
+    Pundit.policy(user, overide).create?
   end
 end

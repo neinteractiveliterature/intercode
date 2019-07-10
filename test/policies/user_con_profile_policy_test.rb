@@ -117,7 +117,7 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
     end
   end
 
-  %w[manage update_privileges withdraw_all_signups].each do |action|
+  %w[manage become update_privileges withdraw_all_signups].each do |action|
     describe "##{action}?" do
       it "lets staff users #{action} attendee profiles" do
         assert UserConProfilePolicy.new(staff_profile.user, user_con_profile).withdraw_all_signups?

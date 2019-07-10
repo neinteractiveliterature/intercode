@@ -67,15 +67,15 @@ class EventProposalPolicy < ApplicationPolicy
 
   def destroy?
     oauth_scope?(:manage_events) &&
-    record.status == 'draft' &&
-    user &&
-    record.owner.user_id == user.id
+      record.status == 'draft' &&
+      user &&
+      record.owner.user_id == user.id
   end
 
   def submit?
     oauth_scope?(:manage_events) &&
-    user &&
-    record.owner.user_id == user.id
+      user &&
+      record.owner.user_id == user.id
   end
 
   def update_admin_notes?

@@ -49,6 +49,10 @@ class UserConProfilePolicy < ApplicationPolicy
     super
   end
 
+  def become?
+    manage?
+  end
+
   def withdraw_all_signups?
     manage?
   end

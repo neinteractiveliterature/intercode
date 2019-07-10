@@ -1,31 +1,3 @@
-def guard_for_convention_associated_model(association, action, find_by: :id)
-  ->(_obj, args, ctx) {
-    model = ctx[:convention].public_send(association).find_by(find_by => args[find_by])
-    ctx[:current_ability].can?(action, model)
-  }
-end
-
-def guard_for_create_convention_associated_model(association)
-  ->(_obj, _args, ctx) {
-    model = ctx[:convention].public_send(association).new
-    ctx[:current_ability].can?(:create, model)
-  }
-end
-
-def guard_for_create_event_associated_model(association, arg_name)
-  ->(_obj, args, ctx) {
-    event = ctx[:convention].events.find(args[:event_id])
-    model = event.public_send(association).new(args[arg_name].to_h)
-    ctx[:current_ability].can?(:create, model)
-  }
-end
-
-def guard_for_model_with_id(model_class, action, find_by: :id)
-  ->(_obj, args, ctx) {
-    ctx[:current_ability].can?(action, model_class.find_by(find_by => args[find_by]))
-  }
-end
-
 class Types::MutationType < Types::BaseObject
   graphql_name 'Mutation'
 

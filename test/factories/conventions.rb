@@ -6,6 +6,7 @@ FactoryBot.define do
     sequence(:domain) { |n| "testcon#{n}.example.com" }
     timezone_name { 'US/Eastern' }
     show_schedule { 'yes' }
+    show_event_list { 'yes' }
     accepting_proposals { false }
     updated_by { nil }
     maximum_event_signups do
