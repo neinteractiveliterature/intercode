@@ -48,29 +48,12 @@ class Types::MutationType < Types::BaseObject
 
   ### Event
 
-  field :createEvent, mutation: Mutations::CreateEvent do
-    guard(guard_for_create_convention_associated_model(:events))
-  end
-
-  field :createFillerEvent, mutation: Mutations::CreateFillerEvent do
-    guard(guard_for_create_convention_associated_model(:events))
-  end
-
-  field :dropEvent, mutation: Mutations::DropEvent do
-    guard(guard_for_convention_associated_model(:events, :drop))
-  end
-
-  field :restoreDroppedEvent, mutation: Mutations::RestoreDroppedEvent do
-    guard(guard_for_convention_associated_model(:events, :restore))
-  end
-
-  field :updateEvent, mutation: Mutations::UpdateEvent do
-    guard(guard_for_convention_associated_model(:events, :update))
-  end
-
-  field :updateEventAdminNotes, mutation: Mutations::UpdateEventAdminNotes do
-    guard(guard_for_convention_associated_model(:events, :update_admin_notes))
-  end
+  field :createEvent, mutation: Mutations::CreateEvent
+  field :createFillerEvent, mutation: Mutations::CreateFillerEvent
+  field :dropEvent, mutation: Mutations::DropEvent
+  field :restoreDroppedEvent, mutation: Mutations::RestoreDroppedEvent
+  field :updateEvent, mutation: Mutations::UpdateEvent
+  field :updateEventAdminNotes, mutation: Mutations::UpdateEventAdminNotes
 
   ### EventCategory
 
@@ -102,14 +85,13 @@ class Types::MutationType < Types::BaseObject
   field :deleteMaximumEventProvidedTicketsOverride,
     mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
 
-  ### Order / OrderEntry
+  ### OrderEntry
 
-  field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder do
-    guard -> (_obj, _args, ctx) { ctx[:user_con_profile] }
-  end
-
+  field :addOrderEntryToCurrentPendingOrder, mutation: Mutations::AddOrderEntryToCurrentPendingOrder
   field :updateOrderEntry, mutation: Mutations::UpdateOrderEntry
   field :deleteOrderEntry, mutation: Mutations::DeleteOrderEntry
+
+  ### Order
 
   field :submitOrder, mutation: Mutations::SubmitOrder
   field :markOrderPaid, mutation: Mutations::MarkOrderPaid
@@ -186,13 +168,7 @@ class Types::MutationType < Types::BaseObject
   field :createTicket, mutation: Mutations::CreateTicket
   field :updateTicket, mutation: Mutations::UpdateTicket
   field :deleteTicket, mutation: Mutations::DeleteTicket
-
-  field :purchaseTicket, mutation: Mutations::PurchaseTicket do
-    guard -> (_obj, _args, ctx) do
-      ctx[:user_con_profile]
-    end
-  end
-
+  field :purchaseTicket, mutation: Mutations::PurchaseTicket
   field :provideEventTicket, mutation: Mutations::ProvideEventTicket
   field :convertTicketToEventProvided, mutation: Mutations::ConvertTicketToEventProvided
 

@@ -4,8 +4,9 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
   argument :id, Integer, required: false
   argument :event, Types::EventInputType, required: false
 
+  load_and_authorize_convention_associated_model :events, :id, :update
+
   def resolve(**args)
-    event = convention.events.find(args[:id])
     event_attrs = args[:event].to_h.merge(
       updated_by: user_con_profile.user
     ).stringify_keys
