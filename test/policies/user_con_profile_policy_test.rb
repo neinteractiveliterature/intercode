@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'event_category_test_helper'
 
 class UserConProfilePolicyTest < ActiveSupport::TestCase
+  include EventCategoryTestHelper
+
   let(:user_con_profile) { create(:user_con_profile) }
   let(:convention) { user_con_profile.convention }
   let(:event) { create(:event, convention: convention) }
@@ -20,6 +23,12 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile).read?
     end
 
+    it 'lets users with read_event_proposals in any event category read profiles' do
+      event_category = create(:event_category, convention: convention)
+      user = create_user_with_read_event_proposals_in_event_category(event_category)
+      assert UserConProfilePolicy.new(user, user_con_profile).read?
+    end
+
     it 'lets users read their own profiles' do
       assert UserConProfilePolicy.new(user_con_profile.user, user_con_profile).read?
     end
@@ -37,6 +46,12 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
     it 'lets team members read emails of anyone in the convention' do
       assert UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile)
         .read_email?
+    end
+
+    it 'lets users with read_event_proposals in any event category read email addresses' do
+      event_category = create(:event_category, convention: convention)
+      user = create_user_with_read_event_proposals_in_event_category(event_category)
+      assert UserConProfilePolicy.new(user, user_con_profile).read_email?
     end
 
     it 'lets users read their own email address' do
@@ -61,6 +76,12 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
     it 'does not let team members read personal info of anyone in the convention' do
       refute UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile)
         .read_personal_info?
+    end
+
+    it 'lets users with read_event_proposals in any event category read personal info' do
+      event_category = create(:event_category, convention: convention)
+      user = create_user_with_read_event_proposals_in_event_category(event_category)
+      assert UserConProfilePolicy.new(user, user_con_profile).read_email?
     end
 
     it 'lets users read their own personal info' do

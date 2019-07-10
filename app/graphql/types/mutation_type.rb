@@ -108,35 +108,12 @@ class Types::MutationType < Types::BaseObject
 
   ### EventProposal
 
-  field :createEventProposal, mutation: Mutations::CreateEventProposal do
-    guard(guard_for_create_convention_associated_model(:event_proposals))
-  end
-
-  field :updateEventProposal, mutation: Mutations::UpdateEventProposal do
-    guard(guard_for_convention_associated_model(:event_proposals, :update))
-  end
-
-  field :deleteEventProposal, mutation: Mutations::DeleteEventProposal do
-    guard(guard_for_convention_associated_model(:event_proposals, :destroy))
-  end
-
-  field :submitEventProposal, mutation: Mutations::SubmitEventProposal do
-    guard(guard_for_convention_associated_model(:event_proposals, :submit))
-  end
-
-  field :transitionEventProposal, mutation: Mutations::TransitionEventProposal do
-    guard -> (_obj, args, ctx) {
-      event_proposal = ctx[:convention].event_proposals.find(args[:id])
-      (
-        ctx[:current_ability].can?(:update, event_proposal) &&
-        (!args[:drop_event] || ctx[:current_ability].can?(:drop, event_proposal.event))
-      )
-    }
-  end
-
-  field :updateEventProposalAdminNotes, mutation: Mutations::UpdateEventProposalAdminNotes do
-    guard(guard_for_convention_associated_model(:event_proposals, :update_admin_notes))
-  end
+  field :createEventProposal, mutation: Mutations::CreateEventProposal
+  field :updateEventProposal, mutation: Mutations::UpdateEventProposal
+  field :deleteEventProposal, mutation: Mutations::DeleteEventProposal
+  field :submitEventProposal, mutation: Mutations::SubmitEventProposal
+  field :transitionEventProposal, mutation: Mutations::TransitionEventProposal
+  field :updateEventProposalAdminNotes, mutation: Mutations::UpdateEventProposalAdminNotes
 
   ### Form
 

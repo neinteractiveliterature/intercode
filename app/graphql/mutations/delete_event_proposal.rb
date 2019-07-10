@@ -3,8 +3,9 @@ class Mutations::DeleteEventProposal < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    event_proposal = convention.event_proposals.find(args[:id])
+  load_and_authorize_convention_associated_model :event_proposals, :id, :destroy
+
+  def resolve(**_args)
     event_proposal.destroy!
     { event_proposal: event_proposal }
   end

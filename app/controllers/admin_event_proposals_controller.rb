@@ -10,7 +10,7 @@ class AdminEventProposalsController < ApplicationController
         send_table_presenter_csv(
           Tables::EventProposalsTableResultsPresenter.for_convention(
             convention,
-            current_ability,
+            pundit_user,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]

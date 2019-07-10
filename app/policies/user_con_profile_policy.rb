@@ -21,6 +21,7 @@ class UserConProfilePolicy < ApplicationPolicy
       d.add(:read_profile) { user && user.id == record.user_id }
       d.add(:read_conventions) do
         has_privilege_in_convention?(convention, :con_com) ||
+        has_event_category_permission_in_convention?(convention, 'read_event_proposals') ||
         team_member_for_user_con_profile?(record)
       end
     end

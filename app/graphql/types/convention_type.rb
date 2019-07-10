@@ -77,7 +77,9 @@ class Types::ConventionType < Types::BaseObject
     if args[:current_ability_can_read_event_proposals]
       promise.then do |event_categories|
         event_categories.select do |category|
-          context[:current_ability].can?(:read, EventProposal.new(event_category: category, status: 'proposed'))
+          policy(
+            EventProposal.new(event_category: category, convention: convention, status: 'proposed')
+          ).read?
         end
       end
     else
@@ -124,7 +126,7 @@ class Types::ConventionType < Types::BaseObject
   def event_proposals_paginated(**args)
     Tables::EventProposalsTableResultsPresenter.for_convention(
       object,
-      context[:current_ability],
+      pundit_user,
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])

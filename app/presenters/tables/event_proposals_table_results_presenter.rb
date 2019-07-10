@@ -1,6 +1,6 @@
 class Tables::EventProposalsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_convention(convention, ability, filters, sort, visible_field_ids = nil)
-    scope = convention.event_proposals.where.not(status: 'draft').accessible_by(ability)
+  def self.for_convention(convention, pundit_user, filters, sort, visible_field_ids = nil)
+    scope = Pundit.policy_scope(pundit_user, convention.event_proposals.where.not(status: 'draft'))
     new(scope, filters, sort, visible_field_ids)
   end
 
