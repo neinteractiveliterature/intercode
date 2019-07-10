@@ -3,6 +3,8 @@ class Mutations::CreateEvent < Mutations::BaseMutation
 
   argument :event, Types::EventInputType, required: true
 
+  authorize_create_convention_associated_model :events
+
   def resolve(**args)
     event_attrs = args[:event].to_h.merge(
       updated_by: user_con_profile.user,

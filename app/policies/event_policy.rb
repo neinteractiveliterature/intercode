@@ -56,6 +56,10 @@ class EventPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
+  def restore?
+    drop?
+  end
+
   def update?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do

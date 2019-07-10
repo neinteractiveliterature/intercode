@@ -143,18 +143,13 @@ class Types::ConventionType < Types::BaseObject
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType do
-    guard ->(graphql_object, _args, ctx) do
-      OrderPolicy.new(
-        ctx[:pundit_user],
-        Order.new(user_con_profile: UserConProfile.new(convention: graphql_object.object))
-      ).read?
-    end
-  end
+  pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType
 
   def orders_paginated(filters: nil, sort: nil, page: nil, per_page: nil)
-    scope = object.orders.where.not(status: 'pending')
-      .includes(order_entries: [:product, :product_variant])
+    scope = policy_scope(
+      object.orders.where.not(status: 'pending')
+        .includes(order_entries: [:product, :product_variant])
+    )
 
     Tables::OrdersTableResultsPresenter.new(scope, filters.to_h, sort)
       .paginate(page: page, per_page: per_page)

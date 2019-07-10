@@ -3,6 +3,12 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
 
   field_class Types::UncamelizedField
 
+  def self.require_user_con_profile
+    define_method :authorized? do |args|
+      !!user_con_profile
+    end
+  end
+
   def self.load_and_authorize_model_with_id(model_class, id_field, action)
     field_name = model_class.name.underscore
     attr_reader field_name

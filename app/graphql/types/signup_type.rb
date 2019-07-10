@@ -21,8 +21,8 @@ class Types::SignupType < Types::BaseObject
   field :created_at, Types::DateType, null: false, camelize: false
   field :updated_at, Types::DateType, null: false, camelize: false
 
-  # Why not just do this as a guard?  We need it to be safe to ask for this data even if you can't
-  # actually read it
+  # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
+  # you can't actually read it
   def bucket_key
     return unless object.bucket&.expose_attendees? || policy(object).read_requested_bucket_key?
     object.bucket_key
