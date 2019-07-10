@@ -10,16 +10,19 @@ class ConventionPolicyTest < ActiveSupport::TestCase
   end
 
   [%w[schedule show_schedule], %w[list_events show_event_list]].each do |(action, field)|
+    let(:convention) { create(:convention, show_schedule: 'no', show_event_list: 'yes') }
+
     describe "##{action}?" do
       describe "when #{field} is 'yes'" do
+        before { convention.update!(field => 'yes') }
+
         it "lets anyone #{action}" do
-          convention = create(:convention, field => 'yes')
           assert ConventionPolicy.new(nil, convention).public_send("#{action}?")
         end
       end
 
       describe "when #{field} is 'gms'" do
-        let(:convention) { create(:convention, field => 'gms') }
+        before { convention.update!(field => 'gms') }
 
         it "lets team members #{action}" do
           event = create(:event, convention: convention)
@@ -48,7 +51,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       end
 
       describe "when #{field} is 'priv'" do
-        let(:convention) { create(:convention, field => 'priv') }
+        before { convention.update!(field => 'priv') }
 
         %w[scheduling gm_liaison staff].each do |priv|
           it "lets #{priv} users #{action}" do
@@ -77,7 +80,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       end
 
       describe "when #{field} is 'no'" do
-        let(:convention) { create(:convention, field => 'no') }
+        before { convention.update!(field => 'no') }
 
         it "does not let staff users #{action}" do
           user_con_profile = create(

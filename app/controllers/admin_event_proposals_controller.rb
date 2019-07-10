@@ -2,7 +2,6 @@ class AdminEventProposalsController < ApplicationController
   include Concerns::SendCsv
 
   before_action :authorize_admin
-  skip_authorization_check
 
   def export
     respond_to do |format|
