@@ -3,8 +3,6 @@ require 'icalendar/tzinfo'
 class CalendarsController < ApplicationController
   include Concerns::AbsoluteUrls
 
-  skip_authorization_check
-
   def user_schedule
     user_con_profile = convention.user_con_profiles.find_by!(ical_secret: params[:id])
 

@@ -1,7 +1,7 @@
 class AdminOrdersController < ApplicationController
   include Concerns::SendCsv
+
   before_action :authorize_read_orders
-  skip_authorization_check
 
   def export
     respond_to do |format|
