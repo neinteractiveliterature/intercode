@@ -1,7 +1,9 @@
 # Fake out Doorkeeper so it will render the authorization screen even if not logged in, so that
 # the React code can show a login prompt
 class NullResourceOwner
-  def id; nil; end
+  def id
+    nil
+  end
 end
 
 Doorkeeper.configure do
@@ -235,7 +237,7 @@ Doorkeeper::JWT.configure do
 
   # Optionally set additional headers for the JWT. See
   # https://tools.ietf.org/html/rfc7515#section-4.1
-  token_headers do |opts|
+  token_headers do |_opts|
     { kid: Doorkeeper::OpenidConnect.signing_key[:kid] }
   end
 

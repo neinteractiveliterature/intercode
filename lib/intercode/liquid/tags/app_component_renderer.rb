@@ -9,13 +9,11 @@ module Intercode
           content_tag(
             :div,
             '',
-            {
-              'data-react-class' => component_name(context),
-              'data-react-props' => JSON.dump(
-                context.registers['controller'].app_component_props
-                  .merge(props(context))
-              )
-            }
+            'data-react-class' => component_name(context),
+            'data-react-props' => JSON.dump(
+              context.registers['controller'].app_component_props
+                .merge(props(context))
+            )
           )
         end
 

@@ -51,9 +51,9 @@ Rollbar.configure do |config|
   # has already been reported and logged the level will need to be changed
   # via the rollbar interface.
   # Valid levels: 'critical', 'error', 'warning', 'info', 'debug', 'ignore'
-  config.exception_level_filters.merge!({
+  config.exception_level_filters.merge!(
     'ActionController::RoutingError' => 'ignore'
-  })
+  )
 
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
