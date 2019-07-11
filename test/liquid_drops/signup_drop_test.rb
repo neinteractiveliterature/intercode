@@ -19,6 +19,6 @@ describe SignupDrop do
   end
 
   it 'returns the event path' do
-    signup_drop.event_url.must_match /events\/#{event.id}/
+    signup_drop.event_url.must_match %r{events/#{event.id}}
   end
 end

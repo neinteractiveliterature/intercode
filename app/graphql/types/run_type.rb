@@ -40,9 +40,7 @@ class Types::RunType < Types::BaseObject
   field :waitlisted_signup_count, Integer, null: true
 
   def waitlisted_signup_count
-    SignupCountLoader.for.load(object).then do |presenter|
-      presenter.waitlist_count
-    end
+    SignupCountLoader.for.load(object).then(&:waitlist_count)
   end
 
   field :not_counted_signup_count, Integer, null: true

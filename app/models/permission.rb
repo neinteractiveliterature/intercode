@@ -15,7 +15,7 @@ class Permission < ApplicationRecord
     where(
       staff_position_id: StaffPosition.joins(:user_con_profiles).where(user_con_profiles: { user_id: user.id })
     ).or(
-      where(organization_role: OrganizationRole.joins(:users).where(users: { id: user.id } ))
+      where(organization_role: OrganizationRole.joins(:users).where(users: { id: user.id }))
     )
   end
 

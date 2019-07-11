@@ -5,7 +5,7 @@ class Mutations::DeleteRoom < Mutations::BaseMutation
 
   load_and_authorize_convention_associated_model :rooms, :id, :destroy
 
-  def resolve(**args)
+  def resolve(**_args)
     room.destroy!
     { room: room }
   end

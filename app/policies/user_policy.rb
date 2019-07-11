@@ -32,9 +32,7 @@ class UserPolicy < ApplicationPolicy
       return scope.all if site_admin? && oauth_scope?(:read_organizations)
 
       disjunctive_where do |dw|
-        if user && oauth_scope?(:read_profile)
-          dw.add(id: user.id)
-        end
+        dw.add(id: user.id) if user && oauth_scope?(:read_profile)
 
         if oauth_scope?(:read_organizations)
           dw.add(

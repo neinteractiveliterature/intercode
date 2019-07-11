@@ -4,7 +4,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   field_class Types::UncamelizedField
 
   def self.require_user_con_profile
-    define_method :authorized? do |args|
+    define_method :authorized? do |_args|
       !!user_con_profile
     end
   end

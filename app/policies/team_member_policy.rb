@@ -25,9 +25,7 @@ class TeamMemberPolicy < ApplicationPolicy
       return scope.all if oauth_scope?(:read_conventions) && site_admin?
 
       disjunctive_where do |dw|
-        if oauth_scope?(:read_events)
-          dw.add(event_id: events_where_team_member)
-        end
+        dw.add(event_id: events_where_team_member) if oauth_scope?(:read_events)
 
         if oauth_scope?(:read_conventions)
           dw.add(event_id: Event.where(

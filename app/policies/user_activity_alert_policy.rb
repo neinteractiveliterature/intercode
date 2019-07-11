@@ -22,9 +22,7 @@ class UserActivityAlertPolicy < ApplicationPolicy
       return scope.all if site_admin? && oauth_scope?(:read_conventions)
 
       disjunctive_where do |dw|
-        if oauth_scope?(:read_conventions)
-          dw.add(convention_id: conventions_where_staff)
-        end
+        dw.add(convention_id: conventions_where_staff) if oauth_scope?(:read_conventions)
       end
     end
   end
