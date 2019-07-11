@@ -21,6 +21,7 @@ function EventProposalAdminNotes({ eventProposalId }) {
   const updateAdminNotesMutate = useMutationCallback(UpdateEventProposalAdminNotes);
   const updateAdminNotes = useCallback(
     adminNotes => updateAdminNotesMutate({
+      variables: { eventProposalId, adminNotes },
       update: (cache) => {
         const { eventProposal } = cache.readQuery({
           query: EventProposalAdminNotesQuery,

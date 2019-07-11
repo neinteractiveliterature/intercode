@@ -7,7 +7,7 @@ class EventProposalPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        (user && record.owner.user_id == user.id) ||
+        (user && record.owner && record.owner.user_id == user.id) ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
           has_event_category_permission?(record.event_category_id, :read_pending_event_proposals)
