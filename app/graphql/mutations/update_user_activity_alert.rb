@@ -1,8 +1,8 @@
 class Mutations::UpdateUserActivityAlert < Mutations::BaseMutation
-  field :user_activity_alert, Types::UserActivityAlert, null: false, camelize: false
+  field :user_activity_alert, Types::UserActivityAlertType, null: false, camelize: false
 
   argument :id, Int, required: true, camelize: false
-  argument :user_activity_alert, Types::UserActivityAlertInput, required: true, camelize: false
+  argument :user_activity_alert, Types::UserActivityAlertInputType, required: true, camelize: false
   argument :add_alert_destinations, [Types::AlertDestinationInput],
     required: true,
     camelize: false

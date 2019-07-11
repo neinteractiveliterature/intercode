@@ -1,5 +1,5 @@
 class Mutations::DeleteUserActivityAlert < Mutations::BaseMutation
-  field :user_activity_alert, Types::UserActivityAlert, null: false, camelize: false
+  field :user_activity_alert, Types::UserActivityAlertType, null: false, camelize: false
 
   argument :id, Int, required: true
 
