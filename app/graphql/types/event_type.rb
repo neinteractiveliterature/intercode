@@ -68,7 +68,7 @@ class Types::EventType < Types::BaseObject
       Pundit.policy(
         context[:pundit_user],
         Ticket.new(
-          user_con_profile: UserConProfile.new(convention: ctx[:convention]),
+          user_con_profile: UserConProfile.new(convention: context[:convention]),
           provided_by_event: value
         )
       ).read?
