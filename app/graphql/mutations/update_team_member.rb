@@ -4,6 +4,8 @@ class Mutations::UpdateTeamMember < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :team_member, Types::TeamMemberInputType, required: true, camelize: false
 
+  load_and_authorize_model_with_id TeamMember, :id, :update
+
   def resolve(**args)
     team_member = TeamMember.find(args[:id])
 

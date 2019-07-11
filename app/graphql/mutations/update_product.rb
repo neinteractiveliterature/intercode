@@ -4,10 +4,17 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :product, Types::ProductInputType, required: true
 
-  def resolve(**args)
-    product = convention.products.includes(:product_variants).find(args[:id])
-    product_fields = args[:product].to_h.deep_symbolize_keys
+  load_and_authorize_convention_associated_model :products, :id, :update
 
+  attr_reader :product
+
+  def authorized?(args)
+    @product = convention.products.includes(:product_variants).find(args[:id])
+    policy(product).update?
+  end
+
+  def resolve(**args)
+    product_fields = args[:product].to_h.deep_symbolize_keys
     product_fields[:price] = MoneyHelper.coerce_money_input(product_fields[:price])
 
     ProductMutationHelper.create_or_update_variants(

@@ -79,7 +79,7 @@ class ReportsController < ApplicationController
   private
 
   def ensure_authorized
-    authorize! :view_reports, convention
+    authorize convention, :view_reports?
   end
 
   def volunteer_event_category_ids

@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class CloneConventionServiceTest < ActiveSupport::TestCase
-  let(:convention) { FactoryBot.create(:convention) }
-  let(:new_convention_attributes) {
+  let(:convention) { create(:convention) }
+  let(:new_convention_attributes) do
     {
       name: 'CopyCon',
       domain: 'copycon.example.com',
@@ -10,7 +10,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       starts_at: Time.new(2018, 10, 28, 18, 0, 0),
       ends_at: Time.new(2018, 10, 30, 18, 0, 0)
     }
-  }
+  end
   let(:service) { CloneConventionService.new(source_convention: convention, new_convention_attributes: new_convention_attributes) }
 
   it 'clones only some convention attributes' do
@@ -54,7 +54,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   it 'clones event categories' do
     ClearCmsContentService.new(convention: convention).call!
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
-    FactoryBot.create(:event_category, convention: convention)
+    create(:event_category, convention: convention)
     result = service.call
     assert result.success?
     result.convention.reload
@@ -62,21 +62,21 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones rooms' do
-    FactoryBot.create_list(:room, 5, convention: convention)
+    create_list(:room, 5, convention: convention)
     result = service.call
     result.convention.reload
     assert_equal 5, result.convention.rooms.count
   end
 
   it 'clones ticket types' do
-    FactoryBot.create(
+    create(
       :paid_ticket_type,
       convention: convention,
       pricing_schedule: ScheduledMoneyValue.new(
         timespans: [
           { start: Time.utc(2016, 1, 1, 0, 0, 0), finish: Time.utc(2016, 6, 1, 0, 0, 0), value: Money.new(2500, 'USD') },
           { start: Time.utc(2016, 6, 1, 0, 0, 0), finish: Time.utc(2016, 10, 1, 0, 0, 0), value: Money.new(3500, 'USD') },
-          { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') },
+          { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') }
         ]
       )
     )
@@ -85,14 +85,14 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert result.success?
 
     cloned_pricing_schedule = result.convention.ticket_types.first.pricing_schedule
-    assert_equal Time.utc(2017, 12, 31, 0, 0,0), cloned_pricing_schedule.timespans.first.start
+    assert_equal Time.utc(2017, 12, 31, 0, 0, 0), cloned_pricing_schedule.timespans.first.start
   end
 
   it 'clones staff positions' do
     ClearCmsContentService.new(convention: convention).call!
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
-    event_category = FactoryBot.create(:event_category, convention: convention)
-    staff_position = FactoryBot.create(:staff_position, convention: convention)
+    event_category = create(:event_category, convention: convention)
+    staff_position = create(:staff_position, convention: convention)
     staff_position.permissions.create!(model: event_category, permission: 'read_event_proposals')
 
     result = service.call
@@ -105,9 +105,9 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones store content' do
-    FactoryBot.create(:product, convention: convention)
-    product_with_variants = FactoryBot.create(:product, convention: convention)
-    FactoryBot.create_list(:product_variant, 5, product: product_with_variants)
+    create(:product, convention: convention)
+    product_with_variants = create(:product, convention: convention)
+    create_list(:product_variant, 5, product: product_with_variants)
 
     result = service.call
     result.convention.reload
@@ -117,8 +117,8 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it 'clones user activity alerts' do
-    alert = FactoryBot.create(:user_activity_alert, convention: convention)
-    staff_position = FactoryBot.create(:staff_position, convention: convention)
+    alert = create(:user_activity_alert, convention: convention)
+    staff_position = create(:staff_position, convention: convention)
     alert.alert_destinations.create!(staff_position: staff_position)
 
     result = service.call

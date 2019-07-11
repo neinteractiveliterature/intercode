@@ -3,8 +3,9 @@ class Mutations::MarkOrderPaid < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    order = convention.orders.find(args[:id])
+  load_and_authorize_model_with_id Order, :id, :update
+
+  def resolve(**_args)
     raise "Order is #{order.status}" unless order.status == 'unpaid'
 
     order.update!(

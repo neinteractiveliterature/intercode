@@ -4,14 +4,15 @@ class Mutations::CreateRun < Mutations::BaseMutation
   argument :event_id, Integer, required: true, camelize: false
   argument :run, Types::RunInputType, required: true
 
-  def resolve(**args)
-    event = convention.events.find(args[:event_id])
+  attr_reader :event
 
-    run = event.runs.create!(
-      args[:run].to_h.merge(
-        updated_by: user_con_profile.user
-      )
-    )
+  def authorized?(args)
+    @event = convention.events.find(args[:event_id])
+    policy(Run.new(event: event)).create?
+  end
+
+  def resolve(**args)
+    run = event.runs.create!(args[:run].to_h.merge(updated_by: current_user))
 
     { run: run }
   end

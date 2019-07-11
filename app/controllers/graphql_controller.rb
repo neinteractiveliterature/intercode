@@ -2,7 +2,7 @@ class GraphqlController < ApplicationController
   class Context
     METHODS = {
       current_user: :current_user,
-      current_ability: :current_ability,
+      pundit_user: :pundit_user,
       user_con_profile: :user_con_profile,
       convention: :convention,
       cms_rendering_context: :cms_rendering_context,
@@ -39,8 +39,7 @@ class GraphqlController < ApplicationController
     end
   end
 
-  skip_authorization_check
-  skip_before_action :verify_authenticity_token # We're doing this in MutationType's guard instead
+  skip_before_action :verify_authenticity_token # We're doing this in MutationType.authorized?
   skip_before_action :ensure_user_con_profile_exists
   skip_before_action :redirect_if_user_con_profile_needs_update
   skip_before_action :ensure_clickwrap_agreement_accepted

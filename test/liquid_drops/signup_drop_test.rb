@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe SignupDrop do
-  let(:signup) { FactoryBot.create(:signup, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') }
+  let(:signup) { create(:signup, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') }
   let(:signup_drop) { SignupDrop.new(signup) }
   let(:the_run) { signup.run }
   let(:event) { the_run.event }
@@ -19,6 +19,6 @@ describe SignupDrop do
   end
 
   it 'returns the event path' do
-    signup_drop.event_url.must_match /events\/#{event.id}/
+    signup_drop.event_url.must_match %r{events/#{event.id}}
   end
 end

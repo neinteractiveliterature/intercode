@@ -4,20 +4,27 @@ class Mutations::WithdrawUserSignup < Mutations::BaseMutation
   argument :user_con_profile_id, Int, required: true, camelize: false
   argument :suppress_notifications, Boolean, required: false, camelize: false
 
-  def resolve(run_id:, user_con_profile_id:, suppress_notifications: false)
-    run = context[:convention].runs.find(run_id)
-    signup = run.signups.where(user_con_profile_id: user_con_profile_id)
+  attr_reader :signup
+
+  def authorized?(args)
+    run = convention.runs.find(args[:run_id])
+    @signup = run.signups.where(user_con_profile_id: args[:user_con_profile_id])
       .where.not(state: 'withdrawn')
       .first
 
     unless signup
-      raise BetterRescueMiddleware::UnloggedError, "You are not signed up for #{run.event.title}."
+      raise BetterRescueMiddleware::UnloggedError,
+        "That user is not signed up for #{run.event.title}."
     end
 
+    policy(signup).withdraw?
+  end
+
+  def resolve(**args)
     EventWithdrawService.new(
       signup,
       context[:current_user],
-      suppress_notifications: suppress_notifications
+      suppress_notifications: args[:suppress_notifications]
     ).call!
 
     { signup: signup }

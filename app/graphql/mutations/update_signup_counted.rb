@@ -4,8 +4,9 @@ class Mutations::UpdateSignupCounted < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :counted, Boolean, required: true
 
+  load_and_authorize_convention_associated_model :signups, :id, :update_counted
+
   def resolve(**args)
-    signup = convention.signups.find(args[:id])
     signup.update!(counted: args[:counted])
 
     if signup.counted_previously_changed? && !args[:counted] && signup.bucket_key

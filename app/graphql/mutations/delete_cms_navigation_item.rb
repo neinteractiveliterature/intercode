@@ -3,8 +3,9 @@ class Mutations::DeleteCmsNavigationItem < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    cms_navigation_item = cms_parent.cms_navigation_items.find(args[:id])
+  load_and_authorize_cms_model :cms_navigation_items, :id, :destroy
+
+  def resolve(**_args)
     cms_navigation_item.destroy!
     { cms_navigation_item: cms_navigation_item }
   end

@@ -9,7 +9,7 @@ class AdminEventProposalsController < ApplicationController
         send_table_presenter_csv(
           Tables::EventProposalsTableResultsPresenter.for_convention(
             convention,
-            current_ability,
+            pundit_user,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]
@@ -25,6 +25,6 @@ class AdminEventProposalsController < ApplicationController
   # Even if the user can manage some event proposals (i.e. their own), only
   # allow access to this controller if they can manage arbitrary ones in this con
   def authorize_admin
-    authorize! :view_event_proposals, convention
+    authorize convention, :view_event_proposals?
   end
 end

@@ -6,7 +6,12 @@ FactoryBot.define do
     user_con_profile
     state { 'confirmed' }
     counted { true }
-    bucket_key { nil }
     updated_by { nil }
+
+    after(:build) do |signup|
+      if signup.confirmed?
+        signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key
+      end
+    end
   end
 end

@@ -4,6 +4,8 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
   argument :event_category_id, Int, required: true, camelize: false
   argument :clone_event_proposal_id, Int, required: false, camelize: false
 
+  authorize_create_convention_associated_model :event_proposals
+
   def resolve(event_category_id:, clone_event_proposal_id: nil)
     unless context[:convention].accepting_proposals
       raise "#{convention.name} is not currently accepting event proposals."
@@ -43,7 +45,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
 
   def find_template_proposal(id)
     proposal = EventProposal.find(id)
-    context[:current_ability].authorize! :read, proposal
+    Pundit.authorize(pundit_user, proposal, :read?)
     proposal
   end
 end

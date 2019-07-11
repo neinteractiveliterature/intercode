@@ -3,8 +3,9 @@ class Mutations::DeleteCmsPartial < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    cms_partial = cms_parent.cms_partials.find(args[:id])
+  load_and_authorize_cms_model :cms_partials, :id, :destroy
+
+  def resolve(**_args)
     cms_partial.destroy!
     { cms_partial: cms_partial }
   end

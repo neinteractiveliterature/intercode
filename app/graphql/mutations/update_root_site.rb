@@ -3,8 +3,14 @@ class Mutations::UpdateRootSite < Mutations::BaseMutation
 
   argument :root_site, Types::RootSiteInputType, required: true, camelize: false
 
+  attr_reader :root_site_instance
+
+  def authorized?(_args)
+    @root_site_instance = RootSite.instance
+    policy(root_site_instance).update?
+  end
+
   def resolve(root_site:)
-    root_site_instance = RootSite.instance
     root_site_instance.update!(root_site.to_h)
     { root_site: root_site_instance }
   end

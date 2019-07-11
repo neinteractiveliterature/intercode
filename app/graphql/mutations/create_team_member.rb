@@ -9,8 +9,14 @@ class Mutations::CreateTeamMember < Mutations::BaseMutation
   argument :team_member, Types::TeamMemberInputType, required: true, camelize: false
   argument :provide_ticket_type_id, Integer, required: false, camelize: false
 
+  attr_reader :event
+
+  def authorized?(args)
+    @event = convention.events.find(args[:event_id])
+    policy(TeamMember.new(event: event)).create?
+  end
+
   def resolve(**args)
-    event = convention.events.find(args[:event_id])
     user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
     result = CreateTeamMemberService.new(
       event: event,

@@ -19,6 +19,7 @@ class CloneConventionService < CivilService::Service
       stripe_publishable_key
       stripe_secret_key
       clickwrap_agreement
+      organization
     ])).merge(new_convention_attributes.symbolize_keys)
   end
 
@@ -57,7 +58,7 @@ class CloneConventionService < CivilService::Service
       )
     end
 
-    Rails.logger.info("Cloning pages")
+    Rails.logger.info('Cloning pages')
     @id_maps[:pages] = clone_with_id_map(
       source_convention.pages,
       convention.pages

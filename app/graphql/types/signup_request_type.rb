@@ -1,4 +1,6 @@
 class Types::SignupRequestType < Types::BaseObject
+  authorize_record
+
   field :id, Int, null: false
   field :state, Types::SignupRequestStateType, null: false
   field :requested_bucket_key, String, null: true

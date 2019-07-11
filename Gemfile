@@ -14,9 +14,9 @@ gem 'webpacker-react', '~> 0.3.2'
 
 gem 'with_advisory_lock'
 
-# Devise for authentication, cancancan for authorization, doorkeeper for OAuth providership
+# Devise for authentication, pundit for authorization, doorkeeper for OAuth providership
 gem 'devise'
-gem 'cancancan'
+gem 'pundit'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'doorkeeper', '5.1.0'
 gem 'devise-doorkeeper'
@@ -54,7 +54,6 @@ gem 'will_paginate'
 
 # GraphQL server
 gem 'graphql'
-gem 'graphql-guard'
 gem 'graphql-batch'
 # gem 'graphql-libgraphqlparser'  TODO: reenable this once it supports graphql 1.9
 gem 'apollo_upload_server', '2.0.0.beta.3'
@@ -118,6 +117,9 @@ group :development do
 
   # n+1 query profiling
   gem 'bullet'
+
+  # Ruby language server for LSP-compatible editors
+  gem 'solargraph'
 end
 
 group :development, :test do

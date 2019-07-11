@@ -1,4 +1,6 @@
 class Types::EventType < Types::BaseObject
+  authorize_record
+
   field :id, Integer, null: false
 
   field :title, String, null: true
@@ -50,14 +52,11 @@ class Types::EventType < Types::BaseObject
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], context[:current_ability]).load(object)
+    EventRunsLoader.for(args[:start], args[:finish], context[:pundit_user]).load(object)
   end
 
   field :run, Types::RunType, null: false do
     argument :id, Integer, required: true
-    guard -> (graphql_object, args, ctx) do
-      ctx[:current_ability].can?(:read, graphql_object.object.runs.find(args[:id]))
-    end
   end
 
   def run(**args)
@@ -65,14 +64,14 @@ class Types::EventType < Types::BaseObject
   end
 
   field :provided_tickets, [Types::TicketType], null: false do
-    guard -> (graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
+    authorize do |value, context|
+      Pundit.policy(
+        context[:pundit_user],
         Ticket.new(
-          user_con_profile: UserConProfile.new(convention: ctx[:convention]),
-          provided_by_event: graphql_object.object
+          user_con_profile: UserConProfile.new(convention: context[:convention]),
+          provided_by_event: value
         )
-      )
+      ).read?
     end
   end
   field :can_provide_tickets, Boolean, deprecation_reason: 'Plaese use event_category.can_provide_tickets instead', null: false
@@ -115,9 +114,7 @@ class Types::EventType < Types::BaseObject
   end
 
   field :admin_notes, String, null: true do
-    guard -> (graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read_admin_notes, graphql_object.object)
-    end
+    authorize_action :read_admin_notes
   end
 
   field :category, String, deprecation_reason: 'Please use event_category instead', null: false

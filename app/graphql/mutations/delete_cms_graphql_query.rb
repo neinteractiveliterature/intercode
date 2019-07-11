@@ -3,9 +3,10 @@ class Mutations::DeleteCmsGraphqlQuery < Mutations::BaseMutation
 
   argument :id, Int, required: true
 
-  def resolve(id:)
-    existing_query = cms_parent.cms_graphql_queries.find(id)
-    existing_query.destroy!
-    { query: existing_query }
+  load_and_authorize_cms_model :cms_graphql_queries, :id, :destroy
+
+  def resolve(**_args)
+    cms_graphql_query.destroy!
+    { query: cms_graphql_query }
   end
 end

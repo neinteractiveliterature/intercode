@@ -9,6 +9,8 @@ class Types::FormType < Types::BaseObject
 
   association_loaders Form, :event_categories, :proposal_event_categories, :user_con_profile_conventions
 
+  authorize_record
+
   def form_api_json
     FormApiJsonLoader.for(cadmus_renderer).load(object)
   end

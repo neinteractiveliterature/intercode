@@ -4,6 +4,8 @@ class Mutations::PurchaseTicket < Mutations::BaseMutation
   argument :ticket_type_id, Integer, required: true, camelize: false
   argument :stripe_token, String, required: true, camelize: false
 
+  require_user_con_profile
+
   def resolve(**args)
     ticket_type = convention.ticket_types.find(args[:ticket_type_id])
 

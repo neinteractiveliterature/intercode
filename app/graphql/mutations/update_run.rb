@@ -4,14 +4,10 @@ class Mutations::UpdateRun < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :run, Types::RunInputType, required: true
 
-  def resolve(**args)
-    run = convention.runs.find(args[:id])
+  load_and_authorize_model_with_id Run, :id, :update
 
-    run.update!(
-      args[:run].to_h.merge(
-        updated_by: user_con_profile.user
-      )
-    )
+  def resolve(**args)
+    run.update!(args[:run].to_h.merge(updated_by: current_user))
 
     { run: run }
   end

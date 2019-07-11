@@ -31,10 +31,12 @@ class UserConProfile < ApplicationRecord
   after_commit :send_user_activity_alerts, on: :create
   after_commit :touch_team_member_events, on: [:create, :update]
 
-  scope :has_any_privileges, -> {
-    sql_clauses = PRIV_NAMES.map { |priv_name| "#{priv_name} = ?" }
+  scope :has_privileges, ->(priv_names) {
+    sql_clauses = priv_names.map { |priv_name| "#{priv_name} = ?" }
     where(sql_clauses.join(' OR '), *sql_clauses.map { |_clause| true })
   }
+
+  scope :has_any_privileges, -> { has_privileges(PRIV_NAMES) }
 
   scope :is_team_member, -> { joins(:team_members).distinct }
 

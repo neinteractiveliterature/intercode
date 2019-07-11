@@ -5,15 +5,24 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   argument :requested_bucket_key, String, required: false, camelize: false
   argument :replace_signup_id, Int, required: false, camelize: false
 
-  def resolve(target_run_id:, requested_bucket_key: nil, replace_signup_id: nil)
+  attr_reader :target_run
+
+  def authorized?(args)
+    @target_run = convention.runs.find(args[:target_run_id])
+    policy(SignupRequest.new(target_run: target_run, user_con_profile: user_con_profile)).create?
+  end
+
+  def resolve(**args)
     raise 'Signup requests are closed.' unless convention.signup_requests_open?
 
-    target_run = convention.runs.find(target_run_id)
-    replace_signup = user_con_profile.signups.find(replace_signup_id) if replace_signup_id
+    replace_signup = if args[:replace_signup_id]
+      user_con_profile.signups.find(args[:replace_signup_id])
+    end
+
     signup_request = user_con_profile.signup_requests.create!(
       target_run: target_run,
       replace_signup: replace_signup,
-      requested_bucket_key: requested_bucket_key,
+      requested_bucket_key: args[:requested_bucket_key],
       updated_by: current_user
     )
 

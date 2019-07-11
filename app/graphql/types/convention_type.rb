@@ -22,42 +22,22 @@ class Types::ConventionType < Types::BaseObject
   field :clickwrap_agreement, String, null: true
   field :stripe_publishable_key, String, null: true
   field :masked_stripe_secret_key, String, null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:update, graphql_object.object)
-    end
+    authorize_action :update
   end
   field :forms, [Types::FormType], null: false
   field :cms_layouts, [Types::CmsLayoutType], null: true
   field :default_layout, Types::CmsLayoutType, null: true
   field :cms_navigation_items, [Types::CmsNavigationItemType], null: true
   field :pages, [Types::PageType], null: true
-  field :rooms, [Types::RoomType], null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, Room.new(convention: graphql_object.object))
-    end
-  end
+  field :rooms, [Types::RoomType], null: true
   field :root_page, Types::PageType, null: true
-  field :staff_positions, [Types::StaffPositionType], null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, StaffPosition.new(convention: graphql_object.object))
-    end
-  end
-  field :ticket_types, [Types::TicketTypeType], null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, TicketType.new(convention: graphql_object.object))
-    end
-  end
+  field :staff_positions, [Types::StaffPositionType], null: true
+  field :ticket_types, [Types::TicketTypeType], null: true
   field :organization, Types::OrganizationType, null: true
   field :products, [Types::ProductType], null: true
-  field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
-    end
-  end
+  field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: true
   field :reports, Types::ConventionReportsType, null: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:view_reports, graphql_object.object)
-    end
+    authorize_action :view_reports
   end
 
   association_loaders(
@@ -97,7 +77,9 @@ class Types::ConventionType < Types::BaseObject
     if args[:current_ability_can_read_event_proposals]
       promise.then do |event_categories|
         event_categories.select do |category|
-          context[:current_ability].can?(:read, EventProposal.new(event_category: category, status: 'proposed'))
+          policy(
+            EventProposal.new(event_category: category, convention: convention, status: 'proposed')
+          ).read?
         end
       end
     else
@@ -117,12 +99,8 @@ class Types::ConventionType < Types::BaseObject
     UserConProfile::MAIL_PRIV_NAMES
   end
 
-  field :user_activity_alert, Types::UserActivityAlert, null: false do
+  field :user_activity_alert, Types::UserActivityAlertType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserActivityAlert.new(convention: graphql_object.object))
-    end
   end
 
   def user_activity_alert(id:)
@@ -130,11 +108,11 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :orders, Types::OrdersConnectionType, max_page_size: 1000, null: true, connection: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
-        Order.new(user_con_profile: UserConProfile.new(convention: graphql_object.object))
-      )
+    authorize do |value, context|
+      Pundit.policy(
+        context[:pundit_user],
+        Order.new(user_con_profile: UserConProfile.new(convention: value))
+      ).read?
     end
   end
 
@@ -143,16 +121,12 @@ class Types::ConventionType < Types::BaseObject
       .includes(order_entries: [:product, :product_variant])
   end
 
-  pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:view_event_proposals, graphql_object.object)
-    end
-  end
+  pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
 
   def event_proposals_paginated(**args)
     Tables::EventProposalsTableResultsPresenter.for_convention(
       object,
-      context[:current_ability],
+      pundit_user,
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
@@ -163,33 +137,26 @@ class Types::ConventionType < Types::BaseObject
   def events_paginated(**args)
     Tables::EventsTableResultsPresenter.for_convention(
       convention: object,
-      ability: context[:current_ability],
+      pundit_user: pundit_user,
       filters: args[:filters].to_h,
       sort: args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(
-        :read,
-        Order.new(user_con_profile: UserConProfile.new(convention: graphql_object.object))
-      )
-    end
-  end
+  pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType
 
   def orders_paginated(filters: nil, sort: nil, page: nil, per_page: nil)
-    scope = object.orders.where.not(status: 'pending')
-      .includes(order_entries: [:product, :product_variant])
+    scope = policy_scope(
+      object.orders.where.not(status: 'pending')
+        .includes(order_entries: [:product, :product_variant])
+    )
 
     Tables::OrdersTableResultsPresenter.new(scope, filters.to_h, sort)
       .paginate(page: page, per_page: per_page)
   end
 
   field :signup_counts_by_state, [Types::SignupCountByStateType], null: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:view_reports, graphql_object.object)
-    end
+    authorize_action :view_reports
   end
 
   def signup_counts_by_state
@@ -198,25 +165,20 @@ class Types::ConventionType < Types::BaseObject
     end
   end
 
-  pagination_field :signup_requests_paginated, Types::SignupRequestsPaginationType, Types::SignupRequestFiltersInputType, null: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, SignupRequest.new(target_run: Run.new(event: Event.new(convention: graphql_object.object))))
-    end
-  end
+  pagination_field :signup_requests_paginated, Types::SignupRequestsPaginationType,
+    Types::SignupRequestFiltersInputType, null: false
 
   def signup_requests_paginated(**args)
     Tables::SignupRequestsTableResultsPresenter.for_convention(
       convention: object,
-      ability: current_ability,
+      pundit_user: pundit_user,
       filters: args[:filters].to_h,
       sort: args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   pagination_field :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType, null: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:view_reports, graphql_object.object)
-    end
+    authorize_action :view_reports
   end
 
   def signup_spy_paginated(**args)
@@ -224,26 +186,18 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType, Types::UserConProfileFiltersInputType do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read, UserConProfile.new(convention: graphql_object.object))
-    end
-  end
+  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType, Types::UserConProfileFiltersInputType
 
   def user_con_profiles_paginated(**args)
     Tables::UserConProfilesTableResultsPresenter.for_convention(
       object,
-      context[:current_ability],
+      pundit_user,
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  field :mailing_lists, Types::MailingListsType, null: false do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:mail_to_any, graphql_object.object)
-    end
-  end
+  field :mailing_lists, Types::MailingListsType, null: false
 
   def mailing_lists
     MailingListsPresenter.new(object)

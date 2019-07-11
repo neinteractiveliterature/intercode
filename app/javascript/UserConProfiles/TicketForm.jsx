@@ -16,7 +16,7 @@ function TicketForm({
 }) {
   const [ticketTypeId, setTicketTypeId] = useState((initialTicket.ticket_type || {}).id);
   const [paymentAmount, setPaymentAmount] = useTransformedState(
-    initialTicket.payment_amount.fractional,
+    initialTicket.payment_amount.fractional / 100.0,
     Transforms.float,
   );
   const [paymentNote, setPaymentNote] = useState(initialTicket.payment_note);

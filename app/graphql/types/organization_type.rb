@@ -8,6 +8,6 @@ class Types::OrganizationType < Types::BaseObject
   association_loaders Organization, :conventions, :organization_roles
 
   def current_ability_can_manage_access
-    can?(:manage, OrganizationRole.new(organization_id: object.id))
+    policy(OrganizationRole.new(organization_id: object.id)).manage?
   end
 end

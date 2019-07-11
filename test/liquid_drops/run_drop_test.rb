@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe RunDrop do
-  let(:the_run) { FactoryBot.create(:run) }
+  let(:the_run) { create(:run) }
   let(:run_drop) { RunDrop.new(the_run) }
   let(:event) { the_run.event }
 
@@ -12,6 +12,6 @@ describe RunDrop do
   end
 
   it 'returns the event path' do
-    run_drop.event_url.must_match /events\/#{event.id}/
+    run_drop.event_url.must_match %r{events/#{event.id}}
   end
 end

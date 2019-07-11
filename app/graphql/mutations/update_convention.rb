@@ -4,9 +4,12 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
   argument :id, Integer, required: false
   argument :convention, Types::ConventionInputType, required: true
 
-  def resolve(**args)
-    convention = args[:id] ? Convention.find(args[:id]) : self.convention
+  def authorized?(args)
+    @convention = args[:id] ? Convention.find(args[:id]) : context[:convention]
+    policy(@convention).update?
+  end
 
+  def resolve(**args)
     convention_data = args[:convention].to_h.merge(
       'maximum_event_signups' => process_scheduled_value_input(
         args[:convention][:maximum_event_signups]
@@ -14,10 +17,12 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
       'updated_by' => user_con_profile.user
     )
 
-    convention.update!(convention_data)
+    @convention.update!(convention_data)
 
-    { convention: convention }
+    { convention: @convention }
   end
+
+  private
 
   def process_scheduled_value_input(input_data)
     timespans_data = input_data[:timespans].map do |timespan|

@@ -1,4 +1,4 @@
-class Types::UserActivityAlertInput < Types::BaseInputObject
+class Types::UserActivityAlertInputType < Types::BaseInputObject
   argument :user_id, Int, required: false, camelize: false
   argument :partial_name, String, required: false, camelize: false
   argument :email, String, required: false

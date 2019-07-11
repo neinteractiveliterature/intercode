@@ -3,8 +3,6 @@ require 'icalendar/tzinfo'
 class CalendarsController < ApplicationController
   include Concerns::AbsoluteUrls
 
-  skip_authorization_check
-
   def user_schedule
     user_con_profile = convention.user_con_profiles.find_by!(ical_secret: params[:id])
 
@@ -46,7 +44,7 @@ class CalendarsController < ApplicationController
     event.description = signup.event.short_blurb
     event.url = url_with_convention_host(
       "/events/#{signup.event.to_param}",
-      signup.event.convention,
+      signup.event.convention
     )
   end
 

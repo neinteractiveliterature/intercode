@@ -19,7 +19,7 @@ class Types::EventCategoryType < Types::BaseObject
     Tables::EventsTableResultsPresenter.new(
       base_scope: object.events,
       convention: convention,
-      ability: current_ability,
+      pundit_user: pundit_user,
       filters: filters.to_h,
       sort: sort
     ).paginate(page: page, per_page: per_page)

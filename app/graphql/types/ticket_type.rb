@@ -11,4 +11,6 @@ class Types::TicketType < Types::BaseObject
   field :updated_at, Types::DateType, null: false
 
   association_loaders Ticket, :ticket_type, :provided_by_event, :user_con_profile
+
+  authorize_record
 end
