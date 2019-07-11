@@ -1,6 +1,5 @@
 class Intercode::Import::Intercode1::Tables::StoreOrderEntries <
     Intercode::Import::Intercode1::Table
-
   attr_reader :con, :order_id_map, :product_id_map
 
   def initialize(connection, order_id_map, product_id_map)
