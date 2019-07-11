@@ -4,9 +4,12 @@ class Mutations::UpdateSignupBucket < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :bucket_key, String, required: true, camelize: false
 
+  load_and_authorize_convention_associated_model :signups, :id, :update_bucket
+
   def resolve(**args)
-    signup = convention.signups.find(args[:id])
-    raise 'The selected bucket is full.' if signup.run.bucket_full?(args[:bucket_key]) && signup.counted?
+    if signup.run.bucket_full?(args[:bucket_key]) && signup.counted?
+      raise 'The selected bucket is full.'
+    end
 
     original_bucket_key = signup.bucket_key
     signup.update!(bucket_key: args[:bucket_key])

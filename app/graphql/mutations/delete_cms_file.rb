@@ -3,8 +3,9 @@ class Mutations::DeleteCmsFile < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    cms_file = cms_parent.cms_files.find(args[:id])
+  load_and_authorize_cms_model :cms_files, :id, :destroy
+
+  def resolve(**_args)
     cms_file.file.remove!
     cms_file.destroy!
     { cms_file: cms_file }

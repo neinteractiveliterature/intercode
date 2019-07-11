@@ -3,8 +3,9 @@ class Mutations::DeleteOrderEntry < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    order_entry = OrderEntry.find(args[:id])
+  load_and_authorize_model_with_id OrderEntry, :id, :update
+
+  def resolve(**_args)
     order_entry.destroy!
     { order_entry: order_entry }
   end

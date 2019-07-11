@@ -2,7 +2,7 @@ module Concerns::ContextAccessors
   %i[
     controller
     current_user
-    current_ability
+    pundit_user
     user_con_profile
     convention
     cadmus_renderer
@@ -16,9 +16,15 @@ module Concerns::ContextAccessors
     end
   end
 
-  delegate :can?, to: :current_ability
-
   def cms_parent
     @cms_parent ||= convention || RootSite.instance
+  end
+
+  def policy(model)
+    Pundit.policy(context[:pundit_user], model)
+  end
+
+  def policy_scope(scope)
+    Pundit.policy_scope(context[:pundit_user], scope)
   end
 end

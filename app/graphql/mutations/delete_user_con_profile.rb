@@ -3,8 +3,9 @@ class Mutations::DeleteUserConProfile < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    user_con_profile = convention.user_con_profiles.find(args[:id])
+  load_and_authorize_convention_associated_model :user_con_profiles, :id, :destroy
+
+  def resolve(**_args)
     user_con_profile.destroy!
 
     { user_con_profile: user_con_profile }

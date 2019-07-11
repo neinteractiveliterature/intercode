@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       format.csv do
         send_table_presenter_csv(
           Tables::UsersTableResultsPresenter.new(
-            User.accessible_by(current_ability),
+            policy_scope(User.all),
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]
@@ -22,6 +22,6 @@ class UsersController < ApplicationController
   private
 
   def authorize_read_users
-    authorize! :read, User
+    authorize User.new, :read?
   end
 end

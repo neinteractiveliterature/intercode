@@ -4,9 +4,10 @@ class Mutations::UpdateEventProposalAdminNotes < Mutations::BaseMutation
   argument :id, Int, required: true, camelize: false
   argument :admin_notes, String, required: true, camelize: false
 
-  def resolve(id:, admin_notes:)
-    event_proposal = context[:convention].event_proposals.find(id)
-    event_proposal.update!(admin_notes: admin_notes)
+  load_and_authorize_convention_associated_model :event_proposals, :id, :update_admin_notes
+
+  def resolve(**args)
+    event_proposal.update!(admin_notes: args[:admin_notes])
 
     { event_proposal: event_proposal }
   end

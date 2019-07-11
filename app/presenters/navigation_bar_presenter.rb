@@ -124,22 +124,22 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Con Schedule'
       url '/events/schedule'
-      visible? { can?(:schedule, convention) }
+      visible? { Pundit.policy(pundit_user, convention).schedule? }
     end,
     NavigationItem.define do
       label 'Con Schedule by Room'
       url '/events/schedule_by_room'
-      visible? { can?(:schedule, convention) }
+      visible? { Pundit.policy(pundit_user, convention).schedule? }
     end,
     NavigationItem.define do
       label 'List of Events'
       url '/events'
-      visible? { can?(:list_events, convention) }
+      visible? { Pundit.policy(pundit_user, convention).list_events? }
     end,
     NavigationItem.define do
       label 'Schedule With Counts'
       url '/events/schedule_with_counts'
-      visible? { can?(:schedule_with_counts, convention) }
+      visible? { Pundit.policy(pundit_user, convention).schedule_with_counts? }
     end,
     NavigationItem.define do
       label 'Propose an Event'
@@ -151,79 +151,85 @@ class NavigationBarPresenter
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
     url '/cms_pages'
-    visible? { can?(:update, Page.new(parent: convention)) }
+    visible? { Pundit.policy(pundit_user, Page.new(parent: convention)).update? }
   end
 
   ADMIN_NAVIGATION_ITEMS = [
     NavigationItem.define do
       label 'Attendees'
       url '/user_con_profiles'
-      visible? { can?(:view_attendees, convention) }
+      visible? { Pundit.policy(pundit_user, convention).view_attendees? }
     end,
     NavigationItem.define do
       label 'Convention Settings'
       url '/convention/edit'
-      visible? { can?(:update, convention) }
+      visible? { Pundit.policy(pundit_user, convention).update? }
     end,
     NavigationItem.define do
       label 'Event Categories'
       url '/event_categories'
-      visible? { convention.site_mode != 'single_event' && can?(:update, EventCategory.new(convention: convention)) }
+      visible? { convention.site_mode != 'single_event' && Pundit.policy(pundit_user, EventCategory.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Event Proposals'
       url '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc'
-      visible? { convention.site_mode != 'single_event' && can?(:view_event_proposals, convention) }
+      visible? { convention.site_mode != 'single_event' && Pundit.policy(pundit_user, convention).view_event_proposals? }
     end,
     NavigationItem.define do
       label 'Event Scheduling'
       url '/admin_events'
-      visible? { can?(:update, Run.new(event: Event.new(convention: convention))) }
+      visible? { Pundit.policy(pundit_user, Run.new(event: Event.new(convention: convention))) }
     end,
     NavigationItem.define do
       label 'Forms'
       url '/admin_forms'
-      visible? { can?(:update, Form.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, Form.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Mailing Lists'
       url '/mailing_lists'
-      visible? { can?(:mail_to_any, convention) }
+      visible? { Pundit.policy(pundit_user, MailingListsPresenter.new(convention)).mail_to_any? }
     end,
     NavigationItem.define do
       label 'OAuth2 Applications'
       url '/oauth/applications-embed'
-      visible? { can?(:manage, Doorkeeper::Application) }
+      visible? { Pundit.policy(pundit_user, Doorkeeper::Application.new).manage? }
     end,
     NavigationItem.define do
       label 'Reports'
       url '/reports'
-      visible? { can?(:view_reports, convention) }
+      visible? { Pundit.policy(pundit_user, convention).view_reports? }
     end,
     NavigationItem.define do
       label 'Rooms'
       url '/rooms'
-      visible? { can?(:update, Room.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, Room.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Signup Moderation'
       url '/signup_moderation'
       visible? do
         convention.signup_mode == 'moderated' &&
-          can?(:create, Signup.new(run: Run.new(event: Event.new(convention: convention))))
+          Pundit.policy(
+            pundit_user,
+            Signup.new(run: Run.new(event: Event.new(convention: convention)))
+          ).manage?
       end
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Staff Positions'
       url '/staff_positions'
-      visible? { can?(:update, StaffPosition.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, StaffPosition.new(convention: convention)).update? }
     end,
     NavigationItem.define do
       label 'Store'
       url '/admin_store'
       visible? do
-        can?(:read, Order.new(user_con_profile: UserConProfile.new(convention: convention)))
+        Pundit.policy(
+          pundit_user,
+          Order.new(user_con_profile: UserConProfile.new(convention: convention))
+        ).read?
       end
     end,
     NavigationItem.define do
@@ -231,13 +237,13 @@ class NavigationBarPresenter
       url '/ticket_types'
       visible? do
         convention.ticket_mode != 'disabled' &&
-          can?(:update, TicketType.new(convention: convention))
+          Pundit.policy(pundit_user, TicketType.new(convention: convention)).update?
       end
     end,
     NavigationItem.define do
       label 'User Activity Alerts'
       url '/user_activity_alerts'
-      visible? { can?(:read, UserActivityAlert.new(convention: convention)) }
+      visible? { Pundit.policy(pundit_user, UserActivityAlert.new(convention: convention)).read? }
     end
   ]
 
@@ -245,13 +251,13 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Organizations'
       url '/organizations'
-      visible? { can?(:read, Organization) }
+      visible? { Pundit.policy(pundit_user, Organization.new).read? }
     end,
     SITE_CONTENT_NAVIGATION_ITEM,
     NavigationItem.define do
       label 'Users'
       url '/users'
-      visible? { can?(:read, User) }
+      visible? { Pundit.policy(pundit_user, User.new).read? }
     end
   ]
 
@@ -282,14 +288,13 @@ class NavigationBarPresenter
     end
   ]
 
-  attr_reader :navbar_classes, :request, :current_ability, :user_con_profile, :user_signed_in, :convention
+  attr_reader :navbar_classes, :request, :user_con_profile, :pundit_user, :user_signed_in, :convention
   alias user_signed_in? user_signed_in
-  delegate :can?, to: :current_ability
 
-  def initialize(navbar_classes, request, current_ability, user_con_profile, user_signed_in, convention)
+  def initialize(navbar_classes, request, pundit_user, user_con_profile, user_signed_in, convention)
     @navbar_classes = navbar_classes
     @request = request
-    @current_ability = current_ability
+    @pundit_user = pundit_user
     @user_con_profile = user_con_profile
     @user_signed_in = user_signed_in
     @convention = convention

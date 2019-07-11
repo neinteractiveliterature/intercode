@@ -3,8 +3,9 @@ class Mutations::DropEvent < Mutations::BaseMutation
 
   argument :id, Integer, required: true
 
-  def resolve(**args)
-    event = convention.events.find(args[:id])
+  load_and_authorize_convention_associated_model :events, :id, :drop
+
+  def resolve(**_args)
     DropEventService.new(event: event).call!
     { event: event }
   end

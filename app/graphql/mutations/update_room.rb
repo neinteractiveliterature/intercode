@@ -4,6 +4,8 @@ class Mutations::UpdateRoom < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :room, Types::RoomInputType, required: true
 
+  load_and_authorize_convention_associated_model :rooms, :id, :update
+
   def resolve(**args)
     room = convention.rooms.find(args[:id])
 

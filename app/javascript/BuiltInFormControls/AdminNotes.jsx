@@ -66,7 +66,7 @@ function AdminNotes({ mutate, value }) {
         <button
           className="btn btn-primary btn-sm ml-2"
           type="button"
-          onClick={save}
+          onClick={() => save(editingValue)}
           disabled={saveInProgress}
         >
           Save

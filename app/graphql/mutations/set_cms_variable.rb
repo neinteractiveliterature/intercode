@@ -3,11 +3,13 @@ class Mutations::SetCmsVariable < Mutations::BaseMutation
 
   argument :cms_variable, Types::CmsVariableInput, required: true, camelize: false
 
+  authorize_create_cms_model :cms_variables
+
   def resolve(cms_variable:)
     begin
       value = JSON.parse(cms_variable['value_json'])
     rescue JSON::ParserError => error
-      raise BetterRescueMiddleware::UnloggedError.new("Invalid JSON: #{error.message}")
+      raise BetterRescueMiddleware::UnloggedError, "Invalid JSON: #{error.message}"
     end
 
     variable = if context[:convention]

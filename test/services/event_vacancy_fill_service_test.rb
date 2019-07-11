@@ -4,7 +4,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   let(:event) do
-    FactoryBot.create(
+    create(
       :event,
       registration_policy: {
         buckets: [
@@ -16,13 +16,13 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     )
   end
 
-  let(:the_run) { FactoryBot.create :run, event: event }
+  let(:the_run) { create :run, event: event }
   let(:convention) { event.convention }
   let(:bucket_key) { 'dogs' }
 
-  let(:anything_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+  let(:anything_user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:anything_signup) do
-    FactoryBot.create(
+    create(
       :signup,
       user_con_profile: anything_user_con_profile,
       run: the_run,
@@ -32,9 +32,9 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     )
   end
 
-  let(:waitlist_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+  let(:waitlist_user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:waitlist_signup) do
-    FactoryBot.create(
+    create(
       :signup,
       user_con_profile: waitlist_user_con_profile,
       run: the_run,
@@ -44,10 +44,10 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   let(:waitlist_no_pref_user_con_profile) do
-    FactoryBot.create(:user_con_profile, convention: convention)
+    create(:user_con_profile, convention: convention)
   end
   let(:waitlist_no_pref_signup) do
-    FactoryBot.create(
+    create(
       :signup,
       user_con_profile: waitlist_no_pref_user_con_profile,
       run: the_run,
@@ -56,9 +56,9 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     )
   end
 
-  let(:no_pref_user_con_profile) { FactoryBot.create(:user_con_profile, convention: convention) }
+  let(:no_pref_user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:no_pref_signup) do
-    FactoryBot.create(
+    create(
       :signup,
       user_con_profile: no_pref_user_con_profile,
       run: the_run,
@@ -225,7 +225,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
   describe 'with not-counted buckets' do
     let(:event) do
-      FactoryBot.create(
+      create(
         :event,
         registration_policy: {
           buckets: [
@@ -256,7 +256,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
       end
 
       it 'will not fill in drops with no-preference signups' do
-        FactoryBot.create(
+        create(
           :signup,
           user_con_profile: no_pref_user_con_profile,
           run: the_run,
@@ -276,7 +276,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
       let(:bucket_key) { 'pc' }
 
       it 'will not fill them in using not-counted signups' do
-        FactoryBot.create(
+        create(
           :signup,
           user_con_profile: no_pref_user_con_profile,
           run: the_run,
@@ -292,7 +292,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
       end
 
       it 'will not fill them in using unlimited signups' do
-        FactoryBot.create(
+        create(
           :signup,
           user_con_profile: no_pref_user_con_profile,
           run: the_run,

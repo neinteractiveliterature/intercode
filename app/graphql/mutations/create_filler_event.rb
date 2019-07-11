@@ -4,6 +4,8 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
   argument :event, Types::EventInputType, required: true
   argument :run, Types::RunInputType, required: false
 
+  authorize_create_convention_associated_model :events
+
   def resolve(**args)
     event_attrs = args[:event].to_h.merge(
       updated_by: user_con_profile.user

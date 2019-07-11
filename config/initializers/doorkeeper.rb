@@ -1,7 +1,9 @@
 # Fake out Doorkeeper so it will render the authorization screen even if not logged in, so that
 # the React code can show a login prompt
 class NullResourceOwner
-  def id; nil; end
+  def id
+    nil
+  end
 end
 
 Doorkeeper.configure do
@@ -25,7 +27,7 @@ Doorkeeper.configure do
   # every time somebody will try to access the admin web interface.
   #
   admin_authenticator do
-    authorize!(:manage, Doorkeeper::Application)
+    authorize Doorkeeper::Application.new, :manage?
   end
 
   # If you are planning to use Doorkeeper in Rails 5 API-only application, then you might
@@ -235,7 +237,7 @@ Doorkeeper::JWT.configure do
 
   # Optionally set additional headers for the JWT. See
   # https://tools.ietf.org/html/rfc7515#section-4.1
-  token_headers do |opts|
+  token_headers do |_opts|
     { kid: Doorkeeper::OpenidConnect.signing_key[:kid] }
   end
 

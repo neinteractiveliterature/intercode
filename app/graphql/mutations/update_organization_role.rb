@@ -8,8 +8,9 @@ class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
   argument :add_permissions, [Types::PermissionInputType], required: false, camelize: false
   argument :remove_permission_ids, [Integer], required: false, camelize: false
 
-  def resolve(id:, **args)
-    organization_role = OrganizationRole.find(id)
+  load_and_authorize_model_with_id OrganizationRole, :id, :update
+
+  def resolve(**args)
     organization_role.update!(
       user_ids: organization_role.user_ids + args[:add_user_ids] - args[:remove_user_ids],
       **(args[:organization_role].to_h)

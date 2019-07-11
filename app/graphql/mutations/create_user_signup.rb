@@ -7,22 +7,27 @@ class Mutations::CreateUserSignup < Mutations::BaseMutation
   argument :no_requested_bucket, Boolean, required: false, camelize: false
   argument :suppress_notifications, Boolean, required: false, camelize: false
 
-  def resolve(run_id:, user_con_profile_id:, requested_bucket_key: nil, no_requested_bucket: false, suppress_notifications: false)
-    should_have_requested_bucket_key = no_requested_bucket.blank?
-    if should_have_requested_bucket_key && !requested_bucket_key
+  attr_reader :run, :signup_user_con_profile
+
+  def authorized?(args)
+    @run = convention.runs.find(args[:run_id])
+    @signup_user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    policy(Signup.new(run: run, user_con_profile: signup_user_con_profile)).create?
+  end
+
+  def resolve(**args)
+    should_have_requested_bucket_key = args[:no_requested_bucket].blank?
+    if should_have_requested_bucket_key && !args[:requested_bucket_key]
       raise BetterRescueMiddleware::UnloggedError,
         'Bad request: signups must either request a bucket or specify that no bucket is requested.'
     end
 
-    run = context[:convention].runs.find(run_id)
-    user_con_profile = context[:convention].user_con_profiles.find(user_con_profile_id)
-
     result = EventSignupService.new(
-      user_con_profile,
+      signup_user_con_profile,
       run,
-      should_have_requested_bucket_key ? requested_bucket_key : nil,
+      should_have_requested_bucket_key ? args[:requested_bucket_key] : nil,
       context[:current_user],
-      suppress_notifications: suppress_notifications,
+      suppress_notifications: args[:suppress_notifications],
       allow_non_self_service_signups: true
     ).call
 

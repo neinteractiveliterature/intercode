@@ -4,6 +4,8 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
   argument :user_id, Integer, required: true, camelize: false
   argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
 
+  authorize_create_convention_associated_model :user_con_profiles
+
   def resolve(**args)
     user = User.find(args[:user_id])
     user_con_profile = convention.user_con_profiles.new(user: user)

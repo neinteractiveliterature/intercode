@@ -5,12 +5,6 @@ class UserConProfilesController < ApplicationController
   # @user_con_profile, which is unsafe for us to use because ApplicationController uses it to mean
   # the current user, and we use that for authorization checking.  So instead, we'll call the user
   # con profile we're working on the "subject profile" (as in the subject of our actions).
-  load_and_authorize_resource :subject_profile,
-    id_param: :id,
-    parent: false,
-    class: 'UserConProfile',
-    through: :convention,
-    through_association: :user_con_profiles
   before_action :authorize_admin_profiles, except: [:revert_become]
 
   unless Rails.env.test?
@@ -19,7 +13,9 @@ class UserConProfilesController < ApplicationController
 
   def become
     identity_assumer = assumed_identity_from_profile || user_con_profile
-    sign_in @subject_profile.user
+    subject_profile = convention.user_con_profiles.find(params[:id])
+    authorize subject_profile, :become?
+    sign_in subject_profile.user
     session[:assumed_identity_from_profile_id] = identity_assumer.id
     redirect_to root_url
   end
@@ -42,7 +38,7 @@ back to your normal identity (since you already are your normal identity).")
         send_table_presenter_csv(
           Tables::UserConProfilesTableResultsPresenter.for_convention(
             convention,
-            current_ability,
+            pundit_user,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]
@@ -59,6 +55,6 @@ back to your normal identity (since you already are your normal identity).")
   # controller. In other words, users shouldn't be able to access even their own profile here
   # (because they could use this controller to escalate their privileges).
   def authorize_admin_profiles
-    authorize! :view_attendees, convention
+    authorize convention, :view_attendees?
   end
 end

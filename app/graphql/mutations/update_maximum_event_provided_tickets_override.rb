@@ -6,10 +6,11 @@ class Mutations::UpdateMaximumEventProvidedTicketsOverride < Mutations::BaseMuta
   argument :id, Integer, required: true
   argument :override_value, Integer, required: true, camelize: false
 
-  def resolve(**args)
-    override = MaximumEventProvidedTicketsOverride.find(args[:id])
-    override.update!(override_value: args[:override_value])
+  load_and_authorize_model_with_id MaximumEventProvidedTicketsOverride, :id, :update
 
-    { maximum_event_provided_tickets_override: override }
+  def resolve(**args)
+    maximum_event_provided_tickets_override.update!(override_value: args[:override_value])
+
+    { maximum_event_provided_tickets_override: maximum_event_provided_tickets_override }
   end
 end

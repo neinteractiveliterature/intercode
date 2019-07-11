@@ -9,9 +9,7 @@ Doorkeeper::OpenidConnect.configure do
     User.find_by(id: access_token.resource_owner_id)
   end
 
-  auth_time_from_resource_owner do |resource_owner|
-    resource_owner.current_sign_in_at
-  end
+  auth_time_from_resource_owner(&:current_sign_in_at)
 
   reauthenticate_resource_owner do |resource_owner, return_to|
     store_location_for resource_owner, return_to

@@ -1,18 +1,13 @@
-class Mutations::UpdateCmsGraphqlQuery < GraphQL::Schema::RelayClassicMutation
+class Mutations::UpdateCmsGraphqlQuery < Mutations::BaseMutation
   field :query, Types::CmsGraphqlQueryType, null: false
 
   argument :id, Int, required: true
   argument :query, Types::CmsGraphqlQueryInputType, required: true
 
-  def resolve(id:, query:)
-    query_scope = if context[:convention]
-      context[:convention].cms_graphql_queries
-    else
-      CmsGraphqlQuery.global
-    end
+  load_and_authorize_cms_model :cms_graphql_queries, :id, :update
 
-    existing_query = query_scope.find(id)
-    existing_query.update!(query.to_h)
-    { query: existing_query }
+  def resolve(**args)
+    cms_graphql_query.update!(args[:query].to_h)
+    { query: cms_graphql_query }
   end
 end

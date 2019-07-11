@@ -17,6 +17,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'RPGs'
   inflect.acronym 'NPC'
   inflect.acronym 'NPCs'
+  inflect.acronym 'OAuth'
   inflect.acronym 'PC'
   inflect.acronym 'PCs'
 end

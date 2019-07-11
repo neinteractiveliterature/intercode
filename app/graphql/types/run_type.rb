@@ -1,4 +1,6 @@
 class Types::RunType < Types::BaseObject
+  authorize_record
+
   field :id, Integer, null: false
   field :event, Types::EventType, null: true
 
@@ -38,9 +40,7 @@ class Types::RunType < Types::BaseObject
   field :waitlisted_signup_count, Integer, null: true
 
   def waitlisted_signup_count
-    SignupCountLoader.for.load(object).then do |presenter|
-      presenter.waitlist_count
-    end
+    SignupCountLoader.for.load(object).then(&:waitlist_count)
   end
 
   field :not_counted_signup_count, Integer, null: true
@@ -85,7 +85,7 @@ class Types::RunType < Types::BaseObject
   field :current_ability_can_signup_summary_run, Boolean, null: false
 
   def current_ability_can_signup_summary_run
-    ModelPermissionLoader.for(Run).load([context[:current_ability], :signup_summary, object.id])
+    ModelPermissionLoader.for(Run).load([pundit_user, :signup_summary, object.id])
   end
 
   field :signups_paginated, Types::SignupsPaginationType, null: false do
@@ -93,17 +93,10 @@ class Types::RunType < Types::BaseObject
     argument :per_page, Integer, required: false, camelize: false
     argument :filters, Types::SignupFiltersInputType, required: false
     argument :sort, [Types::SortInputType, null: true], required: false
-
-    guard ->(graphql_object, _args, ctx) do
-      (
-        ctx[:current_ability].can?(:read, Signup.new(run: graphql_object.object)) ||
-        ctx[:current_ability].can?(:signup_summary, graphql_object.object)
-      )
-    end
   end
 
   def signups_paginated(**args)
-    scope = object.signups
+    scope = object.signups.includes(:user_con_profile)
 
     Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])

@@ -4,8 +4,9 @@ class Mutations::UpdateCmsLayout < Mutations::BaseMutation
   argument :id, Integer, required: true
   argument :cms_layout, Types::CmsLayoutInputType, required: true, camelize: false
 
+  load_and_authorize_cms_model :cms_layouts, :id, :update
+
   def resolve(**args)
-    cms_layout = cms_parent.cms_layouts.find(args[:id])
     cms_layout.update!(args[:cms_layout].to_h)
 
     { cms_layout: cms_layout }

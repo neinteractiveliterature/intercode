@@ -5,7 +5,7 @@ FactoryBot.define do
     event
 
     after(:build) do |team_member|
-      team_member.user_con_profile ||= FactoryBot.build(:user_con_profile, convention: team_member.event.convention)
+      team_member.user_con_profile ||= build(:user_con_profile, convention: team_member.event.convention)
     end
   end
 end

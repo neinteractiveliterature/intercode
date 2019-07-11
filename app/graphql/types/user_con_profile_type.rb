@@ -1,12 +1,12 @@
 class Types::UserConProfileType < Types::BaseObject
   def self.personal_info_field(*args, **kwargs, &block)
     field(*args, **kwargs) do
-      guard ->(graphql_object, _args, ctx) do
-        ctx[:current_ability].can?(:read_personal_info, graphql_object.object)
-      end
+      authorize_action :read_personal_info
       instance_eval(&block) if block
     end
   end
+
+  authorize_record
 
   field :id, Integer, null: false
   field :convention, Types::ConventionType, null: true
@@ -44,9 +44,7 @@ class Types::UserConProfileType < Types::BaseObject
 
   personal_info_field :user, Types::UserType, null: true
   field :email, String, null: true do
-    guard ->(graphql_object, _args, ctx) do
-      ctx[:current_ability].can?(:read_email, graphql_object.object)
-    end
+    authorize_action :read_email
   end
   field :staff_positions, [Types::StaffPositionType], null: false
 
@@ -76,68 +74,41 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :preferred_contact, String, null: true
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: false
 
-  field :ticket, Types::TicketType, null: true do
-    guard -> (graphql_object, _args, ctx) {
-      # Using the actual user_con_profile object here will set the ticket association on that object
-      # which will cause problems if we try to actually read it
-      ctx[:current_ability].can?(:read, Ticket.new(user_con_profile_id: graphql_object.object.id))
-    }
-  end
-
+  field :ticket, Types::TicketType, null: true
   field :ability, Types::AbilityType, null: true
 
   def ability
     if object == context[:user_con_profile]
-      current_ability
+      pundit_user
     else
-      AbilityLoader.for(UserConProfile).load(object)
+      AuthorizationInfoLoader.for(UserConProfile).load(object)
     end
   end
 
-  field :orders, [Types::OrderType, null: true], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
-    }
-  end
-
+  field :orders, [Types::OrderType, null: true], null: false
   field :order_summary, String, null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, Order.new(user_con_profile: graphql_object.object))
-    }
+    authorize do |value, context|
+      OrderPolicy.new(context[:pundit_user], Order.new(user_con_profile: value)).read?
+    end
   end
 
   def order_summary
-    OrderSummaryLoader.for().load(object)
+    OrderSummaryLoader.for.load(object)
   end
 
-  field :signups, [Types::SignupType], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, Signup.new(user_con_profile: graphql_object.object, run: graphql_object.object.convention.events.new.runs.new))
-    }
-  end
-
-  field :signup_requests, [Types::SignupRequestType], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, SignupRequest.new(user_con_profile: graphql_object.object, target_run: graphql_object.object.convention.events.new.runs.new))
-    }
-  end
-
-  field :team_members, [Types::TeamMemberType], null: false do
-    guard -> (graphql_object, _args, ctx) {
-      ctx[:current_ability].can?(:read, TeamMember.new(user_con_profile: graphql_object.object, event: graphql_object.object.convention.events.new))
-    }
-  end
-
+  field :signups, [Types::SignupType], null: false
+  field :signup_requests, [Types::SignupRequestType], null: false
+  field :team_members, [Types::TeamMemberType], null: false
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
-    ability = if object == context[:user_con_profile]
-      current_ability
+    user = if object == context[:user_con_profile]
+      pundit_user
     else
-      Ability.new(object.user)
+      AuthorizationInfo.new(object.user, nil)
     end
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
-    ability.can?(:create, override)
+    Pundit.policy(user, overide).create?
   end
 end

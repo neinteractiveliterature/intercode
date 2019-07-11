@@ -1,5 +1,5 @@
 class Types::QueryType < Types::BaseObject
-  field_class GraphQL::Schema::Field # Camelize fields in this type
+  field_class Types::BaseField # Camelize fields in this type
 
   # Add root-level fields here.
   # They will be entry points for queries on your schema.
@@ -35,36 +35,26 @@ class Types::QueryType < Types::BaseObject
     argument :include_dropped, Boolean, required: false
     argument :start, Types::DateType, required: false
     argument :finish, Types::DateType, required: false
-
-    guard ->(_obj, args, ctx) do
-      current_ability = ctx[:current_ability]
-      convention = ctx[:convention]
-      if args[:includeDropped]
-        return false unless current_ability.can?(:manage, Event.new(convention: convention))
-      end
-
-      true
-    end
   end
 
-  def events(include_dropped: false, start: nil, finish: nil, **args)
+  def events(include_dropped: false, start: nil, finish: nil, **_args)
     events = convention.events
     events = events.active unless include_dropped
     if start || finish
-      run_scope = Run
-      run_scope = run_scope.where('starts_at >= ?', start) if start
-      run_scope = run_scope.where('starts_at < ?', finish) if finish
-      events = events.where(id: run_scope.select(:event_id))
+      if policy(Run.new(event: Event.new(convention: convention))).read?
+        run_scope = convention.runs
+        run_scope = run_scope.where('starts_at >= ?', start) if start
+        run_scope = run_scope.where('starts_at < ?', finish) if finish
+        events = events.where(id: run_scope.select(:event_id))
+      else
+        events = Event.none
+      end
     end
     events
   end
 
   field :event_proposal, Types::EventProposalType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].event_proposals.find(args[:id]))
-    end
   end
 
   def event_proposal(**args)
@@ -188,7 +178,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def current_ability
-    context[:current_ability]
+    pundit_user
   end
 
   field :assumed_identity_from_profile, Types::UserConProfileType, null: true
@@ -206,10 +196,6 @@ class Types::QueryType < Types::BaseObject
 
   field :user_con_profile, Types::UserConProfileType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].user_con_profiles.find(args[:id]))
-    end
   end
 
   def user_con_profile(**args)
@@ -218,10 +204,6 @@ class Types::QueryType < Types::BaseObject
 
   field :form, Types::FormType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].forms.find(args[:id]))
-    end
   end
 
   def form(**args)
@@ -242,7 +224,7 @@ class Types::QueryType < Types::BaseObject
     NavigationBarPresenter.new(
       cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
       nil, # request
-      context[:current_ability],
+      context[:pundit_user],
       context[:user_con_profile],
       !context[:current_user].nil?,
       context[:convention]
@@ -251,14 +233,10 @@ class Types::QueryType < Types::BaseObject
 
   field :staff_position, Types::StaffPositionType, null: true do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].staff_positions.find(args[:id]))
-    end
   end
 
-  def staff_position(**args)
-    convention.staff_positions.find(args[:id])
+  def staff_position(id:)
+    convention.staff_positions.find(id)
   end
 
   field :liquid_assigns, [Types::LiquidAssign], null: true
@@ -278,14 +256,14 @@ class Types::QueryType < Types::BaseObject
   field :preview_liquid, String, null: false do
     argument :content, String, required: true
 
-    guard ->(_obj, _args, ctx) do
+    authorize do |_value, context|
       # TODO maybe better permission for this?  Not sure, but for now I'm using con_com as a proxy
       # for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary Liquid
       # drop data)"
-      if ctx[:convention]
-        ctx[:current_ability].can?(:view_reports, ctx[:convention])
+      if context[:convention]
+        Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
       else
-        ctx[:current_user].site_admin?
+        context[:current_user].site_admin?
       end
     end
   end
@@ -296,14 +274,10 @@ class Types::QueryType < Types::BaseObject
 
   field :product, Types::ProductType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].products.find(args[:id]))
-    end
   end
 
-  def product(**args)
-    convention.products.find(args[:id])
+  def product(id:)
+    policy_scope(convention.products).find(id)
   end
 
   field :oauth_pre_auth, Types::Json, null: false do
@@ -327,7 +301,7 @@ class Types::QueryType < Types::BaseObject
   field :organizations, [Types::OrganizationType], null: false
 
   def organizations
-    Organization.all
+    policy_scope(Organization.all)
   end
 
   field :root_site, Types::RootSiteType, null: false
@@ -338,25 +312,17 @@ class Types::QueryType < Types::BaseObject
 
   field :signup, Types::SignupType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      ctx[:current_ability].can?(:read, ctx[:convention].signups.find(args[:id]))
-    end
   end
 
   def signup(**args)
     convention.signups.find(args[:id])
   end
 
-  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false do
-    guard ->(_obj, _args, ctx) do
-      ctx[:current_ability].can?(:read, User)
-    end
-  end
+  pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false
 
   def users_paginated(**args)
     Tables::UsersTableResultsPresenter.new(
-      User.accessible_by(current_ability),
+      policy_scope(User.all),
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
@@ -364,10 +330,6 @@ class Types::QueryType < Types::BaseObject
 
   field :user, Types::UserType, null: false do
     argument :id, Integer, required: true
-
-    guard ->(_obj, args, ctx) do
-      args[:id] == ctx[:current_user]&.id || ctx[:current_ability].can?(:read, User)
-    end
   end
 
   def user(id:)
@@ -376,10 +338,6 @@ class Types::QueryType < Types::BaseObject
 
   field :users, [Types::UserType], null: false do
     argument :ids, [Integer], required: true
-
-    guard ->(_obj, _args, ctx) do
-      ctx[:current_ability].can?(:read, User)
-    end
   end
 
   def users(ids:)

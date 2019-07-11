@@ -24,9 +24,11 @@ DatabaseCleaner.allow_remote_database_url = true
 DatabaseCleaner.strategy = :transaction
 
 class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
+  include ActionMailer::TestCase::ClearTestDeliveries
+
   before do
     DatabaseCleaner.start
-    ActionMailer::Base.deliveries.clear # TODO: remove once Rails merges PR #24688 to do this itself
   end
   after { DatabaseCleaner.clean }
 end
@@ -34,7 +36,7 @@ end
 class ActionController::TestCase
   include Devise::Test::ControllerHelpers
 
-  def set_convention(convention)
+  def set_convention(convention) # rubocop:disable Naming/AccessorMethodName
     @request.host = convention.domain
     @controller.request.env['intercode.convention'] = convention
   end
@@ -43,7 +45,7 @@ end
 class ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  def set_convention(convention)
+  def set_convention(convention) # rubocop:disable Naming/AccessorMethodName
     self.default_url_options = { host: convention.domain }
   end
 end

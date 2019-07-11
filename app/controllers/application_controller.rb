@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Pundit
   include Concerns::CmsContentHelpers
   include Concerns::ProfileSetupWorkflow
   helper_method :effective_cms_layout
@@ -7,11 +8,6 @@ class ApplicationController < ActionController::Base
   # http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf)
   protect_from_forgery
   skip_forgery_protection if: :doorkeeper_token unless Rails.env.test?
-
-  # CanCan's built-in nag filter that will throw an error if no authorization check was performed.
-  # Only enabled for non-production environments.  To disable, do this in a controller:
-  # skip_authorization_check
-  check_authorization unless: :devise_or_doorkeeper_controller?
 
   # Make Devise work with Rails 4 strong parameters.  See the method below for details.
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -35,7 +31,7 @@ class ApplicationController < ActionController::Base
   # Defines what to do if the current user doesn't have access to the page they're
   # trying to view.  In this case we'll either redirect to a login screen if they're not
   # logged in, or throw them back to the root URL with an error if they are.
-  rescue_from CanCan::AccessDenied do |error|
+  rescue_from Pundit::NotAuthorizedError do |error|
     Rails.logger.warn(error.message)
 
     if user_signed_in?
@@ -92,8 +88,12 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def current_ability
-    @current_ability ||= Ability.new(current_user, doorkeeper_token)
+  def pundit_user
+    @pundit_user ||= AuthorizationInfo.new(
+      current_user,
+      doorkeeper_token,
+      known_user_con_profiles: [user_con_profile]
+    )
   end
 
   # Returns the appropriate Convention object for the domain name of the request.  This relies on

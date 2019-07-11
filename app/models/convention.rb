@@ -48,6 +48,7 @@ class Convention < ApplicationRecord
   validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
   validate :site_mode_must_be_possible
+  validate :show_event_list_must_be_at_least_as_permissive_as_show_schedule
 
   def started?
     starts_at && starts_at <= Time.now
@@ -123,5 +124,15 @@ class Convention < ApplicationRecord
       :site_mode,
       'single_event is not valid because this convention has multiple events already'
     )
+  end
+
+  SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes]
+  def show_event_list_must_be_at_least_as_permissive_as_show_schedule
+    show_event_list_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_event_list)
+    show_schedule_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_schedule)
+
+    if show_event_list_permissivity < show_schedule_permissivity
+      errors.add(:show_event_list, 'must be at least as permissive as show_schedule')
+    end
   end
 end

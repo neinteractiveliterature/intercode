@@ -30,7 +30,7 @@ class RootSite < ApplicationRecord
     CmsNavigationItem.global
   end
 
-  def cms_grahql_queries
+  def cms_graphql_queries
     CmsGraphqlQuery.global
   end
 end

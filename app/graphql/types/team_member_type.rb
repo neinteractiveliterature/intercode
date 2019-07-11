@@ -1,5 +1,6 @@
 class Types::TeamMemberType < Types::BaseObject
   graphql_name 'TeamMember'
+  authorize_record
 
   field :id, Int, null: false
   field :display, Boolean, null: false, deprecation_reason: 'Use display_team_member instead'
@@ -21,6 +22,10 @@ class Types::TeamMemberType < Types::BaseObject
 
   def receive_signup_email
     object.receive_signup_email.upcase
+  end
+
+  def display
+    display_team_member
   end
 
   def display_team_member
