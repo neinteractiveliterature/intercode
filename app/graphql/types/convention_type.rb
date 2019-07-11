@@ -35,7 +35,7 @@ class Types::ConventionType < Types::BaseObject
   field :ticket_types, [Types::TicketTypeType], null: true
   field :organization, Types::OrganizationType, null: true
   field :products, [Types::ProductType], null: true
-  field :user_activity_alerts, [Types::UserActivityAlert, null: true], null: true
+  field :user_activity_alerts, [Types::UserActivityAlertType, null: true], null: true
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end
@@ -99,7 +99,7 @@ class Types::ConventionType < Types::BaseObject
     UserConProfile::MAIL_PRIV_NAMES
   end
 
-  field :user_activity_alert, Types::UserActivityAlert, null: false do
+  field :user_activity_alert, Types::UserActivityAlertType, null: false do
     argument :id, Integer, required: true
   end
 

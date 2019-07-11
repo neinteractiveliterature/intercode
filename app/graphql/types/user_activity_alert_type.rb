@@ -1,4 +1,4 @@
-class Types::UserActivityAlert < Types::BaseObject
+class Types::UserActivityAlertType < Types::BaseObject
   authorize_record
 
   field :id, Int, null: false
@@ -10,5 +10,5 @@ class Types::UserActivityAlert < Types::BaseObject
   field :trigger_on_ticket_create, Boolean, null: false, camelize: false
   field :alert_destinations, [Types::AlertDestination], null: false, camelize: false
 
-  association_loaders :alert_destinations, :convention, :user
+  association_loaders UserActivityAlert, :alert_destinations, :convention, :user
 end
