@@ -5,7 +5,7 @@ class Mutations::UpdateRootSite < Mutations::BaseMutation
 
   attr_reader :root_site_instance
 
-  def authorized?(args)
+  def authorized?(_args)
     @root_site_instance = RootSite.instance
     policy(root_site_instance).update?
   end

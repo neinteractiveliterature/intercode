@@ -37,7 +37,7 @@ class Types::QueryType < Types::BaseObject
     argument :finish, Types::DateType, required: false
   end
 
-  def events(include_dropped: false, start: nil, finish: nil, **args)
+  def events(include_dropped: false, start: nil, finish: nil, **_args)
     events = convention.events
     events = events.active unless include_dropped
     if start || finish

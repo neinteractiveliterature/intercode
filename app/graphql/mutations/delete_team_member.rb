@@ -5,7 +5,7 @@ class Mutations::DeleteTeamMember < Mutations::BaseMutation
 
   load_and_authorize_model_with_id TeamMember, :id, :destroy
 
-  def resolve(**args)
+  def resolve(**_args)
     team_member.destroy!
     { team_member: team_member }
   end

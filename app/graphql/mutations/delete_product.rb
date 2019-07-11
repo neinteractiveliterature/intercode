@@ -5,7 +5,7 @@ class Mutations::DeleteProduct < Mutations::BaseMutation
 
   load_and_authorize_convention_associated_model :products, :id, :destroy
 
-  def resolve(**args)
+  def resolve(**_args)
     if product.order_entries.any?
       raise StandardError, 'This product cannot be deleted because it has been ordered.'
     end

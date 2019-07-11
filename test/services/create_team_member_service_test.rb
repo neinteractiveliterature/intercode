@@ -66,12 +66,12 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
       let(:event) do
         create(
           :event, convention: convention, event_category: event_category,
-          registration_policy: {
-            buckets: [
-              { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
-              { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 }
-            ]
-          }
+                  registration_policy: {
+                    buckets: [
+                      { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
+                      { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 }
+                    ]
+                  }
         )
       end
 

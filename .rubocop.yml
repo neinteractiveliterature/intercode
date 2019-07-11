@@ -171,9 +171,10 @@ Layout/MultilineOperationIndentation:
                  one line.
   Enabled: true
 
+# Disabling because of https://github.com/rubocop-hq/rubocop/issues/6918
 Layout/RescueEnsureAlignment:
   Description: 'Align rescues and ensures correctly.'
-  Enabled: true
+  Enabled: false
 
 Layout/SpaceBeforeFirstArg:
   Description: >-

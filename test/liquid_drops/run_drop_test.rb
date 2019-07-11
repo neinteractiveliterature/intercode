@@ -12,6 +12,6 @@ describe RunDrop do
   end
 
   it 'returns the event path' do
-    run_drop.event_url.must_match /events\/#{event.id}/
+    run_drop.event_url.must_match %r{events/#{event.id}}
   end
 end

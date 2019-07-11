@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CloneConventionServiceTest < ActiveSupport::TestCase
   let(:convention) { create(:convention) }
-  let(:new_convention_attributes) {
+  let(:new_convention_attributes) do
     {
       name: 'CopyCon',
       domain: 'copycon.example.com',
@@ -10,7 +10,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       starts_at: Time.new(2018, 10, 28, 18, 0, 0),
       ends_at: Time.new(2018, 10, 30, 18, 0, 0)
     }
-  }
+  end
   let(:service) { CloneConventionService.new(source_convention: convention, new_convention_attributes: new_convention_attributes) }
 
   it 'clones only some convention attributes' do
@@ -76,7 +76,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
         timespans: [
           { start: Time.utc(2016, 1, 1, 0, 0, 0), finish: Time.utc(2016, 6, 1, 0, 0, 0), value: Money.new(2500, 'USD') },
           { start: Time.utc(2016, 6, 1, 0, 0, 0), finish: Time.utc(2016, 10, 1, 0, 0, 0), value: Money.new(3500, 'USD') },
-          { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') },
+          { start: Time.utc(2016, 10, 1, 0, 0, 0), finish: Time.utc(2016, 10, 26, 0, 0, 0), value: Money.new(4500, 'USD') }
         ]
       )
     )
@@ -85,7 +85,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert result.success?
 
     cloned_pricing_schedule = result.convention.ticket_types.first.pricing_schedule
-    assert_equal Time.utc(2017, 12, 31, 0, 0,0), cloned_pricing_schedule.timespans.first.start
+    assert_equal Time.utc(2017, 12, 31, 0, 0, 0), cloned_pricing_schedule.timespans.first.start
   end
 
   it 'clones staff positions' do

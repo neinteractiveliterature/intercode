@@ -44,7 +44,7 @@ class CalendarsController < ApplicationController
     event.description = signup.event.short_blurb
     event.url = url_with_convention_host(
       "/events/#{signup.event.to_param}",
-      signup.event.convention,
+      signup.event.convention
     )
   end
 

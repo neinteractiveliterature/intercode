@@ -16,7 +16,7 @@ class Mutations::ProvideEventTicket < Mutations::BaseMutation
       policy(Ticket.new(ticket_type: ticket_type, user_con_profile: subject_profile)).create?
   end
 
-  def resolve(**args)
+  def resolve(**_args)
     result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!
 
     { ticket: result.ticket }
