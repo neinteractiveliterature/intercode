@@ -20,7 +20,12 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
       assert TeamMemberPolicy.new(other_team_member.user_con_profile.user, team_member).read?
     end
 
-    it 'does not let users read team memberships in other events' do
+    it 'lets users read team memberships in other events' do
+      assert TeamMemberPolicy.new(other_event_team_member.user_con_profile.user, team_member).read?
+    end
+
+    it 'does not let users read team memberships in other events they cannot read' do
+      convention.update!(show_schedule: 'no', show_event_list: 'no')
       refute TeamMemberPolicy.new(other_event_team_member.user_con_profile.user, team_member).read?
     end
   end
