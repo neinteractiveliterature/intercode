@@ -20,7 +20,7 @@ class AuthorizationInfo
     end
   end
 
-  attr_reader :user, :doorkeeper_token
+  attr_reader :user, :doorkeeper_token, :assumed_identity_from_profile
   QUERY_MANAGER_CLASSES.each do |query_manager_class|
     instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
     attr_reader instance_variable_name
@@ -30,8 +30,11 @@ class AuthorizationInfo
     end
   end
 
-  def initialize(user, doorkeeper_token, known_user_con_profiles: [])
+  def initialize(
+    user, doorkeeper_token, assumed_identity_from_profile: nil, known_user_con_profiles: []
+  )
     @user = user
+    @assumed_identity_from_profile = assumed_identity_from_profile
     @doorkeeper_token = doorkeeper_token
     possible_query_manager_params = { user: user, known_user_con_profiles: known_user_con_profiles }
 
