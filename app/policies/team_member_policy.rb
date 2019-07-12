@@ -4,7 +4,7 @@ class TeamMemberPolicy < ApplicationPolicy
 
   def read?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) { team_member_for_event?(event) }
+      d.add(:read_events) { team_member_for_event?(event) || EventPolicy.new(user, event).read? }
       d.add(:read_conventions) { has_privilege_in_convention?(convention, :con_com, :gm_liaison) }
     end
 
