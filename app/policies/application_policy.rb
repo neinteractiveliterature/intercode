@@ -2,7 +2,8 @@ class ApplicationPolicy
   include AuthorizationInfo::QueryMethods
 
   attr_reader :authorization_info, :record
-  delegate :user, :doorkeeper_token, :oauth_scope?, :oauth_scoped_disjunction,
+  delegate :user, :doorkeeper_token, :assumed_identity_from_profile, :oauth_scope?,
+    :oauth_scoped_disjunction,
     to: :authorization_info
 
   def initialize(authorization_info_or_user, record)
@@ -42,7 +43,8 @@ class ApplicationPolicy
     include AuthorizationInfo::QueryMethods
 
     attr_reader :authorization_info, :scope
-    delegate :user, :doorkeeper_token, :oauth_scope?, to: :authorization_info
+    delegate :user, :doorkeeper_token, :assumed_identity_from_profile, :oauth_scope?,
+      to: :authorization_info
 
     def initialize(authorization_info_or_user, scope)
       @authorization_info = AuthorizationInfo.cast(authorization_info_or_user)

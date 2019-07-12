@@ -136,4 +136,8 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe 'Scope' do
+    # TODO write tests, even though this scope isn't actually used in the code (yet)
+  end
 end

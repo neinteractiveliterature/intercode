@@ -92,7 +92,8 @@ class ApplicationController < ActionController::Base
     @pundit_user ||= AuthorizationInfo.new(
       current_user,
       doorkeeper_token,
-      known_user_con_profiles: [user_con_profile]
+      assumed_identity_from_profile: assumed_identity_from_profile,
+      known_user_con_profiles: [user_con_profile, assumed_identity_from_profile].compact
     )
   end
 
