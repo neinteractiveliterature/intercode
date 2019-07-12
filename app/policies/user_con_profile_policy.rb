@@ -4,6 +4,9 @@ class UserConProfilePolicy < ApplicationPolicy
   def read?
     # you can read the less-sensitive parts of your own profile without read_profile scope
     return true if user && user.id == record.user_id
+    if record.team_members.any? && TeamMemberPolicy.new(user, record.team_members.first).read?
+      return true
+    end
 
     read_email?
   end
