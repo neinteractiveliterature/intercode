@@ -18,6 +18,7 @@ export function useAuthenticationModalProvider(recaptchaSiteKey) {
     visible, state, setState, open, close,
   } = useModal();
   const [afterSignInPath, setAfterSignInPath] = useState(null);
+  const [unauthenticatedError, setUnauthenticatedError] = useState(false);
 
   const contextValue = useMemo(
     () => ({
@@ -29,8 +30,13 @@ export function useAuthenticationModalProvider(recaptchaSiteKey) {
       currentView: (state || {}).currentView,
       setCurrentView: view => setState({ ...state, currentView: view }),
       recaptchaSiteKey,
+      unauthenticatedError,
+      setUnauthenticatedError,
     }),
-    [afterSignInPath, close, open, recaptchaSiteKey, setState, state, visible],
+    [
+      afterSignInPath, close, open, recaptchaSiteKey, setState, setUnauthenticatedError, state,
+      unauthenticatedError, visible,
+    ],
   );
 
   return contextValue;

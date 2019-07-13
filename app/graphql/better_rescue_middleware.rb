@@ -43,7 +43,13 @@ class BetterRescueMiddleware
 
   def attempt_rescue(err, query_context)
     handler = find_handler(err)
-    return GraphQL::ExecutionError.new(err.message) unless handler
+    unless handler
+      if err.is_a?(GraphQL::ExecutionError)
+        return err
+      else
+        return GraphQL::ExecutionError.new(err.message)
+      end
+    end
 
     return_error = handler.call(err, query_context)
     if return_error.is_a?(String)

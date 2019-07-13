@@ -23,7 +23,7 @@ function getOrganizationRolePermissionName(permissionName) {
 function OrganizationDisplay({ organizationId }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
   const confirm = useConfirm();
-  const mutate = useMutation(DeleteOrganizationRole);
+  const [mutate] = useMutation(DeleteOrganizationRole);
   const organization = useMemo(
     () => (error ? null : data.organizations.find(org => org.id === organizationId)),
     [data, error, organizationId],
