@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   NavLink, Route, Switch, Redirect,
 } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
@@ -10,13 +11,13 @@ import { EventAdminEventsQuery } from './queries.gql';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
-import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import sortEventCategories from './sortEventCategories';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAutoClosingDropdownRef from '../NavigationBar/useAutoClosingDropdownRef';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
+import PageLoadingIndicator from '../PageLoadingIndicator';
 
 const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
@@ -27,14 +28,18 @@ const adminComponentsBySchedulingUi = {
 };
 
 function EventAdmin({ location }) {
-  const { data, error } = useQuerySuspended(EventAdminEventsQuery);
+  const { data, loading, error } = useQuery(EventAdminEventsQuery);
 
   const eventCategories = useMemo(
-    () => (error ? null : sortEventCategories(data.convention.event_categories)),
-    [data, error],
+    () => ((loading || error) ? null : sortEventCategories(data.convention.event_categories)),
+    [data, loading, error],
   );
 
   const dropdownRef = useAutoClosingDropdownRef(location);
+
+  if (loading) {
+    return <PageLoadingIndicator visible />;
+  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

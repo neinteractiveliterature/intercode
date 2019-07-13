@@ -1,22 +1,39 @@
 class IntercodeSchema < GraphQL::Schema
   class NotAuthorizedError < GraphQL::ExecutionError
-    def self.from_error(error, message)
-      if error.context[:current_user]
-        new(
-          message,
-          extensions: {
-            code: 'NOT_AUTHORIZED',
-            current_user_id: error.context[:current_user]&.id
-          }
-        )
+    attr_reader :current_user
+
+    def self.from_error(error, message, **args)
+      new(message, current_user: error.context[:current_user], **args)
+    end
+
+    def initialize(message, current_user:, **args)
+      super(message, **args)
+      @current_user = current_user
+    end
+
+    def message
+      if current_user
+        super
       else
-        new(
-          'Not logged in',
-          extensions: {
-            code: 'NOT_AUTHENTICATED'
-          }
-        )
+        'Not logged in'
       end
+    end
+
+    def code
+      if current_user
+        'NOT_AUTHORIZED'
+      else
+        'NOT_AUTHENTICATED'
+      end
+    end
+
+    def to_h
+      super.merge({
+        "extensions" => {
+          "code" => code,
+          "current_user_id": current_user&.id
+        }
+      })
     end
   end
 

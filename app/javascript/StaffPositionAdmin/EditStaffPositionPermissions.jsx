@@ -31,7 +31,7 @@ function EditStaffPositionPermissions({ staffPosition, eventCategories, history 
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
   const [mutationInProgress, setMutationInProgress] = useState(false);
-  const mutate = useMutation(UpdateStaffPositionPermissions);
+  const [mutate] = useMutation(UpdateStaffPositionPermissions);
 
   usePageTitle(`Editing permissions for “${staffPosition.name}”`);
 

@@ -37,7 +37,7 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
   });
   const [winningUserId, setWinningUserId] = useState(null);
   const [winningProfileIds, setWinningProfileIds] = useState({});
-  const [mutate, mutationError, mutationInProgress] = useAsyncFunction(useMutation(MergeUsers));
+  const [mutate, { error: mutationError, loading: mutationInProgress }] = useMutation(MergeUsers);
 
   const performMerge = async () => {
     await mutate({

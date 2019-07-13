@@ -171,6 +171,21 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(_resource)
     if session[:user_return_to]
       session[:user_return_to]
+    elsif request.referer
+      begin
+        referer_uri = URI(request.referer)
+        host_matches = %w[scheme host port].all? do |field|
+          request.public_send(field) == referer_uri.public_send(field)
+        end
+
+        if host_matches
+          request.referer
+        else
+          root_path
+        end
+      rescue
+        root_path
+      end
     else
       root_path
     end
