@@ -49,6 +49,7 @@ module ConventionPermissionsTestHelper
   end
 
   %w[
+    access_admin_notes
     read_limited_prerelease_schedule
     read_prerelease_schedule
     read_orders

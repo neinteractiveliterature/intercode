@@ -21,8 +21,13 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(nil, event).read?
       end
 
-      it 'lets people with update_events permission read dropped events' do
+      it 'lets people with update_events permission in category read dropped events' do
         user = create_user_with_update_events_in_event_category(event_category)
+        assert EventPolicy.new(user, dropped_event).read?
+      end
+
+      it 'lets people with update_events permission in convention read dropped events' do
+        user = create_user_with_update_events_in_convention(convention)
         assert EventPolicy.new(user, dropped_event).read?
       end
 
@@ -196,8 +201,13 @@ class EventPolicyTest < ActiveSupport::TestCase
     %w[update_admin_notes access_admin_notes]
   ].each do |(action, permission)|
     describe "##{action}?" do
-      it "lets people with #{permission} permission #{action}" do
+      it "lets people with #{permission} permission in event category #{action}" do
         user = create_user_with_permission_in_event_category(permission, event_category)
+        assert EventPolicy.new(user, event).public_send("#{action}?")
+      end
+
+      it "lets people with #{permission} permission in convention #{action}" do
+        user = create_user_with_permission_in_convention(permission, convention)
         assert EventPolicy.new(user, event).public_send("#{action}?")
       end
 
@@ -230,8 +240,13 @@ class EventPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#update?' do
-    it 'lets people with update_events permission update events' do
+    it 'lets people with update_events permission in category update events' do
       user = create_user_with_update_events_in_event_category(event_category)
+      assert EventPolicy.new(user, event).update?
+    end
+
+    it 'lets people with update_events permission in convention update events' do
+      user = create_user_with_update_events_in_convention(convention)
       assert EventPolicy.new(user, event).update?
     end
 
