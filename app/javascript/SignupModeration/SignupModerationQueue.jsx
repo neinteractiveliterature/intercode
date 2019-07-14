@@ -85,8 +85,8 @@ function SignupModerationQueue() {
   const { data, loading, error } = useQuery(SignupModerationQueueQuery, {
     variables: { page: currentPage },
   });
-  const acceptSignupRequest = useMutation(AcceptSignupRequest);
-  const rejectSignupRequest = useMutation(RejectSignupRequest);
+  const [acceptSignupRequest] = useMutation(AcceptSignupRequest);
+  const [rejectSignupRequest] = useMutation(RejectSignupRequest);
   const confirm = useConfirm();
 
   const acceptClicked = signupRequest => confirm({

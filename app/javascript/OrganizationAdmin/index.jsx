@@ -37,7 +37,7 @@ function OrganizationAdmin() {
               <>
                 <BreadcrumbItemWithRoute
                   path="/organizations/:id"
-                  to={({ match: { params } }) => `/${params.id}`}
+                  to={({ match: { params } }) => `/organizations/${params.id}`}
                   active={({ match }) => match.isExact}
                 >
                   {organization.name}
@@ -45,7 +45,7 @@ function OrganizationAdmin() {
 
                 <BreadcrumbItemWithRoute
                   path="/organizations/:id/roles/new"
-                  to={({ match: { params } }) => `/${params.id}/roles/new`}
+                  to={({ match: { params } }) => `/organizations/${params.id}/roles/new`}
                   hideUnlessMatch
                 >
                   New organization role
@@ -53,7 +53,7 @@ function OrganizationAdmin() {
 
                 <BreadcrumbItemWithRoute
                   path="/organizations/:id/roles/:roleId/edit"
-                  to={({ match: { params } }) => `/${params.id}/roles/${params.roleId}/edit`}
+                  to={({ match: { params } }) => `/organizations/${params.id}/roles/${params.roleId}/edit`}
                   hideUnlessMatch
                 >
                   Edit organization role

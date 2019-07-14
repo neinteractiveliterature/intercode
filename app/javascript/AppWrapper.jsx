@@ -1,7 +1,7 @@
 /* global Rollbar */
 
 import React, {
-  Suspense, useMemo, useState, useCallback,
+  Suspense, useMemo, useCallback, useRef, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
@@ -9,7 +9,6 @@ import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { BrowserRouter } from 'react-router-dom';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
-import buildApolloClient from './buildApolloClient';
 import Confirm from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
 import { LazyStripeContext } from './LazyStripe';
@@ -17,6 +16,7 @@ import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import { AlertProvider } from './ModalDialogs/Alert';
+import useIntercodeApolloClient from './useIntercodeApolloClient';
 
 class ErrorBoundary extends React.Component {
   static propTypes = {
@@ -61,21 +61,33 @@ export default (WrappedComponent) => {
       [stripePublishableKey],
     );
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
-    const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
     const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
-    const [unauthenticatedError, setUnauthenticatedError] = useState(false);
+    const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
+    const {
+      open: openAuthenticationModal,
+      unauthenticatedError,
+      setUnauthenticatedError,
+    } = authenticationModalContextValue;
     const openSignIn = useCallback(
       async () => {
         setUnauthenticatedError(true);
         await refresh();
-        authenticationModalContextValue.open({ currentView: 'signIn' });
+        openAuthenticationModal({ currentView: 'signIn' });
       },
-      [authenticationModalContextValue, refresh],
+      [openAuthenticationModal, setUnauthenticatedError, refresh],
     );
-    const apolloClient = useMemo(
-      () => buildApolloClient(authenticityToken, openSignIn),
-      [authenticityToken, openSignIn],
+    const onUnauthenticatedRef = useRef(openSignIn);
+    useEffect(
+      () => { onUnauthenticatedRef.current = openSignIn; },
+      [openSignIn],
     );
+    const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
+
+    if (!apolloClient) {
+      // we need one render cycle to initialize the client
+      return <></>;
+    }
+
     return (
       <BrowserRouter basename="/">
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
