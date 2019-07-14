@@ -37,6 +37,8 @@ function describePermissionAbilities(modelPermissions) {
 
 function describePermissionModel(model) {
   switch (model.__typename) {
+    case 'Convention':
+      return <strong>{model.name}</strong>;
     case 'EventCategory':
       return (
         <span
@@ -91,7 +93,7 @@ function StaffPositionsTable({ staffPositions }) {
       <td>
         <ul className="list-unstyled">
           {describePermissions(staffPosition.permissions).map(description => (
-            <li key={description} className="text-nowrap">
+            <li key={description}>
               {description}
             </li>
           ))}
