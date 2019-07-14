@@ -6,7 +6,6 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { CreateOrganizationRole } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
-import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
@@ -14,9 +13,9 @@ import usePageTitle from '../usePageTitle';
 function NewOrganizationRole({ organizationId, history }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
   const { renderForm, formState } = useOrganizationRoleForm({ name: '', users: [], permissions: [] });
-  const [mutate, mutationError, mutationInProgress] = useAsyncFunction(
-    useMutation(CreateOrganizationRole),
-  );
+  const [
+    mutate, { error: mutationError, loading: mutationInProgress },
+  ] = useMutation(CreateOrganizationRole);
 
   usePageTitle('New organization role');
 

@@ -33,6 +33,10 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(user_con_profile.user, user_con_profile).read?
     end
 
+    it 'lets users read profiles of team members in the convention' do
+      assert UserConProfilePolicy.new(user_con_profile.user, team_member.user_con_profile).read?
+    end
+
     it 'does not let randos read profiles' do
       refute UserConProfilePolicy.new(rando_profile.user, user_con_profile).read?
     end
@@ -135,5 +139,9 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
         refute UserConProfilePolicy.new(rando_profile.user, user_con_profile).withdraw_all_signups?
       end
     end
+  end
+
+  describe 'Scope' do
+    # TODO write tests, even though this scope isn't actually used in the code (yet)
   end
 end

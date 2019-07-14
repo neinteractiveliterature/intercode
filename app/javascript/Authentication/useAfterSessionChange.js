@@ -7,7 +7,7 @@ import AuthenticationModalContext from './AuthenticationModalContext';
 export default function useAfterSessionChange(history) {
   const apolloClient = useApolloClient();
   const { refresh } = useContext(AuthenticityTokensContext);
-  const { close: closeModal } = useContext(AuthenticationModalContext);
+  const { close: closeModal, setUnauthenticatedError } = useContext(AuthenticationModalContext);
 
   const afterSessionChange = useCallback(
     async (destPath) => {
@@ -15,21 +15,27 @@ export default function useAfterSessionChange(history) {
         destPath || window.location.href,
         window.location.href,
       );
+
       destUrl.searchParams.delete('show_authentication');
       if (destUrl.toString() === window.location.href) {
-        await refresh();
-        await apolloClient.clearStore();
-        closeModal();
+        window.location.reload();
+        // await refresh();
+        // await apolloClient.reFetchObservableQueries(true);
+        // closeModal();
+        // setUnauthenticatedError(false);
       } else if (destUrl.host === window.location.host) {
-        await refresh();
-        await apolloClient.clearStore();
-        history.push(`${destUrl.pathname}${destUrl.search}${destUrl.hash}`);
-        closeModal();
+        window.location.href = destUrl.toString();
+        // await refresh();
+        // await apolloClient.clearStore();
+        // history.push(`${destUrl.pathname}${destUrl.search}${destUrl.hash}`);
+        // closeModal();
+        // setUnauthenticatedError(false);
+        // apolloClient.reFetchObservableQueries(true);
       } else {
         window.location.href = destUrl.toString();
       }
     },
-    [apolloClient, closeModal, history, refresh],
+    [apolloClient, closeModal, history, refresh, setUnauthenticatedError],
   );
 
   return afterSessionChange;

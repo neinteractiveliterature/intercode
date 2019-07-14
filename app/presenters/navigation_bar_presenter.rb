@@ -178,7 +178,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Event Scheduling'
       url '/admin_events'
-      visible? { Pundit.policy(pundit_user, Run.new(event: Event.new(convention: convention))) }
+      visible? { Pundit.policy(pundit_user, Run.new(event: Event.new(convention: convention))).manage? }
     end,
     NavigationItem.define do
       label 'Forms'

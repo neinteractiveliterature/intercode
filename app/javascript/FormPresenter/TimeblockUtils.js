@@ -83,12 +83,13 @@ export function getValidTimeblockColumns(convention, formItem) {
 }
 
 export function rotateTimeblockColumnsToRows(formItem, columns) {
-  const rowCount = columns[0].cells.length;
+  const columnCount = columns.length;
 
   return formItem.properties.timeblocks.map((timeblock, x) => {
     const row = [];
-    for (let y = 0; y < rowCount; y += 1) {
-      row.push(columns[y].cells[x]);
+    for (let y = 0; y < columnCount; y += 1) {
+      const column = columns[y];
+      row.push(column.cells[x]);
     }
 
     if (row.some(cell => cell != null)) {

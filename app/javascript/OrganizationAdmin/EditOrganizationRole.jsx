@@ -6,7 +6,6 @@ import { Redirect, withRouter } from 'react-router-dom';
 import ErrorDisplay from '../ErrorDisplay';
 import { OrganizationAdminOrganizationsQuery } from './queries.gql';
 import { UpdateOrganizationRole } from './mutations.gql';
-import useAsyncFunction from '../useAsyncFunction';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
@@ -18,9 +17,9 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
   const initialOrganizationRole = organization.organization_roles
     .find(role => role.id === organizationRoleId);
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
-  const [mutate, mutationError, mutationInProgress] = useAsyncFunction(
-    useMutation(UpdateOrganizationRole),
-  );
+  const [
+    mutate, { error: mutationError, loading: mutationInProgress },
+  ] = useMutation(UpdateOrganizationRole);
 
   usePageTitle(useValueUnless(() => `Editing “${initialOrganizationRole.name}”`, error));
 

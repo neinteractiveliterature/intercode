@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import fetch from 'unfetch';
+import isEqual from 'lodash-es/isEqual';
 
 const AuthenticityTokensContext = React.createContext({});
 
@@ -16,7 +17,16 @@ export function useAuthenticityTokens(initialTokens) {
       });
 
       const json = await response.json();
-      setTokens(prevTokens => ({ ...prevTokens, ...json }));
+      setTokens((prevTokens) => {
+        // perform a deep comparison to avoid breaking object equality if we get the same tokens
+        // back from the server
+        const newTokens = ({ ...prevTokens, ...json });
+        if (!isEqual(newTokens, prevTokens)) {
+          return newTokens;
+        }
+
+        return prevTokens;
+      });
     },
     [],
   );

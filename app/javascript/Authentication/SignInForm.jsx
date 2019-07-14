@@ -42,6 +42,7 @@ async function signIn(authenticityToken, email, password, rememberMe) {
 function SignInForm({ history }) {
   const {
     close: closeModal, setCurrentView, afterSignInPath,
+    unauthenticatedError, setUnauthenticatedError,
   } = useContext(AuthenticationModalContext);
   const { signIn: authenticityToken } = useContext(AuthenticityTokensContext);
   const [email, setEmail] = useState('');
@@ -53,6 +54,17 @@ function SignInForm({ history }) {
     event.preventDefault();
     const location = await signIn(authenticityToken, email, password, rememberMe);
     await afterSessionChange(afterSignInPath || location);
+  };
+
+  const onCancel = (event) => {
+    event.preventDefault();
+    if (unauthenticatedError) {
+      history.push('/');
+      closeModal();
+      setUnauthenticatedError(false);
+    } else {
+      closeModal();
+    }
   };
 
   const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
@@ -112,7 +124,7 @@ function SignInForm({ history }) {
               type="button"
               className="btn btn-secondary mr-2"
               disabled={submitInProgress}
-              onClick={closeModal}
+              onClick={onCancel}
             >
               Cancel
             </button>
