@@ -283,6 +283,13 @@ class ConventionPolicyTest < ActiveSupport::TestCase
     end
   end
 
+  describe '#view_reports?' do
+    it 'lets users with the read_reports permission view reports' do
+      user = create_user_with_read_reports_in_convention(convention)
+      assert ConventionPolicy.new(user, convention).view_reports?
+    end
+  end
+
   describe '#view_event_proposals?' do
     it 'lets gm_liaison users view event proposals' do
       user_con_profile = create(
