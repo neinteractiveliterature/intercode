@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class RunPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:the_run) { create(:run) }
   let(:event) { the_run.event }
   let(:convention) { event.convention }
@@ -33,6 +36,15 @@ class RunPolicyTest < ActiveSupport::TestCase
         end
       end
 
+      %w[
+        read_prerelease_schedule read_limited_prerelease_schedule update_events
+      ].each do |permission|
+        it "lets people with #{permission} permission in convention read runs" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          assert RunPolicy.new(user, the_run).read?
+        end
+      end
+
       it 'does not let regular attendees read' do
         user_con_profile = create(:user_con_profile, convention: convention)
         refute RunPolicy.new(user_con_profile.user, the_run).read?
@@ -52,6 +64,20 @@ class RunPolicyTest < ActiveSupport::TestCase
             :user_con_profile, convention: convention, priv => true
           )
           assert RunPolicy.new(user_con_profile.user, the_run).read?
+        end
+      end
+
+      %w[read_limited_prerelease_schedule update_events].each do |permission|
+        it "lets people with #{permission} permission in convention read runs" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          assert RunPolicy.new(user, the_run).read?
+        end
+      end
+
+      %w[read_prerelease_schedule].each do |permission|
+        it "does not let people with #{permission} permission in convention read runs" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          refute RunPolicy.new(user, the_run).read?
         end
       end
 
@@ -75,11 +101,25 @@ class RunPolicyTest < ActiveSupport::TestCase
     describe "when show_schedule is 'no'" do
       before { convention.update!(show_schedule: 'no') }
 
-      it 'does not let staff users read' do
+      it 'lets staff users read' do
         user_con_profile = create(
           :user_con_profile, convention: convention, staff: true
         )
-        refute RunPolicy.new(user_con_profile.user, the_run).read?
+        assert RunPolicy.new(user_con_profile.user, the_run).read?
+      end
+
+      %w[update_events].each do |permission|
+        it "lets people with #{permission} permission in convention read runs" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          assert RunPolicy.new(user, the_run).read?
+        end
+      end
+
+      %w[read_schedule read_prerelease_schedule].each do |permission|
+        it "does not let people with #{permission} permission in convention read runs" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          refute RunPolicy.new(user, the_run).read?
+        end
       end
 
       it 'does not let team members read' do

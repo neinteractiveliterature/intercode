@@ -15,7 +15,8 @@ module Concerns::ScheduleRelease
           'update_events'
         )
     else
-      has_convention_permission?(convention, 'update_events')
+      has_convention_permission?(convention, 'update_events') ||
+        staff_in_convention?(convention)
     end
   end
 
