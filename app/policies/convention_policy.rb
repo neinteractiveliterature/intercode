@@ -42,18 +42,17 @@ class ConventionPolicy < ApplicationPolicy
 
   def view_reports?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) { has_privilege_in_convention?(record, :con_com) }
+      d.add(:read_conventions) do
+        has_privilege_in_convention?(record, :con_com) ||
+          has_convention_permission?(record, 'read_reports')
+      end
     end
 
     site_admin_read?
   end
 
   def view_attendees?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) { has_privilege_in_convention?(record, :con_com) }
-    end
-
-    site_admin_read?
+    UserConProfilePolicy.new(user, UserConProfile.new(convention: record)).read?
   end
 
   def view_event_proposals?

@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class SignupPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:signup) { create(:signup) }
   let(:convention) { signup.run.event.convention }
 
@@ -43,6 +46,11 @@ class SignupPolicyTest < ActiveSupport::TestCase
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert SignupPolicy.new(user_con_profile.user, signup).read_requested_bucket_key?
       end
+    end
+
+    it 'lets users with read_signup_details read requested bucket key for signups in the con' do
+      user = create_user_with_read_signup_details_in_convention(convention)
+      assert SignupPolicy.new(user, signup).read_requested_bucket_key?
     end
 
     it 'lets team members read requested bucket key for signups in their events' do

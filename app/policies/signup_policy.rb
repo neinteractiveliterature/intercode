@@ -16,7 +16,10 @@ class SignupPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
       d.add(:read_events) { team_member_for_event?(event) }
-      d.add(:read_conventions) { has_privilege_in_convention?(convention, :outreach, :con_com) }
+      d.add(:read_conventions) do
+        has_privilege_in_convention?(convention, :outreach, :con_com) ||
+          has_convention_permission?(convention, 'read_signup_details')
+      end
     end
 
     site_admin_read?
