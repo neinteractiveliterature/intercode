@@ -58,6 +58,7 @@ class UserConProfileSignupsCard extends React.Component {
     const unSignedUpEvents = userConProfile.team_members
       .filter(teamMember => !userConProfile.signups
         .some(signup => signup.run.event.id === teamMember.event.id && signup.state === 'confirmed'))
+      .filter(teamMember => teamMember.event.status === 'active')
       .map(teamMember => teamMember.event);
 
     if (unSignedUpEvents.length === 0) {
