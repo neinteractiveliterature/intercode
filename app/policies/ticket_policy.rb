@@ -1,6 +1,6 @@
 class TicketPolicy < ApplicationPolicy
   delegate :user_con_profile, to: :record
-  delegate :convention, to: :user_con_profile
+  delegate :convention, to: :user_con_profile, allow_nil: true
 
   def read?
     return true if oauth_scoped_disjunction do |d|
