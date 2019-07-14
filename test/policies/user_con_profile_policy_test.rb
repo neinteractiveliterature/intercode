@@ -1,8 +1,8 @@
 require 'test_helper'
-require_relative 'event_category_test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class UserConProfilePolicyTest < ActiveSupport::TestCase
-  include EventCategoryTestHelper
+  include ConventionPermissionsTestHelper
 
   let(:user_con_profile) { create(:user_con_profile) }
   let(:convention) { user_con_profile.convention }

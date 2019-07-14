@@ -1,8 +1,8 @@
 require 'test_helper'
-require_relative 'event_category_test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class EventProposalPolicyTest < ActiveSupport::TestCase
-  include EventCategoryTestHelper
+  include ConventionPermissionsTestHelper
 
   let(:event_proposal) { create(:event_proposal) }
   let(:event_category) { event_proposal.event_category }

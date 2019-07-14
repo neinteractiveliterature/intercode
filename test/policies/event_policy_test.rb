@@ -1,8 +1,8 @@
 require 'test_helper'
-require_relative 'event_category_test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class EventPolicyTest < ActiveSupport::TestCase
-  include EventCategoryTestHelper
+  include ConventionPermissionsTestHelper
 
   let(:convention) { create(:convention, show_schedule: 'no') }
   let(:event_category) { create(:event_category, convention: convention) }
@@ -57,9 +57,19 @@ class EventPolicyTest < ActiveSupport::TestCase
         end
       end
 
-      it 'lets people with update_events permission read events' do
+      it 'lets people with update_events permission in category read events' do
         user = create_user_with_update_events_in_event_category(event_category)
         assert EventPolicy.new(user, event).read?
+      end
+
+      %w[
+        read_prerelease_schedule
+        read_limited_prerelease_schedule
+      ].each do |permission|
+        it "lets people with #{permission} permission in convention read events" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          assert EventPolicy.new(user, event).read?
+        end
       end
 
       it 'does not let regular attendees read events' do
@@ -86,6 +96,16 @@ class EventPolicyTest < ActiveSupport::TestCase
       it 'lets people with update_events permission read events' do
         user = create_user_with_update_events_in_event_category(event_category)
         assert EventPolicy.new(user, event).read?
+      end
+
+      it "lets people with read_limited_prerelease_schedule permission in convention read events" do
+        user = create_user_with_read_limited_prerelease_schedule_in_convention(convention)
+        assert EventPolicy.new(user, event).read?
+      end
+
+      it "does not let people with read_prerelease_schedule permission in convention read events" do
+        user = create_user_with_read_prerelease_schedule_in_convention(convention)
+        refute EventPolicy.new(user, event).read?
       end
 
       it 'does not let team members read events' do
