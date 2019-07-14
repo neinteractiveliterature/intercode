@@ -23,12 +23,11 @@ class TeamMemberPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.all if oauth_scope?(:read_conventions) && site_admin?
+      return scope.none unless oauth_scope?(:read_events)
 
       disjunctive_where do |dw|
-        if oauth_scope?(:read_events)
-          dw.add(event: events_where_team_member)
-          dw.add(event: EventPolicy::Scope.new(user, Event.all).resolve)
-        end
+        dw.add(event: events_where_team_member)
+        dw.add(event: EventPolicy::Scope.new(user, Event.all).resolve)
       end
     end
   end

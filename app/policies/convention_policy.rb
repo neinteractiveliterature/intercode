@@ -42,7 +42,10 @@ class ConventionPolicy < ApplicationPolicy
 
   def view_reports?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) { has_convention_permission?(record, 'read_reports') }
+      d.add(:read_conventions) do
+        staff_in_convention?(record) ||
+          has_convention_permission?(record, 'read_reports')
+      end
     end
 
     site_admin_read?
