@@ -19,6 +19,15 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(con_com_profile.user, user_con_profile).read?
     end
 
+    %w[
+      read_user_con_profiles read_user_con_profile_email read_user_con_profile_personal_info
+    ].each do |permission|
+      it "lets users with #{permission} read profiles" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        assert UserConProfilePolicy.new(user, user_con_profile).read?
+      end
+    end
+
     it 'lets team members read profiles of anyone in the convention' do
       assert UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile).read?
     end
@@ -47,6 +56,20 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(con_com_profile.user, user_con_profile).read_email?
     end
 
+    %w[read_user_con_profile_email read_user_con_profile_personal_info].each do |permission|
+      it "lets users with #{permission} read email addresses" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        assert UserConProfilePolicy.new(user, user_con_profile).read_email?
+      end
+    end
+
+    %w[read_user_con_profiles].each do |permission|
+      it "does not let users with #{permission} read email addresses" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        refute UserConProfilePolicy.new(user, user_con_profile).read_email?
+      end
+    end
+
     it 'lets team members read emails of anyone in the convention' do
       assert UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile)
         .read_email?
@@ -70,6 +93,20 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   describe '#read_personal_info?' do
     it 'lets con_com users read personal info' do
       assert UserConProfilePolicy.new(con_com_profile.user, user_con_profile).read_personal_info?
+    end
+
+    %w[read_user_con_profile_personal_info].each do |permission|
+      it "lets users with #{permission} read personal info" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        assert UserConProfilePolicy.new(user, user_con_profile).read_personal_info?
+      end
+    end
+
+    %w[read_user_con_profiles read_user_con_profile_email].each do |permission|
+      it "does not let users with #{permission} read personal_info" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        refute UserConProfilePolicy.new(user, user_con_profile).read_personal_info?
+      end
     end
 
     it 'lets team members read personal info of attendees in their events' do
@@ -142,6 +179,66 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   end
 
   describe 'Scope' do
-    # TODO write tests, even though this scope isn't actually used in the code (yet)
+    before { user_con_profile }
+
+    it 'lets con_com users read all convention user profiles' do
+      resolved_profiles = UserConProfilePolicy::Scope.new(
+        con_com_profile.user, UserConProfile.all
+      ).resolve
+
+      assert_equal [user_con_profile, con_com_profile].sort, resolved_profiles.sort
+    end
+
+    %w[
+      read_user_con_profiles read_user_con_profile_email read_user_con_profile_personal_info
+    ].each do |permission|
+      it "lets users with #{permission} read profiles" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        resolved_profiles = UserConProfilePolicy::Scope.new(user, UserConProfile.all).resolve
+
+        assert_equal [user_con_profile, user.user_con_profiles.first].sort, resolved_profiles.sort
+      end
+    end
+
+    it 'lets team members read profiles of anyone in the convention' do
+      resolved_profiles = UserConProfilePolicy::Scope.new(
+        team_member.user_con_profile.user, UserConProfile.all
+      ).resolve
+
+      assert_equal [user_con_profile, team_member.user_con_profile].sort, resolved_profiles.sort
+    end
+
+    it 'lets users with read_event_proposals in any event category read profiles' do
+      event_category = create(:event_category, convention: convention)
+      user = create_user_with_read_event_proposals_in_event_category(event_category)
+      resolved_profiles = UserConProfilePolicy::Scope.new(user, UserConProfile.all).resolve
+
+      assert_equal [user_con_profile, user.user_con_profiles.first].sort, resolved_profiles.sort
+    end
+
+    it 'lets users read their own profiles' do
+      resolved_profiles = UserConProfilePolicy::Scope.new(
+        user_con_profile.user, UserConProfile.all
+      ).resolve
+
+      assert_equal [user_con_profile].sort, resolved_profiles.sort
+    end
+
+    it 'lets users read profiles of team members in the convention' do
+      team_member
+      resolved_profiles = UserConProfilePolicy::Scope.new(
+        user_con_profile.user, UserConProfile.all
+      ).resolve
+
+      assert_equal [user_con_profile, team_member.user_con_profile].sort, resolved_profiles.sort
+    end
+
+    it 'does not let randos read profiles' do
+      resolved_profiles = UserConProfilePolicy::Scope.new(
+        rando_profile.user, UserConProfile.all
+      ).resolve
+
+      assert_equal [rando_profile].sort, resolved_profiles.sort
+    end
   end
 end
