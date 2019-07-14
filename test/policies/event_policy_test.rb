@@ -65,6 +65,7 @@ class EventPolicyTest < ActiveSupport::TestCase
       %w[
         read_prerelease_schedule
         read_limited_prerelease_schedule
+        update_events
       ].each do |permission|
         it "lets people with #{permission} permission in convention read events" do
           user = create_user_with_permission_in_convention(permission, convention)
@@ -98,9 +99,14 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(user, event).read?
       end
 
-      it "lets people with read_limited_prerelease_schedule permission in convention read events" do
-        user = create_user_with_read_limited_prerelease_schedule_in_convention(convention)
-        assert EventPolicy.new(user, event).read?
+      %w[
+        read_limited_prerelease_schedule
+        update_events
+      ].each do |permission|
+        it "lets people with #{permission} permission in convention read events" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          assert EventPolicy.new(user, event).read?
+        end
       end
 
       it "does not let people with read_prerelease_schedule permission in convention read events" do
@@ -144,6 +150,23 @@ class EventPolicyTest < ActiveSupport::TestCase
       it 'lets people with update_events permission read events' do
         user = create_user_with_update_events_in_event_category(event_category)
         assert EventPolicy.new(user, event).read?
+      end
+
+      %w[update_events].each do |permission|
+        it "lets people with #{permission} permission in convention read events" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          assert EventPolicy.new(user, event).read?
+        end
+      end
+
+      %w[
+        read_limited_prerelease_schedule
+        read_prerelease_schedule
+      ].each do |permission|
+        it "does not let people with #{permission} permission in convention read events" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          refute EventPolicy.new(user, event).read?
+        end
       end
 
       it 'does not let team members read events' do
@@ -280,6 +303,24 @@ class EventPolicyTest < ActiveSupport::TestCase
         end
       end
 
+      %w[read_prerelease_schedule read_limited_prerelease_schedule].each do |permission|
+        it "returns active events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [event].sort, resolved_events.sort
+        end
+      end
+
+      %w[update_events].each do |permission|
+        it "returns all events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [event, dropped_event].sort, resolved_events.sort
+        end
+      end
+
       it 'returns active events to con_com users' do
         user_con_profile = create(:user_con_profile, convention: convention, con_com: true)
         resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
@@ -310,6 +351,33 @@ class EventPolicyTest < ActiveSupport::TestCase
             :user_con_profile, convention: convention, priv => true
           )
           resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
+
+          assert_equal [event, dropped_event].sort, resolved_events.sort
+        end
+      end
+
+      %w[read_limited_prerelease_schedule].each do |permission|
+        it "returns active events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [event].sort, resolved_events.sort
+        end
+      end
+
+      %w[read_prerelease_schedule].each do |permission|
+        it "returns no events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [].sort, resolved_events.sort
+        end
+      end
+
+      %w[update_events].each do |permission|
+        it "returns all events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
 
           assert_equal [event, dropped_event].sort, resolved_events.sort
         end
@@ -355,6 +423,24 @@ class EventPolicyTest < ActiveSupport::TestCase
         resolved_events = EventPolicy::Scope.new(team_member.user_con_profile.user, Event.all).resolve
 
         assert_equal [event], resolved_events.sort
+      end
+
+      %w[read_limited_prerelease_schedule read_prerelease_schedule].each do |permission|
+        it "returns no events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [].sort, resolved_events.sort
+        end
+      end
+
+      %w[update_events].each do |permission|
+        it "returns all events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [event, dropped_event].sort, resolved_events.sort
+        end
       end
 
       it 'returns no events to regular attendees' do
