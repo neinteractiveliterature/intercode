@@ -4,14 +4,18 @@ class Mutations::CreateTicket < Mutations::BaseMutation
   argument :user_con_profile_id, Int, required: true, camelize: false
   argument :ticket, Types::TicketInputType, required: true
 
-  authorize_create_convention_associated_model :tickets
+  attr_reader :ticket_profile
 
-  def resolve(user_con_profile_id:, ticket:)
-    ticket_profile = convention.user_con_profiles.find(user_con_profile_id)
-    ticket_attrs = ticket.to_h
+  def authorized?(args)
+    @ticket_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    policy(Ticket.new(user_con_profile: ticket_profile)).create?
+  end
+
+  def resolve(**args)
+    ticket_attrs = args[:ticket].to_h
     ticket_attrs[:payment_amount] = MoneyHelper.coerce_money_input(ticket_attrs[:payment_amount])
-    ticket_model = ticket_profile.create_ticket!(ticket_attrs)
+    ticket = ticket_profile.create_ticket!(ticket_attrs)
 
-    { ticket: ticket_model }
+    { ticket: ticket }
   end
 end

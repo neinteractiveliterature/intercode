@@ -318,6 +318,7 @@ query UserConProfileSignupsQuery($id: Int!) {
       event {
         id
         title
+        status
       }
     }
 
