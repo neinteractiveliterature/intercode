@@ -99,6 +99,9 @@ class EventPolicy < ApplicationPolicy
 
         # event updaters can see dropped events in their categories
         dw.add(event_category: event_categories_with_permission('update_events'))
+
+        # update_events users can see dropped events in the convention as a whole
+        dw.add(convention: conventions_with_permission('update_events'))
       end
     end
   end
