@@ -215,6 +215,17 @@ class RunPolicyTest < ActiveSupport::TestCase
         end
       end
 
+      %w[
+        read_prerelease_schedule read_limited_prerelease_schedule update_events
+      ].each do |permission|
+        it "returns all runs to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+
+          assert_equal [the_run].sort, resolved_runs.sort
+        end
+      end
+
       it 'does not return runs to regular attendees' do
         user_con_profile = create(:user_con_profile, convention: convention)
         resolved_runs = RunPolicy::Scope.new(user_con_profile.user, Run.all).resolve
@@ -243,6 +254,24 @@ class RunPolicyTest < ActiveSupport::TestCase
         end
       end
 
+      %w[read_limited_prerelease_schedule update_events].each do |permission|
+        it "returns all runs to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+
+          assert_equal [the_run].sort, resolved_runs.sort
+        end
+      end
+
+      %w[read_prerelease_schedule].each do |permission|
+        it "returns no runs to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+
+          assert_equal [].sort, resolved_runs.sort
+        end
+      end
+
       it 'returns no runs to team members' do
         event = create(:event, convention: convention)
         team_member = create(:team_member, event: event)
@@ -268,13 +297,31 @@ class RunPolicyTest < ActiveSupport::TestCase
     describe "when show_schedule is 'no'" do
       before { convention.update!(show_schedule: 'no') }
 
-      it 'returns no runs to staff users read' do
+      it 'returns all runs to staff users' do
         user_con_profile = create(
           :user_con_profile, convention: convention, staff: true
         )
         resolved_runs = RunPolicy::Scope.new(user_con_profile.user, Run.all).resolve
 
-        assert_equal [], resolved_runs.sort
+        assert_equal [the_run], resolved_runs.sort
+      end
+
+      %w[update_events].each do |permission|
+        it "returns all runs to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+
+          assert_equal [the_run].sort, resolved_runs.sort
+        end
+      end
+
+      %w[read_prerelease_schedule read_limited_prerelease_schedule].each do |permission|
+        it "returns no runs to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+
+          assert_equal [].sort, resolved_runs.sort
+        end
       end
 
       it 'returns no runs to team members' do

@@ -278,6 +278,15 @@ class EventPolicyTest < ActiveSupport::TestCase
           assert_equal [event, dropped_event].sort, resolved_events.sort
         end
       end
+
+      %w[update_events].each do |permission|
+        it "returns all events to users with #{permission} permission in convention" do
+          user = create_user_with_permission_in_convention(permission, convention)
+          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+
+          assert_equal [event, dropped_event].sort, resolved_events.sort
+        end
+      end
     end
 
     describe "when show_event_list is 'gms'" do

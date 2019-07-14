@@ -43,6 +43,7 @@ module Concerns::ScheduleRelease
         id: conventions_with_permission('read_limited_prerelease_schedule')
       )
       dw.add(id: conventions_with_permission('update_events'))
+      dw.add(id: conventions_where_staff)
     end
   end
 end
