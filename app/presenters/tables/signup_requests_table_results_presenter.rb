@@ -1,6 +1,6 @@
 class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = SignupRequestPolicy::Scope.new(pundit_user, convention.signup_requests)
+    scope = SignupRequestPolicy::Scope.new(pundit_user, convention.signup_requests).resolve
     new(
       base_scope: scope,
       convention: convention,
