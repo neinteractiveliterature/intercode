@@ -4,10 +4,7 @@ class TicketPolicy < ApplicationPolicy
 
   def read?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) do
-        has_privilege_in_convention?(convention, :con_com) ||
-          has_convention_permission?(convention, 'read_tickets')
-      end
+      d.add(:read_conventions) { has_convention_permission?(convention, 'read_tickets') }
       d.add(:read_events) { team_member_in_convention?(convention) }
       d.add(:read_profile) { user && user.id == user_con_profile.user_id }
     end
@@ -27,9 +24,6 @@ class TicketPolicy < ApplicationPolicy
 
       disjunctive_where do |dw|
         if oauth_scope?(:read_conventions)
-          dw.add(user_con_profile_id: UserConProfile.where(
-            convention: conventions_with_privilege(:con_com)
-          ))
           dw.add(user_con_profile_id: UserConProfile.where(
             convention: conventions_with_permission('read_tickets')
           ))

@@ -11,14 +11,9 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   let(:signup) { create(:signup, run: the_run) }
   let(:team_member) { create(:team_member, event: event) }
   let(:staff_profile) { create(:staff_user_con_profile, convention: convention) }
-  let(:con_com_profile) { create(:user_con_profile, convention: convention, con_com: true) }
   let(:rando_profile) { create(:user_con_profile, convention: convention) }
 
   describe '#read?' do
-    it 'lets con_com users read profiles' do
-      assert UserConProfilePolicy.new(con_com_profile.user, user_con_profile).read?
-    end
-
     %w[
       read_user_con_profiles read_user_con_profile_email read_user_con_profile_personal_info
     ].each do |permission|
@@ -52,10 +47,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_email?' do
-    it 'lets con_com users read email addresses' do
-      assert UserConProfilePolicy.new(con_com_profile.user, user_con_profile).read_email?
-    end
-
     %w[read_user_con_profile_email read_user_con_profile_personal_info].each do |permission|
       it "lets users with #{permission} read email addresses" do
         user = create_user_with_permission_in_convention(permission, convention)
@@ -91,10 +82,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_personal_info?' do
-    it 'lets con_com users read personal info' do
-      assert UserConProfilePolicy.new(con_com_profile.user, user_con_profile).read_personal_info?
-    end
-
     %w[read_user_con_profile_personal_info].each do |permission|
       it "lets users with #{permission} read personal info" do
         user = create_user_with_permission_in_convention(permission, convention)
@@ -141,11 +128,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
           .public_send("#{action}?")
       end
 
-      it "does not let con_com users #{action} other people's profiles" do
-        refute UserConProfilePolicy.new(con_com_profile.user, user_con_profile)
-          .public_send("#{action}?")
-      end
-
       it "lets users #{action} their own profiles" do
         assert UserConProfilePolicy.new(user_con_profile.user, user_con_profile)
           .public_send("#{action}?")
@@ -164,10 +146,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
         assert UserConProfilePolicy.new(staff_profile.user, user_con_profile).withdraw_all_signups?
       end
 
-      it "does not let con_com users #{action} attendee profiles" do
-        refute UserConProfilePolicy.new(con_com_profile.user, user_con_profile).withdraw_all_signups?
-      end
-
       it "does not let users #{action} their own profiles" do
         refute UserConProfilePolicy.new(user_con_profile.user, user_con_profile).withdraw_all_signups?
       end
@@ -180,14 +158,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
 
   describe 'Scope' do
     before { user_con_profile }
-
-    it 'lets con_com users read all convention user profiles' do
-      resolved_profiles = UserConProfilePolicy::Scope.new(
-        con_com_profile.user, UserConProfile.all
-      ).resolve
-
-      assert_equal [user_con_profile, con_com_profile].sort, resolved_profiles.sort
-    end
 
     %w[
       read_user_con_profiles read_user_con_profile_email read_user_con_profile_personal_info

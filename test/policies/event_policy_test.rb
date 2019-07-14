@@ -53,7 +53,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(team_member.user_con_profile.user, event).read?
       end
 
-      %w[con_com scheduling gm_liaison staff].each do |priv|
+      %w[scheduling gm_liaison staff].each do |priv|
         it "lets #{priv} users read events" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -343,13 +343,6 @@ class EventPolicyTest < ActiveSupport::TestCase
 
           assert_equal [event, dropped_event].sort, resolved_events.sort
         end
-      end
-
-      it 'returns active events to con_com users' do
-        user_con_profile = create(:user_con_profile, convention: convention, con_com: true)
-        resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-        assert_equal [event].sort, resolved_events.sort
       end
 
       it 'does not return events to regular attendees' do
