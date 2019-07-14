@@ -34,7 +34,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
             .public_send("#{action}?")
         end
 
-        %w[con_com scheduling gm_liaison staff].each do |priv|
+        %w[scheduling gm_liaison staff].each do |priv|
           it "lets #{priv} users #{action}" do
             user_con_profile = create(
               :user_con_profile, convention: convention, priv => true
@@ -237,45 +237,10 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         end
       end
     end
-
-    %w[con_com].each do |priv|
-      %w[gms yes].each do |value|
-        describe "when show_schedule is '#{value}'" do
-          let(:convention) { create(:convention, show_schedule: value) }
-
-          it "lets #{priv} users schedule_with_counts" do
-            user_con_profile = create(
-              :user_con_profile, convention: convention, priv => true
-            )
-            assert ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
-          end
-        end
-      end
-
-      %w[priv no].each do |value|
-        describe "when show_schedule is '#{value}'" do
-          let(:convention) { create(:convention, show_schedule: value) }
-
-          it "does not let #{priv} users schedule_with_counts" do
-            user_con_profile = create(
-              :user_con_profile, convention: convention, priv => true
-            )
-            refute ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
-          end
-        end
-      end
-    end
   end
 
   %w[view_reports view_attendees].each do |action|
     describe "##{action}?" do
-      it "lets con_com users #{action}" do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, con_com: true
-        )
-        assert ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")
-      end
-
       it "does not let regular attendees #{action}" do
         user_con_profile = create(:user_con_profile, convention: convention)
         refute ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")

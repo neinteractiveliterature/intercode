@@ -9,7 +9,7 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
   let(:other_event_team_member) { create(:team_member, event: other_event) }
 
   describe '#read?' do
-    %w[gm_liaison con_com].each do |priv|
+    %w[gm_liaison].each do |priv|
       it "lets #{priv} users read team memberships" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert TeamMemberPolicy.new(user_con_profile.user, team_member).read?
@@ -36,11 +36,6 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
       assert TeamMemberPolicy.new(user_con_profile.user, team_member).manage?
     end
 
-    it 'does not let con_com users manage team memberships' do
-      user_con_profile = create(:user_con_profile, convention: convention, con_com: true)
-      refute TeamMemberPolicy.new(user_con_profile.user, team_member).manage?
-    end
-
     it 'lets users manage team memberships in their own events' do
       assert TeamMemberPolicy.new(other_team_member.user_con_profile.user, team_member).manage?
     end
@@ -53,7 +48,7 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
   describe 'Scope' do
     let(:all_team_members) { [team_member, other_team_member, other_event_team_member] }
 
-    %w[gm_liaison con_com].each do |priv|
+    %w[gm_liaison].each do |priv|
       it "returns all team memberships in a con for #{priv} users" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         resolved_team_members = TeamMemberPolicy::Scope.new(

@@ -23,11 +23,6 @@ class TicketPolicyTest < ActiveSupport::TestCase
       assert TicketPolicy.new(team_member.user_con_profile.user, ticket).read?
     end
 
-    it 'lets users with the con_com privilege read my ticket' do
-      con_com_profile = create(:user_con_profile, convention: convention, con_com: true)
-      assert TicketPolicy.new(con_com_profile.user, ticket).read?
-    end
-
     it 'lets users with read_tickets in convention read my ticket' do
       user = create_user_with_read_tickets_in_convention(convention)
       assert TicketPolicy.new(user, ticket).read?
@@ -54,17 +49,6 @@ class TicketPolicyTest < ActiveSupport::TestCase
       resolved_tickets = TicketPolicy::Scope.new(me.user, Ticket.all).resolve.to_a
 
       assert_equal [my_ticket], resolved_tickets
-    end
-
-    it 'lets con com users see all the tickets in the con' do
-      me = create(:user_con_profile, con_com: true)
-      my_ticket = create(:ticket, user_con_profile: me)
-      someone = create(:user_con_profile, convention: me.convention)
-      someones_ticket = create(:ticket, user_con_profile: someone)
-      create_list(:ticket, 3)
-      resolved_tickets = TicketPolicy::Scope.new(me.user, Ticket.all).resolve.to_a
-
-      assert_equal [my_ticket, someones_ticket].sort, resolved_tickets.sort
     end
 
     it 'lets users with read_tickets permission see all the tickets in the con' do

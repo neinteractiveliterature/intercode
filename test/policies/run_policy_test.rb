@@ -27,7 +27,7 @@ class RunPolicyTest < ActiveSupport::TestCase
           .read?
       end
 
-      %w[con_com scheduling gm_liaison staff].each do |priv|
+      %w[scheduling gm_liaison staff].each do |priv|
         it "lets #{priv} users read" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -204,7 +204,7 @@ class RunPolicyTest < ActiveSupport::TestCase
         assert_equal [the_run].sort, resolved_runs.sort
       end
 
-      %w[con_com scheduling gm_liaison staff].each do |priv|
+      %w[scheduling gm_liaison staff].each do |priv|
         it "returns all runs to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
