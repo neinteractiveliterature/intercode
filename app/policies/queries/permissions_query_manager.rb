@@ -1,6 +1,7 @@
 class Queries::PermissionsQueryManager < Queries::QueryManager
   def initialize(user:)
     super(user: user)
+    @has_convention_permission = Queries::NilSafeCache.new
     @has_event_category_permission = Queries::NilSafeCache.new
     @has_event_category_permission_in_convention = Queries::NilSafeCache.new
     @has_organization_permission = Queries::NilSafeCache.new
@@ -36,6 +37,22 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
 
   def event_proposals_where_has_event_category_permission(permission)
     EventProposal.where(event_category_id: event_categories_with_permission(permission))
+  end
+
+  def has_convention_permission?(convention, *permissions)
+    return false unless convention && permissions.present? && user
+
+    @has_convention_permission.get([convention.id, permissions]) do
+      conventions_with_permission(*permissions).where(id: convention.id).any?
+    end
+  end
+
+  def conventions_with_permission(*permissions)
+    Convention.where(
+      id: user_permission_scope.where(
+        permission: permissions
+      ).select(:convention_id)
+    )
   end
 
   def has_organization_permission?(organization_id, permission)
