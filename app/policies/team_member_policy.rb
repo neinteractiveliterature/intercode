@@ -25,11 +25,14 @@ class TeamMemberPolicy < ApplicationPolicy
       return scope.all if oauth_scope?(:read_conventions) && site_admin?
 
       disjunctive_where do |dw|
-        dw.add(event_id: events_where_team_member) if oauth_scope?(:read_events)
+        if oauth_scope?(:read_events)
+          dw.add(event: events_where_team_member)
+          dw.add(event: EventPolicy::Scope.new(user, Event.all).resolve)
+        end
 
         if oauth_scope?(:read_conventions)
-          dw.add(event_id: Event.where(
-            convention_id: conventions_with_privilege(:con_com, :gm_liaison)
+          dw.add(event: Event.where(
+            convention: conventions_with_privilege(:con_com, :gm_liaison)
           ))
         end
       end
