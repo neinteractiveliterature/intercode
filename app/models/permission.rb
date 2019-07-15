@@ -7,7 +7,7 @@ class Permission < ApplicationRecord
     case role
     when StaffPosition then where(staff_position_id: role.id)
     when OrganizationRole then where(organization_role_id: role.id)
-    else raise InvalidArgument, "Permission does not support #{role.class} roles"
+    else raise ArgumentError, "Permission does not support #{role.class} roles"
     end
   end
 
@@ -22,7 +22,7 @@ class Permission < ApplicationRecord
   scope :for_model, ->(model) do
     case model
     when EventCategory then where(event_category_id: model.id)
-    else raise InvalidArgument, "Permission does not support #{model.class} models"
+    else raise ArgumentError, "Permission does not support #{model.class} models"
     end
   end
 
@@ -35,7 +35,7 @@ class Permission < ApplicationRecord
     when EventCategory
       self.event_category = new_model
     else
-      raise InvalidArgument, "Permission does not support #{new_model.class} models"
+      raise ArgumentError, "Permission does not support #{new_model.class} models"
     end
   end
 
@@ -50,7 +50,7 @@ class Permission < ApplicationRecord
     when OrganizationRole
       self.organization_role = new_role
     else
-      raise InvalidArgument, "Permission does not support #{new_role.class} roles"
+      raise ArgumentError, "Permission does not support #{new_role.class} roles"
     end
   end
 end
