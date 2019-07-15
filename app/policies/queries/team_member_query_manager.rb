@@ -30,15 +30,22 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
     return false unless user_con_profile && user
 
     @team_member_for_user_con_profile.get(user_con_profile.id) do
-      Signup
-        .where(
-          run: Run.where(
-            event: events_where_team_member
-          ),
-          user_con_profile_id: user_con_profile.id
+      (
+        Signup
+          .where(
+            run: Run.where(
+              event: events_where_team_member
+            ),
+            user_con_profile_id: user_con_profile.id
+          )
+          .where.not(state: 'withdrawn')
+          .any?
+      ) ||
+        (
+          TeamMember
+            .where(event: events_where_team_member, user_con_profile: user_con_profile.id)
+            .any?
         )
-        .where.not(state: 'withdrawn')
-        .any?
     end
   end
 
