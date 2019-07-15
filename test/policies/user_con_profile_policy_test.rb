@@ -77,6 +77,13 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
         .read_personal_info?
     end
 
+    it 'lets team members read personal info of co-team-members in their events' do
+      other_team_member = create(:team_member, event: team_member.event)
+      assert UserConProfilePolicy.new(
+        team_member.user_con_profile.user, other_team_member.user_con_profile
+      ).read_personal_info?
+    end
+
     it 'does not let team members read personal info of anyone in the convention' do
       refute UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile)
         .read_personal_info?
