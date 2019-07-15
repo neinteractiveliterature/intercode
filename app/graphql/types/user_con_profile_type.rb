@@ -31,6 +31,10 @@ class Types::UserConProfileType < Types::BaseObject
   field :show_nickname_in_bio, Boolean, null: true
   field :bio_html, String, null: true
 
+  # This is a little bit of a weird thing to expose here; normally we'd just have people query for
+  # User, but access to that object is restricted
+  field :user_id, Integer, null: false
+
   def bio_html
     MarkdownLoader.for('user_con_profile', 'No bio provided')
       .load([[object, 'bio_html'], object.bio])
