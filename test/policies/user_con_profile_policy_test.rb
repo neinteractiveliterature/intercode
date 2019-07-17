@@ -33,6 +33,13 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(user_con_profile.user, user_con_profile).read?
     end
 
+    it 'lets users read profiles of people in the same runs as them' do
+      other_signup = create(:signup, run: the_run)
+      assert UserConProfilePolicy.new(
+        signup.user_con_profile.user, other_signup.user_con_profile
+      ).read?
+    end
+
     it 'lets users read profiles of team members in the convention' do
       assert UserConProfilePolicy.new(user_con_profile.user, team_member.user_con_profile).read?
     end
