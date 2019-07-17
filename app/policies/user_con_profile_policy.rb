@@ -4,6 +4,11 @@ class UserConProfilePolicy < ApplicationPolicy
   def read?
     # you can read the less-sensitive parts of your own profile without read_profile scope
     return true if user && user.id == record.user_id
+
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:read_events) { user_con_profile_ids_in_signed_up_runs.include?(record.id) }
+    end
+
     if record.team_members.any? && TeamMemberPolicy.new(user, record.team_members.first).read?
       return true
     end
