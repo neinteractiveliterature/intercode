@@ -28,6 +28,8 @@ class Queries::SignupQueryManager < Queries::QueryManager
   end
 
   def my_active_signups
+    return Signup.none unless user
+
     Signup.joins(:user_con_profile)
       .where(user_con_profiles: { user_id: user.id })
       .where.not(state: 'withdrawn')
