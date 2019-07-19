@@ -69,7 +69,7 @@
     "hypernova": "^2.5.0",
     "inflected": "^2.0.3",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.15",
     "lodash-es": "^4.17.14",
     "lodash-webpack-plugin": "^0.11.5",
     "moment": "^2.24.0",
