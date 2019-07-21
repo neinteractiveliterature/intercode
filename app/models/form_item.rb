@@ -41,6 +41,7 @@ class FormItem < ApplicationRecord
       caption: :required,
       timeblocks: :required,
       omit_timeblocks: :optional,
+      hide_timestamps: :optional,
       required: :optional
     },
     timespan: {
