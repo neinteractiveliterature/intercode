@@ -75,9 +75,9 @@ function renderConventionModeRoutes({ signupMode }) {
   ];
 }
 
-function renderSingleEventModeRoutes() {
+function renderSingleEventModeRoutes({ signupMode }) {
   return [
-    ...renderCommonInConventionRoutes(),
+    ...renderCommonInConventionRoutes({ signupMode }),
   ];
 }
 
@@ -105,7 +105,7 @@ function AppRouter({ alert }) {
     }
 
     if (siteMode === 'single_event') {
-      return renderSingleEventModeRoutes();
+      return renderSingleEventModeRoutes({ signupMode });
     }
 
     return renderConventionModeRoutes({ signupMode });
