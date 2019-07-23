@@ -148,9 +148,17 @@ class RefreshSSLCertificateService < CivilService::Service
     @ssl_domains || begin
       Rails.logger.info 'Getting app domains'
       all_domains = heroku.domain.list(heroku_app_name).map { |domain| domain['hostname'] }
-      ([root_domain] + all_domains).flat_map do |domain|
+      all_ssl_domains = ([root_domain] + all_domains).flat_map do |domain|
         ssl_domains_for_host(domain)
       end.compact.uniq
+
+      # filter out non-wildcarded domains that are already covered by a wildcard
+      all_ssl_domains.filter do |ssl_domain|
+        ssl_domain_parts = ssl_domain.split('.')
+        wildcarded_domain_parts = ['*'] + ssl_domain_parts[1..-1]
+        wildcarded_domain = wildcarded_domain_parts.join('.')
+        !all_ssl_domains.include?(wildcarded_domain)
+      end
     end
   end
 
