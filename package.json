@@ -26,7 +26,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.4.4",
+    "@babel/register": "^7.5.5",
     "@rails/webpacker": "^4.0.7",
     "@testing-library/react": "^8.0.4",
     "apollo-cache-inmemory": "^1.6.2",
