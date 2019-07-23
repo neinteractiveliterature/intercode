@@ -154,6 +154,8 @@ class RefreshSSLCertificateService < CivilService::Service
 
       # filter out non-wildcarded domains that are already covered by a wildcard
       all_ssl_domains.select do |ssl_domain|
+        next true if ssl_domain =~ /\A\*\./ # automatically include wildcards
+
         ssl_domain_parts = ssl_domain.split('.')
         wildcarded_domain_parts = ['*'] + ssl_domain_parts[1..-1]
         wildcarded_domain = wildcarded_domain_parts.join('.')
