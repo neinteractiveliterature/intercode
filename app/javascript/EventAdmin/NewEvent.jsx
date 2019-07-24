@@ -53,6 +53,12 @@ function NewEvent({ history, match }) {
     history.push(donePath);
   };
 
+  const warningMessage = (
+    eventCategory.scheduling_ui === 'single_run' && !event.form_response_attrs.length_seconds
+      ? 'Please specify a length of time for this event.'
+      : null
+  );
+
   return (
     <>
       <h2 className="mb-4 mt-2">New event</h2>
@@ -66,6 +72,10 @@ function NewEvent({ history, match }) {
           />
         )}
 
+        {warningMessage && (
+          <div className="alert alert-warning">{warningMessage}</div>
+        )}
+
         <ErrorDisplay graphQLError={createError} />
 
         <div>
@@ -73,7 +83,7 @@ function NewEvent({ history, match }) {
             type="button"
             className="btn btn-primary"
             onClick={createEvent}
-            disabled={!eventCategoryId}
+            disabled={!eventCategoryId || warningMessage}
           >
             Create event
           </button>
