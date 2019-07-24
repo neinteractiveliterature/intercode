@@ -34,15 +34,17 @@ export function useCreateSingleRunEvent() {
   return useCallback(
     ({ event, run }) => mutate({
       variables: {
-        ...buildEventInput(
-          event,
-          {
-            can_play_concurrently: false,
-            con_mail_destination: 'event_email',
-            author: '{{ convention.name }} Staff',
-          },
-        ),
-        ...buildRunInput(run),
+        input: {
+          ...buildEventInput(
+            event,
+            {
+              can_play_concurrently: false,
+              con_mail_destination: 'event_email',
+              author: '{{ convention.name }} Staff',
+            },
+          ),
+          ...buildRunInput(run),
+        },
       },
     }),
     [mutate],
