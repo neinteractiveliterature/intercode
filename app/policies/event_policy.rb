@@ -56,6 +56,10 @@ class EventPolicy < ApplicationPolicy
     site_admin_manage?
   end
 
+  def create?
+    drop?
+  end
+
   def restore?
     drop?
   end

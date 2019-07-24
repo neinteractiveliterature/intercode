@@ -148,6 +148,7 @@ class EventPolicyTest < ActiveSupport::TestCase
 
   [
     %w[read_admin_notes access_admin_notes],
+    %w[create update_events],
     %w[drop update_events],
     %w[restore update_events],
     %w[update_admin_notes access_admin_notes]
