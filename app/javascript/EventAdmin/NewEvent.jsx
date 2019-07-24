@@ -66,7 +66,11 @@ function NewEvent({ history, match }) {
         {eventCategory.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
           <RunFormFields
             run={run}
-            event={{ length_seconds: event.form_response_attrs.length_seconds }}
+            event={{
+              title: event.form_response_attrs.title,
+              length_seconds: event.form_response_attrs.length_seconds,
+              event_category: eventCategory,
+            }}
             convention={convention}
             onChange={setRun}
           />
