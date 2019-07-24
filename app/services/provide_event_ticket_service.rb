@@ -71,7 +71,7 @@ provided #{already_provided_count}"
   end
 
   def user_con_profile_must_not_have_ticket
-    return unless user_con_profile.ticket
+    return unless user_con_profile.ticket&.persisted?
     errors.add :base, "#{user_con_profile.name} already has a #{convention.ticket_name} to \
 #{user_con_profile.convention.name}"
   end
