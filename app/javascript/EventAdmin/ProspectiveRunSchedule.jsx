@@ -154,8 +154,14 @@ function ProspectiveRunSchedule({
         return e;
       });
 
+      const effectiveEvents = (
+        filteredEvents.some(e => e.id === event.id)
+          ? filteredEvents
+          : [...filteredEvents, event]
+      );
+
       if (prospectiveRun) {
-        return filteredEvents.map((e) => {
+        return effectiveEvents.map((e) => {
           if (e.id === event.id) {
             return {
               ...e,
@@ -167,9 +173,9 @@ function ProspectiveRunSchedule({
         });
       }
 
-      return filteredEvents;
+      return effectiveEvents;
     },
-    [data.events, error, event.id, prospectiveRun, run.id],
+    [data.events, error, event, prospectiveRun, run.id],
   );
 
   const conventionDayTimespans = useMemo(
