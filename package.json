@@ -57,7 +57,7 @@
     "debounce-promise": "^3.1.2",
     "detect-browser": "^4.6.0",
     "exports-loader": "^0.7.0",
-    "file-loader": "^4.0.0",
+    "file-loader": "^4.1.0",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "glob": "^7.1.4",
