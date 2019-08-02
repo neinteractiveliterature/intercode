@@ -32,7 +32,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     define_method :authorized? do |args|
       model = model_class.find_by!(id_field => args[id_field])
       instance_variable_set(:"@#{field_name}", model)
-      check_authorization(policy(model), action, message: message)
+      self.class.check_authorization(policy(model), action, message: message)
     end
   end
 
@@ -45,21 +45,21 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     define_method :authorized? do |args|
       model = convention.public_send(association).find_by!(id_field => args[id_field])
       instance_variable_set(:"@#{field_name}", model)
-      check_authorization(policy(model), action, message: message)
+      self.class.check_authorization(policy(model), action, message: message)
     end
   end
 
   def self.authorize_arbitrary_convention_associated_model(association, action, message: 'Unauthorized mutation')
     define_method :authorized? do |_args|
       model = convention.public_send(association).new
-      check_authorization(policy(model), action, message: message)
+      self.class.check_authorization(policy(model), action, message: message)
     end
   end
 
   def self.authorize_arbitrary_cms_model(association, action, message: 'Unauthorized mutation')
     define_method :authorized? do |_args|
       model = cms_parent.public_send(association).new
-      check_authorization(policy(model), action, message: message)
+      self.class.check_authorization(policy(model), action, message: message)
     end
   end
 
@@ -81,7 +81,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     define_method :authorized? do |args|
       model = cms_parent.public_send(association).find_by!(id_field => args[id_field])
       instance_variable_set(:"@#{field_name}", model)
-      check_authorization(policy(model), action, message: message)
+      self.class.check_authorization(policy(model), action, message: message)
     end
   end
 end
