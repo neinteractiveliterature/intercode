@@ -12,6 +12,14 @@ class TicketPolicy < ApplicationPolicy
     super
   end
 
+  def provide?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:manage_events) { record.provided_by_event && team_member_for_event?(record.provided_by_event) }
+    end
+
+    manage?
+  end
+
   def manage?
     return true if oauth_scope?(:manage_conventions) && staff_in_convention?(convention)
 

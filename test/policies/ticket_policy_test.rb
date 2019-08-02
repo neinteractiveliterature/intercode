@@ -30,6 +30,41 @@ class TicketPolicyTest < ActiveSupport::TestCase
     end
   end
 
+  describe '#provide?' do
+    it 'lets con staff provide tickets to events' do
+      event = create(:event)
+      team_member = create(:team_member, event: event)
+      user_con_profile = create(:staff_user_con_profile, convention: event.convention)
+      recipient = create(:user_con_profile, convention: event.convention)
+      ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
+      assert TicketPolicy.new(user_con_profile.user, ticket).provide?
+    end
+
+    it 'lets event team members provide tickets to their own event' do
+      event = create(:event)
+      team_member = create(:team_member, event: event)
+      recipient = create(:user_con_profile, convention: event.convention)
+      ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
+      assert TicketPolicy.new(team_member.user_con_profile.user, ticket).provide?
+    end
+
+    it 'does not let event team members provide tickets to other events' do
+      event = create(:event)
+      team_member = create(:team_member)
+      recipient = create(:user_con_profile, convention: event.convention)
+      ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
+      refute TicketPolicy.new(team_member.user_con_profile.user, ticket).provide?
+    end
+
+    it 'does not let regular users provide tickets' do
+      event = create(:event)
+      user_con_profile = create(:user_con_profile, convention: event.convention)
+      recipient = create(:user_con_profile, convention: event.convention)
+      ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
+      refute TicketPolicy.new(user_con_profile.user, ticket).provide?
+    end
+  end
+
   describe '#manage?' do
     it 'does not let me manage my own ticket' do
       ticket = create(:ticket)
