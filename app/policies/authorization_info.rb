@@ -52,6 +52,10 @@ class AuthorizationInfo
   end
 
   def oauth_scope?(scope)
+    unless Doorkeeper.configuration.scopes.include?(scope.to_s)
+      raise ArgumentError, "Invalid scope: #{scope}"
+    end
+
     doorkeeper_token.nil? || doorkeeper_token.scopes.exists?(scope)
   end
 
