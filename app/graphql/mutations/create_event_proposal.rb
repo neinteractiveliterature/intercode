@@ -39,7 +39,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     event_proposal.assign_form_response_attributes(
       template_proposal.read_form_response_attributes_for_form_items(
         event_proposal.event_category.event_proposal_form.form_items
-      )
+      ).except('team_mailing_list_email')
     )
   end
 
