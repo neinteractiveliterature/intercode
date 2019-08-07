@@ -203,7 +203,7 @@ GEM
       activesupport (~> 5.0)
       railties (~> 5.0)
       rouge (~> 3.0)
-    haml (5.1.1)
+    haml (5.1.2)
       temple (>= 0.8.0)
       tilt
     heroics (0.0.25)
