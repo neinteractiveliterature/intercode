@@ -28,7 +28,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.5.5",
     "@rails/webpacker": "^4.0.7",
-    "@testing-library/react": "^8.0.7",
+    "@testing-library/react": "^8.0.8",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link": "^1.2.11",
