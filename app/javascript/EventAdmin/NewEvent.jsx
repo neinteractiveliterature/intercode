@@ -48,10 +48,16 @@ function NewEvent({ history, match }) {
     }
 
     await createMutate({
-      event, eventCategory, eventCategoryId, setRun,
+      event, eventCategory, eventCategoryId, run, setRun,
     });
     history.push(donePath);
   };
+
+  const warningMessage = (
+    eventCategory.scheduling_ui === 'single_run' && !event.form_response_attrs.length_seconds
+      ? 'Please specify a length of time for this event.'
+      : null
+  );
 
   return (
     <>
@@ -60,10 +66,18 @@ function NewEvent({ history, match }) {
         {eventCategory.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
           <RunFormFields
             run={run}
-            event={{ length_seconds: event.form_response_attrs.length_seconds }}
+            event={{
+              title: event.form_response_attrs.title,
+              length_seconds: event.form_response_attrs.length_seconds,
+              event_category: eventCategory,
+            }}
             convention={convention}
             onChange={setRun}
           />
+        )}
+
+        {warningMessage && (
+          <div className="alert alert-warning">{warningMessage}</div>
         )}
 
         <ErrorDisplay graphQLError={createError} />
@@ -73,7 +87,7 @@ function NewEvent({ history, match }) {
             type="button"
             className="btn btn-primary"
             onClick={createEvent}
-            disabled={!eventCategoryId}
+            disabled={!eventCategoryId || warningMessage}
           >
             Create event
           </button>

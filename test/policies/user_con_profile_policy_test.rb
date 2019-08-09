@@ -37,6 +37,13 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(user_con_profile.user, user_con_profile).read?
     end
 
+    it 'lets users read profiles of people in the same runs as them' do
+      other_signup = create(:signup, run: the_run)
+      assert UserConProfilePolicy.new(
+        signup.user_con_profile.user, other_signup.user_con_profile
+      ).read?
+    end
+
     it 'lets users read profiles of team members in the convention' do
       assert UserConProfilePolicy.new(user_con_profile.user, team_member.user_con_profile).read?
     end
@@ -99,6 +106,13 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
     it 'lets team members read personal info of attendees in their events' do
       assert UserConProfilePolicy.new(team_member.user_con_profile.user, signup.user_con_profile)
         .read_personal_info?
+    end
+
+    it 'lets team members read personal info of co-team-members in their events' do
+      other_team_member = create(:team_member, event: team_member.event)
+      assert UserConProfilePolicy.new(
+        team_member.user_con_profile.user, other_team_member.user_con_profile
+      ).read_personal_info?
     end
 
     it 'does not let team members read personal info of anyone in the convention' do

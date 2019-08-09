@@ -2,10 +2,8 @@
 
 mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
-    team_member {
-      id
-      ...TeamMemberFieldsWithoutPersonalInfo
-    }
+    clientMutationId
+    # we're using refetchQueries to get the updated team member list here
   }
 }
 
