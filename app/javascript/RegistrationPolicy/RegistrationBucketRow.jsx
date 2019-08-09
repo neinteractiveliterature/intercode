@@ -217,6 +217,7 @@ class RegistrationBucketRow extends React.Component {
               })}
             >
               <i className="fa fa-trash-o" />
+              <span className="sr-only">Delete bucket</span>
             </button>
           )}
         </Confirm.Trigger>

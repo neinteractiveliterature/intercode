@@ -1,90 +1,75 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
-// from https://stackoverflow.com/questions/286141/remove-blank-attributes-from-an-object-in-javascript
-function compact(object) {
-  const myObj = { ...object };
-  Object.keys(myObj).forEach(key => (myObj[key] == null) && delete myObj[key]);
-  return myObj;
-}
+function parseDateTimeValues(valueString, timezoneName) {
+  const parsedValue = moment.tz(valueString, timezoneName);
 
-class DateTimeInput extends React.Component {
-  static propTypes = {
-    value: PropTypes.string,
-    timezoneName: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    id: PropTypes.string,
-  }
-
-  static defaultProps = {
-    value: null,
-    id: null,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = this.parseDateTimeValues(props.value, props.timezoneName);
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    this.setState(compact(this.parseDateTimeValues(nextProps.value, nextProps.timezoneName)));
-  }
-
-  parseDateTimeValues = (valueString, timezoneName) => {
-    const parsedValue = moment.tz(valueString, timezoneName);
-
-    if (!parsedValue.isValid()) {
-      return {
-        date: null,
-        time: null,
-      };
-    }
-
+  if (!parsedValue.isValid()) {
     return {
-      date: parsedValue.format('YYYY-MM-DD'),
-      time: parsedValue.format('HH:mm:ss'),
+      date: null,
+      time: null,
     };
   }
 
-  dateChanged = (event) => {
-    this.setState({ date: event.target.value }, this.sendOnChangeFromState);
-  }
+  return {
+    date: parsedValue.format('YYYY-MM-DD'),
+    time: parsedValue.format('HH:mm:ss'),
+  };
+}
 
-  timeChanged = (event) => {
-    this.setState({ time: event.target.value }, this.sendOnChangeFromState);
-  }
+function DateTimeInput({
+  value, timezoneName, onChange, id,
+}) {
+  const { date, time } = useMemo(
+    () => parseDateTimeValues(value, timezoneName),
+    [timezoneName, value],
+  );
 
-  sendOnChangeFromState = () => {
+  const dateTimeValuesChanged = (newDate, newTime) => {
     const momentValue = moment.tz(
-      `${this.state.date}, ${this.state.time}`,
+      `${newDate}, ${newTime}`,
       'YYYY-MM-DD HH:mm:ss',
-      this.props.timezoneName,
+      timezoneName,
     );
 
-    this.props.onChange(momentValue.toISOString());
-  }
+    onChange(momentValue.toISOString());
+  };
 
-  render = () => (
+  const dateChanged = event => dateTimeValuesChanged(event.target.value, time);
+  const timeChanged = event => dateTimeValuesChanged(date, event.target.value);
+
+  return (
     <div className="d-flex">
       <input
         type="date"
         className="form-control mr-1"
-        value={this.state.date || ''}
-        onChange={this.dateChanged}
+        value={date || ''}
+        onChange={dateChanged}
         pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-        id={this.props.id}
+        id={id}
       />
       <input
         type="time"
         className="form-control"
-        value={this.state.time || ''}
-        onChange={this.timeChanged}
+        value={time || ''}
+        onChange={timeChanged}
         pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
       />
     </div>
-  )
+  );
 }
+
+DateTimeInput.propTypes = {
+  value: PropTypes.string,
+  timezoneName: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  id: PropTypes.string,
+};
+
+DateTimeInput.defaultProps = {
+  value: null,
+  id: null,
+};
 
 export default DateTimeInput;

@@ -13,7 +13,7 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
   },
   setupFiles: [
-    'jest-prop-type-error',
+    // 'jest-prop-type-error',
     'regenerator-runtime/runtime',
   ],
   setupFilesAfterEnv: [
