@@ -36,11 +36,10 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     return unless id
 
     template_proposal = find_template_proposal(id)
-    event_proposal.assign_form_response_attributes(
-      template_proposal.read_form_response_attributes_for_form_items(
-        event_proposal.event_category.event_proposal_form.form_items
-      )
-    )
+    clone_attributes = template_proposal.read_form_response_attributes_for_form_items(
+      event_proposal.event_category.event_proposal_form.form_items
+    ).except('event_email')
+    event_proposal.assign_form_response_attributes(clone_attributes)
   end
 
   def find_template_proposal(id)

@@ -158,7 +158,7 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
             <tr>
               <th scope="row" className="pr-2">Email</th>
               <td className="col-md-9">
-                {data.userConProfile.user.email}
+                {data.userConProfile.email}
               </td>
             </tr>
 

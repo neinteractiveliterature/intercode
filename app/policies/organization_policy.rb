@@ -17,7 +17,7 @@ class OrganizationPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope.none unless oauth_scope?(:read_organization_access)
+      return scope.none unless oauth_scope?(:read_organizations)
 
       if site_admin? || organizations_with_permission('manage_organization_access').any?
         scope.all

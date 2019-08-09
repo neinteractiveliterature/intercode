@@ -178,7 +178,7 @@ const getPossibleColumns = (data) => {
     {
       Header: 'User ID',
       id: 'user_id',
-      accessor: userConProfile => userConProfile.user.id,
+      accessor: userConProfile => userConProfile.user_id,
       filterable: false,
       sortable: false,
       width: 70,

@@ -102,6 +102,12 @@ function RunFormFields({ run, event, onChange }) {
     );
   };
 
+  const eventForSchedule = {
+    ...event,
+    id: (event.id || -1),
+    runs: (event.runs || []),
+  };
+
   return (
     <div>
       <ConventionDaySelect
@@ -129,7 +135,7 @@ function RunFormFields({ run, event, onChange }) {
         day={day}
         startTime={startTime}
         run={run}
-        event={event}
+        event={eventForSchedule}
       />
 
       <BootstrapFormInput

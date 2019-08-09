@@ -23,6 +23,7 @@ class TimeblockPreferenceItemDisplay extends React.Component {
         caption: PropTypes.string.isRequired,
         timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
         omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
+        hide_timestamps: PropTypes.bool,
       }).isRequired,
     }).isRequired,
     convention: PropTypes.shape({
@@ -93,8 +94,16 @@ class TimeblockPreferenceItemDisplay extends React.Component {
             <tr key={row.timeblock.label}>
               <td>
                 {row.timeblock.label}
-                <br />
-                <small>{describeTimeblock(row.timeblock)}</small>
+                {
+                  this.props.formItem.properties.hide_timestamps
+                    ? null
+                    : (
+                      <>
+                        <br />
+                        <small>{describeTimeblock(row.timeblock)}</small>
+                      </>
+                    )
+                }
               </td>
               {row.cells.map((cell, x) => this.renderCell(cell, columns[x]))}
             </tr>
