@@ -11,6 +11,7 @@ class CommitableInput extends React.Component {
     disabled: PropTypes.bool,
     renderInput: PropTypes.func,
     placeholder: PropTypes.string,
+    label: PropTypes.string,
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ class CommitableInput extends React.Component {
     disabled: false,
     renderInput: null,
     placeholder: null,
+    label: null,
   };
 
   constructor(props) {
@@ -98,6 +100,7 @@ class CommitableInput extends React.Component {
       onChange: this.inputChange,
       ref: (element) => { this.input = element; },
       placeholder: this.props.placeholder,
+      'aria-label': this.props.label,
     };
 
     const renderInput = this.props.renderInput || (props => <input {...props} />);
@@ -120,6 +123,7 @@ class CommitableInput extends React.Component {
               disabled={this.props.disabled || this.state.commitInProgress}
             >
               <i className="fa fa-times" />
+              <span className="sr-only">Cancel changes</span>
             </button>
             <button
               type="button"
@@ -128,6 +132,7 @@ class CommitableInput extends React.Component {
               disabled={this.props.disabled || this.state.commitInProgress}
             >
               <i className="fa fa-check" />
+              <span className="sr-only">Commit changes</span>
             </button>
           </div>
         </div>
