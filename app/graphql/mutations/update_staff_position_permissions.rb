@@ -8,7 +8,7 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
 
   def authorized?(args)
     @staff_position = convention.staff_positions.find(args[:staff_position_id])
-    policy(Permission.new(model: staff_position)).create?
+    policy(Permission.new(role: staff_position)).create?
   end
 
   def resolve(**args)
