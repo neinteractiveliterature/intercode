@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_14_174248) do
+ActiveRecord::Schema.define(version: 2019_08_14_120605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -490,7 +490,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_174248) do
     t.string "state", default: "pending", null: false
     t.bigint "user_con_profile_id", null: false
     t.bigint "target_run_id", null: false
-    t.string "requested_bucket_key", null: false
+    t.string "requested_bucket_key"
     t.bigint "replace_signup_id"
     t.bigint "result_signup_id"
     t.bigint "updated_by_id"
