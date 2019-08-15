@@ -321,7 +321,7 @@ GEM
     public_suffix (3.0.3)
     puma (3.12.1)
     puma (3.12.1-java)
-    pundit (2.0.1)
+    pundit (2.1.0)
       activesupport (>= 3.0.0)
     rack (2.0.7)
     rack-mini-profiler (1.0.2)
