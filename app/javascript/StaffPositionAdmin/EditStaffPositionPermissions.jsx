@@ -20,14 +20,21 @@ function buildPermissionInput(permission) {
   };
 }
 
-const EventCategoryPermissionNames = flatMap(
-  PermissionNames.filter(
-    permissionNameGroup => permissionNameGroup.model_type === 'EventCategory',
-  ),
-  permissionNameGroup => permissionNameGroup.permissions,
-);
+function getPermissionNamesForModelType(modelType) {
+  return flatMap(
+    PermissionNames.filter(
+      permissionNameGroup => permissionNameGroup.model_type === modelType,
+    ),
+    permissionNameGroup => permissionNameGroup.permissions,
+  );
+}
 
-function EditStaffPositionPermissions({ staffPosition, eventCategories, history }) {
+const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
+const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
+
+function EditStaffPositionPermissions({
+  staffPosition, convention, eventCategories, history,
+}) {
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
   const [mutationInProgress, setMutationInProgress] = useState(false);
@@ -65,6 +72,17 @@ function EditStaffPositionPermissions({ staffPosition, eventCategories, history 
         {staffPosition.name}
         {' Permissions'}
       </h1>
+
+      <PermissionsTableInput
+        permissionNames={ConventionPermissionNames}
+        initialPermissions={staffPosition.permissions}
+        models={[convention]}
+        changeSet={changeSet}
+        add={add}
+        remove={remove}
+        modelsHeader="Convention"
+        formatModelHeader={con => con.name}
+      />
 
       <PermissionsTableInput
         permissionNames={EventCategoryPermissionNames}
@@ -114,6 +132,9 @@ EditStaffPositionPermissions.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
+  convention: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
