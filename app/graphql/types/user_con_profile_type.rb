@@ -1,8 +1,11 @@
 class Types::UserConProfileType < Types::BaseObject
-  def self.personal_info_field(*args, **kwargs, &block)
-    field(*args, **kwargs) do
-      authorize_action :read_personal_info
-      instance_eval(&block) if block
+  # It should be safe to request these fields but they'll return nil if you're not authorized
+  def self.personal_info_field(field_name, *args, **kwargs, &block)
+    field(field_name, *args, **kwargs, &block)
+
+    define_method field_name do
+      return nil unless policy(object).read_personal_info?
+      object.public_send(field_name)
     end
   end
 
@@ -40,10 +43,22 @@ class Types::UserConProfileType < Types::BaseObject
       .load([[object, 'bio_html'], object.bio])
   end
 
-  personal_info_field :form_response_attrs_json, String, null: true
+  field :form_response_attrs_json, String, null: true
 
   def form_response_attrs_json
-    FormResponsePresenter.new(context[:convention].user_con_profile_form, object).as_json.to_json
+    attrs = FormResponsePresenter.new(context[:convention].user_con_profile_form, object).as_json
+    if policy(object).read_personal_info?
+      attrs.to_json
+    else
+      allowed_attrs = %w[
+        first_name
+        last_name
+        nickname
+      ]
+
+      allowed_attrs << 'email' if policy(object).read_email?
+      attrs.slice(*allowed_attrs).to_json
+    end
   end
 
   personal_info_field :user, Types::UserType, null: true
@@ -76,7 +91,7 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :evening_phone, String, null: true
   personal_info_field :best_call_time, String, null: true
   personal_info_field :preferred_contact, String, null: true
-  personal_info_field :accepted_clickwrap_agreement, Boolean, null: false
+  personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
 
   field :ticket, Types::TicketType, null: true
   field :ability, Types::AbilityType, null: true
@@ -113,6 +128,6 @@ class Types::UserConProfileType < Types::BaseObject
     end
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
-    Pundit.policy(user, overide).create?
+    Pundit.policy(user, override).create?
   end
 end
