@@ -17,9 +17,9 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 # Overall Architecture
 
 * **Backend**: Ruby on Rails application exposing a GraphQL API and an OpenID Connect-enabled OAuth2 server
-* **Frontend**: React and Apollo-based JavaScript app with some single-page app behavior, moving towards a fully single-page app
+* **Frontend**: React and Apollo-based single-page JavaScript app
 * **Database engine**: PostgreSQL
-* **Background queue system**: Amazon SQS (this might change in the future)
+* **Background queue system**: Amazon SQS + Shoryuken (this might change in the future)
 * **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Heroku](https://heroku.com) and running it as Docker containers (as opposed to using buildpacks).  In fact, trying to use Heroku buildpacks with this app won't work, because we use the C++-based libgraphqlparser on the server.  (If you figure out a way to make that work with buildpacks, please let @nbudin know, because he would really like to know.)
 
 # Getting Started with Developing Intercode
