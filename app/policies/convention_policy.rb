@@ -44,7 +44,7 @@ class ConventionPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
         staff_in_convention?(record) ||
-          has_convention_permission?(record, 'read_reports')
+        has_convention_permission?(record, 'read_reports')
       end
     end
 
@@ -77,8 +77,6 @@ class ConventionPolicy < ApplicationPolicy
 
     site_admin_manage?
   end
-
-  private
 
   class Scope < Scope
     def resolve

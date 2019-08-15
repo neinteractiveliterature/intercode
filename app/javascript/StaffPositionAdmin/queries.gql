@@ -33,6 +33,7 @@ fragment StaffPositionFields on StaffPosition {
 query StaffPositionsQuery {
   convention {
     id
+    name
 
     event_categories {
       id
