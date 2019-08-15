@@ -40,5 +40,54 @@
         "name": "override ticket quotas"
       }
     ]
+  },
+  {
+    "model_type": "Convention",
+    "permissions": [
+      {
+        "permission": "access_admin_notes",
+        "name": "access admin notes"
+      },
+      {
+        "permission": "read_limited_prerelease_schedule",
+        "name": "read limited pre-release schedule"
+      },
+      {
+        "permission": "read_prerelease_schedule",
+        "name": "read pre-release schedule"
+      },
+      {
+        "permission": "read_orders",
+        "name": "read orders"
+      },
+      {
+        "permission": "read_reports",
+        "name": "read reports"
+      },
+      {
+        "permission": "read_signup_details",
+        "name": "read signup details"
+      },
+      {
+        "permission": "read_tickets",
+        "name": "read tickets"
+      },
+      {
+        "permission": "read_user_con_profiles",
+        "name": "read attendee profiles"
+      },
+      {
+        "permission": "read_user_con_profile_email",
+        "name": "read attendee emails"
+      },
+      {
+        "permission": "read_user_con_profile_personal_info",
+        "name": "read attendee personal info"
+      },
+      {
+        "permission": "update_events",
+        "name": "manage events"
+      }
+    ]
   }
 ]

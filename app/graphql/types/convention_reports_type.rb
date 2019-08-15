@@ -10,6 +10,16 @@ class Types::ConventionReportsType < Types::BaseObject
   field :event_provided_tickets, [Types::EventProvidedTicketListType], null: false
   field :events_by_choice, [Types::EventWithChoiceCountsType], null: false
 
+  # If you really want the convention from context, use this
+  def context_convention
+    context[:convention]
+  end
+
+  def convention
+    raise "Do not call the #convention method in ConventionReportsType.  \
+Use #object or #context_convention instead."
+  end
+
   def ticket_count_by_type_and_payment_amount
     @ticket_count_by_type_and_payment_amount ||= begin
       grouped_count_data = object.tickets.group(
@@ -72,7 +82,7 @@ class Types::ConventionReportsType < Types::BaseObject
     SQL
     rows_by_event_id = rows.group_by { |(event_id, _, _, _)| event_id }
 
-    convention.events.map do |event|
+    object.events.map do |event|
       {
         event: event,
         choice_counts: (rows_by_event_id[event.id] || []).map do |(_, state, choice, count)|

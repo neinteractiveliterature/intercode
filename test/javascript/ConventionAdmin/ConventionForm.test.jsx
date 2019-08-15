@@ -1,7 +1,9 @@
 import React from 'react';
 import moment from 'moment-timezone';
 
-import { render, fireEvent } from '../testUtils';
+import {
+  act, wait, render, fireEvent,
+} from '../testUtils';
 import ConventionForm from '../../../app/javascript/ConventionAdmin/ConventionForm';
 
 describe('ConventionForm', () => {
@@ -81,11 +83,14 @@ describe('ConventionForm', () => {
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
   });
 
-  test('onClickSave', () => {
+  test('onClickSave', async () => {
     const saveConvention = jest.fn();
     const { getByText } = renderConventionForm({ saveConvention });
 
-    fireEvent.click(getByText('Save settings'), { selector: 'button' });
+    await act(async () => {
+      fireEvent.click(getByText('Save settings'), { selector: 'button' });
+      await wait();
+    });
     expect(saveConvention).toHaveBeenCalledTimes(1);
     expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention);
   });

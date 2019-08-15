@@ -1,7 +1,7 @@
 import React from 'react';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-hooks';
 
-import { render, act, fireEvent } from '../testUtils';
+import { render, fireEvent } from '../testUtils';
 import { convention, initialEvent, minimalForm } from './formMockData';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
 
@@ -29,10 +29,10 @@ describe('useEventForm', () => {
     expect(getAllByLabelText('Title*')).toHaveLength(1);
   });
 
-  it('changes the event when response values are changed', () => {
+  it('changes the event when response values are changed', async () => {
     const { result } = renderEventFormHook();
     const [eventFormProps] = result.current;
-    act(() => eventFormProps.formResponseValuesChanged({ title: 'An event' }));
+    act(() => { eventFormProps.formResponseValuesChanged({ title: 'An event' }); });
     const [, { event }] = result.current;
     expect(event.form_response_attrs.title).toEqual('An event');
   });
@@ -53,12 +53,12 @@ describe('useEventForm', () => {
   });
 
   describe('setEvent', () => {
-    it('sets the event', () => {
+    it('sets the event', async () => {
       const { result } = renderEventFormHook();
       const [, { setEvent }] = result.current;
       const fakeEvent = { something: 'blah' };
 
-      act(() => setEvent(fakeEvent));
+      act(() => { setEvent(fakeEvent); });
 
       const [, { event }] = result.current;
       expect(event).toBe(fakeEvent);
@@ -68,23 +68,18 @@ describe('useEventForm', () => {
   describe('validateForm', () => {
     it('validates all required fields', () => {
       const { result } = renderEventFormHook();
-      const { getByLabelText, rerender } = renderEventForm(result);
-      fireEvent.change(getByLabelText('Title*'), { target: { value: 'An event' } });
+      const [eventFormProps] = result.current;
+      act(() => { eventFormProps.formResponseValuesChanged({ title: 'An event' }); });
       const [, { validateForm }] = result.current;
       expect(validateForm()).toBe(true);
-      rerender();
-      expect(getByLabelText('Title*')).not.toHaveClass('is-invalid');
     });
 
     it('errors if a required field is not present', () => {
       const { result } = renderEventFormHook({});
-      const { getByLabelText, rerender } = renderEventForm(result);
       const [, { validateForm }] = result.current;
       let validationResult;
       act(() => { validationResult = validateForm(); });
       expect(validationResult).toBe(false);
-      rerender();
-      expect(getByLabelText('Title*')).toHaveClass('is-invalid');
     });
   });
 });

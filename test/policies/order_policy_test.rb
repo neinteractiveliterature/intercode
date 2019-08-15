@@ -1,14 +1,24 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class OrderPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
+  let(:order) { create(:order) }
+  let(:order_user) { order.user_con_profile.user }
+  let(:convention) { order.user_con_profile.convention }
+
   describe '#read?' do
     it 'lets me read orders I made' do
-      order = create(:order)
-      assert OrderPolicy.new(order.user_con_profile.user, order).read?
+      assert OrderPolicy.new(order_user, order).read?
+    end
+
+    it 'lets users with read_orders permission read orders I made' do
+      user = create_user_with_read_orders_in_convention(order.user_con_profile.convention)
+      assert OrderPolicy.new(user, order).read?
     end
 
     it 'does not let me read orders other people made' do
-      order = create(:order)
       refute OrderPolicy.new(create(:user), order).read?
     end
   end
@@ -16,24 +26,24 @@ class OrderPolicyTest < ActiveSupport::TestCase
   describe '#submit?' do
     %w[pending unpaid].each do |status|
       it "lets me submit my own #{status} orders" do
-        order = create(:order, status: status)
-        assert OrderPolicy.new(order.user_con_profile.user, order).submit?
+        order.update!(status: status)
+        assert OrderPolicy.new(order_user, order).submit?
       end
 
       it "does not let me submit other people's #{status} orders" do
-        order = create(:order, status: status)
+        order.update!(status: status)
         refute OrderPolicy.new(create(:user), order).submit?
       end
     end
 
     (Order::STATUSES - %w[pending unpaid]).each do |status|
       it "does not let me submit my own #{status} orders" do
-        order = create(:order, status: status)
-        refute OrderPolicy.new(order.user_con_profile.user, order).submit?
+        order.update!(status: status)
+        refute OrderPolicy.new(order_user, order).submit?
       end
 
       it "does not let me submit other people's #{status} orders" do
-        order = create(:order, status: status)
+        order.update!(status: status)
         refute OrderPolicy.new(create(:user), order).submit?
       end
     end
@@ -43,18 +53,15 @@ class OrderPolicyTest < ActiveSupport::TestCase
   %w[cancel manage].each do |action|
     describe "##{action}?" do
       it "does not let regular users #{action} their own orders" do
-        order = create(:order)
-        refute OrderPolicy.new(order.user_con_profile.user, order).public_send("#{action}?")
+        refute OrderPolicy.new(order_user, order).public_send("#{action}?")
       end
 
       it "lets con staff #{action} attendees' orders" do
-        order = create(:order)
         staff_profile = create(:staff_user_con_profile, convention: order.user_con_profile.convention)
         assert OrderPolicy.new(staff_profile.user, order).public_send("#{action}?")
       end
 
       it "does not let staff from other conventions #{action} attendees' orders" do
-        order = create(:order)
         staff_profile = create(:staff_user_con_profile)
         refute OrderPolicy.new(staff_profile.user, order).public_send("#{action}?")
       end
@@ -69,6 +76,18 @@ class OrderPolicyTest < ActiveSupport::TestCase
       resolved_orders = OrderPolicy::Scope.new(me.user, Order.all).resolve.to_a
 
       assert_equal my_orders.sort, resolved_orders.sort
+    end
+
+    it 'lets users with read_orders permission see all the orders in the con' do
+      convention = create(:convention)
+      me = create_user_with_read_orders_in_convention(convention)
+      my_orders = create_list(:order, 3, user_con_profile: me.user_con_profiles.first)
+      someone = create(:user_con_profile, convention: convention)
+      someones_orders = create_list(:order, 3, user_con_profile: someone)
+      create_list(:order, 3)
+      resolved_orders = OrderPolicy::Scope.new(me, Order.all).resolve.to_a
+
+      assert_equal (my_orders + someones_orders).sort, resolved_orders.sort
     end
 
     it 'lets con staff see all the orders in the con' do

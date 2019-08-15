@@ -1,9 +1,10 @@
 import React from 'react';
-import { mount } from 'enzyme';
 import { ConfirmModal } from 'react-bootstrap4-modal';
-import Confirm from '../../../app/javascript/ModalDialogs/Confirm';
-import CommitableInput from '../../../app/javascript/BuiltInFormControls/CommitableInput';
+
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
+import {
+  render, act, fireEvent, wait,
+} from '../testUtils';
 
 describe('RegistrationBucketRow', () => {
   let onChange;
@@ -25,157 +26,135 @@ describe('RegistrationBucketRow', () => {
     onDelete = jest.fn();
   });
 
-  const renderRegistrationBucketRow = (props, registrationBucketProps) => mount((
-    <Confirm>
-      <table>
-        <tbody>
-          <RegistrationBucketRow
-            registrationBucket={
-              {
-                ...defaultRegistrationBucketProps,
-                ...registrationBucketProps,
-              }
+  const renderRegistrationBucketRow = (props, registrationBucketProps) => render((
+    <table>
+      <tbody>
+        <RegistrationBucketRow
+          registrationBucket={
+            {
+              ...defaultRegistrationBucketProps,
+              ...registrationBucketProps,
             }
-            onChange={onChange}
-            onDelete={onDelete}
-            lockNameAndDescription={false}
-            lockLimited={false}
-            lockDelete={false}
-            {...props}
-          />
-        </tbody>
-      </table>
-    </Confirm>
+          }
+          onChange={onChange}
+          onDelete={onDelete}
+          lockNameAndDescription={false}
+          lockLimited={false}
+          lockDelete={false}
+          {...props}
+        />
+      </tbody>
+    </table>
   ));
 
   test('it renders the correct field values', () => {
-    const component = renderRegistrationBucketRow();
-    expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(0).find(CommitableInput)).toHaveLength(2);
-    expect(component.find('td').at(0).find(CommitableInput).at(0)
-      .prop('value')).toEqual('test');
-    expect(component.find('td').at(0).find(CommitableInput).at(1)
-      .prop('value')).toEqual('a bucket for testing');
-    expect(component.find('td').at(1).find('input[type="checkbox"]').at(0)
-      .prop('checked')).toBeFalsy(); // unlimited
-    expect(component.find('td').at(1).find('input[type="checkbox"]').at(1)
-      .prop('checked')).toBeTruthy(); // counted
-    expect(component.find('td').at(1).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
-      2,
-      5,
-      10,
-    ]);
+    const {
+      getByDisplayValue, getByLabelText, getByRole, getByText,
+    } = renderRegistrationBucketRow();
+    expect(getByRole('row')).not.toHaveClass('anything-bucket');
+    expect(getByDisplayValue('test')).toBeTruthy();
+    expect(getByDisplayValue('a bucket for testing')).toBeTruthy();
+    expect(getByLabelText('Unlimited?').checked).toBeFalsy();
+    expect(getByLabelText('Counted?').checked).toBeTruthy();
+    expect(getByLabelText('Min')).toHaveValue(2);
+    expect(getByLabelText('Pref')).toHaveValue(5);
+    expect(getByLabelText('Max')).toHaveValue(10);
+    expect(getByText('Delete bucket')).toBeTruthy();
   });
 
   test('lockNameAndDescription', () => {
-    const component = renderRegistrationBucketRow({ lockNameAndDescription: true });
-    expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(0).text()).toEqual('test');
-    expect(component.find('td').at(0).prop('title')).toEqual('a bucket for testing');
-    expect(component.find('td').at(1).find('input[type="checkbox"]').at(0)
-      .prop('checked')).toBeFalsy(); // unlimited
-    expect(component.find('td').at(1).find('input[type="checkbox"]').at(1)
-      .prop('checked')).toBeTruthy(); // counted
-    expect(component.find('td').at(1).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
-      2,
-      5,
-      10,
-    ]);
+    const { getByText } = renderRegistrationBucketRow({ lockNameAndDescription: true });
+    expect(getByText('test')).toBeTruthy();
   });
 
   test('lockLimited', () => {
-    const component = renderRegistrationBucketRow({ lockLimited: true });
-    expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(0).find(CommitableInput)).toHaveLength(2);
-    expect(component.find('td').at(1).find('input[type="checkbox"]')).toHaveLength(0);
-    expect(component.find('td').at(1).find('input[type="number"]').map(input => input.prop('value'))).toEqual([
-      2,
-      5,
-      10,
-    ]);
+    const { queryAllByLabelText } = renderRegistrationBucketRow({ lockLimited: true });
+    expect(queryAllByLabelText('Unlimited?')).toHaveLength(0);
   });
 
   test('lockDelete', () => {
-    const component = renderRegistrationBucketRow({ lockDelete: true });
-    expect(component.find('.anything-bucket').length).toEqual(0);
-    expect(component.find('td').at(2).find('button').length).toEqual(0);
+    const { queryAllByText } = renderRegistrationBucketRow({ lockDelete: true });
+    expect(queryAllByText('Delete bucket')).toHaveLength(0);
   });
 
   test('anything bucket renders properly', () => {
-    const component = renderRegistrationBucketRow({}, { anything: true });
-    expect(component.find('.anything-bucket').length).toEqual(1);
+    const { getByRole } = renderRegistrationBucketRow({}, { anything: true });
+    expect(getByRole('row')).toHaveClass('anything-bucket');
   });
 
   test('changing the name', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(0).find(CommitableInput).at(0)
-      .prop('onChange')('new name');
+    const { getByLabelText, getByText } = renderRegistrationBucketRow();
+    fireEvent.focus(getByLabelText('Bucket name'));
+    fireEvent.change(getByLabelText('Bucket name'), { target: { value: 'new name' } });
+    fireEvent.click(getByText('Commit changes'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].name).toEqual('new name');
     expect(onChange.mock.calls[0][1].key).toEqual('testBucket');
   });
 
   test('changing the description', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(0).find(CommitableInput).at(1)
-      .prop('onChange')('a new description');
+    const { getByLabelText, getByText } = renderRegistrationBucketRow();
+    fireEvent.focus(getByLabelText('Bucket description'));
+    fireEvent.change(getByLabelText('Bucket description'), { target: { value: 'a new description' } });
+    fireEvent.click(getByText('Commit changes'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].description).toEqual('a new description');
   });
 
-  test('changing unlimited checkbox', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(1).find('input[type="checkbox"]').at(0)
-      .simulate('change', { target: { checked: true } });
+  test('changing unlimited checkbox', async () => {
+    const { getByLabelText } = renderRegistrationBucketRow();
+    fireEvent.click(getByLabelText('Unlimited?'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].slots_limited).toEqual(false);
   });
 
   test('changing counted checkbox', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(1).find('input[type="checkbox"]').at(1)
-      .simulate('change', { target: { checked: false } });
+    const { getByLabelText } = renderRegistrationBucketRow();
+    fireEvent.click(getByLabelText('Counted?'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].not_counted).toEqual(true);
   });
 
   test('changing minimumSlots', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(1).find('input[type="number"]').at(0)
-      .simulate('change', { target: { value: 4 } });
+    const { getByLabelText } = renderRegistrationBucketRow();
+    fireEvent.change(getByLabelText('Min'), { target: { value: '4' } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].minimum_slots).toEqual(4);
   });
 
   test('changing preferredSlots', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(1).find('input[type="number"]').at(1)
-      .simulate('change', { target: { value: 6 } });
+    const { getByLabelText } = renderRegistrationBucketRow();
+    fireEvent.change(getByLabelText('Pref'), { target: { value: '6' } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].preferred_slots).toEqual(6);
   });
 
   test('changing totalSlots', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(1).find('input[type="number"]').at(2)
-      .simulate('change', { target: { value: 55 } });
+    const { getByLabelText } = renderRegistrationBucketRow();
+    fireEvent.change(getByLabelText('Max'), { target: { value: '55' } });
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].total_slots).toEqual(55);
   });
 
-  test('deleting', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('button').at(0)
-      .simulate('click');
-    component.find(ConfirmModal).find('button').at(1).simulate('click');
+  test('deleting', async () => {
+    const { getByText } = renderRegistrationBucketRow();
+    await act(async () => {
+      fireEvent.click(getByText('Delete bucket'));
+      await wait();
+      fireEvent.click(getByText('OK'));
+      await wait();
+    });
     expect(onDelete.mock.calls[0][0]).toEqual('testBucket');
   });
 
-  test('canceling delete', () => {
-    const component = renderRegistrationBucketRow();
-    component.find('td').at(2).find('button').at(0)
-      .simulate('click');
-    component.find(ConfirmModal).find('button').at(0).simulate('click');
-    expect(onDelete.mock.calls[0]).toBeFalsy();
+  test('canceling delete', async () => {
+    const { getByText } = renderRegistrationBucketRow();
+    await act(async () => {
+      fireEvent.click(getByText('Delete bucket'));
+      await wait();
+      fireEvent.click(getByText('Cancel'));
+      await wait();
+    });
+    expect(onDelete.mock.calls).toHaveLength(0);
   });
 });

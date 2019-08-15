@@ -11,7 +11,7 @@ class EventPolicy < ApplicationPolicy
           record.status == 'active' &&
           has_schedule_release_permissions?(convention, convention.show_event_list)
         ) ||
-        has_event_category_permission?(record.event_category_id, 'update_events') ||
+        has_applicable_permission?('update_events') ||
         has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
       end
     end
@@ -26,7 +26,7 @@ class EventPolicy < ApplicationPolicy
   def read_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        has_event_category_permission?(record.event_category_id, :access_admin_notes) ||
+        has_applicable_permission?('access_admin_notes') ||
         has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
       end
     end
@@ -37,7 +37,7 @@ class EventPolicy < ApplicationPolicy
   def update_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        has_event_category_permission?(record.event_category_id, :access_admin_notes) ||
+        has_applicable_permission?('access_admin_notes') ||
         has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
       end
     end
@@ -48,7 +48,7 @@ class EventPolicy < ApplicationPolicy
   def drop?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        has_event_category_permission?(record.event_category_id, :update_events) ||
+        has_applicable_permission?('update_events') ||
         has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
       end
     end
@@ -68,12 +68,19 @@ class EventPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
         team_member_for_event?(record) ||
-        has_event_category_permission?(record.event_category_id, :update_events) ||
+        has_applicable_permission?('update_events') ||
         has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
       end
     end
 
     super
+  end
+
+  private
+
+  def has_applicable_permission?(*permissions)
+    has_event_category_permission?(record.event_category_id, *permissions) ||
+      has_convention_permission?(convention, *permissions)
   end
 
   class Scope < Scope
@@ -103,6 +110,9 @@ class EventPolicy < ApplicationPolicy
 
         # event updaters can see dropped events in their categories
         dw.add(event_category: event_categories_with_permission('update_events'))
+
+        # update_events users can see dropped events in the convention as a whole
+        dw.add(convention: conventions_with_permission('update_events'))
       end
     end
   end

@@ -6,11 +6,19 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 require 'minitest/reporters'
-Minitest::Reporters.use!(
-  Minitest::Reporters::SpecReporter.new,
-  ENV,
-  Minitest.backtrace_filter
-)
+if ENV['MINITEST_PROGRESS_REPORTER'].present?
+  Minitest::Reporters.use!(
+    Minitest::Reporters::ProgressReporter.new,
+    ENV,
+    Minitest.backtrace_filter
+  )
+else
+  Minitest::Reporters.use!(
+    Minitest::Reporters::SpecReporter.new,
+    ENV,
+    Minitest.backtrace_filter
+  )
+end
 
 # TODO once DatabaseCleaner actually releases a gem version with the url whitelist feature,
 # switch to this, until then we need to just turn off the safeguard so it will work with Docker

@@ -33,6 +33,7 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
 
   def permission_attrs_for_model(model_type, model_id)
     case model_type
+    when 'Convention' then { convention_id: model_id }
     when 'EventCategory' then { event_category_id: model_id }
     else raise ArgumentError, "Unknown permission model_type #{model_type}"
     end

@@ -404,11 +404,13 @@ ActiveRecord::Schema.define(version: 2019_08_14_120605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "organization_role_id"
+    t.bigint "convention_id"
+    t.index ["convention_id"], name: "index_permissions_on_convention_id"
     t.index ["event_category_id"], name: "index_permissions_on_event_category_id"
     t.index ["organization_role_id"], name: "index_permissions_on_organization_role_id"
     t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_permissions_unique_join", unique: true
     t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
-    t.check_constraint :permissions_model_exclusive_arc, "(((event_category_id IS NOT NULL))::integer = ANY (ARRAY[0, 1]))"
+    t.check_constraint :permissions_model_exclusive_arc, "((((convention_id IS NOT NULL))::integer + ((event_category_id IS NOT NULL))::integer) = ANY (ARRAY[0, 1]))"
     t.check_constraint :permissions_role_exclusive_arc, "((((staff_position_id IS NOT NULL))::integer + ((organization_role_id IS NOT NULL))::integer) = 1)"
   end
 
@@ -596,7 +598,6 @@ ActiveRecord::Schema.define(version: 2019_08_14_120605) do
     t.boolean "gm_liaison", default: false, null: false
     t.boolean "registrar", default: false, null: false
     t.boolean "outreach", default: false, null: false
-    t.boolean "con_com", default: false, null: false
     t.boolean "scheduling", default: false, null: false
     t.boolean "mail_to_gms", default: false, null: false
     t.boolean "mail_to_attendees", default: false, null: false
@@ -689,6 +690,7 @@ ActiveRecord::Schema.define(version: 2019_08_14_120605) do
   add_foreign_key "orders", "user_con_profiles"
   add_foreign_key "organization_roles", "organizations"
   add_foreign_key "pages", "cms_layouts"
+  add_foreign_key "permissions", "conventions"
   add_foreign_key "permissions", "event_categories"
   add_foreign_key "permissions", "organization_roles"
   add_foreign_key "permissions", "staff_positions"

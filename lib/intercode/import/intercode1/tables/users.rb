@@ -21,13 +21,26 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     proposal_chair: 'BidChair',
     gm_liaison: 'GMLiaison',
     outreach: 'Outreach',
-    con_com: 'ConCom',
     scheduling: 'Scheduling',
     mail_to_gms: 'MailToGMs',
     mail_to_attendees: 'MailToAttendes',
     mail_to_vendors: 'MailToVendors',
     mail_to_unpaid: 'MailToUnpaid',
     mail_to_alumni: 'MailToAlumni'
+  }
+
+  PERMISSIONS_MAP = {
+    ConCom: %w[
+      read_orders
+      read_prerelease_schedule
+      read_reports
+      read_schedule_with_counts
+      read_signup_details
+      read_tickets
+      read_user_con_profiles
+      read_user_con_profile_email
+      read_user_con_profile_personal_info
+    ]
   }
 
   PREFERRED_CONTACT_MAP = {
@@ -60,6 +73,8 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       user_con_profile = build_user_con_profile(row, @con, user)
       user_con_profile.save!
       user_con_profile_id_map[row[:UserId]] = user_con_profile
+
+      grant_permissions(row, con, user_con_profile)
 
       ticket = build_ticket(row, user_con_profile)
       ticket.save! if ticket
@@ -94,6 +109,23 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     }.merge(priv_attributes(row)).merge(contact_attributes(row))
 
     user.user_con_profiles.new(profile_attrs)
+  end
+
+  def grant_permissions(row, con, user_con_profile)
+    PERMISSIONS_MAP.each do |permission_granting_priv, permissions|
+      next unless row[permission_granting_priv]
+
+      staff_position = con.staff_positions.find_or_create_by(name: permission_granting_priv) do |sp|
+        sp.visible = false
+        sp.save!
+
+        permissions.each do |permission|
+          sp.permissions.create!(model: con, permission: permission)
+        end
+      end
+
+      staff_position.user_con_profiles << user_con_profile
+    end
   end
 
   def contact_attributes(row)

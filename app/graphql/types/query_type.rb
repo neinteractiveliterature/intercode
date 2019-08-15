@@ -257,9 +257,9 @@ class Types::QueryType < Types::BaseObject
     argument :content, String, required: true
 
     authorize do |_value, context|
-      # TODO maybe better permission for this?  Not sure, but for now I'm using con_com as a proxy
-      # for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary Liquid
-      # drop data)"
+      # TODO maybe better permission for this?  Not sure, but for now I'm using view_reports as a
+      # proxy for "privileged enough to preview arbitrary Liquid (and therefore access arbitrary
+      # Liquid drop data)"
       if context[:convention]
         Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
       else

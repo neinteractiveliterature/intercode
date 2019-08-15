@@ -30,7 +30,10 @@ class ConventionPolicy < ApplicationPolicy
   def schedule_with_counts?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        schedule? && has_privilege_in_convention?(record, :scheduling, :gm_liaison, :con_com)
+        schedule? && (
+          has_privilege_in_convention?(record, :scheduling, :gm_liaison) ||
+            has_convention_permission?(record, 'read_schedule_with_counts')
+        )
       end
     end
 
@@ -39,18 +42,17 @@ class ConventionPolicy < ApplicationPolicy
 
   def view_reports?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) { has_privilege_in_convention?(record, :con_com) }
+      d.add(:read_conventions) do
+        staff_in_convention?(record) ||
+        has_convention_permission?(record, 'read_reports')
+      end
     end
 
     site_admin_read?
   end
 
   def view_attendees?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) { has_privilege_in_convention?(record, :con_com) }
-    end
-
-    site_admin_read?
+    UserConProfilePolicy.new(user, UserConProfile.new(convention: record)).read?
   end
 
   def view_event_proposals?
@@ -75,8 +77,6 @@ class ConventionPolicy < ApplicationPolicy
 
     site_admin_manage?
   end
-
-  private
 
   class Scope < Scope
     def resolve

@@ -186,6 +186,7 @@ class RegistrationBucketRow extends React.Component {
             value={this.props.registrationBucket.name}
             onChange={this.mutator.name}
             placeholder="Bucket name"
+            label="Bucket name"
           />
         </div>
 
@@ -194,6 +195,7 @@ class RegistrationBucketRow extends React.Component {
           onChange={this.mutator.description}
           renderInput={props => <textarea rows={2} {...props} />}
           placeholder="Bucket description"
+          label="Bucket description"
         />
       </td>,
     ];
@@ -217,6 +219,7 @@ class RegistrationBucketRow extends React.Component {
               })}
             >
               <i className="fa fa-trash-o" />
+              <span className="sr-only">Delete bucket</span>
             </button>
           )}
         </Confirm.Trigger>

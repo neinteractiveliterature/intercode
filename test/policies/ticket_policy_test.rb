@@ -1,32 +1,31 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class TicketPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
+  let(:ticket) { create(:ticket) }
+  let(:ticket_user) { ticket.user_con_profile.user }
+  let(:convention) { ticket.user_con_profile.convention }
+
   describe '#read?' do
     it 'lets me read my own ticket' do
-      ticket = create(:ticket)
-      assert TicketPolicy.new(ticket.user_con_profile.user, ticket).read?
+      assert TicketPolicy.new(ticket_user, ticket).read?
     end
 
     it "does not let me read other people's tickets" do
-      ticket = create(:ticket)
       refute TicketPolicy.new(create(:user), ticket).read?
     end
 
     it 'lets event team members read my ticket' do
-      ticket = create(:ticket)
-      event = create(:event, convention: ticket.user_con_profile.convention)
+      event = create(:event, convention: convention)
       team_member = create(:team_member, event: event)
       assert TicketPolicy.new(team_member.user_con_profile.user, ticket).read?
     end
 
-    it 'lets users with the con_com privilege read my ticket' do
-      ticket = create(:ticket)
-      con_com_profile = create(
-        :user_con_profile,
-        convention: ticket.user_con_profile.convention,
-        con_com: true
-      )
-      assert TicketPolicy.new(con_com_profile.user, ticket).read?
+    it 'lets users with read_tickets in convention read my ticket' do
+      user = create_user_with_read_tickets_in_convention(convention)
+      assert TicketPolicy.new(user, ticket).read?
     end
   end
 
@@ -67,16 +66,11 @@ class TicketPolicyTest < ActiveSupport::TestCase
 
   describe '#manage?' do
     it 'does not let me manage my own ticket' do
-      ticket = create(:ticket)
-      refute TicketPolicy.new(ticket.user_con_profile.user, ticket).manage?
+      refute TicketPolicy.new(ticket_user, ticket).manage?
     end
 
     it 'lets con staff manage my ticket' do
-      ticket = create(:ticket)
-      staff_profile = create(
-        :staff_user_con_profile,
-        convention: ticket.user_con_profile.convention
-      )
+      staff_profile = create(:staff_user_con_profile, convention: convention)
       assert TicketPolicy.new(staff_profile.user, ticket).manage?
     end
   end
@@ -92,13 +86,14 @@ class TicketPolicyTest < ActiveSupport::TestCase
       assert_equal [my_ticket], resolved_tickets
     end
 
-    it 'lets con com users see all the tickets in the con' do
-      me = create(:user_con_profile, con_com: true)
-      my_ticket = create(:ticket, user_con_profile: me)
-      someone = create(:user_con_profile, convention: me.convention)
+    it 'lets users with read_tickets permission see all the tickets in the con' do
+      convention = create(:convention)
+      me = create_user_with_read_tickets_in_convention(convention)
+      my_ticket = create(:ticket, user_con_profile: me.user_con_profiles.first)
+      someone = create(:user_con_profile, convention: convention)
       someones_ticket = create(:ticket, user_con_profile: someone)
       create_list(:ticket, 3)
-      resolved_tickets = TicketPolicy::Scope.new(me.user, Ticket.all).resolve.to_a
+      resolved_tickets = TicketPolicy::Scope.new(me, Ticket.all).resolve.to_a
 
       assert_equal [my_ticket, someones_ticket].sort, resolved_tickets.sort
     end
