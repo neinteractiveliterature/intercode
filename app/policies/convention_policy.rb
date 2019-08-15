@@ -31,7 +31,7 @@ class ConventionPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
         schedule? && (
-          has_privilege_in_convention?(record, :scheduling, :gm_liaison) ||
+          has_privilege_in_convention?(record, :gm_liaison) ||
             has_convention_permission?(record, 'read_schedule_with_counts')
         )
       end
