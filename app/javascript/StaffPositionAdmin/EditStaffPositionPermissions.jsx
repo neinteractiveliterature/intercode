@@ -20,14 +20,21 @@ function buildPermissionInput(permission) {
   };
 }
 
-const EventCategoryPermissionNames = flatMap(
-  PermissionNames.filter(
-    permissionNameGroup => permissionNameGroup.model_type === 'EventCategory',
-  ),
-  permissionNameGroup => permissionNameGroup.permissions,
-);
+function getPermissionNamesForModelType(modelType) {
+  return flatMap(
+    PermissionNames.filter(
+      permissionNameGroup => permissionNameGroup.model_type === modelType,
+    ),
+    permissionNameGroup => permissionNameGroup.permissions,
+  );
+}
 
-function EditStaffPositionPermissions({ staffPosition, eventCategories, history }) {
+const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
+const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
+
+function EditStaffPositionPermissions({
+  staffPosition, convention, eventCategories, history,
+}) {
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
   const [mutationInProgress, setMutationInProgress] = useState(false);
@@ -66,23 +73,38 @@ function EditStaffPositionPermissions({ staffPosition, eventCategories, history 
         {' Permissions'}
       </h1>
 
-      <PermissionsTableInput
-        permissionNames={EventCategoryPermissionNames}
-        initialPermissions={staffPosition.permissions}
-        models={eventCategories}
-        changeSet={changeSet}
-        add={add}
-        remove={remove}
-        modelsHeader="Event Category"
-        formatModelHeader={eventCategory => (
-          <span
-            className="p-1 rounded"
-            style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
-          >
-            {eventCategory.name}
-          </span>
-        )}
-      />
+      <section className="mb-4">
+        <PermissionsTableInput
+          permissionNames={ConventionPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          models={[convention]}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          modelsHeader="Convention"
+          formatModelHeader={con => con.name}
+        />
+      </section>
+
+      <section className="mb-4">
+        <PermissionsTableInput
+          permissionNames={EventCategoryPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          models={eventCategories}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          modelsHeader="Event Category"
+          formatModelHeader={eventCategory => (
+            <span
+              className="p-1 rounded"
+              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+            >
+              {eventCategory.name}
+            </span>
+          )}
+        />
+      </section>
 
       <ErrorDisplay graphQLError={error} />
 
@@ -114,6 +136,9 @@ EditStaffPositionPermissions.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
+  convention: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,

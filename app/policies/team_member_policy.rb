@@ -5,7 +5,7 @@ class TeamMemberPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) { team_member_for_event?(event) || EventPolicy.new(user, event).read? }
-      d.add(:read_conventions) { has_privilege_in_convention?(convention, :con_com, :gm_liaison) }
+      d.add(:read_conventions) { has_privilege_in_convention?(convention, :gm_liaison) }
     end
 
     super
@@ -23,15 +23,11 @@ class TeamMemberPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.all if oauth_scope?(:read_conventions) && site_admin?
+      return scope.none unless oauth_scope?(:read_events)
 
       disjunctive_where do |dw|
-        dw.add(event_id: events_where_team_member) if oauth_scope?(:read_events)
-
-        if oauth_scope?(:read_conventions)
-          dw.add(event_id: Event.where(
-            convention_id: conventions_with_privilege(:con_com, :gm_liaison)
-          ))
-        end
+        dw.add(event: events_where_team_member)
+        dw.add(event: EventPolicy::Scope.new(user, Event.all).resolve)
       end
     end
   end

@@ -1,11 +1,14 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class SignupPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:signup) { create(:signup) }
   let(:convention) { signup.run.event.convention }
 
   describe '#read?' do
-    %w[outreach con_com staff].each do |priv|
+    %w[outreach staff].each do |priv|
       it "lets #{priv} users read signups in their convention" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert SignupPolicy.new(user_con_profile.user, signup).read?
@@ -38,11 +41,16 @@ class SignupPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_requested_bucket_key?' do
-    %w[outreach con_com staff].each do |priv|
+    %w[outreach staff].each do |priv|
       it "lets #{priv} users read requested bucket key for signups in their convention" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert SignupPolicy.new(user_con_profile.user, signup).read_requested_bucket_key?
       end
+    end
+
+    it 'lets users with read_signup_details read requested bucket key for signups in the con' do
+      user = create_user_with_read_signup_details_in_convention(convention)
+      assert SignupPolicy.new(user, signup).read_requested_bucket_key?
     end
 
     it 'lets team members read requested bucket key for signups in their events' do
@@ -106,7 +114,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
       refute SignupPolicy.new(user_con_profile.user, signup).manage?
     end
 
-    %w[outreach con_com].each do |priv|
+    %w[outreach].each do |priv|
       it "does not let #{priv} users manage signups in their convention" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         refute SignupPolicy.new(user_con_profile.user, signup).manage?
@@ -135,7 +143,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
   end
 
   describe 'Scope' do
-    %w[outreach con_com staff].each do |priv|
+    %w[outreach staff].each do |priv|
       it "returns signups in cons where the user has the #{priv} privilege" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         resolved_signups = SignupPolicy::Scope.new(user_con_profile.user, Signup.all).resolve

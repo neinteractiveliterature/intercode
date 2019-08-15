@@ -16,6 +16,11 @@ fragment StaffPositionFields on StaffPosition {
     model {
       __typename
 
+      ...on Convention {
+        id
+        name
+      }
+
       ...on EventCategory {
         id
         name
@@ -28,6 +33,7 @@ fragment StaffPositionFields on StaffPosition {
 query StaffPositionsQuery {
   convention {
     id
+    name
 
     event_categories {
       id

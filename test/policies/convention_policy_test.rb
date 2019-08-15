@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class ConventionPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:convention) { create(:convention) }
 
   describe '#read' do
@@ -31,12 +34,21 @@ class ConventionPolicyTest < ActiveSupport::TestCase
             .public_send("#{action}?")
         end
 
-        %w[con_com scheduling gm_liaison staff].each do |priv|
+        %w[scheduling gm_liaison staff].each do |priv|
           it "lets #{priv} users #{action}" do
             user_con_profile = create(
               :user_con_profile, convention: convention, priv => true
             )
             assert ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")
+          end
+        end
+
+        %w[
+          read_prerelease_schedule read_limited_prerelease_schedule update_events
+        ].each do |permission|
+          it "lets users with #{permission} permission in convention #{action}" do
+            user = create_user_with_permission_in_convention(permission, convention)
+            assert ConventionPolicy.new(user, convention).public_send("#{action}?")
           end
         end
 
@@ -62,6 +74,20 @@ class ConventionPolicyTest < ActiveSupport::TestCase
           end
         end
 
+        %w[read_limited_prerelease_schedule update_events].each do |permission|
+          it "lets users with #{permission} permission in convention #{action}" do
+            user = create_user_with_permission_in_convention(permission, convention)
+            assert ConventionPolicy.new(user, convention).public_send("#{action}?")
+          end
+        end
+
+        %w[read_prerelease_schedule].each do |permission|
+          it "does not let users with #{permission} permission in convention #{action}" do
+            user = create_user_with_permission_in_convention(permission, convention)
+            refute ConventionPolicy.new(user, convention).public_send("#{action}?")
+          end
+        end
+
         it "does not let team members #{action}" do
           event = create(:event, convention: convention)
           team_member = create(:team_member, event: event)
@@ -82,11 +108,25 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       describe "when #{field} is 'no'" do
         before { convention.update!(field => 'no') }
 
-        it "does not let staff users #{action}" do
+        it "lets staff users #{action}" do
           user_con_profile = create(
             :user_con_profile, convention: convention, staff: true
           )
-          refute ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")
+          assert ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")
+        end
+
+        %w[update_events].each do |permission|
+          it "lets users with #{permission} permission in convention #{action}" do
+            user = create_user_with_permission_in_convention(permission, convention)
+            assert ConventionPolicy.new(user, convention).public_send("#{action}?")
+          end
+        end
+
+        %w[read_limited_prerelease_schedule read_prerelease_schedule].each do |permission|
+          it "does not let users with #{permission} permission in convention #{action}" do
+            user = create_user_with_permission_in_convention(permission, convention)
+            refute ConventionPolicy.new(user, convention).public_send("#{action}?")
+          end
         end
 
         it "does not let team members #{action}" do
@@ -114,9 +154,43 @@ class ConventionPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#schedule_with_counts?' do
+    {
+      'update_events' => %w[no priv gms yes],
+      'read_limited_prerelease_schedule' => %w[priv gms yes],
+      'read_prerelease_schedule' => %w[gms yes]
+    }.each do |permission, allowed_show_schedule_values|
+      %w[no priv gms yes].each do |value|
+        describe "when show_schedule is #{value}" do
+          allowed = allowed_show_schedule_values.include?(value)
+          verb = (allowed ? 'lets' : 'does not let')
+          it "#{verb} users with #{permission} in convention schedule_with_counts" do
+            convention.update!(show_schedule: value)
+            user = create_user_with_permissions_in_convention(
+              [permission, 'read_schedule_with_counts'], convention
+            )
+            policy_result = ConventionPolicy.new(user, convention).schedule_with_counts?
+
+            if allowed
+              assert policy_result
+            else
+              refute policy_result
+            end
+
+            user_without_counts = create_user_with_permission_in_convention(permission, convention)
+            refute ConventionPolicy.new(user_without_counts, convention).schedule_with_counts?
+          end
+        end
+      end
+    end
+
     %w[priv gms yes no].each do |value|
       describe "when show_schedule is '#{value}'" do
         let(:convention) { create(:convention, show_schedule: value) }
+
+        it "lets staff users schedule_with_counts" do
+          user_con_profile = create(:staff_user_con_profile, convention: convention)
+          assert ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
+        end
 
         it 'does not let regular attendees schedule_with_counts' do
           user_con_profile = create(:user_con_profile, convention: convention)
@@ -136,7 +210,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       end
     end
 
-    %w[scheduling gm_liaison staff].each do |priv|
+    %w[scheduling gm_liaison].each do |priv|
       %w[priv gms yes].each do |value|
         describe "when show_schedule is '#{value}'" do
           let(:convention) { create(:convention, show_schedule: value) }
@@ -163,49 +237,21 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         end
       end
     end
-
-    %w[con_com].each do |priv|
-      %w[gms yes].each do |value|
-        describe "when show_schedule is '#{value}'" do
-          let(:convention) { create(:convention, show_schedule: value) }
-
-          it "lets #{priv} users schedule_with_counts" do
-            user_con_profile = create(
-              :user_con_profile, convention: convention, priv => true
-            )
-            assert ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
-          end
-        end
-      end
-
-      %w[priv no].each do |value|
-        describe "when show_schedule is '#{value}'" do
-          let(:convention) { create(:convention, show_schedule: value) }
-
-          it "does not let #{priv} users schedule_with_counts" do
-            user_con_profile = create(
-              :user_con_profile, convention: convention, priv => true
-            )
-            refute ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
-          end
-        end
-      end
-    end
   end
 
   %w[view_reports view_attendees].each do |action|
     describe "##{action}?" do
-      it "lets con_com users #{action}" do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, con_com: true
-        )
-        assert ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")
-      end
-
       it "does not let regular attendees #{action}" do
         user_con_profile = create(:user_con_profile, convention: convention)
         refute ConventionPolicy.new(user_con_profile.user, convention).public_send("#{action}?")
       end
+    end
+  end
+
+  describe '#view_reports?' do
+    it 'lets users with the read_reports permission view reports' do
+      user = create_user_with_read_reports_in_convention(convention)
+      assert ConventionPolicy.new(user, convention).view_reports?
     end
   end
 

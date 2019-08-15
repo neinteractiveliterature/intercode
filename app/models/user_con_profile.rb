@@ -6,7 +6,7 @@ class UserConProfile < ApplicationRecord
     %w[gms attendees vendors unpaid alumni].map { |group| "mail_to_#{group}" }
   )
   PRIV_NAMES = Set.new(
-    %w[staff gm_liaison outreach con_com scheduling] +
+    %w[staff gm_liaison outreach scheduling] +
     MAIL_PRIV_NAMES.to_a
   )
 

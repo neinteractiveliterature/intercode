@@ -52,7 +52,9 @@ const processFormResponseValue = (key, value) => {
 export default function useEventForm({
   convention, initialEvent, eventForm,
 }) {
-  const [event, setEvent] = useState(initialEvent ? { ...BLANK_EVENT, ...initialEvent } : BLANK_EVENT);
+  const [event, setEvent] = useState(initialEvent
+    ? { ...BLANK_EVENT, ...initialEvent }
+    : BLANK_EVENT);
 
   const [, eventAttrsChanged] = useFormResponse(event, setEvent);
 

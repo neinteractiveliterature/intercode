@@ -72,6 +72,7 @@ function StaffPositionAdmin() {
             <EditStaffPositionPermissions
               staffPosition={findStaffPosition(id)}
               eventCategories={data.convention.event_categories}
+              convention={data.convention}
             />
           )}
         />
