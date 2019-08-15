@@ -5,7 +5,7 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling) ||
+        has_privilege_in_convention?(convention, :gm_liaison) ||
         has_event_category_permission?(event.event_category_id, 'override_event_tickets') ||
         team_member_for_event?(event)
       end
@@ -17,7 +17,7 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling) ||
+        has_privilege_in_convention?(convention, :gm_liaison) ||
         has_event_category_permission?(event.event_category_id, 'override_event_tickets')
       end
     end
@@ -32,7 +32,7 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
       disjunctive_where do |dw|
         if oauth_scope?(:read_events)
           dw.add(event_id: Event.where(
-            convention_id: conventions_with_privilege(:gm_liaison, :scheduling)
+            convention_id: conventions_with_privilege(:gm_liaison)
           ))
 
           dw.add(event_id: events_where_has_event_category_permission('override_event_tickets'))

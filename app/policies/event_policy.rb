@@ -12,7 +12,7 @@ class EventPolicy < ApplicationPolicy
           has_schedule_release_permissions?(convention, convention.show_event_list)
         ) ||
         has_applicable_permission?('update_events') ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_privilege_in_convention?(convention, :gm_liaison)
       end
     end
 
@@ -27,7 +27,7 @@ class EventPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
         has_applicable_permission?('access_admin_notes') ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_privilege_in_convention?(convention, :gm_liaison)
       end
     end
 
@@ -38,7 +38,7 @@ class EventPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
         has_applicable_permission?('access_admin_notes') ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_privilege_in_convention?(convention, :gm_liaison)
       end
     end
 
@@ -49,7 +49,7 @@ class EventPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
         has_applicable_permission?('update_events') ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_privilege_in_convention?(convention, :gm_liaison)
       end
     end
 
@@ -69,7 +69,7 @@ class EventPolicy < ApplicationPolicy
       d.add(:manage_events) do
         team_member_for_event?(record) ||
         has_applicable_permission?('update_events') ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_privilege_in_convention?(convention, :gm_liaison)
       end
     end
 
@@ -105,8 +105,8 @@ class EventPolicy < ApplicationPolicy
           status: 'active'
         )
 
-        # gm_liaison and scheduling can see events regardless of status
-        dw.add(convention: conventions_with_privilege(:gm_liaison, :scheduling))
+        # gm_liaison can see events regardless of status
+        dw.add(convention: conventions_with_privilege(:gm_liaison))
 
         # event updaters can see dropped events in their categories
         dw.add(event_category: event_categories_with_permission('update_events'))
