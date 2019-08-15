@@ -73,34 +73,38 @@ function EditStaffPositionPermissions({
         {' Permissions'}
       </h1>
 
-      <PermissionsTableInput
-        permissionNames={ConventionPermissionNames}
-        initialPermissions={staffPosition.permissions}
-        models={[convention]}
-        changeSet={changeSet}
-        add={add}
-        remove={remove}
-        modelsHeader="Convention"
-        formatModelHeader={con => con.name}
-      />
+      <section className="mb-4">
+        <PermissionsTableInput
+          permissionNames={ConventionPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          models={[convention]}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          modelsHeader="Convention"
+          formatModelHeader={con => con.name}
+        />
+      </section>
 
-      <PermissionsTableInput
-        permissionNames={EventCategoryPermissionNames}
-        initialPermissions={staffPosition.permissions}
-        models={eventCategories}
-        changeSet={changeSet}
-        add={add}
-        remove={remove}
-        modelsHeader="Event Category"
-        formatModelHeader={eventCategory => (
-          <span
-            className="p-1 rounded"
-            style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
-          >
-            {eventCategory.name}
-          </span>
-        )}
-      />
+      <section className="mb-4">
+        <PermissionsTableInput
+          permissionNames={EventCategoryPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          models={eventCategories}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          modelsHeader="Event Category"
+          formatModelHeader={eventCategory => (
+            <span
+              className="p-1 rounded"
+              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+            >
+              {eventCategory.name}
+            </span>
+          )}
+        />
+      </section>
 
       <ErrorDisplay graphQLError={error} />
 
