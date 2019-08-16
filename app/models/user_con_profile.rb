@@ -40,8 +40,12 @@ class UserConProfile < ApplicationRecord
 
   scope :is_team_member, -> { joins(:team_members).distinct }
 
+  scope :has_staff_position, -> { joins(:staff_positions).distinct }
+
   scope :can_have_bio, -> {
-    where(id: has_any_privileges.select(:id)).or(where(id: is_team_member.select(:id)))
+    where(id: has_any_privileges.select(:id))
+      .or(where(id: has_staff_position.select(:id)))
+      .or(where(id: is_team_member.select(:id)))
   }
 
   register_form_response_attrs :first_name,
