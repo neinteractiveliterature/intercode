@@ -33,7 +33,7 @@ class AdminSignupsController < ApplicationController
       format.csv do
         send_table_presenter_csv(
           Tables::SignupsTableResultsPresenter.for_run(
-            @run,
+            run,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]
