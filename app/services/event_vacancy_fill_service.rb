@@ -4,17 +4,18 @@ class EventVacancyFillService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :run, :bucket_key, :move_results, :suppress_notifications
+  attr_reader :run, :bucket_key, :move_results, :suppress_notifications, :immovable_signups
   delegate :event, to: :run
   delegate :convention, to: :event
 
   include Concerns::SkippableAdvisoryLock
   include Concerns::ConventionRegistrationFreeze
 
-  def initialize(run, bucket_key, skip_locking: false, suppress_notifications: false)
+  def initialize(run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false)
     @run = run
     @bucket_key = bucket_key
     @skip_locking = skip_locking
+    @immovable_signups = immovable_signups
     @move_results = []
     @suppress_notifications = suppress_notifications
   end
@@ -54,6 +55,7 @@ class EventVacancyFillService < CivilService::Service
   def best_signup_to_fill_bucket_vacancy(bucket_key)
     bucket = event.registration_policy.bucket_with_key(bucket_key)
     signups_ordered.find do |signup|
+      next if immovable_signups.include?(signup)
       next if move_results.any? { |result| result.signup_id == signup.id }
       signup.bucket_key != bucket.key && signup_can_fill_bucket_vacancy?(signup, bucket)
     end
