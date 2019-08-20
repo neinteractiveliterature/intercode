@@ -1,22 +1,21 @@
 module Concerns::ScheduleRelease
   def has_schedule_release_permissions?(convention, schedule_release_value)
+    return true if staff_in_convention?(convention)
+
     case schedule_release_value
     when 'yes' then true
     when 'gms'
-      has_privilege_in_convention?(convention, :scheduling, :gm_liaison) ||
-        has_convention_permission?(convention,
-          'read_prerelease_schedule', 'read_limited_prerelease_schedule', 'update_events'
-        ) ||
+      has_convention_permission?(convention,
+        'read_prerelease_schedule', 'read_limited_prerelease_schedule', 'update_events'
+      ) ||
         team_member_in_convention?(convention)
     when 'priv'
-      has_privilege_in_convention?(convention, :scheduling, :gm_liaison) ||
-        has_convention_permission?(convention,
-          'read_limited_prerelease_schedule',
-          'update_events'
-        )
+      has_convention_permission?(convention,
+        'read_limited_prerelease_schedule',
+        'update_events'
+      )
     else
-      has_convention_permission?(convention, 'update_events') ||
-        staff_in_convention?(convention)
+      has_convention_permission?(convention, 'update_events')
     end
   end
 
@@ -26,17 +25,9 @@ module Concerns::ScheduleRelease
       dw.add(schedule_release_field => 'gms', id: conventions_where_team_member)
       dw.add(
         schedule_release_field => 'gms',
-        id: conventions_with_privilege(:scheduling, :gm_liaison)
-      )
-      dw.add(
-        schedule_release_field => 'gms',
         id: conventions_with_permission(
           'read_prerelease_schedule', 'read_limited_prerelease_schedule'
         )
-      )
-      dw.add(
-        schedule_release_field => 'priv',
-        id: conventions_with_privilege(:scheduling, :gm_liaison)
       )
       dw.add(
         schedule_release_field => 'priv',

@@ -14,7 +14,7 @@ class EventsMailer < ApplicationMailer
 
   def event_mail_destination(convention)
     staff_position = convention.staff_positions
-      .where(name: 'GM Coordinator').first
+      .where(name: ['GM Coordinator', 'GM Liaison']).first
 
     if staff_position&.email.present?
       staff_position.email
@@ -23,11 +23,7 @@ class EventsMailer < ApplicationMailer
         "#{user_con_profile.name} <#{user_con_profile.email}>"
       end
     else
-      users_with_priv = convention.user_con_profiles.where(gm_liaison: true).to_a
-      if users_with_priv.none?
-        users_with_priv = convention.user_con_profiles.where(staff: true).to_a
-      end
-
+      users_with_priv = convention.user_con_profiles.where(staff: true).to_a
       users_with_priv.map do |user_con_profile|
         "#{user_con_profile.name} <#{user_con_profile.email}>"
       end

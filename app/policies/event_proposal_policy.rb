@@ -10,12 +10,11 @@ class EventProposalPolicy < ApplicationPolicy
         (user && record.owner && record.owner.user_id == user.id) ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
-          has_event_category_permission?(record.event_category_id, :read_pending_event_proposals)
+          has_applicable_permission?(record.event_category_id, :read_pending_event_proposals)
         ) ||
         (
           EVENT_PROPOSAL_NON_PENDING_STATUSES.include?(record.status) &&
-          has_event_category_permission?(record.event_category_id, :read_event_proposals) ||
-          has_privilege_in_convention?(convention, :gm_liaison)
+          has_applicable_permission?(record.event_category_id, :read_event_proposals)
         ) ||
         staff_in_convention?(convention)
       end
@@ -27,8 +26,8 @@ class EventProposalPolicy < ApplicationPolicy
   def read_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        has_event_category_permission?(record.event_category_id, :access_admin_notes) ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_applicable_permission?(record.event_category_id, :access_admin_notes) ||
+        staff_in_convention?(convention)
       end
     end
 
@@ -47,18 +46,13 @@ class EventProposalPolicy < ApplicationPolicy
           user && record.owner.user_id == user.id
         ) ||
         (
-          EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) && (
-            has_event_category_permission?(record.event_category_id, :update_event_proposals) ||
-            staff_in_convention?(convention)
-          )
-        ) ||
-        (
-          %w[accepted withdrawn].include?(record.status) &&
-          has_privilege_in_convention?(convention, :gm_liaison)
+          EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
+          has_applicable_permission?(record.event_category_id, :update_event_proposals)
         ) ||
         (
           record.event && team_member_for_event?(record.event)
-        )
+        ) ||
+        staff_in_convention?(convention)
       end
     end
 
@@ -81,12 +75,19 @@ class EventProposalPolicy < ApplicationPolicy
   def update_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        has_event_category_permission?(record.event_category_id, :access_admin_notes) ||
-        has_privilege_in_convention?(convention, :gm_liaison, :scheduling)
+        has_applicable_permission?(record.event_category_id, :access_admin_notes) ||
+        staff_in_convention?(convention)
       end
     end
 
     site_admin_manage?
+  end
+
+  private
+
+  def has_applicable_permission?(*permissions)
+    has_event_category_permission?(record.event_category_id, *permissions) ||
+      has_convention_permission?(convention, *permissions)
   end
 
   class Scope < Scope
@@ -100,11 +101,15 @@ class EventProposalPolicy < ApplicationPolicy
           status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
         )
         dw.add(
+          convention_id: conventions_with_permission(:read_pending_event_proposals),
+          status: EVENT_PROPOSAL_NON_DRAFT_STATUSES
+        )
+        dw.add(
           event_category_id: event_categories_with_permission(:read_event_proposals),
           status: EVENT_PROPOSAL_NON_PENDING_STATUSES
         )
         dw.add(
-          convention_id: conventions_with_privilege(:gm_liaison),
+          convention_id: conventions_with_permission(:read_event_proposals),
           status: EVENT_PROPOSAL_NON_PENDING_STATUSES
         )
         dw.add(convention_id: conventions_where_staff)

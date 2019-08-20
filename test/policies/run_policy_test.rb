@@ -27,7 +27,7 @@ class RunPolicyTest < ActiveSupport::TestCase
           .read?
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -58,7 +58,7 @@ class RunPolicyTest < ActiveSupport::TestCase
     describe "when show_schedule is 'priv'" do
       before { convention.update!(show_schedule: 'priv') }
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -164,11 +164,16 @@ class RunPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users manage runs" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert RunPolicy.new(user_con_profile.user, the_run).manage?
       end
+    end
+
+    it 'lets users with update_runs manage runs' do
+      user = create_user_with_update_runs_in_convention(convention)
+      assert RunPolicy.new(user, the_run).manage?
     end
 
     it 'does not let team members manage runs' do
@@ -204,7 +209,7 @@ class RunPolicyTest < ActiveSupport::TestCase
         assert_equal [the_run].sort, resolved_runs.sort
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all runs to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -243,7 +248,7 @@ class RunPolicyTest < ActiveSupport::TestCase
     describe "when show_schedule is 'priv'" do
       before { convention.update!(show_schedule: 'priv') }
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all runs to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true

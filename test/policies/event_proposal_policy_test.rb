@@ -15,12 +15,6 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
       assert EventProposalPolicy.new(user_con_profile.user, event_proposal).read?
     end
 
-    it 'lets gm_liaison users read proposals past the proposed phase' do
-      user_con_profile = create(:user_con_profile, convention: convention, gm_liaison: true)
-      event_proposal.update!(status: 'reviewing')
-      assert EventProposalPolicy.new(user_con_profile.user, event_proposal).read?
-    end
-
     it 'lets users with read_pending_event_proposals read event proposals in the proposed phase' do
       user = create_user_with_read_pending_event_proposals_in_event_category(event_category)
       event_proposal.update!(status: 'proposed')
@@ -49,11 +43,16 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_admin_notes?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users read admin notes on proposals" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert EventProposalPolicy.new(user_con_profile.user, event_proposal).read_admin_notes?
       end
+    end
+
+    it 'lets users with convention-level access_admin_notes read admin notes on proposals' do
+      user = create_user_with_access_admin_notes_in_convention(convention)
+      assert EventProposalPolicy.new(user, event_proposal).read_admin_notes?
     end
 
     it 'lets users with access_admin_notes read admin notes on proposals' do
@@ -84,26 +83,16 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
         assert EventProposalPolicy.new(user_con_profile.user, event_proposal).update?
       end
 
+      it "lets users with convention-level update_event_proposals update #{status} proposals" do
+        event_proposal.update!(status: status)
+        user = create_user_with_update_event_proposals_in_convention(convention)
+        assert EventProposalPolicy.new(user, event_proposal).update?
+      end
+
       it "lets users with update_event_proposals update #{status} proposals" do
         event_proposal.update!(status: status)
         user = create_user_with_update_event_proposals_in_event_category(event_category)
         assert EventProposalPolicy.new(user, event_proposal).update?
-      end
-    end
-
-    %w[accepted withdrawn].each do |status|
-      it "lets gm_liaison users update #{status} proposals" do
-        event_proposal.update!(status: status)
-        user_con_profile = create(:user_con_profile, convention: convention, gm_liaison: true)
-        assert EventProposalPolicy.new(user_con_profile.user, event_proposal).update?
-      end
-    end
-
-    (EventProposal::STATUSES - %w[accepted withdrawn]).each do |status|
-      it "does not let gm_liaison users update #{status} proposals" do
-        event_proposal.update!(status: status)
-        user_con_profile = create(:user_con_profile, convention: convention, gm_liaison: true)
-        refute EventProposalPolicy.new(user_con_profile.user, event_proposal).update?
       end
     end
 
@@ -133,11 +122,16 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#update_admin_notes?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users update admin notes on proposals" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => priv)
         assert EventProposalPolicy.new(user_con_profile.user, event_proposal).update_admin_notes?
       end
+    end
+
+    it 'lets users with convention-level access_admin_notes update admin notes on proposals' do
+      user = create_user_with_access_admin_notes_in_convention(convention)
+      assert EventProposalPolicy.new(user, event_proposal).update_admin_notes?
     end
 
     it 'lets users with access_admin_notes update admin notes on proposals' do
@@ -210,18 +204,6 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
       proposed_proposal
       reviewing_proposal
       other_category_reviewing_proposal
-    end
-
-    it 'returns proposals past the proposed phase to gm_liaison users' do
-      user_con_profile = create(:user_con_profile, convention: convention, gm_liaison: true)
-      resolved_event_proposals = EventProposalPolicy::Scope.new(
-        user_con_profile.user, EventProposal.all
-      ).resolve
-
-      assert_equal(
-        [reviewing_proposal, other_category_reviewing_proposal].sort,
-        resolved_event_proposals.sort
-      )
     end
 
     it 'returns proposals past the proposed phase to users with read_event_proposals' do
