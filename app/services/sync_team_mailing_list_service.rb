@@ -36,15 +36,19 @@ class SyncTeamMailingListService < CivilService::Service
   end
 
   def create_or_update_route
+    # RestClient 2.0 is using rack-style params for arrays but we explicitly don't want that for
+    # Mailgun's API
+    route_body = URI.encode_www_form(route_properties)
+
     if applicable_routes.size > 0
       keep_route, *delete_routes = applicable_routes
-      mailgun.put("/routes/#{keep_route['id']}", route_properties)
+      mailgun.put("/routes/#{keep_route['id']}", route_body)
 
       delete_routes.each do |route|
         mailgun.delete("/routes/#{route['id']}")
       end
     else
-      mailgun.post('routes', route_properties)
+      mailgun.post('routes', route_body)
     end
   end
 

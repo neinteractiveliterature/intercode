@@ -27,13 +27,13 @@ class AdminSignupsController < ApplicationController
   def export
     event = convention.events.find(params[:event_id])
     run = event.runs.find(params[:run_id])
-    authorize Signup.new(run: run).read?
+    authorize Signup.new(run: run), :read?
 
     respond_to do |format|
       format.csv do
         send_table_presenter_csv(
           Tables::SignupsTableResultsPresenter.for_run(
-            @run,
+            run,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]

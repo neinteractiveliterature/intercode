@@ -11,6 +11,10 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   let(:signup) { create(:signup, run: the_run) }
   let(:team_member) { create(:team_member, event: event) }
   let(:staff_profile) { create(:staff_user_con_profile, convention: convention) }
+  let(:staff_position) { create(:staff_position, convention: convention) }
+  let(:staff_position_profile) do
+    create(:user_con_profile, convention: convention, staff_positions: [staff_position])
+  end
   let(:rando_profile) { create(:user_con_profile, convention: convention) }
 
   describe '#read?' do
@@ -42,6 +46,14 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(
         signup.user_con_profile.user, other_signup.user_con_profile
       ).read?
+    end
+
+    it 'lets users read profiles of privileged users in the convention' do
+      assert UserConProfilePolicy.new(rando_profile.user, staff_profile).read?
+    end
+
+    it 'lets users read profiles of staff-positioned users in the convention' do
+      assert UserConProfilePolicy.new(rando_profile.user, staff_position_profile).read?
     end
 
     it 'lets users read profiles of team members in the convention' do
