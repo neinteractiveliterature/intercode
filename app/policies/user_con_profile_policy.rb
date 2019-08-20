@@ -5,12 +5,11 @@ class UserConProfilePolicy < ApplicationPolicy
     # you can read the less-sensitive parts of your own profile without read_profile scope
     return true if user && user.id == record.user_id
 
+    # you can always read bio-eligible profiles
+    return true if record.can_have_bio?
+
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) { user_con_profile_ids_in_signed_up_runs.include?(record.id) }
-    end
-
-    if record.team_members.any? && TeamMemberPolicy.new(user, record.team_members.first).read?
-      return true
     end
 
     return true if oauth_scoped_disjunction do |d|

@@ -15,7 +15,9 @@ class Mutations::UpdateSignupBucket < Mutations::BaseMutation
     signup.update!(bucket_key: args[:bucket_key])
 
     if signup.bucket_key_previously_changed? && signup.counted? && original_bucket_key
-      EventVacancyFillService.new(signup.run, original_bucket_key).call!
+      EventVacancyFillService.new(
+        signup.run, original_bucket_key, immovable_signups: signup.run.signups.confirmed.to_a
+      ).call!
     end
 
     { signup: signup.reload }
