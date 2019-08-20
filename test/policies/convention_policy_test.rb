@@ -34,7 +34,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
             .public_send("#{action}?")
         end
 
-        %w[scheduling gm_liaison staff].each do |priv|
+        %w[staff].each do |priv|
           it "lets #{priv} users #{action}" do
             user_con_profile = create(
               :user_con_profile, convention: convention, priv => true
@@ -65,7 +65,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       describe "when #{field} is 'priv'" do
         before { convention.update!(field => 'priv') }
 
-        %w[scheduling gm_liaison staff].each do |priv|
+        %w[staff].each do |priv|
           it "lets #{priv} users #{action}" do
             user_con_profile = create(
               :user_con_profile, convention: convention, priv => true
@@ -187,7 +187,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       describe "when show_schedule is '#{value}'" do
         let(:convention) { create(:convention, show_schedule: value) }
 
-        it "lets staff users schedule_with_counts" do
+        it 'lets staff users schedule_with_counts' do
           user_con_profile = create(:staff_user_con_profile, convention: convention)
           assert ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
         end
@@ -206,34 +206,6 @@ class ConventionPolicyTest < ActiveSupport::TestCase
           team_member = create(:team_member, event: event)
           refute ConventionPolicy.new(team_member.user_con_profile.user, convention)
             .schedule_with_counts?
-        end
-      end
-    end
-
-    %w[scheduling gm_liaison].each do |priv|
-      %w[priv gms yes].each do |value|
-        describe "when show_schedule is '#{value}'" do
-          let(:convention) { create(:convention, show_schedule: value) }
-
-          it "lets #{priv} users schedule_with_counts" do
-            user_con_profile = create(
-              :user_con_profile, convention: convention, priv => true
-            )
-            assert ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
-          end
-        end
-      end
-
-      %w[no].each do |value|
-        describe "when show_schedule is '#{value}'" do
-          let(:convention) { create(:convention, show_schedule: value) }
-
-          it "does not let #{priv} users schedule_with_counts" do
-            user_con_profile = create(
-              :user_con_profile, convention: convention, priv => true
-            )
-            refute ConventionPolicy.new(user_con_profile.user, convention).schedule_with_counts?
-          end
         end
       end
     end
@@ -256,13 +228,6 @@ class ConventionPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#view_event_proposals?' do
-    it 'lets gm_liaison users view event proposals' do
-      user_con_profile = create(
-        :user_con_profile, convention: convention, gm_liaison: true
-      )
-      assert ConventionPolicy.new(user_con_profile.user, convention).view_event_proposals?
-    end
-
     it 'lets users with a read_event_proposals permission in this convention view proposals' do
       event_category = create(:event_category, convention: convention)
       user_con_profile = create(:user_con_profile, convention: convention)
@@ -273,6 +238,17 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         event_category: event_category, permission: 'read_event_proposals'
       )
       assert ConventionPolicy.new(user_con_profile.user, convention).view_event_proposals?
+    end
+
+    it 'lets users with convention-level read_event_proposals permission view proposals' do
+      user = create_user_with_read_event_proposals_in_convention(convention)
+      assert ConventionPolicy.new(user, convention).view_event_proposals?
+    end
+
+    it 'lets users with a read_event_proposals permission in this convention view proposals' do
+      event_category = create(:event_category, convention: convention)
+      user = create_user_with_read_event_proposals_in_event_category(event_category)
+      assert ConventionPolicy.new(user, convention).view_event_proposals?
     end
 
     it 'does not let regular attendees view event proposals' do

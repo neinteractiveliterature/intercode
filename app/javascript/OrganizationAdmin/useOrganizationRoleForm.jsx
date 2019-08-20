@@ -5,7 +5,7 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { useChangeSet, useChangeSetWithSelect } from '../ChangeSet';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
-import PermissionsTableInput from '../BuiltInFormControls/PermissionsTableInput';
+import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 
 const OrganizationRolePermissionNames = flatMap(
   PermissionNames.filter(

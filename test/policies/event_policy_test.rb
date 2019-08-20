@@ -21,6 +21,11 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(nil, event).read?
       end
 
+      it 'lets people with read_inactive_events permission in convention read dropped events' do
+        user = create_user_with_read_inactive_events_in_convention(convention)
+        assert EventPolicy.new(user, dropped_event).read?
+      end
+
       it 'lets people with update_events permission in category read dropped events' do
         user = create_user_with_update_events_in_event_category(event_category)
         assert EventPolicy.new(user, dropped_event).read?
@@ -31,7 +36,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(user, dropped_event).read?
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read dropped events" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -53,7 +58,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(team_member.user_con_profile.user, event).read?
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read events" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -90,7 +95,7 @@ class EventPolicyTest < ActiveSupport::TestCase
     describe "when show_event_list is 'priv'" do
       before { convention.update!(show_event_list: 'priv') }
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read events" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -143,7 +148,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(user_con_profile.user, event).read?
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read events" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -212,7 +217,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(user, event).public_send("#{action}?")
       end
 
-      %w[gm_liaison scheduling staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users #{action}" do
           user_con_profile = create(:user_con_profile, convention: convention, priv => priv)
           assert EventPolicy.new(user_con_profile.user, event).public_send("#{action}?")
@@ -251,7 +256,7 @@ class EventPolicyTest < ActiveSupport::TestCase
       assert EventPolicy.new(user, event).update?
     end
 
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users update events" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => priv)
         assert EventPolicy.new(user_con_profile.user, event).update?
@@ -284,7 +289,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert_equal [event].sort, resolved_events.sort
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all events regardless of status to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -317,7 +322,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert_equal [event].sort, resolved_events.sort
       end
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all events to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -363,7 +368,7 @@ class EventPolicyTest < ActiveSupport::TestCase
     describe "when show_event_list is 'priv'" do
       before { convention.update!(show_event_list: 'priv') }
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all events to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -425,7 +430,7 @@ class EventPolicyTest < ActiveSupport::TestCase
     describe "when show_event_list is 'no'" do
       before { convention.update!(show_event_list: 'no') }
 
-      %w[scheduling gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all events to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true

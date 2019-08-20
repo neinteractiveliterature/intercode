@@ -49,8 +49,24 @@
         "name": "access admin notes"
       },
       {
+        "permission": "override_event_tickets",
+        "name": "override event tickets"
+      },
+      {
+        "permission": "read_event_proposals",
+        "name": "read proposals"
+      },
+      {
+        "permission": "read_inactive_events",
+        "name": "read inactive events"
+      },
+      {
         "permission": "read_limited_prerelease_schedule",
         "name": "read limited pre-release schedule"
+      },
+      {
+        "permission": "read_pending_event_proposals",
+        "name": "read pending proposals"
       },
       {
         "permission": "read_prerelease_schedule",
@@ -87,6 +103,22 @@
       {
         "permission": "update_events",
         "name": "manage events"
+      },
+      {
+        "permission": "update_event_proposals",
+        "name": "update proposals"
+      },
+      {
+        "permission": "update_event_team_members",
+        "name": "update event team members"
+      },
+      {
+        "permission": "update_rooms",
+        "name": "update rooms"
+      },
+      {
+        "permission": "update_runs",
+        "name": "update event runs"
       }
     ]
   }

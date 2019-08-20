@@ -31,8 +31,8 @@ class ConventionPolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
         schedule? && (
-          has_privilege_in_convention?(record, :scheduling, :gm_liaison) ||
-            has_convention_permission?(record, 'read_schedule_with_counts')
+          staff_in_convention?(record) ||
+          has_convention_permission?(record, 'read_schedule_with_counts')
         )
       end
     end
@@ -58,11 +58,12 @@ class ConventionPolicy < ApplicationPolicy
   def view_event_proposals?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        has_privilege_in_convention?(record, :gm_liaison) ||
+        staff_in_convention?(record) ||
         # this is a weird one: does the user have _any_ permission called read_event_proposal
         # in this convention?
         record.staff_positions.where(
-          id: user_permission_scope.where(permission: 'read_event_proposals').select(:staff_position_id)
+          id: user_permission_scope.where(permission: 'read_event_proposals')
+            .select(:staff_position_id)
         ).any?
       end
     end

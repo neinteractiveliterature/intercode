@@ -22,7 +22,10 @@ class RunPolicy < ApplicationPolicy
 
   def manage?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) { has_privilege_in_convention?(convention, :gm_liaison, :scheduling) }
+      d.add(:manage_events) do
+        has_convention_permission?(convention, 'update_runs') ||
+        staff_in_convention?(convention)
+      end
     end
 
     super
