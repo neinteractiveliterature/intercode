@@ -7,36 +7,37 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     @has_organization_permission = Queries::NilSafeCache.new
   end
 
-  def has_event_category_permission?(event_category_id, permission)
-    return false unless event_category_id && permission && user
+  def has_event_category_permission?(event_category_id, *permissions)
+    return false unless event_category_id && permissions.present? && user
 
-    @has_event_category_permission.get([event_category_id, permission]) do
-      user_permission_scope.where(event_category_id: event_category_id, permission: permission).any?
+    @has_event_category_permission.get([event_category_id, permissions]) do
+      user_permission_scope.where(event_category_id: event_category_id, permission: permissions)
+        .any?
     end
   end
 
-  def event_categories_with_permission(permission)
+  def event_categories_with_permission(*permissions)
     EventCategory.where(
       id: user_permission_scope.where(
-        permission: permission
+        permission: permissions
       ).select(:event_category_id)
     )
   end
 
-  def has_event_category_permission_in_convention?(convention, permission)
-    return false unless convention && permission && user
+  def has_event_category_permission_in_convention?(convention, *permissions)
+    return false unless convention && permissions.present? && user
 
-    @has_event_category_permission_in_convention.get([convention.id, permission]) do
-      event_categories_with_permission(permission).where(convention_id: convention.id).any?
+    @has_event_category_permission_in_convention.get([convention.id, permissions]) do
+      event_categories_with_permission(*permissions).where(convention_id: convention.id).any?
     end
   end
 
-  def events_where_has_event_category_permission(permission)
-    Event.where(event_category_id: event_categories_with_permission(permission))
+  def events_where_has_event_category_permission(*permissions)
+    Event.where(event_category_id: event_categories_with_permission(*permissions))
   end
 
-  def event_proposals_where_has_event_category_permission(permission)
-    EventProposal.where(event_category_id: event_categories_with_permission(permission))
+  def event_proposals_where_has_event_category_permission(*permissions)
+    EventProposal.where(event_category_id: event_categories_with_permission(*permissions))
   end
 
   def has_convention_permission?(convention, *permissions)
@@ -55,31 +56,31 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     )
   end
 
-  def has_organization_permission?(organization_id, permission)
-    return false unless organization_id && permission && user
+  def has_organization_permission?(organization_id, *permissions)
+    return false unless organization_id && permissions.present? && user
 
-    @has_organization_permission.get([organization_id, permission]) do
-      organizations_with_permission(permission).where(id: organization_id).any?
+    @has_organization_permission.get([organization_id, permissions]) do
+      organizations_with_permission(*permissions).where(id: organization_id).any?
     end
   end
 
-  def organizations_with_permission(permission)
+  def organizations_with_permission(*permissions)
     Organization.where(
-      id: user_organization_roles_with_permission(permission).select(:organization_id)
+      id: user_organization_roles_with_permission(*permissions).select(:organization_id)
     )
   end
 
-  def user_organization_roles_with_permission(permission)
+  def user_organization_roles_with_permission(*permissions)
     OrganizationRole.where(
-      id: user_permission_scope.where(permission: permission)
+      id: user_permission_scope.where(permission: permissions)
         .where.not(organization_role_id: nil)
         .select(:organization_role_id)
     )
   end
 
-  def conventions_with_organization_permission(permission)
+  def conventions_with_organization_permission(*permissions)
     Convention.where(
-      organization_id: user_organization_roles_with_permission(permission).select(:organization_id)
+      organization_id: user_organization_roles_with_permission(*permissions).select(:organization_id)
     )
   end
 

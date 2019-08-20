@@ -34,7 +34,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
             .public_send("#{action}?")
         end
 
-        %w[scheduling gm_liaison staff].each do |priv|
+        %w[gm_liaison staff].each do |priv|
           it "lets #{priv} users #{action}" do
             user_con_profile = create(
               :user_con_profile, convention: convention, priv => true
@@ -65,7 +65,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       describe "when #{field} is 'priv'" do
         before { convention.update!(field => 'priv') }
 
-        %w[scheduling gm_liaison staff].each do |priv|
+        %w[gm_liaison staff].each do |priv|
           it "lets #{priv} users #{action}" do
             user_con_profile = create(
               :user_con_profile, convention: convention, priv => true
@@ -210,7 +210,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       end
     end
 
-    %w[scheduling gm_liaison].each do |priv|
+    %w[gm_liaison].each do |priv|
       %w[priv gms yes].each do |value|
         describe "when show_schedule is '#{value}'" do
           let(:convention) { create(:convention, show_schedule: value) }
