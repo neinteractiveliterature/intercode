@@ -8,8 +8,7 @@ class RoomPolicy < ApplicationPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_conventions) do
-        has_privilege_in_convention?(convention, :gm_liaison) ||
-        has_convention_permission?(convention, 'update_rooms')
+        staff_in_convention?(convention) || has_convention_permission?(convention, 'update_rooms')
       end
     end
 

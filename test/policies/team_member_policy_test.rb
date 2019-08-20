@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class TeamMemberPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:team_member) { create(:team_member) }
   let(:event) { team_member.event }
   let(:convention) { event.convention }
@@ -9,13 +12,6 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
   let(:other_event_team_member) { create(:team_member, event: other_event) }
 
   describe '#read?' do
-    %w[gm_liaison].each do |priv|
-      it "lets #{priv} users read team memberships" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        assert TeamMemberPolicy.new(user_con_profile.user, team_member).read?
-      end
-    end
-
     it 'lets users read team memberships in their own events' do
       assert TeamMemberPolicy.new(other_team_member.user_con_profile.user, team_member).read?
     end
@@ -31,9 +27,9 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    it 'lets gm_liaison users manage team memberships' do
-      user_con_profile = create(:user_con_profile, convention: convention, gm_liaison: true)
-      assert TeamMemberPolicy.new(user_con_profile.user, team_member).manage?
+    it 'lets users with update_event_team_members manage team memberships' do
+      user = create_user_with_update_event_team_members_in_convention(convention)
+      assert TeamMemberPolicy.new(user, team_member).manage?
     end
 
     it 'lets users manage team memberships in their own events' do
@@ -48,15 +44,11 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
   describe 'Scope' do
     let(:all_team_members) { [team_member, other_team_member, other_event_team_member] }
 
-    %w[gm_liaison].each do |priv|
-      it "returns all team memberships in a con for #{priv} users" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        resolved_team_members = TeamMemberPolicy::Scope.new(
-          user_con_profile.user, TeamMember.all
-        ).resolve
+    it 'returns all team memberships in a con for users with update_event_team_members' do
+      user = create_user_with_update_event_team_members_in_convention(convention)
+      resolved_team_members = TeamMemberPolicy::Scope.new(user, TeamMember.all).resolve
 
-        assert_equal all_team_members.sort, resolved_team_members.sort
-      end
+      assert_equal all_team_members.sort, resolved_team_members.sort
     end
 
     it 'returns all team memberships in your own events but not in other events you cannot read' do

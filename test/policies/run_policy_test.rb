@@ -27,7 +27,7 @@ class RunPolicyTest < ActiveSupport::TestCase
           .read?
       end
 
-      %w[gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -58,7 +58,7 @@ class RunPolicyTest < ActiveSupport::TestCase
     describe "when show_schedule is 'priv'" do
       before { convention.update!(show_schedule: 'priv') }
 
-      %w[gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "lets #{priv} users read" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -164,7 +164,7 @@ class RunPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %w[gm_liaison staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users manage runs" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert RunPolicy.new(user_con_profile.user, the_run).manage?
@@ -209,7 +209,7 @@ class RunPolicyTest < ActiveSupport::TestCase
         assert_equal [the_run].sort, resolved_runs.sort
       end
 
-      %w[gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all runs to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true
@@ -248,7 +248,7 @@ class RunPolicyTest < ActiveSupport::TestCase
     describe "when show_schedule is 'priv'" do
       before { convention.update!(show_schedule: 'priv') }
 
-      %w[gm_liaison staff].each do |priv|
+      %w[staff].each do |priv|
         it "returns all runs to #{priv} users" do
           user_con_profile = create(
             :user_con_profile, convention: convention, priv => true

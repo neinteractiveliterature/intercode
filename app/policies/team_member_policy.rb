@@ -5,7 +5,10 @@ class TeamMemberPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) { team_member_for_event?(event) || EventPolicy.new(user, event).read? }
-      d.add(:read_conventions) { has_privilege_in_convention?(convention, :gm_liaison) }
+      d.add(:read_conventions) do
+        has_convention_permission?(convention, 'update_event_team_members') ||
+        staff_in_convention?(convention)
+      end
     end
 
     super
@@ -14,7 +17,10 @@ class TeamMemberPolicy < ApplicationPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) { team_member_for_event?(event) }
-      d.add(:read_conventions) { has_privilege_in_convention?(convention, :gm_liaison) }
+      d.add(:read_conventions) do
+        has_convention_permission?(convention, 'update_event_team_members') ||
+        staff_in_convention?(convention)
+      end
     end
 
     super
@@ -28,6 +34,7 @@ class TeamMemberPolicy < ApplicationPolicy
       disjunctive_where do |dw|
         dw.add(event: events_where_team_member)
         dw.add(event: EventPolicy::Scope.new(user, Event.all).resolve)
+        dw.add(event: Event.where(convention: conventions_where_staff))
       end
     end
   end

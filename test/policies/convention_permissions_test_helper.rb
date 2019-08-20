@@ -52,6 +52,9 @@ module ConventionPermissionsTestHelper
   %w[
     access_admin_notes
     override_event_tickets
+    read_event_proposals
+    read_inactive_events
+    read_pending_event_proposals
     read_limited_prerelease_schedule
     read_prerelease_schedule
     read_orders
@@ -63,6 +66,7 @@ module ConventionPermissionsTestHelper
     read_user_con_profile_personal_info
     update_events
     update_event_proposals
+    update_event_team_members
     update_rooms
     update_runs
   ].each do |permission|
