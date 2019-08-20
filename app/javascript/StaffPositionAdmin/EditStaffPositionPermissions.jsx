@@ -8,7 +8,8 @@ import ErrorDisplay from '../ErrorDisplay';
 import PermissionNames from '../../../config/permission_names.json';
 import { UpdateStaffPositionPermissions } from './mutations.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
-import PermissionsTableInput from '../BuiltInFormControls/PermissionsTableInput';
+import PermissionsListInput from '../Permissions/PermissionsListInput';
+import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
 
@@ -74,15 +75,14 @@ function EditStaffPositionPermissions({
       </h1>
 
       <section className="mb-4">
-        <PermissionsTableInput
+        <PermissionsListInput
           permissionNames={ConventionPermissionNames}
           initialPermissions={staffPosition.permissions}
-          models={[convention]}
+          model={convention}
           changeSet={changeSet}
           add={add}
           remove={remove}
-          modelsHeader="Convention"
-          formatModelHeader={con => con.name}
+          header={convention.name}
         />
       </section>
 
