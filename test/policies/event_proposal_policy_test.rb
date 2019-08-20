@@ -49,11 +49,16 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_admin_notes?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[gm_liaison staff].each do |priv|
       it "lets #{priv} users read admin notes on proposals" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert EventProposalPolicy.new(user_con_profile.user, event_proposal).read_admin_notes?
       end
+    end
+
+    it 'lets users with convention-level access_admin_notes read admin notes on proposals' do
+      user = create_user_with_access_admin_notes_in_convention(convention)
+      assert EventProposalPolicy.new(user, event_proposal).read_admin_notes?
     end
 
     it 'lets users with access_admin_notes read admin notes on proposals' do
@@ -82,6 +87,12 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
         event_proposal.update!(status: status)
         user_con_profile = create(:staff_user_con_profile, convention: convention)
         assert EventProposalPolicy.new(user_con_profile.user, event_proposal).update?
+      end
+
+      it "lets users with convention-level update_event_proposals update #{status} proposals" do
+        event_proposal.update!(status: status)
+        user = create_user_with_update_event_proposals_in_convention(convention)
+        assert EventProposalPolicy.new(user, event_proposal).update?
       end
 
       it "lets users with update_event_proposals update #{status} proposals" do
@@ -133,11 +144,16 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#update_admin_notes?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[gm_liaison staff].each do |priv|
       it "lets #{priv} users update admin notes on proposals" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => priv)
         assert EventProposalPolicy.new(user_con_profile.user, event_proposal).update_admin_notes?
       end
+    end
+
+    it 'lets users with convention-level access_admin_notes update admin notes on proposals' do
+      user = create_user_with_access_admin_notes_in_convention(convention)
+      assert EventProposalPolicy.new(user, event_proposal).update_admin_notes?
     end
 
     it 'lets users with access_admin_notes update admin notes on proposals' do

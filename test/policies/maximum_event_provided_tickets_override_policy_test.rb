@@ -1,12 +1,15 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:event) { create(:event) }
   let(:convention) { event.convention }
   let(:mepto) { create(:maximum_event_provided_tickets_override, event: event) }
 
   describe '#read?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[gm_liaison staff].each do |priv|
       it "lets #{priv} users read MEPTOs" do
         user_con_profile = create(
           :user_con_profile, convention: convention, priv => true
@@ -15,15 +18,14 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
       end
     end
 
+    it 'lets users with the convention-level override_event_tickets permission read MEPTOs' do
+      user = create_user_with_override_event_tickets_in_convention(convention)
+      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).read?
+    end
+
     it 'lets users with the override_event_tickets permission read MEPTOs' do
-      user_con_profile = create(:user_con_profile, convention: convention)
-      staff_position = create(
-        :staff_position, convention: convention, user_con_profiles: [user_con_profile]
-      )
-      staff_position.permissions.create!(
-        event_category: event.event_category, permission: 'override_event_tickets'
-      )
-      assert MaximumEventProvidedTicketsOverridePolicy.new(user_con_profile.user, mepto).read?
+      user = create_user_with_override_event_tickets_in_event_category(event.event_category)
+      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).read?
     end
 
     it 'lets event team members read MEPTOs' do
@@ -39,7 +41,7 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[gm_liaison staff].each do |priv|
       it "lets #{priv} users manage MEPTOs" do
         user_con_profile = create(
           :user_con_profile, convention: convention, priv => true
@@ -48,15 +50,14 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
       end
     end
 
+    it 'lets users with the convention-level override_event_tickets permission manage MEPTOs' do
+      user = create_user_with_override_event_tickets_in_convention(convention)
+      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).manage?
+    end
+
     it 'lets users with the override_event_tickets permission manage MEPTOs' do
-      user_con_profile = create(:user_con_profile, convention: convention)
-      staff_position = create(
-        :staff_position, convention: convention, user_con_profiles: [user_con_profile]
-      )
-      staff_position.permissions.create!(
-        event_category: event.event_category, permission: 'override_event_tickets'
-      )
-      assert MaximumEventProvidedTicketsOverridePolicy.new(user_con_profile.user, mepto).manage?
+      user = create_user_with_override_event_tickets_in_event_category(event.event_category)
+      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).manage?
     end
 
     it 'does not let event team members manage MEPTOs' do
@@ -78,7 +79,7 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
       events.map { |e| create(:maximum_event_provided_tickets_override, event: e) }
     end
 
-    %w[gm_liaison scheduling staff].each do |priv|
+    %w[gm_liaison staff].each do |priv|
       it "returns all the MEPTOs in a convention for #{priv} users" do
         user_con_profile = create(
           :user_con_profile, convention: convention, priv => true
@@ -92,17 +93,22 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
     end
 
     it(
+      'returns all the MEPTOs for users with convention-level override_event_tickets permission'
+    ) do
+      user = create_user_with_override_event_tickets_in_convention(convention)
+      resolved_meptos = MaximumEventProvidedTicketsOverridePolicy::Scope.new(
+        user, MaximumEventProvidedTicketsOverride.all
+      ).resolve
+
+      assert_equal meptos.sort, resolved_meptos.sort
+    end
+
+    it(
       'returns all the MEPTOs in an event category for users with override_event_tickets permission'
     ) do
-      user_con_profile = create(:user_con_profile, convention: convention)
-      staff_position = create(
-        :staff_position, convention: convention, user_con_profiles: [user_con_profile]
-      )
-      staff_position.permissions.create!(
-        event_category: event_category, permission: 'override_event_tickets'
-      )
+      user = create_user_with_override_event_tickets_in_event_category(event_category)
       resolved_meptos = MaximumEventProvidedTicketsOverridePolicy::Scope.new(
-        user_con_profile.user, MaximumEventProvidedTicketsOverride.all
+        user, MaximumEventProvidedTicketsOverride.all
       ).resolve
 
       assert_equal meptos.sort, resolved_meptos.sort
