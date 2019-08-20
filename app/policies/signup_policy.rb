@@ -18,7 +18,7 @@ class SignupPolicy < ApplicationPolicy
       d.add(:read_events) { team_member_for_event?(event) }
       d.add(:read_conventions) do
         has_privilege_in_convention?(convention, :outreach) ||
-          has_convention_permission?(convention, 'read_signup_details')
+        has_convention_permission?(convention, 'read_signup_details')
       end
     end
 

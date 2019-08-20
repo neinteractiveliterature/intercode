@@ -16,12 +16,8 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   }
 
   PRIV_MAP = {
-    proposal_committee: 'BidCom',
     staff: 'Staff',
-    proposal_chair: 'BidChair',
-    gm_liaison: 'GMLiaison',
     outreach: 'Outreach',
-    scheduling: 'Scheduling',
     mail_to_gms: 'MailToGMs',
     mail_to_attendees: 'MailToAttendes',
     mail_to_vendors: 'MailToVendors',
@@ -30,6 +26,15 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   }
 
   PERMISSIONS_MAP = {
+    BidChair: %w[
+      access_admin_notes
+      read_event_proposals
+      read_pending_event_proposals
+      update_event_proposals
+    ],
+    BidCom: %w[
+      read_event_proposals
+    ],
     ConCom: %w[
       read_orders
       read_prerelease_schedule
@@ -40,6 +45,34 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       read_user_con_profiles
       read_user_con_profile_email
       read_user_con_profile_personal_info
+    ],
+    GMLiaison: %w[
+      access_admin_notes
+      override_event_tickets
+      read_event_proposals
+      read_inactive_events
+      read_limited_prerelease_schedule
+      read_prerelease_schedule
+      read_schedule_with_counts
+      update_event_proposals
+      update_event_team_members
+      update_events
+      update_rooms
+      update_runs
+    ],
+    Scheduling: %w[
+      access_admin_notes
+      override_event_tickets
+      read_event_proposals
+      read_inactive_events
+      read_limited_prerelease_schedule
+      read_pending_event_proposals
+      read_prerelease_schedule
+      read_schedule_with_counts
+      update_event_proposals
+      update_events
+      update_rooms
+      update_runs
     ]
   }
 

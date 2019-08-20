@@ -14,13 +14,6 @@ class RoomPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %i[gm_liaison].each do |priv|
-      it "lets people with the #{priv} privilege manage rooms" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        assert RoomPolicy.new(user_con_profile.user, room).manage?
-      end
-    end
-
     it 'lets people with update_rooms manage rooms' do
       user = create_user_with_update_rooms_in_convention(convention)
       assert RoomPolicy.new(user, room).manage?

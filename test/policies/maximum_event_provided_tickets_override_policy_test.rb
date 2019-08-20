@@ -9,7 +9,7 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   let(:mepto) { create(:maximum_event_provided_tickets_override, event: event) }
 
   describe '#read?' do
-    %w[gm_liaison staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users read MEPTOs" do
         user_con_profile = create(
           :user_con_profile, convention: convention, priv => true
@@ -41,7 +41,7 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %w[gm_liaison staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users manage MEPTOs" do
         user_con_profile = create(
           :user_con_profile, convention: convention, priv => true
@@ -79,7 +79,7 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
       events.map { |e| create(:maximum_event_provided_tickets_override, event: e) }
     end
 
-    %w[gm_liaison staff].each do |priv|
+    %w[staff].each do |priv|
       it "returns all the MEPTOs in a convention for #{priv} users" do
         user_con_profile = create(
           :user_con_profile, convention: convention, priv => true
