@@ -70,8 +70,8 @@ GEM
     arel (9.0.0)
     ast (2.4.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.193.0)
-    aws-sdk-core (3.61.1)
+    aws-partitions (1.203.0)
+    aws-sdk-core (3.63.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.1)
@@ -377,9 +377,10 @@ GEM
     reverse_markdown (1.1.0)
       nokogiri
     rollbar (2.21.0)
-    rollbar-shoryuken (0.1.2)
-      rollbar
-      shoryuken
+    rollbar-shoryuken (1.0.0)
+      aws-sdk-sqs (~> 1.20, <= 2.0)
+      rollbar (~> 2.21, <= 3.0)
+      shoryuken (>= 4.0, <= 5.1)
     rouge (3.3.0)
     rubocop (0.74.0)
       jaro_winkler (~> 1.5.1)
