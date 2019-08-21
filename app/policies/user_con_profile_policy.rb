@@ -34,7 +34,6 @@ class UserConProfilePolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_profile) { profile_is_user_or_identity_assumer? }
       d.add(:read_conventions) do
-        staff_in_convention?(convention) ||
         has_convention_permission?(convention, 'read_user_con_profile_personal_info') ||
         has_event_category_permission_in_convention?(convention, 'read_event_proposals') ||
         team_member_for_user_con_profile?(record)
@@ -58,7 +57,9 @@ class UserConProfilePolicy < ApplicationPolicy
 
   def manage?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { staff_in_convention?(convention) }
+      d.add(:manage_conventions) do
+        has_convention_permission?(convention, 'update_user_con_profiles')
+      end
     end
 
     super
@@ -69,10 +70,6 @@ class UserConProfilePolicy < ApplicationPolicy
   end
 
   def withdraw_all_signups?
-    manage?
-  end
-
-  def update_privileges?
     manage?
   end
 
@@ -93,7 +90,6 @@ class UserConProfilePolicy < ApplicationPolicy
         dw.add(id: TeamMemberPolicy::Scope.new(user, TeamMember.all).resolve
           .select(:user_con_profile_id))
         dw.add(convention: conventions_where_team_member)
-        dw.add(convention: conventions_where_staff)
         dw.add(convention: conventions_with_permission(
           'read_user_con_profiles',
           'read_user_con_profile_email',

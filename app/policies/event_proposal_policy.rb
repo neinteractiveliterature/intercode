@@ -15,8 +15,7 @@ class EventProposalPolicy < ApplicationPolicy
         (
           EVENT_PROPOSAL_NON_PENDING_STATUSES.include?(record.status) &&
           has_applicable_permission?(record.event_category_id, :read_event_proposals)
-        ) ||
-        staff_in_convention?(convention)
+        )
       end
     end
 
@@ -26,8 +25,7 @@ class EventProposalPolicy < ApplicationPolicy
   def read_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        has_applicable_permission?(record.event_category_id, :access_admin_notes) ||
-        staff_in_convention?(convention)
+        has_applicable_permission?(record.event_category_id, :access_admin_notes)
       end
     end
 
@@ -51,8 +49,7 @@ class EventProposalPolicy < ApplicationPolicy
         ) ||
         (
           record.event && team_member_for_event?(record.event)
-        ) ||
-        staff_in_convention?(convention)
+        )
       end
     end
 
@@ -75,8 +72,7 @@ class EventProposalPolicy < ApplicationPolicy
   def update_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        has_applicable_permission?(record.event_category_id, :access_admin_notes) ||
-        staff_in_convention?(convention)
+        has_applicable_permission?(record.event_category_id, :access_admin_notes)
       end
     end
 
@@ -112,7 +108,6 @@ class EventProposalPolicy < ApplicationPolicy
           convention_id: conventions_with_permission(:read_event_proposals),
           status: EVENT_PROPOSAL_NON_PENDING_STATUSES
         )
-        dw.add(convention_id: conventions_where_staff)
       end
     end
   end

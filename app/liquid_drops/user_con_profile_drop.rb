@@ -64,6 +64,9 @@ class UserConProfileDrop < Liquid::Drop
   end
 
   # @return [Array<String>] The user's privileges for this convention
+  # @deprecated Privileges have been removed in favor of permissions and staff positions.  This
+  #   method still exists for compatibility reasons but will return either an empty array or an
+  #   array containing only the string 'site_admin'.
   def privileges
     user_con_profile.privileges.map(&:titleize)
   end

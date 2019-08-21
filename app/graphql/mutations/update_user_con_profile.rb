@@ -6,14 +6,7 @@ class Mutations::UpdateUserConProfile < Mutations::BaseMutation
 
   attr_reader :user_con_profile
 
-  def authorized?(args)
-    @user_con_profile = convention.user_con_profiles.find(args[:id])
-    if args[:user_con_profile][:privileges]
-      policy(user_con_profile).update_privileges?
-    else
-      policy(user_con_profile).update?
-    end
-  end
+  load_and_authorize_model_with_id UserConProfile, :id, :update
 
   def resolve(**args)
     user_con_profile_attrs = args[:user_con_profile].to_h.stringify_keys

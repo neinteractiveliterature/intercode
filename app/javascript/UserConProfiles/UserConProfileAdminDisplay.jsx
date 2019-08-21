@@ -84,7 +84,7 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
               ? (
                 <li className="list-group-item">
                   <Link to={`/user_con_profiles/${userConProfileId}/edit`}>
-                    Edit profile/privileges
+                    Edit profile
                   </Link>
                 </li>
               )
