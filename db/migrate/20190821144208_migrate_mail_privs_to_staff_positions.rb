@@ -4,7 +4,7 @@ class MigrateMailPrivsToStaffPositions < ActiveRecord::Migration[5.2]
     'mail_to_gms' => 'read_team_members_mailing_list'
   }
 
-  def change
+  def up
     Convention.find_each do |convention|
       mail_privs = %w[gms attendees].map { |group| "mail_to_#{group}" }
       sql_clauses = mail_privs.map { |priv_name| "#{priv_name} = ?" }
