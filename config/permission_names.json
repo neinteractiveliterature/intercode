@@ -85,12 +85,20 @@
         "name": "read signup details"
       },
       {
+        "permission": "read_team_members_mailing_list",
+        "name": "read event team members mailing list"
+      },
+      {
         "permission": "read_tickets",
         "name": "read tickets"
       },
       {
         "permission": "read_user_con_profiles",
         "name": "read attendee profiles"
+      },
+      {
+        "permission": "read_user_con_profiles_mailing_list",
+        "name": "read attendees mailing list"
       },
       {
         "permission": "read_user_con_profile_email",
