@@ -85,8 +85,8 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         caption="Show list of events"
         choices={[
           { value: 'no', label: 'No' },
-          { value: 'priv', label: 'Only to users with scheduling privileges' },
-          { value: 'gms', label: 'Only to event team members and users with any privileges' },
+          { value: 'priv', label: 'Only to users with prerelease schedule viewing permission' },
+          { value: 'gms', label: 'Only to event team members and users with any schedule viewing permissions' },
           { value: 'yes', label: 'Yes, to everyone' },
         ]}
         value={convention.show_event_list}
@@ -99,8 +99,8 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
         caption="Show event schedule"
         choices={[
           { value: 'no', label: 'No' },
-          { value: 'priv', label: 'Only to users with scheduling privileges' },
-          { value: 'gms', label: 'Only to event team members and users with any privileges' },
+          { value: 'priv', label: 'Only to users with prerelease schedule viewing permission' },
+          { value: 'gms', label: 'Only to event team members and users with any schedule viewing permissions' },
           { value: 'yes', label: 'Yes, to everyone' },
         ]}
         value={convention.show_schedule}

@@ -13,11 +13,13 @@ class Types::UserConProfileType < Types::BaseObject
 
   field :id, Integer, null: false
   field :convention, Types::ConventionType, null: true
-  field :privileges, [String, null: true], null: true
+  field :privileges, [String, null: true],
+    null: true,
+    deprecation_reason: 'Privileges are deprecated in favor of permissions and staff positions'
 
   def privileges
     AssociationLoader.for(UserConProfile, :user).load(object).then do |user|
-      user.privileges + object.user_con_profile_privileges
+      user.privileges
     end
   end
   field :name, String, null: true

@@ -4,13 +4,11 @@ import Modal from 'react-bootstrap4-modal';
 import { withRouter } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 
-import { AddAttendeeUsersQuery, AddAttendeeUserConProfileFormQuery } from './queries.gql';
+import { AddAttendeeUsersQuery } from './queries.gql';
 import { CreateUserConProfile } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import UserSelect from '../BuiltInFormControls/UserSelect';
-import PrivilegesForm from './PrivilegesForm';
 
 class AddAttendeeModal extends React.Component {
   static propTypes = {
@@ -44,28 +42,11 @@ class AddAttendeeModal extends React.Component {
           first_name: user.first_name,
           last_name: user.last_name,
         },
-        privileges: [],
       },
     });
   }
 
   userConProfileChanged = (userConProfile) => { this.setState({ userConProfile }); }
-
-  renderForm = () => (
-    <div className="mt-4">
-      <p>Profile data will be copied from user&rsquo;s latest convention profile.</p>
-
-      <QueryWithStateDisplay query={AddAttendeeUserConProfileFormQuery}>
-        {({ data }) => (
-          <PrivilegesForm
-            userConProfile={this.state.userConProfile}
-            regularPrivilegeNames={data.convention.privilege_names.filter(priv => priv !== 'site_admin')}
-            onChange={this.userConProfileChanged}
-          />
-        )}
-      </QueryWithStateDisplay>
-    </div>
-  )
 
   render = () => (
     <Modal visible={this.props.visible} dialogClassName="modal-lg">
@@ -87,11 +68,11 @@ class AddAttendeeModal extends React.Component {
           usersQuery={AddAttendeeUsersQuery}
         />
 
-        {
-          this.state.userId
-            ? this.renderForm()
-            : null
-        }
+        {this.state.userId && (
+          <div className="mt-4">
+            <p>Profile data will be copied from user&rsquo;s latest convention profile.</p>
+          </div>
+        )}
 
         <ErrorDisplay graphQLError={this.state.error} />
       </div>
@@ -119,7 +100,6 @@ class AddAttendeeModal extends React.Component {
                         form_response_attrs_json: JSON.stringify(
                           this.state.userConProfile.form_response_attrs,
                         ),
-                        privileges: this.state.userConProfile.privileges,
                       },
                     },
                   });

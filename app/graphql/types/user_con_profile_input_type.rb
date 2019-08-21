@@ -2,7 +2,6 @@ class Types::UserConProfileInputType < Types::BaseInputObject
   argument :first_name, String, required: false, camelize: false
   argument :last_name, String, required: false, camelize: false
   argument :nickname, String, required: false
-  argument :privileges, [String], required: false
   argument :bio, String, required: false
   argument :show_nickname_in_bio, Boolean, required: false, camelize: false
   argument :form_response_attrs_json, String, required: false, camelize: false

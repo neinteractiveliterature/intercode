@@ -17,7 +17,6 @@ class SignupPolicy < ApplicationPolicy
       d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
       d.add(:read_events) { team_member_for_event?(event) }
       d.add(:read_conventions) do
-        staff_in_convention?(convention) ||
         has_convention_permission?(convention, 'read_signup_details')
       end
     end
@@ -28,7 +27,8 @@ class SignupPolicy < ApplicationPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_conventions) do
-        convention.signup_mode == 'moderated' && staff_in_convention?(convention)
+        convention.signup_mode == 'moderated' &&
+        has_convention_permission?(convention, 'update_signups')
       end
     end
 
@@ -51,7 +51,7 @@ class SignupPolicy < ApplicationPolicy
     define_method team_member_action do
       return true if oauth_scoped_disjunction do |d|
         d.add(:manage_events) { team_member_for_event?(event) }
-        d.add(:manage_conventions) { staff_in_convention?(convention) }
+        d.add(:manage_conventions) { has_convention_permission?(convention, 'update_signups') }
       end
 
       site_admin_manage?
@@ -76,7 +76,6 @@ class SignupPolicy < ApplicationPolicy
         end
 
         if oauth_scope?(:read_conventions)
-          dw.add(run: Run.where(event: Event.where(convention: conventions_where_staff)))
           dw.add(
             run: Run.where(
               event: Event.where(

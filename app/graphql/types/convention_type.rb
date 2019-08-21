@@ -87,13 +87,16 @@ class Types::ConventionType < Types::BaseObject
     end
   end
 
-  field :privilege_names, [String], null: false
+  field :privilege_names, [String],
+    null: false,
+    deprecation_reason: 'Privileges have gone away in favor of permissions'
 
   def privilege_names
-    ['site_admin'] + UserConProfile::PRIV_NAMES.to_a
+    ['site_admin']
   end
 
-  field :mail_privilege_names, [String], null: false,
+  field :mail_privilege_names, [String],
+    null: false,
     deprecation_reason: 'Mail privileges have gone away in favor of permissions'
 
   def mail_privilege_names

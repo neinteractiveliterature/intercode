@@ -112,7 +112,6 @@ query UserConProfileAdminQuery($id: Int!) {
     user_id
     name
     name_without_nickname
-    privileges
     form_response_attrs_json
 
     ticket {
@@ -157,7 +156,6 @@ query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filte
   convention {
     id
     name
-    privilege_names
     starts_at
     ends_at
     timezone_name
@@ -234,7 +232,6 @@ query AddAttendeeUsersQuery($name: String) {
 query AddAttendeeUserConProfileFormQuery {
   convention {
     id
-    privilege_names
 
     user_con_profile_form {
       id

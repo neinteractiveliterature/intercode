@@ -43,10 +43,6 @@ function EditUserConProfile({ history, id }) {
     ),
   });
 
-  const canUpdatePrivileges = (
-    error ? false : data.currentAbility.can_update_privileges_user_con_profile
-  );
-
   const [updateUserConProfile, updateError, updateInProgress] = useAsyncFunction(
     useCallback(
       async () => {
@@ -55,7 +51,6 @@ function EditUserConProfile({ history, id }) {
             input: {
               id: userConProfile.id,
               user_con_profile: {
-                ...(canUpdatePrivileges ? { privileges: userConProfile.privileges } : {}),
                 form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
               },
             },
@@ -64,7 +59,7 @@ function EditUserConProfile({ history, id }) {
 
         history.push(`/user_con_profiles/${userConProfile.id}`);
       },
-      [mutate, history, userConProfile, canUpdatePrivileges],
+      [mutate, history, userConProfile],
     ),
   );
 
@@ -82,9 +77,7 @@ function EditUserConProfile({ history, id }) {
         {userConProfile.name}
       </h1>
       <UserConProfileForm
-        canUpdatePrivileges={canUpdatePrivileges}
         userConProfile={userConProfile}
-        regularPrivilegeNames={data.convention.privilege_names.filter(priv => priv !== 'site_admin')}
         onChange={setUserConProfile}
         footerContent={(
           <button className="btn btn-primary" type="button" onClick={updateUserConProfile} disabled={updateInProgress}>

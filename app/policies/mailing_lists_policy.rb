@@ -6,8 +6,7 @@ class MailingListsPolicy < ApplicationPolicy
       d.add(:read_conventions) do
         has_convention_permission?(convention,
           :read_team_members_mailing_list, :read_user_con_profiles_mailing_list
-        ) ||
-        staff_in_convention?(convention)
+        )
       end
     end
 
@@ -17,8 +16,7 @@ class MailingListsPolicy < ApplicationPolicy
   def read_team_members_mailing_list?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        has_convention_permission?(convention, :read_team_members_mailing_list) ||
-        staff_in_convention?(convention)
+        has_convention_permission?(convention, :read_team_members_mailing_list)
       end
     end
 
@@ -28,8 +26,7 @@ class MailingListsPolicy < ApplicationPolicy
   def read_user_con_profiles_mailing_list?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        has_convention_permission?(convention, :read_user_con_profiles_mailing_list) ||
-        staff_in_convention?(convention)
+        has_convention_permission?(convention, :read_user_con_profiles_mailing_list)
       end
     end
 

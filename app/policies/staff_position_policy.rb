@@ -7,7 +7,9 @@ class StaffPositionPolicy < ApplicationPolicy
 
   def manage?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { staff_in_convention?(convention) }
+      d.add(:manage_conventions) do
+        has_convention_permission?(convention, 'update_staff_positions')
+      end
     end
 
     super
