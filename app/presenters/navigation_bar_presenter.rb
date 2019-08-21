@@ -188,7 +188,7 @@ class NavigationBarPresenter
     NavigationItem.define do
       label 'Mailing Lists'
       url '/mailing_lists'
-      visible? { Pundit.policy(pundit_user, MailingListsPresenter.new(convention)).mail_to_any? }
+      visible? { Pundit.policy(pundit_user, MailingListsPresenter.new(convention)).read_any_mailing_list? }
     end,
     NavigationItem.define do
       label 'OAuth2 Applications'

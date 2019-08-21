@@ -1,27 +1,32 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class MailingListsPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:convention) { create(:convention) }
   let(:mailing_lists_presenter) { MailingListsPresenter.new(convention) }
 
-  UserConProfile::MAIL_PRIV_NAMES.each do |priv_name|
-    describe "users with #{priv_name}" do
-      let(:user_con_profile) do
-        create(:user_con_profile, convention: convention, priv_name => true)
-      end
-      let(:policy) { MailingListsPolicy.new(user_con_profile.user, mailing_lists_presenter) }
+  MAIL_PERMISSION_NAMES = %w[read_team_members_mailing_list read_user_con_profiles_mailing_list]
 
-      it "lets #{priv_name} users mail_to_any" do
-        assert policy.mail_to_any?
+  MAIL_PERMISSION_NAMES.each do |permission_name|
+    describe "users with #{permission_name}" do
+      let(:user) do
+        create_user_with_permission_in_convention(permission_name, convention)
       end
+      let(:policy) { MailingListsPolicy.new(user, mailing_lists_presenter) }
 
-      it "lets #{priv_name} users #{priv_name}" do
-        assert policy.public_send("#{priv_name}?")
+      it "lets #{permission_name} users read_any_mailing_list" do
+        assert policy.read_any_mailing_list?
       end
 
-      (UserConProfile::MAIL_PRIV_NAMES - [priv_name]).each do |other_priv_name|
-        it "does not let #{priv_name} users #{other_priv_name}" do
-          refute policy.public_send("#{other_priv_name}?")
+      it "lets #{permission_name} users #{permission_name}" do
+        assert policy.public_send("#{permission_name}?")
+      end
+
+      (MAIL_PERMISSION_NAMES - [permission_name]).each do |other_permission_name|
+        it "does not let #{permission_name} users #{other_permission_name}" do
+          refute policy.public_send("#{other_permission_name}?")
         end
       end
     end
@@ -31,14 +36,14 @@ class MailingListsPolicyTest < ActiveSupport::TestCase
     let(:user_con_profile) { create(:user_con_profile, convention: convention) }
     let(:policy) { MailingListsPolicy.new(user_con_profile.user, mailing_lists_presenter) }
 
-    UserConProfile::MAIL_PRIV_NAMES.each do |priv_name|
-      it "does not let regular attendees #{priv_name}" do
-        refute policy.public_send("#{priv_name}?")
+    MAIL_PERMISSION_NAMES.each do |permission_name|
+      it "does not let regular attendees #{permission_name}" do
+        refute policy.public_send("#{permission_name}?")
       end
     end
 
-    it 'does not let regular attendees mail_to_any' do
-      refute policy.mail_to_any?
+    it 'does not let regular attendees read_any_mailing_list' do
+      refute policy.read_any_mailing_list?
     end
   end
 end
