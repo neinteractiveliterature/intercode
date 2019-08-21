@@ -8,11 +8,16 @@ class SignupPolicyTest < ActiveSupport::TestCase
   let(:convention) { signup.run.event.convention }
 
   describe '#read?' do
-    %w[outreach staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users read signups in their convention" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert SignupPolicy.new(user_con_profile.user, signup).read?
       end
+    end
+
+    it 'lets users with read_signup_details read signups' do
+      user = create_user_with_read_signup_details_in_convention(convention)
+      assert SignupPolicy.new(user, signup).read?
     end
 
     it 'lets team members read signups in their events' do
@@ -41,7 +46,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_requested_bucket_key?' do
-    %w[outreach staff].each do |priv|
+    %w[staff].each do |priv|
       it "lets #{priv} users read requested bucket key for signups in their convention" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         assert SignupPolicy.new(user_con_profile.user, signup).read_requested_bucket_key?
@@ -114,11 +119,9 @@ class SignupPolicyTest < ActiveSupport::TestCase
       refute SignupPolicy.new(user_con_profile.user, signup).manage?
     end
 
-    %w[outreach].each do |priv|
-      it "does not let #{priv} users manage signups in their convention" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        refute SignupPolicy.new(user_con_profile.user, signup).manage?
-      end
+    it 'does not let users with only read_signup_details manage signups' do
+      user = create_user_with_read_signup_details_in_convention(convention)
+      refute SignupPolicy.new(user, signup).manage?
     end
 
     it 'does not let team members manage signups in their events' do
@@ -143,13 +146,20 @@ class SignupPolicyTest < ActiveSupport::TestCase
   end
 
   describe 'Scope' do
-    %w[outreach staff].each do |priv|
+    %w[staff].each do |priv|
       it "returns signups in cons where the user has the #{priv} privilege" do
         user_con_profile = create(:user_con_profile, convention: convention, priv => true)
         resolved_signups = SignupPolicy::Scope.new(user_con_profile.user, Signup.all).resolve
 
         assert_equal [signup], resolved_signups.sort
       end
+    end
+
+    it 'return signups in cons where the user has read_signup_details' do
+      user = create_user_with_read_signup_details_in_convention(convention)
+      resolved_signups = SignupPolicy::Scope.new(user, Signup.all).resolve
+
+      assert_equal [signup], resolved_signups.sort
     end
 
     it 'returns signups for events where you are a team member' do

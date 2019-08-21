@@ -17,7 +17,6 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
 
   PRIV_MAP = {
     staff: 'Staff',
-    outreach: 'Outreach',
     mail_to_gms: 'MailToGMs',
     mail_to_attendees: 'MailToAttendes',
     mail_to_vendors: 'MailToVendors',
@@ -59,6 +58,9 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       update_events
       update_rooms
       update_runs
+    ],
+    Outreach: %w[
+      read_signup_details
     ],
     Scheduling: %w[
       access_admin_notes
