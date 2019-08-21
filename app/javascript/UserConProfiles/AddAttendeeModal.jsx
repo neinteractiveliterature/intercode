@@ -59,9 +59,7 @@ class AddAttendeeModal extends React.Component {
         {({ data }) => (
           <PrivilegesForm
             userConProfile={this.state.userConProfile}
-            regularPrivilegeNames={data.convention.privilege_names
-              .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
-            mailPrivilegeNames={data.convention.mail_privilege_names}
+            regularPrivilegeNames={data.convention.privilege_names.filter(priv => priv !== 'site_admin')}
             onChange={this.userConProfileChanged}
           />
         )}

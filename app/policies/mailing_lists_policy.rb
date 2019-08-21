@@ -1,24 +1,39 @@
 class MailingListsPolicy < ApplicationPolicy
   delegate :convention, to: :record
 
-  def mail_to_any?
+  def read_any_mailing_list?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        has_privilege_in_convention?(convention, *UserConProfile::MAIL_PRIV_NAMES)
+        has_convention_permission?(convention,
+          :read_team_members_mailing_list, :read_user_con_profiles_mailing_list
+        ) ||
+        staff_in_convention?(convention)
       end
     end
 
     read?
   end
 
-  UserConProfile::MAIL_PRIV_NAMES.each do |priv_name|
-    define_method "#{priv_name}?" do
-      return true if oauth_scoped_disjunction do |d|
-        d.add(:read_conventions) { has_privilege_in_convention?(convention, priv_name) }
+  def read_team_members_mailing_list?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:read_conventions) do
+        has_convention_permission?(convention, :read_team_members_mailing_list) ||
+        staff_in_convention?(convention)
       end
-
-      read?
     end
+
+    read?
+  end
+
+  def read_user_con_profiles_mailing_list?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:read_conventions) do
+        has_convention_permission?(convention, :read_user_con_profiles_mailing_list) ||
+        staff_in_convention?(convention)
+      end
+    end
+
+    read?
   end
 
   class Scope < Scope
