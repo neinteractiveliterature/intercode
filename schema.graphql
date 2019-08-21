@@ -267,7 +267,7 @@ type Convention {
   orders_paginated(filters: OrderFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): OrdersPagination!
   organization: Organization
   pages: [Page!]
-  privilege_names: [String!]!
+  privilege_names: [String!]! @deprecated(reason: "Privileges have gone away in favor of permissions")
   products: [Product!]
   reports: ConventionReports!
   rooms: [Room!]
@@ -3469,7 +3469,7 @@ type UserConProfile {
   order_summary: String!
   orders: [Order]!
   preferred_contact: String
-  privileges: [String]
+  privileges: [String] @deprecated(reason: "Privileges are deprecated in favor of permissions and staff positions")
   show_nickname_in_bio: Boolean
   signup_requests: [SignupRequest!]!
   signups: [Signup!]!
@@ -3490,6 +3490,10 @@ input UserConProfileFiltersInput {
   last_name: String
   name: String
   payment_amount: Float
+
+  """
+  DEPRECATED. Privileges are deprecated in favor of permissions and staff positions
+  """
   privileges: [String!]
   ticket: [String!]
   ticket_type: [String!]
@@ -3510,7 +3514,6 @@ input UserConProfileInput {
   last_name: String
   nickname: String
   preferred_contact: String
-  privileges: [String!]
   show_nickname_in_bio: Boolean
   state: String
   zipcode: String
