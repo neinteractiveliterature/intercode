@@ -17,7 +17,7 @@ class SignupPolicy < ApplicationPolicy
       d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
       d.add(:read_events) { team_member_for_event?(event) }
       d.add(:read_conventions) do
-        has_privilege_in_convention?(convention, :outreach) ||
+        staff_in_convention?(convention) ||
         has_convention_permission?(convention, 'read_signup_details')
       end
     end
@@ -76,19 +76,16 @@ class SignupPolicy < ApplicationPolicy
         end
 
         if oauth_scope?(:read_conventions)
-          dw.add(run: runs_in_conventions_with_privilege(:outreach))
+          dw.add(run: Run.where(event: Event.where(convention: conventions_where_staff)))
+          dw.add(
+            run: Run.where(
+              event: Event.where(
+                convention: conventions_with_permission('read_signup_details')
+              )
+            )
+          )
         end
       end
-    end
-
-    private
-
-    def runs_in_conventions_with_privilege(*privileges)
-      Run.where(
-        event: Event.where(
-          convention: conventions_with_privilege(*privileges)
-        )
-      )
     end
   end
 end
