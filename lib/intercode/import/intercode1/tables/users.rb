@@ -16,12 +16,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   }
 
   PRIV_MAP = {
-    staff: 'Staff',
-    mail_to_gms: 'MailToGMs',
-    mail_to_attendees: 'MailToAttendes',
-    mail_to_vendors: 'MailToVendors',
-    mail_to_unpaid: 'MailToUnpaid',
-    mail_to_alumni: 'MailToAlumni'
+    staff: 'Staff'
   }
 
   PERMISSIONS_MAP = {
@@ -58,6 +53,16 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       update_events
       update_rooms
       update_runs
+    ],
+    MailToAll: %w[
+      read_user_con_profiles_mailing_list
+      read_team_members_mailing_list
+    ],
+    MailToAttendees: %w[
+      read_user_con_profiles_mailing_list
+    ],
+    MailToGMs: %w[
+      read_team_members_mailing_list
     ],
     Outreach: %w[
       read_signup_details
@@ -155,7 +160,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
         sp.save!
 
         permissions.each do |permission|
-          sp.permissions.create!(model: con, permission: permission)
+          sp.permissions.find_or_create!(convention_id: con.id, permission: permission)
         end
       end
 
@@ -204,12 +209,6 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
 
     priv_attrs = PRIV_MAP.each_with_object({}) do |(new_priv, old_priv), priv_attributes|
       priv_attributes[new_priv] = row[:Priv].include?(old_priv)
-    end
-
-    if row[:Priv].include?('MailToAll')
-      UserConProfile::MAIL_PRIV_NAMES.each do |priv_name|
-        priv_attrs[priv_name] = true
-      end
     end
 
     priv_attrs

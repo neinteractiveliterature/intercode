@@ -84,9 +84,7 @@ function EditUserConProfile({ history, id }) {
       <UserConProfileForm
         canUpdatePrivileges={canUpdatePrivileges}
         userConProfile={userConProfile}
-        regularPrivilegeNames={data.convention.privilege_names
-          .filter(priv => priv !== 'site_admin' && !data.convention.mail_privilege_names.includes(priv))}
-        mailPrivilegeNames={data.convention.mail_privilege_names}
+        regularPrivilegeNames={data.convention.privilege_names.filter(priv => priv !== 'site_admin')}
         onChange={setUserConProfile}
         footerContent={(
           <button className="btn btn-primary" type="button" onClick={updateUserConProfile} disabled={updateInProgress}>

@@ -27,7 +27,6 @@ query UserConProfileQuery($id: Int!) {
 
     id
     privilege_names
-    mail_privilege_names
   }
 
   userConProfile(id: $id) {
@@ -236,7 +235,6 @@ query AddAttendeeUserConProfileFormQuery {
   convention {
     id
     privilege_names
-    mail_privilege_names
 
     user_con_profile_form {
       id
