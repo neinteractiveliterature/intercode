@@ -2,13 +2,7 @@ class UserConProfile < ApplicationRecord
   include Concerns::FormResponse
   include Concerns::Names
 
-  MAIL_PRIV_NAMES = Set.new(
-    %w[gms attendees vendors unpaid alumni].map { |group| "mail_to_#{group}" }
-  )
-  PRIV_NAMES = Set.new(
-    %w[staff] +
-    MAIL_PRIV_NAMES.to_a
-  )
+  PRIV_NAMES = Set.new(%w[staff])
 
   belongs_to :convention
   belongs_to :user
