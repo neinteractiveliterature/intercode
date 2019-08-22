@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class ProductPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   describe '#read?' do
     it 'lets anyone read any product' do
       product = create(:product)
@@ -9,13 +12,13 @@ class ProductPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    it 'lets con staff manage forms' do
+    it 'lets users with update_products manage products' do
       product = create(:product)
-      user_con_profile = create(:staff_user_con_profile, convention: product.convention)
-      assert ProductPolicy.new(user_con_profile.user, product).manage?
+      user = create_user_with_update_products_in_convention(product.convention)
+      assert ProductPolicy.new(user, product).manage?
     end
 
-    it 'does not let non-staff manage forms' do
+    it 'does not let users without update_products manage products' do
       product = create(:product)
       user_con_profile = create(:user_con_profile, convention: product.convention)
       refute ProductPolicy.new(user_con_profile.user, product).manage?

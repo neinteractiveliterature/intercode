@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class StaffPositionPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   describe '#read?' do
     it 'lets anyone read any staff position' do
       staff_position = create(:staff_position)
@@ -9,16 +12,13 @@ class StaffPositionPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    it 'lets con staff manage staff positions' do
+    it 'lets users with update_staff_positions manage staff positions' do
       staff_position = create(:staff_position)
-      user_con_profile = create(
-        :staff_user_con_profile,
-        convention: staff_position.convention
-      )
-      assert StaffPositionPolicy.new(user_con_profile.user, staff_position).manage?
+      user = create_user_with_update_staff_positions_in_convention(staff_position.convention)
+      assert StaffPositionPolicy.new(user, staff_position).manage?
     end
 
-    it 'does not let non-staff manage staff_positions' do
+    it 'does not let users without update_staff_positions manage staff_positions' do
       staff_position = create(:staff_position)
       user_con_profile = create(:user_con_profile, convention: staff_position.convention)
       refute StaffPositionPolicy.new(user_con_profile.user, staff_position).manage?

@@ -16,8 +16,8 @@ class RootSitePolicyTest < ActiveSupport::TestCase
     end
 
     it 'does not let non-admins manage the root site' do
-      user_con_profile = create(:staff_user_con_profile)
-      refute RootSitePolicy.new(user_con_profile.user, root_site).manage?
+      user = create(:user)
+      refute RootSitePolicy.new(user, root_site).manage?
     end
   end
 

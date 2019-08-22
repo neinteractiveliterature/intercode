@@ -22,4 +22,12 @@ class ApplicationMailer < ActionMailer::Base
       yield
     end
   end
+
+  def emails_for_staff_positions(staff_positions)
+    staff_positions.flat_map do |staff_position|
+      staff_position.email.presence || staff_position.user_con_profiles.map do |user_con_profile|
+        "#{user_con_profile.name} <#{user_con_profile.email}>"
+      end
+    end
+  end
 end

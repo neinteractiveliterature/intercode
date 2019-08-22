@@ -56,14 +56,14 @@ class OrderPolicyTest < ActiveSupport::TestCase
         refute OrderPolicy.new(order_user, order).public_send("#{action}?")
       end
 
-      it "lets con staff #{action} attendees' orders" do
-        staff_profile = create(:staff_user_con_profile, convention: order.user_con_profile.convention)
-        assert OrderPolicy.new(staff_profile.user, order).public_send("#{action}?")
+      it "lets users with update_orders #{action} attendees' orders" do
+        user = create_user_with_update_orders_in_convention(convention)
+        assert OrderPolicy.new(user, order).public_send("#{action}?")
       end
 
-      it "does not let staff from other conventions #{action} attendees' orders" do
-        staff_profile = create(:staff_user_con_profile)
-        refute OrderPolicy.new(staff_profile.user, order).public_send("#{action}?")
+      it "does not let user with update_orders in other conventions #{action} attendees' orders" do
+        user = create_user_with_update_orders_in_convention(create(:convention))
+        refute OrderPolicy.new(user, order).public_send("#{action}?")
       end
     end
   end
@@ -86,17 +86,6 @@ class OrderPolicyTest < ActiveSupport::TestCase
       someones_orders = create_list(:order, 3, user_con_profile: someone)
       create_list(:order, 3)
       resolved_orders = OrderPolicy::Scope.new(me, Order.all).resolve.to_a
-
-      assert_equal (my_orders + someones_orders).sort, resolved_orders.sort
-    end
-
-    it 'lets con staff see all the orders in the con' do
-      me = create(:staff_user_con_profile)
-      my_orders = create_list(:order, 3, user_con_profile: me)
-      someone = create(:user_con_profile, convention: me.convention)
-      someones_orders = create_list(:order, 3, user_con_profile: someone)
-      create_list(:order, 3)
-      resolved_orders = OrderPolicy::Scope.new(me.user, Order.all).resolve.to_a
 
       assert_equal (my_orders + someones_orders).sort, resolved_orders.sort
     end

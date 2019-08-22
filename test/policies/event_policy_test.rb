@@ -36,15 +36,6 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(user, dropped_event).read?
       end
 
-      %w[staff].each do |priv|
-        it "lets #{priv} users read dropped events" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          assert EventPolicy.new(user_con_profile.user, dropped_event).read?
-        end
-      end
-
       it 'does not let regular users read dropped events' do
         refute EventPolicy.new(rando.user, dropped_event).read?
       end
@@ -56,15 +47,6 @@ class EventPolicyTest < ActiveSupport::TestCase
       it 'lets team members read events' do
         team_member = create(:team_member, event: event)
         assert EventPolicy.new(team_member.user_con_profile.user, event).read?
-      end
-
-      %w[staff].each do |priv|
-        it "lets #{priv} users read events" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          assert EventPolicy.new(user_con_profile.user, event).read?
-        end
       end
 
       it 'lets people with update_events permission in category read events' do
@@ -95,15 +77,6 @@ class EventPolicyTest < ActiveSupport::TestCase
     describe "when show_event_list is 'priv'" do
       before { convention.update!(show_event_list: 'priv') }
 
-      %w[staff].each do |priv|
-        it "lets #{priv} users read events" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          assert EventPolicy.new(user_con_profile.user, event).read?
-        end
-      end
-
       it 'lets people with update_events permission read events' do
         user = create_user_with_update_events_in_event_category(event_category)
         assert EventPolicy.new(user, event).read?
@@ -119,7 +92,7 @@ class EventPolicyTest < ActiveSupport::TestCase
         end
       end
 
-      it "does not let people with read_prerelease_schedule permission in convention read events" do
+      it 'does not let people with read_prerelease_schedule permission in convention read events' do
         user = create_user_with_read_prerelease_schedule_in_convention(convention)
         refute EventPolicy.new(user, event).read?
       end
@@ -141,32 +114,14 @@ class EventPolicyTest < ActiveSupport::TestCase
     describe "when show_event_list is 'no'" do
       before { convention.update!(show_event_list: 'no') }
 
-      it 'lets staff users read events' do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, staff: true
-        )
-        assert EventPolicy.new(user_con_profile.user, event).read?
-      end
-
-      %w[staff].each do |priv|
-        it "lets #{priv} users read events" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          assert EventPolicy.new(user_con_profile.user, event).read?
-        end
-      end
-
       it 'lets people with update_events permission read events' do
         user = create_user_with_update_events_in_event_category(event_category)
         assert EventPolicy.new(user, event).read?
       end
 
-      %w[update_events].each do |permission|
-        it "lets people with #{permission} permission in convention read events" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          assert EventPolicy.new(user, event).read?
-        end
+      it 'lets people with convention-level update_events permission read events' do
+        user = create_user_with_update_events_in_convention(convention)
+        assert EventPolicy.new(user, event).read?
       end
 
       %w[
@@ -217,13 +172,6 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert EventPolicy.new(user, event).public_send("#{action}?")
       end
 
-      %w[staff].each do |priv|
-        it "lets #{priv} users #{action}" do
-          user_con_profile = create(:user_con_profile, convention: convention, priv => priv)
-          assert EventPolicy.new(user_con_profile.user, event).public_send("#{action}?")
-        end
-      end
-
       it "does not let team members #{action}" do
         team_member = create(:team_member, event: event)
         refute EventPolicy.new(team_member.user_con_profile.user, event).public_send("#{action}?")
@@ -256,13 +204,6 @@ class EventPolicyTest < ActiveSupport::TestCase
       assert EventPolicy.new(user, event).update?
     end
 
-    %w[staff].each do |priv|
-      it "lets #{priv} users update events" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => priv)
-        assert EventPolicy.new(user_con_profile.user, event).update?
-      end
-    end
-
     it 'lets team members update their own events' do
       team_member = create(:team_member, event: event)
       assert EventPolicy.new(team_member.user_con_profile.user, event).update?
@@ -289,17 +230,6 @@ class EventPolicyTest < ActiveSupport::TestCase
         assert_equal [event].sort, resolved_events.sort
       end
 
-      %w[staff].each do |priv|
-        it "returns all events regardless of status to #{priv} users" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
-      end
-
       %w[update_events].each do |permission|
         it "returns all events to users with #{permission} permission in convention" do
           user = create_user_with_permission_in_convention(permission, convention)
@@ -320,17 +250,6 @@ class EventPolicyTest < ActiveSupport::TestCase
         ).resolve
 
         assert_equal [event].sort, resolved_events.sort
-      end
-
-      %w[staff].each do |priv|
-        it "returns all events to #{priv} users" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
       end
 
       %w[read_prerelease_schedule read_limited_prerelease_schedule].each do |permission|
@@ -367,17 +286,6 @@ class EventPolicyTest < ActiveSupport::TestCase
 
     describe "when show_event_list is 'priv'" do
       before { convention.update!(show_event_list: 'priv') }
-
-      %w[staff].each do |priv|
-        it "returns all events to #{priv} users" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
-      end
 
       %w[read_limited_prerelease_schedule].each do |permission|
         it "returns active events to users with #{permission} permission in convention" do
@@ -429,17 +337,6 @@ class EventPolicyTest < ActiveSupport::TestCase
 
     describe "when show_event_list is 'no'" do
       before { convention.update!(show_event_list: 'no') }
-
-      %w[staff].each do |priv|
-        it "returns all events to #{priv} users" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
-      end
 
       it 'returns their own events to team members' do
         team_member = create(:team_member, event: event)

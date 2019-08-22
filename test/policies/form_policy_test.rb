@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class FormPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   describe '#read?' do
     it 'lets anyone read any form' do
       form = create(:form)
@@ -9,13 +12,13 @@ class FormPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    it 'lets con staff manage forms' do
+    it 'lets users with update_forms manage forms' do
       form = create(:form)
-      user_con_profile = create(:staff_user_con_profile, convention: form.convention)
-      assert FormPolicy.new(user_con_profile.user, form).manage?
+      user = create_user_with_update_forms_in_convention(form.convention)
+      assert FormPolicy.new(user, form).manage?
     end
 
-    it 'does not let non-staff manage forms' do
+    it 'does not let users without update_forms manage forms' do
       form = create(:form)
       user_con_profile = create(:user_con_profile, convention: form.convention)
       refute FormPolicy.new(user_con_profile.user, form).manage?

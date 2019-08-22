@@ -14,7 +14,7 @@ module Concerns::CmsContentPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_conventions) do
-        has_convention_permission?('update_cms_content')
+        has_convention_permission?(convention, 'update_cms_content')
       end
     end
 

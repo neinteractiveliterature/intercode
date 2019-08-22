@@ -26,17 +26,6 @@ class MigrateStaffPrivToStaffPosition < ActiveRecord::Migration[5.2]
   private
 
   def convention_permission_names
-    @convention_permission_names ||= begin
-      perm_names_config = JSON.parse(File.read(
-        File.expand_path('config/permission_names.json', Rails.root)
-      ))
-      perm_names_config.flat_map do |permission_set|
-        if permission_set['model_type'] == 'Convention'
-          permission_set['permissions'].map { |permission_config| permission_config['permission'] }
-        else
-          []
-        end
-      end
-    end
+    @convention_permission_names ||= Permission.permission_names_for_model_type('Convention')
   end
 end

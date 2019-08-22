@@ -9,15 +9,6 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   let(:mepto) { create(:maximum_event_provided_tickets_override, event: event) }
 
   describe '#read?' do
-    %w[staff].each do |priv|
-      it "lets #{priv} users read MEPTOs" do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, priv => true
-        )
-        assert MaximumEventProvidedTicketsOverridePolicy.new(user_con_profile.user, mepto).read?
-      end
-    end
-
     it 'lets users with the convention-level override_event_tickets permission read MEPTOs' do
       user = create_user_with_override_event_tickets_in_convention(convention)
       assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).read?
@@ -41,15 +32,6 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %w[staff].each do |priv|
-      it "lets #{priv} users manage MEPTOs" do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, priv => true
-        )
-        assert MaximumEventProvidedTicketsOverridePolicy.new(user_con_profile.user, mepto).manage?
-      end
-    end
-
     it 'lets users with the convention-level override_event_tickets permission manage MEPTOs' do
       user = create_user_with_override_event_tickets_in_convention(convention)
       assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).manage?
@@ -77,19 +59,6 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
     let(:events) { create_list(:event, 3, convention: convention, event_category: event_category) }
     let(:meptos) do
       events.map { |e| create(:maximum_event_provided_tickets_override, event: e) }
-    end
-
-    %w[staff].each do |priv|
-      it "returns all the MEPTOs in a convention for #{priv} users" do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, priv => true
-        )
-        resolved_meptos = MaximumEventProvidedTicketsOverridePolicy::Scope.new(
-          user_con_profile.user, MaximumEventProvidedTicketsOverride.all
-        ).resolve
-
-        assert_equal meptos.sort, resolved_meptos.sort
-      end
     end
 
     it(
