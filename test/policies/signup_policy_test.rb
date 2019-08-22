@@ -8,13 +8,6 @@ class SignupPolicyTest < ActiveSupport::TestCase
   let(:convention) { signup.run.event.convention }
 
   describe '#read?' do
-    %w[staff].each do |priv|
-      it "lets #{priv} users read signups in their convention" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        assert SignupPolicy.new(user_con_profile.user, signup).read?
-      end
-    end
-
     it 'lets users with read_signup_details read signups' do
       user = create_user_with_read_signup_details_in_convention(convention)
       assert SignupPolicy.new(user, signup).read?
@@ -46,13 +39,6 @@ class SignupPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#read_requested_bucket_key?' do
-    %w[staff].each do |priv|
-      it "lets #{priv} users read requested bucket key for signups in their convention" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        assert SignupPolicy.new(user_con_profile.user, signup).read_requested_bucket_key?
-      end
-    end
-
     it 'lets users with read_signup_details read requested bucket key for signups in the con' do
       user = create_user_with_read_signup_details_in_convention(convention)
       assert SignupPolicy.new(user, signup).read_requested_bucket_key?
@@ -93,30 +79,30 @@ class SignupPolicyTest < ActiveSupport::TestCase
       refute SignupPolicy.new(create(:user), signup).withdraw?
     end
 
-    it 'lets con staff withdraw signups in moderated signup conventions' do
+    it 'lets users with update_signups withdraw signups in moderated signup conventions' do
       convention.update!(signup_mode: 'moderated')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
-      assert SignupPolicy.new(user_con_profile.user, signup).withdraw?
+      user = create_user_with_update_signups_in_convention(convention)
+      assert SignupPolicy.new(user, signup).withdraw?
     end
 
-    it 'does not let con staff withdraw signups in self-service signup conventions' do
+    it 'does not let users with update_signups withdraw signups in self-service signup conventions' do
       convention.update!(signup_mode: 'self_service')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
-      refute SignupPolicy.new(user_con_profile.user, signup).withdraw?
+      user = create_user_with_update_signups_in_convention(convention)
+      refute SignupPolicy.new(user, signup).withdraw?
     end
   end
 
   describe '#manage?' do
-    it 'lets staff users manage signups in moderated conventions' do
+    it 'lets users with update_signups manage signups in moderated conventions' do
       convention.update!(signup_mode: 'moderated')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
-      assert SignupPolicy.new(user_con_profile.user, signup).manage?
+      user = create_user_with_update_signups_in_convention(convention)
+      assert SignupPolicy.new(user, signup).manage?
     end
 
-    it 'does not let staff users manage signups in self-service conventions' do
+    it 'does not let users with update_signups manage signups in self-service conventions' do
       convention.update!(signup_mode: 'self_service')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
-      refute SignupPolicy.new(user_con_profile.user, signup).manage?
+      user = create_user_with_update_signups_in_convention(convention)
+      refute SignupPolicy.new(user, signup).manage?
     end
 
     it 'does not let users with only read_signup_details manage signups' do
@@ -146,15 +132,6 @@ class SignupPolicyTest < ActiveSupport::TestCase
   end
 
   describe 'Scope' do
-    %w[staff].each do |priv|
-      it "returns signups in cons where the user has the #{priv} privilege" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        resolved_signups = SignupPolicy::Scope.new(user_con_profile.user, Signup.all).resolve
-
-        assert_equal [signup], resolved_signups.sort
-      end
-    end
-
     it 'return signups in cons where the user has read_signup_details' do
       user = create_user_with_read_signup_details_in_convention(convention)
       resolved_signups = SignupPolicy::Scope.new(user, Signup.all).resolve

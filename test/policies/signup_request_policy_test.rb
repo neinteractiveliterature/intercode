@@ -1,22 +1,25 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class SignupRequestPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:signup_request) { create(:signup_request) }
   let(:convention) { signup_request.target_run.event.convention }
 
   describe '#read?' do
-    it 'lets con staff read signup requests in a moderated-signup convention' do
+    it 'lets users with update_signups read signup requests in a moderated-signup convention' do
       convention.update!(signup_mode: 'moderated')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
+      user = create_user_with_update_signups_in_convention(convention)
 
-      assert SignupRequestPolicy.new(user_con_profile.user, signup_request).read?
+      assert SignupRequestPolicy.new(user, signup_request).read?
     end
 
-    it 'does not let con staff read signup requests in a self-service signup convention' do
+    it 'does not let users with update_signups read signup requests in a self-service signup convention' do
       convention.update!(signup_mode: 'self_service')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
+      user = create_user_with_update_signups_in_convention(convention)
 
-      refute SignupRequestPolicy.new(user_con_profile.user, signup_request).read?
+      refute SignupRequestPolicy.new(user, signup_request).read?
     end
 
     it 'lets users read their own signup requests' do
@@ -30,20 +33,18 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
 
   %w[accept reject manage].each do |action|
     describe "##{action}?" do
-      it "lets con staff #{action} signup requests in a moderated-signup convention" do
+      it "lets users with update_signups #{action} signup requests in a moderated-signup convention" do
         convention.update!(signup_mode: 'moderated')
-        user_con_profile = create(:staff_user_con_profile, convention: convention)
+        user = create_user_with_update_signups_in_convention(convention)
 
-        assert SignupRequestPolicy.new(user_con_profile.user, signup_request)
-          .public_send("#{action}?")
+        assert SignupRequestPolicy.new(user, signup_request).public_send("#{action}?")
       end
 
-      it "does not let con staff #{action} signup requests in a self-service signup convention" do
+      it "does not let users with update_signups #{action} signup requests in a self-service signup convention" do
         convention.update!(signup_mode: 'self_service')
-        user_con_profile = create(:staff_user_con_profile, convention: convention)
+        user = create_user_with_update_signups_in_convention(convention)
 
-        refute SignupRequestPolicy.new(user_con_profile.user, signup_request)
-          .public_send("#{action}?")
+        refute SignupRequestPolicy.new(user, signup_request).public_send("#{action}?")
       end
 
       it "does not let users #{action} their own signup requests" do
@@ -112,12 +113,10 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
   end
 
   describe 'Scope' do
-    it 'returns all signup requests in moderated-signup cons where you are staff' do
+    it 'returns all signup requests in moderated-signup cons where you have update_signups' do
       convention.update!(signup_mode: 'moderated')
-      user_con_profile = create(:staff_user_con_profile, convention: convention)
-      resolved_signup_requests = SignupRequestPolicy::Scope.new(
-        user_con_profile.user, SignupRequest.all
-      ).resolve
+      user = create_user_with_update_signups_in_convention(convention)
+      resolved_signup_requests = SignupRequestPolicy::Scope.new(user, SignupRequest.all).resolve
 
       assert_equal [signup_request], resolved_signup_requests.sort
     end

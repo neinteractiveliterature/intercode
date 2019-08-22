@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class PermissionPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   describe '#read?' do
     it 'lets site admins read any permissions' do
       organization_permission = create(:organization_permission)
@@ -11,15 +14,14 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       assert PermissionPolicy.new(user, event_category_permission).read?
     end
 
-    it 'lets con staff read permissions in their con' do
+    it 'lets users with update_permissions read permissions in their con' do
       my_con_permission = create(:event_category_permission)
-      user_con_profile = create(
-        :staff_user_con_profile, convention: my_con_permission.staff_position.convention
-      )
+      convention = my_con_permission.staff_position.convention
+      user = create_user_with_update_permissions_in_convention(convention)
       other_con_permission = create(:event_category_permission)
 
-      assert PermissionPolicy.new(user_con_profile.user, my_con_permission).read?
-      refute PermissionPolicy.new(user_con_profile.user, other_con_permission).read?
+      assert PermissionPolicy.new(user, my_con_permission).read?
+      refute PermissionPolicy.new(user, other_con_permission).read?
     end
 
     it 'does not let anyone else read permissions' do
@@ -42,15 +44,14 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       assert PermissionPolicy.new(user, event_category_permission).manage?
     end
 
-    it 'lets con staff manage permissions in their con' do
+    it 'lets users with update_permissions manage permissions in their con' do
       my_con_permission = create(:event_category_permission)
-      user_con_profile = create(
-        :staff_user_con_profile, convention: my_con_permission.staff_position.convention
-      )
+      convention = my_con_permission.staff_position.convention
+      user = create_user_with_update_permissions_in_convention(convention)
       other_con_permission = create(:event_category_permission)
 
-      assert PermissionPolicy.new(user_con_profile.user, my_con_permission).manage?
-      refute PermissionPolicy.new(user_con_profile.user, other_con_permission).manage?
+      assert PermissionPolicy.new(user, my_con_permission).manage?
+      refute PermissionPolicy.new(user, other_con_permission).manage?
     end
 
     it 'does not let anyone else manage permissions' do
@@ -76,16 +77,19 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       )
     end
 
-    it 'returns permissions for cons in which the user is staff' do
+    it 'returns permissions for cons in which the user has update_permissions' do
       my_con_permission = create(:event_category_permission)
-      user_con_profile = create(
-        :staff_user_con_profile, convention: my_con_permission.staff_position.convention
+      convention = my_con_permission.staff_position.convention
+      user = create_user_with_update_permissions_in_convention(convention)
+      user_permissions = Permission.where(
+        staff_position: StaffPosition.where(
+          id: UserConProfile.where(user_id: user.id).flat_map(&:staff_position_ids)
+        )
       )
       create(:event_category_permission) # other_con_permission
-      resolved_permissions = PermissionPolicy::Scope.new(user_con_profile.user, Permission.all)
-        .resolve
+      resolved_permissions = PermissionPolicy::Scope.new(user, Permission.all).resolve
 
-      assert_equal [my_con_permission], resolved_permissions.sort
+      assert_equal [my_con_permission, *user_permissions], resolved_permissions.sort
     end
 
     it 'does not return permissions to regular users' do

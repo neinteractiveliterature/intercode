@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class TicketTypePolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   describe '#read?' do
     it 'lets anyone read any ticket type' do
       ticket_type = create(:free_ticket_type)
@@ -9,13 +12,13 @@ class TicketTypePolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    it 'lets con staff manage ticket types' do
+    it 'lets users with update_ticket_types manage ticket types' do
       ticket_type = create(:free_ticket_type)
-      user_con_profile = create(:staff_user_con_profile, convention: ticket_type.convention)
-      assert TicketTypePolicy.new(user_con_profile.user, ticket_type).manage?
+      user = create_user_with_update_ticket_types_in_convention(ticket_type.convention)
+      assert TicketTypePolicy.new(user, ticket_type).manage?
     end
 
-    it 'does not let non-staff manage ticket types' do
+    it 'does not let users without update_ticket_types manage ticket types' do
       ticket_type = create(:free_ticket_type)
       user_con_profile = create(:user_con_profile, convention: ticket_type.convention)
       refute TicketTypePolicy.new(user_con_profile.user, ticket_type).manage?
