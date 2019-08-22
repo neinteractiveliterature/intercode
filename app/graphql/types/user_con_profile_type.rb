@@ -18,9 +18,7 @@ class Types::UserConProfileType < Types::BaseObject
     deprecation_reason: 'Privileges are deprecated in favor of permissions and staff positions'
 
   def privileges
-    AssociationLoader.for(UserConProfile, :user).load(object).then do |user|
-      user.privileges
-    end
+    AssociationLoader.for(UserConProfile, :user).load(object).then(&:privileges)
   end
   field :name, String, null: true
   field :name_without_nickname, String, null: true
