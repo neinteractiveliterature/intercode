@@ -117,7 +117,11 @@ TicketTypeFilter.defaultProps = {
   filter: null,
 };
 
-const PrivilegesCell = ({ value }) => [...value].sort().map(priv => titleize(priv)).join(', ');
+const privilegeNames = {
+  site_admin: 'Global admin',
+};
+
+const PrivilegesCell = ({ value }) => [...value].map(priv => privilegeNames[priv]).sort().join(', ');
 
 PrivilegesCell.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
@@ -128,25 +132,10 @@ PrivilegesCell.defaultProps = {
 };
 
 const PrivilegesFilter = ({ filter, onChange }) => {
-  const data = useContext(QueryDataContext);
-  const choices = useMemo(
-    () => (data
-      ? [
-        ...(data.convention.privilege_names
-          .map(privilegeName => ({
-            label: humanize(privilegeName),
-            value: privilegeName,
-          }))),
-      ]
-      : []
-    ),
-    [data],
-  );
-
   return (
     <ChoiceSetFilter
       name="privileges"
-      choices={choices}
+      choices={[{ label: 'Global admin', value: 'site_admin' }]}
       onChange={onChange}
       filter={filter}
       multiple
