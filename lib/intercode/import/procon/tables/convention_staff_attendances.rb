@@ -23,10 +23,7 @@ class Intercode::Import::Procon::Tables::ConventionStaffAttendances <
     user_con_profile = user_con_profile_for_person_id(row[:person_id], convention)
     return nil unless user_con_profile
 
-    user_con_profile.update!(staff: true)
     pos = staff_position(row, convention)
-    return unless pos
-    pos.save!
     pos.user_con_profiles << user_con_profile
     pos
   end
@@ -39,10 +36,16 @@ class Intercode::Import::Procon::Tables::ConventionStaffAttendances <
       ) do |pos|
         pos.email = staff_position_row[:email]
         pos.visible = true
+        pos.save!
+
+        grant_all_convention_permissions(pos, convention)
       end
-    elsif !has_staff_positions?
+    else
       convention.staff_positions.find_or_create_by!(name: 'Convention staff') do |pos|
-        pos.visible = true
+        pos.visible = !has_staff_positions?
+        pos.save!
+
+        grant_all_convention_permissions(pos, convention)
       end
     end
   end
@@ -52,5 +55,10 @@ class Intercode::Import::Procon::Tables::ConventionStaffAttendances <
     @has_staff_positions = connection[:staff_positions]
       .where(id: dataset.map(:staff_position_id))
       .any?
+  end
+
+  def grant_all_convention_permissions(staff_position, convention)
+    permission_names = Permission.permission_names_for_model_type('Convention')
+    Permission.grant(staff_position, convention, *permission_names)
   end
 end

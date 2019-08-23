@@ -15,10 +15,6 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     birth_date: :BirthYear
   }
 
-  PRIV_MAP = {
-    staff: 'Staff'
-  }
-
   PERMISSIONS_MAP = {
     BidChair: %w[
       access_admin_notes
@@ -80,7 +76,8 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       update_events
       update_rooms
       update_runs
-    ]
+    ],
+    Staff: Permission.permission_names_for_model_type('Convention')
   }
 
   PREFERRED_CONTACT_MAP = {
@@ -146,7 +143,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     profile_attrs = {
       convention: con,
       additional_info: additional_info(row)
-    }.merge(priv_attributes(row)).merge(contact_attributes(row))
+    }.merge(contact_attributes(row))
 
     user.user_con_profiles.new(profile_attrs)
   end
@@ -202,16 +199,6 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       payment_amount_currency: (row[:PaymentAmount].to_i > 0 ? 'USD' : nil),
       payment_note: row[:PaymentNote]
     )
-  end
-
-  def priv_attributes(row)
-    return {} unless row[:Priv]
-
-    priv_attrs = PRIV_MAP.each_with_object({}) do |(new_priv, old_priv), priv_attributes|
-      priv_attributes[new_priv] = row[:Priv].include?(old_priv)
-    end
-
-    priv_attrs
   end
 
   def imported_event(old_event_id)

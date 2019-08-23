@@ -62,37 +62,23 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
       assert_equal my_order_entries.sort, resolved_order_entries.sort
     end
 
-    it 'lets users with read_orders see all the order entries in the con' do
-      convention = create(:convention)
-      me = create_user_with_read_orders_in_convention(convention)
-      my_orders = create_list(:order, 3, user_con_profile: me.user_con_profiles.first)
-      my_order_entries = my_orders.map { |order| create(:order_entry, order: order) }
-      someone = create(:user_con_profile, convention: convention)
-      someones_orders = create_list(:order, 3, user_con_profile: someone)
-      someones_order_entries = someones_orders.map do |order|
-        create(:order_entry, order: order)
+    %w[read_orders update_orders].each do |permission|
+      it "lets users with #{permission} see all the order entries in the con" do
+        convention = create(:convention)
+        me = create_user_with_permission_in_convention(permission, convention)
+        my_orders = create_list(:order, 3, user_con_profile: me.user_con_profiles.first)
+        my_order_entries = my_orders.map { |order| create(:order_entry, order: order) }
+        someone = create(:user_con_profile, convention: convention)
+        someones_orders = create_list(:order, 3, user_con_profile: someone)
+        someones_order_entries = someones_orders.map do |order|
+          create(:order_entry, order: order)
+        end
+        other_orders = create_list(:order, 3)
+        other_orders.map { |order| create(:order_entry, order: order) }
+        resolved_order_entries = OrderEntryPolicy::Scope.new(me, OrderEntry.all).resolve.to_a
+
+        assert_equal (my_order_entries + someones_order_entries).sort, resolved_order_entries.sort
       end
-      other_orders = create_list(:order, 3)
-      other_orders.map { |order| create(:order_entry, order: order) }
-      resolved_order_entries = OrderEntryPolicy::Scope.new(me, OrderEntry.all).resolve.to_a
-
-      assert_equal (my_order_entries + someones_order_entries).sort, resolved_order_entries.sort
-    end
-
-    it 'lets con staff see all the order entries in the con' do
-      me = create(:staff_user_con_profile)
-      my_orders = create_list(:order, 3, user_con_profile: me)
-      my_order_entries = my_orders.map { |order| create(:order_entry, order: order) }
-      someone = create(:user_con_profile, convention: me.convention)
-      someones_orders = create_list(:order, 3, user_con_profile: someone)
-      someones_order_entries = someones_orders.map do |order|
-        create(:order_entry, order: order)
-      end
-      other_orders = create_list(:order, 3)
-      other_orders.map { |order| create(:order_entry, order: order) }
-      resolved_order_entries = OrderEntryPolicy::Scope.new(me.user, OrderEntry.all).resolve.to_a
-
-      assert_equal (my_order_entries + someones_order_entries).sort, resolved_order_entries.sort
     end
   end
 end

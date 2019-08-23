@@ -10,7 +10,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
   let(:the_run) { create(:run, event: event) }
   let(:signup) { create(:signup, run: the_run) }
   let(:team_member) { create(:team_member, event: event) }
-  let(:staff_profile) { create(:staff_user_con_profile, convention: convention) }
   let(:staff_position) { create(:staff_position, convention: convention) }
   let(:staff_position_profile) do
     create(:user_con_profile, convention: convention, staff_positions: [staff_position])
@@ -46,10 +45,6 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
       assert UserConProfilePolicy.new(
         signup.user_con_profile.user, other_signup.user_con_profile
       ).read?
-    end
-
-    it 'lets users read profiles of privileged users in the convention' do
-      assert UserConProfilePolicy.new(rando_profile.user, staff_profile).read?
     end
 
     it 'lets users read profiles of staff-positioned users in the convention' do
@@ -149,9 +144,9 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
 
   %w[create update].each do |action|
     describe "##{action}?" do
-      it "lets staff users #{action} other people's profiles" do
-        assert UserConProfilePolicy.new(staff_profile.user, user_con_profile)
-          .public_send("#{action}?")
+      it "lets users with update_user_con_profiles #{action} other people's profiles" do
+        user = create_user_with_update_user_con_profiles_in_convention(convention)
+        assert UserConProfilePolicy.new(user, user_con_profile).public_send("#{action}?")
       end
 
       it "lets users #{action} their own profiles" do
@@ -168,8 +163,9 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
 
   %w[manage become update_privileges withdraw_all_signups].each do |action|
     describe "##{action}?" do
-      it "lets staff users #{action} attendee profiles" do
-        assert UserConProfilePolicy.new(staff_profile.user, user_con_profile).withdraw_all_signups?
+      it "lets user with update_user_con_profiles #{action} attendee profiles" do
+        user = create_user_with_update_user_con_profiles_in_convention(convention)
+        assert UserConProfilePolicy.new(user, user_con_profile).withdraw_all_signups?
       end
 
       it "does not let users #{action} their own profiles" do

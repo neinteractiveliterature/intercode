@@ -67,7 +67,7 @@ describe('ConventionForm', () => {
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes').checked).toBe(true);
     expect(getMultipleChoiceInput(
       'Show event schedule',
-      'Only to event team members and users with any privileges',
+      'Only to event team members and users with any schedule viewing permissions',
     ).checked).toBe(true);
 
     fireEvent.click(getByText('Payments'));

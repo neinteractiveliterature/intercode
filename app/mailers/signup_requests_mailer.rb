@@ -20,11 +20,13 @@ class SignupRequestsMailer < ApplicationMailer
   private
 
   def signup_moderators_mail_destination(signup_request)
-    users_with_priv = signup_request.convention.user_con_profiles.where(staff: true).to_a
+    staff_positions = StaffPosition.where(
+      id: Permission.for_model(signup_request.convention)
+        .where(permission: 'update_signups')
+        .select(:staff_position_id)
+    )
 
-    users_with_priv.map do |user_con_profile|
-      "#{user_con_profile.name} <#{user_con_profile.email}>"
-    end
+    emails_for_staff_positions(staff_positions)
   end
 
   def subject_prefix(signup_request)

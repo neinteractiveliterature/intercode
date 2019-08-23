@@ -1723,8 +1723,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Privileges have gone away in favor of permissions"
             },
             {
               "name": "products",
@@ -4517,8 +4517,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Privileges are deprecated in favor of permissions and staff positions"
             },
             {
               "name": "show_nickname_in_bio",
@@ -10943,7 +10943,7 @@
             },
             {
               "name": "privileges",
-              "description": null,
+              "description": "DEPRECATED. Privileges are deprecated in favor of permissions and staff positions",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -25882,24 +25882,6 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "privileges",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
               },
               "defaultValue": null
             },

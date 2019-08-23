@@ -5,8 +5,7 @@ class OrderPolicy < ApplicationPolicy
   def read?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        staff_in_convention?(convention) ||
-          has_convention_permission?(convention, 'read_orders')
+        has_convention_permission?(convention, 'read_orders')
       end
       d.add(:read_profile) { user && user.id == user_con_profile.user_id }
     end
@@ -16,7 +15,7 @@ class OrderPolicy < ApplicationPolicy
 
   def manage?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { staff_in_convention?(convention) }
+      d.add(:manage_conventions) { has_convention_permission?(convention, 'update_orders') }
     end
 
     super
@@ -42,10 +41,9 @@ class OrderPolicy < ApplicationPolicy
 
       disjunctive_where do |dw|
         if oauth_scope?(:read_conventions)
-          dw.add(user_con_profile: UserConProfile.where(convention: conventions_where_staff))
           dw.add(
             user_con_profile_id: UserConProfile.where(
-              convention: conventions_with_permission('read_orders')
+              convention: conventions_with_permission('read_orders', 'update_orders')
             )
           )
         end
