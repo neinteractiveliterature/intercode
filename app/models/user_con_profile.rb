@@ -2,8 +2,6 @@ class UserConProfile < ApplicationRecord
   include Concerns::FormResponse
   include Concerns::Names
 
-  PRIV_NAMES = Set.new(%w[staff])
-
   belongs_to :convention
   belongs_to :user
   has_one :ticket, dependent: :destroy
@@ -25,20 +23,12 @@ class UserConProfile < ApplicationRecord
   after_commit :send_user_activity_alerts, on: :create
   after_commit :touch_team_member_events, on: [:create, :update]
 
-  scope :has_privileges, ->(priv_names) {
-    sql_clauses = priv_names.map { |priv_name| "#{priv_name} = ?" }
-    where(sql_clauses.join(' OR '), *sql_clauses.map { |_clause| true })
-  }
-
-  scope :has_any_privileges, -> { has_privileges(PRIV_NAMES) }
-
   scope :is_team_member, -> { joins(:team_members).distinct }
 
   scope :has_staff_position, -> { joins(:staff_positions).distinct }
 
   scope :can_have_bio, -> {
-    where(id: has_any_privileges.select(:id))
-      .or(where(id: has_staff_position.select(:id)))
+    where(id: has_staff_position.select(:id))
       .or(where(id: is_team_member.select(:id)))
   }
 
@@ -100,21 +90,12 @@ class UserConProfile < ApplicationRecord
     [city, state].reject(&:blank?).join(', ')
   end
 
-  def user_con_profile_privileges
-    PRIV_NAMES.select { |priv| send(priv) }
-  end
-
+  # @deprecated
   def privileges
-    user.privileges + user_con_profile_privileges
+    user.privileges
   end
 
-  def privileges=(privileges)
-    PRIV_NAMES.each do |priv|
-      send("#{priv}=", privileges.include?(priv))
-    end
-  end
-
-  %w[has_any_privileges is_team_member can_have_bio].each do |scope_name|
+  %w[is_team_member can_have_bio].each do |scope_name|
     define_method "#{scope_name}?" do
       self.class.public_send(scope_name).where(id: id).any?
     end

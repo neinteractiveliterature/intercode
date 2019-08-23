@@ -30,10 +30,7 @@ class ConventionPolicy < ApplicationPolicy
   def schedule_with_counts?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        schedule? && (
-          staff_in_convention?(record) ||
-          has_convention_permission?(record, 'read_schedule_with_counts')
-        )
+        schedule? && has_convention_permission?(record, 'read_schedule_with_counts')
       end
     end
 
@@ -43,7 +40,6 @@ class ConventionPolicy < ApplicationPolicy
   def view_reports?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        staff_in_convention?(record) ||
         has_convention_permission?(record, 'read_reports')
       end
     end
@@ -58,7 +54,6 @@ class ConventionPolicy < ApplicationPolicy
   def view_event_proposals?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        staff_in_convention?(record) ||
         # this is a weird one: does the user have _any_ permission called read_event_proposal
         # in this convention?
         record.staff_positions.where(
@@ -73,7 +68,7 @@ class ConventionPolicy < ApplicationPolicy
 
   def update?
     return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { staff_in_convention?(record) }
+      d.add(:manage_conventions) { has_convention_permission?(record, 'update_convention') }
     end
 
     site_admin_manage?

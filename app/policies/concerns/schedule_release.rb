@@ -1,7 +1,5 @@
 module Concerns::ScheduleRelease
   def has_schedule_release_permissions?(convention, schedule_release_value)
-    return true if staff_in_convention?(convention)
-
     case schedule_release_value
     when 'yes' then true
     when 'gms'
@@ -34,7 +32,6 @@ module Concerns::ScheduleRelease
         id: conventions_with_permission('read_limited_prerelease_schedule')
       )
       dw.add(id: conventions_with_permission('update_events'))
-      dw.add(id: conventions_where_staff)
     end
   end
 end

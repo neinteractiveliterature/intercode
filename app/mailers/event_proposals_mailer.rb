@@ -64,22 +64,23 @@ class EventProposalsMailer < ApplicationMailer
       end
   end
 
+  def global_proposal_chair_staff_positions(convention)
+    convention.staff_positions
+      .where(
+        id: Permission.for_model(convention)
+          .where(permission: 'read_pending_event_proposals')
+          .select(:staff_position_id)
+      )
+  end
+
   def proposal_mail_destination(event_proposal)
     staff_positions = proposal_chair_staff_positions(event_proposal)
-    proposal_chair_staff_position_emails = staff_positions.flat_map do |staff_position|
-      staff_position.email.presence || staff_position.user_con_profiles.map do |user_con_profile|
-        "#{user_con_profile.name} <#{user_con_profile.email}>"
-      end
-    end
+    proposal_chair_staff_position_emails = emails_for_staff_positions(staff_positions)
 
     if proposal_chair_staff_position_emails.any?
       proposal_chair_staff_position_emails
     else
-      users_with_priv = event_proposal.convention.user_con_profiles.where(staff: true).to_a
-
-      users_with_priv.map do |user_con_profile|
-        "#{user_con_profile.name} <#{user_con_profile.email}>"
-      end
+      emails_for_staff_positions(global_proposal_chair_staff_positions(event_proposal.convention))
     end
   end
 

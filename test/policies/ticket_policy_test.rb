@@ -30,13 +30,12 @@ class TicketPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#provide?' do
-    it 'lets con staff provide tickets to events' do
+    it 'lets users with update_tickets provide tickets to events' do
       event = create(:event)
-      team_member = create(:team_member, event: event)
-      user_con_profile = create(:staff_user_con_profile, convention: event.convention)
+      user = create_user_with_update_tickets_in_convention(event.convention)
       recipient = create(:user_con_profile, convention: event.convention)
       ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
-      assert TicketPolicy.new(user_con_profile.user, ticket).provide?
+      assert TicketPolicy.new(user, ticket).provide?
     end
 
     it 'lets event team members provide tickets to their own event' do
@@ -69,9 +68,9 @@ class TicketPolicyTest < ActiveSupport::TestCase
       refute TicketPolicy.new(ticket_user, ticket).manage?
     end
 
-    it 'lets con staff manage my ticket' do
-      staff_profile = create(:staff_user_con_profile, convention: convention)
-      assert TicketPolicy.new(staff_profile.user, ticket).manage?
+    it 'lets users with update_tickets manage my ticket' do
+      user = create_user_with_update_tickets_in_convention(convention)
+      assert TicketPolicy.new(user, ticket).manage?
     end
   end
 

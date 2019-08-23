@@ -10,7 +10,8 @@ class SignupRequestPolicy < ApplicationPolicy
       end
 
       d.add(:read_conventions) do
-        convention.signup_mode == 'moderated' && staff_in_convention?(convention)
+        convention.signup_mode == 'moderated' &&
+        has_convention_permission?(convention, 'update_signups')
       end
     end
 
@@ -20,7 +21,8 @@ class SignupRequestPolicy < ApplicationPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_conventions) do
-        convention.signup_mode == 'moderated' && staff_in_convention?(convention)
+        convention.signup_mode == 'moderated' &&
+        has_convention_permission?(convention, 'update_signups')
       end
     end
 
@@ -60,7 +62,8 @@ class SignupRequestPolicy < ApplicationPolicy
           dw.add(
             target_run: Run.where(
               event: Event.where(
-                convention: conventions_with_privilege(:staff).where(signup_mode: 'moderated')
+                convention: conventions_with_permission('update_signups')
+                  .where(signup_mode: 'moderated')
               )
             )
           )

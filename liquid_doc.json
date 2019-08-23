@@ -2784,7 +2784,7 @@
             {
               "tag_name": "return",
               "name": null,
-              "text": "All the events at this convention for which this user is a team\nmember",
+              "text": "All the active events at this convention for which this user is a\nteam member",
               "types": [
                 "Array<EventDrop>"
               ]
@@ -2823,6 +2823,12 @@
           "name": "privileges",
           "docstring": "",
           "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "Privileges have been removed in favor of permissions and staff positions.  This\nmethod still exists for compatibility reasons but will return either an empty array or an\narray containing only the string 'site_admin'.",
+              "types": null
+            },
             {
               "tag_name": "return",
               "name": null,
@@ -3465,8 +3471,8 @@
       ],
       "methods": [
         {
-          "name": "event_id",
-          "docstring": "Returns the value of attribute event_id",
+          "name": "event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression",
           "tags": [
 
           ]
@@ -3537,8 +3543,8 @@
       ],
       "methods": [
         {
-          "name": "event_id",
-          "docstring": "Returns the value of attribute event_id",
+          "name": "event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression",
           "tags": [
 
           ]
@@ -3621,6 +3627,14 @@
           "name": "initialize",
           "docstring": "",
           "tags": [
+            {
+              "tag_name": "raise",
+              "name": null,
+              "text": "",
+              "types": [
+                "SyntaxError"
+              ]
+            },
             {
               "tag_name": "return",
               "name": null,
@@ -3732,8 +3746,8 @@
       ],
       "methods": [
         {
-          "name": "event_id",
-          "docstring": "Returns the value of attribute event_id",
+          "name": "event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression",
           "tags": [
 
           ]
@@ -3804,8 +3818,8 @@
       ],
       "methods": [
         {
-          "name": "event_id",
-          "docstring": "Returns the value of attribute event_id",
+          "name": "event_id_expression",
+          "docstring": "Returns the value of attribute event_id_expression",
           "tags": [
 
           ]

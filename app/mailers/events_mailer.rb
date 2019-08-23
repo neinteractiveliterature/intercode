@@ -13,21 +13,14 @@ class EventsMailer < ApplicationMailer
   private
 
   def event_mail_destination(convention)
-    staff_position = convention.staff_positions
-      .where(name: ['GM Coordinator', 'GM Liaison']).first
+    staff_positions = convention.staff_positions
+      .where(name: ['GM Coordinator', 'GM Liaison']).to_a
+    staff_positions ||= StaffPosition.where(
+      id: Permission.for_model(convention).where(permission: 'update_events')
+        .select(:staff_position_id)
+    )
 
-    if staff_position&.email.present?
-      staff_position.email
-    elsif staff_position
-      staff_position.user_con_profiles.map do |user_con_profile|
-        "#{user_con_profile.name} <#{user_con_profile.email}>"
-      end
-    else
-      users_with_priv = convention.user_con_profiles.where(staff: true).to_a
-      users_with_priv.map do |user_con_profile|
-        "#{user_con_profile.name} <#{user_con_profile.email}>"
-      end
-    end
+    emails_for_staff_positions(staff_positions)
   end
 
   def subject_prefix(event)

@@ -44,7 +44,10 @@ class EventProposalsMailerTest < ActionMailer::TestCase
 
     it 'sends email to staff users, if there is no proposal chair' do
       event_proposal
-      staffer = create(:user_con_profile, convention: convention, staff: true)
+      pos = create(:staff_position, convention: convention)
+      Permission.grant(pos, convention, 'read_event_proposals', 'read_pending_event_proposals')
+      staffer = create(:user_con_profile, convention: convention)
+      pos.user_con_profiles << staffer
       email = EventProposalsMailer.new_proposal(event_proposal)
       assert_emails 1 do
         email.deliver_now

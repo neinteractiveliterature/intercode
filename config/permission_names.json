@@ -81,6 +81,10 @@
         "name": "read reports"
       },
       {
+        "permission": "read_schedule_with_counts",
+        "name": "read schedule with counts"
+      },
+      {
         "permission": "read_signup_details",
         "name": "read signup details"
       },
@@ -109,24 +113,76 @@
         "name": "read attendee personal info"
       },
       {
+        "permission": "update_cms_content",
+        "name": "manage CMS content"
+      },
+      {
+        "permission": "update_convention",
+        "name": "manage convention settings"
+      },
+      {
+        "permission": "update_event_categories",
+        "name": "manage event categories"
+      },
+      {
         "permission": "update_events",
         "name": "manage events"
       },
       {
         "permission": "update_event_proposals",
-        "name": "update proposals"
+        "name": "manage proposals"
       },
       {
         "permission": "update_event_team_members",
-        "name": "update event team members"
+        "name": "manage event team members"
+      },
+      {
+        "permission": "update_forms",
+        "name": "manage forms"
+      },
+      {
+        "permission": "update_orders",
+        "name": "manage orders"
+      },
+      {
+        "permission": "update_permissions",
+        "name": "manage permissions"
+      },
+      {
+        "permission": "update_products",
+        "name": "manage products"
       },
       {
         "permission": "update_rooms",
-        "name": "update rooms"
+        "name": "manage rooms"
       },
       {
         "permission": "update_runs",
-        "name": "update event runs"
+        "name": "manage event runs"
+      },
+      {
+        "permission": "update_signups",
+        "name": "manage signups"
+      },
+      {
+        "permission": "update_staff_positions",
+        "name": "manage staff positions"
+      },
+      {
+        "permission": "update_tickets",
+        "name": "manage tickets"
+      },
+      {
+        "permission": "update_ticket_types",
+        "name": "manage ticket types"
+      },
+      {
+        "permission": "update_user_activity_alerts",
+        "name": "manage user activity alerts"
+      },
+      {
+        "permission": "update_user_con_profiles",
+        "name": "manage attendee profiles"
       }
     ]
   }

@@ -7,8 +7,7 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
       d.add(:read_events) do
         has_convention_permission?(convention, 'override_event_tickets') ||
         has_event_category_permission?(event.event_category_id, 'override_event_tickets') ||
-        team_member_for_event?(event) ||
-        staff_in_convention?(convention)
+        team_member_for_event?(event)
       end
     end
 
@@ -19,8 +18,7 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
         has_convention_permission?(convention, 'override_event_tickets') ||
-        has_event_category_permission?(event.event_category_id, 'override_event_tickets') ||
-        staff_in_convention?(convention)
+        has_event_category_permission?(event.event_category_id, 'override_event_tickets')
       end
     end
 
@@ -38,9 +36,6 @@ class MaximumEventProvidedTicketsOverridePolicy < ApplicationPolicy
           ))
           dw.add(event_id: events_where_has_event_category_permission('override_event_tickets'))
           dw.add(event_id: events_where_team_member)
-          dw.add(event_id: Event.where(
-            convention_id: conventions_where_staff
-          ))
         end
       end
     end

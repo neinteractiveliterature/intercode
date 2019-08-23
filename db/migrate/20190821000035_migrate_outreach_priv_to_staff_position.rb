@@ -1,5 +1,5 @@
 class MigrateOutreachPrivToStaffPosition < ActiveRecord::Migration[5.2]
-  def change
+  def up
     Convention.find_each do |convention|
       outreach_profiles = convention.user_con_profiles.where(outreach: true)
       if outreach_profiles.none?

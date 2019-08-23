@@ -27,15 +27,6 @@ class RunPolicyTest < ActiveSupport::TestCase
           .read?
       end
 
-      %w[staff].each do |priv|
-        it "lets #{priv} users read" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          assert RunPolicy.new(user_con_profile.user, the_run).read?
-        end
-      end
-
       %w[
         read_prerelease_schedule read_limited_prerelease_schedule update_events
       ].each do |permission|
@@ -57,15 +48,6 @@ class RunPolicyTest < ActiveSupport::TestCase
 
     describe "when show_schedule is 'priv'" do
       before { convention.update!(show_schedule: 'priv') }
-
-      %w[staff].each do |priv|
-        it "lets #{priv} users read" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          assert RunPolicy.new(user_con_profile.user, the_run).read?
-        end
-      end
 
       %w[read_limited_prerelease_schedule update_events].each do |permission|
         it "lets people with #{permission} permission in convention read runs" do
@@ -100,13 +82,6 @@ class RunPolicyTest < ActiveSupport::TestCase
 
     describe "when show_schedule is 'no'" do
       before { convention.update!(show_schedule: 'no') }
-
-      it 'lets staff users read' do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, staff: true
-        )
-        assert RunPolicy.new(user_con_profile.user, the_run).read?
-      end
 
       %w[update_events].each do |permission|
         it "lets people with #{permission} permission in convention read runs" do
@@ -164,13 +139,6 @@ class RunPolicyTest < ActiveSupport::TestCase
   end
 
   describe '#manage?' do
-    %w[staff].each do |priv|
-      it "lets #{priv} users manage runs" do
-        user_con_profile = create(:user_con_profile, convention: convention, priv => true)
-        assert RunPolicy.new(user_con_profile.user, the_run).manage?
-      end
-    end
-
     it 'lets users with update_runs manage runs' do
       user = create_user_with_update_runs_in_convention(convention)
       assert RunPolicy.new(user, the_run).manage?
@@ -209,17 +177,6 @@ class RunPolicyTest < ActiveSupport::TestCase
         assert_equal [the_run].sort, resolved_runs.sort
       end
 
-      %w[staff].each do |priv|
-        it "returns all runs to #{priv} users" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          resolved_runs = RunPolicy::Scope.new(user_con_profile.user, Run.all).resolve
-
-          assert_equal [the_run].sort, resolved_runs.sort
-        end
-      end
-
       %w[
         read_prerelease_schedule read_limited_prerelease_schedule update_events
       ].each do |permission|
@@ -247,17 +204,6 @@ class RunPolicyTest < ActiveSupport::TestCase
 
     describe "when show_schedule is 'priv'" do
       before { convention.update!(show_schedule: 'priv') }
-
-      %w[staff].each do |priv|
-        it "returns all runs to #{priv} users" do
-          user_con_profile = create(
-            :user_con_profile, convention: convention, priv => true
-          )
-          resolved_runs = RunPolicy::Scope.new(user_con_profile.user, Run.all).resolve
-
-          assert_equal [the_run].sort, resolved_runs.sort
-        end
-      end
 
       %w[read_limited_prerelease_schedule update_events].each do |permission|
         it "returns all runs to users with #{permission} permission in convention" do
@@ -301,15 +247,6 @@ class RunPolicyTest < ActiveSupport::TestCase
 
     describe "when show_schedule is 'no'" do
       before { convention.update!(show_schedule: 'no') }
-
-      it 'returns all runs to staff users' do
-        user_con_profile = create(
-          :user_con_profile, convention: convention, staff: true
-        )
-        resolved_runs = RunPolicy::Scope.new(user_con_profile.user, Run.all).resolve
-
-        assert_equal [the_run], resolved_runs.sort
-      end
 
       %w[update_events].each do |permission|
         it "returns all runs to users with #{permission} permission in convention" do

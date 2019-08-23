@@ -119,32 +119,14 @@ lower(user_con_profiles.first_name) #{direction}")
     when :ticket_type
       Arel.sql("ticket_types.name #{direction}")
     when :ticket_updated_at
-    when :privileges
-      clauses = UserConProfile::PRIV_NAMES.map do |priv_name|
-        Arel.sql("user_con_profiles.#{priv_name} #{invert_sort_direction direction}")
-      end
-
-      clauses.join(', ')
+      Arel.sql("tickets.updated_at #{direction}")
     else
       super
     end
   end
 
   def apply_privileges_filter(scope, value)
-    user_con_profile_privileges = value.select { |priv| UserConProfile::PRIV_NAMES.include?(priv) }
-
-    if user_con_profile_privileges.any?
-      priv_scopes = user_con_profile_privileges.map do |priv|
-        UserConProfile.joins(:user).where(priv => true)
-      end
-      if value.include?('site_admin')
-        priv_scopes << UserConProfile.joins(:user).where(users: { site_admin: true })
-      end
-      complete_clause = priv_scopes.reduce do |working_scope, priv_scope|
-        working_scope.or(priv_scope)
-      end
-      scope.where(id: complete_clause.select(:id))
-    elsif value.include?('site_admin')
+    if value.include?('site_admin')
       scope.joins(:user).where(users: { site_admin: true })
     else
       scope

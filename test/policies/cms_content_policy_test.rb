@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class CmsContentPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   %i[
     cms_file cms_graphql_query cms_layout cms_navigation_item cms_partial cms_variable page
   ].each do |cms_model_name|
@@ -18,13 +21,13 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
       end
 
       describe '#manage?' do
-        it "lets con staff manage #{cms_model_name.to_s.pluralize}" do
+        it "lets users with update_cms_content manage #{cms_model_name.to_s.pluralize}" do
           model = create(cms_model_name)
-          user_con_profile = create(:staff_user_con_profile, convention: model.parent)
-          assert policy_class.new(user_con_profile.user, model).manage?
+          user = create_user_with_update_cms_content_in_convention(model.parent)
+          assert policy_class.new(user, model).manage?
         end
 
-        it "does not let non-staff manage #{cms_model_name.to_s.pluralize}" do
+        it "does not let users without update_cms_content manage #{cms_model_name.to_s.pluralize}" do
           model = create(cms_model_name)
           user_con_profile = create(:user_con_profile, convention: model.parent)
           refute policy_class.new(user_con_profile.user, model).manage?
