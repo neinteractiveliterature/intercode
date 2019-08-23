@@ -48,7 +48,7 @@
     "caniuse-lite": "^1.0.30000989",
     "classnames": "^2.2.6",
     "clipboard": "^2.0.1",
-    "codemirror": "^5.48.2",
+    "codemirror": "^5.48.4",
     "compression-webpack-plugin": "^3.0.0",
     "core-js": "^3.2.1",
     "css-loader": "^2.1.1",
