@@ -18,15 +18,10 @@ fragment UserConProfileFormData on Convention {
 }
 
 query UserConProfileQuery($id: Int!) {
-  currentAbility {
-    can_update_privileges_user_con_profile(user_con_profile_id: $id)
-  }
-
   convention {
     ...UserConProfileFormData
 
     id
-    privilege_names
   }
 
   userConProfile(id: $id) {
@@ -77,7 +72,6 @@ query UserConProfileAdminQuery($id: Int!) {
     ability {
       can_read_signups
       can_update_user_con_profile(user_con_profile_id: $id)
-      can_update_privileges_user_con_profile(user_con_profile_id: $id)
       can_delete_user_con_profile(user_con_profile_id: $id)
       can_become_user_con_profile(user_con_profile_id: $id)
     }

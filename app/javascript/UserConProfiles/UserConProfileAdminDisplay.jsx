@@ -164,14 +164,7 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
 
             {renderFormItems()}
 
-            <tr>
-              <th scope="row" className="pr-2">Privileges</th>
-              <td>
-                {data.userConProfile.privileges.length > 0
-                  ? data.userConProfile.privileges.map(priv => titleize(priv)).join(', ')
-                  : 'none'}
-              </td>
-            </tr>
+            {/* TODO maybe add staff positions and/or permissions here */}
           </tbody>
         </table>
 
