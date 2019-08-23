@@ -36,7 +36,9 @@ class CloneConventionService < CivilService::Service
       end
       convention.save!
 
-      @id_maps = {}
+      @id_maps = {
+        conventions: { source_convention.id => convention }
+      }
       clone_cms_content(convention)
       clone_event_categories(convention)
       clone_rooms(convention)
@@ -50,22 +52,31 @@ class CloneConventionService < CivilService::Service
   end
 
   def clone_cms_content(convention)
-    %i[cms_graphql_queries cms_variables cms_layouts cms_partials].each do |association|
-      Rails.logger.info("Cloning #{association}")
-      @id_maps[association] = clone_with_id_map(
-        source_convention.public_send(association),
-        convention.public_send(association)
-      )
-    end
+    clone_simple_cms_content(convention)
+    clone_pages(convention)
+    clone_cms_navigation_items(convention)
+    clone_cms_files(convention)
+    clone_forms(convention)
 
-    Rails.logger.info('Cloning pages')
-    @id_maps[:pages] = clone_with_id_map(
-      source_convention.pages,
-      convention.pages
-    ) do |page, cloned_page|
-      cloned_page.cms_layout = @id_maps[:cms_layouts][page.cms_layout_id]
-    end
+    convention.update!(
+      root_page: @id_maps[:pages][source_convention.root_page_id],
+      default_layout: @id_maps[:cms_layouts][source_convention.default_layout_id],
+      user_con_profile_form: @id_maps[:forms][source_convention.user_con_profile_form_id]
+    )
+  end
 
+  def clone_cms_files(convention)
+    Rails.logger.info('Cloning files')
+    @id_maps[:cms_files] = clone_with_id_map(
+      source_convention.cms_files,
+      convention.cms_files
+    ) do |file, cloned_file|
+      file.file.cache_stored_file!
+      cloned_file.file = file.file
+    end
+  end
+
+  def clone_cms_navigation_items(convention)
     Rails.logger.info('Cloning navigation items')
     clone_with_id_map(
       source_convention.cms_navigation_items.root.order(:position),
@@ -81,16 +92,9 @@ class CloneConventionService < CivilService::Service
         cloned_navigation_link.page = @id_maps[:pages][navigation_link.page_id]
       end
     end
+  end
 
-    Rails.logger.info('Cloning files')
-    @id_maps[:cms_files] = clone_with_id_map(
-      source_convention.cms_files,
-      convention.cms_files
-    ) do |file, cloned_file|
-      file.file.cache_stored_file!
-      cloned_file.file = file.file
-    end
-
+  def clone_forms(convention)
     @id_maps[:forms] = clone_with_id_map(
       source_convention.forms,
       convention.forms
@@ -99,12 +103,6 @@ class CloneConventionService < CivilService::Service
       content = FormExportPresenter.new(form).as_json
       ImportFormContentService.new(form: cloned_form, content: content).call!
     end
-
-    convention.update!(
-      root_page: @id_maps[:pages][source_convention.root_page_id],
-      default_layout: @id_maps[:cms_layouts][source_convention.default_layout_id],
-      user_con_profile_form: @id_maps[:forms][source_convention.user_con_profile_form_id]
-    )
   end
 
   def clone_event_categories(convention)
@@ -117,8 +115,28 @@ class CloneConventionService < CivilService::Service
     end
   end
 
+  def clone_pages(convention)
+    Rails.logger.info('Cloning pages')
+    @id_maps[:pages] = clone_with_id_map(
+      source_convention.pages,
+      convention.pages
+    ) do |page, cloned_page|
+      cloned_page.cms_layout = @id_maps[:cms_layouts][page.cms_layout_id]
+    end
+  end
+
   def clone_rooms(convention)
     @id_maps[:rooms] = clone_with_id_map(source_convention.rooms, convention.rooms)
+  end
+
+  def clone_simple_cms_content(convention)
+      %i[cms_graphql_queries cms_variables cms_layouts cms_partials].each do |association|
+      Rails.logger.info("Cloning #{association}")
+      @id_maps[association] = clone_with_id_map(
+        source_convention.public_send(association),
+        convention.public_send(association)
+      )
+    end
   end
 
   def clone_ticket_types(convention)
