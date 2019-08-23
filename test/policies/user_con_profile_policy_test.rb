@@ -161,19 +161,21 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
     end
   end
 
-  %w[manage become update_privileges withdraw_all_signups].each do |action|
+  %w[manage become withdraw_all_signups].each do |action|
     describe "##{action}?" do
       it "lets user with update_user_con_profiles #{action} attendee profiles" do
         user = create_user_with_update_user_con_profiles_in_convention(convention)
-        assert UserConProfilePolicy.new(user, user_con_profile).withdraw_all_signups?
+        assert UserConProfilePolicy.new(user, user_con_profile).public_send("#{action}?")
       end
 
       it "does not let users #{action} their own profiles" do
-        refute UserConProfilePolicy.new(user_con_profile.user, user_con_profile).withdraw_all_signups?
+        refute UserConProfilePolicy.new(user_con_profile.user, user_con_profile)
+          .public_send("#{action}?")
       end
 
       it "does not let randos #{action} arbitrary profiles" do
-        refute UserConProfilePolicy.new(rando_profile.user, user_con_profile).withdraw_all_signups?
+        refute UserConProfilePolicy.new(rando_profile.user, user_con_profile)
+          .public_send("#{action}?")
       end
     end
   end

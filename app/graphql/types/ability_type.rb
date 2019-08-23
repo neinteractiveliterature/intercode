@@ -171,12 +171,17 @@ class Types::AbilityType < Types::BaseObject
     ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update, args[:user_con_profile_id]])
   end
 
-  field :can_update_privileges_user_con_profile, Boolean, null: false do
+  field(
+    :can_update_privileges_user_con_profile, Boolean,
+    null: false,
+    deprecation_reason:
+      'Privileges have been removed in favor of permissions.  This will always return false.'
+  ) do
     argument :user_con_profile_id, Integer, required: true, camelize: false
   end
 
-  def can_update_privileges_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update_privileges, args[:user_con_profile_id]])
+  def can_update_privileges_user_con_profile(**_args)
+    false
   end
 
   field :can_delete_user_con_profile, Boolean, null: false do
