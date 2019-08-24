@@ -16,10 +16,11 @@ tool 'update_schema' do
 
       dest_dir = File.expand_path('schema', dir)
       FileUtils.rm_rf(dest_dir) if File.exist?(dest_dir)
-      sh "yarn run graphdoc:generate -o #{dest_dir}"
+      sh "yarn run graphqldoc:generate -o #{dest_dir}"
 
       Dir.chdir(dir) do
-        sh "git commit -a -m 'Schema docs update'"
+        sh "git add --all ."
+        sh "git commit -m 'Schema docs update'"
         sh 'git push'
       end
     end
