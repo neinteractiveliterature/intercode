@@ -5,7 +5,14 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
   include ConventionPermissionsTestHelper
 
   %i[
-    cms_file cms_graphql_query cms_layout cms_navigation_item cms_partial cms_variable page
+    cms_content_group
+    cms_file
+    cms_graphql_query
+    cms_layout
+    cms_navigation_item
+    cms_partial
+    cms_variable
+    page
   ].each do |cms_model_name|
     model_class = cms_model_name.to_s.camelize.safe_constantize
     policy_finder = Pundit::PolicyFinder.new(model_class)

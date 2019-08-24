@@ -8,6 +8,7 @@ import { ConventionExistsQuery } from './queries.gql';
 import NavigationItemsAdmin from './NavigationItemsAdmin';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
+import CmsContentGroupsAdmin from './CmsContentGroupsAdmin';
 import CmsPagesAdmin from './CmsPagesAdmin';
 import CmsLayoutsAdmin from './CmsLayoutsAdmin';
 import CmsPartialsAdmin from './CmsPartialsAdmin';
@@ -46,6 +47,7 @@ function CmsAdmin() {
         <CmsAdminNavTab path="/cms_layouts">Layouts</CmsAdminNavTab>
         <CmsAdminNavTab path="/cms_variables">Variables</CmsAdminNavTab>
         <CmsAdminNavTab path="/cms_graphql_queries">GraphQL queries</CmsAdminNavTab>
+        <CmsAdminNavTab path="/cms_content_groups">Content groups</CmsAdminNavTab>
         {
           !data.convention && (
             <CmsAdminNavTab path="/root_site">Root site settings</CmsAdminNavTab>
@@ -63,6 +65,7 @@ function CmsAdmin() {
         <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
         <Route path="/cms_variables" component={CmsVariablesAdmin} />
         <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />
+        <Route path="/cms_content_groups" component={CmsContentGroupsAdmin} />
         <Route path="/root_site" component={RootSiteAdmin} />
       </Switch>
     </>

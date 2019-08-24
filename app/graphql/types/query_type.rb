@@ -85,6 +85,20 @@ class Types::QueryType < Types::BaseObject
     convention || root_site
   end
 
+  field :cms_content_groups, [Types::CmsContentGroupType], null: false
+
+  def cms_content_groups
+    cms_parent.cms_content_groups
+  end
+
+  field :cms_content_group, Types::CmsContentGroupType, null: false do
+    argument :id, Int, required: true
+  end
+
+  def cms_content_group(id:)
+    cms_parent.cms_content_groups.find(id)
+  end
+
   field :cms_files, [Types::CmsFileType], null: true
 
   def cms_files
