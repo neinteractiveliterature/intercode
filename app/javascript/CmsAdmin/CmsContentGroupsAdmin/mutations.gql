@@ -1,0 +1,23 @@
+#import './queries.gql'
+
+mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!) {
+  createCmsContentGroup(input: { cms_partial: $cmsContentGroup }) {
+    cms_partial {
+      ...CmsContentGroupFields
+    }
+  }
+}
+
+mutation UpdateContentGroup($id: Int!, $cmsContentGroup: CmsContentGroupInput!) {
+  updateCmsContentGroup(input: { id: $id, cms_partial: $cmsContentGroup }) {
+    cms_partial {
+      ...CmsContentGroupFields
+    }
+  }
+}
+
+mutation DeleteContentGroup($id: Int!) {
+  deleteCmsContentGroup(input: { id: $id }) {
+    clientMutationId
+  }
+}

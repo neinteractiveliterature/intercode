@@ -1,0 +1,15 @@
+fragment CmsContentGroupFields on CmsContentGroup {
+  id
+  name
+}
+
+query CmsContentGroupsAdminQuery {
+  convention {
+    id
+    name
+  }
+
+  cmsContentGroups {
+    ...CmsContentGroupFields
+  }
+}
