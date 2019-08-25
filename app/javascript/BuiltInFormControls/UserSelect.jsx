@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { components } from 'react-select';
@@ -24,10 +26,10 @@ function UserSelect({ usersQuery, ...otherProps }) {
   return (
     <GraphQLAsyncSelect
       isClearable
-      getOptions={data => data.users_paginated.entries}
-      getVariables={inputValue => ({ name: inputValue })}
-      getOptionValue={option => option.id}
-      formatOptionLabel={option => (
+      getOptions={(data) => data.users_paginated.entries}
+      getVariables={(inputValue) => ({ name: inputValue })}
+      getOptionValue={(option) => option.id}
+      formatOptionLabel={(option) => (
         <>
           {option.name}
           {' '}
