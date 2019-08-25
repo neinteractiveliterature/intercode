@@ -3,13 +3,9 @@ import { Switch, Route } from 'react-router-dom';
 
 import CmsContentGroupsAdminTable from './CmsContentGroupsAdminTable';
 // import EditCmsContentGroup from './EditCmsContentGroup';
-// import NewCmsContentGroup from './NewCmsContentGroup';
+import NewCmsContentGroup from './NewCmsContentGroup';
 
 function EditCmsContentGroup() {
-  return <div>todo</div>;
-}
-
-function NewCmsContentGroup() {
   return <div>todo</div>;
 }
 

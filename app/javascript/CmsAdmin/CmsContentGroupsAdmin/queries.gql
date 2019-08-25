@@ -1,6 +1,29 @@
+fragment CmsContentFields on CmsContent {
+  __typename
+
+  ...on Page {
+    id
+    name
+  }
+
+  ...on CmsPartial {
+    id
+    name
+  }
+
+  ...on CmsLayout {
+    id
+    name
+  }
+}
+
 fragment CmsContentGroupFields on CmsContentGroup {
   id
   name
+
+  contents {
+    ...CmsContentFields
+  }
 }
 
 query CmsContentGroupsAdminQuery {
@@ -11,5 +34,11 @@ query CmsContentGroupsAdminQuery {
 
   cmsContentGroups {
     ...CmsContentGroupFields
+  }
+}
+
+query SearchCmsContentQuery($name: String) {
+  searchCmsContent(name: $name) {
+    ...CmsContentFields
   }
 }

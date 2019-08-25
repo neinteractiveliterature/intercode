@@ -4,8 +4,8 @@ class Types::CmsContentType < Types::BaseUnion
   def self.resolve_type(object, _context)
     case object
     when Page then Types::PageType
-    when CmsPartial then Types::CmsPartial
-    when CmsLayout then Types::CmsLayout
+    when CmsPartial then Types::CmsPartialType
+    when CmsLayout then Types::CmsLayoutType
     end
   end
 end
