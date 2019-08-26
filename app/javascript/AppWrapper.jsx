@@ -19,10 +19,6 @@ import { AlertProvider } from './ModalDialogs/Alert';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
 
 class ErrorBoundary extends React.Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -51,6 +47,10 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default (WrappedComponent) => {
   function Wrapper({

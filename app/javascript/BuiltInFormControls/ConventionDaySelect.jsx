@@ -5,20 +5,6 @@ import moment from 'moment-timezone';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 
 class ConventionDaySelect extends React.Component {
-  static propTypes = {
-    convention: PropTypes.shape({
-      starts_at: PropTypes.string.isRequired,
-      ends_at: PropTypes.string.isRequired,
-      timezone_name: PropTypes.string.isRequired,
-    }).isRequired,
-    value: MomentPropTypes.momentObj,
-    onChange: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    value: null,
-  };
-
   onChange = (event) => {
     const newDayString = event.target.value;
 
@@ -56,5 +42,19 @@ class ConventionDaySelect extends React.Component {
     );
   }
 }
+
+ConventionDaySelect.propTypes = {
+  convention: PropTypes.shape({
+    starts_at: PropTypes.string.isRequired,
+    ends_at: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+  }).isRequired,
+  value: MomentPropTypes.momentObj,
+  onChange: PropTypes.func.isRequired,
+};
+
+ConventionDaySelect.defaultProps = {
+  value: null,
+};
 
 export default ConventionDaySelect;

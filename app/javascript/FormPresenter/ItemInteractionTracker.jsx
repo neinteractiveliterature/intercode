@@ -40,38 +40,3 @@ ItemInteractionProvider.propTypes = {
   interactWithItem: PropTypes.func.isRequired,
   hasInteractedWithItem: PropTypes.func.isRequired,
 };
-
-export default class ItemInteractionTracker extends React.Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      interactedItemIds: new Set(),
-    };
-  }
-
-  interactWithItem = (itemId) => {
-    this.setState((prevState) => {
-      const newInteractedItemIds = new Set(prevState.interactedItemIds);
-      newInteractedItemIds.add(itemId);
-      return { interactedItemIds: newInteractedItemIds };
-    });
-  }
-
-  hasInteractedWithItem = (itemId) => this.state.interactedItemIds.has(itemId)
-
-  render = () => (
-    <ItemInteractionTrackerContext.Provider
-      value={{
-        interactWithItem: this.interactWithItem,
-        hasInteractedWithItem: this.hasInteractedWithItem,
-      }}
-    >
-      {this.props.children}
-    </ItemInteractionTrackerContext.Provider>
-  )
-}

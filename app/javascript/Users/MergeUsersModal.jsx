@@ -17,7 +17,6 @@ import LoadingIndicator from '../LoadingIndicator';
 import { MergeUsers } from './mutations.gql';
 import { MergeUsersModalQuery } from './queries.gql';
 import pluralizeWithCount from '../pluralizeWithCount';
-import useAsyncFunction from '../useAsyncFunction';
 
 function renderIfQueryReady(render, { loading, error }) {
   if (error) {

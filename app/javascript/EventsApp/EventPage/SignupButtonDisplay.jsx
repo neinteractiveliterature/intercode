@@ -4,21 +4,6 @@ import classNames from 'classnames';
 import { Manager, Reference, Popper } from 'react-popper';
 
 class SignupButtonDisplay extends React.Component {
-  static propTypes = {
-    signupOption: PropTypes.shape({
-      buttonClass: PropTypes.string,
-      helpText: PropTypes.string,
-      label: PropTypes.string,
-    }).isRequired,
-    onClick: PropTypes.func,
-    disabled: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    onClick: null,
-    disabled: false,
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -83,5 +68,20 @@ class SignupButtonDisplay extends React.Component {
     );
   }
 }
+
+SignupButtonDisplay.propTypes = {
+  signupOption: PropTypes.shape({
+    buttonClass: PropTypes.string,
+    helpText: PropTypes.string,
+    label: PropTypes.string,
+  }).isRequired,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+};
+
+SignupButtonDisplay.defaultProps = {
+  onClick: null,
+  disabled: false,
+};
 
 export default SignupButtonDisplay;

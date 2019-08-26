@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { humanize, titleize } from 'inflected';
+import { humanize } from 'inflected';
 import fetch from 'unfetch';
 import { Link } from 'react-router-dom';
 

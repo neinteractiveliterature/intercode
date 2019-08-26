@@ -8,17 +8,6 @@ import { SetCmsVariableMutation } from './queries.gql';
 import updateCmsVariable from './updateCmsVariable';
 
 class AddVariableRow extends React.Component {
-  static propTypes = {
-    variable: PropTypes.shape({
-      generatedId: PropTypes.number.isRequired,
-      key: PropTypes.string.isRequired,
-      value_json: PropTypes.string.isRequired,
-    }).isRequired,
-    onChange: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -128,5 +117,16 @@ class AddVariableRow extends React.Component {
     </>
   );
 }
+
+AddVariableRow.propTypes = {
+  variable: PropTypes.shape({
+    generatedId: PropTypes.number.isRequired,
+    key: PropTypes.string.isRequired,
+    value_json: PropTypes.string.isRequired,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
 
 export default AddVariableRow;

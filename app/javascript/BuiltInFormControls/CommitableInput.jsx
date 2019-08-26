@@ -3,27 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 class CommitableInput extends React.Component {
-  static propTypes = {
-    value: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    onCancel: PropTypes.func,
-    className: PropTypes.string,
-    disabled: PropTypes.bool,
-    renderInput: PropTypes.func,
-    placeholder: PropTypes.string,
-    label: PropTypes.string,
-  };
-
-  static defaultProps = {
-    value: null,
-    className: null,
-    onCancel: null,
-    disabled: false,
-    renderInput: null,
-    placeholder: null,
-    label: null,
-  };
-
   constructor(props) {
     super(props);
 
@@ -169,5 +148,26 @@ class CommitableInput extends React.Component {
     );
   }
 }
+
+CommitableInput.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  renderInput: PropTypes.func,
+  placeholder: PropTypes.string,
+  label: PropTypes.string,
+};
+
+CommitableInput.defaultProps = {
+  value: null,
+  className: null,
+  onCancel: null,
+  disabled: false,
+  renderInput: null,
+  placeholder: null,
+  label: null,
+};
 
 export default CommitableInput;

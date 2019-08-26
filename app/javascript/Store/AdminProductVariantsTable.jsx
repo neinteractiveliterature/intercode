@@ -33,26 +33,6 @@ const productVariantUpdaterForComponent = (component, variant, transforms) => mu
 });
 
 class AdminProductVariantsTable extends React.Component {
-  static propTypes = {
-    product: PropTypes.shape({
-      id: PropTypes.number,
-      generatedId: PropTypes.number,
-      product_variants: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        description: PropTypes.string,
-        override_price: PropTypes.shape({
-          fractional: PropTypes.number,
-          currency_code: PropTypes.string,
-        }),
-      })),
-      delete_variant_ids: PropTypes.arrayOf(PropTypes.number),
-    }).isRequired,
-    editing: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-    deleteVariant: PropTypes.func.isRequired,
-  };
-
   addVariantClicked = () => {
     const position = Math.max(0, ...this.props.product.product_variants
       .map((variant) => variant.position)) + 1;
@@ -205,5 +185,25 @@ class AdminProductVariantsTable extends React.Component {
     );
   }
 }
+
+AdminProductVariantsTable.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number,
+    generatedId: PropTypes.number,
+    product_variants: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      override_price: PropTypes.shape({
+        fractional: PropTypes.number,
+        currency_code: PropTypes.string,
+      }),
+    })),
+    delete_variant_ids: PropTypes.arrayOf(PropTypes.number),
+  }).isRequired,
+  editing: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  deleteVariant: PropTypes.func.isRequired,
+};
 
 export default DragDropContext(MultiBackend(HTML5toTouch))(AdminProductVariantsTable);

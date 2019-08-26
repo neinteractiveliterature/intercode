@@ -33,32 +33,6 @@ function castMultipleValue(value) {
 }
 
 class MultipleChoiceItemInput extends React.Component {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-      properties: PropTypes.shape({
-        style: PropTypes.string,
-        caption: PropTypes.string.isRequired,
-        multiple: PropTypes.bool,
-        choices: PropTypes.arrayOf(PropTypes.shape({
-          caption: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
-        }).isRequired).isRequired,
-        other: PropTypes.bool,
-        other_caption: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-    onChange: PropTypes.func.isRequired,
-    onInteract: PropTypes.func.isRequired,
-    value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-    valueInvalid: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    value: null,
-    valueInvalid: false,
-  };
-
   constructor(props) {
     super(props);
 
@@ -202,5 +176,31 @@ class MultipleChoiceItemInput extends React.Component {
     );
   };
 }
+
+MultipleChoiceItemInput.propTypes = {
+  formItem: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+    properties: PropTypes.shape({
+      style: PropTypes.string,
+      caption: PropTypes.string.isRequired,
+      multiple: PropTypes.bool,
+      choices: PropTypes.arrayOf(PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+      }).isRequired).isRequired,
+      other: PropTypes.bool,
+      other_caption: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+  onInteract: PropTypes.func.isRequired,
+  value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+  valueInvalid: PropTypes.bool,
+};
+
+MultipleChoiceItemInput.defaultProps = {
+  value: null,
+  valueInvalid: false,
+};
 
 export default MultipleChoiceItemInput;

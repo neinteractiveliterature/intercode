@@ -11,14 +11,6 @@ import LoadingIndicator from '../LoadingIndicator';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 
 class AddAttendeeModal extends React.Component {
-  static propTypes = {
-    conventionName: PropTypes.string.isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-    visible: PropTypes.bool.isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -124,5 +116,13 @@ class AddAttendeeModal extends React.Component {
     </Modal>
   )
 }
+
+AddAttendeeModal.propTypes = {
+  conventionName: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
+  visible: PropTypes.bool.isRequired,
+};
 
 export default withRouter(AddAttendeeModal);

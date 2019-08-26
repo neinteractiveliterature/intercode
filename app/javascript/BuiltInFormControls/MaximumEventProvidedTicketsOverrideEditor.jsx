@@ -12,20 +12,6 @@ const TicketTypePropType = PropTypes.shape({
 });
 
 class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
-  static propTypes = {
-    eventId: PropTypes.number.isRequired,
-    ticketName: PropTypes.string.isRequired,
-    overrides: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      ticket_type: TicketTypePropType.isRequired,
-      override_value: PropTypes.number.isRequired,
-    })).isRequired,
-    ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
-    createOverride: PropTypes.func.isRequired,
-    deleteOverride: PropTypes.func.isRequired,
-    updateOverride: PropTypes.func.isRequired,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -259,5 +245,19 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
     );
   }
 }
+
+MaximumEventProvidedTicketsOverrideEditor.propTypes = {
+  eventId: PropTypes.number.isRequired,
+  ticketName: PropTypes.string.isRequired,
+  overrides: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    ticket_type: TicketTypePropType.isRequired,
+    override_value: PropTypes.number.isRequired,
+  })).isRequired,
+  ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
+  createOverride: PropTypes.func.isRequired,
+  deleteOverride: PropTypes.func.isRequired,
+  updateOverride: PropTypes.func.isRequired,
+};
 
 export default MaximumEventProvidedTicketsOverrideEditor;

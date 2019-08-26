@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash-es/groupBy';
 
@@ -41,71 +41,66 @@ const SCOPE_DESCRIPTIONS = {
   manage_organizations: 'Update privileged data about organizations on the site',
 };
 
-class PermissionsPrompt extends React.Component {
-  static propTypes = {
-    scopeNames: PropTypes.arrayOf(PropTypes.string).isRequired,
-  };
+function PermissionsPrompt({ scopeNames }) {
+  const [expandedGroups, setExpandedGroups] = useState([]);
+  const groupedScopes = groupBy(scopeNames, (scopeName) => getGroupForScopeName(scopeName));
 
-  state = {
-    expandedGroups: [],
-  }
-
-  render = () => {
-    const { scopeNames } = this.props;
-    const groupedScopes = groupBy(scopeNames, (scopeName) => getGroupForScopeName(scopeName));
-
-    return ['readPublic', 'readPrivate', 'manage'].map((scopeGroup) => {
-      if (!groupedScopes[scopeGroup]) {
-        return null;
+  const groupClicked = (scopeGroup) => {
+    setExpandedGroups((prevExpandedGroups) => {
+      if (prevExpandedGroups.includes(scopeGroup)) {
+        return {
+          expandedGroups: prevExpandedGroups.filter((group) => group !== scopeGroup),
+        };
       }
 
-      return (
-        <section key={scopeGroup} className={`card mb-4 ${CLASS_NAMES_BY_SCOPE_GROUP[scopeGroup]}`}>
-          <div className="card-header">
-            <button
-              type="button"
-              className="cursor-pointer btn btn-link text-body p-0 text-decoration-none"
-              onClick={() => {
-                this.setState((prevState) => {
-                  if (prevState.expandedGroups.includes(scopeGroup)) {
-                    return {
-                      expandedGroups: prevState.expandedGroups
-                        .filter((group) => group !== scopeGroup),
-                    };
-                  }
-
-                  return { expandedGroups: [...prevState.expandedGroups, scopeGroup] };
-                });
-              }}
-            >
-              {
-                this.state.expandedGroups.includes(scopeGroup)
-                  ? <i className="fa fa-caret-down"><span className="sr-only">Collapse</span></i>
-                  : <i className="fa fa-caret-right"><span className="sr-only">Expand</span></i>
-              }
-              {' '}
-              <strong>{SCOPE_GROUP_DESCRIPTIONS[scopeGroup]}</strong>
-            </button>
-          </div>
-
-          {
-            this.state.expandedGroups.includes(scopeGroup)
-              ? (
-                <div className="card-body">
-                  <p>This application will be able to:</p>
-                  <ul className="mb-0">
-                    {groupedScopes[scopeGroup].map((scopeName) => (
-                      <li key={scopeName}>{SCOPE_DESCRIPTIONS[scopeName]}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-              : null
-          }
-        </section>
-      );
+      return { expandedGroups: [...prevExpandedGroups, scopeGroup] };
     });
   }
+
+  return ['readPublic', 'readPrivate', 'manage'].map((scopeGroup) => {
+    if (!groupedScopes[scopeGroup]) {
+      return null;
+    }
+
+    return (
+      <section key={scopeGroup} className={`card mb-4 ${CLASS_NAMES_BY_SCOPE_GROUP[scopeGroup]}`}>
+        <div className="card-header">
+          <button
+            type="button"
+            className="cursor-pointer btn btn-link text-body p-0 text-decoration-none"
+            onClick={() => groupClicked(scopeGroup)}
+          >
+            {
+              expandedGroups.includes(scopeGroup)
+                ? <i className="fa fa-caret-down"><span className="sr-only">Collapse</span></i>
+                : <i className="fa fa-caret-right"><span className="sr-only">Expand</span></i>
+            }
+            {' '}
+            <strong>{SCOPE_GROUP_DESCRIPTIONS[scopeGroup]}</strong>
+          </button>
+        </div>
+
+        {
+          expandedGroups.includes(scopeGroup)
+            ? (
+              <div className="card-body">
+                <p>This application will be able to:</p>
+                <ul className="mb-0">
+                  {groupedScopes[scopeGroup].map((scopeName) => (
+                    <li key={scopeName}>{SCOPE_DESCRIPTIONS[scopeName]}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+            : null
+        }
+      </section>
+    );
+  });
 }
+
+PermissionsPrompt.propTypes = {
+  scopeNames: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default PermissionsPrompt;

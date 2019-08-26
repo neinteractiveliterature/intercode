@@ -26,15 +26,6 @@ function getStatus(key) {
 }
 
 class EventProposalStatusUpdater extends React.Component {
-  static propTypes = {
-    eventProposal: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string,
-      status: PropTypes.string.isRequired,
-      event: PropTypes.shape({}),
-    }).isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -152,5 +143,14 @@ class EventProposalStatusUpdater extends React.Component {
     </ModalContainer>
   )
 }
+
+EventProposalStatusUpdater.propTypes = {
+  eventProposal: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    status: PropTypes.string.isRequired,
+    event: PropTypes.shape({}),
+  }).isRequired,
+};
 
 export default EventProposalStatusUpdater;

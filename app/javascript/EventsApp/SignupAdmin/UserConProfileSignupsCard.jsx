@@ -20,10 +20,6 @@ function filterAndSortSignups(signups) {
 }
 
 class UserConProfileSignupsCard extends React.Component {
-  static propTypes = {
-    userConProfileId: PropTypes.number.isRequired,
-  }
-
   renderEventLink = (event) => (
     <Link to={buildEventUrl(event)}>
       {event.title}
@@ -130,5 +126,9 @@ class UserConProfileSignupsCard extends React.Component {
     </QueryWithStateDisplay>
   );
 }
+
+UserConProfileSignupsCard.propTypes = {
+  userConProfileId: PropTypes.number.isRequired,
+};
 
 export default UserConProfileSignupsCard;

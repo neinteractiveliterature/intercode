@@ -24,27 +24,6 @@ import {
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 
 class RegistrationPolicyEditor extends React.Component {
-  static propTypes = {
-    registrationPolicy: RegistrationPolicyPropType.isRequired,
-    onChange: PropTypes.func.isRequired,
-    lockNameAndDescription: PropTypes.bool,
-    lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-    lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-    presets: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      policy: RegistrationPolicyPropType.isRequired,
-    }).isRequired),
-    allowCustom: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    lockNameAndDescription: false,
-    lockLimitedBuckets: null,
-    lockDeleteBuckets: null,
-    presets: null,
-    allowCustom: false,
-  }
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -416,5 +395,26 @@ class RegistrationPolicyEditor extends React.Component {
     </div>
   )
 }
+
+RegistrationPolicyEditor.propTypes = {
+  registrationPolicy: RegistrationPolicyPropType.isRequired,
+  onChange: PropTypes.func.isRequired,
+  lockNameAndDescription: PropTypes.bool,
+  lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
+  lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
+  presets: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    policy: RegistrationPolicyPropType.isRequired,
+  }).isRequired),
+  allowCustom: PropTypes.bool,
+};
+
+RegistrationPolicyEditor.defaultProps = {
+  lockNameAndDescription: false,
+  lockLimitedBuckets: null,
+  lockDeleteBuckets: null,
+  presets: null,
+  allowCustom: false,
+};
 
 export default RegistrationPolicyEditor;
