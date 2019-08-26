@@ -15,7 +15,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 
 function isTeamMember(signup, teamMembers) {
   return teamMembers
-    .some(teamMember => teamMember.user_con_profile.id === signup.user_con_profile.id);
+    .some((teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id);
 }
 
 function sortSignups(signups, teamMembers) {
@@ -132,7 +132,7 @@ function RunSignupSummary({ eventId, runId, eventPath }) {
           </tr>
         </thead>
         <tbody>
-          {sortedSignups.map(signup => renderSignupRow(
+          {sortedSignups.map((signup) => renderSignupRow(
             signup,
             data.event.registration_policy,
             data.event.team_members,

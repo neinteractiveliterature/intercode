@@ -14,22 +14,22 @@ function CreateSignup() {
   return (
     <>
       <FormGroupWithLabel label="Event" name="event">
-        {id => (
+        {(id) => (
           <EventSelect
             id={id}
             value={event}
-            onChange={newEvent => setEvent(newEvent)}
+            onChange={(newEvent) => setEvent(newEvent)}
             eventsQuery={CreateSignupEventsQuery}
           />
         )}
       </FormGroupWithLabel>
 
       <FormGroupWithLabel label="Attendee" name="userConProfile">
-        {id => (
+        {(id) => (
           <UserConProfileSelect
             id={id}
             value={userConProfile}
-            onChange={newUserConProfile => setUserConProfile(newUserConProfile)}
+            onChange={(newUserConProfile) => setUserConProfile(newUserConProfile)}
           />
         )}
       </FormGroupWithLabel>
@@ -37,7 +37,7 @@ function CreateSignup() {
       {event && userConProfile && (
         <Suspense fallback={<LoadingIndicator />}>
           <div className="run-card-deck">
-            {event.runs.map(run => (
+            {event.runs.map((run) => (
               <CreateSignupRunCard
                 key={`${run.id}-${userConProfile.id}`}
                 eventId={event.id}

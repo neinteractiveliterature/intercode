@@ -8,5 +8,5 @@ export function sortTeamMembers(event) {
 }
 
 export default function teamMembersForDisplay(event) {
-  return sortTeamMembers(event).filter(teamMember => teamMember.display_team_member);
+  return sortTeamMembers(event).filter((teamMember) => teamMember.display_team_member);
 }

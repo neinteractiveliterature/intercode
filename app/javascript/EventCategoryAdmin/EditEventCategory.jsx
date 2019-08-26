@@ -22,7 +22,7 @@ function EditEventCategory({ match, history }) {
   const initialEventCategory = useMemo(
     () => (error
       ? null
-      : data.convention.event_categories.find(c => c.id.toString() === eventCategoryId)),
+      : data.convention.event_categories.find((c) => c.id.toString() === eventCategoryId)),
     [data, error, eventCategoryId],
   );
   const [eventCategory, setEventCategory] = useState(initialEventCategory);

@@ -77,7 +77,7 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
   };
 
   return (
-    <React.Fragment>
+    <>
       <div className="d-flex align-items-start mb-4">
         <h1 className="flex-grow-1">Edit user activity alert</h1>
         <button
@@ -115,7 +115,7 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
       >
         Save changes
       </button>
-    </React.Fragment>
+    </>
   );
 }
 

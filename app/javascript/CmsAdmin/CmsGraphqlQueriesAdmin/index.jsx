@@ -16,7 +16,7 @@ function CmsGraphqlQueriesAdmin() {
         render={({ match: { params: { id } }, history }) => (
           <QueryWithStateDisplay query={CmsGraphqlQueriesQuery}>
             {({ data }) => {
-              const query = data.cmsGraphqlQueries.find(q => q.id.toString() === id);
+              const query = data.cmsGraphqlQueries.find((q) => q.id.toString() === id);
 
               return <EditCmsGraphqlQuery initialQuery={query} history={history} />;
             }}

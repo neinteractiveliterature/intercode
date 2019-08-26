@@ -9,6 +9,10 @@ import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
 import GraphQLAsyncSelect from '../../BuiltInFormControls/GraphQLAsyncSelect';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useCreateMutation } from '../../MutationUtils';
+import PermissionsTableInput from '../../Permissions/PermissionsTableInput';
+import { getPermissionNamesForModelType } from '../../Permissions/PermissionUtils';
+
+const ContentSetPermissionNames = getPermissionNamesForModelType('CmsContentSet');
 
 function NewCmsContentGroup({ history }) {
   const mutate = useCreateMutation(CreateContentGroup, {
@@ -74,6 +78,10 @@ function NewCmsContentGroup({ history }) {
           />
         )}
       </FormGroupWithLabel>
+
+      <PermissionsTableInput
+        permissionNames={ContentSetPermissionNames}
+      />
 
       <ErrorDisplay graphQLError={createError} />
 

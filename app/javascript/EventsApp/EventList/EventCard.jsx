@@ -43,9 +43,9 @@ function teamIsAllAuthors(author, teamMembers) {
   }
 
   const teamMemberNames = teamMembers
-    .map(teamMember => teamMember.user_con_profile.name_without_nickname);
+    .map((teamMember) => teamMember.user_con_profile.name_without_nickname);
 
-  if (!teamMemberNames.every(teamMemberName => author.includes(teamMemberName))) {
+  if (!teamMemberNames.every((teamMemberName) => author.includes(teamMemberName))) {
     return false;
   }
 
@@ -67,7 +67,7 @@ const EventCard = ({
     [event],
   );
   const teamMemberNames = displayTeamMembers
-    .map(teamMember => teamMember.user_con_profile.name_without_nickname).join(', ');
+    .map((teamMember) => teamMember.user_con_profile.name_without_nickname).join(', ');
 
   if (teamMemberNames) {
     const teamMemberDescription = pluralizeWithCount(
@@ -79,14 +79,14 @@ const EventCard = ({
     metadataItems.push({
       key: 'team_members',
       content: (
-        <React.Fragment>
+        <>
           <strong>
             {teamMemberDescription}
             {':'}
           </strong>
           {' '}
           {teamMemberNames}
-        </React.Fragment>
+        </>
       ),
     });
   }
@@ -96,14 +96,14 @@ const EventCard = ({
     metadataItems.push({
       key: 'author',
       content: (
-        <React.Fragment>
+        <>
           <strong>
             {authorDescription}
             {':'}
           </strong>
           {' '}
           {formResponse.author}
-        </React.Fragment>
+        </>
       ),
     });
   }
@@ -112,11 +112,11 @@ const EventCard = ({
     metadataItems.push({
       key: 'organization',
       content: (
-        <React.Fragment>
+        <>
           <strong>Organization:</strong>
           {' '}
           {formResponse.organization}
-        </React.Fragment>
+        </>
       ),
     });
   }
@@ -144,7 +144,7 @@ const EventCard = ({
           </div>
         </div>
         <ul className="list-inline my-1">
-          {metadataItems.map(metadataItem => (
+          {metadataItems.map((metadataItem) => (
             <li className="list-inline-item mr-4" key={metadataItem.key}>
               {metadataItem.content}
             </li>
@@ -152,7 +152,7 @@ const EventCard = ({
         </ul>
         <p className="m-0">
           {
-            sorted.some(sort => sort.id === 'created_at')
+            sorted.some((sort) => sort.id === 'created_at')
               ? (
                 <strong>
                   Added

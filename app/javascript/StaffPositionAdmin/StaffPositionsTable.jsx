@@ -18,10 +18,10 @@ import usePageTitle from '../usePageTitle';
 
 function describePermissionAbilities(modelPermissions) {
   const typename = modelPermissions[0].model.__typename;
-  const permissionNameGroups = PermissionNames.filter(group => group.model_type === typename);
-  const permissionNamesForType = flatMap(permissionNameGroups, group => group.permissions);
+  const permissionNameGroups = PermissionNames.filter((group) => group.model_type === typename);
+  const permissionNamesForType = flatMap(permissionNameGroups, (group) => group.permissions);
   const abilities = permissionNamesForType.reduce((acc, { permission, name }) => {
-    if (modelPermissions.some(modelPermission => modelPermission.permission === permission)) {
+    if (modelPermissions.some((modelPermission) => modelPermission.permission === permission)) {
       return [...acc, name];
     }
 
@@ -70,12 +70,12 @@ function describePermissions(permissions) {
 function StaffPositionsTable({ staffPositions }) {
   const deleteMutate = useMutationCallback(DeleteStaffPosition);
   const deleteStaffPosition = useCallback(
-    id => deleteMutate({
+    (id) => deleteMutate({
       variables: { input: { id } },
       update: (proxy) => {
         const data = proxy.readQuery({ query: StaffPositionsQuery });
         data.convention.staff_positions = data.convention.staff_positions.filter((
-          staffPosition => staffPosition.id !== id
+          (staffPosition) => staffPosition.id !== id
         ));
         proxy.writeQuery({ query: StaffPositionsQuery, data });
       },
@@ -85,14 +85,14 @@ function StaffPositionsTable({ staffPositions }) {
 
   usePageTitle('Staff positions');
 
-  const renderRow = staffPosition => (
+  const renderRow = (staffPosition) => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
       <td>{staffPosition.visible ? (<i className="fa fa-check" />) : null}</td>
-      <td>{staffPosition.user_con_profiles.map(ucp => ucp.name_without_nickname).join(', ')}</td>
+      <td>{staffPosition.user_con_profiles.map((ucp) => ucp.name_without_nickname).join(', ')}</td>
       <td>
         <ul className="list-unstyled">
-          {describePermissions(staffPosition.permissions).map(description => (
+          {describePermissions(staffPosition.permissions).map((description) => (
             <li key={description}>
               {description}
             </li>
@@ -116,14 +116,14 @@ function StaffPositionsTable({ staffPositions }) {
             Edit permissions
           </Link>
           <Confirm.Trigger>
-            {confirm => (
+            {(confirm) => (
               <button
                 className="dropdown-item cursor-pointer text-danger"
                 type="button"
                 onClick={() => confirm({
                   prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
                   action: () => deleteStaffPosition(staffPosition.id),
-                  renderError: error => <ErrorDisplay graphQLError={error} />,
+                  renderError: (error) => <ErrorDisplay graphQLError={error} />,
                 })}
               >
                 Delete
@@ -135,7 +135,7 @@ function StaffPositionsTable({ staffPositions }) {
     </tr>
   );
 
-  const sortedStaffPositions = sortByLocaleString(staffPositions, position => position.name);
+  const sortedStaffPositions = sortByLocaleString(staffPositions, (position) => position.name);
 
   return (
     <div>

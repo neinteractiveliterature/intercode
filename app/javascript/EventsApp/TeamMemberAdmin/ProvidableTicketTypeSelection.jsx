@@ -18,7 +18,7 @@ function ProvidableTicketTypeSelection({
   const providedTicketCountByType = getProvidedTicketCountByType(convention, event);
 
   const providableTicketTypeDescriptions = providableTicketTypes
-    .map(ticketType => describeTicketTypeProvidability(
+    .map((ticketType) => describeTicketTypeProvidability(
       ticketType,
       providedTicketCountByType[ticketType.id],
       convention.ticket_name,

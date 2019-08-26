@@ -23,7 +23,7 @@ function OrderSummary() {
   const { data, error } = useQuerySuspended(OrderSummaryQuery);
 
   const renderQuantityCell = (quantitiesByStatus, status) => {
-    const { quantity } = quantitiesByStatus.find(qbs => qbs.status === status);
+    const { quantity } = quantitiesByStatus.find((qbs) => qbs.status === status);
     return <td key={status} className={statusClass(status)}>{quantity}</td>;
   };
 
@@ -41,7 +41,7 @@ function OrderSummary() {
 
   const renderVariant = (variant) => {
     const quantityCells = ORDER_STATUSES
-      .map(status => renderQuantityCell(variant.order_quantities_by_status, status));
+      .map((status) => renderQuantityCell(variant.order_quantities_by_status, status));
 
     return (
       <tr key={`variant-${variant.id}`}>
@@ -59,12 +59,12 @@ function OrderSummary() {
           <th scope="row">{product.name}</th>
           <td colSpan={ORDER_STATUSES.length} />
         </tr>,
-        ...product.product_variants.map(variant => renderVariant(variant)),
+        ...product.product_variants.map((variant) => renderVariant(variant)),
       ];
     }
 
     const quantityCells = ORDER_STATUSES
-      .map(status => renderQuantityCell(product.order_quantities_by_status, status));
+      .map((status) => renderQuantityCell(product.order_quantities_by_status, status));
 
     return [
       <tr key={`product-${product.id}`}>
@@ -79,7 +79,7 @@ function OrderSummary() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const products = data.convention.products.map(product => renderProduct(product));
+  const products = data.convention.products.map((product) => renderProduct(product));
 
   return (
     <table className="table">
@@ -87,7 +87,7 @@ function OrderSummary() {
         <tr>
           <th>Product</th>
           <th className="table-primary">Total to purchase</th>
-          {ORDER_STATUSES.map(status => (
+          {ORDER_STATUSES.map((status) => (
             <th key={status} className={statusClass(status)}>{humanize(status)}</th>
           ))}
         </tr>

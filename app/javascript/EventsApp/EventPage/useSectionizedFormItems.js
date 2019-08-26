@@ -4,7 +4,7 @@ import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization'
 
 function getSectionizedFormItems(formData, formResponse) {
   const form = deserializeForm(formData);
-  const displayFormItems = form.getAllItems().filter(item => (
+  const displayFormItems = form.getAllItems().filter((item) => (
     item.identifier !== 'short_blurb'
     && item.identifier !== 'title'
     && item.public_description != null

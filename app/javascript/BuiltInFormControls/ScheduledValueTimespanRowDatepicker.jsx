@@ -14,7 +14,7 @@ function ScheduledValueTimespanRowDatepicker({
   );
 
   const datetimeValueChanged = useCallback(
-    newValue => rowAttributeDidChange(fieldName, newValue),
+    (newValue) => rowAttributeDidChange(fieldName, newValue),
     [fieldName, rowAttributeDidChange],
   );
 

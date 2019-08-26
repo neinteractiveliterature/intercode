@@ -15,7 +15,7 @@ function SignupSpy() {
     }
 
     return (
-      data.convention.signup_counts_by_state.find(record => record.state === state)
+      data.convention.signup_counts_by_state.find((record) => record.state === state)
       || { count: 0 }
     ).count;
   };

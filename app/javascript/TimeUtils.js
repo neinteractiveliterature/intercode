@@ -1,6 +1,6 @@
 import { onlyOneIsNull } from './ValueUtils';
 
-export const timeIsOnTheHour = time => (
+export const timeIsOnTheHour = (time) => (
   time.millisecond() === 0 && time.second() === 0 && time.minute() === 0
 );
 

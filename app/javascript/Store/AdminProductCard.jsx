@@ -91,7 +91,7 @@ class AdminProductCard extends React.Component {
     editing: true,
     editingProduct: {
       ...this.props.product,
-      product_variants: this.props.product.product_variants.map(variant => ({ ...variant })),
+      product_variants: this.props.product.product_variants.map((variant) => ({ ...variant })),
       delete_variant_ids: [],
     },
   });
@@ -114,7 +114,7 @@ class AdminProductCard extends React.Component {
       return;
     }
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       editingProduct: {
         ...prevState.editingProduct,
         image: file,
@@ -123,7 +123,7 @@ class AdminProductCard extends React.Component {
 
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         editingProduct: {
           ...prevState.editingProduct,
           image_url: reader.result,
@@ -134,7 +134,7 @@ class AdminProductCard extends React.Component {
   }
 
   deleteVariant = (variantId) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       editingProduct: {
         ...prevState.editingProduct,
         delete_variant_ids: [
@@ -172,7 +172,7 @@ class AdminProductCard extends React.Component {
         fractional: editingProduct.price.fractional,
         currency_code: editingProduct.price.currency_code,
       },
-      product_variants: sortProductVariants(editingProduct.product_variants).map(variant => ({
+      product_variants: sortProductVariants(editingProduct.product_variants).map((variant) => ({
         id: variant.id,
         name: variant.name,
         description: variant.description,
@@ -225,7 +225,7 @@ class AdminProductCard extends React.Component {
             update: (cache) => {
               const data = cache.readQuery({ query: AdminProductsQuery });
               data.convention.products = data.convention.products
-                .filter(product => product.id !== this.props.product.id);
+                .filter((product) => product.id !== this.props.product.id);
               cache.writeQuery({ query: AdminProductsQuery, data });
             },
           });
@@ -264,9 +264,9 @@ class AdminProductCard extends React.Component {
           </li>
           <li className="list-inline-item">
             <Mutation mutation={CreateProduct}>
-              {createProduct => (
+              {(createProduct) => (
                 <Mutation mutation={UpdateProduct}>
-                  {updateProduct => (
+                  {(updateProduct) => (
                     <button
                       type="button"
                       className="btn btn-sm btn-primary"
@@ -288,7 +288,7 @@ class AdminProductCard extends React.Component {
       deleteButton = (
         <li className="list-inline-item">
           <Mutation mutation={DeleteProduct}>
-            {deleteProduct => (
+            {(deleteProduct) => (
               <button
                 type="button"
                 className="btn btn-sm btn-danger"
@@ -374,7 +374,7 @@ class AdminProductCard extends React.Component {
               : 'Not available for purchase'
           }
         </span>
-        {this.props.product.payment_options.map(paymentOption => (
+        {this.props.product.payment_options.map((paymentOption) => (
           <i
             key={paymentOption}
             className={

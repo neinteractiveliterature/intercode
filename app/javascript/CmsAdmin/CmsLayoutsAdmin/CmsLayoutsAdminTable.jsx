@@ -25,7 +25,7 @@ function CmsLayoutsAdminTable() {
         return [];
       }
 
-      return sortByLocaleString(data.cmsLayouts, layout => layout.name);
+      return sortByLocaleString(data.cmsLayouts, (layout) => layout.name);
     },
     [data, error],
   );
@@ -36,13 +36,13 @@ function CmsLayoutsAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deleteLayout = id => deleteLayoutMutate({ variables: { id } });
+  const deleteLayout = (id) => deleteLayoutMutate({ variables: { id } });
 
   return (
     <>
       <table className="table table-striped">
         <tbody>
-          {layoutsSorted.map(layout => (
+          {layoutsSorted.map((layout) => (
             <tr key={layout.id}>
               <td>
                 {layout.name}
@@ -64,7 +64,7 @@ function CmsLayoutsAdminTable() {
                   onClick={() => confirm({
                     prompt: 'Are you sure you want to delete this layout?',
                     action: () => deleteLayout(layout.id),
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                   className="btn btn-danger btn-sm ml-1"
                 >

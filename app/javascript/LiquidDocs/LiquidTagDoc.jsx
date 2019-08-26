@@ -7,7 +7,7 @@ import TagDoc from './TagDoc';
 
 function LiquidTagDoc({ liquidTag }) {
   return (
-    <React.Fragment>
+    <>
       <nav aria-label="breadcrumb mb-4">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
@@ -25,7 +25,7 @@ function LiquidTagDoc({ liquidTag }) {
         <div className="card-body">
           <ul className="list-unstyled">
             {
-              liquidTag.tags.filter(tag => tag.tag_name !== 'liquid_tag_name').map((tag, i) => (
+              liquidTag.tags.filter((tag) => tag.tag_name !== 'liquid_tag_name').map((tag, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <TagDoc tag={tag} key={i} />
               ))
@@ -33,7 +33,7 @@ function LiquidTagDoc({ liquidTag }) {
           </ul>
         </div>
       </section>
-    </React.Fragment>
+    </>
   );
 }
 

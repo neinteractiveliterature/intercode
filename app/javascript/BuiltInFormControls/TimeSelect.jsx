@@ -61,7 +61,7 @@ class TimeSelect extends React.Component {
       hourOffset += 1;
     }
 
-    const minuteOptions = [0, 15, 30, 45].map(minute => (
+    const minuteOptions = [0, 15, 30, 45].map((minute) => (
       <option key={minute} value={minute}>{minute.toString(10).padStart(2, '0')}</option>
     ));
 

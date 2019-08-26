@@ -43,7 +43,7 @@ function PageAdminDropdown({ showDelete, pageId, history }) {
               onClick={() => confirm({
                 action: deleteConfirmed,
                 prompt: 'Are you sure you want to delete this page?',
-                renderError: error => <ErrorDisplay graphQLError={error} />,
+                renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })}
               type="button"
             >

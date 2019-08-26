@@ -15,7 +15,7 @@ const variantMatches = (a, b) => (
 
 const productVariantUpdaterForComponent = (component, variant, transforms) => mutator({
   getState: () => component.props.product.product_variants
-    .find(existingVariant => variantMatches(variant, existingVariant)),
+    .find((existingVariant) => variantMatches(variant, existingVariant)),
 
   setState: (state) => {
     const newVariants = component.props.product.product_variants.map((existingVariant) => {
@@ -55,7 +55,7 @@ class AdminProductVariantsTable extends React.Component {
 
   addVariantClicked = () => {
     const position = Math.max(0, ...this.props.product.product_variants
-      .map(variant => variant.position)) + 1;
+      .map((variant) => variant.position)) + 1;
 
     this.props.onChange([
       ...this.props.product.product_variants,
@@ -74,7 +74,7 @@ class AdminProductVariantsTable extends React.Component {
       this.props.deleteVariant(variant.id);
     } else if (variant.generatedId) {
       this.props.onChange(this.props.product.product_variants
-        .filter(existingVariant => existingVariant.generatedId !== variant.generatedId));
+        .filter((existingVariant) => existingVariant.generatedId !== variant.generatedId));
     }
   }
 
@@ -141,7 +141,7 @@ class AdminProductVariantsTable extends React.Component {
     let variants;
     if (this.props.editing) {
       variants = this.props.product.product_variants
-        .filter(variant => !this.props.product.delete_variant_ids.includes(variant.id));
+        .filter((variant) => !this.props.product.delete_variant_ids.includes(variant.id));
     } else {
       variants = this.props.product.product_variants;
     }

@@ -50,10 +50,9 @@ function TeamMemberAdmin({ eventId, eventPath }) {
             hideUnlessMatch
           >
             {({ match }) => event.team_members
-              .find(teamMember => teamMember.id.toString() === match.params.teamMemberId)
+              .find((teamMember) => teamMember.id.toString() === match.params.teamMemberId)
               .user_con_profile
-              .name_without_nickname
-            }
+              .name_without_nickname}
           </BreadcrumbItemWithRoute>
         </ol>
       </nav>

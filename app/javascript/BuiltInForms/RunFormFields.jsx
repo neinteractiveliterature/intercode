@@ -38,7 +38,7 @@ function RunFormFields({ run, event, onChange }) {
     [conventionTimespan, data, error],
   );
   const [day, setDay] = useState(startsAt
-    ? conventionDayTimespans.find(timespan => timespan.includesTime(startsAt)).start
+    ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt)).start
     : null);
   const [hour, setHour] = useState(startsAt && day
     ? startsAt.diff(day.clone().startOf('day'), 'hours')
@@ -63,7 +63,7 @@ function RunFormFields({ run, event, onChange }) {
   useEffect(
     () => {
       onChange(
-        prevRun => ({ ...prevRun, starts_at: (startTime ? startTime.toISOString() : null) }),
+        (prevRun) => ({ ...prevRun, starts_at: (startTime ? startTime.toISOString() : null) }),
       );
     },
     [onChange, startTime],
@@ -83,7 +83,7 @@ function RunFormFields({ run, event, onChange }) {
       return null;
     }
 
-    const timespan = conventionDayTimespans.find(cdt => cdt.includesTime(day));
+    const timespan = conventionDayTimespans.find((cdt) => cdt.includesTime(day));
 
     return (
       <fieldset className="form-group">
@@ -121,14 +121,14 @@ function RunFormFields({ run, event, onChange }) {
         label="Room(s)"
         name="room_ids"
         options={data.convention.rooms}
-        getOptionValue={room => room.id}
-        getOptionLabel={room => room.name}
+        getOptionValue={(room) => room.id}
+        getOptionLabel={(room) => room.name}
         isMulti
         styles={{
-          menu: provided => ({ ...provided, zIndex: 25 }),
+          menu: (provided) => ({ ...provided, zIndex: 25 }),
         }}
         value={run.rooms}
-        onChange={rooms => onChange(prevRun => ({ ...prevRun, rooms }))}
+        onChange={(rooms) => onChange((prevRun) => ({ ...prevRun, rooms }))}
       />
 
       <ProspectiveRunSchedule
@@ -142,7 +142,7 @@ function RunFormFields({ run, event, onChange }) {
         name="title_suffix"
         label="Title suffix"
         value={run.title_suffix || ''}
-        onTextChange={titleSuffix => onChange(prevRun => ({
+        onTextChange={(titleSuffix) => onChange((prevRun) => ({
           ...prevRun, title_suffix: titleSuffix,
         }))}
       />
@@ -150,7 +150,7 @@ function RunFormFields({ run, event, onChange }) {
         name="schedule_note"
         label="Schedule note"
         value={run.schedule_note || ''}
-        onTextChange={scheduleNote => onChange(prevRun => ({
+        onTextChange={(scheduleNote) => onChange((prevRun) => ({
           ...prevRun, schedule_note: scheduleNote,
         }))}
       />

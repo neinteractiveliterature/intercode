@@ -35,7 +35,7 @@ class ChoiceSet extends React.Component {
       if (event.target.checked) {
         this.props.onChange([...(this.props.value || []), event.target.value]);
       } else {
-        this.props.onChange((this.props.value || []).filter(value => value !== event.target.value));
+        this.props.onChange((this.props.value || []).filter((value) => value !== event.target.value));
       }
     } else {
       this.props.onChange(event.target.value);

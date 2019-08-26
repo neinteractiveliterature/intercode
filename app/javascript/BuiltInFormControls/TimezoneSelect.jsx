@@ -11,7 +11,7 @@ import memoize from 'lodash-es/memoize';
 const NOW = new Date().getTime();
 
 const getOffset = (zone) => {
-  let offsetIndex = zone.untils.findIndex(until => until > NOW);
+  let offsetIndex = zone.untils.findIndex((until) => until > NOW);
   if (offsetIndex === -1) {
     offsetIndex = zone.untils.length - 1;
   }
@@ -20,7 +20,7 @@ const getOffset = (zone) => {
 };
 
 const buildTimezoneOptions = () => moment.tz.names()
-  .map(name => moment.tz.zone(name))
+  .map((name) => moment.tz.zone(name))
   .sort((a, b) => ((getOffset(b) - getOffset(a)) || a.name.localeCompare(b.name)))
   .map((zone) => {
     const offset = getOffset(zone);
@@ -92,7 +92,7 @@ class TimezoneSelect extends React.Component {
           options={this.state.options}
           isClearable
           value={getTimezoneOptionsByName()[value]}
-          onInputChange={input => this.filterOptions(input)}
+          onInputChange={(input) => this.filterOptions(input)}
           onChange={(newValue) => { onChange(newValue.value); }}
           {...otherProps}
         />

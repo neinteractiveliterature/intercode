@@ -60,7 +60,7 @@ class ForceConfirmSignupModal extends React.Component {
     }
   }
 
-  bucketKeyChanged = bucketKey => this.setState({ bucketKey })
+  bucketKeyChanged = (bucketKey) => this.setState({ bucketKey })
 
   renderBody = () => {
     const { signup } = this.props;
@@ -107,7 +107,7 @@ class ForceConfirmSignupModal extends React.Component {
         <div className="modal-footer">
           <button type="button" className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
           <Mutation mutation={ForceConfirmSignup}>
-            {forceConfirm => (
+            {(forceConfirm) => (
               <button
                 type="button"
                 className="btn btn-primary"

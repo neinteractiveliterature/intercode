@@ -21,7 +21,7 @@ function NewOrganizationRole({ organizationId, history }) {
 
   if (error) return <ErrorDisplay graphQLError={error} />;
 
-  const organization = data.organizations.find(org => org.id === organizationId);
+  const organization = data.organizations.find((org) => org.id === organizationId);
   if (!organization.current_ability_can_manage_access) {
     return <Redirect to="/organizations" />;
   }
@@ -33,8 +33,8 @@ function NewOrganizationRole({ organizationId, history }) {
       variables: {
         organizationId,
         name,
-        userIds: usersChangeSet.getAddValues().map(user => user.id),
-        permissions: permissionsChangeSet.getAddValues().map(permission => ({
+        userIds: usersChangeSet.getAddValues().map((user) => user.id),
+        permissions: permissionsChangeSet.getAddValues().map((permission) => ({
           permission: permission.permission,
         })),
       },

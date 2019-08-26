@@ -12,7 +12,7 @@ function CmsVariablesAdmin() {
   const [addingVariables, setAddingVariables] = useState([]);
 
   const addVariable = useCallback(
-    () => setAddingVariables(prevAddingVariables => [
+    () => setAddingVariables((prevAddingVariables) => [
       ...prevAddingVariables,
       {
         key: '',
@@ -24,7 +24,7 @@ function CmsVariablesAdmin() {
   );
 
   const addVariableChanged = useCallback(
-    (generatedId, value) => setAddingVariables(prevAddingVariables => (
+    (generatedId, value) => setAddingVariables((prevAddingVariables) => (
       prevAddingVariables.map((variable) => {
         if (variable.generatedId === generatedId) {
           return { ...variable, ...value };
@@ -36,8 +36,8 @@ function CmsVariablesAdmin() {
   );
 
   const removeAddVariable = useCallback(
-    generatedId => setAddingVariables(prevAddingVariables => (
-      prevAddingVariables.filter(variable => variable.generatedId !== generatedId))),
+    (generatedId) => setAddingVariables((prevAddingVariables) => (
+      prevAddingVariables.filter((variable) => variable.generatedId !== generatedId))),
     [],
   );
 
@@ -59,16 +59,16 @@ function CmsVariablesAdmin() {
         </tr>
       </thead>
       <tbody>
-        {cmsVariables.map(variable => (
+        {cmsVariables.map((variable) => (
           <ExistingVariableRow variable={variable} key={variable.key} />
         ))}
-        {addingVariables.map(variable => (
+        {addingVariables.map((variable) => (
           <AddVariableRow
             variable={variable}
             key={variable.generatedId}
-            onChange={value => addVariableChanged(variable.generatedId, value)}
-            onSave={generatedId => removeAddVariable(generatedId)}
-            onCancel={generatedId => removeAddVariable(generatedId)}
+            onChange={(value) => addVariableChanged(variable.generatedId, value)}
+            onSave={(generatedId) => removeAddVariable(generatedId)}
+            onCancel={(generatedId) => removeAddVariable(generatedId)}
           />
         ))}
         {

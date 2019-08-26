@@ -11,7 +11,7 @@ export function useItemInteractionTracking() {
   const [interactedItemIds, setInteractedItemIds] = useState(new Set());
 
   const interactWithItem = useCallback(
-    itemId => setInteractedItemIds((prevSet) => {
+    (itemId) => setInteractedItemIds((prevSet) => {
       const newInteractedItemIds = new Set(prevSet);
       newInteractedItemIds.add(itemId);
       return newInteractedItemIds;
@@ -20,7 +20,7 @@ export function useItemInteractionTracking() {
   );
 
   const hasInteractedWithItem = useCallback(
-    itemId => interactedItemIds.has(itemId),
+    (itemId) => interactedItemIds.has(itemId),
     [interactedItemIds],
   );
 
@@ -62,7 +62,7 @@ export default class ItemInteractionTracker extends React.Component {
     });
   }
 
-  hasInteractedWithItem = itemId => this.state.interactedItemIds.has(itemId)
+  hasInteractedWithItem = (itemId) => this.state.interactedItemIds.has(itemId)
 
   render = () => (
     <ItemInteractionTrackerContext.Provider

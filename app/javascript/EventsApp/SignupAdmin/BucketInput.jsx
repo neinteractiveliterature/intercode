@@ -23,7 +23,7 @@ function shouldBucketChoiceBeDisabled(signup, bucket) {
 }
 
 const BucketInput = ({ signup, ...otherProps }) => {
-  const bucketChoices = signup.run.event.registration_policy.buckets.map(bucket => ({
+  const bucketChoices = signup.run.event.registration_policy.buckets.map((bucket) => ({
     value: bucket.key,
     label: getLabelForBucketChoice(signup, bucket),
     disabled: shouldBucketChoiceBeDisabled(signup, bucket),

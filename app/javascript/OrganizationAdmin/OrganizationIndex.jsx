@@ -9,10 +9,10 @@ import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 
 function renderOrganizationConventions(organization) {
-  const sortedConventions = sortBy(organization.conventions, [convention => convention.starts_at]);
+  const sortedConventions = sortBy(organization.conventions, [(convention) => convention.starts_at]);
   sortedConventions.reverse();
 
-  const conventionNames = sortedConventions.slice(0, 3).map(convention => convention.name);
+  const conventionNames = sortedConventions.slice(0, 3).map((convention) => convention.name);
   if (sortedConventions.length > 3) {
     return `${conventionNames.join(', ')}, and ${sortedConventions.length - 3} more`;
   }
@@ -29,7 +29,7 @@ function OrganizationIndex() {
 
   const sortedOrganizations = sortByLocaleString(
     data.organizations,
-    organization => organization.name,
+    (organization) => organization.name,
   );
 
   return (
@@ -46,7 +46,7 @@ function OrganizationIndex() {
 
         <tbody>
           {
-            sortedOrganizations.map(organization => (
+            sortedOrganizations.map((organization) => (
               <tr key={organization.id}>
                 <td>
                   {

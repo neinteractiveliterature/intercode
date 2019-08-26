@@ -7,7 +7,7 @@ export default function useEventCategorySelection({
 }) {
   const selectableCategories = useMemo(
     () => (selectableCategoryIds
-      ? convention.event_categories.filter(category => selectableCategoryIds.includes(category.id))
+      ? convention.event_categories.filter((category) => selectableCategoryIds.includes(category.id))
       : convention.event_categories),
     [convention.event_categories, selectableCategoryIds],
   );
@@ -20,13 +20,13 @@ export default function useEventCategorySelection({
 
   const eventCategory = useMemo(
     () => (eventCategoryId
-      ? convention.event_categories.find(category => category.id === eventCategoryId)
+      ? convention.event_categories.find((category) => category.id === eventCategoryId)
       : null),
     [convention.event_categories, eventCategoryId],
   );
 
   const eventCategorySelectChanged = useCallback(
-    e => setEventCategoryId(Transforms.integer(e)),
+    (e) => setEventCategoryId(Transforms.integer(e)),
     [setEventCategoryId],
   );
 

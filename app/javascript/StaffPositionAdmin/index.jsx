@@ -17,8 +17,8 @@ function StaffPositionAdmin() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const findStaffPosition = id => data.convention.staff_positions
-    .find(sp => sp.id.toString(10) === id);
+  const findStaffPosition = (id) => data.convention.staff_positions
+    .find((sp) => sp.id.toString(10) === id);
 
   return (
     <>

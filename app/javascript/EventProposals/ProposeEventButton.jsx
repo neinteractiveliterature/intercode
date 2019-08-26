@@ -53,7 +53,7 @@ class ProposeEventButton extends React.Component {
               visible={modalVisible}
               userEventProposals={data.myProfile.user.event_proposals}
               proposableEventCategories={data.convention.event_categories
-                .filter(category => category.proposable)}
+                .filter((category) => category.proposable)}
             />
           </div>
         )}

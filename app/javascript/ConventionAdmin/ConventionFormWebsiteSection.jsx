@@ -9,7 +9,7 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
 // dropdown menu so that the text in the CodeMirror doesn't cover it
 const selectStyles = {
-  menu: provided => ({ ...provided, zIndex: 5 }),
+  menu: (provided) => ({ ...provided, zIndex: 5 }),
 };
 
 function ConventionFormWebsiteSection({
@@ -38,8 +38,8 @@ function ConventionFormWebsiteSection({
         label="Default layout for pages"
         value={convention.default_layout}
         isClearable
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.name}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.name}
         options={cmsLayouts}
         onChange={changeDefaultLayout}
         styles={selectStyles}
@@ -51,8 +51,8 @@ function ConventionFormWebsiteSection({
         label="Root page"
         value={convention.root_page}
         isClearable
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.name}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.name}
         options={pages}
         onChange={changeRootPage}
         styles={selectStyles}

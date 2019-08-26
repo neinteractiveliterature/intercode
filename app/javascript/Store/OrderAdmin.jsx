@@ -62,7 +62,7 @@ const getPossibleColumns = () => [
   {
     Header: 'User',
     id: 'user_name',
-    accessor: order => order.user_con_profile.name_without_nickname,
+    accessor: (order) => order.user_con_profile.name_without_nickname,
     Filter: FreeTextFilter,
   },
   {
@@ -83,7 +83,7 @@ const getPossibleColumns = () => [
     id: 'describe_products',
     filterable: false,
     sortable: false,
-    accessor: order => order.order_entries.map(entry => entry.describe_products),
+    accessor: (order) => order.order_entries.map((entry) => entry.describe_products),
     Cell: ArrayToSentenceCell,
   },
   {

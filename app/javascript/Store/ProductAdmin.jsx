@@ -13,7 +13,7 @@ function ProductAdmin() {
 
   usePageTitle('Products');
 
-  const newProductClicked = () => setNewProducts(prevNewProducts => ([
+  const newProductClicked = () => setNewProducts((prevNewProducts) => ([
     ...prevNewProducts,
     {
       generatedId: new Date().getTime(),
@@ -26,14 +26,14 @@ function ProductAdmin() {
     },
   ]));
 
-  const removeNewProduct = product => setNewProducts(prevNewProducts => prevNewProducts
-    .filter(newProduct => newProduct.generatedId !== product.generatedId));
+  const removeNewProduct = (product) => setNewProducts((prevNewProducts) => prevNewProducts
+    .filter((newProduct) => newProduct.generatedId !== product.generatedId));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const renderProduct = product => (
+  const renderProduct = (product) => (
     <AdminProductCard
       key={product.id || product.generatedId}
       product={product}
@@ -44,7 +44,7 @@ function ProductAdmin() {
     />
   );
 
-  const products = sortByLocaleString(data.convention.products, product => product.name)
+  const products = sortByLocaleString(data.convention.products, (product) => product.name)
     .concat(newProducts)
     .map(renderProduct);
 

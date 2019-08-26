@@ -14,11 +14,11 @@ export const pageReducer = transformsReducer({});
 function CmsPageForm({
   page, dispatch, cmsParent, cmsLayouts,
 }) {
-  const changeCallback = key => value => dispatch({ type: 'change', key, value });
+  const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
   const slugInputId = useUniqueId('slug-');
 
   const cmsLayoutOptions = useMemo(
-    () => sortByLocaleString(cmsLayouts, layout => layout.name).map((layout) => {
+    () => sortByLocaleString(cmsLayouts, (layout) => layout.name).map((layout) => {
       if (cmsParent.default_layout && cmsParent.default_layout.id === layout.id) {
         return {
           ...layout,
@@ -65,7 +65,7 @@ function CmsPageForm({
             id={slugInputId}
             className="form-control"
             value={page.slug || ''}
-            onChange={event => changeCallback('slug')(event.target.value)}
+            onChange={(event) => changeCallback('slug')(event.target.value)}
           />
         </div>
       </div>
@@ -88,8 +88,8 @@ function CmsPageForm({
         label="Layout"
         value={page.cms_layout}
         isClearable
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.name}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.name}
         options={cmsLayoutOptions}
         onChange={changeCallback('cms_layout')}
         placeholder={cmsLayoutSelectPlaceholder}

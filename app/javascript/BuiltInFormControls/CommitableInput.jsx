@@ -103,7 +103,7 @@ class CommitableInput extends React.Component {
       'aria-label': this.props.label,
     };
 
-    const renderInput = this.props.renderInput || (props => <input {...props} />);
+    const renderInput = this.props.renderInput || ((props) => <input {...props} />);
 
     if (this.state.editing) {
       return (

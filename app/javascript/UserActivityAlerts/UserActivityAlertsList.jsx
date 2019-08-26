@@ -106,7 +106,7 @@ function UserActivityAlertsList() {
         </thead>
         <tbody>
           {
-            data.convention.user_activity_alerts.map(userActivityAlert => (
+            data.convention.user_activity_alerts.map((userActivityAlert) => (
               <tr key={userActivityAlert.id}>
                 <td>{renderAlertMatches(userActivityAlert)}</td>
                 <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>

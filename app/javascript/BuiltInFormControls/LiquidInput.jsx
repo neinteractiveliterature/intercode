@@ -25,7 +25,7 @@ class LiquidInput extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className="liquid-docs-browser d-flex flex-column align-items-stretch">
           <header className="bg-light border-top border-color-light d-flex align-items-stretch">
             <div className="flex-grow-1 pt-1">
@@ -35,7 +35,7 @@ class LiquidInput extends React.Component {
                   <a
                     href="#"
                     className={classNames('nav-link', { active: this.state.currentDocTab === 'convention' })}
-                    onClick={e => this.docTabClicked(e, 'convention')}
+                    onClick={(e) => this.docTabClicked(e, 'convention')}
                   >
                     Convention-specific markup
                   </a>
@@ -45,7 +45,7 @@ class LiquidInput extends React.Component {
                   <a
                     href="#"
                     className={classNames('nav-link', { active: this.state.currentDocTab === 'core' })}
-                    onClick={e => this.docTabClicked(e, 'core')}
+                    onClick={(e) => this.docTabClicked(e, 'core')}
                   >
                     Core Liquid markup
                   </a>
@@ -74,13 +74,13 @@ class LiquidInput extends React.Component {
           />
         </div>
         <div className="liquid-docs-spacer" />
-      </React.Fragment>
+      </>
     );
   }
 
   render = () => (
     <ApolloConsumer>
-      {client => (
+      {(client) => (
         <CodeInput
           {...this.props}
           mode="liquid-html"

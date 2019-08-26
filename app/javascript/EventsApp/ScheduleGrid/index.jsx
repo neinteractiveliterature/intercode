@@ -20,7 +20,7 @@ function ScheduleGridApp({ configKey }) {
         </ol>
       </nav>
       <ScheduleGridProvider config={config}>
-        {timespan => <ScheduleGrid timespan={timespan} />}
+        {(timespan) => <ScheduleGrid timespan={timespan} />}
       </ScheduleGridProvider>
       {
         (config.legends || []).map((legend, i) => {

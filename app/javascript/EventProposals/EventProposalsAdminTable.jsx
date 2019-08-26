@@ -103,7 +103,7 @@ StatusFilter.defaultProps = {
 
 function StatusCell({ value }) {
   return (
-    <div className={`badge ${(STATUS_OPTIONS.find(option => option.value === value) || {}).badgeClass}`}>
+    <div className={`badge ${(STATUS_OPTIONS.find((option) => option.value === value) || {}).badgeClass}`}>
       {value}
     </div>
   );
@@ -134,7 +134,7 @@ const EventCategoryFilter = ({ filter, onChange }) => {
   const choices = useMemo(
     () => (
       data
-        ? data.convention.event_categories.map(eventCategory => ({
+        ? data.convention.event_categories.map((eventCategory) => ({
           value: eventCategory.id.toString(),
           label: eventCategory.name,
         }))
@@ -163,7 +163,7 @@ EventCategoryFilter.defaultProps = {
   filter: null,
 };
 
-const getPossibleColumns = data => [
+const getPossibleColumns = (data) => [
   {
     Header: 'Category',
     id: 'event_category',
@@ -181,14 +181,14 @@ const getPossibleColumns = data => [
   {
     Header: 'Submitted by',
     id: 'owner',
-    accessor: eventProposal => eventProposal.owner.name_inverted,
+    accessor: (eventProposal) => eventProposal.owner.name_inverted,
     Filter: FreeTextFilter,
   },
   {
     Header: 'Capacity',
     id: 'capacity',
     width: 80,
-    accessor: eventProposal => eventProposal.registration_policy,
+    accessor: (eventProposal) => eventProposal.registration_policy,
     filterable: false,
     sortable: false,
     Cell: CapacityCell,

@@ -65,7 +65,7 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: user => user.name_inverted,
+    accessor: (user) => user.name_inverted,
     Filter: FreeTextFilter,
   },
   {

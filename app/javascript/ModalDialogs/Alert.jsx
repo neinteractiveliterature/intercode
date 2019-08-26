@@ -32,5 +32,5 @@ AlertProvider.propTypes = {
 
 export function useAlert() {
   const alertModal = useContext(AlertContext);
-  return message => alertModal.open({ message });
+  return (message) => alertModal.open({ message });
 }

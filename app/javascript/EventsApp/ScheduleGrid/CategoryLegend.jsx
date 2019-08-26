@@ -9,7 +9,7 @@ import { sortByLocaleString } from '../../ValueUtils';
 function CategoryLegend() {
   const { data, error } = useQuerySuspended(CommonConventionDataQuery);
   const sortedEventCategories = useMemo(
-    () => (error ? null : sortByLocaleString(data.convention.event_categories, c => c.name)),
+    () => (error ? null : sortByLocaleString(data.convention.event_categories, (c) => c.name)),
     [error, data],
   );
 
@@ -28,7 +28,7 @@ function CategoryLegend() {
           </div>
 
           <div className="card-body">
-            {sortedEventCategories.map(category => (
+            {sortedEventCategories.map((category) => (
               <FakeEventRun key={category.id} eventCategory={category}>
                 {category.name}
               </FakeEventRun>

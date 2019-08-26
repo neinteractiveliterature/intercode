@@ -46,7 +46,7 @@ function ConventionFormEventsSection({ convention, dispatch, disabled }) {
   );
 
   const dispatchMaximumEventSignups = useCallback(
-    action => dispatch({ type: 'dispatchMaximumEventSignups', action }),
+    (action) => dispatch({ type: 'dispatchMaximumEventSignups', action }),
     [dispatch],
   );
 

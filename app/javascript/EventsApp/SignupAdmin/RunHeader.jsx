@@ -39,7 +39,7 @@ const RunHeader = (({ eventId, runId }) => (
                   {'('}
                   {
                     data.event.registration_policy.buckets
-                      .map(bucket => `${bucket.name}: ${bucket.total_slots}`)
+                      .map((bucket) => `${bucket.name}: ${bucket.total_slots}`)
                       .join(', ')
                   }
                   {')'}

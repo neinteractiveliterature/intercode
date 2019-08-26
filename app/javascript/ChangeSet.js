@@ -8,7 +8,7 @@ class ChangeSet {
   add(value, originalValues, comparisonFunction) {
     if (originalValues && comparisonFunction) {
       const removedValue = originalValues
-        .find(originalValue => comparisonFunction(value, originalValue));
+        .find((originalValue) => comparisonFunction(value, originalValue));
       if (removedValue) {
         return new ChangeSet(this.changes.filter(({ changeType, id }) => (
           !(changeType === 'remove' && id === removedValue.id)
@@ -28,8 +28,8 @@ class ChangeSet {
 
   remove(id) {
     let newChanges;
-    if (this.changes.some(change => change.generatedId === id)) {
-      newChanges = this.changes.filter(change => change.generatedId !== id);
+    if (this.changes.some((change) => change.generatedId === id)) {
+      newChanges = this.changes.filter((change) => change.generatedId !== id);
     } else {
       newChanges = [
         ...this.changes,
@@ -47,7 +47,7 @@ class ChangeSet {
       }
 
       if (change.changeType === 'remove') {
-        return workingArray.filter(value => value.id !== change.id);
+        return workingArray.filter((value) => value.id !== change.id);
       }
 
       return workingArray;
@@ -55,11 +55,11 @@ class ChangeSet {
   }
 
   getAddValues() {
-    return this.changes.filter(change => change.changeType === 'add').map(change => change.value);
+    return this.changes.filter((change) => change.changeType === 'add').map((change) => change.value);
   }
 
   getRemoveIds() {
-    return this.changes.filter(change => change.changeType === 'remove').map(change => change.id);
+    return this.changes.filter((change) => change.changeType === 'remove').map((change) => change.id);
   }
 }
 

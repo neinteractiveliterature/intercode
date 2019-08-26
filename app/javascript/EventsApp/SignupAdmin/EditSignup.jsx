@@ -23,14 +23,14 @@ function cityState(userConProfile) {
   return [
     userConProfile.city,
     userConProfile.state,
-  ].filter(item => item && item.trim() !== '').join(', ');
+  ].filter((item) => item && item.trim() !== '').join(', ');
 }
 
 function cityStateZip(userConProfile) {
   return [
     cityState(userConProfile),
     userConProfile.zipcode,
-  ].filter(item => item && item.trim() !== '').join(' ');
+  ].filter((item) => item && item.trim() !== '').join(' ');
 }
 
 function getMakeCountedConfirmPrompt(signup) {
@@ -96,7 +96,7 @@ const renderAddressItem = (userConProfile) => {
     ['address', userConProfile.address],
     ['cityStateZip', cityStateZip(userConProfile)],
     ['country', userConProfile.country],
-  ].filter(pair => pair[1] && pair[1].trim() !== '');
+  ].filter((pair) => pair[1] && pair[1].trim() !== '');
 
   const listItems = elements.map(([key, element]) => <li key={key}>{element}</li>);
   return <ul className="list-unstyled">{listItems}</ul>;
@@ -122,7 +122,7 @@ function EditSignup({ id, teamMembersUrl }) {
   );
 
   const toggleCounted = useCallback(
-    signup => updateCountedMutate({
+    (signup) => updateCountedMutate({
       variables: {
         signupId: signup.id,
         counted: !signup.counted,
@@ -217,7 +217,7 @@ function EditSignup({ id, teamMembersUrl }) {
         onClick={() => confirm({
           prompt: getToggleCountedConfirmPrompt(signup),
           action: () => toggleCounted(signup),
-          renderError: updateCountedError => <ErrorDisplay graphQLError={updateCountedError} />,
+          renderError: (updateCountedError) => <ErrorDisplay graphQLError={updateCountedError} />,
         })}
       >
         {
@@ -236,13 +236,13 @@ function EditSignup({ id, teamMembersUrl }) {
     const { registration_policy: registrationPolicy } = event;
     const timespan = Timespan.fromStrings(run.starts_at, run.ends_at);
     const teamMember = run.event.team_members
-      .find(tm => tm.user_con_profile.id === signup.user_con_profile.id);
+      .find((tm) => tm.user_con_profile.id === signup.user_con_profile.id);
     const bucket = (signup.bucket_key
-      ? registrationPolicy.buckets.find(b => b.key === signup.bucket_key)
+      ? registrationPolicy.buckets.find((b) => b.key === signup.bucket_key)
       : null
     );
     const requestedBucket = (signup.requested_bucket_key
-      ? registrationPolicy.buckets.find(b => b.key === signup.requested_bucket_key)
+      ? registrationPolicy.buckets.find((b) => b.key === signup.requested_bucket_key)
       : null
     );
 
@@ -253,7 +253,7 @@ function EditSignup({ id, teamMembersUrl }) {
           <br />
           {timespan.humanizeInTimezone(data.convention.timezone_name)}
           <br />
-          {run.rooms.map(room => room.name).sort().join(', ')}
+          {run.rooms.map((room) => room.name).sort().join(', ')}
         </div>
 
         <ul className="list-group list-group-flush">

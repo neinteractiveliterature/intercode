@@ -76,7 +76,7 @@ const BucketFilter = ({ filter, onChange }) => {
     () => (
       (data || {}).event
         ? data.event.registration_policy.buckets
-          .map(bucket => ({ label: bucket.name, value: bucket.key }))
+          .map((bucket) => ({ label: bucket.name, value: bucket.key }))
         : []
     ),
     [data],
@@ -122,13 +122,13 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: signup => signup.user_con_profile.name_inverted,
+    accessor: (signup) => signup.user_con_profile.name_inverted,
     Filter: FreeTextFilter,
   },
   {
     Header: 'Bucket',
     id: 'bucket',
-    accessor: signup => signup.bucket_key,
+    accessor: (signup) => signup.bucket_key,
     Cell: BucketCell,
     Filter: BucketFilter,
   },
@@ -136,7 +136,7 @@ const getPossibleColumns = () => [
     Header: 'Age',
     id: 'age',
     width: 40,
-    accessor: signup => ageAsOf(
+    accessor: (signup) => ageAsOf(
       moment(signup.user_con_profile.birth_date),
       moment(signup.run.starts_at),
     ),
@@ -145,7 +145,7 @@ const getPossibleColumns = () => [
   {
     Header: 'Email',
     id: 'email',
-    accessor: signup => signup.user_con_profile.email,
+    accessor: (signup) => signup.user_con_profile.email,
     Cell: EmailCell,
     Filter: FreeTextFilter,
   },

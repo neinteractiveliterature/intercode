@@ -27,7 +27,7 @@ function CmsPartialsAdminTable() {
         return [];
       }
 
-      return sortByLocaleString(data.cmsPartials, partial => partial.name);
+      return sortByLocaleString(data.cmsPartials, (partial) => partial.name);
     },
     [data, error],
   );
@@ -36,13 +36,13 @@ function CmsPartialsAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deletePartial = id => deletePartialMutate({ variables: { id } });
+  const deletePartial = (id) => deletePartialMutate({ variables: { id } });
 
   return (
     <>
       <table className="table table-striped">
         <tbody>
-          {partialsSorted.map(partial => (
+          {partialsSorted.map((partial) => (
             <tr key={partial.id}>
               <td>
                 {partial.name}
@@ -64,7 +64,7 @@ function CmsPartialsAdminTable() {
                   onClick={() => confirm({
                     prompt: 'Are you sure you want to delete this partial?',
                     action: () => deletePartial(partial.id),
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                   className="btn btn-danger btn-sm ml-1"
                 >

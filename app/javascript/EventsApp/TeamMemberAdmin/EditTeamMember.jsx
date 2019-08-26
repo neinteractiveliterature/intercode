@@ -14,7 +14,7 @@ function EditTeamMember({
   event, eventPath, teamMemberId, history,
 }) {
   const [teamMember, setTeamMember] = useState(
-    event.team_members.find(tm => tm.id === teamMemberId),
+    event.team_members.find((tm) => tm.id === teamMemberId),
   );
   const [update, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateTeamMember),

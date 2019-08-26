@@ -29,9 +29,9 @@ class ConventionDaySelect extends React.Component {
     const { convention } = this.props;
     const conventionTimespan = timespanFromConvention(convention);
     const conventionDays = getConventionDayTimespans(conventionTimespan, convention.timezone_name)
-      .map(timespan => timespan.start);
+      .map((timespan) => timespan.start);
 
-    const options = conventionDays.map(day => (
+    const options = conventionDays.map((day) => (
       <div className="form-check form-check-inline" key={day.toISOString()}>
         <label className="form-check-label">
           <input

@@ -124,10 +124,10 @@ class EventEmailInput extends React.Component {
     return (
       <BootstrapFormInput
         label={(
-          <React.Fragment>
+          <>
             Contact email address
             <RequiredIndicator formItem={this.props.formItem} />
-          </React.Fragment>
+          </>
         )}
         name={`${this.props.formItem.identifier}.email`}
         value={(this.props.value || {}).email || ''}

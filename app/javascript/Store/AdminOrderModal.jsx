@@ -106,7 +106,7 @@ Are you sure you want to cancel order #
 
     return (
       <Mutation mutation={CancelOrder}>
-        {cancelOrder => (
+        {(cancelOrder) => (
           <button
             type="button"
             className="btn btn-sm btn-outline-danger"
@@ -129,7 +129,7 @@ Are you sure you want to cancel order #
       return (
         <div>
           <Mutation mutation={MarkOrderPaid}>
-            {markOrderPaid => (
+            {(markOrderPaid) => (
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger mr-1"
@@ -163,7 +163,7 @@ Are you sure you want to cancel order #
       return null;
     }
 
-    const items = order.order_entries.map(orderEntry => (
+    const items = order.order_entries.map((orderEntry) => (
       <li key={orderEntry.id}>
         {orderEntry.describe_products}
       </li>
@@ -201,7 +201,7 @@ Are you sure you want to cancel order #
           <dt className="col-md-3">Payment note</dt>
           <dd className="col-md-9">
             <Mutation mutation={AdminUpdateOrder}>
-              {updateOrder => (
+              {(updateOrder) => (
                 <InPlaceEditor
                   value={order.payment_note}
                   renderInput={({ onChange, ...inputProps }) => (
@@ -211,7 +211,7 @@ Are you sure you want to cancel order #
                       {...inputProps}
                     />
                   )}
-                  onChange={value => updateOrder({
+                  onChange={(value) => updateOrder({
                     variables: {
                       orderId: order.id,
                       paymentNote: value,

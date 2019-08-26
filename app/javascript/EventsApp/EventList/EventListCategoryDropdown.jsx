@@ -8,7 +8,7 @@ import { Transforms } from '../../ComposableFormUtils';
 
 const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
   const currentCategories = eventCategories
-    .filter(category => (value || []).includes(category.id));
+    .filter((category) => (value || []).includes(category.id));
 
   let categoryDescription = 'All events';
   if (currentCategories.length === 1) {
@@ -37,12 +37,11 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
       <div className="p-2">
         <ChoiceSet
           choices={sortedCategories
-            .map(category => ({
+            .map((category) => ({
               label: category.name,
               value: category.id.toString(),
-            }))
-          }
-          value={(value || []).map(integer => integer.toString())}
+            }))}
+          value={(value || []).map((integer) => integer.toString())}
           onChange={(integerArray) => { onChange(integerArray.map(Transforms.integer)); }}
           multiple
         />
