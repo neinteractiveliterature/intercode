@@ -4,18 +4,6 @@ import PropTypes from 'prop-types';
 import ErrorDisplay from './ErrorDisplay';
 
 class ErrorBoundary extends React.Component {
-  static propTypes = {
-    errorType: PropTypes.oneOf(['graphql', 'plain']),
-    placement: PropTypes.oneOf(['before', 'after']),
-    children: PropTypes.node,
-  };
-
-  static defaultProps = {
-    errorType: 'graphql',
-    placement: 'before',
-    children: null,
-  }
-
   static getDerivedStateFromError(error) {
     return { error };
   }
@@ -51,5 +39,17 @@ class ErrorBoundary extends React.Component {
     );
   }
 }
+
+ErrorBoundary.propTypes = {
+  errorType: PropTypes.oneOf(['graphql', 'plain']),
+  placement: PropTypes.oneOf(['before', 'after']),
+  children: PropTypes.node,
+};
+
+ErrorBoundary.defaultProps = {
+  errorType: 'graphql',
+  placement: 'before',
+  children: null,
+};
 
 export default ErrorBoundary;

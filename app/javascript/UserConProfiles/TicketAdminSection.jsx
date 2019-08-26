@@ -17,22 +17,6 @@ import {
 } from './queries.gql';
 
 class TicketAdminSection extends React.Component {
-  static propTypes = {
-    convention: PropTypes.shape({
-      ticket_name: PropTypes.string.isRequired,
-      timezone_name: PropTypes.string.isRequired,
-    }).isRequired,
-    userConProfile: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      ticket: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        charge_id: PropTypes.string,
-        provided_by_event: PropTypes.shape({}),
-      }),
-    }).isRequired,
-  }
-
   renderTicketControls = (ticketAbilityData) => {
     const buttons = [];
     const { currentAbility } = ticketAbilityData;
@@ -261,5 +245,21 @@ class TicketAdminSection extends React.Component {
     </section>
   )
 }
+
+TicketAdminSection.propTypes = {
+  convention: PropTypes.shape({
+    ticket_name: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+  }).isRequired,
+  userConProfile: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    ticket: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      charge_id: PropTypes.string,
+      provided_by_event: PropTypes.shape({}),
+    }),
+  }).isRequired,
+};
 
 export default TicketAdminSection;

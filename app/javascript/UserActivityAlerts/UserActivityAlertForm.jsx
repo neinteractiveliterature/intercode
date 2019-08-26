@@ -12,45 +12,6 @@ import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 
 class UserActivityAlertForm extends React.Component {
-  static propTypes = {
-    onChange: PropTypes.func.isRequired,
-    onAddAlertDestination: PropTypes.func.isRequired,
-    onRemoveAlertDestination: PropTypes.func.isRequired,
-    userActivityAlert: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      partial_name: PropTypes.string,
-      email: PropTypes.string,
-      user: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      }),
-      trigger_on_ticket_create: PropTypes.bool,
-      trigger_on_user_con_profile_create: PropTypes.bool,
-      alert_destinations: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        staff_position: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-        }),
-        user_con_profile: PropTypes.shape({
-          name_without_nickname: PropTypes.string,
-        }),
-      })).isRequired,
-    }).isRequired,
-    convention: PropTypes.shape({
-      staff_positions: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      })).isRequired,
-      ticket_name: PropTypes.string.isRequired,
-      ticket_mode: PropTypes.string.isRequired,
-    }).isRequired,
-    disabled: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   constructor(props) {
     super(props);
 
@@ -261,5 +222,44 @@ class UserActivityAlertForm extends React.Component {
     </>
   )
 }
+
+UserActivityAlertForm.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  onAddAlertDestination: PropTypes.func.isRequired,
+  onRemoveAlertDestination: PropTypes.func.isRequired,
+  userActivityAlert: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    partial_name: PropTypes.string,
+    email: PropTypes.string,
+    user: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+    trigger_on_ticket_create: PropTypes.bool,
+    trigger_on_user_con_profile_create: PropTypes.bool,
+    alert_destinations: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      staff_position: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }),
+      user_con_profile: PropTypes.shape({
+        name_without_nickname: PropTypes.string,
+      }),
+    })).isRequired,
+  }).isRequired,
+  convention: PropTypes.shape({
+    staff_positions: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+    ticket_name: PropTypes.string.isRequired,
+    ticket_mode: PropTypes.string.isRequired,
+  }).isRequired,
+  disabled: PropTypes.bool,
+};
+
+UserActivityAlertForm.defaultProps = {
+  disabled: false,
+};
 
 export default UserActivityAlertForm;

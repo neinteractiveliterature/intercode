@@ -18,40 +18,6 @@ import sortProductVariants from './sortProductVariants';
 import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
 
 class AdminProductCard extends React.Component {
-  static propTypes = {
-    product: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      image_url: PropTypes.string,
-      payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
-      price: PropTypes.shape({
-        fractional: PropTypes.number.isRequired,
-        currency_code: PropTypes.string.isRequired,
-      }),
-      product_variants: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        override_price: PropTypes.shape({
-          fractional: PropTypes.number.isRequired,
-          currency_code: PropTypes.string.isRequired,
-        }),
-      }).isRequired).isRequired,
-      available: PropTypes.bool.isRequired,
-    }).isRequired,
-    currentAbility: PropTypes.shape({
-      can_update_products: PropTypes.bool.isRequired,
-    }).isRequired,
-    initialEditing: PropTypes.bool,
-    onCancelNewProduct: PropTypes.func.isRequired,
-    onSaveNewProduct: PropTypes.func.isRequired,
-  }
-
-  static defaultProps = {
-    initialEditing: false,
-  };
-
   constructor(props) {
     super(props);
 
@@ -468,7 +434,7 @@ class AdminProductCard extends React.Component {
     return (
       <p>
         <strong>
-Base price:
+          Base price:
           {formatMoney(this.props.product.price)}
         </strong>
       </p>
@@ -528,5 +494,39 @@ Base price:
     </div>
   )
 }
+
+AdminProductCard.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image_url: PropTypes.string,
+    payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    price: PropTypes.shape({
+      fractional: PropTypes.number.isRequired,
+      currency_code: PropTypes.string.isRequired,
+    }),
+    product_variants: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      override_price: PropTypes.shape({
+        fractional: PropTypes.number.isRequired,
+        currency_code: PropTypes.string.isRequired,
+      }),
+    }).isRequired).isRequired,
+    available: PropTypes.bool.isRequired,
+  }).isRequired,
+  currentAbility: PropTypes.shape({
+    can_update_products: PropTypes.bool.isRequired,
+  }).isRequired,
+  initialEditing: PropTypes.bool,
+  onCancelNewProduct: PropTypes.func.isRequired,
+  onSaveNewProduct: PropTypes.func.isRequired,
+};
+
+AdminProductCard.defaultProps = {
+  initialEditing: false,
+};
 
 export default AdminProductCard;

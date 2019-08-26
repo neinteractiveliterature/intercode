@@ -19,29 +19,6 @@ import {
 import TimeblockPreferenceCell from './TimeblockPreferenceCell';
 
 class TimeblockPreferenceItemInput extends React.Component {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-      properties: PropTypes.shape({
-        caption: PropTypes.string.isRequired,
-        timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
-        omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
-        hide_timestamps: PropTypes.bool,
-      }).isRequired,
-    }).isRequired,
-    convention: PropTypes.shape({
-      starts_at: PropTypes.string.isRequired,
-      ends_at: PropTypes.string.isRequired,
-      timezone_name: PropTypes.string.isRequired,
-    }).isRequired,
-    value: PropTypes.arrayOf(TimeblockPreferenceAPIRepresentationPropType.isRequired),
-    onChange: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    value: [],
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -154,5 +131,28 @@ class TimeblockPreferenceItemInput extends React.Component {
     );
   };
 }
+
+TimeblockPreferenceItemInput.propTypes = {
+  formItem: PropTypes.shape({
+    caption: PropTypes.string.isRequired,
+    properties: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
+      omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
+      hide_timestamps: PropTypes.bool,
+    }).isRequired,
+  }).isRequired,
+  convention: PropTypes.shape({
+    starts_at: PropTypes.string.isRequired,
+    ends_at: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+  }).isRequired,
+  value: PropTypes.arrayOf(TimeblockPreferenceAPIRepresentationPropType.isRequired),
+  onChange: PropTypes.func.isRequired,
+};
+
+TimeblockPreferenceItemInput.defaultProps = {
+  value: [],
+};
 
 export default TimeblockPreferenceItemInput;

@@ -4,23 +4,6 @@ import MomentPropTypes from 'react-moment-proptypes';
 import { enableUniqueIds } from 'react-html-id';
 
 class TimeSelect extends React.Component {
-  static propTypes = {
-    value: PropTypes.shape({
-      hour: PropTypes.number,
-      minute: PropTypes.number,
-    }).isRequired,
-    onChange: PropTypes.func.isRequired,
-    timespan: PropTypes.shape({
-      start: MomentPropTypes.momentObj,
-      finish: MomentPropTypes.momentObj,
-    }).isRequired,
-    children: PropTypes.node,
-  };
-
-  static defaultProps = {
-    children: null,
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -99,5 +82,22 @@ class TimeSelect extends React.Component {
     );
   }
 }
+
+TimeSelect.propTypes = {
+  value: PropTypes.shape({
+    hour: PropTypes.number,
+    minute: PropTypes.number,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+  timespan: PropTypes.shape({
+    start: MomentPropTypes.momentObj,
+    finish: MomentPropTypes.momentObj,
+  }).isRequired,
+  children: PropTypes.node,
+};
+
+TimeSelect.defaultProps = {
+  children: null,
+};
 
 export default TimeSelect;

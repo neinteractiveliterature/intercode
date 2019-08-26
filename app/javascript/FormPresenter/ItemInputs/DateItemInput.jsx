@@ -1,50 +1,58 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 
-class DateItemInput extends React.Component {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-      properties: PropTypes.shape({
-        caption: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-    value: PropTypes.string,
-    valueInvalid: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
-    onInteract: PropTypes.func.isRequired,
-  };
+function DateItemInput(props) {
+  const {
+    formItem, onInteract, onChange, value, valueInvalid,
+  } = props;
 
-  static defaultProps = {
-    value: null,
-    valueInvalid: false,
-  };
+  const userDidInteract = useCallback(
+    () => { onInteract(formItem.identifier); },
+    [onInteract, formItem],
+  );
 
-  onChange = (event) => {
-    this.props.onChange(event.target.value);
-    this.userDidInteract();
-  }
+  const inputChanged = useCallback(
+    (event) => {
+      onChange(event.target.value);
+      userDidInteract();
+    },
+    [onChange, userDidInteract],
+  );
 
-  userDidInteract = () => {
-    this.props.onInteract(this.props.formItem.identifier);
-  }
-
-  render = () => (
+  return (
     <fieldset className="form-group">
-      <CaptionLegend formItem={this.props.formItem} />
+      <CaptionLegend formItem={formItem} />
       <input
         type="date"
-        value={this.props.value}
-        onChange={this.onChange}
-        onBlur={this.userDidInteract}
-        className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
+        value={value}
+        onChange={inputChanged}
+        onBlur={userDidInteract}
+        className={classNames('form-control', { 'is-invalid': valueInvalid })}
       />
-      <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
+      <FieldRequiredFeedback valueInvalid={valueInvalid} />
     </fieldset>
-  )
+  );
 }
+
+DateItemInput.propTypes = {
+  formItem: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+    properties: PropTypes.shape({
+      caption: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  value: PropTypes.string,
+  valueInvalid: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  onInteract: PropTypes.func.isRequired,
+};
+
+DateItemInput.defaultProps = {
+  value: null,
+  valueInvalid: false,
+};
 
 export default DateItemInput;

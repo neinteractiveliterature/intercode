@@ -1,47 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Clipboard from 'react-clipboard.js';
 
-class CopyToClipboardButton extends React.Component {
-  static propTypes = {
-    copiedProps: PropTypes.shape({}),
-  }
+function CopyToClipboardButton({ copiedProps, ...otherProps }) {
+  const [copied, setCopied] = useState(false);
 
-  static defaultProps = {
-    copiedProps: {},
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      copied: false,
-    };
-  }
-
-  onSuccess = () => {
-    if (this.state.copied) {
+  const onSuccess = () => {
+    if (copied) {
       return;
     }
 
-    this.setState({ copied: true });
-    window.setTimeout(() => { this.setState({ copied: false }); }, 2000);
-  }
+    setCopied(true);
+    window.setTimeout(() => { setCopied(false); }, 2000);
+  };
 
-  render = () => (
+  return (
     <Clipboard
-      {...this.props}
-      {...this.state.copied ? (this.props.copiedProps || {}) : {}}
-      onSuccess={this.onSuccess}
+      {...otherProps}
+      {...copied ? (copiedProps || {}) : {}}
+      onSuccess={onSuccess}
     >
       <i className="fa fa-copy" />
       {' '}
-      {
-        this.state.copied
-          ? 'Copied!'
-          : 'Copy to clipboard'
-      }
+      {copied ? 'Copied!' : 'Copy to clipboard'}
     </Clipboard>
-  )
+  );
 }
+
+CopyToClipboardButton.propTypes = {
+  copiedProps: PropTypes.shape({}),
+};
+
+CopyToClipboardButton.defaultProps = {
+  copiedProps: {},
+};
 
 export default CopyToClipboardButton;

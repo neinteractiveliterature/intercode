@@ -8,13 +8,6 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { CmsVariablesQuery, DeleteCmsVariableMutation, SetCmsVariableMutation } from './queries.gql';
 
 class ExistingVariableRow extends React.Component {
-  static propTypes = {
-    variable: PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      value_json: PropTypes.string.isRequired,
-    }).isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -112,5 +105,12 @@ class ExistingVariableRow extends React.Component {
     </>
   )
 }
+
+ExistingVariableRow.propTypes = {
+  variable: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    value_json: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default ExistingVariableRow;

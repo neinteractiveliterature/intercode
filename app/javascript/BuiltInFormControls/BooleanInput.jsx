@@ -3,15 +3,6 @@ import PropTypes from 'prop-types';
 import MultipleChoiceInput from './MultipleChoiceInput';
 
 class BooleanInput extends React.Component {
-  static propTypes = {
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    value: null,
-  };
-
   onChange = (value) => {
     this.props.onChange(value === 'true');
   }
@@ -30,5 +21,14 @@ class BooleanInput extends React.Component {
     );
   }
 }
+
+BooleanInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.bool,
+};
+
+BooleanInput.defaultProps = {
+  value: null,
+};
 
 export default BooleanInput;

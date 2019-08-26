@@ -7,7 +7,6 @@ import FormGroupWithLabel from './FormGroupWithLabel';
 function SelectWithLabel({ label, ...otherProps }) {
   return (
     <FormGroupWithLabel label={label} name={otherProps.name}>
-      { /* eslint-disable-next-line react/jsx-props-no-spreading */ }
       {(id) => <Select inputId={id} {...otherProps} />}
     </FormGroupWithLabel>
   );

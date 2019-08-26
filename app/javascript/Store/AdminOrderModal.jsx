@@ -10,23 +10,6 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { MarkOrderPaid, AdminUpdateOrder, CancelOrder } from './mutations.gql';
 
 class AdminOrderModal extends React.Component {
-  static propTypes = {
-    order: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      status: PropTypes.string.isRequired,
-      charge_id: PropTypes.string,
-      user_con_profile: PropTypes.shape({
-        name_without_nickname: PropTypes.string.isRequired,
-      }).isRequired,
-    }),
-    closeModal: PropTypes.func.isRequired,
-    timezoneName: PropTypes.string.isRequired,
-  };
-
-  static defaultProps = {
-    order: null,
-  };
-
   constructor(props) {
     super(props);
 
@@ -95,9 +78,9 @@ class AdminOrderModal extends React.Component {
       prompt = (
         <div>
           <p>
-Are you sure you want to cancel order #
+            Are you sure you want to cancel order #
             {this.props.order.id}
-?
+            ?
           </p>
         </div>
       );
@@ -254,5 +237,28 @@ Are you sure you want to cancel order #
     </div>
   )
 }
+
+AdminOrderModal.propTypes = {
+  order: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    status: PropTypes.string.isRequired,
+    charge_id: PropTypes.string,
+    user_con_profile: PropTypes.shape({
+      name_without_nickname: PropTypes.string.isRequired,
+    }).isRequired,
+    order_entries: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    })).isRequired,
+    total_price: PropTypes.number,
+    paid_at: PropTypes.string,
+    payment_note: PropTypes.string,
+  }),
+  closeModal: PropTypes.func.isRequired,
+  timezoneName: PropTypes.string.isRequired,
+};
+
+AdminOrderModal.defaultProps = {
+  order: null,
+};
 
 export default AdminOrderModal;

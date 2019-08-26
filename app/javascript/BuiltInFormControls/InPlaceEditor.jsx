@@ -2,20 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class InPlaceEditor extends React.Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    children: PropTypes.node,
-    renderInput: PropTypes.func,
-    className: PropTypes.string,
-  };
-
-  static defaultProps = {
-    children: null,
-    renderInput: null,
-    className: null,
-  }
-
   constructor(props) {
     super(props);
 
@@ -111,5 +97,19 @@ class InPlaceEditor extends React.Component {
     );
   }
 }
+
+InPlaceEditor.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  children: PropTypes.node,
+  renderInput: PropTypes.func,
+  className: PropTypes.string,
+};
+
+InPlaceEditor.defaultProps = {
+  children: null,
+  renderInput: null,
+  className: null,
+};
 
 export default InPlaceEditor;

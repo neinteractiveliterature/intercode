@@ -20,7 +20,7 @@ function BootstrapFormInput(props) {
         className="form-control"
         id={inputId}
         onChange={onChangeProp}
-        {...otherProps} // eslint-disable-line react/jsx-props-no-spreading
+        {...otherProps}
       />
       {
         helpText

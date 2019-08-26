@@ -20,7 +20,7 @@ function GraphQLAsyncSelect({
     <AsyncSelect
       handleInputChange={(input) => input.toLowerCase().trim()}
       loadOptions={loadOptions}
-      {...otherProps} // eslint-disable-line react/jsx-props-no-spreading
+      {...otherProps}
     />
   );
 }

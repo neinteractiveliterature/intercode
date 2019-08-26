@@ -10,21 +10,6 @@ import { mutator, Transforms } from '../ComposableFormUtils';
 import { RegistrationPolicyBucketPropType, setBucketProperties } from './RegistrationPolicyBucket';
 
 class RegistrationBucketRow extends React.Component {
-  static propTypes = {
-    registrationBucket: RegistrationPolicyBucketPropType.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    lockNameAndDescription: PropTypes.bool,
-    lockLimited: PropTypes.bool,
-    lockDelete: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    lockNameAndDescription: false,
-    lockLimited: false,
-    lockDelete: false,
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -240,5 +225,20 @@ class RegistrationBucketRow extends React.Component {
     </tr>
   )
 }
+
+RegistrationBucketRow.propTypes = {
+  registrationBucket: RegistrationPolicyBucketPropType.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  lockNameAndDescription: PropTypes.bool,
+  lockLimited: PropTypes.bool,
+  lockDelete: PropTypes.bool,
+};
+
+RegistrationBucketRow.defaultProps = {
+  lockNameAndDescription: false,
+  lockLimited: false,
+  lockDelete: false,
+};
 
 export default RegistrationBucketRow;

@@ -5,21 +5,6 @@ import { Route } from 'react-router-dom';
 import BreadcrumbItem from './BreadcrumbItem';
 
 class BreadcrumbItemWithRoute extends React.Component {
-  static propTypes = {
-    active: PropTypes.func,
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-    exact: PropTypes.bool,
-    path: PropTypes.string.isRequired,
-    to: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-    hideUnlessMatch: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    active: null,
-    exact: false,
-    hideUnlessMatch: false,
-  }
-
   buildActive = (routeProps) => {
     if (this.props.active) {
       return this.props.active(routeProps);
@@ -60,5 +45,20 @@ class BreadcrumbItemWithRoute extends React.Component {
     return <Route path={this.props.path} exact={this.props.exact} {...routeRenderingProps} />;
   }
 }
+
+BreadcrumbItemWithRoute.propTypes = {
+  active: PropTypes.func,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  exact: PropTypes.bool,
+  path: PropTypes.string.isRequired,
+  to: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+  hideUnlessMatch: PropTypes.bool,
+};
+
+BreadcrumbItemWithRoute.defaultProps = {
+  active: null,
+  exact: false,
+  hideUnlessMatch: false,
+};
 
 export default BreadcrumbItemWithRoute;
