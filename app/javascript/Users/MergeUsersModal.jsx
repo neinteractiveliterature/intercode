@@ -68,32 +68,32 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       uniqBy(
         flatMap(
           data.users,
-          user => user.user_con_profiles.map(profile => profile.convention),
+          (user) => user.user_con_profiles.map((profile) => profile.convention),
         ),
-        convention => convention.id,
+        (convention) => convention.id,
       ),
-      convention => new Date(convention.starts_at).getTime(),
+      (convention) => new Date(convention.starts_at).getTime(),
     );
     allConventions.reverse();
 
     profilesByConventionId = mapValues(
-      keyBy(allConventions, convention => convention.id),
-      convention => flatMap(
+      keyBy(allConventions, (convention) => convention.id),
+      (convention) => flatMap(
         data.users,
-        user => user.user_con_profiles
-          .map(profile => ({ ...profile, email: user.email }))
-          .filter(profile => profile.convention.id === convention.id),
+        (user) => user.user_con_profiles
+          .map((profile) => ({ ...profile, email: user.email }))
+          .filter((profile) => profile.convention.id === convention.id),
       ),
     );
   }
 
   const ambiguousProfileConventionIds = Object.keys(pickBy(
     profilesByConventionId,
-    profiles => profiles.length > 1,
+    (profiles) => profiles.length > 1,
   ));
 
   const fullyDisambiguated = ambiguousProfileConventionIds.every(
-    conventionId => winningProfileIds[conventionId],
+    (conventionId) => winningProfileIds[conventionId],
   );
 
   const renderMergePreview = () => {
@@ -101,12 +101,12 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       return null;
     }
 
-    const winningUser = data.users.find(user => user.id.toString() === winningUserId);
+    const winningUser = data.users.find((user) => user.id.toString() === winningUserId);
     if (!winningUser) {
       return null;
     }
 
-    const allPrivileges = uniq(flatMap(data.users, user => user.privileges));
+    const allPrivileges = uniq(flatMap(data.users, (user) => user.privileges));
 
     const renderConventionRow = (convention) => {
       const userConProfiles = profilesByConventionId[convention.id];
@@ -134,7 +134,7 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
             choices={
               userConProfiles.map((profile) => {
                 const ticketWording = profile.ticket ? `Has ${convention.ticket_name}` : `No ${convention.ticket_name}`;
-                const signups = profile.signups.filter(signup => signup.state !== 'withdrawn');
+                const signups = profile.signups.filter((signup) => signup.state !== 'withdrawn');
                 return {
                   label: `${profile.email}’s profile [${ticketWording}, ${pluralizeWithCount('signup', signups.length)}]`,
                   value: profile.id.toString(),
@@ -142,7 +142,7 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
               })
             }
             value={winningProfileIds[convention.id]}
-            onChange={value => setWinningProfileIds({
+            onChange={(value) => setWinningProfileIds({
               ...winningProfileIds,
               [convention.id]: value,
             })}
@@ -178,7 +178,7 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
           <dt className="col-sm-3">Conventions</dt>
           <dd className="col-sm-9">
             <ul className="list-unstyled">
-              {allConventions.map(convention => (
+              {allConventions.map((convention) => (
                 <li key={convention.id}>{renderConventionRow(convention)}</li>
               ))}
             </ul>
@@ -193,7 +193,7 @@ function MergeUsersModal({ closeModal, visible, userIds }) {
       <p>Please select a user account to merge others into:</p>
 
       <ChoiceSet
-        choices={sortBy(data.users, user => user.id).map(user => ({
+        choices={sortBy(data.users, (user) => user.id).map((user) => ({
           label: `${user.id} (${user.name}, ${user.email})`,
           value: user.id.toString(),
         }))}

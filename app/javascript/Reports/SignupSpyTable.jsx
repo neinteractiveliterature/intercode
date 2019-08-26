@@ -42,14 +42,14 @@ const getPossibleColumns = () => [
   {
     Header: 'Name',
     id: 'name',
-    accessor: signup => signup.user_con_profile.name_inverted,
+    accessor: (signup) => signup.user_con_profile.name_inverted,
     sortable: false,
     filterable: false,
   },
   {
     Header: 'Event',
     id: 'event_title',
-    accessor: signup => signup.run.event.title,
+    accessor: (signup) => signup.run.event.title,
     sortable: false,
     filterable: false,
   },

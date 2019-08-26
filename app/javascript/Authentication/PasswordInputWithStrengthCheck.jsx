@@ -27,7 +27,7 @@ function PasswordFeedback({ result }) {
       )}
       {result.feedback.suggestions && (
         <ul className="list-unstyled">
-          {result.feedback.suggestions.map(suggestion => (
+          {result.feedback.suggestions.map((suggestion) => (
             <li key={suggestion}>{suggestion}</li>
           ))}
         </ul>
@@ -75,7 +75,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
     fair: score === 2,
     good: score === 3,
     great: score >= 4,
-  }, matches => matches))[0];
+  }, (matches) => matches))[0];
   const scoreTextClasses = {
     'text-danger': score < 2,
     'text-warning': score === 2,
@@ -91,7 +91,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
           className="form-control"
           type="password"
           value={value}
-          onChange={event => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
         />
         <div
           style={{ right: 0, top: 0, position: 'absolute' }}

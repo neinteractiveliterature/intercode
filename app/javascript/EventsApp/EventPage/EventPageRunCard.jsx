@@ -15,7 +15,7 @@ import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 
 function updateCacheAfterSignup(cache, event, run, signup) {
   const data = cache.readQuery({ query: EventPageQuery, variables: { eventId: event.id } });
-  const runData = data.event.runs.find(eventRun => eventRun.id === run.id);
+  const runData = data.event.runs.find((eventRun) => eventRun.id === run.id);
   runData.my_signups.push(signup);
 
   cache.writeQuery({
@@ -36,14 +36,14 @@ function EventPageRunCard({
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal();
   const eventPath = buildEventUrl(event);
-  const mySignup = run.my_signups.find(signup => signup.state !== 'withdrawn');
-  const myPendingSignupRequest = run.my_signup_requests.find(signupRequest => signupRequest.state === 'pending');
+  const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
+  const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
   const createMySignupMutate = useMutationCallback(CreateMySignup);
   const withdrawMySignupMutate = useMutationCallback(WithdrawMySignup);
   const withdrawSignupRequestMutate = useMutationCallback(WithdrawSignupRequest);
 
   const selfServiceSignup = useCallback(
-    signupOption => createMySignupMutate({
+    (signupOption) => createMySignupMutate({
       variables: {
         runId: run.id,
         requestedBucketKey: (signupOption.bucket || {}).key,
@@ -60,7 +60,7 @@ function EventPageRunCard({
     () => confirm({
       prompt: `Are you sure you want to withdraw from ${event.title}?`,
       action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),
-      renderError: error => <ErrorDisplay graphQLError={error} />,
+      renderError: (error) => <ErrorDisplay graphQLError={error} />,
     }),
     [confirm, event.title, run.id, withdrawMySignupMutate],
   );
@@ -87,7 +87,7 @@ function EventPageRunCard({
         </>
       ),
       action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),
-      renderError: error => <ErrorDisplay graphQLError={error} />,
+      renderError: (error) => <ErrorDisplay graphQLError={error} />,
     }),
     [confirm, event.title, run.id, withdrawMySignupMutate],
   );
@@ -119,7 +119,7 @@ function EventPageRunCard({
   const withdrawPendingSignupRequest = () => confirm({
     prompt: `Are you sure you want to withdraw your request to sign up for ${event.title}?`,
     action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
-    renderError: error => <ErrorDisplay graphQLError={error} />,
+    renderError: (error) => <ErrorDisplay graphQLError={error} />,
   });
 
   return (

@@ -9,7 +9,7 @@ function getDisplayName(WrappedComponent) {
 }
 
 function NonCMSPageWrapper(WrappedComponent) {
-  const wrapper = props => (
+  const wrapper = (props) => (
     <div className="non-cms-page">
       <WrappedComponent {...props} />
     </div>
@@ -50,7 +50,7 @@ const UnwrappedNonCMSPageComponents = {
 };
 
 const NonCMSPageComponents = {
-  ...mapValues(UnwrappedNonCMSPageComponents, component => NonCMSPageWrapper(lazy(component))),
+  ...mapValues(UnwrappedNonCMSPageComponents, (component) => NonCMSPageWrapper(lazy(component))),
   WrappedClickwrapAgreement: NonCMSPageWrapper(ClickwrapAgreement),
 };
 

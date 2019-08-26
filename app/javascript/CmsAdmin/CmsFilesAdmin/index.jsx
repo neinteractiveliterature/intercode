@@ -34,13 +34,13 @@ function CmsFilesAdmin() {
     [data, error],
   );
 
-  const deleteFile = id => deleteFileMutate({ variables: { id } });
+  const deleteFile = (id) => deleteFileMutate({ variables: { id } });
 
   return (
     <>
-      {fileChunks.map(files => (
+      {fileChunks.map((files) => (
         <div className="card-deck mb-4" key={files[0].id}>
-          {files.map(cmsFile => (
+          {files.map((cmsFile) => (
             <div className="card" key={cmsFile.id}>
               <div className="card-header">
                 <div className="float-right">
@@ -50,7 +50,7 @@ function CmsFilesAdmin() {
                     onClick={() => confirm({
                       prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
                       action: () => deleteFile(cmsFile.id),
-                      renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                     })}
                   >
                     <i className="fa fa-trash" aria-hidden="true" />

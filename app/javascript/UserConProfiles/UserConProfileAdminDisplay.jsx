@@ -124,7 +124,7 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
                   onClick={() => confirm({
                     prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
                     action: deleteConfirmed,
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                 >
                   Delete

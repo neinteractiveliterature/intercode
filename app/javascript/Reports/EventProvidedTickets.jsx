@@ -16,15 +16,15 @@ import useValueUnless from '../useValueUnless';
 function EventProvidedTicketsByEvent({ data }) {
   const sortedRows = titleSort(
     data.convention.reports.event_provided_tickets,
-    row => row.provided_by_event.title,
+    (row) => row.provided_by_event.title,
   );
 
-  return sortedRows.map(row => (
+  return sortedRows.map((row) => (
     <section className="mt-2" key={row.provided_by_event.id}>
       <p className="font-weight-bold mb-0">{row.provided_by_event.title}</p>
       <ul className="list-unstyled">
-        {sortByLocaleString(row.tickets, ticket => ticket.user_con_profile.name_inverted)
-          .map(ticket => (
+        {sortByLocaleString(row.tickets, (ticket) => ticket.user_con_profile.name_inverted)
+          .map((ticket) => (
             <li key={ticket.id}>
               {ticket.user_con_profile.name_inverted}
               <span className="text-muted">
@@ -33,8 +33,7 @@ function EventProvidedTicketsByEvent({ data }) {
                 {')'}
               </span>
             </li>
-          ))
-        }
+          ))}
       </ul>
     </section>
   ));
@@ -49,10 +48,10 @@ function EventProvidedTicketsByUser({ data }) {
     () => {
       const unsortedRows = flatMap(
         data.convention.reports.event_provided_tickets,
-        ({ provided_by_event: event, tickets }) => tickets.map(ticket => ({ ticket, event })),
+        ({ provided_by_event: event, tickets }) => tickets.map((ticket) => ({ ticket, event })),
       );
 
-      return sortByLocaleString(unsortedRows, row => row.ticket.user_con_profile.name_inverted);
+      return sortByLocaleString(unsortedRows, (row) => row.ticket.user_con_profile.name_inverted);
     },
     [data],
   );
@@ -115,7 +114,7 @@ function EventProvidedTickets() {
         {'Total: '}
         {pluralizeWithCount(
           `event-provided ${data.convention.ticket_name}`,
-          sum(data.convention.reports.event_provided_tickets.map(row => row.tickets.length)),
+          sum(data.convention.reports.event_provided_tickets.map((row) => row.tickets.length)),
         )}
       </h3>
       <TabList {...tabProps} />

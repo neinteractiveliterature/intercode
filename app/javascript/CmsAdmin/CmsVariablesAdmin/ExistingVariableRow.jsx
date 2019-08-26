@@ -23,14 +23,14 @@ class ExistingVariableRow extends React.Component {
   }
 
   render = () => (
-    <React.Fragment>
+    <>
       <tr>
         <td>
           <code>{this.props.variable.key}</code>
         </td>
         <td>
           <Mutation mutation={SetCmsVariableMutation}>
-            {mutate => (
+            {(mutate) => (
               <CommitableInput
                 className="text-monospace"
                 value={this.props.variable.value_json}
@@ -55,9 +55,9 @@ class ExistingVariableRow extends React.Component {
         </td>
         <td>
           <Mutation mutation={DeleteCmsVariableMutation}>
-            {mutate => (
+            {(mutate) => (
               <Confirm.Trigger>
-                {confirm => (
+                {(confirm) => (
                   <button
                     className="btn btn-outline-danger"
                     type="button"
@@ -74,7 +74,7 @@ class ExistingVariableRow extends React.Component {
                                 data: {
                                   ...data,
                                   cmsVariables: data.cmsVariables
-                                    .filter(variable => variable.key !== this.props.variable.key),
+                                    .filter((variable) => variable.key !== this.props.variable.key),
                                 },
                               });
                             },
@@ -109,7 +109,7 @@ class ExistingVariableRow extends React.Component {
           )
           : null
       }
-    </React.Fragment>
+    </>
   )
 }
 

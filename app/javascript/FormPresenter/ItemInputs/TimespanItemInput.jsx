@@ -35,7 +35,7 @@ class TimespanItemInput extends React.Component {
     };
   }
 
-  getCurrentUnit = () => UNITS.find(u => this.state.unit === u.name);
+  getCurrentUnit = () => UNITS.find((u) => this.state.unit === u.name);
 
   userDidInteract = () => {
     this.props.onInteract(this.props.formItem.identifier);
@@ -59,7 +59,7 @@ class TimespanItemInput extends React.Component {
 
   render = () => {
     const inputId = this.nextUniqueId();
-    const options = UNITS.map(unit => (
+    const options = UNITS.map((unit) => (
       <option key={unit.name} value={unit.name}>
         {unit.name}
         (s)

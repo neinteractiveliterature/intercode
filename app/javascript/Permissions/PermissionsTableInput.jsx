@@ -34,7 +34,7 @@ function PermissionsTableInput({
       </thead>
 
       <tbody>
-        {models.map(model => (
+        {models.map((model) => (
           <tr key={model.id}>
             <th scope="row">
               {formatModelHeader(model)}

@@ -52,7 +52,7 @@ class PermissionsPrompt extends React.Component {
 
   render = () => {
     const { scopeNames } = this.props;
-    const groupedScopes = groupBy(scopeNames, scopeName => getGroupForScopeName(scopeName));
+    const groupedScopes = groupBy(scopeNames, (scopeName) => getGroupForScopeName(scopeName));
 
     return ['readPublic', 'readPrivate', 'manage'].map((scopeGroup) => {
       if (!groupedScopes[scopeGroup]) {
@@ -70,7 +70,7 @@ class PermissionsPrompt extends React.Component {
                   if (prevState.expandedGroups.includes(scopeGroup)) {
                     return {
                       expandedGroups: prevState.expandedGroups
-                        .filter(group => group !== scopeGroup),
+                        .filter((group) => group !== scopeGroup),
                     };
                   }
 
@@ -94,7 +94,7 @@ class PermissionsPrompt extends React.Component {
                 <div className="card-body">
                   <p>This application will be able to:</p>
                   <ul className="mb-0">
-                    {groupedScopes[scopeGroup].map(scopeName => (
+                    {groupedScopes[scopeGroup].map((scopeName) => (
                       <li key={scopeName}>{SCOPE_DESCRIPTIONS[scopeName]}</li>
                     ))}
                   </ul>

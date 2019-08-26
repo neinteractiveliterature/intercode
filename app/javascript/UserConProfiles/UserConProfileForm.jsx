@@ -37,16 +37,14 @@ class UserConProfileForm extends React.Component {
     this.setState({ tab: 'profile' });
   }
 
-  renderContent = () => {
-    return (
-      <SinglePageFormPresenter
-        form={this.props.form}
-        convention={this.props.convention}
-        response={this.props.userConProfile.form_response_attrs}
-        responseValuesChanged={this.formResponseValuesChanged}
-      />
-    );
-  }
+  renderContent = () => (
+    <SinglePageFormPresenter
+      form={this.props.form}
+      convention={this.props.convention}
+      response={this.props.userConProfile.form_response_attrs}
+      responseValuesChanged={this.formResponseValuesChanged}
+    />
+  )
 
   render = () => (
     <div>

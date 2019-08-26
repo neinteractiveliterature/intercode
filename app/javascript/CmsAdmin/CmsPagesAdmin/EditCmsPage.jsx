@@ -14,7 +14,7 @@ import usePageTitle from '../../usePageTitle';
 
 function EditCmsPage({ match, history }) {
   const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
-  const initialPage = error ? null : data.cmsPages.find(p => match.params.id === p.id.toString());
+  const initialPage = error ? null : data.cmsPages.find((p) => match.params.id === p.id.toString());
   const [page, dispatch] = useReducer(pageReducer, initialPage);
   const [updatePage, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdatePage),

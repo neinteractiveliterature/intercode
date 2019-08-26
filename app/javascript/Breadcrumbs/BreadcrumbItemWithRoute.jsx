@@ -36,7 +36,7 @@ class BreadcrumbItemWithRoute extends React.Component {
     return this.props.to(routeProps);
   }
 
-  renderBreadcrumbItem = routeProps => (
+  renderBreadcrumbItem = (routeProps) => (
     <BreadcrumbItem
       to={this.buildToString(routeProps)}
       active={this.buildActive(routeProps)}

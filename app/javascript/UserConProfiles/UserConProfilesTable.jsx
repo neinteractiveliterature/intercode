@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, withRouter } from 'react-router-dom';
-import { humanize, titleize } from 'inflected';
+import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import ReactTable from 'react-table';
 
@@ -87,7 +87,7 @@ const TicketTypeFilter = ({ filter, onChange }) => {
       ? [
         { label: 'Unpaid', value: 'none' },
         ...(data.convention.ticket_types
-          .map(ticketType => ({
+          .map((ticketType) => ({
             label: humanize(ticketType.name),
             value: ticketType.id.toString(),
           }))),
@@ -121,7 +121,7 @@ const privilegeNames = {
   site_admin: 'Global admin',
 };
 
-const PrivilegesCell = ({ value }) => [...value].map(priv => privilegeNames[priv]).sort().join(', ');
+const PrivilegesCell = ({ value }) => [...value].map((priv) => privilegeNames[priv]).sort().join(', ');
 
 PrivilegesCell.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
@@ -131,17 +131,15 @@ PrivilegesCell.defaultProps = {
   value: null,
 };
 
-const PrivilegesFilter = ({ filter, onChange }) => {
-  return (
-    <ChoiceSetFilter
-      name="privileges"
-      choices={[{ label: 'Global admin', value: 'site_admin' }]}
-      onChange={onChange}
-      filter={filter}
-      multiple
-    />
-  );
-};
+const PrivilegesFilter = ({ filter, onChange }) => (
+  <ChoiceSetFilter
+    name="privileges"
+    choices={[{ label: 'Global admin', value: 'site_admin' }]}
+    onChange={onChange}
+    filter={filter}
+    multiple
+  />
+);
 
 PrivilegesFilter.propTypes = {
   filter: PropTypes.arrayOf(PropTypes.string),
@@ -167,7 +165,7 @@ const getPossibleColumns = (data) => {
     {
       Header: 'User ID',
       id: 'user_id',
-      accessor: userConProfile => userConProfile.user_id,
+      accessor: (userConProfile) => userConProfile.user_id,
       filterable: false,
       sortable: false,
       width: 70,
@@ -175,7 +173,7 @@ const getPossibleColumns = (data) => {
     {
       Header: 'Name',
       id: 'name',
-      accessor: userConProfile => userConProfile.name_inverted,
+      accessor: (userConProfile) => userConProfile.name_inverted,
       Filter: FreeTextFilter,
     },
     {
@@ -230,7 +228,7 @@ const getPossibleColumns = (data) => {
     {
       Header: 'Event team member?',
       id: 'is_team_member',
-      accessor: userConProfile => userConProfile.team_members.length > 0,
+      accessor: (userConProfile) => userConProfile.team_members.length > 0,
       width: 150,
       sortable: false,
       Cell: BooleanCell,
@@ -252,7 +250,7 @@ const getPossibleColumns = (data) => {
           {
             Header: `${humanize(data.convention.ticket_name || 'ticket')} status changed`,
             id: 'ticket_updated_at',
-            accessor: userConProfile => (
+            accessor: (userConProfile) => (
               userConProfile.ticket ? moment(userConProfile.ticket.updated_at) : null
             ),
             filterable: false,
@@ -278,7 +276,7 @@ const getPossibleColumns = (data) => {
 
   form.getAllItems().forEach((formItem) => {
     const { identifier } = formItem;
-    if (!identifier || identifier === 'first_name' || identifier === 'last_name' || columns.some(column => column.id === identifier)) {
+    if (!identifier || identifier === 'first_name' || identifier === 'last_name' || columns.some((column) => column.id === identifier)) {
       return;
     }
 
@@ -297,7 +295,7 @@ const getPossibleColumns = (data) => {
     columns.push({
       Header: formItem.admin_description || humanize(identifier),
       id: identifier,
-      accessor: userConProfile => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
+      accessor: (userConProfile) => JSON.parse(userConProfile.form_response_attrs_json)[identifier],
       Cell: FormItemCell,
       sortable: false,
       filterable: false,

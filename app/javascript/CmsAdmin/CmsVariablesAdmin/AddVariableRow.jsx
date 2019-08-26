@@ -66,9 +66,9 @@ class AddVariableRow extends React.Component {
   }
 
   render = () => (
-    <React.Fragment>
+    <>
       <Mutation mutation={SetCmsVariableMutation}>
-        {mutate => (
+        {(mutate) => (
           <tr>
             <td>
               <input
@@ -84,7 +84,7 @@ class AddVariableRow extends React.Component {
                 className="form-control text-monospace"
                 value={this.props.variable.value_json}
                 onChange={(event) => { this.mutator.value_json(event.target.value); }}
-                onKeyDown={event => this.handleKeyDown(event, mutate)}
+                onKeyDown={(event) => this.handleKeyDown(event, mutate)}
               />
             </td>
             <td>
@@ -125,7 +125,7 @@ class AddVariableRow extends React.Component {
           )
           : null
       }
-    </React.Fragment>
+    </>
   );
 }
 

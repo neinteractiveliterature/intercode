@@ -3,15 +3,15 @@ import classNames from 'classnames';
 import getFullnessClass from './getFullnessClass';
 
 export function userSignupStatus(run) {
-  if (run.my_signups.some(signup => signup.state === 'confirmed')) {
+  if (run.my_signups.some((signup) => signup.state === 'confirmed')) {
     return 'confirmed';
   }
 
-  if (run.my_signups.some(signup => signup.state === 'waitlisted')) {
+  if (run.my_signups.some((signup) => signup.state === 'waitlisted')) {
     return 'waitlisted';
   }
 
-  if (run.my_signup_requests.some(signupRequest => signupRequest.state === 'pending')) {
+  if (run.my_signup_requests.some((signupRequest) => signupRequest.state === 'pending')) {
     return 'request_pending';
   }
 

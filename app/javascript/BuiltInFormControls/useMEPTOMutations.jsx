@@ -37,14 +37,14 @@ export default function useMEPTOMutations({
   );
 
   const deleteOverride = useCallback(
-    id => deleteMutate({
+    (id) => deleteMutate({
       variables: {
         input: {
           id,
         },
       },
 
-      update: store => deleteUpdater(store, id),
+      update: (store) => deleteUpdater(store, id),
     }),
     [deleteMutate, deleteUpdater],
   );

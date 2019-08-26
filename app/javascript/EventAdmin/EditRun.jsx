@@ -15,7 +15,7 @@ function EditRun({
         return null;
       }
 
-      return events.find(e => e.id.toString() === match.params.eventId);
+      return events.find((e) => e.id.toString() === match.params.eventId);
     },
     [match, events],
   );
@@ -35,13 +35,13 @@ function EditRun({
         };
       }
 
-      return event.runs.find(r => r.id.toString() === match.params.runId);
+      return event.runs.find((r) => r.id.toString() === match.params.runId);
     },
     [match, event],
   );
 
   const cancelEditing = () => {
-    const eventCategory = convention.event_categories.find(c => c.id === event.event_category.id);
+    const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
     history.replace(buildEventCategoryUrl(eventCategory));
   };
 

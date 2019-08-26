@@ -28,7 +28,7 @@ function CmsPagesAdminTable() {
         return [];
       }
 
-      return sortByLocaleString(data.cmsPages, page => page.name);
+      return sortByLocaleString(data.cmsPages, (page) => page.name);
     },
     [data, error],
   );
@@ -37,13 +37,13 @@ function CmsPagesAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deletePage = id => deletePageMutate({ variables: { id } });
+  const deletePage = (id) => deletePageMutate({ variables: { id } });
 
   return (
     <>
       <table className="table table-striped">
         <tbody>
-          {pagesSorted.map(page => (
+          {pagesSorted.map((page) => (
             <tr key={page.id}>
               <td>
                 <Link to={`/pages/${page.slug}`}>{page.name}</Link>
@@ -65,7 +65,7 @@ function CmsPagesAdminTable() {
                   onClick={() => confirm({
                     prompt: `Are you sure you want to delete ${page.name}?`,
                     action: () => deletePage(page.id),
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                   className="btn btn-danger btn-sm ml-1"
                 >

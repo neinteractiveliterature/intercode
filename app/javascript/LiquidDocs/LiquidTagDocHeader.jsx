@@ -7,7 +7,7 @@ function LiquidTagDocHeader({ liquidTag }) {
   const liquidTagName = findLiquidTagName(liquidTag);
 
   return (
-    <React.Fragment>
+    <>
       <div>
         <code>
           {'{% '}
@@ -20,7 +20,7 @@ function LiquidTagDocHeader({ liquidTag }) {
           ? <p className="mt-2 mb-0">{liquidTag.docstring}</p>
           : null
       }
-    </React.Fragment>
+    </>
   );
 }
 

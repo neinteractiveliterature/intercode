@@ -102,7 +102,7 @@ class ConvertToEventProvidedTicketModal extends React.Component {
             Cancel
           </button>
           <Mutation mutation={ConvertTicketToEventProvided}>
-            {mutate => (
+            {(mutate) => (
               <button
                 type="button"
                 className="btn btn-primary"

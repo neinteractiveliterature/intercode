@@ -31,7 +31,7 @@ function ScheduleMultipleRunsModal({
     [convention.timezone_name, conventionTimespan],
   );
   const conventionDayTimespan = useMemo(
-    () => (day ? conventionDayTimespans.find(cdt => cdt.includesTime(day)) : null),
+    () => (day ? conventionDayTimespans.find((cdt) => cdt.includesTime(day)) : null),
     [conventionDayTimespans, day],
   );
 
@@ -67,20 +67,20 @@ function ScheduleMultipleRunsModal({
   );
 
   const existingRunTimespans = useMemo(
-    () => event.runs.map(run => timespanFromRun(convention, event, run)),
+    () => event.runs.map((run) => timespanFromRun(convention, event, run)),
     [event, convention],
   );
 
   const nonConflictingTimespansWithinRange = useMemo(
-    () => timespansWithinRange.filter(runTimespan => (
-      !existingRunTimespans.some(existingTimespan => existingTimespan.overlapsTimespan(runTimespan))
+    () => timespansWithinRange.filter((runTimespan) => (
+      !existingRunTimespans.some((existingTimespan) => existingTimespan.overlapsTimespan(runTimespan))
     )),
     [timespansWithinRange, existingRunTimespans],
   );
 
   const scheduleRuns = useCallback(
     async () => {
-      const runs = nonConflictingTimespansWithinRange.map(nonConflictingTimespan => ({
+      const runs = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
         starts_at: nonConflictingTimespan.start.toISOString(),
       }));
 
@@ -93,7 +93,7 @@ function ScheduleMultipleRunsModal({
         },
         update: (store, { data: { createMultipleRuns: { runs: newRuns } } }) => {
           const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-          const eventData = eventsData.events.find(e => e.id === event.id);
+          const eventData = eventsData.events.find((e) => e.id === event.id);
           eventData.runs = [...eventData.runs, ...newRuns];
           store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
@@ -140,7 +140,7 @@ function ScheduleMultipleRunsModal({
       let description = runTimespan.start.format('h:mma');
       const runConflicts = (
         nonConflictingTimespans
-          .find(nonConflictingTimespan => nonConflictingTimespan.isSame(runTimespan)) == null
+          .find((nonConflictingTimespan) => nonConflictingTimespan.isSame(runTimespan)) == null
       );
 
       if (runConflicts) {

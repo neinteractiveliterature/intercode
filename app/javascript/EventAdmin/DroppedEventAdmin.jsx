@@ -21,7 +21,7 @@ function DroppedEventAdmin() {
 
   const droppedEvents = data.events.filter((event) => {
     const eventCategory = data.convention.event_categories
-      .find(c => c.id === event.event_category.id);
+      .find((c) => c.id === event.event_category.id);
     return event.status === 'dropped' && eventCategory.scheduling_ui !== 'single_run';
   });
   droppedEvents.sort((a, b) => a.title.localeCompare(b.title, { sensitivity: 'base' }));
@@ -35,7 +35,7 @@ function DroppedEventAdmin() {
     );
   }
 
-  const rows = droppedEvents.map(droppedEvent => (
+  const rows = droppedEvents.map((droppedEvent) => (
     <tr key={droppedEvent.id}>
       <td>{droppedEvent.title}</td>
       <td className="text-right">
@@ -46,7 +46,7 @@ function DroppedEventAdmin() {
             prompt: `Are you sure you want to restore this event?  (Scheduled runs and
               previous signups will not be restored.)`,
             action: () => restoreDroppedEvent({ variables: { input: { id: droppedEvent.id } } }),
-            renderError: restoreError => <ErrorDisplay graphQLError={restoreError} />,
+            renderError: (restoreError) => <ErrorDisplay graphQLError={restoreError} />,
           })}
         >
           Restore

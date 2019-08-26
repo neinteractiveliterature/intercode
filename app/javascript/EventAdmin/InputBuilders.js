@@ -22,7 +22,7 @@ export const buildRunInput = (run) => {
       starts_at: run.starts_at,
       schedule_note: run.schedule_note,
       title_suffix: run.title_suffix,
-      room_ids: (run.rooms || []).map(room => room.id),
+      room_ids: (run.rooms || []).map((room) => room.id),
     },
   };
 };

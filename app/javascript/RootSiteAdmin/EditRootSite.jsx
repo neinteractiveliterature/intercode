@@ -74,8 +74,8 @@ function EditRootSite() {
         label="Default layout for pages"
         value={defaultLayout}
         isClearable
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.name}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.name}
         options={data.cmsLayouts}
         onChange={setDefaultLayout}
         disabled={updateInProgress}
@@ -86,8 +86,8 @@ function EditRootSite() {
         label="Root page"
         value={rootPage}
         isClearable
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.name}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.name}
         options={data.cmsPages}
         onChange={setRootPage}
         disabled={updateInProgress}

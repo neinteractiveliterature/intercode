@@ -10,7 +10,7 @@ function getFormDataForEventCategoryId(eventCategoryId, convention, getData) {
     return { form_api_json: BLANK_FORM_API_JSON };
   }
 
-  const eventCategory = convention.event_categories.find(c => c.id === eventCategoryId);
+  const eventCategory = convention.event_categories.find((c) => c.id === eventCategoryId);
   if (eventCategory) {
     return getData(eventCategory) || { form_api_json: BLANK_FORM_API_JSON };
   }
@@ -21,7 +21,7 @@ function getEventFormDataForEventCategoryId(eventCategoryId, convention) {
   return getFormDataForEventCategoryId(
     eventCategoryId,
     convention,
-    eventCategory => eventCategory.event_form,
+    (eventCategory) => eventCategory.event_form,
   );
 }
 
@@ -29,7 +29,7 @@ function getProposalFormDataForEventCategoryId(eventCategoryId, convention) {
   return getFormDataForEventCategoryId(
     eventCategoryId,
     convention,
-    eventCategory => eventCategory.event_proposal_form,
+    (eventCategory) => eventCategory.event_proposal_form,
   );
 }
 

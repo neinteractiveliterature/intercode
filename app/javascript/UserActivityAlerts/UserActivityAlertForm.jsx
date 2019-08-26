@@ -91,7 +91,7 @@ class UserActivityAlertForm extends React.Component {
   }
 
   render = () => (
-    <React.Fragment>
+    <>
       <div className="card">
         <div className="card-header">
           Matching
@@ -166,30 +166,30 @@ class UserActivityAlertForm extends React.Component {
         </div>
 
         <ul className="list-group list-group-flush">
-          {this.props.userActivityAlert.alert_destinations.map(alertDestination => (
+          {this.props.userActivityAlert.alert_destinations.map((alertDestination) => (
             <li key={alertDestination.id} className="list-group-item">
               <div className="d-flex">
                 <div className="flex-grow-1">
                   {
                   alertDestination.staff_position
                     ? (
-                      <React.Fragment>
+                      <>
                         <strong>Staff position:</strong>
                         {' '}
                         {alertDestination.staff_position.name}
-                      </React.Fragment>
+                      </>
                     )
                     : (
-                      <React.Fragment>
+                      <>
                         <strong>User:</strong>
                         {' '}
                         {alertDestination.user_con_profile.name_without_nickname}
-                      </React.Fragment>
+                      </>
                     )
                   }
                 </div>
                 <Confirm.Trigger>
-                  {confirm => (
+                  {(confirm) => (
                     <button
                       className="btn btn-sm btn-danger"
                       type="button"
@@ -221,20 +221,20 @@ class UserActivityAlertForm extends React.Component {
             {
               this.state.addDestinationType === 'staff_position'
                 ? (
-                  <React.Fragment>
+                  <>
                     <Select
                       options={this.props.convention.staff_positions}
                       isClearable
-                      getOptionValue={option => option.id}
-                      getOptionLabel={option => option.name}
+                      getOptionValue={(option) => option.id}
+                      getOptionLabel={(option) => option.name}
                       value={null}
-                      onChange={value => this.addStaffPositionDestination(value)}
+                      onChange={(value) => this.addStaffPositionDestination(value)}
                       disabled={this.props.disabled}
                     />
                     <button className="btn btn-primary mt-2" type="button" onClick={this.addDestination} disabled={this.props.disabled}>
                       Add destination
                     </button>
-                  </React.Fragment>
+                  </>
                 )
                 : null
             }
@@ -242,23 +242,23 @@ class UserActivityAlertForm extends React.Component {
             {
               this.state.addDestinationType === 'user_con_profile'
                 ? (
-                  <React.Fragment>
+                  <>
                     <UserConProfileSelect
                       value={null}
-                      onChange={value => this.addUserConProfileDestination(value)}
+                      onChange={(value) => this.addUserConProfileDestination(value)}
                       disabled={this.props.disabled}
                     />
                     <button className="btn btn-primary mt-2" type="button" onClick={this.addDestination} disabled={this.props.disabled}>
                       Add destination
                     </button>
-                  </React.Fragment>
+                  </>
                 )
                 : null
             }
           </li>
         </ul>
       </div>
-    </React.Fragment>
+    </>
   )
 }
 

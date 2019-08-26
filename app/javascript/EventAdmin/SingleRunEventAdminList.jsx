@@ -60,7 +60,7 @@ function SingleRunEventAdminList({ eventCategoryId }) {
             onClick={() => confirm({
               prompt: 'Are you sure you want to drop this event?',
               action: () => drop({ variables: { input: { id: event.id } } }),
-              renderError: e => <ErrorDisplay graphQLError={e} />,
+              renderError: (e) => <ErrorDisplay graphQLError={e} />,
             })}
           >
             <i className="fa fa-trash-o" />

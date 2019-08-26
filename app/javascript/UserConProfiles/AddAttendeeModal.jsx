@@ -86,7 +86,7 @@ class AddAttendeeModal extends React.Component {
           Cancel
         </button>
         <Mutation mutation={CreateUserConProfile}>
-          {mutate => (
+          {(mutate) => (
             <button
               className="btn btn-primary"
               type="button"

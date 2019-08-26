@@ -118,7 +118,7 @@ class Client {
         update: (cache) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
           data.cmsNavigationItems = data.cmsNavigationItems
-            .filter(item => item.id !== navigationItem.id);
+            .filter((item) => item.id !== navigationItem.id);
           cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         },
       });
@@ -131,7 +131,7 @@ class Client {
   }
 
   async sortNavigationItems(navigationItems) {
-    const sortItems = navigationItems.map(navigationItem => ({
+    const sortItems = navigationItems.map((navigationItem) => ({
       id: navigationItem.id,
       cms_navigation_item: {
         position: navigationItem.position,
@@ -147,7 +147,7 @@ class Client {
         update: (cache) => {
           const data = cache.readQuery({ query: NavigationItemsAdminQuery });
           const newNavigationItems = data.cmsNavigationItems.map((item) => {
-            const sortItem = sortItems.find(si => si.id === item.id);
+            const sortItem = sortItems.find((si) => si.id === item.id);
             if (sortItem == null) {
               return item;
             }

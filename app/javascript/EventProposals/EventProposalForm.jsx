@@ -18,7 +18,7 @@ function parseResponseErrors(error) {
   if (!graphQLErrors) {
     return {};
   }
-  const updateError = graphQLErrors.find(graphQLError => isEqual(graphQLError.path, ['updateEventProposal']));
+  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateEventProposal']));
   const { validationErrors } = (updateError || {});
   return validationErrors;
 }
@@ -74,7 +74,7 @@ function EventProposalForm({
 
   const responseValuesChanged = useCallback(
     (newResponseValues) => {
-      setEventProposal(prevEventProposal => ({
+      setEventProposal((prevEventProposal) => ({
         ...prevEventProposal,
         formResponseAttrs: {
           ...prevEventProposal.formResponseAttrs,
@@ -111,7 +111,7 @@ function EventProposalForm({
   useAutocommitFormResponseOnChange(commitResponse, eventProposal);
 
   const submitResponse = useCallback(
-    proposal => submitEventProposal({
+    (proposal) => submitEventProposal({
       variables: {
         input: {
           id: proposal.id,

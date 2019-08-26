@@ -18,7 +18,7 @@ function describeRow(ticketType, paymentAmount) {
 
 function descriptionCell(ticketType, paymentAmount) {
   if (ticketType.pricing_schedule.timespans
-    .some(timespan => isEqual(timespan.value, paymentAmount))
+    .some((timespan) => isEqual(timespan.value, paymentAmount))
   ) {
     return <td>{describeRow(ticketType, paymentAmount)}</td>;
   }

@@ -12,11 +12,11 @@ export default function useEventFormWithCategorySelection({
     () => {
       if (schedulingUi) {
         return convention.event_categories
-          .filter(category => category.scheduling_ui === schedulingUi)
-          .map(category => category.id);
+          .filter((category) => category.scheduling_ui === schedulingUi)
+          .map((category) => category.id);
       }
 
-      return convention.event_categories.map(category => category.id);
+      return convention.event_categories.map((category) => category.id);
     },
     [convention.event_categories, schedulingUi],
   );
@@ -33,7 +33,7 @@ export default function useEventFormWithCategorySelection({
 
   useEffect(
     () => {
-      setEvent(prevEvent => ({ ...prevEvent, event_category: eventCategory }));
+      setEvent((prevEvent) => ({ ...prevEvent, event_category: eventCategory }));
     },
     [eventCategory, setEvent],
   );

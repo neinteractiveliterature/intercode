@@ -31,11 +31,11 @@ function renderBucketOptions(bucket, preset) {
   const bucketOptions = [
     bucket.not_counted ? 'Not counted' : 'Counted',
     bucket.expose_atendees ? 'Expose attendees' : null,
-  ].filter(option => option != null);
+  ].filter((option) => option != null);
 
   return (
     <div className="ml-2">
-      {bucketOptions.map(option => <span className="badge badge-secondary" key={option}>{option}</span>)}
+      {bucketOptions.map((option) => <span className="badge badge-secondary" key={option}>{option}</span>)}
     </div>
   );
 }
@@ -96,7 +96,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
     [presets, registrationPolicy],
   );
   const isUnlimited = useMemo(
-    () => !registrationPolicy.buckets.some(bucket => bucket.slots_limited),
+    () => !registrationPolicy.buckets.some((bucket) => bucket.slots_limited),
     [registrationPolicy.buckets],
   );
 
@@ -120,8 +120,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
         <td colSpan={columnCount}>
           {registrationPolicy.prevent_no_preference_signups
             ? <span>&quot;No preference&quot; option will not be available</span>
-            : <span>&quot;No preference&quot; option will be available</span>
-          }
+            : <span>&quot;No preference&quot; option will be available</span>}
           {' '}
           <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
         </td>
@@ -135,7 +134,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className="flex-grow-1">
           Min:
           {' '}
@@ -151,7 +150,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
           {' '}
           {sumTotalSlots(registrationPolicy)}
         </div>
-      </React.Fragment>
+      </>
     );
   };
 
@@ -177,7 +176,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }) {
       <tbody>
         {registrationPolicy.buckets
           .sort(bucketSortCompare)
-          .map(bucket => (
+          .map((bucket) => (
             <RegistrationPolicyDisplayBucketRow
               bucket={bucket}
               preset={preset}

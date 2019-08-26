@@ -10,7 +10,7 @@ function ColumnSelector({
   const renderHiddenColumnCount = () => {
     const count = (
       possibleColumns.length
-      - visibleColumnIds.filter(columnId => !alwaysVisibleColumns.includes(columnId)).length
+      - visibleColumnIds.filter((columnId) => !alwaysVisibleColumns.includes(columnId)).length
       - alwaysVisibleColumns.length
     );
 
@@ -19,12 +19,12 @@ function ColumnSelector({
     }
 
     return (
-      <React.Fragment>
+      <>
         {' '}
         <span className="badge badge-primary">
           {count}
         </span>
-      </React.Fragment>
+      </>
     );
   };
 
@@ -44,8 +44,8 @@ function ColumnSelector({
           multiple
           choices={
             possibleColumns
-              .filter(column => !alwaysVisibleColumns.includes(column.id))
-              .map(column => ({ label: column.Header, value: column.id }))
+              .filter((column) => !alwaysVisibleColumns.includes(column.id))
+              .map((column) => ({ label: column.Header, value: column.id }))
           }
           value={visibleColumnIds}
           onChange={setVisibleColumnIds}

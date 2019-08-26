@@ -46,7 +46,7 @@ export function useDeleteMutation(mutation, {
           store.writeQuery({
             query,
             variables: queryVariables,
-            data: set(arrayPath, get(arrayPath, data).filter(object => object.id !== id), data),
+            data: set(arrayPath, get(arrayPath, data).filter((object) => object.id !== id), data),
           });
         },
         ...mutateOptions,

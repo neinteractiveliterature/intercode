@@ -2,7 +2,7 @@ import React from 'react';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
 function UserFormFields({ formState, setFormState, showNameWarning }) {
-  const setFormField = field => value => setFormState(state => ({ ...state, [field]: value }));
+  const setFormField = (field) => (value) => setFormState((state) => ({ ...state, [field]: value }));
 
   return (
     <>

@@ -33,7 +33,7 @@ function ShortFormEventDetails({ eventId }) {
 
   return (
     <dl className="row mb-0">
-      {shortFormItems.map(item => (
+      {shortFormItems.map((item) => (
         <React.Fragment key={item.identifier}>
           <dt className="col-md-3">{item.public_description}</dt>
           <dd className="col-md-9">
@@ -53,7 +53,7 @@ function ShortFormEventDetails({ eventId }) {
               <dt className="col-md-3">{pluralize(humanize(underscore(event.event_category.team_member_name)))}</dt>
               <dd className="col-md-9">
                 <ul className="list-unstyled mb-0">
-                  {displayTeamMembers.map(teamMember => (
+                  {displayTeamMembers.map((teamMember) => (
                     <li key={teamMember.id}>
                       {teamMember.user_con_profile.name_without_nickname}
                       {

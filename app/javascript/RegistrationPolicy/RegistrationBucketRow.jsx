@@ -193,7 +193,7 @@ class RegistrationBucketRow extends React.Component {
         <CommitableInput
           value={this.props.registrationBucket.description}
           onChange={this.mutator.description}
-          renderInput={props => <textarea rows={2} {...props} />}
+          renderInput={(props) => <textarea rows={2} {...props} />}
           placeholder="Bucket description"
           label="Bucket description"
         />
@@ -209,7 +209,7 @@ class RegistrationBucketRow extends React.Component {
     return (
       <td style={{ width: '30px' }}>
         <Confirm.Trigger>
-          {confirm => (
+          {(confirm) => (
             <button
               className="btn btn-sm btn-secondary"
               type="button"

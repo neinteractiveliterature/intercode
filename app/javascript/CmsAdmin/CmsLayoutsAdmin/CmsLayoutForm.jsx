@@ -8,7 +8,7 @@ import { transformsReducer } from '../../ComposableFormUtils';
 export const layoutReducer = transformsReducer({});
 
 function CmsLayoutForm({ layout, dispatch }) {
-  const changeCallback = key => value => dispatch({ type: 'change', key, value });
+  const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
 
   return (
     <>

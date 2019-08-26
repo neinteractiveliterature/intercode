@@ -28,7 +28,7 @@ function CmsGraphqlQueriesAdminTable() {
     <>
       <table className="table table-striped">
         <tbody>
-          {data.cmsGraphqlQueries.map(query => (
+          {data.cmsGraphqlQueries.map((query) => (
             <tr key={query.id}>
               <td>
                 <code>{query.identifier}</code>
@@ -53,7 +53,7 @@ function CmsGraphqlQueriesAdminTable() {
                     action: () => deleteCmsGraphqlQuery({
                       variables: { id: query.id },
                     }),
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                 >
                   Delete

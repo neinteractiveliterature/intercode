@@ -76,7 +76,7 @@ class TicketAdminSection extends React.Component {
 
         buttons.push(
           <Confirm.Trigger>
-            {confirm => (
+            {(confirm) => (
               <Mutation
                 mutation={DeleteTicket}
                 update={(cache) => {
@@ -96,8 +96,8 @@ class TicketAdminSection extends React.Component {
                   });
                 }}
               >
-                {deleteTicket => (
-                  <React.Fragment>
+                {(deleteTicket) => (
+                  <>
                     {
                       this.props.userConProfile.ticket.charge_id
                         ? (
@@ -112,7 +112,7 @@ class TicketAdminSection extends React.Component {
                                 },
                               }),
                               prompt: (
-                                <React.Fragment>
+                                <>
                                   <p>
                                     Are you sure you want to delete
                                     {' '}
@@ -123,9 +123,9 @@ class TicketAdminSection extends React.Component {
                                     {' '}
                                     and refund their money?
                                   </p>
-                                </React.Fragment>
+                                </>
                               ),
-                              renderError: error => <ErrorDisplay graphQLError={error} />,
+                              renderError: (error) => <ErrorDisplay graphQLError={error} />,
                             })}
                           >
                           Delete with refund
@@ -144,7 +144,7 @@ class TicketAdminSection extends React.Component {
                           },
                         }),
                         prompt: (
-                          <React.Fragment>
+                          <>
                             <p>
                               Are you sure you want to delete
                               {' '}
@@ -155,14 +155,14 @@ class TicketAdminSection extends React.Component {
                               {' '}
                               without a refund?
                             </p>
-                          </React.Fragment>
+                          </>
                         ),
-                        renderError: error => <ErrorDisplay graphQLError={error} />,
+                        renderError: (error) => <ErrorDisplay graphQLError={error} />,
                       })}
                     >
                       Delete without refund
                     </button>
-                  </React.Fragment>
+                  </>
                 )}
               </Mutation>
             )}
@@ -212,10 +212,10 @@ class TicketAdminSection extends React.Component {
         {
           ticket.provided_by_event
             ? (
-              <React.Fragment>
+              <>
                 <dt className="col-md-3">Provided by event</dt>
                 <dd className="col-md-9">{ticket.provided_by_event.title}</dd>
-              </React.Fragment>
+              </>
             )
             : null
         }

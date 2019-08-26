@@ -7,7 +7,7 @@ import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
 import { ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
 import Form from '../Models/Form';
 
-const buildSingleBucketRegistrationPolicy = totalSlots => ({
+const buildSingleBucketRegistrationPolicy = (totalSlots) => ({
   buckets: [
     {
       key: 'signups',

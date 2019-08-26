@@ -11,7 +11,7 @@ import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
 function sortByConventionDate(profiles) {
-  return reverse(sortBy(profiles, profile => profile.convention.starts_at));
+  return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
 }
 
 function UserAdminDisplay({ userId }) {
@@ -29,7 +29,7 @@ function UserAdminDisplay({ userId }) {
         <h1>{data.user.name}</h1>
         <table className="table table-sm table-striped my-4">
           <tbody>
-            {['first_name', 'last_name', 'email'].map(field => (
+            {['first_name', 'last_name', 'email'].map((field) => (
               <tr key={field}>
                 <th scope="row" className="pr-2">{humanize(field)}</th>
                 <td className="col-md-9">
@@ -42,7 +42,7 @@ function UserAdminDisplay({ userId }) {
               <th scope="row" className="pr-2">Privileges</th>
               <td>
                 {data.user.privileges.length > 0
-                  ? data.user.privileges.map(priv => titleize(priv)).join(', ')
+                  ? data.user.privileges.map((priv) => titleize(priv)).join(', ')
                   : 'none'}
               </td>
             </tr>
@@ -53,15 +53,14 @@ function UserAdminDisplay({ userId }) {
                 {data.user.user_con_profiles.length > 0
                   ? (
                     <ul className="list-unstyled mb-0">
-                      {sortByConventionDate(data.user.user_con_profiles).map(profile => (
+                      {sortByConventionDate(data.user.user_con_profiles).map((profile) => (
                         <li key={profile.id}>
                           <a href={`//${profile.convention.domain}`}>
                             {profile.convention.name}
                           </a>
                           {profile.privileges.length > 0
-                            ? ` (${profile.privileges.map(priv => titleize(priv)).join(', ')})`
-                            : null
-                          }
+                            ? ` (${profile.privileges.map((priv) => titleize(priv)).join(', ')})`
+                            : null}
                         </li>
                       ))}
                     </ul>

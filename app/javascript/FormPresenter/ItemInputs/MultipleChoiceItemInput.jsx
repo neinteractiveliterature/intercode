@@ -29,7 +29,7 @@ function castMultipleValue(value) {
     arrayValue = [value];
   }
 
-  return arrayValue.map(item => item.toString());
+  return arrayValue.map((item) => item.toString());
 }
 
 class MultipleChoiceItemInput extends React.Component {
@@ -65,9 +65,9 @@ class MultipleChoiceItemInput extends React.Component {
     let otherValue = '';
     if (this.isOtherSelected()) {
       if (this.isMultiple()) {
-        const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+        const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
         otherValue = castMultipleValue(this.props.value).find((
-          selectedChoiceValue => !choiceValues.includes(selectedChoiceValue)
+          (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue)
         ));
       } else {
         otherValue = castSingleValue(this.props.value);
@@ -81,9 +81,9 @@ class MultipleChoiceItemInput extends React.Component {
     this.userDidInteract();
 
     if (this.isMultiple()) {
-      const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+      const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
       const providedValues = newValue
-        .filter(choiceValue => choiceValues.some(providedValue => providedValue === choiceValue));
+        .filter((choiceValue) => choiceValues.some((providedValue) => providedValue === choiceValue));
       if (newValue.includes(OTHER_VALUE)) {
         this.props.onChange([...providedValues, this.state.otherValue]);
       } else {
@@ -120,11 +120,11 @@ class MultipleChoiceItemInput extends React.Component {
       return false;
     }
 
-    const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+    const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
 
     if (this.isMultiple()) {
       return !castMultipleValue(this.props.value).every((
-        selectedChoiceValue => choiceValues.includes(selectedChoiceValue)
+        (selectedChoiceValue) => choiceValues.includes(selectedChoiceValue)
       ));
     }
 
@@ -160,7 +160,7 @@ class MultipleChoiceItemInput extends React.Component {
   }
 
   render = () => {
-    const choicesForChoiceSet = this.props.formItem.properties.choices.map(choice => ({
+    const choicesForChoiceSet = this.props.formItem.properties.choices.map((choice) => ({
       label: choice.caption,
       value: choice.value,
     }));

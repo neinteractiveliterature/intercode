@@ -1,34 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import flatMap from 'lodash-es/flatMap';
 import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
-import PermissionNames from '../../../config/permission_names.json';
 import { UpdateStaffPositionPermissions } from './mutations.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
-
-function buildPermissionInput(permission) {
-  return {
-    model_type: permission.model.__typename,
-    model_id: permission.model.id,
-    permission: permission.permission,
-  };
-}
-
-function getPermissionNamesForModelType(modelType) {
-  return flatMap(
-    PermissionNames.filter(
-      permissionNameGroup => permissionNameGroup.model_type === modelType,
-    ),
-    permissionNameGroup => permissionNameGroup.permissions,
-  );
-}
+import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 
 const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
 const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
@@ -53,7 +35,7 @@ function EditStaffPositionPermissions({
             .map(buildPermissionInput),
           revokePermissions: changeSet.getRemoveIds().map((removeId) => {
             const existingPermission = staffPosition.permissions
-              .find(p => p.id === removeId);
+              .find((p) => p.id === removeId);
 
             return buildPermissionInput(existingPermission);
           }),
@@ -95,7 +77,7 @@ function EditStaffPositionPermissions({
           add={add}
           remove={remove}
           modelsHeader="Event Category"
-          formatModelHeader={eventCategory => (
+          formatModelHeader={(eventCategory) => (
             <span
               className="p-1 rounded"
               style={getEventCategoryStyles({ eventCategory, variant: 'default' })}

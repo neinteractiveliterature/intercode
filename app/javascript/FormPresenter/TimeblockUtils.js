@@ -33,7 +33,7 @@ function getDayStarts(convention) {
 function getAllPossibleTimeblocks(convention, formItem) {
   return flatMap(
     getDayStarts(convention),
-    dayStart => formItem.properties.timeblocks.map(timeblock => ({
+    (dayStart) => formItem.properties.timeblocks.map((timeblock) => ({
       dayStart,
       timeblock,
       label: timeblock.label,
@@ -63,7 +63,7 @@ function isTimeblockValid(convention, formItem, timeblock) {
 
 export function getValidTimeblocks(convention, formItem) {
   return getAllPossibleTimeblocks(convention, formItem)
-    .filter(timeblock => isTimeblockValid(convention, formItem, timeblock));
+    .filter((timeblock) => isTimeblockValid(convention, formItem, timeblock));
 }
 
 export function getValidTimeblockColumns(convention, formItem) {
@@ -71,15 +71,15 @@ export function getValidTimeblockColumns(convention, formItem) {
   return getDayStarts(convention)
     .map((dayStart) => {
       const possibleTimeblocksForDayStart = allPossibleTimeblocks
-        .filter(timeblock => dayStart.isSame(timeblock.dayStart));
+        .filter((timeblock) => dayStart.isSame(timeblock.dayStart));
 
       return {
         dayStart,
         cells: possibleTimeblocksForDayStart
-          .map(timeblock => (isTimeblockValid(convention, formItem, timeblock) ? timeblock : null)),
+          .map((timeblock) => (isTimeblockValid(convention, formItem, timeblock) ? timeblock : null)),
       };
     })
-    .filter(column => column.cells.some(cell => cell != null));
+    .filter((column) => column.cells.some((cell) => cell != null));
 }
 
 export function rotateTimeblockColumnsToRows(formItem, columns) {
@@ -92,7 +92,7 @@ export function rotateTimeblockColumnsToRows(formItem, columns) {
       row.push(column.cells[x]);
     }
 
-    if (row.some(cell => cell != null)) {
+    if (row.some((cell) => cell != null)) {
       return {
         timeblock,
         cells: row,
@@ -100,7 +100,7 @@ export function rotateTimeblockColumnsToRows(formItem, columns) {
     }
 
     return null;
-  }).filter(row => row != null);
+  }).filter((row) => row != null);
 }
 
 export function getColumnHeader(column) {
