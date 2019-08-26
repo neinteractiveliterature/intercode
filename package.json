@@ -145,7 +145,7 @@
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.8.0"
   },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
