@@ -65,7 +65,7 @@
     "graphql": "^14.5.0",
     "graphql-anywhere": "^4.2.4",
     "graphql-tag": "^2.10.1",
-    "html-to-react": "^1.4.0",
+    "html-to-react": "^1.4.1",
     "hypernova": "^2.5.0",
     "inflected": "^2.0.3",
     "js-yaml": "^3.13.1",
