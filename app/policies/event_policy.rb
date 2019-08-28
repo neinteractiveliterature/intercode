@@ -68,7 +68,7 @@ class EventPolicy < ApplicationPolicy
       end
     end
 
-    super
+    site_admin_manage?
   end
 
   private
