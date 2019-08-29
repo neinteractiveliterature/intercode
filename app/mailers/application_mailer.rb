@@ -10,7 +10,9 @@ class ApplicationMailer < ActionMailer::Base
   protected
 
   def from_address_for_convention(convention)
-    "#{convention.name} <noreply@#{convention.domain}>"
+    address = Mail::Address.new("noreply@#{convention.domain}")
+    address.display_name = convention.name
+    address.format
   end
 
   def use_convention_timezone(convention, &block)
