@@ -83,7 +83,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.61.1)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
-    aws-sdk-sqs (1.21.0)
+    aws-sdk-sqs (1.22.0)
       aws-sdk-core (~> 3, >= 3.61.1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.0)
