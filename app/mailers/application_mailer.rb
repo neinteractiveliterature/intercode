@@ -28,7 +28,9 @@ class ApplicationMailer < ActionMailer::Base
   def emails_for_staff_positions(staff_positions)
     staff_positions.flat_map do |staff_position|
       staff_position.email.presence || staff_position.user_con_profiles.map do |user_con_profile|
-        "#{user_con_profile.name} <#{user_con_profile.email}>"
+        address = Mail::Address.new(user_con_profile.email)
+        address.display_name = user_con_profile.name
+        address.format
       end
     end
   end
