@@ -23,7 +23,11 @@ module Intercode
 
     config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.use Intercode::FindVirtualHost
-    config.middleware.insert_after ActionDispatch::Static, Rack::Deflater # gzip http responses
+    if Rails.application.config.public_file_server
+      config.middleware.insert_after ActionDispatch::Static, Rack::Deflater # gzip http responses
+    else
+      config.middleware.use Rack::Deflater
+    end
 
     config.generators do |g|
       g.template_engine :erb
