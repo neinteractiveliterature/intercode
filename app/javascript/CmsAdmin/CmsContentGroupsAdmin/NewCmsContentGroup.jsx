@@ -6,25 +6,39 @@ import { CmsContentGroupsAdminQuery, SearchCmsContentQuery } from './queries.gql
 import { CreateContentGroup } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
+import { getPermissionNamesForModelType, buildPermissionInput } from '../../Permissions/PermissionUtils';
 import GraphQLAsyncSelect from '../../BuiltInFormControls/GraphQLAsyncSelect';
-import useAsyncFunction from '../../useAsyncFunction';
-import { useCreateMutation } from '../../MutationUtils';
 import PermissionsTableInput from '../../Permissions/PermissionsTableInput';
-import { getPermissionNamesForModelType } from '../../Permissions/PermissionUtils';
+import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
+import { UpdateStaffPositionPermissions } from '../../StaffPositionAdmin/mutations.gql';
+import useAsyncFunction from '../../useAsyncFunction';
+import { useChangeSet } from '../../ChangeSet';
+import { useCreateMutation } from '../../MutationUtils';
+import { useMutation } from 'react-apollo-hooks';
+import useQuerySuspended from '../../useQuerySuspended';
 
-const ContentSetPermissionNames = getPermissionNamesForModelType('CmsContentSet');
+const ContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 
 function NewCmsContentGroup({ history }) {
+  const { data, error } = useQuerySuspended(CmsContentGroupsAdminQuery);
   const mutate = useCreateMutation(CreateContentGroup, {
     query: CmsContentGroupsAdminQuery,
     arrayPath: ['cmsContentGroups'],
     newObjectPath: ['createCmsContentGroup', 'cms_content_group'],
   });
+  const [updateStaffPositionsMutate] = useMutation(UpdateStaffPositionPermissions);
   const [createCmsContentGroup, createError, createInProgress] = useAsyncFunction(mutate);
   const [contentGroup, setContentGroup] = useState({
     name: '',
     contents: [],
+    permissions: [],
   });
+  const [staffPositions, setStaffPositions] = useState([]);
+  const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
   const formSubmitted = async (event) => {
     event.preventDefault();
@@ -40,8 +54,36 @@ function NewCmsContentGroup({ history }) {
       },
     });
 
+    const permissionUpdatePromises = staffPositions.map(async (staffPosition) => {
+      const grantPermissions = permissionsChangeSet.getAddValues().filter(permission => permission.role.id === staffPosition.id);
+      const existingPermissions = contentGroup.permissions.filter(permission => permission.role.id === staffPosition.id);
+      const revokePermissions = existingPermissions.filter(permission => permissionsChangeSet.getRemoveIds().includes(permission.id));
+
+      if (grantPermissions.length === 0 && revokePermissions.length === 0) {
+        return;
+      }
+
+      await updateStaffPositionsMutate({
+        variables: {
+          staff_position_id: staffPosition.id,
+          grantPermissions: grantPermissions.map(buildPermissionInput),
+          revokePermissions: revokePermissions.map(buildPermissionInput),
+        },
+      });
+    });
+
+    await Promise.all(permissionUpdatePromises);
+
     history.push('/cms_content_groups');
   };
+
+  const addStaffPosition = (staffPosition) => {
+    setStaffPositions(prevStaffPositions => [...prevStaffPositions, staffPosition]);
+  }
+
+  const removeStaffPosition = (staffPosition) => {
+    setStaffPositions(prevStaffPositions => prevStaffPositions.filter(pos => pos.id !== staffPosition.id));
+  }
 
   return (
     <form onSubmit={formSubmitted}>
@@ -79,9 +121,34 @@ function NewCmsContentGroup({ history }) {
         )}
       </FormGroupWithLabel>
 
-      <PermissionsTableInput
-        permissionNames={ContentSetPermissionNames}
-      />
+      <section className="my-4 card">
+        <div className="card-header">
+          Permissions
+        </div>
+
+        <div className="card-body">
+          {staffPositions.length > 0 && (
+            <PermissionsTableInput
+              permissionNames={ContentGroupPermissionNames}
+              initialPermissions={[]}
+              models={staffPositions}
+              changeSet={permissionsChangeSet}
+              add={addPermission}
+              remove={removePermission}
+              formatModelHeader={staffPosition => staffPosition.name}
+              removeModel={removeStaffPosition}
+            />
+          )}
+
+          <SelectWithLabel
+            label="Add staff position"
+            options={data.convention.staff_positions}
+            getOptionValue={staffPosition => staffPosition.id}
+            getOptionLabel={staffPosition => staffPosition.name}
+            onChange={addStaffPosition}
+          />
+        </div>
+      </section>
 
       <ErrorDisplay graphQLError={createError} />
 

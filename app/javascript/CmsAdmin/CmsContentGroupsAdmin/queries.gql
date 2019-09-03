@@ -30,6 +30,11 @@ query CmsContentGroupsAdminQuery {
   convention {
     id
     name
+
+    staff_positions {
+      id
+      name
+    }
   }
 
   cmsContentGroups {
