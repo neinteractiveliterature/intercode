@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       cache_from:
+        - intercode:ci-run
         - neinteractiveliterature/intercode:build-latest
         - neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
       target: test

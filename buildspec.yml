@@ -19,6 +19,8 @@ phases:
       - docker build --cache-from $BUILD_IMAGE_TAG --cache-from $FALLBACK_BUILD_IMAGE_TAG --build-arg ASSETS_HOST="$ASSETS_HOST" --target build-production -t $BUILD_IMAGE_TAG .
       - echo Pushing the build image...
       - docker push $BUILD_IMAGE_TAG
+      - echo Tagging and running the test suite...
+      - docker tag $BUILD_IMAGE_TAG intercode:ci-run
       - docker-compose -f docker-compose.test.yml run
         -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
         -e CI=$CI -e TRAVIS=$TRAVIS -e TRAVIS_COMMIT=$TRAVIS_COMMIT
