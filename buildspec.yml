@@ -16,9 +16,19 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build --cache-from $BUILD_IMAGE_TAG --cache-from $FALLBACK_BUILD_IMAGE_TAG --target build-production -t $BUILD_IMAGE_TAG .
+      - docker build --cache-from $BUILD_IMAGE_TAG --cache-from $FALLBACK_BUILD_IMAGE_TAG --build-arg ASSETS_HOST="$ASSETS_HOST" --target build-production -t $BUILD_IMAGE_TAG .
       - echo Pushing the build image...
       - docker push $BUILD_IMAGE_TAG
+      - docker-compose -f docker-compose.test.yml run
+        -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+        -e CI=$CI -e TRAVIS=$TRAVIS -e TRAVIS_COMMIT=$TRAVIS_COMMIT
+        -e TRAVIS_BRANCH=$TRAVIS_BRANCH -e TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
+        -e TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA
+        -e TRAVIS_JOB_ID=$TRAVIS_JOB_ID -e TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -e TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+        -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
+        -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
+        web
+        test/travis-complete.sh
   # post_build:
   #   commands:
   #     - echo Build completed on `date`
