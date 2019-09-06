@@ -16,10 +16,9 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build --cache-from $BUILD_IMAGE_TAG --cache-from $FALLBACK_BUILD_IMAGE_TAG --target build-production -t $IMAGE_REPO_NAME:$BUILD_IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$BUILD_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$BUILD_IMAGE_TAG
+      - docker build --cache-from $BUILD_IMAGE_TAG --cache-from $FALLBACK_BUILD_IMAGE_TAG --target build-production -t $BUILD_IMAGE_TAG .
       - echo Pushing the build image...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$BUILD_IMAGE_TAG
+      - docker push $BUILD_IMAGE_TAG
   # post_build:
   #   commands:
   #     - echo Build completed on `date`
