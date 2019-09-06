@@ -3,6 +3,8 @@ services:
   web:
     image: neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
     build:
+      args:
+        ASSETS_HOST: ${ASSETS_HOST}
       context: .
       dockerfile: Dockerfile
       cache_from:
