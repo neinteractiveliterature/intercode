@@ -6,7 +6,7 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - export BUILD_IMAGE_TAG=$BUILD_IMAGE_TAG_PREFIX${CODEBUILD_SOURCE_VERSION//\//-}
+      - export BUILD_IMAGE_TAG=$BUILD_IMAGE_TAG_PREFIX${CODEBUILD_SOURCE_VERSION//\//-/}
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
       - echo Pulling base image...
