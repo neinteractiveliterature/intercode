@@ -6,7 +6,7 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - export BUILD_IMAGE_TAG=$BUILD_IMAGE_TAG_PREFIX$(echo $CODEBUILD_SOURCE_VERSION | sed 's/\//-/g')
+      - export BUILD_IMAGE_TAG=$BUILD_IMAGE_TAG_PREFIX$(echo ${CODEBUILD_WEBHOOK_TRIGGER:-CODEBUILD_SOURCE_VERSION} | sed 's/\//-/g')
       - export FALLBACK_BUILD_IMAGE_TAG=$BUILD_IMAGE_TAG_PREFIXmaster
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
