@@ -2,18 +2,17 @@ module Intercode
   module Liquid
     module Tags
       # @api
-      class AppComponentRenderer < ::Liquid::Tag
+      module AppComponentRenderer
         include ActionView::Helpers::TagHelper
 
-        def render(context)
+        def render_react_component(context)
+          controller_props = context.registers['controller']&.app_component_props
+
           content_tag(
             :div,
             '',
             'data-react-class' => component_name(context),
-            'data-react-props' => JSON.dump(
-              context.registers['controller'].app_component_props
-                .merge(props(context))
-            )
+            'data-react-props' => JSON.dump((controller_props || {}).merge(props(context)))
           )
         end
 
