@@ -2,10 +2,10 @@ module Intercode
   module Liquid
     module Tags
       # @api
-      class AppComponentRenderer < ::Liquid::Tag
+      module AppComponentRenderer
         include ActionView::Helpers::TagHelper
 
-        def render(context)
+        def render_react_component(context)
           content_tag(
             :div,
             '',

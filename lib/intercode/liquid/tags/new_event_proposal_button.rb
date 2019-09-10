@@ -10,7 +10,9 @@ module Intercode
       #   {% new_event_proposal_button "Propose, right now!" %}
       # @example Customizing the button text and the CSS class
       #   {% new_event_proposal_button "Propose, or don't" btn-warning %}
-      class NewEventProposalButton < AppComponentRenderer
+      class NewEventProposalButton < ::Liquid::Tag
+        include AppComponentRenderer
+
         attr_reader :button_text, :button_class
 
         def initialize(tag_name, args, _options)
@@ -19,6 +21,10 @@ module Intercode
 
           @button_text = Regexp.last_match(1)
           @button_class = Regexp.last_match(3)
+        end
+
+        def render(context)
+          render_react_component(context)
         end
 
         def component_name(_context)

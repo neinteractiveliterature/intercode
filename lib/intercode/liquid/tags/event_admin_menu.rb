@@ -7,12 +7,18 @@ module Intercode
       # @liquid_tag_name event_admin_menu
       # @example
       #   {% event_admin_menu 1234 %}
-      class EventAdminMenu < AppComponentRenderer
+      class EventAdminMenu < ::Liquid::Tag
+        include AppComponentRenderer
+
         attr_reader :event_id_expression
 
         def initialize(tag_name, args, _options)
           super
           @event_id_expression = ::Liquid::Expression.parse(args)
+        end
+
+        def render(context)
+          render_react_component(context)
         end
 
         def component_name(_context)
