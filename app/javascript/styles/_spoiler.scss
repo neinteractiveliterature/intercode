@@ -1,0 +1,23 @@
+.spoiler {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+.spoiler-hidden {
+  color: black;
+
+  &:hover .spoiler-hover {
+    visibility: visible;
+  }
+}
+
+.spoiler-hover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #ddd;
+  visibility: hidden;
+  font-style: italic;
+}

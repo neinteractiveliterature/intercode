@@ -7,12 +7,18 @@ module Intercode
       # @liquid_tag_name event_runs_section
       # @example
       #   {% event_runs_section 1234 %}
-      class EventRunsSection < AppComponentRenderer
+      class EventRunsSection < ::Liquid::Tag
+        include AppComponentRenderer
+
         attr_reader :event_id_expression
 
         def initialize(tag_name, args, _options)
           super
           @event_id_expression = ::Liquid::Expression.parse(args)
+        end
+
+        def render(context)
+          render_react_component(context)
         end
 
         def component_name(_context)
