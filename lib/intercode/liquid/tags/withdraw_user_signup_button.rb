@@ -11,7 +11,9 @@ module Intercode
       #   {% withdraw_user_signup_button signup "Withdraw my signup" %}
       # @example Customizing the button text and the CSS class
       #   {% withdraw_user_signup_button "Withdraw my signup" btn-warning %}
-      class WithdrawUserSignupButton < AppComponentRenderer
+      class WithdrawUserSignupButton < ::Liquid::Tag
+        include AppComponentRenderer
+
         attr_reader :button_text, :button_class, :signup_variable_name
 
         def initialize(tag_name, args, _options)
@@ -21,6 +23,10 @@ module Intercode
           @signup_variable_name = Regexp.last_match(1)
           @button_text = Regexp.last_match(3)
           @button_class = Regexp.last_match(5)
+        end
+
+        def render(context)
+          render_react_component(context)
         end
 
         def component_name(_context)

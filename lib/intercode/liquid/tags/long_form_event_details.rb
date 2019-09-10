@@ -7,12 +7,18 @@ module Intercode
       # @liquid_tag_name long_form_event_details
       # @example
       #   {% long_form_event_details 1234 %}
-      class LongFormEventDetails < AppComponentRenderer
+      class LongFormEventDetails < ::Liquid::Tag
+        include AppComponentRenderer
+
         attr_reader :event_id_expression
 
         def initialize(tag_name, args, _options)
           super
           @event_id_expression = ::Liquid::Expression.parse(args)
+        end
+
+        def render(context)
+          render_react_component(context)
         end
 
         def component_name(_context)
