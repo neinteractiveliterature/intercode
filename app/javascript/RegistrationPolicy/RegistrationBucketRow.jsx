@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
 
-import CommitableInput from '../BuiltInFormControls/CommitableInput';
 import Confirm from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
 import { mutator, Transforms } from '../ComposableFormUtils';
@@ -88,9 +87,11 @@ class RegistrationBucketRow extends React.Component {
             Counted?
           </label>
           <HelpPopover>
-            If checked, this bucket will not count towards the attendee&rsquo;s number of signups,
-            and will exclude this bucket from the &ldquo;No Preference&rdquo; option (so, any
-            attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this bucket).
+            &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups,
+            and are included in the &ldquo;No Preference&rdquo; option. If the bucket is <em>not</em>
+            {' '}
+            counted, any attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this
+            bucket.
           </HelpPopover>
         </div>
 
@@ -179,23 +180,30 @@ class RegistrationBucketRow extends React.Component {
       );
     }
 
+    const nameId = this.nextUniqueId();
+    const descriptionId = this.nextUniqueId();
+
     return [
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
-          <CommitableInput
+          <label className="sr-only" htmlFor={nameId}>Bucket name</label>
+          <input
+            id={nameId}
             value={this.props.registrationBucket.name}
-            onChange={this.mutator.name}
+            onChange={(event) => this.mutator.name(event.target.value)}
             placeholder="Bucket name"
-            label="Bucket name"
+            className="form-control"
           />
         </div>
 
-        <CommitableInput
+        <label className="sr-only" htmlFor={descriptionId}>Bucket description</label>
+        <textarea
+          id={descriptionId}
+          rows="2"
           value={this.props.registrationBucket.description}
-          onChange={this.mutator.description}
-          renderInput={props => <textarea rows={2} {...props} />}
+          onChange={(event) => this.mutator.description(event.target.value)}
           placeholder="Bucket description"
-          label="Bucket description"
+          className="form-control"
         />
       </td>,
     ];
