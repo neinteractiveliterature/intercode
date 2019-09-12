@@ -4,7 +4,7 @@ import useUniqueId from '../useUniqueId';
 
 function BootstrapFormTextarea(props) {
   const {
-    name, value, label, disabled, onChange, onTextChange, ...otherProps
+    name, value, label, hideLabel, disabled, onChange, onTextChange, ...otherProps
   } = props;
   const inputId = useUniqueId(`${name}-`);
 
@@ -30,7 +30,7 @@ function BootstrapFormTextarea(props) {
 }
 
 BootstrapFormTextarea.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   label: PropTypes.string.isRequired,
   hideLabel: PropTypes.bool,
   value: PropTypes.string.isRequired,
@@ -40,6 +40,7 @@ BootstrapFormTextarea.propTypes = {
 };
 
 BootstrapFormTextarea.defaultProps = {
+  name: null,
   disabled: false,
   hideLabel: false,
   onChange: null,
