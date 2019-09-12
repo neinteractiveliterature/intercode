@@ -1,4 +1,5 @@
 const schemaJson = require('./schema.json');
+const path = require('path');
 
 module.exports = {
   env: {
@@ -69,7 +70,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       'webpack': {
-        config: './config/webpack/environment.js',
+        config: path.resolve(__dirname, './config/webpack/environment.js'),
       },
     },
     'import/ignore': [
