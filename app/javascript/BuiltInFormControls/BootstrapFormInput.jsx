@@ -8,7 +8,7 @@ function BootstrapFormInput(props) {
   const inputId = useUniqueId(`${props.name || 'input'}-`);
 
   const {
-    helpText, label, onChange, onTextChange, ...otherProps
+    helpText, label, hideLabel, onChange, onTextChange, ...otherProps
   } = props;
 
   const onChangeProp = onChange || ((event) => { onTextChange(event.target.value); });

@@ -171,8 +171,8 @@ class RegistrationBucketRow extends React.Component {
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
           <BootstrapFormInput
-            value={this.props.registrationBucket.name}
-            onChange={(event) => this.mutator.name(event.target.value)}
+            value={this.props.registrationBucket.name || ''}
+            onTextChange={this.mutator.name}
             placeholder="Bucket name"
             label="Bucket name"
             hideLabel
@@ -182,7 +182,7 @@ class RegistrationBucketRow extends React.Component {
 
         <BootstrapFormTextarea
           rows="2"
-          value={this.props.registrationBucket.description}
+          value={this.props.registrationBucket.description || ''}
           label="Bucket description"
           hideLabel
           onTextChange={this.mutator.description}
