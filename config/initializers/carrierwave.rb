@@ -9,5 +9,6 @@ CarrierWave.configure do |config|
     }
 
     config.fog_directory = ENV['AWS_S3_BUCKET']
+    config.asset_host = ENV['UPLOADS_HOST'] if ENV['UPLOADS_HOST'].present?
   end
 end

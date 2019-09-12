@@ -4,10 +4,11 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
 
+import ErrorBoundary from './ErrorBoundary';
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';
-import ErrorBoundary from './ErrorBoundary';
+import Spoiler from './Spoiler';
 
 const EventAdminMenu = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'));
 const LongFormEventDetails = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'));
@@ -22,6 +23,7 @@ export const DEFAULT_COMPONENT_MAP = {
   ProposeEventButton,
   RunsSection,
   ShortFormEventDetails,
+  Spoiler,
   SignInButton,
   SignOutButton,
   SignUpButton,
