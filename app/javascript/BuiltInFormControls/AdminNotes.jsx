@@ -12,12 +12,17 @@ function AdminNotes({ mutate, value }) {
 
   const startEditing = () => {
     setEditingValue(value || '');
-    if (textareaElement) {
+    if (textareaElement.current) {
       textareaElement.current.focus();
     }
   };
 
   const cancelEditing = () => { setEditingValue(null); };
+
+  const saveClicked = async () => {
+    await save(editingValue);
+    setEditingValue(null);
+  };
 
   if (editingValue == null) {
     return (
@@ -66,7 +71,7 @@ function AdminNotes({ mutate, value }) {
         <button
           className="btn btn-primary btn-sm ml-2"
           type="button"
-          onClick={() => save(editingValue)}
+          onClick={saveClicked}
           disabled={saveInProgress}
         >
           Save
