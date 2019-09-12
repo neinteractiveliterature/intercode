@@ -15,7 +15,7 @@ function BootstrapFormTextarea(props) {
 
   return (
     <div className="form-group">
-      <label htmlFor={inputId}>{label}</label>
+      <label htmlFor={inputId} className={hideLabel ? 'sr-only' : null}>{label}</label>
       <textarea
         className="form-control"
         id={inputId}
@@ -32,6 +32,7 @@ function BootstrapFormTextarea(props) {
 BootstrapFormTextarea.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  hideLabel: PropTypes.bool,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onTextChange: PropTypes.func,
@@ -40,6 +41,7 @@ BootstrapFormTextarea.propTypes = {
 
 BootstrapFormTextarea.defaultProps = {
   disabled: false,
+  hideLabel: false,
   onChange: null,
   onTextChange: null,
 };

@@ -7,6 +7,8 @@ import Confirm from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import { RegistrationPolicyBucketPropType, setBucketProperties } from './RegistrationPolicyBucket';
+import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
 class RegistrationBucketRow extends React.Component {
   constructor(props) {
@@ -165,28 +167,25 @@ class RegistrationBucketRow extends React.Component {
       );
     }
 
-    const nameId = this.nextUniqueId();
-    const descriptionId = this.nextUniqueId();
-
     return [
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
-          <label className="sr-only" htmlFor={nameId}>Bucket name</label>
-          <input
-            id={nameId}
+          <BootstrapFormInput
             value={this.props.registrationBucket.name}
             onChange={(event) => this.mutator.name(event.target.value)}
             placeholder="Bucket name"
+            label="Bucket name"
+            hideLabel
             className="form-control"
           />
         </div>
 
-        <label className="sr-only" htmlFor={descriptionId}>Bucket description</label>
-        <textarea
-          id={descriptionId}
+        <BootstrapFormTextarea
           rows="2"
           value={this.props.registrationBucket.description}
-          onChange={(event) => this.mutator.description(event.target.value)}
+          label="Bucket description"
+          hideLabel
+          onTextChange={this.mutator.description}
           placeholder="Bucket description"
           className="form-control"
         />

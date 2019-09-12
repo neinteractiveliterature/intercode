@@ -15,7 +15,7 @@ function BootstrapFormInput(props) {
 
   return (
     <div className="form-group">
-      <label htmlFor={inputId}>{label}</label>
+      <label htmlFor={inputId} className={hideLabel ? 'sr-only' : null}>{label}</label>
       <input
         className="form-control"
         id={inputId}
@@ -34,6 +34,7 @@ function BootstrapFormInput(props) {
 BootstrapFormInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  hideLabel: PropTypes.bool,
   type: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func,
@@ -44,6 +45,7 @@ BootstrapFormInput.propTypes = {
 
 BootstrapFormInput.defaultProps = {
   name: null,
+  hideLabel: false,
   type: 'text',
   disabled: false,
   helpText: null,
