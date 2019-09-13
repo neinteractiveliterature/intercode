@@ -120,12 +120,13 @@ function NewCmsContentGroup({ history }) {
             <PermissionsTableInput
               permissionNames={ContentGroupPermissionNames}
               initialPermissions={[]}
-              models={staffPositions}
+              rowType="role"
+              roles={staffPositions}
               changeSet={permissionsChangeSet}
               add={addPermission}
               remove={removePermission}
-              formatModelHeader={(staffPosition) => staffPosition.name}
-              removeModel={removeStaffPosition}
+              formatRowHeader={(staffPosition) => staffPosition.name}
+              removeRow={removeStaffPosition}
             />
           )}
 

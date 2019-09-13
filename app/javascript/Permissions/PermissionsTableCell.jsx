@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ModelPropType, PermissionPropType } from './PermissionPropTypes';
+import { ModelPropType, PermissionPropType, RolePropType } from './PermissionPropTypes';
 import usePermissionToggle from './usePermissionToggle';
 import PermissionCheckBox from './PermissionCheckBox';
 
@@ -9,7 +9,9 @@ function PermissionsTableCell({
   initialPermissions,
   currentPermissions,
   changeSet,
+  rowType,
   model,
+  role,
   permission,
   grantPermission,
   revokePermission,
@@ -17,7 +19,8 @@ function PermissionsTableCell({
   const { toggle, hasPermission, className } = usePermissionToggle({
     grantPermission,
     revokePermission,
-    model,
+    model: rowType === 'model' ? model : null,
+    role: rowType === 'role' ? role : null,
     permission,
     initialPermissions,
     changeSet,
@@ -42,7 +45,9 @@ function PermissionsTableCell({
 }
 
 PermissionsTableCell.propTypes = {
-  model: ModelPropType.isRequired,
+  rowType: PropTypes.oneOf(['model', 'role']).isRequired,
+  model: ModelPropType,
+  role: RolePropType,
   permission: PropTypes.string.isRequired,
   initialPermissions: PropTypes.arrayOf(PermissionPropType).isRequired,
   currentPermissions: PropTypes.arrayOf(PermissionPropType).isRequired,
@@ -51,6 +56,11 @@ PermissionsTableCell.propTypes = {
   }).isRequired,
   grantPermission: PropTypes.func.isRequired,
   revokePermission: PropTypes.func.isRequired,
+};
+
+PermissionsTableCell.defaultProps = {
+  model: null,
+  role: null,
 };
 
 export default PermissionsTableCell;

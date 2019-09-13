@@ -72,12 +72,13 @@ function EditStaffPositionPermissions({
         <PermissionsTableInput
           permissionNames={EventCategoryPermissionNames}
           initialPermissions={staffPosition.permissions}
+          rowType="model"
           models={eventCategories}
           changeSet={changeSet}
           add={add}
           remove={remove}
-          modelsHeader="Event Category"
-          formatModelHeader={(eventCategory) => (
+          rowsHeader="Event Category"
+          formatRowHeader={(eventCategory) => (
             <span
               className="p-1 rounded"
               style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
