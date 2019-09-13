@@ -11,9 +11,9 @@ export default function usePermissionsChangeSet({
   );
 
   const grantPermission = useCallback(
-    (model, permission) => {
+    ({ role, model, permission }) => {
       add(
-        { model, permission },
+        { role, model, permission },
         initialPermissions,
         permissionEquals,
       );
@@ -22,8 +22,8 @@ export default function usePermissionsChangeSet({
   );
 
   const revokePermission = useCallback(
-    (model, permission) => {
-      const permissionId = findPermission(currentPermissions, model, permission).id;
+    ({ role, model, permission }) => {
+      const permissionId = findPermission(currentPermissions, { role, model, permission }).id;
 
       remove(permissionId);
     },

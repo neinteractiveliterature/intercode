@@ -4,23 +4,23 @@ import classNames from 'classnames';
 import { findPermission, permissionEquals } from './PermissionUtils';
 
 export default function usePermissionToggle({
-  grantPermission, revokePermission, model, permission, initialPermissions,
+  grantPermission, revokePermission, role, model, permission, initialPermissions,
   changeSet, currentPermissions,
 }) {
   const setPermission = (value) => {
     if (value) {
-      grantPermission(model, permission);
+      grantPermission({ role, model, permission });
     } else {
-      revokePermission(model, permission);
+      revokePermission({ role, model, permission });
     }
   };
 
   const existingPermission = findPermission(
-    initialPermissions, model, permission,
+    initialPermissions, { role, model, permission },
   );
 
   const hasPermission = (
-    findPermission(currentPermissions, model, permission) != null
+    findPermission(currentPermissions, { role, model, permission }) != null
   );
 
   const toggle = () => setPermission(!hasPermission);
@@ -29,7 +29,7 @@ export default function usePermissionToggle({
     () => classNames('cursor-pointer text-center align-middle', {
       'table-success': changeSet.changes.some(({ changeType, value }) => (
         changeType === 'add'
-        && permissionEquals(value, { model, permission })
+        && permissionEquals(value, { role, model, permission })
       )),
       'table-danger': (
         existingPermission
@@ -39,7 +39,7 @@ export default function usePermissionToggle({
         ))
       ),
     }),
-    [changeSet, existingPermission, model, permission],
+    [changeSet, existingPermission, role, model, permission],
   );
 
   return { hasPermission, toggle, className };

@@ -12,11 +12,11 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    Types::PermissionInputType.load_permission_models(args[:grant_permissions]).each do |input|
+    Types::PermissionInputType.load_permission_input_models(args[:grant_permissions]).each do |input|
       Permission.grant(staff_position, input[:model], input[:permission])
     end
 
-    Types::PermissionInputType.load_permission_models(args[:revoke_permissions]).each do |input|
+    Types::PermissionInputType.load_permission_input_models(args[:revoke_permissions]).each do |input|
       Permission.revoke(staff_position, input[:model], input[:permission])
     end
 

@@ -55,11 +55,12 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         <PermissionsTableInput
           permissionNames={OrganizationRolePermissionNames}
           initialPermissions={initialPermissions}
+          rowType="model"
           models={[initialOrganizationRole]}
           changeSet={permissionsChangeSet}
           add={addPermission}
           remove={removePermission}
-          formatModelHeader={() => 'Permitted?'}
+          formatRowHeader={() => 'Permitted?'}
         />
       </fieldset>
     </>
