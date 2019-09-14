@@ -44,7 +44,7 @@ function NewCmsContentGroup({ history }) {
   const formSubmitted = async (event) => {
     event.preventDefault();
 
-    await createCmsContentGroup({
+    const createResult = await createCmsContentGroup({
       variables: {
         cmsContentGroup: {
           name: contentGroup.name,
@@ -54,6 +54,8 @@ function NewCmsContentGroup({ history }) {
         },
       },
     });
+
+    const newContentGroup = createResult.data.createCmsContentGroup.cms_content_group;
 
     const permissionUpdatePromises = staffPositions.map(async (staffPosition) => {
       const grantPermissions = permissionsChangeSet.getAddValues().filter((permission) => permission.role.id === staffPosition.id);
@@ -66,9 +68,9 @@ function NewCmsContentGroup({ history }) {
 
       await updateStaffPositionsMutate({
         variables: {
-          staff_position_id: staffPosition.id,
-          grantPermissions: grantPermissions.map(buildPermissionInput),
-          revokePermissions: revokePermissions.map(buildPermissionInput),
+          staffPositionId: staffPosition.id,
+          grantPermissions: grantPermissions.map((perm) => buildPermissionInput({ ...perm, model: newContentGroup })),
+          revokePermissions: revokePermissions.map((perm) => buildPermissionInput({ ...perm, model: newContentGroup })),
         },
       });
     });
