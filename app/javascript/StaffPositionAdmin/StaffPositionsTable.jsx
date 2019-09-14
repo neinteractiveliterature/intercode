@@ -37,6 +37,14 @@ function describePermissionAbilities(modelPermissions) {
 
 function describePermissionModel(model) {
   switch (model.__typename) {
+    case 'CmsContentGroup':
+      return (
+        <>
+          <span className="badge badge-secondary">CMS content</span>
+          &nbsp;
+          {model.name}
+        </>
+      );
     case 'Convention':
       return <strong>{model.name}</strong>;
     case 'EventCategory':

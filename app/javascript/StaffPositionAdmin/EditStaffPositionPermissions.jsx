@@ -12,11 +12,12 @@ import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
 import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 
+const CmsContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
 const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
 
 function EditStaffPositionPermissions({
-  staffPosition, convention, eventCategories, history,
+  staffPosition, convention, history,
 }) {
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
@@ -73,7 +74,7 @@ function EditStaffPositionPermissions({
           permissionNames={EventCategoryPermissionNames}
           initialPermissions={staffPosition.permissions}
           rowType="model"
-          models={eventCategories}
+          models={convention.event_categories}
           changeSet={changeSet}
           add={add}
           remove={remove}
@@ -86,6 +87,20 @@ function EditStaffPositionPermissions({
               {eventCategory.name}
             </span>
           )}
+        />
+      </section>
+
+      <section className="mb-4">
+        <PermissionsTableInput
+          permissionNames={CmsContentGroupPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          rowType="model"
+          models={convention.cms_content_groups}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          rowsHeader="CMS Content Group"
+          formatRowHeader={(contentGroup) => contentGroup.name}
         />
       </section>
 
@@ -115,12 +130,16 @@ EditStaffPositionPermissions.propTypes = {
       permission: PropTypes.string.isRequired,
     })).isRequired,
   }).isRequired,
-  eventCategories: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
   convention: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    event_categories: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+    cms_content_groups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
