@@ -1,33 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
-import { CreateContentGroup } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
+import { UpdateContentGroup } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
-import { useCreateMutation } from '../../MutationUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 
-function NewCmsContentGroup({ history }) {
+function EditCmsContentGroup({ match: { params }, history }) {
   const { data, error } = useQuerySuspended(CmsContentGroupsAdminQuery);
-  const mutate = useCreateMutation(CreateContentGroup, {
-    query: CmsContentGroupsAdminQuery,
-    arrayPath: ['cmsContentGroups'],
-    newObjectPath: ['createCmsContentGroup', 'cms_content_group'],
-  });
-  const [createCmsContentGroup, createError, createInProgress] = useAsyncFunction(mutate);
+  const initialContentGroup = useMemo(
+    () => {
+      if (error) {
+        return null;
+      }
+
+      return data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === params.id);
+    },
+    [data, error, params.id],
+  );
+  const [mutate] = useMutation(UpdateContentGroup);
+  const [updateCmsContentGroup, updateError, updateInProgress] = useAsyncFunction(mutate);
   const [contentGroup, setContentGroup] = useState({
     name: '',
     contents: [],
     permissions: [],
+    ...(initialContentGroup || {}),
   });
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
 
-  usePageTitle('New Content Group');
+  usePageTitle(`Editing “${(initialContentGroup || {}).name}”`);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -36,15 +43,20 @@ function NewCmsContentGroup({ history }) {
   const formSubmitted = async (event) => {
     event.preventDefault();
 
-    await createCmsContentGroup({
+    await updateCmsContentGroup({
       variables: {
+        id: initialContentGroup.id,
         cmsContentGroup: {
           name: contentGroup.name,
           contents: contentGroup.contents.map(({ id, __typename }) => ({
             id, content_type: __typename,
           })),
         },
-        permissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
+        grantPermissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
+        revokePermissions: permissionsChangeSet.getRemoveIds()
+          .map((removeId) => buildPermissionInput(
+            initialContentGroup.permissions.find((perm) => perm.id === removeId),
+          )),
       },
     });
 
@@ -53,34 +65,43 @@ function NewCmsContentGroup({ history }) {
 
   return (
     <form onSubmit={formSubmitted}>
-      <h3 className="mb-4">New content group</h3>
+      <h3 className="mb-4">
+        Editing
+        {' '}
+        {initialContentGroup.name}
+      </h3>
 
       <CmsContentGroupFormFields
         contentGroup={contentGroup}
         setContentGroup={setContentGroup}
-        disabled={createInProgress}
+        disabled={updateInProgress}
         convention={data.convention}
         permissionsChangeSet={permissionsChangeSet}
         addPermission={addPermission}
         removePermission={removePermission}
       />
 
-      <ErrorDisplay graphQLError={createError} />
+      <ErrorDisplay graphQLError={updateError} />
 
       <input
         type="submit"
-        value="Create content group"
+        value="Update content group"
         className="btn btn-primary"
-        disabled={createInProgress}
+        disabled={updateInProgress}
       />
     </form>
   );
 }
 
-NewCmsContentGroup.propTypes = {
+EditCmsContentGroup.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
-export default NewCmsContentGroup;
+export default EditCmsContentGroup;

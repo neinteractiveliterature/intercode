@@ -28,10 +28,10 @@ export function findPermission(currentPermissions, { role, model, permission }) 
 
 export function buildPermissionInput(permission) {
   return {
-    model_type: permission.model.__typename,
-    model_id: permission.model.id,
-    role_type: permission.role.__typename,
-    role_id: permission.role.id,
+    model_type: (permission.model || {}).__typename,
+    model_id: (permission.model || {}).id,
+    role_type: (permission.role || {}).__typename,
+    role_id: (permission.role || {}).id,
     permission: permission.permission,
   };
 }
