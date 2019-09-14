@@ -32,6 +32,11 @@ query StaffPositionsQuery {
       default_color
     }
 
+    cms_content_groups {
+      id
+      name
+    }
+
     staff_positions {
       id
       ...StaffPositionFields

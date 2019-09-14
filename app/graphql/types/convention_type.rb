@@ -26,6 +26,7 @@ class Types::ConventionType < Types::BaseObject
   end
   field :forms, [Types::FormType], null: false
   field :cms_layouts, [Types::CmsLayoutType], null: true
+  field :cms_content_groups, [Types::CmsContentGroupType], null: false
   field :default_layout, Types::CmsLayoutType, null: true
   field :cms_navigation_items, [Types::CmsNavigationItemType], null: true
   field :pages, [Types::PageType], null: true
@@ -42,6 +43,7 @@ class Types::ConventionType < Types::BaseObject
 
   association_loaders(
     Convention,
+    :cms_content_groups,
     :cms_layouts,
     :cms_navigation_items,
     :default_layout,
