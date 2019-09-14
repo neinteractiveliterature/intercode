@@ -11,6 +11,7 @@ import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
 import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
+import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 
 const CmsContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
@@ -23,6 +24,64 @@ function EditStaffPositionPermissions({
   const [error, setError] = useState(null);
   const [mutationInProgress, setMutationInProgress] = useState(false);
   const [mutate] = useMutation(UpdateStaffPositionPermissions);
+  const tabProps = useTabs([
+    {
+      id: 'convention',
+      name: 'Convention',
+      renderContent: () => (
+        <PermissionsListInput
+          permissionNames={ConventionPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          model={convention}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          header={convention.name}
+        />
+      ),
+    },
+    {
+      id: 'eventCategories',
+      name: 'Event categories',
+      renderContent: () => (
+        <PermissionsTableInput
+          permissionNames={EventCategoryPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          rowType="model"
+          models={convention.event_categories}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          rowsHeader="Event Category"
+          formatRowHeader={(eventCategory) => (
+            <span
+              className="p-1 rounded"
+              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+            >
+              {eventCategory.name}
+            </span>
+          )}
+        />
+      ),
+    },
+    {
+      id: 'cmsContentGroups',
+      name: 'CMS Content Groups',
+      renderContent: () => (
+        <PermissionsTableInput
+          permissionNames={CmsContentGroupPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          rowType="model"
+          models={convention.cms_content_groups}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          rowsHeader="CMS Content Group"
+          formatRowHeader={(contentGroup) => contentGroup.name}
+        />
+      ),
+    },
+  ]);
 
   usePageTitle(`Editing permissions for “${staffPosition.name}”`);
 
@@ -57,51 +116,9 @@ function EditStaffPositionPermissions({
         {' Permissions'}
       </h1>
 
-      <section className="mb-4">
-        <PermissionsListInput
-          permissionNames={ConventionPermissionNames}
-          initialPermissions={staffPosition.permissions}
-          model={convention}
-          changeSet={changeSet}
-          add={add}
-          remove={remove}
-          header={convention.name}
-        />
-      </section>
-
-      <section className="mb-4">
-        <PermissionsTableInput
-          permissionNames={EventCategoryPermissionNames}
-          initialPermissions={staffPosition.permissions}
-          rowType="model"
-          models={convention.event_categories}
-          changeSet={changeSet}
-          add={add}
-          remove={remove}
-          rowsHeader="Event Category"
-          formatRowHeader={(eventCategory) => (
-            <span
-              className="p-1 rounded"
-              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
-            >
-              {eventCategory.name}
-            </span>
-          )}
-        />
-      </section>
-
-      <section className="mb-4">
-        <PermissionsTableInput
-          permissionNames={CmsContentGroupPermissionNames}
-          initialPermissions={staffPosition.permissions}
-          rowType="model"
-          models={convention.cms_content_groups}
-          changeSet={changeSet}
-          add={add}
-          remove={remove}
-          rowsHeader="CMS Content Group"
-          formatRowHeader={(contentGroup) => contentGroup.name}
-        />
+      <TabList {...tabProps} />
+      <section className="mt-2">
+        <TabBody {...tabProps} />
       </section>
 
       <ErrorDisplay graphQLError={error} />
