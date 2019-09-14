@@ -49,4 +49,22 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
       end
     end
   end
+
+  %i[
+    cms_layout
+    cms_partial
+    page
+  ].each do |cms_model_name|
+    model_class = cms_model_name.to_s.camelize.safe_constantize
+    policy_finder = Pundit::PolicyFinder.new(model_class)
+    policy_class = policy_finder.policy!
+
+    it "lets users with update_content manage #{cms_model_name.to_s.pluralize} in the group" do
+      model = create(cms_model_name)
+      content_group = create(:cms_content_group, parent: model.parent)
+      content_group.cms_content_group_associations.create!(content: model)
+      user = create_user_with_update_content_in_cms_content_group(content_group)
+      assert policy_class.new(user, model).manage?
+    end
+  end
 end

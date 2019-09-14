@@ -56,6 +56,14 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     )
   end
 
+  def cms_content_groups_with_permission(*permissions)
+    CmsContentGroup.where(
+      id: user_permission_scope.where(
+        permission: permissions
+      ).select(:cms_content_group_id)
+    )
+  end
+
   def has_organization_permission?(organization_id, *permissions)
     return false unless organization_id && permissions.present? && user
 
