@@ -1,3 +1,5 @@
+#import "../Permissions/fragments.gql"
+
 fragment StaffPositionFields on StaffPosition {
   id
   name
@@ -14,18 +16,7 @@ fragment StaffPositionFields on StaffPosition {
     permission
 
     model {
-      __typename
-
-      ...on Convention {
-        id
-        name
-      }
-
-      ...on EventCategory {
-        id
-        name
-        default_color
-      }
+      ...PermissionedModelFields
     }
   }
 }
