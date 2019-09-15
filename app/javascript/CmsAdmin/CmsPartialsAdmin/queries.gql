@@ -3,12 +3,18 @@ fragment CmsPartialFields on CmsPartial {
   name
   content
   admin_notes
+  current_ability_can_update
+  current_ability_can_delete
 }
 
 query CmsPartialsAdminQuery {
   convention {
     id
     name
+  }
+
+  currentAbility {
+    can_create_cms_partials
   }
 
   cmsPartials {

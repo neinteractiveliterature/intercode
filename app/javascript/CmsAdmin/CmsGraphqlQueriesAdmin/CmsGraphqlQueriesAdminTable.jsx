@@ -44,28 +44,34 @@ function CmsGraphqlQueriesAdminTable() {
                 }
               </td>
               <td className="text-right">
-                <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary mr-2">Edit</Link>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-danger"
-                  onClick={() => confirm({
-                    prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
-                    action: () => deleteCmsGraphqlQuery({
-                      variables: { id: query.id },
-                    }),
-                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                  })}
-                >
-                  Delete
-                </button>
+                {query.current_ability_can_update && (
+                  <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary mr-2">Edit</Link>
+                )}
+                {query.current_ability_can_delete && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger"
+                    onClick={() => confirm({
+                      prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
+                      action: () => deleteCmsGraphqlQuery({
+                        variables: { id: query.id },
+                      }),
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                    })}
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Link to="/cms_graphql_queries/new" className="btn btn-primary">
-        New GraphQL query
-      </Link>
+      {data.currentAbility.can_create_cms_graphql_queries && (
+        <Link to="/cms_graphql_queries/new" className="btn btn-primary">
+          New GraphQL query
+        </Link>
+      )}
     </>
   );
 }

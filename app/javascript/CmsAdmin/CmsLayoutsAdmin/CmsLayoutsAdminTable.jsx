@@ -56,27 +56,33 @@ function CmsLayoutsAdminTable() {
                 }
               </td>
               <td className="text-right">
-                <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
-                  Edit
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => confirm({
-                    prompt: 'Are you sure you want to delete this layout?',
-                    action: () => deleteLayout(layout.id),
-                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                  })}
-                  className="btn btn-danger btn-sm ml-1"
-                >
-                  Delete
-                </button>
+                {layout.current_ability_can_update && (
+                  <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
+                    Edit
+                  </Link>
+                )}
+                {layout.current_ability_can_delete && (
+                  <button
+                    type="button"
+                    onClick={() => confirm({
+                      prompt: 'Are you sure you want to delete this layout?',
+                      action: () => deleteLayout(layout.id),
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                    })}
+                    className="btn btn-danger btn-sm ml-1"
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Link to="/cms_layouts/new" className="btn btn-secondary">New layout</Link>
+      {data.currentAbility.can_create_cms_layouts && (
+        <Link to="/cms_layouts/new" className="btn btn-secondary">New layout</Link>
+      )}
     </>
   );
 }

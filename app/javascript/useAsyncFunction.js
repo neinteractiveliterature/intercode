@@ -25,5 +25,6 @@ export default function useAsyncFunction(func, { suppressError } = {}) {
     ),
     error,
     inProgress,
+    () => setError(null),
   ];
 }

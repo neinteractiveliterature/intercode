@@ -33,7 +33,7 @@ export function useCreateMutation(mutation, {
 }
 
 export function useDeleteMutation(mutation, {
-  query, variables, arrayPath, idVariablePath, queryVariables, ...options
+  query, variables, arrayPath, idVariablePath, idAttribute, queryVariables, ...options
 }) {
   const mutate = useMutationCallback(mutation, { variables, ...options });
   return useCallback(
@@ -46,12 +46,17 @@ export function useDeleteMutation(mutation, {
           store.writeQuery({
             query,
             variables: queryVariables,
-            data: set(arrayPath, get(arrayPath, data).filter((object) => object.id !== id), data),
+            data: set(
+              arrayPath,
+              get(arrayPath, data)
+                .filter((object) => object[idAttribute || 'id'] !== id),
+              data,
+            ),
           });
         },
         ...mutateOptions,
       });
     },
-    [arrayPath, idVariablePath, mutate, query, queryVariables, variables],
+    [arrayPath, idVariablePath, idAttribute, mutate, query, queryVariables, variables],
   );
 }

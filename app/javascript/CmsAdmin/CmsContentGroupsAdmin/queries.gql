@@ -22,6 +22,8 @@ fragment CmsContentFields on CmsContent {
 fragment CmsContentGroupFields on CmsContentGroup {
   id
   name
+  current_ability_can_update
+  current_ability_can_delete
 
   contents {
     ...CmsContentFields
@@ -50,6 +52,10 @@ query CmsContentGroupsAdminQuery {
 
   cmsContentGroups {
     ...CmsContentGroupFields
+  }
+
+  currentAbility {
+    can_create_cms_content_groups
   }
 }
 

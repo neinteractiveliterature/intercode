@@ -10,6 +10,8 @@ fragment CmsPageFields on Page {
   content
   admin_notes
   skip_clickwrap_agreement
+  current_ability_can_update
+  current_ability_can_delete
 
   cms_layout {
     ...CmsPageAdminLayoutFields
@@ -20,6 +22,10 @@ query CmsPagesAdminQuery {
   convention {
     id
     name
+  }
+
+  currentAbility {
+    can_create_pages
   }
 
   cmsPages {
