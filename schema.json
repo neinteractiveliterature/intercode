@@ -7529,6 +7529,24 @@
               "deprecationReason": null
             },
             {
+              "name": "can_manage_any_cms_content",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "can_override_maximum_event_provided_tickets",
               "description": null,
               "args": [

@@ -15,6 +15,7 @@ type Ability {
   can_delete_ticket(ticket_id: Int!): Boolean!
   can_delete_user_con_profile(user_con_profile_id: Int!): Boolean!
   can_force_confirm_signup(signup_id: Int!): Boolean!
+  can_manage_any_cms_content: Boolean!
   can_override_maximum_event_provided_tickets: Boolean!
   can_read_admin_notes_on_event_proposal(event_proposal_id: Int!): Boolean!
   can_read_event_signups(event_id: Int!): Boolean!
