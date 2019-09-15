@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 export default function useFormResponse(response, setResponse) {
   const setResponseAttrs = useCallback(
-    newAttrs => setResponse(prevResponse => ({
+    (newAttrs) => setResponse((prevResponse) => ({
       ...prevResponse,
       form_response_attrs: {
         ...prevResponse.form_response_attrs,

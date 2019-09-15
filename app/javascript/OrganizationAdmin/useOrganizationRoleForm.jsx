@@ -9,9 +9,9 @@ import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 
 const OrganizationRolePermissionNames = flatMap(
   PermissionNames.filter(
-    permissionNameGroup => permissionNameGroup.role_type === 'OrganizationRole',
+    (permissionNameGroup) => permissionNameGroup.role_type === 'OrganizationRole',
   ),
-  permissionNameGroup => permissionNameGroup.permissions,
+  (permissionNameGroup) => permissionNameGroup.permissions,
 );
 
 export default function useOrganizationRoleForm(initialOrganizationRole) {
@@ -21,7 +21,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
 
   const initialPermissions = useMemo(
     () => initialOrganizationRole.permissions
-      .map(permission => ({ ...permission, model: initialOrganizationRole })),
+      .map((permission) => ({ ...permission, model: initialOrganizationRole })),
     [initialOrganizationRole],
   );
 
@@ -55,11 +55,12 @@ export default function useOrganizationRoleForm(initialOrganizationRole) {
         <PermissionsTableInput
           permissionNames={OrganizationRolePermissionNames}
           initialPermissions={initialPermissions}
+          rowType="model"
           models={[initialOrganizationRole]}
           changeSet={permissionsChangeSet}
           add={addPermission}
           remove={removePermission}
-          formatModelHeader={() => 'Permitted?'}
+          formatRowHeader={() => 'Permitted?'}
         />
       </fieldset>
     </>

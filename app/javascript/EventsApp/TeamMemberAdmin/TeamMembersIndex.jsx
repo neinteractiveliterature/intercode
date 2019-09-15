@@ -20,7 +20,7 @@ import { useDeleteMutation } from '../../MutationUtils';
 import { DeleteTeamMember } from './mutations.gql';
 
 function sortTeamMembers(teamMembers) {
-  return sortByLocaleString(teamMembers, teamMember => teamMember.user_con_profile.name_inverted);
+  return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted);
 }
 
 function TeamMemberActionMenu({
@@ -69,7 +69,7 @@ function TeamMemberActionMenu({
         onClick={() => confirm({
           prompt: `Are you sure you want to remove ${teamMember.user_con_profile.name_without_nickname} as a ${event.event_category.team_member_name}?`,
           action: deleteTeamMember,
-          renderError: error => <ErrorDisplay graphQLError={error} />,
+          renderError: (error) => <ErrorDisplay graphQLError={error} />,
         })}
       >
         {'Remove '}
@@ -148,7 +148,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedTeamMembers.map(teamMember => (
+                  {sortedTeamMembers.map((teamMember) => (
                     <tr key={teamMember.id}>
                       <td>
                         {teamMember.user_con_profile.name_inverted}
@@ -163,7 +163,7 @@ function TeamMembersIndex({ eventId, eventPath }) {
                         convention.ticket_mode !== 'disabled' && (
                           <td>
                             <Checkmark
-                              value={event.provided_tickets.some(ticket => (
+                              value={event.provided_tickets.some((ticket) => (
                                 ticket.user_con_profile.id
                                   === teamMember.user_con_profile.id
                               ))}

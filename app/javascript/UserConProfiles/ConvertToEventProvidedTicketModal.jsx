@@ -25,7 +25,7 @@ class ConvertToEventProvidedTicketModal extends React.Component {
 
   render = () => {
     const {
-      convention, event, userConProfile, visible, onClose,
+      convention, userConProfile, visible, onClose,
     } = this.props;
 
     return (
@@ -102,7 +102,7 @@ class ConvertToEventProvidedTicketModal extends React.Component {
             Cancel
           </button>
           <Mutation mutation={ConvertTicketToEventProvided}>
-            {mutate => (
+            {(mutate) => (
               <button
                 type="button"
                 className="btn btn-primary"
@@ -154,5 +154,18 @@ class ConvertToEventProvidedTicketModal extends React.Component {
     );
   }
 }
+
+ConvertToEventProvidedTicketModal.propTypes = {
+  convention: PropTypes.shape({
+    ticket_name: PropTypes.string.isRequired,
+  }).isRequired,
+  event: PropTypes.shape({}).isRequired,
+  userConProfile: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default ConvertToEventProvidedTicketModal;

@@ -5,6 +5,10 @@ query CmsPageQuery($slug: String, $rootPage: Boolean) {
     clickwrap_agreement
   }
 
+  currentAbility {
+    can_manage_any_cms_content
+  }
+
   myProfile {
     id
     accepted_clickwrap_agreement

@@ -1,5 +1,5 @@
 class MarkdownPresenter
-  ALLOWED_LIQUID_NODE_CLASSES = [String, Intercode::Liquid::Tags::Youtube]
+  ALLOWED_LIQUID_NODE_CLASSES = [String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube]
 
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::TextHelper

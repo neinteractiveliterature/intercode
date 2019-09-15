@@ -13,11 +13,11 @@ const ExampleTagDoc = ({ tag }) => (
         {
           tag.name
             ? (
-              <React.Fragment>
+              <>
                 <strong>Example:</strong>
                 {' '}
                 {tag.name}
-              </React.Fragment>
+              </>
             )
             : <strong>Example</strong>
         }
@@ -40,7 +40,7 @@ ExampleTagDoc.propTypes = {
 const ReturnTagWithClassDoc = ({
   tag, assignName, returnClassName, prefix,
 }) => (
-  <React.Fragment>
+  <>
     <p className="mb-1">
       <strong>Return:</strong>
       {' '}
@@ -58,7 +58,7 @@ const ReturnTagWithClassDoc = ({
         prefix={prefix}
       />
     </div>
-  </React.Fragment>
+  </>
 );
 
 ReturnTagWithClassDoc.propTypes = {
@@ -99,26 +99,26 @@ const FallbackTagDoc = ({ tag }) => (
     {
       tag.types
         ? (
-          <React.Fragment>
+          <>
             {' '}
             <em>
               [
               {tag.types.join(', ')}
               ]
             </em>
-          </React.Fragment>
+          </>
         )
         : null
     }
     {
       tag.text
         ? (
-          <React.Fragment>
+          <>
             {' '}
             &mdash;
             {' '}
             {tag.text}
-          </React.Fragment>
+          </>
         )
         : null
     }

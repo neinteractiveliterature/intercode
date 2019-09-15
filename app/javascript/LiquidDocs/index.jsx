@@ -24,14 +24,14 @@ function LiquidDocs() {
         const sortedFilters = sortByName(DocData.filter_methods);
         const sortedTags = sortByName(
           DocData.classes.filter(
-            klass => klass.tags.some(tag => tag.tag_name === 'liquid_tag_name'),
+            (klass) => klass.tags.some((tag) => tag.tag_name === 'liquid_tag_name'),
           ),
         );
 
         return (
           <>
             <Switch>
-              {sortedAssigns.map(assign => (
+              {sortedAssigns.map((assign) => (
                 <Route
                   path={`/liquid_docs/assigns/${assign.name}(\\..*)?`}
                   render={() => (
@@ -40,7 +40,7 @@ function LiquidDocs() {
                   key={`route-${assign.name}`}
                 />
               ))}
-              {sortedFilters.map(filter => (
+              {sortedFilters.map((filter) => (
                 <Route
                   path={`/liquid_docs/filters/${filter.name}(\\..*)?`}
                   render={() => (
@@ -49,7 +49,7 @@ function LiquidDocs() {
                   key={`route-${filter.name}`}
                 />
               ))}
-              {sortedTags.map(liquidTag => (
+              {sortedTags.map((liquidTag) => (
                 <Route
                   path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`}
                   render={() => (
@@ -71,7 +71,7 @@ function LiquidDocs() {
                     <h2 className="mb-2">Assigns</h2>
 
                     {
-                      sortedAssigns.map(assign => (
+                      sortedAssigns.map((assign) => (
                         <AssignDocLink compact assign={assign} key={assign.name} />
                       ))
                     }
@@ -81,7 +81,7 @@ function LiquidDocs() {
                     <h2 className="mb-2">Filters</h2>
                     <ul className="list-group">
                       {
-                        sortedFilters.map(filter => (
+                        sortedFilters.map((filter) => (
                           <FilterDocLink compact filter={filter} key={filter.name} />
                         ))
                       }
@@ -92,7 +92,7 @@ function LiquidDocs() {
                     <h2 className="mb-2">Tags</h2>
 
                     {
-                      sortedTags.map(liquidTag => (
+                      sortedTags.map((liquidTag) => (
                         <LiquidTagDocLink compact liquidTag={liquidTag} key={liquidTag.name} />
                       ))
                     }

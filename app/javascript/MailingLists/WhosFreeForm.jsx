@@ -48,7 +48,7 @@ function WhosFreeForm({ onSubmit }) {
             <TimeSelect
               timespan={startTimespan}
               value={momentToTimeObject(start)}
-              onChange={newTime => setStart(makeTimeOfDay(start, day, newTime))}
+              onChange={(newTime) => setStart(makeTimeOfDay(start, day, newTime))}
             />
           </div>
           <div>
@@ -56,7 +56,7 @@ function WhosFreeForm({ onSubmit }) {
             <TimeSelect
               timespan={finishTimespan}
               value={momentToTimeObject(finish)}
-              onChange={newTime => setFinish(makeTimeOfDay(finish, day, newTime))}
+              onChange={(newTime) => setFinish(makeTimeOfDay(finish, day, newTime))}
             />
           </div>
         </div>

@@ -19,7 +19,7 @@ function NewEvent({ history, match }) {
     () => (error
       ? null
       : data.convention.event_categories
-        .find(c => c.id === Number.parseInt(match.params.eventCategoryId, 10))
+        .find((c) => c.id === Number.parseInt(match.params.eventCategoryId, 10))
     ),
     [data, error, match],
   );

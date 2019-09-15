@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function MultipleChoiceItemDisplay({ formItem, value }) {
-  const isValueOther = v => !(formItem.properties.choices.some(choice => choice.value === v));
+  const isValueOther = (v) => !(formItem.properties.choices.some((choice) => choice.value === v));
 
   if (Array.isArray(value)) {
     const selectedChoiceLabels = formItem.properties.choices.map((choice) => {
@@ -11,15 +11,15 @@ function MultipleChoiceItemDisplay({ formItem, value }) {
       }
 
       return null;
-    }).filter(selectedChoiceLabel => selectedChoiceLabel != null);
+    }).filter((selectedChoiceLabel) => selectedChoiceLabel != null);
 
-    const otherChoiceLabels = value.filter(isValueOther).map(choice => `Other: ${choice}`);
+    const otherChoiceLabels = value.filter(isValueOther).map((choice) => `Other: ${choice}`);
 
     return <>{[...selectedChoiceLabels, ...otherChoiceLabels].join(', ')}</>;
   }
 
   const selectedChoice = formItem.properties.choices
-    .find(choice => value === choice.value);
+    .find((choice) => value === choice.value);
 
   if (selectedChoice) {
     return <>{selectedChoice.caption}</>;

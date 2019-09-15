@@ -28,7 +28,7 @@ function CmsPagesAdminTable() {
         return [];
       }
 
-      return sortByLocaleString(data.cmsPages, page => page.name);
+      return sortByLocaleString(data.cmsPages, (page) => page.name);
     },
     [data, error],
   );
@@ -37,13 +37,13 @@ function CmsPagesAdminTable() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const deletePage = id => deletePageMutate({ variables: { id } });
+  const deletePage = (id) => deletePageMutate({ variables: { id } });
 
   return (
     <>
       <table className="table table-striped">
         <tbody>
-          {pagesSorted.map(page => (
+          {pagesSorted.map((page) => (
             <tr key={page.id}>
               <td>
                 <Link to={`/pages/${page.slug}`}>{page.name}</Link>
@@ -57,27 +57,39 @@ function CmsPagesAdminTable() {
                 }
               </td>
               <td className="text-right">
-                <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
-                  Edit
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => confirm({
-                    prompt: `Are you sure you want to delete ${page.name}?`,
-                    action: () => deletePage(page.id),
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
-                  })}
-                  className="btn btn-danger btn-sm ml-1"
-                >
-                  Delete
-                </button>
+                {page.current_ability_can_update
+                  ? (
+                    <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
+                      Edit
+                    </Link>
+                  )
+                  : (
+                    <Link to={`/cms_pages/${page.id}/view_source`} className="btn btn-outline-secondary btn-sm">
+                      View source
+                    </Link>
+                  )}
+                {page.current_ability_can_delete && (
+                  <button
+                    type="button"
+                    onClick={() => confirm({
+                      prompt: `Are you sure you want to delete ${page.name}?`,
+                      action: () => deletePage(page.id),
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                    })}
+                    className="btn btn-danger btn-sm ml-1"
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Link to="/cms_pages/new" className="btn btn-secondary">New Page</Link>
+      {data.currentAbility.can_create_pages && (
+        <Link to="/cms_pages/new" className="btn btn-secondary">New Page</Link>
+      )}
     </>
   );
 }

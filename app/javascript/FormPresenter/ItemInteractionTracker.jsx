@@ -11,7 +11,7 @@ export function useItemInteractionTracking() {
   const [interactedItemIds, setInteractedItemIds] = useState(new Set());
 
   const interactWithItem = useCallback(
-    itemId => setInteractedItemIds((prevSet) => {
+    (itemId) => setInteractedItemIds((prevSet) => {
       const newInteractedItemIds = new Set(prevSet);
       newInteractedItemIds.add(itemId);
       return newInteractedItemIds;
@@ -20,7 +20,7 @@ export function useItemInteractionTracking() {
   );
 
   const hasInteractedWithItem = useCallback(
-    itemId => interactedItemIds.has(itemId),
+    (itemId) => interactedItemIds.has(itemId),
     [interactedItemIds],
   );
 
@@ -40,38 +40,3 @@ ItemInteractionProvider.propTypes = {
   interactWithItem: PropTypes.func.isRequired,
   hasInteractedWithItem: PropTypes.func.isRequired,
 };
-
-export default class ItemInteractionTracker extends React.Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      interactedItemIds: new Set(),
-    };
-  }
-
-  interactWithItem = (itemId) => {
-    this.setState((prevState) => {
-      const newInteractedItemIds = new Set(prevState.interactedItemIds);
-      newInteractedItemIds.add(itemId);
-      return { interactedItemIds: newInteractedItemIds };
-    });
-  }
-
-  hasInteractedWithItem = itemId => this.state.interactedItemIds.has(itemId)
-
-  render = () => (
-    <ItemInteractionTrackerContext.Provider
-      value={{
-        interactWithItem: this.interactWithItem,
-        hasInteractedWithItem: this.hasInteractedWithItem,
-      }}
-    >
-      {this.props.children}
-    </ItemInteractionTrackerContext.Provider>
-  )
-}

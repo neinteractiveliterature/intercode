@@ -5,14 +5,19 @@ import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import { EventProposalQueryWithOwner } from './queries.gql';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
+import useQuerySuspended from '../useQuerySuspended';
+import ErrorDisplay from '../ErrorDisplay';
 
-class EventProposalDisplay extends React.Component {
-  static propTypes = {
-    eventProposalId: PropTypes.number.isRequired,
-  };
+function EventProposalDisplay({ eventProposalId }) {
+  const { data, error } = useQuerySuspended(EventProposalQueryWithOwner, {
+    variables: { eventProposalId },
+  });
 
-  renderFormItems = ({ convention, eventProposal }) => {
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const renderFormItems = ({ convention, eventProposal }) => {
     const form = deserializeForm(eventProposal.event_category.event_proposal_form);
     const formResponse = deserializeFormResponseModel(eventProposal);
 
@@ -40,37 +45,34 @@ class EventProposalDisplay extends React.Component {
         </li>
       );
     });
-  }
+  };
 
-  render = () => (
-    <QueryWithStateDisplay
-      query={EventProposalQueryWithOwner}
-      variables={{ eventProposalId: this.props.eventProposalId }}
-    >
-      {({ data }) => (
-        <ul className="list-unstyled my-4">
-          <li className="p-3">
-            <div className="row">
-              <div className="col-md-2">
-                <strong>Submitted by</strong>
-              </div>
-              <div className="col-md-10">
-                {data.eventProposal.owner.name}
-                {' '}
+  return (
+    <ul className="list-unstyled my-4">
+      <li className="p-3">
+        <div className="row">
+          <div className="col-md-2">
+            <strong>Submitted by</strong>
+          </div>
+          <div className="col-md-10">
+            {data.eventProposal.owner.name}
+            {' '}
                 (
-                <a href={`mailto:${data.eventProposal.owner.email}`}>
-                  {data.eventProposal.owner.email}
-                </a>
+            <a href={`mailto:${data.eventProposal.owner.email}`}>
+              {data.eventProposal.owner.email}
+            </a>
                 )
-              </div>
-            </div>
-          </li>
+          </div>
+        </div>
+      </li>
 
-          {this.renderFormItems(data)}
-        </ul>
-      )}
-    </QueryWithStateDisplay>
-  )
+      {renderFormItems(data)}
+    </ul>
+  );
 }
+
+EventProposalDisplay.propTypes = {
+  eventProposalId: PropTypes.number.isRequired,
+};
 
 export default EventProposalDisplay;

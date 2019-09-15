@@ -1,17 +1,17 @@
 /* eslint-disable jsx-a11y/label-has-for */
 
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import moment from 'moment-timezone';
-import { enableUniqueIds } from 'react-html-id';
 import createFilterOptions from 'react-select-fast-filter-options';
 import memoize from 'lodash-es/memoize';
+import useUniqueId from '../useUniqueId';
 
 const NOW = new Date().getTime();
 
 const getOffset = (zone) => {
-  let offsetIndex = zone.untils.findIndex(until => until > NOW);
+  let offsetIndex = zone.untils.findIndex((until) => until > NOW);
   if (offsetIndex === -1) {
     offsetIndex = zone.untils.length - 1;
   }
@@ -20,7 +20,7 @@ const getOffset = (zone) => {
 };
 
 const buildTimezoneOptions = () => moment.tz.names()
-  .map(name => moment.tz.zone(name))
+  .map((name) => moment.tz.zone(name))
   .sort((a, b) => ((getOffset(b) - getOffset(a)) || a.name.localeCompare(b.name)))
   .map((zone) => {
     const offset = getOffset(zone);
@@ -58,47 +58,44 @@ export const loadOptions = (inputValue) => {
   return filtered;
 };
 
-class TimezoneSelect extends React.Component {
-  static propTypes = {
-    label: PropTypes.string.isRequired,
+function TimezoneSelect(props) {
+  const [options, setOptions] = useState(loadOptions(''));
+
+  const filterOptions = (input) => {
+    setOptions(loadOptions(input));
   };
 
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
+  const {
+    label, value, onChange, ...otherProps
+  } = props;
+  const selectId = useUniqueId('timezone-select-');
 
-    this.state = {
-      options: loadOptions(''),
-    };
-  }
-
-  filterOptions = (input) => {
-    this.setState({ options: loadOptions(input) });
-  }
-
-  render = () => {
-    const {
-      label, value, onChange, ...otherProps
-    } = this.props;
-    const selectId = this.nextUniqueId();
-
-    return (
-      <div className="form-group">
-        <label htmlFor={selectId}>
-          {label}
-        </label>
-        <Select
-          inputId={selectId}
-          options={this.state.options}
-          isClearable
-          value={getTimezoneOptionsByName()[value]}
-          onInputChange={input => this.filterOptions(input)}
-          onChange={(newValue) => { onChange(newValue.value); }}
-          {...otherProps}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="form-group">
+      <label htmlFor={selectId}>
+        {label}
+      </label>
+      <Select
+        inputId={selectId}
+        options={options}
+        isClearable
+        value={getTimezoneOptionsByName()[value]}
+        onInputChange={(input) => filterOptions(input)}
+        onChange={(newValue) => { onChange(newValue.value); }}
+        {...otherProps}
+      />
+    </div>
+  );
 }
+
+TimezoneSelect.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+};
+
+TimezoneSelect.defaultProps = {
+  value: null,
+};
 
 export default TimezoneSelect;

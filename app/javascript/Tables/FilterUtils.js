@@ -9,7 +9,7 @@ export function encodeStringArray(value) {
 }
 
 export function decodeStringArray(value) {
-  const decoded = value.split(',').filter(decodedValue => decodedValue.length > 0);
+  const decoded = value.split(',').filter((decodedValue) => decodedValue.length > 0);
   if (decoded.length === 0) {
     return null;
   }
@@ -21,11 +21,11 @@ export function encodeIntegerArray(value) {
     return null;
   }
 
-  return value.map(integer => integer.toString()).join(',');
+  return value.map((integer) => integer.toString()).join(',');
 }
 
 export function decodeIntegerArray(value) {
-  const decoded = value.split(',').map(Transforms.integer).filter(integer => integer != null);
+  const decoded = value.split(',').map(Transforms.integer).filter((integer) => integer != null);
   if (decoded.length === 0) {
     return null;
   }

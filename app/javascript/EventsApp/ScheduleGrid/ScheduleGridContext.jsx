@@ -30,7 +30,7 @@ export function useScheduleGridProvider(config, convention, events) {
   const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
 
   const isRunDetailsVisible = useMemo(
-    () => runId => visibleRunDetailsIds.has(runId),
+    () => (runId) => visibleRunDetailsIds.has(runId),
     [visibleRunDetailsIds],
   );
 
@@ -60,7 +60,7 @@ export function useScheduleGridProvider(config, convention, events) {
 
         const runTimespan = schedule.getRunTimespan(runId);
         const concurrentRunIds = schedule.getEventRunsOverlapping(runTimespan)
-          .map(eventRun => eventRun.runId);
+          .map((eventRun) => eventRun.runId);
 
         concurrentRunIds.forEach((concurrentRunId) => {
           newVisibleRunDetailsIds.delete(concurrentRunId);
@@ -118,7 +118,7 @@ function MobileScheduleGridProvider({ config, children }) {
       conventionTimespan={timespanFromConvention(convention)}
       timezoneName={convention.timezone_name}
     >
-      {timespan => (
+      {(timespan) => (
         <ScheduleGridContext.Provider value={providerValue}>
           {children(timespan)}
         </ScheduleGridContext.Provider>
@@ -171,7 +171,7 @@ function DesktopScheduleGridProvider({ config, children }) {
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(
-    timespan => client.query({
+    (timespan) => client.query({
       query: ScheduleGridEventsQuery,
       variables: getEventsQueryVariables(timespan, config.showExtendedCounts),
     }),
@@ -191,7 +191,7 @@ function DesktopScheduleGridProvider({ config, children }) {
       timezoneName={convention.timezone_name}
       prefetchTimespan={prefetchTimespan}
     >
-      {timespan => (
+      {(timespan) => (
         <Suspense fallback={<ScheduleGridSkeleton />}>
           <DesktopScheduleGridProviderTabContent
             config={config}

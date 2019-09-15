@@ -53,7 +53,7 @@ EmailList.propTypes = {
   emails: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-  })),
+  })).isRequired,
   separator: PropTypes.string.isRequired,
   renderToolbarContent: PropTypes.func,
 };

@@ -32,22 +32,22 @@ export default class SignupCountData {
   filterRows(filters) {
     return Object.entries(filters).reduce((filteredData, [field, value]) => {
       if (Array.isArray(value)) {
-        return filteredData.filter(row => value.includes(row[field]));
+        return filteredData.filter((row) => value.includes(row[field]));
       }
 
-      return filteredData.filter(row => value === row[field]);
+      return filteredData.filter((row) => value === row[field]);
     }, this.data);
   }
 
   sumSignupCounts(filters) {
-    return sum(this.filterRows(filters).map(row => row.signup_count));
+    return sum(this.filterRows(filters).map((row) => row.signup_count));
   }
 
   getConfirmedLimitedSignupCount(event) {
-    const limitedBuckets = event.registration_policy.buckets.filter(bucket => bucket.slots_limited);
+    const limitedBuckets = event.registration_policy.buckets.filter((bucket) => bucket.slots_limited);
     return this.sumSignupCounts({
       state: 'confirmed',
-      bucket_key: limitedBuckets.map(bucket => bucket.key),
+      bucket_key: limitedBuckets.map((bucket) => bucket.key),
       counted: true,
     });
   }

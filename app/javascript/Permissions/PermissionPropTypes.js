@@ -10,7 +10,13 @@ export const ModelPropType = PropTypes.shape({
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 });
 
+export const RolePropType = PropTypes.shape({
+  __typename: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+});
+
 export const PermissionPropType = PropTypes.shape({
-  model: ModelPropType.isRequired,
+  model: ModelPropType,
+  role: RolePropType,
   permission: PropTypes.string.isRequired,
 });

@@ -24,27 +24,27 @@ export default class Schedule {
 
     this.timezoneName = convention.timezone_name;
 
-    this.eventsById = new Map(events.map(event => [event.id, event]));
-    this.runsById = new Map(events.map(event => (
-      event.runs.map(run => [run.id, { ...run, event_id: event.id }])
+    this.eventsById = new Map(events.map((event) => [event.id, event]));
+    this.runsById = new Map(events.map((event) => (
+      event.runs.map((run) => [run.id, { ...run, event_id: event.id }])
     )).reduce((runEntries, entriesForEvent) => [...runEntries, ...entriesForEvent], []));
 
     this.conventionTimespan = timespanFromConvention(convention);
 
     this.eventRuns = EventRun.buildEventRunsFromApi(events);
     this.runTimespansById = new Map(this.eventRuns
-      .map(eventRun => [eventRun.runId, eventRun.timespan]));
+      .map((eventRun) => [eventRun.runId, eventRun.timespan]));
   }
 
-  getRun = runId => this.runsById.get(runId)
+  getRun = (runId) => this.runsById.get(runId)
 
-  getEvent = eventId => this.eventsById.get(eventId)
+  getEvent = (eventId) => this.eventsById.get(eventId)
 
-  getEventRunsOverlapping = timespan => this.eventRuns.filter(eventRun => (
+  getEventRunsOverlapping = (timespan) => this.eventRuns.filter((eventRun) => (
     timespan.overlapsTimespan(eventRun.timespan)
   ))
 
-  getRunTimespan = runId => this.runTimespansById.get(runId)
+  getRunTimespan = (runId) => this.runTimespansById.get(runId)
 
   groupEventRunsByCategory = (eventRuns) => {
     const matchRules = this.config.buildCategoryMatchRules();
@@ -81,7 +81,7 @@ export default class Schedule {
       (eventRunsByRoom, eventRun) => {
         const { runId } = eventRun;
         const run = this.runsById.get(runId);
-        let roomNames = run.room_names || (run.rooms || []).map(room => room.name);
+        let roomNames = run.room_names || (run.rooms || []).map((room) => room.name);
         if (roomNames.length === 0) {
           roomNames = ['-'];
         }
@@ -102,7 +102,7 @@ export default class Schedule {
     const roomNames = [...runsByRoomMap.keys()]
       .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' }));
 
-    return roomNames.map(roomName => ({
+    return roomNames.map((roomName) => ({
       id: roomName,
       rowHeader: roomName,
       eventRuns: runsByRoomMap.get(roomName),
@@ -116,7 +116,7 @@ export default class Schedule {
       ]);
 
     if (this.config.filterEmptyGroups) {
-      return blocks.filter(scheduleBlock => scheduleBlock[0].eventRuns.length > 0);
+      return blocks.filter((scheduleBlock) => scheduleBlock[0].eventRuns.length > 0);
     }
 
     return blocks;

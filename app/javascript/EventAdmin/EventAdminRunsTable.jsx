@@ -40,7 +40,7 @@ function EventAdminRunsTable({ eventCategoryId }) {
           </tr>
         </thead>
         <tbody>
-          {sortedEvents.map(event => (
+          {sortedEvents.map((event) => (
             <EventAdminRow
               event={event}
               convention={data.convention}
@@ -52,13 +52,13 @@ function EventAdminRunsTable({ eventCategoryId }) {
 
       <Route
         path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
-        render={props => (
+        render={(props) => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
       />
       <Route
         path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}
-        render={props => (
+        render={(props) => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
       />

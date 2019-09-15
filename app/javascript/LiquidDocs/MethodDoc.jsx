@@ -5,7 +5,7 @@ import AssignName from './AssignName';
 import TagDoc from './TagDoc';
 
 function MethodDoc({ method, prefix = null }) {
-  if (method.tags.some(tag => tag.tag_name === 'api')) {
+  if (method.tags.some((tag) => tag.tag_name === 'api')) {
     return null;
   }
 

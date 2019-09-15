@@ -16,7 +16,7 @@ function EditCmsLayout({ match, history }) {
   const { data, error } = useQuerySuspended(CmsLayoutsAdminQuery);
   const initialLayout = error
     ? null
-    : data.cmsLayouts.find(p => match.params.id === p.id.toString());
+    : data.cmsLayouts.find((p) => match.params.id === p.id.toString());
   const [layout, dispatch] = useReducer(layoutReducer, initialLayout);
   const [updateLayout, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateLayout),

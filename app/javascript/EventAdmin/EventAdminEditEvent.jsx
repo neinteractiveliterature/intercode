@@ -33,7 +33,7 @@ function EventAdminEditEvent({ match, history }) {
 
   const eventId = match.params.id;
   const initialEvent = useMemo(
-    () => (error ? null : deserializeEvent(data.events.find(e => e.id.toString() === eventId))),
+    () => (error ? null : deserializeEvent(data.events.find((e) => e.id.toString() === eventId))),
     [data.events, error, eventId],
   );
 

@@ -40,7 +40,7 @@ function ConventionAdmin({ id, history }) {
             ticket_name: convention.ticket_name,
             ticket_mode: convention.ticket_mode,
             maximum_event_signups: {
-              timespans: convention.maximum_event_signups.timespans.map(timespan => ({
+              timespans: convention.maximum_event_signups.timespans.map((timespan) => ({
                 start: timespan.start,
                 finish: timespan.finish,
                 string_value: timespan.value,

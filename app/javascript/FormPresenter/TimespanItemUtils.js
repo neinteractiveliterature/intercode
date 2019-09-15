@@ -6,7 +6,7 @@ export const UNITS = [
 export function getUnitForValue(value) {
   if (typeof value === 'number') {
     return (
-      UNITS.find(unit => value % unit.length_seconds === 0)
+      UNITS.find((unit) => value % unit.length_seconds === 0)
       || UNITS[UNITS.length - 1]
     );
   }

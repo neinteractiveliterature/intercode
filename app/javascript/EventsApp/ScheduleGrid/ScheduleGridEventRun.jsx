@@ -326,7 +326,7 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
           style: popperStyle,
         }) => {
           if (!detailsVisible) {
-            return <React.Fragment />;
+            return <></>;
           }
 
           return (

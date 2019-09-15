@@ -15,13 +15,14 @@ function renderCommonRoutes() {
     <Route path="/cms_layouts" component={PageComponents.CmsAdmin} key="cmsLayouts" />,
     <Route path="/cms_variables" component={PageComponents.CmsAdmin} key="cmsVariables" />,
     <Route path="/cms_graphql_queries" component={PageComponents.CmsAdmin} key="cmsGraphqlQueries" />,
+    <Route path="/cms_content_groups" component={PageComponents.CmsAdmin} key="cmsContentGroups" />,
     <Route path="/oauth/applications-embed" component={PageComponents.OAuthApplications} key="oauthApplications" />,
     <Route path="/oauth/authorize" component={PageComponents.OAuthAuthorizationPrompt} key="oauthAuthorization" />,
     <Route path="/users/edit" component={PageComponents.EditUser} key="editUser" />,
     <Route path="/users/password/edit" component={PageComponents.ResetPassword} key="resetPassword" />,
     <Route
       path="/pages/:slug([a-zA-Z0-9\-/]+)"
-      render={routeProps => (
+      render={(routeProps) => (
         <PageComponents.CmsPage {...routeProps} slug={routeProps.match.params.slug} />
       )}
       key="cmsPage"
@@ -29,7 +30,7 @@ function renderCommonRoutes() {
     <Route
       path="/"
       exact
-      render={routeProps => (
+      render={(routeProps) => (
         <PageComponents.CmsPage {...routeProps} rootPage />
       )}
       key="cmsRootPage"

@@ -16,7 +16,7 @@ function AssignDoc({ assign, prefix = null }) {
   }
 
   const sortedMethods = assignClass.methods.sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
-  const prefixParts = (prefix || '').split('.').filter(part => part.length > 0);
+  const prefixParts = (prefix || '').split('.').filter((part) => part.length > 0);
 
   return (
     <Switch>
@@ -85,7 +85,7 @@ function AssignDoc({ assign, prefix = null }) {
               }
 
               <ul className="list-group list-group-flush">
-                {sortedMethods.map(method => (
+                {sortedMethods.map((method) => (
                   <MethodDoc
                     method={method}
                     prefix={buildMemberPrefix(assign.name, prefix)}

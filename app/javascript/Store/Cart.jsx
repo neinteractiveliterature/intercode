@@ -33,12 +33,12 @@ function Cart({ history }) {
   );
 
   const deleteOrderEntry = useCallback(
-    id => deleteMutate({
+    (id) => deleteMutate({
       variables: { input: { id } },
       update: (proxy) => {
         const storeData = proxy.readQuery({ query: CartQuery });
         storeData.currentPendingOrder.order_entries = storeData.currentPendingOrder.order_entries
-          .filter(entry => entry.id !== id);
+          .filter((entry) => entry.id !== id);
         proxy.writeQuery({ query: CartQuery, data: storeData });
       },
     }),
@@ -74,7 +74,7 @@ function Cart({ history }) {
     return 'Your cart is empty.';
   }
 
-  const rows = data.currentPendingOrder.order_entries.map(entry => (
+  const rows = data.currentPendingOrder.order_entries.map((entry) => (
     <tr key={entry.id}>
       <td>
         {entry.product.name}
@@ -102,7 +102,7 @@ function Cart({ history }) {
             confirm({
               prompt: `Are you sure you want to remove ${name} from your cart?`,
               action: () => deleteOrderEntry(entry.id),
-              renderError: e => <ErrorDisplay graphQLError={e} />,
+              renderError: (e) => <ErrorDisplay graphQLError={e} />,
             });
           }}
         >
@@ -114,7 +114,7 @@ function Cart({ history }) {
   ));
 
   const totalPrice = data.currentPendingOrder.order_entries
-    .map(entry => entry.price.fractional)
+    .map((entry) => entry.price.fractional)
     .reduce((total, entryPrice) => total + entryPrice, 0);
 
   const currencyCode = (
@@ -167,7 +167,7 @@ function Cart({ history }) {
         paymentOptions={
           intersection(
             ...((data.currentPendingOrder || {}).order_entries || [])
-              .map(entry => entry.product.payment_options),
+              .map((entry) => entry.product.payment_options),
           )
         }
       />

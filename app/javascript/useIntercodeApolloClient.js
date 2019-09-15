@@ -19,7 +19,7 @@ function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
 
   const AuthLink = useMemo(
     () => (operation, next) => {
-      operation.setContext(context => ({
+      operation.setContext((context) => ({
         ...context,
         credentials: 'same-origin',
         headers: {
@@ -36,7 +36,7 @@ function useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef) {
   const ErrorHandlerLink = useMemo(
     () => onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
-        if (graphQLErrors.some(err => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
+        if (graphQLErrors.some((err) => (err.extensions || {}).code === 'NOT_AUTHENTICATED')) {
           onUnauthenticatedRef.current();
         }
       }

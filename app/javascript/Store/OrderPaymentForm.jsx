@@ -6,19 +6,6 @@ import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import { mutator, Transforms } from '../ComposableFormUtils';
 
 class OrderPaymentForm extends React.Component {
-  static propTypes = {
-    onChange: PropTypes.func.isRequired,
-    disabled: PropTypes.bool.isRequired,
-    paymentDetails: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      ccNumber: PropTypes.string.isRequired,
-      cvc: PropTypes.string.isRequired,
-      expMonth: PropTypes.string.isRequired,
-      expYear: PropTypes.string.isRequired,
-      zip: PropTypes.string.isRequired,
-    }).isRequired,
-  };
-
   constructor(props) {
     super(props);
 
@@ -56,5 +43,18 @@ class OrderPaymentForm extends React.Component {
     );
   }
 }
+
+OrderPaymentForm.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  paymentDetails: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    ccNumber: PropTypes.string.isRequired,
+    cvc: PropTypes.string.isRequired,
+    expMonth: PropTypes.string.isRequired,
+    expYear: PropTypes.string.isRequired,
+    zip: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default OrderPaymentForm;

@@ -35,7 +35,7 @@ class ProvideTicketModal extends React.Component {
 
         data.event.provided_tickets.push(ticket);
         const teamMemberToUpdate = data.event.team_members
-          .find(tm => teamMember.id === tm.id);
+          .find((tm) => teamMember.id === tm.id);
         teamMemberToUpdate.user_con_profile.ticket = ticket;
 
         store.writeQuery({
@@ -112,7 +112,7 @@ class ProvideTicketModal extends React.Component {
                     Cancel
                   </button>
                   <Mutation mutation={ProvideEventTicket}>
-                    {mutate => (
+                    {(mutate) => (
                       <button
                         type="button"
                         className="btn btn-primary"

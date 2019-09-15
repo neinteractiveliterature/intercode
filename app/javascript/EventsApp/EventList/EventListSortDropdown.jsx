@@ -18,11 +18,11 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
   }
 
   const currentSort = (
-    mySortOrders.find(order => isEqual(order.sorted, value))
+    mySortOrders.find((order) => isEqual(order.sorted, value))
     || mySortOrders[0]
   );
 
-  const sortOptions = mySortOrders.map(order => (
+  const sortOptions = mySortOrders.map((order) => (
     <button
       className="dropdown-item"
       key={order.caption}

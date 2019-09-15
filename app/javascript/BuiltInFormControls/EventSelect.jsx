@@ -8,10 +8,10 @@ function EventSelect({ eventsQuery, ...otherProps }) {
   return (
     <GraphQLAsyncSelect
       isClearable
-      getOptions={data => data.convention.events_paginated.entries}
-      getVariables={inputValue => ({ title: inputValue })}
-      getOptionValue={option => option.id}
-      getOptionLabel={option => option.title}
+      getOptions={(data) => data.convention.events_paginated.entries}
+      getVariables={(inputValue) => ({ title: inputValue })}
+      getOptionValue={(option) => option.id}
+      getOptionLabel={(option) => option.title}
       query={eventsQuery || DefaultEventsQuery}
       {...otherProps}
     />

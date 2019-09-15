@@ -64,7 +64,7 @@ function NewUserActivityAlert({ history }) {
   };
 
   return (
-    <React.Fragment>
+    <>
       <h1 className="mb-4">New user activity alert</h1>
 
       <UserActivityAlertForm
@@ -86,7 +86,7 @@ function NewUserActivityAlert({ history }) {
       >
         Create user activity alert
       </button>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -64,7 +64,7 @@ function FormAdmin() {
             <FormJSONEditor
               history={history}
               initialForm={data.convention.forms
-                .find(form => form.id.toString(10) === match.params.id)}
+                .find((form) => form.id.toString(10) === match.params.id)}
             />
           )}
         />

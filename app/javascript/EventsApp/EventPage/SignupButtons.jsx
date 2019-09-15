@@ -12,7 +12,7 @@ function SignupButtons({
 
   return (
     <div className="d-flex flex-wrap justify-content-center">
-      {signupOptions.map(signupOption => (
+      {signupOptions.map((signupOption) => (
         <SignupButtonDisplay
           key={signupOption.key}
           signupOption={signupOption}

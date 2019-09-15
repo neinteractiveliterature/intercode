@@ -1,45 +1,87 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import flatMap from 'lodash-es/flatMap';
 import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
-import PermissionNames from '../../../config/permission_names.json';
 import { UpdateStaffPositionPermissions } from './mutations.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
+import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
+import { useTabs, TabList, TabBody } from '../UIComponents/Tabs';
 
-function buildPermissionInput(permission) {
-  return {
-    model_type: permission.model.__typename,
-    model_id: permission.model.id,
-    permission: permission.permission,
-  };
-}
-
-function getPermissionNamesForModelType(modelType) {
-  return flatMap(
-    PermissionNames.filter(
-      permissionNameGroup => permissionNameGroup.model_type === modelType,
-    ),
-    permissionNameGroup => permissionNameGroup.permissions,
-  );
-}
-
+const CmsContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 const EventCategoryPermissionNames = getPermissionNamesForModelType('EventCategory');
 const ConventionPermissionNames = getPermissionNamesForModelType('Convention');
 
 function EditStaffPositionPermissions({
-  staffPosition, convention, eventCategories, history,
+  staffPosition, convention, history,
 }) {
   const [changeSet, add, remove] = useChangeSet();
   const [error, setError] = useState(null);
   const [mutationInProgress, setMutationInProgress] = useState(false);
   const [mutate] = useMutation(UpdateStaffPositionPermissions);
+  const tabProps = useTabs([
+    {
+      id: 'convention',
+      name: 'Convention',
+      renderContent: () => (
+        <PermissionsListInput
+          permissionNames={ConventionPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          model={convention}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          header={convention.name}
+        />
+      ),
+    },
+    {
+      id: 'eventCategories',
+      name: 'Event categories',
+      renderContent: () => (
+        <PermissionsTableInput
+          permissionNames={EventCategoryPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          rowType="model"
+          models={convention.event_categories}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          rowsHeader="Event Category"
+          formatRowHeader={(eventCategory) => (
+            <span
+              className="p-1 rounded"
+              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
+            >
+              {eventCategory.name}
+            </span>
+          )}
+        />
+      ),
+    },
+    {
+      id: 'cmsContentGroups',
+      name: 'CMS Content Groups',
+      renderContent: () => (
+        <PermissionsTableInput
+          permissionNames={CmsContentGroupPermissionNames}
+          initialPermissions={staffPosition.permissions}
+          rowType="model"
+          models={convention.cms_content_groups}
+          changeSet={changeSet}
+          add={add}
+          remove={remove}
+          rowsHeader="CMS Content Group"
+          formatRowHeader={(contentGroup) => contentGroup.name}
+        />
+      ),
+    },
+  ]);
 
   usePageTitle(`Editing permissions for “${staffPosition.name}”`);
 
@@ -53,7 +95,7 @@ function EditStaffPositionPermissions({
             .map(buildPermissionInput),
           revokePermissions: changeSet.getRemoveIds().map((removeId) => {
             const existingPermission = staffPosition.permissions
-              .find(p => p.id === removeId);
+              .find((p) => p.id === removeId);
 
             return buildPermissionInput(existingPermission);
           }),
@@ -74,36 +116,9 @@ function EditStaffPositionPermissions({
         {' Permissions'}
       </h1>
 
-      <section className="mb-4">
-        <PermissionsListInput
-          permissionNames={ConventionPermissionNames}
-          initialPermissions={staffPosition.permissions}
-          model={convention}
-          changeSet={changeSet}
-          add={add}
-          remove={remove}
-          header={convention.name}
-        />
-      </section>
-
-      <section className="mb-4">
-        <PermissionsTableInput
-          permissionNames={EventCategoryPermissionNames}
-          initialPermissions={staffPosition.permissions}
-          models={eventCategories}
-          changeSet={changeSet}
-          add={add}
-          remove={remove}
-          modelsHeader="Event Category"
-          formatModelHeader={eventCategory => (
-            <span
-              className="p-1 rounded"
-              style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
-            >
-              {eventCategory.name}
-            </span>
-          )}
-        />
+      <TabList {...tabProps} />
+      <section className="mt-2">
+        <TabBody {...tabProps} />
       </section>
 
       <ErrorDisplay graphQLError={error} />
@@ -132,12 +147,16 @@ EditStaffPositionPermissions.propTypes = {
       permission: PropTypes.string.isRequired,
     })).isRequired,
   }).isRequired,
-  eventCategories: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
   convention: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    event_categories: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+    cms_content_groups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,

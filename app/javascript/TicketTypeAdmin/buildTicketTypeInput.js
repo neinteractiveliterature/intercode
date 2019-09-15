@@ -7,7 +7,7 @@ export default function buildTicketTypeInput(ticketType) {
     allows_event_signups: ticketType.allows_event_signups,
     description: ticketType.description,
     pricing_schedule: {
-      timespans: ticketType.pricing_schedule.timespans.map(timespan => ({
+      timespans: ticketType.pricing_schedule.timespans.map((timespan) => ({
         start: timespan.start,
         finish: timespan.finish,
         value: {

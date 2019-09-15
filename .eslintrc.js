@@ -1,4 +1,5 @@
 const schemaJson = require('./schema.json');
+const path = require('path');
 
 module.exports = {
   env: {
@@ -52,6 +53,7 @@ module.exports = {
     ],
     'no-underscore-dangle': ['error', { allow: ['__typename'] } ],
     'react/destructuring-assignment': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'jsx-a11y/label-has-for': 'off',
     'jsx-a11y/label-has-associated-control': [
       'error',
@@ -68,7 +70,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       'webpack': {
-        config: './config/webpack/environment.js',
+        config: path.resolve(__dirname, './config/webpack/environment.js'),
       },
     },
     'import/ignore': [
