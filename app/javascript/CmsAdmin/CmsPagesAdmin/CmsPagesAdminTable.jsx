@@ -57,11 +57,17 @@ function CmsPagesAdminTable() {
                 }
               </td>
               <td className="text-right">
-                {page.current_ability_can_update && (
-                  <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
-                    Edit
-                  </Link>
-                )}
+                {page.current_ability_can_update
+                  ? (
+                    <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
+                      Edit
+                    </Link>
+                  )
+                  : (
+                    <Link to={`/cms_pages/${page.id}/view_source`} className="btn btn-outline-secondary btn-sm">
+                      View source
+                    </Link>
+                  )}
                 {page.current_ability_can_delete && (
                   <button
                     type="button"

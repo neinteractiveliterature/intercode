@@ -15,6 +15,7 @@ function PermissionsTableCell({
   permission,
   grantPermission,
   revokePermission,
+  readOnly,
 }) {
   const { toggle, hasPermission, className } = usePermissionToggle({
     grantPermission,
@@ -24,18 +25,25 @@ function PermissionsTableCell({
     permission,
     initialPermissions,
     changeSet,
+    readOnly,
     currentPermissions,
   });
+
+  const toggleWithReadOnlyCheck = () => {
+    if (!readOnly) {
+      toggle();
+    }
+  };
 
   return (
     <td
       role="gridcell"
       className={className}
-      tabIndex={0}
-      onClick={toggle}
+      tabIndex={readOnly ? null : 0}
+      onClick={toggleWithReadOnlyCheck}
       onKeyDown={(event) => {
         if (event.keyCode === 32 || event.keyCode === 13) {
-          toggle();
+          toggleWithReadOnlyCheck();
         }
       }}
     >
@@ -56,11 +64,13 @@ PermissionsTableCell.propTypes = {
   }).isRequired,
   grantPermission: PropTypes.func.isRequired,
   revokePermission: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
 };
 
 PermissionsTableCell.defaultProps = {
   model: null,
   role: null,
+  readOnly: false,
 };
 
 export default PermissionsTableCell;

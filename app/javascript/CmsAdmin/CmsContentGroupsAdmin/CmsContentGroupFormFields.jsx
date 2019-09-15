@@ -13,7 +13,7 @@ import { PermissionPropType } from '../../Permissions/PermissionPropTypes';
 const ContentGroupPermissionNames = getPermissionNamesForModelType('CmsContentGroup');
 
 function CmsContentGroupFormFields({
-  contentGroup, setContentGroup, disabled, convention,
+  contentGroup, setContentGroup, disabled, readOnly, convention,
   permissionsChangeSet, addPermission, removePermission,
 }) {
   const [staffPositions, setStaffPositions] = useState(
@@ -37,6 +37,7 @@ function CmsContentGroupFormFields({
         value={contentGroup.name}
         onTextChange={(name) => setContentGroup({ ...contentGroup, name })}
         disabled={disabled}
+        readOnly={readOnly}
       />
 
       <FormGroupWithLabel label="Contents" name="contents">
@@ -46,7 +47,7 @@ function CmsContentGroupFormFields({
             value={contentGroup.contents}
             inputId={id}
             onChange={(contents) => setContentGroup({ ...contentGroup, contents })}
-            disabled={disabled}
+            isDisabled={disabled || readOnly}
           />
         )}
       </FormGroupWithLabel>
@@ -63,20 +64,20 @@ function CmsContentGroupFormFields({
               initialPermissions={contentGroup.permissions}
               rowType="role"
               roles={staffPositions}
-              changeSet={permissionsChangeSet}
-              add={addPermission}
-              remove={removePermission}
               formatRowHeader={(staffPosition) => staffPosition.name}
+              readOnly={readOnly}
             />
           )}
 
-          <SelectWithLabel
-            label="Add staff position"
-            options={convention.staff_positions}
-            getOptionValue={(staffPosition) => staffPosition.id}
-            getOptionLabel={(staffPosition) => staffPosition.name}
-            onChange={addStaffPosition}
-          />
+          {!readOnly && (
+            <SelectWithLabel
+              label="Add staff position"
+              options={convention.staff_positions}
+              getOptionValue={(staffPosition) => staffPosition.id}
+              getOptionLabel={(staffPosition) => staffPosition.name}
+              onChange={addStaffPosition}
+            />
+          )}
         </div>
       </section>
     </>
@@ -89,18 +90,24 @@ CmsContentGroupFormFields.propTypes = {
     contents: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     permissions: PropTypes.arrayOf(PermissionPropType).isRequired,
   }).isRequired,
-  setContentGroup: PropTypes.func.isRequired,
+  setContentGroup: PropTypes.func,
   disabled: PropTypes.bool,
+  readOnly: PropTypes.bool,
   convention: PropTypes.shape({
     staff_positions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
-  permissionsChangeSet: PropTypes.shape({}).isRequired,
-  addPermission: PropTypes.func.isRequired,
-  removePermission: PropTypes.func.isRequired,
+  permissionsChangeSet: PropTypes.shape({}),
+  addPermission: PropTypes.func,
+  removePermission: PropTypes.func,
 };
 
 CmsContentGroupFormFields.defaultProps = {
   disabled: false,
+  readOnly: false,
+  setContentGroup: null,
+  permissionsChangeSet: null,
+  addPermission: null,
+  removePermission: null,
 };
 
 export default CmsContentGroupFormFields;

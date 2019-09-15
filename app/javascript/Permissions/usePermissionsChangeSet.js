@@ -6,7 +6,7 @@ export default function usePermissionsChangeSet({
   initialPermissions, changeSet, add, remove,
 }) {
   const currentPermissions = useMemo(
-    () => changeSet.apply(initialPermissions),
+    () => (changeSet ? changeSet.apply(initialPermissions) : initialPermissions),
     [changeSet, initialPermissions],
   );
 

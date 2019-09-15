@@ -1,26 +1,32 @@
-import React from 'react';
-import { ApolloConsumer } from 'react-apollo';
+import React, { useState } from 'react';
 import classNames from 'classnames';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import CodeInput from './CodeInput';
 import { PreviewLiquidQuery } from './previewQueries.gql';
 
-class LiquidInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showingDocs: false,
-      currentDocTab: 'convention',
-    };
-  }
+function LiquidInput(props) {
+  const [showingDocs, setShowingDocs] = useState(false);
+  const [currentDocTab, setCurrentDocTab] = useState('convention');
+  const client = useApolloClient();
 
-  docTabClicked = (event, tab) => {
+  const docTabClicked = (event, tab) => {
     event.preventDefault();
-    this.setState({ currentDocTab: tab });
-  }
+    setCurrentDocTab(tab);
+  };
 
-  renderDocs = () => {
-    if (!this.state.showingDocs) {
+  const getPreviewContent = async (liquid) => {
+    const response = await client.query({
+      query: PreviewLiquidQuery,
+      variables: { liquid },
+      fetchPolicy: 'no-cache',
+    });
+
+    return response.data.previewLiquid;
+  };
+
+  const renderDocs = () => {
+    if (!showingDocs) {
       return null;
     }
 
@@ -31,21 +37,21 @@ class LiquidInput extends React.Component {
             <div className="flex-grow-1 pt-1">
               <ul className="nav nav-tabs pl-2 justify-content-center">
                 <li className="nav-item">
-                  { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
+                  { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     href="#"
-                    className={classNames('nav-link', { active: this.state.currentDocTab === 'convention' })}
-                    onClick={(e) => this.docTabClicked(e, 'convention')}
+                    className={classNames('nav-link', { active: currentDocTab === 'convention' })}
+                    onClick={(e) => docTabClicked(e, 'convention')}
                   >
                     Convention-specific markup
                   </a>
                 </li>
                 <li className="nav-item">
-                  { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
+                  { /* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     href="#"
-                    className={classNames('nav-link', { active: this.state.currentDocTab === 'core' })}
-                    onClick={(e) => this.docTabClicked(e, 'core')}
+                    className={classNames('nav-link', { active: currentDocTab === 'core' })}
+                    onClick={(e) => docTabClicked(e, 'core')}
                   >
                     Core Liquid markup
                   </a>
@@ -57,7 +63,7 @@ class LiquidInput extends React.Component {
                 type="button"
                 className="btn btn-link btn-sm mr-3 text-body"
                 style={{ cursor: 'pointer' }}
-                onClick={() => { this.setState({ showingDocs: false }); }}
+                onClick={() => setShowingDocs(false)}
               >
                 <i className="fa fa-close" title="Close" />
               </button>
@@ -65,7 +71,7 @@ class LiquidInput extends React.Component {
           </header>
           <iframe
             src={
-              this.state.currentDocTab === 'convention'
+              currentDocTab === 'convention'
                 ? '/liquid_docs'
                 : 'https://shopify.github.io/liquid/'
             }
@@ -76,44 +82,32 @@ class LiquidInput extends React.Component {
         <div className="liquid-docs-spacer" />
       </>
     );
-  }
+  };
 
-  render = () => (
-    <ApolloConsumer>
-      {(client) => (
-        <CodeInput
-          {...this.props}
-          mode="liquid-html"
-          getPreviewContent={async (liquid) => {
-            const response = await client.query({
-              query: PreviewLiquidQuery,
-              variables: { liquid },
-              fetchPolicy: 'no-cache',
-            });
-
-            return response.data.previewLiquid;
-          }}
-          extraNavControls={(
-            <li className="flex-grow-1 d-flex justify-content-end">
-              <div className="nav-item">
-                <button
-                  type="button"
-                  className="btn btn-link nav-link py-0 px-2"
-                  onClick={(e) => { e.preventDefault(); this.setState({ showingDocs: true }); }}
-                >
-                  <i className="fa fa-question-circle" />
-                  {' '}
-                  Help
-                </button>
-              </div>
-            </li>
-          )}
-        >
-          {this.renderDocs()}
-        </CodeInput>
+  return (
+    <CodeInput
+      {...props}
+      mode="liquid-html"
+      getPreviewContent={getPreviewContent}
+      extraNavControls={(
+        <li className="flex-grow-1 d-flex justify-content-end">
+          <div className="nav-item">
+            <button
+              type="button"
+              className="btn btn-link nav-link py-0 px-2"
+              onClick={(e) => { e.preventDefault(); setShowingDocs(true); }}
+            >
+              <i className="fa fa-question-circle" />
+              {' '}
+              Help
+            </button>
+          </div>
+        </li>
       )}
-    </ApolloConsumer>
-  )
+    >
+      {renderDocs()}
+    </CodeInput>
+  );
 }
 
 export default LiquidInput;

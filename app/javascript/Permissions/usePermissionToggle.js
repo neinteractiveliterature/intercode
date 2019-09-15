@@ -5,7 +5,7 @@ import { findPermission, permissionEquals } from './PermissionUtils';
 
 export default function usePermissionToggle({
   grantPermission, revokePermission, role, model, permission, initialPermissions,
-  changeSet, currentPermissions,
+  changeSet, currentPermissions, readOnly,
 }) {
   const setPermission = (value) => {
     if (value) {
@@ -26,20 +26,21 @@ export default function usePermissionToggle({
   const toggle = () => setPermission(!hasPermission);
 
   const className = useMemo(
-    () => classNames('cursor-pointer text-center align-middle', {
-      'table-success': changeSet.changes.some(({ changeType, value }) => (
+    () => classNames('text-center align-middle', {
+      'cursor-pointer': !readOnly,
+      'table-success': changeSet && changeSet.changes.some(({ changeType, value }) => (
         changeType === 'add'
         && permissionEquals(value, { role, model, permission })
       )),
       'table-danger': (
         existingPermission
-        && changeSet.changes.some(({ changeType, id }) => (
+        && changeSet && changeSet.changes.some(({ changeType, id }) => (
           changeType === 'remove'
           && existingPermission.id === id
         ))
       ),
     }),
-    [changeSet, existingPermission, role, model, permission],
+    [changeSet, readOnly, existingPermission, role, model, permission],
   );
 
   return { hasPermission, toggle, className };

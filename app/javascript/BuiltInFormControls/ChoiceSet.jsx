@@ -59,6 +59,7 @@ ChoiceSet.propTypes = {
   choiceClassName: PropTypes.string,
   inputClassName: PropTypes.string,
   disabled: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 ChoiceSet.defaultProps = {
@@ -68,6 +69,7 @@ ChoiceSet.defaultProps = {
   choiceClassName: null,
   inputClassName: null,
   disabled: false,
+  readOnly: false,
 };
 
 export default ChoiceSet;
