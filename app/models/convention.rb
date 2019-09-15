@@ -8,6 +8,7 @@ class Convention < ApplicationRecord
 
   has_many :cms_navigation_items, as: :parent, dependent: :destroy
   has_many :pages, as: :parent, dependent: :destroy
+  has_many :cms_content_groups, as: :parent, dependent: :destroy
   has_many :cms_layouts, as: :parent, dependent: :destroy
   has_many :cms_partials, as: :parent, dependent: :destroy
   has_many :cms_files, as: :parent, dependent: :destroy
@@ -29,6 +30,7 @@ class Convention < ApplicationRecord
   has_many :products, dependent: :destroy
   has_many :orders, through: :user_con_profiles
   has_many :user_activity_alerts, dependent: :destroy
+  has_many :permissions, dependent: :destroy
 
   belongs_to :root_page, class_name: 'Page', optional: true
   belongs_to :default_layout, class_name: 'CmsLayout', optional: true

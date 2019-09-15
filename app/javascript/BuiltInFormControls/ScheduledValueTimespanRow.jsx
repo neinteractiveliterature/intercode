@@ -21,7 +21,7 @@ function ScheduledValueTimespanRow({
   );
 
   const valueChanged = useCallback(
-    value => rowAttributeDidChange('value', value),
+    (value) => rowAttributeDidChange('value', value),
     [rowAttributeDidChange],
   );
 

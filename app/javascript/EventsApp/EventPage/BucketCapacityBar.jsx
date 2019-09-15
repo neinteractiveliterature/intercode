@@ -17,7 +17,7 @@ function BucketCapacityBar({
       className={`bucket-capacity-bar ${className}`}
       style={{ width: `${widthFraction * 100.0}%` }}
     >
-      {mapRange(startingTickmarkIndex, tickmarkCount, 1, index => (
+      {mapRange(startingTickmarkIndex, tickmarkCount, 1, (index) => (
         <div
           key={index}
           className={`bucket-capacity-tickmark bg-white ${tickmarkClass}`}

@@ -36,8 +36,8 @@ function DateTimeInput({
     onChange(momentValue.toISOString());
   };
 
-  const dateChanged = event => dateTimeValuesChanged(event.target.value, time);
-  const timeChanged = event => dateTimeValuesChanged(date, event.target.value);
+  const dateChanged = (event) => dateTimeValuesChanged(event.target.value, time);
+  const timeChanged = (event) => dateTimeValuesChanged(date, event.target.value);
 
   return (
     <div className="d-flex">

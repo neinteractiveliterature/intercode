@@ -6,7 +6,7 @@ export default function updateCmsVariable(
 ) {
   const data = cache.readQuery({ query: CmsVariablesQuery });
   if (
-    data.cmsVariables.some(variable => variable.key === cmsVariable.key)
+    data.cmsVariables.some((variable) => variable.key === cmsVariable.key)
   ) {
     data.cmsVariables = data.cmsVariables.map((variable) => {
       if (variable.key === cmsVariable.key) {

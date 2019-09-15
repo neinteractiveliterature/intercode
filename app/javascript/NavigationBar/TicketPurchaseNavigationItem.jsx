@@ -22,7 +22,7 @@ function TicketPurchaseNavigationItem() {
     return null;
   }
 
-  if (!convention.ticket_types.some(ticketType => ticketType.publicly_available)) {
+  if (!convention.ticket_types.some((ticketType) => ticketType.publicly_available)) {
     return null;
   }
 

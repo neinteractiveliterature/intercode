@@ -72,7 +72,7 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
           ...queryOptions,
         });
         const newOverrides = storeData.event.maximum_event_provided_tickets_overrides
-          .filter(override => override.id !== id);
+          .filter((override) => override.id !== id);
         storeData.event.maximum_event_provided_tickets_overrides = newOverrides;
         store.writeQuery({ query: StandaloneEditEventQuery, ...queryOptions, data: storeData });
       },

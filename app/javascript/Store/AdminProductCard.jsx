@@ -18,40 +18,6 @@ import sortProductVariants from './sortProductVariants';
 import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
 
 class AdminProductCard extends React.Component {
-  static propTypes = {
-    product: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      image_url: PropTypes.string,
-      payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
-      price: PropTypes.shape({
-        fractional: PropTypes.number.isRequired,
-        currency_code: PropTypes.string.isRequired,
-      }),
-      product_variants: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        override_price: PropTypes.shape({
-          fractional: PropTypes.number.isRequired,
-          currency_code: PropTypes.string.isRequired,
-        }),
-      }).isRequired).isRequired,
-      available: PropTypes.bool.isRequired,
-    }).isRequired,
-    currentAbility: PropTypes.shape({
-      can_update_products: PropTypes.bool.isRequired,
-    }).isRequired,
-    initialEditing: PropTypes.bool,
-    onCancelNewProduct: PropTypes.func.isRequired,
-    onSaveNewProduct: PropTypes.func.isRequired,
-  }
-
-  static defaultProps = {
-    initialEditing: false,
-  };
-
   constructor(props) {
     super(props);
 
@@ -91,7 +57,7 @@ class AdminProductCard extends React.Component {
     editing: true,
     editingProduct: {
       ...this.props.product,
-      product_variants: this.props.product.product_variants.map(variant => ({ ...variant })),
+      product_variants: this.props.product.product_variants.map((variant) => ({ ...variant })),
       delete_variant_ids: [],
     },
   });
@@ -114,7 +80,7 @@ class AdminProductCard extends React.Component {
       return;
     }
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       editingProduct: {
         ...prevState.editingProduct,
         image: file,
@@ -123,7 +89,7 @@ class AdminProductCard extends React.Component {
 
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         editingProduct: {
           ...prevState.editingProduct,
           image_url: reader.result,
@@ -134,7 +100,7 @@ class AdminProductCard extends React.Component {
   }
 
   deleteVariant = (variantId) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       editingProduct: {
         ...prevState.editingProduct,
         delete_variant_ids: [
@@ -172,7 +138,7 @@ class AdminProductCard extends React.Component {
         fractional: editingProduct.price.fractional,
         currency_code: editingProduct.price.currency_code,
       },
-      product_variants: sortProductVariants(editingProduct.product_variants).map(variant => ({
+      product_variants: sortProductVariants(editingProduct.product_variants).map((variant) => ({
         id: variant.id,
         name: variant.name,
         description: variant.description,
@@ -225,7 +191,7 @@ class AdminProductCard extends React.Component {
             update: (cache) => {
               const data = cache.readQuery({ query: AdminProductsQuery });
               data.convention.products = data.convention.products
-                .filter(product => product.id !== this.props.product.id);
+                .filter((product) => product.id !== this.props.product.id);
               cache.writeQuery({ query: AdminProductsQuery, data });
             },
           });
@@ -264,9 +230,9 @@ class AdminProductCard extends React.Component {
           </li>
           <li className="list-inline-item">
             <Mutation mutation={CreateProduct}>
-              {createProduct => (
+              {(createProduct) => (
                 <Mutation mutation={UpdateProduct}>
-                  {updateProduct => (
+                  {(updateProduct) => (
                     <button
                       type="button"
                       className="btn btn-sm btn-primary"
@@ -288,7 +254,7 @@ class AdminProductCard extends React.Component {
       deleteButton = (
         <li className="list-inline-item">
           <Mutation mutation={DeleteProduct}>
-            {deleteProduct => (
+            {(deleteProduct) => (
               <button
                 type="button"
                 className="btn btn-sm btn-danger"
@@ -374,7 +340,7 @@ class AdminProductCard extends React.Component {
               : 'Not available for purchase'
           }
         </span>
-        {this.props.product.payment_options.map(paymentOption => (
+        {this.props.product.payment_options.map((paymentOption) => (
           <i
             key={paymentOption}
             className={
@@ -468,7 +434,7 @@ class AdminProductCard extends React.Component {
     return (
       <p>
         <strong>
-Base price:
+          Base price:
           {formatMoney(this.props.product.price)}
         </strong>
       </p>
@@ -528,5 +494,39 @@ Base price:
     </div>
   )
 }
+
+AdminProductCard.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image_url: PropTypes.string,
+    payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    price: PropTypes.shape({
+      fractional: PropTypes.number.isRequired,
+      currency_code: PropTypes.string.isRequired,
+    }),
+    product_variants: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      override_price: PropTypes.shape({
+        fractional: PropTypes.number.isRequired,
+        currency_code: PropTypes.string.isRequired,
+      }),
+    }).isRequired).isRequired,
+    available: PropTypes.bool.isRequired,
+  }).isRequired,
+  currentAbility: PropTypes.shape({
+    can_update_products: PropTypes.bool.isRequired,
+  }).isRequired,
+  initialEditing: PropTypes.bool,
+  onCancelNewProduct: PropTypes.func.isRequired,
+  onSaveNewProduct: PropTypes.func.isRequired,
+};
+
+AdminProductCard.defaultProps = {
+  initialEditing: false,
+};
 
 export default AdminProductCard;

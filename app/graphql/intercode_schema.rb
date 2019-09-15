@@ -84,6 +84,9 @@ class IntercodeSchema < GraphQL::Schema
   end
 
   def self.unauthorized_field(error)
+    # It should be safe to query for admin_notes even if you can't see them
+    return nil if error.field.graphql_name == 'admin_notes'
+
     # Add a top-level error to the response instead of returning nil:
     raise NotAuthorizedError.from_error(
       error,

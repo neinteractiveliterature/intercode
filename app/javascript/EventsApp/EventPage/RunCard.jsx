@@ -149,7 +149,7 @@ function RunCard({
           {runTimespan.finish.format('h:mma')}
 
           <br />
-          {run.rooms.map(room => room.name).sort().join(', ')}
+          {run.rooms.map((room) => room.name).sort().join(', ')}
         </div>
       )}
       {

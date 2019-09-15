@@ -4,42 +4,43 @@ import classNames from 'classnames';
 import { findPermission, permissionEquals } from './PermissionUtils';
 
 export default function usePermissionToggle({
-  grantPermission, revokePermission, model, permission, initialPermissions,
-  changeSet, currentPermissions,
+  grantPermission, revokePermission, role, model, permission, initialPermissions,
+  changeSet, currentPermissions, readOnly,
 }) {
   const setPermission = (value) => {
     if (value) {
-      grantPermission(model, permission);
+      grantPermission({ role, model, permission });
     } else {
-      revokePermission(model, permission);
+      revokePermission({ role, model, permission });
     }
   };
 
   const existingPermission = findPermission(
-    initialPermissions, model, permission,
+    initialPermissions, { role, model, permission },
   );
 
   const hasPermission = (
-    findPermission(currentPermissions, model, permission) != null
+    findPermission(currentPermissions, { role, model, permission }) != null
   );
 
   const toggle = () => setPermission(!hasPermission);
 
   const className = useMemo(
-    () => classNames('cursor-pointer text-center align-middle', {
-      'table-success': changeSet.changes.some(({ changeType, value }) => (
+    () => classNames('text-center align-middle', {
+      'cursor-pointer': !readOnly,
+      'table-success': changeSet && changeSet.changes.some(({ changeType, value }) => (
         changeType === 'add'
-        && permissionEquals(value, { model, permission })
+        && permissionEquals(value, { role, model, permission })
       )),
       'table-danger': (
         existingPermission
-        && changeSet.changes.some(({ changeType, id }) => (
+        && changeSet && changeSet.changes.some(({ changeType, id }) => (
           changeType === 'remove'
           && existingPermission.id === id
         ))
       ),
     }),
-    [changeSet, existingPermission, model, permission],
+    [changeSet, readOnly, existingPermission, role, model, permission],
   );
 
   return { hasPermission, toggle, className };

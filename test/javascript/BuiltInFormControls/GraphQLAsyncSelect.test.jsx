@@ -1,6 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { PureGraphQLAsyncSelect as GraphQLAsyncSelect } from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
+import {
+  render, fireEvent, act, wait,
+} from '../testUtils';
+import GraphQLAsyncSelect from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
 
 describe('GraphQLAsyncSelect', () => {
   const defaultQuery = async () => ({
@@ -16,27 +18,29 @@ describe('GraphQLAsyncSelect', () => {
   });
 
   const renderUserConProfileSelect = (props, query) => {
-    const fakeClient = {
+    const apolloClient = {
       query: query || defaultQuery,
     };
 
-    return shallow((
+    return render((
       <GraphQLAsyncSelect
-        client={fakeClient}
         query={{}}
-        getOptions={data => data.convention.user_con_profiles_paginated.entries}
-        getOptionLabel={option => option.name_without_nickname}
-        getOptionValue={option => option.id}
-        getVariables={input => ({ name: input })}
+        getOptions={(data) => data.convention.user_con_profiles_paginated.entries}
+        getOptionLabel={(option) => option.name_without_nickname}
+        getOptionValue={(option) => option.id}
+        getVariables={(input) => ({ name: input })}
         {...props}
       />
-    ));
+    ), { apolloClient });
   };
 
   test('loads options', async () => {
-    const component = renderUserConProfileSelect();
-    const componentInstance = component.instance();
-    const options = await componentInstance.loadOptions('gab');
-    expect(options).toEqual([{ id: 1, name_without_nickname: 'Gabriel Knight' }]);
+    const { getByRole, queryAllByText } = renderUserConProfileSelect();
+    const selectInput = getByRole('textbox');
+    await act(async () => {
+      fireEvent.change(selectInput, { target: { value: 'gab' } });
+      await wait();
+    });
+    expect(queryAllByText('Gabriel Knight')).toHaveLength(1);
   });
 });

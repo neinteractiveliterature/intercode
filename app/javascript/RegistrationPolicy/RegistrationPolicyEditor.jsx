@@ -24,27 +24,6 @@ import {
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 
 class RegistrationPolicyEditor extends React.Component {
-  static propTypes = {
-    registrationPolicy: RegistrationPolicyPropType.isRequired,
-    onChange: PropTypes.func.isRequired,
-    lockNameAndDescription: PropTypes.bool,
-    lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-    lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
-    presets: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      policy: RegistrationPolicyPropType.isRequired,
-    }).isRequired),
-    allowCustom: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    lockNameAndDescription: false,
-    lockLimitedBuckets: null,
-    lockDeleteBuckets: null,
-    presets: null,
-    allowCustom: false,
-  }
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -71,9 +50,9 @@ class RegistrationPolicyEditor extends React.Component {
   addBucket = (event) => {
     event.preventDefault();
     const customBucketKeyNumbers = this.props.registrationPolicy.buckets
-      .map(bucket => bucket.key)
-      .filter(key => key.match(/^custom-\d+$/))
-      .map(key => Number.parseInt(key.replace('custom-', ''), 10));
+      .map((bucket) => bucket.key)
+      .filter((key) => key.match(/^custom-\d+$/))
+      .map((key) => Number.parseInt(key.replace('custom-', ''), 10));
     const maxBucketKeyNumber = (
       customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0
     );
@@ -134,7 +113,7 @@ class RegistrationPolicyEditor extends React.Component {
     if (name === '_custom') {
       this.setState({ preset: undefined, custom: true });
     } else {
-      const preset = this.props.presets.find(p => p.name === name);
+      const preset = this.props.presets.find((p) => p.name === name);
       this.setState({ preset, custom: false });
       if (preset) {
         this.props.onChange(preset.policy);
@@ -144,7 +123,7 @@ class RegistrationPolicyEditor extends React.Component {
     }
   }
 
-  renderHeaders = () => this.getHeaderLabels().map(label => <th key={label}>{label}</th>)
+  renderHeaders = () => this.getHeaderLabels().map((label) => <th key={label}>{label}</th>)
 
   renderAddButtons = () => {
     if (this.state.preset) {
@@ -177,7 +156,7 @@ class RegistrationPolicyEditor extends React.Component {
   renderBucketRow = (bucket) => {
     const bucketInPreset = (
       this.state.preset
-      && !!this.state.preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key)
+      && !!this.state.preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key)
     );
 
     const lockDelete = (
@@ -229,7 +208,7 @@ class RegistrationPolicyEditor extends React.Component {
   renderTable = () => {
     const bucketRows = this.props.registrationPolicy.buckets
       .sort(bucketSortCompare)
-      .map(bucket => this.renderBucketRow(bucket));
+      .map((bucket) => this.renderBucketRow(bucket));
 
     return (
       <div className="table-responsive">
@@ -273,7 +252,7 @@ class RegistrationPolicyEditor extends React.Component {
       selectorValue = '_custom';
     }
 
-    const presetOptions = this.props.presets.map(preset => (
+    const presetOptions = this.props.presets.map((preset) => (
       <option value={preset.name} key={preset.name}>{preset.name}</option>
     ));
     if (this.props.allowCustom) {
@@ -416,5 +395,26 @@ class RegistrationPolicyEditor extends React.Component {
     </div>
   )
 }
+
+RegistrationPolicyEditor.propTypes = {
+  registrationPolicy: RegistrationPolicyPropType.isRequired,
+  onChange: PropTypes.func.isRequired,
+  lockNameAndDescription: PropTypes.bool,
+  lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
+  lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
+  presets: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    policy: RegistrationPolicyPropType.isRequired,
+  }).isRequired),
+  allowCustom: PropTypes.bool,
+};
+
+RegistrationPolicyEditor.defaultProps = {
+  lockNameAndDescription: false,
+  lockLimitedBuckets: null,
+  lockDeleteBuckets: null,
+  presets: null,
+  allowCustom: false,
+};
 
 export default RegistrationPolicyEditor;

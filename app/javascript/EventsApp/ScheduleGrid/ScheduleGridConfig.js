@@ -1,11 +1,11 @@
 import configData from '../../../../config/schedule_grid_configs.json';
 
 class ScheduleGridConfig {
-  static allConfigs = configData.map(props => new ScheduleGridConfig(props));
+  static allConfigs = configData.map((props) => new ScheduleGridConfig(props));
 
-  static allConfigKeys = ScheduleGridConfig.allConfigs.map(config => config.key);
+  static allConfigKeys = ScheduleGridConfig.allConfigs.map((config) => config.key);
 
-  static get = key => ScheduleGridConfig.allConfigs.find(config => config.key === key);
+  static get = (key) => ScheduleGridConfig.allConfigs.find((config) => config.key === key);
 
   constructor(props) {
     Object.entries(props).forEach(([key, value]) => { this[key] = value; });

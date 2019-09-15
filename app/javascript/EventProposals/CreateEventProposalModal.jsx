@@ -47,8 +47,8 @@ function CreateEventProposalModal({
           isClearable={proposableEventCategories.length > 1}
           isDisabled={createInProgress}
           value={eventCategory}
-          getOptionValue={option => option.id}
-          getOptionLabel={option => option.name}
+          getOptionValue={(option) => option.id}
+          getOptionLabel={(option) => option.name}
           onChange={(category) => { setEventCategory(category); }}
         />
 
@@ -59,8 +59,8 @@ function CreateEventProposalModal({
             Otherwise, leave this field blank.`
           }
           options={(userEventProposals || [])
-            .filter(eventProposal => eventProposal.status !== 'draft')
-            .filter(eventProposal => (
+            .filter((eventProposal) => eventProposal.status !== 'draft')
+            .filter((eventProposal) => (
               eventCategory
               && eventProposal.event_category.name.toLowerCase()
               === eventCategory.name.toLowerCase()
@@ -68,8 +68,8 @@ function CreateEventProposalModal({
           isClearable
           isDisabled={createInProgress}
           value={cloneEventProposal}
-          getOptionValue={option => option.id}
-          getOptionLabel={option => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
+          getOptionValue={(option) => option.id}
+          getOptionLabel={(option) => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
           onChange={(proposal) => { setCloneEventProposal(proposal); }}
         />
 

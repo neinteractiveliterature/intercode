@@ -20,11 +20,7 @@ function filterAndSortSignups(signups) {
 }
 
 class UserConProfileSignupsCard extends React.Component {
-  static propTypes = {
-    userConProfileId: PropTypes.number.isRequired,
-  }
-
-  renderEventLink = event => (
+  renderEventLink = (event) => (
     <Link to={buildEventUrl(event)}>
       {event.title}
     </Link>
@@ -38,14 +34,13 @@ class UserConProfileSignupsCard extends React.Component {
         <li>
           <small>
             {timespanFromRun(convention, signup.run.event, signup.run)
-              .humanizeInTimezone(convention.timezone_name)
-            }
+              .humanizeInTimezone(convention.timezone_name)}
           </small>
         </li>
         <li>
           <small>
             {
-              signup.run.rooms.map(room => room.name)
+              signup.run.rooms.map((room) => room.name)
                 .sort((a, b) => a.localeCompare(b, { sensitivity: 'base' })).join(', ')
             }
           </small>
@@ -56,10 +51,10 @@ class UserConProfileSignupsCard extends React.Component {
 
   renderUnSignedUpTeamMemberEvents = (userConProfile, myProfile) => {
     const unSignedUpEvents = userConProfile.team_members
-      .filter(teamMember => !userConProfile.signups
-        .some(signup => signup.run.event.id === teamMember.event.id && signup.state === 'confirmed'))
-      .filter(teamMember => teamMember.event.status === 'active')
-      .map(teamMember => teamMember.event);
+      .filter((teamMember) => !userConProfile.signups
+        .some((signup) => signup.run.event.id === teamMember.event.id && signup.state === 'confirmed'))
+      .filter((teamMember) => teamMember.event.status === 'active')
+      .map((teamMember) => teamMember.event);
 
     if (unSignedUpEvents.length === 0) {
       return null;
@@ -73,7 +68,7 @@ class UserConProfileSignupsCard extends React.Component {
             : `${userConProfile.name_without_nickname} is a team member for the following events, but is not signed up for them:`
         )}
         {' '}
-        {unSignedUpEvents.map(event => this.renderEventLink(event)).reduce((prev, curr) => [prev, ', ', curr])}
+        {unSignedUpEvents.map((event) => this.renderEventLink(event)).reduce((prev, curr) => [prev, ', ', curr])}
       </li>
     );
   }
@@ -95,7 +90,7 @@ class UserConProfileSignupsCard extends React.Component {
                   ? <li className="list-group-item"><em>No signups</em></li>
                   : null
               }
-              {signups.map(signup => this.renderSignup(signup, data.convention))}
+              {signups.map((signup) => this.renderSignup(signup, data.convention))}
               {this.renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
             </ul>
             {
@@ -103,9 +98,9 @@ class UserConProfileSignupsCard extends React.Component {
                 ? (
                   <div className="card-footer border-top-0">
                     <Mutation mutation={WithdrawAllUserConProfileSignups}>
-                      {mutate => (
+                      {(mutate) => (
                         <Confirm.Trigger>
-                          {confirm => (
+                          {(confirm) => (
                             <button
                               type="button"
                               className="btn btn-danger btn-sm"
@@ -131,5 +126,9 @@ class UserConProfileSignupsCard extends React.Component {
     </QueryWithStateDisplay>
   );
 }
+
+UserConProfileSignupsCard.propTypes = {
+  userConProfileId: PropTypes.number.isRequired,
+};
 
 export default UserConProfileSignupsCard;

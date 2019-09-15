@@ -50,19 +50,19 @@ function RoomsAdmin() {
     }
   };
 
-  const deleteRoom = roomId => deleteRoomMutate({
+  const deleteRoom = (roomId) => deleteRoomMutate({
     variables: { input: { id: roomId } },
     update: (store) => {
       const roomsData = store.readQuery({ query: RoomsAdminQuery });
-      const roomIndex = roomsData.convention.rooms.findIndex(room => room.id === roomId);
+      const roomIndex = roomsData.convention.rooms.findIndex((room) => room.id === roomId);
       roomsData.convention.rooms.splice(roomIndex, 1);
       store.writeQuery({ query: RoomsAdminQuery, data: roomsData });
     },
   });
 
-  const sortedRooms = sortByLocaleString(data.convention.rooms, room => room.name);
+  const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name);
 
-  const roomRows = sortedRooms.map(room => (
+  const roomRows = sortedRooms.map((room) => (
     <li className="list-group-item" key={room.id}>
       <div className="row align-items-baseline">
         <div className="ml-3">
@@ -86,7 +86,7 @@ function RoomsAdmin() {
           onClick={() => confirm({
             prompt: 'Are you sure you want to delete this room?',
             action: () => deleteRoom(room.id),
-            renderError: e => <ErrorDisplay error={e} />,
+            renderError: (e) => <ErrorDisplay error={e} />,
           })}
           type="button"
         >
@@ -110,7 +110,7 @@ function RoomsAdmin() {
                   placeholder="Room name"
                   className="form-control"
                   value={creatingRoomName}
-                  onChange={event => setCreatingRoomName(event.target.value)}
+                  onChange={(event) => setCreatingRoomName(event.target.value)}
                   onKeyDown={keyDownInCreatingRoom}
                 />
               </div>

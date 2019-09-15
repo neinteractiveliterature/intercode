@@ -77,7 +77,7 @@ function EventAdmin({ location }) {
             </li>
           )}
         >
-          {eventCategories.map(eventCategory => (
+          {eventCategories.map((eventCategory) => (
             <NavLink className="dropdown-item" key={eventCategory.id} to={buildEventCategoryUrl(eventCategory)}>
               {eventCategory.name}
             </NavLink>
@@ -90,7 +90,7 @@ function EventAdmin({ location }) {
 
       <Switch>
         <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`} component={NewEvent} />
-        {eventCategories.map(eventCategory => (
+        {eventCategories.map((eventCategory) => (
           <Route
             key={eventCategory.id}
             path={buildEventCategoryUrl(eventCategory)}

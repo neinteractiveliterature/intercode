@@ -8,7 +8,7 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useMutationCallback from '../useMutationCallback';
 
-function PageAdminDropdown({ showDelete, pageId, history }) {
+function PageAdminDropdown({ showEdit, showDelete, pageId, history }) {
   const confirm = useConfirm();
   const deletePage = useMutationCallback(DeletePage);
 
@@ -34,7 +34,9 @@ function PageAdminDropdown({ showDelete, pageId, history }) {
         )}
         placement="bottom-end"
       >
-        <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">Edit page</Link>
+        {showEdit
+          ? <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">Edit page</Link>
+          : <Link to={`/cms_pages/${pageId}/view_source`} className="dropdown-item">View page source</Link>}
         <Link to="/cms_pages" className="dropdown-item">View all pages</Link>
         {
           showDelete ? (
@@ -43,7 +45,7 @@ function PageAdminDropdown({ showDelete, pageId, history }) {
               onClick={() => confirm({
                 action: deleteConfirmed,
                 prompt: 'Are you sure you want to delete this page?',
-                renderError: error => <ErrorDisplay graphQLError={error} />,
+                renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })}
               type="button"
             >
@@ -57,6 +59,7 @@ function PageAdminDropdown({ showDelete, pageId, history }) {
 }
 
 PageAdminDropdown.propTypes = {
+  showEdit: PropTypes.bool.isRequired,
   showDelete: PropTypes.bool.isRequired,
   pageId: PropTypes.number.isRequired,
   history: PropTypes.shape({

@@ -7,13 +7,13 @@ export const chooseAmong = (values, sortFunction, allowNull) => {
   let eligibleValues = values;
 
   if (!allowNull) {
-    eligibleValues = values.filter(value => value != null);
+    eligibleValues = values.filter((value) => value != null);
   }
 
   return eligibleValues.sort(sortFunction)[0];
 };
 
-export const preferNull = sortFunction => (a, b) => {
+export const preferNull = (sortFunction) => (a, b) => {
   if (a == null) {
     return -1;
   }
@@ -32,6 +32,6 @@ export function sortByLocaleString(list, transform, options = { sensitivity: 'ba
 export function titleSort(list, transform) {
   return sortByLocaleString(
     list,
-    element => (transform || (e => e))(element).replace(/^(the|a) /i, '').replace(/\W/, ''),
+    (element) => (transform || ((e) => e))(element).replace(/^(the|a) /i, '').replace(/\W/, ''),
   );
 }

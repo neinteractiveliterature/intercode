@@ -4,12 +4,17 @@ fragment CmsFileFields on CmsFile {
   url
   content_type
   size
+  current_ability_can_delete
 }
 
 query CmsFilesAdminQuery {
   convention {
     id
     name
+  }
+
+  currentAbility {
+    can_create_cms_files
   }
 
   cmsFiles {

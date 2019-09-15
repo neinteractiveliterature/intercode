@@ -14,13 +14,13 @@ function TabbedMailingList({
   const exportCSV = useCallback(
     () => {
       const data = [
-        ['Email', 'Name', ...metadataFields.map(fieldName => humanize(fieldName))],
+        ['Email', 'Name', ...metadataFields.map((fieldName) => humanize(fieldName))],
         ...emails.map((email) => {
           const metadata = JSON.parse(email.metadata_json);
           return [
             email.email,
             email.name,
-            ...metadataFields.map(fieldName => metadata[fieldName]),
+            ...metadataFields.map((fieldName) => metadata[fieldName]),
           ];
         }),
       ];
@@ -48,7 +48,7 @@ function TabbedMailingList({
               <tr>
                 <th>Email</th>
                 <th>Name</th>
-                {metadataFields.map(fieldName => (
+                {metadataFields.map((fieldName) => (
                   <th key={fieldName}>{humanize(fieldName)}</th>
                 ))}
               </tr>
@@ -60,7 +60,7 @@ function TabbedMailingList({
                   <tr key={email.email}>
                     <td><a href={`mailto:${email.formatted_address}`}>{email.email}</a></td>
                     <td>{email.name}</td>
-                    {metadataFields.map(fieldName => (
+                    {metadataFields.map((fieldName) => (
                       <td key={fieldName}>{metadata[fieldName]}</td>
                     ))}
                   </tr>

@@ -35,7 +35,7 @@ function NewTeamMember({
 
   usePageTitle(`Add ${event.event_category.team_member_name} - ${event.title}`);
 
-  const userConProfileChanged = userConProfile => setTeamMember(prevTeamMember => ({
+  const userConProfileChanged = (userConProfile) => setTeamMember((prevTeamMember) => ({
     ...prevTeamMember,
     user_con_profile: userConProfile,
   }));

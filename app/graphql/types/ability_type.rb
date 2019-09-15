@@ -1,4 +1,49 @@
 class Types::AbilityType < Types::BaseObject
+  field :can_create_pages, Boolean, null: false
+  def can_create_pages
+    policy(Page.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_partials, Boolean, null: false
+  def can_create_cms_partials
+    policy(CmsPartial.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_files, Boolean, null: false
+  def can_create_cms_files
+    policy(CmsFile.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_layouts, Boolean, null: false
+  def can_create_cms_layouts
+    policy(CmsLayout.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_navigation_items, Boolean, null: false
+  def can_create_cms_navigation_items
+    policy(CmsNavigationItem.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_variables, Boolean, null: false
+  def can_create_cms_variables
+    policy(CmsVariable.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_graphql_queries, Boolean, null: false
+  def can_create_cms_graphql_queries
+    policy(CmsGraphqlQuery.new(parent: convention)).create?
+  end
+
+  field :can_create_cms_content_groups, Boolean, null: false
+  def can_create_cms_content_groups
+    policy(CmsContentGroup.new(parent: convention)).create?
+  end
+
+  field :can_manage_any_cms_content, Boolean, null: false
+  def can_manage_any_cms_content
+    PagePolicy::ManageScope.new(pundit_user, cms_parent.pages).resolve.any?
+  end
+
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets

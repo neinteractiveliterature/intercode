@@ -19,7 +19,7 @@ function renderChoiceCounts(choiceData) {
   }
 
   const title = ['confirmed', 'waitlisted', 'withdrawn']
-    .map(state => `${capitalize(state)}: ${choiceData[state] || 0}`)
+    .map((state) => `${capitalize(state)}: ${choiceData[state] || 0}`)
     .join('  ');
 
   return (
@@ -40,8 +40,8 @@ function EventsByChoice() {
         return 0;
       }
 
-      const choices = flatMap(data.convention.reports.events_by_choice, eventByChoice => (
-        eventByChoice.choice_counts.map(choiceCount => choiceCount.choice)
+      const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) => (
+        eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice)
       ));
 
       return Array.from({ length: max(choices) }, (element, index) => index + 1);
@@ -52,13 +52,13 @@ function EventsByChoice() {
   const filteredRows = useMemo(
     () => (error
       ? []
-      : data.convention.reports.events_by_choice.filter(row => row.choice_counts.length > 0)
+      : data.convention.reports.events_by_choice.filter((row) => row.choice_counts.length > 0)
     ),
     [data, error],
   );
 
   const sortedRows = useMemo(
-    () => titleSort(filteredRows, row => row.event.title),
+    () => titleSort(filteredRows, (row) => row.event.title),
     [filteredRows],
   );
 
@@ -68,14 +68,14 @@ function EventsByChoice() {
   //   choiceCountsProcessed: { '1': { confirmed: 1, waitlisted: 2, withdrawn: 1, total: 4 } }
   // }
   const processedRows = useMemo(
-    () => sortedRows.map(row => ({
+    () => sortedRows.map((row) => ({
       ...row,
       choiceCountsProcessed: mapValues(
-        groupBy(row.choice_counts, choiceCount => choiceCount.choice),
+        groupBy(row.choice_counts, (choiceCount) => choiceCount.choice),
         (choiceCounts) => {
           const countsByState = mapValues(
-            keyBy(choiceCounts, choiceCount => choiceCount.state),
-            choiceCount => choiceCount.count,
+            keyBy(choiceCounts, (choiceCount) => choiceCount.state),
+            (choiceCount) => choiceCount.count,
           );
 
           return {
@@ -116,16 +116,16 @@ function EventsByChoice() {
         <thead>
           <tr>
             <th>Event</th>
-            {choiceColumns.map(choice => (
+            {choiceColumns.map((choice) => (
               <th key={choice}>{choice}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {processedRows.map(row => (
+          {processedRows.map((row) => (
             <tr key={row.event.id}>
               <td>{row.event.title}</td>
-              {choiceColumns.map(choice => (
+              {choiceColumns.map((choice) => (
                 <td key={choice} className="text-nowrap">
                   {renderChoiceCounts(row.choiceCountsProcessed[choice])}
                 </td>

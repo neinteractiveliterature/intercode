@@ -19,7 +19,7 @@ function EventAdminRow({ event, convention }) {
     [event.length_seconds],
   );
   const eventCategory = useMemo(
-    () => convention.event_categories.find(c => c.id === event.event_category.id),
+    () => convention.event_categories.find((c) => c.id === event.event_category.id),
     [convention.event_categories, event.event_category],
   );
 
@@ -38,7 +38,7 @@ function EventAdminRow({ event, convention }) {
     const runMetadata = [
       titleSuffix,
       <li key="timespan">{timespan.humanizeInTimezone(convention.timezone_name)}</li>,
-      <li key="rooms">{run.rooms.map(room => room.name).sort().join(', ')}</li>,
+      <li key="rooms">{run.rooms.map((room) => room.name).sort().join(', ')}</li>,
       scheduleNote,
     ];
 

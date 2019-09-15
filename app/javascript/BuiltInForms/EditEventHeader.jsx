@@ -18,7 +18,7 @@ function EditEventHeader({ event, showDropButton, dropEvent }) {
               also delete any runs of this event and remove any participants signed up
               for those runs.`,
           action: dropEvent,
-          renderError: error => <ErrorDisplay graphQLError={error} />,
+          renderError: (error) => <ErrorDisplay graphQLError={error} />,
         })}
       >
         Drop event

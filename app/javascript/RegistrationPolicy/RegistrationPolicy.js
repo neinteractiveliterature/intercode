@@ -18,11 +18,11 @@ export function sumPreferredSlots(registrationPolicy) {
 }
 
 export function getRegistrationPolicySlotsLimited(registrationPolicy) {
-  return registrationPolicy.buckets.every(bucket => bucket.slots_limited);
+  return registrationPolicy.buckets.every((bucket) => bucket.slots_limited);
 }
 
 export function getRegistrationPolicyBucket(registrationPolicy, key) {
-  return registrationPolicy.buckets.find(bucket => bucket.key === key);
+  return registrationPolicy.buckets.find((bucket) => bucket.key === key);
 }
 
 export function addRegistrationPolicyBucket(registrationPolicy, key, bucket) {
@@ -39,12 +39,12 @@ export function addRegistrationPolicyBucket(registrationPolicy, key, bucket) {
 export function removeRegistrationPolicyBucket(registrationPolicy, key) {
   return {
     ...registrationPolicy,
-    buckets: registrationPolicy.buckets.filter(bucket => bucket.key !== key),
+    buckets: registrationPolicy.buckets.filter((bucket) => bucket.key !== key),
   };
 }
 
 export function updateRegistrationPolicyBucket(registrationPolicy, key, newBucket) {
-  const index = registrationPolicy.buckets.findIndex(bucket => bucket.key === key);
+  const index = registrationPolicy.buckets.findIndex((bucket) => bucket.key === key);
 
   if (index === -1) {
     return addRegistrationPolicyBucket(registrationPolicy, newBucket);
@@ -60,7 +60,7 @@ export function updateRegistrationPolicyBucket(registrationPolicy, key, newBucke
 }
 
 export function getRegistrationPolicyAnythingBucket(registrationPolicy) {
-  return registrationPolicy.buckets.find(bucket => bucket.anything);
+  return registrationPolicy.buckets.find((bucket) => bucket.anything);
 }
 
 export const RegistrationPolicyPropType = PropTypes.shape({

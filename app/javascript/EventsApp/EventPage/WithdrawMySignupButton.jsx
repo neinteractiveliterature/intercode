@@ -20,7 +20,7 @@ function WithdrawMySignupButton({
         window.location.reload();
       }
     },
-    renderError: error => <ErrorDisplay graphQLError={error} />,
+    renderError: (error) => <ErrorDisplay graphQLError={error} />,
   });
 
   return (

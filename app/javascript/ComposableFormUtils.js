@@ -74,20 +74,20 @@ export const Transforms = {
   datetime(value) { return convertDatetimeValue(value); },
   datetimeWithTimezone(timezoneName) {
     return namedFunction(
-      value => convertDatetimeValue(value, timezoneName),
+      (value) => convertDatetimeValue(value, timezoneName),
       `datetimeWithTimezone('${timezoneName}')`,
     );
   },
   datetimeWithForcedTimezone(timezoneName) {
     return namedFunction(
-      value => forceTimezoneForDatetimeValue(value, timezoneName),
+      (value) => forceTimezoneForDatetimeValue(value, timezoneName),
       `datetimeWithForcedTimezone('${timezoneName}')`,
     );
   },
-  negate(func) { return namedFunction(value => !func(value), 'negate'); },
-  parseInt(func) { return namedFunction(value => Number.parseInt(func(value), 10), 'parseInt'); },
+  negate(func) { return namedFunction((value) => !func(value), 'negate'); },
+  parseInt(func) { return namedFunction((value) => Number.parseInt(func(value), 10), 'parseInt'); },
   booleanString(value) { return value === 'true'; },
-  multiValue(choices) { return choices.map(choice => choice.value); },
+  multiValue(choices) { return choices.map((choice) => choice.value); },
 };
 
 export function stateChangeCalculator(
@@ -129,8 +129,8 @@ export function combineStateChangeCalculators(
         ...acc,
         [name]: combineStateChangeCalculators(
           transformsByName[name],
-          namedFunction(state => preprocessState(state)[name], `dig('${name}')`),
-          namedFunction(state => postprocessState({ [name]: state }), `bury('${name}')`),
+          namedFunction((state) => preprocessState(state)[name], `dig('${name}')`),
+          namedFunction((state) => postprocessState({ [name]: state }), `bury('${name}')`),
         ),
       };
     },
@@ -169,14 +169,14 @@ export function mutator(config = {}) {
 
   return stateUpdater(
     config.component ? () => config.component.state : config.getState,
-    config.component ? state => config.component.setState(state) : config.setState,
+    config.component ? (state) => config.component.setState(state) : config.setState,
     combineStateChangeCalculators(config.transforms),
   );
 }
 
 export function useTransformedState(initialValue, transform) {
   const [state, setState] = useState(initialValue);
-  const setStateWithTransform = untransformedValue => setState(transform(untransformedValue));
+  const setStateWithTransform = (untransformedValue) => setState(transform(untransformedValue));
 
   return [state, setStateWithTransform];
 }
@@ -197,7 +197,7 @@ export function transformsReducer(transforms) {
 
 export function useChangeDispatchers(dispatch, keys) {
   return useMemo(
-    () => keys.map(key => value => dispatch({ type: 'change', key, value })),
+    () => keys.map((key) => (value) => dispatch({ type: 'change', key, value })),
     [dispatch, keys],
   );
 }

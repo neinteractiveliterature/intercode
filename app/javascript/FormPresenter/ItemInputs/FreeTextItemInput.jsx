@@ -7,25 +7,6 @@ import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
 
 class FreeTextItemInput extends React.Component {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-      properties: PropTypes.shape({
-        caption: PropTypes.string.isRequired,
-        format: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-    value: PropTypes.string,
-    valueInvalid: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
-    onInteract: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    value: null,
-    valueInvalid: false,
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -109,5 +90,24 @@ class FreeTextItemInput extends React.Component {
     );
   };
 }
+
+FreeTextItemInput.propTypes = {
+  formItem: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+    properties: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      format: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  value: PropTypes.string,
+  valueInvalid: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  onInteract: PropTypes.func.isRequired,
+};
+
+FreeTextItemInput.defaultProps = {
+  value: null,
+  valueInvalid: false,
+};
 
 export default FreeTextItemInput;

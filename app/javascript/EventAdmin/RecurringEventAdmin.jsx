@@ -30,7 +30,7 @@ function RecurringEventAdmin({ eventCategoryId }) {
         {eventCategory.name.toLowerCase()}
       </Link>
       <hr className="my-4" />
-      {sortedEvents.map(event => (
+      {sortedEvents.map((event) => (
         <RecurringEventSection
           convention={data.convention}
           event={event}
@@ -38,7 +38,7 @@ function RecurringEventAdmin({ eventCategoryId }) {
         />
       ))}
       <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
-        {props => (
+        {(props) => (
           <EditRun {...props} events={data.events} convention={data.convention} />
         )}
       </Route>

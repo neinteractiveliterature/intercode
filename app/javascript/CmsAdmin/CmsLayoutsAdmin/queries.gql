@@ -4,12 +4,18 @@ fragment CmsLayoutFields on CmsLayout {
   content
   navbar_classes
   admin_notes
+  current_ability_can_update
+  current_ability_can_delete
 }
 
 query CmsLayoutsAdminQuery {
   convention {
     id
     name
+  }
+
+  currentAbility {
+    can_create_cms_layouts
   }
 
   cmsLayouts {

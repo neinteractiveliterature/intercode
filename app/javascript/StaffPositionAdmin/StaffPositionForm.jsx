@@ -9,11 +9,6 @@ import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { mutator, Transforms } from '../ComposableFormUtils';
 
 class StaffPositionForm extends React.Component {
-  static propTypes = {
-    staffPosition: StaffPositionPropType.isRequired,
-    onChange: PropTypes.func.isRequired,
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -70,5 +65,10 @@ class StaffPositionForm extends React.Component {
     );
   }
 }
+
+StaffPositionForm.propTypes = {
+  staffPosition: StaffPositionPropType.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default StaffPositionForm;

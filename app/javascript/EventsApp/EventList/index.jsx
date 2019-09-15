@@ -46,7 +46,7 @@ function EventList({ history }) {
   const [cachedConventionName, setCachedConventionName] = useState(null);
   const [cachedEventCategories, setCachedEventCategories] = useState(null);
   const [cachedPageCount, setCachedPageCount] = useState(null);
-  const onPageChange = newPage => reactTableOnPageChange(newPage - 1);
+  const onPageChange = (newPage) => reactTableOnPageChange(newPage - 1);
 
   useEffect(
     () => {

@@ -7,7 +7,7 @@ import FormGroupWithLabel from './FormGroupWithLabel';
 function SelectWithLabel({ label, ...otherProps }) {
   return (
     <FormGroupWithLabel label={label} name={otherProps.name}>
-      {id => <Select inputId={id} {...otherProps} />}
+      {(id) => <Select inputId={id} {...otherProps} />}
     </FormGroupWithLabel>
   );
 }

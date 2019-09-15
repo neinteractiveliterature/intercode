@@ -1,116 +1,101 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { useMutation } from 'react-apollo-hooks';
 
-import Confirm from '../../ModalDialogs/Confirm';
+import { useConfirm } from '../../ModalDialogs/Confirm';
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import ErrorDisplay from '../../ErrorDisplay';
 import { CmsVariablesQuery, DeleteCmsVariableMutation, SetCmsVariableMutation } from './queries.gql';
+import useAsyncFunction from '../../useAsyncFunction';
+import { useDeleteMutation } from '../../MutationUtils';
 
-class ExistingVariableRow extends React.Component {
-  static propTypes = {
-    variable: PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      value_json: PropTypes.string.isRequired,
-    }).isRequired,
-  }
+function ExistingVariableRow({ variable }) {
+  const [setVariableMutate] = useMutation(SetCmsVariableMutation);
+  const [
+    setVariable, setVariableError, , clearSetVariableError,
+  ] = useAsyncFunction(setVariableMutate);
+  const deleteVariableMutate = useDeleteMutation(DeleteCmsVariableMutation, {
+    query: CmsVariablesQuery,
+    arrayPath: ['cmsVariables'],
+    idVariablePath: ['key'],
+    idAttribute: 'key',
+  });
+  const [
+    deleteVariable, deleteVariableError, , clearDeleteVariableError,
+  ] = useAsyncFunction(deleteVariableMutate);
+  const confirm = useConfirm();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-    };
-  }
+  const error = setVariableError || deleteVariableError;
+  const clearError = () => {
+    clearSetVariableError();
+    clearDeleteVariableError();
+  };
 
-  render = () => (
-    <React.Fragment>
+  return (
+    <>
       <tr>
         <td>
-          <code>{this.props.variable.key}</code>
+          <code>{variable.key}</code>
         </td>
         <td>
-          <Mutation mutation={SetCmsVariableMutation}>
-            {mutate => (
+          {variable.current_ability_can_update
+            ? (
               <CommitableInput
                 className="text-monospace"
-                value={this.props.variable.value_json}
-                onChange={async (value) => {
-                  this.setState({ error: null });
-                  try {
-                    await mutate({
-                      variables: {
-                        key: this.props.variable.key,
-                        value_json: value,
-                      },
-                    });
-                  } catch (error) {
-                    this.setState({ error });
-                    throw error;
-                  }
-                }}
-                onCancel={() => this.setState({ error: null })}
+                value={variable.value_json}
+                onChange={(value) => setVariable({
+                  variables: {
+                    key: variable.key,
+                    value_json: value,
+                  },
+                })}
+                onCancel={clearError}
               />
-            )}
-          </Mutation>
+            )
+            : <span className="text-monospace">{variable.value_json}</span>}
         </td>
         <td>
-          <Mutation mutation={DeleteCmsVariableMutation}>
-            {mutate => (
-              <Confirm.Trigger>
-                {confirm => (
-                  <button
-                    className="btn btn-outline-danger"
-                    type="button"
-                    onClick={() => confirm({
-                      prompt: `Are you sure you want to delete the variable "${this.props.variable.key}"?`,
-                      action: async () => {
-                        try {
-                          await mutate({
-                            variables: { key: this.props.variable.key },
-                            update: (cache) => {
-                              const data = cache.readQuery({ query: CmsVariablesQuery });
-                              cache.writeQuery({
-                                query: CmsVariablesQuery,
-                                data: {
-                                  ...data,
-                                  cmsVariables: data.cmsVariables
-                                    .filter(variable => variable.key !== this.props.variable.key),
-                                },
-                              });
-                            },
-                          });
-                        } catch (error) {
-                          this.setState({ error });
-                        }
-                      },
-                    })}
-                  >
-                    <i className="fa fa-trash-o" />
-                    <span className="sr-only">
-                      Delete variable &quot;
-                      {this.props.variable.key}
-                      &quot;
-                    </span>
-                  </button>
-                )}
-              </Confirm.Trigger>
-            )}
-          </Mutation>
+          {variable.current_ability_can_delete && (
+            <button
+              className="btn btn-outline-danger"
+              type="button"
+              onClick={() => confirm({
+                prompt: `Are you sure you want to delete the variable "${variable.key}"?`,
+                action: () => deleteVariable({ variables: { key: variable.key } }),
+              })}
+            >
+              <i className="fa fa-trash-o" />
+              <span className="sr-only">
+                Delete variable &ldquo;
+                {variable.key}
+                &rdquo;
+              </span>
+            </button>
+          )}
         </td>
       </tr>
       {
-        this.state.error
+        error
           ? (
             <tr>
               <td colSpan="3">
-                <ErrorDisplay graphQLError={this.state.error} />
+                <ErrorDisplay graphQLError={error} />
               </td>
             </tr>
           )
           : null
       }
-    </React.Fragment>
-  )
+    </>
+  );
 }
+
+ExistingVariableRow.propTypes = {
+  variable: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    value_json: PropTypes.string.isRequired,
+    current_ability_can_update: PropTypes.bool.isRequired,
+    current_ability_can_delete: PropTypes.bool.isRequired,
+  }).isRequired,
+};
 
 export default ExistingVariableRow;

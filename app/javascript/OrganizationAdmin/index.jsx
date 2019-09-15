@@ -31,7 +31,7 @@ function OrganizationAdmin() {
         <Route
           path="/organizations/:id"
           render={({ match: { params: { id } } }) => {
-            const organization = data.organizations.find(org => org.id.toString() === id);
+            const organization = data.organizations.find((org) => org.id.toString() === id);
 
             return (
               <>

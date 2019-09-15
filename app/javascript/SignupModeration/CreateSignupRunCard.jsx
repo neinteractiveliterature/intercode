@@ -42,7 +42,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
       await withdrawSignupMutate({ variables: { runId, userConProfileId } });
       await apolloClient.resetStore();
     },
-    renderError: withdrawError => <ErrorDisplay graphQLError={withdrawError} />,
+    renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
   });
 
   const signupOptions = useMemo(
@@ -51,17 +51,17 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
   );
 
   const mySignup = useMemo(
-    () => (error ? null : data.userConProfile.signups.find(s => s.run.id === runId && s.state !== 'withdrawn')),
+    () => (error ? null : data.userConProfile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn')),
     [data, error, runId],
   );
 
   const myPendingSignupRequest = useMemo(
-    () => (error ? null : data.userConProfile.signup_requests.find(sr => sr.target_run.id === runId && sr.state === 'pending')),
+    () => (error ? null : data.userConProfile.signup_requests.find((sr) => sr.target_run.id === runId && sr.state === 'pending')),
     [data, error, runId],
   );
 
   const run = useMemo(
-    () => (error ? null : data.event.runs.find(r => r.id === runId)),
+    () => (error ? null : data.event.runs.find((r) => r.id === runId)),
     [data, error, runId],
   );
 

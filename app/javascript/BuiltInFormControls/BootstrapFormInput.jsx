@@ -2,60 +2,55 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
+import useUniqueId from '../useUniqueId';
 
-class BootstrapFormInput extends React.Component {
-  static propTypes = {
-    name: PropTypes.string,
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-    type: PropTypes.string,
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func,
-    onTextChange: PropTypes.func,
-    helpText: PropTypes.string,
-    disabled: PropTypes.bool,
-  };
+function BootstrapFormInput(props) {
+  const inputId = useUniqueId(`${props.name || 'input'}-`);
 
-  static defaultProps = {
-    name: null,
-    type: 'text',
-    disabled: false,
-    helpText: null,
-    onChange: null,
-    onTextChange: null,
-  };
+  const {
+    helpText, label, hideLabel, onChange, onTextChange, ...otherProps
+  } = props;
 
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
-  }
+  const onChangeProp = onChange || ((event) => { onTextChange(event.target.value); });
 
-  render = () => {
-    const inputId = this.nextUniqueId();
-
-    const {
-      helpText, label, onChange, onTextChange, ...otherProps
-    } = this.props;
-
-    const onChangeProp = onChange || ((event) => { onTextChange(event.target.value); });
-
-    return (
-      <div className="form-group">
-        <label htmlFor={inputId}>{label}</label>
-        <input
-          className="form-control"
-          id={inputId}
-          onChange={onChangeProp}
-          {...otherProps}
-        />
-        {
-          helpText
-            ? <small className="form-text text-muted">{helpText}</small>
-            : null
-        }
-      </div>
-    );
-  }
+  return (
+    <div className="form-group">
+      <label htmlFor={inputId} className={hideLabel ? 'sr-only' : null}>{label}</label>
+      <input
+        className="form-control"
+        id={inputId}
+        onChange={onChangeProp}
+        {...otherProps}
+      />
+      {
+        helpText
+          ? <small className="form-text text-muted">{helpText}</small>
+          : null
+      }
+    </div>
+  );
 }
+
+BootstrapFormInput.propTypes = {
+  name: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  hideLabel: PropTypes.bool,
+  type: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  onTextChange: PropTypes.func,
+  helpText: PropTypes.string,
+  disabled: PropTypes.bool,
+};
+
+BootstrapFormInput.defaultProps = {
+  name: null,
+  hideLabel: false,
+  type: 'text',
+  disabled: false,
+  helpText: null,
+  onChange: null,
+  onTextChange: null,
+};
 
 export default BootstrapFormInput;

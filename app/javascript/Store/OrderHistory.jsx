@@ -51,7 +51,7 @@ function OrderHistory() {
   const renderOrderStatus = (order) => {
     if (order.status === 'paid') {
       const opsPosition = data.convention.staff_positions
-        .find(staffPosition => staffPosition.name === 'Operations Coordinator');
+        .find((staffPosition) => staffPosition.name === 'Operations Coordinator');
       const opsEmail = (opsPosition || {}).email;
       const emailSubject = `[${data.convention.name}] Cancellation request: order ${order.id}`;
       const emailBody = `I would like to request that order ${order.id} be canceled.`;
@@ -98,7 +98,7 @@ function OrderHistory() {
   };
 
   const renderOrder = (order) => {
-    const renderedOrderEntries = order.order_entries.map(entry => renderOrderEntry(entry));
+    const renderedOrderEntries = order.order_entries.map((entry) => renderOrderEntry(entry));
     const submittedTime = moment(order.submitted_at).tz(data.convention.timezone_name);
 
     return (
@@ -132,7 +132,7 @@ function OrderHistory() {
   const { orders } = data.myProfile;
 
   if (orders.length > 0) {
-    const renderedOrders = orders.map(order => renderOrder(order));
+    const renderedOrders = orders.map((order) => renderOrder(order));
     return (
       <>
         <h1 className="mb-4">My order history</h1>
@@ -149,8 +149,8 @@ function OrderHistory() {
               paymentModal.state
                 ? intersection(
                   ...paymentModal.state.order.order_entries
-                    .map(entry => entry.product.payment_options),
-                ).filter(paymentOption => paymentOption !== 'pay_at_convention')
+                    .map((entry) => entry.product.payment_options),
+                ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
                 : []
             }
           />
