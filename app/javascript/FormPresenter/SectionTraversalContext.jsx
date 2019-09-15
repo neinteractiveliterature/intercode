@@ -38,7 +38,7 @@ export function SectionTraversalProvider({ form, children }) {
     () => {
       addToSectionIndex(
         -1,
-        newSectionIndex => Math.max(newSectionIndex, 0),
+        (newSectionIndex) => Math.max(newSectionIndex, 0),
       );
     },
     [addToSectionIndex],
@@ -50,7 +50,7 @@ export function SectionTraversalProvider({ form, children }) {
 
       addToSectionIndex(
         1,
-        newSectionIndex => Math.min(newSectionIndex, maxSectionIndex),
+        (newSectionIndex) => Math.min(newSectionIndex, maxSectionIndex),
       );
     },
     [sectionCount, addToSectionIndex],

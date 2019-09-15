@@ -17,8 +17,8 @@ function StaffPositionAdmin() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const findStaffPosition = id => data.convention.staff_positions
-    .find(sp => sp.id.toString(10) === id);
+  const findStaffPosition = (id) => data.convention.staff_positions
+    .find((sp) => sp.id.toString(10) === id);
 
   return (
     <>
@@ -71,7 +71,6 @@ function StaffPositionAdmin() {
           render={({ match: { params: { id } } }) => (
             <EditStaffPositionPermissions
               staffPosition={findStaffPosition(id)}
-              eventCategories={data.convention.event_categories}
               convention={data.convention}
             />
           )}

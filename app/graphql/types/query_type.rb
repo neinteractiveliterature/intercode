@@ -85,6 +85,39 @@ class Types::QueryType < Types::BaseObject
     convention || root_site
   end
 
+  field :search_cms_content, [Types::CmsContentType], null: false do
+    argument :name, String, required: false
+  end
+
+  def search_cms_content(name: nil)
+    scopes = Types::CmsContentType.possible_types.map do |content_type|
+      policy_scope(cms_parent.public_send(content_type.graphql_name.tableize))
+    end
+
+    contents = scopes.flat_map do |scope|
+      filtered_scope = scope
+      filtered_scope = filtered_scope.where('lower(name) like ?', "%#{name.downcase}%") if name.present?
+
+      filtered_scope.limit(10).to_a
+    end
+
+    contents.sort_by { |content| [content.name.length, content.name] }
+  end
+
+  field :cms_content_groups, [Types::CmsContentGroupType], null: false
+
+  def cms_content_groups
+    cms_parent.cms_content_groups
+  end
+
+  field :cms_content_group, Types::CmsContentGroupType, null: false do
+    argument :id, Int, required: true
+  end
+
+  def cms_content_group(id:)
+    cms_parent.cms_content_groups.find(id)
+  end
+
   field :cms_files, [Types::CmsFileType], null: true
 
   def cms_files

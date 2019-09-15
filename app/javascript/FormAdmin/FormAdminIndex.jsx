@@ -13,9 +13,9 @@ import { useDeleteMutation } from '../MutationUtils';
 
 function describeFormUsers(form) {
   return [
-    ...form.user_con_profile_conventions.map(convention => `User profile form for ${convention.name}`).sort(),
-    ...form.event_categories.map(eventCategory => `Event form for ${pluralize(eventCategory.name)}`).sort(),
-    ...form.proposal_event_categories.map(eventCategory => `Proposal form for ${pluralize(eventCategory.name)}`).sort(),
+    ...form.user_con_profile_conventions.map((convention) => `User profile form for ${convention.name}`).sort(),
+    ...form.event_categories.map((eventCategory) => `Event form for ${pluralize(eventCategory.name)}`).sort(),
+    ...form.proposal_event_categories.map((eventCategory) => `Proposal form for ${pluralize(eventCategory.name)}`).sort(),
   ];
 }
 
@@ -30,7 +30,7 @@ function FormAdminIndex() {
   const sortedForms = useMemo(
     () => (error
       ? null
-      : sortByLocaleString(data.convention.forms, form => form.title)),
+      : sortByLocaleString(data.convention.forms, (form) => form.title)),
     [data, error],
   );
 
@@ -61,7 +61,7 @@ function FormAdminIndex() {
           </tr>
         </thead>
         <tbody>
-          {sortedForms.map(form => (
+          {sortedForms.map((form) => (
             <tr key={form.id}>
               <td>{form.title}</td>
               <td>
@@ -79,7 +79,7 @@ function FormAdminIndex() {
                   type="button"
                   onClick={() => confirm({
                     prompt: 'Are you sure you want to delete this form?',
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                     action: () => deleteForm({ variables: { id: form.id } }),
                   })}
                 >

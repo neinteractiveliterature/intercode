@@ -1,37 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import useAsyncFunction from '../../useAsyncFunction';
 
-class RefreshButton extends React.Component {
-  static propTypes = {
-    refreshData: PropTypes.func.isRequired,
-  }
+function RefreshButton({ refreshData }) {
+  const [refreshAsync, , refreshInProgress] = useAsyncFunction(refreshData);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
-  render = () => (
+  return (
     <button
       className="btn btn-link"
       type="button"
-      disabled={this.state.refreshing}
-      onClick={async () => {
-        this.setState({ refreshing: true });
-        try {
-          await this.props.refreshData();
-        } finally {
-          this.setState({ refreshing: false });
-        }
-      }}
+      disabled={refreshInProgress}
+      onClick={refreshAsync}
     >
-      <i className={classNames('fa fa-refresh', { 'fa-spin': this.state.refreshing })} />
+      <i className={classNames('fa fa-refresh', { 'fa-spin': refreshInProgress })} />
       <span className="d-none d-md-inline"> Refresh</span>
     </button>
-  )
+  );
 }
+
+RefreshButton.propTypes = {
+  refreshData: PropTypes.func.isRequired,
+};
 
 export default RefreshButton;

@@ -1,3 +1,4 @@
+/* eslint-disable import/export */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
@@ -39,7 +40,7 @@ function customRender(ui, options = {}) {
   const { apolloClient, stripePublishableKey, ...otherOptions } = options;
   return render(ui, {
     ...otherOptions,
-    wrapper: wrapperProps => (
+    wrapper: (wrapperProps) => (
       <TestWrapper
         apolloClient={apolloClient || { query: () => {} }}
         stripePublishableKey={stripePublishableKey}

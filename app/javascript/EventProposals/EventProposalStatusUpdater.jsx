@@ -22,19 +22,10 @@ const STATUSES = [
 ];
 
 function getStatus(key) {
-  return STATUSES.find(status => status.key === key);
+  return STATUSES.find((status) => status.key === key);
 }
 
 class EventProposalStatusUpdater extends React.Component {
-  static propTypes = {
-    eventProposal: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string,
-      status: PropTypes.string.isRequired,
-      event: PropTypes.shape({}),
-    }).isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -84,11 +75,11 @@ class EventProposalStatusUpdater extends React.Component {
             <div className="modal-body">
               <MultipleChoiceInput
                 caption="New status"
-                choices={['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map(status => ({
+                choices={['proposed', 'reviewing', 'accepted', 'rejected', 'withdrawn'].map((status) => ({
                   label: status, value: status,
                 }))}
                 value={this.state.status}
-                onChange={status => this.setState({ status, dropEvent: false })}
+                onChange={(status) => this.setState({ status, dropEvent: false })}
                 disabled={this.state.mutationInProgress}
               />
 
@@ -110,7 +101,7 @@ class EventProposalStatusUpdater extends React.Component {
                     <BooleanInput
                       caption="Drop event?"
                       value={this.state.dropEvent}
-                      onChange={dropEvent => this.setState({ dropEvent })}
+                      onChange={(dropEvent) => this.setState({ dropEvent })}
                       disabled={this.state.mutationInProgress}
                     />
                   )
@@ -131,7 +122,7 @@ class EventProposalStatusUpdater extends React.Component {
               </button>
 
               <Mutation mutation={TransitionEventProposal}>
-                {mutate => (
+                {(mutate) => (
                   <button
                     type="button"
                     className={`btn ${getStatus(this.state.status).buttonClass}`}
@@ -152,5 +143,14 @@ class EventProposalStatusUpdater extends React.Component {
     </ModalContainer>
   )
 }
+
+EventProposalStatusUpdater.propTypes = {
+  eventProposal: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    status: PropTypes.string.isRequired,
+    event: PropTypes.shape({}),
+  }).isRequired,
+};
 
 export default EventProposalStatusUpdater;

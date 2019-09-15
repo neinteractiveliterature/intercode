@@ -83,20 +83,18 @@ describe('RegistrationBucketRow', () => {
   });
 
   test('changing the name', () => {
-    const { getByLabelText, getByText } = renderRegistrationBucketRow();
+    const { getByLabelText } = renderRegistrationBucketRow();
     fireEvent.focus(getByLabelText('Bucket name'));
     fireEvent.change(getByLabelText('Bucket name'), { target: { value: 'new name' } });
-    fireEvent.click(getByText('Commit changes'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].name).toEqual('new name');
     expect(onChange.mock.calls[0][1].key).toEqual('testBucket');
   });
 
   test('changing the description', () => {
-    const { getByLabelText, getByText } = renderRegistrationBucketRow();
+    const { getByLabelText } = renderRegistrationBucketRow();
     fireEvent.focus(getByLabelText('Bucket description'));
     fireEvent.change(getByLabelText('Bucket description'), { target: { value: 'a new description' } });
-    fireEvent.click(getByText('Commit changes'));
     expect(onChange.mock.calls[0][0]).toEqual('testBucket');
     expect(onChange.mock.calls[0][1].description).toEqual('a new description');
   });

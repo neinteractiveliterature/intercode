@@ -64,7 +64,7 @@ class ColumnReservationSet {
       return -1;
     });
 
-    return (reservedColumnNumbers.filter(columnNumber => columnNumber !== -1));
+    return (reservedColumnNumbers.filter((columnNumber) => columnNumber !== -1));
   }
 
   getLastReservedColumnNumber() {
@@ -86,11 +86,11 @@ class ColumnReservationSet {
   }
 
   isEmpty() {
-    return this.reservations.every(reservation => reservation == null);
+    return this.reservations.every((reservation) => reservation == null);
   }
 
   nextFreeColumn() {
-    const foundNull = this.reservations.findIndex(reservation => reservation == null);
+    const foundNull = this.reservations.findIndex((reservation) => reservation == null);
     if (foundNull !== -1) {
       return foundNull;
     }

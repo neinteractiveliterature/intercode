@@ -71,7 +71,7 @@ function RunsSection({ eventId }) {
     <div className="run-card-deck">
       {showFakeRun
         ? <FakeRun event={event} />
-        : sortedRuns.map(run => (
+        : sortedRuns.map((run) => (
           <EventPageRunCard
             event={event}
             run={run}
@@ -79,8 +79,7 @@ function RunsSection({ eventId }) {
             myProfile={myProfile}
             currentAbility={currentAbility}
           />
-        ))
-      }
+        ))}
     </div>
   );
 }

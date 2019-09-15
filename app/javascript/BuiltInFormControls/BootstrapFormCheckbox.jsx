@@ -2,64 +2,57 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
+import useUniqueId from '../useUniqueId';
 
-class BootstrapFormCheckbox extends React.Component {
-  static propTypes = {
-    name: PropTypes.string,
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-    checked: PropTypes.bool.isRequired,
-    onChange: PropTypes.func,
-    onCheckedChange: PropTypes.func,
-    disabled: PropTypes.bool,
-    type: PropTypes.oneOf(['radio', 'checkbox']),
-    className: PropTypes.string,
-    inputClassName: PropTypes.string,
-  };
+function BootstrapFormCheckbox(props) {
+  const {
+    className,
+    inputClassName,
+    label,
+    onChange,
+    onCheckedChange,
+    ...otherProps
+  } = props;
 
-  static defaultProps = {
-    disabled: false,
-    type: 'checkbox',
-    className: '',
-    inputClassName: '',
-    name: null,
-    onChange: null,
-    onCheckedChange: null,
-  };
+  const inputId = useUniqueId(otherProps.name ? `${otherProps.name}-` : 'checkbox-');
+  const onChangeProp = onChange || ((event) => { onCheckedChange(event.target.checked); });
 
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
-  }
-
-  render = () => {
-    const inputId = this.nextUniqueId();
-    const {
-      className,
-      inputClassName,
-      label,
-      onChange,
-      onCheckedChange,
-      ...otherProps
-    } = this.props;
-
-    const onChangeProp = onChange || ((event) => { onCheckedChange(event.target.checked); });
-
-    return (
-      <div className={`form-check ${className}`}>
-        <label className="form-check-label" htmlFor={inputId}>
-          <input
-            className={`form-check-input ${inputClassName}`}
-            id={inputId}
-            onChange={onChangeProp}
-            {...otherProps}
-          />
-          {' '}
-          {label}
-        </label>
-      </div>
-    );
-  }
+  return (
+    <div className={`form-check ${className}`}>
+      <label className="form-check-label" htmlFor={inputId}>
+        <input
+          className={`form-check-input ${inputClassName}`}
+          id={inputId}
+          onChange={onChangeProp}
+          {...otherProps}
+        />
+        {' '}
+        {label}
+      </label>
+    </div>
+  );
 }
+
+BootstrapFormCheckbox.propTypes = {
+  name: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  checked: PropTypes.bool.isRequired,
+  onChange: PropTypes.func,
+  onCheckedChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  type: PropTypes.oneOf(['radio', 'checkbox']),
+  className: PropTypes.string,
+  inputClassName: PropTypes.string,
+};
+
+BootstrapFormCheckbox.defaultProps = {
+  disabled: false,
+  type: 'checkbox',
+  className: '',
+  inputClassName: '',
+  name: null,
+  onChange: null,
+  onCheckedChange: null,
+};
 
 export default BootstrapFormCheckbox;

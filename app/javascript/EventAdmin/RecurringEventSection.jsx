@@ -27,7 +27,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
   );
 
   const runLists = conventionDays.map((conventionDay) => {
-    const dayRuns = event.runs.filter(run => (
+    const dayRuns = event.runs.filter((run) => (
       conventionDay.includesTime(moment(run.starts_at))
     ));
 
@@ -39,7 +39,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }) {
       if (runStart.day() !== conventionDay.start.day()) {
         format = 'ddd h:mma';
       }
-      const eventCategory = convention.event_categories.find(c => c.id === event.event_category.id);
+      const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
 
       return (
         <li key={run.id} className="my-2">
@@ -108,7 +108,7 @@ function RecurringEventSection({ event, convention }) {
   const [expanded, setExpanded] = useState(false);
   const scheduleRunsModal = useModal();
 
-  const toggleExpanded = useCallback(() => setExpanded(prevExpanded => !prevExpanded), []);
+  const toggleExpanded = useCallback(() => setExpanded((prevExpanded) => !prevExpanded), []);
 
   return (
     <section className="my-4">

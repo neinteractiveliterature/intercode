@@ -73,7 +73,7 @@ function ProductOrderForm({ productId, history }) {
       <select
         className="form-control mb-3"
         value={productVariantId || ''}
-        onChange={event => productVariantIdChanged(event.target.value)}
+        onChange={(event) => productVariantIdChanged(event.target.value)}
       >
         <option disabled value="">Select...</option>
         {options}
@@ -89,7 +89,7 @@ function ProductOrderForm({ productId, history }) {
         min="1"
         className="form-control"
         value={quantity == null ? '' : quantity}
-        onChange={event => quantityChanged(event.target.value)}
+        onChange={(event) => quantityChanged(event.target.value)}
       />
     </label>
   );
@@ -102,7 +102,7 @@ function ProductOrderForm({ productId, history }) {
     let pricePerItem = data.product.price.fractional;
     if (productVariantId) {
       const productVariant = data.product.product_variants
-        .find(variant => variant.id === productVariantId);
+        .find((variant) => variant.id === productVariantId);
 
       if (productVariant.override_price != null) {
         pricePerItem = productVariant.override_price.fractional;

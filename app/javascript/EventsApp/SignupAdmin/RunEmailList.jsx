@@ -11,7 +11,7 @@ import usePageTitle from '../../usePageTitle';
 
 function getEmails({ data, includes }) {
   const teamMemberUserConProfileIds = data.event.team_members
-    .map(teamMember => teamMember.user_con_profile.id);
+    .map((teamMember) => teamMember.user_con_profile.id);
 
   const includesObject = {};
   includes.forEach((value) => { includesObject[value] = true; });
@@ -34,7 +34,7 @@ function getEmails({ data, includes }) {
     return true;
   });
 
-  return signups.map(signup => ({
+  return signups.map((signup) => ({
     email: signup.user_con_profile.email,
     name: signup.user_con_profile.name_without_nickname,
   }));

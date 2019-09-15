@@ -14,7 +14,7 @@ function FormItemInput({
   formItem, value, onChange, onInteract, valueInvalid, convention,
 }) {
   const valueDidChange = useCallback(
-    newValue => onChange(formItem.identifier, newValue),
+    (newValue) => onChange(formItem.identifier, newValue),
     [formItem.identifier, onChange],
   );
 

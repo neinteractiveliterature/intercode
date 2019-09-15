@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { humanize, titleize } from 'inflected';
+import { humanize } from 'inflected';
 import fetch from 'unfetch';
 import { Link } from 'react-router-dom';
 
@@ -124,7 +124,7 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
                   onClick={() => confirm({
                     prompt: `Are you sure you want to remove ${data.userConProfile.name} from ${data.convention.name}?`,
                     action: deleteConfirmed,
-                    renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })}
                 >
                   Delete

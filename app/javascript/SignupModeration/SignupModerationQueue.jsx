@@ -28,7 +28,7 @@ function describeRequestedBucket(signupRequest) {
     signupRequest.requested_bucket_key
       ? (
         signupRequest.target_run.event.registration_policy.buckets
-          .find(bucket => bucket.key === signupRequest.requested_bucket_key)
+          .find((bucket) => bucket.key === signupRequest.requested_bucket_key)
         || {}).name
       : 'No preference'
   );
@@ -50,7 +50,7 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
             {' '}
             {(
               run.event.registration_policy.buckets
-                .find(bucket => bucket.key === requestedBucketKey)
+                .find((bucket) => bucket.key === requestedBucketKey)
               || {}
             ).name || 'No preference'}
           </small>
@@ -89,7 +89,7 @@ function SignupModerationQueue() {
   const [rejectSignupRequest] = useMutation(RejectSignupRequest);
   const confirm = useConfirm();
 
-  const acceptClicked = signupRequest => confirm({
+  const acceptClicked = (signupRequest) => confirm({
     prompt: (
       <>
         <p>
@@ -120,10 +120,10 @@ function SignupModerationQueue() {
       </>
     ),
     action: () => acceptSignupRequest({ variables: { id: signupRequest.id } }),
-    renderError: acceptError => <ErrorDisplay graphQLError={acceptError} />,
+    renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
   });
 
-  const rejectClicked = signupRequest => confirm({
+  const rejectClicked = (signupRequest) => confirm({
     prompt: (
       <p className="mb-0">
         Please confirm you want to reject this signup request.  This will
@@ -135,7 +135,7 @@ function SignupModerationQueue() {
       </p>
     ),
     action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),
-    renderError: acceptError => <ErrorDisplay graphQLError={acceptError} />,
+    renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
   });
 
   if (error) {
@@ -159,7 +159,7 @@ function SignupModerationQueue() {
           </tr>
         </thead>
         <tbody>
-          {data.convention.signup_requests_paginated.entries.map(signupRequest => (
+          {data.convention.signup_requests_paginated.entries.map((signupRequest) => (
             <tr key={signupRequest.id}>
               <td>{signupRequest.user_con_profile.name}</td>
               <td>

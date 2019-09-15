@@ -1,30 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { titleize } from 'inflected';
+import classNames from 'classnames';
 
 import PermissionsTableCell from './PermissionsTableCell';
 import usePermissionsChangeSet from './usePermissionsChangeSet';
-import { PermissionNamePropType, PermissionPropType, ModelPropType } from './PermissionPropTypes';
+import {
+  PermissionNamePropType, PermissionPropType, ModelPropType, RolePropType,
+} from './PermissionPropTypes';
 
 function PermissionsTableInput({
   permissionNames,
   initialPermissions,
+  rowType,
   models,
+  roles,
   changeSet,
   add,
   remove,
-  modelsHeader,
-  formatModelHeader,
+  rowsHeader,
+  formatRowHeader,
+  readOnly,
 }) {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions, changeSet, add, remove,
   });
 
+  const rows = rowType === 'role' ? roles : models;
+
   return (
-    <table className="table table-responsive table-hover-cell" role="grid">
+    <table className={classNames('table table-responsive', { 'table-hover-cell': !readOnly })} role="grid">
       <thead>
         <tr>
-          <th>{modelsHeader}</th>
+          <th>{rowsHeader}</th>
           {
             permissionNames.map(({ permission, name }) => (
               <th key={permission} className="text-center">{titleize(name)}</th>
@@ -34,10 +42,10 @@ function PermissionsTableInput({
       </thead>
 
       <tbody>
-        {models.map(model => (
-          <tr key={model.id}>
+        {rows.map((row) => (
+          <tr key={row.id}>
             <th scope="row">
-              {formatModelHeader(model)}
+              {formatRowHeader(row)}
             </th>
             {permissionNames.map(({ permission }) => (
               <PermissionsTableCell
@@ -45,10 +53,13 @@ function PermissionsTableInput({
                 initialPermissions={initialPermissions}
                 currentPermissions={currentPermissions}
                 changeSet={changeSet}
-                model={model}
+                rowType={rowType}
+                model={rowType === 'model' ? row : null}
+                role={rowType === 'role' ? row : null}
                 permission={permission}
                 grantPermission={grantPermission}
                 revokePermission={revokePermission}
+                readOnly={readOnly}
               />
             ))}
           </tr>
@@ -61,18 +72,24 @@ function PermissionsTableInput({
 PermissionsTableInput.propTypes = {
   permissionNames: PropTypes.arrayOf(PermissionNamePropType).isRequired,
   initialPermissions: PropTypes.arrayOf(PermissionPropType.isRequired).isRequired,
-  models: PropTypes.arrayOf(ModelPropType).isRequired,
+  rowType: PropTypes.oneOf(['model', 'role']).isRequired,
+  models: PropTypes.arrayOf(ModelPropType),
+  roles: PropTypes.arrayOf(RolePropType),
   changeSet: PropTypes.shape({
     apply: PropTypes.shape.isRequired,
   }).isRequired,
   add: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
-  modelsHeader: PropTypes.node,
-  formatModelHeader: PropTypes.func.isRequired,
+  rowsHeader: PropTypes.node,
+  formatRowHeader: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
 };
 
 PermissionsTableInput.defaultProps = {
-  modelsHeader: null,
+  rowsHeader: null,
+  models: null,
+  roles: null,
+  readOnly: false,
 };
 
 export default PermissionsTableInput;

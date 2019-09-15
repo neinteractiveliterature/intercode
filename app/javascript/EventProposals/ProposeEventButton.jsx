@@ -10,18 +10,6 @@ import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import SignInButton from '../Authentication/SignInButton';
 
 class ProposeEventButton extends React.Component {
-  static propTypes = {
-    caption: PropTypes.node.isRequired,
-    className: PropTypes.string,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-  };
-
-  static defaultProps = {
-    className: 'btn btn-secondary',
-  }
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -53,7 +41,7 @@ class ProposeEventButton extends React.Component {
               visible={modalVisible}
               userEventProposals={data.myProfile.user.event_proposals}
               proposableEventCategories={data.convention.event_categories
-                .filter(category => category.proposable)}
+                .filter((category) => category.proposable)}
             />
           </div>
         )}
@@ -79,5 +67,17 @@ class ProposeEventButton extends React.Component {
     </QueryWithStateDisplay>
   )
 }
+
+ProposeEventButton.propTypes = {
+  caption: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+ProposeEventButton.defaultProps = {
+  className: 'btn btn-secondary',
+};
 
 export default withRouter(ProposeEventButton);

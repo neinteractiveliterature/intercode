@@ -19,35 +19,12 @@ import {
 import TimeblockPreferenceCell from './TimeblockPreferenceCell';
 
 class TimeblockPreferenceItemInput extends React.Component {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      caption: PropTypes.string.isRequired,
-      properties: PropTypes.shape({
-        caption: PropTypes.string.isRequired,
-        timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
-        omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
-        hide_timestamps: PropTypes.bool,
-      }).isRequired,
-    }).isRequired,
-    convention: PropTypes.shape({
-      starts_at: PropTypes.string.isRequired,
-      ends_at: PropTypes.string.isRequired,
-      timezone_name: PropTypes.string.isRequired,
-    }).isRequired,
-    value: PropTypes.arrayOf(TimeblockPreferenceAPIRepresentationPropType.isRequired),
-    onChange: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    value: [],
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
 
     this.state = {
-      preferences: (this.props.value || []).map(apiRepresentation => ({
+      preferences: (this.props.value || []).map((apiRepresentation) => ({
         start: moment(apiRepresentation.start),
         finish: moment(apiRepresentation.finish),
         label: apiRepresentation.label,
@@ -58,15 +35,15 @@ class TimeblockPreferenceItemInput extends React.Component {
 
   preferenceDidChange = (newOrdinality, hypotheticalPreference) => {
     const existingPreference = this.state.preferences
-      .find(p => preferencesMatch(p, hypotheticalPreference));
+      .find((p) => preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         preferences: prevState.preferences
-          .filter(p => (!(preferencesMatch(p, hypotheticalPreference)))),
+          .filter((p) => (!(preferencesMatch(p, hypotheticalPreference)))),
       }), this.preferencesDidChange);
     } else if (existingPreference) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         preferences: prevState.preferences.map((p) => {
           if (preferencesMatch(p, hypotheticalPreference)) {
             return { ...p, ordinality: newOrdinality };
@@ -76,7 +53,7 @@ class TimeblockPreferenceItemInput extends React.Component {
         }),
       }), this.preferencesDidChange);
     } else {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         preferences: [
           ...prevState.preferences,
           {
@@ -89,7 +66,7 @@ class TimeblockPreferenceItemInput extends React.Component {
   }
 
   preferencesDidChange = () => {
-    this.props.onChange(this.state.preferences.map(preference => ({
+    this.props.onChange(this.state.preferences.map((preference) => ({
       start: preference.start.toISOString(),
       finish: preference.finish.toISOString(),
       label: preference.label,
@@ -108,7 +85,7 @@ class TimeblockPreferenceItemInput extends React.Component {
           <thead>
             <tr>
               <th />
-              {columns.map(column => (
+              {columns.map((column) => (
                 <th key={column.dayStart.toString()}>
                   {getColumnHeader(column)}
                 </th>
@@ -116,7 +93,7 @@ class TimeblockPreferenceItemInput extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {rows.map(row => (
+            {rows.map((row) => (
               <tr key={row.timeblock.label}>
                 <td>
                   {row.timeblock.label}
@@ -154,5 +131,28 @@ class TimeblockPreferenceItemInput extends React.Component {
     );
   };
 }
+
+TimeblockPreferenceItemInput.propTypes = {
+  formItem: PropTypes.shape({
+    caption: PropTypes.string.isRequired,
+    properties: PropTypes.shape({
+      caption: PropTypes.string.isRequired,
+      timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,
+      omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType.isRequired).isRequired,
+      hide_timestamps: PropTypes.bool,
+    }).isRequired,
+  }).isRequired,
+  convention: PropTypes.shape({
+    starts_at: PropTypes.string.isRequired,
+    ends_at: PropTypes.string.isRequired,
+    timezone_name: PropTypes.string.isRequired,
+  }).isRequired,
+  value: PropTypes.arrayOf(TimeblockPreferenceAPIRepresentationPropType.isRequired),
+  onChange: PropTypes.func.isRequired,
+};
+
+TimeblockPreferenceItemInput.defaultProps = {
+  value: [],
+};
 
 export default TimeblockPreferenceItemInput;

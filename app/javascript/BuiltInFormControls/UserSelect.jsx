@@ -24,10 +24,10 @@ function UserSelect({ usersQuery, ...otherProps }) {
   return (
     <GraphQLAsyncSelect
       isClearable
-      getOptions={data => data.users_paginated.entries}
-      getVariables={inputValue => ({ name: inputValue })}
-      getOptionValue={option => option.id}
-      formatOptionLabel={option => (
+      getOptions={(data) => data.users_paginated.entries}
+      getVariables={(inputValue) => ({ name: inputValue })}
+      getOptionValue={(option) => option.id}
+      formatOptionLabel={(option) => (
         <>
           {option.name}
           {' '}

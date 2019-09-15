@@ -1,0 +1,33 @@
+fragment PermissionedModelFields on PermissionedModel {
+  __typename
+
+  ...on CmsContentGroup {
+    id
+    name
+  }
+
+  ...on Convention {
+    id
+    name
+  }
+
+  ...on EventCategory {
+    id
+    name
+    default_color
+  }
+}
+
+fragment PermissionedRoleFields on PermissionedRole {
+  __typename
+
+  ...on StaffPosition {
+    id
+    name
+  }
+
+  ...on OrganizationRole {
+    id
+    name
+  }
+}

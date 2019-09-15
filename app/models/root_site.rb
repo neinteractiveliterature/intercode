@@ -10,6 +10,10 @@ class RootSite < ApplicationRecord
     Page.global
   end
 
+  def cms_content_groups
+    CmsContentGroup.global
+  end
+
   def cms_layouts
     CmsLayout.global
   end

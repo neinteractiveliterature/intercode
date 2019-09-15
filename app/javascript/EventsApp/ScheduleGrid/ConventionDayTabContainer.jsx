@@ -87,7 +87,7 @@ function ConventionDayTabContainer({
     <div>
       <div className="d-flex flex-wrap">
         <ul className="nav nav-tabs flex-grow-1">
-          {conventionDayTimespans.map(timespan => (
+          {conventionDayTimespans.map((timespan) => (
             <ConventionDayTab
               basename={basename}
               timespan={timespan}
@@ -102,7 +102,7 @@ function ConventionDayTabContainer({
         </div>
       </div>
       <Switch>
-        {conventionDayTimespans.map(timespan => (
+        {conventionDayTimespans.map((timespan) => (
           <Route
             path={`${basename}/${timespan.start.format('dddd').toLowerCase()}`}
             render={() => children(timespan)}

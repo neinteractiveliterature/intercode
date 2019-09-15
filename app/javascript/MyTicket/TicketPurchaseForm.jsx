@@ -25,7 +25,7 @@ function TicketPurchaseForm({ stripe }) {
   const { data, error: queryError } = useQuerySuspended(TicketPurchaseFormQuery);
   const availableTicketTypes = (queryError
     ? []
-    : data.convention.ticket_types.filter(ticketType => ticketType.publicly_available));
+    : data.convention.ticket_types.filter((ticketType) => ticketType.publicly_available));
   const [ticketType, setTicketType] = useState(availableTicketTypes.length === 1
     ? availableTicketTypes[0]
     : null);

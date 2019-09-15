@@ -7,8 +7,8 @@ import { transformsReducer } from '../../ComposableFormUtils';
 
 export const layoutReducer = transformsReducer({});
 
-function CmsLayoutForm({ layout, dispatch }) {
-  const changeCallback = key => value => dispatch({ type: 'change', key, value });
+function CmsLayoutForm({ layout, dispatch, readOnly }) {
+  const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
 
   return (
     <>
@@ -16,12 +16,14 @@ function CmsLayoutForm({ layout, dispatch }) {
         label="Name"
         value={layout.name || ''}
         onTextChange={changeCallback('name')}
+        readOnly={readOnly}
       />
 
       <BootstrapFormInput
         label="Admin notes"
         value={layout.admin_notes || ''}
         onTextChange={changeCallback('admin_notes')}
+        readOnly={readOnly}
       />
 
       <BootstrapFormInput
@@ -39,6 +41,7 @@ function CmsLayoutForm({ layout, dispatch }) {
             {')'}
           </>
         )}
+        readOnly={readOnly}
       />
 
       <div className="form-group">
@@ -46,6 +49,7 @@ function CmsLayoutForm({ layout, dispatch }) {
         <LiquidInput
           value={layout.content}
           onChange={changeCallback('content')}
+          codeMirrorOptions={{ readOnly }}
         />
       </div>
     </>
@@ -59,7 +63,13 @@ CmsLayoutForm.propTypes = {
     navbar_classes: PropTypes.string,
     content: PropTypes.string,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func,
+  readOnly: PropTypes.bool,
+};
+
+CmsLayoutForm.defaultProps = {
+  dispatch: null,
+  readOnly: false,
 };
 
 export default CmsLayoutForm;

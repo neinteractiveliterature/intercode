@@ -4,10 +4,11 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
 
+import ErrorBoundary from './ErrorBoundary';
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';
-import ErrorBoundary from './ErrorBoundary';
+import Spoiler from './Spoiler';
 
 const EventAdminMenu = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'));
 const LongFormEventDetails = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'));
@@ -22,6 +23,7 @@ export const DEFAULT_COMPONENT_MAP = {
   ProposeEventButton,
   RunsSection,
   ShortFormEventDetails,
+  Spoiler,
   SignInButton,
   SignOutButton,
   SignUpButton,
@@ -117,19 +119,19 @@ function processDefaultNode(node, children, index) {
 }
 
 const AUTHENTICATION_LINK_REPLACEMENTS = {
-  '/users/sign_in': node => (
+  '/users/sign_in': (node) => (
     <SignInButton
       className={(node.attributes.class || {}).value || 'btn btn-link d-inline p-0'}
       caption={node.textContent}
     />
   ),
-  '/users/sign_up': node => (
+  '/users/sign_up': (node) => (
     <SignUpButton
       className={(node.attributes.class || {}).value || 'btn btn-primary btn-sm'}
       caption={node.textContent}
     />
   ),
-  '/users/sign_out': node => (
+  '/users/sign_out': (node) => (
     <SignOutButton
       className={(node.attributes.class || {}).value}
       caption={node.textContent}
@@ -139,7 +141,7 @@ const AUTHENTICATION_LINK_REPLACEMENTS = {
 
 const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS = Object.entries(AUTHENTICATION_LINK_REPLACEMENTS)
   .map(([path, processNode]) => ({
-    shouldProcessNode: node => (
+    shouldProcessNode: (node) => (
       node.nodeType === Node.ELEMENT_NODE
       && node.nodeName.toLowerCase() === 'a'
       && ((node.attributes.href || {}).value || '').endsWith(path)
@@ -168,9 +170,9 @@ function processReactComponentNode(node, children, index, componentMap) {
 function processCmsLinkNode(node, children, index) {
   const attributesArray = [...node.attributes];
   const hrefAttribute = attributesArray
-    .find(attribute => (attribute.name || '').toLowerCase() === 'href');
+    .find((attribute) => (attribute.name || '').toLowerCase() === 'href');
   const otherAttributes = attributesArray
-    .filter(attribute => (attribute.name || '').toLowerCase() !== 'href');
+    .filter((attribute) => (attribute.name || '').toLowerCase() !== 'href');
   const href = (hrefAttribute || {}).value;
 
   if (href && !href.startsWith('#') && (new URL(href, window.location.href).origin === window.location.origin)) {
@@ -191,7 +193,7 @@ function processCmsLinkNode(node, children, index) {
 
 function traverseDom(node, isValidNode, processingInstructions, index) {
   if (isValidNode(node)) {
-    const processingInstruction = processingInstructions.find(instruction => (
+    const processingInstruction = processingInstructions.find((instruction) => (
       instruction.shouldProcessNode(node)
     ));
 
@@ -199,7 +201,7 @@ function traverseDom(node, isValidNode, processingInstructions, index) {
       const traversedChildren = [...node.childNodes].map((child, i) => (
         traverseDom(child, isValidNode, processingInstructions, i)
       ));
-      const children = traversedChildren.filter(x => x != null && x !== false);
+      const children = traversedChildren.filter((x) => x != null && x !== false);
 
       if (processingInstruction.replaceChildren) {
         return createElement(node, index, null, [
@@ -226,11 +228,11 @@ function buildProcessingInstructions(componentMap) {
   return [
     ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
     {
-      shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'a',
+      shouldProcessNode: (node) => node.nodeType === Node.ELEMENT_NODE && node.nodeName.toLowerCase() === 'a',
       processNode: processCmsLinkNode,
     },
     {
-      shouldProcessNode: node => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
+      shouldProcessNode: (node) => node.nodeType === Node.ELEMENT_NODE && node.attributes['data-react-class'],
       processNode: (node, children, index) => (
         processReactComponentNode(node, children, index, componentMap)
       ),

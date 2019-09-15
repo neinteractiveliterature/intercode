@@ -28,11 +28,11 @@ function ScheduleGridExtendedCounts({ now, eventRuns }) {
     [nowISOString, timezoneName],
   );
   const hourEventRuns = useMemo(
-    () => eventRuns.filter(eventRun => hourTimespan.overlapsTimespan(eventRun.timespan)),
+    () => eventRuns.filter((eventRun) => hourTimespan.overlapsTimespan(eventRun.timespan)),
     [eventRuns, hourTimespan],
   );
   const hourRunData = useMemo(
-    () => hourEventRuns.map(eventRun => buildHourRunData(eventRun, schedule)),
+    () => hourEventRuns.map((eventRun) => buildHourRunData(eventRun, schedule)),
     [hourEventRuns, schedule],
   );
 

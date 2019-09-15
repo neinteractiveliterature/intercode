@@ -15,7 +15,7 @@ const variantMatches = (a, b) => (
 
 const productVariantUpdaterForComponent = (component, variant, transforms) => mutator({
   getState: () => component.props.product.product_variants
-    .find(existingVariant => variantMatches(variant, existingVariant)),
+    .find((existingVariant) => variantMatches(variant, existingVariant)),
 
   setState: (state) => {
     const newVariants = component.props.product.product_variants.map((existingVariant) => {
@@ -33,29 +33,9 @@ const productVariantUpdaterForComponent = (component, variant, transforms) => mu
 });
 
 class AdminProductVariantsTable extends React.Component {
-  static propTypes = {
-    product: PropTypes.shape({
-      id: PropTypes.number,
-      generatedId: PropTypes.number,
-      product_variants: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        description: PropTypes.string,
-        override_price: PropTypes.shape({
-          fractional: PropTypes.number,
-          currency_code: PropTypes.string,
-        }),
-      })),
-      delete_variant_ids: PropTypes.arrayOf(PropTypes.number),
-    }).isRequired,
-    editing: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-    deleteVariant: PropTypes.func.isRequired,
-  };
-
   addVariantClicked = () => {
     const position = Math.max(0, ...this.props.product.product_variants
-      .map(variant => variant.position)) + 1;
+      .map((variant) => variant.position)) + 1;
 
     this.props.onChange([
       ...this.props.product.product_variants,
@@ -74,7 +54,7 @@ class AdminProductVariantsTable extends React.Component {
       this.props.deleteVariant(variant.id);
     } else if (variant.generatedId) {
       this.props.onChange(this.props.product.product_variants
-        .filter(existingVariant => existingVariant.generatedId !== variant.generatedId));
+        .filter((existingVariant) => existingVariant.generatedId !== variant.generatedId));
     }
   }
 
@@ -141,7 +121,7 @@ class AdminProductVariantsTable extends React.Component {
     let variants;
     if (this.props.editing) {
       variants = this.props.product.product_variants
-        .filter(variant => !this.props.product.delete_variant_ids.includes(variant.id));
+        .filter((variant) => !this.props.product.delete_variant_ids.includes(variant.id));
     } else {
       variants = this.props.product.product_variants;
     }
@@ -205,5 +185,25 @@ class AdminProductVariantsTable extends React.Component {
     );
   }
 }
+
+AdminProductVariantsTable.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number,
+    generatedId: PropTypes.number,
+    product_variants: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      override_price: PropTypes.shape({
+        fractional: PropTypes.number,
+        currency_code: PropTypes.string,
+      }),
+    })),
+    delete_variant_ids: PropTypes.arrayOf(PropTypes.number),
+  }).isRequired,
+  editing: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  deleteVariant: PropTypes.func.isRequired,
+};
 
 export default DragDropContext(MultiBackend(HTML5toTouch))(AdminProductVariantsTable);

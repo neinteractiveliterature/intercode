@@ -21,8 +21,8 @@ export function scheduledValueIsValid(scheduledValue) {
 
 function addTimespanToScheduledValue(scheduledValue) {
   const newTimespans = [...(scheduledValue.timespans || [])];
-  const lastTimespan = maxBy(newTimespans, timespan => moment(timespan.finish).toDate());
-  const everyTimespanFinishes = newTimespans.every(timespan => timespan.finish);
+  const lastTimespan = maxBy(newTimespans, (timespan) => moment(timespan.finish).toDate());
+  const everyTimespanFinishes = newTimespans.every((timespan) => timespan.finish);
 
   let startTime = null;
   if (lastTimespan && everyTimespanFinishes) {
@@ -54,7 +54,7 @@ export function scheduledValueReducer(state, action) {
       return updateScheduledValueTimespan(
         state,
         action.index,
-        timespan => ({ ...timespan, [action.field]: action.value }),
+        (timespan) => ({ ...timespan, [action.field]: action.value }),
       );
     default:
       return state;

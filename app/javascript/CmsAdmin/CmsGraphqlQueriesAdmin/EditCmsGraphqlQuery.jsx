@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
+import { CmsGraphqlQueriesQuery } from './queries.gql';
 import { UpdateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
 import useMutationCallback from '../../useMutationCallback';
 import usePageTitle from '../../usePageTitle';
+import useQuerySuspended from '../../useQuerySuspended';
 
 import 'graphiql/graphiql.css';
 
-function EditCmsGraphqlQuery({ initialQuery, history }) {
+function EditCmsGraphqlQuery({ match, history }) {
+  const { data, error } = useQuerySuspended(CmsGraphqlQueriesQuery);
+  const initialQuery = error
+    ? null
+    : data.cmsGraphqlQueries.find((q) => q.id.toString() === match.params.id);
   const [query, setQuery] = useState(initialQuery);
   const [update, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateCmsGraphqlQuery),
@@ -56,10 +62,10 @@ function EditCmsGraphqlQuery({ initialQuery, history }) {
 }
 
 EditCmsGraphqlQuery.propTypes = {
-  initialQuery: PropTypes.shape({
-    identifier: PropTypes.string.isRequired,
-    admin_notes: PropTypes.string.isRequired,
-    query: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,

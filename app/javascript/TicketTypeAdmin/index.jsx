@@ -30,7 +30,7 @@ function TicketTypeAdmin() {
         path="/ticket_types/:id/edit"
         render={({ match: { params: { id } } }) => {
           const ticketType = data.convention.ticket_types
-            .find(tt => tt.id.toString(10) === id);
+            .find((tt) => tt.id.toString(10) === id);
 
           return (
             <EditTicketType

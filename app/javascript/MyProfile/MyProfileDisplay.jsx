@@ -42,7 +42,7 @@ function MyProfileDisplay() {
         return [];
       }
 
-      return form.getAllItems().filter(item => item.identifier);
+      return form.getAllItems().filter((item) => item.identifier);
     },
     [form],
   );
@@ -67,7 +67,7 @@ function MyProfileDisplay() {
             <dt className="col-md-3 mb-2">Email</dt>
             <dd className="col-md-9 mb-2">{data.myProfile.email}</dd>
 
-            {formItems.map(item => (
+            {formItems.map((item) => (
               <React.Fragment key={item.id}>
                 <dt className="col-md-3 mb-2"><AdminCaption formItem={item} /></dt>
                 <dd className="col-md-9 mb-2">

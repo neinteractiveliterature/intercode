@@ -11,8 +11,8 @@ export default class Form {
 
   static fromApiResponse(body) {
     const { form_sections: formSections, form_items: formItems, ...properties } = body;
-    const formSectionsById = keyBy(formSections || [], section => section.id);
-    const formItemsById = keyBy(formItems, item => item.id);
+    const formSectionsById = keyBy(formSections || [], (section) => section.id);
+    const formItemsById = keyBy(formItems, (item) => item.id);
 
     return new Form(properties, formSectionsById, formItemsById);
   }
@@ -37,16 +37,16 @@ export default class Form {
   }
 
   getSectionIndex(sectionId) {
-    return this.getSections().findIndex(section => section.id === sectionId);
+    return this.getSections().findIndex((section) => section.id === sectionId);
   }
 
   getItemsInSection(sectionId) {
     const sectionItems = Object.values(this.formItems)
-      .filter(item => item.form_section_id === sectionId);
+      .filter((item) => item.form_section_id === sectionId);
     return sectionItems.sort((a, b) => a.position - b.position);
   }
 
   getAllItems() {
-    return flatMap(this.getSections(), section => this.getItemsInSection(section.id));
+    return flatMap(this.getSections(), (section) => this.getItemsInSection(section.id));
   }
 }

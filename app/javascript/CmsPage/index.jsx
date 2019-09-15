@@ -62,12 +62,13 @@ function CmsPage({
       {!loading && (
         <>
           {
-            data.cmsPage.current_ability_can_update && (
+            data.currentAbility.can_manage_any_cms_content && (
               <div className="page-admin-dropdown">
                 <Suspense fallback={<></>}>
                   <PageAdminDropdown
                     history={history}
                     pageId={data.cmsPage.id}
+                    showEdit={data.cmsPage.current_ability_can_update}
                     showDelete={data.cmsPage.current_ability_can_delete}
                   />
                 </Suspense>
@@ -86,7 +87,9 @@ function CmsPage({
 CmsPage.propTypes = {
   slug: PropTypes.string,
   rootPage: PropTypes.bool,
-  history: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }).isRequired,

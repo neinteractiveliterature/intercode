@@ -1,7 +1,7 @@
 import { humanize, underscore } from 'inflected';
 
 export function findBucket(bucketKey, registrationPolicy) {
-  return registrationPolicy.buckets.find(bucket => bucket.key === bucketKey);
+  return registrationPolicy.buckets.find((bucket) => bucket.key === bucketKey);
 }
 
 export function formatBucket(signup, event) {
@@ -13,7 +13,7 @@ export function formatBucket(signup, event) {
     }
 
     if (event.team_members
-      .some(teamMember => teamMember.user_con_profile.id === signup.user_con_profile.id)
+      .some((teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id)
     ) {
       return `${humanize(underscore(event.event_category.team_member_name))} (not counted)`;
     }

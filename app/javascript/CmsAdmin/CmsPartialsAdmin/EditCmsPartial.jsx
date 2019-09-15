@@ -16,7 +16,7 @@ function EditCmsPartial({ match, history }) {
   const { data, error } = useQuerySuspended(CmsPartialsAdminQuery);
   const initialPartial = error
     ? null
-    : data.cmsPartials.find(p => match.params.id === p.id.toString());
+    : data.cmsPartials.find((p) => match.params.id === p.id.toString());
   const [partial, dispatch] = useReducer(partialReducer, initialPartial);
   const [updatePartial, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdatePartial),

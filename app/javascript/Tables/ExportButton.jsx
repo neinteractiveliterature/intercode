@@ -21,7 +21,7 @@ function dataToKeyPathValuePairs(data, prependKeys = []) {
   }
 
   if (Array.isArray(data)) {
-    return data.map(item => dataToKeyPathValuePairs(item, [...prependKeys, '']))
+    return data.map((item) => dataToKeyPathValuePairs(item, [...prependKeys, '']))
       .reduce((acc, subValue) => acc.concat(subValue), []);
   }
 
@@ -36,7 +36,7 @@ function dataToQueryString(data) {
   const keyPathValuePairs = dataToKeyPathValuePairs(data);
   const queryStringItems = keyPathValuePairs.map(([keyPath, value]) => {
     const [first, ...rest] = keyPath;
-    const key = `${first}${rest.map(part => `[${part}]`).join('')}`;
+    const key = `${first}${rest.map((part) => `[${part}]`).join('')}`;
     return QueryString.stringify({ [key]: value });
   });
 

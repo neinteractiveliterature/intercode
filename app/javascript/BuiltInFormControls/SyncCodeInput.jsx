@@ -26,33 +26,6 @@ import parsePageContent from '../parsePageContent';
 import '../Codemirror/LiquidMultiplexModes';
 
 class SyncCodeInput extends React.Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    getPreviewContent: PropTypes.func,
-    mode: PropTypes.string.isRequired,
-    onBlur: PropTypes.func,
-    className: PropTypes.string,
-    formControlClassName: PropTypes.string,
-    lines: PropTypes.number,
-    children: PropTypes.node,
-    codeMirrorOptions: PropTypes.shape({}),
-    editorWrapperClassName: PropTypes.string,
-    extraNavControls: PropTypes.node,
-  }
-
-  static defaultProps = {
-    className: null,
-    formControlClassName: null,
-    lines: null,
-    children: null,
-    onBlur: null,
-    codeMirrorOptions: {},
-    editorWrapperClassName: null,
-    extraNavControls: null,
-    getPreviewContent: null,
-  };
-
   constructor(props) {
     super(props);
 
@@ -179,5 +152,32 @@ class SyncCodeInput extends React.Component {
     </div>
   )
 }
+
+SyncCodeInput.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  getPreviewContent: PropTypes.func,
+  mode: PropTypes.string.isRequired,
+  onBlur: PropTypes.func,
+  className: PropTypes.string,
+  formControlClassName: PropTypes.string,
+  lines: PropTypes.number,
+  children: PropTypes.node,
+  codeMirrorOptions: PropTypes.shape({}),
+  editorWrapperClassName: PropTypes.string,
+  extraNavControls: PropTypes.node,
+};
+
+SyncCodeInput.defaultProps = {
+  className: null,
+  formControlClassName: null,
+  lines: null,
+  children: null,
+  onBlur: null,
+  codeMirrorOptions: {},
+  editorWrapperClassName: null,
+  extraNavControls: null,
+  getPreviewContent: null,
+};
 
 export default SyncCodeInput;

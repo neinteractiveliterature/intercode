@@ -3,28 +3,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { enableUniqueIds } from 'react-html-id';
 
-import CommitableInput from '../BuiltInFormControls/CommitableInput';
 import Confirm from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import { RegistrationPolicyBucketPropType, setBucketProperties } from './RegistrationPolicyBucket';
+import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
+import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 
 class RegistrationBucketRow extends React.Component {
-  static propTypes = {
-    registrationBucket: RegistrationPolicyBucketPropType.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    lockNameAndDescription: PropTypes.bool,
-    lockLimited: PropTypes.bool,
-    lockDelete: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    lockNameAndDescription: false,
-    lockLimited: false,
-    lockDelete: false,
-  };
-
   constructor(props) {
     super(props);
     enableUniqueIds(this);
@@ -88,9 +74,11 @@ class RegistrationBucketRow extends React.Component {
             Counted?
           </label>
           <HelpPopover>
-            If checked, this bucket will not count towards the attendee&rsquo;s number of signups,
-            and will exclude this bucket from the &ldquo;No Preference&rdquo; option (so, any
-            attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this bucket).
+            &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups,
+            and are included in the &ldquo;No Preference&rdquo; option. If the bucket is <em>not</em>
+            {' '}
+            counted, any attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this
+            bucket.
           </HelpPopover>
         </div>
 
@@ -182,20 +170,24 @@ class RegistrationBucketRow extends React.Component {
     return [
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
-          <CommitableInput
-            value={this.props.registrationBucket.name}
-            onChange={this.mutator.name}
+          <BootstrapFormInput
+            value={this.props.registrationBucket.name || ''}
+            onTextChange={this.mutator.name}
             placeholder="Bucket name"
             label="Bucket name"
+            hideLabel
+            className="form-control"
           />
         </div>
 
-        <CommitableInput
-          value={this.props.registrationBucket.description}
-          onChange={this.mutator.description}
-          renderInput={props => <textarea rows={2} {...props} />}
-          placeholder="Bucket description"
+        <BootstrapFormTextarea
+          rows="2"
+          value={this.props.registrationBucket.description || ''}
           label="Bucket description"
+          hideLabel
+          onTextChange={this.mutator.description}
+          placeholder="Bucket description"
+          className="form-control"
         />
       </td>,
     ];
@@ -209,7 +201,7 @@ class RegistrationBucketRow extends React.Component {
     return (
       <td style={{ width: '30px' }}>
         <Confirm.Trigger>
-          {confirm => (
+          {(confirm) => (
             <button
               className="btn btn-sm btn-secondary"
               type="button"
@@ -240,5 +232,20 @@ class RegistrationBucketRow extends React.Component {
     </tr>
   )
 }
+
+RegistrationBucketRow.propTypes = {
+  registrationBucket: RegistrationPolicyBucketPropType.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  lockNameAndDescription: PropTypes.bool,
+  lockLimited: PropTypes.bool,
+  lockDelete: PropTypes.bool,
+};
+
+RegistrationBucketRow.defaultProps = {
+  lockNameAndDescription: false,
+  lockLimited: false,
+  lockDelete: false,
+};
 
 export default RegistrationBucketRow;

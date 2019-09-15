@@ -9,28 +9,6 @@ import { mutator, Transforms } from '../../ComposableFormUtils';
 import RequiredIndicator from './RequiredIndicator';
 
 class EventEmailInput extends React.Component {
-  static propTypes = {
-    convention: PropTypes.shape({
-      event_mailing_list_domain: PropTypes.string,
-    }).isRequired,
-    formItem: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-    }).isRequired,
-    value: PropTypes.shape({
-      con_mail_destination: PropTypes.oneOf(['event_email', 'gms']),
-      email: PropTypes.string,
-      team_mailing_list_name: PropTypes.string,
-    }),
-    onChange: PropTypes.func.isRequired,
-    onInteract: PropTypes.func.isRequired,
-    valueInvalid: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    value: null,
-    valueInvalid: false,
-  }
-
   constructor(props) {
     super(props);
 
@@ -124,10 +102,10 @@ class EventEmailInput extends React.Component {
     return (
       <BootstrapFormInput
         label={(
-          <React.Fragment>
+          <>
             Contact email address
             <RequiredIndicator formItem={this.props.formItem} />
-          </React.Fragment>
+          </>
         )}
         name={`${this.props.formItem.identifier}.email`}
         value={(this.props.value || {}).email || ''}
@@ -174,5 +152,27 @@ class EventEmailInput extends React.Component {
     </fieldset>
   )
 }
+
+EventEmailInput.propTypes = {
+  convention: PropTypes.shape({
+    event_mailing_list_domain: PropTypes.string,
+  }).isRequired,
+  formItem: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+  }).isRequired,
+  value: PropTypes.shape({
+    con_mail_destination: PropTypes.oneOf(['event_email', 'gms']),
+    email: PropTypes.string,
+    team_mailing_list_name: PropTypes.string,
+  }),
+  onChange: PropTypes.func.isRequired,
+  onInteract: PropTypes.func.isRequired,
+  valueInvalid: PropTypes.bool,
+};
+
+EventEmailInput.defaultProps = {
+  value: null,
+  valueInvalid: false,
+};
 
 export default EventEmailInput;

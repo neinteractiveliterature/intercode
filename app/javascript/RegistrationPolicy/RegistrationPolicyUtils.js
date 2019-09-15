@@ -8,7 +8,7 @@ export function presetMatchesPolicy(registrationPolicy, preset) {
     return false;
   }
 
-  const allKeysMatch = preset.policy.buckets.every(bucket => (
+  const allKeysMatch = preset.policy.buckets.every((bucket) => (
     typeof bucket.key === 'string' && getRegistrationPolicyBucket(registrationPolicy, bucket.key)
   ));
   if (!allKeysMatch) {
@@ -16,7 +16,7 @@ export function presetMatchesPolicy(registrationPolicy, preset) {
   }
 
   const allBucketOptionsMatch = registrationPolicy.buckets
-    .every(bucket => preset.policy.buckets.find(presetBucket => presetBucket.key === bucket.key
+    .every((bucket) => preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key
       && !!presetBucket.slots_limited === !!bucket.slots_limited
       && !!presetBucket.not_counted === !!bucket.not_counted
       && !!presetBucket.expose_attendees === !!bucket.expose_attendees));
@@ -36,7 +36,7 @@ export function findPreset(registrationPolicy, presets) {
     return null;
   }
 
-  return presets.find(preset => presetMatchesPolicy(registrationPolicy, preset));
+  return presets.find((preset) => presetMatchesPolicy(registrationPolicy, preset));
 }
 
 
@@ -54,6 +54,6 @@ export function bucketSortCompare(a, b) {
 
 export function isPreventNoPreferenceSignupsApplicable(registrationPolicy) {
   return registrationPolicy.buckets
-    .filter(bucket => bucket.slots_limited)
+    .filter((bucket) => bucket.slots_limited)
     .length > 1;
 }

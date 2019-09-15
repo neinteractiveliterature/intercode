@@ -24,7 +24,7 @@ function isTeamMember(event, userConProfile) {
   }
 
   return event.team_members
-    .some(teamMember => teamMember.user_con_profile.id === userConProfile.id);
+    .some((teamMember) => teamMember.user_con_profile.id === userConProfile.id);
 }
 
 function buildBucketSignupOption(bucket, index, hideLabel) {
@@ -46,7 +46,7 @@ function buildNoPreferenceOptions(event) {
   }
 
   const eligibleBuckets = ((event.registration_policy || {}).buckets || [])
-    .filter(bucket => bucket.slots_limited && !bucket.not_counted);
+    .filter((bucket) => bucket.slots_limited && !bucket.not_counted);
 
   if (eligibleBuckets.length < 2) {
     return [];
@@ -57,7 +57,7 @@ function buildNoPreferenceOptions(event) {
     label: 'No preference',
     buttonClass: 'btn-outline-dark',
     bucket: null,
-    helpText: `Sign up for any of: ${eligibleBuckets.map(bucket => bucket.name).join(', ')}`,
+    helpText: `Sign up for any of: ${eligibleBuckets.map((bucket) => bucket.name).join(', ')}`,
     noPreference: true,
     teamMember: false,
     counted: true, // no preference signups only go to counted buckets
@@ -81,7 +81,7 @@ function allSignupOptions(event, userConProfile) {
   }
 
   const buckets = sortBuckets((event.registration_policy || {}).buckets || []);
-  const nonAnythingBuckets = buckets.filter(bucket => !bucket.anything);
+  const nonAnythingBuckets = buckets.filter((bucket) => !bucket.anything);
 
   return [
     ...buckets.map((bucket, index) => {
@@ -96,15 +96,15 @@ function allSignupOptions(event, userConProfile) {
         index,
         !bucket.not_counted && nonAnythingBuckets.length === 1,
       );
-    }).filter(bucket => bucket != null),
+    }).filter((bucket) => bucket != null),
     ...buildNoPreferenceOptions(event),
   ];
 }
 
 export default function buildSignupOptions(event, userConProfile) {
   const allOptions = allSignupOptions(event, userConProfile);
-  const noPreferenceOptions = allOptions.filter(option => option.noPreference);
-  const notCountedOptions = allOptions.filter(option => !option.counted);
+  const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
+  const notCountedOptions = allOptions.filter((option) => !option.counted);
 
   const partitionedOptions = {
     mainPreference: [],

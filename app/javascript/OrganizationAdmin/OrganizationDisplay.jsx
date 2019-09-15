@@ -14,9 +14,9 @@ import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
-const OrganizationRolePermissions = PermissionNames.find(group => group.role_type === 'OrganizationRole').permissions;
+const OrganizationRolePermissions = PermissionNames.find((group) => group.role_type === 'OrganizationRole').permissions;
 function getOrganizationRolePermissionName(permissionName) {
-  const permission = OrganizationRolePermissions.find(p => p.permission === permissionName);
+  const permission = OrganizationRolePermissions.find((p) => p.permission === permissionName);
   return (permission || {}).name;
 }
 
@@ -25,7 +25,7 @@ function OrganizationDisplay({ organizationId }) {
   const confirm = useConfirm();
   const [mutate] = useMutation(DeleteOrganizationRole);
   const organization = useMemo(
-    () => (error ? null : data.organizations.find(org => org.id === organizationId)),
+    () => (error ? null : data.organizations.find((org) => org.id === organizationId)),
     [data, error, organizationId],
   );
 
@@ -37,7 +37,7 @@ function OrganizationDisplay({ organizationId }) {
     return <Redirect to="/organizations" />;
   }
 
-  const deleteOrganizationRole = id => mutate({
+  const deleteOrganizationRole = (id) => mutate({
     variables: { id },
     update: (proxy) => {
       const storeData = proxy.readQuery({ query: OrganizationAdminOrganizationsQuery });
@@ -50,7 +50,7 @@ function OrganizationDisplay({ organizationId }) {
               return {
                 ...org,
                 organization_roles: org.organization_roles
-                  .filter(role => role.id !== id),
+                  .filter((role) => role.id !== id),
               };
             }
 
@@ -77,13 +77,13 @@ function OrganizationDisplay({ organizationId }) {
           </tr>
         </thead>
         <tbody>
-          {organization.organization_roles.map(organizationRole => (
+          {organization.organization_roles.map((organizationRole) => (
             <tr>
               <td>{organizationRole.name}</td>
-              <td>{organizationRole.users.map(user => user.name).join(', ')}</td>
+              <td>{organizationRole.users.map((user) => user.name).join(', ')}</td>
               <td>
                 {organizationRole.permissions
-                  .map(permission => titleize(
+                  .map((permission) => titleize(
                     getOrganizationRolePermissionName(permission.permission),
                   ))
                   .join(', ')}
@@ -106,7 +106,7 @@ function OrganizationDisplay({ organizationId }) {
                     onClick={() => confirm({
                       prompt: `Are you sure you want to delete the role ${organizationRole.name}?`,
                       action: () => deleteOrganizationRole(organizationRole.id),
-                      renderError: e => <ErrorDisplay graphQLError={e} />,
+                      renderError: (e) => <ErrorDisplay graphQLError={e} />,
                     })}
                   >
                     Delete

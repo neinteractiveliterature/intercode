@@ -23,6 +23,7 @@ module Intercode
 
     config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.use Intercode::FindVirtualHost
+    config.middleware.use Rack::Deflater
 
     config.generators do |g|
       g.template_engine :erb
