@@ -56,27 +56,33 @@ function CmsContentGroupsAdminTable() {
                 }
               </td>
               <td className="text-right">
-                <Link to={`/cms_content_groups/${contentGroup.id}/edit`} className="btn btn-secondary btn-sm">
-                  Edit
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => confirm({
-                    prompt: 'Are you sure you want to delete this content group?',
-                    action: () => deleteContentGroup(contentGroup.id),
-                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                  })}
-                  className="btn btn-danger btn-sm ml-1"
-                >
-                  Delete
-                </button>
+                {contentGroup.current_ability_can_update && (
+                  <Link to={`/cms_content_groups/${contentGroup.id}/edit`} className="btn btn-secondary btn-sm">
+                    Edit
+                  </Link>
+                )}
+                {contentGroup.current_ability_can_delete && (
+                  <button
+                    type="button"
+                    onClick={() => confirm({
+                      prompt: 'Are you sure you want to delete this content group?',
+                      action: () => deleteContentGroup(contentGroup.id),
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                    })}
+                    className="btn btn-danger btn-sm ml-1"
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Link to="/cms_content_groups/new" className="btn btn-secondary">New content group</Link>
+      {data.currentAbility.can_create_cms_content_groups && (
+        <Link to="/cms_content_groups/new" className="btn btn-secondary">New content group</Link>
+      )}
     </>
   );
 }

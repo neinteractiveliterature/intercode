@@ -81,19 +81,21 @@ function CmsVariablesAdmin() {
             : null
         }
       </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan="3">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={addVariable}
-            >
-              Add variable
-            </button>
-          </td>
-        </tr>
-      </tfoot>
+      {data.currentAbility.can_create_cms_variables && (
+        <tfoot>
+          <tr>
+            <td colSpan="3">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={addVariable}
+              >
+                Add variable
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      )}
     </table>
   );
 }

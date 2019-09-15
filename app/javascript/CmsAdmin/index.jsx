@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink, Switch, Route } from 'react-router-dom';
+import {
+  NavLink, Switch, Route, Redirect,
+} from 'react-router-dom';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
-import { ConventionExistsQuery } from './queries.gql';
+import { CmsAdminBaseQuery } from './queries.gql';
 import NavigationItemsAdmin from './NavigationItemsAdmin';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
@@ -29,7 +31,7 @@ CmsAdminNavTab.propTypes = {
 };
 
 function CmsAdmin() {
-  const { data, error } = useQuerySuspended(ConventionExistsQuery);
+  const { data, error } = useQuerySuspended(CmsAdminBaseQuery);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -43,7 +45,8 @@ function CmsAdmin() {
         <CmsAdminNavTab path="/cms_pages">Pages</CmsAdminNavTab>
         <CmsAdminNavTab path="/cms_partials">Partials</CmsAdminNavTab>
         <CmsAdminNavTab path="/cms_files">Files</CmsAdminNavTab>
-        <CmsAdminNavTab path="/cms_navigation_items">Navigation</CmsAdminNavTab>
+        {data.currentAbility.can_create_cms_navigation_items
+          && <CmsAdminNavTab path="/cms_navigation_items">Navigation</CmsAdminNavTab>}
         <CmsAdminNavTab path="/cms_layouts">Layouts</CmsAdminNavTab>
         <CmsAdminNavTab path="/cms_variables">Variables</CmsAdminNavTab>
         <CmsAdminNavTab path="/cms_graphql_queries">GraphQL queries</CmsAdminNavTab>
@@ -61,7 +64,9 @@ function CmsAdmin() {
         <Route path="/cms_pages" component={CmsPagesAdmin} />
         <Route path="/cms_partials" component={CmsPartialsAdmin} />
         <Route path="/cms_files" component={CmsFilesAdmin} />
-        <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
+        {data.currentAbility.can_create_cms_navigation_items
+          ? <Route path="/cms_navigation_items" component={NavigationItemsAdmin} />
+          : <Route path="/cms_navigation_items" render={() => <Redirect to="/cms_pages" />} />}
         <Route path="/cms_layouts" component={CmsLayoutsAdmin} />
         <Route path="/cms_variables" component={CmsVariablesAdmin} />
         <Route path="/cms_graphql_queries" component={CmsGraphqlQueriesAdmin} />

@@ -57,27 +57,33 @@ function CmsPagesAdminTable() {
                 }
               </td>
               <td className="text-right">
-                <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
-                  Edit
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => confirm({
-                    prompt: `Are you sure you want to delete ${page.name}?`,
-                    action: () => deletePage(page.id),
-                    renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                  })}
-                  className="btn btn-danger btn-sm ml-1"
-                >
-                  Delete
-                </button>
+                {page.current_ability_can_update && (
+                  <Link to={`/cms_pages/${page.id}/edit`} className="btn btn-secondary btn-sm">
+                    Edit
+                  </Link>
+                )}
+                {page.current_ability_can_delete && (
+                  <button
+                    type="button"
+                    onClick={() => confirm({
+                      prompt: `Are you sure you want to delete ${page.name}?`,
+                      action: () => deletePage(page.id),
+                      renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                    })}
+                    className="btn btn-danger btn-sm ml-1"
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Link to="/cms_pages/new" className="btn btn-secondary">New Page</Link>
+      {data.currentAbility.can_create_pages && (
+        <Link to="/cms_pages/new" className="btn btn-secondary">New Page</Link>
+      )}
     </>
   );
 }
