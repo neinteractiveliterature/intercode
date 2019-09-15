@@ -56,11 +56,17 @@ function CmsLayoutsAdminTable() {
                 }
               </td>
               <td className="text-right">
-                {layout.current_ability_can_update && (
-                  <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
-                    Edit
-                  </Link>
-                )}
+                {layout.current_ability_can_update
+                  ? (
+                    <Link to={`/cms_layouts/${layout.id}/edit`} className="btn btn-secondary btn-sm">
+                      Edit
+                    </Link>
+                  )
+                  : (
+                    <Link to={`/cms_layouts/${layout.id}/view_source`} className="btn btn-outline-secondary btn-sm">
+                      View source
+                    </Link>
+                  )}
                 {layout.current_ability_can_delete && (
                   <button
                     type="button"

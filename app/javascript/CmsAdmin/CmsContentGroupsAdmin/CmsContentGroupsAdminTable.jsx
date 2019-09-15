@@ -56,11 +56,17 @@ function CmsContentGroupsAdminTable() {
                 }
               </td>
               <td className="text-right">
-                {contentGroup.current_ability_can_update && (
-                  <Link to={`/cms_content_groups/${contentGroup.id}/edit`} className="btn btn-secondary btn-sm">
-                    Edit
-                  </Link>
-                )}
+                {contentGroup.current_ability_can_update
+                  ? (
+                    <Link to={`/cms_content_groups/${contentGroup.id}/edit`} className="btn btn-secondary btn-sm">
+                      Edit
+                    </Link>
+                  )
+                  : (
+                    <Link to={`/cms_content_groups/${contentGroup.id}`} className="btn btn-outline-secondary btn-sm">
+                      View configuration
+                    </Link>
+                  )}
                 {contentGroup.current_ability_can_delete && (
                   <button
                     type="button"

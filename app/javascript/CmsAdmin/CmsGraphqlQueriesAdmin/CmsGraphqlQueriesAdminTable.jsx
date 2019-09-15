@@ -44,9 +44,14 @@ function CmsGraphqlQueriesAdminTable() {
                 }
               </td>
               <td className="text-right">
-                {query.current_ability_can_update && (
-                  <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary mr-2">Edit</Link>
-                )}
+                {query.current_ability_can_update
+                  ? (
+                    <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary mr-2">Edit</Link>
+                  )
+                  : (
+                    <Link to={`/cms_graphql_queries/${query.id}/view_source`} className="btn btn-sm btn-outline-secondary mr-2">View source</Link>
+                  )
+                }
                 {query.current_ability_can_delete && (
                   <button
                     type="button"

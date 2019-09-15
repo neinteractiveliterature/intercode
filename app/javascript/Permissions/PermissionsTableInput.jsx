@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { titleize } from 'inflected';
+import classNames from 'classnames';
 
 import PermissionsTableCell from './PermissionsTableCell';
 import usePermissionsChangeSet from './usePermissionsChangeSet';
@@ -19,6 +20,7 @@ function PermissionsTableInput({
   remove,
   rowsHeader,
   formatRowHeader,
+  readOnly,
 }) {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions, changeSet, add, remove,
@@ -27,7 +29,7 @@ function PermissionsTableInput({
   const rows = rowType === 'role' ? roles : models;
 
   return (
-    <table className="table table-responsive table-hover-cell" role="grid">
+    <table className={classNames('table table-responsive', { 'table-hover-cell': !readOnly })} role="grid">
       <thead>
         <tr>
           <th>{rowsHeader}</th>
@@ -57,6 +59,7 @@ function PermissionsTableInput({
                 permission={permission}
                 grantPermission={grantPermission}
                 revokePermission={revokePermission}
+                readOnly={readOnly}
               />
             ))}
           </tr>
@@ -79,12 +82,14 @@ PermissionsTableInput.propTypes = {
   remove: PropTypes.func.isRequired,
   rowsHeader: PropTypes.node,
   formatRowHeader: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
 };
 
 PermissionsTableInput.defaultProps = {
   rowsHeader: null,
   models: null,
   roles: null,
+  readOnly: false,
 };
 
 export default PermissionsTableInput;

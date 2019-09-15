@@ -56,11 +56,17 @@ function CmsPartialsAdminTable() {
                 }
               </td>
               <td className="text-right">
-                {partial.current_ability_can_update && (
-                  <Link to={`/cms_partials/${partial.id}/edit`} className="btn btn-secondary btn-sm">
+                {partial.current_ability_can_update
+                  ? (
+                    <Link to={`/cms_partials/${partial.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit
-                  </Link>
-                )}
+                    </Link>
+                  )
+                  : (
+                    <Link to={`/cms_partials/${partial.id}/view_source`} className="btn btn-outline-secondary btn-sm">
+                      View source
+                    </Link>
+                  )}
                 {partial.current_ability_can_delete && (
                   <button
                     type="button"

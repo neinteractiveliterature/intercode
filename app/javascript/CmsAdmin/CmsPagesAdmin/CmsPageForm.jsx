@@ -12,7 +12,7 @@ import useUniqueId from '../../useUniqueId';
 export const pageReducer = transformsReducer({});
 
 function CmsPageForm({
-  page, dispatch, cmsParent, cmsLayouts,
+  page, dispatch, cmsParent, cmsLayouts, readOnly,
 }) {
   const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
   const slugInputId = useUniqueId('slug-');
@@ -43,12 +43,14 @@ function CmsPageForm({
         label="Name"
         value={page.name || ''}
         onTextChange={changeCallback('name')}
+        readOnly={readOnly}
       />
 
       <BootstrapFormInput
         label="Admin notes"
         value={page.admin_notes || ''}
         onTextChange={changeCallback('admin_notes')}
+        readOnly={readOnly}
       />
 
       <div className="form-group">
@@ -58,7 +60,7 @@ function CmsPageForm({
         <div className="input-group">
           <div className="input-group-prepend">
             <span className="input-group-text">
-              {new URL('/pages', window.location.href).toString()}
+              {`${new URL('/pages', window.location.href).toString()}/`}
             </span>
           </div>
           <input
@@ -66,6 +68,7 @@ function CmsPageForm({
             className="form-control"
             value={page.slug || ''}
             onChange={(event) => changeCallback('slug')(event.target.value)}
+            readOnly={readOnly}
           />
         </div>
       </div>
@@ -82,6 +85,7 @@ function CmsPageForm({
         )}
         value={page.skip_clickwrap_agreement || false}
         onChange={changeCallback('skip_clickwrap_agreement')}
+        disabled={readOnly}
       />
 
       <SelectWithLabel
@@ -93,6 +97,7 @@ function CmsPageForm({
         options={cmsLayoutOptions}
         onChange={changeCallback('cms_layout')}
         placeholder={cmsLayoutSelectPlaceholder}
+        disabled={readOnly}
       />
 
       <div className="form-group">
@@ -100,6 +105,7 @@ function CmsPageForm({
         <LiquidInput
           value={page.content}
           onChange={changeCallback('content')}
+          codeMirrorOptions={{ readOnly }}
         />
       </div>
     </>
@@ -118,14 +124,23 @@ CmsPageForm.propTypes = {
     }),
     content: PropTypes.string,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func,
   cmsParent: PropTypes.shape({
-    default_layout: PropTypes.shape({}),
+    default_layout: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   cmsLayouts: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
+  readOnly: PropTypes.bool,
+};
+
+CmsPageForm.defaultProps = {
+  readOnly: false,
+  dispatch: null,
 };
 
 export default CmsPageForm;

@@ -39,6 +39,11 @@ class Types::AbilityType < Types::BaseObject
     policy(CmsContentGroup.new(parent: convention)).create?
   end
 
+  field :can_manage_any_cms_content, Boolean, null: false
+  def can_manage_any_cms_content
+    PagePolicy::ManageScope.new(pundit_user, cms_parent.pages).resolve.any?
+  end
+
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets

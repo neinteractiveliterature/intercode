@@ -10,9 +10,9 @@ import LoadingIndicator from '../../LoadingIndicator';
 
 const GraphiQL = lazy(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
 
-function CmsGraphqlQueryForm({ value, onChange }) {
+function CmsGraphqlQueryForm({ value, onChange, readOnly }) {
   const client = useApolloClient();
-  const valueMutator = mutator({
+  const valueMutator = onChange && mutator({
     getState: () => value,
     setState: onChange,
     transforms: {
@@ -36,22 +36,25 @@ function CmsGraphqlQueryForm({ value, onChange }) {
         label="Identifier"
         className="form-control text-monospace"
         value={value.identifier}
-        onTextChange={valueMutator.identifier}
+        onTextChange={valueMutator && valueMutator.identifier}
+        readOnly={readOnly}
       />
 
       <BootstrapFormTextarea
         name="admin_notes"
         label="Admin notes"
         value={value.admin_notes}
-        onTextChange={valueMutator.admin_notes}
+        onTextChange={valueMutator && valueMutator.admin_notes}
+        readOnly={readOnly}
       />
 
       <div className="border" style={{ height: '40em' }}>
         <Suspense fallback={<LoadingIndicator />}>
           <GraphiQL
             query={value.query}
-            onEditQuery={valueMutator.query}
+            onEditQuery={valueMutator && valueMutator.query}
             fetcher={fetcher}
+            readOnly={readOnly}
           />
         </Suspense>
       </div>
@@ -65,7 +68,13 @@ CmsGraphqlQueryForm.propTypes = {
     admin_notes: PropTypes.string.isRequired,
     query: PropTypes.string.isRequired,
   }).isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  readOnly: PropTypes.bool,
+};
+
+CmsGraphqlQueryForm.defaultProps = {
+  readOnly: false,
+  onChange: null,
 };
 
 export default CmsGraphqlQueryForm;
