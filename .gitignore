@@ -52,3 +52,6 @@ cookbooks
 
 # eslint keeps a local cache of what's changed
 /.eslintcache
+
+# Hello vscode users
+/.vscode

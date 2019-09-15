@@ -7,8 +7,8 @@ import { transformsReducer } from '../../ComposableFormUtils';
 
 export const partialReducer = transformsReducer({});
 
-function CmsPartialForm({ partial, dispatch }) {
-  const changeCallback = key => value => dispatch({ type: 'change', key, value });
+function CmsPartialForm({ partial, dispatch, readOnly }) {
+  const changeCallback = (key) => (value) => dispatch({ type: 'change', key, value });
 
   return (
     <>
@@ -16,12 +16,14 @@ function CmsPartialForm({ partial, dispatch }) {
         label="Name"
         value={partial.name || ''}
         onTextChange={changeCallback('name')}
+        readOnly={readOnly}
       />
 
       <BootstrapFormInput
         label="Admin notes"
         value={partial.admin_notes || ''}
         onTextChange={changeCallback('admin_notes')}
+        readOnly={readOnly}
       />
 
       <div className="form-group">
@@ -29,6 +31,7 @@ function CmsPartialForm({ partial, dispatch }) {
         <LiquidInput
           value={partial.content}
           onChange={changeCallback('content')}
+          codeMirrorOptions={{ readOnly }}
         />
       </div>
     </>
@@ -41,7 +44,13 @@ CmsPartialForm.propTypes = {
     admin_notes: PropTypes.string,
     content: PropTypes.string,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func,
+  readOnly: PropTypes.bool,
+};
+
+CmsPartialForm.defaultProps = {
+  dispatch: null,
+  readOnly: false,
 };
 
 export default CmsPartialForm;

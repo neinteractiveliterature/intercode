@@ -41,7 +41,7 @@ class TimeblockPreferenceItemDisplay extends React.Component {
     }
 
     const existingPreference = this.props.value
-      .find(p => preferencesMatch(p, {
+      .find((p) => preferencesMatch(p, {
         start: cell.timespan.start,
         finish: cell.timespan.finish,
         label: cell.timeblock.label,
@@ -82,7 +82,7 @@ class TimeblockPreferenceItemDisplay extends React.Component {
         <thead>
           <tr>
             <th />
-            {columns.map(column => (
+            {columns.map((column) => (
               <th key={column.dayStart.toString()} className="text-center">
                 {getColumnHeader(column)}
               </th>
@@ -90,7 +90,7 @@ class TimeblockPreferenceItemDisplay extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {rows.map(row => (
+          {rows.map((row) => (
             <tr key={row.timeblock.label}>
               <td>
                 {row.timeblock.label}

@@ -28,7 +28,7 @@ function EditRunModal({
           starts_at: run.starts_at,
           title_suffix: run.title_suffix,
           schedule_note: run.schedule_note,
-          room_ids: run.rooms.map(room => room.id),
+          room_ids: run.rooms.map((room) => room.id),
         },
       };
 
@@ -52,7 +52,7 @@ function EditRunModal({
         },
         update: (store, { data: { createRun: { run: newRun } } }) => {
           const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-          const eventData = eventsData.events.find(e => e.id === event.id);
+          const eventData = eventsData.events.find((e) => e.id === event.id);
           eventData.runs.push(newRun);
           store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
@@ -85,8 +85,8 @@ function EditRunModal({
         },
         update: (store) => {
           const eventsData = store.readQuery({ query: EventAdminEventsQuery });
-          const eventData = eventsData.events.find(e => e.id === event.id);
-          const runIndex = eventData.runs.findIndex(r => r.id === run.id);
+          const eventData = eventsData.events.find((e) => e.id === event.id);
+          const runIndex = eventData.runs.findIndex((r) => r.id === run.id);
           eventData.runs.splice(runIndex, 1);
           store.writeQuery({ query: EventAdminEventsQuery, data: eventsData });
         },
@@ -136,7 +136,7 @@ function EditRunModal({
                 onClick={() => confirm({
                   prompt: `Are you sure you want to delete this run of ${event && event.title}?`,
                   action: deleteRun,
-                  renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
+                  renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                 })}
               >
                 Delete

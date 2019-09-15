@@ -6,7 +6,7 @@ class Permission < ApplicationRecord
   ))
 
   exclusive_arc :role, [StaffPosition, OrganizationRole]
-  exclusive_arc :model, [Convention, EventCategory]
+  exclusive_arc :model, [CmsContentGroup, Convention, EventCategory]
 
   scope :for_user, ->(user) do
     where(

@@ -43,7 +43,7 @@ function EditEventProposal({ match, history }) {
         await apolloClient.clearStore();
         history.replace('/pages/new-proposal');
       },
-      renderError: e => <ErrorDisplay graphQLError={e} />,
+      renderError: (e) => <ErrorDisplay graphQLError={e} />,
     }),
   };
 

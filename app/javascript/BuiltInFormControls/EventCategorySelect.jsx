@@ -8,7 +8,7 @@ function EventCategorySelect({
   eventCategories, label, ...props
 }) {
   const categoryOptions = eventCategories
-    .map(category => (
+    .map((category) => (
       <option value={category.id} key={category.id}>{humanize(category.name)}</option>
     ));
 

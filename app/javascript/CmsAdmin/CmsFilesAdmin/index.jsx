@@ -34,28 +34,30 @@ function CmsFilesAdmin() {
     [data, error],
   );
 
-  const deleteFile = id => deleteFileMutate({ variables: { id } });
+  const deleteFile = (id) => deleteFileMutate({ variables: { id } });
 
   return (
     <>
-      {fileChunks.map(files => (
+      {fileChunks.map((files) => (
         <div className="card-deck mb-4" key={files[0].id}>
-          {files.map(cmsFile => (
+          {files.map((cmsFile) => (
             <div className="card" key={cmsFile.id}>
               <div className="card-header">
-                <div className="float-right">
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger px-2 py-1"
-                    onClick={() => confirm({
-                      prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
-                      action: () => deleteFile(cmsFile.id),
-                      renderError: deleteError => <ErrorDisplay graphQLError={deleteError} />,
-                    })}
-                  >
-                    <i className="fa fa-trash" aria-hidden="true" />
-                  </button>
-                </div>
+                {cmsFile.current_ability_can_delete && (
+                  <div className="float-right">
+                    <button
+                      type="button"
+                      className="btn btn-outline-danger px-2 py-1"
+                      onClick={() => confirm({
+                        prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
+                        action: () => deleteFile(cmsFile.id),
+                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                      })}
+                    >
+                      <i className="fa fa-trash" aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
                 <small className="text-break font-weight-bold">{cmsFile.filename}</small>
               </div>
               <div className="card-body text-center py-2">
@@ -78,7 +80,7 @@ function CmsFilesAdmin() {
         </div>
       ))}
 
-      <FileUploadForm />
+      {data.currentAbility.can_create_cms_files && <FileUploadForm />}
     </>
   );
 }

@@ -11,7 +11,7 @@ function findRunFromHash(runs, hash) {
     return null;
   }
 
-  return runs.find(run => `#run-${run.id}` === hash);
+  return runs.find((run) => `#run-${run.id}` === hash);
 }
 
 function getConventionDayStart(event, run, convention) {
@@ -25,7 +25,7 @@ function getConventionDayStart(event, run, convention) {
     conventionTimespan,
     convention.timezone_name,
   );
-  const conventionDay = conventionDayTimespans.find(timespan => timespan.includesTime(runStart));
+  const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(runStart));
   return (conventionDay || conventionTimespan).start;
 }
 

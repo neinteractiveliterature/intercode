@@ -14,7 +14,7 @@ export default function FormProgress({ form }) {
   const sectionItems = form.getItemsInSection(currentSectionId);
   const itemIndex = items.indexOf(sectionItems[sectionItems.length - 1]) + 1;
   const sectionIndex = form.getSections()
-    .findIndex(formSection => formSection.id === currentSectionId);
+    .findIndex((formSection) => formSection.id === currentSectionId);
   const progressPercentValue = Math.round((itemIndex / items.length) * 100);
   const progressPercent = `${progressPercentValue}%`;
 

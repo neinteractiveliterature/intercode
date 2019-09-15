@@ -70,7 +70,7 @@ function EventCategoryRow({ eventCategory }) {
                 className="btn btn-outline-danger btn-sm mr-2"
                 onClick={() => confirm({
                   prompt: 'Are you sure you want to delete this event category?',
-                  renderError: error => <ErrorDisplay graphQLError={error} />,
+                  renderError: (error) => <ErrorDisplay graphQLError={error} />,
                   action: () => deleteEventCategory({
                     variables: { id: eventCategory.id },
                   }),

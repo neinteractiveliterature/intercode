@@ -24,7 +24,7 @@ function ChoiceSetFilter({
       const rawFilterValue = (filter || {}).value || [];
       if (filterCodec) {
         if (multiple) {
-          return rawFilterValue.map(singleValue => filterCodec.encode(singleValue));
+          return rawFilterValue.map((singleValue) => filterCodec.encode(singleValue));
         }
 
         return filterCodec.encode(rawFilterValue);
@@ -37,7 +37,7 @@ function ChoiceSetFilter({
   const choices = useMemo(
     () => {
       if (filterCodec) {
-        return sortChoices(rawChoices.map(choice => ({
+        return sortChoices(rawChoices.map((choice) => ({
           ...choice,
           value: filterCodec.encode(choice.value),
         })));
@@ -51,7 +51,7 @@ function ChoiceSetFilter({
   const valueChanged = (value) => {
     if (filterCodec) {
       if (multiple) {
-        onChange(value.map(singleValue => filterCodec.decode(singleValue)));
+        onChange(value.map((singleValue) => filterCodec.decode(singleValue)));
       } else {
         onChange(filterCodec.decode(value));
       }
@@ -75,8 +75,8 @@ function ChoiceSetFilter({
     if (Array.isArray(filterValue)) {
       if (filterValue.length > 0) {
         return filterValue.map(
-          item => (
-            choices.find(choice => choice.value === item)
+          (item) => (
+            choices.find((choice) => choice.value === item)
             || { label: item }
           ),
         ).map(({ label }) => <span key={label} className="mr-2">{label}</span>);
@@ -85,7 +85,7 @@ function ChoiceSetFilter({
       return <span className="mr-2">Any</span>;
     }
 
-    const choice = choices.find(c => c.value === filterValue) || { label: filterValue };
+    const choice = choices.find((c) => c.value === filterValue) || { label: filterValue };
     return <span className="mr-2">{choice.label || 'Any'}</span>;
   };
 
@@ -126,7 +126,7 @@ function ChoiceSetFilter({
           addWidthStyle: {
             enabled: true,
             order: 875,
-            fn: data => ({
+            fn: (data) => ({
               ...data,
               styles: { ...data.styles, width: `${data.offsets.popper.width}px` },
             }),

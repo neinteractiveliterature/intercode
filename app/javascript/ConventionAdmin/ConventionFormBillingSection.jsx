@@ -29,7 +29,7 @@ function ConventionFormBillingSection({
         <CommitableInput
           value={convention.stripe_publishable_key || ''}
           onChange={changeStripePublishableKey}
-          renderInput={inputProps => (
+          renderInput={(inputProps) => (
             <input
               id="stripe_publishable_key"
               {...inputProps}
@@ -49,7 +49,7 @@ function ConventionFormBillingSection({
         <CommitableInput
           value={convention.stripe_secret_key || ''}
           onChange={changeStripeSecretKey}
-          renderInput={inputProps => (
+          renderInput={(inputProps) => (
             <input
               id="stripe_secret_key"
               {...inputProps}

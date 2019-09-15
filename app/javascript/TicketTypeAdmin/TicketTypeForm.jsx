@@ -61,7 +61,7 @@ function TicketTypeForm({
   ticketType, ticketName, timezone, onChange,
 }) {
   const dispatch = useCallback(
-    action => onChange(ticketTypeReducer(ticketType, action)),
+    (action) => onChange(ticketTypeReducer(ticketType, action)),
     [ticketType, onChange],
   );
   const [
@@ -77,7 +77,7 @@ function TicketTypeForm({
   );
 
   const dispatchPricingSchedule = useCallback(
-    action => dispatch({ type: 'dispatchPricingSchedule', action }),
+    (action) => dispatch({ type: 'dispatchPricingSchedule', action }),
     [dispatch],
   );
 

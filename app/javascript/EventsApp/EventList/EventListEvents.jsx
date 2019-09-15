@@ -21,10 +21,10 @@ function EventListEvents({
 
   return eventsPaginated.entries.map((event) => {
     let preamble = null;
-    if (sorted.some(sort => sort.id === 'first_scheduled_run_start')) {
+    if (sorted.some((sort) => sort.id === 'first_scheduled_run_start')) {
       const runs = getSortedRuns(event);
       if (runs.length > 0) {
-        const conventionDay = conventionDayTimespans.find(timespan => timespan.includesTime(
+        const conventionDay = conventionDayTimespans.find((timespan) => timespan.includesTime(
           moment.tz(runs[0].starts_at, convention.timezone_name),
         ));
         if (

@@ -29,45 +29,19 @@ function castMultipleValue(value) {
     arrayValue = [value];
   }
 
-  return arrayValue.map(item => item.toString());
+  return arrayValue.map((item) => item.toString());
 }
 
 class MultipleChoiceItemInput extends React.Component {
-  static propTypes = {
-    formItem: PropTypes.shape({
-      identifier: PropTypes.string.isRequired,
-      properties: PropTypes.shape({
-        style: PropTypes.string,
-        caption: PropTypes.string.isRequired,
-        multiple: PropTypes.bool,
-        choices: PropTypes.arrayOf(PropTypes.shape({
-          caption: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
-        }).isRequired).isRequired,
-        other: PropTypes.bool,
-        other_caption: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
-    onChange: PropTypes.func.isRequired,
-    onInteract: PropTypes.func.isRequired,
-    value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
-    valueInvalid: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    value: null,
-    valueInvalid: false,
-  };
-
   constructor(props) {
     super(props);
 
     let otherValue = '';
     if (this.isOtherSelected()) {
       if (this.isMultiple()) {
-        const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+        const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
         otherValue = castMultipleValue(this.props.value).find((
-          selectedChoiceValue => !choiceValues.includes(selectedChoiceValue)
+          (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue)
         ));
       } else {
         otherValue = castSingleValue(this.props.value);
@@ -81,9 +55,9 @@ class MultipleChoiceItemInput extends React.Component {
     this.userDidInteract();
 
     if (this.isMultiple()) {
-      const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+      const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
       const providedValues = newValue
-        .filter(choiceValue => choiceValues.some(providedValue => providedValue === choiceValue));
+        .filter((choiceValue) => choiceValues.some((providedValue) => providedValue === choiceValue));
       if (newValue.includes(OTHER_VALUE)) {
         this.props.onChange([...providedValues, this.state.otherValue]);
       } else {
@@ -120,11 +94,11 @@ class MultipleChoiceItemInput extends React.Component {
       return false;
     }
 
-    const choiceValues = this.props.formItem.properties.choices.map(choice => choice.value);
+    const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
 
     if (this.isMultiple()) {
       return !castMultipleValue(this.props.value).every((
-        selectedChoiceValue => choiceValues.includes(selectedChoiceValue)
+        (selectedChoiceValue) => choiceValues.includes(selectedChoiceValue)
       ));
     }
 
@@ -160,7 +134,7 @@ class MultipleChoiceItemInput extends React.Component {
   }
 
   render = () => {
-    const choicesForChoiceSet = this.props.formItem.properties.choices.map(choice => ({
+    const choicesForChoiceSet = this.props.formItem.properties.choices.map((choice) => ({
       label: choice.caption,
       value: choice.value,
     }));
@@ -202,5 +176,31 @@ class MultipleChoiceItemInput extends React.Component {
     );
   };
 }
+
+MultipleChoiceItemInput.propTypes = {
+  formItem: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+    properties: PropTypes.shape({
+      style: PropTypes.string,
+      caption: PropTypes.string.isRequired,
+      multiple: PropTypes.bool,
+      choices: PropTypes.arrayOf(PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+      }).isRequired).isRequired,
+      other: PropTypes.bool,
+      other_caption: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+  onInteract: PropTypes.func.isRequired,
+  value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+  valueInvalid: PropTypes.bool,
+};
+
+MultipleChoiceItemInput.defaultProps = {
+  value: null,
+  valueInvalid: false,
+};
 
 export default MultipleChoiceItemInput;

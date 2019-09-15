@@ -81,7 +81,7 @@ function TicketTypesList({
         update: (proxy) => {
           const data = proxy.readQuery({ query: AdminTicketTypesQuery });
           data.convention.ticket_types = data.convention.ticket_types.filter((
-            ticketType => ticketType.id !== id
+            (ticketType) => ticketType.id !== id
           ));
           proxy.writeQuery({ query: AdminTicketTypesQuery, data });
         },
@@ -91,7 +91,7 @@ function TicketTypesList({
     [deleteMutate, history],
   );
 
-  const renderTicketTypeDisplay = ticketType => (
+  const renderTicketTypeDisplay = (ticketType) => (
     <div className={`card my-4 ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
       <div className="card-header">
         <div className="row">
@@ -111,7 +111,7 @@ function TicketTypesList({
               onClick={() => confirm({
                 prompt: `Are you sure you want to delete the ticket type “${ticketType.description}”?`,
                 action: () => deleteTicketType(ticketType.id),
-                renderError: error => <ErrorDisplay graphQLError={error} />,
+                renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })}
             >
               <i className="fa fa-trash-o mr-1" />

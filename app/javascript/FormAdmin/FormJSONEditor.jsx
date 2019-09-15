@@ -71,7 +71,7 @@ function FormJSONEditor({ initialForm, history }) {
         label="Title"
         name="title"
         value={form.title}
-        onTextChange={title => setForm(prevForm => ({ ...prevForm, title }))}
+        onTextChange={(title) => setForm((prevForm) => ({ ...prevForm, title }))}
       />
 
       <fieldset className="mb-4">
@@ -79,7 +79,7 @@ function FormJSONEditor({ initialForm, history }) {
         <CodeInput
           value={form.sectionsJSON}
           mode="application/json"
-          onChange={sectionsJSON => setForm(prevForm => ({ ...prevForm, sectionsJSON }))}
+          onChange={(sectionsJSON) => setForm((prevForm) => ({ ...prevForm, sectionsJSON }))}
         />
       </fieldset>
 

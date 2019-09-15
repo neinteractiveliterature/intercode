@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_21_170923) do
+ActiveRecord::Schema.define(version: 2019_08_24_155151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,25 @@ ActiveRecord::Schema.define(version: 2019_08_21_170923) do
     t.index ["alert_type", "alert_id"], name: "index_alert_destinations_on_alert_type_and_alert_id"
     t.index ["staff_position_id"], name: "index_alert_destinations_on_staff_position_id"
     t.index ["user_con_profile_id"], name: "index_alert_destinations_on_user_con_profile_id"
+  end
+
+  create_table "cms_content_group_associations", force: :cascade do |t|
+    t.string "content_type", null: false
+    t.bigint "content_id", null: false
+    t.bigint "cms_content_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cms_content_group_id"], name: "index_cms_content_group_associations_on_cms_content_group_id"
+    t.index ["content_type", "content_id"], name: "index_cms_content_group_associations_on_content"
+  end
+
+  create_table "cms_content_groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "parent_type"
+    t.bigint "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_type", "parent_id"], name: "index_cms_content_groups_on_parent_type_and_parent_id"
   end
 
   create_table "cms_files", id: :serial, force: :cascade do |t|
@@ -405,12 +424,14 @@ ActiveRecord::Schema.define(version: 2019_08_21_170923) do
     t.datetime "updated_at", null: false
     t.bigint "organization_role_id"
     t.bigint "convention_id"
+    t.bigint "cms_content_group_id"
+    t.index ["cms_content_group_id"], name: "index_permissions_on_cms_content_group_id"
     t.index ["convention_id"], name: "index_permissions_on_convention_id"
     t.index ["event_category_id"], name: "index_permissions_on_event_category_id"
     t.index ["organization_role_id"], name: "index_permissions_on_organization_role_id"
     t.index ["staff_position_id", "permission", "event_category_id"], name: "idx_permissions_unique_join", unique: true
     t.index ["staff_position_id"], name: "index_permissions_on_staff_position_id"
-    t.check_constraint :permissions_model_exclusive_arc, "((((convention_id IS NOT NULL))::integer + ((event_category_id IS NOT NULL))::integer) = ANY (ARRAY[0, 1]))"
+    t.check_constraint :permissions_model_exclusive_arc, "(((((cms_content_group_id IS NOT NULL))::integer + ((convention_id IS NOT NULL))::integer) + ((event_category_id IS NOT NULL))::integer) = ANY (ARRAY[0, 1]))"
     t.check_constraint :permissions_role_exclusive_arc, "((((staff_position_id IS NOT NULL))::integer + ((organization_role_id IS NOT NULL))::integer) = 1)"
   end
 
@@ -647,6 +668,7 @@ ActiveRecord::Schema.define(version: 2019_08_21_170923) do
 
   add_foreign_key "alert_destinations", "staff_positions"
   add_foreign_key "alert_destinations", "user_con_profiles"
+  add_foreign_key "cms_content_group_associations", "cms_content_groups"
   add_foreign_key "cms_files", "users", column: "uploader_id"
   add_foreign_key "cms_navigation_items", "cms_navigation_items", column: "navigation_section_id"
   add_foreign_key "cms_navigation_items", "pages"
@@ -681,6 +703,7 @@ ActiveRecord::Schema.define(version: 2019_08_21_170923) do
   add_foreign_key "orders", "user_con_profiles"
   add_foreign_key "organization_roles", "organizations"
   add_foreign_key "pages", "cms_layouts"
+  add_foreign_key "permissions", "cms_content_groups"
   add_foreign_key "permissions", "conventions"
   add_foreign_key "permissions", "event_categories"
   add_foreign_key "permissions", "organization_roles"

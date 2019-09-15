@@ -12,20 +12,6 @@ const TicketTypePropType = PropTypes.shape({
 });
 
 class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
-  static propTypes = {
-    eventId: PropTypes.number.isRequired,
-    ticketName: PropTypes.string.isRequired,
-    overrides: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      ticket_type: TicketTypePropType.isRequired,
-      override_value: PropTypes.number.isRequired,
-    })).isRequired,
-    ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
-    createOverride: PropTypes.func.isRequired,
-    deleteOverride: PropTypes.func.isRequired,
-    updateOverride: PropTypes.func.isRequired,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -49,11 +35,11 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
   addingTicketTypeIdDidChange = (event) => {
     const newTicketTypeId = Number.parseInt(event.target.value, 10);
     const newTicketType = this.props.ticketTypes.find((
-      ticketType => ticketType.id === newTicketTypeId
+      (ticketType) => ticketType.id === newTicketTypeId
     ));
 
     if (newTicketType == null) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         addingOverride: {
           ...prevState.addingOverride,
           ticket_type: {
@@ -64,7 +50,7 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
         },
       }));
     } else {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         addingOverride: {
           ...prevState.addingOverride,
           ticket_type: newTicketType,
@@ -76,7 +62,7 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
   addingOverrideValueDidChange = (event) => {
     const newValue = Number.parseInt(event.target.value, 10);
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       addingOverride: {
         ...prevState.addingOverride,
         override_value: (Number.isNaN(newValue) ? null : newValue),
@@ -143,7 +129,7 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
       (a, b) => a.description.localeCompare(b.description, { sensitivity: 'base' })
     ));
 
-    const rows = sortedOverrides.map(override => (
+    const rows = sortedOverrides.map((override) => (
       <tr key={override.id}>
         <td>{override.ticket_type.description}</td>
         <td>{override.ticket_type.maximum_event_provided_tickets}</td>
@@ -169,10 +155,10 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
       </tr>
     ));
 
-    const unoverriddenTicketTypes = sortedTicketTypes.filter(ticketType => (
-      overrides.every(override => override.ticket_type.id !== ticketType.id)
+    const unoverriddenTicketTypes = sortedTicketTypes.filter((ticketType) => (
+      overrides.every((override) => override.ticket_type.id !== ticketType.id)
     ));
-    const ticketTypeOptions = unoverriddenTicketTypes.map(ticketType => (
+    const ticketTypeOptions = unoverriddenTicketTypes.map((ticketType) => (
       <option value={ticketType.id} key={ticketType.id}>{ticketType.description}</option>
     ));
 
@@ -259,5 +245,19 @@ class MaximumEventProvidedTicketsOverrideEditor extends React.Component {
     );
   }
 }
+
+MaximumEventProvidedTicketsOverrideEditor.propTypes = {
+  eventId: PropTypes.number.isRequired,
+  ticketName: PropTypes.string.isRequired,
+  overrides: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    ticket_type: TicketTypePropType.isRequired,
+    override_value: PropTypes.number.isRequired,
+  })).isRequired,
+  ticketTypes: PropTypes.arrayOf(TicketTypePropType).isRequired,
+  createOverride: PropTypes.func.isRequired,
+  deleteOverride: PropTypes.func.isRequired,
+  updateOverride: PropTypes.func.isRequired,
+};
 
 export default MaximumEventProvidedTicketsOverrideEditor;

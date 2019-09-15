@@ -3,9 +3,9 @@ import CodeMirror from 'codemirror';
 // Adapted from https://github.com/CristinaSolana/codemirror-liquid-multiplex
 
 const defineMultiplexingMode = (...modeNames) => (
-  config => (
+  (config) => (
     CodeMirror.multiplexingMode(
-      ...modeNames.map(modeName => CodeMirror.getMode(config, modeName)),
+      ...modeNames.map((modeName) => CodeMirror.getMode(config, modeName)),
       {
         open: '{{',
         close: '}}',

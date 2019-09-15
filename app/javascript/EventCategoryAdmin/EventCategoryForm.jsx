@@ -160,8 +160,8 @@ function EventCategoryForm({
       <SelectWithLabel
         label="Event form (required)"
         options={forms}
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.title}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.title}
         value={value.event_form}
         onChange={valueMutator.event_form}
         disabled={disabled}
@@ -170,8 +170,8 @@ function EventCategoryForm({
       <SelectWithLabel
         label="Event proposal form (optional; if blank this event category cannot be proposed)"
         options={forms}
-        getOptionValue={option => option.id}
-        getOptionLabel={option => option.title}
+        getOptionValue={(option) => option.id}
+        getOptionLabel={(option) => option.title}
         value={value.event_proposal_form}
         onChange={valueMutator.event_proposal_form}
         disabled={disabled}

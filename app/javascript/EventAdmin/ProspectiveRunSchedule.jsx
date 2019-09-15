@@ -78,7 +78,7 @@ function ProspectiveRunScheduleEventRun({ convention, runDimensions, layoutResul
       style={{
         ...getRunStyle({
           event,
-          eventCategory: convention.event_categories.find(c => c.id === event.event_category.id),
+          eventCategory: convention.event_categories.find((c) => c.id === event.event_category.id),
           signupStatus: (run.id === PROSPECTIVE_RUN_ID ? 'confirmed' : null),
           config: SCHEDULE_GRID_CONFIG,
           signupCountData: FAKE_SIGNUP_COUNT_DATA,
@@ -147,7 +147,7 @@ function ProspectiveRunSchedule({
         if (e.id === event.id) {
           return {
             ...e,
-            runs: [...e.runs.filter(r => run.id !== r.id)],
+            runs: [...e.runs.filter((r) => run.id !== r.id)],
           };
         }
 
@@ -155,7 +155,7 @@ function ProspectiveRunSchedule({
       });
 
       const effectiveEvents = (
-        filteredEvents.some(e => e.id === event.id)
+        filteredEvents.some((e) => e.id === event.id)
           ? filteredEvents
           : [...filteredEvents, event]
       );
@@ -191,7 +191,7 @@ function ProspectiveRunSchedule({
         return null;
       }
       const dayTimespan = new Timespan(day, day.clone().endOf('day'));
-      return conventionDayTimespans.find(cdt => cdt.overlapsTimespan(dayTimespan));
+      return conventionDayTimespans.find((cdt) => cdt.overlapsTimespan(dayTimespan));
     },
     [conventionDayTimespans, day],
   );

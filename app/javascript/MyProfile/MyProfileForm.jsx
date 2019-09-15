@@ -19,7 +19,7 @@ import usePageTitle from '../usePageTitle';
 
 function parseResponseErrors(error) {
   const { graphQLErrors } = error;
-  const updateError = graphQLErrors.find(graphQLError => isEqual(graphQLError.path, ['updateUserConProfile']));
+  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateUserConProfile']));
   const { validationErrors } = (updateError || {});
   return validationErrors;
 }

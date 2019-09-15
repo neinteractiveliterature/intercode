@@ -13,9 +13,9 @@ import useValueUnless from '../useValueUnless';
 
 function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
   const { data, error } = useQuerySuspended(OrganizationAdminOrganizationsQuery);
-  const organization = data.organizations.find(org => org.id === organizationId);
+  const organization = data.organizations.find((org) => org.id === organizationId);
   const initialOrganizationRole = organization.organization_roles
-    .find(role => role.id === organizationRoleId);
+    .find((role) => role.id === organizationRoleId);
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
   const [
     mutate, { error: mutationError, loading: mutationInProgress },
@@ -35,9 +35,9 @@ function EditOrganizationRole({ organizationId, organizationRoleId, history }) {
       variables: {
         id: organizationRoleId,
         name,
-        addUserIds: usersChangeSet.getAddValues().map(user => user.id),
+        addUserIds: usersChangeSet.getAddValues().map((user) => user.id),
         removeUserIds: usersChangeSet.getRemoveIds(),
-        addPermissions: permissionsChangeSet.getAddValues().map(permission => ({
+        addPermissions: permissionsChangeSet.getAddValues().map((permission) => ({
           permission: permission.permission,
         })),
         removePermissionIds: permissionsChangeSet.getRemoveIds(),

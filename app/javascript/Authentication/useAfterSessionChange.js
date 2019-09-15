@@ -35,7 +35,7 @@ export default function useAfterSessionChange(history) {
         window.location.href = destUrl.toString();
       }
     },
-    [apolloClient, closeModal, history, refresh, setUnauthenticatedError],
+    [],
   );
 
   return afterSessionChange;

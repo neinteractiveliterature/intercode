@@ -8,32 +8,6 @@ import ErrorDisplay from '../../ErrorDisplay';
 import { ForceConfirmSignup } from './mutations.gql';
 
 class ForceConfirmSignupModal extends React.Component {
-  static propTypes = {
-    signup: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      user_con_profile: PropTypes.shape({
-        name_without_nickname: PropTypes.string.isRequired,
-      }).isRequired,
-      requested_bucket_key: PropTypes.string,
-      run: PropTypes.shape({
-        event: PropTypes.shape({
-          registration_policy: PropTypes.shape({
-            buckets: PropTypes.arrayOf(PropTypes.shape({
-              key: PropTypes.string.isRequired,
-              name: PropTypes.string.isRequired,
-            })).isRequired,
-          }).isRequired,
-        }).isRequired,
-      }).isRequired,
-    }),
-    onComplete: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    signup: null,
-  };
-
   constructor(props) {
     super(props);
 
@@ -60,7 +34,7 @@ class ForceConfirmSignupModal extends React.Component {
     }
   }
 
-  bucketKeyChanged = bucketKey => this.setState({ bucketKey })
+  bucketKeyChanged = (bucketKey) => this.setState({ bucketKey })
 
   renderBody = () => {
     const { signup } = this.props;
@@ -107,7 +81,7 @@ class ForceConfirmSignupModal extends React.Component {
         <div className="modal-footer">
           <button type="button" className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
           <Mutation mutation={ForceConfirmSignup}>
-            {forceConfirm => (
+            {(forceConfirm) => (
               <button
                 type="button"
                 className="btn btn-primary"
@@ -123,5 +97,31 @@ class ForceConfirmSignupModal extends React.Component {
     );
   }
 }
+
+ForceConfirmSignupModal.propTypes = {
+  signup: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    user_con_profile: PropTypes.shape({
+      name_without_nickname: PropTypes.string.isRequired,
+    }).isRequired,
+    requested_bucket_key: PropTypes.string,
+    run: PropTypes.shape({
+      event: PropTypes.shape({
+        registration_policy: PropTypes.shape({
+          buckets: PropTypes.arrayOf(PropTypes.shape({
+            key: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+          })).isRequired,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
+  }),
+  onComplete: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
+
+ForceConfirmSignupModal.defaultProps = {
+  signup: null,
+};
 
 export default ForceConfirmSignupModal;

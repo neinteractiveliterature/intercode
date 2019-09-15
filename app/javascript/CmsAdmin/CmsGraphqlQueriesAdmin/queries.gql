@@ -3,11 +3,17 @@ fragment CmsGraphqlQueryFields on CmsGraphqlQuery {
   identifier
   query
   admin_notes
+  current_ability_can_update
+  current_ability_can_delete
 }
 
 query CmsGraphqlQueriesQuery {
   cmsGraphqlQueries {
     id
     ...CmsGraphqlQueryFields
+  }
+
+  currentAbility {
+    can_create_cms_graphql_queries
   }
 }

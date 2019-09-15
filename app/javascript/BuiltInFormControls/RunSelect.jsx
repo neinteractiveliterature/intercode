@@ -8,12 +8,12 @@ function RunSelect({ event, timezoneName, ...otherProps }) {
   return (
     <Select
       options={event ? event.runs : []}
-      getOptionValue={r => r.id}
+      getOptionValue={(r) => r.id}
       formatOptionLabel={(r) => {
         const timespan = timespanFromRun({ timezone_name: timezoneName }, event, r);
         const timeDescription = timespan.humanizeInTimezone(timezoneName);
-        const roomsDescription = sortByLocaleString(r.rooms || [], room => room.name)
-          .map(room => room.name)
+        const roomsDescription = sortByLocaleString(r.rooms || [], (room) => room.name)
+          .map((room) => room.name)
           .join(', ');
 
         if (r.title_suffix) {

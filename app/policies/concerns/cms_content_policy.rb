@@ -7,6 +7,26 @@ module Concerns::CmsContentPolicy
     end
   end
 
+  class DefaultManageScope < ApplicationPolicy::Scope
+    def resolve
+      return scope if site_admin?
+
+      disjunctive_where do |dw|
+        if oauth_scope?(:manage_conventions)
+          model_name = self.class.name.split('::')[-2].gsub(/Policy\z/, '')
+
+          dw.add(parent_type: 'Convention', parent_id: conventions_with_permission('update_cms_content'))
+          dw.add(
+            id: CmsContentGroupAssociation.where(
+              content_type: model_name,
+              cms_content_group_id: cms_content_groups_with_permission('update_content').select(:id)
+            ).select(:content_id)
+          )
+        end
+      end
+    end
+  end
+
   def read?
     true
   end
@@ -14,7 +34,11 @@ module Concerns::CmsContentPolicy
   def manage?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_conventions) do
-        has_convention_permission?(convention, 'update_cms_content')
+        has_convention_permission?(convention, 'update_cms_content') ||
+        (
+          record.respond_to?(:cms_content_groups) &&
+          record.cms_content_groups.where(id: cms_content_groups_with_permission('update_content')).any?
+        )
       end
     end
 
@@ -22,7 +46,8 @@ module Concerns::CmsContentPolicy
   end
 
   included do
-    const_set('Scope', Concerns::CmsContentPolicy::DefaultScope)
+    const_set('Scope', Class.new(Concerns::CmsContentPolicy::DefaultScope))
+    const_set('ManageScope', Class.new(Concerns::CmsContentPolicy::DefaultManageScope))
   end
 
   private

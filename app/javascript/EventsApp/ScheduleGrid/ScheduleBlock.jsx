@@ -22,7 +22,7 @@ function ScheduleBlock({ scheduleBlock, rowHeader, renderEventRun }) {
       <ScheduleGridRowHeader layoutResult={layoutResult} rowHeader={rowHeader} />
       <div className="schedule-grid-block">
         <div style={blockContentStyle}>
-          {layoutResult.runDimensions.map(runDimensions => (
+          {layoutResult.runDimensions.map((runDimensions) => (
             <React.Fragment key={runDimensions.eventRun.runId}>
               {renderEventRun({ layoutResult, runDimensions })}
             </React.Fragment>

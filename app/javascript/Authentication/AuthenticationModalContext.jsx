@@ -28,7 +28,7 @@ export function useAuthenticationModalProvider(recaptchaSiteKey) {
       afterSignInPath,
       setAfterSignInPath,
       currentView: (state || {}).currentView,
-      setCurrentView: view => setState({ ...state, currentView: view }),
+      setCurrentView: (view) => setState({ ...state, currentView: view }),
       recaptchaSiteKey,
       unauthenticatedError,
       setUnauthenticatedError,

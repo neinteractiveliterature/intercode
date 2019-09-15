@@ -7,6 +7,12 @@ class Types::MutationType < Types::BaseObject
     true
   end
 
+  ### CmsContentGroup
+
+  field :createCmsContentGroup, mutation: Mutations::CreateCmsContentGroup
+  field :updateCmsContentGroup, mutation: Mutations::UpdateCmsContentGroup
+  field :deleteCmsContentGroup, mutation: Mutations::DeleteCmsContentGroup
+
   ### CmsFile
 
   field :createCmsFile, mutation: Mutations::CreateCmsFile

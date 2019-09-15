@@ -3,7 +3,7 @@ import Timespan from '../../../Timespan';
 
 class EventRun {
   static buildEventRunsFromApi(apiResponse) {
-    const runsByEvent = apiResponse.map(apiEvent => (
+    const runsByEvent = apiResponse.map((apiEvent) => (
       apiEvent.runs.map((apiRun) => {
         const start = moment(apiRun.starts_at);
         const finish = start.clone().add(apiEvent.length_seconds, 'seconds');

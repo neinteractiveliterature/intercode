@@ -17,13 +17,13 @@ export default function useColumnSelection({
         return uniq([...effectiveAlwaysVisibleColumns, ...defaultVisibleColumns]);
       }
 
-      return possibleColumns.map(column => column.id);
+      return possibleColumns.map((column) => column.id);
     },
     [defaultVisibleColumns, effectiveAlwaysVisibleColumns, history.location, possibleColumns],
   );
 
   const visibleColumns = useMemo(
-    () => possibleColumns.filter(column => visibleColumnIds.includes(column.id)),
+    () => possibleColumns.filter((column) => visibleColumnIds.includes(column.id)),
     [possibleColumns, visibleColumnIds],
   );
 
