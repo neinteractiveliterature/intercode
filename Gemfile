@@ -22,7 +22,7 @@ gem 'doorkeeper', '5.2.0'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
-gem 'doorkeeper-openid_connect'
+gem 'doorkeeper-openid_connect', git: 'https://github.com/nbudin/doorkeeper-openid_connect.git', branch: 'fix_doorkeeper_52_compat'
 
 # Let's store sessions in the database, shall we?
 gem 'activerecord-session_store'
