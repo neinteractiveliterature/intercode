@@ -1,7 +1,8 @@
 class UserPolicy < ApplicationPolicy
   def read?
+    return true if user && user == record
+
     oauth_scoped_disjunction do |d|
-      d.add(:read_profile) { user && user == record }
       d.add(:read_organizations) do
         site_admin? ||
           record.user_con_profiles.where(
@@ -32,7 +33,7 @@ class UserPolicy < ApplicationPolicy
       return scope.all if site_admin? && oauth_scope?(:read_organizations)
 
       disjunctive_where do |dw|
-        dw.add(id: user.id) if user && oauth_scope?(:read_profile)
+        dw.add(id: user.id) if user
 
         if oauth_scope?(:read_organizations)
           dw.add(
