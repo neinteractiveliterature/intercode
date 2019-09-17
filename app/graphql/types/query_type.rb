@@ -318,11 +318,12 @@ class Types::QueryType < Types::BaseObject
   end
 
   def oauth_pre_auth(query_params:)
-    Doorkeeper::OAuth::PreAuthorization.new(
+    pre_auth = Doorkeeper::OAuth::PreAuthorization.new(
       Doorkeeper.configuration,
-      Doorkeeper::OAuth::Client.find(query_params['client_id']),
       ActionController::Parameters.new(query_params)
-    ).as_json({})
+    )
+    pre_auth.valid?
+    pre_auth.as_json({})
   end
 
   field :current_pending_order, Types::OrderType, null: true

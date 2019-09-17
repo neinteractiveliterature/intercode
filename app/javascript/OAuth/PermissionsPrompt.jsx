@@ -48,12 +48,10 @@ function PermissionsPrompt({ scopeNames }) {
   const groupClicked = (scopeGroup) => {
     setExpandedGroups((prevExpandedGroups) => {
       if (prevExpandedGroups.includes(scopeGroup)) {
-        return {
-          expandedGroups: prevExpandedGroups.filter((group) => group !== scopeGroup),
-        };
+        return prevExpandedGroups.filter((group) => group !== scopeGroup);
       }
 
-      return { expandedGroups: [...prevExpandedGroups, scopeGroup] };
+      return [...prevExpandedGroups, scopeGroup];
     });
   }
 
