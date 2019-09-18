@@ -11,10 +11,15 @@ export default function useAfterSessionChange(history) {
 
   const afterSessionChange = useCallback(
     async (destPath) => {
-      const destUrl = new URL(
+      let destUrl = new URL(
         destPath || window.location.href,
         window.location.href,
       );
+
+      if (destUrl.host === window.location.host && destUrl.pathname === '/users/sign_in') {
+        // don't double sign-in
+        destUrl = new URL('/', window.location.href);
+      }
 
       destUrl.searchParams.delete('show_authentication');
       if (destUrl.toString() === window.location.href) {
