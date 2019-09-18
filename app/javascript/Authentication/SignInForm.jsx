@@ -24,6 +24,7 @@ async function signIn(authenticityToken, email, password, rememberMe) {
     body: formData,
     credentials: 'include',
     headers: {
+      Accept: 'application/json',
       'X-CSRF-Token': authenticityToken,
     },
   });

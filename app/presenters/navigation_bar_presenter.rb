@@ -281,7 +281,7 @@ class NavigationBarPresenter
     end,
     NavigationItem.define do
       label 'Authorized Applications'
-      url { oauth_authorized_applications_path }
+      url '/oauth/applications-embed'
       visible? { user_signed_in? }
     end,
     SignOutNavigationItem.define do
