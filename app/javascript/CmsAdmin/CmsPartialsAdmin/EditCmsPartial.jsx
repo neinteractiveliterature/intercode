@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import buildPartialInput from './buildPartialInput';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
@@ -21,6 +22,7 @@ function EditCmsPartial({ match, history }) {
   const [updatePartial, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdatePartial),
   );
+  const apolloClient = useApolloClient();
 
   usePageTitle(useValueUnless(() => `Editing “${initialPartial.name}”`, error));
 
@@ -36,6 +38,7 @@ function EditCmsPartial({ match, history }) {
         cmsPartial: buildPartialInput(partial),
       },
     });
+    await apolloClient.resetStore();
     history.push('/cms_partials');
   };
 

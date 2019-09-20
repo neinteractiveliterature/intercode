@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useApolloClient } from 'react-apollo-hooks';
 
 import { CmsContentGroupsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -33,6 +33,7 @@ function EditCmsContentGroup({ match: { params }, history }) {
     ...(initialContentGroup || {}),
   });
   const [permissionsChangeSet, addPermission, removePermission] = useChangeSet();
+  const apolloClient = useApolloClient();
 
   usePageTitle(`Editing “${(initialContentGroup || {}).name}”`);
 
@@ -60,6 +61,7 @@ function EditCmsContentGroup({ match: { params }, history }) {
       },
     });
 
+    await apolloClient.resetStore();
     history.push('/cms_content_groups');
   };
 

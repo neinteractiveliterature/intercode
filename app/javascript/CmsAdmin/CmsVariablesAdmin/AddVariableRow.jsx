@@ -1,114 +1,94 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { useMutation, useApolloClient } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../../ErrorDisplay';
-import { mutator, Transforms } from '../../ComposableFormUtils';
 import { SetCmsVariableMutation } from './queries.gql';
 import updateCmsVariable from './updateCmsVariable';
+import useAsyncFunction from '../../useAsyncFunction';
 
-class AddVariableRow extends React.Component {
-  constructor(props) {
-    super(props);
+function AddVariableRow({
+  variable, onChange, onSave, onCancel,
+}) {
+  const [setCmsVariableMutate] = useMutation(SetCmsVariableMutation);
+  const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
+  const apolloClient = useApolloClient();
 
-    this.state = {
-      mutationInProgress: false,
-      error: null,
-    };
-
-    this.mutator = mutator({
-      getState: () => this.props.variable,
-      setState: this.props.onChange,
-      transforms: {
-        key: Transforms.identity,
-        value_json: Transforms.identity,
+  const save = async () => {
+    await setCmsVariable({
+      variables: {
+        key: variable.key,
+        value_json: variable.value_json,
       },
+      update: updateCmsVariable,
     });
-  }
+    await apolloClient.resetStore();
 
-  handleKeyDown = (event, mutate) => {
+    return onSave(variable.generatedId);
+  };
+
+  const handleKeyDown = (event) => {
     switch (event.key) {
       case 'Enter':
         event.preventDefault();
-        this.save(mutate);
+        save();
         break;
 
       default:
     }
-  }
+  };
 
-  save = async (mutate) => {
-    this.setState({ mutationInProgress: true, error: null });
-    try {
-      await mutate({
-        variables: {
-          key: this.props.variable.key,
-          value_json: this.props.variable.value_json,
-        },
-        update: updateCmsVariable,
-      });
-
-      this.props.onSave(this.props.variable.generatedId);
-    } catch (error) {
-      this.setState({ mutationInProgress: false, error });
-    }
-  }
-
-  render = () => (
+  return (
     <>
-      <Mutation mutation={SetCmsVariableMutation}>
-        {(mutate) => (
-          <tr>
-            <td>
-              <input
-                type="text"
-                className="form-control text-monospace"
-                value={this.props.variable.key}
-                onChange={(event) => { this.mutator.key(event.target.value); }}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                className="form-control text-monospace"
-                value={this.props.variable.value_json}
-                onChange={(event) => { this.mutator.value_json(event.target.value); }}
-                onKeyDown={(event) => this.handleKeyDown(event, mutate)}
-              />
-            </td>
-            <td>
-              <div className="btn-group">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => this.props.onCancel(this.props.variable.generatedId)}
-                  disabled={this.state.mutationInProgress}
-                >
-                  <i className="fa fa-times" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  disabled={
-                    this.props.variable.key.trim() === ''
-                    || this.props.variable.value_json.trim() === ''
-                    || this.state.mutationInProgress
-                  }
-                  onClick={() => this.save(mutate)}
-                >
-                  <i className="fa fa-check" />
-                </button>
-              </div>
-            </td>
-          </tr>
-        )}
-      </Mutation>
+      <tr>
+        <td>
+          <input
+            type="text"
+            className="form-control text-monospace"
+            value={variable.key}
+            onChange={(event) => onChange({ ...variable, key: event.target.value })}
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            className="form-control text-monospace"
+            value={variable.value_json}
+            onChange={(event) => onChange({ ...variable, value_json: event.target.value })}
+            onKeyDown={handleKeyDown}
+          />
+        </td>
+        <td>
+          <div className="btn-group">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => onCancel(variable.generatedId)}
+              disabled={setInProgress}
+            >
+              <i className="fa fa-times" />
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={
+                variable.key.trim() === ''
+                || variable.value_json.trim() === ''
+                || setInProgress
+              }
+              onClick={save}
+            >
+              <i className="fa fa-check" />
+            </button>
+          </div>
+        </td>
+      </tr>
       {
-        this.state.error
+        setError
           ? (
             <tr>
               <td colSpan="3">
-                <ErrorDisplay graphQLError={this.state.error} />
+                <ErrorDisplay graphQLError={setError} />
               </td>
             </tr>
           )

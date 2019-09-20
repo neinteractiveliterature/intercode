@@ -6,6 +6,7 @@ import { CmsVariablesQuery } from './queries.gql';
 import usePageTitle from '../../usePageTitle';
 import useQuerySuspended from '../../useQuerySuspended';
 import ErrorDisplay from '../../ErrorDisplay';
+import { sortByLocaleString } from '../../ValueUtils';
 
 function CmsVariablesAdmin() {
   const { data, error } = useQuerySuspended(CmsVariablesQuery);
@@ -59,7 +60,7 @@ function CmsVariablesAdmin() {
         </tr>
       </thead>
       <tbody>
-        {cmsVariables.map((variable) => (
+        {sortByLocaleString(cmsVariables, (variable) => variable.key).map((variable) => (
           <ExistingVariableRow variable={variable} key={variable.key} />
         ))}
         {addingVariables.map((variable) => (

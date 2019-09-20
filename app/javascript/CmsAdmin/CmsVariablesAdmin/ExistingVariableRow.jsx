@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useApolloClient } from 'react-apollo-hooks';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
@@ -24,11 +24,28 @@ function ExistingVariableRow({ variable }) {
     deleteVariable, deleteVariableError, , clearDeleteVariableError,
   ] = useAsyncFunction(deleteVariableMutate);
   const confirm = useConfirm();
+  const apolloClient = useApolloClient();
 
   const error = setVariableError || deleteVariableError;
   const clearError = () => {
     clearSetVariableError();
     clearDeleteVariableError();
+  };
+
+  const commitVariable = async (value) => {
+    await setVariable({
+      variables: {
+        key: variable.key,
+        value_json: value,
+      },
+    });
+
+    return apolloClient.resetStore();
+  };
+
+  const deleteConfirmed = async () => {
+    await deleteVariable({ variables: { key: variable.key } });
+    return apolloClient.resetStore();
   };
 
   return (
@@ -43,12 +60,7 @@ function ExistingVariableRow({ variable }) {
               <CommitableInput
                 className="text-monospace"
                 value={variable.value_json}
-                onChange={(value) => setVariable({
-                  variables: {
-                    key: variable.key,
-                    value_json: value,
-                  },
-                })}
+                onChange={commitVariable}
                 onCancel={clearError}
               />
             )
@@ -61,7 +73,7 @@ function ExistingVariableRow({ variable }) {
               type="button"
               onClick={() => confirm({
                 prompt: `Are you sure you want to delete the variable "${variable.key}"?`,
-                action: () => deleteVariable({ variables: { key: variable.key } }),
+                action: deleteConfirmed,
               })}
             >
               <i className="fa fa-trash-o" />
