@@ -99,6 +99,7 @@ class Client {
           : data.createCmsNavigationItem
       );
 
+      await this.apolloClient.resetStore();
       return graphqlNavigationItemToCadmusNavbarAdminObject(mutationResponse.cms_navigation_item);
     } catch (error) {
       this.onError(error);
@@ -112,7 +113,7 @@ class Client {
     this.requestsInProgress.deletingNavigationItem = true;
 
     try {
-      return await this.apolloClient.mutate({
+      const response = await this.apolloClient.mutate({
         mutation: DeleteNavigationItem,
         variables: { id: navigationItem.id },
         update: (cache) => {
@@ -122,6 +123,8 @@ class Client {
           cache.writeQuery({ query: NavigationItemsAdminQuery, data });
         },
       });
+      await this.apolloClient.resetStore();
+      return response;
     } catch (error) {
       this.onError(error);
       throw error;
@@ -141,7 +144,7 @@ class Client {
 
     this.requestsInProgress.sortingNavigationItems = true;
     try {
-      return await this.apolloClient.mutate({
+      const response = await this.apolloClient.mutate({
         mutation: SortNavigationItems,
         variables: { sortItems },
         update: (cache) => {
@@ -164,6 +167,9 @@ class Client {
           });
         },
       });
+
+      await this.apolloClient.resetStore();
+      return response;
     } catch (error) {
       this.onError(error);
       throw error;
