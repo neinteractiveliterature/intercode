@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import buildLayoutInput from './buildLayoutInput';
 import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
@@ -21,6 +22,7 @@ function EditCmsLayout({ match, history }) {
   const [updateLayout, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateLayout),
   );
+  const apolloClient = useApolloClient();
 
   usePageTitle(useValueUnless(() => `Editing “${initialLayout.name}”`, error));
 
@@ -36,6 +38,7 @@ function EditCmsLayout({ match, history }) {
         cmsLayout: buildLayoutInput(layout),
       },
     });
+    await apolloClient.resetStore();
     history.push('/cms_layouts');
   };
 

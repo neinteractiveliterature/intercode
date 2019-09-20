@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { pageReducer } from './CmsPageForm';
@@ -19,6 +20,7 @@ function EditCmsPage({ match, history }) {
   const [updatePage, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdatePage),
   );
+  const apolloClient = useApolloClient();
 
   usePageTitle(useValueUnless(() => `Edit “${initialPage.name}”`, error));
 
@@ -34,6 +36,7 @@ function EditCmsPage({ match, history }) {
         page: buildPageInput(page),
       },
     });
+    await apolloClient.resetStore();
     history.push('/cms_pages');
   };
 

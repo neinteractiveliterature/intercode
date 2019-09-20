@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CmsGraphqlQueriesQuery } from './queries.gql';
@@ -21,6 +22,7 @@ function EditCmsGraphqlQuery({ match, history }) {
   const [update, updateError, updateInProgress] = useAsyncFunction(
     useMutationCallback(UpdateCmsGraphqlQuery),
   );
+  const apolloClient = useApolloClient();
 
   usePageTitle(`Editing “${initialQuery.identifier}”`);
 
@@ -36,6 +38,7 @@ function EditCmsGraphqlQuery({ match, history }) {
       },
     });
 
+    await apolloClient.resetStore();
     history.push('/cms_graphql_queries');
   };
 
