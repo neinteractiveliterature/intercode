@@ -7,6 +7,7 @@ import { UpdateUserConProfile } from '../UserConProfiles/mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useMutationCallback from '../useMutationCallback';
 import ErrorDisplay from '../ErrorDisplay';
+import { MyProfileQuery } from './queries.gql';
 
 function BioForm({ userConProfile, history }) {
   const [bio, setBio] = useState(userConProfile.bio || '');
@@ -30,6 +31,7 @@ function BioForm({ userConProfile, history }) {
           },
         },
       },
+      refetchQueries: [{ query: MyProfileQuery }],
     });
 
     history.push('/my_profile');
