@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
-  include Concerns::FormResponse
+  include Concerns::AgeRestrictions
   include Concerns::EventEmail
+  include Concerns::FormResponse
 
   STATUSES = Set.new(%w[active dropped])
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
@@ -20,6 +21,8 @@ class Event < ApplicationRecord
     :registration_policy,
     :participant_communications,
     :age_restrictions,
+    :age_restrictions_description,
+    :minimum_age,
     :content_warnings
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or

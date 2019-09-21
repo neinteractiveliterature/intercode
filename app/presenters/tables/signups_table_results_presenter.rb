@@ -1,20 +1,31 @@
 class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_run(run, filters, sort, visible_field_ids = nil)
-    scope = run.signups.includes(:user_con_profile)
-    new(scope, filters, sort, visible_field_ids)
+  def self.for_run(run, pundit_user, filters, sort, visible_field_ids = nil)
+    scope = SignupPolicy::Scope.new(pundit_user, run.signups.includes(:user_con_profile))
+    new(scope.resolve, pundit_user, filters, sort, visible_field_ids)
   end
 
-  def self.signup_spy_for_convention(convention)
-    scope = convention.signups.joins(run: :event)
+  def self.signup_spy_for_convention(convention, pundit_user)
+    scope = SignupPolicy::Scope.new(
+      pundit_user,
+      convention.signups.joins(run: :event)
       .includes(user_con_profile: :signups, run: :event)
       .where(events: { convention_id: convention.id })
+    )
 
     new(
-      scope,
+      scope.resolve,
+      pundit_user,
       {},
       [{ field: 'created_at', desc: true }],
       %w[name event_title state created_at choice]
     )
+  end
+
+  attr_reader :pundit_user
+
+  def initialize(scope, pundit_user, *args)
+    @pundit_user = pundit_user
+    super(scope, *args)
   end
 
   def fields
@@ -24,6 +35,7 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
       Tables::TableResultsPresenter::Field.new(:name, 'Name'),
       Tables::TableResultsPresenter::Field.new(:event_title, 'Event'),
       Tables::TableResultsPresenter::Field.new(:bucket, 'Bucket'),
+      Tables::TableResultsPresenter::Field.new(:age_restrictions_check, 'Age check'),
       Tables::TableResultsPresenter::Field.new(:age, 'Age'),
       Tables::TableResultsPresenter::Field.new(:email, 'Email'),
       Tables::TableResultsPresenter::Field.new(:created_at, 'Timestamp'),
@@ -71,8 +83,6 @@ OR lower(user_con_profiles.first_name) like :value",
       "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
     when :email
       "users.email #{direction}"
-    when :age
-      "user_con_profiles.birth_date #{invert_sort_direction direction}"
     when :bucket
       "bucket_key #{direction}"
     else
@@ -88,7 +98,10 @@ OR lower(user_con_profiles.first_name) like :value",
     case field.id
     when :name then signup.user_con_profile.name_inverted
     when :bucket then describe_bucket(signup)
-    when :age then signup.user_con_profile.age_as_of(signup.run.starts_at)
+    when :age
+      if UserConProfilePolicy.new(pundit_user, signup.user_con_profile).read_birth_date?
+        signup.user_con_profile.age_as_of(signup.run.starts_at)
+      end
     when :email then signup.user_con_profile.email
     when :event_title then signup.run.event.title
     when :choice then signup.counted? ? signup.choice : 'N/C'

@@ -1,5 +1,10 @@
 class FormItem < ApplicationRecord
   PROPERTIES_SCHEMA = {
+    age_restrictions: {
+      identifier: :required,
+      caption: :required,
+      required: :optional
+    },
     date: {
       identifier: :required,
       caption: :required,

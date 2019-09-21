@@ -1,12 +1,14 @@
 class EventProposal < ApplicationRecord
-  include Concerns::FormResponse
+  include Concerns::AgeRestrictions
   include Concerns::EventEmail
+  include Concerns::FormResponse
 
   STATUSES = Set.new(%w[draft proposed reviewing accepted rejected withdrawn])
 
   register_form_response_attrs :title,
     :email,
     :event_email,
+    :age_restrictions,
     :team_mailing_list_name,
     :length_seconds,
     :description,
