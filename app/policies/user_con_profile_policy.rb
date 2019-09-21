@@ -30,6 +30,18 @@ class UserConProfilePolicy < ApplicationPolicy
     end
   end
 
+  def read_birth_date?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:read_profile) { profile_is_user_or_identity_assumer? }
+      d.add(:read_conventions) do
+        has_convention_permission?(convention, 'read_user_con_profile_personal_info') ||
+        has_event_category_permission_in_convention?(convention, 'read_event_proposals')
+      end
+    end
+
+    site_admin_read?
+  end
+
   def read_personal_info?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_profile) { profile_is_user_or_identity_assumer? }

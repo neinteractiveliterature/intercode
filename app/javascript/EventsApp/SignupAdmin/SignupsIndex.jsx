@@ -73,7 +73,7 @@ function SignupsIndex({
               eventId={eventId}
               exportUrl={exportSignupsUrl}
               runPath={runPath}
-              defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age', 'email']}
+              defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
             />
           )}
         />

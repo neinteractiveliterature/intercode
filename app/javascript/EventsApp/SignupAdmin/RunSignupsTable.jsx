@@ -61,6 +61,23 @@ SignupStateFilter.defaultProps = {
   filter: null,
 };
 
+const AgeRestrictionsCheckCell = ({ value }) => {
+  let badgeClass = 'badge-danger';
+  if (value === 'OK') {
+    badgeClass = 'badge-success';
+  } else if (value === 'Unknown age') {
+    badgeClass = 'badge-warning';
+  } else if (value === 'N/A') {
+    badgeClass = 'badge-light';
+  }
+
+  return <span className={`badge ${badgeClass}`}>{value}</span>;
+};
+
+AgeRestrictionsCheckCell.propTypes = {
+  value: PropTypes.string.isRequired,
+};
+
 const BucketCell = ({ original }) => {
   const data = useContext(QueryDataContext);
   return formatBucket(original, data.event);
@@ -129,8 +146,16 @@ const getPossibleColumns = () => [
     Header: 'Bucket',
     id: 'bucket',
     accessor: (signup) => signup.bucket_key,
-    Cell: BucketCell,
+    Cell: (props) => <BucketCell {...props} />,
     Filter: BucketFilter,
+  },
+  {
+    Header: 'Age check',
+    id: 'age_restrictions_check',
+    accessor: 'age_restrictions_check',
+    width: 100,
+    filterable: false,
+    Cell: AgeRestrictionsCheckCell,
   },
   {
     Header: 'Age',

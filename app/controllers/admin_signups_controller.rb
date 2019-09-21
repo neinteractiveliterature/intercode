@@ -34,11 +34,12 @@ class AdminSignupsController < ApplicationController
         send_table_presenter_csv(
           Tables::SignupsTableResultsPresenter.for_run(
             run,
+            pundit_user,
             params[:filters]&.to_unsafe_h,
             params[:sort],
             params[:columns]
           ),
-          unique_filename
+          unique_filename(event, run)
         )
       end
     end
@@ -48,12 +49,12 @@ class AdminSignupsController < ApplicationController
 
   # Find a filename that will be unique across all runs, using a variety of filename generation
   # strategies
-  def unique_filename
+  def unique_filename(event, run)
     filename_generator = PRIORITIZED_FILENAME_GENERATORS.find do |generator|
-      filenames = @event.runs.map { |run| generator.call(run) }
+      filenames = event.runs.map { |r| generator.call(r) }
       filenames.uniq.size == filenames.size
     end
 
-    "#{filename_generator.call(@run)} Signups"
+    "#{filename_generator.call(run)} Signups"
   end
 end

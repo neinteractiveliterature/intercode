@@ -20,8 +20,6 @@ module Concerns::FormResponse
 
   def assign_form_response_attributes(attributes)
     form_response_attrs = self.class.form_response_attrs
-    new_model_attrs = {}
-    new_additional_info = additional_info || {}
 
     attributes.stringify_keys.each do |key, value|
       old_value = read_form_response_attribute(key)
@@ -29,14 +27,14 @@ module Concerns::FormResponse
         form_response_attribute_changes[key] = [old_value, value]
       end
 
+      # Go one-by-one because some attributes (e.g. event_email and age_restrictions) do
+      # recursive attribute assignment
       if form_response_attrs.include?(key)
-        new_model_attrs[key] = value
+        assign_attributes(key => value)
       else
-        new_additional_info[key] = value
+        assign_attributes(additional_info: (additional_info || {}).merge(key => value))
       end
     end
-
-    assign_attributes(new_model_attrs.merge(additional_info: new_additional_info))
   end
 
   def read_form_response_attribute(attribute)

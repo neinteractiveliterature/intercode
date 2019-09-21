@@ -81,7 +81,12 @@ class Types::UserConProfileType < Types::BaseObject
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
   end
 
-  personal_info_field :birth_date, Types::DateType, null: true
+  field :birth_date, Types::DateType, null: true
+  def birth_date
+    return nil unless policy(object).read_birth_date?
+    object.birth_date
+  end
+
   personal_info_field :address, String, null: true
   personal_info_field :city, String, null: true
   personal_info_field :state, String, null: true

@@ -142,6 +142,53 @@ class UserConProfilePolicyTest < ActiveSupport::TestCase
     end
   end
 
+  describe '#read_birth_date?' do
+    %w[read_user_con_profile_personal_info].each do |permission|
+      it "lets users with #{permission} read birth date" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        assert UserConProfilePolicy.new(user, user_con_profile).read_birth_date?
+      end
+    end
+
+    %w[read_user_con_profiles read_user_con_profile_email].each do |permission|
+      it "does not let users with #{permission} read birth date" do
+        user = create_user_with_permission_in_convention(permission, convention)
+        refute UserConProfilePolicy.new(user, user_con_profile).read_birth_date?
+      end
+    end
+
+    it 'does not let team members read birth date of attendees in their events' do
+      refute UserConProfilePolicy.new(team_member.user_con_profile.user, signup.user_con_profile)
+        .read_birth_date?
+    end
+
+    it 'does not let team members read birth date of co-team-members in their events' do
+      other_team_member = create(:team_member, event: team_member.event)
+      refute UserConProfilePolicy.new(
+        team_member.user_con_profile.user, other_team_member.user_con_profile
+      ).read_birth_date?
+    end
+
+    it 'does not let team members read birth date of anyone in the convention' do
+      refute UserConProfilePolicy.new(team_member.user_con_profile.user, user_con_profile)
+        .read_birth_date?
+    end
+
+    it 'lets users with read_event_proposals in any event category read birth date' do
+      event_category = create(:event_category, convention: convention)
+      user = create_user_with_read_event_proposals_in_event_category(event_category)
+      assert UserConProfilePolicy.new(user, user_con_profile).read_email?
+    end
+
+    it 'lets users read their own birth date' do
+      assert UserConProfilePolicy.new(user_con_profile.user, user_con_profile).read_birth_date?
+    end
+
+    it 'does not let randos read birth date' do
+      refute UserConProfilePolicy.new(rando_profile.user, user_con_profile).read_birth_date?
+    end
+  end
+
   %w[create update].each do |action|
     describe "##{action}?" do
       it "lets users with update_user_con_profiles #{action} other people's profiles" do
