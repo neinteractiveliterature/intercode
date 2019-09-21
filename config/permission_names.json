@@ -76,6 +76,10 @@
         "name": "read attendee emails"
       },
       {
+        "permission": "read_user_con_profile_birth_date",
+        "name": "read attendee birth dates"
+      },
+      {
         "permission": "read_user_con_profile_personal_info",
         "name": "read attendee personal info"
       },
