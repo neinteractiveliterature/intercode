@@ -47,18 +47,17 @@ class Types::UserConProfileType < Types::BaseObject
 
   def form_response_attrs_json
     attrs = FormResponsePresenter.new(context[:convention].user_con_profile_form, object).as_json
-    if policy(object).read_personal_info?
-      attrs.to_json
-    else
-      allowed_attrs = %w[
-        first_name
-        last_name
-        nickname
-      ]
 
-      allowed_attrs << 'email' if policy(object).read_email?
-      attrs.slice(*allowed_attrs).to_json
+    allowed_attrs = attrs.keys
+    allowed_attrs.delete('email') unless policy(object).read_email?
+    allowed_attrs.delete('birth_date') unless policy(object).read_birth_date?
+    unless policy(object).read_personal_info?
+      allowed_attrs.select! do |attr|
+        %w[first_name last_name nickname email birth_date].include?(attr)
+      end
     end
+
+    attrs.slice(*allowed_attrs).to_json
   end
 
   personal_info_field :user, Types::UserType, null: true
