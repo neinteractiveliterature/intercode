@@ -18,7 +18,10 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     it 'disallows signups' do
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match(/\AYou must have a valid ticket to #{Regexp.escape convention.name}/)
+      assert_match(
+        /\AYou must have a valid ticket to #{Regexp.escape convention.name}/,
+        result.errors.full_messages.join('\n')
+      )
     end
   end
 
@@ -34,7 +37,10 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     it 'disallows signups' do
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match(/\AYou have a #{Regexp.escape ticket_type.description}/)
+      assert_match(
+        /\AYou have a #{Regexp.escape ticket_type.description}/,
+        result.errors.full_messages.join('\n')
+      )
     end
   end
 
@@ -89,7 +95,10 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /already signed up/
+      assert_match(
+         /already signed up/,
+         result.errors.full_messages.join('\n')
+      )
     end
 
     describe 'as a team member' do
@@ -102,11 +111,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       it 'signs up a team member as not counted' do
         result = subject.call
 
-        result.must_be :success?
-        result.signup.must_be :confirmed?
-        result.signup.wont_be :counted?
-        result.signup.bucket_key.must_be_nil
-        result.signup.requested_bucket_key.must_be_nil
+        assert result.success?
+        assert result.signup.confirmed?
+        refute result.signup.counted?
+        assert_nil result.signup.bucket_key
+        assert_nil result.signup.requested_bucket_key
       end
 
       it 'does not care whether signups are open yet' do

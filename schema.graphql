@@ -637,6 +637,7 @@ input CreateFormWithJSONInput {
   """
   clientMutationId: String
   form_json: String!
+  form_type: FormType!
 }
 
 """
@@ -1718,10 +1719,28 @@ type Form {
   event_categories: [EventCategory!]!
   export_json: Json!
   form_api_json: Json!
+  form_type: FormType!
   id: Int!
   proposal_event_categories: [EventCategory!]!
   title: String!
   user_con_profile_conventions: [Convention!]!
+}
+
+enum FormType {
+  """
+  Event form
+  """
+  event
+
+  """
+  Event proposal form
+  """
+  event_proposal
+
+  """
+  User con profile form
+  """
+  user_con_profile
 }
 
 """
@@ -2502,6 +2521,7 @@ type SignOutNavigationItem {
 }
 
 type Signup {
+  age_restrictions_check: String!
   bucket_key: String
   choice: Int
   counted: Boolean!

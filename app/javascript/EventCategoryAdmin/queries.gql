@@ -38,6 +38,7 @@ query EventCategoryAdminQuery {
     forms {
       id
       title
+      form_type
     }
   }
 }

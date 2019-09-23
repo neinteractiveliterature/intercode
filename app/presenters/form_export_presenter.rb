@@ -8,6 +8,7 @@ class FormExportPresenter
   def as_json
     {
       title: form.title,
+      form_type: form.form_type,
       sections: form.form_sections.order(:position).includes(:form_items).map do |section|
         export_section(section)
       end

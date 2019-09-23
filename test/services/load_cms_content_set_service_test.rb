@@ -34,10 +34,8 @@ describe LoadCmsContentSetService do
       assert_equal default_layout, convention.default_layout
     end
 
-    it 'loads forms' do
-      LoadCmsContentSetService::FORM_NAMES.each do |form_name|
-        assert convention.public_send(form_name), "#{form_name} is missing"
-      end
+    it 'loads user con profile form' do
+      assert convention.user_con_profile_form, 'user_con_profile_form is missing'
     end
   end
 
@@ -88,14 +86,14 @@ describe LoadCmsContentSetService do
     result.errors.full_messages.join("\n").must_match /layout named Default already exists/
   end
 
-  LoadCmsContentSetService::FORM_NAMES.each do |form_name|
-    it "is invalid if #{form_name} already exists" do
-      convention.public_send("create_#{form_name}!", title: form_name, convention: convention)
+  it 'is invalid if user_con_profile_form already exists' do
+    convention.create_user_con_profile_form!(
+      title: 'user con profile form', convention: convention, form_type: 'user_con_profile'
+    )
 
-      result = service.call
+    result = service.call
 
-      assert result.failure?
-      result.errors.full_messages.join("\n").must_match /already has a form for #{form_name}/
-    end
+    assert result.failure?
+    assert_match(/already has a user_con_profile form/, result.errors.full_messages.join("\n"))
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_21_230626) do
+ActiveRecord::Schema.define(version: 2019_09_23_155934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -294,6 +294,7 @@ ActiveRecord::Schema.define(version: 2019_09_21_230626) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "convention_id"
+    t.string "form_type", null: false
     t.index ["convention_id"], name: "index_forms_on_convention_id"
   end
 

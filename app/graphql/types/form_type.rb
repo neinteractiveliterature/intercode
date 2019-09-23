@@ -2,6 +2,7 @@ class Types::FormType < Types::BaseObject
   field :id, Int, null: false
   field :title, String, null: false
   field :form_api_json, Types::Json, null: false, camelize: false
+  field :form_type, Types::FormTypeType, null: false, camelize: false
   field :export_json, Types::Json, null: false, camelize: false
   field :event_categories, [Types::EventCategoryType], null: false, camelize: false
   field :proposal_event_categories, [Types::EventCategoryType], null: false, camelize: false

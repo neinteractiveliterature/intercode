@@ -159,7 +159,7 @@ function EventCategoryForm({
 
       <SelectWithLabel
         label="Event form (required)"
-        options={forms}
+        options={forms.filter((form) => form.form_type === 'event')}
         getOptionValue={(option) => option.id}
         getOptionLabel={(option) => option.title}
         value={value.event_form}
@@ -169,7 +169,7 @@ function EventCategoryForm({
 
       <SelectWithLabel
         label="Event proposal form (optional; if blank this event category cannot be proposed)"
-        options={forms}
+        options={forms.filter((form) => form.form_type === 'event_proposal')}
         getOptionValue={(option) => option.id}
         getOptionLabel={(option) => option.title}
         value={value.event_proposal_form}

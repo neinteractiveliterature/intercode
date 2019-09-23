@@ -1,8 +1,4 @@
 class LoadCmsContentSetService < CivilService::Service
-  FORM_NAMES = %w[
-    user_con_profile_form
-  ]
-
   attr_reader :convention, :content_set, :content_set_name
 
   validates_presence_of :convention, :content_set_name
@@ -10,7 +6,7 @@ class LoadCmsContentSetService < CivilService::Service
   validate :ensure_no_conflicting_pages
   validate :ensure_no_conflicting_partials
   validate :ensure_no_conflicting_layouts
-  validate :ensure_no_conflicting_forms
+  validate :ensure_no_conflicting_user_con_profile_form
 
   def initialize(convention:, content_set_name:)
     @convention = convention
@@ -35,15 +31,15 @@ class LoadCmsContentSetService < CivilService::Service
   end
 
   def load_form_content
-    content_set.all_form_paths_with_names.each do |path, name|
-      form = case name
-      when *FORM_NAMES
-        create_form(name)
+    content_set.all_form_contents_by_name.values.each do |content|
+      form = case content['form_type']
+      when 'user_con_profile'
+        convention.create_user_con_profile_form!(convention: convention, form_type: content['form_type'])
       else
-        convention.forms.create!
+        convention.forms.create!(convention: convention, form_type: content['form_type'])
       end
 
-      ImportFormContentService.new(form: form, content: JSON.parse(File.read(path))).call!
+      ImportFormContentService.new(form: form, content: content).call!
     end
 
     convention.save!
@@ -116,10 +112,6 @@ class LoadCmsContentSetService < CivilService::Service
     )
   end
 
-  def create_form(association_name)
-    convention.public_send("create_#{association_name}!", convention: convention)
-  end
-
   def association_for_subdir(subdir)
     case subdir
     when 'layouts' then convention.cms_layouts
@@ -181,12 +173,8 @@ class LoadCmsContentSetService < CivilService::Service
     end
   end
 
-  def ensure_no_conflicting_forms
-    existing_form_names = Set.new(FORM_NAMES.select { |name| convention.public_send(name) })
-    content_set.all_form_names.each do |name|
-      if existing_form_names.include?(name)
-        errors.add(:base, "#{convention.name} already has a form for #{name}")
-      end
-    end
+  def ensure_no_conflicting_user_con_profile_form
+    return unless content_set.user_con_profile_form && convention.user_con_profile_form
+    errors.add(:base, "#{convention.name} already has a user_con_profile form")
   end
 end

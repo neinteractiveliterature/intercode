@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { pluralize } from 'inflected';
+import { humanize, pluralize } from 'inflected';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteForm } from './mutations.gql';
@@ -56,6 +56,7 @@ function FormAdminIndex() {
         <thead>
           <tr>
             <th>Title</th>
+            <th>Form type</th>
             <th>Usage</th>
             <th />
           </tr>
@@ -64,6 +65,7 @@ function FormAdminIndex() {
           {sortedForms.map((form) => (
             <tr key={form.id}>
               <td>{form.title}</td>
+              <td>{humanize(form.form_type)}</td>
               <td>
                 <ul className="list-unstyled m-0">
                   {describeFormUsers(form).map((formUser, i) => (
