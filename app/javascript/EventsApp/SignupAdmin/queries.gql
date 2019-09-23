@@ -188,6 +188,7 @@ query RunSignupsTableSignupsQuery($eventId: Int!, $runId: Int!, $page: Int, $per
           counted
           bucket_key
           requested_bucket_key
+          age_restrictions_check
 
           run {
             id

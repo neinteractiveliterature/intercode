@@ -1,53 +1,53 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
 import classNames from 'classnames';
+
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import MarkdownInput from '../../BuiltInFormControls/MarkdownInput';
 import RequiredIndicator from './RequiredIndicator';
+import useUniqueId from '../../useUniqueId';
 
-class FreeTextItemInput extends React.Component {
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
-  }
+function FreeTextItemInput(props) {
+  const {
+    formItem, onChange, onInteract, value, valueInvalid,
+  } = props;
+  const domId = useUniqueId(`${formItem.identifier}-`);
 
-  userDidInteract = () => {
-    this.props.onInteract(this.props.formItem.identifier);
-  }
+  const userInteracted = useCallback(
+    () => onInteract(formItem.identifier),
+    [onInteract, formItem.identifier],
+  );
 
-  valueDidChange = (event) => {
-    this.props.onChange(event.target.value);
-    this.userDidInteract();
-  }
+  const valueChanged = useCallback(
+    (newValue) => {
+      onChange(newValue);
+      userInteracted();
+    },
+    [onChange, userInteracted],
+  );
 
-  markdownDidChange = (newValue) => {
-    this.props.onChange(newValue);
-    this.userDidInteract();
-  }
-
-  renderLabel = (formItem, domId) => (
+  const renderLabel = () => (
     <label htmlFor={domId} className="form-item-label">
       <span
-          // eslint-disable-next-line react/no-danger
+        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: formItem.properties.caption }}
       />
       <RequiredIndicator formItem={formItem} />
     </label>
-  )
+  );
 
-  renderInput = (formItem, domId) => {
+  const renderInput = () => {
     if (formItem.properties.format === 'markdown') {
       return (
         <MarkdownInput
           name={formItem.identifier}
-          value={this.props.value || ''}
-          onChange={this.markdownDidChange}
-          onBlur={this.userDidInteract}
+          value={value || ''}
+          onChange={valueChanged}
+          onBlur={userInteracted}
           lines={formItem.properties.lines}
-          formControlClassName={classNames({ 'is-invalid': this.props.valueInvalid })}
+          formControlClassName={classNames({ 'is-invalid': valueInvalid })}
         >
-          <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
+          <FieldRequiredFeedback valueInvalid={valueInvalid} />
         </MarkdownInput>
       );
     }
@@ -57,38 +57,34 @@ class FreeTextItemInput extends React.Component {
           id={domId}
           name={formItem.identifier}
           type={formItem.properties.free_text_type || 'text'}
-          className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
-          value={this.props.value || ''}
-          onChange={this.valueDidChange}
-          onBlur={this.userDidInteract}
+          className={classNames('form-control', { 'is-invalid': valueInvalid })}
+          value={value || ''}
+          onChange={(event) => valueChanged(event.target.value)}
+          onBlur={userInteracted}
         />
       );
     }
+
     return (
       <textarea
         id={domId}
         name={formItem.identifier}
         rows={formItem.properties.lines}
-        className={classNames('form-control', { 'is-invalid': this.props.valueInvalid })}
-        value={this.props.value || ''}
-        onChange={this.valueDidChange}
-        onBlur={this.userDidInteract}
+        className={classNames('form-control', { 'is-invalid': valueInvalid })}
+        value={value || ''}
+        onChange={(event) => valueChanged(event.target.value)}
+        onBlur={userInteracted}
       />
     );
-  }
-
-  render = () => {
-    const { formItem } = this.props;
-    const domId = this.nextUniqueId();
-
-    return (
-      <div className="form-group">
-        {this.renderLabel(formItem, domId)}
-        {this.renderInput(formItem, domId)}
-        <FieldRequiredFeedback valueInvalid={this.props.valueInvalid} />
-      </div>
-    );
   };
+
+  return (
+    <div className="form-group">
+      {renderLabel()}
+      {renderInput()}
+      <FieldRequiredFeedback valueInvalid={valueInvalid} />
+    </div>
+  );
 }
 
 FreeTextItemInput.propTypes = {
@@ -97,6 +93,8 @@ FreeTextItemInput.propTypes = {
     properties: PropTypes.shape({
       caption: PropTypes.string.isRequired,
       format: PropTypes.string,
+      lines: PropTypes.number,
+      free_text_type: PropTypes.string,
     }).isRequired,
   }).isRequired,
   value: PropTypes.string,

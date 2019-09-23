@@ -188,7 +188,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   def signup_spy_paginated(**args)
-    Tables::SignupsTableResultsPresenter.signup_spy_for_convention(object)
+    Tables::SignupsTableResultsPresenter.signup_spy_for_convention(object, pundit_user)
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 

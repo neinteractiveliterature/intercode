@@ -98,7 +98,7 @@ class Types::RunType < Types::BaseObject
   def signups_paginated(**args)
     scope = object.signups.includes(:user_con_profile)
 
-    Tables::SignupsTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort])
+    Tables::SignupsTableResultsPresenter.new(scope, pundit_user, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 end

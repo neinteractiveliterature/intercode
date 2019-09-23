@@ -9,6 +9,7 @@
     - previous_change = nil
     - changes.each do |change|
       - form_item = form_items[change.field_identifier]
+      - next if %w[minimum_age age_restrictions_description].include?(change.field_identifier) && changes.any? { |c| c.field_identifier == 'age_restrictions' }
       - previous_value = capture do
         = render_form_response_value(form_item, change.previous_value, timezone)
       - new_value = capture do

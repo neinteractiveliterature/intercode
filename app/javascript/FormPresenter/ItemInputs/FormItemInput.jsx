@@ -9,6 +9,7 @@ import RegistrationPolicyItemInput from './RegistrationPolicyItemInput';
 import StaticTextItem from '../StaticTextItem';
 import TimeblockPreferenceItemInput from './TimeblockPreferenceItemInput';
 import TimespanItemInput from './TimespanItemInput';
+import AgeRestrictionsInput from './AgeRestrictionsInput';
 
 function FormItemInput({
   formItem, value, onChange, onInteract, valueInvalid, convention,
@@ -27,6 +28,8 @@ function FormItemInput({
   };
 
   switch (formItem.item_type) {
+    case 'age_restrictions':
+      return <AgeRestrictionsInput {...commonProps} />;
     case 'date':
       return <DateItemInput {...commonProps} />;
     case 'event_email':

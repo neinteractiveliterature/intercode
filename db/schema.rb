@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_24_155151) do
+ActiveRecord::Schema.define(version: 2019_09_21_230626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,13 +237,14 @@ ActiveRecord::Schema.define(version: 2019_08_24_155151) do
     t.string "status", default: "active", null: false
     t.text "registration_policy"
     t.text "participant_communications"
-    t.text "age_restrictions"
+    t.text "age_restrictions_description"
     t.text "content_warnings"
     t.text "additional_info"
     t.text "admin_notes"
     t.text "team_mailing_list_name"
     t.boolean "private_signup_list", default: false, null: false
     t.bigint "event_category_id", null: false
+    t.integer "minimum_age"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
