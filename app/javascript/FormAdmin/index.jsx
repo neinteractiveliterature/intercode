@@ -53,6 +53,7 @@ function FormAdmin() {
               history={history}
               initialForm={{
                 id: null,
+                form_type: '',
                 export_json: '{ "title": "", "sections": [] }',
               }}
             />

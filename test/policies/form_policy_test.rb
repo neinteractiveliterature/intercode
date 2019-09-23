@@ -6,20 +6,20 @@ class FormPolicyTest < ActiveSupport::TestCase
 
   describe '#read?' do
     it 'lets anyone read any form' do
-      form = create(:form)
+      form = create(:event_form)
       assert FormPolicy.new(nil, form).read?
     end
   end
 
   describe '#manage?' do
     it 'lets users with update_forms manage forms' do
-      form = create(:form)
+      form = create(:event_form)
       user = create_user_with_update_forms_in_convention(form.convention)
       assert FormPolicy.new(user, form).manage?
     end
 
     it 'does not let users without update_forms manage forms' do
-      form = create(:form)
+      form = create(:event_form)
       user_con_profile = create(:user_con_profile, convention: form.convention)
       refute FormPolicy.new(user_con_profile.user, form).manage?
     end
@@ -27,7 +27,7 @@ class FormPolicyTest < ActiveSupport::TestCase
 
   describe 'Scope' do
     it 'always returns all forms' do
-      create_list(:form, 3)
+      create_list(:event_form, 3)
       assert_equal 3, FormPolicy::Scope.new(nil, Form.all).resolve.count
     end
   end

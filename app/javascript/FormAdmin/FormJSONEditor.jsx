@@ -10,6 +10,7 @@ import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
 import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
+import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 
 function formDataFromJSON(json) {
   const { title, sections } = JSON.parse(json);
@@ -52,7 +53,7 @@ function FormJSONEditor({ initialForm, history }) {
         },
       });
     } else {
-      await createForm({ variables: { formJSON } });
+      await createForm({ variables: { formJSON, formType: form.form_type } });
     }
     history.push('/admin_forms');
   };
@@ -73,6 +74,19 @@ function FormJSONEditor({ initialForm, history }) {
         value={form.title}
         onTextChange={(title) => setForm((prevForm) => ({ ...prevForm, title }))}
       />
+
+      <BootstrapFormSelect
+        label="Form type"
+        name="form_type"
+        value={form.form_type}
+        onValueChange={(formType) => setForm((prevForm) => ({ ...prevForm, form_type: formType }))}
+        disabled={initialForm.id != null}
+      >
+        <option disabled selected={form.form_type == null}>Select a form type...</option>
+        <option value="event">Event form</option>
+        <option value="event_proposal">Event proposal form</option>
+        <option value="user_con_profile">User con profile form</option>
+      </BootstrapFormSelect>
 
       <fieldset className="mb-4">
         <legend className="col-form-label">Content</legend>

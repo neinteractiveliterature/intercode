@@ -1,6 +1,7 @@
 fragment FormFields on Form {
   id
   title
+  form_type
   export_json
 
   event_categories {

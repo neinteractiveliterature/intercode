@@ -1,7 +1,7 @@
 #import "./queries.gql"
 
-mutation CreateFormWithJSON($formJSON: String!) {
-  createFormWithJSON(input: { form_json: $formJSON }) {
+mutation CreateFormWithJSON($formJSON: String!, $formType: FormType!) {
+  createFormWithJSON(input: { form_json: $formJSON, form_type: $formType }) {
     form {
       id
       ...FormFields

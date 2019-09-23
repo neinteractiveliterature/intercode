@@ -8,17 +8,17 @@ describe SignupDrop do
 
   %w[run user_con_profile state bucket team_member?].each do |field|
     it "returns the #{field} of the signup" do
-      signup_drop.public_send(field).must_equal signup.public_send(field)
+      assert_equal signup.public_send(field), signup_drop.public_send(field)
     end
   end
 
   %w[event starts_at ends_at length_seconds].each do |field|
     it "returns the #{field} of the run" do
-      signup_drop.public_send(field).must_equal the_run.public_send(field)
+      assert_equal the_run.public_send(field), signup_drop.public_send(field)
     end
   end
 
   it 'returns the event path' do
-    signup_drop.event_url.must_match %r{events/#{event.id}}
+    assert_match %r{events/#{event.id}}, signup_drop.event_url
   end
 end
