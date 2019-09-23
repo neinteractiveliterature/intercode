@@ -44,11 +44,7 @@ class ExportCmsContentSetService < CivilService::Service
     Dir.mkdir(File.expand_path('forms', content_set.root_path))
 
     convention.forms.each do |form|
-      form_name = LoadCmsContentSetService::FORM_NAMES.find do |name|
-        form == convention.public_send(name)
-      end
-
-      filename = form_name || form.title.underscore
+      filename = form.title.underscore
 
       content = FormExportPresenter.new(form).as_json
       inherited_content = inherited_form_content_for(filename)

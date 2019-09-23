@@ -5,6 +5,20 @@ class CmsContentSet
     @name = name
   end
 
+  def user_con_profile_form
+    @user_con_profile_form ||= begin
+      forms = all_form_contents_by_name.values.select { |content| content['form_type'] == 'user_con_profile' }
+      raise 'Content set contains multiple user_con_profile forms' if forms.size > 1
+      forms.first
+    end
+  end
+
+  def all_form_contents_by_name
+    @all_forms_by_name ||= all_form_paths_with_names.each_with_object({}) do |(form_path, form_name), hash|
+      hash[form_name] = JSON.parse(File.read(form_path))
+    end
+  end
+
   def all_form_paths_with_names
     all_form_paths.map do |form_path|
       [form_path, basename_without_extension(form_path, '.json')]

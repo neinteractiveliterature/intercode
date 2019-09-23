@@ -1,5 +1,6 @@
 {
   "title": "Regular event form",
+  "form_type": "event",
   "sections": [
     {
       "title": "Event Properties",
@@ -163,13 +164,11 @@
           "caption": "**Content Warnings**<br>Per NEIL policy, game descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='fa fa-external-link' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page.<br>Please provide a content warning for your game."
         },
         {
-          "item_type": "free_text",
+          "item_type": "age_restrictions",
           "identifier": "age_restrictions",
           "admin_description": "Player Visible Age Restrictions",
           "public_description": "Age Restrictions",
-          "lines": 1,
           "required": false,
-          "format": "markdown",
           "caption": "**Age Restrictions**<br>Please include the preferred ages of players for your larp. Examples are \"Players must be 18 or older\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age] years old are welcome in this game\"."
         },
         {
