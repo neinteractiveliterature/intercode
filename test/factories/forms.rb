@@ -4,6 +4,6 @@ FactoryBot.define do
   end
 
   factory :event_proposal_form, parent: :form do
-    form_type 'event_proposal'
+    form_type { 'event_proposal' }
   end
 end
