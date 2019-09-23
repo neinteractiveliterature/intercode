@@ -26,7 +26,7 @@ FactoryBot.define do
     stripe_secret_key { "sk_test_#{Devise.friendly_token}" }
 
     after(:build) do |convention|
-      convention.user_con_profile_form ||= convention.build_user_con_profile_form
+      convention.user_con_profile_form ||= convention.build_user_con_profile_form(form_type: 'user_con_profile')
     end
   end
 end
