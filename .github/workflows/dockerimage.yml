@@ -10,5 +10,12 @@ jobs:
  
     steps:
     - uses: actions/checkout@v1
+    - name: Log into Docker Hub
+      env: # Or as an environment variable
+        DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
+      run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+    - name: Pull Docker images for build
+      run: test/docker-pull.sh
     - name: Build the "local-build" Docker image
-      run: docker build . --file Dockerfile --build-arg ASSETS_HOST=assets.neilhosting.net --target build --tag ${GITHUB_REPOSITORY}:local-build
+      run: docker build . --file Dockerfile --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from neinteractiveliterature/intercode:build-production-master --target build --tag ${GITHUB_REPOSITORY}:local-build
