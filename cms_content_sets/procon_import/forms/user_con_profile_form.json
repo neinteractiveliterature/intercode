@@ -1,5 +1,6 @@
 {
   "title": "User con profile form",
+  "form_type": "user_con_profile",
   "sections": [
     {
       "title": "Your {{ convention.name }} profile",
