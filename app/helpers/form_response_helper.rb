@@ -15,6 +15,7 @@ module FormResponseHelper
 
   def render_value_of_type(item_type, value, properties = {}, timezone = nil)
     case item_type
+    when 'age_restrictions' then render_age_restrictions_value(value)
     when 'free_text' then render_free_text_value(value, properties)
     when 'multiple_choice' then render_multiple_choice_value(value, properties)
     when 'registration_policy' then render_registration_policy_value(value)
@@ -33,6 +34,27 @@ module FormResponseHelper
       "#{bucket.minimum_slots} / #{bucket.preferred_slots} / #{bucket.total_slots}"
     else
       'unlimited'
+    end
+  end
+
+  def render_age_restrictions_value(value)
+    content_tag('ul', class: 'list-unstyled m-0') do
+      safe_join([
+        content_tag('li') do
+          safe_join([
+            content_tag('strong', 'Minimum age:'),
+            ' ',
+            value['minimum_age'].present? ? value['minimum_age'] : content_tag('em', 'none set')
+          ], '')
+        end,
+        content_tag('li') do
+          safe_join([
+            content_tag('strong', 'Public description:'),
+            ' ',
+            MarkdownPresenter.new('').render(value['age_restrictions_description'])
+          ], '')
+        end
+      ], '')
     end
   end
 
