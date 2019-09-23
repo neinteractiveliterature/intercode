@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import AgeRestrictionsDisplay from './AgeRestrictionsDisplay';
 import DateItemDisplay from './DateItemDisplay';
 import EventEmailDisplay from './EventEmailDisplay';
 import FreeTextItemDisplay from './FreeTextItemDisplay';
@@ -24,6 +25,8 @@ function FormItemDisplay({
   }
 
   switch (formItem.item_type) {
+    case 'age_restrictions':
+      return <AgeRestrictionsDisplay {...commonProps} />;
     case 'date':
       return <DateItemDisplay {...commonProps} convention={convention} />;
     case 'event_email':

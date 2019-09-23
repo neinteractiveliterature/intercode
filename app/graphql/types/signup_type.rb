@@ -5,6 +5,7 @@ class Types::SignupType < Types::BaseObject
   field :state, Types::SignupStateType, null: false
   field :counted, Boolean, null: false
   field :bucket_key, String, null: true, camelize: false
+  field :age_restrictions_check, String, null: false, camelize: false
   field :requested_bucket_key, String, null: true, camelize: false do
     authorize_action :read_requested_bucket_key
   end

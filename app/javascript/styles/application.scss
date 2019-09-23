@@ -37,7 +37,7 @@ table.no-top-border thead th {
 }
 
 .CodeMirror {
-  height: auto;
+  height: auto !important;
 }
 
 .CodeMirror-scroll {

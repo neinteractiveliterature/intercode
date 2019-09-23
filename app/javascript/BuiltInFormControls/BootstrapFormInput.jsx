@@ -39,7 +39,7 @@ BootstrapFormInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onTextChange: PropTypes.func,
-  helpText: PropTypes.string,
+  helpText: PropTypes.node,
   disabled: PropTypes.bool,
 };
 

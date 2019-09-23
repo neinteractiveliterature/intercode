@@ -45,6 +45,17 @@ class Signup < ApplicationRecord
     index ? index + 1 : nil
   end
 
+  def age_restrictions_check
+    return 'N/A' if event.minimum_age.blank?
+    return 'Unknown age' if user_con_profile.birth_date.blank?
+
+    if user_con_profile.age_as_of(run.starts_at) >= event.minimum_age
+      'OK'
+    else
+      'Too young'
+    end
+  end
+
   private
 
   def must_be_in_existing_bucket
