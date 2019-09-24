@@ -34,7 +34,7 @@ function NewStaffPosition({ history }) {
               name: staffPosition.name,
               email: staffPosition.email,
               visible: staffPosition.visible,
-              user_con_profile_ids: staffPosition.user_con_profiles.map((
+              user_con_profile_ids: (staffPosition.user_con_profiles || []).map((
                 (userConProfile) => userConProfile.id
               )),
             },
