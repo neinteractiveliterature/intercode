@@ -24,10 +24,10 @@ jobs:
       run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
     - name: Build the "local-build" Docker image
       run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build --tag local-build
-    - name: Temp list all files so I can figure out what's busting the Docker cache
-      run: ls -a
-#     - name: Build the "build-production" Docker image
-#       run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build-production --tag local-build-production
+    - name: Build the "build-production" Docker image
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build-production --tag local-build-production
+    - name: Figure out wtf is up
+      run: docker diff docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master local-build-production
 #     - name: Tag build-production for Github Package Registry
 #       run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
 #     - name: Push build-production to Github Package Registry
