@@ -36,7 +36,8 @@ jobs:
       run: docker tag local-test neinteractiveliterature/intercode:build-latest
     - name: Run tests
       run: docker-compose -f docker-compose.test.yml run
-        -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY 
+        -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+        -e GIT_COMMIT_SHA=$GITHUB_SHA -e GIT_BRANCH=$GITHUB_REF
         -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
         web
         test/travis-complete.sh
