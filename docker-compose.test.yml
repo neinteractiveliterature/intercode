@@ -1,13 +1,12 @@
 version: '3.4'
 services:
   web:
-    image: neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
+    image: local-test
     build:
       context: .
       dockerfile: Dockerfile
       cache_from:
-        - neinteractiveliterature/intercode:build-latest
-        - neinteractiveliterature/intercode:build-${TRAVIS_PULL_REQUEST_BRANCH}
+        - local-build-production
       target: test
     links:
       - postgres
@@ -16,15 +15,15 @@ services:
     environment:
       DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
       TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
-  shoryuken:
-    image: neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
-    links:
-      - postgres
-    depends_on:
-      - postgres
-    environment:
-      DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
-      TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
+  # shoryuken:
+  #   image: local-test
+  #   links:
+  #     - postgres
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
+  #     TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
   postgres:
     image: postgres:10.4
     expose:
