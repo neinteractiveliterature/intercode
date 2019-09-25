@@ -29,7 +29,7 @@ jobs:
     - name: Download container-diff
       run: curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64
     - name: Diff the images
-      run: ./container-diff-linux-amd64 diff docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master local-build-production
+      run: ./container-diff-linux-amd64 diff docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master daemon://local-build-production
 #     - name: Tag build-production for Github Package Registry
 #       run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
 #     - name: Push build-production to Github Package Registry
