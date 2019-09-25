@@ -66,6 +66,9 @@ function CmsContentGroupFormFields({
               roles={staffPositions}
               formatRowHeader={(staffPosition) => staffPosition.name}
               readOnly={readOnly}
+              changeSet={permissionsChangeSet}
+              add={addPermission}
+              remove={removePermission}
             />
           )}
 
