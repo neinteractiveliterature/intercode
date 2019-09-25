@@ -19,7 +19,7 @@ jobs:
       env:
         GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
         GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
-      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
+      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
     - name: Pull Docker images for build
       run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}:build-production-master
     - name: Build the "local-build" Docker image
