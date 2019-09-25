@@ -30,3 +30,13 @@ jobs:
       run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
     - name: Push build-production to Github Package Registry
       run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+    - name: Build the "test" Docker image
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
+    - name: Tag the "test" Docker image so Compose will see it (temporary while we're on Travis)
+      run: docker tag local-test neinteractiveliterature/intercode:build-latest
+    - name: Run tests
+      run: docker-compose -f docker-compose.test.yml run
+        -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY 
+        -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
+        web
+        test/travis-complete.sh
