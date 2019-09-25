@@ -11,11 +11,22 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Log into Docker Hub
-      env: # Or as an environment variable
+      env:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+    - name: Log into Github Package Registry
+      env:
+        GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
+        GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
+      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
     - name: Pull Docker images for build
-      run: test/docker-pull.sh
+      run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}:build-production-master
     - name: Build the "local-build" Docker image
-      run: docker build . --file Dockerfile --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from neinteractiveliterature/intercode:build-production-master --target build --tag ${GITHUB_REPOSITORY}:local-build
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}:build-production-master --target build --tag ${GITHUB_REPOSITORY}:local-build
+    - name: Build the "build-production" Docker image
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}:build-production-master --target build-production --tag ${GITHUB_REPOSITORY}:local-build
+    - name: Tag build-production for Github Package Registry
+      run: docker tag ${GITHUB_REPOSITORY}:local-build docker.pkg.github.com/${GITHUB_REPOSITORY}:build-production-master
+    - name: Push build-production to Github Package Registry
+      run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}:build-production-master
