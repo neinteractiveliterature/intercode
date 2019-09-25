@@ -76,6 +76,8 @@ before_script:
   -t neinteractiveliterature/intercode:test-${TRAVIS_COMMIT}
   .
 script:
+- docker tag neinteractiveliterature/intercode:build-production-${TRAVIS_COMMIT} local-build-production
+- docker tag neinteractiveliterature/intercode:test-${TRAVIS_COMMIT} local-test
 - docker-compose -f docker-compose.test.yml run
   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   -e CI=$CI -e TRAVIS=$TRAVIS -e TRAVIS_COMMIT=$TRAVIS_COMMIT
