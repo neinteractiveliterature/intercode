@@ -23,10 +23,10 @@ jobs:
     - name: Pull Docker images for build
       run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
     - name: Build the "local-build" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build --tag ${GITHUB_REPOSITORY}:local-build
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build --tag local-build
     - name: Build the "build-production" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build-production --tag ${GITHUB_REPOSITORY}:local-build-production
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build-production --tag local-build-production
     - name: Tag build-production for Github Package Registry
-      run: docker tag ${GITHUB_REPOSITORY}:local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+      run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
     - name: Push build-production to Github Package Registry
       run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
