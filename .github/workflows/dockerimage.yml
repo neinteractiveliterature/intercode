@@ -13,28 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Pull Docker images for build
+      run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
+    - name: Build the "local-build-production" Docker image
+      run: docker build .
+        --build-arg ASSETS_HOST=assets.neilhosting.net
+        --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+        --target build
+        --tag local-build
+
+    # Push to Github Package Registry if on master
     - name: Log into Github Package Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       env:
         GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
         GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
       run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
-    - name: Pull Docker images for build
-      run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
-    - name: Build the "local-build" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build --tag local-build
-    - name: Build the "local-build-production" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master --target build-production --tag local-build-production
     - name: Tag build-production for Github Package Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
     - name: Push build-production to Github Package Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
-    - name: Build the "local-production" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+    # Run the tests
     - name: Build the "test" Docker image
       run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
     - name: Tag the "test" Docker image so Compose will see it (temporary while we're on Travis)
@@ -49,17 +51,17 @@ jobs:
         web
         test/travis-complete.sh
 
-  publish-dockerhub:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
+    # Build and publish the production image if on master
     - name: Log into Docker Hub
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       env:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-    - name: Tag the image for pushing to Docker Hub
+    - name: Build the "local-production" Docker image
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
+    - name: Tag the production image for pushing to Docker Hub
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_REF}
     - name: Push to Docker Hub
