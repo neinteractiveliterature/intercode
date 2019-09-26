@@ -24,8 +24,8 @@ jobs:
       run: docker build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
-        --target build
-        --tag local-build
+        --target build-production
+        --tag local-build-production
 
     # Push to Github Package Registry if on master
     - name: Tag build-production for Github Package Registry
