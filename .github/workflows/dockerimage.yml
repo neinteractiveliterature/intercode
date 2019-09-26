@@ -9,7 +9,6 @@ on:
       - master
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +30,7 @@ jobs:
       run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
     - name: Build the "local-production" Docker image
       run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
-      
+
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -49,25 +48,24 @@ jobs:
         -e CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
         web
         test/travis-complete.sh
-  
+
   publish-dockerhub:
     runs-on: ubuntu-latest
     needs: test
-    on:
-      push:
-        branches:
-          - master
     steps:
     - name: Log into Docker Hub
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       env:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - name: Tag the image for pushing to Docker Hub
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_REF}
     - name: Push to Docker Hub
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker push ${GITHUB_REPOSITORY}:${GITHUB_REF}
-        
+
 # I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
 #     - name: Download container-diff
 #       run: curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64
