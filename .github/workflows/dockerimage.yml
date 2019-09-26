@@ -38,8 +38,6 @@ jobs:
     # Run the tests
     - name: Build the "test" Docker image
       run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
-    - name: Tag the "test" Docker image so Compose will see it (temporary while we're on Travis)
-      run: docker tag local-test neinteractiveliterature/intercode:build-latest
     - name: Run tests
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateTestReporterId }}
