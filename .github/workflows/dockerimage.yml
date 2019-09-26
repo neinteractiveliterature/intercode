@@ -60,12 +60,18 @@ jobs:
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
-    - name: Tag the production image for pushing to Docker Hub
+    - name: Tag the production image with the SHA
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_REF}
-    - name: Push to Docker Hub
+      run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
+    - name: Tag the production image "latest"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_REF}
+      run: docker tag local-production ${GITHUB_REPOSITORY}:latest
+    - name: Push the SHA tag to Docker Hub
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
+    - name: Push "latest" to Docker Hub
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push ${GITHUB_REPOSITORY}:latest
 
 # I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
 #     - name: Download container-diff
