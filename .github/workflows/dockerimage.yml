@@ -73,6 +73,38 @@ jobs:
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker push ${GITHUB_REPOSITORY}:latest
 
+    # Push to Heroku if on master
+    - name: Log into Heroku Container Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      env:
+        HEROKU_API_TOKEN: ${{ secrets.HerokuApiToken }}
+      run: echo "$HEROKU_API_TOKEN" | docker login --username=_ --password-stdin registry.heroku.com
+    - name: Tag production image as "web"
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker tag local-production registry.heroku.com/intercode/web
+    - name: Build "release" image
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker build -t registry.heroku.com/intercode/release
+        --build-arg INTERCODE_TAG=${GITHUB_SHA}
+        --build-arg REVISION=${GITHUB_SHA}
+        -f Dockerfile.release
+        .
+    - name: Build "shoryuken" image
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker build -t registry.heroku.com/intercode/shoryuken
+        --build-arg INTERCODE_TAG=${GITHUB_SHA}
+        -f Dockerfile.shoryuken
+        .
+    - name: Push "web" image to Heroku Container Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push registry.heroku.com/intercode/web
+    - name: Push "release" image to Heroku Container Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push registry.heroku.com/intercode/release
+    - name: Push "shoryuken" image to Heroku Container Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push registry.heroku.com/intercode/shoryuken
+
 # I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
 #     - name: Download container-diff
 #       run: curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64
