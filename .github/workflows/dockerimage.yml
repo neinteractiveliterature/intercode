@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Log into Github Package Registry
+      env:
+        GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
+        GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
+      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
     - name: Pull Docker images for build
       run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
     - name: Build the "local-build-production" Docker image
@@ -23,12 +28,6 @@ jobs:
         --tag local-build
 
     # Push to Github Package Registry if on master
-    - name: Log into Github Package Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      env:
-        GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
-        GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
-      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
     - name: Tag build-production for Github Package Registry
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
