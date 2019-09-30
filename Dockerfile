@@ -2,7 +2,9 @@ ARG RUBY_VERSION=2.5.3
 
 ### build
 
-FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build
+FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
+
+ARG ASSETS_HOST
 
 COPY Gemfile Gemfile.lock /usr/src/build/
 RUN bundle install -j4 --without intercode1_import \
@@ -13,29 +15,15 @@ RUN bundle install -j4 --without intercode1_import \
 COPY package.json yarn.lock /usr/src/build/
 RUN yarn install --production=false
 
-### dev
-
-FROM build AS dev
-
-ENV RAILS_ENV development
+COPY --chown=www:www . /usr/src/build
 
 USER www
 WORKDIR /usr/src/build
-
-### build-production
-
-FROM build AS build-production
-ARG ASSETS_HOST
-
-COPY --chown=www:www . /usr/src/build
 
 ENV RAILS_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 ENV ASSETS_HOST ${ASSETS_HOST}
-
-USER www
-WORKDIR /usr/src/build
 
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
