@@ -1,6 +1,6 @@
 ARG RUBY_VERSION=2.5.3
 
-### build
+### build-production
 
 FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
 
@@ -41,14 +41,13 @@ CMD bundle exec rails server -p $PORT -b 0.0.0.0
 
 ### test
 
-FROM production AS test
+FROM build-production AS test
 
 ENV RAILS_ENV test
 
 USER www
 WORKDIR /usr/src/app
 
-COPY --from=build /usr/src/build/node_modules /usr/src/app/node_modules
 RUN mv public/packs public/packs-test \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
   && chmod +x ./cc-test-reporter \
