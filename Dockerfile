@@ -28,17 +28,6 @@ ENV ASSETS_HOST ${ASSETS_HOST}
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile \
   && rm -rf node_modules tmp/cache
 
-### production
-
-FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
-
-COPY --from=build-production /usr/local/bundle /usr/local/bundle
-COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
-COPY --from=build-production --chown=www /usr/src/build /usr/src/app
-WORKDIR /usr/src/app
-
-CMD bundle exec rails server -p $PORT -b 0.0.0.0
-
 ### test
 
 FROM build-production AS test
@@ -52,3 +41,14 @@ RUN mv public/packs public/packs-test \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
   && chmod +x ./cc-test-reporter \
   && ./cc-test-reporter before-build
+
+### production
+
+FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
+
+COPY --from=build-production /usr/local/bundle /usr/local/bundle
+COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
+COPY --from=build-production --chown=www /usr/src/build /usr/src/app
+WORKDIR /usr/src/app
+
+CMD bundle exec rails server -p $PORT -b 0.0.0.0
