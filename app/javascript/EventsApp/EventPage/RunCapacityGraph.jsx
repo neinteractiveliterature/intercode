@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import RunCapacityGraphBucket from './RunCapacityGraphBucket';
 import SignupCountData from '../SignupCountData';
 import sortBuckets from './sortBuckets';
+import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 
 function RunCapacityGraph({ run, event, signupsAvailable }) {
   const signupCountData = SignupCountData.fromRun(run);
@@ -20,9 +21,14 @@ function RunCapacityGraph({ run, event, signupsAvailable }) {
         />
       ))}
       <div className="bucket-capacity">
-        Waitlist:
-        {' '}
+        Waitlist
+        {' - '}
         {signupCountData.getWaitlistCount()}
+        <BucketAvailabilityDisplay
+          className="text-secondary"
+          signupCount={signupCountData.getWaitlistCount()}
+          remainingCapacity={0}
+        />
       </div>
     </div>
   );

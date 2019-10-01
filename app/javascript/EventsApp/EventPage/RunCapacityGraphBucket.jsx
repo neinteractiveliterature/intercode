@@ -1,20 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import BucketCapacityBar from './BucketCapacityBar';
 import pluralizeWithCount from '../../pluralizeWithCount';
-
-function getBucketAvailabilityFraction(bucket, remainingCapacity) {
-  if (!bucket.slots_limited) {
-    return 1.0;
-  }
-
-  if (bucket.total_slots === 0) {
-    return 0.0;
-  }
-
-  return remainingCapacity / bucket.total_slots;
-}
+import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 
 function describeCapacity(bucket, signupCount, signupsAvailable) {
   if (!bucket.slots_limited) {
@@ -31,7 +19,7 @@ function describeCapacity(bucket, signupCount, signupsAvailable) {
     return pluralizeWithCount('slot', remainingCapacity);
   }
 
-  return `${remainingCapacity > 0 ? remainingCapacity : 0} / ${bucket.total_slots} available`;
+  return `${remainingCapacity > 0 ? remainingCapacity : 0} of ${bucket.total_slots} left`;
 }
 
 function RunCapacityGraphBucket({
@@ -45,35 +33,17 @@ function RunCapacityGraphBucket({
 
   const signupCount = signupCountData.sumSignupCounts({ state: 'confirmed', bucket_key: bucket.key });
   const remainingCapacity = bucket.total_slots - signupCount;
-  const availabilityFraction = getBucketAvailabilityFraction(bucket, remainingCapacity);
-  const tickmarkClass = bucket.total_slots >= 10 ? 'bucket-capacity-tickmark-thin' : '';
 
   return (
     <div className="bucket-capacity">
-      <div className="bucket-capacity-bars">
-        <BucketCapacityBar
-          className={`bg-bucket-color-${(bucketIndex % 9) + 1}`}
-          widthFraction={availabilityFraction}
-          tickmarkCount={remainingCapacity}
-          tickmarkClass={tickmarkClass}
-          startingTickmarkIndex={1}
-        />
-        {
-          signupCount > 0
-            ? (
-              <BucketCapacityBar
-                className="bg-bucket-color-full"
-                widthFraction={1.0 - availabilityFraction}
-                tickmarkCount={signupCount}
-                tickmarkClass={tickmarkClass}
-              />
-            )
-            : null
-        }
-      </div>
       {bucket.name}
-      {': '}
+      {' - '}
       {describeCapacity(bucket, signupCount, signupsAvailable)}
+      <BucketAvailabilityDisplay
+        className={`text-bucket-color-${(bucketIndex % 9) + 1}`}
+        signupCount={signupCount}
+        remainingCapacity={remainingCapacity}
+      />
     </div>
   );
 }
@@ -82,8 +52,12 @@ RunCapacityGraphBucket.propTypes = {
   bucket: PropTypes.shape({
     total_slots: PropTypes.number.isRequired,
     slots_limited: PropTypes.bool.isRequired,
+    key: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
-  signupCountData: PropTypes.shape({}).isRequired,
+  signupCountData: PropTypes.shape({
+    sumSignupCounts: PropTypes.func.isRequired,
+  }).isRequired,
   signupsAvailable: PropTypes.bool.isRequired,
   bucketIndex: PropTypes.number.isRequired,
 };

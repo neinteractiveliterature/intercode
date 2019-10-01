@@ -144,12 +144,17 @@ function RunCard({
               : null
           }
 
-          {runTimespan.start.format('ddd h:mma')}
-          {'-'}
-          {runTimespan.finish.format('h:mma')}
+          <div className="d-flex flex-wrap">
+            <div className="flex-grow-1">
+              {runTimespan.start.format('ddd h:mma')}
+              {'-'}
+              {runTimespan.finish.format('h:mma')}
+            </div>
 
-          <br />
-          {run.rooms.map((room) => room.name).sort().join(', ')}
+            <div>
+              {run.rooms.map((room) => room.name).sort().join(', ')}
+            </div>
+          </div>
         </div>
       )}
       {
