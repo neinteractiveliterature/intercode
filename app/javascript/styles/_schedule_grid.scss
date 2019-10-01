@@ -95,10 +95,11 @@
 }
 
 .availability-bar {
-  background-color: map-get($theme-colors, 'success');
+  background-color: white;
+  border-top: 1px $gray-300 solid;
   position: absolute;
   bottom: 0;
-  height: 3px;
+  height: 4px;
   left: 0;
   width: 100%;
   z-index: -1;
@@ -106,9 +107,9 @@
   .unavailable {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     height: 100%;
-    background-color: $gray-200;
+    background-color: $gray-500;
   }
 
   &.unlimited {

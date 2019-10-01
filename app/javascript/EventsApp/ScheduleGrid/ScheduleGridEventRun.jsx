@@ -8,6 +8,29 @@ import buildEventUrl from '../buildEventUrl';
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { userSignupStatus, getRunClassName, getRunStyle } from './StylingUtils';
 import SignupCountData from '../SignupCountData';
+import pluralizeWithCount from '../../pluralizeWithCount';
+import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
+
+function calculateAvailability(event, signupCountData) {
+  let totalSlots;
+  let signupCount;
+  if (event.registration_policy.total_slots > 0) {
+    signupCount = signupCountData.getConfirmedLimitedSignupCount(event);
+    totalSlots = event.registration_policy.total_slots;
+  } else if (event.registration_policy.only_uncounted) {
+    signupCount = signupCountData.getNotCountedConfirmedSignupCount();
+    totalSlots = event.registration_policy.total_slots_including_not_counted;
+  }
+
+  return {
+    totalSlots,
+    signupCount,
+    remainingCapacity: totalSlots - signupCount,
+    availabilityFraction: 1.0 - (signupCount / totalSlots),
+    unlimited: !event.registration_policy.slots_limited,
+    waitlistCount: signupCountData.getWaitlistCount(),
+  };
+}
 
 function describeAvailability(event, signupCountData) {
   if (signupCountData.runFull(event)) {
@@ -27,19 +50,19 @@ function describeAvailability(event, signupCountData) {
     );
   }
 
-  if (!event.registration_policy.slots_limited) {
+  const {
+    unlimited, totalSlots, remainingCapacity,
+  } = calculateAvailability(event, signupCountData);
+
+  if (unlimited) {
     return 'Unlimited slots';
   }
 
-  if (event.registration_policy.total_slots === 0) {
+  if (totalSlots === 0) {
     return null;
   }
 
-  const availableSlots = (
-    event.registration_policy.total_slots
-    - signupCountData.getConfirmedLimitedSignupCount(event)
-  );
-  return `${availableSlots}/${event.registration_policy.total_slots} slots available`;
+  return `${remainingCapacity} of ${pluralizeWithCount('slot', totalSlots)} left`;
 }
 
 function RunDisplay({
@@ -57,28 +80,10 @@ function RunDisplay({
       return null;
     }
 
-    let availabilityFraction = 100.0;
-    if (event.registration_policy.total_slots > 0) {
-      availabilityFraction = (
-        1.0 - (
-          signupCountData.getConfirmedLimitedSignupCount(event)
-          / event.registration_policy.total_slots
-        )
-      );
-    } else if (event.registration_policy.only_uncounted) {
-      availabilityFraction = (
-        1.0 - (
-          signupCountData.getNotCountedConfirmedSignupCount()
-          / event.registration_policy.total_slots_including_not_counted
-        )
-      );
-    }
+    const { availabilityFraction, unlimited } = calculateAvailability(event, signupCountData);
 
     return (
-      <AvailabilityBar
-        availabilityFraction={availabilityFraction}
-        unlimited={!event.registration_policy.slots_limited}
-      />
+      <AvailabilityBar availabilityFraction={availabilityFraction} unlimited={unlimited} />
     );
   };
 
@@ -174,6 +179,10 @@ function RunDetails({
     () => describeAvailability(event, signupCountData),
     [event, signupCountData],
   );
+  const availability = useMemo(
+    () => calculateAvailability(event, signupCountData),
+    [event, signupCountData],
+  );
   const roomsDescription = useMemo(
     () => run.room_names.sort().join(', '),
     [run.room_names],
@@ -232,8 +241,26 @@ function RunDetails({
               availabilityDescription
                 ? (
                   <tr>
-                    <td className="text-center pr-1"><i className="fa fa-users" /></td>
-                    <td>{availabilityDescription}</td>
+                    <td className="text-center pr-1 align-top"><i className="fa fa-users" /></td>
+                    <td>
+                      {availabilityDescription}
+                      {availability.totalSlots > 0 && (
+                        <BucketAvailabilityDisplay
+                          compact
+                          className="text-dark"
+                          signupCount={availability.signupCount}
+                          remainingCapacity={availability.remainingCapacity}
+                        />
+                      )}
+                      {availability.waitlistCount > 0 && (
+                        <BucketAvailabilityDisplay
+                          compact
+                          className="text-black-50"
+                          signupCount={availability.waitlistCount}
+                          remainingCapacity={0}
+                        />
+                      )}
+                    </td>
                   </tr>
                 )
                 : null
