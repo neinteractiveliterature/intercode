@@ -25,8 +25,7 @@ ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 ENV ASSETS_HOST ${ASSETS_HOST}
 
-RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile \
-  && rm -rf node_modules tmp/cache
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile
 
 ### test
 
