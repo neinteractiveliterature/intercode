@@ -109,13 +109,10 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   field :orders, [Types::OrderType, null: true], null: false
-  field :order_summary, String, null: false do
-    authorize do |value, context|
-      OrderPolicy.new(context[:pundit_user], Order.new(user_con_profile: value)).read?
-    end
-  end
+  field :order_summary, String, null: false
 
   def order_summary
+    return '' unless policy(Order.new(user_con_profile: object)).read?
     OrderSummaryLoader.for.load(object)
   end
 
