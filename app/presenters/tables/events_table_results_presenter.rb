@@ -31,6 +31,8 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
       value.present? ? scope.where(event_category_id: value) : scope
     when :title
       Concerns::Names.string_search(scope, value, ['title'])
+    when :title_prefix
+      scope.title_prefix(value)
     else
       scope
     end
