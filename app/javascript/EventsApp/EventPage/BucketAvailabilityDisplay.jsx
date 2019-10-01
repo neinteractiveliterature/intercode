@@ -22,7 +22,7 @@ function BucketAvailabilityDisplay({
   const cells = [
     ...[...Array(signupCount)].map((value, index) => (
       <div className="bucket-availability-cell">
-        <i key={`signedup-${index}`} className={classNames('fa', { 'fa-user-circle-o': !compact, 'fa-circle': compact })} />
+        <i key={`signedup-${index}`} className="fa fa-user-circle-o" />
       </div>
     )),
     ...[...Array(remainingCapacity)].map((value, index) => (
