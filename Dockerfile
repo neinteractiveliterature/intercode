@@ -13,7 +13,7 @@ RUN bundle install -j4 --without intercode1_import \
   && find /usr/local/bundle/gems -name '*.o' -delete
 
 COPY package.json yarn.lock /usr/src/build/
-RUN yarn install --production=false
+RUN yarn install
 
 COPY --chown=www:www . /usr/src/build
 
@@ -25,7 +25,7 @@ ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 ENV ASSETS_HOST ${ASSETS_HOST}
 
-RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rake assets:precompile
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
 ### test
 
@@ -40,6 +40,10 @@ RUN mv public/packs public/packs-test \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
   && chmod +x ./cc-test-reporter \
   && ./cc-test-reporter before-build
+
+# Unfortunately all the previous stuff is going to have run yarn install with NODE_ENV=production
+# and we need it to be test for this
+RUN yarn install --production=false
 
 ### production
 
