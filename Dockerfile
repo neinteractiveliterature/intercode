@@ -46,7 +46,7 @@ FROM build-production AS test
 ENV RAILS_ENV test
 
 USER www
-WORKDIR /usr/src/app
+WORKDIR /usr/src/build
 
 RUN mv public/packs public/packs-test \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
