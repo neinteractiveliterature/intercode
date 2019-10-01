@@ -111,11 +111,25 @@ function EventList({ history }) {
             )}
           </div>
 
-          <div className="ml-2">
+          <div className="mb-2">
             <EventListSortDropdown
               showConventionOrder={!loading && data.currentAbility.can_read_schedule}
               value={sorted}
               onChange={onSortedChange}
+            />
+          </div>
+
+          <div className="ml-2">
+            <input
+              type="search"
+              className="form-control"
+              value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value || ''}
+              onChange={(event) => {
+                onFilteredChange([
+                  ...(filtered || []).filter(({ id }) => id !== 'title_prefix'),
+                  { id: 'title_prefix', value: event.target.value },
+                ]);
+              }}
             />
           </div>
         </div>

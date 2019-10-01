@@ -32,7 +32,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     when :title
       Concerns::Names.string_search(scope, value, ['title'])
     when :title_prefix
-      scope.title_prefix(value)
+      value.present? ? scope.title_prefix(value) : scope
     else
       scope
     end
