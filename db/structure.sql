@@ -1,0 +1,3798 @@
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: alert_destinations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.alert_destinations (
+    id bigint NOT NULL,
+    alert_type character varying NOT NULL,
+    alert_id bigint NOT NULL,
+    staff_position_id bigint,
+    user_con_profile_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: alert_destinations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.alert_destinations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: alert_destinations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.alert_destinations_id_seq OWNED BY public.alert_destinations.id;
+
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_content_group_associations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_content_group_associations (
+    id bigint NOT NULL,
+    content_type character varying NOT NULL,
+    content_id bigint NOT NULL,
+    cms_content_group_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_content_group_associations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_content_group_associations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_content_group_associations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_content_group_associations_id_seq OWNED BY public.cms_content_group_associations.id;
+
+
+--
+-- Name: cms_content_groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_content_groups (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    parent_type character varying,
+    parent_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_content_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_content_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_content_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_content_groups_id_seq OWNED BY public.cms_content_groups.id;
+
+
+--
+-- Name: cms_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_files (
+    id integer NOT NULL,
+    parent_id integer,
+    uploader_id integer,
+    file character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    parent_type character varying
+);
+
+
+--
+-- Name: cms_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_files_id_seq OWNED BY public.cms_files.id;
+
+
+--
+-- Name: cms_files_layouts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_files_layouts (
+    cms_file_id bigint NOT NULL,
+    cms_layout_id bigint NOT NULL
+);
+
+
+--
+-- Name: cms_files_pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_files_pages (
+    cms_file_id bigint NOT NULL,
+    page_id bigint NOT NULL
+);
+
+
+--
+-- Name: cms_graphql_queries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_graphql_queries (
+    id bigint NOT NULL,
+    parent_type character varying,
+    parent_id bigint,
+    identifier text,
+    admin_notes text,
+    query text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_graphql_queries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_graphql_queries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_graphql_queries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_graphql_queries_id_seq OWNED BY public.cms_graphql_queries.id;
+
+
+--
+-- Name: cms_layouts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_layouts (
+    id bigint NOT NULL,
+    parent_type character varying,
+    parent_id bigint,
+    name text,
+    content text,
+    navbar_classes text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    admin_notes text
+);
+
+
+--
+-- Name: cms_layouts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_layouts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_layouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_layouts_id_seq OWNED BY public.cms_layouts.id;
+
+
+--
+-- Name: cms_layouts_partials; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_layouts_partials (
+    cms_partial_id bigint NOT NULL,
+    cms_layout_id bigint NOT NULL
+);
+
+
+--
+-- Name: cms_navigation_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_navigation_items (
+    id bigint NOT NULL,
+    title text,
+    parent_type character varying,
+    parent_id bigint,
+    navigation_section_id bigint,
+    page_id bigint,
+    "position" integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: cms_navigation_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_navigation_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_navigation_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_navigation_items_id_seq OWNED BY public.cms_navigation_items.id;
+
+
+--
+-- Name: cms_partials; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_partials (
+    id integer NOT NULL,
+    parent_id integer,
+    name character varying NOT NULL,
+    content text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    parent_type character varying,
+    admin_notes text,
+    invariant boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: cms_partials_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_partials_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_partials_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_partials_id_seq OWNED BY public.cms_partials.id;
+
+
+--
+-- Name: cms_partials_pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_partials_pages (
+    cms_partial_id bigint NOT NULL,
+    page_id bigint NOT NULL
+);
+
+
+--
+-- Name: cms_variables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cms_variables (
+    id bigint NOT NULL,
+    parent_id bigint,
+    key character varying(100) NOT NULL,
+    value text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    parent_type character varying
+);
+
+
+--
+-- Name: cms_variables_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cms_variables_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cms_variables_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cms_variables_id_seq OWNED BY public.cms_variables.id;
+
+
+--
+-- Name: conventions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.conventions (
+    id integer NOT NULL,
+    show_schedule character varying DEFAULT 'no'::character varying NOT NULL,
+    accepting_proposals boolean,
+    updated_by_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    starts_at timestamp without time zone,
+    ends_at timestamp without time zone,
+    root_page_id integer,
+    name character varying,
+    domain character varying NOT NULL,
+    timezone_name character varying,
+    maximum_event_signups text,
+    maximum_tickets integer,
+    default_layout_id bigint,
+    user_con_profile_form_id bigint,
+    ticket_name character varying DEFAULT 'ticket'::character varying NOT NULL,
+    event_mailing_list_domain text,
+    stripe_publishable_key text,
+    stripe_secret_key text,
+    clickwrap_agreement text,
+    show_event_list character varying DEFAULT 'no'::character varying NOT NULL,
+    organization_id bigint,
+    ticket_mode character varying DEFAULT 'disabled'::character varying NOT NULL,
+    site_mode character varying DEFAULT 'convention'::character varying NOT NULL,
+    signup_mode character varying DEFAULT 'self_service'::character varying NOT NULL,
+    signup_requests_open boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: conventions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.conventions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: conventions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.conventions_id_seq OWNED BY public.conventions.id;
+
+
+--
+-- Name: event_categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.event_categories (
+    id bigint NOT NULL,
+    convention_id bigint NOT NULL,
+    name text NOT NULL,
+    team_member_name text NOT NULL,
+    scheduling_ui text NOT NULL,
+    default_color text,
+    full_color text,
+    signed_up_color text,
+    can_provide_tickets boolean DEFAULT false NOT NULL,
+    event_form_id bigint NOT NULL,
+    event_proposal_form_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: event_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.event_categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: event_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.event_categories_id_seq OWNED BY public.event_categories.id;
+
+
+--
+-- Name: event_proposals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.event_proposals (
+    id bigint NOT NULL,
+    convention_id bigint,
+    owner_id bigint,
+    event_id bigint,
+    status character varying,
+    title text,
+    email text,
+    length_seconds integer,
+    description text,
+    short_blurb text,
+    registration_policy text,
+    can_play_concurrently boolean,
+    additional_info text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    timeblock_preferences text,
+    submitted_at timestamp without time zone,
+    admin_notes text,
+    reminded_at timestamp without time zone,
+    team_mailing_list_name text,
+    event_category_id bigint NOT NULL
+);
+
+
+--
+-- Name: event_proposals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.event_proposals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: event_proposals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.event_proposals_id_seq OWNED BY public.event_proposals.id;
+
+
+--
+-- Name: events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.events (
+    id integer NOT NULL,
+    title character varying,
+    author character varying,
+    email character varying,
+    organization character varying,
+    url text,
+    length_seconds integer,
+    can_play_concurrently boolean DEFAULT false NOT NULL,
+    con_mail_destination character varying,
+    description text,
+    short_blurb text,
+    updated_by_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    convention_id integer,
+    owner_id integer,
+    status character varying DEFAULT 'active'::character varying NOT NULL,
+    registration_policy text,
+    participant_communications text,
+    age_restrictions_description text,
+    content_warnings text,
+    additional_info text,
+    admin_notes text,
+    team_mailing_list_name text,
+    private_signup_list boolean DEFAULT false NOT NULL,
+    event_category_id bigint NOT NULL,
+    minimum_age integer,
+    title_vector tsvector
+);
+
+
+--
+-- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
+
+
+--
+-- Name: form_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.form_items (
+    id bigint NOT NULL,
+    form_section_id bigint,
+    "position" integer,
+    identifier text,
+    item_type text,
+    properties text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    admin_description text,
+    default_value text,
+    public_description text
+);
+
+
+--
+-- Name: form_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.form_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: form_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.form_items_id_seq OWNED BY public.form_items.id;
+
+
+--
+-- Name: form_response_changes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.form_response_changes (
+    id bigint NOT NULL,
+    user_con_profile_id bigint NOT NULL,
+    field_identifier character varying NOT NULL,
+    previous_value text,
+    new_value text,
+    notified_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    response_type character varying,
+    response_id bigint
+);
+
+
+--
+-- Name: form_response_changes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.form_response_changes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: form_response_changes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.form_response_changes_id_seq OWNED BY public.form_response_changes.id;
+
+
+--
+-- Name: form_sections; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.form_sections (
+    id bigint NOT NULL,
+    form_id bigint,
+    title text,
+    "position" integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: form_sections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.form_sections_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: form_sections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.form_sections_id_seq OWNED BY public.form_sections.id;
+
+
+--
+-- Name: forms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.forms (
+    id bigint NOT NULL,
+    title text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    convention_id bigint,
+    form_type character varying NOT NULL
+);
+
+
+--
+-- Name: forms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.forms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: forms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.forms_id_seq OWNED BY public.forms.id;
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.maximum_event_provided_tickets_overrides (
+    id bigint NOT NULL,
+    event_id bigint,
+    ticket_type_id bigint,
+    override_value integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.maximum_event_provided_tickets_overrides_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.maximum_event_provided_tickets_overrides_id_seq OWNED BY public.maximum_event_provided_tickets_overrides.id;
+
+
+--
+-- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.oauth_access_grants (
+    id bigint NOT NULL,
+    resource_owner_id integer NOT NULL,
+    application_id bigint NOT NULL,
+    token character varying NOT NULL,
+    expires_in integer NOT NULL,
+    redirect_uri text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    revoked_at timestamp without time zone,
+    scopes character varying
+);
+
+
+--
+-- Name: oauth_access_grants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.oauth_access_grants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_access_grants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.oauth_access_grants_id_seq OWNED BY public.oauth_access_grants.id;
+
+
+--
+-- Name: oauth_access_tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.oauth_access_tokens (
+    id bigint NOT NULL,
+    resource_owner_id integer,
+    application_id bigint,
+    token character varying NOT NULL,
+    refresh_token character varying,
+    expires_in integer,
+    revoked_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    scopes character varying,
+    previous_refresh_token character varying DEFAULT ''::character varying NOT NULL
+);
+
+
+--
+-- Name: oauth_access_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.oauth_access_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_access_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.oauth_access_tokens_id_seq OWNED BY public.oauth_access_tokens.id;
+
+
+--
+-- Name: oauth_applications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.oauth_applications (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    uid character varying NOT NULL,
+    secret character varying NOT NULL,
+    redirect_uri text NOT NULL,
+    scopes character varying DEFAULT ''::character varying NOT NULL,
+    confidential boolean DEFAULT true NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: oauth_applications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.oauth_applications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_applications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.oauth_applications_id_seq OWNED BY public.oauth_applications.id;
+
+
+--
+-- Name: oauth_openid_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.oauth_openid_requests (
+    id bigint NOT NULL,
+    access_grant_id bigint NOT NULL,
+    nonce character varying NOT NULL
+);
+
+
+--
+-- Name: oauth_openid_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.oauth_openid_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_openid_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.oauth_openid_requests_id_seq OWNED BY public.oauth_openid_requests.id;
+
+
+--
+-- Name: order_entries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.order_entries (
+    id bigint NOT NULL,
+    order_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    product_variant_id bigint,
+    quantity integer,
+    price_per_item_cents integer,
+    price_per_item_currency character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: order_entries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.order_entries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: order_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.order_entries_id_seq OWNED BY public.order_entries.id;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.orders (
+    id bigint NOT NULL,
+    user_con_profile_id bigint NOT NULL,
+    status character varying NOT NULL,
+    charge_id character varying,
+    payment_amount_cents integer,
+    payment_amount_currency character varying,
+    payment_note text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    submitted_at timestamp without time zone,
+    paid_at timestamp without time zone
+);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
+
+
+--
+-- Name: organization_roles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organization_roles (
+    id bigint NOT NULL,
+    organization_id bigint,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: organization_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organization_roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organization_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organization_roles_id_seq OWNED BY public.organization_roles.id;
+
+
+--
+-- Name: organization_roles_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organization_roles_users (
+    organization_role_id bigint NOT NULL,
+    user_id bigint NOT NULL
+);
+
+
+--
+-- Name: organizations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organizations (
+    id bigint NOT NULL,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.organizations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: organizations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.organizations_id_seq OWNED BY public.organizations.id;
+
+
+--
+-- Name: pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.pages (
+    id integer NOT NULL,
+    name text,
+    slug character varying,
+    content text,
+    parent_id integer,
+    parent_type character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    cms_layout_id bigint,
+    admin_notes text,
+    invariant boolean DEFAULT false NOT NULL,
+    skip_clickwrap_agreement boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.pages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.pages_id_seq OWNED BY public.pages.id;
+
+
+--
+-- Name: permissions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.permissions (
+    id bigint NOT NULL,
+    event_category_id bigint,
+    staff_position_id bigint,
+    permission character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    organization_role_id bigint,
+    convention_id bigint,
+    cms_content_group_id bigint,
+    CONSTRAINT permissions_model_exclusive_arc CHECK ((((((cms_content_group_id IS NOT NULL))::integer + ((convention_id IS NOT NULL))::integer) + ((event_category_id IS NOT NULL))::integer) = ANY (ARRAY[0, 1]))),
+    CONSTRAINT permissions_role_exclusive_arc CHECK (((((staff_position_id IS NOT NULL))::integer + ((organization_role_id IS NOT NULL))::integer) = 1))
+);
+
+
+--
+-- Name: permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.permissions_id_seq OWNED BY public.permissions.id;
+
+
+--
+-- Name: product_variants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.product_variants (
+    id bigint NOT NULL,
+    product_id bigint,
+    name text,
+    description text,
+    image character varying,
+    override_price_cents integer,
+    override_price_currency character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    "position" integer
+);
+
+
+--
+-- Name: product_variants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.product_variants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: product_variants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.product_variants_id_seq OWNED BY public.product_variants.id;
+
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    convention_id bigint,
+    available boolean,
+    name text,
+    description text,
+    image character varying,
+    price_cents integer,
+    price_currency character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    payment_options text
+);
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- Name: rooms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.rooms (
+    id integer NOT NULL,
+    convention_id integer,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: rooms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.rooms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rooms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.rooms_id_seq OWNED BY public.rooms.id;
+
+
+--
+-- Name: rooms_runs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.rooms_runs (
+    room_id integer NOT NULL,
+    run_id integer NOT NULL
+);
+
+
+--
+-- Name: root_sites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.root_sites (
+    id bigint NOT NULL,
+    site_name text,
+    root_page_id bigint,
+    default_layout_id bigint
+);
+
+
+--
+-- Name: root_sites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.root_sites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: root_sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.root_sites_id_seq OWNED BY public.root_sites.id;
+
+
+--
+-- Name: runs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.runs (
+    id integer NOT NULL,
+    event_id integer,
+    starts_at timestamp without time zone,
+    title_suffix character varying,
+    schedule_note text,
+    updated_by_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.runs_id_seq OWNED BY public.runs.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.schema_migrations (
+    version character varying NOT NULL
+);
+
+
+--
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sessions (
+    id integer NOT NULL,
+    session_id character varying NOT NULL,
+    data text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
+
+
+--
+-- Name: signup_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.signup_requests (
+    id bigint NOT NULL,
+    state character varying DEFAULT 'pending'::character varying NOT NULL,
+    user_con_profile_id bigint NOT NULL,
+    target_run_id bigint NOT NULL,
+    requested_bucket_key character varying,
+    replace_signup_id bigint,
+    result_signup_id bigint,
+    updated_by_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: signup_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.signup_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: signup_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.signup_requests_id_seq OWNED BY public.signup_requests.id;
+
+
+--
+-- Name: signups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.signups (
+    id integer NOT NULL,
+    run_id integer,
+    bucket_key character varying,
+    updated_by_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    user_con_profile_id integer NOT NULL,
+    state character varying DEFAULT 'confirmed'::character varying NOT NULL,
+    counted boolean,
+    requested_bucket_key character varying
+);
+
+
+--
+-- Name: signups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.signups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: signups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.signups_id_seq OWNED BY public.signups.id;
+
+
+--
+-- Name: staff_positions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.staff_positions (
+    id integer NOT NULL,
+    convention_id integer,
+    name text,
+    email text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    visible boolean
+);
+
+
+--
+-- Name: staff_positions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.staff_positions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: staff_positions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.staff_positions_id_seq OWNED BY public.staff_positions.id;
+
+
+--
+-- Name: staff_positions_user_con_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.staff_positions_user_con_profiles (
+    staff_position_id bigint NOT NULL,
+    user_con_profile_id bigint NOT NULL
+);
+
+
+--
+-- Name: team_members; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.team_members (
+    id integer NOT NULL,
+    event_id integer,
+    updated_at timestamp without time zone,
+    updated_by_id integer,
+    display boolean,
+    show_email boolean,
+    receive_con_email boolean,
+    created_at timestamp without time zone,
+    user_con_profile_id integer NOT NULL,
+    receive_signup_email character varying DEFAULT 'no'::character varying NOT NULL
+);
+
+
+--
+-- Name: team_members_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.team_members_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: team_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.team_members_id_seq OWNED BY public.team_members.id;
+
+
+--
+-- Name: ticket_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ticket_types (
+    id integer NOT NULL,
+    convention_id integer,
+    name text,
+    description text,
+    pricing_schedule text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    publicly_available boolean DEFAULT true NOT NULL,
+    counts_towards_convention_maximum boolean DEFAULT true NOT NULL,
+    maximum_event_provided_tickets integer DEFAULT 0 NOT NULL,
+    allows_event_signups boolean DEFAULT true NOT NULL
+);
+
+
+--
+-- Name: ticket_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ticket_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ticket_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ticket_types_id_seq OWNED BY public.ticket_types.id;
+
+
+--
+-- Name: tickets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tickets (
+    id integer NOT NULL,
+    user_con_profile_id integer,
+    ticket_type_id integer,
+    charge_id character varying,
+    payment_amount_cents integer,
+    payment_amount_currency character varying,
+    payment_note text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    provided_by_event_id integer
+);
+
+
+--
+-- Name: tickets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tickets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tickets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tickets_id_seq OWNED BY public.tickets.id;
+
+
+--
+-- Name: user_activity_alerts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_activity_alerts (
+    id bigint NOT NULL,
+    convention_id bigint NOT NULL,
+    user_id bigint,
+    partial_name text,
+    email text,
+    trigger_on_user_con_profile_create boolean DEFAULT false NOT NULL,
+    trigger_on_ticket_create boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: user_activity_alerts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_activity_alerts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_activity_alerts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_activity_alerts_id_seq OWNED BY public.user_activity_alerts.id;
+
+
+--
+-- Name: user_con_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_con_profiles (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    convention_id integer NOT NULL,
+    registrar boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    first_name character varying NOT NULL,
+    last_name character varying NOT NULL,
+    nickname character varying,
+    birth_date date,
+    gender character varying,
+    city character varying,
+    state character varying,
+    zipcode character varying,
+    country character varying,
+    day_phone character varying,
+    evening_phone character varying,
+    best_call_time character varying,
+    preferred_contact character varying,
+    bio text,
+    show_nickname_in_bio boolean,
+    address text,
+    additional_info text,
+    receive_whos_free_emails boolean DEFAULT true NOT NULL,
+    gravatar_enabled boolean DEFAULT false NOT NULL,
+    ical_secret text NOT NULL,
+    needs_update boolean DEFAULT false NOT NULL,
+    accepted_clickwrap_agreement boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: user_con_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_con_profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_con_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_con_profiles_id_seq OWNED BY public.user_con_profiles.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    first_name character varying NOT NULL,
+    last_name character varying NOT NULL,
+    site_admin boolean,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip character varying,
+    last_sign_in_ip character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    legacy_password_md5 text,
+    legacy_password_sha1 text,
+    legacy_password_sha1_salt text
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: alert_destinations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.alert_destinations ALTER COLUMN id SET DEFAULT nextval('public.alert_destinations_id_seq'::regclass);
+
+
+--
+-- Name: cms_content_group_associations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_content_group_associations ALTER COLUMN id SET DEFAULT nextval('public.cms_content_group_associations_id_seq'::regclass);
+
+
+--
+-- Name: cms_content_groups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_content_groups ALTER COLUMN id SET DEFAULT nextval('public.cms_content_groups_id_seq'::regclass);
+
+
+--
+-- Name: cms_files id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files ALTER COLUMN id SET DEFAULT nextval('public.cms_files_id_seq'::regclass);
+
+
+--
+-- Name: cms_graphql_queries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_graphql_queries ALTER COLUMN id SET DEFAULT nextval('public.cms_graphql_queries_id_seq'::regclass);
+
+
+--
+-- Name: cms_layouts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_layouts ALTER COLUMN id SET DEFAULT nextval('public.cms_layouts_id_seq'::regclass);
+
+
+--
+-- Name: cms_navigation_items id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_navigation_items ALTER COLUMN id SET DEFAULT nextval('public.cms_navigation_items_id_seq'::regclass);
+
+
+--
+-- Name: cms_partials id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_partials ALTER COLUMN id SET DEFAULT nextval('public.cms_partials_id_seq'::regclass);
+
+
+--
+-- Name: cms_variables id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_variables ALTER COLUMN id SET DEFAULT nextval('public.cms_variables_id_seq'::regclass);
+
+
+--
+-- Name: conventions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions ALTER COLUMN id SET DEFAULT nextval('public.conventions_id_seq'::regclass);
+
+
+--
+-- Name: event_categories id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_categories ALTER COLUMN id SET DEFAULT nextval('public.event_categories_id_seq'::regclass);
+
+
+--
+-- Name: event_proposals id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals ALTER COLUMN id SET DEFAULT nextval('public.event_proposals_id_seq'::regclass);
+
+
+--
+-- Name: events id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events ALTER COLUMN id SET DEFAULT nextval('public.events_id_seq'::regclass);
+
+
+--
+-- Name: form_items id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_items ALTER COLUMN id SET DEFAULT nextval('public.form_items_id_seq'::regclass);
+
+
+--
+-- Name: form_response_changes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_response_changes ALTER COLUMN id SET DEFAULT nextval('public.form_response_changes_id_seq'::regclass);
+
+
+--
+-- Name: form_sections id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_sections ALTER COLUMN id SET DEFAULT nextval('public.form_sections_id_seq'::regclass);
+
+
+--
+-- Name: forms id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.forms ALTER COLUMN id SET DEFAULT nextval('public.forms_id_seq'::regclass);
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides ALTER COLUMN id SET DEFAULT nextval('public.maximum_event_provided_tickets_overrides_id_seq'::regclass);
+
+
+--
+-- Name: oauth_access_grants id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_grants ALTER COLUMN id SET DEFAULT nextval('public.oauth_access_grants_id_seq'::regclass);
+
+
+--
+-- Name: oauth_access_tokens id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_tokens ALTER COLUMN id SET DEFAULT nextval('public.oauth_access_tokens_id_seq'::regclass);
+
+
+--
+-- Name: oauth_applications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_applications ALTER COLUMN id SET DEFAULT nextval('public.oauth_applications_id_seq'::regclass);
+
+
+--
+-- Name: oauth_openid_requests id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_openid_requests ALTER COLUMN id SET DEFAULT nextval('public.oauth_openid_requests_id_seq'::regclass);
+
+
+--
+-- Name: order_entries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_entries ALTER COLUMN id SET DEFAULT nextval('public.order_entries_id_seq'::regclass);
+
+
+--
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
+
+
+--
+-- Name: organization_roles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_roles ALTER COLUMN id SET DEFAULT nextval('public.organization_roles_id_seq'::regclass);
+
+
+--
+-- Name: organizations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations ALTER COLUMN id SET DEFAULT nextval('public.organizations_id_seq'::regclass);
+
+
+--
+-- Name: pages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pages ALTER COLUMN id SET DEFAULT nextval('public.pages_id_seq'::regclass);
+
+
+--
+-- Name: permissions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions ALTER COLUMN id SET DEFAULT nextval('public.permissions_id_seq'::regclass);
+
+
+--
+-- Name: product_variants id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_variants ALTER COLUMN id SET DEFAULT nextval('public.product_variants_id_seq'::regclass);
+
+
+--
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: rooms id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms ALTER COLUMN id SET DEFAULT nextval('public.rooms_id_seq'::regclass);
+
+
+--
+-- Name: root_sites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.root_sites ALTER COLUMN id SET DEFAULT nextval('public.root_sites_id_seq'::regclass);
+
+
+--
+-- Name: runs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.runs ALTER COLUMN id SET DEFAULT nextval('public.runs_id_seq'::regclass);
+
+
+--
+-- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
+
+
+--
+-- Name: signup_requests id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests ALTER COLUMN id SET DEFAULT nextval('public.signup_requests_id_seq'::regclass);
+
+
+--
+-- Name: signups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups ALTER COLUMN id SET DEFAULT nextval('public.signups_id_seq'::regclass);
+
+
+--
+-- Name: staff_positions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_positions ALTER COLUMN id SET DEFAULT nextval('public.staff_positions_id_seq'::regclass);
+
+
+--
+-- Name: team_members id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.team_members ALTER COLUMN id SET DEFAULT nextval('public.team_members_id_seq'::regclass);
+
+
+--
+-- Name: ticket_types id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ticket_types ALTER COLUMN id SET DEFAULT nextval('public.ticket_types_id_seq'::regclass);
+
+
+--
+-- Name: tickets id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets ALTER COLUMN id SET DEFAULT nextval('public.tickets_id_seq'::regclass);
+
+
+--
+-- Name: user_activity_alerts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_activity_alerts ALTER COLUMN id SET DEFAULT nextval('public.user_activity_alerts_id_seq'::regclass);
+
+
+--
+-- Name: user_con_profiles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_con_profiles ALTER COLUMN id SET DEFAULT nextval('public.user_con_profiles_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: alert_destinations alert_destinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.alert_destinations
+    ADD CONSTRAINT alert_destinations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: cms_content_group_associations cms_content_group_associations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_content_group_associations
+    ADD CONSTRAINT cms_content_group_associations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_content_groups cms_content_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_content_groups
+    ADD CONSTRAINT cms_content_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_files cms_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files
+    ADD CONSTRAINT cms_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_graphql_queries cms_graphql_queries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_graphql_queries
+    ADD CONSTRAINT cms_graphql_queries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_layouts cms_layouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_layouts
+    ADD CONSTRAINT cms_layouts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_navigation_items cms_navigation_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_navigation_items
+    ADD CONSTRAINT cms_navigation_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_partials cms_partials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_partials
+    ADD CONSTRAINT cms_partials_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_variables cms_variables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_variables
+    ADD CONSTRAINT cms_variables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: conventions conventions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT conventions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: event_categories event_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_categories
+    ADD CONSTRAINT event_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: event_proposals event_proposals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals
+    ADD CONSTRAINT event_proposals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: form_items form_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_items
+    ADD CONSTRAINT form_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: form_response_changes form_response_changes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_response_changes
+    ADD CONSTRAINT form_response_changes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: form_sections form_sections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_sections
+    ADD CONSTRAINT form_sections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: forms forms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.forms
+    ADD CONSTRAINT forms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides maximum_event_provided_tickets_overrides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides
+    ADD CONSTRAINT maximum_event_provided_tickets_overrides_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_access_grants oauth_access_grants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_grants
+    ADD CONSTRAINT oauth_access_grants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_access_tokens oauth_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_tokens
+    ADD CONSTRAINT oauth_access_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_applications oauth_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_applications
+    ADD CONSTRAINT oauth_applications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_openid_requests oauth_openid_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_openid_requests
+    ADD CONSTRAINT oauth_openid_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: order_entries order_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_entries
+    ADD CONSTRAINT order_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organization_roles organization_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_roles
+    ADD CONSTRAINT organization_roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: organizations organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations
+    ADD CONSTRAINT organizations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pages pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pages
+    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: permissions permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_variants product_variants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_variants
+    ADD CONSTRAINT product_variants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT rooms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: root_sites root_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.root_sites
+    ADD CONSTRAINT root_sites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: runs runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.runs
+    ADD CONSTRAINT runs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: signup_requests signup_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT signup_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: signups signups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups
+    ADD CONSTRAINT signups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: staff_positions staff_positions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_positions
+    ADD CONSTRAINT staff_positions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: team_members team_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT team_members_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ticket_types ticket_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ticket_types
+    ADD CONSTRAINT ticket_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tickets tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT tickets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_activity_alerts user_activity_alerts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_activity_alerts
+    ADD CONSTRAINT user_activity_alerts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_con_profiles user_con_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_con_profiles
+    ADD CONSTRAINT user_con_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_max_event_provided_tickets_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_max_event_provided_tickets_on_event_id ON public.maximum_event_provided_tickets_overrides USING btree (event_id);
+
+
+--
+-- Name: idx_max_event_provided_tickets_on_ticket_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_max_event_provided_tickets_on_ticket_type_id ON public.maximum_event_provided_tickets_overrides USING btree (ticket_type_id);
+
+
+--
+-- Name: idx_permissions_unique_join; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_permissions_unique_join ON public.permissions USING btree (staff_position_id, permission, event_category_id);
+
+
+--
+-- Name: index_alert_destinations_on_alert_type_and_alert_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_alert_destinations_on_alert_type_and_alert_id ON public.alert_destinations USING btree (alert_type, alert_id);
+
+
+--
+-- Name: index_alert_destinations_on_staff_position_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_alert_destinations_on_staff_position_id ON public.alert_destinations USING btree (staff_position_id);
+
+
+--
+-- Name: index_alert_destinations_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_alert_destinations_on_user_con_profile_id ON public.alert_destinations USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_cms_content_group_associations_on_cms_content_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_content_group_associations_on_cms_content_group_id ON public.cms_content_group_associations USING btree (cms_content_group_id);
+
+
+--
+-- Name: index_cms_content_group_associations_on_content; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_content_group_associations_on_content ON public.cms_content_group_associations USING btree (content_type, content_id);
+
+
+--
+-- Name: index_cms_content_groups_on_parent_type_and_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_content_groups_on_parent_type_and_parent_id ON public.cms_content_groups USING btree (parent_type, parent_id);
+
+
+--
+-- Name: index_cms_files_on_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_files_on_parent_id ON public.cms_files USING btree (parent_id);
+
+
+--
+-- Name: index_cms_files_on_parent_id_and_file; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_cms_files_on_parent_id_and_file ON public.cms_files USING btree (parent_id, file);
+
+
+--
+-- Name: index_cms_files_on_uploader_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_files_on_uploader_id ON public.cms_files USING btree (uploader_id);
+
+
+--
+-- Name: index_cms_graphql_queries_on_parent_type_and_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_graphql_queries_on_parent_type_and_parent_id ON public.cms_graphql_queries USING btree (parent_type, parent_id);
+
+
+--
+-- Name: index_cms_layouts_on_parent_type_and_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_layouts_on_parent_type_and_parent_id ON public.cms_layouts USING btree (parent_type, parent_id);
+
+
+--
+-- Name: index_cms_navigation_items_on_navigation_section_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_navigation_items_on_navigation_section_id ON public.cms_navigation_items USING btree (navigation_section_id);
+
+
+--
+-- Name: index_cms_navigation_items_on_page_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_navigation_items_on_page_id ON public.cms_navigation_items USING btree (page_id);
+
+
+--
+-- Name: index_cms_navigation_items_on_parent_type_and_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_navigation_items_on_parent_type_and_parent_id ON public.cms_navigation_items USING btree (parent_type, parent_id);
+
+
+--
+-- Name: index_cms_partials_on_parent_id_and_parent_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_partials_on_parent_id_and_parent_type ON public.cms_partials USING btree (parent_id, parent_type);
+
+
+--
+-- Name: index_cms_partials_on_parent_id_and_parent_type_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_cms_partials_on_parent_id_and_parent_type_and_name ON public.cms_partials USING btree (parent_id, parent_type, name);
+
+
+--
+-- Name: index_cms_variables_on_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_cms_variables_on_parent_id ON public.cms_variables USING btree (parent_id);
+
+
+--
+-- Name: index_cms_variables_on_parent_id_and_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_cms_variables_on_parent_id_and_key ON public.cms_variables USING btree (parent_id, key);
+
+
+--
+-- Name: index_conventions_on_default_layout_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_conventions_on_default_layout_id ON public.conventions USING btree (default_layout_id);
+
+
+--
+-- Name: index_conventions_on_domain; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_conventions_on_domain ON public.conventions USING btree (domain);
+
+
+--
+-- Name: index_conventions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_conventions_on_organization_id ON public.conventions USING btree (organization_id);
+
+
+--
+-- Name: index_conventions_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_conventions_on_updated_by_id ON public.conventions USING btree (updated_by_id);
+
+
+--
+-- Name: index_conventions_on_user_con_profile_form_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_conventions_on_user_con_profile_form_id ON public.conventions USING btree (user_con_profile_form_id);
+
+
+--
+-- Name: index_event_categories_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_categories_on_convention_id ON public.event_categories USING btree (convention_id);
+
+
+--
+-- Name: index_event_categories_on_event_form_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_categories_on_event_form_id ON public.event_categories USING btree (event_form_id);
+
+
+--
+-- Name: index_event_categories_on_event_proposal_form_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_categories_on_event_proposal_form_id ON public.event_categories USING btree (event_proposal_form_id);
+
+
+--
+-- Name: index_event_proposals_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_proposals_on_convention_id ON public.event_proposals USING btree (convention_id);
+
+
+--
+-- Name: index_event_proposals_on_event_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_proposals_on_event_category_id ON public.event_proposals USING btree (event_category_id);
+
+
+--
+-- Name: index_event_proposals_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_proposals_on_event_id ON public.event_proposals USING btree (event_id);
+
+
+--
+-- Name: index_event_proposals_on_owner_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_proposals_on_owner_id ON public.event_proposals USING btree (owner_id);
+
+
+--
+-- Name: index_events_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_convention_id ON public.events USING btree (convention_id);
+
+
+--
+-- Name: index_events_on_event_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_event_category_id ON public.events USING btree (event_category_id);
+
+
+--
+-- Name: index_events_on_owner_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_owner_id ON public.events USING btree (owner_id);
+
+
+--
+-- Name: index_events_on_title_vector; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_title_vector ON public.events USING gin (title_vector);
+
+
+--
+-- Name: index_events_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_updated_by_id ON public.events USING btree (updated_by_id);
+
+
+--
+-- Name: index_form_items_on_form_section_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_form_items_on_form_section_id ON public.form_items USING btree (form_section_id);
+
+
+--
+-- Name: index_form_response_changes_on_notified_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_form_response_changes_on_notified_at ON public.form_response_changes USING btree (notified_at);
+
+
+--
+-- Name: index_form_response_changes_on_response_type_and_response_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_form_response_changes_on_response_type_and_response_id ON public.form_response_changes USING btree (response_type, response_id);
+
+
+--
+-- Name: index_form_response_changes_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_form_response_changes_on_user_con_profile_id ON public.form_response_changes USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_form_sections_on_form_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_form_sections_on_form_id ON public.form_sections USING btree (form_id);
+
+
+--
+-- Name: index_forms_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_forms_on_convention_id ON public.forms USING btree (convention_id);
+
+
+--
+-- Name: index_oauth_access_grants_on_application_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_oauth_access_grants_on_application_id ON public.oauth_access_grants USING btree (application_id);
+
+
+--
+-- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON public.oauth_access_grants USING btree (token);
+
+
+--
+-- Name: index_oauth_access_tokens_on_application_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_oauth_access_tokens_on_application_id ON public.oauth_access_tokens USING btree (application_id);
+
+
+--
+-- Name: index_oauth_access_tokens_on_refresh_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_refresh_token ON public.oauth_access_tokens USING btree (refresh_token);
+
+
+--
+-- Name: index_oauth_access_tokens_on_resource_owner_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_oauth_access_tokens_on_resource_owner_id ON public.oauth_access_tokens USING btree (resource_owner_id);
+
+
+--
+-- Name: index_oauth_access_tokens_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON public.oauth_access_tokens USING btree (token);
+
+
+--
+-- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_applications_on_uid ON public.oauth_applications USING btree (uid);
+
+
+--
+-- Name: index_oauth_openid_requests_on_access_grant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_oauth_openid_requests_on_access_grant_id ON public.oauth_openid_requests USING btree (access_grant_id);
+
+
+--
+-- Name: index_order_entries_on_order_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_order_entries_on_order_id ON public.order_entries USING btree (order_id);
+
+
+--
+-- Name: index_order_entries_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_order_entries_on_product_id ON public.order_entries USING btree (product_id);
+
+
+--
+-- Name: index_order_entries_on_product_variant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_order_entries_on_product_variant_id ON public.order_entries USING btree (product_variant_id);
+
+
+--
+-- Name: index_orders_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orders_on_user_con_profile_id ON public.orders USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_organization_roles_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organization_roles_on_organization_id ON public.organization_roles USING btree (organization_id);
+
+
+--
+-- Name: index_pages_on_cms_layout_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pages_on_cms_layout_id ON public.pages USING btree (cms_layout_id);
+
+
+--
+-- Name: index_pages_on_parent_type_and_parent_id_and_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_pages_on_parent_type_and_parent_id_and_slug ON public.pages USING btree (parent_type, parent_id, slug);
+
+
+--
+-- Name: index_permissions_on_cms_content_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_permissions_on_cms_content_group_id ON public.permissions USING btree (cms_content_group_id);
+
+
+--
+-- Name: index_permissions_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_permissions_on_convention_id ON public.permissions USING btree (convention_id);
+
+
+--
+-- Name: index_permissions_on_event_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_permissions_on_event_category_id ON public.permissions USING btree (event_category_id);
+
+
+--
+-- Name: index_permissions_on_organization_role_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_permissions_on_organization_role_id ON public.permissions USING btree (organization_role_id);
+
+
+--
+-- Name: index_permissions_on_staff_position_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_permissions_on_staff_position_id ON public.permissions USING btree (staff_position_id);
+
+
+--
+-- Name: index_product_variants_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_product_variants_on_product_id ON public.product_variants USING btree (product_id);
+
+
+--
+-- Name: index_products_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_convention_id ON public.products USING btree (convention_id);
+
+
+--
+-- Name: index_rooms_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_on_convention_id ON public.rooms USING btree (convention_id);
+
+
+--
+-- Name: index_rooms_runs_on_room_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_runs_on_room_id ON public.rooms_runs USING btree (room_id);
+
+
+--
+-- Name: index_rooms_runs_on_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rooms_runs_on_run_id ON public.rooms_runs USING btree (run_id);
+
+
+--
+-- Name: index_rooms_runs_on_run_id_and_room_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_rooms_runs_on_run_id_and_room_id ON public.rooms_runs USING btree (run_id, room_id);
+
+
+--
+-- Name: index_root_sites_on_default_layout_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_root_sites_on_default_layout_id ON public.root_sites USING btree (default_layout_id);
+
+
+--
+-- Name: index_root_sites_on_root_page_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_root_sites_on_root_page_id ON public.root_sites USING btree (root_page_id);
+
+
+--
+-- Name: index_runs_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_runs_on_event_id ON public.runs USING btree (event_id);
+
+
+--
+-- Name: index_runs_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_runs_on_updated_by_id ON public.runs USING btree (updated_by_id);
+
+
+--
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_sessions_on_session_id ON public.sessions USING btree (session_id);
+
+
+--
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_updated_at ON public.sessions USING btree (updated_at);
+
+
+--
+-- Name: index_signup_requests_on_replace_signup_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_replace_signup_id ON public.signup_requests USING btree (replace_signup_id);
+
+
+--
+-- Name: index_signup_requests_on_result_signup_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_result_signup_id ON public.signup_requests USING btree (result_signup_id);
+
+
+--
+-- Name: index_signup_requests_on_state; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_state ON public.signup_requests USING btree (state);
+
+
+--
+-- Name: index_signup_requests_on_target_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_target_run_id ON public.signup_requests USING btree (target_run_id);
+
+
+--
+-- Name: index_signup_requests_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_updated_by_id ON public.signup_requests USING btree (updated_by_id);
+
+
+--
+-- Name: index_signup_requests_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_user_con_profile_id ON public.signup_requests USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_signups_on_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signups_on_run_id ON public.signups USING btree (run_id);
+
+
+--
+-- Name: index_signups_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signups_on_updated_by_id ON public.signups USING btree (updated_by_id);
+
+
+--
+-- Name: index_signups_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signups_on_user_con_profile_id ON public.signups USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_staff_positions_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_staff_positions_on_convention_id ON public.staff_positions USING btree (convention_id);
+
+
+--
+-- Name: index_staff_positions_on_visible; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_staff_positions_on_visible ON public.staff_positions USING btree (visible);
+
+
+--
+-- Name: index_team_members_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_team_members_on_user_con_profile_id ON public.team_members USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_ticket_types_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ticket_types_on_convention_id ON public.ticket_types USING btree (convention_id);
+
+
+--
+-- Name: index_tickets_on_charge_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_tickets_on_charge_id ON public.tickets USING btree (charge_id);
+
+
+--
+-- Name: index_tickets_on_provided_by_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tickets_on_provided_by_event_id ON public.tickets USING btree (provided_by_event_id);
+
+
+--
+-- Name: index_tickets_on_ticket_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tickets_on_ticket_type_id ON public.tickets USING btree (ticket_type_id);
+
+
+--
+-- Name: index_tickets_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tickets_on_user_con_profile_id ON public.tickets USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_user_activity_alerts_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_activity_alerts_on_convention_id ON public.user_activity_alerts USING btree (convention_id);
+
+
+--
+-- Name: index_user_activity_alerts_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_activity_alerts_on_user_id ON public.user_activity_alerts USING btree (user_id);
+
+
+--
+-- Name: index_user_con_profiles_on_convention_id_and_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_user_con_profiles_on_convention_id_and_user_id ON public.user_con_profiles USING btree (convention_id, user_id);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: events tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'pg_catalog.english', 'title');
+
+
+--
+-- Name: signup_requests fk_rails_008590ab32; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT fk_rails_008590ab32 FOREIGN KEY (replace_signup_id) REFERENCES public.signups(id);
+
+
+--
+-- Name: events fk_rails_0215031867; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_0215031867 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: runs fk_rails_058061fb50; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.runs
+    ADD CONSTRAINT fk_rails_058061fb50 FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: pages fk_rails_0bbdd8c678; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pages
+    ADD CONSTRAINT fk_rails_0bbdd8c678 FOREIGN KEY (cms_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: conventions fk_rails_12ecfb12f1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT fk_rails_12ecfb12f1 FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: signup_requests fk_rails_1381757389; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT fk_rails_1381757389 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: permissions fk_rails_1c6be1bb15; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT fk_rails_1c6be1bb15 FOREIGN KEY (event_category_id) REFERENCES public.event_categories(id);
+
+
+--
+-- Name: permissions fk_rails_1dd9fc9231; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT fk_rails_1dd9fc9231 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: organization_roles fk_rails_1edd21f138; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_roles
+    ADD CONSTRAINT fk_rails_1edd21f138 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: root_sites fk_rails_2435d7a881; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.root_sites
+    ADD CONSTRAINT fk_rails_2435d7a881 FOREIGN KEY (root_page_id) REFERENCES public.pages(id);
+
+
+--
+-- Name: conventions fk_rails_253741ce10; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT fk_rails_253741ce10 FOREIGN KEY (root_page_id) REFERENCES public.pages(id);
+
+
+--
+-- Name: events fk_rails_2e7e36b62c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_2e7e36b62c FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: user_activity_alerts fk_rails_2fb619f03b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_activity_alerts
+    ADD CONSTRAINT fk_rails_2fb619f03b FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: form_sections fk_rails_364c041eca; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_sections
+    ADD CONSTRAINT fk_rails_364c041eca FOREIGN KEY (form_id) REFERENCES public.forms(id);
+
+
+--
+-- Name: event_categories fk_rails_3b52f7da22; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_categories
+    ADD CONSTRAINT fk_rails_3b52f7da22 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: signup_requests fk_rails_4018e13a21; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT fk_rails_4018e13a21 FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: order_entries fk_rails_415fc5349e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_entries
+    ADD CONSTRAINT fk_rails_415fc5349e FOREIGN KEY (product_variant_id) REFERENCES public.product_variants(id);
+
+
+--
+-- Name: conventions fk_rails_43f145c8c7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT fk_rails_43f145c8c7 FOREIGN KEY (user_con_profile_form_id) REFERENCES public.forms(id);
+
+
+--
+-- Name: permissions fk_rails_47812e3d12; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT fk_rails_47812e3d12 FOREIGN KEY (staff_position_id) REFERENCES public.staff_positions(id);
+
+
+--
+-- Name: signups fk_rails_4abc90d735; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups
+    ADD CONSTRAINT fk_rails_4abc90d735 FOREIGN KEY (run_id) REFERENCES public.runs(id);
+
+
+--
+-- Name: signup_requests fk_rails_4d7ce061ee; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT fk_rails_4d7ce061ee FOREIGN KEY (target_run_id) REFERENCES public.runs(id);
+
+
+--
+-- Name: cms_content_group_associations fk_rails_4facd81f7c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_content_group_associations
+    ADD CONSTRAINT fk_rails_4facd81f7c FOREIGN KEY (cms_content_group_id) REFERENCES public.cms_content_groups(id);
+
+
+--
+-- Name: root_sites fk_rails_5cb3c6880e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.root_sites
+    ADD CONSTRAINT fk_rails_5cb3c6880e FOREIGN KEY (default_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: cms_navigation_items fk_rails_6287617e27; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_navigation_items
+    ADD CONSTRAINT fk_rails_6287617e27 FOREIGN KEY (navigation_section_id) REFERENCES public.cms_navigation_items(id);
+
+
+--
+-- Name: cms_files fk_rails_6ddf636ea5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files
+    ADD CONSTRAINT fk_rails_6ddf636ea5 FOREIGN KEY (uploader_id) REFERENCES public.users(id);
+
+
+--
+-- Name: signups fk_rails_6f474f10dd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups
+    ADD CONSTRAINT fk_rails_6f474f10dd FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: oauth_access_tokens fk_rails_732cb83ab7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_tokens
+    ADD CONSTRAINT fk_rails_732cb83ab7 FOREIGN KEY (application_id) REFERENCES public.oauth_applications(id);
+
+
+--
+-- Name: oauth_openid_requests fk_rails_77114b3b09; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_openid_requests
+    ADD CONSTRAINT fk_rails_77114b3b09 FOREIGN KEY (access_grant_id) REFERENCES public.oauth_access_grants(id);
+
+
+--
+-- Name: order_entries fk_rails_7789d2d248; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_entries
+    ADD CONSTRAINT fk_rails_7789d2d248 FOREIGN KEY (order_id) REFERENCES public.orders(id);
+
+
+--
+-- Name: signups fk_rails_797f99efdb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups
+    ADD CONSTRAINT fk_rails_797f99efdb FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: event_categories fk_rails_832c947bed; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_categories
+    ADD CONSTRAINT fk_rails_832c947bed FOREIGN KEY (event_form_id) REFERENCES public.forms(id);
+
+
+--
+-- Name: event_categories fk_rails_867e77c5c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_categories
+    ADD CONSTRAINT fk_rails_867e77c5c3 FOREIGN KEY (event_proposal_form_id) REFERENCES public.forms(id);
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides fk_rails_889a5603de; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides
+    ADD CONSTRAINT fk_rails_889a5603de FOREIGN KEY (ticket_type_id) REFERENCES public.ticket_types(id);
+
+
+--
+-- Name: event_proposals fk_rails_89019bf78d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals
+    ADD CONSTRAINT fk_rails_89019bf78d FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: tickets fk_rails_89217f3a4e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_89217f3a4e FOREIGN KEY (ticket_type_id) REFERENCES public.ticket_types(id);
+
+
+--
+-- Name: orders fk_rails_8f422d0898; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT fk_rails_8f422d0898 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: order_entries fk_rails_8fea6b4169; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_entries
+    ADD CONSTRAINT fk_rails_8fea6b4169 FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: team_members fk_rails_91b80ad054; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT fk_rails_91b80ad054 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: cms_navigation_items fk_rails_92d572d3d8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_navigation_items
+    ADD CONSTRAINT fk_rails_92d572d3d8 FOREIGN KEY (page_id) REFERENCES public.pages(id);
+
+
+--
+-- Name: event_proposals fk_rails_94d428b316; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals
+    ADD CONSTRAINT fk_rails_94d428b316 FOREIGN KEY (event_category_id) REFERENCES public.event_categories(id);
+
+
+--
+-- Name: forms fk_rails_96a0e4a52f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.forms
+    ADD CONSTRAINT fk_rails_96a0e4a52f FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: events fk_rails_a0b385fce3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_a0b385fce3 FOREIGN KEY (event_category_id) REFERENCES public.event_categories(id);
+
+
+--
+-- Name: user_activity_alerts fk_rails_a341e92133; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_activity_alerts
+    ADD CONSTRAINT fk_rails_a341e92133 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: user_con_profiles fk_rails_a42fa405fd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_con_profiles
+    ADD CONSTRAINT fk_rails_a42fa405fd FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: maximum_event_provided_tickets_overrides fk_rails_ab5f88b28a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides
+    ADD CONSTRAINT fk_rails_ab5f88b28a FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: rooms_runs fk_rails_abc40e1f4b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms_runs
+    ADD CONSTRAINT fk_rails_abc40e1f4b FOREIGN KEY (room_id) REFERENCES public.rooms(id);
+
+
+--
+-- Name: tickets fk_rails_af73cf8952; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_af73cf8952 FOREIGN KEY (provided_by_event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: rooms_runs fk_rails_b1132f8445; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms_runs
+    ADD CONSTRAINT fk_rails_b1132f8445 FOREIGN KEY (run_id) REFERENCES public.runs(id);
+
+
+--
+-- Name: staff_positions fk_rails_b388ecf670; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_positions
+    ADD CONSTRAINT fk_rails_b388ecf670 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: event_proposals fk_rails_b3b51be8c8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals
+    ADD CONSTRAINT fk_rails_b3b51be8c8 FOREIGN KEY (owner_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: oauth_access_grants fk_rails_b4b53e07b8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_access_grants
+    ADD CONSTRAINT fk_rails_b4b53e07b8 FOREIGN KEY (application_id) REFERENCES public.oauth_applications(id);
+
+
+--
+-- Name: conventions fk_rails_b74d51e308; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT fk_rails_b74d51e308 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+
+
+--
+-- Name: alert_destinations fk_rails_b7ce40761b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.alert_destinations
+    ADD CONSTRAINT fk_rails_b7ce40761b FOREIGN KEY (staff_position_id) REFERENCES public.staff_positions(id);
+
+
+--
+-- Name: permissions fk_rails_c526e10020; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT fk_rails_c526e10020 FOREIGN KEY (cms_content_group_id) REFERENCES public.cms_content_groups(id);
+
+
+--
+-- Name: form_items fk_rails_ccec6a4891; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_items
+    ADD CONSTRAINT fk_rails_ccec6a4891 FOREIGN KEY (form_section_id) REFERENCES public.form_sections(id);
+
+
+--
+-- Name: conventions fk_rails_d37c5f984d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conventions
+    ADD CONSTRAINT fk_rails_d37c5f984d FOREIGN KEY (default_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: rooms fk_rails_d7f8465d1c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms
+    ADD CONSTRAINT fk_rails_d7f8465d1c FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: team_members fk_rails_da66de2915; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT fk_rails_da66de2915 FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: product_variants fk_rails_dae52f850b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.product_variants
+    ADD CONSTRAINT fk_rails_dae52f850b FOREIGN KEY (product_id) REFERENCES public.products(id);
+
+
+--
+-- Name: products fk_rails_e4e774d01f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_rails_e4e774d01f FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: permissions fk_rails_ef14717c62; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT fk_rails_ef14717c62 FOREIGN KEY (organization_role_id) REFERENCES public.organization_roles(id);
+
+
+--
+-- Name: signup_requests fk_rails_efbea103cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT fk_rails_efbea103cd FOREIGN KEY (result_signup_id) REFERENCES public.signups(id);
+
+
+--
+-- Name: ticket_types fk_rails_f0519904ee; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ticket_types
+    ADD CONSTRAINT fk_rails_f0519904ee FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: form_response_changes fk_rails_f24e19a90a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.form_response_changes
+    ADD CONSTRAINT fk_rails_f24e19a90a FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: event_proposals fk_rails_f55d8601dc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals
+    ADD CONSTRAINT fk_rails_f55d8601dc FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: events fk_rails_f58490957c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_f58490957c FOREIGN KEY (owner_id) REFERENCES public.users(id);
+
+
+--
+-- Name: runs fk_rails_f5bbfb45de; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.runs
+    ADD CONSTRAINT fk_rails_f5bbfb45de FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: alert_destinations fk_rails_f6d69543fb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.alert_destinations
+    ADD CONSTRAINT fk_rails_f6d69543fb FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: tickets fk_rails_f70289817e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_f70289817e FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: user_con_profiles fk_rails_f7ac429ed7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_con_profiles
+    ADD CONSTRAINT fk_rails_f7ac429ed7 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+SET search_path TO "$user", public;
+
+INSERT INTO "schema_migrations" (version) VALUES
+('20120604131744'),
+('20120604142637'),
+('20120604143822'),
+('20120604200523'),
+('20120604201100'),
+('20120609181638'),
+('20120616163017'),
+('20120616164203'),
+('20120616165151'),
+('20120616165745'),
+('20120618132100'),
+('20120727205929'),
+('20131023143926'),
+('20131227011316'),
+('20140112205637'),
+('20151003133150'),
+('20151031144823'),
+('20151107232925'),
+('20151108010959'),
+('20151108011241'),
+('20151108020322'),
+('20151108021933'),
+('20151108041735'),
+('20151108133732'),
+('20151115201840'),
+('20151116213829'),
+('20151129142816'),
+('20151129154850'),
+('20160207182454'),
+('20160207184126'),
+('20160207190435'),
+('20160310141909'),
+('20160506223047'),
+('20161112151816'),
+('20161112202920'),
+('20161112203319'),
+('20161113163044'),
+('20161127205353'),
+('20170208234244'),
+('20170219064321'),
+('20170225162643'),
+('20170521170228'),
+('20170521222419'),
+('20170522175455'),
+('20170526163733'),
+('20170602200806'),
+('20170717141614'),
+('20170721234402'),
+('20170721234424'),
+('20170721234716'),
+('20170721235511'),
+('20170724165907'),
+('20170724172123'),
+('20170829191902'),
+('20170829204511'),
+('20171014183340'),
+('20171014184727'),
+('20171014184903'),
+('20171015182922'),
+('20171018213324'),
+('20171021154612'),
+('20171029163258'),
+('20171029163343'),
+('20171031202206'),
+('20171111160337'),
+('20171111160745'),
+('20171111161320'),
+('20171111234858'),
+('20171112175130'),
+('20171112181739'),
+('20171127182439'),
+('20171201155843'),
+('20180122194924'),
+('20180123225046'),
+('20180123225540'),
+('20180130040510'),
+('20180201184633'),
+('20180204164156'),
+('20180204164355'),
+('20180207173614'),
+('20180209001048'),
+('20180209005856'),
+('20180209153345'),
+('20180209193547'),
+('20180212193535'),
+('20180213195724'),
+('20180216202555'),
+('20180220182000'),
+('20180301162045'),
+('20180304162934'),
+('20180305002945'),
+('20180305003044'),
+('20180305014004'),
+('20180305014112'),
+('20180312150839'),
+('20180403214703'),
+('20180408151722'),
+('20180502160657'),
+('20180817153813'),
+('20180820151612'),
+('20180826212515'),
+('20180922185941'),
+('20180922221147'),
+('20181010144914'),
+('20181011174128'),
+('20181011174357'),
+('20181015020539'),
+('20181015021731'),
+('20181020012444'),
+('20181024143839'),
+('20181025162756'),
+('20181028182940'),
+('20181103145535'),
+('20181103150022'),
+('20181103160827'),
+('20181108151904'),
+('20181113145849'),
+('20181209164557'),
+('20181216163057'),
+('20181217185216'),
+('20181217193826'),
+('20181221201405'),
+('20181222160432'),
+('20181227173933'),
+('20190116034950'),
+('20190126155504'),
+('20190127185603'),
+('20190127190135'),
+('20190127192813'),
+('20190208214318'),
+('20190209164632'),
+('20190209164652'),
+('20190209164910'),
+('20190209165002'),
+('20190209165241'),
+('20190415164817'),
+('20190419202156'),
+('20190420154557'),
+('20190422211940'),
+('20190502202300'),
+('20190521212001'),
+('20190601161948'),
+('20190605014656'),
+('20190622195919'),
+('20190711173547'),
+('20190714174248'),
+('20190814120605'),
+('20190815181731'),
+('20190820154537'),
+('20190821000035'),
+('20190821144208'),
+('20190821170923'),
+('20190824154605'),
+('20190824155151'),
+('20190921202956'),
+('20190921230626'),
+('20190923155934'),
+('20191001204405');
+
+
