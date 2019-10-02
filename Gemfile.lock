@@ -301,7 +301,7 @@ GEM
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     nokogiri (1.10.4-java)
-    oj (3.9.1)
+    oj (3.9.2)
     orm_adapter (0.5.0)
     parallel (1.17.0)
     parser (2.6.3.0)
@@ -528,7 +528,7 @@ DEPENDENCIES
   minitest-spec-rails
   money-rails
   mysql2 (~> 0.5.2)
-  oj (~> 3.9.1)
+  oj (~> 3.9.2)
   parallel
   pg
   platform-api
