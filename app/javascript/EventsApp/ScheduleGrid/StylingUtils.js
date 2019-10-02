@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 
 import getFullnessClass from './getFullnessClass';
+import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 
 export function userSignupStatus(run) {
   if (run.my_signups.some((signup) => signup.state === 'confirmed')) {
@@ -19,7 +20,7 @@ export function userSignupStatus(run) {
 }
 
 export function getRunClassName({
-  event, signupStatus, config, signupCountData,
+  event, signupStatus, config, signupCountData, unlimited,
 }) {
   return classNames(
     'schedule-grid-event',
@@ -36,6 +37,7 @@ export function getRunClassName({
         && signupCountData.runFull(event)
         && signupStatus == null
       ),
+      unlimited,
     },
   );
 }
@@ -43,7 +45,7 @@ export function getRunClassName({
 export function getRunPositioningStyles({ runDimensions, layoutResult }) {
   return {
     top: `${(runDimensions.laneIndex / layoutResult.laneCount) * 100.0}%`,
-    height: `${100.0 / layoutResult.laneCount}%`,
+    height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
     left: `${runDimensions.timePlacement}%`,
     width: `${runDimensions.timeSpan}%`,
     position: 'absolute',
@@ -59,7 +61,7 @@ export function getEventCategoryStyles({ eventCategory, variant }) {
       return { backgroundColor: color, borderColor: color };
     }
 
-    return { backgroundColor: color };
+    return { backgroundColor: color, borderColor: eventCategory.signed_up_color };
   }
 
   return {};

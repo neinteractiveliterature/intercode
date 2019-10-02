@@ -71,7 +71,7 @@ function CategoryLegend() {
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} signupStatus="confirmed">
-              <i className="fa fa-check-square" />
+              <i className="fa fa-user-circle" />
               {' '}
               Confirmed
             </FakeEventRun>

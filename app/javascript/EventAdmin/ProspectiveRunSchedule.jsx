@@ -207,7 +207,7 @@ function ProspectiveRunSchedule({
 
   return (
     <ScheduleGridContext.Provider value={scheduleGridProviderValue}>
-      <div className="schedule-grid mb-4 bg-light" style={{ overflowX: 'auto' }}>
+      <div className="schedule-grid mb-4" style={{ overflowX: 'auto' }}>
         <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
           <div className="mt-1 d-flex">
             {

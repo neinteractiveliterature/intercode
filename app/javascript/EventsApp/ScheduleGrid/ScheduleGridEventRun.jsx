@@ -72,6 +72,18 @@ function RunDisplay({
   const { config } = useContext(ScheduleGridContext);
   const signupStatus = userSignupStatus(run);
 
+  const runStyle = getRunStyle({
+    event,
+    eventCategory: event.event_category,
+    signupStatus,
+    config,
+    signupCountData,
+    runDimensions,
+    layoutResult,
+  });
+
+  const { availabilityFraction, unlimited } = calculateAvailability(event, signupCountData);
+
   const renderAvailabilityBar = () => {
     if (
       event.registration_policy.slots_limited
@@ -80,10 +92,8 @@ function RunDisplay({
       return null;
     }
 
-    const { availabilityFraction, unlimited } = calculateAvailability(event, signupCountData);
-
     return (
-      <AvailabilityBar availabilityFraction={availabilityFraction} unlimited={unlimited} />
+      <AvailabilityBar availabilityFraction={availabilityFraction} unlimited={unlimited} runStyle={runStyle} />
     );
   };
 
@@ -115,7 +125,7 @@ function RunDisplay({
     }
 
     if (signupStatus === 'confirmed') {
-      return <i className="fa fa-check-square mr-1" title="Confirmed signup" />;
+      return <i className="fa fa-user-circle mr-1" title="Confirmed signup" />;
     }
 
     if (signupStatus === 'waitlisted') {
@@ -133,17 +143,9 @@ function RunDisplay({
     <div
       tabIndex={0}
       className={getRunClassName({
-        event, signupStatus, config, signupCountData,
+        event, signupStatus, config, signupCountData, unlimited,
       })}
-      style={getRunStyle({
-        event,
-        eventCategory: event.event_category,
-        signupStatus,
-        config,
-        signupCountData,
-        runDimensions,
-        layoutResult,
-      })}
+      style={runStyle}
       role="button"
       onClick={toggle}
       onKeyDown={(keyEvent) => {
@@ -157,7 +159,7 @@ function RunDisplay({
       {renderAvailabilityBar(signupCountData)}
       <div className="d-flex">
         {renderExtendedCounts(config, signupCountData)}
-        <div className="p-1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <div className="p-1 pl-2" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {renderSignupStatusBadge(signupStatus, config)}
           {event.title}
         </div>

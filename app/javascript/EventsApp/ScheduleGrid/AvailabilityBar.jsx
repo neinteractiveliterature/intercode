@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-function AvailabilityBar({ availabilityFraction, unlimited }) {
+function AvailabilityBar({ availabilityFraction, unlimited, runStyle }) {
   const unavailableBarWidth = (
     unlimited
       ? 100.0
@@ -11,7 +11,14 @@ function AvailabilityBar({ availabilityFraction, unlimited }) {
 
   return (
     <div className={classNames('availability-bar', { unlimited })}>
-      <div style={{ width: `${unavailableBarWidth}%` }} className="unavailable" />
+      <div className="available" />
+      <div
+        style={{
+          width: `${unavailableBarWidth}%`,
+          backgroundColor: (runStyle || {}).backgroundColor,
+        }}
+        className="unavailable"
+      />
     </div>
   );
 }
