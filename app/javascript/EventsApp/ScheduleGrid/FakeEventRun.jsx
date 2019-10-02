@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import AvailabilityBar from './AvailabilityBar';
 import { getRunClassificationStyles, getRunClassName } from './StylingUtils';
+import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 
 function FakeEventRun({
   eventCategory, children, availability, unlimited, runFull, signupStatus, onClick, withRef,
@@ -20,6 +21,16 @@ function FakeEventRun({
       : {}
   );
 
+  const runStyle = {
+    zIndex: 0,
+    position: 'relative',
+    height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
+    marginBottom: LANE_GUTTER_HEIGHT,
+    ...getRunClassificationStyles({
+      config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
+    }),
+  };
+
   return (
     <div
       className={classNames(
@@ -28,19 +39,17 @@ function FakeEventRun({
           config, signupCountData, signupStatus, event: {},
         }),
       )}
-      style={{
-        zIndex: 0,
-        position: 'relative',
-        ...getRunClassificationStyles({
-          config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
-        }),
-      }}
+      style={runStyle}
       ref={withRef}
       {...clickableProps}
     >
-      {children}
+      <div className="d-flex pl-1">
+        <div className="p-1" style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+          {children}
+        </div>
+      </div>
 
-      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} />
+      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} runStyle={runStyle} />
     </div>
   );
 }
