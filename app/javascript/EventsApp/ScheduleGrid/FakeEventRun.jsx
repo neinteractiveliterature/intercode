@@ -43,10 +43,8 @@ function FakeEventRun({
       ref={withRef}
       {...clickableProps}
     >
-      <div className="d-flex pl-1">
-        <div className="p-1" style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-          {children}
-        </div>
+      <div className="schedule-grid-event-content">
+        {children}
       </div>
 
       <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} runStyle={runStyle} />

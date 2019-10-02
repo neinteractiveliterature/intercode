@@ -35,6 +35,7 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
   border: 1px map-get($theme-colors, 'info') solid;
   border-radius: $schedule-grid-event-border-radius;
   overflow: hidden;
+  display: flex;
 
   &.full {
     border-width: 0;
@@ -53,6 +54,17 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
     // border-top-right-radius: 0;
     // border-bottom-right-radius: 0;
   }
+}
+
+.schedule-grid-event-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  flex-grow: 1;
+  min-width: 0;
+  padding: $spacer * 0.25;
+  padding-left: $spacer * 0.5;
 }
 
 .schedule-grid-row-header {
@@ -110,7 +122,6 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 
 .availability-bar {
   background-color: transparent;
-  // border-top: 1px $gray-300 solid;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -156,4 +167,14 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
       }
     }
   }
+}
+
+.schedule-grid-run-details-popover {
+  max-width: 400px;
+}
+
+.schedule-grid-run-details-content {
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
 }
