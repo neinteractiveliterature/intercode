@@ -50,6 +50,8 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
     return null;
   }
 
+  const popoverParent = document.querySelectorAll('.non-cms-page')[0] || document.body;
+
   return (
     <Manager>
       <Reference>
@@ -69,7 +71,7 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
         <Popper
           placement={detailsVisible ? 'bottom' : 'invalid'}
           modifiers={{
-            preventOverflow: { boundariesElement: document.body },
+            preventOverflow: { boundariesElement: popoverParent },
           }}
         >
           {({
@@ -97,7 +99,7 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
             );
           }}
         </Popper>
-      ), document.body)}
+      ), popoverParent)}
     </Manager>
   );
 }

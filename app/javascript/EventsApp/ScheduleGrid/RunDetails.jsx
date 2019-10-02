@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
-import { describeAvailability, calculateAvailability } from './AvailabilityUtils';
+import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
 import buildEventUrl from '../buildEventUrl';
 
@@ -15,6 +15,10 @@ const RunDetails = React.forwardRef(({
 
   const availabilityDescription = useMemo(
     () => describeAvailability(event, signupCountData),
+    [event, signupCountData],
+  );
+  const waitlistDescription = useMemo(
+    () => describeWaitlist(event, signupCountData),
     [event, signupCountData],
   );
   const availability = useMemo(
@@ -91,6 +95,18 @@ const RunDetails = React.forwardRef(({
                             remainingCapacity={availability.remainingCapacity}
                           />
                         )}
+                      </td>
+                    </tr>
+                  )
+                  : null
+              }
+              {
+                waitlistDescription
+                  ? (
+                    <tr>
+                      <td className="text-center pr-1 align-top"><i className="fa fa-hourglass-half" /></td>
+                      <td>
+                        {waitlistDescription}
                         {availability.waitlistCount > 0 && (
                           <BucketAvailabilityDisplay
                             compact

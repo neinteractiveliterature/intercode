@@ -32,10 +32,6 @@ export function describeAvailability(event, signupCountData) {
           {event.registration_policy.total_slots}
           {' slots)'}
         </span>
-        {', '}
-        <strong>Waitlist:</strong>
-        {' '}
-        {signupCountData.getWaitlistCount()}
       </>
     );
   }
@@ -53,4 +49,18 @@ export function describeAvailability(event, signupCountData) {
   }
 
   return `${remainingCapacity} of ${pluralizeWithCount('slot', totalSlots)} left`;
+}
+
+export function describeWaitlist(event, signupCountData) {
+  if (signupCountData.runFull(event)) {
+    return (
+      <>
+        <strong>Waitlist:</strong>
+        {' '}
+        {signupCountData.getWaitlistCount()}
+      </>
+    );
+  }
+
+  return null;
 }
