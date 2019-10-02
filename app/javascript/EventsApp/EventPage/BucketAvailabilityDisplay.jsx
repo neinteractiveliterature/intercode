@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const MAX_CELLS_PER_LINE_REGULAR = 15;
-const MAX_CELLS_PER_LINE_COMPACT = 19;
+const MAX_CELLS_PER_LINE_COMPACT = 20;
 
 function BucketAvailabilityDisplay({
   className, signupCount, remainingCapacity, compact,
@@ -19,13 +19,21 @@ function BucketAvailabilityDisplay({
     lineWidth = Math.ceil(totalCells / numLines);
   }
 
+  const generateNElements = (n, generateElement) => {
+    if (n < 1) {
+      return [];
+    }
+
+    return [...Array(n)].map(generateElement);
+  };
+
   const cells = [
-    ...[...Array(signupCount)].map((value, index) => (
+    ...generateNElements(signupCount, (value, index) => (
       <div className="bucket-availability-cell" key={`signedup-${index}`}>
         <i className="fa fa-user-circle-o" />
       </div>
     )),
-    ...[...Array(remainingCapacity)].map((value, index) => (
+    ...generateNElements(remainingCapacity, (value, index) => (
       <div className="bucket-availability-cell" key={`available-${index}`}>
         <i className="fa fa-circle-thin" />
       </div>

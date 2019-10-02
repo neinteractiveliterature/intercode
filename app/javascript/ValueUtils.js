@@ -29,9 +29,13 @@ export function sortByLocaleString(list, transform, options = { sensitivity: 'ba
   return [...list].sort((a, b) => transform(a).localeCompare(transform(b), options));
 }
 
+export function normalizeTitle(title) {
+  return title.replace(/^(the|a) /i, '').replace(/\W/, '');
+}
+
 export function titleSort(list, transform) {
   return sortByLocaleString(
     list,
-    (element) => (transform || ((e) => e))(element).replace(/^(the|a) /i, '').replace(/\W/, ''),
+    (element) => normalizeTitle((transform || ((e) => e))(element)),
   );
 }
