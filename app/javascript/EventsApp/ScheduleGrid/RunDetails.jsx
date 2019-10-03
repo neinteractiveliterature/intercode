@@ -40,8 +40,8 @@ const RunDetails = React.forwardRef(({
       <span ref={arrowProps.ref} style={arrowProps.style} className="arrow" />
       <div className="schedule-grid-run-details-content">
         <div className="popover-header">
-          <div className="row align-items-center">
-            <div className="col">
+          <div className="d-flex align-items-center">
+            <div className="flex-grow-1 schedule-grid-run-details-title">
               <strong>
                 {event.title}
               </strong>
@@ -58,7 +58,7 @@ const RunDetails = React.forwardRef(({
                   : []
               }
             </div>
-            <button type="button" className="btn btn-link btn-sm mr-2 text-dark" style={{ cursor: 'pointer' }} onClick={toggle}>
+            <button type="button" className="btn btn-link btn-sm text-dark" style={{ cursor: 'pointer' }} onClick={toggle}>
               <i className="fa fa-close" title="Close" />
             </button>
           </div>
