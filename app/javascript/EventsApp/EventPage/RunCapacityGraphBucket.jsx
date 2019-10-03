@@ -19,7 +19,9 @@ function describeCapacity(bucket, signupCount, signupsAvailable) {
     return pluralizeWithCount('slot', remainingCapacity);
   }
 
-  return `${remainingCapacity > 0 ? remainingCapacity : 0} of ${bucket.total_slots} left`;
+  const displayCount = signupCount > bucket.total_slots ? bucket.total_slots : signupCount;
+
+  return `${displayCount} of ${pluralizeWithCount('slot', bucket.total_slots)} filled`;
 }
 
 function RunCapacityGraphBucket({

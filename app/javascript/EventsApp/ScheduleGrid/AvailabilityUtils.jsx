@@ -37,7 +37,7 @@ export function describeAvailability(event, signupCountData) {
   }
 
   const {
-    unlimited, totalSlots, remainingCapacity,
+    unlimited, totalSlots, signupCount,
   } = calculateAvailability(event, signupCountData);
 
   if (unlimited) {
@@ -48,7 +48,9 @@ export function describeAvailability(event, signupCountData) {
     return null;
   }
 
-  return `${remainingCapacity} of ${pluralizeWithCount('slot', totalSlots)} left`;
+  const displayCount = signupCount > totalSlots ? totalSlots : signupCount;
+
+  return `${displayCount} of ${pluralizeWithCount('slot', totalSlots)} filled`;
 }
 
 export function describeWaitlist(event, signupCountData) {
