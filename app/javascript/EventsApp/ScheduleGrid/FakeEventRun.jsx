@@ -8,6 +8,7 @@ import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 
 function FakeEventRun({
   eventCategory, children, availability, unlimited, runFull, signupStatus, onClick, withRef,
+  zeroCapacity,
 }) {
   const config = { classifyEventsBy: 'category', showSignedUp: true };
   const signupCountData = { runFull: () => runFull };
@@ -29,6 +30,7 @@ function FakeEventRun({
     ...getRunClassificationStyles({
       config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
     }),
+    'zero-capacity': zeroCapacity,
   };
 
   return (
@@ -36,7 +38,7 @@ function FakeEventRun({
       className={classNames(
         'px-1 pb-1 schedule-grid-event small',
         getRunClassName({
-          config, signupCountData, signupStatus, event: {},
+          config, signupCountData, signupStatus, event: {}, unlimited,
         }),
       )}
       style={runStyle}
@@ -47,7 +49,11 @@ function FakeEventRun({
         {children}
       </div>
 
-      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} runStyle={runStyle} />
+      <AvailabilityBar
+        availabilityFraction={availability}
+        unlimited={unlimited}
+        runStyle={runStyle}
+      />
     </div>
   );
 }
@@ -61,6 +67,7 @@ FakeEventRun.propTypes = {
   signupStatus: PropTypes.string,
   onClick: PropTypes.func,
   withRef: PropTypes.func,
+  zeroCapacity: PropTypes.bool,
 };
 
 FakeEventRun.defaultProps = {
@@ -70,6 +77,7 @@ FakeEventRun.defaultProps = {
   signupStatus: null,
   onClick: undefined,
   withRef: undefined,
+  zeroCapacity: false,
 };
 
 export default FakeEventRun;

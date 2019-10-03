@@ -48,11 +48,8 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
     color: white;
   }
 
-  &.unlimited {
-    // border-right: 0;
+  &.unlimited, &.zero-capacity {
     border-radius: 0;
-    // border-top-right-radius: 0;
-    // border-bottom-right-radius: 0;
   }
 }
 
@@ -131,6 +128,7 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 
   .available {
     background-color: $schedule-grid-background;
+    border-radius: $schedule-grid-event-border-radius;
     position: absolute;
     top: 0;
     left: 0;
