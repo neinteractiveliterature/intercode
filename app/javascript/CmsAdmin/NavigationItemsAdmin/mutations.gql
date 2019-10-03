@@ -4,7 +4,7 @@ mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
   createCmsNavigationItem(input: { cms_navigation_item: $navigationItem }) {
     cms_navigation_item {
       id
-      ...NavigationItemFields
+      ...AdminNavigationItemFields
     }
   }
 }
@@ -13,7 +13,7 @@ mutation UpdateNavigationItem($id: Int!, $navigationItem: CmsNavigationItemInput
   updateCmsNavigationItem(input: { id: $id, cms_navigation_item: $navigationItem }) {
     cms_navigation_item {
       id
-      ...NavigationItemFields
+      ...AdminNavigationItemFields
     }
   }
 }
