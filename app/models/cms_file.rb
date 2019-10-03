@@ -7,4 +7,20 @@ class CmsFile < ApplicationRecord
 
   cadmus_file :file
   validate :validate_file_name_is_unique
+
+  def rename_file(filename)
+    new_path = File.join(File.dirname(file.path), filename)
+
+    if Concerns::EnvironmentBasedUploader.use_fog?
+      resource = AWS::S3::Resource.new
+      bucket = resource.bucket(CmsFileUploader.fog_directory)
+      object = bucket.object(file.path)
+      object.move_to(bucket: bucket_name, key: new_path)
+    else
+      File.rename(file.path, new_path)
+    end
+
+    update_column('file', filename)
+    reload
+  end
 end
