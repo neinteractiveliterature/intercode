@@ -12,6 +12,7 @@ import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import { mutator, Transforms } from '../ComposableFormUtils';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
+import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
 
 function autogenerateColors(eventCategory) {
   if (!eventCategory.default_color) {
@@ -107,9 +108,10 @@ function EventCategoryForm({
                     clickable
                     onClick={toggle}
                     eventCategory={value}
-                    availability={1.0}
+                    availability={variant === 'full' ? 0.0 : 0.5}
                     {...eventRunProps}
                   >
+                    <SignupStatusBadge signupStatus={eventRunProps.signupStatus} />
                     {humanize(variant)}
                   </FakeEventRun>
                 </div>
@@ -202,6 +204,7 @@ EventCategoryForm.propTypes = {
     full_color: PropTypes.string,
     event_form: PropTypes.shape({}),
     event_proposal_form: PropTypes.shape({}),
+    can_provide_tickets: PropTypes.bool,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   forms: PropTypes.arrayOf(PropTypes.shape({

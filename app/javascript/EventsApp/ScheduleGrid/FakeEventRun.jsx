@@ -4,9 +4,11 @@ import classNames from 'classnames';
 
 import AvailabilityBar from './AvailabilityBar';
 import { getRunClassificationStyles, getRunClassName } from './StylingUtils';
+import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 
 function FakeEventRun({
   eventCategory, children, availability, unlimited, runFull, signupStatus, onClick, withRef,
+  zeroCapacity,
 }) {
   const config = { classifyEventsBy: 'category', showSignedUp: true };
   const signupCountData = { runFull: () => runFull };
@@ -20,27 +22,38 @@ function FakeEventRun({
       : {}
   );
 
+  const runStyle = {
+    zIndex: 0,
+    position: 'relative',
+    height: PIXELS_PER_LANE - LANE_GUTTER_HEIGHT,
+    marginBottom: LANE_GUTTER_HEIGHT,
+    ...getRunClassificationStyles({
+      config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
+    }),
+    'zero-capacity': zeroCapacity,
+  };
+
   return (
     <div
       className={classNames(
         'px-1 pb-1 schedule-grid-event small',
         getRunClassName({
-          config, signupCountData, signupStatus, event: {},
+          config, signupCountData, signupStatus, event: {}, unlimited,
         }),
       )}
-      style={{
-        zIndex: 0,
-        position: 'relative',
-        ...getRunClassificationStyles({
-          config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
-        }),
-      }}
+      style={runStyle}
       ref={withRef}
       {...clickableProps}
     >
-      {children}
+      <div className="schedule-grid-event-content">
+        {children}
+      </div>
 
-      <AvailabilityBar availabilityFraction={availability} unlimited={unlimited} />
+      <AvailabilityBar
+        availabilityFraction={availability}
+        unlimited={unlimited}
+        runStyle={runStyle}
+      />
     </div>
   );
 }
@@ -54,6 +67,7 @@ FakeEventRun.propTypes = {
   signupStatus: PropTypes.string,
   onClick: PropTypes.func,
   withRef: PropTypes.func,
+  zeroCapacity: PropTypes.bool,
 };
 
 FakeEventRun.defaultProps = {
@@ -63,6 +77,7 @@ FakeEventRun.defaultProps = {
   signupStatus: null,
   onClick: undefined,
   withRef: undefined,
+  zeroCapacity: false,
 };
 
 export default FakeEventRun;

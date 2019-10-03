@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_23_155934) do
+ActiveRecord::Schema.define(version: 2019_10_02_003757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,9 +178,9 @@ ActiveRecord::Schema.define(version: 2019_09_23_155934) do
     t.text "name", null: false
     t.text "team_member_name", null: false
     t.text "scheduling_ui", null: false
-    t.text "default_color"
-    t.text "full_color"
-    t.text "signed_up_color"
+    t.text "default_color", null: false
+    t.text "full_color", null: false
+    t.text "signed_up_color", null: false
     t.boolean "can_provide_tickets", default: false, null: false
     t.bigint "event_form_id", null: false
     t.bigint "event_proposal_form_id"
@@ -245,9 +245,11 @@ ActiveRecord::Schema.define(version: 2019_09_23_155934) do
     t.boolean "private_signup_list", default: false, null: false
     t.bigint "event_category_id", null: false
     t.integer "minimum_age"
+    t.tsvector "title_vector"
     t.index ["convention_id"], name: "index_events_on_convention_id"
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["owner_id"], name: "index_events_on_owner_id"
+    t.index ["title_vector"], name: "index_events_on_title_vector", using: :gin
     t.index ["updated_by_id"], name: "index_events_on_updated_by_id"
   end
 
