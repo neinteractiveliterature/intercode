@@ -67,7 +67,7 @@ class MarkdownPresenter
   def sanitize_html(html, sanitize_content: true)
     if sanitize_content
       # Loofah will automatically sanitize CSS for us
-      sanitize(html, attributes: Rails::Html::WhiteListSanitizer.allowed_attributes + ['style'])
+      sanitize(html, attributes: Rails::Html::SafeListSanitizer.allowed_attributes + ['style'])
     else
       sanitize(html, scrubber: Rails::Html::TargetScrubber.new) # target nothing for removal
     end
