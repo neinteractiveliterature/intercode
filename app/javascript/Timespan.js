@@ -81,6 +81,27 @@ class Timespan {
     );
   }
 
+  expandStart(...args) {
+    return new Timespan(
+      this.start.clone().subtract(...args),
+      this.finish,
+    );
+  }
+
+  expandFinish(...args) {
+    return new Timespan(
+      this.start,
+      this.finish.clone().add(...args),
+    );
+  }
+
+  expand(...args) {
+    return new Timespan(
+      this.start.clone().subtract(...args),
+      this.finish.clone().add(...args),
+    );
+  }
+
   expandedToFit = this.union
 
   getLength(unit = 'millisecond') {

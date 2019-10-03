@@ -88,7 +88,7 @@ export function useScheduleGridProvider(config, convention, events) {
 
 function ScheduleGridSkeleton() {
   return (
-    <div className="schedule-grid mb-4 bg-light">
+    <div className="schedule-grid mb-4">
       <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
         <PageLoadingIndicator visible />
       </div>

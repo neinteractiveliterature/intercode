@@ -112,7 +112,7 @@ export default class Schedule {
   buildScheduleBlocksFromGroups = (groups, actualTimespan) => {
     const blocks = groups
       .map(({ eventRuns, id, ...props }) => [
-        new ScheduleBlock(id, actualTimespan, eventRuns), props,
+        new ScheduleBlock(id, actualTimespan, eventRuns, this), props,
       ]);
 
     if (this.config.filterEmptyGroups) {

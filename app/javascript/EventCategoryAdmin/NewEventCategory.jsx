@@ -26,6 +26,9 @@ function NewEventCategory({ history }) {
     team_member_name: 'team member',
     scheduling_ui: null,
     can_provide_tickets: false,
+    default_color: '#d4f5fa',
+    full_color: 'rgba(23, 162, 184, 0.7)',
+    signed_up_color: '#17a2b8',
   });
 
   const createClicked = async () => {
