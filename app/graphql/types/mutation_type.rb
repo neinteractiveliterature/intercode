@@ -16,6 +16,7 @@ class Types::MutationType < Types::BaseObject
   ### CmsFile
 
   field :createCmsFile, mutation: Mutations::CreateCmsFile
+  field :renameCmsFile, mutation: Mutations::RenameCmsFile
   field :deleteCmsFile, mutation: Mutations::DeleteCmsFile
 
   ### CmsGraphqlQuery

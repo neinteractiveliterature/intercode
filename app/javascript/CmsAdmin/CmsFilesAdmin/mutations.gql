@@ -8,6 +8,14 @@ mutation CreateCmsFile($file: Upload!) {
   }
 }
 
+mutation RenameCmsFile($id: Int!, $filename: String!) {
+  renameCmsFile(input: { id: $id, filename: $filename }) {
+    cms_file {
+      ...CmsFileFields
+    }
+  }
+}
+
 mutation DeleteCmsFile($id: Int!) {
   deleteCmsFile(input: { id: $id }) {
     clientMutationId
