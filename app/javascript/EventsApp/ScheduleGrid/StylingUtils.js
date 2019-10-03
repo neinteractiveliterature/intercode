@@ -32,6 +32,10 @@ export function getRunClassName({
     ),
     {
       'signed-up': config.showSignedUp && signupStatus != null,
+      'zero-capacity': (
+        event.registration_policy
+        && event.registration_policy.total_slots_including_not_counted === 0
+      ),
       full: (
         config.classifyEventsBy !== 'fullness'
         && signupCountData.runFull(event)
@@ -61,7 +65,10 @@ export function getEventCategoryStyles({ eventCategory, variant }) {
       return { backgroundColor: color, borderColor: color };
     }
 
-    return { backgroundColor: color, borderColor: eventCategory.signed_up_color };
+    return {
+      backgroundColor: color,
+      borderColor: eventCategory.signed_up_color,
+    };
   }
 
   return {};

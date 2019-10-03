@@ -11,7 +11,14 @@ function AvailabilityBar({ availabilityFraction, unlimited, runStyle }) {
 
   return (
     <div className={classNames('availability-bar', { unlimited })}>
-      <div className="available" />
+      <div
+        className="available"
+        style={{
+          boxShadow: unavailableBarWidth < 100.0
+            ? `inset 0 0 2px 2px ${(runStyle || {}).backgroundColor || 'transparent'}`
+            : null,
+        }}
+      />
       <div
         style={{
           width: `${unavailableBarWidth}%`,
@@ -26,9 +33,11 @@ function AvailabilityBar({ availabilityFraction, unlimited, runStyle }) {
 AvailabilityBar.propTypes = {
   availabilityFraction: PropTypes.number.isRequired,
   unlimited: PropTypes.bool,
+  runStyle: PropTypes.shape({}),
 };
 
 AvailabilityBar.defaultProps = {
+  runStyle: null,
   unlimited: false,
 };
 
