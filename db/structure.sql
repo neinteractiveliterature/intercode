@@ -454,9 +454,9 @@ CREATE TABLE public.event_categories (
     name text NOT NULL,
     team_member_name text NOT NULL,
     scheduling_ui text NOT NULL,
-    default_color text,
-    full_color text,
-    signed_up_color text,
+    default_color text NOT NULL,
+    full_color text NOT NULL,
+    signed_up_color text NOT NULL,
     can_provide_tickets boolean DEFAULT false NOT NULL,
     event_form_id bigint NOT NULL,
     event_proposal_form_id bigint,
@@ -3793,6 +3793,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190921202956'),
 ('20190921230626'),
 ('20190923155934'),
-('20191001204405');
+('20191001204405'),
+('20191002003757');
 
 
