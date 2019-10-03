@@ -7,11 +7,11 @@ class Mutations::SortCmsNavigationItems < Mutations::BaseMutation
     args[:sort_items].each do |sort_item|
       cms_navigation_item_attrs = sort_item[:cms_navigation_item].to_h.symbolize_keys
         .slice(:position, :navigation_section_id)
-      convention.cms_navigation_items.where(id: sort_item[:id])
+      cms_parent.cms_navigation_items.where(id: sort_item[:id])
         .update_all(cms_navigation_item_attrs)
     end
 
-    convention.touch # invalidate the navigation bar cache
+    cms_parent.touch # invalidate the navigation bar cache
 
     {}
   end
