@@ -112,31 +112,34 @@ function EventList({ history }) {
       </h1>
 
       <div className="d-flex align-items-start flex-wrap mt-4">
-        <div className="flex-grow-1 d-flex">
+        <div className="flex-grow-1 d-flex flex-wrap">
           {renderPagination()}
         </div>
 
-        <div className="d-flex flex-wrap">
-          <div className="mb-2">
-            {cachedEventCategories && (
-              <EventListCategoryDropdown
-                eventCategories={cachedEventCategories}
-                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                onChange={categoryChanged}
+        <div className="d-flex flex-column flex-sm-row">
+          <div className="d-flex flex-row mb-2">
+            <div>
+              {cachedEventCategories && (
+                <EventListCategoryDropdown
+                  eventCategories={cachedEventCategories}
+                  value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+                  onChange={categoryChanged}
+                />
+              )}
+            </div>
+
+            <div>
+              <EventListSortDropdown
+                showConventionOrder={!loading && data.currentAbility.can_read_schedule}
+                value={sorted}
+                onChange={onSortedChange}
               />
-            )}
+            </div>
           </div>
 
-          <div className="mb-2">
-            <EventListSortDropdown
-              showConventionOrder={!loading && data.currentAbility.can_read_schedule}
-              value={sorted}
-              onChange={onSortedChange}
-            />
-          </div>
-
-          <div className="ml-2">
+          <div className="ml-2 flex-grow-1">
             <SearchInput
+              label="Search"
               value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value}
               onChange={titlePrefixChanged}
             />

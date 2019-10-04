@@ -27,7 +27,6 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
           className="btn btn-link dropdown-toggle"
           ref={ref}
           onClick={toggle}
-          style={{ whiteSpace: 'normal' }}
         >
           {categoryDescription}
         </button>
