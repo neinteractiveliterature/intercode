@@ -306,6 +306,9 @@ GEM
     parser (2.6.3.0)
       ast (~> 2.4.0)
     pg (1.1.4)
+    pg_search (2.3.0)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
     platform-api (2.2.0)
       heroics (~> 0.0.25)
       moneta (~> 1.0.0)
@@ -529,6 +532,7 @@ DEPENDENCIES
   oj (~> 3.9.2)
   parallel
   pg
+  pg_search
   platform-api
   pry-rails
   pry-remote
