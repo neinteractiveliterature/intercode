@@ -33,8 +33,9 @@ FROM build-production AS test
 
 ENV RAILS_ENV test
 
+USER root
+RUN apk add --no-cache postgresql-client
 USER www
-WORKDIR /usr/src/build
 
 RUN mv public/packs public/packs-test \
   && curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter \
