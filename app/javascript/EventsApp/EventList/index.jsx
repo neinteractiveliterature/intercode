@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 
@@ -18,6 +18,7 @@ import {
 } from '../../Tables/TableUtils';
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
+import SearchInput from '../../BuiltInFormControls/SearchInput';
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
@@ -48,6 +49,26 @@ function EventList({ history }) {
   const [cachedPageCount, setCachedPageCount] = useState(null);
   const onPageChange = (newPage) => reactTableOnPageChange(newPage - 1);
 
+  const changeFilterValue = useCallback(
+    (fieldId, value) => {
+      onFilteredChange((prevFiltered) => [
+        ...(prevFiltered || []).filter(({ id }) => id !== fieldId),
+        { id: fieldId, value },
+      ]);
+    },
+    [onFilteredChange],
+  );
+
+  const categoryChanged = useCallback(
+    (value) => changeFilterValue('category', value),
+    [changeFilterValue],
+  );
+
+  const titlePrefixChanged = useCallback(
+    (value) => changeFilterValue('title_prefix', value),
+    [changeFilterValue],
+  );
+
   useEffect(
     () => {
       if (!loading && !error) {
@@ -76,7 +97,7 @@ function EventList({ history }) {
     <>
       <EventListPagination
         currentPage={page + 1}
-        totalPages={totalPages}
+        totalPages={totalPages || 0}
         onPageChange={onPageChange}
       />
       <EventListPageSizeControl pageSize={pageSize} onPageSizeChange={onPageSizeChange} />
@@ -101,12 +122,7 @@ function EventList({ history }) {
               <EventListCategoryDropdown
                 eventCategories={cachedEventCategories}
                 value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                onChange={(value) => {
-                  onFilteredChange([
-                    ...(filtered || []).filter(({ id }) => id !== 'category'),
-                    { id: 'category', value },
-                  ]);
-                }}
+                onChange={categoryChanged}
               />
             )}
           </div>
@@ -120,16 +136,9 @@ function EventList({ history }) {
           </div>
 
           <div className="ml-2">
-            <input
-              type="search"
-              className="form-control"
-              value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value || ''}
-              onChange={(event) => {
-                onFilteredChange([
-                  ...(filtered || []).filter(({ id }) => id !== 'title_prefix'),
-                  { id: 'title_prefix', value: event.target.value },
-                ]);
-              }}
+            <SearchInput
+              value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value}
+              onChange={titlePrefixChanged}
             />
           </div>
         </div>
@@ -164,12 +173,6 @@ function EventList({ history }) {
 }
 
 EventList.propTypes = {
-  convention: PropTypes.shape({
-    event_categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
-  currentAbility: PropTypes.shape({
-    can_read_schedule: PropTypes.bool.isRequired,
-  }).isRequired,
   history: PropTypes.shape({}).isRequired,
 };
 

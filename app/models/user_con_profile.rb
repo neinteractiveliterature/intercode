@@ -95,10 +95,15 @@ class UserConProfile < ApplicationRecord
     user.privileges
   end
 
-  %w[is_team_member can_have_bio].each do |scope_name|
-    define_method "#{scope_name}?" do
-      self.class.public_send(scope_name).where(id: id).any?
-    end
+  def is_team_member? # rubocop:disable Naming/PredicateName
+    return true if team_members.loaded? && team_members.size > 0
+    self.class.is_team_member.where(id: id).any?
+  end
+
+  def can_have_bio?
+    return true if team_members.loaded? && team_members.size > 0
+    return true if staff_positions.loaded? && staff_positions.size > 0
+    self.class.is_team_member.where(id: id).any?
   end
 
   def email=(email)

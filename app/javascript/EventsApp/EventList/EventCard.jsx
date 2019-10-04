@@ -129,15 +129,9 @@ const EventCard = ({
             <h4 className="m-0">
               <Link to={buildEventUrl(event)}>{event.title}</Link>
             </h4>
-            {
-              event.category !== 'filler'
-                ? (
-                  <div className="lead ml-2 text-muted">
-                    {event.event_category.name}
-                  </div>
-                )
-                : null
-            }
+            <div className="lead ml-2 text-muted">
+              {event.event_category.name}
+            </div>
           </div>
           <div className="lead">
             {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
@@ -177,9 +171,14 @@ const EventCard = ({
 EventCard.propTypes = {
   event: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    category: PropTypes.string.isRequired,
+    event_category: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      team_member_name: PropTypes.string.isRequired,
+    }).isRequired,
     title: PropTypes.string,
     form_response_attrs_json: PropTypes.string.isRequired,
+    short_blurb_html: PropTypes.string.isRequired,
+    team_members: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     created_at: PropTypes.string.isRequired,
   }).isRequired,
   timezoneName: PropTypes.string.isRequired,
