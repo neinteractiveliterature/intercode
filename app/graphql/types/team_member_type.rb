@@ -17,7 +17,7 @@ class Types::TeamMemberType < Types::BaseObject
   end
 
   def user_con_profile
-    RecordLoader.for(UserConProfile).load(object.user_con_profile_id)
+    RecordLoader.for(UserConProfile, includes: [:team_members]).load(object.user_con_profile_id)
   end
 
   def receive_signup_email
