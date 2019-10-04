@@ -176,3 +176,9 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
 }
+
+.schedule-grid-run-details-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
