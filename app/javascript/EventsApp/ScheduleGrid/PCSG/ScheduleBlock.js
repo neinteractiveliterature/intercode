@@ -19,8 +19,12 @@ class ScheduleBlock {
   getRunCountInTimespan(event, timespan) {
     return event.runs
       .filter((run) => {
-        const runTimespan = this.eventRuns.find((eventRun) => eventRun.runId === run.id).timespan;
-        return runTimespan.overlapsTimespan(timespan);
+        const eventRun = this.eventRuns.find((er) => er.runId === run.id);
+        if (!eventRun) {
+          return false;
+        }
+
+        return eventRun.timespan.overlapsTimespan(timespan);
       })
       .length;
   }
