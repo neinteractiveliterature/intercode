@@ -25,6 +25,9 @@ module Intercode
     config.middleware.use Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
+    # To enable tsvectors and triggers; hopefully can get rid of this at some point :(
+    config.active_record.schema_format = :sql
+
     config.generators do |g|
       g.template_engine :erb
       g.test_framework :test_unit, fixture: false

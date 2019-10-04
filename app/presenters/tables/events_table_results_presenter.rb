@@ -1,6 +1,8 @@
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = Pundit.policy_scope(pundit_user, convention.events.where(status: 'active'))
+    scope = Pundit.policy_scope(
+      pundit_user, convention.events.where(status: 'active').includes(:convention)
+    )
     new(
       base_scope: scope,
       convention: convention,
@@ -31,6 +33,8 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
       value.present? ? scope.where(event_category_id: value) : scope
     when :title
       Concerns::Names.string_search(scope, value, ['title'])
+    when :title_prefix
+      value.present? ? scope.title_prefix(value) : scope
     else
       scope
     end

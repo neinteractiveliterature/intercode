@@ -22,7 +22,6 @@ class Types::EventType < Types::BaseObject
   field :created_at, Types::DateType, null: true
 
   field :event_category, Types::EventCategoryType, null: false
-  field :team_members, [Types::TeamMemberType], null: false
 
   association_loaders Event, :event_category, :team_members
 
@@ -52,7 +51,7 @@ class Types::EventType < Types::BaseObject
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], context[:pundit_user]).load(object)
+    EventRunsLoader.for(args[:start], args[:finish], pundit_user).load(object)
   end
 
   field :run, Types::RunType, null: false do
@@ -61,6 +60,12 @@ class Types::EventType < Types::BaseObject
 
   def run(**args)
     RecordLoader.for(Run).load(args[:id])
+  end
+
+  field :team_members, [Types::TeamMemberType], null: false
+
+  def team_members
+    EventTeamMembersLoader.for(pundit_user).load(object)
   end
 
   field :provided_tickets, [Types::TicketType], null: false do

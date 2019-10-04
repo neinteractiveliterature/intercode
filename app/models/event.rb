@@ -2,9 +2,22 @@ class Event < ApplicationRecord
   include Concerns::AgeRestrictions
   include Concerns::EventEmail
   include Concerns::FormResponse
+  include PgSearch::Model
 
   STATUSES = Set.new(%w[active dropped])
   CON_MAIL_DESTINATIONS = Set.new(%w[event_email gms])
+
+  pg_search_scope(
+    :title_prefix,
+    against: :title,
+    using: {
+      tsearch: {
+        dictionary: 'english',
+        prefix: true,
+        tsvector_column: 'title_vector'
+      }
+    }
+  )
 
   register_form_response_attrs :title,
     :author,
