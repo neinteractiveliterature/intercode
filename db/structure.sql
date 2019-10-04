@@ -3063,10 +3063,10 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
--- Name: events tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+-- Name: events tsvector_update_event_title; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'pg_catalog.english', 'title');
+CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'pg_catalog.simple', 'title');
 
 
 --
@@ -3794,6 +3794,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190921230626'),
 ('20190923155934'),
 ('20191001204405'),
-('20191002003757');
+('20191002003757'),
+('20191004200432');
 
 
