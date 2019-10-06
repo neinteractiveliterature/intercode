@@ -8,7 +8,7 @@ function BootstrapFormInput(props) {
   const inputId = useUniqueId(`${props.name || 'input'}-`);
 
   const {
-    helpText, label, hideLabel, onChange, onTextChange, ...otherProps
+    helpText, label, hideLabel, invalidFeedback, onChange, onTextChange, ...otherProps
   } = props;
 
   const onChangeProp = onChange || ((event) => { onTextChange(event.target.value); });
@@ -27,6 +27,7 @@ function BootstrapFormInput(props) {
           ? <small className="form-text text-muted">{helpText}</small>
           : null
       }
+      {invalidFeedback && <div className="invalid-feedback">{invalidFeedback}</div>}
     </div>
   );
 }
@@ -41,6 +42,7 @@ BootstrapFormInput.propTypes = {
   onTextChange: PropTypes.func,
   helpText: PropTypes.node,
   disabled: PropTypes.bool,
+  invalidFeedback: PropTypes.node,
 };
 
 BootstrapFormInput.defaultProps = {
@@ -51,6 +53,7 @@ BootstrapFormInput.defaultProps = {
   helpText: null,
   onChange: null,
   onTextChange: null,
+  invalidFeedback: null,
 };
 
 export default BootstrapFormInput;
