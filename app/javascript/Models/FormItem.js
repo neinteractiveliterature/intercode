@@ -28,23 +28,29 @@ function multipleChoiceValueIsComplete(value) {
   return false;
 }
 
+function registrationPolicyBucketIsComplete(value) {
+  if (typeof value !== 'object') {
+    return false;
+  }
+
+  if (!value.name || !value.description || !value.key) {
+    return false;
+  }
+
+  return true;
+}
+
 function registrationPolicyValueIsComplete(value) {
   if (typeof value !== 'object') {
     return false;
   }
 
   const policy = value;
-  if (policy.buckets.length === 0) {
+  if ((policy.buckets || []).length === 0) {
     return false;
   }
 
-  return policy.buckets.every((bucket) => {
-    if (!bucket.name || !bucket.description || !bucket.key) {
-      return false;
-    }
-
-    return true;
-  });
+  return policy.buckets.every(registrationPolicyBucketIsComplete);
 }
 
 function timeblockPreferenceValueIsComplete(value) {

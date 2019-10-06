@@ -56,7 +56,7 @@ class RegistrationBucketRow extends React.Component {
               checked={!this.props.registrationBucket.slots_limited}
               onChange={(event) => { this.mutator.slots_limited(event.target.checked); }}
             />
-            {' '}
+
             Unlimited?
           </label>
         </div>
@@ -70,13 +70,15 @@ class RegistrationBucketRow extends React.Component {
               checked={!this.props.registrationBucket.not_counted}
               onChange={(event) => { this.mutator.not_counted(event.target.checked); }}
             />
-            {' '}
+
             Counted?
           </label>
           <HelpPopover>
             &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups,
-            and are included in the &ldquo;No Preference&rdquo; option. If the bucket is <em>not</em>
-            {' '}
+            and are included in the &ldquo;No Preference&rdquo; option. If the bucket is
+{' '}
+<em>not</em>
+
             counted, any attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this
             bucket.
           </HelpPopover>
@@ -92,7 +94,7 @@ class RegistrationBucketRow extends React.Component {
                 checked={this.props.registrationBucket.expose_attendees}
                 onChange={(event) => { this.mutator.expose_attendees(event.target.checked); }}
               />
-              {' '}
+
               Expose attendees?
             </label>
             <HelpPopover>
@@ -176,7 +178,10 @@ class RegistrationBucketRow extends React.Component {
             placeholder="Bucket name"
             label="Bucket name"
             hideLabel
-            className="form-control"
+            className={classNames('form-control', {
+              'is-invalid': this.props.validateComplete && !this.props.registrationBucket.name,
+            })}
+            invalidFeedback="This field is required."
           />
         </div>
 
@@ -187,7 +192,10 @@ class RegistrationBucketRow extends React.Component {
           hideLabel
           onTextChange={this.mutator.description}
           placeholder="Bucket description"
-          className="form-control"
+          className={classNames('form-control', {
+            'is-invalid': this.props.validateComplete && !this.props.registrationBucket.description,
+          })}
+          invalidFeedback="This field is required."
         />
       </td>,
     ];
@@ -240,12 +248,14 @@ RegistrationBucketRow.propTypes = {
   lockNameAndDescription: PropTypes.bool,
   lockLimited: PropTypes.bool,
   lockDelete: PropTypes.bool,
+  validateComplete: PropTypes.bool,
 };
 
 RegistrationBucketRow.defaultProps = {
   lockNameAndDescription: false,
   lockLimited: false,
   lockDelete: false,
+  validateComplete: false,
 };
 
 export default RegistrationBucketRow;

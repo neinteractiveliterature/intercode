@@ -5,7 +5,7 @@ import { RegistrationPolicyPropType } from '../../RegistrationPolicy/Registratio
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
 
 function RegistrationPolicyItemInput({
-  formItem, value, valueInvalid, onChange,
+  formItem, value, valueInvalid, onChange, onInteract,
 }) {
   const defaultValue = useMemo(
     () => {
@@ -22,14 +22,20 @@ function RegistrationPolicyItemInput({
     ? defaultValue
     : value;
 
+  const valueChanged = (newValue) => {
+    onInteract();
+    onChange(newValue);
+  };
+
   return (
     <fieldset className="form-group">
       <div className={classNames({ 'border-0': !valueInvalid, 'border rounded border-danger': valueInvalid })}>
         <RegistrationPolicyEditor
           registrationPolicy={effectiveValue}
-          onChange={onChange}
+          onChange={valueChanged}
           presets={formItem.properties.presets}
           allowCustom={formItem.properties.allow_custom}
+          validateComplete={valueInvalid}
         />
         {
           valueInvalid
@@ -48,7 +54,9 @@ function RegistrationPolicyItemInput({
 RegistrationPolicyItemInput.propTypes = {
   formItem: PropTypes.shape({
     properties: PropTypes.shape({
-      presets: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      presets: PropTypes.arrayOf(PropTypes.shape({
+        policy: PropTypes.shape({}).isRequired,
+      })).isRequired,
       allow_custom: PropTypes.bool.isRequired,
     }).isRequired,
   }).isRequired,
