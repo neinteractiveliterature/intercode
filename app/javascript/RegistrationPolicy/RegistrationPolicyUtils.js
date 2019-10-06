@@ -15,7 +15,7 @@ export function presetMatchesPolicy(registrationPolicy, preset) {
     return false;
   }
 
-  const allBucketOptionsMatch = registrationPolicy.buckets
+  const allBucketOptionsMatch = (registrationPolicy.buckets || [])
     .every((bucket) => preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key
       && !!presetBucket.slots_limited === !!bucket.slots_limited
       && !!presetBucket.not_counted === !!bucket.not_counted
@@ -53,7 +53,7 @@ export function bucketSortCompare(a, b) {
 }
 
 export function isPreventNoPreferenceSignupsApplicable(registrationPolicy) {
-  return registrationPolicy.buckets
+  return (registrationPolicy.buckets || [])
     .filter((bucket) => bucket.slots_limited)
     .length > 1;
 }
