@@ -4,6 +4,22 @@ query AppRootQuery($path: String!) {
     content_html
   }
 
+  currentAbility {
+    can_read_schedule
+    can_read_schedule_with_counts
+    can_list_events
+    can_read_user_con_profiles
+    can_update_convention
+    can_update_event_categories
+    can_read_event_proposals
+    can_manage_runs
+    can_manage_forms
+    can_read_any_mailing_list
+    can_manage_oauth_applications
+    can_read_reports
+    can_manage_rooms
+  }
+
   currentUser {
     id
     name
@@ -37,10 +53,17 @@ query AppRootQuery($path: String!) {
   convention {
     id
     name
+    accepting_proposals
     site_mode
     signup_mode
     timezone_name
     clickwrap_agreement
+    tickets_available_for_purchase
+    ticket_name
+    ticket_types {
+      id
+      publicly_available
+    }
   }
 
   rootSite {

@@ -120,34 +120,6 @@ class NavigationBarPresenter
     end
   end
 
-  EVENTS_NAVIGATION_ITEMS = [
-    NavigationItem.define do
-      label 'Con Schedule'
-      url '/events/schedule'
-      visible? { Pundit.policy(pundit_user, convention).schedule? }
-    end,
-    NavigationItem.define do
-      label 'Con Schedule by Room'
-      url '/events/schedule_by_room'
-      visible? { Pundit.policy(pundit_user, convention).schedule? }
-    end,
-    NavigationItem.define do
-      label 'List of Events'
-      url '/events'
-      visible? { Pundit.policy(pundit_user, convention).list_events? }
-    end,
-    NavigationItem.define do
-      label 'Schedule With Counts'
-      url '/events/schedule_with_counts'
-      visible? { Pundit.policy(pundit_user, convention).schedule_with_counts? }
-    end,
-    NavigationItem.define do
-      label 'Propose an Event'
-      url '/pages/new-proposal'
-      visible? { convention.accepting_proposals }
-    end
-  ]
-
   SITE_CONTENT_NAVIGATION_ITEM = NavigationItem.define do
     label 'Site Content'
     url '/cms_pages'
@@ -263,33 +235,6 @@ class NavigationBarPresenter
     end
   ]
 
-  USER_NAVIGATION_ITEMS = [
-    NavigationItem.define do
-      label 'My Account'
-      url { edit_user_registration_path }
-      visible? { user_signed_in? }
-    end,
-    NavigationItem.define do
-      label { "My #{convention.name} Profile" }
-      url '/my_profile'
-      visible? { user_con_profile }
-    end,
-    NavigationItem.define do
-      label 'My Order History'
-      url '/order_history'
-      visible? { user_con_profile }
-    end,
-    NavigationItem.define do
-      label 'Authorized Applications'
-      url '/oauth/applications-embed'
-      visible? { user_signed_in? }
-    end,
-    SignOutNavigationItem.define do
-      label 'Log Out'
-      visible? { user_signed_in? }
-    end
-  ]
-
   attr_reader :navbar_classes, :request, :user_con_profile, :pundit_user, :user_signed_in, :convention
   alias user_signed_in? user_signed_in
 
@@ -306,24 +251,8 @@ class NavigationBarPresenter
     NavigationBar.new(navbar_classes, root_navigation_items)
   end
 
-  def ticket_purchase_navigation_items
-    if convention&.tickets_available_for_purchase? && convention.site_mode != 'single_event'
-      [TicketPurchaseNavigationItem.new]
-    else
-      []
-    end
-  end
-
   def root_navigation_items
     [
-      *ticket_purchase_navigation_items,
-      *(
-        if convention && convention.site_mode != 'single_event'
-          [NavigationSection.new('Events', events_navigation_items)]
-        else
-          []
-        end
-      ),
       *cms_navigation_item_sections,
       *(
         if convention
@@ -333,10 +262,6 @@ class NavigationBarPresenter
         end
       )
     ]
-  end
-
-  def events_navigation_items
-    build_navigation_items(EVENTS_NAVIGATION_ITEMS)
   end
 
   def cms_navigation_item_sections
@@ -361,10 +286,6 @@ class NavigationBarPresenter
 
   def root_site_admin_navigation_items
     build_navigation_items(ROOT_SITE_ADMIN_NAVIGATION_ITEMS)
-  end
-
-  def user_navigation_items
-    build_navigation_items(USER_NAVIGATION_ITEMS)
   end
 
   def navbar_brand

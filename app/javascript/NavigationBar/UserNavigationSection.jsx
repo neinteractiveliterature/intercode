@@ -1,5 +1,4 @@
 import React, { forwardRef, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
@@ -182,12 +181,5 @@ function UserNavigationSection({ location }) {
 
   return currentUser ? renderLoggedInContent() : renderLoggedOutContent();
 }
-
-UserNavigationSection.propTypes = {
-  item: PropTypes.shape({
-    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
-  renderNavigationItems: PropTypes.func.isRequired,
-};
 
 export default withRouter(UserNavigationSection);

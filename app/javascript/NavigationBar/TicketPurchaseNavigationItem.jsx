@@ -1,20 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 
-import { NavigationBarQuery } from './queries.gql';
-import useQuerySuspended from '../useQuerySuspended';
+import AppRootContext from '../AppRootContext';
 
 function TicketPurchaseNavigationItem() {
-  const { data, error } = useQuerySuspended(NavigationBarQuery);
+  const { myProfile, ticketName, ticketTypes } = useContext(AppRootContext);
 
-  if (error) {
-    return null;
-  }
-
-  const { convention, myProfile } = data;
-
-  if (!convention) {
+  if (!ticketTypes) {
     return null;
   }
 
@@ -22,7 +15,7 @@ function TicketPurchaseNavigationItem() {
     return null;
   }
 
-  if (!convention.ticket_types.some((ticketType) => ticketType.publicly_available)) {
+  if (!ticketTypes.some((ticketType) => ticketType.publicly_available)) {
     return null;
   }
 
@@ -32,11 +25,11 @@ function TicketPurchaseNavigationItem() {
         <span className="d-inline d-md-none d-lg-inline">
           Buy a
           {' '}
-          {convention.ticket_name}
+          {ticketName}
           !
         </span>
         <span className="d-none d-md-inline d-lg-none">
-          {humanize(convention.ticket_name)}
+          {humanize(ticketName)}
           !
         </span>
       </Link>
