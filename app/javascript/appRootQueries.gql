@@ -18,6 +18,14 @@ query AppRootQuery($path: String!) {
     can_manage_oauth_applications
     can_read_reports
     can_manage_rooms
+    can_manage_signups
+    can_manage_any_cms_content
+    can_manage_staff_positions
+    can_read_orders
+    can_manage_ticket_types
+    can_read_user_activity_alerts
+    can_read_organizations
+    can_read_users
   }
 
   currentUser {
@@ -56,6 +64,7 @@ query AppRootQuery($path: String!) {
     accepting_proposals
     site_mode
     signup_mode
+    ticket_mode
     timezone_name
     clickwrap_agreement
     tickets_available_for_purchase

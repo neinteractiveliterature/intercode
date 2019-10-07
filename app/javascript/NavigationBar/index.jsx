@@ -1,12 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useQuery } from 'react-apollo-hooks';
 import sortBy from 'lodash-es/sortBy';
+import { titleize } from 'inflected';
 
-import { NavigationBarQuery } from './queries.gql';
-import ErrorDisplay from '../ErrorDisplay';
-import renderNavigationItems from './renderNavigationItems';
 import AppRootContext from '../AppRootContext';
 import NavigationBrand from './NavigationBrand';
 import UserNavigationSection from './UserNavigationSection';
@@ -15,74 +12,18 @@ import NavigationItem from './NavigationItem';
 import NavigationSection from './NavigationSection';
 import { sortByLocaleString } from '../ValueUtils';
 
-function EventsNavigationSection() {
-  const { conventionAcceptingProposals, currentAbility } = useContext(AppRootContext);
-
-  return (
-    <NavigationSection label="Events">
-      {currentAbility.can_read_schedule && (
-        <NavigationItem
-          inSection
-          item={{
-            label: 'Con Schedule',
-            url: '/events/schedule',
-          }}
-        />
-      )}
-      {currentAbility.can_read_schedule && (
-        <NavigationItem
-          inSection
-          item={{
-            label: 'Con Schedule by Room',
-            url: '/events/schedule_by_room',
-          }}
-        />
-      )}
-      {currentAbility.can_list_events && (
-        <NavigationItem
-          inSection
-          item={{
-            label: 'List of Events',
-            url: '/events',
-          }}
-        />
-      )}
-      {conventionAcceptingProposals && (
-        <NavigationItem
-          inSection
-          item={{
-            label: 'Propose an Event',
-            url: '/pages/new-proposal',
-          }}
-        />
-      )}
-      {currentAbility.can_read_schedule_with_counts && (
-        <NavigationItem
-          inSection
-          item={{
-            label: 'Schedule With Counts',
-            url: '/events/schedule_with_counts',
-          }}
-        />
-      )}
-    </NavigationSection>
-  );
-}
-
-function GeneratedNavigationSection({ items }) {
+function GeneratedNavigationSection({ label, items }) {
   const sortedItems = sortByLocaleString(items, (item) => (item || {}).label || '');
 
   if (items.some((item) => item)) {
     return (
-      <NavigationSection label="Admin">
+      <NavigationSection label={label}>
         {sortedItems.map((item) => item && (
           <NavigationItem
             inSection
             key={`${item.label}-${item.url}`}
-            item={{
-              label: item.label,
-              url: item.url,
-            }}
+            label={item.label}
+            url={item.url}
           />
         ))}
       </NavigationSection>
@@ -92,11 +33,53 @@ function GeneratedNavigationSection({ items }) {
   return null;
 }
 
-function ConventionAdminNavigationSection() {
-  const { currentAbility, siteMode } = useContext(AppRootContext);
+function EventsNavigationSection() {
+  const { conventionAcceptingProposals, currentAbility } = useContext(AppRootContext);
 
   return (
     <GeneratedNavigationSection
+      label="Events"
+      items={[
+        currentAbility.can_read_schedule && {
+          label: 'Con Schedule',
+          url: '/events/schedule',
+        },
+        currentAbility.can_read_schedule && {
+          label: 'Con Schedule by Room',
+          url: '/events/schedule_by_room',
+        },
+        currentAbility.can_list_events && {
+          label: 'List of Events',
+          url: '/events',
+        },
+        conventionAcceptingProposals && {
+          label: 'Propose an Event',
+          url: '/pages/new-proposal',
+        },
+        currentAbility.can_read_schedule_with_counts && {
+          label: 'Schedule With Counts',
+          url: '/events/schedule_with_counts',
+        },
+      ]}
+    />
+  );
+}
+
+function generateSiteContentItem(currentAbility) {
+  return currentAbility.can_manage_any_cms_content && {
+    label: 'Site Content',
+    url: '/cms_pages',
+  };
+}
+
+function ConventionAdminNavigationSection() {
+  const {
+    currentAbility, signupMode, siteMode, ticketMode, ticketName,
+  } = useContext(AppRootContext);
+
+  return (
+    <GeneratedNavigationSection
+      label="Admin"
       items={[
         currentAbility.can_read_user_con_profiles && {
           label: 'Attendees',
@@ -138,24 +121,54 @@ function ConventionAdminNavigationSection() {
           label: 'Rooms',
           url: '/rooms',
         },
+        currentAbility.can_manage_signups && signupMode === 'moderated' && {
+          label: 'Signup Moderation',
+          url: '/signup_moderation',
+        },
+        generateSiteContentItem(currentAbility),
+        currentAbility.can_manage_staff_positions && {
+          label: 'Staff Positions',
+          url: '/staff_positions',
+        },
+        currentAbility.can_read_orders && {
+          label: 'Store',
+          url: '/admin_store',
+        },
+        currentAbility.can_manage_ticket_types && ticketMode !== 'disabled' && {
+          label: `${titleize(ticketName)} Types`,
+          url: '/ticket_types',
+        },
+        currentAbility.can_read_user_activity_alerts && {
+          label: 'User Activity Alerts',
+          url: '/user_activity_alerts',
+        },
       ]}
     />
   );
 }
 
 function RootSiteAdminNavigationSection() {
-  const items = [
+  const { currentAbility } = useContext(AppRootContext);
 
-  ];
-
-  if (items.some((item) => item)) {
-    return <NavigationSection label="Admin">{items}</NavigationSection>;
-  }
-
-  return null;
+  return (
+    <GeneratedNavigationSection
+      label="Admin"
+      items={[
+        currentAbility.can_read_organizations && {
+          label: 'Organizations',
+          url: '/organizations',
+        },
+        generateSiteContentItem(currentAbility),
+        currentAbility.can_read_users && {
+          label: 'Users',
+          url: '/users',
+        },
+      ]}
+    />
+  );
 }
 
-function NavigationBarContent({ navbarClasses, items }) {
+function NavigationBarContent({ navbarClasses, rootItems }) {
   const {
     conventionName, rootSiteName, siteMode, ticketsAvailableForPurchase,
   } = useContext(AppRootContext);
@@ -175,7 +188,24 @@ function NavigationBarContent({ navbarClasses, items }) {
             {conventionName && siteMode !== 'single_event' && (
               <EventsNavigationSection />
             )}
-            {renderNavigationItems(items, false)}
+            {rootItems.map((rootItem) => {
+              if (rootItem.sectionItems) {
+                return (
+                  <NavigationSection label={rootItem.title} key={rootItem.id}>
+                    {rootItem.sectionItems.map((sectionItem) => (
+                      <NavigationItem
+                        label={sectionItem.title}
+                        url={`/pages/${sectionItem.page.slug}`}
+                        key={sectionItem.id}
+                        inSection
+                      />
+                    ))}
+                  </NavigationSection>
+                );
+              }
+
+              return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
+            })}
             {conventionName
               ? <ConventionAdminNavigationSection />
               : <RootSiteAdminNavigationSection />}
@@ -191,14 +221,13 @@ function NavigationBarContent({ navbarClasses, items }) {
 
 NavigationBarContent.propTypes = {
   navbarClasses: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  rootItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
 
 function NavigationBar({ navbarClasses }) {
   const { cmsNavigationItems } = useContext(AppRootContext);
-  const { data, loading, error } = useQuery(NavigationBarQuery);
 
   const rootNavigationItems = useMemo(
     () => {
@@ -221,28 +250,9 @@ function NavigationBar({ navbarClasses }) {
     [cmsNavigationItems],
   );
 
-  if (loading) {
-    return (
-      <nav className={classNames('navbar', navbarClasses)} role="navigation">
-        <div className="container">
-          <div className="navbar-brand">&nbsp;</div>
-        </div>
-      </nav>
-    );
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!data.navigationBar) {
-    return null;
-  }
-
   return (
     <MemoizedNavigationBarContent
       rootItems={rootNavigationItems}
-      items={data.navigationBar.items}
       navbarClasses={navbarClasses}
     />
   );

@@ -243,27 +243,6 @@ class Types::QueryType < Types::BaseObject
     convention.forms.find(args[:id])
   end
 
-  field :navigation_bar, Types::NavigationBarType, null: false do
-    argument :cms_layout_id, Integer, required: false, camelize: false
-  end
-
-  def navigation_bar(**args)
-    cms_layout = if args[:cms_layout_id]
-      CmsLayout.find(args[:cms_layout_id])
-    else
-      cms_parent.default_layout
-    end
-
-    NavigationBarPresenter.new(
-      cms_layout&.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES,
-      nil, # request
-      context[:pundit_user],
-      context[:user_con_profile],
-      !context[:current_user].nil?,
-      context[:convention]
-    ).navigation_bar
-  end
-
   field :staff_position, Types::StaffPositionType, null: true do
     argument :id, Integer, required: true
   end

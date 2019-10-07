@@ -13,6 +13,7 @@ const AppRootContext = React.createContext({
   siteMode: null,
   signupMode: null,
   ticketsAvailableForPurchase: null,
+  ticketMode: null,
   ticketName: null,
   ticketTypes: null,
   timezoneName: null,
