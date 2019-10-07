@@ -76,8 +76,8 @@ class RegistrationBucketRow extends React.Component {
           <HelpPopover>
             &ldquo;Counted&rdquo; buckets count towards the attendee&rsquo;s number of signups,
             and are included in the &ldquo;No Preference&rdquo; option. If the bucket is
-{' '}
-<em>not</em>
+
+            <em>not</em>
 
             counted, any attendees who click &ldquo;No Preference&rdquo; won&rsquo;t end up in this
             bucket.
