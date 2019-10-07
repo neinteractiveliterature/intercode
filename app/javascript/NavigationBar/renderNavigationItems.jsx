@@ -1,7 +1,6 @@
 import React from 'react';
 
 import NavigationItem from './NavigationItem';
-import NavigationBrand from './NavigationBrand';
 import NavigationCollapse from './NavigationCollapse';
 import NavigationSection from './NavigationSection';
 import SignOutNavigationItem from './SignOutNavigationItem';
@@ -12,8 +11,6 @@ let renderNavigationItems;
 
 export function renderNavigationItem(item, key, inSection) {
   switch (item.__typename) {
-    case 'NavigationBrand':
-      return <NavigationBrand item={item} key={key} />;
     case 'NavigationCollapse':
       return (
         <NavigationCollapse
