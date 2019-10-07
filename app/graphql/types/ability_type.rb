@@ -44,6 +44,12 @@ class Types::AbilityType < Types::BaseObject
     PagePolicy::ManageScope.new(pundit_user, cms_parent.pages).resolve.any?
   end
 
+  field :can_update_convention, Boolean, null: false
+
+  def can_update_convention
+    convention && policy(convention).update?
+  end
+
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
@@ -85,6 +91,12 @@ class Types::AbilityType < Types::BaseObject
     ModelPermissionLoader.for(Signup).load([pundit_user, :update_bucket, args[:signup_id]])
   end
 
+  field :can_update_event_categories, Boolean, null: false
+
+  def can_update_event_categories
+    convention && policy(EventCategory.new(convention: convention)).update?
+  end
+
   field :can_update_event, Boolean, null: false do
     argument :event_id, Integer, required: true, camelize: false
   end
@@ -104,7 +116,61 @@ class Types::AbilityType < Types::BaseObject
   field :can_read_schedule, Boolean, null: false
 
   def can_read_schedule
-    policy(convention).schedule?
+    convention && policy(convention).schedule?
+  end
+
+  field :can_read_schedule_with_counts, Boolean, null: false
+
+  def can_read_schedule_with_counts
+    convention && policy(convention).schedule_with_counts?
+  end
+
+  field :can_list_events, Boolean, null: false
+
+  def can_list_events
+    convention && policy(convention).list_events?
+  end
+
+  field :can_read_event_proposals, Boolean, null: false
+
+  def can_read_event_proposals
+    convention && policy(convention).view_event_proposals?
+  end
+
+  field :can_read_any_mailing_list, Boolean, null: false
+
+  def can_read_any_mailing_list
+    convention && policy(MailingListsPresenter.new(convention)).read_any_mailing_list?
+  end
+
+  field :can_read_reports, Boolean, null: false
+
+  def can_read_reports
+    convention && policy(convention).view_reports?
+  end
+
+  field :can_manage_forms, Boolean, null: false
+
+  def can_manage_forms
+    convention && policy(Form.new(convention: convention)).manage?
+  end
+
+  field :can_manage_runs, Boolean, null: false
+
+  def can_manage_runs
+    convention && policy(Run.new(event: Event.new(convention: convention))).manage?
+  end
+
+  field :can_manage_rooms, Boolean, null: false
+
+  def can_manage_rooms
+    convention && policy(Room.new(convention: convention)).manage?
+  end
+
+  field :can_manage_oauth_applications, Boolean, null: false
+
+  def can_manage_oauth_applications
+    policy(Doorkeeper::Application.new).manage?
   end
 
   field :can_read_admin_notes_on_event_proposal, Boolean, null: false do
@@ -200,6 +266,12 @@ class Types::AbilityType < Types::BaseObject
 
   def can_update_products
     policy(Product.new(convention: context[:convention])).update?
+  end
+
+  field :can_read_user_con_profiles, Boolean, null: false
+
+  def can_read_user_con_profiles
+    convention && policy(convention).view_attendees?
   end
 
   field :can_create_user_con_profiles, Boolean, null: false
