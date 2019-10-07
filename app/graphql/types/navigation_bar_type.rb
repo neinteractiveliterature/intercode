@@ -1,7 +1,7 @@
 class Types::NavigationBarType < Types::BaseObject
   field :id, ID, null: false
   field :classes, String, null: false
-  field :items, [Types::NavigationBarItemType], null: false
+  field :items, [Types::RootNavigationGroupItemType], null: false
 
   def id
     if user_con_profile

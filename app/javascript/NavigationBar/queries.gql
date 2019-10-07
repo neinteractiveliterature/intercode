@@ -48,40 +48,29 @@ query NavigationBarQuery($cms_layout_id: Int) {
     classes
     items {
       __typename
-      ... on NavigationBrand {
-        label
+      ... on NavigationItem {
+        ...NavigationItemFields
       }
-      ... on NavigationCollapse {
-        groups {
-          expand
-          items {
-            __typename
-            ... on NavigationItem {
-              ...NavigationItemFields
-            }
-            ... on UserNavigationSection {
-              items {
-                __typename
-                ...on NavigationItem {
-                  ...NavigationItemFields
-                }
-                ...on SignOutNavigationItem {
-                  ...SignOutNavigationItemFields
-                }
-              }
-            }
-            ... on NavigationSection {
-              label
-              items {
-                __typename
-                ...on NavigationItem {
-                  ...NavigationItemFields
-                }
-                ...on SignOutNavigationItem {
-                  ...SignOutNavigationItemFields
-                }
-              }
-            }
+      ... on UserNavigationSection {
+        items {
+          __typename
+          ...on NavigationItem {
+            ...NavigationItemFields
+          }
+          ...on SignOutNavigationItem {
+            ...SignOutNavigationItemFields
+          }
+        }
+      }
+      ... on NavigationSection {
+        label
+        items {
+          __typename
+          ...on NavigationItem {
+            ...NavigationItemFields
+          }
+          ...on SignOutNavigationItem {
+            ...SignOutNavigationItemFields
           }
         }
       }

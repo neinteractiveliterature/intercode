@@ -316,30 +316,22 @@ class NavigationBarPresenter
 
   def root_navigation_items
     [
-      navbar_brand,
-      NavigationCollapse.new([
-        RootNavigationGroup.new([
-          *ticket_purchase_navigation_items,
-          *(
-            if convention && convention.site_mode != 'single_event'
-              [NavigationSection.new('Events', events_navigation_items)]
-            else
-              []
-            end
-          ),
-          *cms_navigation_item_sections,
-          *(
-            if convention
-              [NavigationSection.new('Admin', admin_navigation_items)]
-            else
-              [NavigationSection.new('Admin', root_site_admin_navigation_items)]
-            end
-          )
-        ], expand: true),
-        RootNavigationGroup.new([
-          UserNavigationSection.new(user_navigation_items)
-        ])
-      ])
+      *ticket_purchase_navigation_items,
+      *(
+        if convention && convention.site_mode != 'single_event'
+          [NavigationSection.new('Events', events_navigation_items)]
+        else
+          []
+        end
+      ),
+      *cms_navigation_item_sections,
+      *(
+        if convention
+          [NavigationSection.new('Admin', admin_navigation_items)]
+        else
+          [NavigationSection.new('Admin', root_site_admin_navigation_items)]
+        end
+      )
     ]
   end
 

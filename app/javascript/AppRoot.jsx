@@ -54,7 +54,12 @@ function AppLayout({ location, history }) {
   const appRootContextValue = useCachedLoadableValue(
     loading, error,
     () => ({
+      assumedIdentityFromProfile: data.assumedIdentityFromProfile,
+      cmsNavigationItems: data.cmsNavigationItems,
       conventionName: (data.convention || {}).name,
+      currentPendingOrder: data.currentPendingOrder,
+      currentUser: data.currentUser,
+      myProfile: data.myProfile,
       rootSiteName: (data.rootSite || {}).site_name,
       siteMode: (data.convention || {}).site_mode,
       signupMode: (data.convention || {}).signup_mode,

@@ -1,23 +1,18 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 
 import htmlFetch from './htmlFetch';
-import { NavigationBarQuery } from './queries.gql';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import SignInButton from '../Authentication/SignInButton';
 import SignUpButton from '../Authentication/SignUpButton';
-import useQuerySuspended from '../useQuerySuspended';
 import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
+import AppRootContext from '../AppRootContext';
+import NavigationItem from './NavigationItem';
+import SignOutNavigationItem from './SignOutNavigationItem';
 
 function CurrentPendingOrderButton() {
-  const { data, error } = useQuerySuspended(NavigationBarQuery);
-
-  if (error) {
-    return null;
-  }
-
-  const { currentPendingOrder } = data;
+  const { currentPendingOrder } = useContext(AppRootContext);
 
   if (!currentPendingOrder) {
     return null;
@@ -45,13 +40,7 @@ function CurrentPendingOrderButton() {
 
 // eslint-disable-next-line react/prop-types
 function LoggedInDropdownTarget({ toggle }, ref) {
-  const { data, error } = useQuerySuspended(NavigationBarQuery);
-
-  if (error) {
-    return null;
-  }
-
-  const { currentUser, myProfile, assumedIdentityFromProfile } = data;
+  const { currentUser, myProfile, assumedIdentityFromProfile } = useContext(AppRootContext);
 
   if (!currentUser) {
     // this can happen in the middle of a resetStore
@@ -62,7 +51,7 @@ function LoggedInDropdownTarget({ toggle }, ref) {
     return (
       <button className="btn btn-warning dropdown-toggle" onClick={toggle} ref={ref} type="button">
         <i className="fa fa-user-secret" />
-        {' '}
+
         <span className="d-inline d-md-none d-lg-inline">
           {myProfile.name_without_nickname}
         </span>
@@ -90,11 +79,7 @@ function LoggedInDropdownTarget({ toggle }, ref) {
 const RefForwardingLoggedInDropdownTarget = forwardRef(LoggedInDropdownTarget);
 
 function RevertAssumedIdentityButton() {
-  const { data, error } = useQuerySuspended(NavigationBarQuery);
-
-  if (error) {
-    return null;
-  }
+  const { assumedIdentityFromProfile } = useContext(AppRootContext);
 
   const revertAssumedIdentity = async () => {
     const response = await htmlFetch('/user_con_profiles/revert_become', {
@@ -103,8 +88,6 @@ function RevertAssumedIdentityButton() {
 
     window.location.href = response.url;
   };
-
-  const { assumedIdentityFromProfile } = data;
 
   if (!assumedIdentityFromProfile) {
     return null;
@@ -121,13 +104,9 @@ function RevertAssumedIdentityButton() {
   );
 }
 
-function UserNavigationSection({ item, location, renderNavigationItems }) {
-  const { data, error } = useQuerySuspended(NavigationBarQuery);
+function UserNavigationSection({ location }) {
+  const { conventionName, currentUser, myProfile } = useContext(AppRootContext);
   const dropdownRef = useAutoClosingDropdownRef(location);
-
-  if (error) {
-    return null;
-  }
 
   const renderLoggedInContent = () => (
     <>
@@ -143,7 +122,45 @@ function UserNavigationSection({ item, location, renderNavigationItems }) {
               placement="bottom-end"
               style={{ zIndex: 1100 }}
             >
-              {renderNavigationItems(item.items, true)}
+              {currentUser && (
+                <NavigationItem
+                  inSection
+                  item={{
+                    label: 'My Account',
+                    url: '/users/edit',
+                  }}
+                />
+              )}
+              {myProfile && (
+                <NavigationItem
+                  inSection
+                  item={{
+                    label: `My ${conventionName} Profile`,
+                    url: '/my_profile',
+                  }}
+                />
+              )}
+              {myProfile && (
+                <NavigationItem
+                  inSection
+                  item={{
+                    label: 'My Order History',
+                    url: '/order_history',
+                  }}
+                />
+              )}
+              {currentUser && (
+                <NavigationItem
+                  inSection
+                  item={{
+                    label: 'Authorized Applications',
+                    url: '/oauth/applications-embed',
+                  }}
+                />
+              )}
+              {currentUser && (
+                <SignOutNavigationItem item={{ label: 'Log Out' }} />
+              )}
             </PopperDropdown>
           </div>
           <RevertAssumedIdentityButton />
@@ -163,7 +180,7 @@ function UserNavigationSection({ item, location, renderNavigationItems }) {
     </>
   );
 
-  return data.currentUser ? renderLoggedInContent() : renderLoggedOutContent();
+  return currentUser ? renderLoggedInContent() : renderLoggedOutContent();
 }
 
 UserNavigationSection.propTypes = {

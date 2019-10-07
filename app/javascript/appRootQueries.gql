@@ -4,9 +4,34 @@ query AppRootQuery($path: String!) {
     content_html
   }
 
+  currentUser {
+    id
+    name
+  }
+
+  currentPendingOrder {
+    id
+    order_entries {
+      id
+      quantity
+    }
+  }
+
   myProfile {
     id
+    name
     accepted_clickwrap_agreement
+    name_without_nickname
+    first_name
+    last_name
+    ticket {
+      id
+    }
+  }
+
+  assumedIdentityFromProfile {
+    id
+    name_without_nickname
   }
 
   convention {
@@ -21,5 +46,20 @@ query AppRootQuery($path: String!) {
   rootSite {
     id
     site_name
+  }
+
+  cmsNavigationItems {
+    id
+    position
+    title
+
+    navigation_section {
+      id
+    }
+
+    page {
+      id
+      slug
+    }
   }
 }
