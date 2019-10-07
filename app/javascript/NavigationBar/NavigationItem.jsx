@@ -2,23 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-function NavigationItem({ item, inSection }) {
+function NavigationItem({ label, url, inSection }) {
   if (inSection) {
-    return <Link to={item.url} className="dropdown-item">{item.label}</Link>;
+    return <Link to={url} className="dropdown-item">{label}</Link>;
   }
 
   return (
     <li className="nav-item">
-      <Link to={item.url} className="nav-link">{item.label}</Link>
+      <Link to={url} className="nav-link">{label}</Link>
     </li>
   );
 }
 
 NavigationItem.propTypes = {
-  item: PropTypes.shape({
-    label: PropTypes.string,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
+  label: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   inSection: PropTypes.bool.isRequired,
 };
 

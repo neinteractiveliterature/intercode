@@ -124,37 +124,29 @@ function UserNavigationSection({ location }) {
               {currentUser && (
                 <NavigationItem
                   inSection
-                  item={{
-                    label: 'My Account',
-                    url: '/users/edit',
-                  }}
+                  label="My Account"
+                  url="/users/edit"
                 />
               )}
               {myProfile && (
                 <NavigationItem
                   inSection
-                  item={{
-                    label: `My ${conventionName} Profile`,
-                    url: '/my_profile',
-                  }}
+                  label={`My ${conventionName} Profile`}
+                  url="/my_profile"
                 />
               )}
               {myProfile && (
                 <NavigationItem
                   inSection
-                  item={{
-                    label: 'My Order History',
-                    url: '/order_history',
-                  }}
+                  label="My Order History"
+                  url="/order_history"
                 />
               )}
               {currentUser && (
                 <NavigationItem
                   inSection
-                  item={{
-                    label: 'Authorized Applications',
-                    url: '/oauth/applications-embed',
-                  }}
+                  label="Authorized Applications"
+                  url="/oauth/applications-embed"
                 />
               )}
               {currentUser && (

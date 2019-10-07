@@ -65,6 +65,7 @@ function AppLayout({ location, history }) {
       rootSiteName: (data.rootSite || {}).site_name,
       siteMode: (data.convention || {}).site_mode,
       signupMode: (data.convention || {}).signup_mode,
+      ticketMode: (data.convention || {}).ticket_mode,
       ticketName: (data.convention || {}).ticket_name,
       ticketTypes: (data.convention || {}).ticket_types,
       ticketsAvailableForPurchase: (data.convention || {}).tickets_available_for_purchase,
