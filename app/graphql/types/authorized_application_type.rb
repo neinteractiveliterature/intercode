@@ -1,5 +1,5 @@
 class Types::AuthorizedApplicationType < Types::BaseObject
-  field :id, Integer, null: false
+  field :uid, ID, null: false
   field :name, String, null: false
   field :scopes, [String], null: false
 

@@ -4,3 +4,11 @@ query OAuthAuthorizationPromptQuery($queryParams: Json!) {
   }
   oauthPreAuth(queryParams: $queryParams)
 }
+
+query OAuthAuthorizedApplicationQuery {
+  myAuthorizedApplications {
+    uid
+    name
+    scopes
+  }
+}
