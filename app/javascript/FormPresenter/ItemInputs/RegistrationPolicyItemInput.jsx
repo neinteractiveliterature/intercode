@@ -63,6 +63,7 @@ RegistrationPolicyItemInput.propTypes = {
   value: RegistrationPolicyPropType,
   valueInvalid: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onInteract: PropTypes.func.isRequired,
 };
 
 RegistrationPolicyItemInput.defaultProps = {

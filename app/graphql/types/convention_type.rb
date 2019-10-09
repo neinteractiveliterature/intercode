@@ -40,6 +40,7 @@ class Types::ConventionType < Types::BaseObject
   field :reports, Types::ConventionReportsType, null: false do
     authorize_action :view_reports
   end
+  field :tickets_available_for_purchase, Boolean, null: false, method: :tickets_available_for_purchase?
 
   association_loaders(
     Convention,
