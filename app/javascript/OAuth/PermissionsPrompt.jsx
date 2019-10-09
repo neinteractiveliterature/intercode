@@ -53,7 +53,7 @@ function PermissionsPrompt({ scopeNames }) {
 
       return [...prevExpandedGroups, scopeGroup];
     });
-  }
+  };
 
   return ['readPublic', 'readPrivate', 'manage'].map((scopeGroup) => {
     if (!groupedScopes[scopeGroup]) {

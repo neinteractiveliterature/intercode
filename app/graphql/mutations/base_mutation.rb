@@ -9,6 +9,12 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     end
   end
 
+  def self.require_user
+    define_method :authorized? do |_args|
+      !!current_user
+    end
+  end
+
   def self.return_true_or_not_authorized_error(authorized, current_user, message: 'Unauthorized mutation')
     if authorized
       true
