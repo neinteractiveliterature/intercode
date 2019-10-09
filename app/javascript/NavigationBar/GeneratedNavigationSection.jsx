@@ -1,0 +1,37 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { sortByLocaleString } from '../ValueUtils';
+import NavigationSection from './NavigationSection';
+import NavigationItem from './NavigationItem';
+
+function GeneratedNavigationSection({ label, items }) {
+  const sortedItems = sortByLocaleString(items, (item) => (item || {}).label || '');
+
+  if (items.some((item) => item)) {
+    return (
+      <NavigationSection label={label}>
+        {sortedItems.map((item) => item && (
+          <NavigationItem
+            inSection
+            key={`${item.label}-${item.url}`}
+            label={item.label}
+            url={item.url}
+          />
+        ))}
+      </NavigationSection>
+    );
+  }
+
+  return null;
+}
+
+GeneratedNavigationSection.propTypes = {
+  label: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  })).isRequired,
+};
+
+export default GeneratedNavigationSection;

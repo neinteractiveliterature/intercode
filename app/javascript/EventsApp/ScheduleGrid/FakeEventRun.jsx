@@ -30,7 +30,6 @@ function FakeEventRun({
     ...getRunClassificationStyles({
       config, signupCountData, signupStatus, event: {}, eventCategory: (eventCategory || {}),
     }),
-    'zero-capacity': zeroCapacity,
   };
 
   return (
@@ -40,6 +39,9 @@ function FakeEventRun({
         getRunClassName({
           config, signupCountData, signupStatus, event: {}, unlimited,
         }),
+        {
+          'zero-capacity': zeroCapacity,
+        },
       )}
       style={runStyle}
       ref={withRef}

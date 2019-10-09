@@ -1,20 +1,77 @@
-import React from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useQuery } from 'react-apollo-hooks';
+import sortBy from 'lodash-es/sortBy';
 
-import { NavigationBarQuery } from './queries.gql';
-import ErrorDisplay from '../ErrorDisplay';
-import renderNavigationItems from './renderNavigationItems';
+import AppRootContext from '../AppRootContext';
+import NavigationBrand from './NavigationBrand';
+import UserNavigationSection from './UserNavigationSection';
+import TicketPurchaseNavigationItem from './TicketPurchaseNavigationItem';
+import NavigationItem from './NavigationItem';
+import NavigationSection from './NavigationSection';
+import useCollapse from './useCollapse';
+import EventsNavigationSection from './EventsNavigationSection';
+import AdminNavigationSection from './AdminNavigationSection';
 
-function NavigationBarContent({ navbarClasses, items }) {
+function NavigationBarContent({ navbarClasses, rootItems }) {
+  const {
+    conventionName, rootSiteName, siteMode, ticketsAvailableForPurchase,
+  } = useContext(AppRootContext);
+  const collapseRef = useRef();
+  const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
+  const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
+
   return (
     <nav className={classNames('navbar', navbarClasses)} role="navigation">
       <div className="container">
-        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          className="navbar-toggler navbar-toggler-right"
+          type="button"
+          onClick={toggleCollapsed}
+          aria-controls="navbarSupportedContent"
+          aria-expanded={!collapsed}
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon" />
         </button>
-        {renderNavigationItems(items, false)}
+        <NavigationBrand item={{ label: conventionName || rootSiteName }} />
+        <div
+          id="navbarSupportedContent"
+          className={classNames('navbar-collapse', collapseClassName)}
+          ref={collapseRef}
+          {...otherCollapseProps}
+        >
+          <ul className="navbar-nav mr-auto">
+            {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
+              <TicketPurchaseNavigationItem />
+            )}
+            {conventionName && siteMode !== 'single_event' && (
+              <EventsNavigationSection />
+            )}
+            {rootItems.map((rootItem) => {
+              if (rootItem.sectionItems) {
+                return (
+                  <NavigationSection label={rootItem.title} key={rootItem.id}>
+                    {rootItem.sectionItems.map((sectionItem) => (
+                      <NavigationItem
+                        label={sectionItem.title}
+                        url={`/pages/${sectionItem.page.slug}`}
+                        key={sectionItem.id}
+                        inSection
+                      />
+                    ))}
+                  </NavigationSection>
+                );
+              }
+
+              return <NavigationItem label={rootItem.title} url={`/pages/${rootItem.page.slug}`} key={rootItem.id} />;
+            })}
+            <AdminNavigationSection />
+          </ul>
+          <ul className="navbar-nav">
+            <UserNavigationSection />
+          </ul>
+        </div>
       </div>
     </nav>
   );
@@ -22,34 +79,40 @@ function NavigationBarContent({ navbarClasses, items }) {
 
 NavigationBarContent.propTypes = {
   navbarClasses: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  rootItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
 
 function NavigationBar({ navbarClasses }) {
-  const { data, loading, error } = useQuery(NavigationBarQuery);
+  const { cmsNavigationItems } = useContext(AppRootContext);
 
-  if (loading) {
-    return (
-      <nav className={classNames('navbar', navbarClasses)} role="navigation">
-        <div className="container">
-          <div className="navbar-brand">&nbsp;</div>
-        </div>
-      </nav>
-    );
-  }
+  const rootNavigationItems = useMemo(
+    () => {
+      const rootItems = sortBy(
+        cmsNavigationItems.filter((item) => item.navigation_section == null),
+        (item) => item.position,
+      );
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+      return rootItems.map((rootItem) => {
+        const sectionItems = sortBy(
+          cmsNavigationItems.filter(
+            (item) => item.navigation_section && item.navigation_section.id === rootItem.id,
+          ),
+          (item) => item.position,
+        );
 
-  if (!data.navigationBar) {
-    return null;
-  }
+        return { ...rootItem, sectionItems };
+      });
+    },
+    [cmsNavigationItems],
+  );
 
   return (
-    <MemoizedNavigationBarContent items={data.navigationBar.items} navbarClasses={navbarClasses} />
+    <MemoizedNavigationBarContent
+      rootItems={rootNavigationItems}
+      navbarClasses={navbarClasses}
+    />
   );
 }
 

@@ -5,35 +5,28 @@ import { withRouter } from 'react-router-dom';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import useAutoClosingDropdownRef from './useAutoClosingDropdownRef';
 
-function NavigationSection({ item, location, renderNavigationItems }) {
+function NavigationSection({ children, label, location }) {
   const dropdownRef = useAutoClosingDropdownRef(location);
-
-  if (!item.items || item.items.length === 0) {
-    return null;
-  }
 
   return (
     <PopperDropdown
       ref={dropdownRef}
       renderReference={({ ref, toggle }) => (
         <li className="nav-item dropdown" role="presentation" ref={ref}>
-          <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">{item.label}</button>
+          <button className="btn btn-link nav-link dropdown-toggle" onClick={toggle} type="button">{label}</button>
         </li>
       )}
       style={{ zIndex: 1100 }}
     >
-      {renderNavigationItems(item.items, true)}
+      {children}
     </PopperDropdown>
   );
 }
 
 NavigationSection.propTypes = {
-  item: PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  }).isRequired,
+  children: PropTypes.node.isRequired,
+  label: PropTypes.string.isRequired,
   location: PropTypes.shape({}).isRequired,
-  renderNavigationItems: PropTypes.func.isRequired,
 };
 
 export default withRouter(NavigationSection);
