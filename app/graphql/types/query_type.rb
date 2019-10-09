@@ -73,6 +73,13 @@ class Types::QueryType < Types::BaseObject
     context[:user_con_profile]
   end
 
+  field :my_authorized_applications, [Types::AuthorizedApplicationType], null: false
+
+  def my_authorized_applications
+    return [] unless current_user
+    Doorkeeper::Application.authorized_for(current_user)
+  end
+
   field :current_user, Types::UserType, null: true
 
   def current_user
