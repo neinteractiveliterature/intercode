@@ -18,6 +18,7 @@ function renderCommonRoutes() {
     <Route path="/cms_content_groups" component={PageComponents.CmsAdmin} key="cmsContentGroups" />,
     <Route path="/oauth/applications-embed" component={PageComponents.OAuthApplications} key="oauthApplications" />,
     <Route path="/oauth/authorize" component={PageComponents.OAuthAuthorizationPrompt} key="oauthAuthorization" />,
+    <Route path="/oauth/authorized_applications" component={PageComponents.AuthorizedApplications} key="oauthAuthorizedApplications" />,
     <Route path="/users/edit" component={PageComponents.EditUser} key="editUser" />,
     <Route path="/users/password/edit" component={PageComponents.ResetPassword} key="resetPassword" />,
     <Route

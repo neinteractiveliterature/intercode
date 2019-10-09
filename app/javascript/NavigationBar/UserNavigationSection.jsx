@@ -146,7 +146,7 @@ function UserNavigationSection({ location }) {
                 <NavigationItem
                   inSection
                   label="Authorized Applications"
-                  url="/oauth/applications-embed"
+                  url="/oauth/authorized_applications"
                 />
               )}
               {currentUser && (
