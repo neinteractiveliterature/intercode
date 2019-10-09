@@ -135,9 +135,9 @@ input AlertDestinationInput {
 }
 
 type AuthorizedApplication {
-  id: Int!
   name: String!
   scopes: [String!]!
+  uid: ID!
 }
 
 """
