@@ -19,6 +19,7 @@ function NonCMSPageWrapper(WrappedComponent) {
 }
 
 const UnwrappedNonCMSPageComponents = {
+  AuthorizedApplications: () => import(/* webpackChunkName: "authorized-applications" */ './OAuth/AuthorizedApplications'),
   Cart: () => import(/* webpackChunkName: "store" */ './Store/Cart'),
   CmsAdmin: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'),
   ConventionAdmin: () => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'),

@@ -7,6 +7,10 @@ class Types::MutationType < Types::BaseObject
     true
   end
 
+  ### AuthorizedApplication
+
+  field :revokeAuthorizedApplication, mutation: Mutations::RevokeAuthorizedApplication
+
   ### CmsContentGroup
 
   field :createCmsContentGroup, mutation: Mutations::CreateCmsContentGroup

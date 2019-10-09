@@ -5,7 +5,7 @@ query OAuthAuthorizationPromptQuery($queryParams: Json!) {
   oauthPreAuth(queryParams: $queryParams)
 }
 
-query OAuthAuthorizedApplicationQuery {
+query OAuthAuthorizedApplicationsQuery {
   myAuthorizedApplications {
     uid
     name
