@@ -3,10 +3,29 @@ module EventSignupMailerHelper
     safe_join(
       [
         user_con_profile_description(signup.user_con_profile, html: html),
+        ' ',
         action_description,
-        "#{run_description(signup.run)}."
+        ' ',
+        "#{run_description(signup.run)}. ",
+        "They are currently #{signup.state}",
+        *[
+          if signup.bucket_key
+            [
+              " in the #{bucket_description(signup.event.registration_policy, signup.bucket_key)} bucket",
+              *[
+                if signup.requested_bucket_key
+                  '.'
+                else
+                  ' (but have no bucket preference).'
+                end
+              ]
+            ]
+          else
+            ['.']
+          end
+        ]
       ],
-      ' '
+      ''
     )
   end
 
