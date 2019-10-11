@@ -2,7 +2,7 @@ class JsonFailureApp < Devise::FailureApp
   # never redirect
   def respond
     http_auth
-    response.content_type = 'application/json'
+    response.media_type = 'application/json'
   end
 
   def http_auth_body

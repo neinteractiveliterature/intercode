@@ -8,7 +8,7 @@ class CalendarsController < ApplicationController
 
     cal = build_user_schedule_calendar(user_con_profile)
     cal.publish
-    response.content_type = 'text/calendar'
+    response.media_type = 'text/calendar'
     render plain: cal.to_ical
   end
 
