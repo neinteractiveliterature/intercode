@@ -1,4 +1,5 @@
-class Types::Json < Types::BaseScalar
+class Types::JSON < Types::BaseScalar
+  graphql_name 'Json' # for backwards compatibility
   description 'An arbitrary object, serialized as JSON'
 
   def self.coerce_input(input_value, _context)

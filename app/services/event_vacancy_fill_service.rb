@@ -8,8 +8,8 @@ class EventVacancyFillService < CivilService::Service
   delegate :event, to: :run
   delegate :convention, to: :event
 
-  include Concerns::SkippableAdvisoryLock
-  include Concerns::ConventionRegistrationFreeze
+  include SkippableAdvisoryLock
+  include ConventionRegistrationFreeze
 
   def initialize(run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false)
     @run = run

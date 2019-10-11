@@ -1,4 +1,4 @@
-module Concerns::AgeRestrictions
+module AgeRestrictions
   def age_restrictions
     {
       age_restrictions_description: read_form_response_attribute(:age_restrictions_description),

@@ -1,7 +1,7 @@
 class Event < ApplicationRecord
-  include Concerns::AgeRestrictions
-  include Concerns::EventEmail
-  include Concerns::FormResponse
+  include AgeRestrictions
+  include EventEmail
+  include FormResponse
   include PgSearch::Model
 
   STATUSES = Set.new(%w[active dropped])

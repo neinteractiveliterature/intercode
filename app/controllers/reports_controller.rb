@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  include Concerns::SendCsv
+  include SendCsv
 
   before_action :ensure_authorized
 

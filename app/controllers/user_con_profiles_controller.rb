@@ -1,5 +1,5 @@
 class UserConProfilesController < ApplicationController
-  include Concerns::SendCsv
+  include SendCsv
 
   # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be
   # @user_con_profile, which is unsafe for us to use because ApplicationController uses it to mean

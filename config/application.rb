@@ -12,6 +12,7 @@ module Intercode
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
+    config.autoloader = :zeitwerk
 
     config.hosts << ENV['INTERCODE_HOST'] if ENV['INTERCODE_HOST'].present?
     config.hosts << ->(host) do

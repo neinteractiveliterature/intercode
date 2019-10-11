@@ -4,7 +4,7 @@ class AcceptSignupRequestService < CivilService::Service
   end
   self.result_class = Result
 
-  include Concerns::SkippableAdvisoryLock
+  include SkippableAdvisoryLock
 
   attr_reader :signup_request, :whodunit, :suppress_notifications
 

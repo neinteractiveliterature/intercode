@@ -124,7 +124,7 @@ class SignupOptionsPresenter
     end
   end
 
-  include Concerns::SortBuckets
+  include SortBuckets
 
   attr_reader :event, :user_con_profile
 

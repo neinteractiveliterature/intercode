@@ -1,7 +1,7 @@
 class EventProposal < ApplicationRecord
-  include Concerns::AgeRestrictions
-  include Concerns::EventEmail
-  include Concerns::FormResponse
+  include AgeRestrictions
+  include EventEmail
+  include FormResponse
 
   STATUSES = Set.new(%w[draft proposed reviewing accepted rejected withdrawn])
 
@@ -31,7 +31,7 @@ class EventProposal < ApplicationRecord
   scope :not_reminded, -> { where(reminded_at: nil) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
-  serialize :timeblock_preferences, JsonArrayCoderWrapper.new(
+  serialize :timeblock_preferences, JSONArrayCoderWrapper.new(
     ActiveModelCoder.new('EventProposal::TimeblockPreference')
   )
 

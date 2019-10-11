@@ -9,8 +9,8 @@ class EventWithdrawService < CivilService::Service
   delegate :event, to: :run
   delegate :convention, to: :event
 
-  include Concerns::SkippableAdvisoryLock
-  include Concerns::ConventionRegistrationFreeze
+  include SkippableAdvisoryLock
+  include ConventionRegistrationFreeze
 
   def initialize(
     signup, whodunit,

@@ -1,6 +1,6 @@
 require 'English'
 
-class RefreshSSLCertificateService < CivilService::Service
+class RefreshSslCertificateService < CivilService::Service
   attr_reader :heroku_api_token, :heroku_app_name, :root_domain, :no_wildcard_domains,
     :skip_domains, :staging
 

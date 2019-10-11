@@ -1,5 +1,5 @@
 class Mutations::CreateCmsContentGroup < Mutations::BaseMutation
-  include Concerns::CmsContentGroupMutation
+  include CmsContentGroupMutation
 
   field :cms_content_group, Types::CmsContentGroupType, null: false
   argument :cms_content_group, Types::CmsContentGroupInputType, required: true, camelize: false

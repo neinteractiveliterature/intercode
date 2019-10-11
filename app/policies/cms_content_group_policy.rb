@@ -1,3 +1,3 @@
 class CmsContentGroupPolicy < ApplicationPolicy
-  include Concerns::CmsContentPolicy
+  include CmsContentPolicy
 end

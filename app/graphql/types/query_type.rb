@@ -299,8 +299,8 @@ class Types::QueryType < Types::BaseObject
     policy_scope(convention.products).find(id)
   end
 
-  field :oauth_pre_auth, Types::Json, null: false do
-    argument :query_params, Types::Json, required: true
+  field :oauth_pre_auth, Types::JSON, null: false do
+    argument :query_params, Types::JSON, required: true
   end
 
   def oauth_pre_auth(query_params:)

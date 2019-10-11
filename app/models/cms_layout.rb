@@ -1,6 +1,6 @@
 class CmsLayout < ApplicationRecord
   include Cadmus::Layout
-  include Concerns::CmsReferences
+  include CmsReferences
 
   has_many :cms_content_group_associations, as: :content
   has_many :cms_content_groups, through: :cms_content_group_associations

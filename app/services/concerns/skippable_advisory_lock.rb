@@ -1,4 +1,4 @@
-module Concerns::SkippableAdvisoryLock
+module SkippableAdvisoryLock
   attr_reader :skip_locking
 
   def with_advisory_lock_unless_skip_locking(name, &block)

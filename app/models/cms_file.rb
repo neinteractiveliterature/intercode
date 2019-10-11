@@ -11,7 +11,7 @@ class CmsFile < ApplicationRecord
   def rename_file(filename)
     new_path = File.join(File.dirname(file.path), filename)
 
-    if Concerns::EnvironmentBasedUploader.use_fog?
+    if EnvironmentBasedUploader.use_fog?
       resource = AWS::S3::Resource.new
       bucket = resource.bucket(CmsFileUploader.fog_directory)
       object = bucket.object(file.path)

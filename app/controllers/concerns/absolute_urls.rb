@@ -1,4 +1,4 @@
-module Concerns::AbsoluteUrls
+module AbsoluteUrls
   def default_url_scheme
     Rails.env.production? ? 'https' : 'http'
   end

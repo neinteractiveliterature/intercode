@@ -1,5 +1,5 @@
 class FormApiPresenter
-  include Concerns::FormMarkdown
+  include FormMarkdown
 
   attr_reader :form, :cadmus_renderer
 
