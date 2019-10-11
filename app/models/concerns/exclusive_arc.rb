@@ -1,4 +1,4 @@
-module Concerns::ExclusiveArc
+module ExclusiveArc
   extend ActiveSupport::Concern
 
   class_methods do

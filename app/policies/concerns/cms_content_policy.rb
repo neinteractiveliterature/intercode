@@ -1,4 +1,4 @@
-module Concerns::CmsContentPolicy
+module CmsContentPolicy
   extend ActiveSupport::Concern
 
   class DefaultScope < ApplicationPolicy::Scope
@@ -46,8 +46,8 @@ module Concerns::CmsContentPolicy
   end
 
   included do
-    const_set('Scope', Class.new(Concerns::CmsContentPolicy::DefaultScope))
-    const_set('ManageScope', Class.new(Concerns::CmsContentPolicy::DefaultManageScope))
+    const_set('Scope', Class.new(CmsContentPolicy::DefaultScope))
+    const_set('ManageScope', Class.new(CmsContentPolicy::DefaultManageScope))
   end
 
   private

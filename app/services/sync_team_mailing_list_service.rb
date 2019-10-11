@@ -1,5 +1,5 @@
 class SyncTeamMailingListService < CivilService::Service
-  include Concerns::SkippableAdvisoryLock
+  include SkippableAdvisoryLock
 
   def self.mailgun
     return unless ENV['MAILGUN_PRIVATE_KEY']

@@ -1,5 +1,5 @@
 class SessionsController < Devise::SessionsController
-  include Concerns::RedirectWithAuthentication
+  include RedirectWithAuthentication
 
   prepend_before_action :set_return_to, only: [:new, :create]
 

@@ -1,5 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
-  include Concerns::RedirectWithAuthentication
+  include RedirectWithAuthentication
 
   prepend_before_action :check_captcha, only: [:create]
   prepend_before_action :disable_destroy, only: [:destroy]

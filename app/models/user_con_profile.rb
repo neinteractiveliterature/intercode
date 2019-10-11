@@ -1,6 +1,6 @@
 class UserConProfile < ApplicationRecord
-  include Concerns::FormResponse
-  include Concerns::Names
+  include FormResponse
+  include Names
 
   belongs_to :convention
   belongs_to :user

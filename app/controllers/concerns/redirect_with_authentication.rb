@@ -1,4 +1,4 @@
-module Concerns::RedirectWithAuthentication
+module RedirectWithAuthentication
   private
 
   def redirect_with_authentication(view)

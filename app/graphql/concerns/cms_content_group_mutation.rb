@@ -1,4 +1,4 @@
-module Concerns::CmsContentGroupMutation
+module CmsContentGroupMutation
   def update_cms_contents(content_group, contents)
     contents_by_type = contents.group_by { |content| content[:content_type] }
     Types::CmsContentTypeIndicator.values.keys.each do |content_type|

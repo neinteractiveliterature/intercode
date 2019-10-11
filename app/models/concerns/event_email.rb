@@ -1,6 +1,6 @@
 require 'mail'
 
-module Concerns::EventEmail
+module EventEmail
   extend ActiveSupport::Concern
 
   included do

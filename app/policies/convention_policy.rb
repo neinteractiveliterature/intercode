@@ -1,5 +1,5 @@
 class ConventionPolicy < ApplicationPolicy
-  include Concerns::ScheduleRelease
+  include ScheduleRelease
 
   def read?
     true

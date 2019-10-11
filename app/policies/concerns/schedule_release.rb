@@ -1,4 +1,4 @@
-module Concerns::ScheduleRelease
+module ScheduleRelease
   def has_schedule_release_permissions?(convention, schedule_release_value)
     case schedule_release_value
     when 'yes' then true

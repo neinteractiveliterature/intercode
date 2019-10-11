@@ -1,4 +1,4 @@
-class JsonFailureApp < Devise::FailureApp
+class JSONFailureApp < Devise::FailureApp
   # never redirect
   def respond
     http_auth

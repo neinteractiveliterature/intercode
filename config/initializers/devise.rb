@@ -217,6 +217,6 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
   #
   config.warden do |manager|
-    manager.failure_app = JsonFailureApp
+    manager.failure_app = JSONFailureApp
   end
 end

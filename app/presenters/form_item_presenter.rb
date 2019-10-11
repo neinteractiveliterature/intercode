@@ -1,5 +1,5 @@
 class FormItemPresenter
-  include Concerns::FormMarkdown
+  include FormMarkdown
 
   attr_reader :form_item, :cadmus_renderer
 

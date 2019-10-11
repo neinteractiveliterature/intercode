@@ -1,5 +1,5 @@
 class Types::BaseObject < GraphQL::Schema::Object
-  include Concerns::ContextAccessors
+  include ContextAccessors
 
   def self.association_loader(model_class, association)
     define_method association do

@@ -1,4 +1,4 @@
-module Concerns::FormResponse
+module FormResponse
   extend ActiveSupport::Concern
 
   included do |base|

@@ -1,5 +1,5 @@
 class EventPolicy < ApplicationPolicy
-  include Concerns::ScheduleRelease
+  include ScheduleRelease
 
   delegate :convention, to: :record
 
@@ -79,7 +79,7 @@ class EventPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    include Concerns::ScheduleRelease
+    include ScheduleRelease
 
     def resolve
       return scope.all if oauth_scope?(:read_events) && site_admin?

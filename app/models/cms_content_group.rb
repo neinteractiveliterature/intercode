@@ -1,5 +1,6 @@
 class CmsContentGroup < ApplicationRecord
   include Cadmus::Concerns::ModelWithParent
+
   model_with_parent
   after_commit :touch_parent
 

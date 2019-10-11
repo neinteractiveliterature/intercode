@@ -1,4 +1,4 @@
-module Concerns::ContextAccessors
+module ContextAccessors
   %i[
     controller
     current_user
