@@ -3,7 +3,6 @@ class CreateTeamMembers < ActiveRecord::Migration[5.1]
     create_table :team_members do |t|
       t.references :event
       t.references :user
-      t.datetime :updated_at
       t.integer :updated_by_id
       t.boolean :display
       t.boolean :show_email

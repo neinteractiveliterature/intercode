@@ -1,5 +1,5 @@
 class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
-  include Concerns::ContextAccessors
+  include ContextAccessors
 
   field_class Types::UncamelizedField
 

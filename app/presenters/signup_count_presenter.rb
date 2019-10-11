@@ -1,5 +1,5 @@
 class SignupCountPresenter
-  include Concerns::SortBuckets
+  include SortBuckets
   include ActionView::Helpers::TextHelper
 
   attr_reader :run

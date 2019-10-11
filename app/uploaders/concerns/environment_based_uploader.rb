@@ -1,4 +1,4 @@
-module Concerns::EnvironmentBasedUploader
+module EnvironmentBasedUploader
   extend ActiveSupport::Concern
 
   def self.use_fog?
@@ -6,7 +6,7 @@ module Concerns::EnvironmentBasedUploader
   end
 
   included do
-    if Concerns::EnvironmentBasedUploader.use_fog?
+    if EnvironmentBasedUploader.use_fog?
       storage :fog
     else
       storage :file

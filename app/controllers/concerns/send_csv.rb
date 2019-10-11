@@ -1,4 +1,4 @@
-module Concerns::SendCsv
+module SendCsv
   def configure_csv_headers(csv_filename)
     headers['X-Accel-Buffering'] = 'no'
     headers['Cache-Control'] = 'no-cache'

@@ -10,14 +10,10 @@
 #   inflect.uncountable %w( fish sheep )
 # end
 
+inflections_config = JSON.parse(File.read(File.expand_path('config/inflections.json', Rails.root)))
+
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.acronym 'GM'
-  inflect.acronym 'GMs'
-  inflect.acronym 'RPG'
-  inflect.acronym 'RPGs'
-  inflect.acronym 'NPC'
-  inflect.acronym 'NPCs'
-  inflect.acronym 'OAuth'
-  inflect.acronym 'PC'
-  inflect.acronym 'PCs'
+  inflections_config['acronym'].each do |word|
+    inflect.acronym(word)
+  end
 end

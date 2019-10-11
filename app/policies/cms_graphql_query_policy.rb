@@ -1,3 +1,3 @@
 class CmsGraphqlQueryPolicy < ApplicationPolicy
-  include Concerns::CmsContentPolicy
+  include CmsContentPolicy
 end

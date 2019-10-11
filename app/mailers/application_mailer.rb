@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  include Concerns::AbsoluteUrls
+  include AbsoluteUrls
 
   default(
     from: "intercode@#{Rails.application.config.action_mailer.default_url_options.try(:[], :host)}"

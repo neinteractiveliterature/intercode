@@ -1,5 +1,5 @@
 class ProvideEventTicketService < CivilService::Service
-  include Concerns::SkippableAdvisoryLock
+  include SkippableAdvisoryLock
   include ActionView::Helpers::TextHelper
 
   class Result < CivilService::Result

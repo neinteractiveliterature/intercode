@@ -18,8 +18,8 @@ class EventSignupService < CivilService::Service
   validate :require_valid_bucket
   validate :require_no_bucket_for_team_member
 
-  include Concerns::SkippableAdvisoryLock
-  include Concerns::ConventionRegistrationFreeze
+  include SkippableAdvisoryLock
+  include ConventionRegistrationFreeze
 
   def initialize(
     user_con_profile, run, requested_bucket_key, whodunit,
@@ -72,7 +72,7 @@ class EventSignupService < CivilService::Service
     @max_signups_allowed = convention.maximum_event_signups.value_at(Time.now)
 
     case @max_signups_allowed
-    when 'not_now' then return # Concerns::ConventionRegistrationFreeze will take care of this
+    when 'not_now' then return # ConventionRegistrationFreeze will take care of this
     when 'not_yet' then errors.add :base, 'Signups are not allowed at this time.'
     else
       unless signup_count_allowed?(user_signup_count + 1)

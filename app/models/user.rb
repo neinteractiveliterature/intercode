@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include Concerns::Names
+  include Names
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,

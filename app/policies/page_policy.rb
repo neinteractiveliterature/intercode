@@ -1,3 +1,3 @@
 class PagePolicy < ApplicationPolicy
-  include Concerns::CmsContentPolicy
+  include CmsContentPolicy
 end

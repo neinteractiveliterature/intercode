@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  include Concerns::SendCsv
+  include SendCsv
 
   before_action :authorize_read_users
 

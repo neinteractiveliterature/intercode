@@ -1,6 +1,6 @@
 class Page < ApplicationRecord
   include Cadmus::Page
-  include Concerns::CmsReferences
+  include CmsReferences
 
   cadmus_page
   belongs_to :cms_layout, optional: true

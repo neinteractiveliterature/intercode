@@ -1,5 +1,5 @@
-module Concerns::ProfileSetupWorkflow
-  include Concerns::CmsContentHelpers
+module ProfileSetupWorkflow
+  include CmsContentHelpers
 
   protected
 

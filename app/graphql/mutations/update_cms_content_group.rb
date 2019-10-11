@@ -1,5 +1,5 @@
 class Mutations::UpdateCmsContentGroup < Mutations::BaseMutation
-  include Concerns::CmsContentGroupMutation
+  include CmsContentGroupMutation
 
   field :cms_content_group, Types::CmsContentGroupType, null: false
   argument :id, Integer, required: true

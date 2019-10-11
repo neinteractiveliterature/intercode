@@ -1,4 +1,4 @@
-module Concerns::CmsContentHelpers
+module CmsContentHelpers
   extend ActiveSupport::Concern
 
   protected

@@ -28,10 +28,13 @@ function GeneratedNavigationSection({ label, items }) {
 
 GeneratedNavigationSection.propTypes = {
   label: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-  })).isRequired,
+  items: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+    }),
+    PropTypes.bool,
+  ])).isRequired,
 };
 
 export default GeneratedNavigationSection;

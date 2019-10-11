@@ -1,5 +1,5 @@
 class Permission < ApplicationRecord
-  include Concerns::ExclusiveArc
+  include ExclusiveArc
 
   PERMISSION_NAMES_CONFIG = JSON.parse(File.read(
     File.expand_path('config/permission_names.json', Rails.root)

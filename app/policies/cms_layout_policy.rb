@@ -1,3 +1,3 @@
 class CmsLayoutPolicy < ApplicationPolicy
-  include Concerns::CmsContentPolicy
+  include CmsContentPolicy
 end

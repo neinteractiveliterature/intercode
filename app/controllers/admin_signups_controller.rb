@@ -22,7 +22,7 @@ class AdminSignupsController < ApplicationController
     ->(run) { "#{run.event.title} (run #{run.id})" }
   ]
 
-  include Concerns::SendCsv
+  include SendCsv
 
   def export
     event = convention.events.find(params[:event_id])

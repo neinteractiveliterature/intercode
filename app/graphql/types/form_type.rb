@@ -1,9 +1,9 @@
 class Types::FormType < Types::BaseObject
   field :id, Int, null: false
   field :title, String, null: false
-  field :form_api_json, Types::Json, null: false, camelize: false
+  field :form_api_json, Types::JSON, null: false, camelize: false
   field :form_type, Types::FormTypeType, null: false, camelize: false
-  field :export_json, Types::Json, null: false, camelize: false
+  field :export_json, Types::JSON, null: false, camelize: false
   field :event_categories, [Types::EventCategoryType], null: false, camelize: false
   field :proposal_event_categories, [Types::EventCategoryType], null: false, camelize: false
   field :user_con_profile_conventions, [Types::ConventionType], null: false, camelize: false
@@ -13,7 +13,7 @@ class Types::FormType < Types::BaseObject
   authorize_record
 
   def form_api_json
-    FormApiJsonLoader.for(cadmus_renderer).load(object)
+    FormApiJSONLoader.for(cadmus_renderer).load(object)
   end
 
   def export_json

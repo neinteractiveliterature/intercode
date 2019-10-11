@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class CmsFileUploader < CarrierWave::Uploader::Base
-  include Concerns::EnvironmentBasedUploader
+  include EnvironmentBasedUploader
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick

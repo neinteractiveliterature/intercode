@@ -1,5 +1,5 @@
 class CreateTeamMemberService < CivilService::Service
-  include Concerns::SkippableAdvisoryLock
+  include SkippableAdvisoryLock
 
   class Result < CivilService::Result
     attr_accessor :team_member, :ticket, :converted_signups, :move_results
