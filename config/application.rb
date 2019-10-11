@@ -14,7 +14,7 @@ module Intercode
     config.load_defaults 5.2
     config.autoloader = :zeitwerk
 
-    config.hosts << ENV['INTERCODE_HOST'] if ENV['INTERCODE_HOST'].present?
+    config.hosts << /.*#{Regexp.escape(ENV['INTERCODE_HOST'])/ if ENV['INTERCODE_HOST'].present?
     config.hosts << ->(host) do
       Convention.where(domain: host).any?
     end
