@@ -147,7 +147,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     end
   end
 
-  include Concerns::SkippableAdvisoryLock
+  include SkippableAdvisoryLock
 
   attr_reader :event, :new_registration_policy, :whodunit, :move_results
 

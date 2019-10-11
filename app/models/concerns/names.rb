@@ -1,4 +1,4 @@
-module Concerns::Names
+module Names
   def self.string_search(scope, search_string, columns)
     model = scope.is_a?(ActiveRecord::Relation) ? scope.model : scope
     query = columns.map { |column| "lower(#{model.table_name}.#{column}) like :term" }.join(' OR ')
@@ -26,7 +26,7 @@ module Concerns::Names
 
   included do
     scope :name_search, ->(search_string, columns: %w[first_name last_name]) do
-      Concerns::Names.string_search(self, search_string, columns)
+      Names.string_search(self, search_string, columns)
     end
   end
 end

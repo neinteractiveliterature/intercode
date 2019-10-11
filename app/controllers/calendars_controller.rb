@@ -1,14 +1,14 @@
 require 'icalendar/tzinfo'
 
 class CalendarsController < ApplicationController
-  include Concerns::AbsoluteUrls
+  include AbsoluteUrls
 
   def user_schedule
     user_con_profile = convention.user_con_profiles.find_by!(ical_secret: params[:id])
 
     cal = build_user_schedule_calendar(user_con_profile)
     cal.publish
-    response.content_type = 'text/calendar'
+    response.media_type = 'text/calendar'
     render plain: cal.to_ical
   end
 

@@ -1,7 +1,7 @@
 class Types::PermissionInputType < Types::BaseInputObject
-  argument :model_type, PermissionedModelTypeIndicator, required: false, camelize: false
+  argument :model_type, Types::PermissionedModelTypeIndicator, required: false, camelize: false
   argument :model_id, Int, required: false, camelize: false
-  argument :role_type, PermissionedRoleTypeIndicator, required: false, camelize: false
+  argument :role_type, Types::PermissionedRoleTypeIndicator, required: false, camelize: false
   argument :role_id, Int, required: false, camelize: false
   argument :permission, String, required: true
 

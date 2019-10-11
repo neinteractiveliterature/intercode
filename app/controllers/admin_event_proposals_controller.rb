@@ -1,5 +1,5 @@
 class AdminEventProposalsController < ApplicationController
-  include Concerns::SendCsv
+  include SendCsv
 
   before_action :authorize_admin
 

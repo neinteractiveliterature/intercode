@@ -1,6 +1,6 @@
 class CmsPartial < ApplicationRecord
   include Cadmus::Partial
-  include Concerns::CmsReferences
+  include CmsReferences
 
   has_and_belongs_to_many :pages
   has_many :cms_content_group_associations, as: :content

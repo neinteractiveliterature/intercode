@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pundit
-  include Concerns::CmsContentHelpers
-  include Concerns::ProfileSetupWorkflow
+  include CmsContentHelpers
+  include ProfileSetupWorkflow
   helper_method :effective_cms_layout
 
   # Turn on Rails' built-in CSRF protection (see

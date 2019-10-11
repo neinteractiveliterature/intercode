@@ -1,4 +1,4 @@
-module Concerns::SortBuckets
+module SortBuckets
   def sort_buckets(buckets)
     buckets.sort_by do |bucket|
       [

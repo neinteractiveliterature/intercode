@@ -25,7 +25,7 @@ class Types::EventType < Types::BaseObject
 
   association_loaders Event, :event_category, :team_members
 
-  field :form_response_attrs_json, Types::Json, null: true
+  field :form_response_attrs_json, Types::JSON, null: true
 
   def form_response_attrs_json
     AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
@@ -35,7 +35,7 @@ class Types::EventType < Types::BaseObject
     end
   end
 
-  field :form_response_attrs_json_with_rendered_markdown, Types::Json, null: true
+  field :form_response_attrs_json_with_rendered_markdown, Types::JSON, null: true
 
   def form_response_attrs_json_with_rendered_markdown
     AssociationLoader.for(Event, :event_category).load(object).then do |event_category|

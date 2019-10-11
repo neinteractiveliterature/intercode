@@ -1,3 +1,3 @@
 class CmsNavigationItemPolicy < ApplicationPolicy
-  include Concerns::CmsContentPolicy
+  include CmsContentPolicy
 end

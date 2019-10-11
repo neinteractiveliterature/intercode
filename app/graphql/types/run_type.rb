@@ -62,7 +62,7 @@ class Types::RunType < Types::BaseObject
     end
   end
 
-  field :signup_count_by_state_and_bucket_key_and_counted, Types::Json, null: false
+  field :signup_count_by_state_and_bucket_key_and_counted, Types::JSON, null: false
 
   def signup_count_by_state_and_bucket_key_and_counted
     SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)

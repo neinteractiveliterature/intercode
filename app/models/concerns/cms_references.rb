@@ -1,4 +1,4 @@
-module Concerns::CmsReferences
+module CmsReferences
   def each_liquid_node(&block)
     each_node_in_liquid_block(liquid_template.root, &block)
   end

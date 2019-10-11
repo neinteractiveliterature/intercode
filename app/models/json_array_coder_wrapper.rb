@@ -1,4 +1,4 @@
-class JsonArrayCoderWrapper
+class JSONArrayCoderWrapper
   attr_reader :wrapped_coder
 
   def initialize(wrapped_coder)

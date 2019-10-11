@@ -1,4 +1,4 @@
-module Concerns::ConventionRegistrationFreeze
+module ConventionRegistrationFreeze
   extend ActiveSupport::Concern
 
   included do

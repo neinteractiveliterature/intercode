@@ -1,5 +1,5 @@
 class RunPolicy < ApplicationPolicy
-  include Concerns::ScheduleRelease
+  include ScheduleRelease
 
   delegate :event, to: :record
   delegate :convention, to: :event
@@ -31,7 +31,7 @@ class RunPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    include Concerns::ScheduleRelease
+    include ScheduleRelease
 
     def resolve
       return scope.none unless oauth_scope?(:read_events)

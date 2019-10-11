@@ -1,4 +1,4 @@
-class FormApiJsonLoader < GraphQL::Batch::Loader
+class FormApiJSONLoader < GraphQL::Batch::Loader
   attr_reader :cadmus_renderer
 
   def initialize(cadmus_renderer)
