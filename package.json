@@ -118,7 +118,7 @@
     "tinycolor2": "^1.4.1",
     "unfetch": "^4.1.0",
     "webpack": "^4.41.2",
-    "webpack-bundle-analyzer": "^3.5.2",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^4.2.2",
     "webpacker-react": "^0.3.2",
