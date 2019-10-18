@@ -12,7 +12,12 @@ export default function useEventAdminCategory(data, error, eventCategoryId) {
     [data, error, eventCategoryId],
   );
   const filteredEvents = useMemo(
-    () => (error ? [] : data.events.filter((event) => event.event_category.id === eventCategoryId)),
+    () => (error
+      ? []
+      : data.events.filter((event) => (
+        event.event_category.id === eventCategoryId
+        && event.status === 'active'
+      ))),
     [data, error, eventCategoryId],
   );
   const sortedEvents = useMemo(
