@@ -41,11 +41,11 @@ class ColumnReservationSet {
     this.columnNumberByRunId = new Map();
   }
 
-  reserve(columnNumber, eventRun) {
+  reserve(columnNumber, eventRun, timespan) {
     if (this.reservations[columnNumber] != null) {
-      this.reservations[columnNumber].addEventRun(eventRun);
+      this.reservations[columnNumber].addEventRun(eventRun, timespan);
     } else {
-      this.reservations[columnNumber] = new ColumnReservation(eventRun);
+      this.reservations[columnNumber] = new ColumnReservation(eventRun, timespan);
     }
 
     this.columnNumberByRunId.set(eventRun.runId, columnNumber);

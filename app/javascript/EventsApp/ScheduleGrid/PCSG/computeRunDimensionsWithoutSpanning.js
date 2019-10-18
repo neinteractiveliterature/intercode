@@ -13,8 +13,12 @@ function computeRunDimensionsWithoutSpanning(scheduleBlock) {
     const now = eventRun.timespan.start;
     columnReservations.expire(now);
 
+    const displayLength = Math.max(MIN_LENGTH, eventRun.timespan.getLength());
+    const displayTimespan = eventRun.timespan.clone();
+    displayTimespan.finish = displayTimespan.start.clone().add(displayLength);
+
     const laneIndex = columnReservations.findFreeColumnForEventRun(eventRun);
-    columnReservations.reserve(laneIndex, eventRun);
+    columnReservations.reserve(laneIndex, eventRun, displayTimespan);
 
     if (laneIndex + 1 > maxColumns) {
       maxColumns = laneIndex + 1;
@@ -24,7 +28,7 @@ function computeRunDimensionsWithoutSpanning(scheduleBlock) {
       eventRun,
       laneIndex,
       (eventRun.timespan.start.diff(scheduleBlock.timespan.start) / myLength) * 100.0,
-      (Math.max(MIN_LENGTH, eventRun.timespan.getLength()) / myLength) * 100.0,
+      (displayLength / myLength) * 100.0,
     );
   });
 

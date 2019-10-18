@@ -1,12 +1,12 @@
 class ColumnReservation {
-  constructor(eventRun) {
-    this.timespan = eventRun.timespan;
+  constructor(eventRun, timespan) {
+    this.timespan = timespan || eventRun.timespan;
     this.eventRuns = [eventRun];
   }
 
-  addEventRun(eventRun) {
+  addEventRun(eventRun, timespan) {
     this.eventRuns.push(eventRun);
-    this.timespan = this.timespan.expandedToFit(eventRun.timespan);
+    this.timespan = this.timespan.expandedToFit(timespan || eventRun.timespan);
   }
 }
 
