@@ -89,7 +89,9 @@ class Types::EventType < Types::BaseObject
   field :maximum_event_provided_tickets_overrides, [override_type], null: false
 
   def maximum_event_provided_tickets_overrides
-    AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(object)
+    AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides).load(object).then do |meptos|
+      meptos.select { |mepto| policy(mepto).read? }
+    end
   end
 
   field :registration_policy, Types::RegistrationPolicyType, null: true
