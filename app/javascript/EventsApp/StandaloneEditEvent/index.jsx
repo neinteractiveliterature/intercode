@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useApolloClient } from 'react-apollo-hooks';
 
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
 import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';
@@ -24,6 +25,7 @@ import useValueUnless from '../../useValueUnless';
 function StandaloneEditEvent({ eventId, eventPath, history }) {
   const queryOptions = { variables: { eventId } };
   const { data, error } = useQuerySuspended(StandaloneEditEventQuery, queryOptions);
+  const apolloClient = useApolloClient();
 
   const initialEvent = deserializeEvent(data.event);
 
@@ -37,17 +39,20 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
 
   const updateEventMutate = useMutationCallback(StandaloneUpdateEvent);
   const updateEvent = useCallback(
-    () => updateEventMutate({
-      variables: {
-        input: {
-          id: event.id,
-          event: {
-            form_response_attrs_json: JSON.stringify(event.form_response_attrs),
+    async () => {
+      await updateEventMutate({
+        variables: {
+          input: {
+            id: event.id,
+            event: {
+              form_response_attrs_json: JSON.stringify(event.form_response_attrs),
+            },
           },
         },
-      },
-    }),
-    [event, updateEventMutate],
+      });
+      await apolloClient.resetStore();
+    },
+    [apolloClient, event, updateEventMutate],
   );
 
   const meptoMutations = useMEPTOMutations({
