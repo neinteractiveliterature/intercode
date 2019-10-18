@@ -2,6 +2,8 @@ import ColumnReservationSet from './ColumnReservationSet';
 import ScheduleLayoutResult from './ScheduleLayoutResult';
 import RunDimensions from './RunDimensions';
 
+const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
+
 function computeRunDimensionsWithoutSpanning(scheduleBlock) {
   const columnReservations = new ColumnReservationSet();
   const myLength = scheduleBlock.timespan.getLength();
@@ -22,7 +24,7 @@ function computeRunDimensionsWithoutSpanning(scheduleBlock) {
       eventRun,
       laneIndex,
       (eventRun.timespan.start.diff(scheduleBlock.timespan.start) / myLength) * 100.0,
-      (eventRun.timespan.getLength() / myLength) * 100.0,
+      (Math.max(MIN_LENGTH, eventRun.timespan.getLength()) / myLength) * 100.0,
     );
   });
 
