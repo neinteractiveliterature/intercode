@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
+import { humanize } from 'inflected';
 import DroppedEventAdmin from './DroppedEventAdmin';
 import EventAdminEditEvent from './EventAdminEditEvent';
 import { EventAdminEventsQuery } from './queries.gql';
@@ -80,6 +81,12 @@ function EventAdmin({ location }) {
           {eventCategories.map((eventCategory) => (
             <NavLink className="dropdown-item" key={eventCategory.id} to={buildEventCategoryUrl(eventCategory)}>
               {eventCategory.name}
+              {' '}
+              <small className="text-muted">
+                (
+                {humanize(eventCategory.scheduling_ui)}
+                )
+              </small>
             </NavLink>
           ))}
         </PopperDropdown>

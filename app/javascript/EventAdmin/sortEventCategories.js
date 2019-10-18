@@ -5,7 +5,7 @@ export default function sortEventCategories(eventCategories) {
     const aSchedulingUiPriority = schedulingUiPriority.indexOf(a.scheduling_ui);
     const bSchedulingUiPriority = schedulingUiPriority.indexOf(b.scheduling_ui);
 
-    if (aSchedulingUiPriority !== b.schedulingUiPriority) {
+    if (aSchedulingUiPriority !== bSchedulingUiPriority) {
       return aSchedulingUiPriority - bSchedulingUiPriority;
     }
 
