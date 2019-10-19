@@ -9,6 +9,7 @@ class UserConProfile < ApplicationRecord
   has_many :signups, dependent: :destroy
   has_many :signup_requests, dependent: :destroy
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
+  has_many :event_ratings, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_and_belongs_to_many :staff_positions
   has_many :permissions, through: :staff_positions
