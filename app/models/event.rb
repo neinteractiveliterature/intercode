@@ -57,6 +57,8 @@ class Event < ApplicationRecord
     inverse_of: 'provided_by_event',
     foreign_key: 'provided_by_event_id'
 
+  has_many :event_ratings, dependent: :destroy
+
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
