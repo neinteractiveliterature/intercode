@@ -213,4 +213,11 @@ class Types::ConventionType < Types::BaseObject
   def reports
     object
   end
+
+  field :pre_schedule_content_html, String, null: true
+  def pre_schedule_content_html
+    partial = object.cms_partials.find_by(name: 'pre_schedule_text')
+    return nil unless partial
+    context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
+  end
 end

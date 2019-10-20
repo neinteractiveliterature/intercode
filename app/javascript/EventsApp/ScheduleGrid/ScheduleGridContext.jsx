@@ -113,17 +113,23 @@ function MobileScheduleGridProvider({ config, children }) {
   }
 
   return (
-    <ConventionDayTabContainer
-      basename={config.basename}
-      conventionTimespan={timespanFromConvention(convention)}
-      timezoneName={convention.timezone_name}
-    >
-      {(timespan) => (
-        <ScheduleGridContext.Provider value={providerValue}>
-          {children(timespan)}
-        </ScheduleGridContext.Provider>
+    <>
+      {convention.pre_schedule_content_html && (
+        // eslint-disable-next-line react/no-danger
+        <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
-    </ConventionDayTabContainer>
+      <ConventionDayTabContainer
+        basename={config.basename}
+        conventionTimespan={timespanFromConvention(convention)}
+        timezoneName={convention.timezone_name}
+      >
+        {(timespan) => (
+          <ScheduleGridContext.Provider value={providerValue}>
+            {children(timespan)}
+          </ScheduleGridContext.Provider>
+        )}
+      </ConventionDayTabContainer>
+    </>
   );
 }
 
@@ -185,24 +191,30 @@ function DesktopScheduleGridProvider({ config, children }) {
   const { convention } = data;
 
   return (
-    <ConventionDayTabContainer
-      basename={config.basename}
-      conventionTimespan={timespanFromConvention(convention)}
-      timezoneName={convention.timezone_name}
-      prefetchTimespan={prefetchTimespan}
-    >
-      {(timespan) => (
-        <Suspense fallback={<ScheduleGridSkeleton />}>
-          <DesktopScheduleGridProviderTabContent
-            config={config}
-            convention={convention}
-            timespan={timespan}
-          >
-            {children}
-          </DesktopScheduleGridProviderTabContent>
-        </Suspense>
+    <>
+      {convention.pre_schedule_content_html && (
+        // eslint-disable-next-line react/no-danger
+        <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
-    </ConventionDayTabContainer>
+      <ConventionDayTabContainer
+        basename={config.basename}
+        conventionTimespan={timespanFromConvention(convention)}
+        timezoneName={convention.timezone_name}
+        prefetchTimespan={prefetchTimespan}
+      >
+        {(timespan) => (
+          <Suspense fallback={<ScheduleGridSkeleton />}>
+            <DesktopScheduleGridProviderTabContent
+              config={config}
+              convention={convention}
+              timespan={timespan}
+            >
+              {children}
+            </DesktopScheduleGridProviderTabContent>
+          </Suspense>
+        )}
+      </ConventionDayTabContainer>
+    </>
   );
 }
 
