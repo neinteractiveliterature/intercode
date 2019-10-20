@@ -98,6 +98,17 @@ class Event < ApplicationRecord
 
   scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
 
+  scope :by_rating_for_user_con_profile, ->(user_con_profile) do
+    joined = joins(<<~SQL)
+      LEFT JOIN event_ratings ON (
+        events.id = event_ratings.event_id
+        AND user_con_profile_id = #{connection.quote(user_con_profile.id)}
+      )
+    SQL
+
+    joined.order('COALESCE(event_ratings.rating, 0) DESC')
+  end
+
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
