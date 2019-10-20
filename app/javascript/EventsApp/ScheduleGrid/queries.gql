@@ -47,6 +47,7 @@ fragment ScheduleGridEventFragment on Event {
 query ScheduleGridConventionDataQuery {
   convention {
     id
+    pre_schedule_content_html
     ...CommonConventionData
   }
 }
