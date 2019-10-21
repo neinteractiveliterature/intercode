@@ -98,7 +98,17 @@ class Event < ApplicationRecord
 
   scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
 
-  scope :by_rating_for_user_con_profile, ->(user_con_profile) do
+  scope :order_by_title, ->(direction = nil) do
+    order(Arel.sql(<<~SQL))
+      regexp_replace(
+        regexp_replace(events.title, '^(the|a|) +', '', 'i'),
+        '\\W',
+        ''
+      ) #{direction || 'ASC'}
+    SQL
+  end
+
+  scope :order_by_rating_for_user_con_profile, ->(user_con_profile, direction = nil) do
     joined = joins(<<~SQL)
       LEFT JOIN event_ratings ON (
         events.id = event_ratings.event_id
@@ -106,7 +116,7 @@ class Event < ApplicationRecord
       )
     SQL
 
-    joined.order('COALESCE(event_ratings.rating, 0) DESC')
+    joined.order("COALESCE(event_ratings.rating, 0) #{direction || 'DESC'}")
   end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')

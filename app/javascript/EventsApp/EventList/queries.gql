@@ -21,6 +21,7 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
         created_at
         short_blurb_html
         form_response_attrs_json
+        my_rating
 
         event_category {
           id

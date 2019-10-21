@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 
@@ -19,6 +19,7 @@ import {
 import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import SearchInput from '../../BuiltInFormControls/SearchInput';
+import AppRootContext from '../../AppRootContext';
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
@@ -29,6 +30,11 @@ function EventList({ history }) {
     page, sorted, filtered, onPageChange: reactTableOnPageChange, onSortedChange, onFilteredChange,
   } = useReactRouterReactTable({ history, ...filterCodecs });
   const { pageSize, onPageSizeChange } = useLocalStorageReactTable('eventList');
+  const { myProfile } = useContext(AppRootContext);
+  const defaultSort = (myProfile
+    ? [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }]
+    : [{ id: 'title', desc: false }]
+  );
   const { data, loading, error } = useQuery(
     EventListEventsQuery,
     {
@@ -36,9 +42,7 @@ function EventList({ history }) {
         page: page + 1,
         pageSize: (pageSize || 20),
         sort: reactTableSortToTableResultsSort(
-          sorted && sorted.length > 0
-            ? sorted
-            : [{ id: 'title', desc: false }],
+          (sorted && sorted.length > 0) ? sorted : defaultSort,
         ),
         filters: reactTableFiltersToTableResultsFilters(filtered),
       },

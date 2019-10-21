@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
@@ -9,6 +9,8 @@ import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
 import teamMembersForDisplay from '../teamMembersForDisplay';
+import AppRootContext from '../../AppRootContext';
+import RateEventControl from '../../EventRatings/RateEventControl';
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
@@ -59,6 +61,7 @@ function teamIsAllAuthors(author, teamMembers) {
 const EventCard = ({
   event, timezoneName, sorted, canReadSchedule,
 }) => {
+  const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
 
@@ -137,13 +140,18 @@ const EventCard = ({
             {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
           </div>
         </div>
-        <ul className="list-inline my-1">
-          {metadataItems.map((metadataItem) => (
-            <li className="list-inline-item mr-4" key={metadataItem.key}>
-              {metadataItem.content}
-            </li>
-          ))}
-        </ul>
+        <div className="d-flex align-items-start">
+          <ul className="list-inline my-1 flex-grow-1">
+            {metadataItems.map((metadataItem) => (
+              <li className="list-inline-item mr-4" key={metadataItem.key}>
+                {metadataItem.content}
+              </li>
+            ))}
+          </ul>
+          {myProfile && (
+            <RateEventControl rating={event.my_rating} />
+          )}
+        </div>
         <p className="m-0">
           {
             sorted.some((sort) => sort.id === 'created_at')
@@ -176,6 +184,7 @@ EventCard.propTypes = {
       team_member_name: PropTypes.string.isRequired,
     }).isRequired,
     title: PropTypes.string,
+    my_rating: PropTypes.number,
     form_response_attrs_json: PropTypes.string.isRequired,
     short_blurb_html: PropTypes.string.isRequired,
     team_members: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

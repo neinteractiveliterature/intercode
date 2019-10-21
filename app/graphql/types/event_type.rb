@@ -124,6 +124,17 @@ class Types::EventType < Types::BaseObject
     authorize_action :read_admin_notes
   end
 
+  field :my_rating, Integer, null: true
+  def my_rating
+    return nil unless user_con_profile
+    return nil unless EventRatingPolicy.new(
+      pundit_user,
+      EventRating.new(user_con_profile: user_con_profile, event: object)
+    ).read?
+
+    EventRatingLoader.for(user_con_profile).load(object)
+  end
+
   field :category, String, deprecation_reason: 'Please use event_category instead', null: false
 
   def category
