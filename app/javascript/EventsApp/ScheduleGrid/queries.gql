@@ -62,6 +62,7 @@ query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: 
 query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   convention {
     id
+    pre_schedule_content_html
     ...CommonConventionData
   }
 
