@@ -30,7 +30,7 @@ export function sortByLocaleString(list, transform, options = { sensitivity: 'ba
 }
 
 export function normalizeTitle(title) {
-  return title.replace(/[^0-9a-z ]/gi, '').trim().replace(/^(the|a) /i, '').replace(/ /g, '');
+  return title.replace(/[^0-9a-z ]/gi, '').trim().replace(/^(the|a|an) /i, '').replace(/ /g, '');
 }
 
 export function titleSort(list, transform) {
