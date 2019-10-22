@@ -104,7 +104,7 @@ class Event < ApplicationRecord
 
   def self.normalize_title_for_sort(title)
     return '' unless title
-    title.gsub(/\A(the|a|) /i, '').gsub(/\W/, '')
+    title.gsub(/[^0-9a-z ]/i, '').strip.gsub(/\A(the|a|) /i, '').gsub(/ /, '')
   end
 
   def self.title_sort(events)
