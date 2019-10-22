@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   include AgeRestrictions
   include EventEmail
   include FormResponse
+  include OrderByTitle
   include PgSearch::Model
 
   STATUSES = Set.new(%w[active dropped])
@@ -98,16 +99,6 @@ class Event < ApplicationRecord
 
   scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
 
-  scope :order_by_title, ->(direction = nil) do
-    order(Arel.sql(<<~SQL))
-      regexp_replace(
-        regexp_replace(events.title, '^(the|a|) +', '', 'i'),
-        '\\W',
-        ''
-      ) #{direction || 'ASC'}
-    SQL
-  end
-
   scope :order_by_rating_for_user_con_profile, ->(user_con_profile, direction = nil) do
     joined = joins(<<~SQL)
       LEFT JOIN event_ratings ON (
@@ -122,15 +113,6 @@ class Event < ApplicationRecord
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
-
-  def self.normalize_title_for_sort(title)
-    return '' unless title
-    title.gsub(/[^0-9a-z ]/i, '').strip.gsub(/\A(the|a|an) /i, '').gsub(/ /, '')
-  end
-
-  def self.title_sort(events)
-    events.sort_by { |event| normalize_title_for_sort(event.title) }
-  end
 
   def to_param
     "#{id}-#{title.parameterize}"

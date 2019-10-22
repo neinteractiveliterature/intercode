@@ -28,15 +28,14 @@ class ReportsController < ApplicationController
   end
 
   def per_event
-    @events = Event.title_sort(
-      convention.events.regular.active
-        .where.not(event_category_id: volunteer_event_category_ids)
-        .includes(
-          :event_category,
-          team_members: :user_con_profile,
-          runs: [:rooms, signups: :user_con_profile]
-        )
-    )
+    @events = convention.events.regular.active
+      .where.not(event_category_id: volunteer_event_category_ids)
+      .includes(
+        :event_category,
+        team_members: :user_con_profile,
+        runs: [:rooms, signups: :user_con_profile]
+      )
+      .order_by_title
   end
 
   def per_user
@@ -56,24 +55,23 @@ class ReportsController < ApplicationController
       signups: [:event, run: :rooms]
     ).find(params[:user_con_profile_id])
 
-    @events = Event.title_sort(
-      Event.where(id: TeamMember.where(user_con_profile_id: @subject_profile.id).select(:event_id))
-        .where.not(event_category_id: volunteer_event_category_ids)
-        .active
-        .includes(
-          :event_category,
-          team_members: :user_con_profile,
-          runs: [:rooms, signups: :user_con_profile]
-        )
-    )
+    team_member_events_scope = TeamMember.where(user_con_profile_id: @subject_profile.id)
+    @events = Event.where(id: team_member_events_scope.select(:event_id))
+      .where.not(event_category_id: volunteer_event_category_ids)
+      .active
+      .includes(
+        :event_category,
+        team_members: :user_con_profile,
+        runs: [:rooms, signups: :user_con_profile]
+      )
+      .order_by_title
   end
 
   def volunteer_events
-    @events = Event.title_sort(
-      convention.events.where(event_category_id: volunteer_event_category_ids).active.includes(
-        runs: [signups: :user_con_profile]
-      )
-    )
+    @events = convention.events.where(event_category_id: volunteer_event_category_ids)
+      .active
+      .includes(runs: [signups: :user_con_profile])
+      .order_by_title
   end
 
   private
