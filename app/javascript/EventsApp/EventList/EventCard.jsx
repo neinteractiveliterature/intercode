@@ -136,47 +136,48 @@ const EventCard = ({
   return (
     <div className="card mb-4" key={event.id}>
       <div className="card-header">
-        <div className="d-flex flex-wrap mb-3">
-          <div className="d-flex flex-grow-1">
-            <h4 className="m-0">
+        <div className="event-card-header">
+          <div className="mb-2">
+            <h4 className="m-0 d-inline">
               <Link to={buildEventUrl(event)}>{event.title}</Link>
             </h4>
-            <div className="lead ml-2 text-muted">
+            <span className="lead ml-2 text-muted">
               {event.event_category.name}
-            </div>
+            </span>
           </div>
           <div className="lead">
             {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
           </div>
-        </div>
-        <div className="d-flex align-items-start">
-          <ul className="list-inline my-1 flex-grow-1">
+          <div className="d-flex flex-wrap mt-1">
             {metadataItems.map((metadataItem) => (
-              <li className="list-inline-item mr-4" key={metadataItem.key}>
+              <div className="flex-shrink-1 mr-4" key={metadataItem.key}>
                 {metadataItem.content}
-              </li>
+              </div>
             ))}
-          </ul>
-          {myProfile && (
-            <RateEventControl
-              value={event.my_rating}
-              onChange={(rating) => rateEvent(event.id, rating)}
-            />
-          )}
+          </div>
+          <div className="d-flex align-items-end justify-content-end">
+            {myProfile && (
+              <RateEventControl
+                value={event.my_rating}
+                onChange={(rating) => rateEvent(event.id, rating)}
+              />
+            )}
+          </div>
         </div>
-        <p className="m-0">
-          {
-            sorted.some((sort) => sort.id === 'created_at')
-              ? (
+
+        {
+          sorted.some((sort) => sort.id === 'created_at')
+            ? (
+              <p className="m-0">
                 <strong>
                   Added
                   {' '}
                   {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
                 </strong>
-              )
-              : null
-          }
-        </p>
+              </p>
+            )
+            : null
+        }
       </div>
 
       <div
