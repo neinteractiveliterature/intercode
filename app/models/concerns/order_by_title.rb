@@ -6,12 +6,13 @@ module OrderByTitle
       order(Arel.sql(<<~SQL))
         regexp_replace(
           regexp_replace(
-            regexp_replace(events.title, '[^0-9a-z ]', '', 'gi'),
-            '^ *(the|a|an) +',
+            trim(regexp_replace(events.title, '[^0-9a-z ]', '', 'gi')),
+            '^(the|a|an) +',
             '',
             'i'
           ),
           ' ',
+          '',
           'g'
         ) #{direction}
       SQL

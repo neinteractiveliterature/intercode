@@ -9,10 +9,7 @@ import ErrorDisplay from '../../ErrorDisplay';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
 import { EventListEventsQuery } from './queries.gql';
 import EventListEvents from './EventListEvents';
-import EventListPageSizeControl from './EventListPageSizeControl';
-import EventListPagination from './EventListPagination';
 import EventListSortDropdown from './EventListSortDropdown';
-import useLocalStorageReactTable from '../../Tables/useLocalStorageReactTable';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
 import {
   reactTableFiltersToTableResultsFilters,
@@ -29,9 +26,8 @@ const filterCodecs = buildFieldFilterCodecs({
 
 function EventList({ history }) {
   const {
-    page, sorted, filtered, onPageChange: reactTableOnPageChange, onSortedChange, onFilteredChange,
+    sorted, filtered, onSortedChange, onFilteredChange,
   } = useReactRouterReactTable({ history, ...filterCodecs });
-  const { pageSize, onPageSizeChange } = useLocalStorageReactTable('eventList');
   const { myProfile } = useContext(AppRootContext);
   const defaultSort = (myProfile
     ? [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }]
@@ -44,7 +40,7 @@ function EventList({ history }) {
     {
       variables: {
         page: 1,
-        pageSize: 20,
+        pageSize: 10,
         sort: reactTableSortToTableResultsSort(
           (sorted && sorted.length > 0) ? sorted : defaultSort,
         ),
@@ -55,7 +51,6 @@ function EventList({ history }) {
   const [cachedConventionName, setCachedConventionName] = useState(null);
   const [cachedEventCategories, setCachedEventCategories] = useState(null);
   const [cachedPageCount, setCachedPageCount] = useState(null);
-  const onPageChange = (newPage) => reactTableOnPageChange(newPage - 1);
 
   useEffect(
     () => {
@@ -63,17 +58,28 @@ function EventList({ history }) {
         return;
       }
 
-      if (data.convention.events_paginated.entries.length < data.convention.events_paginated.total_entries) {
+      const totalEntries = data.convention.events_paginated.total_entries;
+
+      if (data.convention.events_paginated.entries.length < totalEntries) {
+        // this is a little weird but because of the way pagination works, we're going to end up
+        // re-fetching the first 20 - so just go ahead and replace them
         fetchMore({
-          variables: { page: (data.convention.events_paginated.entries.length / 20) + 1 },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            debugger;
-          },
+          variables: { page: 1, pageSize: totalEntries },
+          updateQuery: (prev, { fetchMoreResult }) => ({
+            ...prev,
+            convention: {
+              ...prev.convention,
+              events_paginated: {
+                ...prev.convention.events_paginated,
+                entries: fetchMoreResult.convention.events_paginated.entries,
+              },
+            },
+          }),
         });
       }
     },
     [loading, error, data, fetchMore],
-  )
+  );
 
   const changeFilterValue = useCallback(
     (fieldId, value) => {
@@ -117,19 +123,6 @@ function EventList({ history }) {
     setCachedPageCount(eventsPaginated.total_pages);
   }
 
-  const totalPages = (loading ? cachedPageCount : eventsPaginated.total_pages);
-
-  const renderPagination = () => (
-    <>
-      <EventListPagination
-        currentPage={page + 1}
-        totalPages={totalPages || 0}
-        onPageChange={onPageChange}
-      />
-      <EventListPageSizeControl pageSize={pageSize} onPageSizeChange={onPageSizeChange} />
-    </>
-  );
-
   return (
     <>
       <h1 className="text-nowrap">
@@ -137,39 +130,33 @@ function EventList({ history }) {
         {cachedConventionName && ` at ${cachedConventionName}`}
       </h1>
 
-      <div className="d-flex align-items-start flex-wrap mt-4">
-        <div className="flex-grow-1 d-flex flex-wrap">
-          {renderPagination()}
-        </div>
-
-        <div className="d-flex flex-column flex-sm-row">
-          <div className="d-flex flex-row mb-2">
-            <div>
-              {cachedEventCategories && (
-                <EventListCategoryDropdown
-                  eventCategories={cachedEventCategories}
-                  value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                  onChange={categoryChanged}
-                />
-              )}
-            </div>
-
-            <div>
-              <EventListSortDropdown
-                showConventionOrder={!loading && data.currentAbility.can_read_schedule}
-                value={sorted}
-                onChange={onSortedChange}
+      <div className="d-flex flex-column flex-sm-row mt-4">
+        <div className="d-flex flex-row mb-2">
+          <div>
+            {cachedEventCategories && (
+              <EventListCategoryDropdown
+                eventCategories={cachedEventCategories}
+                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
+                onChange={categoryChanged}
               />
-            </div>
+            )}
           </div>
 
-          <div className="ml-2 flex-grow-1">
-            <SearchInput
-              label="Search"
-              value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value}
-              onChange={titlePrefixChanged}
+          <div>
+            <EventListSortDropdown
+              showConventionOrder={!loading && data.currentAbility.can_read_schedule}
+              value={sorted}
+              onChange={onSortedChange}
             />
           </div>
+        </div>
+
+        <div className="ml-2 flex-grow-1">
+          <SearchInput
+            label="Search"
+            value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value}
+            onChange={titlePrefixChanged}
+          />
         </div>
       </div>
 
@@ -178,23 +165,12 @@ function EventList({ history }) {
         loading
           ? null
           : (
-            <>
-              <EventListEvents
-                convention={data.convention}
-                eventsPaginated={eventsPaginated}
-                sorted={sorted}
-                canReadSchedule={data.currentAbility.can_read_schedule}
-              />
-              {
-                eventsPaginated.entries.length >= 4
-                  ? (
-                    <div className="d-flex flex-wrap justify-content-center mt-4">
-                      {renderPagination()}
-                    </div>
-                  )
-                  : null
-              }
-            </>
+            <EventListEvents
+              convention={data.convention}
+              eventsPaginated={eventsPaginated}
+              sorted={sorted}
+              canReadSchedule={data.currentAbility.can_read_schedule}
+            />
           )
       }
     </>
