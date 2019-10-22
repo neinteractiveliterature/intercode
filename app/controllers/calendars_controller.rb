@@ -57,6 +57,6 @@ class CalendarsController < ApplicationController
   end
 
   def event_location_from_signup(signup)
-    signup.run.rooms.map(&:name).sort
+    signup.run.rooms.map(&:name).sort.presence
   end
 end
