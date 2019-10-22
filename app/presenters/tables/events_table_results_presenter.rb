@@ -69,7 +69,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
           regexp_replace(
             regexp_replace(
               regexp_replace(events.title, '[^0-9a-z ]', '', 'gi'),
-              '^ *(the|a|) +',
+              '^ *(the|a|an) +',
               '',
               'i'
             ),
