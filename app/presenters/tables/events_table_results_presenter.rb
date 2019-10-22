@@ -67,9 +67,14 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
       if ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
         Arel.sql(<<~SQL)
           regexp_replace(
-            regexp_replace(events.title, '^(the|a|) +', '', 'i'),
-            '\\W',
-            ''
+            regexp_replace(
+              regexp_replace(events.title, '[^0-9a-z ]', '', 'gi'),
+              '^ *(the|a|) +',
+              '',
+              'i'
+            ),
+            ' ',
+            'g'
           ) #{direction}
         SQL
       else
