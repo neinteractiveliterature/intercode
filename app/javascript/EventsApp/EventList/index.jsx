@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, {
+  useState, useEffect, useCallback, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 
@@ -35,12 +37,14 @@ function EventList({ history }) {
     ? [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }]
     : [{ id: 'title', desc: false }]
   );
-  const { data, loading, error } = useQuery(
+  const {
+    data, loading, error, fetchMore,
+  } = useQuery(
     EventListEventsQuery,
     {
       variables: {
-        page: page + 1,
-        pageSize: (pageSize || 20),
+        page: 1,
+        pageSize: 20,
         sort: reactTableSortToTableResultsSort(
           (sorted && sorted.length > 0) ? sorted : defaultSort,
         ),
@@ -52,6 +56,24 @@ function EventList({ history }) {
   const [cachedEventCategories, setCachedEventCategories] = useState(null);
   const [cachedPageCount, setCachedPageCount] = useState(null);
   const onPageChange = (newPage) => reactTableOnPageChange(newPage - 1);
+
+  useEffect(
+    () => {
+      if (loading || error) {
+        return;
+      }
+
+      if (data.convention.events_paginated.entries.length < data.convention.events_paginated.total_entries) {
+        fetchMore({
+          variables: { page: (data.convention.events_paginated.entries.length / 20) + 1 },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            debugger;
+          },
+        });
+      }
+    },
+    [loading, error, data, fetchMore],
+  )
 
   const changeFilterValue = useCallback(
     (fieldId, value) => {
