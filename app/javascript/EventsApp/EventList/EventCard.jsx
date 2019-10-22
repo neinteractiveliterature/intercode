@@ -4,6 +4,7 @@ import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
+import { useMutation, useApolloClient } from 'react-apollo-hooks';
 
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
@@ -11,6 +12,7 @@ import buildEventUrl from '../buildEventUrl';
 import teamMembersForDisplay from '../teamMembersForDisplay';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
+import { RateEvent } from '../../EventRatings/mutations.gql';
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
@@ -64,6 +66,13 @@ const EventCard = ({
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
+  const [rateEventMutate] = useMutation(RateEvent);
+
+  const rateEvent = async (eventId, rating) => {
+    await rateEventMutate({
+      variables: { eventId, rating },
+    });
+  };
 
   const displayTeamMembers = useMemo(
     () => teamMembersForDisplay(event),
@@ -149,7 +158,10 @@ const EventCard = ({
             ))}
           </ul>
           {myProfile && (
-            <RateEventControl rating={event.my_rating} />
+            <RateEventControl
+              value={event.my_rating}
+              onChange={(rating) => rateEvent(event.id, rating)}
+            />
           )}
         </div>
         <p className="m-0">

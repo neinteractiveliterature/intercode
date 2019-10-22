@@ -8,14 +8,14 @@ const RATING_NAMES = {
 };
 
 const RATING_ICON_CLASSES = {
-  1: 'fa-smile-o',
+  1: 'fa-thumbs-up',
   0: 'fa-meh-o',
-  '-1': 'fa-frown-o',
+  '-1': 'fa-thumbs-down',
 };
 
 function EventRatingIcon({ rating }) {
   return (
-    <i className={`fa ${RATING_ICON_CLASSES[rating]} m-2`}>
+    <i className={`event-rating-icon fa ${RATING_ICON_CLASSES[rating]}`}>
       <span className="sr-only">{RATING_NAMES[rating]}</span>
     </i>
   );
