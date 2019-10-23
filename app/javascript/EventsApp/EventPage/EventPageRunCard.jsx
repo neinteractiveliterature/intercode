@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { useApolloClient } from 'react-apollo-hooks';
 import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations.gql';
 import { EventPageQuery } from './queries.gql';
 import RunCard from './RunCard';
@@ -41,28 +42,36 @@ function EventPageRunCard({
   const createMySignupMutate = useMutationCallback(CreateMySignup);
   const withdrawMySignupMutate = useMutationCallback(WithdrawMySignup);
   const withdrawSignupRequestMutate = useMutationCallback(WithdrawSignupRequest);
+  const apolloClient = useApolloClient();
 
   const selfServiceSignup = useCallback(
-    (signupOption) => createMySignupMutate({
-      variables: {
-        runId: run.id,
-        requestedBucketKey: (signupOption.bucket || {}).key,
-        noRequestedBucket: signupOption.bucket == null,
-      },
-      update: (cache, { data: { createMySignup: { signup } } }) => {
-        updateCacheAfterSignup(cache, event, run, signup);
-      },
-    }),
-    [createMySignupMutate, event, run],
+    async (signupOption) => {
+      await createMySignupMutate({
+        variables: {
+          runId: run.id,
+          requestedBucketKey: (signupOption.bucket || {}).key,
+          noRequestedBucket: signupOption.bucket == null,
+        },
+        update: (cache, { data: { createMySignup: { signup } } }) => {
+          updateCacheAfterSignup(cache, event, run, signup);
+        },
+      });
+
+      await apolloClient.resetStore();
+    },
+    [apolloClient, createMySignupMutate, event, run],
   );
 
   const selfServiceWithdraw = useCallback(
     () => confirm({
       prompt: `Are you sure you want to withdraw from ${event.title}?`,
-      action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),
+      action: async () => {
+        await withdrawMySignupMutate({ variables: { runId: run.id } });
+        await apolloClient.resetStore();
+      },
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     }),
-    [confirm, event.title, run.id, withdrawMySignupMutate],
+    [apolloClient, confirm, event.title, run.id, withdrawMySignupMutate],
   );
 
   const moderatedWithdraw = useCallback(
