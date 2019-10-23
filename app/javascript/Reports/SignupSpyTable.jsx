@@ -68,7 +68,8 @@ const getPossibleColumns = () => [
     accessor: 'created_at',
     sortable: false,
     filterable: false,
-    Cell: TimestampCell,
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ value }) => <TimestampCell value={value} />,
   },
   {
     Header: 'Choice',
