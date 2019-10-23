@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import arrayToSentence from 'array-to-sentence';
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
-import { useMutation, useApolloClient } from 'react-apollo-hooks';
+import { useMutation } from 'react-apollo-hooks';
 
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
@@ -33,7 +33,16 @@ function renderFirstRunTime(event, timezoneName) {
         }
 
         previousDayName = dayName;
-        return `${dayName} ${runStart.format('h:mma')}`;
+        return (
+          <>
+            <span className="d-lg-none">
+              {runStart.format('ddd h:mma')}
+            </span>
+            <span className="d-none d-lg-inline">
+              {runStart.format('dddd h:mma')}
+            </span>
+          </>
+        );
       }),
     ]);
   }
@@ -145,7 +154,7 @@ const EventCard = ({
               {event.event_category.name}
             </span>
           </div>
-          <div className="lead">
+          <div className="lead ml-1">
             {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
           </div>
           <div className="d-flex flex-wrap mt-1">
