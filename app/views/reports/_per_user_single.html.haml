@@ -9,7 +9,7 @@
         - active_signups.sort_by { |signup| signup.run.starts_at }.each do |signup|
           %tr
             %td= format_run_day_and_time signup.run.starts_at
-            %td= signup.run.rooms.map(&:name).sort.join(', ')
+            %td= signup.run.rooms.map(&:name).sort.uniq.join(', ')
             %td
               = signup.run.event.title
               - if signup.run.title_suffix.present?
