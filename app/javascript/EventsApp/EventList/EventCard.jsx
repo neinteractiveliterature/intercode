@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 import flatMap from 'lodash-es/flatMap';
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
-import { useMutation } from 'react-apollo-hooks';
 
 import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
@@ -12,7 +11,7 @@ import buildEventUrl from '../buildEventUrl';
 import teamMembersForDisplay from '../teamMembersForDisplay';
 import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
-import { RateEvent } from '../../EventRatings/mutations.gql';
+import useRateEvent from '../../EventRatings/useRateEvent';
 
 function arrayToSentenceReact(array) {
   if (array.length < 2) {
@@ -86,13 +85,7 @@ const EventCard = ({
   const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
-  const [rateEventMutate] = useMutation(RateEvent);
-
-  const rateEvent = async (eventId, rating) => {
-    await rateEventMutate({
-      variables: { eventId, rating },
-    });
-  };
+  const rateEvent = useRateEvent();
 
   const displayTeamMembers = useMemo(
     () => teamMembersForDisplay(event),
