@@ -8,7 +8,7 @@ export const RATING_NAMES = {
   '-1': 'Hidden',
 };
 
-function getRatingIconClass(rating, selected) {
+export function getRatingIconClass(rating, selected) {
   if (rating === -1) {
     return 'fa-eye-slash';
   }
@@ -20,7 +20,7 @@ function getRatingIconClass(rating, selected) {
   return '';
 }
 
-function getRatingColorClass(rating, selected) {
+export function getRatingColorClass(rating, selected) {
   if (rating === -1) {
     return selected ? 'text-danger' : 'text-hover-danger';
   }

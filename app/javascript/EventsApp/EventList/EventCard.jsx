@@ -45,14 +45,14 @@ function renderFirstRunTime(event, timezoneName) {
 
         previousDayName = dayName;
         return (
-          <>
+          <React.Fragment key={runStart.toISOString()}>
             <span className="d-lg-none text-nowrap">
               {runStart.format('ddd h:mma')}
             </span>
             <span className="d-none d-lg-inline text-nowrap">
               {runStart.format('dddd h:mma')}
             </span>
-          </>
+          </React.Fragment>
         );
       }),
     ]);

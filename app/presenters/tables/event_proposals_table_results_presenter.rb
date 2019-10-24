@@ -39,7 +39,7 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-  def expand_scope_for_sort(scope, sort_field)
+  def expand_scope_for_sort(scope, sort_field, _direction)
     case sort_field
     when :owner
       scope.joins(:owner)
