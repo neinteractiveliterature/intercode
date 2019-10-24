@@ -54,7 +54,7 @@ EventListCategoryDropdown.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
-  value: PropTypes.arrayOf(PropTypes.string),
+  value: PropTypes.arrayOf(PropTypes.number),
   onChange: PropTypes.func.isRequired,
 };
 
