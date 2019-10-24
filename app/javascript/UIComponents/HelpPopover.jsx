@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import PopperDropdown from './PopperDropdown';
 
-function HelpPopover({ children, className }) {
+function HelpPopover({
+  children, className, initialVisible, visibleChanged,
+}) {
+  const [visible, setVisible] = useState(initialVisible);
+
+  const toggleVisible = () => {
+    const newVisible = !visible;
+    setVisible(newVisible);
+    if (visibleChanged) {
+      visibleChanged(newVisible);
+    }
+  };
+
   return (
     <PopperDropdown
-      placement="auto"
+      placement="bottom"
+      visible={visible}
+      onToggle={toggleVisible}
       renderReference={({ ref, toggle }) => (
         <span
           role="button"
@@ -32,7 +46,6 @@ function HelpPopover({ children, className }) {
     >
       {({
         placement,
-        visible,
         arrowProps,
         ref,
         style,
@@ -61,11 +74,15 @@ function HelpPopover({ children, className }) {
 HelpPopover.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  initialVisible: PropTypes.bool,
+  visibleChanged: PropTypes.func,
 };
 
 HelpPopover.defaultProps = {
   children: null,
   className: null,
+  initialVisible: false,
+  visibleChanged: null,
 };
 
 export default HelpPopover;

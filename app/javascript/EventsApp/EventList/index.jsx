@@ -19,7 +19,7 @@ import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import SearchInput from '../../BuiltInFormControls/SearchInput';
 import AppRootContext from '../../AppRootContext';
-import EventListMyRatingDropdown from './EventListMyRatingDropdown';
+import EventListMyRatingSelector from './EventListMyRatingSelector';
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
@@ -176,10 +176,12 @@ function EventList({ history }) {
         </div>
 
         {myProfile && (
-          <EventListMyRatingDropdown
-            value={(effectiveFiltered.find(({ id }) => id === 'my_rating') || {}).value}
-            onChange={myRatingFilterChanged}
-          />
+          <>
+            <EventListMyRatingSelector
+              value={(effectiveFiltered.find(({ id }) => id === 'my_rating') || {}).value}
+              onChange={myRatingFilterChanged}
+            />
+          </>
         )}
       </div>
 

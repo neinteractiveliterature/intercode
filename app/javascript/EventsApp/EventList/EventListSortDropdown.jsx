@@ -21,7 +21,7 @@ const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
   }
 
   if (myProfile) {
-    mySortOrders.splice(0, 0, { sorted: [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }], caption: 'my interest' });
+    mySortOrders.splice(0, 0, { sorted: [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }], caption: 'my favorites' });
   }
 
   const currentSort = (

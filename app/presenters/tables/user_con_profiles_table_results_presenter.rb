@@ -92,7 +92,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     end
   end
 
-  def expand_scope_for_sort(scope, sort_field)
+  def expand_scope_for_sort(scope, sort_field, _direction)
     case sort_field
     when :email
       scope.joins(:user)
