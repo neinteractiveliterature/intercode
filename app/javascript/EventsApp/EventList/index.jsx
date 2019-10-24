@@ -19,9 +19,12 @@ import usePageTitle from '../../usePageTitle';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import SearchInput from '../../BuiltInFormControls/SearchInput';
 import AppRootContext from '../../AppRootContext';
+import EventListMyRatingDropdown from './EventListMyRatingDropdown';
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
+  my_rating: FilterCodecs.integerArray,
+  title_prefix: FilterCodecs.nonEmptyString,
 });
 
 function EventList({ history }) {
@@ -33,6 +36,17 @@ function EventList({ history }) {
     ? [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }]
     : [{ id: 'title', desc: false }]
   );
+  const [cachedConventionName, setCachedConventionName] = useState(null);
+  const [cachedEventCategories, setCachedEventCategories] = useState(null);
+  const [cachedPageCount, setCachedPageCount] = useState(null);
+  const allCategoryIds = cachedEventCategories ? cachedEventCategories.map((c) => c.id) : [];
+  const defaultFiltered = (myProfile
+    ? [{ id: 'my_rating', value: [1, 0] }, { id: 'category', value: allCategoryIds }]
+    : [{ id: 'category', value: allCategoryIds }]
+  );
+  const effectiveSorted = (sorted && sorted.length > 0) ? sorted : defaultSort;
+  const effectiveFiltered = (filtered && filtered.length > 0) ? filtered : defaultFiltered;
+
   const {
     data, loading, error, fetchMore,
   } = useQuery(
@@ -41,16 +55,11 @@ function EventList({ history }) {
       variables: {
         page: 1,
         pageSize: 10,
-        sort: reactTableSortToTableResultsSort(
-          (sorted && sorted.length > 0) ? sorted : defaultSort,
-        ),
-        filters: reactTableFiltersToTableResultsFilters(filtered),
+        sort: reactTableSortToTableResultsSort(effectiveSorted),
+        filters: reactTableFiltersToTableResultsFilters(effectiveFiltered),
       },
     },
   );
-  const [cachedConventionName, setCachedConventionName] = useState(null);
-  const [cachedEventCategories, setCachedEventCategories] = useState(null);
-  const [cachedPageCount, setCachedPageCount] = useState(null);
 
   useEffect(
     () => {
@@ -96,6 +105,11 @@ function EventList({ history }) {
     [changeFilterValue],
   );
 
+  const myRatingFilterChanged = useCallback(
+    (value) => changeFilterValue('my_rating', value),
+    [changeFilterValue],
+  );
+
   const titlePrefixChanged = useCallback(
     (value) => changeFilterValue('title_prefix', value),
     [changeFilterValue],
@@ -125,39 +139,48 @@ function EventList({ history }) {
 
   return (
     <>
-      <h1 className="text-nowrap">
+      <h1>
         Events
         {cachedConventionName && ` at ${cachedConventionName}`}
       </h1>
 
-      <div className="d-flex flex-column flex-sm-row mt-4">
-        <div className="d-flex flex-row mb-2">
-          <div>
-            {cachedEventCategories && (
-              <EventListCategoryDropdown
-                eventCategories={cachedEventCategories}
-                value={((filtered || []).find(({ id }) => id === 'category') || {}).value}
-                onChange={categoryChanged}
+      <div className="mb-2">
+        <div className="d-flex flex-column flex-sm-row mt-4">
+          <div className="d-flex flex-row">
+            <div>
+              {cachedEventCategories && (
+                <EventListCategoryDropdown
+                  eventCategories={cachedEventCategories}
+                  value={(effectiveFiltered.find(({ id }) => id === 'category') || {}).value}
+                  onChange={categoryChanged}
+                />
+              )}
+            </div>
+
+            <div>
+              <EventListSortDropdown
+                showConventionOrder={!loading && data.currentAbility.can_read_schedule}
+                value={sorted}
+                onChange={onSortedChange}
               />
-            )}
+            </div>
           </div>
 
-          <div>
-            <EventListSortDropdown
-              showConventionOrder={!loading && data.currentAbility.can_read_schedule}
-              value={sorted}
-              onChange={onSortedChange}
+          <div className="ml-2 flex-grow-1">
+            <SearchInput
+              label="Search"
+              value={(effectiveFiltered.find(({ id }) => id === 'title_prefix') || {}).value}
+              onChange={titlePrefixChanged}
             />
           </div>
         </div>
 
-        <div className="ml-2 flex-grow-1">
-          <SearchInput
-            label="Search"
-            value={((filtered || []).find(({ id }) => id === 'title_prefix') || {}).value}
-            onChange={titlePrefixChanged}
+        {myProfile && (
+          <EventListMyRatingDropdown
+            value={(effectiveFiltered.find(({ id }) => id === 'my_rating') || {}).value}
+            onChange={myRatingFilterChanged}
           />
-        </div>
+        )}
       </div>
 
       <PageLoadingIndicator visible={loading} />

@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import arrayToSentence from 'array-to-sentence';
+import flatMap from 'lodash-es/flatMap';
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-apollo-hooks';
@@ -14,6 +14,17 @@ import AppRootContext from '../../AppRootContext';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import { RateEvent } from '../../EventRatings/mutations.gql';
 
+function arrayToSentenceReact(array) {
+  if (array.length < 2) {
+    return array;
+  }
+
+  const head = array.slice(0, -1);
+  const tail = array[array.length - 1];
+
+  return [...flatMap(head, (item) => [item, ', ']), ' and ', tail];
+}
+
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
     const sortedRuns = getSortedRuns(event);
@@ -24,7 +35,7 @@ function renderFirstRunTime(event, timezoneName) {
 
     let previousDayName = null;
 
-    return arrayToSentence([
+    return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
         const runStart = moment.tz(run.starts_at, timezoneName);
         const dayName = runStart.format('dddd');
@@ -35,10 +46,10 @@ function renderFirstRunTime(event, timezoneName) {
         previousDayName = dayName;
         return (
           <>
-            <span className="d-lg-none">
+            <span className="d-lg-none text-nowrap">
               {runStart.format('ddd h:mma')}
             </span>
-            <span className="d-none d-lg-inline">
+            <span className="d-none d-lg-inline text-nowrap">
               {runStart.format('dddd h:mma')}
             </span>
           </>
@@ -146,31 +157,35 @@ const EventCard = ({
     <div className="card mb-4" key={event.id}>
       <div className="card-header">
         <div className="event-card-header">
-          <div className="mb-2">
-            <h4 className="m-0 d-inline">
+          <div className="float-right text-right ml-1">
+            <div className="lead">
+              {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
+            </div>
+            <div className="mt-1 d-flex align-items-end justify-content-end">
+              {myProfile && (
+                <RateEventControl
+                  value={event.my_rating}
+                  onChange={(rating) => rateEvent(event.id, rating)}
+                />
+              )}
+            </div>
+          </div>
+
+          <div>
+            <h4 className="m-0 d-inline event-card-event-title">
               <Link to={buildEventUrl(event)}>{event.title}</Link>
             </h4>
-            <span className="lead ml-2 text-muted">
+            {' '}
+            <span className="lead text-muted">
               {event.event_category.name}
             </span>
-          </div>
-          <div className="lead ml-1">
-            {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
-          </div>
-          <div className="d-flex flex-wrap mt-1">
-            {metadataItems.map((metadataItem) => (
-              <div className="flex-shrink-1 mr-4" key={metadataItem.key}>
-                {metadataItem.content}
-              </div>
-            ))}
-          </div>
-          <div className="d-flex align-items-end justify-content-end">
-            {myProfile && (
-              <RateEventControl
-                value={event.my_rating}
-                onChange={(rating) => rateEvent(event.id, rating)}
-              />
-            )}
+            <div className="d-flex flex-wrap mt-1">
+              {metadataItems.map((metadataItem) => (
+                <div className="flex-shrink-1 mr-4" key={metadataItem.key}>
+                  {metadataItem.content}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

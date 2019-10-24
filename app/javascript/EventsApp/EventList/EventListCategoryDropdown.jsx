@@ -10,10 +10,10 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
   const currentCategories = eventCategories
     .filter((category) => (value || []).includes(category.id));
 
-  let categoryDescription = 'All events';
+  let categoryDescription = 'All event types';
   if (currentCategories.length === 1) {
     categoryDescription = pluralize(currentCategories[0].name);
-  } else if (currentCategories.length > 1) {
+  } else if (currentCategories.length > 1 && currentCategories.length < eventCategories.length) {
     categoryDescription = `${currentCategories.length} event types`;
   }
 

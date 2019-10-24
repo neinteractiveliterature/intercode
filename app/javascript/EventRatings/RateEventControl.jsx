@@ -6,7 +6,7 @@ import EventRatingIcon from './EventRatingIcon';
 function RatingPicker({ onClickRating }) {
   return (
     <div className="d-flex">
-      {[-1, 1].map((rating) => (
+      {[1, -1].map((rating) => (
         <button
           key={rating}
           type="button"
@@ -30,14 +30,14 @@ function RateEventControl({ value, onChange }) {
   };
 
   const hasRating = value != null && value !== 0;
-  const width = `${hasRating ? 2 : 4}rem`;
+  const width = `${hasRating ? 3 : 6}rem`;
 
   return (
     <div className="bg-white border rounded rate-event-control" style={{ width }}>
       {hasRating
         ? (
           <button type="button" className="btn p-0 cursor-pointer border-0" onClick={clearRating}>
-            <EventRatingIcon rating={value} />
+            <EventRatingIcon rating={value} selected />
           </button>
         )
         : <RatingPicker onClickRating={onChange} />}

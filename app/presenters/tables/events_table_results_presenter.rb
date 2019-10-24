@@ -35,6 +35,8 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
       Names.string_search(scope, value, ['title'])
     when :title_prefix
       value.present? ? scope.title_prefix(value) : scope
+    when :my_rating
+      value.present? ? scope.with_rating_for_user_con_profile(user_con_profile, value) : scope
     else
       scope
     end
