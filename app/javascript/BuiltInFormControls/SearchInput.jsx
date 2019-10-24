@@ -28,7 +28,7 @@ function SearchInput({
   );
 
   return (
-    <div className="form-group">
+    <div className="form-group mb-0">
       <label htmlFor={inputId} className="sr-only">{label}</label>
       <div className="input-group" {...(inputGroupProps || {})}>
         <input

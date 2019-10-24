@@ -14,3 +14,9 @@ $color-variants: map-merge((
     background-color: $value;
   }
 }
+
+@each $color, $value in $theme-colors {
+  .text-hover-#{$color}:hover {
+    color: $value !important;
+  }
+}
