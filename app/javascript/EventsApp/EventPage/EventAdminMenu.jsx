@@ -23,7 +23,7 @@ function EventAdminMenu({ eventId }) {
   }
 
   return (
-    <div className="card">
+    <div className="card mb-4">
       <div className="card-header">
         Event Admin
       </div>
