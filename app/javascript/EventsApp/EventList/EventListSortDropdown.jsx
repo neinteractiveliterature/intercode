@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import isEqual from 'lodash-es/isEqual';
 
 import PopperDropdown from '../../UIComponents/PopperDropdown';
+import AppRootContext from '../../AppRootContext';
 
 const SORT_ORDERS = [
   { sorted: [{ id: 'title', desc: false }], caption: 'title' },
@@ -12,9 +13,15 @@ const SORT_ORDERS = [
 ];
 
 const EventListSortDropdown = ({ showConventionOrder, value, onChange }) => {
+  const { myProfile } = useContext(AppRootContext);
+
   const mySortOrders = [...SORT_ORDERS];
   if (showConventionOrder) {
     mySortOrders.splice(1, 0, { sorted: [{ id: 'first_scheduled_run_start', desc: false }], caption: 'convention order' });
+  }
+
+  if (myProfile) {
+    mySortOrders.splice(0, 0, { sorted: [{ id: 'my_rating', desc: true }, { id: 'title', desc: false }], caption: 'my favorites' });
   }
 
   const currentSort = (

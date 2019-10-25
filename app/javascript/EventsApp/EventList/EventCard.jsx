@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import arrayToSentence from 'array-to-sentence';
+import flatMap from 'lodash-es/flatMap';
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,20 @@ import getSortedRuns from './getSortedRuns';
 import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
 import teamMembersForDisplay from '../teamMembersForDisplay';
+import AppRootContext from '../../AppRootContext';
+import RateEventControl from '../../EventRatings/RateEventControl';
+import useRateEvent from '../../EventRatings/useRateEvent';
+
+function arrayToSentenceReact(array) {
+  if (array.length < 2) {
+    return array;
+  }
+
+  const head = array.slice(0, -1);
+  const tail = array[array.length - 1];
+
+  return [...flatMap(head, (item) => [item, ', ']), ' and ', tail];
+}
 
 function renderFirstRunTime(event, timezoneName) {
   if (event.runs.length > 0) {
@@ -20,7 +34,7 @@ function renderFirstRunTime(event, timezoneName) {
 
     let previousDayName = null;
 
-    return arrayToSentence([
+    return arrayToSentenceReact([
       ...sortedRuns.map((run) => {
         const runStart = moment.tz(run.starts_at, timezoneName);
         const dayName = runStart.format('dddd');
@@ -29,7 +43,16 @@ function renderFirstRunTime(event, timezoneName) {
         }
 
         previousDayName = dayName;
-        return `${dayName} ${runStart.format('h:mma')}`;
+        return (
+          <React.Fragment key={runStart.toISOString()}>
+            <span className="d-lg-none text-nowrap">
+              {runStart.format('ddd h:mma')}
+            </span>
+            <span className="d-none d-lg-inline text-nowrap">
+              {runStart.format('dddd h:mma')}
+            </span>
+          </React.Fragment>
+        );
       }),
     ]);
   }
@@ -59,8 +82,10 @@ function teamIsAllAuthors(author, teamMembers) {
 const EventCard = ({
   event, timezoneName, sorted, canReadSchedule,
 }) => {
+  const { myProfile } = useContext(AppRootContext);
   const formResponse = JSON.parse(event.form_response_attrs_json);
   const metadataItems = [];
+  const rateEvent = useRateEvent();
 
   const displayTeamMembers = useMemo(
     () => teamMembersForDisplay(event),
@@ -124,39 +149,52 @@ const EventCard = ({
   return (
     <div className="card mb-4" key={event.id}>
       <div className="card-header">
-        <div className="d-flex flex-wrap mb-3">
-          <div className="d-flex flex-grow-1">
-            <h4 className="m-0">
-              <Link to={buildEventUrl(event)}>{event.title}</Link>
-            </h4>
-            <div className="lead ml-2 text-muted">
-              {event.event_category.name}
+        <div className="event-card-header">
+          <div className="float-right text-right ml-1">
+            <div className="lead">
+              {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
+            </div>
+            <div className="mt-1 d-flex align-items-end justify-content-end">
+              {myProfile && (
+                <RateEventControl
+                  value={event.my_rating}
+                  onChange={(rating) => rateEvent(event.id, rating)}
+                />
+              )}
             </div>
           </div>
-          <div className="lead">
-            {canReadSchedule ? renderFirstRunTime(event, timezoneName) : null}
+
+          <div>
+            <h4 className="m-0 d-inline event-card-event-title">
+              <Link to={buildEventUrl(event)}>{event.title}</Link>
+            </h4>
+            {' '}
+            <span className="lead text-muted">
+              {event.event_category.name}
+            </span>
+            <div className="d-flex flex-wrap mt-1">
+              {metadataItems.map((metadataItem) => (
+                <div className="flex-shrink-1 mr-4" key={metadataItem.key}>
+                  {metadataItem.content}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <ul className="list-inline my-1">
-          {metadataItems.map((metadataItem) => (
-            <li className="list-inline-item mr-4" key={metadataItem.key}>
-              {metadataItem.content}
-            </li>
-          ))}
-        </ul>
-        <p className="m-0">
-          {
-            sorted.some((sort) => sort.id === 'created_at')
-              ? (
+
+        {
+          sorted.some((sort) => sort.id === 'created_at')
+            ? (
+              <p className="m-0">
                 <strong>
                   Added
                   {' '}
                   {moment.tz(event.created_at, timezoneName).format('dddd, MMMM D, YYYY [at] h:mma')}
                 </strong>
-              )
-              : null
-          }
-        </p>
+              </p>
+            )
+            : null
+        }
       </div>
 
       <div
@@ -176,6 +214,7 @@ EventCard.propTypes = {
       team_member_name: PropTypes.string.isRequired,
     }).isRequired,
     title: PropTypes.string,
+    my_rating: PropTypes.number,
     form_response_attrs_json: PropTypes.string.isRequired,
     short_blurb_html: PropTypes.string.isRequired,
     team_members: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

@@ -57,6 +57,14 @@ export function toStringOrNull(value) {
   return value.toString();
 }
 
+export function nonEmptyString(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+
+  return value;
+}
+
 export const FilterCodecs = {
   stringArray: {
     encode: encodeStringArray,
@@ -77,6 +85,10 @@ export const FilterCodecs = {
   integer: {
     encode: toStringOrNull,
     decode: Transforms.integer,
+  },
+  nonEmptyString: {
+    encode: nonEmptyString,
+    decode: Transforms.identity,
   },
 };
 

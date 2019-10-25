@@ -65,6 +65,7 @@ class Types::MutationType < Types::BaseObject
   field :restoreDroppedEvent, mutation: Mutations::RestoreDroppedEvent
   field :updateEvent, mutation: Mutations::UpdateEvent
   field :updateEventAdminNotes, mutation: Mutations::UpdateEventAdminNotes
+  field :rateEvent, mutation: Mutations::RateEvent
 
   ### EventCategory
 
