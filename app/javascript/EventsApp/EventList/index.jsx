@@ -68,23 +68,31 @@ function EventList({ history }) {
       }
 
       const totalEntries = data.convention.events_paginated.total_entries;
+      const fetchRest = async () => {
+        try {
+          await fetchMore({
+            variables: { page: 1, pageSize: totalEntries },
+            updateQuery: (prev, { fetchMoreResult }) => ({
+              ...prev,
+              convention: {
+                ...prev.convention,
+                events_paginated: {
+                  ...prev.convention.events_paginated,
+                  entries: fetchMoreResult.convention.events_paginated.entries,
+                },
+              },
+            }),
+          });
+        } catch (err) {
+          // ignore, see https://github.com/apollographql/apollo-client/issues/4114#issuecomment-502111099
+        }
+      };
+
 
       if (data.convention.events_paginated.entries.length < totalEntries) {
         // this is a little weird but because of the way pagination works, we're going to end up
         // re-fetching the first 20 - so just go ahead and replace them
-        fetchMore({
-          variables: { page: 1, pageSize: totalEntries },
-          updateQuery: (prev, { fetchMoreResult }) => ({
-            ...prev,
-            convention: {
-              ...prev.convention,
-              events_paginated: {
-                ...prev.convention.events_paginated,
-                entries: fetchMoreResult.convention.events_paginated.entries,
-              },
-            },
-          }),
-        });
+        fetchRest();
       }
     },
     [loading, error, data, fetchMore],
