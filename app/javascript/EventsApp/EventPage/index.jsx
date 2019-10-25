@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import EventBreadcrumbItems from './EventBreadcrumbItems';
@@ -11,9 +11,14 @@ import useValueUnless from '../../useValueUnless';
 import ShortFormEventDetails from './ShortFormEventDetails';
 import EventAdminMenu from './EventAdminMenu';
 import LongFormEventDetails from './LongFormEventDetails';
+import RateEventControl from '../../EventRatings/RateEventControl';
+import AppRootContext from '../../AppRootContext';
+import useRateEvent from '../../EventRatings/useRateEvent';
 
 function EventPage({ eventId, eventPath }) {
+  const { myProfile } = useContext(AppRootContext);
   const { data, error } = useQuerySuspended(EventPageQuery, { variables: { eventId } });
+  const rateEvent = useRateEvent();
 
   usePageTitle(
     useValueUnless(() => data.event.title, error),
@@ -48,6 +53,15 @@ function EventPage({ eventId, eventPath }) {
         </div>
 
         <div className="col-md-3">
+          {myProfile && (
+            <div className="d-flex justify-content-center justify-content-md-end mb-4">
+              <RateEventControl
+                value={event.my_rating}
+                onChange={(rating) => rateEvent(event.id, rating)}
+              />
+            </div>
+          )}
+
           <EventAdminMenu eventId={eventId} />
         </div>
       </div>

@@ -73,14 +73,14 @@ class Tables::TableResultsPresenter
     return scope unless sort.present?
 
     expanded_scope = sort.inject(scope) do |current_scope, sort_entry|
-      expand_scope_for_sort(current_scope, sort_entry[:field].to_sym)
+      expand_scope_for_sort(current_scope, sort_entry[:field].to_sym, sort_entry[:desc] ? 'DESC' : 'ASC')
     end
 
     expanded_scope.order(
       sort.map do |entry|
         direction = entry[:desc] ? 'DESC' : 'ASC'
         sql_order_for_sort_field(entry[:field].to_sym, direction)
-      end
+      end.compact
     )
   end
 
@@ -95,7 +95,7 @@ class Tables::TableResultsPresenter
     raise 'Subclasses must implement #apply_filter!'
   end
 
-  def expand_scope_for_sort(scope, _sort_field_id)
+  def expand_scope_for_sort(scope, _sort_field_id, _direction)
     scope
   end
 

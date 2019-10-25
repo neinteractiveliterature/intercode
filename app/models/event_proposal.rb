@@ -2,6 +2,7 @@ class EventProposal < ApplicationRecord
   include AgeRestrictions
   include EventEmail
   include FormResponse
+  include OrderByTitle
 
   STATUSES = Set.new(%w[draft proposed reviewing accepted rejected withdrawn])
 

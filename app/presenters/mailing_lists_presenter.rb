@@ -28,11 +28,10 @@ class MailingListsPresenter
   end
 
   def event_proposers
-    event_proposals = Event.title_sort(
-      convention.event_proposals
-        .where.not(status: [:draft, :rejected, :dropped])
-        .includes(owner: :user)
-    )
+    event_proposals = convention.event_proposals
+      .where.not(status: [:draft, :rejected, :dropped])
+      .includes(owner: :user)
+      .order_by_title
 
     Result.new(
       event_proposals.map do |event_proposal|
@@ -47,9 +46,10 @@ class MailingListsPresenter
   end
 
   def team_members
-    events = Event.title_sort(
-      convention.events.active.includes(team_members: { user_con_profile: :user })
-    )
+    events = convention.events.active
+      .includes(team_members: { user_con_profile: :user })
+      .order_by_title
+
     emails_by_event = events.each_with_object({}) do |event, hash|
       hash[event] = team_member_emails_for_event(event)
     end.to_h
