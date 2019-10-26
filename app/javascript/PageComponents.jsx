@@ -3,6 +3,7 @@ import mapValues from 'lodash-es/mapValues';
 
 import ClickwrapAgreement from './ClickwrapAgreement';
 import CmsPage from './CmsPage';
+import { checkBundleHashOnError, lazyWithBundleHashCheck } from './checkBundleHash';
 
 function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -51,7 +52,10 @@ const UnwrappedNonCMSPageComponents = {
 };
 
 const NonCMSPageComponents = {
-  ...mapValues(UnwrappedNonCMSPageComponents, (component) => NonCMSPageWrapper(lazy(component))),
+  ...mapValues(
+    UnwrappedNonCMSPageComponents,
+    (component) => NonCMSPageWrapper(lazyWithBundleHashCheck(component)),
+  ),
   WrappedClickwrapAgreement: NonCMSPageWrapper(ClickwrapAgreement),
 };
 

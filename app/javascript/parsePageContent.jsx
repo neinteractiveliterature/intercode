@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import camelCase from 'lodash-es/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
@@ -9,13 +9,14 @@ import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';
 import Spoiler from './Spoiler';
+import { lazyWithBundleHashCheck } from './checkBundleHash';
 
-const EventAdminMenu = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'));
-const LongFormEventDetails = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'));
-const ProposeEventButton = lazy(() => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'));
-const RunsSection = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/RunsSection'));
-const ShortFormEventDetails = lazy(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/ShortFormEventDetails'));
-const WithdrawMySignupButton = lazy(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'));
+const EventAdminMenu = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'));
+const LongFormEventDetails = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'));
+const ProposeEventButton = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'));
+const RunsSection = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/RunsSection'));
+const ShortFormEventDetails = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/ShortFormEventDetails'));
+const WithdrawMySignupButton = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'));
 
 export const DEFAULT_COMPONENT_MAP = {
   EventAdminMenu,

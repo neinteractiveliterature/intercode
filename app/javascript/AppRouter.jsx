@@ -1,15 +1,15 @@
 import React, {
-  useState, useContext, Suspense, useEffect, useCallback,
+  useState, useContext, Suspense, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
   Switch, Route, Redirect, withRouter,
 } from 'react-router-dom';
-import fetch from 'unfetch';
 
 import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
+import { reloadOnBundleHashMismatch } from './checkBundleHash';
 
 function renderCommonRoutes() {
   return [
@@ -105,30 +105,12 @@ function renderRootSiteRoutes() {
 function AppRouter({ alert, location }) {
   const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
-  const [bundleHash, setBundleHash] = useState(null);
-
-  const checkBundleHash = useCallback(
-    async () => {
-      try {
-        const response = await fetch('/bundle_hash');
-        const newHash = await response.text();
-        if (bundleHash == null) {
-          setBundleHash(newHash);
-        } else if (bundleHash !== newHash) {
-          window.location.reload();
-        }
-      } catch (error) {
-        // well, we tried
-      }
-    },
-    [bundleHash],
-  );
 
   useEffect(
     () => {
-      checkBundleHash();
+      reloadOnBundleHashMismatch();
     },
-    [checkBundleHash, location.pathname],
+    [location.pathname],
   );
 
   const renderRoutes = () => {

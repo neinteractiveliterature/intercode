@@ -1,8 +1,9 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 import LoadingIndicator from '../LoadingIndicator';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const SyncColorPicker = lazy(() => import(/* webpackChunkName: "color-picker" */ './SyncColorPicker'));
+const SyncColorPicker = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "color-picker" */ './SyncColorPicker'));
 
 function ColorPicker(props) {
   return (

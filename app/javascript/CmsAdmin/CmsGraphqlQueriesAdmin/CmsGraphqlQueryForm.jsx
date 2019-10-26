@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { parse } from 'graphql/language/parser';
 import { useApolloClient } from 'react-apollo-hooks';
@@ -7,8 +7,9 @@ import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import BootstrapFormTextarea from '../../BuiltInFormControls/BootstrapFormTextarea';
 import { mutator, Transforms } from '../../ComposableFormUtils';
 import LoadingIndicator from '../../LoadingIndicator';
+import { lazyWithBundleHashCheck } from '../../checkBundleHash';
 
-const GraphiQL = lazy(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
+const GraphiQL = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
 
 function CmsGraphqlQueryForm({ value, onChange, readOnly }) {
   const client = useApolloClient();
