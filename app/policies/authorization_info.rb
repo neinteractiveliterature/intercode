@@ -62,4 +62,14 @@ class AuthorizationInfo
   def oauth_scoped_disjunction(&block)
     Queries::OAuthScopedDisjunction.evaluate(self, &block)
   end
+
+  def actual_user
+    @actual_user ||= begin
+      if assumed_identity_from_profile
+        assumed_identity_from_profile.user
+      else
+        user
+      end
+    end
+  end
 end

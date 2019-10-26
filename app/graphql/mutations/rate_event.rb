@@ -4,7 +4,9 @@ class Mutations::RateEvent < Mutations::BaseMutation
   argument :event_id, Integer, required: true, camelize: false
   argument :rating, Integer, required: true
 
-  require_user_con_profile
+  def authorized?(_args)
+    !!user_con_profile && !assumed_identity_from_profile
+  end
 
   def resolve(event_id:, rating:)
     event_rating = user_con_profile.event_ratings.find_or_initialize_by(event_id: event_id)
