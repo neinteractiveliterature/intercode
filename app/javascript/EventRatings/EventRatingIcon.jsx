@@ -42,9 +42,8 @@ function EventRatingIcon({ rating, selected, size }) {
       )}
       style={{
         fontSize: `${size}rem`,
-        width: `${size * 2.0}rem`,
-        height: `${size * 2.0}rem`,
-        paddingTop: `${size * 0.5}rem`,
+        width: `${size}rem`,
+        height: `${size}rem`,
       }}
     >
       <span className="sr-only">{RATING_NAMES[rating]}</span>

@@ -159,10 +159,7 @@ const EventCard = ({
                 <RateEventControl
                   value={event.my_rating}
                   onChange={(rating) => rateEvent(event.id, rating)}
-                  buttonProps={{
-                    size: 1.2,
-                    padding: 0.25,
-                  }}
+                  size={1.2}
                 />
               )}
             </div>

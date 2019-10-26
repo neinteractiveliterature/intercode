@@ -58,7 +58,7 @@ function EventPage({ eventId, eventPath }) {
               <RateEventControl
                 value={event.my_rating}
                 onChange={(rating) => rateEvent(event.id, rating)}
-                buttonProps={{ size: 1.5, padding: 0.0 }}
+                size={1.5}
               />
             </div>
           )}
