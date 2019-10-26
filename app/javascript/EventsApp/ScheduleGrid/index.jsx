@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import CategoryLegend from './CategoryLegend';
@@ -6,8 +6,12 @@ import FullnessLegend from './FullnessLegend';
 import ScheduleGrid from './ScheduleGrid';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import { ScheduleGridProvider } from './ScheduleGridContext';
+import EventListMyRatingSelector from '../EventList/EventListMyRatingSelector';
+import AppRootContext from '../../AppRootContext';
 
 function ScheduleGridApp({ configKey }) {
+  const { myProfile } = useContext(AppRootContext);
+  const [ratingFilter, setRatingFilter] = useState([1, 0]);
   const config = ScheduleGridConfig.get(configKey);
 
   return (
@@ -19,8 +23,15 @@ function ScheduleGridApp({ configKey }) {
           </li>
         </ol>
       </nav>
-      <ScheduleGridProvider config={config}>
-        {(timespan) => <ScheduleGrid timespan={timespan} />}
+      <ScheduleGridProvider config={config} myRatingFilter={myProfile ? ratingFilter : null}>
+        {(timespan) => (
+          <div className="mb-4">
+            <ScheduleGrid timespan={timespan} />
+            {config.showPersonalFilters && myProfile && (
+              <EventListMyRatingSelector value={ratingFilter} onChange={setRatingFilter} />
+            )}
+          </div>
+        )}
       </ScheduleGridProvider>
       {
         (config.legends || []).map((legend, i) => {

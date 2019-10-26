@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getRatingIconClass, RATING_NAMES } from '../../EventRatings/EventRatingIcon';
 
-function SignupStatusBadge({ signupStatus }) {
+function SignupStatusBadge({ signupStatus, myRating }) {
   if (signupStatus === 'confirmed') {
     return <i className="fa fa-user-circle mr-1" title="Confirmed signup" />;
   }
@@ -12,6 +13,10 @@ function SignupStatusBadge({ signupStatus }) {
 
   if (signupStatus === 'request_pending') {
     return <i className="fa fa-pause-circle mr-1" title="Signup request pending" />;
+  }
+
+  if (myRating) {
+    return <i className={`fa ${getRatingIconClass(myRating, true)} mr-1`} title={RATING_NAMES[myRating]} />;
   }
 
   return null;
