@@ -1,6 +1,11 @@
-import React, { useState, useContext, Suspense } from 'react';
+import React, {
+  useState, useContext, Suspense, useEffect, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import {
+  Switch, Route, Redirect, withRouter,
+} from 'react-router-dom';
+import fetch from 'unfetch';
 
 import PageLoadingIndicator from './PageLoadingIndicator';
 import AppRootContext from './AppRootContext';
@@ -97,9 +102,34 @@ function renderRootSiteRoutes() {
   ];
 }
 
-function AppRouter({ alert }) {
+function AppRouter({ alert, location }) {
   const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
+  const [bundleHash, setBundleHash] = useState(null);
+
+  const checkBundleHash = useCallback(
+    async () => {
+      try {
+        const response = await fetch('/bundle_hash');
+        const newHash = await response.text();
+        if (bundleHash == null) {
+          setBundleHash(newHash);
+        } else if (bundleHash !== newHash) {
+          window.location.reload();
+        }
+      } catch (error) {
+        // well, we tried
+      }
+    },
+    [bundleHash],
+  );
+
+  useEffect(
+    () => {
+      checkBundleHash();
+    },
+    [checkBundleHash, location.pathname],
+  );
 
   const renderRoutes = () => {
     if (!conventionName) {
@@ -128,14 +158,14 @@ function AppRouter({ alert }) {
         {renderRoutes()}
         <Route
           path="/"
-          render={({ location }) => (
+          render={({ location: routeLocation }) => (
             <div className="alert alert-warning">
               <h1>Oops!</h1>
 
               <p className="mb-0">
                 We couldn&rsquo;t find a page at the location
                 {' '}
-                {location.pathname}
+                {routeLocation.pathname}
                 .
               </p>
             </div>
@@ -148,10 +178,13 @@ function AppRouter({ alert }) {
 
 AppRouter.propTypes = {
   alert: PropTypes.string,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
 };
 
 AppRouter.defaultProps = {
   alert: null,
 };
 
-export default AppRouter;
+export default withRouter(AppRouter);

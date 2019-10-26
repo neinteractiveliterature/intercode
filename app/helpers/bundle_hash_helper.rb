@@ -1,0 +1,2 @@
+module BundleHashHelper
+end
