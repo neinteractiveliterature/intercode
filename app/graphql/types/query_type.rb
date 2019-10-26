@@ -33,23 +33,13 @@ class Types::QueryType < Types::BaseObject
   field :events, [Types::EventType, null: true], null: true do
     argument :extended_counts, Boolean, required: false
     argument :include_dropped, Boolean, required: false
-    argument :my_rating_filter, [Int], required: false
     argument :start, Types::DateType, required: false
     argument :finish, Types::DateType, required: false
   end
 
-  def events(include_dropped: false, my_rating_filter: nil, start: nil, finish: nil, **_args)
+  def events(include_dropped: false, start: nil, finish: nil, **_args)
     events = convention.events
     events = events.active unless include_dropped
-    if my_rating_filter.present?
-      my_signups_scope = Signup.where(
-        user_con_profile_id: context[:user_con_profile].id, state: %w[confirmed waitlisted]
-      )
-      events = events.where(
-        id: Event.where(id: Event.with_rating_for_user_con_profile(context[:user_con_profile], my_rating_filter))
-          .or(Event.where(id: my_signups_scope.joins(:run).select(:event_id)))
-      )
-    end
 
     if start || finish
       if policy(Run.new(event: Event.new(convention: convention))).read?

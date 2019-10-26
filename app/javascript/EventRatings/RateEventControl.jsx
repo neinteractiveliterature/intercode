@@ -22,7 +22,13 @@ function RatingButton({
       onClick={onClick}
     >
       <div style={paddingStyle}>
-        <EventRatingIcon size={size} rating={rating} selected={selected} />
+        <EventRatingIcon
+          size={size}
+          rating={rating}
+          selected={selected}
+          useColors
+          overrideElementSize
+        />
       </div>
     </button>
   );

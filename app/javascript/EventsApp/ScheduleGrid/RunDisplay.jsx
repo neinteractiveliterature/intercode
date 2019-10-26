@@ -22,6 +22,7 @@ const RunDisplay = React.memo(React.forwardRef(({
     signupCountData,
     runDimensions,
     layoutResult,
+    disableDetailsPopup: run.disableDetailsPopup,
   });
 
   const { availabilityFraction, unlimited } = calculateAvailability(event, signupCountData);
@@ -75,13 +76,13 @@ const RunDisplay = React.memo(React.forwardRef(({
 
   return (
     <div
-      tabIndex={0}
+      tabIndex={run.disableDetailsPopup ? null : 0}
       className={getRunClassName({
         event, signupStatus, config, signupCountData, unlimited,
       })}
       style={runStyle}
-      role="button"
-      onClick={toggle}
+      role={run.disableDetailsPopup ? null : 'button'}
+      onClick={run.disableDetailsPopup ? null : toggle}
       onKeyDown={(keyEvent) => {
         if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
           keyEvent.preventDefault();
@@ -92,9 +93,9 @@ const RunDisplay = React.memo(React.forwardRef(({
     >
       {renderExtendedCounts(config, signupCountData)}
       <div className="schedule-grid-event-content">
-        {renderAvailabilityBar(signupCountData)}
+        {!event.fake && renderAvailabilityBar(signupCountData)}
         {renderSignupStatusBadge()}
-        {event.title}
+        {event.displayTitle || event.title}
       </div>
     </div>
   );
