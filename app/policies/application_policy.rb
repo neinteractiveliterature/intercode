@@ -3,7 +3,7 @@ class ApplicationPolicy
 
   attr_reader :authorization_info, :record
   delegate :user, :doorkeeper_token, :assumed_identity_from_profile, :oauth_scope?,
-    :oauth_scoped_disjunction,
+    :oauth_scoped_disjunction, :actual_user,
     to: :authorization_info
 
   def initialize(authorization_info_or_user, record)
