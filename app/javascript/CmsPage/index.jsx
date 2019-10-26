@@ -1,5 +1,5 @@
 import React, {
-  lazy, useMemo, useEffect, Suspense,
+  useMemo, useEffect, Suspense,
 } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
@@ -10,8 +10,9 @@ import PageLoadingIndicator from '../PageLoadingIndicator';
 import parsePageContent from '../parsePageContent';
 import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const PageAdminDropdown = lazy(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
+const PageAdminDropdown = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
 function CmsPage({
   slug, rootPage, history, location,

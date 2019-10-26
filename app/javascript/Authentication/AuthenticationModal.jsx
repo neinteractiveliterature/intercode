@@ -1,11 +1,12 @@
-import React, { lazy, Suspense, useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const ForgotPasswordForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './ForgotPasswordForm'));
-const SignInForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './SignInForm'));
-const SignUpForm = lazy(() => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'));
+const ForgotPasswordForm = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "authentication-forms" */ './ForgotPasswordForm'));
+const SignInForm = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "authentication-forms" */ './SignInForm'));
+const SignUpForm = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'));
 
 function AuthenticationModal() {
   const { visible, currentView } = useContext(AuthenticationModalContext);

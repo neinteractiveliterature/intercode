@@ -1,8 +1,9 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 import LoadingIndicator from '../LoadingIndicator';
+import { lazyWithBundleHashCheck } from '../checkBundleHash';
 
-const SyncCodeInput = lazy(() => import(/* webpackChunkName: "code-input" */ './SyncCodeInput'));
+const SyncCodeInput = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "code-input" */ './SyncCodeInput'));
 
 function CodeInput(props) {
   return (
