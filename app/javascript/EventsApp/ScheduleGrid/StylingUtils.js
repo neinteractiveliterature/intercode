@@ -41,6 +41,7 @@ export function getRunClassName({
         && signupCountData.runFull(event)
         && signupStatus == null
       ),
+      fake: event.fake,
       unlimited,
     },
   );
@@ -92,10 +93,10 @@ export function getRunClassificationStyles({
 }
 
 export function getRunStyle({
-  event, eventCategory, signupStatus, config, signupCountData, runDimensions, layoutResult,
+  event, eventCategory, signupStatus, config, signupCountData, runDimensions, layoutResult, disableDetailsPopup,
 }) {
   return {
-    cursor: 'pointer',
+    cursor: (disableDetailsPopup ? null : 'pointer'),
     ...getRunPositioningStyles({ runDimensions, layoutResult }),
     ...getRunClassificationStyles({
       event, eventCategory, signupStatus, config, signupCountData,

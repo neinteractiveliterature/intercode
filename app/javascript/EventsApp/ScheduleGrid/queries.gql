@@ -53,21 +53,21 @@ query ScheduleGridConventionDataQuery {
   }
 }
 
-query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date, $myRatingFilter: [Int!]) {
-  events(extendedCounts: $extendedCounts, start: $start, finish: $finish, myRatingFilter: $myRatingFilter) {
+query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
     id
     ...ScheduleGridEventFragment
   }
 }
 
-query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date, $myRatingFilter: [Int!]) {
+query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
   convention {
     id
     pre_schedule_content_html
     ...CommonConventionData
   }
 
-  events(extendedCounts: $extendedCounts, start: $start, finish: $finish, myRatingFilter: $myRatingFilter) {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
     id
     ...ScheduleGridEventFragment
   }

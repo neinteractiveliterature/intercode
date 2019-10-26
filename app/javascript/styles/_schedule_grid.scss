@@ -48,7 +48,7 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
     color: white;
   }
 
-  &.unlimited, &.zero-capacity {
+  &.unlimited, &.zero-capacity, &.fake {
     border-radius: 0;
   }
 }

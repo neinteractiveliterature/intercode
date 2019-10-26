@@ -19,7 +19,7 @@ function expandTimespanToNearestHour(timespan) {
 }
 
 export default class Schedule {
-  constructor(config, convention, events) {
+  constructor(config, convention, events, myRatingFilter) {
     this.config = config;
 
     this.timezoneName = convention.timezone_name;
@@ -30,6 +30,9 @@ export default class Schedule {
     )).reduce((runEntries, entriesForEvent) => [...runEntries, ...entriesForEvent], []));
 
     this.conventionTimespan = timespanFromConvention(convention);
+
+    this.myRatingFilter = myRatingFilter;
+    this.nextFakeEventRunId = -1;
 
     this.eventRuns = EventRun.buildEventRunsFromApi(events);
     this.runTimespansById = new Map(this.eventRuns
@@ -151,4 +154,62 @@ export default class Schedule {
   }
 
   shouldUseRowHeaders = () => this.config.groupEventsBy === 'room'
+
+  shouldShowRun = (runId) => {
+    if (this.myRatingFilter == null || this.myRatingFilter.length === 0) {
+      return true;
+    }
+
+    const run = this.runsById.get(runId);
+    const event = this.eventsById.get(run.event_id);
+    return this.myRatingFilter.includes(event.my_rating || 0);
+  }
+
+  addFakeEventRun = (timespan, title, displayTitle) => {
+    const fakeEventRunId = this.nextFakeEventRunId;
+    this.nextFakeEventRunId -= 1;
+
+    const fakeEventRun = {
+      runId: fakeEventRunId,
+      timespan,
+    };
+
+    const fakeRun = {
+      id: fakeEventRunId,
+      disableDetailsPopup: true,
+      event_id: fakeEventRunId,
+      my_signups: [],
+      my_signup_requests: [],
+      room_names: [],
+      signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
+        confirmed: {},
+        waitlisted: {},
+        withdrawn: {},
+      }),
+    };
+
+    const fakeEvent = {
+      id: fakeEventRunId,
+      title,
+      displayTitle,
+      fake: true,
+      event_category: {
+        default_color: 'rgba(0, 0, 0, 0.1)',
+        signed_up_color: 'transparent',
+      },
+      registration_policy: {
+        buckets: [],
+        total_slots: 0,
+        slots_limited: true,
+      },
+      runs: [fakeRun],
+    };
+
+    this.eventsById.set(fakeEventRunId, fakeEvent);
+    this.runsById.set(fakeEventRunId, fakeRun);
+    this.runTimespansById.set(fakeEventRunId, timespan);
+    this.eventRuns.push(fakeEventRun);
+
+    return fakeEventRun;
+  }
 }

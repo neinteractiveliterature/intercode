@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getRatingIconClass, RATING_NAMES } from '../../EventRatings/EventRatingIcon';
+import EventRatingIcon from '../../EventRatings/EventRatingIcon';
 
 function SignupStatusBadge({ signupStatus, myRating }) {
   if (signupStatus === 'confirmed') {
@@ -16,7 +16,7 @@ function SignupStatusBadge({ signupStatus, myRating }) {
   }
 
   if (myRating) {
-    return <i className={`fa ${getRatingIconClass(myRating, true)} mr-1`} title={RATING_NAMES[myRating]} />;
+    return <span className="mr-1"><EventRatingIcon rating={myRating} selected /></span>;
   }
 
   return null;

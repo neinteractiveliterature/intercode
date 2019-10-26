@@ -27,7 +27,7 @@ export const ScheduleGridContext = React.createContext({
   toggleRunDetailsVisibility: () => {},
 });
 
-export function useScheduleGridProvider(config, convention, events) {
+export function useScheduleGridProvider(config, convention, events, myRatingFilter) {
   const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
 
   const isRunDetailsVisible = useMemo(
@@ -38,12 +38,12 @@ export function useScheduleGridProvider(config, convention, events) {
   const schedule = useMemo(
     () => {
       if (config && convention && events) {
-        return new Schedule(config, convention, events);
+        return new Schedule(config, convention, events, myRatingFilter);
       }
 
       return {};
     },
-    [config, convention, events],
+    [config, convention, events, myRatingFilter],
   );
 
   const toggleRunDetailsVisibility = useCallback(
@@ -119,7 +119,6 @@ function MobileScheduleGridProvider({ config, children, myRatingFilter }) {
     query: ScheduleGridCombinedQuery,
     variables: {
       extendedCounts: config.showExtendedCounts || false,
-      myRatingFilter,
     },
   };
 
@@ -128,7 +127,7 @@ function MobileScheduleGridProvider({ config, children, myRatingFilter }) {
   });
   const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
   const { convention, events } = (cachedData || {});
-  const providerValue = useScheduleGridProvider(config, convention, events);
+  const providerValue = useScheduleGridProvider(config, convention, events, myRatingFilter);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -180,7 +179,6 @@ function DesktopScheduleGridProviderTabContent({
 }) {
   const { data, error, loading } = useQuery(ScheduleGridEventsQuery, {
     variables: {
-      myRatingFilter,
       ...getEventsQueryVariables(timespan, config.showExtendedCounts),
     },
   });
@@ -189,6 +187,7 @@ function DesktopScheduleGridProviderTabContent({
     config,
     convention,
     (cachedData || {}).events || [],
+    myRatingFilter,
   );
 
   if (error) {
@@ -220,11 +219,10 @@ function DesktopScheduleGridProvider({ config, children, myRatingFilter }) {
     (timespan) => client.query({
       query: ScheduleGridEventsQuery,
       variables: {
-        myRatingFilter,
         ...getEventsQueryVariables(timespan, config.showExtendedCounts),
       },
     }),
-    [client, config.showExtendedCounts, myRatingFilter],
+    [client, config.showExtendedCounts],
   );
 
   if (error) {
