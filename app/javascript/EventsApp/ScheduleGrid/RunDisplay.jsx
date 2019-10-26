@@ -53,11 +53,11 @@ const RunDisplay = React.memo(React.forwardRef(({
         <span className="text-success">
           {signupCountData.sumSignupCounts({ state: 'confirmed', counted: true })}
         </span>
-        {'/'}
+        /
         <span className="text-info">
           {signupCountData.sumSignupCounts({ state: 'confirmed', counted: false })}
         </span>
-        {'/'}
+        /
         <span className="text-danger">
           {signupCountData.getWaitlistCount()}
         </span>
@@ -70,7 +70,7 @@ const RunDisplay = React.memo(React.forwardRef(({
       return null;
     }
 
-    return <SignupStatusBadge signupStatus={signupStatus} />;
+    return <SignupStatusBadge signupStatus={signupStatus} myRating={event.my_rating} />;
   };
 
   return (
@@ -93,7 +93,7 @@ const RunDisplay = React.memo(React.forwardRef(({
       {renderExtendedCounts(config, signupCountData)}
       <div className="schedule-grid-event-content">
         {renderAvailabilityBar(signupCountData)}
-        {renderSignupStatusBadge(signupStatus, config)}
+        {renderSignupStatusBadge()}
         {event.title}
       </div>
     </div>

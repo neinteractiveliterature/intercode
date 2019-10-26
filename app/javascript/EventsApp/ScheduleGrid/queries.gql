@@ -5,6 +5,7 @@ fragment ScheduleGridEventFragment on Event {
   title
   length_seconds
   short_blurb_html
+  my_rating
 
   event_category {
     id
@@ -52,21 +53,21 @@ query ScheduleGridConventionDataQuery {
   }
 }
 
-query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
-  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+query ScheduleGridEventsQuery($extendedCounts: Boolean!, $start: Date, $finish: Date, $myRatingFilter: [Int!]) {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish, myRatingFilter: $myRatingFilter) {
     id
     ...ScheduleGridEventFragment
   }
 }
 
-query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date) {
+query ScheduleGridCombinedQuery($extendedCounts: Boolean!, $start: Date, $finish: Date, $myRatingFilter: [Int!]) {
   convention {
     id
     pre_schedule_content_html
     ...CommonConventionData
   }
 
-  events(extendedCounts: $extendedCounts, start: $start, finish: $finish) {
+  events(extendedCounts: $extendedCounts, start: $start, finish: $finish, myRatingFilter: $myRatingFilter) {
     id
     ...ScheduleGridEventFragment
   }

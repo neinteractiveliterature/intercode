@@ -48,10 +48,11 @@ class Types::EventType < Types::BaseObject
   field :runs, [Types::RunType], null: false do
     argument :start, Types::DateType, required: false
     argument :finish, Types::DateType, required: false
+    argument :exclude_conflicts, Boolean, required: false
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], pundit_user).load(object)
+    EventRunsLoader.for(args[:start], args[:finish], args[:exclude_conflicts], pundit_user).load(object)
   end
 
   field :run, Types::RunType, null: false do

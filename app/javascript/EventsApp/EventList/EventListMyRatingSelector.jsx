@@ -34,6 +34,7 @@ function EventListMyRatingSelector({ value, onChange }) {
       <ChoiceSet
         choices={DROPDOWN_OPTIONS}
         choiceClassName="form-check-inline"
+        containerClassName="d-flex flex-wrap"
         value={(value || []).map((integer) => integer.toString())}
         onChange={(integerArray) => { onChange(integerArray.map(Transforms.integer)); }}
         multiple
