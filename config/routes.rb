@@ -56,6 +56,7 @@ Intercode::Application.routes.draw do
   end
 
   get 'users/export' => 'users#export', as: :export_users
+  get 'bundle_hash' => 'bundle_hash#show'
 
   get '/(*extra)' => 'single_page_app#root', as: :root, constraints: {
     extra: %r{(?!(uploads|packs|assets)/).*}
