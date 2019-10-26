@@ -30,5 +30,11 @@ class EventRatingPolicyTest < ActiveSupport::TestCase
     it "does not allow site admins to #{action} other people's event ratings" do
       refute EventRatingPolicy.new(create(:site_admin), event_rating).send("#{action}?")
     end
+
+    it "does not allow site admins to #{action} other people's event ratings even under assumed identities" do
+      admin_profile = create(:user_con_profile, convention: event_rating.user_con_profile.convention, user: create(:site_admin))
+      authorization_info = AuthorizationInfo.new(event_rating.user_con_profile.user, nil, assumed_identity_from_profile: admin_profile)
+      refute EventRatingPolicy.new(authorization_info, event_rating).send("#{action}?")
+    end
   end
 end

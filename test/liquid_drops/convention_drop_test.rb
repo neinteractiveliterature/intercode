@@ -5,7 +5,7 @@ describe ConventionDrop do
   let(:convention_drop) { ConventionDrop.new(convention) }
 
   it "returns the convention's name" do
-    convention_drop.name.must_equal convention.name
+    assert_equal convention.name, convention_drop.name
   end
 
   describe 'with runs that have openings' do
@@ -49,17 +49,17 @@ describe ConventionDrop do
     end
 
     it 'returns all runs with limited-slot openings' do
-      convention_drop.runs_with_openings.must_include run_with_openings
-      convention_drop.runs_with_openings.must_include volunteer_run_with_openings
-      convention_drop.runs_with_openings.wont_include run_without_openings
-      convention_drop.runs_with_openings.wont_include unlimited_run_with_openings
+      assert_includes convention_drop.runs_with_openings, run_with_openings
+      assert_includes convention_drop.runs_with_openings, volunteer_run_with_openings
+      refute_includes convention_drop.runs_with_openings, run_without_openings
+      refute_includes convention_drop.runs_with_openings, unlimited_run_with_openings
     end
 
     it 'returns all non-volunteer runs with limited-slot openings' do
-      convention_drop.non_volunteer_runs_with_openings.must_include run_with_openings
-      convention_drop.non_volunteer_runs_with_openings.wont_include volunteer_run_with_openings
-      convention_drop.non_volunteer_runs_with_openings.wont_include run_without_openings
-      convention_drop.non_volunteer_runs_with_openings.wont_include unlimited_run_with_openings
+      assert_includes convention_drop.non_volunteer_runs_with_openings, run_with_openings
+      refute_includes convention_drop.non_volunteer_runs_with_openings, volunteer_run_with_openings
+      refute_includes convention_drop.non_volunteer_runs_with_openings, run_without_openings
+      refute_includes convention_drop.non_volunteer_runs_with_openings, unlimited_run_with_openings
     end
   end
 end

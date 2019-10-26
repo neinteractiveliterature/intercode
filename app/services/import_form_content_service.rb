@@ -21,7 +21,7 @@ class ImportFormContentService < CivilService::Service
       logger.info 'Clearing any existing content'
       form.form_sections.destroy_all
 
-      form.update_attributes(title: content[:title])
+      form.update(title: content[:title])
       content[:sections].each_with_index do |section_attributes, i|
         import_section(section_attributes, i + 1)
       end
