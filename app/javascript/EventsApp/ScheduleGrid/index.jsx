@@ -8,10 +8,12 @@ import ScheduleGridConfig from './ScheduleGridConfig';
 import { ScheduleGridProvider } from './ScheduleGridContext';
 import EventListMyRatingSelector from '../EventList/EventListMyRatingSelector';
 import AppRootContext from '../../AppRootContext';
+import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 
 function ScheduleGridApp({ configKey }) {
   const { myProfile } = useContext(AppRootContext);
   const [ratingFilter, setRatingFilter] = useState([1, 0]);
+  const [hideConflicts, setHideConflicts] = useState(false);
   const config = ScheduleGridConfig.get(configKey);
 
   return (
@@ -23,13 +25,31 @@ function ScheduleGridApp({ configKey }) {
           </li>
         </ol>
       </nav>
-      <ScheduleGridProvider config={config} myRatingFilter={myProfile ? ratingFilter : null}>
+      <ScheduleGridProvider
+        config={config}
+        myRatingFilter={myProfile ? ratingFilter : null}
+        hideConflicts={myProfile ? hideConflicts : false}
+      >
         {(timespan) => (
           <div className="mb-4">
-            <ScheduleGrid timespan={timespan} />
             {config.showPersonalFilters && myProfile && (
-              <EventListMyRatingSelector value={ratingFilter} onChange={setRatingFilter} />
+              <div className="d-flex flex-column flex-md-row bg-light border-bottom">
+                <EventListMyRatingSelector value={ratingFilter} onChange={setRatingFilter} />
+                <div className="flex-grow-1 d-none d-md-block" />
+                <div className="btn text-left">
+                  <ChoiceSet
+                    choiceClassName="form-check-inline"
+                    choices={[
+                      { label: 'Show conflicts', value: 'false' },
+                      { label: 'Hide conflicts', value: 'true' },
+                    ]}
+                    value={hideConflicts.toString()}
+                    onChange={(value) => setHideConflicts(value === 'true')}
+                  />
+                </div>
+              </div>
             )}
+            <ScheduleGrid timespan={timespan} />
           </div>
         )}
       </ScheduleGridProvider>
