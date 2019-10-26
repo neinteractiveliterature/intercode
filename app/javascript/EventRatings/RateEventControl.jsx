@@ -3,44 +3,71 @@ import PropTypes from 'prop-types';
 
 import EventRatingIcon from './EventRatingIcon';
 
-function RatingPicker({ onClickRating }) {
+function RatingButton({
+  rating, selected, onClick, padding, size,
+}) {
   return (
-    <div className="d-flex">
-      {[1, -1].map((rating) => (
-        <button
-          key={rating}
-          type="button"
-          className="btn p-0 cursor-pointer border-0"
-          onClick={() => onClickRating(rating)}
-        >
-          <EventRatingIcon rating={rating} />
-        </button>
-      ))}
-    </div>
+    <button
+      key={rating}
+      type="button"
+      className="btn p-0 cursor-pointer border-0"
+      onClick={onClick}
+    >
+      <div style={{ padding: `${padding}rem` }}>
+        <EventRatingIcon size={size} rating={rating} selected={selected} />
+      </div>
+    </button>
   );
 }
 
-RatingPicker.propTypes = {
-  onClickRating: PropTypes.func.isRequired,
+RatingButton.propTypes = {
+  rating: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  size: PropTypes.number,
+  padding: PropTypes.number,
 };
 
-function RateEventControl({ value, onChange }) {
+RatingButton.defaultProps = {
+  selected: false,
+  size: 1.0,
+  padding: 0.0,
+};
+
+function RateEventControl({ value, onChange, buttonProps }) {
   const clearRating = () => {
     onChange(0);
   };
 
   const hasRating = value != null && value !== 0;
-  const width = `${hasRating ? 3 : 6}rem`;
+  const buttonSize = (buttonProps || {}).size || RatingButton.defaultProps.size;
+  const buttonPadding = (buttonProps || {}).padding || RatingButton.defaultProps.padding;
+  const buttonWidth = (buttonSize * 2.0) + (buttonPadding * 2.0);
+  const width = `calc(${hasRating ? buttonWidth : buttonWidth * 2.0}rem + 2px)`;
 
   return (
     <div className="bg-white border rounded rate-event-control" style={{ width }}>
       {hasRating
         ? (
-          <button type="button" className="btn p-0 cursor-pointer border-0" onClick={clearRating}>
-            <EventRatingIcon rating={value} selected />
-          </button>
+          <RatingButton
+            rating={value}
+            onClick={clearRating}
+            selected
+            {...buttonProps}
+          />
         )
-        : <RatingPicker onClickRating={onChange} />}
+        : (
+          <div className="d-flex">
+            {[1, -1].map((rating) => (
+              <RatingButton
+                key={rating}
+                rating={rating}
+                onClick={() => onChange(rating)}
+                {...buttonProps}
+              />
+            ))}
+          </div>
+        )}
     </div>
   );
 }
@@ -48,10 +75,12 @@ function RateEventControl({ value, onChange }) {
 RateEventControl.propTypes = {
   value: PropTypes.number,
   onChange: PropTypes.func.isRequired,
+  buttonProps: PropTypes.shape({}),
 };
 
 RateEventControl.defaultProps = {
   value: null,
+  buttonProps: {},
 };
 
 export default RateEventControl;

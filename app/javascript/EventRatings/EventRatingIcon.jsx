@@ -22,25 +22,30 @@ export function getRatingIconClass(rating, selected) {
 
 export function getRatingColorClass(rating, selected) {
   if (rating === -1) {
-    return selected ? 'text-danger' : 'text-hover-danger';
+    return selected ? 'text-danger' : 'text-secondary text-hover-danger';
   }
 
   if (rating === 1) {
-    return selected ? 'text-warning' : 'text-hover-warning';
+    return selected ? 'text-warning' : 'text-secondary text-hover-warning';
   }
 
   return '';
 }
 
-function EventRatingIcon({ rating, selected }) {
+function EventRatingIcon({ rating, selected, size }) {
   return (
     <i
       className={classnames(
-        'event-rating-icon fa',
+        'fa',
         getRatingIconClass(rating, selected),
         getRatingColorClass(rating, selected),
       )}
-      style={{ fontSize: '1.5rem' }}
+      style={{
+        fontSize: `${size}rem`,
+        width: `${size * 2.0}rem`,
+        height: `${size * 2.0}rem`,
+        paddingTop: `${size * 0.5}rem`,
+      }}
     >
       <span className="sr-only">{RATING_NAMES[rating]}</span>
     </i>
@@ -49,11 +54,13 @@ function EventRatingIcon({ rating, selected }) {
 
 EventRatingIcon.propTypes = {
   rating: PropTypes.number.isRequired,
+  size: PropTypes.number,
   selected: PropTypes.bool,
 };
 
 EventRatingIcon.defaultProps = {
   selected: false,
+  size: 1.0,
 };
 
 export default EventRatingIcon;

@@ -78,7 +78,10 @@ const RunDetails = React.forwardRef(({
         <div className="popover-body overflow-auto">
           {myProfile && (
             <div className="float-right">
-              <RateEventControl value={event.my_rating} onChange={ratingChanged} />
+              <RateEventControl
+                value={event.my_rating}
+                onChange={ratingChanged}
+              />
             </div>
           )}
           <table className="mb-2">
