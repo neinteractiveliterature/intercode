@@ -19,7 +19,7 @@ function expandTimespanToNearestHour(timespan) {
 }
 
 export default class Schedule {
-  constructor(config, convention, events, myRatingFilter) {
+  constructor(config, convention, events, myRatingFilter, hideConflicts) {
     this.config = config;
 
     this.timezoneName = convention.timezone_name;
@@ -37,6 +37,23 @@ export default class Schedule {
     this.eventRuns = EventRun.buildEventRunsFromApi(events);
     this.runTimespansById = new Map(this.eventRuns
       .map((eventRun) => [eventRun.runId, eventRun.timespan]));
+
+    this.hideConflicts = hideConflicts;
+    this.myConflictingRuns = [];
+    events.forEach((event) => {
+      if (event.can_play_concurrently) {
+        return;
+      }
+
+      event.runs.forEach((run) => {
+        if (
+          run.my_signups.some((signup) => signup.state === 'confirmed' || signup.state === 'waitlisted')
+          || run.my_signup_requests.some((request) => request.state === 'pending')
+        ) {
+          this.myConflictingRuns.push(run);
+        }
+      });
+    });
   }
 
   getRun = (runId) => this.runsById.get(runId)
@@ -156,12 +173,28 @@ export default class Schedule {
   shouldUseRowHeaders = () => this.config.groupEventsBy === 'room'
 
   shouldShowRun = (runId) => {
+    const run = this.runsById.get(runId);
+    const event = this.eventsById.get(run.event_id);
+
+    if (this.hideConflicts) {
+      const runTimespan = this.getRunTimespan(runId);
+      const hasConflict = this.myConflictingRuns.filter((run) => run.id !== runId)
+        .some((run) => this.getRunTimespan(run.id).overlapsTimespan(runTimespan));
+
+      const acceptsCountedSignups = event.registration_policy.buckets.some((bucket) => (
+        (!bucket.slots_limited || bucket.total_slots > 0)
+        && !bucket.not_counted
+      ));
+
+      if (hasConflict && acceptsCountedSignups) {
+        return false;
+      }
+    }
+
     if (this.myRatingFilter == null || this.myRatingFilter.length === 0) {
       return true;
     }
 
-    const run = this.runsById.get(runId);
-    const event = this.eventsById.get(run.event_id);
     return this.myRatingFilter.includes(event.my_rating || 0);
   }
 

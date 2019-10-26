@@ -1,9 +1,7 @@
-import React from 'react';
 import moment from 'moment-timezone';
 import sortBy from 'lodash-es/sortBy';
 
 import { normalizeTitle } from '../../../ValueUtils';
-import EventRatingIcon from '../../../EventRatings/EventRatingIcon';
 
 class ScheduleBlock {
   constructor(id, timespan, eventRuns, schedule) {
@@ -15,7 +13,10 @@ class ScheduleBlock {
     this.interval = moment.duration(1, 'hour');
     this.schedule = schedule;
 
-    const sortedEventRuns = sortBy(eventRuns, (eventRun) => eventRun.timespan.start.toDate().getTime());
+    const sortedEventRuns = sortBy(
+      eventRuns,
+      (eventRun) => eventRun.timespan.start.toDate().getTime(),
+    );
     sortedEventRuns.forEach((eventRun) => { this.addEventRun(eventRun); });
   }
 

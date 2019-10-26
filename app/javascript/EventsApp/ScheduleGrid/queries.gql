@@ -6,6 +6,7 @@ fragment ScheduleGridEventFragment on Event {
   length_seconds
   short_blurb_html
   my_rating
+  can_play_concurrently
 
   event_category {
     id
@@ -27,6 +28,8 @@ fragment ScheduleGridEventFragment on Event {
 
     buckets {
       key
+      not_counted
+      total_slots
       slots_limited
     }
   }
