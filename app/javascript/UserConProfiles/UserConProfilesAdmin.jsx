@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import EditTicket from './EditTicket';
@@ -7,6 +7,8 @@ import NewTicket from './NewTicket';
 import UserConProfileAdminDisplay from './UserConProfileAdminDisplay';
 import UserConProfilesTable from './UserConProfilesTable';
 import usePageTitle from '../usePageTitle';
+import AppRootContext from '../AppRootContext';
+import ErrorDisplay from '../ErrorDisplay';
 
 function AttendeesPage() {
   usePageTitle('Attendees');
@@ -23,6 +25,13 @@ function AttendeesPage() {
 }
 
 function UserConProfilesAdmin() {
+  const { currentAbility } = useContext(AppRootContext);
+  if (!currentAbility.can_read_user_con_profiles) {
+    return (
+      <ErrorDisplay stringError="You are not authorized to view this page." />
+    );
+  }
+
   return (
     <Switch>
       <Route path="/user_con_profiles/new" component={AttendeesPage} />

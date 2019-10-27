@@ -48,7 +48,13 @@ class ConventionPolicy < ApplicationPolicy
   end
 
   def view_attendees?
-    UserConProfilePolicy.new(user, UserConProfile.new(convention: record)).read?
+    return true if oauth_scoped_disjunction do |d|
+      d.add(:read_conventions) do
+        has_convention_permission?(record, 'read_user_con_profiles')
+      end
+    end
+
+    site_admin_read?
   end
 
   def view_event_proposals?
