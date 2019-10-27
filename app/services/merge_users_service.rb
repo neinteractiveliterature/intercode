@@ -16,7 +16,7 @@ class MergeUsersService < CivilService::Service
 
   attr_reader :user_ids, :winning_user_id, :winning_user_con_profile_ids_by_convention_id
 
-  validates_presence_of :user_ids, :winning_user_id, :winning_user_con_profile_ids_by_convention_id
+  validates_presence_of :user_ids, :winning_user_id
   validate :ensure_winning_user_id_is_in_user_ids
   validate :ensure_all_winning_user_con_profiles_exist
   validate :ensure_fully_disambiguated
