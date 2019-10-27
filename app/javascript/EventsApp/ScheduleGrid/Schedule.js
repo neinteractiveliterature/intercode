@@ -47,8 +47,8 @@ export default class Schedule {
 
       event.runs.forEach((run) => {
         if (
-          run.my_signups.some((signup) => signup.state === 'confirmed' || signup.state === 'waitlisted')
-          || run.my_signup_requests.some((request) => request.state === 'pending')
+          (run.my_signups || []).some((signup) => signup.state === 'confirmed' || signup.state === 'waitlisted')
+          || (run.my_signup_requests || []).some((request) => request.state === 'pending')
         ) {
           this.myConflictingRuns.push(run);
         }
