@@ -159,6 +159,7 @@ const EventCard = ({
                 <RateEventControl
                   value={event.my_rating}
                   onChange={(rating) => rateEvent(event.id, rating)}
+                  size={1.2}
                 />
               )}
             </div>

@@ -52,20 +52,26 @@ function ScheduleGridEventRun({ runDimensions, layoutResult }) {
 
   const popoverParent = document.querySelectorAll('.non-cms-page')[0] || document.body;
 
+  const renderRunDisplay = (ref) => (
+    <RunDisplay
+      event={event}
+      run={run}
+      signupCountData={signupCountData}
+      ref={ref}
+      toggle={toggleVisibility}
+      runDimensions={runDimensions}
+      layoutResult={layoutResult}
+    />
+  );
+
+  if (run.disableDetailsPopup) {
+    return renderRunDisplay(null);
+  }
+
   return (
     <Manager>
       <Reference>
-        {({ ref }) => (
-          <RunDisplay
-            event={event}
-            run={run}
-            signupCountData={signupCountData}
-            ref={ref}
-            toggle={toggleVisibility}
-            runDimensions={runDimensions}
-            layoutResult={layoutResult}
-          />
-        )}
+        {({ ref }) => renderRunDisplay(ref)}
       </Reference>
       {ReactDOM.createPortal((
         <Popper

@@ -1,9 +1,9 @@
 import React, {
-  Suspense, useState, useMemo, useCallback,
+  Suspense, useState, useMemo, useCallback, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useQuery } from 'react-apollo-hooks';
 
 import ConfigPropType from './ConfigPropType';
 import ConventionDayTabContainer from './ConventionDayTabContainer';
@@ -14,6 +14,7 @@ import { timespanFromConvention } from '../../TimespanUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
+import useCachedLoadableValue from '../../useCachedLoadableValue';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect().os);
 
@@ -26,7 +27,12 @@ export const ScheduleGridContext = React.createContext({
   toggleRunDetailsVisibility: () => {},
 });
 
-export function useScheduleGridProvider(config, convention, events) {
+const ScheduleGridFiltersContext = React.createContext({
+  myRatingFilter: null,
+  hideConflicts: false,
+});
+
+export function useScheduleGridProvider(config, convention, events, myRatingFilter, hideConflicts) {
   const [visibleRunDetailsIds, setVisibleRunDetailsIds] = useState(new Set());
 
   const isRunDetailsVisible = useMemo(
@@ -37,12 +43,12 @@ export function useScheduleGridProvider(config, convention, events) {
   const schedule = useMemo(
     () => {
       if (config && convention && events) {
-        return new Schedule(config, convention, events);
+        return new Schedule(config, convention, events, myRatingFilter, hideConflicts);
       }
 
       return {};
     },
-    [config, convention, events],
+    [config, convention, events, hideConflicts, myRatingFilter],
   );
 
   const toggleRunDetailsVisibility = useCallback(
@@ -96,25 +102,60 @@ function ScheduleGridSkeleton() {
   );
 }
 
+function LoadingOverlay({ loading }) {
+  if (!loading) {
+    return null;
+  }
+
+  return (
+    <div
+      className="position-absolute d-flex align-items-center justify-content-center"
+      style={{
+        top: 0, left: 0, bottom: 0, right: 0,
+      }}
+    >
+      <PageLoadingIndicator visible={loading} />
+    </div>
+  );
+}
+
+LoadingOverlay.propTypes = {
+  loading: PropTypes.bool,
+};
+
+LoadingOverlay.defaultProps = {
+  loading: false,
+};
+
 function MobileScheduleGridProvider({ config, children }) {
   const combinedQueryParams = {
     query: ScheduleGridCombinedQuery,
-    variables: { extendedCounts: config.showExtendedCounts || false },
+    variables: {
+      extendedCounts: config.showExtendedCounts || false,
+    },
   };
 
-  const { data, error } = useQuerySuspended(combinedQueryParams.query, {
+  const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
+  const { data, error, loading } = useQuery(combinedQueryParams.query, {
     variables: combinedQueryParams.variables,
   });
-  const { convention, events } = (data || {});
-  const providerValue = useScheduleGridProvider(config, convention, events);
+  const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
+  const { convention, events } = (cachedData || {});
+  const providerValue = useScheduleGridProvider(
+    config, convention, events, myRatingFilter, hideConflicts,
+  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!convention) {
+    return <PageLoadingIndicator visible />;
+  }
+
   return (
     <>
-      {convention.pre_schedule_content_html && (
+      {(convention || {}).pre_schedule_content_html && (
         // eslint-disable-next-line react/no-danger
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
@@ -125,7 +166,10 @@ function MobileScheduleGridProvider({ config, children }) {
       >
         {(timespan) => (
           <ScheduleGridContext.Provider value={providerValue}>
-            {children(timespan)}
+            <div className="position-relative">
+              <LoadingOverlay loading={loading} />
+              {children(timespan)}
+            </div>
           </ScheduleGridContext.Provider>
         )}
       </ConventionDayTabContainer>
@@ -149,10 +193,20 @@ function getEventsQueryVariables(timespan, showExtendedCounts) {
 function DesktopScheduleGridProviderTabContent({
   config, convention, children, timespan,
 }) {
-  const { data: { events }, error } = useQuerySuspended(ScheduleGridEventsQuery, {
-    variables: getEventsQueryVariables(timespan, config.showExtendedCounts),
+  const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
+  const { data, error, loading } = useQuery(ScheduleGridEventsQuery, {
+    variables: {
+      ...getEventsQueryVariables(timespan, config.showExtendedCounts),
+    },
   });
-  const providerValue = useScheduleGridProvider(config, convention, events);
+  const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
+  const providerValue = useScheduleGridProvider(
+    config,
+    convention,
+    (cachedData || {}).events || [],
+    myRatingFilter,
+    hideConflicts,
+  );
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -160,7 +214,10 @@ function DesktopScheduleGridProviderTabContent({
 
   return (
     <ScheduleGridContext.Provider value={providerValue}>
-      {children(timespan)}
+      <div className="position-relative">
+        <LoadingOverlay loading={loading} />
+        {children(timespan)}
+      </div>
     </ScheduleGridContext.Provider>
   );
 }
@@ -179,7 +236,9 @@ function DesktopScheduleGridProvider({ config, children }) {
   const prefetchTimespan = useCallback(
     (timespan) => client.query({
       query: ScheduleGridEventsQuery,
-      variables: getEventsQueryVariables(timespan, config.showExtendedCounts),
+      variables: {
+        ...getEventsQueryVariables(timespan, config.showExtendedCounts),
+      },
     }),
     [client, config.showExtendedCounts],
   );
@@ -223,19 +282,38 @@ DesktopScheduleGridProvider.propTypes = {
   children: PropTypes.func.isRequired,
 };
 
-export function ScheduleGridProvider({ config, children }) {
+export function ScheduleGridProvider({
+  config, children, myRatingFilter, hideConflicts,
+}) {
+  const filtersContextValue = { myRatingFilter, hideConflicts };
+
   if (IS_MOBILE) {
-    return <MobileScheduleGridProvider config={config}>{children}</MobileScheduleGridProvider>;
+    return (
+      <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
+        <MobileScheduleGridProvider config={config}>
+          {children}
+        </MobileScheduleGridProvider>
+      </ScheduleGridFiltersContext.Provider>
+    );
   }
 
   return (
-    <DesktopScheduleGridProvider config={config}>
-      {children}
-    </DesktopScheduleGridProvider>
+    <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
+      <DesktopScheduleGridProvider config={config}>
+        {children}
+      </DesktopScheduleGridProvider>
+    </ScheduleGridFiltersContext.Provider>
   );
 }
 
 ScheduleGridProvider.propTypes = {
   config: ConfigPropType.isRequired,
   children: PropTypes.func.isRequired,
+  myRatingFilter: PropTypes.arrayOf(PropTypes.number),
+  hideConflicts: PropTypes.bool,
+};
+
+ScheduleGridProvider.defaultProps = {
+  myRatingFilter: null,
+  hideConflicts: false,
 };

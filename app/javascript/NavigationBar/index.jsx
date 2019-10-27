@@ -1,7 +1,10 @@
-import React, { useContext, useMemo, useRef } from 'react';
+import React, {
+  useContext, useMemo, useRef, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sortBy from 'lodash-es/sortBy';
+import { withRouter } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
 import NavigationBrand from './NavigationBrand';
@@ -13,13 +16,22 @@ import useCollapse from './useCollapse';
 import EventsNavigationSection from './EventsNavigationSection';
 import AdminNavigationSection from './AdminNavigationSection';
 
-function NavigationBarContent({ navbarClasses, rootItems }) {
+function NavigationBarContent({ navbarClasses, rootItems, location }) {
   const {
     conventionName, rootSiteName, siteMode, ticketsAvailableForPurchase,
   } = useContext(AppRootContext);
   const collapseRef = useRef();
-  const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
+  const {
+    collapsed, collapseProps, setCollapsed, toggleCollapsed,
+  } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
+
+  useEffect(
+    () => {
+      setCollapsed(true);
+    },
+    [location.pathname, setCollapsed],
+  );
 
   return (
     <nav className={classNames('navbar', navbarClasses)} role="navigation">
@@ -80,9 +92,12 @@ function NavigationBarContent({ navbarClasses, rootItems }) {
 NavigationBarContent.propTypes = {
   navbarClasses: PropTypes.string.isRequired,
   rootItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
 };
 
-const MemoizedNavigationBarContent = React.memo(NavigationBarContent);
+const MemoizedNavigationBarContent = withRouter(React.memo(NavigationBarContent));
 
 function NavigationBar({ navbarClasses }) {
   const { cmsNavigationItems } = useContext(AppRootContext);
