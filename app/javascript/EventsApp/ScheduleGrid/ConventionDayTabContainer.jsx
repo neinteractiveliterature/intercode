@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
 import {
-  NavLink, Switch, Redirect, Route,
+  NavLink, Switch, Redirect, Route, withRouter,
 } from 'react-router-dom';
 import { useApolloClient } from 'react-apollo-hooks';
 
@@ -10,7 +10,9 @@ import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
 import { ScheduleGridCombinedQuery } from './queries.gql';
 
-function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
+function ConventionDayTab({
+  basename, timespan, prefetchTimespan, location,
+}) {
   const prefetchProps = (
     prefetchTimespan
       ? ({
@@ -23,7 +25,7 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }) {
   return (
     <li className="nav-item">
       <NavLink
-        to={`${basename}/${timespan.start.format('dddd').toLowerCase()}`}
+        to={`${basename}/${timespan.start.format('dddd').toLowerCase()}${location.search}`}
         className="nav-link"
         {...prefetchProps}
       >
@@ -44,11 +46,16 @@ ConventionDayTab.propTypes = {
     start: MomentPropTypes.momentObj.isRequired,
   }).isRequired,
   prefetchTimespan: PropTypes.func,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }).isRequired,
 };
 
 ConventionDayTab.defaultProps = {
   prefetchTimespan: null,
 };
+
+const ConventionDayTabWithRouter = withRouter(ConventionDayTab);
 
 function ConventionDayTabContainer({
   basename, conventionTimespan, timezoneName, prefetchTimespan, children, showExtendedCounts,
@@ -88,7 +95,7 @@ function ConventionDayTabContainer({
       <div className="d-flex flex-wrap">
         <ul className="nav nav-tabs flex-grow-1">
           {conventionDayTimespans.map((timespan) => (
-            <ConventionDayTab
+            <ConventionDayTabWithRouter
               basename={basename}
               timespan={timespan}
               prefetchTimespan={prefetchTimespan}
@@ -120,6 +127,7 @@ ConventionDayTabContainer.propTypes = {
   conventionTimespan: PropTypes.shape({
     start: MomentPropTypes.momentObj.isRequired,
     finish: MomentPropTypes.momentObj.isRequired,
+    isFinite: PropTypes.func.isRequired,
   }).isRequired,
   timezoneName: PropTypes.string.isRequired,
   prefetchTimespan: PropTypes.func,

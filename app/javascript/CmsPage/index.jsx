@@ -11,6 +11,7 @@ import parsePageContent from '../parsePageContent';
 import useValueUnless from '../useValueUnless';
 import usePageTitle from '../usePageTitle';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { FourOhFourPage } from '../AppRouter';
 
 const PageAdminDropdown = lazyWithBundleHashCheck(() => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'));
 
@@ -65,6 +66,10 @@ function CmsPage({
   );
 
   if (error) {
+    if (error.message.match(/Couldn't find Page/i)) {
+      return <FourOhFourPage />;
+    }
+
     return <ErrorDisplay graphQLError={error} />;
   }
 

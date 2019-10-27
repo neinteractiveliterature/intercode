@@ -8,7 +8,7 @@ export const RATING_NAMES = {
   '-1': 'Hidden',
 };
 
-export function getRatingIconClass(rating, selected) {
+function getRatingIconClass(rating, selected) {
   if (rating === -1) {
     return 'fa-eye-slash';
   }
@@ -20,27 +20,33 @@ export function getRatingIconClass(rating, selected) {
   return '';
 }
 
-export function getRatingColorClass(rating, selected) {
+function getRatingColorClass(rating, selected) {
   if (rating === -1) {
-    return selected ? 'text-danger' : 'text-hover-danger';
+    return selected ? 'text-danger' : 'text-secondary text-hover-danger';
   }
 
   if (rating === 1) {
-    return selected ? 'text-warning' : 'text-hover-warning';
+    return selected ? 'text-warning' : 'text-secondary text-hover-warning';
   }
 
   return '';
 }
 
-function EventRatingIcon({ rating, selected }) {
+function EventRatingIcon({
+  rating, selected, useColors, size, overrideElementSize,
+}) {
   return (
     <i
       className={classnames(
-        'event-rating-icon fa',
+        'fa',
         getRatingIconClass(rating, selected),
-        getRatingColorClass(rating, selected),
+        useColors ? getRatingColorClass(rating, selected) : null,
       )}
-      style={{ fontSize: '1.5rem' }}
+      style={{
+        fontSize: `${size}rem`,
+        width: overrideElementSize ? `${size}rem` : null,
+        height: overrideElementSize ? `${size}rem` : null,
+      }}
     >
       <span className="sr-only">{RATING_NAMES[rating]}</span>
     </i>
@@ -49,11 +55,17 @@ function EventRatingIcon({ rating, selected }) {
 
 EventRatingIcon.propTypes = {
   rating: PropTypes.number.isRequired,
+  size: PropTypes.number,
   selected: PropTypes.bool,
+  useColors: PropTypes.bool,
+  overrideElementSize: PropTypes.bool,
 };
 
 EventRatingIcon.defaultProps = {
   selected: false,
+  useColors: false,
+  size: 1.0,
+  overrideElementSize: false,
 };
 
 export default EventRatingIcon;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
 
 export default function useLayoutForTimespan(schedule, timespan) {
@@ -12,7 +13,7 @@ export default function useLayoutForTimespan(schedule, timespan) {
       min.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
       return min;
     },
-    [timespan],
+    [timespan.start.toISOString(), timespan.finish.toISOString()],
   );
 
   const layout = useMemo(
@@ -23,7 +24,7 @@ export default function useLayoutForTimespan(schedule, timespan) {
       )
       : null
     ),
-    [minTimespan, schedule, timespan],
+    [minTimespan, schedule, timespan.start.toISOString(), timespan.finish.toISOString()],
   );
 
   return layout;

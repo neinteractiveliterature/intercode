@@ -37,7 +37,7 @@ function ChoiceSet(props) {
   ));
 
   return (
-    <div>
+    <div className={props.containerClassName}>
       {options}
     </div>
   );
@@ -56,6 +56,7 @@ ChoiceSet.propTypes = {
   ]),
   onChange: PropTypes.func.isRequired,
   multiple: PropTypes.bool,
+  containerClassName: PropTypes.string,
   choiceClassName: PropTypes.string,
   inputClassName: PropTypes.string,
   disabled: PropTypes.bool,
@@ -66,6 +67,7 @@ ChoiceSet.defaultProps = {
   name: null,
   value: null,
   multiple: false,
+  containerClassName: null,
   choiceClassName: null,
   inputClassName: null,
   disabled: false,

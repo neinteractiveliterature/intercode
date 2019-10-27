@@ -11,6 +11,30 @@ import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
 import { reloadOnBundleHashMismatch } from './checkBundleHash';
 
+function FourOhFourPage({ location }) {
+  return (
+    <div className="alert alert-warning">
+      <h1>Oops!</h1>
+
+      <p className="mb-0">
+        We couldn&rsquo;t find a page at the location
+        {' '}
+        {location.pathname}
+        .
+      </p>
+    </div>
+  );
+}
+
+FourOhFourPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
+};
+
+const FourOhFourPageWithRouter = withRouter(FourOhFourPage);
+export { FourOhFourPageWithRouter as FourOhFourPage };
+
 function renderCommonRoutes() {
   return [
     <Route path="/cms_pages" component={PageComponents.CmsAdmin} key="cmsPages" />,
@@ -138,21 +162,7 @@ function AppRouter({ alert, location }) {
 
       <Switch>
         {renderRoutes()}
-        <Route
-          path="/"
-          render={({ location: routeLocation }) => (
-            <div className="alert alert-warning">
-              <h1>Oops!</h1>
-
-              <p className="mb-0">
-                We couldn&rsquo;t find a page at the location
-                {' '}
-                {routeLocation.pathname}
-                .
-              </p>
-            </div>
-          )}
-        />
+        <Route path="/" component={FourOhFourPage} />
       </Switch>
     </Suspense>
   );

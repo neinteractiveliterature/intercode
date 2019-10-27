@@ -6,12 +6,19 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
 import buildEventUrl from '../buildEventUrl';
+import AppRootContext from '../../AppRootContext';
+import RateEventControl from '../../EventRatings/RateEventControl';
+import useRateEvent from '../../EventRatings/useRateEvent';
+import { useApolloClient } from 'react-apollo-hooks';
 
 const RunDetails = React.forwardRef(({
   popperStyle, placement, arrowProps, event, run, runDimensions, toggle, signupCountData,
 }, ref) => {
+  const { myProfile } = useContext(AppRootContext);
   const { schedule } = useContext(ScheduleGridContext);
   const { timespan } = runDimensions.eventRun;
+  const rateEvent = useRateEvent();
+  const apolloClient = useApolloClient();
 
   const availabilityDescription = useMemo(
     () => describeAvailability(event, signupCountData),
@@ -29,6 +36,11 @@ const RunDetails = React.forwardRef(({
     () => run.room_names.sort().join(', '),
     [run.room_names],
   );
+
+  const ratingChanged = async (rating) => {
+    await rateEvent(event.id, rating);
+    await apolloClient.resetStore();
+  };
 
   return (
     <div
@@ -64,6 +76,14 @@ const RunDetails = React.forwardRef(({
           </div>
         </div>
         <div className="popover-body overflow-auto">
+          {myProfile && (
+            <div className="float-right">
+              <RateEventControl
+                value={event.my_rating}
+                onChange={ratingChanged}
+              />
+            </div>
+          )}
           <table className="mb-2">
             <tbody>
               <tr>

@@ -18,7 +18,7 @@ function ScheduleGrid({ timespan }) {
   const layout = useLayoutForTimespan(schedule, timespan);
 
   return (
-    <div className="schedule-grid mb-4" style={{ overflowX: 'auto' }}>
+    <div className="schedule-grid" style={{ overflowX: 'auto' }}>
       <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
         <div className="mt-1 d-flex">
           {

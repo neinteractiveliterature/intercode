@@ -1,9 +1,10 @@
 class EventRunsLoader < GraphQL::Batch::Loader
-  attr_reader :start, :finish, :pundit_user
+  attr_reader :start, :finish, :exclude_conflicts_for_user_con_profile, :pundit_user
 
-  def initialize(start, finish, pundit_user)
+  def initialize(start, finish, exclude_conflicts_for_user_con_profile, pundit_user)
     @start = start
     @finish = finish
+    @exclude_conflicts_for_user_con_profile = exclude_conflicts_for_user_con_profile
     @pundit_user = pundit_user
   end
 

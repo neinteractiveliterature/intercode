@@ -58,6 +58,7 @@ function EventPage({ eventId, eventPath }) {
               <RateEventControl
                 value={event.my_rating}
                 onChange={(rating) => rateEvent(event.id, rating)}
+                size={1.5}
               />
             </div>
           )}

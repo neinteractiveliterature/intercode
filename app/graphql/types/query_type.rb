@@ -40,6 +40,7 @@ class Types::QueryType < Types::BaseObject
   def events(include_dropped: false, start: nil, finish: nil, **_args)
     events = convention.events
     events = events.active unless include_dropped
+
     if start || finish
       if policy(Run.new(event: Event.new(convention: convention))).read?
         run_scope = convention.runs

@@ -6,6 +6,7 @@
     "classifyEventsBy": "category",
     "showSignedUp": true,
     "showSignupStatusBadge": true,
+    "showPersonalFilters": true,
     "groupEventsBy": "category",
     "categoryGroups": [
       {
