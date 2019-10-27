@@ -1,20 +1,76 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import CategoryLegend from './CategoryLegend';
 import FullnessLegend from './FullnessLegend';
 import ScheduleGrid from './ScheduleGrid';
 import ScheduleGridConfig from './ScheduleGridConfig';
 import { ScheduleGridProvider } from './ScheduleGridContext';
-import EventListMyRatingSelector from '../EventList/EventListMyRatingSelector';
+import { RATING_OPTIONS } from '../EventList/EventListMyRatingSelector';
 import AppRootContext from '../../AppRootContext';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
+import { Transforms } from '../../ComposableFormUtils';
+import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
+import { FilterCodecs, buildFieldFilterCodecs } from '../../Tables/FilterUtils';
 
-function ScheduleGridApp({ configKey }) {
+const filterCodecs = buildFieldFilterCodecs({
+  my_rating: FilterCodecs.integerArray,
+  hide_conflicts: FilterCodecs.boolean,
+});
+
+const DEFAULT_PERSONAL_FILTERS = [
+  { id: 'my_rating', value: [1, 0] },
+  { id: 'hide_conflicts', value: false },
+];
+
+function ScheduleGridApp({ configKey, history, location }) {
   const { myProfile } = useContext(AppRootContext);
-  const [ratingFilter, setRatingFilter] = useState([1, 0]);
-  const [hideConflicts, setHideConflicts] = useState(false);
+  const { filtered, onFilteredChange } = useReactRouterReactTable({ history, ...filterCodecs });
   const config = ScheduleGridConfig.get(configKey);
+  const storageKey = `schedule:${configKey}:personalFilters`;
+
+  const loadPersonalFilters = useCallback(
+    () => {
+      const storedValue = window.localStorage.getItem(storageKey);
+      if (storedValue) {
+        try {
+          return JSON.parse(storedValue);
+        } catch (e) {
+          return DEFAULT_PERSONAL_FILTERS;
+        }
+      }
+
+      return DEFAULT_PERSONAL_FILTERS;
+    },
+    [storageKey],
+  );
+
+  useEffect(() => {
+    if (config.showPersonalFilters && myProfile && !location.search) {
+      onFilteredChange(loadPersonalFilters());
+    }
+  }, [config.showPersonalFilters, loadPersonalFilters, location, myProfile, onFilteredChange]);
+
+  const ratingFilter = (filtered.find((f) => f.id === 'my_rating') || {}).value;
+  const hideConflicts = (filtered.find((f) => f.id === 'hide_conflicts') || {}).value;
+
+  const choiceSetValue = [
+    ...(ratingFilter || []).map((integer) => integer.toString()),
+    ...(hideConflicts ? [] : ['conflicts']),
+  ];
+
+  const choiceSetChanged = (newValue) => {
+    const integerArray = newValue.filter((choice) => choice !== 'conflicts').map(Transforms.integer);
+
+    const newFiltered = [
+      { id: 'my_rating', value: integerArray },
+      { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
+    ];
+
+    onFilteredChange(newFiltered);
+    window.localStorage.setItem(storageKey, JSON.stringify(newFiltered));
+  };
 
   return (
     <>
@@ -34,17 +90,15 @@ function ScheduleGridApp({ configKey }) {
           <div className="mb-4">
             {config.showPersonalFilters && myProfile && (
               <div className="d-flex flex-column flex-md-row bg-light border-bottom">
-                <EventListMyRatingSelector value={ratingFilter} onChange={setRatingFilter} />
-                <div className="flex-grow-1 d-none d-md-block" />
-                <div className="btn text-left">
+                <div className="d-flex btn">
+                  <span className="mr-2">Show:</span>
                   <ChoiceSet
+                    choices={[...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }]}
                     choiceClassName="form-check-inline"
-                    choices={[
-                      { label: 'Show conflicts', value: 'false' },
-                      { label: 'Hide conflicts', value: 'true' },
-                    ]}
-                    value={hideConflicts.toString()}
-                    onChange={(value) => setHideConflicts(value === 'true')}
+                    containerClassName="d-flex flex-wrap"
+                    value={choiceSetValue}
+                    onChange={choiceSetChanged}
+                    multiple
                   />
                 </div>
               </div>
@@ -79,6 +133,10 @@ function ScheduleGridApp({ configKey }) {
 
 ScheduleGridApp.propTypes = {
   configKey: PropTypes.string.isRequired,
+  history: PropTypes.shape({}).isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }).isRequired,
 };
 
-export default ScheduleGridApp;
+export default withRouter(ScheduleGridApp);

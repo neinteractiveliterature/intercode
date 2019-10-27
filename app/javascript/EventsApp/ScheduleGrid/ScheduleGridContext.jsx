@@ -1,5 +1,5 @@
 import React, {
-  Suspense, useState, useMemo, useCallback,
+  Suspense, useState, useMemo, useCallback, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
@@ -25,6 +25,11 @@ export const ScheduleGridContext = React.createContext({
   isRunDetailsVisible: () => false,
   visibleRunDetailsIds: new Set(),
   toggleRunDetailsVisibility: () => {},
+});
+
+const ScheduleGridFiltersContext = React.createContext({
+  myRatingFilter: null,
+  hideConflicts: false,
 });
 
 export function useScheduleGridProvider(config, convention, events, myRatingFilter, hideConflicts) {
@@ -114,9 +119,15 @@ function LoadingOverlay({ loading }) {
   );
 }
 
-function MobileScheduleGridProvider({
-  config, children, myRatingFilter, hideConflicts,
-}) {
+LoadingOverlay.propTypes = {
+  loading: PropTypes.bool,
+};
+
+LoadingOverlay.defaultProps = {
+  loading: false,
+};
+
+function MobileScheduleGridProvider({ config, children }) {
   const combinedQueryParams = {
     query: ScheduleGridCombinedQuery,
     variables: {
@@ -124,6 +135,7 @@ function MobileScheduleGridProvider({
     },
   };
 
+  const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
   const { data, error, loading } = useQuery(combinedQueryParams.query, {
     variables: combinedQueryParams.variables,
   });
@@ -179,8 +191,9 @@ function getEventsQueryVariables(timespan, showExtendedCounts) {
 }
 
 function DesktopScheduleGridProviderTabContent({
-  config, convention, children, timespan, myRatingFilter, hideConflicts,
+  config, convention, children, timespan,
 }) {
+  const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
   const { data, error, loading } = useQuery(ScheduleGridEventsQuery, {
     variables: {
       ...getEventsQueryVariables(timespan, config.showExtendedCounts),
@@ -216,7 +229,7 @@ DesktopScheduleGridProviderTabContent.propTypes = {
   convention: PropTypes.shape({}).isRequired,
 };
 
-function DesktopScheduleGridProvider({ config, children, myRatingFilter, hideConflicts }) {
+function DesktopScheduleGridProvider({ config, children }) {
   const { data, error } = useQuerySuspended(ScheduleGridConventionDataQuery);
   const client = useApolloClient();
 
@@ -254,8 +267,6 @@ function DesktopScheduleGridProvider({ config, children, myRatingFilter, hideCon
               config={config}
               convention={convention}
               timespan={timespan}
-              myRatingFilter={myRatingFilter}
-              hideConflicts={hideConflicts}
             >
               {children}
             </DesktopScheduleGridProviderTabContent>
@@ -269,26 +280,29 @@ function DesktopScheduleGridProvider({ config, children, myRatingFilter, hideCon
 DesktopScheduleGridProvider.propTypes = {
   config: ConfigPropType.isRequired,
   children: PropTypes.func.isRequired,
-  myRatingFilter: PropTypes.arrayOf(PropTypes.number),
 };
 
-DesktopScheduleGridProvider.defaultProps = {
-  myRatingFilter: null,
-};
+export function ScheduleGridProvider({
+  config, children, myRatingFilter, hideConflicts,
+}) {
+  const filtersContextValue = { myRatingFilter, hideConflicts };
 
-export function ScheduleGridProvider({ config, children, myRatingFilter, hideConflicts }) {
   if (IS_MOBILE) {
     return (
-      <MobileScheduleGridProvider config={config} myRatingFilter={myRatingFilter} hideConflicts={hideConflicts}>
-        {children}
-      </MobileScheduleGridProvider>
+      <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
+        <MobileScheduleGridProvider config={config}>
+          {children}
+        </MobileScheduleGridProvider>
+      </ScheduleGridFiltersContext.Provider>
     );
   }
 
   return (
-    <DesktopScheduleGridProvider config={config} myRatingFilter={myRatingFilter} hideConflicts={hideConflicts}>
-      {children}
-    </DesktopScheduleGridProvider>
+    <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
+      <DesktopScheduleGridProvider config={config}>
+        {children}
+      </DesktopScheduleGridProvider>
+    </ScheduleGridFiltersContext.Provider>
   );
 }
 
@@ -296,8 +310,10 @@ ScheduleGridProvider.propTypes = {
   config: ConfigPropType.isRequired,
   children: PropTypes.func.isRequired,
   myRatingFilter: PropTypes.arrayOf(PropTypes.number),
+  hideConflicts: PropTypes.bool,
 };
 
 ScheduleGridProvider.defaultProps = {
   myRatingFilter: null,
+  hideConflicts: false,
 };
