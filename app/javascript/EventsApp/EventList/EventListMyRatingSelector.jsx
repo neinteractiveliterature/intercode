@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash-es/sortBy';
 
@@ -8,7 +8,7 @@ import { RATING_NAMES } from '../../EventRatings/EventRatingIcon';
 import HelpPopover from '../../UIComponents/HelpPopover';
 import RatingsHelp from '../../EventRatings/RatingsHelp';
 
-const DROPDOWN_OPTIONS = sortBy(
+export const RATING_OPTIONS = sortBy(
   Object.entries(RATING_NAMES),
   ([rating]) => ['1', '0', '-1'].indexOf(rating),
 ).map(([rating, name]) => ({
@@ -32,7 +32,7 @@ function EventListMyRatingSelector({ value, onChange }) {
     <div className="d-flex btn">
       <span className="mr-2">Show:</span>
       <ChoiceSet
-        choices={DROPDOWN_OPTIONS}
+        choices={RATING_OPTIONS}
         choiceClassName="form-check-inline"
         containerClassName="d-flex flex-wrap"
         value={(value || []).map((integer) => integer.toString())}
