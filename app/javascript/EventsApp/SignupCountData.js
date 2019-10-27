@@ -7,11 +7,6 @@ export default class SignupCountData {
   }
 
   static fromJSON(json) {
-    try {
-      JSON.parse(json);
-    } catch (e) {
-      debugger;
-    }
     const rawData = JSON.parse(json);
     const rows = flatMap(Object.entries(rawData), ([state, signupCountsByBucketKeyAndCounted]) => (
       flatMap(
