@@ -94,7 +94,7 @@ function ScheduleGridApp({ configKey, history, location }) {
                   <span className="mr-2">Show:</span>
                   <ChoiceSet
                     choices={[...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }]}
-                    choiceClassName="form-check-inline"
+                    choiceClassName="form-check-inline mr-md-4"
                     containerClassName="d-flex flex-wrap"
                     value={choiceSetValue}
                     onChange={choiceSetChanged}
