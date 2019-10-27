@@ -46,7 +46,7 @@ function ConventionAdminNavigationSection() {
         },
         currentAbility.can_read_any_mailing_list && {
           label: 'Mailing Lists',
-          url: '/mailing_list',
+          url: '/mailing_lists',
         },
         currentAbility.can_manage_oauth_applications && {
           label: 'OAuth2 Applications',
