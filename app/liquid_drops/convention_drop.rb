@@ -12,6 +12,10 @@ class ConventionDrop < Liquid::Drop
   #                    mailing lists
   # @!method accepting_proposals
   #   @return [Boolean] Whether or not the convention is currently accepting event proposals
+  # @!method show_schedule
+  #   @return [String] "no", "priv", "gms", or "yes" depending on who the schedule is visible to
+  # @!method show_event_list
+  #   @return [String] "no", "priv", "gms", or "yes" depending on who the event list is visible to
   # @!method ticket_name
   #   @return [String] The name this convention uses for "tickets"
   # @!method ticket_mode
@@ -20,7 +24,7 @@ class ConventionDrop < Liquid::Drop
   # #!method organization
   #   @return [OrganizationDrop] The organization running this convention
   delegate :id, :name, :started?, :ended?, :event_mailing_list_domain, :accepting_proposals,
-    :ticket_name, :organization, :ticket_mode, to: :convention
+    :show_schedule, :show_event_list, :ticket_name, :organization, :ticket_mode, to: :convention
 
   # @return [Boolean] Whether or not the convention has already started
   alias started started?
