@@ -12,13 +12,7 @@ class Types::TeamMemberType < Types::BaseObject
   field :event, Types::EventType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
 
-  def event
-    RecordLoader.for(Event).load(object.event_id)
-  end
-
-  def user_con_profile
-    RecordLoader.for(UserConProfile, includes: [:team_members]).load(object.user_con_profile_id)
-  end
+  association_loaders TeamMember, :event, :user_con_profile
 
   def receive_signup_email
     object.receive_signup_email.upcase

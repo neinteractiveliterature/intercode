@@ -31,7 +31,9 @@ class Types::EventType < Types::BaseObject
     AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
       AssociationLoader.for(EventCategory, :event_form).load(event_category)
     end.then do |form|
-      FormResponsePresenter.new(form, object).as_json
+      AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
+        FormResponsePresenter.new(form, object).as_json
+      end
     end
   end
 
@@ -41,7 +43,9 @@ class Types::EventType < Types::BaseObject
     AssociationLoader.for(Event, :event_category).load(object).then do |event_category|
       AssociationLoader.for(EventCategory, :event_form).load(event_category)
     end.then do |form|
-      FormResponsePresenter.new(form, object).as_json_with_rendered_markdown('event', object, '')
+      AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
+        FormResponsePresenter.new(form, object).as_json_with_rendered_markdown('event', object, '')
+      end
     end
   end
 
