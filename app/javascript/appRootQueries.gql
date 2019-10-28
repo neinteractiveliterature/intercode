@@ -1,7 +1,7 @@
 query AppRootQuery($path: String!) {
   effectiveCmsLayout(path: $path) {
     id
-    content_html
+    content_html(path: $path)
   }
 
   currentAbility {

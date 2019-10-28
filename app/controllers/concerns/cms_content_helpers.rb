@@ -19,28 +19,27 @@ module CmsContentHelpers
     current_cms_page(path)&.cms_layout || cms_parent.default_layout
   end
 
-  def event_for_path
+  def event_for_path(path)
     return unless convention
-    return @event_for_path if defined?(@event_for_path)
 
-    @event_for_path = begin
-      if convention.site_mode == 'single_event'
-        convention.events.first
-      elsif (match = (%r{\A/events/(\d+)}.match(request.path)))
-        convention.events.active.find_by(id: match[1])
-      end
+    if convention.site_mode == 'single_event'
+      convention.events.first
+    elsif (match = (%r{\A/events/(\d+)}.match(path)))
+      convention.events.active.find_by(id: match[1])
     end
   end
 
-  def cms_rendering_context
-    @cms_rendering_context ||= CmsRenderingContext.new(
+  def cms_rendering_context(path: nil)
+    effective_path = path || request.path
+    @cms_rendering_contexts_by_path = {}
+    @cms_rendering_contexts_by_path[effective_path] ||= CmsRenderingContext.new(
       cms_parent: convention || RootSite.instance,
       controller: self,
       assigns: {
         'user' => current_user,
         'convention' => convention,
         'user_con_profile' => user_con_profile,
-        'event' => event_for_path
+        'event' => event_for_path(effective_path)
       }
     )
   end
