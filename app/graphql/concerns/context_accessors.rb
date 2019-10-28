@@ -6,7 +6,6 @@ module ContextAccessors
     user_con_profile
     convention
     cadmus_renderer
-    cms_rendering_context
     current_pending_order
     assumed_identity_from_profile
     verified_request
@@ -26,5 +25,9 @@ module ContextAccessors
 
   def policy_scope(scope)
     Pundit.policy_scope(context[:pundit_user], scope)
+  end
+
+  def cms_rendering_context(path: nil)
+    controller.send(:cms_rendering_context, path: path)
   end
 end

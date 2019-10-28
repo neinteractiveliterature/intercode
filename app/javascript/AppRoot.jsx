@@ -16,11 +16,11 @@ import useCachedLoadableValue from './useCachedLoadableValue';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
-  if (path.startsWith('/pages/') || path === '/') {
+  if (path.startsWith('/pages/') || path.startsWith('/events') || path === '/') {
     return path;
   }
 
-  return '/events'; // arbitrary path that's not a CMS page
+  return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
 function AppLayout({ location, history }) {

@@ -2,7 +2,9 @@ class Types::CmsLayoutType < Types::BaseObject
   field :id, Integer, null: false
   field :name, String, null: true
   field :content, String, null: true
-  field :content_html, String, null: true
+  field :content_html, String, null: true do
+    argument :path, String, required: false
+  end
   field :navbar_classes, String, null: true
   field :admin_notes, String, null: true do
     authorize_action :update
@@ -18,10 +20,11 @@ class Types::CmsLayoutType < Types::BaseObject
     ModelPermissionLoader.for(CmsLayout).load([pundit_user, :destroy, object.id])
   end
 
-  def content_html
-    cms_rendering_context.render_layout_content(
+  def content_html(path: nil)
+    rendering_context = cms_rendering_context(path: path)
+    rendering_context.render_layout_content(
       object,
-      cms_rendering_context.liquid_assigns_for_single_page_app(object)
+      rendering_context.liquid_assigns_for_single_page_app(object)
     )
   end
 end
