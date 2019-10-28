@@ -3,6 +3,7 @@ class Types::BaseObject < GraphQL::Schema::Object
 
   def self.association_loader(model_class, association)
     define_method association do
+      return object.public_send(association) if object.association(association).loaded?
       AssociationLoader.for(model_class, association).load(object)
     end
   end
