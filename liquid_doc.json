@@ -1254,6 +1254,34 @@
           ]
         },
         {
+          "name": "show_schedule",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "\"no\", \"priv\", \"gms\", or \"yes\" depending on who the schedule is visible to",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "show_event_list",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "\"no\", \"priv\", \"gms\", or \"yes\" depending on who the event list is visible to",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
           "name": "ticket_name",
           "docstring": "",
           "tags": [
@@ -3396,6 +3424,63 @@
       ]
     },
     {
+      "name": "Intercode::Liquid::Tags::Spoiler",
+      "superclasses": [
+        "Intercode::Liquid::Tags::Spoiler",
+        "Liquid::Block"
+      ],
+      "docstring": "Renders the included text as a spoiler (click to reveal).",
+      "tags": [
+        {
+          "tag_name": "example",
+          "name": "",
+          "text": "{% spoiler %}Rosebud is a sled{% endspoiler %}",
+          "types": null
+        },
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "spoiler",
+          "types": null
+        }
+      ],
+      "methods": [
+        {
+          "name": "component_name",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "props",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "render_react_component",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Intercode::Liquid::Tags::Youtube",
       "superclasses": [
         "Intercode::Liquid::Tags::Youtube",
@@ -3451,7 +3536,6 @@
       "name": "Intercode::Liquid::Tags::EventAdminMenu",
       "superclasses": [
         "Intercode::Liquid::Tags::EventAdminMenu",
-        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
       "docstring": "Renders an event's admin menu, if the user is permitted to administer the event.\nRequires specifying an event ID.",
@@ -3492,6 +3576,13 @@
           ]
         },
         {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
           "name": "component_name",
           "docstring": "",
           "tags": [
@@ -3506,7 +3597,7 @@
           ]
         },
         {
-          "name": "render",
+          "name": "render_react_component",
           "docstring": "",
           "tags": [
             {
@@ -3523,7 +3614,6 @@
       "name": "Intercode::Liquid::Tags::EventRunsSection",
       "superclasses": [
         "Intercode::Liquid::Tags::EventRunsSection",
-        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
       "docstring": "Renders an event's runs section, which includes the capacity graphs and signup buttons.\nRequires specifying an event ID.",
@@ -3564,6 +3654,13 @@
           ]
         },
         {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
           "name": "component_name",
           "docstring": "",
           "tags": [
@@ -3578,7 +3675,7 @@
           ]
         },
         {
-          "name": "render",
+          "name": "render_react_component",
           "docstring": "",
           "tags": [
             {
@@ -3669,64 +3766,9 @@
       ]
     },
     {
-      "name": "Intercode::Liquid::Tags::AppComponentRenderer",
-      "superclasses": [
-        "Intercode::Liquid::Tags::AppComponentRenderer",
-        "Liquid::Tag"
-      ],
-      "docstring": "",
-      "tags": [
-        {
-          "tag_name": "api",
-          "name": null,
-          "text": "",
-          "types": null
-        }
-      ],
-      "methods": [
-        {
-          "name": "render",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "api",
-              "name": null,
-              "text": "",
-              "types": null
-            }
-          ]
-        },
-        {
-          "name": "component_name",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "api",
-              "name": null,
-              "text": "",
-              "types": null
-            }
-          ]
-        },
-        {
-          "name": "props",
-          "docstring": "",
-          "tags": [
-            {
-              "tag_name": "api",
-              "name": null,
-              "text": "",
-              "types": null
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Intercode::Liquid::Tags::LongFormEventDetails",
       "superclasses": [
         "Intercode::Liquid::Tags::LongFormEventDetails",
-        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
       "docstring": "Renders the long-form event details section (usually including stuff like the event's\ndescription, content warnings, etc.)  Requires specifying an event ID.",
@@ -3767,6 +3809,13 @@
           ]
         },
         {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
           "name": "component_name",
           "docstring": "",
           "tags": [
@@ -3781,7 +3830,7 @@
           ]
         },
         {
-          "name": "render",
+          "name": "render_react_component",
           "docstring": "",
           "tags": [
             {
@@ -3798,7 +3847,6 @@
       "name": "Intercode::Liquid::Tags::ShortFormEventDetails",
       "superclasses": [
         "Intercode::Liquid::Tags::ShortFormEventDetails",
-        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
       "docstring": "Renders the short-form event details list (usually including stuff like the event's team\nmembers, contact email, authors, etc.)  Requires specifying an event ID.",
@@ -3839,6 +3887,13 @@
           ]
         },
         {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
           "name": "component_name",
           "docstring": "",
           "tags": [
@@ -3853,7 +3908,7 @@
           ]
         },
         {
-          "name": "render",
+          "name": "render_react_component",
           "docstring": "",
           "tags": [
             {
@@ -3870,7 +3925,6 @@
       "name": "Intercode::Liquid::Tags::NewEventProposalButton",
       "superclasses": [
         "Intercode::Liquid::Tags::NewEventProposalButton",
-        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
       "docstring": "Renders a \"Propose an event\" button.  This will automatically render as a\n\"Log in to propose\" button if the user is not logged in.  The button text and the button\nCSS classes can be customized.",
@@ -3924,6 +3978,13 @@
           ]
         },
         {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
           "name": "component_name",
           "docstring": "",
           "tags": [
@@ -3938,7 +3999,7 @@
           ]
         },
         {
-          "name": "render",
+          "name": "render_react_component",
           "docstring": "",
           "tags": [
             {
@@ -3955,7 +4016,6 @@
       "name": "Intercode::Liquid::Tags::WithdrawUserSignupButton",
       "superclasses": [
         "Intercode::Liquid::Tags::WithdrawUserSignupButton",
-        "Intercode::Liquid::Tags::AppComponentRenderer",
         "Liquid::Tag"
       ],
       "docstring": "Renders a \"Withdraw\" button for an existing signup.  The button text and the button\nCSS classes can be customized.",
@@ -4022,6 +4082,13 @@
           ]
         },
         {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
           "name": "component_name",
           "docstring": "",
           "tags": [
@@ -4036,7 +4103,7 @@
           ]
         },
         {
-          "name": "render",
+          "name": "render_react_component",
           "docstring": "",
           "tags": [
             {
