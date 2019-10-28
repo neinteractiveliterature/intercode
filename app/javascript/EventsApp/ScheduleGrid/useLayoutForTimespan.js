@@ -1,7 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
 
+function getMemoizationKeyForTimespan(timespan) {
+  if (!timespan) {
+    return '';
+  }
+
+  return [
+    timespan.start ? timespan.start.toISOString() : '',
+    timespan.finish ? timespan.finish.toISOString() : '',
+  ].join('/');
+}
+
 export default function useLayoutForTimespan(schedule, timespan) {
+  const timespanKey = getMemoizationKeyForTimespan(timespan);
+
   const minTimespan = useMemo(
     () => {
       if (!timespan) {
@@ -13,7 +26,7 @@ export default function useLayoutForTimespan(schedule, timespan) {
       min.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
       return min;
     },
-    [timespan.start.toISOString(), timespan.finish.toISOString()],
+    [timespanKey],
   );
 
   const layout = useMemo(
@@ -24,7 +37,7 @@ export default function useLayoutForTimespan(schedule, timespan) {
       )
       : null
     ),
-    [minTimespan, schedule, timespan.start.toISOString(), timespan.finish.toISOString()],
+    [minTimespan, schedule, timespanKey],
   );
 
   return layout;
