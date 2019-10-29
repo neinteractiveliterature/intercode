@@ -1,3 +1,5 @@
+/* global Rollbar */
+
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'unfetch';
@@ -53,8 +55,20 @@ function SignInForm({ history }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const location = await signIn(authenticityToken, email, password, rememberMe);
-    await afterSessionChange(afterSignInPath || location);
+    try {
+      const location = await signIn(authenticityToken, email, password, rememberMe);
+      await afterSessionChange(afterSignInPath || location);
+    } catch (e) {
+      if (!e.message.match(/invalid email or password/i)) {
+        if (typeof Rollbar !== 'undefined') {
+          Rollbar.error(e);
+        }
+      }
+
+      // we're doing suppressError below specifically so that we can not Rollbar invalid email
+      // or password errors
+      throw e;
+    }
   };
 
   const onCancel = (event) => {
@@ -68,7 +82,9 @@ function SignInForm({ history }) {
     }
   };
 
-  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, {
+    suppressError: true,
+  });
 
   return (
     <>
@@ -110,9 +126,9 @@ function SignInForm({ history }) {
             onCheckedChange={setRememberMe}
             disabled={submitInProgress}
           />
-        </div>
 
-        <ErrorDisplay stringError={(submitError || {}).message} />
+          <ErrorDisplay stringError={(submitError || {}).message} />
+        </div>
 
         <div className="modal-footer bg-light">
           <div className="flex-grow-1">
