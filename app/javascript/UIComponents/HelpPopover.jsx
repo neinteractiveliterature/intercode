@@ -9,7 +9,9 @@ function HelpPopover({
 }) {
   const [visible, setVisible] = useState(initialVisible);
 
-  const toggleVisible = () => {
+  const toggleVisible = (prevVisible, event) => {
+    event.preventDefault();
+    event.stopPropagation();
     const newVisible = !visible;
     setVisible(newVisible);
     if (visibleChanged) {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import { mutator, Transforms } from '../../ComposableFormUtils';
+import HelpPopover from '../../UIComponents/HelpPopover';
 
 function TeamMemberForm({
   event, disabled, value, onChange,
@@ -24,7 +25,22 @@ function TeamMemberForm({
       {
         [
           { name: 'display_team_member', label: `Display as ${event.event_category.team_member_name}` },
-          { name: 'show_email', label: 'Show individual email address on event page' },
+          {
+            name: 'show_email',
+            label: (
+              <>
+                Show individual email address on event page
+                {' '}
+                <HelpPopover>
+                  Selecting this option will make the individual email address for this
+                  {' '}
+                  {event.event_category.team_member_name}
+                  {' '}
+                  appear on the event page, but only for logged-in site users.
+                </HelpPopover>
+              </>
+            ),
+          },
           { name: 'receive_con_email', label: 'Receive email from convention' },
         ].map(({ name, label }) => (
           <BootstrapFormCheckbox
