@@ -42,6 +42,6 @@ class ProductDrop < Liquid::Drop
 
   # @return [String] The relative URL to use for linking to this product's page
   def url
-    product_path(product)
+    "/products/#{product.to_param}"
   end
 end
