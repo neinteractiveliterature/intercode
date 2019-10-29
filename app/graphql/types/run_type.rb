@@ -72,14 +72,18 @@ class Types::RunType < Types::BaseObject
 
   def my_signups
     return [] unless context[:user_con_profile]
-    context[:user_con_profile].signups.select { |signup| signup.run_id == object.id }
+    MySignupsLoader.for(pundit_user).load(context[:user_con_profile]).then do |signups|
+      signups.select { |signup| signup.run_id == object.id }
+    end
   end
 
   field :my_signup_requests, [Types::SignupRequestType], null: false
 
   def my_signup_requests
     return [] unless context[:user_con_profile]
-    context[:user_con_profile].signup_requests.select { |signup_request| signup_request.target_run_id == object.id }
+    MySignupRequestsLoader.for(pundit_user).load(context[:user_con_profile]).then do |signup_requests|
+      signup_requests.select { |signup_request| signup_request.target_run_id == object.id }
+    end
   end
 
   field :current_ability_can_signup_summary_run, Boolean, null: false
