@@ -1,8 +1,6 @@
 CarrierWave.configure do |config|
-  if EnvironmentBasedUploader.use_fog?
-    missing_keys = %w[AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_S3_BUCKET].select do |required_key|
-      ENV[required_key].blank?
-    end
+  if EnvironmentBasedUploader.fog_environment?
+    missing_keys = EnvironmentBasedUploader.missing_keys_for_fog
 
     if missing_keys.any?
       Rails.logger.warn <<~TEXT
