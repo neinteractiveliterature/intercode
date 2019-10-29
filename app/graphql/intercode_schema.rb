@@ -59,7 +59,8 @@ class IntercodeSchema < GraphQL::Schema
   better_rescue_middleware.suppress_logs(
     ActiveRecord::RecordNotFound,
     ActiveRecord::RecordInvalid,
-    Liquid::SyntaxError
+    Liquid::SyntaxError,
+    NotAuthorizedError
   )
   middleware better_rescue_middleware
 
