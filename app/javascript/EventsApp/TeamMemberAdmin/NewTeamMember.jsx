@@ -18,10 +18,10 @@ function NewTeamMember({
 }) {
   const [teamMember, setTeamMember] = useState({
     user_con_profile: null,
-    display: true,
-    show_email: true,
+    display_team_member: true,
+    show_email: false,
     receive_con_email: true,
-    receive_signup_email: 'NO',
+    receive_signup_email: 'NON_WAITLIST_SIGNUPS',
   });
   const userConProfileSelectId = useUniqueId('user-con-profile-');
   const [createTeamMember, createError, createInProgress] = useAsyncFunction(

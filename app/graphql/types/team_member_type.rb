@@ -33,4 +33,9 @@ class Types::TeamMemberType < Types::BaseObject
   def receive_con_email
     !!object.receive_con_email
   end
+
+  def email
+    return nil unless current_user
+    object.email
+  end
 end
