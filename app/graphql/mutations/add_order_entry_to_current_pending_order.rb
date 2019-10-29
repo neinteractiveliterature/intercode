@@ -9,12 +9,12 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
     order ||= user_con_profile.orders.create!(status: 'pending')
 
     new_order_entry = order.order_entries.find_or_initialize_by(
-      product_id: order_entry[:product_id],
-      product_variant_id: order_entry[:product_variant_id]
+      product_id: order_entry.product_id,
+      product_variant_id: order_entry.product_variant_id
     ) do |entry|
       entry.quantity = 0
     end
-    new_order_entry.quantity += order_entry[:quantity]
+    new_order_entry.quantity += order_entry.quantity
     new_order_entry.save!
 
     { order_entry: new_order_entry }

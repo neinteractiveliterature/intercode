@@ -14,7 +14,7 @@ class Mutations::PurchaseTicket < Mutations::BaseMutation
 
     if result.failure?
       err = CivilService::ServiceFailure.new(service, result)
-      raise BetterRescueMiddleware::UnloggedError, err.message if result.card_error
+      raise GraphQL::ExecutionError, err.message if result.card_error
       raise err
     end
 

@@ -15,7 +15,7 @@ class Mutations::CreateMySignup < Mutations::BaseMutation
   def resolve(**args)
     should_have_requested_bucket_key = args[:no_requested_bucket].blank?
     if should_have_requested_bucket_key && !args[:requested_bucket_key]
-      raise BetterRescueMiddleware::UnloggedError,
+      raise GraphQL::ExecutionError,
         'Bad request: signups must either request a bucket or specify that no bucket is requested.'
     end
 
@@ -27,7 +27,7 @@ class Mutations::CreateMySignup < Mutations::BaseMutation
     ).call
 
     if result.failure?
-      raise BetterRescueMiddleware::UnloggedError, result.errors.full_messages.join(', ')
+      raise GraphQL::ExecutionError, result.errors.full_messages.join(', ')
     end
 
     { signup: result.signup }

@@ -12,7 +12,7 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
   def resolve(**args)
     convention_data = args[:convention].to_h.merge(
       'maximum_event_signups' => process_scheduled_value_input(
-        args[:convention][:maximum_event_signups]
+        args[:convention].maximum_event_signups
       ),
       'updated_by' => user_con_profile.user
     )

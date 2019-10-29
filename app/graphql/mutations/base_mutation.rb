@@ -2,6 +2,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   include ContextAccessors
 
   field_class Types::UncamelizedField
+  input_object_class Types::BaseInputObject
 
   def self.require_user_con_profile
     define_method :authorized? do |_args|

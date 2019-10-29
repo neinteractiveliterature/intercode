@@ -21,7 +21,7 @@ class Mutations::CreateTeamMember < Mutations::BaseMutation
     result = CreateTeamMemberService.new(
       event: event,
       user_con_profile: user_con_profile,
-      team_member_attrs: args[:team_member],
+      team_member_attrs: args[:team_member].to_h,
       provide_ticket_type_id: args[:provide_ticket_type_id]
     ).call!
 

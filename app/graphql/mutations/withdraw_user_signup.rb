@@ -13,8 +13,7 @@ class Mutations::WithdrawUserSignup < Mutations::BaseMutation
       .first
 
     unless signup
-      raise BetterRescueMiddleware::UnloggedError,
-        "That user is not signed up for #{run.event.title}."
+      raise GraphQL::ExecutionError, "That user is not signed up for #{run.event.title}."
     end
 
     policy(signup).withdraw?

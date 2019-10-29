@@ -13,7 +13,7 @@ class Mutations::AcceptSignupRequest < Mutations::BaseMutation
     ).call
 
     if result.failure?
-      raise BetterRescueMiddleware::UnloggedError, result.errors.full_messages.join(', ')
+      raise GraphQL::ExecutionError, result.errors.full_messages.join(', ')
     end
 
     { signup: result.signup, signup_request: signup_request }
