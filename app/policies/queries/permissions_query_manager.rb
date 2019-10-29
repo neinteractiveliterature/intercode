@@ -53,7 +53,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     return false unless convention && permissions.present? && user
 
     user_permissions = convention_permissions(convention)
-    permissions.any? { |permission| user_permissions.include?(permission) }
+    permissions.any? { |permission| user_permissions.include?(permission.to_s) }
   end
 
   def conventions_with_permission(*permissions)

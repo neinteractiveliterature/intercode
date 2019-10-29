@@ -10,11 +10,11 @@ class EventProposalPolicy < ApplicationPolicy
         (user && record.owner && record.owner.user_id == user.id) ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
-          has_applicable_permission?(record.event_category_id, :read_pending_event_proposals)
+          has_applicable_permission?(:read_pending_event_proposals)
         ) ||
         (
           EVENT_PROPOSAL_NON_PENDING_STATUSES.include?(record.status) &&
-          has_applicable_permission?(record.event_category_id, :read_event_proposals)
+          has_applicable_permission?(:read_event_proposals)
         )
       end
     end
@@ -25,7 +25,7 @@ class EventProposalPolicy < ApplicationPolicy
   def read_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:read_events) do
-        has_applicable_permission?(record.event_category_id, :access_admin_notes)
+        has_applicable_permission?(:access_admin_notes)
       end
     end
 
@@ -45,7 +45,7 @@ class EventProposalPolicy < ApplicationPolicy
         ) ||
         (
           EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
-          has_applicable_permission?(record.event_category_id, :update_event_proposals)
+          has_applicable_permission?(:update_event_proposals)
         ) ||
         (
           record.event && team_member_for_event?(record.event)
@@ -72,7 +72,7 @@ class EventProposalPolicy < ApplicationPolicy
   def update_admin_notes?
     return true if oauth_scoped_disjunction do |d|
       d.add(:manage_events) do
-        has_applicable_permission?(record.event_category_id, :access_admin_notes)
+        has_applicable_permission?(:access_admin_notes)
       end
     end
 
