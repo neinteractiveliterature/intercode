@@ -24,7 +24,7 @@ function TeamMemberForm({
       {
         [
           { name: 'display_team_member', label: `Display as ${event.event_category.team_member_name}` },
-          { name: 'show_email', label: 'Show email address' },
+          { name: 'show_email', label: 'Show individual email address on event page' },
           { name: 'receive_con_email', label: 'Receive email from convention' },
         ].map(({ name, label }) => (
           <BootstrapFormCheckbox

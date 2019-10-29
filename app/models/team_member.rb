@@ -26,7 +26,7 @@ class TeamMember < ApplicationRecord
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string
   def email
-    user_con_profile.email if show_email?
+    user_con_profile.email if show_email? && display_team_member
   end
 
   def receive_signup_email=(value)
