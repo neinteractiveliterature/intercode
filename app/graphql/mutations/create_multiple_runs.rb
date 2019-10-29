@@ -12,15 +12,16 @@ class Mutations::CreateMultipleRuns < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    runs = args[:runs].map do |run|
-      event.runs.create!(
-        starts_at: run[:starts_at],
-        title_suffix: run[:title_suffix],
-        schedule_note: run[:schedule_note],
-        room_ids: run[:room_ids],
+    run_attrs_hashes = args[:runs].map do |run|
+      {
+        starts_at: run.starts_at,
+        title_suffix: run.title_suffix,
+        schedule_note: run.schedule_note,
+        room_ids: run.room_ids,
         updated_by: current_user
-      )
+      }
     end
+    runs = event.runs.create!(run_attrs_hashes)
 
     { runs: runs }
   end

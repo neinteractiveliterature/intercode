@@ -37,15 +37,18 @@ class IntercodeSchema < GraphQL::Schema
     end
   end
 
+  use GraphQL::Execution::Interpreter
+  use GraphQL::Analysis::AST
+  use GraphQL::Execution::Errors
+
   mutation(Types::MutationType)
   query(Types::QueryType)
+  tracer(GraphQL::Tracing::SkylightTracing.new(set_endpoint_name: true))
 
   use GraphQL::Batch
-  use GraphQL::Tracing::SkylightTracing, set_endpoint_name: true
 
-  better_rescue_middleware = BetterRescueMiddleware.new
-  better_rescue_middleware.rescue_from ActiveRecord::RecordInvalid do |err, _ctx|
-    GraphQL::ExecutionError.new(
+  rescue_from ActiveRecord::RecordInvalid do |err, _obj, _args, _ctx, _field|
+    raise GraphQL::ExecutionError.new(
       "Validation failed for #{err.record.class.name}: \
 #{err.record.errors.full_messages.join(', ')}",
       options: {
@@ -53,16 +56,19 @@ class IntercodeSchema < GraphQL::Schema
       }
     )
   end
-  better_rescue_middleware.rescue_from CivilService::ServiceFailure do |err, _ctx|
-    err.result.errors.full_messages.join(', ')
+
+  rescue_from ActiveRecord::RecordNotFound do |_err, _obj, _args, _ctx, field|
+    raise GraphQL::ExecutionError.new("#{field.type.unwrap.graphql_name} not found")
   end
-  better_rescue_middleware.suppress_logs(
-    ActiveRecord::RecordNotFound,
-    ActiveRecord::RecordInvalid,
-    Liquid::SyntaxError,
-    NotAuthorizedError
-  )
-  middleware better_rescue_middleware
+
+  rescue_from Liquid::SyntaxError do |err, _obj, _args, _ctx, _field|
+    raise GraphQL::ExecutionError.new(err.message)
+  end
+
+  rescue_from CivilService::ServiceFailure do |err, _obj, _args, _ctx, _field|
+    Rollbar.error(err)
+    raise GraphQL::ExecutionError.new(err.result.errors.full_messages.join(', '))
+  end
 
   def self.resolve_type(_abstract_type, object, _context)
     case object

@@ -11,8 +11,8 @@ class Mutations::UpdateCmsContentGroup < Mutations::BaseMutation
 
   def resolve(id:, cms_content_group:, grant_permissions: [], revoke_permissions: [])
     content_group = cms_parent.cms_content_groups.find(id)
-    content_group.update!(name: cms_content_group[:name])
-    update_cms_contents(content_group, cms_content_group[:contents])
+    content_group.update!(name: cms_content_group.name)
+    update_cms_contents(content_group, cms_content_group.contents)
 
     Types::PermissionInputType.load_permission_input_roles(grant_permissions || []).each do |input|
       Permission.grant(input[:role], content_group, input[:permission])
