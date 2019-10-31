@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/rmosolgo/graphql-ruby.git
-  revision: 85ecd8022142f7c5934fda5e030f0fd76329c617
+  revision: d4621c511297a13c1d0be0b70ba57331623281ee
   specs:
-    graphql (1.9.14)
+    graphql (1.9.15)
 
 GIT
   remote: https://github.com/nbudin/doorkeeper-openid_connect.git
