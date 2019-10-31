@@ -32,6 +32,8 @@ module Intercode
     config.middleware.use Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
+    config.skylight.probes += %w[active_job graphql]
+
     # To enable tsvectors and triggers; hopefully can get rid of this at some point :(
     config.active_record.schema_format = :sql
 

@@ -54,7 +54,7 @@ gem 'will_paginate'
 gem 'pg_search'
 
 # GraphQL server
-gem 'graphql', github: "rmosolgo/graphql-ruby" # TODO: upgrade to the released version with the Errors plugin once it ships
+gem 'graphql', '>= 1.9.15'
 gem 'graphql-batch'
 gem 'apollo_upload_server', '2.0.0.beta.3'
 gem 'graphql-rails_logger', groups: [:development, :test]
