@@ -43,7 +43,6 @@ class IntercodeSchema < GraphQL::Schema
 
   mutation(Types::MutationType)
   query(Types::QueryType)
-  tracer(GraphQL::Tracing::SkylightTracing.new(set_endpoint_name: true))
 
   use GraphQL::Batch
 

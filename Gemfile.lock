@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/rmosolgo/graphql-ruby.git
-  revision: 85ecd8022142f7c5934fda5e030f0fd76329c617
-  specs:
-    graphql (1.9.14)
-
-GIT
   remote: https://github.com/nbudin/doorkeeper-openid_connect.git
   revision: 17245d74b43c058f51d3bdfbe3fdb01bf0325f36
   branch: fix_doorkeeper_52_compat
@@ -219,6 +213,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
+    graphql (1.9.15)
     graphql-batch (0.4.1)
       graphql (>= 1.3, < 2)
       promise.rb (~> 0.7.2)
@@ -534,7 +529,7 @@ DEPENDENCIES
   flamegraph
   fog-aws
   graphiql-rails
-  graphql!
+  graphql (>= 1.9.15)
   graphql-batch
   graphql-rails_logger
   haml
