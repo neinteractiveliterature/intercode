@@ -20,6 +20,29 @@ fragment FormFields on Form {
   }
 }
 
+fragment FormEditorData on Form {
+  id
+  title
+  form_type
+
+  form_sections {
+    id
+    title
+    position
+    form_items {
+      id
+      position
+      identifier
+      item_type
+      admin_description
+      public_description
+      properties
+      rendered_properties
+      default_value
+    }
+  }
+}
+
 query FormAdminQuery {
   convention {
     id
@@ -29,5 +52,19 @@ query FormAdminQuery {
       id
       ...FormFields
     }
+  }
+}
+
+query FormEditorQuery($id: Int!) {
+  convention {
+    id
+    name
+    starts_at
+    ends_at
+    timezone_name
+  }
+
+  form(id: $id) {
+    ...FormEditorData
   }
 }

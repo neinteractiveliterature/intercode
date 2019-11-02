@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import FormAdminIndex from './FormAdminIndex';
 import { FormAdminQuery } from './queries.gql';
+import FormEditor from './FormEditor';
 import FormJSONEditor from './FormJSONEditor';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
@@ -60,7 +61,7 @@ function FormAdmin() {
           )}
         />
         <Route
-          path="/admin_forms/:id/edit"
+          path="/admin_forms/:id/edit_advanced"
           render={({ match, history }) => (
             <FormJSONEditor
               history={history}
@@ -68,6 +69,14 @@ function FormAdmin() {
                 .find((form) => form.id.toString(10) === match.params.id)}
             />
           )}
+        />
+        <Route
+          path="/admin_forms/:id/edit/section/:sectionId"
+          component={FormEditor}
+        />
+        <Route
+          path="/admin_forms/:id/edit"
+          component={FormEditor}
         />
         <Route path="/admin_forms" render={() => <FormAdminIndex />} />
       </Switch>

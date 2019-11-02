@@ -9,7 +9,7 @@ import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { BrowserRouter } from 'react-router-dom';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
-import Confirm from './ModalDialogs/Confirm';
+import Confirm, { useConfirm } from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
 import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
@@ -56,6 +56,7 @@ export default (WrappedComponent) => {
   function Wrapper({
     authenticityTokens, recaptchaSiteKey, stripePublishableKey, ...otherProps
   }) {
+    const confirm = useConfirm();
     const lazyStripeProviderValue = useMemo(
       () => ({ publishableKey: stripePublishableKey }),
       [stripePublishableKey],
@@ -83,13 +84,24 @@ export default (WrappedComponent) => {
     );
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
 
+    const getUserConfirmation = useCallback(
+      (message, callback) => {
+        confirm({
+          prompt: message,
+          action: () => callback(true),
+          onCancel: () => callback(false),
+        });
+      },
+      [confirm],
+    );
+
     if (!apolloClient) {
       // we need one render cycle to initialize the client
       return <></>;
     }
 
     return (
-      <BrowserRouter basename="/">
+      <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
             <ApolloProvider client={apolloClient}>
@@ -98,13 +110,11 @@ export default (WrappedComponent) => {
                   <>
                     {!unauthenticatedError && (
                       <Suspense fallback={<PageLoadingIndicator visible />}>
-                        <Confirm>
-                          <AlertProvider>
-                            <ErrorBoundary>
-                              <WrappedComponent {...otherProps} />
-                            </ErrorBoundary>
-                          </AlertProvider>
-                        </Confirm>
+                        <AlertProvider>
+                          <ErrorBoundary>
+                            <WrappedComponent {...otherProps} />
+                          </ErrorBoundary>
+                        </AlertProvider>
                       </Suspense>
                     )}
                     <AuthenticationModal />
@@ -136,5 +146,9 @@ export default (WrappedComponent) => {
 
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
-  return Wrapper;
+  function ConfirmWrapper(props) {
+    return <Confirm><Wrapper {...props} /></Confirm>;
+  }
+
+  return ConfirmWrapper;
 };

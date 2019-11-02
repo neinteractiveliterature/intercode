@@ -1,4 +1,6 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {
+ useState, useContext, useMemo, useCallback
+} from 'react';
 import PropTypes from 'prop-types';
 import { ConfirmModal } from 'react-bootstrap4-modal';
 
@@ -41,13 +43,23 @@ function Confirm({ children }) {
     [modal],
   );
 
+  const cancelClicked = useCallback(
+    () => {
+      if (modal.onCancel) {
+        modal.onCancel();
+      }
+      modal.close();
+    },
+    [modal],
+  );
+
   return (
     <ConfirmContext.Provider value={contextValue}>
       {children}
       <ConfirmModal
         visible={modal.visible}
         onOK={okClicked}
-        onCancel={modal.close}
+        onCancel={cancelClicked}
         disableButtons={actionInProgress}
       >
         {(modal.state || {}).prompt || <div />}
