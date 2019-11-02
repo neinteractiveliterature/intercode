@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 
 function StaticTextEditor({ formItem, onChange }) {
@@ -15,5 +17,14 @@ function StaticTextEditor({ formItem, onChange }) {
     />
   );
 }
+
+StaticTextEditor.propTypes = {
+  formItem: PropTypes.shape({
+    properties: PropTypes.shape({
+      content: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default StaticTextEditor;

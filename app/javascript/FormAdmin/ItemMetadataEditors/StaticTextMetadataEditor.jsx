@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 
@@ -20,5 +21,14 @@ function StaticTextMetadataEditor({ formItem, onChange }) {
     </BootstrapFormSelect>
   );
 }
+
+StaticTextMetadataEditor.propTypes = {
+  formItem: PropTypes.shape({
+    properties: PropTypes.shape({
+      style: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default StaticTextMetadataEditor;
