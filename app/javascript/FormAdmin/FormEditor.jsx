@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, Prompt, Redirect } from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
+import sortBy from 'lodash-es/sortBy';
 
 import flatMap from 'lodash-es/flatMap';
 import ErrorDisplay from '../ErrorDisplay';
@@ -27,9 +28,9 @@ function FormEditor({ match }) {
 
       return {
         ...data.form,
-        form_sections: data.form.form_sections.map((formSection) => ({
+        form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
           ...formSection,
-          form_items: formSection.form_items.map((formItem) => ({
+          form_items: sortBy(formSection.form_items, 'position').map((formItem) => ({
             ...formItem,
             properties: JSON.parse(formItem.properties),
             rendered_properties: JSON.parse(formItem.rendered_properties),
@@ -118,7 +119,8 @@ function FormEditor({ match }) {
                     initialFormItem={formItem}
                     renderedFormItem={renderedFormItemsById.get(formItem.id)}
                     close={() => {
-                      setEditingItemIds((prevValue) => prevValue.filter((itemId) => itemId !== formItem.id));
+                      setEditingItemIds((prevValue) => prevValue
+                        .filter((itemId) => itemId !== formItem.id));
                     }}
                   />
                 )

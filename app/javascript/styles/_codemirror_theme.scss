@@ -1,9 +1,14 @@
 // mostly copied/modified from .cm-s-intercode that ships with codemirror
 
+.bg-disabled {
+  background-color: $input-disabled-bg;
+}
+
 .cm-s-intercode.CodeMirror {
   font-size: $code-font-size * 0.9;
 	font-family: $font-family-monospace;
   line-height: auto;
+  background: transparent;
 
   .cm-header {color: $blue;}
   .cm-quote {color: $green;}

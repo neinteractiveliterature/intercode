@@ -20,6 +20,18 @@ fragment FormFields on Form {
   }
 }
 
+fragment FormEditorFormItemFields on FormItem {
+  id
+  position
+  identifier
+  item_type
+  admin_description
+  public_description
+  properties
+  rendered_properties
+  default_value
+}
+
 fragment FormEditorData on Form {
   id
   title
@@ -30,15 +42,7 @@ fragment FormEditorData on Form {
     title
     position
     form_items {
-      id
-      position
-      identifier
-      item_type
-      admin_description
-      public_description
-      properties
-      rendered_properties
-      default_value
+      ...FormEditorFormItemFields
     }
   }
 }

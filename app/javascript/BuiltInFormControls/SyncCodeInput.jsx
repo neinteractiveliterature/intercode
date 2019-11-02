@@ -96,6 +96,7 @@ class SyncCodeInput extends React.Component {
           foldGutter: false,
           gutters: [],
           mode: this.props.mode,
+          readOnly: this.props.disabled ? 'nocursor' : false,
           ...(this.props.codeMirrorOptions || {}),
         }}
         {...eventHandlers}
@@ -144,7 +145,13 @@ class SyncCodeInput extends React.Component {
         style={{ overflow: 'hidden' }}
       >
         {this.renderNav()}
-        <div className={classNames('form-control border-0', this.props.editorWrapperClassName)}>
+        <div
+          className={classNames(
+            'form-control border-0',
+            this.props.editorWrapperClassName,
+            { 'bg-disabled': this.props.disabled },
+          )}
+        >
           {this.renderContent()}
         </div>
       </div>
@@ -166,6 +173,7 @@ SyncCodeInput.propTypes = {
   codeMirrorOptions: PropTypes.shape({}),
   editorWrapperClassName: PropTypes.string,
   extraNavControls: PropTypes.node,
+  disabled: PropTypes.bool,
 };
 
 SyncCodeInput.defaultProps = {
@@ -178,6 +186,7 @@ SyncCodeInput.defaultProps = {
   editorWrapperClassName: null,
   extraNavControls: null,
   getPreviewContent: null,
+  disabled: false,
 };
 
 export default SyncCodeInput;
