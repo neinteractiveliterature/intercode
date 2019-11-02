@@ -88,6 +88,10 @@ class Types::MutationType < Types::BaseObject
   field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON
   field :deleteForm, mutation: Mutations::DeleteForm
 
+  ### FormItem
+
+  field :updateFormItem, mutation: Mutations::UpdateFormItem
+
   ### MaximumEventProvidedTicketsOverride
 
   field :createMaximumEventProvidedTicketsOverride,

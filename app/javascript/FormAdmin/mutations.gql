@@ -23,3 +23,12 @@ mutation DeleteForm($id: Int!) {
     clientMutationId
   }
 }
+
+mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
+  updateFormItem(input: { id: $id, form_item: $formItem }) {
+    form_item {
+      id
+      ...FormEditorFormItemFields
+    }
+  }
+}

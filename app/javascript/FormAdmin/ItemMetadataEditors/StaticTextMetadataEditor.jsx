@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 
-function StaticTextMetadataEditor({ formItem, onChange }) {
+function StaticTextMetadataEditor({ formItem, onChange, disabled }) {
   return (
     <BootstrapFormSelect
+      disabled={disabled}
       value={formItem.properties.style}
-      onChange={(style) => onChange((prevFormItem) => ({
+      onValueChange={(style) => onChange((prevFormItem) => ({
         ...prevFormItem,
         properties: {
           ...prevFormItem.properties,
@@ -23,12 +24,17 @@ function StaticTextMetadataEditor({ formItem, onChange }) {
 }
 
 StaticTextMetadataEditor.propTypes = {
+  disabled: PropTypes.bool,
   formItem: PropTypes.shape({
     properties: PropTypes.shape({
       style: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
+};
+
+StaticTextMetadataEditor.defaultProps = {
+  disabled: false,
 };
 
 export default StaticTextMetadataEditor;
