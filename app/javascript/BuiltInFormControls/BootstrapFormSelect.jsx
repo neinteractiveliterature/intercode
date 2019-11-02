@@ -23,7 +23,7 @@ function BootstrapFormSelect(props) {
 }
 
 BootstrapFormSelect.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func,
@@ -35,6 +35,7 @@ BootstrapFormSelect.propTypes = {
 BootstrapFormSelect.defaultProps = {
   children: null,
   disabled: false,
+  name: null,
   onChange: null,
   onValueChange: null,
 };

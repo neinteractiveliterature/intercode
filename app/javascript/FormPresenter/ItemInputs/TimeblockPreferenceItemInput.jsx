@@ -134,7 +134,7 @@ class TimeblockPreferenceItemInput extends React.Component {
 
 TimeblockPreferenceItemInput.propTypes = {
   formItem: PropTypes.shape({
-    caption: PropTypes.string.isRequired,
+    caption: PropTypes.string,
     properties: PropTypes.shape({
       caption: PropTypes.string.isRequired,
       timeblocks: PropTypes.arrayOf(TimeblockPropType.isRequired).isRequired,

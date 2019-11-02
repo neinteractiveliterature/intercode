@@ -1,0 +1,39 @@
+.form-editor-item {
+  position: relative;
+}
+
+.form-editor-item-overlay {
+  opacity: 0.0;
+  position: absolute;
+  cursor: pointer;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 0 0 5px black;
+
+  &:hover {
+    opacity: 1.0;
+  }
+}
+
+.form-editor-item-identifier {
+  background-color: map-get($map: $theme-colors, $key: 'info');
+  border-radius: 0.3rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-shadow: none;
+}
+
+.form-item-editor {
+  background-color: map-get($map: $theme-colors, $key: 'warning');
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}

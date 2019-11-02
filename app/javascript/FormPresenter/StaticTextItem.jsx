@@ -15,6 +15,7 @@ const StaticTextItem = ({ formItem }) => {
 StaticTextItem.propTypes = {
   formItem: PropTypes.shape({
     properties: PropTypes.shape({
+      content: PropTypes.string.isRequired,
       style: PropTypes.string,
     }).isRequired,
   }).isRequired,

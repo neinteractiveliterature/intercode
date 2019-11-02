@@ -1,0 +1,118 @@
+{
+  "event": {
+    "special_items": {
+      "title": {
+        "description": "Event title",
+        "required": true
+      },
+      "author": {
+        "description": "Event author(s)"
+      },
+      "event_email": {
+        "description": "Event email",
+        "item_type": "event_email"
+      },
+      "organization": {
+        "description": "Organization"
+      },
+      "url": {
+        "description": "Event homepage URL"
+      },
+      "length_seconds": {
+        "description": "Event length",
+        "item_type": "timespan",
+        "required": true
+      },
+      "can_play_concurrently": {
+        "description": "Can sign up for simultaneous events",
+        "required": true
+      },
+      "con_mail_destination": {
+        "description": "Convention mail destination"
+      },
+      "description": {
+        "description": "Full description",
+        "required": true
+      },
+      "short_blurb": {
+        "description": "Short blurb",
+        "required": true
+      },
+      "registration_policy": {
+        "description": "Registration policy",
+        "item_type": "registration_policy",
+        "required": true
+      },
+      "participant_communications": {
+        "description": "Participant communications policy"
+      },
+      "age_restrictions": {
+        "description": "Age restrictions",
+        "item_type": "age_restrictions"
+      },
+      "content_warnings": {
+        "description": "Content warnings"
+      }
+    }
+  },
+  "event_proposal": {
+    "special_items": {
+      "title": {
+        "description": "Event title",
+        "required": true
+      },
+      "event_email": {
+        "description": "Event email",
+        "item_type": "event_email"
+      },
+      "age_restrictions": {
+        "description": "Age restrictions",
+        "item_type": "age_restrictions"
+      },
+      "length_seconds": {
+        "description": "Event length",
+        "item_type": "timespan",
+        "required": true
+      },
+      "description": {
+        "description": "Full description",
+        "required": true
+      },
+      "short_blurb": {
+        "description": "Short blurb",
+        "required": true
+      },
+      "registration_policy": {
+        "description": "Registration policy",
+        "item_type": "registration_policy",
+        "required": true
+      },
+      "can_play_concurrently": {
+        "description": "Can sign up for simultaneous events",
+        "required": true
+      },
+      "timeblock_preferences": {
+        "description": "Timeblock preferences",
+        "item_type": "timeblock_preference"
+      },
+      "authors": {
+        "description": "Event author(s)"
+      },
+      "organization": {
+        "description": "Organization"
+      },
+      "url": {
+        "description": "Event homepage URL"
+      },
+      "player_communications": {
+        "description": "Participant communications policy"
+      },
+      "content_warnings": {
+        "description": "Content warnings"
+      }
+    }
+  },
+  "user_con_profile": {
+
+  }
+}

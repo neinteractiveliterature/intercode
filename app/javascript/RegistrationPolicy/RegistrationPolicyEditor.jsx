@@ -23,7 +23,7 @@ function RegistrationPolicyEditor(props) {
     allowCustom, lockNameAndDescription, lockDeleteBuckets, lockLimitedBuckets,
     onChange, presets, validateComplete,
   } = props;
-  const registrationPolicy = props.registrationPolicy || {};
+  const registrationPolicy = props.registrationPolicy || { buckets: [] };
 
   const [preset, setPreset] = useState(() => findPreset(registrationPolicy, presets));
   const [custom, setCustom] = useState(() => (
@@ -285,7 +285,7 @@ function RegistrationPolicyEditor(props) {
 }
 
 RegistrationPolicyEditor.propTypes = {
-  registrationPolicy: RegistrationPolicyPropType.isRequired,
+  registrationPolicy: RegistrationPolicyPropType,
   onChange: PropTypes.func.isRequired,
   lockNameAndDescription: PropTypes.bool,
   lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
@@ -299,6 +299,7 @@ RegistrationPolicyEditor.propTypes = {
 };
 
 RegistrationPolicyEditor.defaultProps = {
+  registrationPolicy: null,
   lockNameAndDescription: false,
   lockLimitedBuckets: null,
   lockDeleteBuckets: null,
