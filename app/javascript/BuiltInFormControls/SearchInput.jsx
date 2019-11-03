@@ -1,31 +1,13 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash-es/debounce';
 import useUniqueId from '../useUniqueId';
+import useDebouncedState from '../useDebouncedState';
 
 function SearchInput({
   value, onChange, wait, name, label, inputProps, inputGroupProps,
 }) {
-  const [transientValue, setTransientValue] = useState(value || '');
-  const transientValueChanged = useMemo(
-    () => debounce(
-      (newTransientValue) => {
-        onChange(newTransientValue);
-      },
-      wait,
-      { leading: false, trailing: true },
-    ),
-    [onChange, wait],
-  );
+  const [transientValue, setTransientValue] = useDebouncedState(value || '', onChange, wait);
   const inputId = useUniqueId(`${name || 'search'}-`);
-
-  useEffect(
-    () => {
-      transientValueChanged(transientValue);
-      return transientValueChanged.cancel;
-    },
-    [transientValue, transientValueChanged],
-  );
 
   return (
     <div className="form-group mb-0">

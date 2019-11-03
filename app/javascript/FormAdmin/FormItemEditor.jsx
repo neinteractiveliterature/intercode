@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useApolloClient } from 'react-apollo-hooks';
+import debounce from 'lodash-es/debounce';
 
 import FormTypes from './form_types.json';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
+import { PreviewFormItemQuery } from './queries.gql';
 import StaticTextEditor from './ItemEditors/StaticTextEditor';
-import StaticTextMetadataEditor from './ItemMetadataEditors/StaticTextMetadataEditor';
 import { UpdateFormItem } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import ErrorDisplay from '../ErrorDisplay';
+import { buildFormItemInput, parseFormItemObject } from './FormItemUtils';
+import useDebouncedState from '../useDebouncedState';
+import FreeTextEditor from './ItemEditors/FreeTextEditor';
 
 function FormItemEditor({
-  close, convention, form, initialFormItem, renderedFormItem,
+  close, convention, form, formSectionId, initialFormItem, initialRenderedFormItem,
 }) {
-  const [formItem, setFormItem] = useState(initialFormItem);
+  const apolloClient = useApolloClient();
+  const [renderedFormItem, setRenderedFormItem] = useState(initialRenderedFormItem);
+  const refreshRenderedFormItem = useCallback(
+    async (newFormItem) => {
+      const response = await apolloClient.query({
+        query: PreviewFormItemQuery,
+        variables: { formSectionId, formItem: buildFormItemInput(newFormItem) },
+        fetchPolicy: 'no-cache',
+      });
+      const previewFormItem = parseFormItemObject(response.data.previewFormItem);
+      setRenderedFormItem({ ...previewFormItem, properties: previewFormItem.rendered_properties });
+    },
+    [apolloClient, formSectionId],
+  );
+
+  const [formItem, setFormItem] = useDebouncedState(initialFormItem, refreshRenderedFormItem, 150);
   const formType = FormTypes[form.form_type];
   const specialItem = ((formType || {}).special_items || {})[formItem.identifier];
   const [updateFormItemMutate] = useMutation(UpdateFormItem);
@@ -21,7 +40,14 @@ function FormItemEditor({
 
   const disabled = updateInProgress;
 
-  const renderEditorContent = () => {
+  useEffect(
+    () => {
+      debounce(refreshRenderedFormItem, 300);
+    },
+    [formItem, refreshRenderedFormItem],
+  );
+
+  const renderEditor = () => {
     const commonProps = { formItem, onChange: setFormItem, disabled };
     switch (formItem.item_type) {
       // case 'age_restrictions':
@@ -30,46 +56,14 @@ function FormItemEditor({
       //   return <DateItemInput {...commonProps} />;
       // case 'event_email':
       //   return <EventEmailInput {...commonProps} convention={convention} />;
-      // case 'free_text':
-      //   return <FreeTextItemInput {...commonProps} />;
+      case 'free_text':
+        return <FreeTextEditor {...commonProps} />;
       // case 'multiple_choice':
       //   return <MultipleChoiceItemInput {...commonProps} />;
       // case 'registration_policy':
       //   return <RegistrationPolicyItemInput {...commonProps} />;
       case 'static_text':
         return <StaticTextEditor {...commonProps} />;
-      // case 'timeblock_preference':
-      //   return <TimeblockPreferenceItemInput {...commonProps} convention={convention} />;
-      // case 'timespan':
-      //   return <TimespanItemInput {...commonProps} />;
-      default:
-        return (
-          <FormItemInput
-            convention={convention}
-            formItem={renderedFormItem}
-            onInteract={() => { }}
-          />
-        );
-    }
-  };
-
-  const renderMetadataEditor = () => {
-    const commonProps = { formItem, onChange: setFormItem, disabled };
-    switch (formItem.item_type) {
-      // case 'age_restrictions':
-      //   return <AgeRestrictionsInput {...commonProps} />;
-      // case 'date':
-      //   return <DateItemInput {...commonProps} />;
-      // case 'event_email':
-      //   return <EventEmailInput {...commonProps} convention={convention} />;
-      // case 'free_text':
-      //   return <FreeTextItemInput {...commonProps} />;
-      // case 'multiple_choice':
-      //   return <MultipleChoiceItemInput {...commonProps} />;
-      // case 'registration_policy':
-      //   return <RegistrationPolicyItemInput {...commonProps} />;
-      case 'static_text':
-        return <StaticTextMetadataEditor {...commonProps} />;
       // case 'timeblock_preference':
       //   return <TimeblockPreferenceItemInput {...commonProps} convention={convention} />;
       // case 'timespan':
@@ -83,14 +77,7 @@ function FormItemEditor({
     await updateFormItem({
       variables: {
         id: formItem.id,
-        formItem: {
-          identifier: formItem.identifier,
-          item_type: formItem.item_type,
-          admin_description: formItem.admin_description,
-          public_description: formItem.public_description,
-          default_value: formItem.default_value ? JSON.stringify(formItem.default_value) : null,
-          properties: JSON.stringify(formItem.properties),
-        },
+        formItem: buildFormItemInput(formItem),
       },
     });
 
@@ -98,11 +85,18 @@ function FormItemEditor({
   };
 
   return (
-    <div className="form-item-editor mb-2">
-      <div className="bg-white rounded p-1">
-        {renderEditorContent()}
+    <div className="bg-info-light rounded glow-info p-2 mb-2">
+      <div className="bg-white border border-info rounded mb-2">
+        <div className="bg-info text-white px-2 font-weight-bold">Preview</div>
+        <div className="p-2">
+          <FormItemInput
+            convention={convention}
+            formItem={renderedFormItem}
+            onInteract={() => { }}
+          />
+        </div>
       </div>
-      {renderMetadataEditor()}
+      {renderEditor()}
       <ErrorDisplay graphQLError={updateError} />
       <div className="mt-2 text-right">
         <button
@@ -132,10 +126,11 @@ FormItemEditor.propTypes = {
   form: PropTypes.shape({
     form_type: PropTypes.string.isRequired,
   }).isRequired,
+  formSectionId: PropTypes.number.isRequired,
   initialFormItem: PropTypes.shape({
     identifier: PropTypes.string,
   }).isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
+  initialRenderedFormItem: PropTypes.shape({}).isRequired,
 };
 
 export default FormItemEditor;

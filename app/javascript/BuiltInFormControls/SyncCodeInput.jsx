@@ -121,15 +121,17 @@ class SyncCodeInput extends React.Component {
             Edit
           </button>
         </li>
-        <li className="nav-item">
-          <button
-            type="button"
-            className={classNames('btn btn-link nav-link py-0 px-2', { active: this.state.previewing })}
-            onClick={this.previewTabClicked}
-          >
-            Preview
-          </button>
-        </li>
+        {this.props.getPreviewContent && (
+          <li className="nav-item">
+            <button
+              type="button"
+              className={classNames('btn btn-link nav-link py-0 px-2', { active: this.state.previewing })}
+              onClick={this.previewTabClicked}
+            >
+              Preview
+            </button>
+          </li>
+        )}
         {this.props.extraNavControls}
       </ul>
     );
