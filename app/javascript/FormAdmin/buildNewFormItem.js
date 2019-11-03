@@ -1,4 +1,9 @@
 const DEFAULT_PROPERTIES = {
+  free_text: {
+    caption: '',
+    lines: 1,
+    format: 'plain',
+  },
   static_text: {
     content: '',
     style: 'normal',

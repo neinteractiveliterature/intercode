@@ -72,3 +72,10 @@ query FormEditorQuery($id: Int!) {
     ...FormEditorData
   }
 }
+
+query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
+  previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
+    id
+    ...FormEditorFormItemFields
+  }
+}

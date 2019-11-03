@@ -11,6 +11,7 @@ import usePageTitle from '../usePageTitle';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import FormEditorItemPreview from './FormEditorItemPreview';
 import FormItemEditor from './FormItemEditor';
+import { parseFormItemObject } from './FormItemUtils';
 
 function FormEditor({ match }) {
   const { data, error, loading } = useQuery(FormEditorQuery, {
@@ -30,11 +31,7 @@ function FormEditor({ match }) {
         ...data.form,
         form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
           ...formSection,
-          form_items: sortBy(formSection.form_items, 'position').map((formItem) => ({
-            ...formItem,
-            properties: JSON.parse(formItem.properties),
-            rendered_properties: JSON.parse(formItem.rendered_properties),
-          })),
+          form_items: sortBy(formSection.form_items, 'position').map(parseFormItemObject),
         })),
       };
     },
@@ -116,8 +113,9 @@ function FormEditor({ match }) {
                     key={formItem.id}
                     convention={data.convention}
                     form={form}
+                    formSectionId={currentSection.id}
                     initialFormItem={formItem}
-                    renderedFormItem={renderedFormItemsById.get(formItem.id)}
+                    initialRenderedFormItem={renderedFormItemsById.get(formItem.id)}
                     close={() => {
                       setEditingItemIds((prevValue) => prevValue
                         .filter((itemId) => itemId !== formItem.id));

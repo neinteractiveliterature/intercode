@@ -1,12 +1,14 @@
 $success-light: lighten($success, 35%);
 $warning-light: lighten($warning, 35%);
 $danger-light: lighten($danger, 35%);
+$info-light: lighten($info, 50%);
 
 $color-variants: () !default;
 $color-variants: map-merge((
   "success-light": $success-light,
   "warning-light": $warning-light,
   "danger-light": $danger-light,
+  "info-light": $info-light,
 ), $color-variants);
 
 @each $color, $value in $color-variants {

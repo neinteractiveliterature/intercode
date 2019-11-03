@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useApolloClient } from 'react-apollo-hooks';
 
@@ -15,7 +16,7 @@ function LiquidInput(props) {
     setCurrentDocTab(tab);
   };
 
-  const getPreviewContent = async (liquid) => {
+  const getPreviewContent = props.disablePreview ? null : async (liquid) => {
     const response = await client.query({
       query: PreviewLiquidQuery,
       variables: { liquid },
@@ -109,5 +110,13 @@ function LiquidInput(props) {
     </CodeInput>
   );
 }
+
+LiquidInput.propTypes = {
+  disablePreview: PropTypes.bool,
+};
+
+LiquidInput.defaultProps = {
+  disablePreview: false,
+};
 
 export default LiquidInput;
