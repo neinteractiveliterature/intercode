@@ -7,8 +7,9 @@ import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { Transforms } from '../../ComposableFormUtils';
+import CommonQuestionFields from './CommonQuestionFields';
 
-function FreeTextEditor({ formItem, onChange, disabled }) {
+function FreeTextEditor({ form, formItem, onChange, disabled }) {
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat = (
     formItem.properties.format === 'markdown'
@@ -31,6 +32,7 @@ function FreeTextEditor({ formItem, onChange, disabled }) {
 
   return (
     <>
+      <CommonQuestionFields form={form} formItem={formItem} onChange={onChange} />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
