@@ -48,7 +48,9 @@ function FormItemEditor({
   );
 
   const renderEditor = () => {
-    const commonProps = { formItem, onChange: setFormItem, disabled };
+    const commonProps = {
+      form, formItem, onChange: setFormItem, disabled,
+    };
     switch (formItem.item_type) {
       // case 'age_restrictions':
       //   return <AgeRestrictionsInput {...commonProps} />;
