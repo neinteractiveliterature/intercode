@@ -9,7 +9,9 @@ import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { Transforms } from '../../ComposableFormUtils';
 import CommonQuestionFields from './CommonQuestionFields';
 
-function FreeTextEditor({ form, formItem, onChange, disabled }) {
+function FreeTextEditor({
+  convention, form, formItem, onChange, disabled, renderedFormItem,
+}) {
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat = (
     formItem.properties.format === 'markdown'
@@ -27,12 +29,15 @@ function FreeTextEditor({ form, formItem, onChange, disabled }) {
     }));
   };
 
-  // identifier: : required,
-  // required: : optional,
-
   return (
     <>
-      <CommonQuestionFields form={form} formItem={formItem} onChange={onChange} />
+      <CommonQuestionFields
+        convention={convention}
+        form={form}
+        formItem={formItem}
+        onChange={onChange}
+        renderedFormItem={renderedFormItem}
+      />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -71,7 +76,9 @@ function FreeTextEditor({ form, formItem, onChange, disabled }) {
 }
 
 FreeTextEditor.propTypes = {
+  convention: PropTypes.shape({}).isRequired,
   disabled: PropTypes.bool,
+  form: PropTypes.shape({}).isRequired,
   formItem: PropTypes.shape({
     properties: PropTypes.shape({
       caption: PropTypes.string,
@@ -81,6 +88,7 @@ FreeTextEditor.propTypes = {
     }).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
+  renderedFormItem: PropTypes.shape({}).isRequired,
 };
 
 FreeTextEditor.defaultProps = {

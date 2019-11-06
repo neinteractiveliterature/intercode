@@ -1,6 +1,7 @@
 export function parseFormItemObject(formItem) {
   return {
     ...formItem,
+    default_value: JSON.parse(formItem.default_value),
     properties: JSON.parse(formItem.properties),
     rendered_properties: JSON.parse(formItem.rendered_properties),
   };

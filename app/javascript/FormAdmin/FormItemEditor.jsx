@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useMutation, useApolloClient } from 'react-apollo-hooks';
 import debounce from 'lodash-es/debounce';
 
-import FormTypes from './form_types.json';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { PreviewFormItemQuery } from './queries.gql';
 import StaticTextEditor from './ItemEditors/StaticTextEditor';
@@ -13,6 +12,10 @@ import ErrorDisplay from '../ErrorDisplay';
 import { buildFormItemInput, parseFormItemObject } from './FormItemUtils';
 import useDebouncedState from '../useDebouncedState';
 import FreeTextEditor from './ItemEditors/FreeTextEditor';
+import DateEditor from './ItemEditors/DateEditor';
+import AgeRestrictionsEditor from './ItemEditors/AgeRestrictionsEditor';
+import EventEmailEditor from './ItemEditors/EventEmailEditor';
+import TimespanEditor from './ItemEditors/TimespanEditor';
 
 function FormItemEditor({
   close, convention, form, formSectionId, initialFormItem, initialRenderedFormItem,
@@ -33,8 +36,6 @@ function FormItemEditor({
   );
 
   const [formItem, setFormItem] = useDebouncedState(initialFormItem, refreshRenderedFormItem, 150);
-  const formType = FormTypes[form.form_type];
-  const specialItem = ((formType || {}).special_items || {})[formItem.identifier];
   const [updateFormItemMutate] = useMutation(UpdateFormItem);
   const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
 
@@ -49,15 +50,15 @@ function FormItemEditor({
 
   const renderEditor = () => {
     const commonProps = {
-      form, formItem, onChange: setFormItem, disabled,
+      convention, form, formItem, onChange: setFormItem, renderedFormItem, disabled,
     };
     switch (formItem.item_type) {
-      // case 'age_restrictions':
-      //   return <AgeRestrictionsInput {...commonProps} />;
-      // case 'date':
-      //   return <DateItemInput {...commonProps} />;
-      // case 'event_email':
-      //   return <EventEmailInput {...commonProps} convention={convention} />;
+      case 'age_restrictions':
+        return <AgeRestrictionsEditor {...commonProps} />;
+      case 'date':
+        return <DateEditor {...commonProps} />;
+      case 'event_email':
+        return <EventEmailEditor {...commonProps} />;
       case 'free_text':
         return <FreeTextEditor {...commonProps} />;
       // case 'multiple_choice':
@@ -68,8 +69,8 @@ function FormItemEditor({
         return <StaticTextEditor {...commonProps} />;
       // case 'timeblock_preference':
       //   return <TimeblockPreferenceItemInput {...commonProps} convention={convention} />;
-      // case 'timespan':
-      //   return <TimespanItemInput {...commonProps} />;
+      case 'timespan':
+        return <TimespanEditor {...commonProps} />;
       default:
         return null;
     }
@@ -95,6 +96,7 @@ function FormItemEditor({
             convention={convention}
             formItem={renderedFormItem}
             onInteract={() => { }}
+            value={renderedFormItem.default_value}
           />
         </div>
       </div>
