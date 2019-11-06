@@ -1,4 +1,11 @@
 const DEFAULT_PROPERTIES = {
+  age_restrictions: {
+    caption: '',
+  },
+  date: {
+    caption: '',
+  },
+  event_email: {},
   free_text: {
     caption: '',
     lines: 1,
@@ -7,6 +14,9 @@ const DEFAULT_PROPERTIES = {
   static_text: {
     content: '',
     style: 'normal',
+  },
+  timespan: {
+    caption: '',
   },
 };
 

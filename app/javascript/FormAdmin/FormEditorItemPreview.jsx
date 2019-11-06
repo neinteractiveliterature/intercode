@@ -52,6 +52,7 @@ function FormEditorItemPreview({
         convention={convention}
         formItem={renderedFormItem}
         onInteract={() => { }}
+        value={formItem.default_value}
       />
     </div>
   );
@@ -63,9 +64,11 @@ FormEditorItemPreview.propTypes = {
     form_type: PropTypes.string.isRequired,
   }).isRequired,
   formItem: PropTypes.shape({
+    default_value: PropTypes.any,
     identifier: PropTypes.string,
   }).isRequired,
   renderedFormItem: PropTypes.shape({}).isRequired,
+  startEditing: PropTypes.func.isRequired,
 };
 
 export default FormEditorItemPreview;

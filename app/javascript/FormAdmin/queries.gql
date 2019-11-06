@@ -66,6 +66,7 @@ query FormEditorQuery($id: Int!) {
     starts_at
     ends_at
     timezone_name
+    event_mailing_list_domain
   }
 
   form(id: $id) {
