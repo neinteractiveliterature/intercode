@@ -8,7 +8,12 @@ class WaitlistPositionLoader < GraphQL::Batch::Loader
       .transform_values { |rows| rows.sort_by(&:third).map(&:second) }
 
     keys.each do |signup|
-      fulfill(signup, signup_ids_ordered[signup.run_id].index(signup.id) + 1)
+      waitlist_index = signup_ids_ordered[signup.run_id].index(signup.id)
+      if waitlist_index.nil?
+        fulfill(signup, nil)
+      else
+        fulfill(signup, waitlist_index + 1)
+      end
     end
   end
 end
