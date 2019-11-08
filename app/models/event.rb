@@ -100,23 +100,35 @@ class Event < ApplicationRecord
   scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
 
   scope :joins_rating_for_user_con_profile, ->(user_con_profile) do
-    joins(<<~SQL)
-      LEFT JOIN event_ratings ON (
-        events.id = event_ratings.event_id
-        AND user_con_profile_id = #{connection.quote(user_con_profile.id)}
-      )
-    SQL
+    if user_con_profile
+      joins(<<~SQL)
+        LEFT JOIN event_ratings ON (
+          events.id = event_ratings.event_id
+          AND user_con_profile_id = #{connection.quote(user_con_profile.id)}
+        )
+      SQL
+    else
+      self
+    end
   end
 
   scope :with_rating_for_user_con_profile, ->(user_con_profile, rating) do
-    rating_array = rating.is_a?(Array) ? rating : [rating]
-    joins_rating_for_user_con_profile(user_con_profile)
-      .where('COALESCE(event_ratings.rating, 0) IN (?)', rating_array)
+    if user_con_profile
+      rating_array = rating.is_a?(Array) ? rating : [rating]
+      joins_rating_for_user_con_profile(user_con_profile)
+        .where('COALESCE(event_ratings.rating, 0) IN (?)', rating_array)
+    else
+      self
+    end
   end
 
   scope :order_by_rating_for_user_con_profile, ->(user_con_profile, direction = nil) do
-    joins_rating_for_user_con_profile(user_con_profile)
-      .order(Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || 'DESC'}"))
+    if user_con_profile
+      joins_rating_for_user_con_profile(user_con_profile)
+        .order(Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || 'DESC'}"))
+    else
+      self
+    end
   end
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
