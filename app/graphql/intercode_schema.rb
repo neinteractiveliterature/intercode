@@ -101,3 +101,5 @@ was hidden due to permissions"
     )
   end
 end
+
+IntercodeSchema.graphql_definition
