@@ -49,7 +49,7 @@ function RunCard({
             {
               mySignup.state === 'confirmed'
                 ? 'You are signed up.'
-                : `You are #${mySignup.waitlist_position} on the waitlist.`
+                : `You are ${mySignup.waitlist_position ? `#${mySignup.waitlist_position}` : ''} on the waitlist.`
             }
           </em>
           <p className="mb-0">
