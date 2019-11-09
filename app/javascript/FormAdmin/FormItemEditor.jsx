@@ -16,6 +16,8 @@ import DateEditor from './ItemEditors/DateEditor';
 import AgeRestrictionsEditor from './ItemEditors/AgeRestrictionsEditor';
 import EventEmailEditor from './ItemEditors/EventEmailEditor';
 import TimespanEditor from './ItemEditors/TimespanEditor';
+import MultipleChoiceEditor from './ItemEditors/MultipleChoiceEditor';
+import generateChoiceId from './generateChoiceId';
 
 function FormItemEditor({
   close, convention, form, formSectionId, initialFormItem, initialRenderedFormItem,
@@ -35,7 +37,22 @@ function FormItemEditor({
     [apolloClient, formSectionId],
   );
 
-  const [formItem, setFormItem] = useDebouncedState(initialFormItem, refreshRenderedFormItem, 150);
+  const [formItem, setFormItem] = useDebouncedState(() => {
+    if (initialFormItem.properties.choices != null) {
+      return {
+        ...initialFormItem,
+        properties: {
+          ...initialFormItem.properties,
+          choices: initialFormItem.properties.choices.map((choice) => ({
+            ...choice,
+            generatedId: generateChoiceId(),
+          })),
+        },
+      };
+    }
+
+    return initialFormItem;
+  }, refreshRenderedFormItem, 150);
   const [updateFormItemMutate] = useMutation(UpdateFormItem);
   const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
 
@@ -61,8 +78,8 @@ function FormItemEditor({
         return <EventEmailEditor {...commonProps} />;
       case 'free_text':
         return <FreeTextEditor {...commonProps} />;
-      // case 'multiple_choice':
-      //   return <MultipleChoiceItemInput {...commonProps} />;
+      case 'multiple_choice':
+        return <MultipleChoiceEditor {...commonProps} />;
       // case 'registration_policy':
       //   return <RegistrationPolicyItemInput {...commonProps} />;
       case 'static_text':
@@ -95,7 +112,8 @@ function FormItemEditor({
           <FormItemInput
             convention={convention}
             formItem={renderedFormItem}
-            onInteract={() => { }}
+            onInteract={() => {}}
+            onChange={() => {}}
             value={renderedFormItem.default_value}
           />
         </div>

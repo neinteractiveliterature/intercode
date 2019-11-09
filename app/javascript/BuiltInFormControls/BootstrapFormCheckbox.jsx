@@ -2,6 +2,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
 import useUniqueId from '../useUniqueId';
 
 function BootstrapFormCheckbox(props) {
@@ -18,10 +20,10 @@ function BootstrapFormCheckbox(props) {
   const onChangeProp = onChange || ((event) => { onCheckedChange(event.target.checked); });
 
   return (
-    <div className={`form-check ${className}`}>
+    <div className={classnames('form-check', className)}>
       <label className="form-check-label" htmlFor={inputId}>
         <input
-          className={`form-check-input ${inputClassName}`}
+          className={classnames('form-check-input', inputClassName)}
           id={inputId}
           onChange={onChangeProp}
           {...otherProps}

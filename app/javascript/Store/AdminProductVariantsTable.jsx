@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MultiBackend, { Preview } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'; // or any other pipeline
-import { DragDropContext } from 'react-dnd';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch'; // or any other pipeline
+import { DndProvider } from 'react-dnd';
+
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
@@ -164,20 +165,22 @@ class AdminProductVariantsTable extends React.Component {
 
     return (
       <div className="mt-2">
-        <table className="table table-sm" ref={(table) => { this.table = table; }}>
-          <thead>
-            <tr>
-              <th />
-              <th>Variant name</th>
-              <th>Description</th>
-              <th>Override price</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
+        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+          <table className="table table-sm" ref={(table) => { this.table = table; }}>
+            <thead>
+              <tr>
+                <th />
+                <th>Variant name</th>
+                <th>Description</th>
+                <th>Override price</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
+        </DndProvider>
         {addVariantButton}
 
         <Preview generator={this.generatePreview} />
@@ -206,4 +209,4 @@ AdminProductVariantsTable.propTypes = {
   deleteVariant: PropTypes.func.isRequired,
 };
 
-export default DragDropContext(MultiBackend(HTML5toTouch))(AdminProductVariantsTable);
+export default AdminProductVariantsTable;

@@ -57,7 +57,8 @@ class MultipleChoiceItemInput extends React.Component {
     if (this.isMultiple()) {
       const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
       const providedValues = newValue
-        .filter((choiceValue) => choiceValues.some((providedValue) => providedValue === choiceValue));
+        .filter((choiceValue) => choiceValues
+          .some((providedValue) => providedValue === choiceValue));
       if (newValue.includes(OTHER_VALUE)) {
         this.props.onChange([...providedValues, this.state.otherValue]);
       } else {
@@ -124,6 +125,7 @@ class MultipleChoiceItemInput extends React.Component {
 
     return (
       <input
+        aria-label={`${this.props.formItem.properties.other_caption || 'Other'}: please specify`}
         type="text"
         className="form-control"
         value={this.state.otherValue}
@@ -152,7 +154,6 @@ class MultipleChoiceItemInput extends React.Component {
         <div className={classNames({ 'border-0': !this.props.valueInvalid, 'border rounded border-danger': this.props.valueInvalid })}>
           <CaptionLegend formItem={this.props.formItem} />
           <ChoiceSet
-            name={this.props.formItem.identifier}
             choices={choicesForChoiceSet}
             value={this.getValueForChoiceSet()}
             onChange={this.onChange}
