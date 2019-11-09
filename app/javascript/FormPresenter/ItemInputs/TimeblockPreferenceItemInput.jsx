@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { enableUniqueIds } from 'react-html-id';
 
 import CaptionLegend from './CaptionLegend';
 import {
@@ -18,118 +17,117 @@ import {
 } from '../TimeblockTypes';
 import TimeblockPreferenceCell from './TimeblockPreferenceCell';
 
-class TimeblockPreferenceItemInput extends React.Component {
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
+function TimeblockPreferenceItemInput({
+  convention, formItem, value, onChange,
+}) {
+  const preferences = useMemo(
+    () => (value || []).map((apiRepresentation) => ({
+      start: moment(apiRepresentation.start),
+      finish: moment(apiRepresentation.finish),
+      label: apiRepresentation.label,
+      ordinality: apiRepresentation.ordinality,
+    })),
+    [value],
+  );
 
-    this.state = {
-      preferences: (this.props.value || []).map((apiRepresentation) => ({
-        start: moment(apiRepresentation.start),
-        finish: moment(apiRepresentation.finish),
-        label: apiRepresentation.label,
-        ordinality: apiRepresentation.ordinality,
-      })),
-    };
-  }
+  const preferencesDidChange = useCallback(
+    (newPreferences) => {
+      onChange(newPreferences.map((preference) => ({
+        start: preference.start.toISOString(),
+        finish: preference.finish.toISOString(),
+        label: preference.label,
+        ordinality: preference.ordinality,
+      })));
+    },
+    [onChange],
+  );
 
-  preferenceDidChange = (newOrdinality, hypotheticalPreference) => {
-    const existingPreference = this.state.preferences
+  const preferenceDidChange = (newOrdinality, hypotheticalPreference) => {
+    const existingPreference = preferences
       .find((p) => preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
-      this.setState((prevState) => ({
-        preferences: prevState.preferences
-          .filter((p) => (!(preferencesMatch(p, hypotheticalPreference)))),
-      }), this.preferencesDidChange);
+      preferencesDidChange(preferences
+        .filter((p) => !(preferencesMatch(p, hypotheticalPreference))));
     } else if (existingPreference) {
-      this.setState((prevState) => ({
-        preferences: prevState.preferences.map((p) => {
-          if (preferencesMatch(p, hypotheticalPreference)) {
-            return { ...p, ordinality: newOrdinality };
-          }
+      preferencesDidChange(preferences.map((p) => {
+        if (preferencesMatch(p, hypotheticalPreference)) {
+          return { ...p, ordinality: newOrdinality };
+        }
 
-          return p;
-        }),
-      }), this.preferencesDidChange);
+        return p;
+      }));
     } else {
-      this.setState((prevState) => ({
-        preferences: [
-          ...prevState.preferences,
-          {
-            ...hypotheticalPreference,
-            ordinality: newOrdinality,
-          },
-        ],
-      }), this.preferencesDidChange);
+      preferencesDidChange([
+        ...preferences,
+        {
+          ...hypotheticalPreference,
+          ordinality: newOrdinality,
+        },
+      ]);
     }
-  }
+  };
 
-  preferencesDidChange = () => {
-    this.props.onChange(this.state.preferences.map((preference) => ({
-      start: preference.start.toISOString(),
-      finish: preference.finish.toISOString(),
-      label: preference.label,
-      ordinality: preference.ordinality,
-    })));
-  }
+  const columns = useMemo(
+    () => getValidTimeblockColumns(convention, formItem),
+    [convention, formItem],
+  );
+  const rows = useMemo(
+    () => rotateTimeblockColumnsToRows(formItem, columns),
+    [columns, formItem],
+  );
 
-  render = () => {
-    const columns = getValidTimeblockColumns(this.props.convention, this.props.formItem);
-    const rows = rotateTimeblockColumnsToRows(this.props.formItem, columns);
-
-    return (
-      <fieldset className="form-group">
-        <CaptionLegend formItem={this.props.formItem} />
-        <table className="table">
-          <thead>
-            <tr>
-              <th />
-              {columns.map((column) => (
-                <th key={column.dayStart.toString()}>
-                  {getColumnHeader(column)}
-                </th>
+  return (
+    <fieldset className="form-group">
+      <CaptionLegend formItem={formItem} />
+      <table className="table">
+        <thead>
+          <tr>
+            <th />
+            {columns.map((column) => (
+              <th key={column.dayStart.toString()}>
+                {getColumnHeader(column)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.timeblock.label}>
+              <td>
+                {row.timeblock.label}
+                {
+                  formItem.properties.hide_timestamps
+                    ? null
+                    : (
+                      <>
+                        <br />
+                        <small>{describeTimeblock(row.timeblock)}</small>
+                      </>
+                    )
+                }
+              </td>
+              {row.cells.map((cell, x) => (
+                cell
+                  ? (
+                    <TimeblockPreferenceCell
+                      key={cell.dayStart.format('dddd')}
+                      timeblock={cell.timeblock}
+                      existingPreferences={preferences}
+                      dayStart={cell.dayStart}
+                      start={cell.timespan.start}
+                      finish={cell.timespan.finish}
+                      onChange={preferenceDidChange}
+                    />
+                  )
+                  : <td key={columns[x].dayStart.format('dddd')} />
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.timeblock.label}>
-                <td>
-                  {row.timeblock.label}
-                  {
-                    this.props.formItem.properties.hide_timestamps
-                      ? null
-                      : (
-                        <>
-                          <br />
-                          <small>{describeTimeblock(row.timeblock)}</small>
-                        </>
-                      )
-                  }
-                </td>
-                {row.cells.map((cell, x) => (
-                  cell
-                    ? (
-                      <TimeblockPreferenceCell
-                        key={cell.dayStart.format('dddd')}
-                        timeblock={cell.timeblock}
-                        existingPreferences={this.state.preferences}
-                        dayStart={cell.dayStart}
-                        start={cell.timespan.start}
-                        finish={cell.timespan.finish}
-                        onChange={this.preferenceDidChange}
-                      />
-                    )
-                    : <td key={columns[x].dayStart.format('dddd')} />
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </fieldset>
-    );
-  };
+          ))}
+        </tbody>
+      </table>
+    </fieldset>
+  );
 }
 
 TimeblockPreferenceItemInput.propTypes = {

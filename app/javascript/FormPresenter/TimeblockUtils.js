@@ -33,15 +33,23 @@ function getDayStarts(convention) {
 function getAllPossibleTimeblocks(convention, formItem) {
   return flatMap(
     getDayStarts(convention),
-    (dayStart) => formItem.properties.timeblocks.map((timeblock) => ({
-      dayStart,
-      timeblock,
-      label: timeblock.label,
-      timespan: new Timespan(
-        moment(dayStart).set(timeblock.start),
-        moment(dayStart).set(timeblock.finish),
-      ),
-    })),
+    (dayStart) => formItem.properties.timeblocks.map((timeblock) => {
+      try {
+        const timespan = new Timespan(
+          moment(dayStart).set(timeblock.start),
+          moment(dayStart).set(timeblock.finish),
+        );
+
+        return {
+          dayStart,
+          timeblock,
+          label: timeblock.label,
+          timespan,
+        };
+      } catch (error) {
+        return null;
+      }
+    }).filter((possibleTimeblock) => possibleTimeblock != null),
   );
 }
 

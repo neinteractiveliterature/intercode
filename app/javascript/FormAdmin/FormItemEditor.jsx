@@ -18,6 +18,7 @@ import EventEmailEditor from './ItemEditors/EventEmailEditor';
 import TimespanEditor from './ItemEditors/TimespanEditor';
 import MultipleChoiceEditor from './ItemEditors/MultipleChoiceEditor';
 import generateChoiceId from './generateChoiceId';
+import TimeblockPreferenceEditor from './ItemEditors/TimeblockPreferenceEditor';
 
 function FormItemEditor({
   close, convention, form, formSectionId, initialFormItem, initialRenderedFormItem,
@@ -37,22 +38,26 @@ function FormItemEditor({
     [apolloClient, formSectionId],
   );
 
-  const [formItem, setFormItem] = useDebouncedState(() => {
-    if (initialFormItem.properties.choices != null) {
-      return {
-        ...initialFormItem,
-        properties: {
-          ...initialFormItem.properties,
-          choices: initialFormItem.properties.choices.map((choice) => ({
-            ...choice,
-            generatedId: generateChoiceId(),
-          })),
-        },
-      };
-    }
+  const [formItem, setFormItem] = useDebouncedState(
+    () => ['choices', 'timeblocks', 'omit_timeblocks'].reduce((memo, property) => {
+      if (memo.properties[property] != null) {
+        return {
+          ...memo,
+          properties: {
+            ...memo.properties,
+            [property]: memo.properties[property].map((item) => ({
+              ...item,
+              generatedId: generateChoiceId(),
+            })),
+          },
+        };
+      }
 
-    return initialFormItem;
-  }, refreshRenderedFormItem, 150);
+      return memo;
+    }, initialFormItem),
+    refreshRenderedFormItem,
+    150,
+  );
   const [updateFormItemMutate] = useMutation(UpdateFormItem);
   const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
 
@@ -84,8 +89,8 @@ function FormItemEditor({
       //   return <RegistrationPolicyItemInput {...commonProps} />;
       case 'static_text':
         return <StaticTextEditor {...commonProps} />;
-      // case 'timeblock_preference':
-      //   return <TimeblockPreferenceItemInput {...commonProps} convention={convention} />;
+      case 'timeblock_preference':
+        return <TimeblockPreferenceEditor {...commonProps} convention={convention} />;
       case 'timespan':
         return <TimespanEditor {...commonProps} />;
       default:
@@ -151,6 +156,9 @@ FormItemEditor.propTypes = {
   formSectionId: PropTypes.number.isRequired,
   initialFormItem: PropTypes.shape({
     identifier: PropTypes.string,
+    properties: PropTypes.shape({
+      choices: PropTypes.array,
+    }).isRequired,
   }).isRequired,
   initialRenderedFormItem: PropTypes.shape({}).isRequired,
 };
