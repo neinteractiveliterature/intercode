@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
-import classnames from 'classnames';
 
 function MultipleChoiceOptionRow({
   caption, value, choiceChanged, index, nonUnique, deleteChoice, swapChoices,
