@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import FormTypes from './form_types.json';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
+import { FormEditorContext } from './FormEditorContexts';
 
-function FormEditorItemPreview({
-  convention, form, formItem, renderedFormItem, startEditing,
-}) {
+function FormEditorItemPreview({ formItem, startEditing }) {
+  const { convention, form, renderedFormItemsById } = useContext(FormEditorContext);
+  const renderedFormItem = renderedFormItemsById.get(formItem.id);
   const formType = FormTypes[form.form_type];
   const specialItem = ((formType || {}).special_items || {})[formItem.identifier];
 
@@ -59,15 +60,11 @@ function FormEditorItemPreview({
 }
 
 FormEditorItemPreview.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
-  form: PropTypes.shape({
-    form_type: PropTypes.string.isRequired,
-  }).isRequired,
   formItem: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     default_value: PropTypes.any,
     identifier: PropTypes.string,
   }).isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
   startEditing: PropTypes.func.isRequired,
 };
 

@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useContext } from 'react';
 import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
@@ -9,10 +8,11 @@ import RegistrationPolicyItemEditorPresetRow from './RegistrationPolicyItemEdito
 import useArrayProperty from './useArrayProperty';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import usePropertyUpdater from './usePropertyUpdater';
+import { FormItemEditorContext } from '../FormEditorContexts';
 
-function RegistrationPolicyItemEditor({
-  convention, form, formItem, onChange, renderedFormItem,
-}) {
+function RegistrationPolicyItemEditor() {
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+
   const generateNewPreset = useCallback(
     () => ({
       name: '',
@@ -23,23 +23,15 @@ function RegistrationPolicyItemEditor({
     [],
   );
 
-  const allowCustomChanged = usePropertyUpdater(onChange, 'allow_custom');
+  const allowCustomChanged = usePropertyUpdater(setFormItem, 'allow_custom');
 
   const [addPreset, presetChanged, deletePreset, movePreset] = useArrayProperty(
-    'presets',
-    onChange,
-    generateNewPreset,
+    'presets', setFormItem, generateNewPreset,
   );
 
   return (
     <>
-      <CommonQuestionFields
-        convention={convention}
-        form={form}
-        formItem={formItem}
-        onChange={onChange}
-        renderedFormItem={renderedFormItem}
-      />
+      <CommonQuestionFields />
 
       <table className="table">
         <thead>
@@ -91,18 +83,5 @@ function RegistrationPolicyItemEditor({
     </>
   );
 }
-
-RegistrationPolicyItemEditor.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
-  form: PropTypes.shape({}).isRequired,
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      allow_custom: PropTypes.bool,
-      presets: PropTypes.array,
-    }).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
-};
 
 export default RegistrationPolicyItemEditor;

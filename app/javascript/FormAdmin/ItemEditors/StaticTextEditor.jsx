@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
+import { FormItemEditorContext } from '../FormEditorContexts';
 
-function StaticTextEditor({ formItem, onChange, disabled }) {
+function StaticTextEditor({ disabled }) {
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
   const contentInputId = useUniqueId('static-text-content-');
 
   return (
@@ -20,13 +22,13 @@ function StaticTextEditor({ formItem, onChange, disabled }) {
           disabled={disabled}
           disablePreview
           value={formItem.properties.content || ''}
-          onChange={formItemPropertyUpdater('content', onChange)}
+          onChange={formItemPropertyUpdater('content', setFormItem)}
         />
       </div>
       <BootstrapFormSelect
         disabled={disabled}
         value={formItem.properties.style}
-        onValueChange={formItemPropertyUpdater('style', onChange)}
+        onValueChange={formItemPropertyUpdater('style', setFormItem)}
         label="Text style"
       >
         <option value="normal">Normal</option>
@@ -38,13 +40,6 @@ function StaticTextEditor({ formItem, onChange, disabled }) {
 
 StaticTextEditor.propTypes = {
   disabled: PropTypes.bool,
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      content: PropTypes.string,
-      style: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 StaticTextEditor.defaultProps = {

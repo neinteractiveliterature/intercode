@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
@@ -12,77 +12,21 @@ import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import MultipleChoiceOptionRow from './MultipleChoiceOptionRow';
-import generateChoiceId from '../generateChoiceId';
+import { FormItemEditorContext } from '../FormEditorContexts';
+import useArrayProperty from './useArrayProperty';
 
-function MultipleChoiceEditor({
-  convention, form, formItem, onChange, disabled, renderedFormItem,
-}) {
+function MultipleChoiceEditor({ disabled }) {
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('multiple-choice-caption-');
-  const updateChoices = useCallback(
-    (updater) => onChange((prevFormItem) => ({
-      ...prevFormItem,
-      properties: {
-        ...prevFormItem.properties,
-        choices: updater(prevFormItem.properties.choices),
-      },
-    })),
-    [onChange],
-  );
+  const generateNewChoice = () => ({ caption: '', value: '' });
 
-  const addChoice = useCallback(
-    () => {
-      updateChoices((prevChoices) => [
-        ...prevChoices,
-        { caption: '', value: '', generatedId: generateChoiceId() },
-      ]);
-    },
-    [updateChoices],
-  );
-
-  const choiceChanged = useCallback(
-    (index, newProperties) => {
-      updateChoices((prevChoices) => {
-        const newChoices = [...prevChoices];
-        newChoices.splice(index, 1, { ...newChoices[index], ...newProperties });
-        return newChoices;
-      });
-    },
-    [updateChoices],
-  );
-
-  const deleteChoice = useCallback(
-    (index) => {
-      updateChoices((prevChoices) => {
-        const newChoices = [...prevChoices];
-        newChoices.splice(index, 1);
-        return newChoices;
-      });
-    },
-    [updateChoices],
-  );
-
-  const swapChoices = useCallback(
-    (dragIndex, hoverIndex) => {
-      updateChoices((prevChoices) => {
-        const newChoices = [...prevChoices];
-        const dragChoice = newChoices[dragIndex];
-        newChoices.splice(dragIndex, 1);
-        newChoices.splice(hoverIndex, 0, dragChoice);
-        return newChoices;
-      });
-    },
-    [updateChoices],
+  const [addChoice, choiceChanged, deleteChoice, moveChoice] = useArrayProperty(
+    'choices', setFormItem, generateNewChoice,
   );
 
   return (
     <>
-      <CommonQuestionFields
-        convention={convention}
-        form={form}
-        formItem={formItem}
-        onChange={onChange}
-        renderedFormItem={renderedFormItem}
-      />
+      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -93,7 +37,7 @@ function MultipleChoiceEditor({
           lines={2}
           disablePreview
           value={formItem.properties.caption || ''}
-          onChange={formItemPropertyUpdater('caption', onChange)}
+          onChange={formItemPropertyUpdater('caption', setFormItem)}
         />
 
         <MultipleChoiceInput
@@ -105,7 +49,7 @@ function MultipleChoiceEditor({
             { label: 'Multi-select, horizontal layout', value: 'checkbox_horizontal' },
           ]}
           value={formItem.properties.style}
-          onChange={formItemPropertyUpdater('style', onChange)}
+          onChange={formItemPropertyUpdater('style', setFormItem)}
         />
 
         <table className="table">
@@ -119,18 +63,16 @@ function MultipleChoiceEditor({
           </thead>
           <tbody>
             <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-              {formItem.properties.choices.map(({ caption, value, generatedId }, index) => (
+              {formItem.properties.choices.map((choice, index) => (
                 <MultipleChoiceOptionRow
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={generatedId}
-                  caption={caption}
-                  value={value}
+                  key={choice.generatedId}
+                  choice={choice}
                   index={index}
                   deleteChoice={deleteChoice}
                   choiceChanged={choiceChanged}
-                  swapChoices={swapChoices}
+                  moveChoice={moveChoice}
                   nonUnique={formItem.properties.choices
-                    .filter((choice) => choice.value === value).length > 1}
+                    .filter((c) => c.value === choice.value).length > 1}
                 />
               ))}
             </DndProvider>
@@ -156,7 +98,7 @@ function MultipleChoiceEditor({
               <BootstrapFormCheckbox
                 label="Include?"
                 checked={!!formItem.properties.other}
-                onCheckedChange={formItemPropertyUpdater('other', onChange)}
+                onCheckedChange={formItemPropertyUpdater('other', setFormItem)}
               />
             </div>
             <div className="col">
@@ -164,7 +106,7 @@ function MultipleChoiceEditor({
                 label="“Other” option text"
                 disabled={!formItem.properties.other}
                 value={formItem.properties.other_caption || ''}
-                onTextChange={formItemPropertyUpdater('other_caption', onChange)}
+                onTextChange={formItemPropertyUpdater('other_caption', setFormItem)}
               />
             </div>
           </div>
@@ -175,23 +117,7 @@ function MultipleChoiceEditor({
 }
 
 MultipleChoiceEditor.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
   disabled: PropTypes.bool,
-  form: PropTypes.shape({}).isRequired,
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      caption: PropTypes.string,
-      style: PropTypes.string,
-      choices: PropTypes.arrayOf(PropTypes.shape({
-        caption: PropTypes.string,
-        value: PropTypes.string,
-      })).isRequired,
-      other: PropTypes.bool,
-      other_caption: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
 };
 
 MultipleChoiceEditor.defaultProps = {

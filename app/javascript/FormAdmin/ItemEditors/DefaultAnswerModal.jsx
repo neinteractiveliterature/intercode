@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
 
 import FormItemInput from '../../FormPresenter/ItemInputs/FormItemInput';
+import { FormItemEditorContext, FormEditorContext } from '../FormEditorContexts';
 
-function DefaultAnswerModal({
-  close, convention, formItem, onChange, renderedFormItem, visible,
-}) {
+function DefaultAnswerModal({ close, visible }) {
+  const { convention } = useContext(FormEditorContext);
+  const { formItem, setFormItem, renderedFormItem } = useContext(FormItemEditorContext);
   const [defaultValue, setDefaultValue] = useState(formItem.default_value);
   const inputChanged = (identifier, newValue) => setDefaultValue(newValue);
 
   const setDefaultAnswer = () => {
-    onChange({ ...formItem, default_value: defaultValue });
+    setFormItem({ ...formItem, default_value: defaultValue });
     close();
   };
 
   const clearDefaultAnswer = () => {
-    onChange({ ...formItem, default_value: null });
+    setFormItem({ ...formItem, default_value: null });
     close();
   };
 
@@ -53,5 +55,10 @@ function DefaultAnswerModal({
     </Modal>
   );
 }
+
+DefaultAnswerModal.propTypes = {
+  close: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+};
 
 export default DefaultAnswerModal;

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
@@ -7,6 +7,7 @@ import { useConfirm } from '../../ModalDialogs/Confirm';
 import Timespan from '../../Timespan';
 import useSortable from '../../useSortable';
 import { FuzzyTimePropType } from '../../FormPresenter/TimeblockTypes';
+import { FormEditorContext } from '../FormEditorContexts';
 
 function useTimeblockPropertyUpdater(onChange, generatedId, property) {
   return useCallback(
@@ -19,8 +20,10 @@ function useTimeblockPropertyUpdater(onChange, generatedId, property) {
 }
 
 function TimeblockPreferenceEditorTimeblockRow({
-  timeblock, index, onChange, timezoneName, deleteTimeblock, moveTimeblock,
+  timeblock, index, onChange, deleteTimeblock, moveTimeblock,
 }) {
+  const { convention } = useContext(FormEditorContext);
+  const timezoneName = convention.timezone_name;
   const confirm = useConfirm();
   const startChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'start');
   const finishChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'finish');
@@ -117,7 +120,6 @@ TimeblockPreferenceEditorTimeblockRow.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
-  timezoneName: PropTypes.string.isRequired,
   deleteTimeblock: PropTypes.func.isRequired,
   moveTimeblock: PropTypes.func.isRequired,
 };

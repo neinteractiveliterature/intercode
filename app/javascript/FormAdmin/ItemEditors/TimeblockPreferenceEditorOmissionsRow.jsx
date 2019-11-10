@@ -1,16 +1,17 @@
-import React, { useMemo, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo, useCallback, useContext } from 'react';
 import moment from 'moment-timezone';
 
 import { getValidTimeblockColumns } from '../../FormPresenter/TimeblockUtils';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import Timespan from '../../Timespan';
 import { timespanFromConvention } from '../../TimespanUtils';
-import { TimeblockOmissionPropType, TimeblockPropType } from '../../FormPresenter/TimeblockTypes';
+import { TimeblockPropType } from '../../FormPresenter/TimeblockTypes';
+import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
 
-function TimeblockPreferenceEditorOmissionsRow({
-  convention, formItem, timeblock, onChange,
-}) {
+function TimeblockPreferenceEditorOmissionsRow({ timeblock }) {
+  const { convention } = useContext(FormEditorContext);
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+
   const conventionTimespan = useMemo(
     () => timespanFromConvention(convention),
     [convention],
@@ -25,7 +26,7 @@ function TimeblockPreferenceEditorOmissionsRow({
 
   const omissionDatesChanged = useCallback(
     (newOmissionDates) => {
-      onChange((prevFormItem) => {
+      setFormItem((prevFormItem) => {
         const prevOmissions = prevFormItem.properties.omit_timeblocks || [];
         const newOmissions = [
           ...prevOmissions.filter((omission) => omission.label !== timeblock.label),
@@ -40,7 +41,7 @@ function TimeblockPreferenceEditorOmissionsRow({
         };
       });
     },
-    [onChange, timeblock.label],
+    [setFormItem, timeblock.label],
   );
 
   const columns = useMemo(
@@ -103,16 +104,7 @@ function TimeblockPreferenceEditorOmissionsRow({
 }
 
 TimeblockPreferenceEditorOmissionsRow.propTypes = {
-  convention: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType),
-    }).isRequired,
-  }).isRequired,
   timeblock: TimeblockPropType.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default TimeblockPreferenceEditorOmissionsRow;

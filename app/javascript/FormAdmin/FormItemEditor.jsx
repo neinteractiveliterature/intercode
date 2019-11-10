@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useMutation, useApolloClient } from 'react-apollo-hooks';
 import debounce from 'lodash-es/debounce';
@@ -20,23 +22,26 @@ import MultipleChoiceEditor from './ItemEditors/MultipleChoiceEditor';
 import generateChoiceId from './generateChoiceId';
 import TimeblockPreferenceEditor from './ItemEditors/TimeblockPreferenceEditor';
 import RegistrationPolicyItemEditor from './ItemEditors/RegistrationPolicyItemEditor';
+import { FormSectionEditorContext, FormEditorContext, FormItemEditorContext } from './FormEditorContexts';
 
-function FormItemEditor({
-  close, convention, form, formSectionId, initialFormItem, initialRenderedFormItem,
-}) {
+function FormItemEditor({ close, initialFormItem }) {
+  const { convention, renderedFormItemsById } = useContext(FormEditorContext);
+  const { currentSection } = useContext(FormSectionEditorContext);
   const apolloClient = useApolloClient();
-  const [renderedFormItem, setRenderedFormItem] = useState(initialRenderedFormItem);
+  const [renderedFormItem, setRenderedFormItem] = useState(
+    () => renderedFormItemsById.get(initialFormItem.id) || initialFormItem,
+  );
   const refreshRenderedFormItem = useCallback(
     async (newFormItem) => {
       const response = await apolloClient.query({
         query: PreviewFormItemQuery,
-        variables: { formSectionId, formItem: buildFormItemInput(newFormItem) },
+        variables: { formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
         fetchPolicy: 'no-cache',
       });
       const previewFormItem = parseFormItemObject(response.data.previewFormItem);
       setRenderedFormItem({ ...previewFormItem, properties: previewFormItem.rendered_properties });
     },
-    [apolloClient, formSectionId],
+    [apolloClient, currentSection.id],
   );
 
   const [formItem, setFormItem] = useDebouncedState(
@@ -72,9 +77,8 @@ function FormItemEditor({
   );
 
   const renderEditor = () => {
-    const commonProps = {
-      convention, form, formItem, onChange: setFormItem, renderedFormItem, disabled,
-    };
+    const commonProps = { disabled };
+
     switch (formItem.item_type) {
       case 'age_restrictions':
         return <AgeRestrictionsEditor {...commonProps} />;
@@ -91,7 +95,7 @@ function FormItemEditor({
       case 'static_text':
         return <StaticTextEditor {...commonProps} />;
       case 'timeblock_preference':
-        return <TimeblockPreferenceEditor {...commonProps} convention={convention} />;
+        return <TimeblockPreferenceEditor {...commonProps} />;
       case 'timespan':
         return <TimespanEditor {...commonProps} />;
       default:
@@ -124,7 +128,9 @@ function FormItemEditor({
           />
         </div>
       </div>
-      {renderEditor()}
+      <FormItemEditorContext.Provider value={{ formItem, setFormItem, renderedFormItem }}>
+        {renderEditor()}
+      </FormItemEditorContext.Provider>
       <ErrorDisplay graphQLError={updateError} />
       <div className="mt-2 text-right">
         <button
@@ -150,18 +156,13 @@ function FormItemEditor({
 
 FormItemEditor.propTypes = {
   close: PropTypes.func.isRequired,
-  convention: PropTypes.shape({}).isRequired,
-  form: PropTypes.shape({
-    form_type: PropTypes.string.isRequired,
-  }).isRequired,
-  formSectionId: PropTypes.number.isRequired,
   initialFormItem: PropTypes.shape({
+    id: PropTypes.number,
     identifier: PropTypes.string,
     properties: PropTypes.shape({
       choices: PropTypes.array,
     }).isRequired,
   }).isRequired,
-  initialRenderedFormItem: PropTypes.shape({}).isRequired,
 };
 
 export default FormItemEditor;

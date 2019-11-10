@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
@@ -8,10 +8,10 @@ import { formItemPropertyUpdater } from '../FormItemUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { Transforms } from '../../ComposableFormUtils';
 import CommonQuestionFields from './CommonQuestionFields';
+import { FormItemEditorContext } from '../FormEditorContexts';
 
-function FreeTextEditor({
-  convention, form, formItem, onChange, disabled, renderedFormItem,
-}) {
+function FreeTextEditor({ disabled }) {
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat = (
     formItem.properties.format === 'markdown'
@@ -19,7 +19,7 @@ function FreeTextEditor({
       : formItem.properties.free_text_type || 'text'
   );
   const setResponseFormat = (newResponseFormat) => {
-    onChange((prevFormItem) => ({
+    setFormItem((prevFormItem) => ({
       ...prevFormItem,
       properties: {
         ...prevFormItem.properties,
@@ -31,13 +31,7 @@ function FreeTextEditor({
 
   return (
     <>
-      <CommonQuestionFields
-        convention={convention}
-        form={form}
-        formItem={formItem}
-        onChange={onChange}
-        renderedFormItem={renderedFormItem}
-      />
+      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -47,13 +41,13 @@ function FreeTextEditor({
           disabled={disabled}
           disablePreview
           value={formItem.properties.caption || ''}
-          onChange={formItemPropertyUpdater('caption', onChange)}
+          onChange={formItemPropertyUpdater('caption', setFormItem)}
         />
       </div>
       <BootstrapFormInput
         disabled={disabled}
         value={formItem.properties.lines.toString()}
-        onTextChange={(value) => formItemPropertyUpdater('lines', onChange)(Transforms.integer(value))}
+        onTextChange={(value) => formItemPropertyUpdater('lines', setFormItem)(Transforms.integer(value))}
         type="number"
         min="1"
         label="Lines"
@@ -76,19 +70,7 @@ function FreeTextEditor({
 }
 
 FreeTextEditor.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
   disabled: PropTypes.bool,
-  form: PropTypes.shape({}).isRequired,
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      caption: PropTypes.string,
-      lines: PropTypes.number.isRequired,
-      format: PropTypes.string,
-      free_text_type: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
 };
 
 FreeTextEditor.defaultProps = {

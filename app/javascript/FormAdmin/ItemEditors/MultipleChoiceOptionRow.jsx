@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import useSortable from '../../useSortable';
 
+function useChoicePropertyUpdater(choiceChanged, generatedId, property) {
+  return useCallback(
+    (value) => choiceChanged(generatedId, (prevChoice) => ({ ...prevChoice, [property]: value })),
+    [choiceChanged, generatedId, property],
+  );
+}
+
 function MultipleChoiceOptionRow({
-  caption, value, choiceChanged, index, nonUnique, deleteChoice, swapChoices,
+  choice, choiceChanged, index, nonUnique, deleteChoice, moveChoice,
 }) {
   const confirm = useConfirm();
-  const [rowRef, drag, { isDragging }] = useSortable(index, swapChoices, 'choice');
+  const [rowRef, drag, { isDragging }] = useSortable(index, moveChoice, 'choice');
+  const captionChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'caption');
+  const valueChanged = useChoicePropertyUpdater(choiceChanged, choice.generatedId, 'value');
 
-  const missingValue = (!value || value.trim() === '');
+  const missingValue = (!choice.value || choice.value.trim() === '');
   const hasValidationError = nonUnique || missingValue;
 
   return (
@@ -25,8 +34,8 @@ function MultipleChoiceOptionRow({
           aria-label="Option text"
           type="text"
           className="form-control"
-          value={caption || ''}
-          onChange={(event) => choiceChanged(index, { caption: event.target.value })}
+          value={choice.caption || ''}
+          onChange={(event) => captionChanged(event.target.value)}
         />
       </td>
       <td>
@@ -34,8 +43,8 @@ function MultipleChoiceOptionRow({
           aria-label="Option value"
           type="text"
           className={classnames('form-control', { 'is-invalid': hasValidationError })}
-          value={value || ''}
-          onChange={(event) => choiceChanged(index, { value: event.target.value })}
+          value={choice.value || ''}
+          onChange={(event) => valueChanged(event.target.value)}
         />
         {missingValue && (
           <div className="invalid-feedback">
@@ -54,7 +63,7 @@ function MultipleChoiceOptionRow({
           className="btn btn-outline-danger btn-sm"
           onClick={() => confirm({
             prompt: 'Are you sure you want to delete this option?',
-            action: () => deleteChoice(index),
+            action: () => deleteChoice(choice.generatedId),
           })}
         >
           <span className="sr-only">Delete option</span>
@@ -66,18 +75,19 @@ function MultipleChoiceOptionRow({
 }
 
 MultipleChoiceOptionRow.propTypes = {
-  caption: PropTypes.string,
-  value: PropTypes.string,
+  choice: PropTypes.shape({
+    caption: PropTypes.string,
+    value: PropTypes.string,
+    generatedId: PropTypes.string,
+  }).isRequired,
   index: PropTypes.number.isRequired,
   choiceChanged: PropTypes.func.isRequired,
   deleteChoice: PropTypes.func.isRequired,
-  swapChoices: PropTypes.func.isRequired,
+  moveChoice: PropTypes.func.isRequired,
   nonUnique: PropTypes.bool,
 };
 
 MultipleChoiceOptionRow.defaultProps = {
-  caption: null,
-  value: null,
   nonUnique: false,
 };
 

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
@@ -8,15 +8,14 @@ import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
 import CommonQuestionFields from './CommonQuestionFields';
-import { FuzzyTimePropType } from '../../FormPresenter/TimeblockTypes';
 import TimeblockPreferenceEditorTimeblockRow from './TimeblockPreferenceEditorTimeblockRow';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import TimeblockPreferenceEditorOmissionsRow from './TimeblockPreferenceEditorOmissionsRow';
 import useArrayProperty from './useArrayProperty';
+import { FormItemEditorContext } from '../FormEditorContexts';
 
-function TimeblockPreferenceEditor({
-  convention, form, formItem, onChange, disabled, renderedFormItem,
-}) {
+function TimeblockPreferenceEditor({ disabled }) {
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timeblock-preference-');
 
   const generateNewTimeblock = useCallback(
@@ -25,20 +24,12 @@ function TimeblockPreferenceEditor({
   );
 
   const [addTimeblock, timeblockChanged, deleteTimeblock, moveTimeblock] = useArrayProperty(
-    'timeblocks',
-    onChange,
-    generateNewTimeblock,
+    'timeblocks', setFormItem, generateNewTimeblock,
   );
 
   return (
     <>
-      <CommonQuestionFields
-        convention={convention}
-        form={form}
-        formItem={formItem}
-        onChange={onChange}
-        renderedFormItem={renderedFormItem}
-      />
+      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -49,12 +40,12 @@ function TimeblockPreferenceEditor({
           disabled={disabled}
           disablePreview
           value={formItem.properties.caption || ''}
-          onChange={formItemPropertyUpdater('caption', onChange)}
+          onChange={formItemPropertyUpdater('caption', setFormItem)}
         />
         <BooleanInput
           caption="Timestamp visibility"
           value={formItem.properties.hide_timestamps || false}
-          onChange={formItemPropertyUpdater('hide_timestamps', onChange)}
+          onChange={formItemPropertyUpdater('hide_timestamps', setFormItem)}
           trueLabel="Hidden"
           falseLabel="Visible"
           falseBeforeTrue
@@ -77,17 +68,11 @@ function TimeblockPreferenceEditor({
                     index={index}
                     timeblock={timeblock}
                     onChange={timeblockChanged}
-                    timezoneName={convention.timezone_name}
                     deleteTimeblock={deleteTimeblock}
                     moveTimeblock={moveTimeblock}
                   />
 
-                  <TimeblockPreferenceEditorOmissionsRow
-                    timeblock={timeblock}
-                    formItem={formItem}
-                    convention={convention}
-                    onChange={onChange}
-                  />
+                  <TimeblockPreferenceEditorOmissionsRow timeblock={timeblock} />
                 </React.Fragment>
               ))}
             </DndProvider>
@@ -111,24 +96,7 @@ function TimeblockPreferenceEditor({
 }
 
 TimeblockPreferenceEditor.propTypes = {
-  convention: PropTypes.shape({
-    timezone_name: PropTypes.string.isRequired,
-  }).isRequired,
   disabled: PropTypes.bool,
-  form: PropTypes.shape({}).isRequired,
-  formItem: PropTypes.shape({
-    properties: PropTypes.shape({
-      caption: PropTypes.string,
-      timeblocks: PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string,
-        start: FuzzyTimePropType,
-        finish: FuzzyTimePropType,
-      })).isRequired,
-      hide_timestamps: PropTypes.bool,
-    }).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
 };
 
 TimeblockPreferenceEditor.defaultProps = {

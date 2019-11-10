@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo, useContext } from 'react';
 import CreatableSelect from 'react-select/creatable';
 
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
@@ -8,10 +7,11 @@ import FormGroupWithLabel from '../../BuiltInFormControls/FormGroupWithLabel';
 import FormTypes from '../form_types.json';
 import useModal from '../../ModalDialogs/useModal';
 import DefaultAnswerModal from './DefaultAnswerModal';
+import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
 
-function CommonQuestionFields({
-  convention, form, formItem, onChange, renderedFormItem,
-}) {
+function CommonQuestionFields() {
+  const { form } = useContext(FormEditorContext);
+  const { formItem, setFormItem } = useContext(FormItemEditorContext);
   const formType = FormTypes[form.form_type] || {};
   const specialItems = formType.special_items || {};
   const defaultAnswerModal = useModal();
@@ -42,11 +42,6 @@ function CommonQuestionFields({
     <div className="d-flex flex-column flex-lg-row align-items-center">
       <DefaultAnswerModal
         close={defaultAnswerModal.close}
-        convention={convention}
-        form={form}
-        formItem={formItem}
-        onChange={onChange}
-        renderedFormItem={renderedFormItem}
         visible={defaultAnswerModal.visible}
       />
       <div className="flex-grow-1 mr-lg-4">
@@ -82,7 +77,7 @@ function CommonQuestionFields({
                 );
               }}
               options={identifierOptions}
-              onChange={({ value }) => onChange({ ...formItem, identifier: value })}
+              onChange={({ value }) => setFormItem({ ...formItem, identifier: value })}
               styles={{
                 menu: (provided) => ({ ...provided, zIndex: 25 }),
               }}
@@ -94,7 +89,7 @@ function CommonQuestionFields({
         <BooleanInput
           caption="Response required?"
           value={formItem.properties.required}
-          onChange={formItemPropertyUpdater('required', onChange)}
+          onChange={formItemPropertyUpdater('required', setFormItem)}
         />
       </div>
       <button
@@ -107,20 +102,5 @@ function CommonQuestionFields({
     </div>
   );
 }
-
-CommonQuestionFields.propTypes = {
-  convention: PropTypes.shape({}).isRequired,
-  form: PropTypes.shape({
-    form_type: PropTypes.string.isRequired,
-  }).isRequired,
-  formItem: PropTypes.shape({
-    identifier: PropTypes.string.isRequired,
-    properties: PropTypes.shape({
-      required: PropTypes.bool,
-    }).isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderedFormItem: PropTypes.shape({}).isRequired,
-};
 
 export default CommonQuestionFields;
