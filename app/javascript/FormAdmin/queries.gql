@@ -32,6 +32,15 @@ fragment FormEditorFormItemFields on FormItem {
   default_value
 }
 
+fragment FormEditorFormSectionFields on FormSection {
+  id
+  title
+  position
+  form_items {
+    ...FormEditorFormItemFields
+  }
+}
+
 fragment FormEditorData on Form {
   id
   title
@@ -39,11 +48,7 @@ fragment FormEditorData on Form {
 
   form_sections {
     id
-    title
-    position
-    form_items {
-      ...FormEditorFormItemFields
-    }
+    ...FormEditorFormSectionFields
   }
 }
 

@@ -1,7 +1,4 @@
 import React, { useCallback, useContext } from 'react';
-import { DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import RegistrationPolicyItemEditorPresetRow from './RegistrationPolicyItemEditorPresetRow';
 import useArrayProperty from './useArrayProperty';
@@ -40,18 +37,16 @@ function RegistrationPolicyItemEditor() {
           </tr>
         </thead>
         <tbody>
-          <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-            {(formItem.properties.presets || []).map((preset, index) => (
-              <RegistrationPolicyItemEditorPresetRow
-                key={preset.generatedId}
-                preset={preset}
-                index={index}
-                movePreset={movePreset}
-                deletePreset={deletePreset}
-                onChange={presetChanged}
-              />
-            ))}
-          </DndProvider>
+          {(formItem.properties.presets || []).map((preset, index) => (
+            <RegistrationPolicyItemEditorPresetRow
+              key={preset.generatedId}
+              preset={preset}
+              index={index}
+              movePreset={movePreset}
+              deletePreset={deletePreset}
+              onChange={presetChanged}
+            />
+          ))}
           <tr>
             <td />
             <td colSpan={2}>

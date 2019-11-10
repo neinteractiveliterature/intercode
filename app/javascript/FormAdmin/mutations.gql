@@ -32,3 +32,12 @@ mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
     }
   }
 }
+
+mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
+  moveFormItem(input: { id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex }) {
+    form_section {
+      id
+      ...FormEditorFormSectionFields
+    }
+  }
+}

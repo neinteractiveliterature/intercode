@@ -1,7 +1,4 @@
 import React, { useContext } from 'react';
-import { DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
@@ -60,20 +57,18 @@ function MultipleChoiceEditor() {
             </tr>
           </thead>
           <tbody>
-            <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-              {formItem.properties.choices.map((choice, index) => (
-                <MultipleChoiceOptionRow
-                  key={choice.generatedId}
-                  choice={choice}
-                  index={index}
-                  deleteChoice={deleteChoice}
-                  choiceChanged={choiceChanged}
-                  moveChoice={moveChoice}
-                  nonUnique={formItem.properties.choices
-                    .filter((c) => c.value === choice.value).length > 1}
-                />
-              ))}
-            </DndProvider>
+            {formItem.properties.choices.map((choice, index) => (
+              <MultipleChoiceOptionRow
+                key={choice.generatedId}
+                choice={choice}
+                index={index}
+                deleteChoice={deleteChoice}
+                choiceChanged={choiceChanged}
+                moveChoice={moveChoice}
+                nonUnique={formItem.properties.choices
+                  .filter((c) => c.value === choice.value).length > 1}
+              />
+            ))}
             <tr>
               <td />
               <td>

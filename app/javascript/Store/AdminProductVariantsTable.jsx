@@ -1,8 +1,6 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import MultiBackend, { Preview } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch'; // or any other pipeline
-import { DndProvider } from 'react-dnd';
+import { Preview } from 'react-dnd-multi-backend';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import formatMoney from '../formatMoney';
@@ -173,25 +171,21 @@ function AdminProductVariantsTable({
 
   return (
     <div className="mt-2">
-      <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-        <>
-          <table className="table table-sm" ref={tableRef}>
-            <thead>
-              <tr>
-                <th />
-                <th>Variant name</th>
-                <th>Description</th>
-                <th>Override price</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {rows}
-            </tbody>
-          </table>
-          <Preview generator={generatePreview} />
-        </>
-      </DndProvider>
+      <table className="table table-sm" ref={tableRef}>
+        <thead>
+          <tr>
+            <th />
+            <th>Variant name</th>
+            <th>Description</th>
+            <th>Override price</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+      <Preview generator={generatePreview} />
       {renderAddVariantButton()}
     </div>
   );

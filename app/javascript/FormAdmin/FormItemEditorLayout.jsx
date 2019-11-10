@@ -1,16 +1,14 @@
 import React, {
-  useContext, useMemo, useState, useCallback, useEffect,
+  useContext, useMemo, useState, useCallback,
 } from 'react';
 import { useApolloClient, useMutation } from 'react-apollo-hooks';
 import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
-import debounce from 'lodash-es/debounce';
 import isEqual from 'lodash-es/isEqual';
 
 import FormItemTools from './FormItemTools';
 import FormItemEditorContent from './FormItemEditorContent';
 import { FormEditorContext, FormItemEditorContext } from './FormEditorContexts';
-import generateChoiceId from './generateChoiceId';
-import { parseFormItemObject, buildFormItemInput } from './FormItemUtils';
+import { parseFormItemObject, buildFormItemInput, addGeneratedIds } from './FormItemUtils';
 import { PreviewFormItemQuery } from './queries.gql';
 import { UpdateFormItem } from './mutations.gql';
 import useDebouncedState from '../useDebouncedState';
@@ -46,22 +44,10 @@ function FormItemEditorLayout() {
   );
 
   const [formItem, setFormItem] = useDebouncedState(
-    () => ['choices', 'presets', 'timeblocks', 'omit_timeblocks'].reduce((memo, property) => {
-      if (memo.properties[property] != null) {
-        return {
-          ...memo,
-          properties: {
-            ...memo.properties,
-            [property]: memo.properties[property].map((item) => ({
-              ...item,
-              generatedId: generateChoiceId(),
-            })),
-          },
-        };
-      }
-
-      return memo;
-    }, initialFormItem),
+    () => ({
+      ...initialFormItem,
+      properties: addGeneratedIds(initialFormItem.properties),
+    }),
     refreshRenderedFormItem,
     150,
   );
@@ -71,13 +57,6 @@ function FormItemEditorLayout() {
   const hasChanges = useMemo(
     () => !isEqual(buildFormItemInput(initialFormItem), buildFormItemInput(formItem)),
     [formItem, initialFormItem],
-  );
-
-  useEffect(
-    () => {
-      debounce(refreshRenderedFormItem, 300);
-    },
-    [formItem, refreshRenderedFormItem],
   );
 
   const [updateFormItemMutate] = useMutation(UpdateFormItem);

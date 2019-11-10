@@ -91,6 +91,7 @@ class Types::MutationType < Types::BaseObject
   ### FormItem
 
   field :updateFormItem, mutation: Mutations::UpdateFormItem
+  field :moveFormItem, mutation: Mutations::MoveFormItem
 
   ### MaximumEventProvidedTicketsOverride
 

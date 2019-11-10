@@ -1,7 +1,4 @@
 import React, { useCallback, useContext } from 'react';
-import { DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
@@ -59,21 +56,19 @@ function TimeblockPreferenceEditor() {
             </tr>
           </thead>
           <tbody>
-            <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-              {formItem.properties.timeblocks.map((timeblock, index) => (
-                <React.Fragment key={timeblock.generatedId}>
-                  <TimeblockPreferenceEditorTimeblockRow
-                    index={index}
-                    timeblock={timeblock}
-                    onChange={timeblockChanged}
-                    deleteTimeblock={deleteTimeblock}
-                    moveTimeblock={moveTimeblock}
-                  />
+            {formItem.properties.timeblocks.map((timeblock, index) => (
+              <React.Fragment key={timeblock.generatedId}>
+                <TimeblockPreferenceEditorTimeblockRow
+                  index={index}
+                  timeblock={timeblock}
+                  onChange={timeblockChanged}
+                  deleteTimeblock={deleteTimeblock}
+                  moveTimeblock={moveTimeblock}
+                />
 
-                  <TimeblockPreferenceEditorOmissionsRow timeblock={timeblock} />
-                </React.Fragment>
-              ))}
-            </DndProvider>
+                <TimeblockPreferenceEditorOmissionsRow timeblock={timeblock} />
+              </React.Fragment>
+            ))}
           </tbody>
           <tfoot>
             <tr>

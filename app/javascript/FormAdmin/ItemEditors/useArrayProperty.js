@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
+import uuidv4 from 'uuid/v4';
 
-import generateChoiceId from '../generateChoiceId';
 import usePropertyUpdater from './usePropertyUpdater';
 
 export default function useArrayProperty(property, onChange, generateNewItem) {
@@ -22,7 +22,7 @@ export default function useArrayProperty(property, onChange, generateNewItem) {
   const addItem = useCallback(
     () => updateItems((prevItems) => [
       ...prevItems,
-      { ...generateNewItem(), generatedId: generateChoiceId() },
+      { ...generateNewItem(), generatedId: uuidv4() },
     ]),
     [generateNewItem, updateItems],
   );

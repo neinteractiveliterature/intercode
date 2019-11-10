@@ -88,7 +88,15 @@ function FormItemTools({ saveFormItem }) {
 
   return (
     <>
-      <div className="d-flex align-items-stretch mb-4">
+      <ul className="list-unstyled">
+        {renderItemMetadata()}
+      </ul>
+
+      {formItem.item_type !== 'static_text' && (
+        <CommonQuestionFields />
+      )}
+
+      <div className="d-flex align-items-stretch mt-4">
         <NavLink
           className="btn btn-outline-secondary col mr-2"
           to={`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`}
@@ -106,14 +114,6 @@ function FormItemTools({ saveFormItem }) {
           Save
         </button>
       </div>
-
-      <ul className="list-unstyled">
-        {renderItemMetadata()}
-      </ul>
-
-      {formItem.item_type !== 'static_text' && (
-        <CommonQuestionFields />
-      )}
     </>
   );
 }

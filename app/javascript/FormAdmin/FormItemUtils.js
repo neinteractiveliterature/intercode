@@ -1,3 +1,7 @@
+import uuidv4 from 'uuid/v4';
+
+const GENERATED_ID_ARRAY_PROPERTIES = ['choices', 'presets', 'timeblocks', 'omit_timeblocks'];
+
 export function parseFormItemObject(formItem) {
   return {
     ...formItem,
@@ -7,6 +11,47 @@ export function parseFormItemObject(formItem) {
   };
 }
 
+export function serializeParsedFormItem(formItem) {
+  return {
+    ...formItem,
+    default_value: JSON.stringify(formItem.default_value),
+    properties: JSON.stringify(formItem.properties),
+    rendered_properties: JSON.stringify(formItem.rendered_properties),
+  };
+}
+
+export function addGeneratedIds(properties) {
+  return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
+    if (memo[property] != null) {
+      return {
+        ...memo,
+        [property]: memo[property].map((item) => ({
+          ...item,
+          generatedId: uuidv4(),
+        })),
+      };
+    }
+
+    return memo;
+  }, properties);
+}
+
+export function removeGeneratedIds(properties) {
+  return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
+    if (memo[property] != null) {
+      return {
+        ...memo,
+        [property]: memo[property].map((item) => {
+          const { generatedId, ...otherItemProperties } = item;
+          return otherItemProperties;
+        }),
+      };
+    }
+
+    return memo;
+  }, properties);
+}
+
 export function buildFormItemInput(formItem) {
   return {
     identifier: formItem.identifier,
@@ -14,7 +59,7 @@ export function buildFormItemInput(formItem) {
     admin_description: formItem.admin_description,
     public_description: formItem.public_description,
     default_value: formItem.default_value ? JSON.stringify(formItem.default_value) : null,
-    properties: JSON.stringify(formItem.properties),
+    properties: JSON.stringify(removeGeneratedIds(formItem.properties)),
   };
 }
 
