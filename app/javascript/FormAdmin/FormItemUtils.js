@@ -19,11 +19,14 @@ export function buildFormItemInput(formItem) {
 }
 
 export function formItemPropertyUpdater(property, onChange) {
-  return (newValue) => onChange((prevFormItem) => ({
-    ...prevFormItem,
-    properties: {
-      ...prevFormItem.properties,
-      [property]: newValue,
-    },
-  }));
+  return (newValue) => onChange((prevFormItem) => {
+    const newFormItem = ({
+      ...prevFormItem,
+      properties: {
+        ...prevFormItem.properties,
+        [property]: newValue,
+      },
+    });
+    return newFormItem;
+  });
 }

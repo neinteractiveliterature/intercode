@@ -62,6 +62,14 @@ module.exports = {
         controlComponents: ['Select'],
       },
     ],
+    "jsx-a11y/control-has-associated-label": [
+      2,
+      {
+        ignoreElements: [
+          'th',
+        ],
+      },
+    ],
     "no-restricted-imports": ['error', 'graphql-tag'],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",

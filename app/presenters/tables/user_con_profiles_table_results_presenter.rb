@@ -96,7 +96,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     case sort_field
     when :email
       scope.joins(:user)
-    when :ticket, :ticket_type
+    when :ticket, :ticket_type, :ticket_updated_at
       scope.joins(ticket: :ticket_type)
     else
       scope

@@ -13,6 +13,10 @@ function describeCapacity(bucket, signupCount, signupsAvailable) {
     return `unlimited (${signupCount} signed up)`;
   }
 
+  if (bucket.total_slots == null) {
+    return '0 slots';
+  }
+
   const remainingCapacity = bucket.total_slots - signupCount;
 
   if (!signupsAvailable && remainingCapacity === bucket.total_slots) {
@@ -52,7 +56,7 @@ function RunCapacityGraphBucket({
 
 RunCapacityGraphBucket.propTypes = {
   bucket: PropTypes.shape({
-    total_slots: PropTypes.number.isRequired,
+    total_slots: PropTypes.number,
     slots_limited: PropTypes.bool.isRequired,
     key: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,

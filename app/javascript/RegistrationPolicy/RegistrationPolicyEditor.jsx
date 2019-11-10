@@ -20,7 +20,7 @@ import PreventNoPreferenceSignupRow from './PreventNoPreferenceSignupRow';
 
 function RegistrationPolicyEditor(props) {
   const {
-    allowCustom, lockNameAndDescription, lockDeleteBuckets, lockLimitedBuckets,
+    allowCustom, lockCounts, lockNameAndDescription, lockDeleteBuckets, lockLimitedBuckets,
     onChange, presets, validateComplete,
   } = props;
   const registrationPolicy = props.registrationPolicy || { buckets: [] };
@@ -169,6 +169,7 @@ function RegistrationPolicyEditor(props) {
         registrationBucket={bucket}
         onChange={bucketChanged}
         onDelete={deleteBucket}
+        lockCounts={lockCounts}
         lockNameAndDescription={bucketInPreset || lockNameAndDescription}
         lockLimited={lockLimited}
         lockDelete={lockDelete}
@@ -287,6 +288,7 @@ function RegistrationPolicyEditor(props) {
 RegistrationPolicyEditor.propTypes = {
   registrationPolicy: RegistrationPolicyPropType,
   onChange: PropTypes.func.isRequired,
+  lockCounts: PropTypes.bool,
   lockNameAndDescription: PropTypes.bool,
   lockLimitedBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
   lockDeleteBuckets: PropTypes.arrayOf(PropTypes.string.isRequired),
@@ -300,6 +302,7 @@ RegistrationPolicyEditor.propTypes = {
 
 RegistrationPolicyEditor.defaultProps = {
   registrationPolicy: null,
+  lockCounts: false,
   lockNameAndDescription: false,
   lockLimitedBuckets: null,
   lockDeleteBuckets: null,

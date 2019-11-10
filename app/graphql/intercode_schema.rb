@@ -57,16 +57,16 @@ class IntercodeSchema < GraphQL::Schema
   end
 
   rescue_from ActiveRecord::RecordNotFound do |_err, _obj, _args, _ctx, field|
-    raise GraphQL::ExecutionError.new("#{field.type.unwrap.graphql_name} not found")
+    raise GraphQL::ExecutionError, "#{field.type.unwrap.graphql_name} not found"
   end
 
   rescue_from Liquid::SyntaxError do |err, _obj, _args, _ctx, _field|
-    raise GraphQL::ExecutionError.new(err.message)
+    raise GraphQL::ExecutionError, err.message
   end
 
   rescue_from CivilService::ServiceFailure do |err, _obj, _args, _ctx, _field|
     Rollbar.error(err)
-    raise GraphQL::ExecutionError.new(err.result.errors.full_messages.join(', '))
+    raise GraphQL::ExecutionError, err.result.errors.full_messages.join(', ')
   end
 
   def self.resolve_type(_abstract_type, object, _context)
@@ -101,3 +101,5 @@ was hidden due to permissions"
     )
   end
 end
+
+IntercodeSchema.graphql_definition

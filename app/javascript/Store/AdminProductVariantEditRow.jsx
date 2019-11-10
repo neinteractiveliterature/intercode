@@ -1,78 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DragSource, DropTarget } from 'react-dnd';
 
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
+import useSortable from '../useSortable';
 
-const productVariantDragSource = {
-  beginDrag(props) {
-    return { productVariant: props.variant, productId: props.productId, index: props.index };
-  },
-};
+function AdminProductVariantEditRow({
+  variant, updater, deleteVariant, moveVariant, index,
+}) {
+  const [rowRef, drag, { isDragging }] = useSortable(index, moveVariant, 'PRODUCT_VARIANT');
 
-const productVariantDropTarget = {
-  // Largely stolen from https://github.com/react-dnd/react-dnd/tree/master/packages/documentation/examples/04%20Sortable/Simple
-  hover(props, monitor) {
-    const { productId } = monitor.getItem();
-    if (props.productId !== productId) {
-      return;
-    }
-
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
-
-    // Don't replace items with themselves
-    if (dragIndex === hoverIndex) {
-      return;
-    }
-
-    // Time to actually perform the action
-    props.moveVariant(dragIndex, hoverIndex);
-
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex; // eslint-disable-line no-param-reassign
-  },
-};
-
-function collectProductVariantDrag(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview(),
-    isDragging: monitor.isDragging(),
-  };
-}
-
-function collectProductVariantDrop(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-  };
-}
-
-function AdminProductVariantEditRow(props) {
-  const {
-    connectDragSource,
-    connectDropTarget,
-    connectDragPreview,
-    isDragging,
-    variant,
-    updater,
-    deleteVariant,
-  } = props;
-
-  return connectDropTarget(connectDragPreview((
-    <tr key={variant.id || variant.generatedId} className={isDragging ? 'opacity-50' : null}>
-      <td>
-        {connectDragSource((
-          <i className="fa fa-ellipsis-v cursor-grab">
-            <span className="sr-only">Drag to reorder</span>
-          </i>
-        ))}
+  return (
+    <tr
+      key={variant.id || variant.generatedId}
+      className={isDragging ? 'opacity-50' : null}
+      ref={rowRef}
+    >
+      <td ref={drag}>
+        <i className="fa fa-bars cursor-grab">
+          <span className="sr-only">Drag to reorder</span>
+        </i>
       </td>
       <td>
         <InPlaceEditor
@@ -113,11 +61,10 @@ function AdminProductVariantEditRow(props) {
         </button>
       </td>
     </tr>
-  )));
+  );
 }
 
 AdminProductVariantEditRow.propTypes = {
-  productId: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   variant: PropTypes.shape({
     id: PropTypes.number,
@@ -136,14 +83,6 @@ AdminProductVariantEditRow.propTypes = {
     override_price: PropTypes.func.isRequired,
   }).isRequired,
   moveVariant: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired,
-  connectDropTarget: PropTypes.func.isRequired,
-  connectDragPreview: PropTypes.func.isRequired,
 };
 
-export default DragSource('PRODUCT_VARIANT', productVariantDragSource, collectProductVariantDrag)(
-  DropTarget('PRODUCT_VARIANT', productVariantDropTarget, collectProductVariantDrop)(
-    AdminProductVariantEditRow,
-  ),
-);
+export default AdminProductVariantEditRow;

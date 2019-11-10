@@ -34,5 +34,10 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 #
 # preload_app!
 
+# TODO maybe remove this when graphql 1.10 is ready
+before_fork do
+  IntercodeSchema.graphql_definition
+end
+
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
