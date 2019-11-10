@@ -19,6 +19,7 @@ import TimespanEditor from './ItemEditors/TimespanEditor';
 import MultipleChoiceEditor from './ItemEditors/MultipleChoiceEditor';
 import generateChoiceId from './generateChoiceId';
 import TimeblockPreferenceEditor from './ItemEditors/TimeblockPreferenceEditor';
+import RegistrationPolicyItemEditor from './ItemEditors/RegistrationPolicyItemEditor';
 
 function FormItemEditor({
   close, convention, form, formSectionId, initialFormItem, initialRenderedFormItem,
@@ -39,7 +40,7 @@ function FormItemEditor({
   );
 
   const [formItem, setFormItem] = useDebouncedState(
-    () => ['choices', 'timeblocks', 'omit_timeblocks'].reduce((memo, property) => {
+    () => ['choices', 'presets', 'timeblocks', 'omit_timeblocks'].reduce((memo, property) => {
       if (memo.properties[property] != null) {
         return {
           ...memo,
@@ -85,8 +86,8 @@ function FormItemEditor({
         return <FreeTextEditor {...commonProps} />;
       case 'multiple_choice':
         return <MultipleChoiceEditor {...commonProps} />;
-      // case 'registration_policy':
-      //   return <RegistrationPolicyItemInput {...commonProps} />;
+      case 'registration_policy':
+        return <RegistrationPolicyItemEditor {...commonProps} />;
       case 'static_text':
         return <StaticTextEditor {...commonProps} />;
       case 'timeblock_preference':

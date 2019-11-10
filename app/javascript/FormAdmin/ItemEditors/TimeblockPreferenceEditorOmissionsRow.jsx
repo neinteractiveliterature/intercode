@@ -6,6 +6,7 @@ import { getValidTimeblockColumns } from '../../FormPresenter/TimeblockUtils';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import Timespan from '../../Timespan';
 import { timespanFromConvention } from '../../TimespanUtils';
+import { TimeblockOmissionPropType, TimeblockPropType } from '../../FormPresenter/TimeblockTypes';
 
 function TimeblockPreferenceEditorOmissionsRow({
   convention, formItem, timeblock, onChange,
@@ -23,12 +24,12 @@ function TimeblockPreferenceEditorOmissionsRow({
   );
 
   const omissionDatesChanged = useCallback(
-    (omissionDates) => {
+    (newOmissionDates) => {
       onChange((prevFormItem) => {
         const prevOmissions = prevFormItem.properties.omit_timeblocks || [];
         const newOmissions = [
           ...prevOmissions.filter((omission) => omission.label !== timeblock.label),
-          ...omissionDates.map((date) => ({ label: timeblock.label, date })),
+          ...newOmissionDates.map((date) => ({ label: timeblock.label, date })),
         ];
         return {
           ...prevFormItem,
@@ -100,5 +101,18 @@ function TimeblockPreferenceEditorOmissionsRow({
     </tr>
   );
 }
+
+TimeblockPreferenceEditorOmissionsRow.propTypes = {
+  convention: PropTypes.shape({
+    timezone_name: PropTypes.string.isRequired,
+  }).isRequired,
+  formItem: PropTypes.shape({
+    properties: PropTypes.shape({
+      omit_timeblocks: PropTypes.arrayOf(TimeblockOmissionPropType),
+    }).isRequired,
+  }).isRequired,
+  timeblock: TimeblockPropType.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default TimeblockPreferenceEditorOmissionsRow;

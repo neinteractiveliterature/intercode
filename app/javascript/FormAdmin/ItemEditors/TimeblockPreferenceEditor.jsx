@@ -10,78 +10,24 @@ import { formItemPropertyUpdater } from '../FormItemUtils';
 import CommonQuestionFields from './CommonQuestionFields';
 import { FuzzyTimePropType } from '../../FormPresenter/TimeblockTypes';
 import TimeblockPreferenceEditorTimeblockRow from './TimeblockPreferenceEditorTimeblockRow';
-import generateChoiceId from '../generateChoiceId';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import TimeblockPreferenceEditorOmissionsRow from './TimeblockPreferenceEditorOmissionsRow';
-
-function usePropertyUpdater(onChange, property) {
-  return useCallback(
-    (updater) => onChange((prevFormItem) => ({
-      ...prevFormItem,
-      properties: {
-        ...prevFormItem.properties,
-        [property]: updater(prevFormItem.properties[property]),
-      },
-    })),
-    [onChange, property],
-  );
-}
+import useArrayProperty from './useArrayProperty';
 
 function TimeblockPreferenceEditor({
   convention, form, formItem, onChange, disabled, renderedFormItem,
 }) {
   const captionInputId = useUniqueId('timeblock-preference-');
-  const updateTimeblocks = usePropertyUpdater(onChange, 'timeblocks');
 
-  const timeblockChanged = useCallback(
-    (generatedId, updater) => {
-      updateTimeblocks((prevTimeblocks) => prevTimeblocks.map((tb) => {
-        if (tb.generatedId !== generatedId) {
-          return tb;
-        }
-
-        return updater(tb);
-      }));
-    },
-    [updateTimeblocks],
+  const generateNewTimeblock = useCallback(
+    () => ({ label: '', start: {}, finish: {} }),
+    [],
   );
 
-  const addTimeblock = useCallback(
-    () => updateTimeblocks((prevTimeblocks) => [
-      ...prevTimeblocks,
-      {
-        label: '', start: {}, finish: {}, generatedId: generateChoiceId(),
-      },
-    ]),
-    [updateTimeblocks],
-  );
-
-  const deleteTimeblock = useCallback(
-    (generatedId) => {
-      onChange((prevFormItem) => ({
-        ...prevFormItem,
-        properties: {
-          ...prevFormItem.properties,
-          timeblocks: prevFormItem.properties.timeblocks.filter((tb) => (
-            tb.generatedId !== generatedId
-          )),
-        },
-      }));
-    },
-    [onChange],
-  );
-
-  const moveTimeblock = useCallback(
-    (dragIndex, hoverIndex) => {
-      updateTimeblocks((prevTimeblocks) => {
-        const newTimeblocks = [...prevTimeblocks];
-        const dragTimeblock = newTimeblocks[dragIndex];
-        newTimeblocks.splice(dragIndex, 1);
-        newTimeblocks.splice(hoverIndex, 0, dragTimeblock);
-        return newTimeblocks;
-      });
-    },
-    [updateTimeblocks],
+  const [addTimeblock, timeblockChanged, deleteTimeblock, moveTimeblock] = useArrayProperty(
+    'timeblocks',
+    onChange,
+    generateNewTimeblock,
   );
 
   return (
