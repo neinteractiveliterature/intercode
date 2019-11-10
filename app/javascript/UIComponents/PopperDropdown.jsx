@@ -56,7 +56,7 @@ function PopperDropdown({
     setInternalVisible(false);
   };
 
-  const targetClicked = () => {
+  const targetClicked = (event) => {
     if (onToggle) {
       setInternalVisible((prevVisible) => onToggle(prevVisible, event));
     } else {
