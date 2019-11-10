@@ -1,19 +1,16 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
-import CommonQuestionFields from './CommonQuestionFields';
 import { FormItemEditorContext } from '../FormEditorContexts';
 
-function AgeRestrictionsEditor({ disabled }) {
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+function AgeRestrictionsEditor() {
+  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('age-restrictions-caption-');
 
   return (
     <>
-      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -29,10 +26,6 @@ function AgeRestrictionsEditor({ disabled }) {
     </>
   );
 }
-
-AgeRestrictionsEditor.propTypes = {
-  disabled: PropTypes.bool,
-};
 
 AgeRestrictionsEditor.defaultProps = {
   disabled: false,

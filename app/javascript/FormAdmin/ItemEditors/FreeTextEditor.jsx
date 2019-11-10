@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
@@ -7,11 +6,10 @@ import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import { Transforms } from '../../ComposableFormUtils';
-import CommonQuestionFields from './CommonQuestionFields';
 import { FormItemEditorContext } from '../FormEditorContexts';
 
-function FreeTextEditor({ disabled }) {
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+function FreeTextEditor() {
+  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat = (
     formItem.properties.format === 'markdown'
@@ -31,7 +29,6 @@ function FreeTextEditor({ disabled }) {
 
   return (
     <>
-      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -68,13 +65,5 @@ function FreeTextEditor({ disabled }) {
     </>
   );
 }
-
-FreeTextEditor.propTypes = {
-  disabled: PropTypes.bool,
-};
-
-FreeTextEditor.defaultProps = {
-  disabled: false,
-};
 
 export default FreeTextEditor;

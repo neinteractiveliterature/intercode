@@ -1,17 +1,20 @@
 import React, { useMemo } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import {
+  Redirect, Route, Switch, useRouteMatch,
+} from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 import sortBy from 'lodash-es/sortBy';
-
 import flatMap from 'lodash-es/flatMap';
+
 import ErrorDisplay from '../ErrorDisplay';
+import { FormEditorContext } from './FormEditorContexts';
 import { FormEditorQuery } from './queries.gql';
-import usePageTitle from '../usePageTitle';
+import FormItemEditorLayout from './FormItemEditorLayout';
+import FormSectionEditorLayout from './FormSectionEditorLayout';
+import FormTypes from './form_types.json';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseFormItemObject } from './FormItemUtils';
-import FormSectionEditor from './FormSectionEditor';
-import { FormEditorContext } from './FormEditorContexts';
-import FormSectionNav from './FormSectionNav';
+import usePageTitle from '../usePageTitle';
 
 function FormEditor() {
   const match = useRouteMatch();
@@ -60,21 +63,40 @@ function FormEditor() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  let currentSection = null;
+
+  if (!match.params.sectionId) {
+    const firstSection = form.form_sections[0];
+    if (firstSection) {
+      return <Redirect to={`/admin_forms/${match.params.id}/edit/section/${firstSection.id}`} />;
+    }
+  } else {
+    currentSection = form.form_sections
+      .find((formSection) => formSection.id.toString() === match.params.sectionId);
+  }
+
   const { convention } = data;
+  const formType = FormTypes[form.form_type] || {};
 
   return (
     <>
       <h1 className="mb-4">{form.title}</h1>
 
-      <FormEditorContext.Provider value={{ convention, form, renderedFormItemsById }}>
-        <div className="row m-0">
-          <nav className="col-3 bg-light p-2">
-            <FormSectionNav />
-          </nav>
-          <div className="col p-2 border overflow-auto" style={{ height: '90vh' }}>
-            <FormSectionEditor />
-          </div>
-        </div>
+      <FormEditorContext.Provider
+        value={{
+          convention, currentSection, form, formType, renderedFormItemsById,
+        }}
+      >
+        <Switch>
+          <Route
+            path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"
+            component={FormItemEditorLayout}
+          />
+          <Route
+            path="/admin_forms/:id/edit/section/:sectionId"
+            component={FormSectionEditorLayout}
+          />
+        </Switch>
       </FormEditorContext.Provider>
     </>
   );

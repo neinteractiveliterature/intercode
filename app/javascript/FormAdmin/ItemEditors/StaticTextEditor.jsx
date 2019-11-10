@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import BootstrapFormSelect from '../../BuiltInFormControls/BootstrapFormSelect';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
@@ -7,8 +6,8 @@ import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
 
-function StaticTextEditor({ disabled }) {
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+function StaticTextEditor() {
+  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const contentInputId = useUniqueId('static-text-content-');
 
   return (
@@ -37,13 +36,5 @@ function StaticTextEditor({ disabled }) {
     </>
   );
 }
-
-StaticTextEditor.propTypes = {
-  disabled: PropTypes.bool,
-};
-
-StaticTextEditor.defaultProps = {
-  disabled: false,
-};
 
 export default StaticTextEditor;

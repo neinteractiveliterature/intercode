@@ -1,31 +1,23 @@
 import React, { useContext } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import FormTypes from './form_types.json';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
 
-function FormEditorItemPreview({ formItem, startEditing }) {
+function FormEditorItemPreview({ formItem }) {
+  const match = useRouteMatch();
   const { convention, form, renderedFormItemsById } = useContext(FormEditorContext);
   const renderedFormItem = renderedFormItemsById.get(formItem.id);
   const formType = FormTypes[form.form_type];
   const specialItem = ((formType || {}).special_items || {})[formItem.identifier];
 
-  const keyDown = (event) => {
-    if (event.keyCode === 13 || event.keyCode === 32) {
-      event.preventDefault();
-      startEditing();
-    }
-  };
-
   return (
     <div className="form-editor-item">
-      <div
+      <Link
         className="form-editor-item-overlay"
-        onClick={startEditing}
-        onKeyDown={keyDown}
-        role="button"
-        tabIndex={0}
+        to={`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}/item/${formItem.id}`}
       >
         {formItem.identifier && (
           <div className="form-editor-item-identifier">
@@ -47,7 +39,7 @@ function FormEditorItemPreview({ formItem, startEditing }) {
           </div>
         )}
         <div className="font-weight-bold">Click to edit</div>
-      </div>
+      </Link>
 
       <FormItemInput
         convention={convention}
@@ -65,7 +57,6 @@ FormEditorItemPreview.propTypes = {
     default_value: PropTypes.any,
     identifier: PropTypes.string,
   }).isRequired,
-  startEditing: PropTypes.func.isRequired,
 };
 
 export default FormEditorItemPreview;

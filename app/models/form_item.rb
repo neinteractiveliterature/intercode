@@ -100,10 +100,13 @@ class FormItem < ApplicationRecord
   end
 
   def ensure_unique_identifier_across_form
-    other_identifiers = FormItem
-      .where(form_section_id: FormSection.where(form_id: form.id).select(:id))
-      .where.not(id: id)
-      .pluck(:identifier)
+    return unless identifier.present?
+
+    other_identifiers_scope = FormItem.where(
+      form_section_id: FormSection.where(form_id: form.id).select(:id)
+    )
+    other_identifiers_scope = other_identifiers_scope.where.not(id: id) if persisted?
+    other_identifiers = other_identifiers_scope.pluck(:identifier)
 
     return unless other_identifiers.include?(identifier)
     errors.add :identifier, 'is already taken'

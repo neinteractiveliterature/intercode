@@ -1,5 +1,4 @@
 import React, { useCallback, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
@@ -7,15 +6,14 @@ import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
-import CommonQuestionFields from './CommonQuestionFields';
 import TimeblockPreferenceEditorTimeblockRow from './TimeblockPreferenceEditorTimeblockRow';
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import TimeblockPreferenceEditorOmissionsRow from './TimeblockPreferenceEditorOmissionsRow';
 import useArrayProperty from './useArrayProperty';
 import { FormItemEditorContext } from '../FormEditorContexts';
 
-function TimeblockPreferenceEditor({ disabled }) {
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+function TimeblockPreferenceEditor() {
+  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('timeblock-preference-');
 
   const generateNewTimeblock = useCallback(
@@ -29,7 +27,6 @@ function TimeblockPreferenceEditor({ disabled }) {
 
   return (
     <>
-      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -45,6 +42,7 @@ function TimeblockPreferenceEditor({ disabled }) {
         <BooleanInput
           caption="Timestamp visibility"
           value={formItem.properties.hide_timestamps || false}
+          disabled={disabled}
           onChange={formItemPropertyUpdater('hide_timestamps', setFormItem)}
           trueLabel="Hidden"
           falseLabel="Visible"
@@ -81,7 +79,12 @@ function TimeblockPreferenceEditor({ disabled }) {
             <tr>
               <td />
               <td colSpan={4}>
-                <button type="button" className="btn btn-outline-primary btn-sm" onClick={addTimeblock}>
+                <button
+                  type="button"
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={addTimeblock}
+                  disabled={disabled}
+                >
                   <i className="fa fa-plus" />
                   {' '}
                   Add timeblock
@@ -94,13 +97,5 @@ function TimeblockPreferenceEditor({ disabled }) {
     </>
   );
 }
-
-TimeblockPreferenceEditor.propTypes = {
-  disabled: PropTypes.bool,
-};
-
-TimeblockPreferenceEditor.defaultProps = {
-  disabled: false,
-};
 
 export default TimeblockPreferenceEditor;

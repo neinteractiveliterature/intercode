@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
@@ -7,7 +6,6 @@ import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useUniqueId from '../../useUniqueId';
 import { formItemPropertyUpdater } from '../FormItemUtils';
-import CommonQuestionFields from './CommonQuestionFields';
 import MultipleChoiceInput from '../../BuiltInFormControls/MultipleChoiceInput';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
@@ -15,8 +13,8 @@ import MultipleChoiceOptionRow from './MultipleChoiceOptionRow';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import useArrayProperty from './useArrayProperty';
 
-function MultipleChoiceEditor({ disabled }) {
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+function MultipleChoiceEditor() {
+  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('multiple-choice-caption-');
   const generateNewChoice = () => ({ caption: '', value: '' });
 
@@ -26,7 +24,6 @@ function MultipleChoiceEditor({ disabled }) {
 
   return (
     <>
-      <CommonQuestionFields />
       <div className="form-group">
         <label htmlFor={captionInputId} className="form-item-label">
           Caption
@@ -50,6 +47,7 @@ function MultipleChoiceEditor({ disabled }) {
           ]}
           value={formItem.properties.style}
           onChange={formItemPropertyUpdater('style', setFormItem)}
+          disabled={disabled}
         />
 
         <table className="table">
@@ -76,6 +74,28 @@ function MultipleChoiceEditor({ disabled }) {
                 />
               ))}
             </DndProvider>
+            <tr>
+              <td />
+              <td>
+                <BootstrapFormCheckbox
+                  label="Include “other, please specify”"
+                  checked={!!formItem.properties.other}
+                  onCheckedChange={formItemPropertyUpdater('other', setFormItem)}
+                  disabled={disabled}
+                />
+              </td>
+              <td className="pb-0">
+                {formItem.properties.other && (
+                  <BootstrapFormInput
+                    label="“Other” option text"
+                    disabled={disabled || !formItem.properties.other}
+                    value={formItem.properties.other_caption || ''}
+                    onTextChange={formItemPropertyUpdater('other_caption', setFormItem)}
+                  />
+                )}
+              </td>
+              <td />
+            </tr>
           </tbody>
           <tfoot>
             <tr>
@@ -90,38 +110,9 @@ function MultipleChoiceEditor({ disabled }) {
             </tr>
           </tfoot>
         </table>
-
-        <fieldset>
-          <legend className="col-form-label">“Other” option</legend>
-          <div className="form-row">
-            <div className="col-3">
-              <BootstrapFormCheckbox
-                label="Include?"
-                checked={!!formItem.properties.other}
-                onCheckedChange={formItemPropertyUpdater('other', setFormItem)}
-              />
-            </div>
-            <div className="col">
-              <BootstrapFormInput
-                label="“Other” option text"
-                disabled={!formItem.properties.other}
-                value={formItem.properties.other_caption || ''}
-                onTextChange={formItemPropertyUpdater('other_caption', setFormItem)}
-              />
-            </div>
-          </div>
-        </fieldset>
       </div>
     </>
   );
 }
-
-MultipleChoiceEditor.propTypes = {
-  disabled: PropTypes.bool,
-};
-
-MultipleChoiceEditor.defaultProps = {
-  disabled: false,
-};
 
 export default MultipleChoiceEditor;

@@ -71,6 +71,10 @@ function FormAdmin() {
           )}
         />
         <Route
+          path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"
+          component={FormEditor}
+        />
+        <Route
           path="/admin_forms/:id/edit/section/:sectionId"
           component={FormEditor}
         />

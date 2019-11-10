@@ -3,7 +3,6 @@ import { DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
-import CommonQuestionFields from './CommonQuestionFields';
 import RegistrationPolicyItemEditorPresetRow from './RegistrationPolicyItemEditorPresetRow';
 import useArrayProperty from './useArrayProperty';
 import BootstrapFormCheckbox from '../../BuiltInFormControls/BootstrapFormCheckbox';
@@ -11,7 +10,7 @@ import usePropertyUpdater from './usePropertyUpdater';
 import { FormItemEditorContext } from '../FormEditorContexts';
 
 function RegistrationPolicyItemEditor() {
-  const { formItem, setFormItem } = useContext(FormItemEditorContext);
+  const { disabled, formItem, setFormItem } = useContext(FormItemEditorContext);
 
   const generateNewPreset = useCallback(
     () => ({
@@ -31,8 +30,6 @@ function RegistrationPolicyItemEditor() {
 
   return (
     <>
-      <CommonQuestionFields />
-
       <table className="table">
         <thead>
           <tr>
@@ -62,6 +59,7 @@ function RegistrationPolicyItemEditor() {
                 label="Allow users to create custom policies"
                 checked={formItem.properties.allow_custom}
                 onCheckedChange={allowCustomChanged}
+                disabled={disabled}
               />
             </td>
             <td />
@@ -71,7 +69,12 @@ function RegistrationPolicyItemEditor() {
           <tr>
             <td />
             <td colSpan={4}>
-              <button type="button" className="btn btn-outline-primary btn-sm" onClick={addPreset}>
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm"
+                onClick={addPreset}
+                disabled={disabled}
+              >
                 <i className="fa fa-plus" />
                 {' '}
                 Add policy preset
