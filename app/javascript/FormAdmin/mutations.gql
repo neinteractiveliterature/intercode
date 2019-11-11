@@ -24,6 +24,15 @@ mutation DeleteForm($id: Int!) {
   }
 }
 
+mutation CreateFormItem($formSectionId: Int!, $formItem: FormItemInput!) {
+  createFormItem(input: { form_section_id: $formSectionId, form_item: $formItem }) {
+    form_item {
+      id
+      ...FormEditorFormItemFields
+    }
+  }
+}
+
 mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
   updateFormItem(input: { id: $id, form_item: $formItem }) {
     form_item {

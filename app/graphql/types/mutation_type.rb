@@ -90,6 +90,7 @@ class Types::MutationType < Types::BaseObject
 
   ### FormItem
 
+  field :createFormItem, mutation: Mutations::CreateFormItem
   field :updateFormItem, mutation: Mutations::UpdateFormItem
   field :moveFormItem, mutation: Mutations::MoveFormItem
 
