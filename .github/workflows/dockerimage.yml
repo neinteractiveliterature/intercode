@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Set up Docker Buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
     - name: Log into Github Package Registry
       env:
         GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
@@ -21,7 +25,7 @@ jobs:
     - name: Pull Docker images for build
       run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
     - name: Build the "local-build-production" Docker image
-      run: docker build .
+      run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
         --target build-production
@@ -37,7 +41,7 @@ jobs:
 
     # Run the tests
     - name: Build the "test" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
+      run: docker buildx build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
     - name: Run tests
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateTestReporterId }}
@@ -57,7 +61,7 @@ jobs:
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
+      run: docker buildx build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
     - name: Tag the production image with the SHA
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
@@ -82,14 +86,14 @@ jobs:
       run: docker tag local-production registry.heroku.com/intercode/web
     - name: Build "release" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker build -t registry.heroku.com/intercode/release
+      run: docker buildx build -t registry.heroku.com/intercode/release
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         --build-arg REVISION=${GITHUB_SHA}
         -f Dockerfile.release
         .
     - name: Build "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker build -t registry.heroku.com/intercode/shoryuken
+      run: docker buildx build -t registry.heroku.com/intercode/shoryuken
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         -f Dockerfile.shoryuken
         .
