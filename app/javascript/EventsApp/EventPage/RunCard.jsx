@@ -11,6 +11,7 @@ import ViewSignupsOptions from './ViewSignupsOptions';
 import AppRootContext from '../../AppRootContext';
 import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function RunCard({
   run, event, history, signupOptions, currentAbility, myProfile, mySignup, myPendingSignupRequest,
@@ -92,6 +93,7 @@ function RunCard({
           disabled={mutationInProgress}
           onClick={signupButtonClicked}
         />
+        {mutationInProgress && <LoadingIndicator />}
         <ErrorDisplay graphQLError={signupError} />
       </>
     );
