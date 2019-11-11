@@ -165,7 +165,7 @@ GEM
     docile (1.3.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.2.1)
+    doorkeeper (5.2.2)
       railties (>= 5)
     doorkeeper-jwt (0.3.0)
       jwt (~> 2.1.0, >= 2.1.0)
@@ -518,7 +518,7 @@ DEPENDENCIES
   devise
   devise-doorkeeper
   devise-encryptable
-  doorkeeper (= 5.2.1)
+  doorkeeper (= 5.2.2)
   doorkeeper-jwt
   doorkeeper-openid_connect!
   dotenv-rails
