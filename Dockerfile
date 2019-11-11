@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.1.3-experimental
 ARG RUBY_VERSION=2.5.3
 
 ### build-production
@@ -6,26 +7,31 @@ FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
 
 ARG ASSETS_HOST
 
-COPY Gemfile Gemfile.lock /usr/src/build/
-RUN bundle install -j4 --without intercode1_import \
-  && rm -rf /usr/local/bundle/cache/*.gem \
-  && find /usr/local/bundle/gems -name '*.c' -delete \
-  && find /usr/local/bundle/gems -name '*.o' -delete
+USER root
+WORKDIR /usr/src/intercode
 
-COPY package.json yarn.lock /usr/src/build/
-RUN yarn install
+COPY Gemfile Gemfile.lock /usr/src/intercode/
+RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
+  bundle install -j4 --without intercode1_import \
+  && cp -R /usr/local/bundle /usr/local/bundle-tmp \
+  && rm -rf /usr/local/bundle-tmp/cache/*.gem \
+  && find /usr/local/bundle-tmp/gems -name '*.c' -delete \
+  && find /usr/local/bundle-tmp/gems -name '*.o' -delete
+RUN rm -rf /usr/local/bundle && mv /usr/local/bundle-tmp /usr/local/bundle
 
-COPY --chown=www:www . /usr/src/build
+COPY package.json yarn.lock /usr/src/intercode/
+RUN --mount=type=cache,target=/usr/src/intercode/node_modules,id=yarn yarn install
 
-USER www
-WORKDIR /usr/src/build
+COPY --chown=www:www . /usr/src/intercode
 
 ENV RAILS_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 ENV ASSETS_HOST ${ASSETS_HOST}
 
-RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
+RUN --mount=type=cache,target=/usr/src/intercode/node_modules,id=yarn \
+  --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
+  DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
 ### test
 
@@ -52,7 +58,7 @@ FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
 
 COPY --from=build-production /usr/local/bundle /usr/local/bundle
 COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
-COPY --from=build-production --chown=www /usr/src/build /usr/src/app
-WORKDIR /usr/src/app
+COPY --from=build-production --chown=www /usr/src/intercode /usr/src/intercode
+WORKDIR /usr/src/intercode
 
 CMD bundle exec rails server -p $PORT -b 0.0.0.0
