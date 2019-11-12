@@ -56,6 +56,12 @@ module.exports = {
       getStyleRule(/\.(css)$/i),
       getStyleRule(/\.(scss|sass)$/i, false, [
         {
+          loader: 'cache-loader',
+          options: {
+            cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+          },
+        },
+        {
           loader: 'sass-loader',
           options: { sourceMap: true },
         },
@@ -68,6 +74,12 @@ module.exports = {
       {
         test: /displayBrowserWarning\.jsx$/,
         use: [
+          {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+            },
+          },
           {
             loader: 'babel-loader',
             options: {
@@ -91,6 +103,12 @@ module.exports = {
         type: "javascript/auto",
         use: [
           {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+            },
+          },
+          {
             loader: 'babel-loader',
             options: {
               cacheDirectory: path.join(config.cache_path, 'babel-loader')
@@ -102,6 +120,12 @@ module.exports = {
         test: /\.(mjs|js|jsx)?(\.erb)?$/,
         exclude: /node_modules/,
         use: [
+          {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: path.join(config.cache_path, 'cache-loader'),
+            },
+          },
           {
             loader: 'babel-loader',
             options: {
