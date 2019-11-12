@@ -37,8 +37,6 @@ jobs:
       uses: crazy-max/ghaction-docker-buildx@v1
       with:
         version: latest
-    - name: Create buildx driver
-      run: docker buildx create --driver=docker-container --use
     # - name: Log into Github Package Registry
     #   env:
     #     GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
@@ -51,7 +49,7 @@ jobs:
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from=type=local,src=build-cache
         --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
-        --cache-to=type=local,src=build-cache
+        --cache-to=type=local,dest=build-cache
         --target build-production
         --tag local-build-production
         --load
