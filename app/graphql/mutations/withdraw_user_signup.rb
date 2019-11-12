@@ -6,7 +6,7 @@ class Mutations::WithdrawUserSignup < Mutations::BaseMutation
 
   attr_reader :signup
 
-  def authorized?(args)
+  define_authorization_check do |args|
     run = convention.runs.find(args[:run_id])
     @signup = run.signups.where(user_con_profile_id: args[:user_con_profile_id])
       .where.not(state: 'withdrawn')

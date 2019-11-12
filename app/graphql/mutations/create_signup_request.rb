@@ -7,7 +7,7 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
 
   attr_reader :target_run
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @target_run = convention.runs.find(args[:target_run_id])
     policy(SignupRequest.new(target_run: target_run, user_con_profile: user_con_profile)).create?
   end

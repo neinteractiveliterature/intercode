@@ -7,7 +7,7 @@ class Mutations::ProvideEventTicket < Mutations::BaseMutation
 
   attr_reader :event, :ticket_type, :subject_profile
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @event = convention.events.find(args[:event_id])
     @ticket_type = convention.ticket_types.find(args[:ticket_type_id])
     @subject_profile = convention.user_con_profiles.find(args[:user_con_profile_id])

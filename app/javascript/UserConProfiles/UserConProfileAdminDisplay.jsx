@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import fetch from 'unfetch';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserConProfile } from './mutations.gql';
@@ -17,7 +17,8 @@ import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
-function UserConProfileAdminDisplay({ userConProfileId, history }) {
+function UserConProfileAdminDisplay({ userConProfileId }) {
+  const history = useHistory();
   const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
   });
@@ -188,9 +189,6 @@ function UserConProfileAdminDisplay({ userConProfileId, history }) {
 
 UserConProfileAdminDisplay.propTypes = {
   userConProfileId: PropTypes.number.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default UserConProfileAdminDisplay;
