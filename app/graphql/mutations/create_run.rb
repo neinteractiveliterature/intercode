@@ -6,7 +6,7 @@ class Mutations::CreateRun < Mutations::BaseMutation
 
   attr_reader :event
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @event = convention.events.find(args[:event_id])
     policy(Run.new(event: event)).create?
   end

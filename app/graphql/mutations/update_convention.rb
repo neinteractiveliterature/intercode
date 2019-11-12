@@ -4,7 +4,7 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
   argument :id, Integer, required: false
   argument :convention, Types::ConventionInputType, required: true
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @convention = args[:id] ? Convention.find(args[:id]) : context[:convention]
     policy(@convention).update?
   end
