@@ -51,6 +51,7 @@ jobs:
     - name: Run tests
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateTestReporterId }}
+        DOCKER_CLI_EXPERIMENTAL: enabled
       run: docker-compose -f docker-compose.test.yml run
         -e GIT_COMMIT_SHA=${GITHUB_SHA} -e GIT_BRANCH=${GITHUB_REF}
         -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
