@@ -14,6 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Uninstall Ubuntu's version of Docker
+      run: sudo apt-get remove docker docker-engine docker.io containerd runc
+    - name: Install Docker GPG key
+      run: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - name: Add Docker apt repo
+      run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - name: apt-get update
+      run: sudo apt-get update
+    - name: Install Docker CE
+      run: sudo apt-get install docker-ce docker-ce-cli containerd.io
     - name: Set up Docker Buildx
       uses: crazy-max/ghaction-docker-buildx@v1
       with:
