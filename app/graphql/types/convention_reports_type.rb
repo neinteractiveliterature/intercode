@@ -46,7 +46,7 @@ Use #object or #context_convention instead."
   end
 
   def event_provided_tickets
-    tickets = object.tickets.where.not(provided_by_event_id: nil).includes(:provided_by_event)
+    tickets = object.tickets.joins(:provided_by_event).where(events: { status: 'active' }).includes(:provided_by_event)
     tickets.to_a.group_by(&:provided_by_event).map do |provided_by_event, event_tickets|
       {
         provided_by_event: provided_by_event,
@@ -77,12 +77,13 @@ Use #object or #context_convention instead."
           events.convention_id = #{object.id}
           AND signups.counted = 't'
           AND team_members.id IS NULL
+          AND events.status = 'active'
       ) ranked_signups
       GROUP BY event_id, state, choice
     SQL
     rows_by_event_id = rows.group_by { |(event_id, _, _, _)| event_id }
 
-    object.events.map do |event|
+    object.events.active.map do |event|
       {
         event: event,
         choice_counts: (rows_by_event_id[event.id] || []).map do |(_, state, choice, count)|
