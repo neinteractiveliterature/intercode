@@ -42,7 +42,12 @@ jobs:
 
     # Run the tests
     - name: Build the "test" Docker image
-      run: docker buildx build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
+      run: docker buildx build .
+        --output=type=image,push=true
+        --build-arg ASSETS_HOST=assets.neilhosting.net
+        --cache-from local-build-production
+        --target test
+        --tag local-test
     - name: Run tests
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateTestReporterId }}
@@ -62,7 +67,12 @@ jobs:
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker buildx build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
+      run: docker buildx build .
+        --output=type=image,push=true
+        --build-arg ASSETS_HOST=assets.neilhosting.net
+        --cache-from local-build-production
+        --target production
+        --tag local-production
     - name: Tag the production image with the SHA
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
