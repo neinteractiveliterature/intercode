@@ -50,10 +50,12 @@ jobs:
       run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
         $(if [ -f build-cache/index.json ]; then echo '--cache-from=type=local,src=build-cache'; fi)
-        --cache-to=type=local,dest=build-cache
+        --cache-to=type=local,dest=build-cache-new
         --target build-production
         --tag local-build-production
         --load
+    - name: Replace the old build cache with the new one
+      run: rm -rf build-cache && mv build-cache-new build-cache
 
     # Push to Github Package Registry if on master
     # - name: Tag build-production for Github Package Registry
