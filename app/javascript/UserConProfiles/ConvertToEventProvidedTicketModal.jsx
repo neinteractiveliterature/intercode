@@ -73,15 +73,13 @@ class ConvertToEventProvidedTicketModal extends React.Component {
                         />
                       </p>
 
-                      {
-                        <ProvidableTicketTypeSelection
-                          event={data.event}
-                          convention={data.convention}
-                          value={this.state.ticketTypeId}
-                          onChange={(value) => { this.setState({ ticketTypeId: value }); }}
-                          disabled={this.state.mutationInProgress}
-                        />
-                      }
+                      <ProvidableTicketTypeSelection
+                        event={data.event}
+                        convention={data.convention}
+                        value={this.state.ticketTypeId}
+                        onChange={(value) => { this.setState({ ticketTypeId: value }); }}
+                        disabled={this.state.mutationInProgress}
+                      />
                     </>
                   )}
                 </QueryWithStateDisplay>
@@ -159,7 +157,6 @@ ConvertToEventProvidedTicketModal.propTypes = {
   convention: PropTypes.shape({
     ticket_name: PropTypes.string.isRequired,
   }).isRequired,
-  event: PropTypes.shape({}).isRequired,
   userConProfile: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
