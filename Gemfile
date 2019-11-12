@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-# TODO remove this comment
-
 ruby '2.5.3'
 gem 'rails', '6.0.1'
 
