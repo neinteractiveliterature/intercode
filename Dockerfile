@@ -13,8 +13,11 @@ WORKDIR /usr/src/intercode
 COPY Gemfile Gemfile.lock /usr/src/intercode/
 RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
   bundle install -j4 --without intercode1_import \
+  && echo 'Running bundle clean' \
   && bundle clean \
+  && echo 'Copying /usr/local/bundle to /usr/local/bundle-tmp' \
   && cp -R /usr/local/bundle /usr/local/bundle-tmp \
+  && echo 'Cleaning cached gems and intermediate build files from /usr/local/bundle-tmp' \
   && rm -rf /usr/local/bundle-tmp/cache/*.gem \
   && find /usr/local/bundle-tmp/gems -name '*.c' -delete \
   && find /usr/local/bundle-tmp/gems -name '*.o' -delete
