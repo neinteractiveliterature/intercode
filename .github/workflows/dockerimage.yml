@@ -18,7 +18,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: build-cache
-        key: ${GITHUB_REF}-docker-cache
+        key: ${{ github.ref }}-docker-cache
         restore-keys: master-docker-cache
     - name: Uninstall Ubuntu's version of Docker
       run: sudo apt-get remove docker docker-engine docker.io containerd runc moby-cli moby-engine
