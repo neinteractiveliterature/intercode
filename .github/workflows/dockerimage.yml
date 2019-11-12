@@ -14,8 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Set up cache
+      uses: actions/cache@v1
+      with:
+        path: build-cache
+        key: ${{ runner.os }}-build-cache
     - name: Uninstall Ubuntu's version of Docker
-      run: sudo apt-get remove docker docker-engine docker.io containerd runc
+      run: sudo apt-get remove docker docker-engine docker.io containerd runc moby-cli moby-engine
     - name: Install Docker GPG key
       run: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     - name: Add Docker apt repo
@@ -24,8 +29,6 @@ jobs:
       run: sudo apt-get update
     - name: Install Docker CE
       run: sudo apt-get install docker-ce docker-ce-cli containerd.io
-    - name: let's just check we're putting this in the right place
-      run: which docker-compose
     - name: Install docker-compose
       run: sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     - name: chmod docker-compose
@@ -34,27 +37,32 @@ jobs:
       uses: crazy-max/ghaction-docker-buildx@v1
       with:
         version: latest
-    - name: Log into Github Package Registry
-      env:
-        GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
-        GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
-      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
-    - name: Pull Docker images for build
-      run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
+    - name: Create buildx driver
+      run: docker buildx create --driver=docker-container --use
+    # - name: Log into Github Package Registry
+    #   env:
+    #     GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
+    #     GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
+    #   run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
+    # - name: Pull Docker images for build
+    #   run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
     - name: Build the "local-build-production" Docker image
       run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
+        --cache-from=type=local,src=build-cache
         --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+        --cache-to=type=local,src=build-cache
         --target build-production
         --tag local-build-production
+        --load
 
     # Push to Github Package Registry if on master
-    - name: Tag build-production for Github Package Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
-    - name: Push build-production to Github Package Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+    # - name: Tag build-production for Github Package Registry
+    #   if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+    #   run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+    # - name: Push build-production to Github Package Registry
+    #   if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+    #   run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
 
     # Run the tests
     - name: Build the "test" Docker image
@@ -64,6 +72,7 @@ jobs:
         --cache-from local-build-production
         --target test
         --tag local-test
+        --load
     - name: Run tests
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateTestReporterId }}
@@ -90,6 +99,7 @@ jobs:
         --cache-from local-build-production
         --target production
         --tag local-production
+        --load
     - name: Tag the production image with the SHA
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
@@ -112,28 +122,24 @@ jobs:
     - name: Tag production image as "web"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production registry.heroku.com/intercode/web
+    - name: Push "web" image to Heroku Container Registry
+      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      run: docker push registry.heroku.com/intercode/web
     - name: Build "release" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/release
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         --build-arg REVISION=${GITHUB_SHA}
         -f Dockerfile.release
+        --push
         .
-    - name: Build "shoryuken" image
+    - name: Build and push "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
         --build-arg INTERCODE_TAG=${GITHUB_SHA}
         -f Dockerfile.shoryuken
+        --push
         .
-    - name: Push "web" image to Heroku Container Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push registry.heroku.com/intercode/web
-    - name: Push "release" image to Heroku Container Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push registry.heroku.com/intercode/release
-    - name: Push "shoryuken" image to Heroku Container Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push registry.heroku.com/intercode/shoryuken
 
 # I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
 #     - name: Download container-diff
