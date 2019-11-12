@@ -20,7 +20,8 @@ RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
 RUN rm -rf /usr/local/bundle && mv /usr/local/bundle-tmp /usr/local/bundle
 
 COPY package.json yarn.lock /usr/src/intercode/
-RUN --mount=type=cache,target=/usr/src/intercode/node_modules,id=yarn yarn install
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
+  yarn install
 
 COPY --chown=www:www . /usr/src/intercode
 
@@ -29,7 +30,7 @@ ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 ENV ASSETS_HOST ${ASSETS_HOST}
 
-RUN --mount=type=cache,target=/usr/src/intercode/node_modules,id=yarn \
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
   --mount=type=cache,target=/usr/src/intercode/tmp/cache,id=rails \
   DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
@@ -49,7 +50,9 @@ RUN mv public/packs public/packs-test \
 
 # Unfortunately all the previous stuff is going to have run yarn install with NODE_ENV=production
 # and we need it to be test for this
-RUN yarn install --production=false
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
+  --mount=type=cache,target=/usr/src/intercode/node_modules,id=node_modules \
+  yarn install --production=false
 
 ### production
 
