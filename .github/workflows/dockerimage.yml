@@ -66,7 +66,6 @@ jobs:
     # Run the tests
     - name: Build the "test" Docker image
       run: docker buildx build .
-        --output=type=image,push=false
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from local-build-production
         --target test
@@ -93,7 +92,6 @@ jobs:
     - name: Build the "local-production" Docker image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker buildx build .
-        --output=type=image,push=false
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from local-build-production
         --target production
