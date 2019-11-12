@@ -6,7 +6,7 @@ class Mutations::CreateTicket < Mutations::BaseMutation
 
   attr_reader :ticket_profile
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @ticket_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
     policy(Ticket.new(user_con_profile: ticket_profile)).create?
   end

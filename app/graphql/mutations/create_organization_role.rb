@@ -8,7 +8,7 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
 
   attr_reader :organization
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @organization = Organization.find(args[:organization_id])
     policy(OrganizationRole.new(organization: organization)).create?
   end
