@@ -44,12 +44,10 @@ jobs:
     #   run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
     # - name: Pull Docker images for build
     #   run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
-    - name: Set up CACHE_FROM_OPTION environment variable
-      run: export CACHE_FROM_OPTION=$(if [ -f build-cache/index.xson ]; then echo '--cache-from=type=local,src=build-cache'; fi)
     - name: Build the "local-build-production" Docker image
       run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
-        $CACHE_FROM_OPTION
+        $(if [ -f build-cache/index.json ]; then echo '--cache-from=type=local,src=build-cache'; fi)
         --cache-to=type=local,dest=build-cache
         --target build-production
         --tag local-build-production
