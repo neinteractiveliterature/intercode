@@ -19,6 +19,8 @@ jobs:
       with:
         path: build-cache
         key: ${{ runner.os }}-build-cache
+    - name: Make sure cache directory exists
+      run: mkdir -p build-cache
     - name: Uninstall Ubuntu's version of Docker
       run: sudo apt-get remove docker docker-engine docker.io containerd runc moby-cli moby-engine
     - name: Install Docker GPG key
