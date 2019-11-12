@@ -18,8 +18,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: build-cache
-        key: ${{ github.ref }}-docker-cache
-        restore-keys: master-docker-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
     - name: Uninstall Ubuntu's version of Docker
       run: sudo apt-get remove docker docker-engine docker.io containerd runc moby-cli moby-engine
     - name: Install Docker GPG key
