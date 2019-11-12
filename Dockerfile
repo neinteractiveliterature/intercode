@@ -13,6 +13,7 @@ WORKDIR /usr/src/intercode
 COPY Gemfile Gemfile.lock /usr/src/intercode/
 RUN --mount=type=cache,target=/usr/local/bundle,id=bundler \
   bundle install -j4 --without intercode1_import \
+  && bundle clean \
   && cp -R /usr/local/bundle /usr/local/bundle-tmp \
   && rm -rf /usr/local/bundle-tmp/cache/*.gem \
   && find /usr/local/bundle-tmp/gems -name '*.c' -delete \
@@ -51,7 +52,6 @@ RUN mv public/packs public/packs-test \
 # Unfortunately all the previous stuff is going to have run yarn install with NODE_ENV=production
 # and we need it to be test for this
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
-  --mount=type=cache,target=/usr/src/intercode/node_modules,id=node_modules \
   yarn install --production=false
 
 ### production
