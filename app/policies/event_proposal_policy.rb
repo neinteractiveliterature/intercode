@@ -82,7 +82,7 @@ class EventProposalPolicy < ApplicationPolicy
   private
 
   def has_applicable_permission?(*permissions)
-    has_event_category_permission?(record.event_category_id, *permissions) ||
+    has_event_category_permission?(record.event_category, *permissions) ||
       has_convention_permission?(convention, *permissions)
   end
 
