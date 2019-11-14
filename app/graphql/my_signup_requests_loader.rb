@@ -6,10 +6,8 @@ class MySignupRequestsLoader < GraphQL::Batch::Loader
   end
 
   def perform(keys)
-    signup_request_scope = SignupRequestPolicy::Scope.new(
-      pundit_user,
-      SignupRequest.where(user_con_profile_id: keys.map(&:id)).includes(target_run: { event: :convention })
-    ).resolve
+    signup_request_scope = SignupRequest.where(user_con_profile_id: keys.map(&:id))
+      .includes(target_run: { event: :convention })
 
     signup_requests_by_user_con_profile_id = signup_request_scope.to_a.group_by(&:user_con_profile_id)
     keys.each do |user_con_profile|

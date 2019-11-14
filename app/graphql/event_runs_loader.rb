@@ -9,16 +9,16 @@ class EventRunsLoader < GraphQL::Batch::Loader
   end
 
   def perform(keys)
-    run_scope = RunPolicy::Scope.new(
-      pundit_user,
-      Run.includes(event: [:convention]).where(event_id: keys.map(&:id))
-    ).resolve
+    run_scope = Run.includes(event: [:convention]).where(event_id: keys.map(&:id))
     run_scope = run_scope.where('runs.starts_at >= ?', start) if start
     run_scope = run_scope.where('runs.starts_at < ?', finish) if finish
 
     runs_by_event_id = run_scope.to_a.group_by(&:event_id)
     keys.each do |event|
-      fulfill(event, runs_by_event_id[event.id] || [])
+      readable_runs = (runs_by_event_id[event.id] || []).select do |run|
+        RunPolicy.new(pundit_user, run).read?
+      end
+      fulfill(event, readable_runs)
     end
   end
 end
