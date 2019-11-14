@@ -5,6 +5,7 @@ class SignupPolicy < ApplicationPolicy
 
   def read?
     return true if oauth_scoped_disjunction do |d|
+      d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
       d.add(:read_events) { signed_up_for_run?(run) && !event.private_signup_list? }
     end
     return true if read_requested_bucket_key?
