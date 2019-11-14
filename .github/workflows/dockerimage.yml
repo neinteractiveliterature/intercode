@@ -39,13 +39,8 @@ jobs:
       uses: crazy-max/ghaction-docker-buildx@v1
       with:
         version: latest
-    # - name: Log into Github Package Registry
-    #   env:
-    #     GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
-    #     GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
-    #   run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
-    # - name: Pull Docker images for build
-    #   run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
+
+    # Do the actual build
     - name: Build the "local-build-production" Docker image
       run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
@@ -56,14 +51,6 @@ jobs:
         --load
     - name: Replace the old build cache with the new one
       run: rm -rf build-cache && mv build-cache-new build-cache
-
-    # Push to Github Package Registry if on master
-    # - name: Tag build-production for Github Package Registry
-    #   if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-    #   run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
-    # - name: Push build-production to Github Package Registry
-    #   if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-    #   run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
 
     # Run the tests
     - name: Build the "test" Docker image
@@ -86,13 +73,13 @@ jobs:
 
     # Build and publish the production image if on master
     - name: Log into Docker Hub
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       env:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - name: Build the "local-production" Docker image
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from local-build-production
@@ -100,13 +87,13 @@ jobs:
         --tag local-production
         --load
     - name: Tag the production image with the SHA
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Tag the production image "latest"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:latest
     - name: Push the SHA tag to Docker Hub
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Push "latest" to Docker Hub
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
