@@ -148,13 +148,15 @@ function EventPageRunCard({
         {...otherProps}
       />
 
-      <CreateModeratedSignupModal
-        close={createModeratedSignupModal.close}
-        visible={createModeratedSignupModal.visible}
-        signupOption={(createModeratedSignupModal.state || {}).signupOption}
-        event={event}
-        run={run}
-      />
+      {signupMode === 'moderated' && (
+        <CreateModeratedSignupModal
+          close={createModeratedSignupModal.close}
+          visible={createModeratedSignupModal.visible}
+          signupOption={(createModeratedSignupModal.state || {}).signupOption}
+          event={event}
+          run={run}
+        />
+      )}
     </div>
   );
 }

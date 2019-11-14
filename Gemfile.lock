@@ -92,17 +92,17 @@ GEM
       rails (>= 4.2)
     ast (2.4.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.237.0)
-    aws-sdk-core (3.76.0)
+    aws-partitions (1.239.0)
+    aws-sdk-core (3.77.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.228.0)
+      aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
     aws-sdk-kms (1.25.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.53.0)
-      aws-sdk-core (~> 3, >= 3.71.0)
+    aws-sdk-s3 (1.54.0)
+      aws-sdk-core (~> 3, >= 3.77.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sdk-sqs (1.23.1)
@@ -244,7 +244,7 @@ GEM
     jmespath (1.4.0)
     json (2.2.0)
     json (2.2.0-java)
-    json-jwt (1.10.2)
+    json-jwt (1.11.0)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
@@ -315,7 +315,7 @@ GEM
     nokogiri (1.10.5-java)
     oj (3.9.2)
     orm_adapter (0.5.0)
-    parallel (1.18.0)
+    parallel (1.19.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
     pg (1.1.4)
@@ -476,7 +476,7 @@ GEM
     uniform_notifier (1.12.1)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webpacker (4.1.0)
+    webpacker (4.2.0)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -572,7 +572,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock
   term-ansicolor
-  webpacker (~> 4.1.0)
+  webpacker (~> 4.2.0)
   webpacker-react (~> 0.3.2)
   whenever
   will_paginate
