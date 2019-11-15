@@ -6,11 +6,11 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
   subject { RegistrationPolicy.unlimited }
 
   it 'is valid' do
-    subject.must_be :valid?
+    assert subject.valid?
   end
 
   it 'has one bucket' do
-    subject.buckets.size.must_equal 1
+    assert_equal 1, subject.buckets.size
   end
 
   it 'allows all signups' do
@@ -22,13 +22,13 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
       signup_user_con_profile = create(:user_con_profile, convention: event_run.event.convention)
       create(:ticket, user_con_profile: signup_user_con_profile, ticket_type: free_ticket_type)
       result = EventSignupService.new(signup_user_con_profile, event_run, bucket_key, signup_user_con_profile.user).call
-      result.must_be :success?
+      assert result.success?
     end
   end
 
   it 'serializes and deserializes' do
     json = subject.to_json
     deserialized = RegistrationPolicy.new.from_json(json)
-    deserialized.buckets.must_equal subject.buckets
+    assert_equal subject.buckets, deserialized.buckets
   end
 end

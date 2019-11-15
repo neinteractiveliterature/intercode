@@ -13,7 +13,7 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
         ]
       )
 
-      policy.anything_bucket.must_equal anything_bucket
+      assert_equal anything_bucket, policy.anything_bucket
     end
   end
 
@@ -41,7 +41,7 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
         ]
       )
 
-      policy.wont_be :valid?
+      refute policy.valid?
       assert policy.errors.full_messages.first =~ /at most 1 flex bucket/
     end
   end

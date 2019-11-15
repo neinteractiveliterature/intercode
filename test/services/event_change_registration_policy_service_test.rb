@@ -28,14 +28,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   it 'changes the registration policy' do
     result = subject.call
 
-    result.must_be :success?
-    event.reload.registration_policy.must_equal new_registration_policy
+    assert result.success?
+    assert_equal new_registration_policy, event.reload.registration_policy
   end
 
   it 'does not email the team members if nobody moved' do
     perform_enqueued_jobs do
       subject.call!
-      ActionMailer::Base.deliveries.size.must_equal 0
+      assert_equal 0, ActionMailer::Base.deliveries.size
     end
   end
 
@@ -58,23 +58,23 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     it 'moves the signup' do
       result = subject.call
 
-      result.must_be :success?
-      result.move_results.size.must_equal 1
-      result.move_results.first.signup_id.must_equal signup.id
-      result.move_results.first.bucket_key.must_equal 'anything'
-      result.move_results.first.prev_bucket_key.must_equal 'unlimited'
-      result.move_results.first.state.must_equal 'confirmed'
-      result.move_results.first.prev_state.must_equal 'confirmed'
-      signup.reload.bucket_key.must_equal 'anything'
+      assert result.success?
+      assert_equal 1, result.move_results.size
+      assert_equal signup.id, result.move_results.first.signup_id
+      assert_equal 'anything', result.move_results.first.bucket_key
+      assert_equal 'unlimited', result.move_results.first.prev_bucket_key
+      assert_equal 'confirmed', result.move_results.first.state
+      assert_equal 'confirmed', result.move_results.first.prev_state
+      assert_equal 'anything', signup.reload.bucket_key
     end
 
     it 'emails the team members' do
       perform_enqueued_jobs do
         subject.call!
 
-        ActionMailer::Base.deliveries.size.must_equal 1
+        assert_equal 1, ActionMailer::Base.deliveries.size
         recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_equal [[team_member.user_con_profile.email]]
+        assert_equal [[team_member.user_con_profile.email]], recipients
       end
     end
   end
@@ -123,25 +123,25 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     it 'moves the overflow signups' do
       result = subject.call
 
-      result.must_be :success?
-      result.move_results.size.must_equal 1
-      result.move_results.first.signup_id.must_equal signup2.id
-      result.move_results.first.bucket_key.must_equal 'anything'
-      result.move_results.first.prev_bucket_key.must_equal 'dogs'
-      result.move_results.first.state.must_equal 'confirmed'
-      result.move_results.first.prev_state.must_equal 'confirmed'
+      assert result.success?
+      assert_equal 1, result.move_results.size
+      assert_equal signup2.id, result.move_results.first.signup_id
+      assert_equal 'anything', result.move_results.first.bucket_key
+      assert_equal 'dogs', result.move_results.first.prev_bucket_key
+      assert_equal 'confirmed', result.move_results.first.state
+      assert_equal 'confirmed', result.move_results.first.prev_state
 
-      signup1.reload.bucket_key.must_equal 'dogs'
-      signup2.reload.bucket_key.must_equal 'anything'
+      assert_equal 'dogs', signup1.reload.bucket_key
+      assert_equal 'anything', signup2.reload.bucket_key
     end
 
     it 'emails the team members' do
       perform_enqueued_jobs do
         subject.call!
 
-        ActionMailer::Base.deliveries.size.must_equal 1
+        assert_equal 1, ActionMailer::Base.deliveries.size
         recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_equal [[team_member.user_con_profile.email]]
+        assert_equal [[team_member.user_con_profile.email]], recipients
       end
     end
 
@@ -176,26 +176,26 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       it 'moves them wherever it can' do
         result = subject.call
 
-        result.must_be :success?
-        result.move_results.size.must_equal 1
-        result.move_results.first.signup_id.must_equal signup3.id
-        result.move_results.first.bucket_key.must_equal 'cats'
-        result.move_results.first.prev_bucket_key.must_equal 'dogs'
-        result.move_results.first.state.must_equal 'confirmed'
-        result.move_results.first.prev_state.must_equal 'confirmed'
+        assert result.success?
+        assert_equal 1, result.move_results.size
+        assert_equal signup3.id, result.move_results.first.signup_id
+        assert_equal 'cats', result.move_results.first.bucket_key
+        assert_equal 'dogs', result.move_results.first.prev_bucket_key
+        assert_equal 'confirmed', result.move_results.first.state
+        assert_equal 'confirmed', result.move_results.first.prev_state
 
-        signup1.reload.bucket_key.must_equal 'dogs'
-        signup2.reload.bucket_key.must_equal 'anything'
-        signup3.reload.bucket_key.must_equal 'cats'
+        assert_equal 'dogs', signup1.reload.bucket_key
+        assert_equal 'anything', signup2.reload.bucket_key
+        assert_equal 'cats', signup3.reload.bucket_key
       end
 
       it 'emails the team members' do
         perform_enqueued_jobs do
           subject.call!
 
-          ActionMailer::Base.deliveries.size.must_equal 1
+          assert_equal 1, ActionMailer::Base.deliveries.size
           recipients = ActionMailer::Base.deliveries.map(&:to)
-          recipients.must_equal [[team_member.user_con_profile.email]]
+          assert_equal [[team_member.user_con_profile.email]], recipients
         end
       end
     end
@@ -221,14 +221,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       it 'fails' do
         result = subject.call
 
-        result.must_be :failure?
+        assert result.failure?
         result.errors.full_messages.join("\n").must_match(
           /\ASignup for #{user_con_profile3.name_without_nickname} would no longer fit/
         )
-        signup1.reload.bucket_key.must_equal 'dogs'
-        signup2.reload.bucket_key.must_equal 'dogs'
-        signup3.reload.bucket_key.must_equal 'anything'
-        event.reload.registration_policy.wont_equal new_registration_policy
+        assert_equal 'dogs', signup1.reload.bucket_key
+        assert_equal 'dogs', signup2.reload.bucket_key
+        assert_equal 'anything', signup3.reload.bucket_key
+        refute_equal new_registration_policy, event.reload.registration_policy
       end
     end
   end
@@ -278,25 +278,25 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     it 'tries not to move confirmed signups' do
       result = subject.call
 
-      result.must_be :success?
-      signup1.reload.bucket_key.must_equal 'anything'
+      assert result.success?
+      assert_equal 'anything', signup1.reload.bucket_key
     end
 
     it 'pulls in waitlisted signups' do
       result = subject.call
 
-      result.must_be :success?
-      signup2.reload.bucket_key.must_equal 'dogs'
-      signup2.reload.state.must_equal 'confirmed'
+      assert result.success?
+      assert_equal 'dogs', signup2.reload.bucket_key
+      assert_equal 'confirmed', signup2.reload.state
     end
 
     it 'emails the team members and the attendees who got pulled in' do
       perform_enqueued_jobs do
         subject.call!
 
-        ActionMailer::Base.deliveries.size.must_equal 2
+        assert_equal 2, ActionMailer::Base.deliveries.size
         recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_equal [[user_con_profile2.email], [team_member.user_con_profile.email]]
+        assert_equal [[user_con_profile2.email], [team_member.user_con_profile.email]], recipients
       end
     end
   end

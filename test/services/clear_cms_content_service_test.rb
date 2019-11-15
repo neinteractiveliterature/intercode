@@ -24,11 +24,11 @@ describe ClearCmsContentService do
     end
 
     it 'destroys all pages' do
-      convention.pages.count.must_equal 0
+      assert_equal 0, convention.pages.count
     end
 
     it 'destroys all partials' do
-      convention.cms_partials.count.must_equal 0
+      assert_equal 0, convention.cms_partials.count
     end
   end
 end

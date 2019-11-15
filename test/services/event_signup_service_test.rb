@@ -17,7 +17,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   describe 'without a valid ticket' do
     it 'disallows signups' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(
         /\AYou must have a valid ticket to #{Regexp.escape convention.name}/,
         result.errors.full_messages.join('\n')
@@ -36,7 +36,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'disallows signups' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(
         /\AYou have a #{Regexp.escape ticket_type.description}/,
         result.errors.full_messages.join('\n')
@@ -49,8 +49,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'signs the user up for an event' do
       result = subject.call
-      result.must_be :success?
-      result.signup.must_be :confirmed?
+      assert result.success?
+      assert result.signup.confirmed?
     end
   end
 
@@ -61,8 +61,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'signs the user up for an event' do
       result = subject.call
-      result.must_be :success?
-      result.signup.must_be :confirmed?
+      assert result.success?
+      assert result.signup.confirmed?
     end
 
     it 'emails the team members who have requested it' do
@@ -72,13 +72,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       perform_enqueued_jobs do
         result = subject.call
-        result.must_be :success?
+        assert result.success?
 
-        ActionMailer::Base.deliveries.size.must_equal 2
+        assert_equal 2, ActionMailer::Base.deliveries.size
         recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_include [email_team_member.user_con_profile.email]
-        recipients.must_include [email_team_member2.user_con_profile.email]
-        recipients.wont_include [no_email_team_member.user_con_profile.email]
+        assert_includes recipients, [email_team_member.user_con_profile.email]
+        assert_includes recipients, [email_team_member2.user_con_profile.email]
+        refute_includes recipients, [no_email_team_member.user_con_profile.email]
       end
     end
 
@@ -94,7 +94,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(
          /already signed up/,
          result.errors.full_messages.join('\n')
@@ -132,8 +132,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         )
 
         result = subject.call
-        result.must_be :success?
-        result.signup.must_be :confirmed?
+        assert result.success?
+        assert result.signup.confirmed?
       end
     end
 
@@ -151,8 +151,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :success?
-      result.signup.must_be :confirmed?
+      assert result.success?
+      assert result.signup.confirmed?
     end
 
     it 'does not count non-counted signups towards the signup limit' do
@@ -177,8 +177,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :success?
-      result.signup.must_be :confirmed?
+      assert result.success?
+      assert result.signup.confirmed?
     end
 
     it 'does count waitlisted signups towards the signup limit' do
@@ -204,8 +204,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /\AYou are already signed up for 1 event/
+      assert result.failure?
+      assert_match /\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n')
     end
 
     it 'does not count withdrawn signups towards the signup limit' do
@@ -230,8 +230,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :success?
-      result.signup.must_be :confirmed?
+      assert result.success?
+      assert result.signup.confirmed?
     end
 
     it 'disallows signups if the user has reached the current signup limit' do
@@ -250,11 +250,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       other_event = create(:event, length_seconds: event.length_seconds)
       other_run = create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
       other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
-      other_signup_service.call.must_be :success?
+      assert other_signup_service.call.success?
 
       result = subject.call
-      result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /\AYou are already signed up for 1 event/
+      assert result.failure?
+      assert_match /\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n')
     end
 
     it 'disallows signups if signups are not yet open' do
@@ -271,8 +271,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /\ASignups are not allowed at this time/
+      assert result.failure?
+      assert_match /\ASignups are not allowed at this time/, result.errors.full_messages.join('\n')
     end
 
     it 'disallows signups to a frozen convention' do
@@ -289,8 +289,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       )
 
       result = subject.call
-      result.must_be :failure?
-      result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+      assert result.failure?
+      assert_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/, result.errors.full_messages.join('\n')
     end
 
     describe 'with a conflicting event' do
@@ -307,40 +307,40 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           requested_bucket_key: 'unlimited'
         )
 
-        waitlist_signup1.must_be :waitlisted?
+        assert waitlist_signup1.waitlisted?
 
         result = subject.call
-        result.must_be :failure?
-        waitlist_signup1.reload.must_be :waitlisted?
-        result.errors.full_messages.join('\n').must_match /\AYou are already waitlisted for #{Regexp.escape other_event.title}/
+        assert result.failure?
+        assert waitlist_signup1.reload.waitlisted?
+        assert_match /\AYou are already waitlisted for #{Regexp.escape other_event.title}/, result.errors.full_messages.join('\n')
       end
 
       it 'disallows signups to conflicting events' do
         other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
-        other_signup_service.call.must_be :success?
+        assert other_signup_service.call.success?
 
         result = subject.call
-        result.must_be :failure?
-        result.errors.full_messages.join('\n').must_match /\AYou are already signed up for #{Regexp.escape other_event.title}/
+        assert result.failure?
+        assert_match /\AYou are already signed up for #{Regexp.escape other_event.title}/, result.errors.full_messages.join('\n')
       end
 
       it 'allows signups to conflicting events that allow concurrent signups' do
         other_event.update!(can_play_concurrently: true)
         other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
-        other_signup_service.call.must_be :success?
+        assert other_signup_service.call.success?
 
         result = subject.call
-        result.must_be :success?
+        assert result.success?
       end
 
       it 'allows signups to conflicting events if this one allows concurrent signups' do
         other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
-        other_signup_service.call.must_be :success?
+        assert other_signup_service.call.success?
 
         event.update!(can_play_concurrently: true)
 
         result = subject.call
-        result.must_be :success?
+        assert result.success?
       end
     end
 
@@ -362,20 +362,20 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       it 'will sign the user up into that bucket' do
         result = subject.call
-        result.must_be :success?
-        result.signup.must_be :confirmed?
-        result.signup.bucket_key.must_equal 'cats'
-        result.signup.requested_bucket_key.must_equal 'cats'
+        assert result.success?
+        assert result.signup.confirmed?
+        assert_equal 'cats', result.signup.bucket_key
+        assert_equal 'cats', result.signup.requested_bucket_key
       end
 
       it 'will fall back to the anything bucket if necessary' do
         2.times { create_other_signup 'cats' }
 
         result = subject.call
-        result.must_be :success?
-        result.signup.must_be :confirmed?
-        result.signup.bucket_key.must_equal 'anything'
-        result.signup.requested_bucket_key.must_equal 'cats'
+        assert result.success?
+        assert result.signup.confirmed?
+        assert_equal 'anything', result.signup.bucket_key
+        assert_equal 'cats', result.signup.requested_bucket_key
       end
 
       it 'will go to the waitlist if necessary' do
@@ -383,10 +383,10 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         4.times { create_other_signup 'anything' }
 
         result = subject.call
-        result.must_be :success?
-        result.signup.must_be :waitlisted?
-        result.signup.bucket_key.must_be :nil?
-        result.signup.requested_bucket_key.must_equal 'cats'
+        assert result.success?
+        assert result.signup.waitlisted?
+        assert result.signup.bucket_key.nil?
+        assert_equal 'cats', result.signup.requested_bucket_key
       end
 
       it 'emails only the team members who have requested waitlist emails' do
@@ -397,12 +397,12 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         perform_enqueued_jobs do
           result = subject.call
-          result.must_be :success?
+          assert result.success?
 
-          ActionMailer::Base.deliveries.size.must_equal 1
+          assert_equal 1, ActionMailer::Base.deliveries.size
           recipients = ActionMailer::Base.deliveries.map(&:to)
-          recipients.must_include [email_team_member.user_con_profile.email]
-          recipients.wont_include [no_email_team_member.user_con_profile.email]
+          assert_includes recipients, [email_team_member.user_con_profile.email]
+          refute_includes recipients, [no_email_team_member.user_con_profile.email]
         end
       end
 
@@ -411,8 +411,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         it 'disallows signups to a nonexistent bucket' do
           result = subject.call
-          result.must_be :failure?
-          result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
+          assert result.failure?
+          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/, result.errors.full_messages.join('\n')
         end
       end
 
@@ -421,8 +421,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         it 'disallows signups to the anything bucket' do
           result = subject.call
-          result.must_be :failure?
-          result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
+          assert result.failure?
+          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/, result.errors.full_messages.join('\n')
         end
       end
 
@@ -431,20 +431,20 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         it 'prioritizes the anything bucket' do
           result = subject.call
-          result.must_be :success?
-          result.signup.must_be :confirmed?
+          assert result.success?
+          assert result.signup.confirmed?
           result.signup.requested_bucket_key.must_be_nil
-          result.signup.bucket_key.must_equal 'anything'
+          assert_equal 'anything', result.signup.bucket_key
         end
 
         it 'puts you into some other bucket if anything is full' do
           4.times { create_other_signup 'anything' }
 
           result = subject.call
-          result.must_be :success?
-          result.signup.must_be :confirmed?
+          assert result.success?
+          assert result.signup.confirmed?
           result.signup.requested_bucket_key.must_be_nil
-          result.signup.bucket_key.wont_equal 'anything'
+          refute_equal 'anything', result.signup.bucket_key
         end
 
         describe 'but the registration policy does not allow it' do
@@ -464,8 +464,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
           it 'prevents it' do
             result = subject.call
-            result.must_be :failure?
-            result.errors.full_messages.join('\n').must_match /\APlease choose one of the following buckets: dogs, cats.\z/
+            assert result.failure?
+            assert_match /\APlease choose one of the following buckets: dogs, cats.\z/, result.errors.full_messages.join('\n')
           end
         end
       end
@@ -478,13 +478,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           movable_signup = create_other_signup 'cats', requested_bucket_key: nil
 
           result = subject.call
-          result.must_be :success?
-          result.signup.must_be :confirmed?
-          result.signup.requested_bucket_key.must_equal 'cats'
-          result.signup.bucket_key.must_equal 'anything'
+          assert result.success?
+          assert result.signup.confirmed?
+          assert_equal 'cats', result.signup.requested_bucket_key
+          assert_equal 'anything', result.signup.bucket_key
 
           movable_signup.reload
-          movable_signup.bucket_key.must_equal 'cats'
+          assert_equal 'cats', movable_signup.bucket_key
           movable_signup.requested_bucket_key.must_be_nil
         end
 
@@ -494,13 +494,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           movable_signup = create_other_signup 'cats', requested_bucket_key: nil
 
           result = subject.call
-          result.must_be :success?
-          result.signup.must_be :confirmed?
-          result.signup.requested_bucket_key.must_equal 'cats'
-          result.signup.bucket_key.must_equal 'cats'
+          assert result.success?
+          assert result.signup.confirmed?
+          assert_equal 'cats', result.signup.requested_bucket_key
+          assert_equal 'cats', result.signup.bucket_key
 
           movable_signup.reload
-          movable_signup.bucket_key.must_equal 'dogs'
+          assert_equal 'dogs', movable_signup.bucket_key
           movable_signup.requested_bucket_key.must_be_nil
         end
 
@@ -511,13 +511,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           movable_signup = create_other_signup 'cats', requested_bucket_key: nil
 
           result = subject.call
-          result.must_be :success?
-          result.signup.must_be :waitlisted?
-          result.signup.requested_bucket_key.must_equal 'cats'
+          assert result.success?
+          assert result.signup.waitlisted?
+          assert_equal 'cats', result.signup.requested_bucket_key
           result.signup.bucket_key.must_be_nil
 
           movable_signup.reload
-          movable_signup.bucket_key.must_equal 'cats'
+          assert_equal 'cats', movable_signup.bucket_key
           movable_signup.requested_bucket_key.must_be_nil
         end
       end
@@ -541,20 +541,20 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       it 'will sign the user up into that bucket' do
         result = subject.call
-        result.must_be :success?
-        result.signup.must_be :confirmed?
-        result.signup.wont_be :counted?
-        result.signup.bucket_key.must_equal 'npc'
-        result.signup.requested_bucket_key.must_equal 'npc'
+        assert result.success?
+        assert result.signup.confirmed?
+        refute result.signup.counted?
+        assert_equal 'npc', result.signup.bucket_key
+        assert_equal 'npc', result.signup.requested_bucket_key
       end
 
       it 'will not use anything buckets' do
         create_other_signup('npc')
         result = subject.call
-        result.must_be :success?
-        result.signup.must_be :waitlisted?
+        assert result.success?
+        assert result.signup.waitlisted?
         result.signup.bucket_key.must_be_nil
-        result.signup.requested_bucket_key.must_equal 'npc'
+        assert_equal 'npc', result.signup.requested_bucket_key
       end
 
       describe 'no-preference signups' do
@@ -563,8 +563,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           create_other_signup('pc')
           4.times { create_other_signup('anything') }
           result = subject.call
-          result.must_be :success?
-          result.signup.must_be :waitlisted?
+          assert result.success?
+          assert result.signup.waitlisted?
           result.signup.bucket_key.must_be_nil
           result.signup.requested_bucket_key.must_be_nil
         end

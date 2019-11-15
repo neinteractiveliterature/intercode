@@ -10,13 +10,13 @@ describe TicketDrop do
 
   %w[user_con_profile provided_by_event payment_amount ticket_type].each do |field|
     it "returns the #{field} of the ticket" do
-      ticket_drop.public_send(field).must_equal ticket.public_send(field)
+      assert_equal ticket.public_send(field), ticket_drop.public_send(field)
     end
   end
 
   %w[name description].each do |field|
     it "returns the #{field} of the ticket type" do
-      ticket_drop.public_send("ticket_type_#{field}").must_equal ticket_type.public_send(field)
+      assert_equal ticket_type.public_send(field), ticket_drop.public_send("ticket_type_#{field}")
     end
   end
 end
