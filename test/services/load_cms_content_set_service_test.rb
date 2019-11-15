@@ -21,7 +21,7 @@ describe LoadCmsContentSetService do
     it 'loads pages' do
       root = convention.pages.find_by(slug: 'root')
       assert root
-      convention.root_page.must_equal root
+      assert_equal root, convention.root_page
     end
 
     it 'loads partials' do
@@ -43,7 +43,7 @@ describe LoadCmsContentSetService do
     result = LoadCmsContentSetService.new(convention: convention, content_set_name: 'nonexistent').call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /No content set found/
+    assert_match /No content set found/, result.errors.full_messages.join("\n")
   end
 
   it 'is invalid if a root page already exists' do
@@ -51,7 +51,7 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /already has a root page/
+    assert_match /already has a root page/, result.errors.full_messages.join("\n")
   end
 
   it 'is invalid if a default layout already exists' do
@@ -59,7 +59,7 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /already has a default layout/
+    assert_match /already has a default layout/, result.errors.full_messages.join("\n")
   end
 
   it 'is invalid if a page with the same name exists' do
@@ -67,7 +67,7 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /page named root already exists/
+    assert_match /page named root already exists/, result.errors.full_messages.join("\n")
   end
 
   it 'is invalid if a partial with the same name exists' do
@@ -75,7 +75,7 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /partial named news already exists/
+    assert_match /partial named news already exists/, result.errors.full_messages.join("\n")
   end
 
   it 'is invalid if a layout with the same name exists' do
@@ -83,7 +83,7 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    result.errors.full_messages.join("\n").must_match /layout named Default already exists/
+    assert_match /layout named Default already exists/, result.errors.full_messages.join("\n")
   end
 
   it 'is invalid if user_con_profile_form already exists' do

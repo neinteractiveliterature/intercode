@@ -9,7 +9,7 @@ describe UserConProfileDrop do
 
   %w[email first_name last_name nickname ticket].each do |field|
     it "returns the #{field} of the user con profile" do
-      user_con_profile_drop.public_send(field).must_equal user_con_profile.public_send(field)
+      assert_equal user_con_profile.public_send(field), user_con_profile_drop.public_send(field)
     end
   end
 
@@ -21,7 +21,7 @@ describe UserConProfileDrop do
     end
 
     it 'returns the events for which the user con profile is a team member' do
-      user_con_profile_drop.team_member_events.map(&:id).sort.must_equal events.map(&:id).sort
+      assert_equal events.map(&:id).sort, user_con_profile_drop.team_member_events.map(&:id).sort
     end
   end
 
@@ -36,12 +36,12 @@ describe UserConProfileDrop do
     end
 
     it 'returns all the confirmed signups' do
-      user_con_profile_drop.signups.map(&:id).sort.must_equal confirmed_signups.map(&:id).sort
+      assert_equal confirmed_signups.map(&:id).sort, user_con_profile_drop.signups.map(&:id).sort
     end
 
     it 'returns none of the withdrawn signups' do
       signups = user_con_profile_drop.signups
-      withdrawn_signups.each { |signup| signups.wont_include signup }
+      refute_includes withdrawn_signups.each { |signup| signups, signup }
     end
   end
 end

@@ -15,7 +15,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
   it 'buys a ticket' do
     assert_difference('Ticket.count', 1) do
       result = subject.call
-      result.must_be :success?
+      assert result.success?
     end
   end
 
@@ -27,7 +27,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
     it 'fails with an error' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(/declined/, result.errors.full_messages.join(', '))
     end
   end
@@ -39,7 +39,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
     it 'fails with an error' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(/\AYou already have a ticket/, result.errors.full_messages.join(', '))
     end
   end
@@ -54,7 +54,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
     it 'fails with an error' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(/sold out/, result.errors.full_messages.join(', '))
     end
   end
@@ -66,7 +66,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
     it 'fails with an error' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(/is over/, result.errors.full_messages.join(', '))
     end
   end
@@ -83,7 +83,7 @@ class PurchaseTicketServiceTest < ActiveSupport::TestCase
 
     it 'fails with an error' do
       result = subject.call
-      result.must_be :failure?
+      assert result.failure?
       assert_match(/not publicly available/, result.errors.full_messages.join(', '))
     end
   end

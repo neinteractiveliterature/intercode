@@ -25,9 +25,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
   it 'withdraws the user from an event' do
     result = subject.call
-    result.must_be :success?
-    signup.reload.must_be :withdrawn?
-    result.move_results.must_be :empty?
+    assert result.success?
+    assert signup.reload.withdrawn?
+    assert result.move_results.empty?
   end
 
   it 'notifies team members who have requested it' do
@@ -37,13 +37,13 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
     perform_enqueued_jobs do
       result = subject.call
-      result.must_be :success?
+      assert result.success?
 
-      ActionMailer::Base.deliveries.size.must_equal 2
+      assert_equal 2, ActionMailer::Base.deliveries.size
       recipients = ActionMailer::Base.deliveries.map(&:to)
-      recipients.must_include [email_team_member.user_con_profile.email]
-      recipients.must_include [email_team_member2.user_con_profile.email]
-      recipients.wont_include [no_email_team_member.user_con_profile.email]
+      assert_includes recipients, [email_team_member.user_con_profile.email]
+      assert_includes recipients, [email_team_member2.user_con_profile.email]
+      refute_includes recipients, [no_email_team_member.user_con_profile.email]
     end
   end
 
@@ -61,8 +61,11 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     )
 
     result = subject.call
-    result.must_be :failure?
-    result.errors.full_messages.join('\n').must_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/
+    assert result.failure?
+    assert_match(
+      /\ARegistrations for #{Regexp.escape convention.name} are frozen/,
+      result.errors.full_messages.join('\n')
+    )
   end
 
   describe 'with limited buckets' do
@@ -108,38 +111,38 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       anything_signup
 
       result = subject.call
-      result.must_be :success?
-      signup.reload.must_be :withdrawn?
+      assert result.success?
+      assert signup.reload.withdrawn?
 
-      result.move_results.size.must_equal 1
+      assert_equal 1, result.move_results.size
 
-      anything_signup.reload.bucket_key.must_equal bucket_key
+      assert_equal bucket_key, anything_signup.reload.bucket_key
     end
 
     it 'moves a waitlist signup into the vacancy' do
       waitlist_signup
 
       result = subject.call
-      result.must_be :success?
-      signup.reload.must_be :withdrawn?
+      assert result.success?
+      assert signup.reload.withdrawn?
 
-      result.move_results.size.must_equal 1
+      assert_equal 1, result.move_results.size
 
-      waitlist_signup.reload.bucket_key.must_equal bucket_key
+      assert_equal bucket_key, waitlist_signup.reload.bucket_key
     end
 
-    it 'cascades vacancy filling chronologically' do
+    it 'does not move confirmed signups unless necessary' do
       anything_signup
       waitlist_signup
 
       result = subject.call
-      result.must_be :success?
-      signup.reload.must_be :withdrawn?
+      assert result.success?
+      assert signup.reload.withdrawn?
 
-      result.move_results.size.must_equal 2
+      assert_equal 1, result.move_results.size
 
-      anything_signup.reload.bucket_key.must_equal bucket_key
-      waitlist_signup.reload.bucket_key.must_equal 'anything'
+      assert_equal 'anything', anything_signup.reload.bucket_key
+      assert_equal bucket_key, waitlist_signup.reload.bucket_key
     end
 
     it 'notifies team members who have requested it' do
@@ -148,10 +151,10 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
       perform_enqueued_jobs do
         result = subject.call
-        result.must_be :success?
+        assert result.success?
 
         recipients = ActionMailer::Base.deliveries.map(&:to)
-        recipients.must_include [team_member.user_con_profile.email]
+        assert_includes recipients, [team_member.user_con_profile.email]
       end
     end
   end
