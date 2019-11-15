@@ -72,12 +72,17 @@ class Types::UserConProfileType < Types::BaseObject
     :signups,
     :signup_requests,
     :staff_positions,
-    :team_members,
     :ticket,
     :user
 
   def email
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
+  end
+
+  def team_members
+    AssociationLoader.for(UserConProfile, :team_members).load(object).then do |team_members|
+      team_members.select { |team_member| policy(team_member).read? }
+    end
   end
 
   field :birth_date, Types::DateType, null: true

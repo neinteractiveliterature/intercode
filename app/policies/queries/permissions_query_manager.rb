@@ -47,6 +47,15 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
       )
     end
 
+    define_method "#{association_name}_ids_with_permission_in_convention" do |convention, *permissions|
+      permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type)
+      return [] unless permission_sets.present?
+
+      permission_sets.select do |_model_id, permission_set|
+        permissions.any? { |permission| permission_set.include?(permission.to_s) }
+      end.keys
+    end
+
     define_method "#{association_name}_permissions" do |model|
       all_model_permissions(model_type, model)
     end

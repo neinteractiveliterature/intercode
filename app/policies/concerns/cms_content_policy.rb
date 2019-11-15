@@ -37,7 +37,9 @@ module CmsContentPolicy
         has_convention_permission?(convention, 'update_cms_content') ||
         (
           record.respond_to?(:cms_content_groups) &&
-          record.cms_content_groups.where(id: cms_content_groups_with_permission('update_content')).any?
+          cms_content_group_ids_with_permission_in_convention(convention, 'update_content').any? do |id|
+            record.cms_content_group_ids.include?(id)
+          end
         )
       end
     end

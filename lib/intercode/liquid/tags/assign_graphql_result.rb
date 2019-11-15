@@ -40,9 +40,14 @@ module Intercode
             context: GraphqlController::Context.new(context.registers['controller']),
             variables: variables
           )
+          hash_result = result.to_h
 
-          context.scopes.last[destination_variable] = result.to_h['data']
-          ''.freeze
+          context.scopes.last[destination_variable] = hash_result['data']
+          if hash_result['errors'].present?
+            hash_result['errors'].map { |error| error['message'] }.join(', ')
+          else
+            ''.freeze
+          end
         end
 
         def blank?
