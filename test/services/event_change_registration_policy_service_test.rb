@@ -222,8 +222,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         result = subject.call
 
         assert result.failure?
-        result.errors.full_messages.join("\n").must_match(
-          /\ASignup for #{user_con_profile3.name_without_nickname} would no longer fit/
+        assert_match(
+          /\ASignup for #{user_con_profile3.name_without_nickname} would no longer fit/,
+          result.errors.full_messages.join("\n")
         )
         assert_equal 'dogs', signup1.reload.bucket_key
         assert_equal 'dogs', signup2.reload.bucket_key

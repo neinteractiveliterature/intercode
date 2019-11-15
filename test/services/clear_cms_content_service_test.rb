@@ -20,7 +20,7 @@ describe ClearCmsContentService do
     end
 
     it 'destroys the root page' do
-      convention.root_page.must_be_nil
+      assert_nil convention.root_page
     end
 
     it 'destroys all pages' do
