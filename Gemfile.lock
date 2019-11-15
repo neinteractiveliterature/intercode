@@ -167,8 +167,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.2.2)
       railties (>= 5)
-    doorkeeper-jwt (0.3.0)
-      jwt (~> 2.1.0, >= 2.1.0)
+    doorkeeper-jwt (0.4.0)
+      jwt (~> 2.1)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
@@ -248,7 +248,7 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
-    jwt (2.1.0)
+    jwt (2.2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     launchy (2.4.3-java)
