@@ -9,6 +9,11 @@
 /.travis.yml
 /.github/workflows/*
 
+# The local cache we're making in CI
+/build-cache
+/build-cache-new
+
+# Git repo
 /.git
 
 # Ignore bundler config
