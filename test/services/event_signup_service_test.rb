@@ -433,7 +433,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call
           assert result.success?
           assert result.signup.confirmed?
-          result.signup.requested_bucket_key.must_be_nil
+          assert_nil result.signup.requested_bucket_key
           assert_equal 'anything', result.signup.bucket_key
         end
 
@@ -443,7 +443,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call
           assert result.success?
           assert result.signup.confirmed?
-          result.signup.requested_bucket_key.must_be_nil
+          assert_nil result.signup.requested_bucket_key
           refute_equal 'anything', result.signup.bucket_key
         end
 
@@ -485,7 +485,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
           movable_signup.reload
           assert_equal 'cats', movable_signup.bucket_key
-          movable_signup.requested_bucket_key.must_be_nil
+          assert_nil movable_signup.requested_bucket_key
         end
 
         it 'moves them into a different bucket if the flex bucket is not possible' do
@@ -501,7 +501,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
           movable_signup.reload
           assert_equal 'dogs', movable_signup.bucket_key
-          movable_signup.requested_bucket_key.must_be_nil
+          assert_nil movable_signup.requested_bucket_key
         end
 
         it 'waitlists you if not possible' do
@@ -514,11 +514,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           assert result.success?
           assert result.signup.waitlisted?
           assert_equal 'cats', result.signup.requested_bucket_key
-          result.signup.bucket_key.must_be_nil
+          assert_nil result.signup.bucket_key
 
           movable_signup.reload
           assert_equal 'cats', movable_signup.bucket_key
-          movable_signup.requested_bucket_key.must_be_nil
+          assert_nil movable_signup.requested_bucket_key
         end
       end
     end
@@ -553,7 +553,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call
         assert result.success?
         assert result.signup.waitlisted?
-        result.signup.bucket_key.must_be_nil
+        assert_nil result.signup.bucket_key
         assert_equal 'npc', result.signup.requested_bucket_key
       end
 
@@ -565,8 +565,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call
           assert result.success?
           assert result.signup.waitlisted?
-          result.signup.bucket_key.must_be_nil
-          result.signup.requested_bucket_key.must_be_nil
+          assert_nil result.signup.bucket_key
+          assert_nil result.signup.requested_bucket_key
         end
       end
     end
