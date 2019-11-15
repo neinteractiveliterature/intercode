@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - master
-      - buildkit
 
 jobs:
   build:
@@ -73,13 +72,13 @@ jobs:
 
     # Build and publish the production image if on master
     - name: Log into Docker Hub
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
       env:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - name: Build the "local-production" Docker image
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
       run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
         --cache-from local-build-production
@@ -87,13 +86,13 @@ jobs:
         --tag local-production
         --load
     - name: Tag the production image with the SHA
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Tag the production image "latest"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:latest
     - name: Push the SHA tag to Docker Hub
-      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master')
       run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Push "latest" to Docker Hub
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
