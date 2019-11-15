@@ -14,34 +14,56 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Log into Github Package Registry
-      env:
-        GITHUB_PACKAGE_REGISTRY_USERNAME: ${{ secrets.GithubPackageRegistryUsername }}
-        GITHUB_PACKAGE_REGISTRY_PASSWORD: ${{ secrets.GithubPackageRegistryPassword }}
-      run: echo "$GITHUB_PACKAGE_REGISTRY_PASSWORD" | docker login docker.pkg.github.com -u "$GITHUB_PACKAGE_REGISTRY_USERNAME" --password-stdin
-    - name: Pull Docker images for build
-      run: docker pull docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master || true
+    - name: Set up cache
+      uses: actions/cache@v1
+      with:
+        path: build-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+    - name: Uninstall Ubuntu's version of Docker
+      run: sudo apt-get remove docker docker-engine docker.io containerd runc moby-cli moby-engine
+    - name: Install Docker GPG key
+      run: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - name: Add Docker apt repo
+      run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - name: apt-get update
+      run: sudo apt-get update
+    - name: Install Docker CE
+      run: sudo apt-get install docker-ce docker-ce-cli containerd.io
+    - name: Install docker-compose
+      run: sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    - name: chmod docker-compose
+      run: sudo chmod +x /usr/local/bin/docker-compose
+    - name: Set up Docker Buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
+
+    # Do the actual build
     - name: Build the "local-build-production" Docker image
-      run: docker build .
+      run: docker buildx build .
         --build-arg ASSETS_HOST=assets.neilhosting.net
-        --cache-from docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+        $(if [ -f build-cache/index.json ]; then echo '--cache-from=type=local,src=build-cache'; fi)
+        --cache-to=type=local,dest=build-cache-new
         --target build-production
         --tag local-build-production
-
-    # Push to Github Package Registry if on master
-    - name: Tag build-production for Github Package Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker tag local-build-production docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
-    - name: Push build-production to Github Package Registry
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/intercode:build-production-master
+        --load
+    - name: Replace the old build cache with the new one
+      run: rm -rf build-cache && mv build-cache-new build-cache
 
     # Run the tests
     - name: Build the "test" Docker image
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target test --tag local-test
+      run: docker buildx build .
+        --build-arg ASSETS_HOST=assets.neilhosting.net
+        --cache-from local-build-production
+        --target test
+        --tag local-test
+        --load
     - name: Run tests
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateTestReporterId }}
+        DOCKER_CLI_EXPERIMENTAL: enabled
       run: docker-compose -f docker-compose.test.yml run
         -e GIT_COMMIT_SHA=${GITHUB_SHA} -e GIT_BRANCH=${GITHUB_REF}
         -e GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
@@ -51,22 +73,27 @@ jobs:
 
     # Build and publish the production image if on master
     - name: Log into Docker Hub
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       env:
         DOCKER_HUB_USERNAME: ${{ secrets.DockerHubUsername }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DockerHubPassword }}
       run: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     - name: Build the "local-production" Docker image
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker build . --build-arg ASSETS_HOST=assets.neilhosting.net --cache-from local-build-production --target production --tag local-production
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
+      run: docker buildx build .
+        --build-arg ASSETS_HOST=assets.neilhosting.net
+        --cache-from local-build-production
+        --target production
+        --tag local-production
+        --load
     - name: Tag the production image with the SHA
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       run: docker tag local-production ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Tag the production image "latest"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production ${GITHUB_REPOSITORY}:latest
     - name: Push the SHA tag to Docker Hub
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
+      if: github.event_name == 'push' && (github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/buildkit')
       run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA}
     - name: Push "latest" to Docker Hub
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
@@ -81,28 +108,24 @@ jobs:
     - name: Tag production image as "web"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker tag local-production registry.heroku.com/intercode/web
-    - name: Build "release" image
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker build -t registry.heroku.com/intercode/release
-        --build-arg INTERCODE_TAG=${GITHUB_SHA}
-        --build-arg REVISION=${GITHUB_SHA}
-        -f Dockerfile.release
-        .
-    - name: Build "shoryuken" image
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker build -t registry.heroku.com/intercode/shoryuken
-        --build-arg INTERCODE_TAG=${GITHUB_SHA}
-        -f Dockerfile.shoryuken
-        .
     - name: Push "web" image to Heroku Container Registry
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
       run: docker push registry.heroku.com/intercode/web
-    - name: Push "release" image to Heroku Container Registry
+    - name: Build "release" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push registry.heroku.com/intercode/release
-    - name: Push "shoryuken" image to Heroku Container Registry
+      run: docker buildx build -t registry.heroku.com/intercode/release
+        --build-arg INTERCODE_TAG=${GITHUB_SHA}
+        --build-arg REVISION=${GITHUB_SHA}
+        -f Dockerfile.release
+        --push
+        .
+    - name: Build and push "shoryuken" image
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-      run: docker push registry.heroku.com/intercode/shoryuken
+      run: docker buildx build -t registry.heroku.com/intercode/shoryuken
+        --build-arg INTERCODE_TAG=${GITHUB_SHA}
+        -f Dockerfile.shoryuken
+        --push
+        .
 
 # I wrote these for debugging why the cache wasn't being used, come to find out, it was being used
 #     - name: Download container-diff

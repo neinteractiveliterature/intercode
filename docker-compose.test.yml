@@ -2,12 +2,6 @@ version: '3.4'
 services:
   web:
     image: local-test
-    build:
-      context: .
-      dockerfile: Dockerfile
-      cache_from:
-        - local-build-production
-      target: test
     links:
       - postgres
     depends_on:
