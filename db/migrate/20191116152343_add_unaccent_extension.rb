@@ -1,6 +1,6 @@
 class AddUnaccentExtension < ActiveRecord::Migration[6.0]
   def up
-    execute 'CREATE EXTENSION unaccent'
+    execute 'CREATE EXTENSION IF NOT EXISTS unaccent'
   end
 
   def down
