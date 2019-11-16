@@ -20,6 +20,8 @@ import PageLoadingIndicator from '../../PageLoadingIndicator';
 import SearchInput from '../../BuiltInFormControls/SearchInput';
 import AppRootContext from '../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
+import useAsyncFunction from '../../useAsyncFunction';
+import LoadingIndicator from '../../LoadingIndicator';
 
 const PAGE_SIZE = 20;
 
@@ -84,6 +86,9 @@ function EventList({ history }) {
       },
     },
   );
+  const [
+    fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress,
+  ] = useAsyncFunction(fetchMoreEvents);
 
   const loadedEntries = (
     loading || error
@@ -103,10 +108,10 @@ function EventList({ history }) {
       }
 
       if (loadedEntries < totalEntries) {
-        fetchMoreEvents(fetchMore, (loadedEntries / PAGE_SIZE) + 1);
+        fetchMoreEventsAsync(fetchMore, (loadedEntries / PAGE_SIZE) + 1);
       }
     },
-    [fetchMore, loadedEntries, totalEntries],
+    [fetchMore, fetchMoreEventsAsync, loadedEntries, totalEntries],
   );
 
   const changeFilterValue = useCallback(
@@ -209,13 +214,23 @@ function EventList({ history }) {
         loading
           ? null
           : (
-            <EventListEvents
-              convention={data.convention}
-              eventsPaginated={eventsPaginated}
-              sorted={sorted}
-              canReadSchedule={data.currentAbility.can_read_schedule}
-              fetchMoreIfNeeded={fetchMoreIfNeeded}
-            />
+            <>
+              <EventListEvents
+                convention={data.convention}
+                eventsPaginated={eventsPaginated}
+                sorted={sorted}
+                canReadSchedule={data.currentAbility.can_read_schedule}
+                fetchMoreIfNeeded={fetchMoreIfNeeded}
+              />
+              {fetchMoreInProgress && (
+                <div>
+                  <LoadingIndicator />
+                  {' '}
+                  <em className="text-muted">Loading more events...</em>
+                </div>
+              )}
+              <ErrorDisplay graphQLError={fetchMoreError} />
+            </>
           )
       }
     </>

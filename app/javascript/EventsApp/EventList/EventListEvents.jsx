@@ -56,7 +56,7 @@ function EventListEvents({
 
     if (index === eventsPaginated.entries.length - 5) {
       return (
-        <Waypoint onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
+        <Waypoint fireOnRapidScroll onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
           <div>
             {eventContent}
           </div>
