@@ -106,7 +106,7 @@
     "react-router-dom": "^5.1.2",
     "react-select": "^3.0.8",
     "react-select-fast-filter-options": "^0.2.3",
-    "react-stripe-elements": "^3.0.1",
+    "react-stripe-elements": "^6.0.1",
     "react-table": "^6.10.3",
     "react-waypoint": "^9.0.2",
     "require-from-string": "^2.0.2",
