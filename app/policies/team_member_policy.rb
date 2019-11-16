@@ -33,7 +33,7 @@ class TeamMemberPolicy < ApplicationPolicy
 
       disjunctive_where do |dw|
         dw.add(event: events_where_team_member)
-        dw.add(event: EventPolicy::Scope.new(user, Event.all).resolve)
+        dw.add(event: EventPolicy::Scope.new(authorization_info, Event.all).resolve)
         dw.add(event: Event.where(
           convention: conventions_with_permission('update_event_team_members')
         ))

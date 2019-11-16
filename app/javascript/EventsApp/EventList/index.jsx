@@ -21,11 +21,36 @@ import SearchInput from '../../BuiltInFormControls/SearchInput';
 import AppRootContext from '../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 
+const PAGE_SIZE = 20;
+
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
   my_rating: FilterCodecs.integerArray,
   title_prefix: FilterCodecs.nonEmptyString,
 });
+
+const fetchMoreEvents = async (fetchMore, page) => {
+  try {
+    await fetchMore({
+      variables: { page, pageSize: PAGE_SIZE },
+      updateQuery: (prev, { fetchMoreResult }) => ({
+        ...prev,
+        convention: {
+          ...prev.convention,
+          events_paginated: {
+            ...prev.convention.events_paginated,
+            entries: [
+              ...prev.convention.events_paginated.entries,
+              ...fetchMoreResult.convention.events_paginated.entries,
+            ],
+          },
+        },
+      }),
+    });
+  } catch (err) {
+    // ignore, see https://github.com/apollographql/apollo-client/issues/4114#issuecomment-502111099
+  }
+};
 
 function EventList({ history }) {
   const {
@@ -39,10 +64,9 @@ function EventList({ history }) {
   const [cachedConventionName, setCachedConventionName] = useState(null);
   const [cachedEventCategories, setCachedEventCategories] = useState(null);
   const [cachedPageCount, setCachedPageCount] = useState(null);
-  const allCategoryIds = cachedEventCategories ? cachedEventCategories.map((c) => c.id) : [];
   const defaultFiltered = (myProfile
-    ? [{ id: 'my_rating', value: [1, 0] }, { id: 'category', value: allCategoryIds }]
-    : [{ id: 'category', value: allCategoryIds }]
+    ? [{ id: 'my_rating', value: [1, 0] }, { id: 'category', value: [] }]
+    : [{ id: 'category', value: [] }]
   );
   const effectiveSorted = (sorted && sorted.length > 0) ? sorted : defaultSort;
   const effectiveFiltered = (filtered && filtered.length > 0) ? filtered : defaultFiltered;
@@ -54,48 +78,35 @@ function EventList({ history }) {
     {
       variables: {
         page: 1,
-        pageSize: 10,
+        pageSize: PAGE_SIZE,
         sort: reactTableSortToTableResultsSort(effectiveSorted),
         filters: reactTableFiltersToTableResultsFilters(effectiveFiltered),
       },
     },
   );
 
-  useEffect(
+  const loadedEntries = (
+    loading || error
+      ? 0
+      : data.convention.events_paginated.entries.length
+  );
+  const totalEntries = (
+    loading || error
+      ? null
+      : data.convention.events_paginated.total_entries
+  );
+
+  const fetchMoreIfNeeded = useCallback(
     () => {
-      if (loading || error) {
+      if (loadedEntries === 0) {
         return;
       }
 
-      const totalEntries = data.convention.events_paginated.total_entries;
-      const fetchRest = async () => {
-        try {
-          await fetchMore({
-            variables: { page: 1, pageSize: totalEntries },
-            updateQuery: (prev, { fetchMoreResult }) => ({
-              ...prev,
-              convention: {
-                ...prev.convention,
-                events_paginated: {
-                  ...prev.convention.events_paginated,
-                  entries: fetchMoreResult.convention.events_paginated.entries,
-                },
-              },
-            }),
-          });
-        } catch (err) {
-          // ignore, see https://github.com/apollographql/apollo-client/issues/4114#issuecomment-502111099
-        }
-      };
-
-
-      if (data.convention.events_paginated.entries.length < totalEntries) {
-        // this is a little weird but because of the way pagination works, we're going to end up
-        // re-fetching the first 20 - so just go ahead and replace them
-        fetchRest();
+      if (loadedEntries < totalEntries) {
+        fetchMoreEvents(fetchMore, (loadedEntries / PAGE_SIZE) + 1);
       }
     },
-    [loading, error, data, fetchMore],
+    [fetchMore, loadedEntries, totalEntries],
   );
 
   const changeFilterValue = useCallback(
@@ -203,6 +214,7 @@ function EventList({ history }) {
               eventsPaginated={eventsPaginated}
               sorted={sorted}
               canReadSchedule={data.currentAbility.can_read_schedule}
+              fetchMoreIfNeeded={fetchMoreIfNeeded}
             />
           )
       }

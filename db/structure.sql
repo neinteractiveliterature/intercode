@@ -23,6 +23,85 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: unaccent; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
+
+
+--
+-- Name: simple_unaccent; Type: TEXT SEARCH CONFIGURATION; Schema: public; Owner: -
+--
+
+CREATE TEXT SEARCH CONFIGURATION public.simple_unaccent (
+    PARSER = pg_catalog."default" );
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR asciiword WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR word WITH public.unaccent, simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR numword WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR email WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR url WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR host WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR sfloat WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR version WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR hword_numpart WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR hword_part WITH public.unaccent, simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR hword_asciipart WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR numhword WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR asciihword WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR hword WITH public.unaccent, simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR url_path WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR file WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR "float" WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR "int" WITH simple;
+
+ALTER TEXT SEARCH CONFIGURATION public.simple_unaccent
+    ADD MAPPING FOR uint WITH simple;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -3135,7 +3214,7 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 -- Name: events tsvector_update_event_title; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'pg_catalog.simple', 'title');
+CREATE TRIGGER tsvector_update_event_title BEFORE INSERT OR UPDATE ON public.events FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('title_vector', 'public.simple_unaccent', 'title');
 
 
 --
@@ -3866,6 +3945,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191002003757'),
 ('20191004200432'),
 ('20191010195351'),
-('20191019225829');
+('20191019225829'),
+('20191116152343'),
+('20191116152842');
 
 
