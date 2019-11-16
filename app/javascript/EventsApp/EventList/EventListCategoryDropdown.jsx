@@ -18,6 +18,11 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
   }
 
   const sortedCategories = [...eventCategories].sort((a, b) => a.name.localeCompare(b.name, { sensitivity: 'base' }));
+  const choiceSetValue = (
+    (value || []).length > 0
+      ? value.map((id) => id.toString())
+      : eventCategories.map((c) => c.id.toString())
+  );
 
   return (
     <PopperDropdown
@@ -40,7 +45,7 @@ const EventListCategoryDropdown = ({ eventCategories, value, onChange }) => {
               label: category.name,
               value: category.id.toString(),
             }))}
-          value={(value || []).map((integer) => integer.toString())}
+          value={choiceSetValue}
           onChange={(integerArray) => { onChange(integerArray.map(Transforms.integer)); }}
           multiple
         />
