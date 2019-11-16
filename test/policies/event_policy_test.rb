@@ -221,175 +221,184 @@ class EventPolicyTest < ActiveSupport::TestCase
       dropped_event
     end
 
-    describe "when show_event_list is 'yes'" do
-      before { convention.update!(show_event_list: 'yes') }
+    [
+      ['globally', ->() { Event.all }],
+      ['inside a convention', ->() { convention.events } ]
+    ].each do |(description, scope_generator)|
+      let(:event_scope) { instance_exec(&scope_generator) }
 
-      it 'returns all active events to regular users' do
-        resolved_events = EventPolicy::Scope.new(nil, Event.all).resolve
+      describe(description) do
+        describe "when show_event_list is 'yes'" do
+          before { convention.update!(show_event_list: 'yes') }
 
-        assert_equal [event].sort, resolved_events.sort
-      end
+          it 'returns all active events to regular users' do
+            resolved_events = EventPolicy::Scope.new(nil, event_scope).resolve
 
-      %w[update_events].each do |permission|
-        it "returns all events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+            assert_equal [event].sort, resolved_events.sort
+          end
 
-          assert_equal [event, dropped_event].sort, resolved_events.sort
+          %w[update_events].each do |permission|
+            it "returns all events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [event, dropped_event].sort, resolved_events.sort
+            end
+          end
         end
-      end
-    end
 
-    describe "when show_event_list is 'gms'" do
-      before { convention.update!(show_event_list: 'gms') }
+        describe "when show_event_list is 'gms'" do
+          before { convention.update!(show_event_list: 'gms') }
 
-      it 'returns active events to team members' do
-        team_member = create(:team_member, event: event)
-        resolved_events = EventPolicy::Scope.new(
-          team_member.user_con_profile.user, Event.all
-        ).resolve
+          it 'returns active events to team members' do
+            team_member = create(:team_member, event: event)
+            resolved_events = EventPolicy::Scope.new(
+              team_member.user_con_profile.user, event_scope
+            ).resolve
 
-        assert_equal [event].sort, resolved_events.sort
-      end
+            assert_equal [event].sort, resolved_events.sort
+          end
 
-      %w[read_prerelease_schedule read_limited_prerelease_schedule].each do |permission|
-        it "returns active events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
+          %w[read_prerelease_schedule read_limited_prerelease_schedule].each do |permission|
+            it "returns active events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [event].sort, resolved_events.sort
+            end
+          end
+
+          %w[update_events].each do |permission|
+            it "returns all events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [event, dropped_event].sort, resolved_events.sort
+            end
+          end
+
+          it 'does not return events to regular attendees' do
+            user_con_profile = create(:user_con_profile, convention: convention)
+            resolved_events = EventPolicy::Scope.new(user_con_profile.user, event_scope).resolve
+
+            assert_equal [], resolved_events.sort
+          end
+
+          it 'does not return events to anonymous users' do
+            resolved_events = EventPolicy::Scope.new(nil, event_scope).resolve
+
+            assert_equal [], resolved_events.sort
+          end
+        end
+
+        describe "when show_event_list is 'priv'" do
+          before { convention.update!(show_event_list: 'priv') }
+
+          %w[read_limited_prerelease_schedule].each do |permission|
+            it "returns active events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [event].sort, resolved_events.sort
+            end
+          end
+
+          %w[read_prerelease_schedule].each do |permission|
+            it "returns no events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [].sort, resolved_events.sort
+            end
+          end
+
+          %w[update_events].each do |permission|
+            it "returns all events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [event, dropped_event].sort, resolved_events.sort
+            end
+          end
+
+          it 'returns their own events to team members' do
+            team_member = create(:team_member, event: event)
+            resolved_events = EventPolicy::Scope.new(team_member.user_con_profile.user, event_scope).resolve
+
+            assert_equal [event], resolved_events.sort
+          end
+
+          it 'returns no events to regular attendees' do
+            user_con_profile = create(:user_con_profile, convention: convention)
+            resolved_events = EventPolicy::Scope.new(user_con_profile.user, event_scope).resolve
+
+            assert_equal [], resolved_events.sort
+          end
+
+          it 'returns no events to anonymous users' do
+            resolved_events = EventPolicy::Scope.new(nil, event_scope).resolve
+
+            assert_equal [], resolved_events.sort
+          end
+        end
+
+        describe "when show_event_list is 'no'" do
+          before { convention.update!(show_event_list: 'no') }
+
+          it 'returns their own events to team members' do
+            team_member = create(:team_member, event: event)
+            resolved_events = EventPolicy::Scope.new(team_member.user_con_profile.user, event_scope).resolve
+
+            assert_equal [event], resolved_events.sort
+          end
+
+          %w[read_limited_prerelease_schedule read_prerelease_schedule].each do |permission|
+            it "returns no events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [].sort, resolved_events.sort
+            end
+          end
+
+          %w[update_events].each do |permission|
+            it "returns all events to users with #{permission} permission in convention" do
+              user = create_user_with_permission_in_convention(permission, convention)
+              resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+              assert_equal [event, dropped_event].sort, resolved_events.sort
+            end
+          end
+
+          it 'returns no events to regular attendees' do
+            user_con_profile = create(:user_con_profile, convention: convention)
+            resolved_events = EventPolicy::Scope.new(user_con_profile.user, event_scope).resolve
+
+            assert_equal [], resolved_events.sort
+          end
+
+          it 'returns no events to anonymous users' do
+            resolved_events = EventPolicy::Scope.new(nil, event_scope).resolve
+
+            assert_equal [], resolved_events.sort
+          end
+
+          it 'returns all events to site_admin users' do
+            user = create(:user, site_admin: true)
+            resolved_events = EventPolicy::Scope.new(user, event_scope).resolve
+
+            assert_equal [event, dropped_event].sort, resolved_events.sort
+          end
+        end
+
+        it 'returns all events in a single_event convention' do
+          dropped_event.destroy!
+          convention.update!(site_mode: 'single_event', show_event_list: 'no')
+          resolved_events = EventPolicy::Scope.new(nil, event_scope).resolve
 
           assert_equal [event].sort, resolved_events.sort
         end
       end
-
-      %w[update_events].each do |permission|
-        it "returns all events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
-      end
-
-      it 'does not return events to regular attendees' do
-        user_con_profile = create(:user_con_profile, convention: convention)
-        resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-        assert_equal [], resolved_events.sort
-      end
-
-      it 'does not return events to anonymous users' do
-        resolved_events = EventPolicy::Scope.new(nil, Event.all).resolve
-
-        assert_equal [], resolved_events.sort
-      end
-    end
-
-    describe "when show_event_list is 'priv'" do
-      before { convention.update!(show_event_list: 'priv') }
-
-      %w[read_limited_prerelease_schedule].each do |permission|
-        it "returns active events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-          assert_equal [event].sort, resolved_events.sort
-        end
-      end
-
-      %w[read_prerelease_schedule].each do |permission|
-        it "returns no events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-          assert_equal [].sort, resolved_events.sort
-        end
-      end
-
-      %w[update_events].each do |permission|
-        it "returns all events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
-      end
-
-      it 'returns their own events to team members' do
-        team_member = create(:team_member, event: event)
-        resolved_events = EventPolicy::Scope.new(team_member.user_con_profile.user, Event.all).resolve
-
-        assert_equal [event], resolved_events.sort
-      end
-
-      it 'returns no events to regular attendees' do
-        user_con_profile = create(:user_con_profile, convention: convention)
-        resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-        assert_equal [], resolved_events.sort
-      end
-
-      it 'returns no events to anonymous users' do
-        resolved_events = EventPolicy::Scope.new(nil, Event.all).resolve
-
-        assert_equal [], resolved_events.sort
-      end
-    end
-
-    describe "when show_event_list is 'no'" do
-      before { convention.update!(show_event_list: 'no') }
-
-      it 'returns their own events to team members' do
-        team_member = create(:team_member, event: event)
-        resolved_events = EventPolicy::Scope.new(team_member.user_con_profile.user, Event.all).resolve
-
-        assert_equal [event], resolved_events.sort
-      end
-
-      %w[read_limited_prerelease_schedule read_prerelease_schedule].each do |permission|
-        it "returns no events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-          assert_equal [].sort, resolved_events.sort
-        end
-      end
-
-      %w[update_events].each do |permission|
-        it "returns all events to users with #{permission} permission in convention" do
-          user = create_user_with_permission_in_convention(permission, convention)
-          resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-          assert_equal [event, dropped_event].sort, resolved_events.sort
-        end
-      end
-
-      it 'returns no events to regular attendees' do
-        user_con_profile = create(:user_con_profile, convention: convention)
-        resolved_events = EventPolicy::Scope.new(user_con_profile.user, Event.all).resolve
-
-        assert_equal [], resolved_events.sort
-      end
-
-      it 'returns no events to anonymous users' do
-        resolved_events = EventPolicy::Scope.new(nil, Event.all).resolve
-
-        assert_equal [], resolved_events.sort
-      end
-
-      it 'returns all events to site_admin users' do
-        user = create(:user, site_admin: true)
-        resolved_events = EventPolicy::Scope.new(user, Event.all).resolve
-
-        assert_equal [event, dropped_event].sort, resolved_events.sort
-      end
-    end
-
-    it 'returns all events in a single_event convention' do
-      dropped_event.destroy!
-      convention.update!(site_mode: 'single_event', show_event_list: 'no')
-      resolved_events = EventPolicy::Scope.new(nil, Event.all).resolve
-
-      assert_equal [event].sort, resolved_events.sort
     end
   end
 end
