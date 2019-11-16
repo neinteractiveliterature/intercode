@@ -57,7 +57,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     when :title
       scope.order_by_title(direction)
     when :my_rating
-      if user_con_profile
+      if user_con_profile && !pundit_user.assumed_identity_from_profile
         scope.order_by_rating_for_user_con_profile(user_con_profile, direction)
       else
         scope
