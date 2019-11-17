@@ -71,7 +71,6 @@ class Types::UserConProfileType < Types::BaseObject
     :orders,
     :signups,
     :signup_requests,
-    :staff_positions,
     :ticket,
     :user
 
@@ -79,9 +78,28 @@ class Types::UserConProfileType < Types::BaseObject
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
   end
 
+  def staff_positions
+    AssociationLoader.for(UserConProfile, :staff_positions).load(object).then do |staff_positions|
+      staff_positions
+
+      # TODO: talk to Dave about this, it will break the bios page as currently coded
+      # because the page assumes Con Com is visible
+      # if context[:query_from_liquid]
+      #   staff_positions.select(&:visible?)
+      # else
+      #   staff_positions
+      # end
+    end
+  end
+
   def team_members
     AssociationLoader.for(UserConProfile, :team_members).load(object).then do |team_members|
-      team_members.select { |team_member| policy(team_member).read? }
+      readable_team_members = team_members.select { |team_member| policy(team_member).read? }
+      if context[:query_from_liquid]
+        readable_team_members.select(&:display?)
+      else
+        readable_team_members
+      end
     end
   end
 

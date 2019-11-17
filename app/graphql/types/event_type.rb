@@ -70,7 +70,13 @@ class Types::EventType < Types::BaseObject
   field :team_members, [Types::TeamMemberType], null: false
 
   def team_members
-    EventTeamMembersLoader.for(pundit_user).load(object)
+    EventTeamMembersLoader.for(pundit_user).load(object).then do |team_members|
+      if context[:query_from_liquid]
+        team_members.select(&:display?)
+      else
+        team_members
+      end
+    end
   end
 
   field :provided_tickets, [Types::TicketType], null: false do

@@ -37,7 +37,10 @@ module Intercode
           end
 
           result = cms_graphql_query.execute(
-            context: GraphqlController::Context.new(context.registers['controller']),
+            context: GraphqlController::Context.new(
+              context.registers['controller'],
+              query_from_liquid: true
+            ),
             variables: variables
           )
           hash_result = result.to_h
