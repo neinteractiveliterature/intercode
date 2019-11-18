@@ -28,7 +28,7 @@ class Queries::ScheduleReleaseQueryManager < Queries::QueryManager
   def conventions_with_schedule_release_permissions(schedule_release_field)
     Queries::DisjunctiveWhere.build(Convention.all) do |dw|
       dw.add(schedule_release_field => 'yes')
-      dw.add(schedule_release_field => 'gms', id: conventions_where_team_member)
+      dw.add(schedule_release_field => 'gms', id: @authorization_info.conventions_where_team_member)
       dw.add(
         schedule_release_field => 'gms',
         id: @authorization_info.conventions_with_permission(
