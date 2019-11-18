@@ -1,6 +1,4 @@
 class ConventionPolicy < ApplicationPolicy
-  include ScheduleRelease
-
   def read?
     true
   end

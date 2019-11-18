@@ -1,6 +1,4 @@
 class RunPolicy < ApplicationPolicy
-  include ScheduleRelease
-
   delegate :event, to: :record
   delegate :convention, to: :event
 
@@ -31,8 +29,6 @@ class RunPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    include ScheduleRelease
-
     def resolve
       return scope.none unless oauth_scope?(:read_events)
       return scope.all if site_admin?
