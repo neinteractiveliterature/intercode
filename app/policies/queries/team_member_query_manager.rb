@@ -1,5 +1,6 @@
 class Queries::TeamMemberQueryManager < Queries::QueryManager
-  def initialize(**_args)
+  def initialize(user:)
+    super(user: user)
     @team_member_in_convention = Queries::NilSafeCache.new
     @team_member_for_event = Queries::NilSafeCache.new
     @team_member_for_user_con_profile = Queries::NilSafeCache.new
