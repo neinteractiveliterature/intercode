@@ -1,6 +1,7 @@
 class AuthorizationInfo
   QUERY_MANAGER_CLASSES = [
     Queries::PermissionsQueryManager,
+    Queries::ScheduleReleaseQueryManager,
     Queries::SignupQueryManager,
     Queries::TeamMemberQueryManager,
     Queries::UserConProfileQueryManager
@@ -36,7 +37,11 @@ class AuthorizationInfo
     @user = user
     @assumed_identity_from_profile = assumed_identity_from_profile
     @doorkeeper_token = doorkeeper_token
-    possible_query_manager_params = { user: user, known_user_con_profiles: known_user_con_profiles }
+    possible_query_manager_params = {
+      user: user,
+      known_user_con_profiles: known_user_con_profiles,
+      authorization_info: self
+    }
 
     QUERY_MANAGER_CLASSES.each do |query_manager_class|
       instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
