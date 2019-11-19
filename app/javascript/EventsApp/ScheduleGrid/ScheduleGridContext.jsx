@@ -9,7 +9,7 @@ import ConfigPropType from './ConfigPropType';
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
-import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery, ScheduleGridCombinedQuery } from './queries.gql';
+import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery } from './queries.gql';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
@@ -117,65 +117,6 @@ LoadingOverlay.defaultProps = {
   loading: false,
 };
 
-function MobileScheduleGridProvider({ config, children }) {
-  const combinedQueryParams = {
-    query: ScheduleGridCombinedQuery,
-    variables: {
-      extendedCounts: config.showExtendedCounts || false,
-    },
-  };
-
-  const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
-  const { data, error, loading } = useQuery(combinedQueryParams.query, {
-    variables: combinedQueryParams.variables,
-  });
-  const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
-  const { convention, events } = (cachedData || {});
-  const providerValue = useScheduleGridProvider(
-    config, convention, events, myRatingFilter, hideConflicts,
-  );
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!convention) {
-    return <ScheduleGridSkeleton />;
-  }
-
-  return (
-    <>
-      {(convention || {}).pre_schedule_content_html && (
-        // eslint-disable-next-line react/no-danger
-        <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
-      )}
-      {loading
-        ? <ScheduleGridSkeleton />
-        : (
-          <ConventionDayTabContainer
-            basename={config.basename}
-            conventionTimespan={timespanFromConvention(convention)}
-            timezoneName={convention.timezone_name}
-          >
-            {(timespan) => (
-              <ScheduleGridContext.Provider value={providerValue}>
-                <div className="position-relative">
-                  <LoadingOverlay loading={loading} />
-                  {children(timespan)}
-                </div>
-              </ScheduleGridContext.Provider>
-            )}
-          </ConventionDayTabContainer>
-        )}
-    </>
-  );
-}
-
-MobileScheduleGridProvider.propTypes = {
-  config: ConfigPropType.isRequired,
-  children: PropTypes.func.isRequired,
-};
-
 function getEventsQueryVariables(timespan, showExtendedCounts) {
   return {
     start: timespan.start.toISOString(),
@@ -184,7 +125,7 @@ function getEventsQueryVariables(timespan, showExtendedCounts) {
   };
 }
 
-function DesktopScheduleGridProviderTabContent({
+function ScheduleGridProviderTabContent({
   config, convention, children, timespan, afterLoaded,
 }) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
@@ -225,14 +166,19 @@ function DesktopScheduleGridProviderTabContent({
   );
 }
 
-DesktopScheduleGridProviderTabContent.propTypes = {
+ScheduleGridProviderTabContent.propTypes = {
   config: ConfigPropType.isRequired,
   children: PropTypes.func.isRequired,
   timespan: PropTypes.shape({}).isRequired,
   convention: PropTypes.shape({}).isRequired,
+  afterLoaded: PropTypes.func.isRequired,
 };
 
-function DesktopScheduleGridProvider({ config, children, prefetchAll }) {
+export function ScheduleGridProvider({
+  config, children, myRatingFilter, hideConflicts,
+}) {
+  const filtersContextValue = { myRatingFilter, hideConflicts };
+  const prefetchAll = IS_MOBILE;
   const { data, loading, error } = useQuerySuspended(ScheduleGridConventionDataQuery);
   const client = useApolloClient();
 
@@ -283,7 +229,7 @@ function DesktopScheduleGridProvider({ config, children, prefetchAll }) {
   }
 
   return (
-    <>
+    <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
       {convention.pre_schedule_content_html && (
         // eslint-disable-next-line react/no-danger
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
@@ -296,36 +242,17 @@ function DesktopScheduleGridProvider({ config, children, prefetchAll }) {
       >
         {(timespan) => (
           <Suspense fallback={<ScheduleGridSkeleton />}>
-            <DesktopScheduleGridProviderTabContent
+            <ScheduleGridProviderTabContent
               config={config}
               convention={convention}
               timespan={timespan}
               afterLoaded={afterTabLoaded}
             >
               {children}
-            </DesktopScheduleGridProviderTabContent>
+            </ScheduleGridProviderTabContent>
           </Suspense>
         )}
       </ConventionDayTabContainer>
-    </>
-  );
-}
-
-DesktopScheduleGridProvider.propTypes = {
-  config: ConfigPropType.isRequired,
-  children: PropTypes.func.isRequired,
-};
-
-export function ScheduleGridProvider({
-  config, children, myRatingFilter, hideConflicts,
-}) {
-  const filtersContextValue = { myRatingFilter, hideConflicts };
-
-  return (
-    <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
-      <DesktopScheduleGridProvider config={config} prefetchAll={IS_MOBILE}>
-        {children}
-      </DesktopScheduleGridProvider>
     </ScheduleGridFiltersContext.Provider>
   );
 }
@@ -341,3 +268,4 @@ ScheduleGridProvider.defaultProps = {
   myRatingFilter: null,
   hideConflicts: false,
 };
+
