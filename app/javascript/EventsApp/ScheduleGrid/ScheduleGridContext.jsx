@@ -1,5 +1,5 @@
 import React, {
-  Suspense, useState, useMemo, useCallback, useContext,
+  Suspense, useState, useMemo, useCallback, useContext, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
@@ -10,7 +10,7 @@ import ConventionDayTabContainer from './ConventionDayTabContainer';
 import ErrorDisplay from '../../ErrorDisplay';
 import Schedule from './Schedule';
 import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery, ScheduleGridCombinedQuery } from './queries.gql';
-import { timespanFromConvention } from '../../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
@@ -185,7 +185,7 @@ function getEventsQueryVariables(timespan, showExtendedCounts) {
 }
 
 function DesktopScheduleGridProviderTabContent({
-  config, convention, children, timespan,
+  config, convention, children, timespan, afterLoaded,
 }) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
   const { data, error, loading } = useQuery(ScheduleGridEventsQuery, {
@@ -200,6 +200,15 @@ function DesktopScheduleGridProviderTabContent({
     (cachedData || {}).events || [],
     myRatingFilter,
     hideConflicts,
+  );
+
+  useEffect(
+    () => {
+      if (!loading && !error) {
+        afterLoaded();
+      }
+    },
+    [afterLoaded, error, loading],
   );
 
   if (error) {
@@ -223,8 +232,8 @@ DesktopScheduleGridProviderTabContent.propTypes = {
   convention: PropTypes.shape({}).isRequired,
 };
 
-function DesktopScheduleGridProvider({ config, children }) {
-  const { data, error } = useQuerySuspended(ScheduleGridConventionDataQuery);
+function DesktopScheduleGridProvider({ config, children, prefetchAll }) {
+  const { data, loading, error } = useQuerySuspended(ScheduleGridConventionDataQuery);
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(
@@ -237,11 +246,41 @@ function DesktopScheduleGridProvider({ config, children }) {
     [client, config.showExtendedCounts],
   );
 
+  const convention = (loading || error) ? null : data.convention;
+
+  const conventionTimespan = useMemo(
+    () => (convention ? timespanFromConvention(convention) : null),
+    [convention],
+  );
+
+  const conventionDayTimespans = useMemo(
+    () => (
+      convention && conventionTimespan.isFinite()
+        ? getConventionDayTimespans(
+          conventionTimespan,
+          convention.timezone_name,
+        )
+        : []
+    ),
+    [convention, conventionTimespan],
+  );
+
+  const afterTabLoaded = useCallback(
+    () => {
+      if (prefetchAll) {
+        conventionDayTimespans.forEach(prefetchTimespan);
+      }
+    },
+    [conventionDayTimespans, prefetchAll, prefetchTimespan],
+  );
+
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { convention } = data;
+  if (loading) {
+    return <ScheduleGridSkeleton />;
+  }
 
   return (
     <>
@@ -251,7 +290,7 @@ function DesktopScheduleGridProvider({ config, children }) {
       )}
       <ConventionDayTabContainer
         basename={config.basename}
-        conventionTimespan={timespanFromConvention(convention)}
+        conventionTimespan={conventionTimespan}
         timezoneName={convention.timezone_name}
         prefetchTimespan={prefetchTimespan}
       >
@@ -261,6 +300,7 @@ function DesktopScheduleGridProvider({ config, children }) {
               config={config}
               convention={convention}
               timespan={timespan}
+              afterLoaded={afterTabLoaded}
             >
               {children}
             </DesktopScheduleGridProviderTabContent>
@@ -281,19 +321,9 @@ export function ScheduleGridProvider({
 }) {
   const filtersContextValue = { myRatingFilter, hideConflicts };
 
-  if (IS_MOBILE) {
-    return (
-      <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
-        <MobileScheduleGridProvider config={config}>
-          {children}
-        </MobileScheduleGridProvider>
-      </ScheduleGridFiltersContext.Provider>
-    );
-  }
-
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
-      <DesktopScheduleGridProvider config={config}>
+      <DesktopScheduleGridProvider config={config} prefetchAll={IS_MOBILE}>
         {children}
       </DesktopScheduleGridProvider>
     </ScheduleGridFiltersContext.Provider>
