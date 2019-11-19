@@ -13,8 +13,8 @@ import { ScheduleGridConventionDataQuery, ScheduleGridEventsQuery, ScheduleGridC
 import { timespanFromConvention } from '../../TimespanUtils';
 import useQuerySuspended from '../../useQuerySuspended';
 import PageLoadingIndicator from '../../PageLoadingIndicator';
-import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
+import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect().os);
 
@@ -92,16 +92,6 @@ export function useScheduleGridProvider(config, convention, events, myRatingFilt
   };
 }
 
-function ScheduleGridSkeleton() {
-  return (
-    <div className="schedule-grid mb-4">
-      <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
-        <PageLoadingIndicator visible />
-      </div>
-    </div>
-  );
-}
-
 function LoadingOverlay({ loading }) {
   if (!loading) {
     return null;
@@ -150,7 +140,7 @@ function MobileScheduleGridProvider({ config, children }) {
   }
 
   if (!convention) {
-    return <PageLoadingIndicator visible />;
+    return <ScheduleGridSkeleton />;
   }
 
   return (
@@ -159,20 +149,24 @@ function MobileScheduleGridProvider({ config, children }) {
         // eslint-disable-next-line react/no-danger
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
-      <ConventionDayTabContainer
-        basename={config.basename}
-        conventionTimespan={timespanFromConvention(convention)}
-        timezoneName={convention.timezone_name}
-      >
-        {(timespan) => (
-          <ScheduleGridContext.Provider value={providerValue}>
-            <div className="position-relative">
-              <LoadingOverlay loading={loading} />
-              {children(timespan)}
-            </div>
-          </ScheduleGridContext.Provider>
+      {loading
+        ? <ScheduleGridSkeleton />
+        : (
+          <ConventionDayTabContainer
+            basename={config.basename}
+            conventionTimespan={timespanFromConvention(convention)}
+            timezoneName={convention.timezone_name}
+          >
+            {(timespan) => (
+              <ScheduleGridContext.Provider value={providerValue}>
+                <div className="position-relative">
+                  <LoadingOverlay loading={loading} />
+                  {children(timespan)}
+                </div>
+              </ScheduleGridContext.Provider>
+            )}
+          </ConventionDayTabContainer>
         )}
-      </ConventionDayTabContainer>
     </>
   );
 }
