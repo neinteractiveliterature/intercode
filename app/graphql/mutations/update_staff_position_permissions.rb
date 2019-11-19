@@ -6,7 +6,7 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
 
   attr_reader :staff_position
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @staff_position = convention.staff_positions.find(args[:staff_position_id])
     policy(Permission.new(role: staff_position)).create?
   end

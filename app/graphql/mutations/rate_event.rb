@@ -4,7 +4,7 @@ class Mutations::RateEvent < Mutations::BaseMutation
   argument :event_id, Integer, required: true, camelize: false
   argument :rating, Integer, required: true
 
-  def authorized?(_args)
+  define_authorization_check do |_args|
     !!user_con_profile && !assumed_identity_from_profile
   end
 

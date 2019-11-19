@@ -7,7 +7,7 @@ class Mutations::TransitionEventProposal < Mutations::BaseMutation
 
   attr_reader :event_proposal
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @event_proposal = context[:convention].event_proposals.find(args[:id])
     return false if args[:drop_event] && !policy(event_proposal.event).drop?
 

@@ -7,11 +7,11 @@ describe RunDrop do
 
   %w[event starts_at ends_at length_seconds].each do |field|
     it "returns the #{field} of the run" do
-      run_drop.public_send(field).must_equal the_run.public_send(field)
+      assert_equal the_run.public_send(field), run_drop.public_send(field)
     end
   end
 
   it 'returns the event path' do
-    run_drop.event_url.must_match %r{events/#{event.id}}
+    assert_match %r{events/#{event.id}}, run_drop.event_url
   end
 end

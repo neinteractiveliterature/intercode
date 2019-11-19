@@ -1,6 +1,4 @@
 class EventPolicy < ApplicationPolicy
-  include ScheduleRelease
-
   delegate :convention, to: :record
 
   def read?
@@ -74,16 +72,25 @@ class EventPolicy < ApplicationPolicy
   private
 
   def has_applicable_permission?(*permissions)
-    has_event_category_permission?(record.event_category_id, *permissions) ||
+    has_event_category_permission?(record.event_category, *permissions) ||
       has_convention_permission?(convention, *permissions)
   end
 
   class Scope < Scope
-    include ScheduleRelease
-
     def resolve
       return scope.all if oauth_scope?(:read_events) && site_admin?
 
+      convention_id = scope.where_values_hash.stringify_keys['convention_id']
+      if convention_id.is_a?(Integer)
+        convention = Convention.find(convention_id)
+        resolve_for_single_convention(convention)
+      else
+        resolve_global
+      end
+    end
+
+    # The slow-but-painfully-correct path
+    def resolve_global
       disjunctive_where do |dw|
         if user
           dw.add(
@@ -106,6 +113,31 @@ class EventPolicy < ApplicationPolicy
 
         # update_events users can see dropped events in the convention as a whole
         dw.add(convention: conventions_with_permission('update_events'))
+      end
+    end
+
+    # The fast path where we can do simpler checks inside a single convention
+    def resolve_for_single_convention(convention)
+      return scope.all if convention.site_mode == 'single_event'
+      return scope.all if has_convention_permission?(convention, 'read_inactive_events', 'update_events')
+      if has_schedule_release_permissions?(convention, convention.show_event_list)
+        return scope.where(status: 'active')
+      end
+
+      disjunctive_where do |dw|
+        if user
+          dw.add(
+            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id))
+              .select(:event_id),
+            status: 'active'
+          )
+        end
+
+        dw.add(
+          event_category_id: event_category_ids_with_permission_in_convention(
+            convention, 'update_events'
+          )
+        )
       end
     end
   end

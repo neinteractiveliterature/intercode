@@ -11,7 +11,7 @@ class Mutations::CreateTeamMember < Mutations::BaseMutation
 
   attr_reader :event
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @event = convention.events.find(args[:event_id])
     policy(TeamMember.new(event: event)).create?
   end

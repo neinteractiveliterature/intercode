@@ -33,6 +33,7 @@ class EventVacancyFillService < CivilService::Service
     move_results.each do |result|
       notify_moved_signup(result) if result.should_notify?
     end
+
     success(move_results: move_results)
   end
 
@@ -55,35 +56,69 @@ class EventVacancyFillService < CivilService::Service
   def best_signup_to_fill_bucket_vacancy(bucket_key)
     bucket = event.registration_policy.bucket_with_key(bucket_key)
     signups_ordered.find do |signup|
-      next if immovable_signups.include?(signup)
-      next if move_results.any? { |result| result.signup_id == signup.id }
-      signup.bucket_key != bucket.key && signup_can_fill_bucket_vacancy?(signup, bucket)
+      next if signup.bucket_key == bucket.key
+      next unless signup_can_fill_bucket_vacancy?(signup, bucket)
+      next if signup_already_in_best_slot?(signup)
+
+      signup
     end
+  end
+
+  def signup_already_in_best_slot?(signup)
+    return false unless signup.confirmed?
+
+    (signup.requested_bucket_key == signup.bucket_key)
+    # TODO: figure out how to do something like the next line.  We'd rather not move a no-pref
+    # signup out of flex but at this point I am not sure how to do that while allowing it to be
+    # moved at all.
+    #  || (signup.no_preference? && signup.anything? && move_results.empty?)
   end
 
   def signup_can_fill_bucket_vacancy?(signup, bucket)
     return false if signup.bucket&.not_counted? || signup.bucket&.slots_unlimited?
 
     (
-      (signup.requested_bucket_key.nil? && bucket.slots_limited?) ||
+      (signup.no_preference? && bucket.slots_limited? && bucket.counted?) ||
       signup.requested_bucket_key == bucket.key ||
       bucket.anything?
     )
   end
 
-  def signups_ordered
-    @signups_ordered ||= begin
-      run.signups.reload
-      run.signups.where.not(state: 'withdrawn').where.not(id: team_member_signups.map(&:id)).to_a.sort_by do |signup|
-        [
-          # try not to move signups that are in the bucket they wanted
-          (signup.bucket_key == signup.requested_bucket_key && signup.confirmed?) ? 1 : 0,
-          # don't move confirmed no-preference signups unless necessary
-          (signup.requested_bucket_key.nil? && signup.confirmed?) ? 1 : 0,
-          signup.created_at
-        ]
+  def all_signups_ordered
+    @all_signups_ordered ||= begin
+      all_signups.to_a.sort_by do |signup|
+        signup_priority_key(signup)
       end
     end
+  end
+
+  def all_signups
+    @all_signups ||= begin
+      run.signups.reload
+      run.signups.where.not(state: 'withdrawn')
+        .where.not(id: team_member_signups.map(&:id))
+    end
+  end
+
+  def signups_ordered
+    all_signups_ordered.select { |signup| signup_movable?(signup) }
+  end
+
+  def signup_movable?(signup)
+    return false if immovable_signups.include?(signup)
+    return false if move_results.any? { |result| result.signup_id == signup.id }
+    true
+  end
+
+  def signup_priority_key(signup)
+    [
+      # Move waitlisted signups first
+      signup.confirmed? ? 1 : 0,
+      # don't move confirmed no-preference signups unless necessary
+      (signup.no_preference? && signup.confirmed?) ? 1 : 0,
+      # When moving confirmed signups, try to keep the earlier signups stable
+      signup.created_at.to_i * (signup.confirmed? ? -1 : 1)
+    ]
   end
 
   def team_member_signups

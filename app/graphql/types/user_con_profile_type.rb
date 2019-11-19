@@ -71,13 +71,36 @@ class Types::UserConProfileType < Types::BaseObject
     :orders,
     :signups,
     :signup_requests,
-    :staff_positions,
-    :team_members,
     :ticket,
     :user
 
   def email
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
+  end
+
+  def staff_positions
+    AssociationLoader.for(UserConProfile, :staff_positions).load(object).then do |staff_positions|
+      staff_positions
+
+      # TODO: talk to Dave about this, it will break the bios page as currently coded
+      # because the page assumes Con Com is visible
+      # if context[:query_from_liquid]
+      #   staff_positions.select(&:visible?)
+      # else
+      #   staff_positions
+      # end
+    end
+  end
+
+  def team_members
+    AssociationLoader.for(UserConProfile, :team_members).load(object).then do |team_members|
+      readable_team_members = team_members.select { |team_member| policy(team_member).read? }
+      if context[:query_from_liquid]
+        readable_team_members.select(&:display?)
+      else
+        readable_team_members
+      end
+    end
   end
 
   field :birth_date, Types::DateType, null: true

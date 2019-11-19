@@ -1,6 +1,4 @@
 class RunPolicy < ApplicationPolicy
-  include ScheduleRelease
-
   delegate :event, to: :record
   delegate :convention, to: :event
 
@@ -17,7 +15,7 @@ class RunPolicy < ApplicationPolicy
 
   def signup_summary?
     return false if event.private_signup_list?
-    SignupPolicy.new(user, Signup.new(run: record)).read?
+    SignupPolicy.new(authorization_info, Signup.new(run: record)).read?
   end
 
   def manage?
@@ -31,8 +29,6 @@ class RunPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    include ScheduleRelease
-
     def resolve
       return scope.none unless oauth_scope?(:read_events)
       return scope.all if site_admin?

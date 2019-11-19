@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import { Waypoint } from 'react-waypoint';
 
 import EventCard from './EventCard';
 import getSortedRuns from './getSortedRuns';
 import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
 
 function EventListEvents({
-  convention, eventsPaginated, sorted, canReadSchedule,
+  convention, eventsPaginated, sorted, canReadSchedule, fetchMoreIfNeeded,
 }) {
   let previousConventionDay = null;
   let conventionDayTimespans = [];
@@ -19,7 +20,7 @@ function EventListEvents({
     );
   }
 
-  return eventsPaginated.entries.map((event) => {
+  return eventsPaginated.entries.map((event, index) => {
     let preamble = null;
     if (sorted.some((sort) => sort.id === 'first_scheduled_run_start')) {
       const runs = getSortedRuns(event);
@@ -41,7 +42,7 @@ function EventListEvents({
       }
     }
 
-    return (
+    const eventContent = (
       <React.Fragment key={event.id}>
         {preamble}
         <EventCard
@@ -52,6 +53,18 @@ function EventListEvents({
         />
       </React.Fragment>
     );
+
+    if (index === eventsPaginated.entries.length - 5) {
+      return (
+        <Waypoint fireOnRapidScroll onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
+          <div>
+            {eventContent}
+          </div>
+        </Waypoint>
+      );
+    }
+
+    return eventContent;
   });
 }
 

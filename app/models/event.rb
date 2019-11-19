@@ -13,7 +13,7 @@ class Event < ApplicationRecord
     against: :title,
     using: {
       tsearch: {
-        dictionary: 'simple',
+        dictionary: 'simple_unaccent',
         prefix: true,
         tsvector_column: 'title_vector'
       }

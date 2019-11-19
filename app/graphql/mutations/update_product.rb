@@ -8,7 +8,7 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
 
   attr_reader :product
 
-  def authorized?(args)
+  define_authorization_check do |args|
     @product = convention.products.includes(:product_variants).find(args[:id])
     policy(product).update?
   end

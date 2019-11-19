@@ -5,11 +5,11 @@ describe EventDrop do
   let(:event_drop) { EventDrop.new(event) }
 
   it 'returns the title of the event' do
-    event_drop.title.must_equal event.title
+    assert_equal event.title, event_drop.title
   end
 
   it 'returns the team member name of the event category' do
-    event_drop.team_member_name.must_equal event.event_category.team_member_name
+    assert_equal event.event_category.team_member_name, event_drop.team_member_name
   end
 
   describe 'with team members' do
@@ -20,11 +20,11 @@ describe EventDrop do
     end
 
     it 'returns the user con profiles of the team members of the event' do
-      event_drop.team_member_user_con_profiles.map(&:id).sort.must_equal team_members.map(&:user_con_profile_id).sort
+      assert_equal team_members.map(&:user_con_profile_id).sort, event_drop.team_member_user_con_profiles.map(&:id).sort
     end
   end
 
   it 'returns the event path' do
-    event_drop.url.must_match %r{events/#{event.id}}
+    assert_match %r{events/#{event.id}}, event_drop.url
   end
 end

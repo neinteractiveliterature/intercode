@@ -5,7 +5,7 @@ class Mutations::MergeUsers < Mutations::BaseMutation
   argument :winning_user_id, Integer, required: true
   argument :winning_user_con_profiles, [Types::WinningUserConProfileInputType], required: true
 
-  def authorized?(args)
+  define_authorization_check do |args|
     users = User.find(args[:user_ids])
     users.all? { |user| policy(user).merge? }
   end

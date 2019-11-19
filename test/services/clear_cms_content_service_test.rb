@@ -20,15 +20,15 @@ describe ClearCmsContentService do
     end
 
     it 'destroys the root page' do
-      convention.root_page.must_be_nil
+      assert_nil convention.root_page
     end
 
     it 'destroys all pages' do
-      convention.pages.count.must_equal 0
+      assert_equal 0, convention.pages.count
     end
 
     it 'destroys all partials' do
-      convention.cms_partials.count.must_equal 0
+      assert_equal 0, convention.cms_partials.count
     end
   end
 end

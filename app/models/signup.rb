@@ -36,6 +36,10 @@ class Signup < ApplicationRecord
     event.team_members.any? { |team_member| team_member.user_con_profile == user_con_profile }
   end
 
+  def no_preference?
+    requested_bucket_key.nil?
+  end
+
   def to_liquid
     SignupDrop.new(self)
   end

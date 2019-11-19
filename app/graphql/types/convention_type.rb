@@ -61,7 +61,10 @@ class Types::ConventionType < Types::BaseObject
 
   field :bio_eligible_user_con_profiles, [Types::UserConProfileType], null: false
   def bio_eligible_user_con_profiles
-    object.user_con_profiles.can_have_bio
+    object.user_con_profiles.can_have_bio.includes(
+      :staff_positions,
+      team_members: { event: :convention }
+    )
   end
 
   field :clickwrap_agreement_html, String, null: true

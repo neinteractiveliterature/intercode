@@ -1,19 +1,16 @@
 class MySignupsLoader < GraphQL::Batch::Loader
-  attr_reader :pundit_user
+  attr_reader :user_con_profile
 
-  def initialize(pundit_user)
-    @pundit_user = pundit_user
+  def initialize(user_con_profile)
+    @user_con_profile = user_con_profile
   end
 
   def perform(keys)
-    signup_scope = SignupPolicy::Scope.new(
-      pundit_user,
-      Signup.where(user_con_profile_id: keys.map(&:id)).includes(run: { event: :convention })
-    ).resolve
-
-    signups_by_user_con_profile_id = signup_scope.to_a.group_by(&:user_con_profile_id)
-    keys.each do |user_con_profile|
-      fulfill(user_con_profile, signups_by_user_con_profile_id[user_con_profile.id] || [])
+    signup_scope = user_con_profile.signups.where(run_id: keys.map(&:id))
+      .includes(run: { event: :convention })
+    signups_by_run_id = signup_scope.to_a.group_by(&:run_id)
+    keys.each do |run|
+      fulfill(run, signups_by_run_id[run.id] || [])
     end
   end
 end
