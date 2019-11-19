@@ -58,12 +58,20 @@ class EventVacancyFillService < CivilService::Service
     signups_ordered.find do |signup|
       next if signup.bucket_key == bucket.key
       next unless signup_can_fill_bucket_vacancy?(signup, bucket)
-
-      # don't move signups that are already in their best possible spot
-      next if signup.confirmed? && signup.requested_bucket_key == signup.bucket_key
+      next if signup_already_in_best_slot?(signup)
 
       signup
     end
+  end
+
+  def signup_already_in_best_slot?(signup)
+    return false unless signup.confirmed?
+
+    (signup.requested_bucket_key == signup.bucket_key)
+    # TODO: figure out how to do something like the next line.  We'd rather not move a no-pref
+    # signup out of flex but at this point I am not sure how to do that while allowing it to be
+    # moved at all.
+    #  || (signup.no_preference? && signup.anything? && move_results.empty?)
   end
 
   def signup_can_fill_bucket_vacancy?(signup, bucket)
