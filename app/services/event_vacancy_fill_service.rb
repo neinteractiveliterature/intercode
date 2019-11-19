@@ -76,22 +76,24 @@ class EventVacancyFillService < CivilService::Service
     )
   end
 
-  def signups_ordered
-    @signups_ordered ||= begin
-      movable_signups.to_a.sort_by do |signup|
+  def all_signups_ordered
+    @all_signups_ordered ||= begin
+      all_signups.to_a.sort_by do |signup|
         signup_priority_key(signup)
       end
     end
   end
 
-  def movable_signups
-    @movable_signups ||= begin
+  def all_signups
+    @all_signups ||= begin
       run.signups.reload
-      all_signups = run.signups.where.not(state: 'withdrawn')
+      run.signups.where.not(state: 'withdrawn')
         .where.not(id: team_member_signups.map(&:id))
-
-      all_signups.select { |signup| signup_movable?(signup) }
     end
+  end
+
+  def signups_ordered
+    all_signups_ordered.select { |signup| signup_movable?(signup) }
   end
 
   def signup_movable?(signup)
