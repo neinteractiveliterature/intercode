@@ -84,30 +84,34 @@ function PopperDropdown({
               preventOverflow: { boundariesElement: popoverParent },
             }}
           >
-            {({ ref: popperRef, style: popperStyle, ...otherProps }) => (
-              <PopperDropdownContentWithOnClickOutside
-                getPopperRef={popperRef}
-                style={{ ...(style || {}), ...popperStyle }}
-                placement={effectivePlacement}
-                visible={internalVisible || false}
-                handleClickOutside={handleClickOutside}
-                suppressWrapperDiv={typeof children === 'function'}
-              >
-                {
-                  typeof children === 'function'
-                    ? children({
-                      ref: popperRef,
-                      style,
-                      visible: internalVisible || false,
-                      toggle: targetClicked,
-                      setVisible: setInternalVisible,
-                      ...otherProps,
-                      placement: effectivePlacement,
-                    })
-                    : children
-                }
-              </PopperDropdownContentWithOnClickOutside>
-            )}
+            {({ ref: popperRef, style: popperStyle, ...otherProps }) => {
+              const effectiveStyle = { ...(style || {}), ...popperStyle };
+
+              return (
+                <PopperDropdownContentWithOnClickOutside
+                  getPopperRef={popperRef}
+                  style={effectiveStyle}
+                  placement={effectivePlacement}
+                  visible={internalVisible || false}
+                  handleClickOutside={handleClickOutside}
+                  suppressWrapperDiv={typeof children === 'function'}
+                >
+                  {
+                    typeof children === 'function'
+                      ? children({
+                        ref: popperRef,
+                        style: effectiveStyle,
+                        visible: internalVisible || false,
+                        toggle: targetClicked,
+                        setVisible: setInternalVisible,
+                        ...otherProps,
+                        placement: effectivePlacement,
+                      })
+                      : children
+                  }
+                </PopperDropdownContentWithOnClickOutside>
+              );
+            }}
           </Popper>
         ),
         popoverParent,

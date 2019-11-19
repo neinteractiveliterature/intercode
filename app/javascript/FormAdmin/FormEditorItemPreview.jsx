@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMutation } from 'react-apollo-hooks';
 
-import FormTypes from './form_types.json';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
 import { MoveFormItem } from './mutations.gql';
@@ -14,7 +13,7 @@ import { serializeParsedFormItem } from './FormItemUtils';
 function FormEditorItemPreview({ formItem, index }) {
   const match = useRouteMatch();
   const {
-    convention, currentSection, form, renderedFormItemsById,
+    convention, currentSection, formType, renderedFormItemsById,
   } = useContext(FormEditorContext);
   const renderedFormItem = renderedFormItemsById.get(formItem.id);
   const [moveFormItem] = useMutation(MoveFormItem);
@@ -53,12 +52,11 @@ function FormEditorItemPreview({ formItem, index }) {
 
   const [ref, drag, { isDragging }] = useSortable(index, moveItem, 'formItem');
 
-  const formType = FormTypes[form.form_type];
   const standardItem = ((formType || {}).standard_items || {})[formItem.identifier];
 
   return (
-    <div ref={ref} className={classnames('d-flex bg-white', { 'opacity-50': isDragging })}>
-      <div className="mr-2">
+    <div ref={ref} className={classnames('d-flex align-items-start bg-white border-bottom', { 'opacity-50': isDragging })}>
+      <div className="mr-2 mt-2">
         <span className="sr-only">Drag to reorder</span>
         <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
       </div>
@@ -95,6 +93,16 @@ function FormEditorItemPreview({ formItem, index }) {
           onInteract={() => { }}
           value={formItem.default_value}
         />
+      </div>
+      <div className="ml-2 mt-2">
+        <button
+          className="btn btn-outline-danger btn-sm"
+          type="button"
+          disabled={standardItem && standardItem.required}
+        >
+          <span className="sr-only">Delete question</span>
+          <i className="fa fa-trash-o" />
+        </button>
       </div>
     </div>
   );

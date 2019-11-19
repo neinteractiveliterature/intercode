@@ -5,7 +5,7 @@ import classNames from 'classnames';
 function Tooltip({
   withRef, style, visible, placement, arrowProps, children,
 }) {
-  const placementClass = placement.split('-')[0];
+  const placementClass = (placement || '').split('-')[0];
 
   return (
     <div
