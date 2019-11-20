@@ -11,7 +11,7 @@ import { FormEditorContext } from './FormEditorContexts';
 import { FormEditorQuery } from './queries.gql';
 import FormItemEditorLayout from './FormItemEditorLayout';
 import FormSectionEditorLayout from './FormSectionEditorLayout';
-import FormTypes from './form_types.json';
+import FormTypes from '../../../config/form_types.json';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';

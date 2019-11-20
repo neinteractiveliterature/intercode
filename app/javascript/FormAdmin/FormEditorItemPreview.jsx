@@ -9,6 +9,7 @@ import { FormEditorContext } from './FormEditorContexts';
 import { MoveFormItem } from './mutations.gql';
 import useSortable from '../useSortable';
 import { serializeParsedFormItem } from './FormItemUtils';
+import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 
 function FormEditorItemPreview({ formItem, index }) {
   const match = useRouteMatch();
@@ -55,7 +56,7 @@ function FormEditorItemPreview({ formItem, index }) {
   const standardItem = ((formType || {}).standard_items || {})[formItem.identifier];
 
   return (
-    <div ref={ref} className={classnames('d-flex align-items-start bg-white border-bottom', { 'opacity-50': isDragging })}>
+    <div ref={ref} className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}>
       <div className="mr-2 mt-2">
         <span className="sr-only">Drag to reorder</span>
         <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
@@ -95,14 +96,26 @@ function FormEditorItemPreview({ formItem, index }) {
         />
       </div>
       <div className="ml-2 mt-2">
-        <button
-          className="btn btn-outline-danger btn-sm"
-          type="button"
-          disabled={standardItem && standardItem.required}
-        >
-          <span className="sr-only">Delete question</span>
-          <i className="fa fa-trash-o" />
-        </button>
+        {(standardItem && standardItem.required)
+          ? (
+            <ButtonWithTooltip
+              buttonProps={{ className: 'btn btn-outline-danger btn-sm', disabled: true }}
+              tooltipContent={`${standardItem.description} is required for ${formType.description}`}
+            >
+              <span className="sr-only">Delete question</span>
+              <i className="fa fa-trash-o" />
+            </ButtonWithTooltip>
+          )
+          : (
+            <button
+              className="btn btn-outline-danger btn-sm"
+              type="button"
+            >
+              <span className="sr-only">Delete question</span>
+              <i className="fa fa-trash-o" />
+            </button>
+          )
+        }
       </div>
     </div>
   );

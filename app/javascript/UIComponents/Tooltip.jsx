@@ -28,7 +28,10 @@ Tooltip.propTypes = {
   style: PropTypes.shape({}).isRequired,
   visible: PropTypes.bool.isRequired,
   placement: PropTypes.string.isRequired,
-  arrowProps: PropTypes.shape({}).isRequired,
+  arrowProps: PropTypes.shape({
+    ref: PropTypes.shape({}).isRequired,
+    style: PropTypes.shape({}),
+  }).isRequired,
   children: PropTypes.node.isRequired,
 };
 
