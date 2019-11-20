@@ -149,6 +149,7 @@
     "jest-prop-type-error": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "webpack-dashboard": "^3.2.0",
     "webpack-dev-server": "^3.9.0"
   },
   "scripts": {
