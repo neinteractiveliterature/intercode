@@ -1,5 +1,7 @@
 import uuidv4 from 'uuid/v4';
 
+import { FormEditorQuery } from './queries.gql';
+
 const GENERATED_ID_ARRAY_PROPERTIES = ['choices', 'presets', 'timeblocks', 'omit_timeblocks'];
 
 export function parseFormItemObject(formItem) {
@@ -74,4 +76,27 @@ export function formItemPropertyUpdater(property, onChange) {
     });
     return newFormItem;
   });
+}
+
+export function mutationUpdaterForFormSection(formId, formSectionId, updater) {
+  return (proxy, mutationResultData) => {
+    const data = proxy.readQuery({ query: FormEditorQuery, variables: { id: formId } });
+    proxy.writeQuery({
+      query: FormEditorQuery,
+      variables: { id: formId },
+      data: {
+        ...data,
+        form: {
+          ...data.form,
+          form_sections: data.form.form_sections.map((section) => {
+            if (section.id !== formSectionId) {
+              return section;
+            }
+
+            return updater(section, mutationResultData);
+          }),
+        },
+      },
+    });
+  };
 }

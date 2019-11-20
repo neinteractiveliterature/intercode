@@ -42,6 +42,12 @@ mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
   }
 }
 
+mutation DeleteFormItem($id: Int!) {
+  deleteFormItem(input: { id: $id }) {
+    clientMutationId
+  }
+}
+
 mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
   moveFormItem(input: { id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex }) {
     form_section {

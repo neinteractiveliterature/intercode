@@ -4,20 +4,41 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMutation } from 'react-apollo-hooks';
 
+import { DeleteFormItem, MoveFormItem } from './mutations.gql';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
-import { MoveFormItem } from './mutations.gql';
 import useSortable from '../useSortable';
-import { serializeParsedFormItem } from './FormItemUtils';
+import { serializeParsedFormItem, mutationUpdaterForFormSection } from './FormItemUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import ErrorDisplay from '../ErrorDisplay';
+
+function describeFormItemForDelete(formItem, standardItem) {
+  if (standardItem) {
+    return `the “${standardItem.description}” item`;
+  }
+
+  if (formItem.item_type === 'static_text') {
+    return 'this static text item';
+  }
+
+  return `the custom item “${formItem.identifier}”`;
+}
 
 function FormEditorItemPreview({ formItem, index }) {
+  const confirm = useConfirm();
   const match = useRouteMatch();
   const {
-    convention, currentSection, formType, renderedFormItemsById,
+    convention, currentSection, form, formType, renderedFormItemsById,
   } = useContext(FormEditorContext);
   const renderedFormItem = renderedFormItemsById.get(formItem.id);
   const [moveFormItem] = useMutation(MoveFormItem);
+  const [deleteFormItem] = useMutation(DeleteFormItem, {
+    update: mutationUpdaterForFormSection(form.id, currentSection.id, (section) => ({
+      ...section,
+      form_items: section.form_items.filter((item) => item.id !== formItem.id),
+    })),
+  });
 
   const moveItem = useCallback(
     (dragIndex, hoverIndex) => {
@@ -102,7 +123,7 @@ function FormEditorItemPreview({ formItem, index }) {
               buttonProps={{ className: 'btn btn-outline-danger btn-sm', disabled: true }}
               tooltipContent={`${standardItem.description} is required for ${formType.description}`}
             >
-              <span className="sr-only">Delete question</span>
+              <span className="sr-only">Delete item</span>
               <i className="fa fa-trash-o" />
             </ButtonWithTooltip>
           )
@@ -110,12 +131,16 @@ function FormEditorItemPreview({ formItem, index }) {
             <button
               className="btn btn-outline-danger btn-sm"
               type="button"
+              onClick={() => confirm({
+                prompt: `Are you sure you want to delete ${describeFormItemForDelete(formItem, standardItem)}?`,
+                action: () => deleteFormItem({ variables: { id: formItem.id } }),
+                renderError: (error) => <ErrorDisplay graphQLError={error} />,
+              })}
             >
-              <span className="sr-only">Delete question</span>
+              <span className="sr-only">Delete item</span>
               <i className="fa fa-trash-o" />
             </button>
-          )
-        }
+          )}
       </div>
     </div>
   );
