@@ -1,27 +1,16 @@
-import React, { useMemo, useContext } from 'react';
-import { pluralize } from 'inflected';
-import classNames from 'classnames';
+import React, { useContext } from 'react';
 
 import BooleanInput from '../../BuiltInFormControls/BooleanInput';
 import { formItemPropertyUpdater } from '../FormItemUtils';
 import useModal from '../../ModalDialogs/useModal';
 import DefaultAnswerModal from './DefaultAnswerModal';
 import { FormEditorContext, FormItemEditorContext } from '../FormEditorContexts';
-import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
+import FormItemIdentifierInput from './FormItemIdentifierInput';
 
 function CommonQuestionFields() {
   const { formType } = useContext(FormEditorContext);
   const { formItem, setFormItem, standardItem } = useContext(FormItemEditorContext);
-  const standardItems = formType.standard_items || {};
   const defaultAnswerModal = useModal();
-
-  const standardIdentifiers = useMemo(
-    () => Object.entries(standardItems).map(([identifier]) => (identifier)),
-    [standardItems],
-  );
-
-  const normalizedIdentifier = (formItem.identifier || '');
-  const identifierIsReserved = standardIdentifiers.includes(normalizedIdentifier.toLowerCase());
 
   return (
     <div>
@@ -30,28 +19,12 @@ function CommonQuestionFields() {
         visible={defaultAnswerModal.visible}
       />
       {!standardItem && (
-        <BootstrapFormInput
-          label="Identifier"
-          className={classNames('form-control', {
-            'is-invalid': identifierIsReserved,
-          })}
-          invalidFeedback={
-            identifierIsReserved && (
-              <>
-                <i className="fa fa-warning" />
-                {' '}
-                “
-                {normalizedIdentifier}
-                ”
-                {' '}
-                is a reserved identifier in
-                {' '}
-                {pluralize(formType.description)}
-              </>
-            )
-          }
+        <FormItemIdentifierInput
           value={formItem.identifier}
-          onTextChange={(identifier) => setFormItem({ ...formItem, identifier })}
+          onChange={(identifier) => setFormItem(
+            (prevFormItem) => ({ ...prevFormItem, identifier }),
+          )}
+          formType={formType}
         />
       )}
       {!(standardItem && standardItem.required) && (

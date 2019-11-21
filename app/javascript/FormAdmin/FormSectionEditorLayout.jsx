@@ -7,11 +7,14 @@ import FormSectionEditorContent from './FormSectionEditorContent';
 import buildNewFormItem from './buildNewFormItem';
 import { FormEditorContext } from './FormEditorContexts';
 import { buildFormItemInput, mutationUpdaterForFormSection } from './FormItemUtils';
+import useModal from '../ModalDialogs/useModal';
+import NewFormItemModal from './NewFormItemModal';
 
 function FormSectionEditorLayout() {
   const { currentSection, form } = useContext(FormEditorContext);
   const [createFormItemMutate] = useMutation(CreateFormItem);
   const sectionBottomRef = useRef();
+  const newFormItemModal = useModal();
 
   const createFormItem = useCallback(
     async (newFormItem) => {
@@ -49,7 +52,7 @@ function FormSectionEditorLayout() {
       <div className="col px-0 border overflow-auto" style={{ height: '90vh' }}>
         <div className="d-flex flex-column align-items-stretch">
           <div className="bg-warning-light p-2 border-bottom border-warning sticky-top">
-            <button className="btn btn-sm btn-secondary mr-2" type="button">
+            <button className="btn btn-sm btn-secondary mr-2" type="button" onClick={newFormItemModal.open}>
               Add item
             </button>
 
@@ -65,6 +68,12 @@ function FormSectionEditorLayout() {
         </div>
         <div ref={sectionBottomRef} />
       </div>
+
+      <NewFormItemModal
+        visible={newFormItemModal.visible}
+        close={newFormItemModal.close}
+        createFormItem={createFormItem}
+      />
     </div>
   );
 }
