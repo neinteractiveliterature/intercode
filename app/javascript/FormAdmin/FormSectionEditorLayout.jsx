@@ -49,9 +49,13 @@ function FormSectionEditorLayout() {
       <nav className="col-3 bg-light p-2">
         <FormSectionNav />
       </nav>
-      <div className="col px-0 border overflow-auto" style={{ height: '90vh' }}>
-        <div className="d-flex flex-column align-items-stretch">
-          <div className="bg-warning-light p-2 border-bottom border-warning sticky-top">
+      <div className="col px-0 border d-flex flex-column" style={{ height: '90vh' }}>
+        <div className="d-flex flex-column flex-grow-1 align-items-stretch overflow-hidden">
+          <div className="flex-grow-1 overflow-auto">
+            <FormSectionEditorContent />
+          </div>
+
+          <div className="bg-warning-light p-2 border-top border-warning">
             <button className="btn btn-sm btn-secondary mr-2" type="button" onClick={newFormItemModal.open}>
               Add item
             </button>
@@ -61,9 +65,6 @@ function FormSectionEditorLayout() {
               {' '}
               Add static text
             </button>
-          </div>
-          <div className="p-2">
-            <FormSectionEditorContent />
           </div>
         </div>
         <div ref={sectionBottomRef} />

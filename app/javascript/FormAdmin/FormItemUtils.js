@@ -22,6 +22,20 @@ export function serializeParsedFormItem(formItem) {
   };
 }
 
+export function parseFormSectionObject(formSection) {
+  return {
+    ...formSection,
+    form_items: formSection.form_items.map(parseFormItemObject),
+  };
+}
+
+export function serializeParsedFormSection(formSection) {
+  return {
+    ...formSection,
+    form_items: formSection.form_items.map(serializeParsedFormItem),
+  };
+}
+
 export function addGeneratedIds(properties) {
   return GENERATED_ID_ARRAY_PROPERTIES.reduce((memo, property) => {
     if (memo[property] != null) {

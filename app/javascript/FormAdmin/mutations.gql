@@ -24,6 +24,39 @@ mutation DeleteForm($id: Int!) {
   }
 }
 
+mutation CreateFormSection($formId: Int!, $formSection: FormSectionInput!) {
+  createFormSection(input: { form_id: $formId, form_section: $formSection }) {
+    form_section {
+      id
+      ...FormEditorFormSectionFields
+    }
+  }
+}
+
+mutation UpdateFormSection($id: Int!, $formSection: FormSectionInput!) {
+  updateFormSection(input: { id: $id, form_section: $formSection }) {
+    form_section {
+      id
+      ...FormEditorFormSectionFields
+    }
+  }
+}
+
+mutation DeleteFormSection($id: Int!) {
+  deleteFormSection(input: { id: $id }) {
+    clientMutationId
+  }
+}
+
+mutation MoveFormSection($id: Int!, $destinationIndex: Int!) {
+  moveFormSection(input: { id: $id, destination_index: $destinationIndex }) {
+    form {
+      id
+      ...FormEditorData
+    }
+  }
+}
+
 mutation CreateFormItem($formSectionId: Int!, $formItem: FormItemInput!) {
   createFormItem(input: { form_section_id: $formSectionId, form_item: $formItem }) {
     form_item {
