@@ -3,7 +3,12 @@ ARG RUBY_VERSION=2.6.5
 
 ### build-production
 
-FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as build-production
+FROM ruby:${RUBY_VERSION} as build-production
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install -y yarn libjemalloc-dev libjemalloc2 && apt-get clean
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
 ARG ASSETS_HOST
 
@@ -59,10 +64,12 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
 
 ### production
 
-FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
+FROM ruby:${RUBY_VERSION} as production
+
+RUN apt-get update && apt-get install -y libjemalloc2 && apt-get clean
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
 COPY --from=build-production /usr/local/bundle /usr/local/bundle
-COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
 COPY --from=build-production --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
