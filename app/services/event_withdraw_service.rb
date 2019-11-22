@@ -38,7 +38,7 @@ class EventWithdrawService < CivilService::Service
           prev_bucket_key,
           skip_locking: true
         ).call
-        return failure(vacancy_fill_result.error) if vacancy_fill_result.failure?
+        return failure(vacancy_fill_result.errors) if vacancy_fill_result.failure?
         vacancy_fill_result.move_results
       else
         []
