@@ -1,4 +1,8 @@
 class Queries::SignupQueryManager < Queries::QueryManager
+  def initialize(user:)
+    super(user: user)
+  end
+
   def signed_up_for_run?(run)
     return false unless run && user
 
