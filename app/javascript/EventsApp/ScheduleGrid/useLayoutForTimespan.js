@@ -24,6 +24,9 @@ export default function useLayoutForTimespan(schedule, timespan) {
       const min = timespan.clone();
       min.start.add(3, 'hours'); // start grid at 9am unless something is earlier
       min.finish.subtract(6, 'hours'); // end grid at midnight unless something is earlier
+      if (min.start.isAfter(min.finish)) {
+        return timespan;
+      }
       return min;
     },
     [timespanKey],
