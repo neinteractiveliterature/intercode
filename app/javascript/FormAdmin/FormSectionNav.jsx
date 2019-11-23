@@ -8,6 +8,7 @@ import { FormEditorQuery } from './queries.gql';
 import { useCreateMutation } from '../MutationUtils';
 import { serializeParsedFormSection } from './FormItemUtils';
 import FormSectionNavItem from './FormSectionNavItem';
+import { buildOptimisticArrayForMove } from '../useSortable';
 
 function FormSectionNav() {
   const history = useHistory();
@@ -22,30 +23,24 @@ function FormSectionNav() {
 
   const moveSection = useCallback(
     (dragIndex, hoverIndex) => {
-      const draggedSection = form.form_sections[dragIndex];
-      const optimisticSections = form.form_sections.map(serializeParsedFormSection);
-      optimisticSections.splice(dragIndex, 1);
-      optimisticSections.splice(hoverIndex, 0, serializeParsedFormSection(draggedSection));
-
-      const optimisticResponse = {
-        moveFormSection: {
-          __typename: 'Mutation',
-          form: {
-            ...form,
-            form_sections: optimisticSections.map((section, sectionIndex) => ({
-              ...section,
-              position: sectionIndex + 1,
-            })),
-          },
-        },
-      };
+      const optimisticSections = buildOptimisticArrayForMove(
+        form.form_sections, dragIndex, hoverIndex,
+      ).map(serializeParsedFormSection);
 
       moveFormSection({
         variables: {
-          id: draggedSection.id,
+          id: form.form_sections[dragIndex].id,
           destinationIndex: hoverIndex,
         },
-        optimisticResponse,
+        optimisticResponse: {
+          moveFormSection: {
+            __typename: 'Mutation',
+            form: {
+              ...form,
+              form_sections: optimisticSections,
+            },
+          },
+        },
       });
     },
     [form, moveFormSection],

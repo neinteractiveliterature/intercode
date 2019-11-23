@@ -7,7 +7,7 @@ import { useMutation } from 'react-apollo-hooks';
 import { DeleteFormItem, MoveFormItem } from './mutations.gql';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import { FormEditorContext } from './FormEditorContexts';
-import useSortable from '../useSortable';
+import useSortable, { buildOptimisticArrayForMove } from '../useSortable';
 import { serializeParsedFormItem, mutationUpdaterForFormSection } from './FormItemUtils';
 import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -42,31 +42,25 @@ function FormEditorItemPreview({ formItem, index }) {
 
   const moveItem = useCallback(
     (dragIndex, hoverIndex) => {
-      const draggedItem = currentSection.form_items[dragIndex];
-      const optimisticItems = currentSection.form_items.map(serializeParsedFormItem);
-      optimisticItems.splice(dragIndex, 1);
-      optimisticItems.splice(hoverIndex, 0, serializeParsedFormItem(draggedItem));
-
-      const optimisticResponse = {
-        moveFormItem: {
-          __typename: 'Mutation',
-          form_section: {
-            ...currentSection,
-            form_items: optimisticItems.map((item, itemIndex) => ({
-              ...item,
-              position: itemIndex + 1,
-            })),
-          },
-        },
-      };
+      const optimisticItems = buildOptimisticArrayForMove(
+        currentSection.form_items, dragIndex, hoverIndex,
+      ).map(serializeParsedFormItem);
 
       moveFormItem({
         variables: {
-          id: draggedItem.id,
+          id: currentSection.form_items[dragIndex].id,
           formSectionId: currentSection.id,
           destinationIndex: hoverIndex,
         },
-        optimisticResponse,
+        optimisticResponse: {
+          moveFormItem: {
+            __typename: 'Mutation',
+            form_section: {
+              ...currentSection,
+              form_items: optimisticItems,
+            },
+          },
+        },
       });
     },
     [currentSection, moveFormItem],

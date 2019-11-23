@@ -62,3 +62,15 @@ export default function useSortable(index, moveItem, itemType) {
 
   return [ref, drag, { isDragging }];
 }
+
+export function buildOptimisticArrayForMove(items, dragIndex, hoverIndex) {
+  const draggedItem = items[dragIndex];
+  const optimisticItems = [...items];
+  optimisticItems.splice(dragIndex, 1);
+  optimisticItems.splice(hoverIndex, 0, draggedItem);
+
+  return optimisticItems.map((item, itemIndex) => ({
+    ...item,
+    position: itemIndex + 1,
+  }));
+}
