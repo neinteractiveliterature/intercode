@@ -35,14 +35,6 @@ function FormAdmin() {
           >
             New form
           </BreadcrumbItemWithRoute>
-
-          <BreadcrumbItemWithRoute
-            path="/admin_forms/:id/edit"
-            to={({ match }) => `/admin_forms/${match.params.id}/edit`}
-            hideUnlessMatch
-          >
-            Edit form
-          </BreadcrumbItemWithRoute>
         </ol>
       </nav>
 
@@ -69,18 +61,6 @@ function FormAdmin() {
                 .find((form) => form.id.toString(10) === match.params.id)}
             />
           )}
-        />
-        <Route
-          path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"
-          component={FormEditor}
-        />
-        <Route
-          path="/admin_forms/:id/edit/section/:sectionId"
-          component={FormEditor}
-        />
-        <Route
-          path="/admin_forms/:id/edit"
-          component={FormEditor}
         />
         <Route path="/admin_forms" render={() => <FormAdminIndex />} />
       </Switch>

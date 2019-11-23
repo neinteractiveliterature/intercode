@@ -18,6 +18,15 @@ mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
   }
 }
 
+mutation UpdateForm($id: Int!, $form: FormInput!) {
+  updateForm(input: { id: $id, form: $form }) {
+    form {
+      id
+      ...FormEditorData
+    }
+  }
+}
+
 mutation DeleteForm($id: Int!) {
   deleteForm(input: { id: $id }) {
     clientMutationId

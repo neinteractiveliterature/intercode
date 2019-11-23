@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import {
-  Redirect, Route, Switch, useRouteMatch,
+  Link, Redirect, Route, Switch, useRouteMatch,
 } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import sortBy from 'lodash-es/sortBy';
 import flatMap from 'lodash-es/flatMap';
 
@@ -12,8 +12,10 @@ import { FormEditorQuery } from './queries.gql';
 import FormItemEditorLayout from './FormItemEditorLayout';
 import FormSectionEditorLayout from './FormSectionEditorLayout';
 import FormTypes from '../../../config/form_types.json';
+import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import PageLoadingIndicator from '../PageLoadingIndicator';
 import { parseFormItemObject } from './FormItemUtils';
+import { UpdateForm } from './mutations.gql';
 import usePageTitle from '../usePageTitle';
 
 function FormEditor() {
@@ -23,6 +25,7 @@ function FormEditor() {
       id: Number.parseInt(match.params.id, 10),
     },
   });
+  const [updateForm] = useMutation(UpdateForm);
 
   const form = useMemo(
     () => {
@@ -53,6 +56,8 @@ function FormEditor() {
     [form],
   );
 
+  const updateFormTitle = (title) => updateForm({ variables: { id: form.id, form: { title } } });
+
   usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
 
   if (loading) {
@@ -79,8 +84,38 @@ function FormEditor() {
   const formType = FormTypes[form.form_type] || {};
 
   return (
-    <>
-      <h1 className="mb-4">{form.title}</h1>
+    <div
+      style={{ display: 'grid', gridTemplateRows: 'min-content minmax(0, 1fr)', height: '100vh' }}
+    >
+      <div className="navbar navbar-light bg-warning-light">
+        {match.params.itemId
+          ? (
+            <Link
+              to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
+              className="btn btn-secondary"
+            >
+              <i className="fa fa-chevron-left" />
+              {' '}
+              Back to section
+            </Link>
+          )
+          : (
+            <Link to="/admin_forms" className="btn btn-secondary">
+              <i className="fa fa-chevron-left" />
+              {' '}
+              Back to forms
+            </Link>
+          )}
+        <div className="flex-grow-1 ml-2">
+          <InPlaceEditor
+            className="d-flex align-items-start w-100"
+            value={form.title}
+            onChange={updateFormTitle}
+          >
+            <div className="navbar-brand">{form.title}</div>
+          </InPlaceEditor>
+        </div>
+      </div>
 
       <FormEditorContext.Provider
         value={{
@@ -98,7 +133,7 @@ function FormEditor() {
           />
         </Switch>
       </FormEditorContext.Provider>
-    </>
+    </div>
   );
 }
 

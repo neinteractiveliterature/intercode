@@ -29,7 +29,7 @@ Tooltip.propTypes = {
   visible: PropTypes.bool.isRequired,
   placement: PropTypes.string.isRequired,
   arrowProps: PropTypes.shape({
-    ref: PropTypes.shape({}).isRequired,
+    ref: PropTypes.any,
     style: PropTypes.shape({}),
   }).isRequired,
   children: PropTypes.node.isRequired,

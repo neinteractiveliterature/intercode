@@ -31,6 +31,7 @@ const UnwrappedNonCMSPageComponents = {
   EventsApp: () => import(/* webpackChunkName: "events-app" */ './EventsApp'),
   EditEventProposal: () => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'),
   FormAdmin: () => import(/* webpackChunkName: "form-admin" */ './FormAdmin'),
+  FormEditor: () => import(/* webpackChunkName: "form-editor" */ './FormAdmin/FormEditor'),
   MailingLists: () => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'),
   MyProfile: () => import(/* webpackChunkName: "my-profile" */ './MyProfile'),
   MyTicket: () => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'),

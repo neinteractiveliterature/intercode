@@ -83,11 +83,11 @@ function FormItemEditorLayout() {
         message="Are you sure you want to discard changes to this item?"
         when={hasChanges}
       />
-      <div className="row m-0">
+      <div className="row m-0 flex-grow-1">
         <nav className="col-3 bg-light p-2">
           <FormItemTools saveFormItem={saveFormItem} />
         </nav>
-        <div className="col px-0 border" style={{ height: '90vh' }}>
+        <div className="col px-0 border">
           <div className="d-flex flex-column overflow-hidden">
             <div className="bg-info-light mb-2 sticky-top">
               <div className="bg-info text-white px-2 font-weight-bold">Preview</div>

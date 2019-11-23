@@ -45,11 +45,11 @@ function FormSectionEditorLayout() {
   );
 
   return (
-    <div className="row m-0">
+    <div className="row m-0 overflow-hidden">
       <nav className="col-3 bg-light p-2">
         <FormSectionNav />
       </nav>
-      <div className="col px-0 border d-flex flex-column" style={{ height: '90vh' }}>
+      <div className="col px-0 border-left d-flex flex-column">
         <div className="d-flex flex-column flex-grow-1 align-items-stretch overflow-hidden">
           <div className="flex-grow-1 overflow-auto">
             <FormSectionEditorContent />

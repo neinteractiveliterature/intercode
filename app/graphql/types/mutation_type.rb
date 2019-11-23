@@ -86,6 +86,7 @@ class Types::MutationType < Types::BaseObject
 
   field :createFormWithJSON, mutation: Mutations::CreateFormWithJSON
   field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON
+  field :updateForm, mutation: Mutations::UpdateForm
   field :deleteForm, mutation: Mutations::DeleteForm
 
   ### FormItem
