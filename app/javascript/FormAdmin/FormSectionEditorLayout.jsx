@@ -36,7 +36,7 @@ function FormSectionEditorLayout() {
         sectionBottomRef.current.scrollIntoView();
       }
     },
-    [createFormItemMutate, currentSection.id, form.id],
+    [createFormItemMutate, currentSection, form.id],
   );
 
   const createStaticText = useCallback(
