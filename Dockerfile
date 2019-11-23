@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.1.3-experimental
-ARG RUBY_VERSION=2.5.3
+ARG RUBY_VERSION=2.6.5
 
 ### build-production
 
