@@ -57,7 +57,12 @@ class IntercodeSchema < GraphQL::Schema
   end
 
   rescue_from ActiveRecord::RecordNotFound do |_err, _obj, _args, _ctx, field|
-    raise GraphQL::ExecutionError, "#{field.type.unwrap.graphql_name} not found"
+    type_name = field.type.unwrap.graphql_name
+    if type_name == 'Boolean'
+      raise GraphQL::ExecutionError, "Record not found while evaluating #{field.name}"
+    else
+      raise GraphQL::ExecutionError, "#{field.type.unwrap.graphql_name} not found"
+    end
   end
 
   rescue_from Liquid::SyntaxError do |err, _obj, _args, _ctx, _field|
