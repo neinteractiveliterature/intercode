@@ -178,8 +178,8 @@ export default class Schedule {
 
     if (this.hideConflicts) {
       const runTimespan = this.getRunTimespan(runId);
-      const hasConflict = this.myConflictingRuns.filter((run) => run.id !== runId)
-        .some((run) => this.getRunTimespan(run.id).overlapsTimespan(runTimespan));
+      const hasConflict = this.myConflictingRuns.filter((r) => r.id !== runId)
+        .some((r) => this.getRunTimespan(r.id).overlapsTimespan(runTimespan));
 
       const acceptsCountedSignups = event.registration_policy.buckets.some((bucket) => (
         (!bucket.slots_limited || bucket.total_slots > 0)

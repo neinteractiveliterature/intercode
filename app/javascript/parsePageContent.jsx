@@ -159,7 +159,7 @@ function processReactComponentNode(node, children, index, componentMap) {
   const props = JSON.parse((node.attributes['data-react-props'] || { value: '{}' }).value);
   return React.createElement(
     Suspense,
-    { fallback: (<></>) },
+    { fallback: (<></>), key: index },
     React.createElement(
       ErrorBoundary,
       { errorType: 'graphql' },
