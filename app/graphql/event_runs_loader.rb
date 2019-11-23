@@ -15,10 +15,14 @@ class EventRunsLoader < GraphQL::Batch::Loader
 
     runs_by_event_id = run_scope.to_a.group_by(&:event_id)
     # if I can read one run I can read any run
-    return [] unless RunPolicy.new(pundit_user, run_scope.first).read?
-
-    keys.each do |event|
-      fulfill(event, runs_by_event_id[event.id] || [])
+    if runs_by_event_id.present? && RunPolicy.new(pundit_user, run_scope.first).read?
+      keys.each do |event|
+        fulfill(event, runs_by_event_id[event.id] || [])
+      end
+    else
+      keys.each do |event|
+        fulfill(event, [])
+      end
     end
   end
 end
