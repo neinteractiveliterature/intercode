@@ -62,15 +62,20 @@ RUN mv public/packs public/packs-test \
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
   yarn install --production=false
 
+### pre-production
+
+FROM build-production as pre-production
+RUN rm -rf /usr/src/intercode/node_modules
+
 ### production
 
-FROM ruby:${RUBY_VERSION} as production
+FROM ruby:${RUBY_VERSION}-slim as production
 
-RUN apt-get update && apt-get install -y libjemalloc2 && apt-get clean
+RUN apt-get update && apt-get install -y libpq5 libjemalloc2 && apt-get clean
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
-COPY --from=build-production /usr/local/bundle /usr/local/bundle
-COPY --from=build-production --chown=www /usr/src/intercode /usr/src/intercode
+COPY --from=pre-production /usr/local/bundle /usr/local/bundle
+COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
 CMD bundle exec rails server -p $PORT -b 0.0.0.0
