@@ -62,7 +62,6 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
 FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
 
 COPY --from=build-production /usr/local/bundle /usr/local/bundle
-COPY --from=build-production /usr/local/lib/libgraphqlparser.so /usr/local/lib/libgraphqlparser.so
 COPY --from=build-production --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
