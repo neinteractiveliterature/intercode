@@ -45,37 +45,35 @@ function FormSectionEditorLayout() {
   );
 
   return (
-    <div className="row m-0 overflow-hidden">
-      <nav className="col-3 bg-light p-2">
+    <>
+      <nav className="form-section-editor-nav bg-light border-right p-2">
         <FormSectionNav />
       </nav>
-      <div className="col px-0 border-left d-flex flex-column">
-        <div className="d-flex flex-column flex-grow-1 align-items-stretch overflow-hidden">
-          <div className="flex-grow-1 overflow-auto">
-            <FormSectionEditorContent />
-          </div>
 
-          <div className="bg-warning-light p-2 border-top border-warning">
-            <button className="btn btn-sm btn-secondary mr-2" type="button" onClick={newFormItemModal.open}>
-              Add item
-            </button>
+      <div className="overflow-auto" style={{ gridRow: 'span 3' }}>
+        <FormSectionEditorContent />
 
-            <button className="btn btn-sm btn-secondary" type="button" onClick={createStaticText}>
-              <i className="fa fa-paragraph" />
-              {' '}
-              Add static text
-            </button>
-          </div>
-        </div>
         <div ref={sectionBottomRef} />
       </div>
 
-      <NewFormItemModal
-        visible={newFormItemModal.visible}
-        close={newFormItemModal.close}
-        createFormItem={createFormItem}
-      />
-    </div>
+      <div className="bg-warning-light p-2 border-top border-warning">
+        <button className="btn btn-sm btn-secondary mr-2" type="button" onClick={newFormItemModal.open}>
+          Add item
+        </button>
+
+        <button className="btn btn-sm btn-secondary" type="button" onClick={createStaticText}>
+          <i className="fa fa-paragraph" />
+          {' '}
+          Add static text
+        </button>
+
+        <NewFormItemModal
+          visible={newFormItemModal.visible}
+          close={newFormItemModal.close}
+          createFormItem={createFormItem}
+        />
+      </div>
+    </>
   );
 }
 

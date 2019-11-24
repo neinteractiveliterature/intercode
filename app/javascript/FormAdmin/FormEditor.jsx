@@ -84,10 +84,8 @@ function FormEditor() {
   const formType = FormTypes[form.form_type] || {};
 
   return (
-    <div
-      style={{ display: 'grid', gridTemplateRows: 'min-content minmax(0, 1fr)', height: '100vh' }}
-    >
-      <div className="navbar navbar-light bg-warning-light">
+    <div className="form-editor">
+      <div className="form-editor-top-navbar navbar navbar-light bg-warning-light">
         {match.params.itemId
           ? (
             <Link

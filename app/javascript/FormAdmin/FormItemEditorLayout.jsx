@@ -83,32 +83,26 @@ function FormItemEditorLayout() {
         message="Are you sure you want to discard changes to this item?"
         when={hasChanges}
       />
-      <div className="row m-0 flex-grow-1">
-        <nav className="col-3 bg-light p-2">
-          <FormItemTools saveFormItem={saveFormItem} />
-        </nav>
-        <div className="col px-0 border">
-          <div className="d-flex flex-column overflow-hidden">
-            <div className="bg-info-light mb-2 sticky-top">
-              <div className="bg-info text-white px-2 font-weight-bold">Preview</div>
-              <div className="glow-inset-info">
-                <div className="p-2 overflow-auto" style={{ maxHeight: '40vh' }}>
-                  <FormItemInput
-                    convention={convention}
-                    formItem={renderedFormItem}
-                    onInteract={() => { }}
-                    onChange={() => { }}
-                    value={renderedFormItem.default_value}
-                  />
-                </div>
-              </div>
-            </div>
-            <ErrorDisplay graphQLError={updateError} />
-            <div className="p-2 overflow-auto">
-              <FormItemEditorContent />
-            </div>
-          </div>
+      <nav className="form-item-editor-tools bg-light p-2 border-right">
+        <FormItemTools saveFormItem={saveFormItem} />
+      </nav>
+      <div className="form-item-editor-preview bg-info-light">
+        <div className="bg-info text-white px-2 font-weight-bold">Preview</div>
+        <div className="glow-inset-info p-2 overflow-auto">
+          <FormItemInput
+            convention={convention}
+            formItem={renderedFormItem}
+            onInteract={() => { }}
+            onChange={() => { }}
+            value={renderedFormItem.default_value}
+          />
         </div>
+      </div>
+      <div className="form-item-editor-error">
+        <ErrorDisplay graphQLError={updateError} />
+      </div>
+      <div className="form-item-editor-content p-2 overflow-auto">
+        <FormItemEditorContent />
       </div>
     </FormItemEditorContext.Provider>
   );

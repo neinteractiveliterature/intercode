@@ -1,3 +1,38 @@
+.form-editor {
+  display: grid;
+  grid-template-rows: min-content min-content min-content minmax(0, 1fr) min-content;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+}
+
+.form-editor-top-navbar {
+  grid-column: span 2;
+}
+
+.form-section-editor-content {
+  grid-row: span 3;
+}
+
+// .form-section-editor-add-item-bar {
+// }
+
+.form-item-editor-tools, .form-section-editor-nav {
+  grid-row: span 4;
+}
+
+.form-item-editor-preview {
+  display: grid;
+  grid-template-rows: min-content minmax(0, 1fr);
+  max-height: 40vh;
+}
+
+// .form-item-editor-error {
+// }
+
+.form-item-editor-content {
+  grid-row: span 2;
+}
+
 .form-editor-item {
   position: relative;
 }
