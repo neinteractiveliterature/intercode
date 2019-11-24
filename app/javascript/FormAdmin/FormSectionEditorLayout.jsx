@@ -50,13 +50,13 @@ function FormSectionEditorLayout() {
         <FormSectionNav />
       </nav>
 
-      <div className="overflow-auto" style={{ gridRow: 'span 3' }}>
+      <div className="form-section-editor-content overflow-auto">
         <FormSectionEditorContent />
 
         <div ref={sectionBottomRef} />
       </div>
 
-      <div className="bg-warning-light p-2 border-top border-warning">
+      <div className="form-section-editor-add-item-bar bg-warning-light p-2 border-top border-warning">
         <button className="btn btn-sm btn-secondary mr-2" type="button" onClick={newFormItemModal.open}>
           Add item
         </button>
