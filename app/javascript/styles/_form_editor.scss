@@ -1,36 +1,58 @@
 .form-editor {
   display: grid;
-  grid-template-rows: min-content min-content min-content minmax(0, 1fr) min-content;
-  grid-template-columns: 300px 1fr;
   height: 100vh;
+
+  grid-template-rows: min-content min-content min-content min-content minmax(0, 1fr) min-content;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+      "navbar"
+      "side"
+      "preview"
+      "error"
+      "content"
+      "toolbar";
+
+  @include media-breakpoint-up(lg) {
+    grid-template-rows: min-content min-content min-content minmax(0, 1fr) min-content;
+    grid-template-columns: 300px 1fr;
+    grid-template-areas:
+      "navbar navbar"
+      "side   preview"
+      "side   error"
+      "side   content"
+      "side   toolbar";
+  }
 }
 
 .form-editor-top-navbar {
-  grid-column: span 2;
+  grid-area: navbar;
 }
 
 .form-section-editor-content {
-  grid-row: span 3;
+  grid-area: content;
 }
 
-// .form-section-editor-add-item-bar {
-// }
+.form-section-editor-add-item-bar {
+  grid-area: toolbar;
+}
 
 .form-item-editor-tools, .form-section-editor-nav {
-  grid-row: span 4;
+  grid-area: side;
 }
 
 .form-item-editor-preview {
   display: grid;
   grid-template-rows: min-content minmax(0, 1fr);
   max-height: 40vh;
+  grid-area: preview;
 }
 
-// .form-item-editor-error {
-// }
+.form-item-editor-error {
+  grid-area: error;
+}
 
 .form-item-editor-content {
-  grid-row: span 2;
+  grid-area: content;
 }
 
 .form-editor-item {
