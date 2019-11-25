@@ -18,6 +18,15 @@ mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
   }
 }
 
+mutation CreateForm($form: FormInput!, $formType: FormType!) {
+  createForm(input: { form: $form, form_type: $formType }) {
+    form {
+      id
+      ...FormFields
+    }
+  }
+}
+
 mutation UpdateForm($id: Int!, $form: FormInput!) {
   updateForm(input: { id: $id, form: $form }) {
     form {

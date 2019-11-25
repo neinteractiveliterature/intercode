@@ -7,12 +7,13 @@ import classNames from 'classnames';
 
 import { FormEditorContext } from './FormEditorContexts';
 import { sortByLocaleString } from '../ValueUtils';
-import buildNewFormItem, { DEFAULT_PROPERTIES } from './buildNewFormItem';
+import FormItemDefaultProperties from '../../../config/form_item_default_properties.json';
+import buildNewFormItem from './buildNewFormItem';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import FormItemIdentifierInput from './ItemEditors/FormItemIdentifierInput';
 
-const customItemTypes = Object.keys(DEFAULT_PROPERTIES).filter(
+const customItemTypes = Object.keys(FormItemDefaultProperties).filter(
   (itemType) => itemType !== 'static_text',
 );
 

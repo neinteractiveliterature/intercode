@@ -10,6 +10,8 @@ import { sortByLocaleString } from '../ValueUtils';
 import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import { useDeleteMutation } from '../MutationUtils';
+import useModal from '../ModalDialogs/useModal';
+import NewFormModal from './NewFormModal';
 
 function describeFormUsers(form) {
   return [
@@ -27,6 +29,7 @@ function FormAdminIndex() {
     arrayPath: ['convention', 'forms'],
     idVariablePath: ['id'],
   });
+  const newFormModal = useModal();
   const sortedForms = useMemo(
     () => (error
       ? null
@@ -47,9 +50,8 @@ function FormAdminIndex() {
         {data.convention.name}
       </h1>
 
-      <div className="alert alert-danger mt-4">
-        Form editing is an advanced feature that requires knowledge of Intercode’s
-        form system as well as directly editing JSON data.  Proceed with caution.
+      <div className="alert alert-warning mt-4">
+        Changes to forms take effect immediately.  Proceed with caution.
       </div>
 
       <table className="table table-striped">
@@ -99,9 +101,11 @@ function FormAdminIndex() {
         </tbody>
       </table>
 
-      <Link to="/admin_forms/new" className="btn btn-primary">
+      <button type="button" className="btn btn-primary" onClick={newFormModal.open}>
         New form
-      </Link>
+      </button>
+
+      <NewFormModal visible={newFormModal.visible} close={newFormModal.close} />
     </>
   );
 }

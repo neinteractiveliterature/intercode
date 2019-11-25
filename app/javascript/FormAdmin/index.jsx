@@ -4,7 +4,6 @@ import { Switch, Route } from 'react-router-dom';
 import BreadcrumbItemWithRoute from '../Breadcrumbs/BreadcrumbItemWithRoute';
 import FormAdminIndex from './FormAdminIndex';
 import { FormAdminQuery } from './queries.gql';
-import FormEditor from './FormEditor';
 import FormJSONEditor from './FormJSONEditor';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
@@ -29,29 +28,16 @@ function FormAdmin() {
           </BreadcrumbItemWithRoute>
 
           <BreadcrumbItemWithRoute
-            path="/admin_forms/new"
-            to="/admin_forms/new"
+            path="/admin_forms/edit_advanced"
+            to="/admin_forms/edit_advanced"
             hideUnlessMatch
           >
-            New form
+            Edit form (advanced)
           </BreadcrumbItemWithRoute>
         </ol>
       </nav>
 
       <Switch>
-        <Route
-          path="/admin_forms/new"
-          render={({ history }) => (
-            <FormJSONEditor
-              history={history}
-              initialForm={{
-                id: null,
-                form_type: '',
-                export_json: '{ "title": "", "sections": [] }',
-              }}
-            />
-          )}
-        />
         <Route
           path="/admin_forms/:id/edit_advanced"
           render={({ match, history }) => (
