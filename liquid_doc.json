@@ -1358,9 +1358,71 @@
           ]
         },
         {
+          "name": "run_availabilities",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Run availabilities for this convention",
+              "types": [
+                "Array<RunAvailabilityDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "run_availabilities_with_any_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Run availabilities for this convention with any slots\n(counted or not-counted) available",
+              "types": [
+                "Array<RunAvailabilityDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "run_availabilities_with_counted_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Run availabilities for this convention with counted slots\navailable",
+              "types": [
+                "Array<RunAvailabilityDrop>"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "run_availabilities_with_not_counted_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Run availabilities for this convention with not-counted\nslots available",
+              "types": [
+                "Array<RunAvailabilityDrop>"
+              ]
+            }
+          ]
+        },
+        {
           "name": "runs_with_openings",
           "docstring": "",
           "tags": [
+            {
+              "tag_name": "deprecated",
+              "name": null,
+              "text": "",
+              "types": null
+            },
             {
               "tag_name": "return",
               "name": null,
@@ -2609,6 +2671,177 @@
       ]
     },
     {
+      "name": "RunAvailabilityDrop",
+      "superclasses": [
+        "RunAvailabilityDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "The available slots for an event run",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "run_availability_presenter",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "run",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The run itself",
+              "types": [
+                "RunDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bucket_availabilities_with_any_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The bucket availabilites in this run that have any available\nslots (both counted and not-counted)",
+              "types": [
+                "BucketAvailabilityDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bucket_availabilities_with_counted_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The bucket availabilites in this run with available counted\nslots",
+              "types": [
+                "BucketAvailabilityDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "buckets_with_not_counted_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The bucket availabilites in this run with available\nnot-counted slots",
+              "types": [
+                "BucketAvailabilityDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of RunAvailabilityDrop",
+              "types": [
+                "RunAvailabilityDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "full",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Are all buckets (both counted and non-counted) full?",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "has_any_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Are there any buckets (either counted or non-counted) with availability?",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "has_counted_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Are there any counted buckets with availability?",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "has_not_counted_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Are there any not-counted buckets with availability?",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_category_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the event category for this event.  Useful for passing to the\nLiquid \"where\" filter.",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "UserConProfileDrop",
       "superclasses": [
         "UserConProfileDrop",
@@ -2918,6 +3151,121 @@
               "name": null,
               "text": "",
               "types": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "BucketAvailabilityDrop",
+      "superclasses": [
+        "BucketAvailabilityDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "The available slots for a single bucket in an event run",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "bucket_availability_presenter",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "bucket",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The bucket itself",
+              "types": [
+                "RegistrationPolicy::BucketDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "confirmed_count",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The number of filled slots in this bucket (whether counted or not-counted)",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "available_slots",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The number of slots available in this bucket (or nil if the bucket is\nunlimited)",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            },
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of BucketAvailabilityDrop",
+              "types": [
+                "BucketAvailabilityDrop"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "full",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Is this bucket full?  (Always false for unlimited buckets.)",
+              "types": [
+                "Boolean"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "has_availablity",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Does this bucket have any available slots?\n(Always true for unlimited buckets.)",
+              "types": [
+                "Boolean"
+              ]
             }
           ]
         }

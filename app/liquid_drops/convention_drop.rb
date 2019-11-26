@@ -37,6 +37,32 @@ class ConventionDrop < Liquid::Drop
     @convention = convention
   end
 
+  # @return [Array<RunAvailabilityDrop>] Run availabilities for this convention
+  def run_availabilities
+    runs = convention.runs.includes(event: :event_category).order(:starts_at)
+    presenters = RunAvailabilityPresenter.for_runs(runs).values
+    presenters.sort_by { |p| runs.index(p.run) }
+  end
+
+  # @return [Array<RunAvailabilityDrop>] Run availabilities for this convention with any slots
+  #                                      (counted or not-counted) available
+  def run_availabilities_with_any_slots
+    run_availabilities.select(&:has_any_slots?)
+  end
+
+  # @return [Array<RunAvailabilityDrop>] Run availabilities for this convention with counted slots
+  #                                      available
+  def run_availabilities_with_counted_slots
+    run_availabilities.select(&:has_counted_slots?)
+  end
+
+  # @return [Array<RunAvailabilityDrop>] Run availabilities for this convention with not-counted
+  #                                      slots available
+  def run_availabilities_with_not_counted_slots
+    run_availabilities.select(&:has_not_counted_slots?)
+  end
+
+  # @deprecated
   # @return [Array<RunDrop>] Runs of events in this convention that have any available slots in
   #                          limited buckets
   def runs_with_openings
