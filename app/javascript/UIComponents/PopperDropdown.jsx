@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useRef, useImperativeHandle, forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
+import ReactDOM, { findDOMNode } from 'react-dom';
 import { Manager, Reference, Popper } from 'react-popper';
 import classNames from 'classnames';
 import onClickOutside from 'react-onclickoutside';
@@ -39,7 +39,7 @@ const PopperDropdownContentWithOnClickOutside = onClickOutside(PopperDropdownCon
 
 function PopperDropdown({
   // eslint-disable-next-line react/prop-types
-  children, onToggle, placement, renderReference, visible,
+  children, onToggle, placement, renderReference, style, visible,
 }, ref) {
   const [internalVisible, setInternalVisible] = useState(visible);
   useEffect(() => { setInternalVisible(visible); }, [visible]);
@@ -56,7 +56,7 @@ function PopperDropdown({
     setInternalVisible(false);
   };
 
-  const targetClicked = () => {
+  const targetClicked = (event) => {
     if (onToggle) {
       setInternalVisible((prevVisible) => onToggle(prevVisible, event));
     } else {
@@ -65,6 +65,7 @@ function PopperDropdown({
   };
 
   const effectivePlacement = placement || 'bottom-start';
+  const popoverParent = document.querySelectorAll('.non-cms-page')[0] || document.body;
 
   return (
     <Manager ref={managerNode}>
@@ -75,32 +76,46 @@ function PopperDropdown({
           setVisible: setInternalVisible,
         })}
       </Reference>
-      <Popper placement={internalVisible ? effectivePlacement : 'invalid'}>
-        {({ ref: popperRef, style, ...otherProps }) => (
-          <PopperDropdownContentWithOnClickOutside
-            getPopperRef={popperRef}
-            style={style}
-            placement={effectivePlacement}
-            visible={internalVisible || false}
-            handleClickOutside={handleClickOutside}
-            suppressWrapperDiv={typeof children === 'function'}
+      {ReactDOM.createPortal(
+        (
+          <Popper
+            placement={internalVisible ? effectivePlacement : 'invalid'}
+            modifiers={{
+              preventOverflow: { boundariesElement: popoverParent },
+            }}
           >
-            {
-              typeof children === 'function'
-                ? children({
-                  ref: popperRef,
-                  style,
-                  visible: internalVisible || false,
-                  toggle: targetClicked,
-                  setVisible: setInternalVisible,
-                  ...otherProps,
-                  placement: effectivePlacement,
-                })
-                : children
-            }
-          </PopperDropdownContentWithOnClickOutside>
-        )}
-      </Popper>
+            {({ ref: popperRef, style: popperStyle, ...otherProps }) => {
+              const effectiveStyle = { ...(style || {}), ...popperStyle };
+
+              return (
+                <PopperDropdownContentWithOnClickOutside
+                  getPopperRef={popperRef}
+                  style={effectiveStyle}
+                  placement={effectivePlacement}
+                  visible={internalVisible || false}
+                  handleClickOutside={handleClickOutside}
+                  suppressWrapperDiv={typeof children === 'function'}
+                >
+                  {
+                    typeof children === 'function'
+                      ? children({
+                        ref: popperRef,
+                        style: effectiveStyle,
+                        visible: internalVisible || false,
+                        toggle: targetClicked,
+                        setVisible: setInternalVisible,
+                        ...otherProps,
+                        placement: effectivePlacement,
+                      })
+                      : children
+                  }
+                </PopperDropdownContentWithOnClickOutside>
+              );
+            }}
+          </Popper>
+        ),
+        popoverParent,
+      )}
     </Manager>
   );
 }

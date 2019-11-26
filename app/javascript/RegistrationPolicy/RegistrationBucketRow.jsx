@@ -116,6 +116,10 @@ class RegistrationBucketRow extends React.Component {
       return null;
     }
 
+    if (this.props.lockCounts) {
+      return null;
+    }
+
     const slotControls = [
       {
         label: 'Min',
@@ -245,6 +249,7 @@ RegistrationBucketRow.propTypes = {
   registrationBucket: RegistrationPolicyBucketPropType.isRequired,
   onChange: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  lockCounts: PropTypes.bool,
   lockNameAndDescription: PropTypes.bool,
   lockLimited: PropTypes.bool,
   lockDelete: PropTypes.bool,
@@ -252,6 +257,7 @@ RegistrationBucketRow.propTypes = {
 };
 
 RegistrationBucketRow.defaultProps = {
+  lockCounts: false,
   lockNameAndDescription: false,
   lockLimited: false,
   lockDelete: false,

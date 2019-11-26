@@ -11,6 +11,7 @@ import PopperDropdown from '../UIComponents/PopperDropdown';
 import Tooltip from '../UIComponents/Tooltip';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useDeleteMutation } from '../MutationUtils';
+import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 
 function EventCategoryRow({ eventCategory }) {
   const confirm = useConfirm();
@@ -37,32 +38,22 @@ function EventCategoryRow({ eventCategory }) {
         {
           eventCategory.events_paginated.total_entries > 0
             ? (
-              <PopperDropdown
-                placement="bottom-end"
-                renderReference={({ ref, setVisible }) => (
-                  <button
-                    ref={ref}
-                    type="button"
-                    className="btn btn-outline-danger btn-sm mr-2"
-                    disabled
-                    onFocus={() => setVisible(true)}
-                    onBlur={() => setVisible(false)}
-                    onMouseOver={() => setVisible(true)}
-                    onMouseOut={() => setVisible(false)}
-                  >
-                    <i className="fa fa-trash-o" />
-                    <span className="sr-only">Delete event category</span>
-                  </button>
-                )}
-              >
-                {({ ref, ...popperProps }) => (
-                  <Tooltip withRef={ref} {...popperProps}>
+              <ButtonWithTooltip
+                buttonProps={{
+                  className: 'btn btn-outline-danger btn-sm mr-2',
+                  disabled: true,
+                }}
+                tooltipContent={(
+                  <>
                     This event category cannot be deleted because there are events in
                     it.  To delete it, first either drop these events or change their
                     categories.
-                  </Tooltip>
+                  </>
                 )}
-              </PopperDropdown>
+              >
+                <i className="fa fa-trash-o" />
+                <span className="sr-only">Delete event category</span>
+              </ButtonWithTooltip>
             )
             : (
               <button

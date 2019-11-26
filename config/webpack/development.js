@@ -1,5 +1,6 @@
 const { config: { outputPath: contentBase, publicPath }, devServer } = require('@rails/webpacker');
 const environment = require('./environment');
+const DashboardPlugin = require("webpack-dashboard/plugin");
 
 module.exports = {
   ...environment,
@@ -25,6 +26,7 @@ module.exports = {
       ])
       : []
     ),
+    new DashboardPlugin({ port: devServer.port }),
   ],
   devServer: {
     clientLogLevel: 'none',

@@ -20,3 +20,14 @@ export function getConventionDayTimespans(conventionTimespan, timezoneName) {
     moment.duration(6, 'hours'), // start convention days at 6:00am
   );
 }
+
+export function getMemoizationKeyForTimespan(timespan) {
+  if (!timespan) {
+    return '';
+  }
+
+  return [
+    timespan.start ? timespan.start.toISOString() : '',
+    timespan.finish ? timespan.finish.toISOString() : '',
+  ].join('/');
+}

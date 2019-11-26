@@ -5,7 +5,7 @@ import classNames from 'classnames';
 function Tooltip({
   withRef, style, visible, placement, arrowProps, children,
 }) {
-  const placementClass = placement.split('-')[0];
+  const placementClass = (placement || '').split('-')[0];
 
   return (
     <div
@@ -28,7 +28,10 @@ Tooltip.propTypes = {
   style: PropTypes.shape({}).isRequired,
   visible: PropTypes.bool.isRequired,
   placement: PropTypes.string.isRequired,
-  arrowProps: PropTypes.shape({}).isRequired,
+  arrowProps: PropTypes.shape({
+    ref: PropTypes.any,
+    style: PropTypes.shape({}),
+  }).isRequired,
   children: PropTypes.node.isRequired,
 };
 

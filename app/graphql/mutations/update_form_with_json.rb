@@ -7,7 +7,6 @@ class Mutations::UpdateFormWithJSON < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :forms, :id, :update
 
   def resolve(**args)
-    form = convention.forms.find(args[:id])
     ImportFormContentService.new(form: form, content: JSON.parse(args[:form_json])).call!
 
     { form: form }

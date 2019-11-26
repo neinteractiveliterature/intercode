@@ -1,0 +1,183 @@
+{
+  "event": {
+    "description": "event form",
+    "standard_items": {
+      "title": {
+        "description": "Event title",
+        "required": true
+      },
+      "author": {
+        "description": "Event author(s)"
+      },
+      "event_email": {
+        "description": "Event email",
+        "item_type": "event_email"
+      },
+      "organization": {
+        "description": "Organization"
+      },
+      "url": {
+        "description": "Event homepage URL"
+      },
+      "length_seconds": {
+        "description": "Event length",
+        "item_type": "timespan",
+        "required": true
+      },
+      "can_play_concurrently": {
+        "description": "Can sign up for simultaneous events",
+        "required": true
+      },
+      "con_mail_destination": {
+        "description": "Convention mail destination"
+      },
+      "description": {
+        "description": "Full description",
+        "required": true
+      },
+      "short_blurb": {
+        "description": "Short blurb",
+        "required": true
+      },
+      "registration_policy": {
+        "description": "Registration policy",
+        "item_type": "registration_policy",
+        "required": true
+      },
+      "participant_communications": {
+        "description": "Participant communications policy"
+      },
+      "age_restrictions": {
+        "description": "Age restrictions",
+        "item_type": "age_restrictions"
+      },
+      "content_warnings": {
+        "description": "Content warnings"
+      }
+    }
+  },
+  "event_proposal": {
+    "description": "event proposal form",
+    "standard_items": {
+      "title": {
+        "description": "Event title",
+        "required": true
+      },
+      "event_email": {
+        "description": "Event email",
+        "item_type": "event_email"
+      },
+      "age_restrictions": {
+        "description": "Age restrictions",
+        "item_type": "age_restrictions"
+      },
+      "length_seconds": {
+        "description": "Event length",
+        "item_type": "timespan",
+        "required": true
+      },
+      "description": {
+        "description": "Full description",
+        "required": true
+      },
+      "short_blurb": {
+        "description": "Short blurb",
+        "required": true
+      },
+      "registration_policy": {
+        "description": "Registration policy",
+        "item_type": "registration_policy",
+        "required": true
+      },
+      "can_play_concurrently": {
+        "description": "Can sign up for simultaneous events",
+        "required": true
+      },
+      "timeblock_preferences": {
+        "description": "Timeblock preferences",
+        "item_type": "timeblock_preference"
+      },
+      "authors": {
+        "description": "Event author(s)"
+      },
+      "organization": {
+        "description": "Organization"
+      },
+      "url": {
+        "description": "Event homepage URL"
+      },
+      "player_communications": {
+        "description": "Participant communications policy"
+      },
+      "content_warnings": {
+        "description": "Content warnings"
+      }
+    }
+  },
+  "user_con_profile": {
+    "description": "user profile form",
+    "standard_items": {
+      "first_name": {
+        "description": "First name",
+        "required": true
+      },
+      "last_name": {
+        "description": "Last name",
+        "required": true
+      },
+      "nickname": {
+        "description": "Nickname",
+        "required": false
+      },
+      "birth_date": {
+        "description": "Birth date",
+        "required": false,
+        "item_type": "date"
+      },
+      "address": {
+        "description": "Address",
+        "item_type": "free_text",
+        "required": false
+      },
+      "city": {
+        "description": "City",
+        "item_type": "free_text",
+        "required": false
+      },
+      "state": {
+        "description": "State/Province",
+        "required": false
+      },
+      "zipcode": {
+        "description": "ZIP/Postal code",
+        "required": false
+      },
+      "country": {
+        "description": "Country",
+        "required": false
+      },
+      "day_phone": {
+        "description": "Daytime phone number",
+        "item_type": "free_text",
+        "required": false
+      },
+      "evening_phone": {
+        "description": "Evening phone number",
+        "item_type": "free_text",
+        "required": false
+      },
+      "best_call_time": {
+        "description": "Best time to call",
+        "required": false
+      },
+      "preferred_contact_method": {
+        "description": "Preferred contact method",
+        "required": false
+      },
+      "receive_whos_free_emails": {
+        "description": "Receive “who’s free?” emails from convention?",
+        "required": false
+      }
+    }
+  }
+}

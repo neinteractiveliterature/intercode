@@ -86,7 +86,23 @@ class Types::MutationType < Types::BaseObject
 
   field :createFormWithJSON, mutation: Mutations::CreateFormWithJSON
   field :updateFormWithJSON, mutation: Mutations::UpdateFormWithJSON
+  field :createForm, mutation: Mutations::CreateForm
+  field :updateForm, mutation: Mutations::UpdateForm
   field :deleteForm, mutation: Mutations::DeleteForm
+
+  ### FormItem
+
+  field :createFormItem, mutation: Mutations::CreateFormItem
+  field :updateFormItem, mutation: Mutations::UpdateFormItem
+  field :moveFormItem, mutation: Mutations::MoveFormItem
+  field :deleteFormItem, mutation: Mutations::DeleteFormItem
+
+  ### FormSection
+
+  field :createFormSection, mutation: Mutations::CreateFormSection
+  field :updateFormSection, mutation: Mutations::UpdateFormSection
+  field :moveFormSection, mutation: Mutations::MoveFormSection
+  field :deleteFormSection, mutation: Mutations::DeleteFormSection
 
   ### MaximumEventProvidedTicketsOverride
 
