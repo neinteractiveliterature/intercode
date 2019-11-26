@@ -148,6 +148,11 @@ function MoveFormItemModal({ visible, close }) {
   );
 }
 
+MoveFormItemModal.propTypes = {
+  close: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+};
+
 function FormItemTools({ saveFormItem }) {
   const match = useRouteMatch();
   const { disabled, formItem, standardItem } = useContext(FormItemEditorContext);
