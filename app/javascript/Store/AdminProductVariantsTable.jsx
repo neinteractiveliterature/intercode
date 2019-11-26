@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import MultiBackend, { Preview } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'; // or any other pipeline
-import { DragDropContext } from 'react-dnd';
+import { Preview } from 'react-dnd-multi-backend';
+
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
@@ -13,12 +12,14 @@ const variantMatches = (a, b) => (
   || (a.id && b.id === a.id)
 );
 
-const productVariantUpdaterForComponent = (component, variant, transforms) => mutator({
-  getState: () => component.props.product.product_variants
+const productVariantUpdater = (
+  getProductVariants, setProductVariants, variant, transforms,
+) => mutator({
+  getState: () => getProductVariants()
     .find((existingVariant) => variantMatches(variant, existingVariant)),
 
   setState: (state) => {
-    const newVariants = component.props.product.product_variants.map((existingVariant) => {
+    const newVariants = getProductVariants().map((existingVariant) => {
       if (variantMatches(variant, existingVariant)) {
         return { ...existingVariant, ...state };
       }
@@ -26,19 +27,23 @@ const productVariantUpdaterForComponent = (component, variant, transforms) => mu
       return existingVariant;
     });
 
-    component.props.onChange(newVariants);
+    setProductVariants(newVariants);
   },
 
   transforms,
 });
 
-class AdminProductVariantsTable extends React.Component {
-  addVariantClicked = () => {
-    const position = Math.max(0, ...this.props.product.product_variants
+function AdminProductVariantsTable({
+  product, editing, onChange, deleteVariant,
+}) {
+  const tableRef = useRef();
+
+  const addVariantClicked = () => {
+    const position = Math.max(0, ...product.product_variants
       .map((variant) => variant.position)) + 1;
 
-    this.props.onChange([
-      ...this.props.product.product_variants,
+    onChange([
+      ...product.product_variants,
       {
         generatedId: new Date().getTime(),
         name: null,
@@ -47,19 +52,19 @@ class AdminProductVariantsTable extends React.Component {
         position,
       },
     ]);
-  }
+  };
 
-  deleteVariantClicked = (variant) => {
+  const deleteVariantClicked = (variant) => {
     if (variant.id) {
-      this.props.deleteVariant(variant.id);
+      deleteVariant(variant.id);
     } else if (variant.generatedId) {
-      this.props.onChange(this.props.product.product_variants
+      onChange(product.product_variants
         .filter((existingVariant) => existingVariant.generatedId !== variant.generatedId));
     }
-  }
+  };
 
-  moveVariant = (dragIndex, hoverIndex) => {
-    const variants = sortProductVariants(this.props.product.product_variants);
+  const moveVariant = (dragIndex, hoverIndex) => {
+    const variants = sortProductVariants(product.product_variants);
     const dragVariant = variants[dragIndex];
     const hoverVariant = variants[hoverIndex];
 
@@ -75,20 +80,20 @@ class AdminProductVariantsTable extends React.Component {
       return variant;
     });
 
-    this.props.onChange(newVariants);
-  }
+    onChange(newVariants);
+  };
 
-  generatePreview = (type, { productVariant, index }, style) => {
+  const generatePreview = (type, { productVariant, index }, style) => {
     if (type === 'PRODUCT_VARIANT') {
       return (
-        <table style={{ ...style, width: `${this.table.offsetWidth}px` }}>
+        <table style={{ ...style, width: `${tableRef.current.offsetWidth}px` }}>
           <AdminProductVariantEditRow
-            productId={this.props.product.id}
+            productId={product.id}
             index={index}
             variant={productVariant}
-            deleteVariant={() => {}}
+            deleteVariant={() => { }}
             updater={{}}
-            moveVariant={() => {}}
+            moveVariant={() => { }}
             isDragging={false}
           />
         </table>
@@ -96,94 +101,94 @@ class AdminProductVariantsTable extends React.Component {
     }
 
     return null;
-  }
+  };
 
-  render = () => {
-    const addVariantButton = (
-      this.props.editing
-        ? (
-          <button type="button" className="btn btn-primary btn-sm" onClick={this.addVariantClicked}>
-            Add variant
-          </button>
-        )
-        : null
-    );
-
-    if (this.props.product.product_variants.length === 0) {
-      return (
-        <div>
-          <p>This product does not have any variants.</p>
-          {addVariantButton}
-        </div>
-      );
+  const renderAddVariantButton = () => {
+    if (!editing) {
+      return null;
     }
-
-    let variants;
-    if (this.props.editing) {
-      variants = this.props.product.product_variants
-        .filter((variant) => !this.props.product.delete_variant_ids.includes(variant.id));
-    } else {
-      variants = this.props.product.product_variants;
-    }
-
-    const rows = sortProductVariants(variants).map((variant, index) => {
-      if (this.props.editing) {
-        const variantUpdater = productVariantUpdaterForComponent(
-          this,
-          variant,
-          {
-            name: Transforms.identity,
-            description: Transforms.identity,
-            override_price: parseMoneyOrNull,
-          },
-        );
-
-        return (
-          <AdminProductVariantEditRow
-            index={index}
-            key={variant.id || variant.generatedId}
-            productId={this.props.product.id || this.props.product.generatedId}
-            variant={variant}
-            updater={variantUpdater}
-            deleteVariant={() => { this.deleteVariantClicked(variant); }}
-            moveVariant={this.moveVariant}
-          />
-        );
-      }
-
-      return (
-        <tr key={variant.id}>
-          <td />
-          <td>{variant.name}</td>
-          <td>{variant.description}</td>
-          <td>{variant.override_price ? formatMoney(variant.override_price) : null}</td>
-          <td />
-        </tr>
-      );
-    });
 
     return (
-      <div className="mt-2">
-        <table className="table table-sm" ref={(table) => { this.table = table; }}>
-          <thead>
-            <tr>
-              <th />
-              <th>Variant name</th>
-              <th>Description</th>
-              <th>Override price</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-        {addVariantButton}
+      <button type="button" className="btn btn-primary btn-sm" onClick={addVariantClicked}>
+        Add variant
+      </button>
+    );
+  };
 
-        <Preview generator={this.generatePreview} />
+  if (product.product_variants.length === 0) {
+    return (
+      <div>
+        <p>This product does not have any variants.</p>
+        {renderAddVariantButton()}
       </div>
     );
   }
+
+  let variants;
+  if (editing) {
+    variants = product.product_variants
+      .filter((variant) => !product.delete_variant_ids.includes(variant.id));
+  } else {
+    variants = product.product_variants;
+  }
+
+  const rows = sortProductVariants(variants).map((variant, index) => {
+    if (editing) {
+      const variantUpdater = productVariantUpdater(
+        () => product.product_variants,
+        onChange,
+        variant,
+        {
+          name: Transforms.identity,
+          description: Transforms.identity,
+          override_price: parseMoneyOrNull,
+        },
+      );
+
+      return (
+        <AdminProductVariantEditRow
+          index={index}
+          key={variant.id || variant.generatedId}
+          productId={product.id || product.generatedId}
+          variant={variant}
+          updater={variantUpdater}
+          deleteVariant={() => deleteVariantClicked(variant)}
+          moveVariant={moveVariant}
+        />
+      );
+    }
+
+    return (
+      <tr key={variant.id}>
+        <td />
+        <td>{variant.name}</td>
+        <td>{variant.description}</td>
+        <td>{variant.override_price ? formatMoney(variant.override_price) : null}</td>
+        <td />
+      </tr>
+    );
+  });
+
+  return (
+    <div className="mt-2">
+      <table className="table table-sm" ref={tableRef}>
+        <thead>
+          <tr>
+            <th />
+            <th>Variant name</th>
+            <th>Description</th>
+            <th>Override price</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+      <Preview generator={generatePreview} />
+      {renderAddVariantButton()}
+    </div>
+  );
 }
 
 AdminProductVariantsTable.propTypes = {
@@ -206,4 +211,4 @@ AdminProductVariantsTable.propTypes = {
   deleteVariant: PropTypes.func.isRequired,
 };
 
-export default DragDropContext(MultiBackend(HTML5toTouch))(AdminProductVariantsTable);
+export default AdminProductVariantsTable;

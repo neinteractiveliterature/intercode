@@ -28,39 +28,18 @@ function FormAdmin() {
           </BreadcrumbItemWithRoute>
 
           <BreadcrumbItemWithRoute
-            path="/admin_forms/new"
-            to="/admin_forms/new"
+            path="/admin_forms/edit_advanced"
+            to="/admin_forms/edit_advanced"
             hideUnlessMatch
           >
-            New form
-          </BreadcrumbItemWithRoute>
-
-          <BreadcrumbItemWithRoute
-            path="/admin_forms/:id/edit"
-            to={({ match }) => `/admin_forms/${match.params.id}/edit`}
-            hideUnlessMatch
-          >
-            Edit form
+            Edit form (advanced)
           </BreadcrumbItemWithRoute>
         </ol>
       </nav>
 
       <Switch>
         <Route
-          path="/admin_forms/new"
-          render={({ history }) => (
-            <FormJSONEditor
-              history={history}
-              initialForm={{
-                id: null,
-                form_type: '',
-                export_json: '{ "title": "", "sections": [] }',
-              }}
-            />
-          )}
-        />
-        <Route
-          path="/admin_forms/:id/edit"
+          path="/admin_forms/:id/edit_advanced"
           render={({ match, history }) => (
             <FormJSONEditor
               history={history}

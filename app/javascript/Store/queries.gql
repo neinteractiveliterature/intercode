@@ -25,6 +25,7 @@ fragment AdminProductFields on Product {
   id
   name
   description
+  description_html
   image_url
   available
   payment_options

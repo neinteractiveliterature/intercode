@@ -2,4 +2,8 @@
   .glow-#{$color} {
     box-shadow: 0 0 5px $value;
   }
+
+  .glow-inset-#{$color} {
+    box-shadow: inset 0 0 5px $value;
+  }
 }

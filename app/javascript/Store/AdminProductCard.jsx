@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
 import classNames from 'classnames';
-import { ConfirmModal } from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 
+import { useMutation } from 'react-apollo-hooks';
 import { AdminProductsQuery } from './queries.gql';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
@@ -16,118 +15,96 @@ import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
 import sortProductVariants from './sortProductVariants';
 import { mutator, parseMoneyOrNull, Transforms } from '../ComposableFormUtils';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import useAsyncFunction from '../useAsyncFunction';
+import useUniqueId from '../useUniqueId';
 
-class AdminProductCard extends React.Component {
-  constructor(props) {
-    super(props);
+function duplicateProductForEditing(product) {
+  return {
+    ...product,
+    product_variants: product.product_variants.map((variant) => ({ ...variant })),
+    delete_variant_ids: [],
+  };
+}
 
-    this.state = (
-      props.initialEditing
-        ? this.getEditState()
-        : {
-          editing: props.initialEditing,
-          editingProduct: null,
-        }
-    );
+function AdminProductCard({
+  currentAbility, initialEditing, product, onCancelNewProduct, onSaveNewProduct,
+}) {
+  const confirm = useConfirm();
+  const [createProduct] = useMutation(CreateProduct);
+  const [updateProduct] = useMutation(UpdateProduct);
+  const [deleteProduct] = useMutation(DeleteProduct);
+  const [editing, setEditing] = useState(initialEditing);
+  const [editingProduct, setEditingProduct] = useState(() => {
+    if (initialEditing) {
+      return duplicateProductForEditing(product);
+    }
 
-    this.mutator = mutator({
-      component: this,
-      transforms: {
-        editingProduct: {
-          available: Transforms.identity,
-          description: Transforms.identity,
-          name: Transforms.identity,
-          payment_options: Transforms.identity,
-          price: parseMoneyOrNull,
-          product_variants: Transforms.identity,
-        },
-      },
-    });
-  }
-
-  getCardClass = () => (
-    classNames('bg-light', {
-      'border-dark': this.state.editing,
-      'glow-dark': this.state.editing,
-    })
-  )
-
-  getEditState = () => ({
-    error: null,
-    editing: true,
-    editingProduct: {
-      ...this.props.product,
-      product_variants: this.props.product.product_variants.map((variant) => ({ ...variant })),
-      delete_variant_ids: [],
+    return null;
+  });
+  const editingProductMutator = mutator({
+    getState: () => editingProduct,
+    setState: setEditingProduct,
+    transforms: {
+      available: Transforms.identity,
+      description: Transforms.identity,
+      name: Transforms.identity,
+      payment_options: Transforms.identity,
+      price: parseMoneyOrNull,
+      product_variants: Transforms.identity,
     },
   });
 
-  editClicked = () => {
-    this.setState(this.getEditState());
-  }
+  const cardClass = classNames('bg-light', {
+    'border-dark': editing,
+    'glow-dark': editing,
+  });
 
-  cancelClicked = () => {
-    if (this.props.product.id) {
-      this.setState({ editing: false, editingProduct: null, error: null });
+  const editClicked = () => {
+    setEditing(true);
+    setEditingProduct(duplicateProductForEditing(product));
+  };
+
+  const cancelClicked = () => {
+    if (product.id) {
+      setEditing(false);
+      setEditingProduct(null);
     } else {
-      this.props.onCancelNewProduct(this.props.product);
+      onCancelNewProduct(product);
     }
-  }
+  };
 
-  imageChanged = (event) => {
+  const imageChanged = (event) => {
     const file = event.target.files[0];
     if (!file) {
       return;
     }
 
-    this.setState((prevState) => ({
-      editingProduct: {
-        ...prevState.editingProduct,
-        image: file,
-      },
+    setEditingProduct((prevEditingProduct) => ({
+      ...prevEditingProduct,
+      image: file,
     }));
 
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      this.setState((prevState) => ({
-        editingProduct: {
-          ...prevState.editingProduct,
-          image_url: reader.result,
-        },
+      setEditingProduct((prevEditingProduct) => ({
+        ...prevEditingProduct, image_url: reader.result,
       }));
     });
     reader.readAsDataURL(file);
-  }
+  };
 
-  deleteVariant = (variantId) => {
-    this.setState((prevState) => ({
-      editingProduct: {
-        ...prevState.editingProduct,
-        delete_variant_ids: [
-          ...prevState.editingProduct.delete_variant_ids,
-          variantId,
-        ],
-      },
+  const deleteVariant = (variantId) => {
+    setEditingProduct((prevEditingProduct) => ({
+      ...prevEditingProduct,
+      delete_variant_ids: [
+        ...prevEditingProduct.delete_variant_ids,
+        variantId,
+      ],
     }));
-  }
+  };
 
-  beginConfirm = (prompt, action) => {
-    this.setState({
-      confirm: { prompt, action },
-    });
-  }
-
-  performConfirm = async () => {
-    await this.state.confirm.action();
-    this.setState({ confirm: null });
-  }
-
-  cancelConfirm = () => {
-    this.setState({ confirm: null });
-  }
-
-  saveClicked = async (createProduct, updateProduct) => {
-    const { editingProduct } = this.state;
+  const saveProduct = async () => {
     const imageInput = editingProduct.image ? { image: editingProduct.image } : {};
     const productInput = {
       name: editingProduct.name,
@@ -155,146 +132,121 @@ class AdminProductCard extends React.Component {
       ...imageInput,
     };
 
-    this.setState({ error: null });
+    if (editingProduct.id) {
+      await updateProduct({
+        variables: { id: editingProduct.id, product: productInput },
+      });
 
-    try {
-      if (this.state.editingProduct.id) {
-        await updateProduct({
-          variables: { id: this.state.editingProduct.id, product: productInput },
-        });
+      setEditing(false);
+      setEditingProduct(null);
+    } else {
+      await createProduct({
+        variables: { product: productInput },
+        update: (cache, { data: { createProduct: { product: newProduct } } }) => {
+          const data = cache.readQuery({ query: AdminProductsQuery });
+          data.convention.products.push(newProduct);
+          cache.writeQuery({ query: AdminProductsQuery, data });
+        },
+      });
 
-        this.setState({ editing: false, editingProduct: null });
-      } else {
-        await createProduct({
-          variables: { product: productInput },
-          update: (cache, { data: { createProduct: { product } } }) => {
-            const data = cache.readQuery({ query: AdminProductsQuery });
-            data.convention.products.push(product);
-            cache.writeQuery({ query: AdminProductsQuery, data });
-          },
-        });
-
-        this.props.onSaveNewProduct(this.state.editingProduct);
-      }
-    } catch (error) {
-      this.setState({ error });
+      onSaveNewProduct(editingProduct);
     }
-  }
+  };
 
-  deleteClicked = (deleteProduct) => {
-    this.beginConfirm(
-      `Are you sure you want to delete the product ${this.props.product.name}?`,
-      async () => {
-        try {
-          await deleteProduct({
-            variables: { id: this.props.product.id },
-            update: (cache) => {
-              const data = cache.readQuery({ query: AdminProductsQuery });
-              data.convention.products = data.convention.products
-                .filter((product) => product.id !== this.props.product.id);
-              cache.writeQuery({ query: AdminProductsQuery, data });
-            },
-          });
-        } catch (error) {
-          this.setState({ error });
-        }
-      },
-    );
-  }
+  const [saveClicked, saveError] = useAsyncFunction(saveProduct);
 
-  renderVariantsTable = () => (
+  const deleteClicked = () => {
+    confirm({
+      prompt: `Are you sure you want to delete the product ${product.name}?`,
+      action: () => deleteProduct({
+        variables: { id: product.id },
+        update: (cache) => {
+          const data = cache.readQuery({ query: AdminProductsQuery });
+          data.convention.products = data.convention.products
+            .filter((p) => p.id !== product.id);
+          cache.writeQuery({ query: AdminProductsQuery, data });
+        },
+      }),
+      renderError: (error) => <ErrorDisplay graphQLError={error} />,
+    });
+  };
+
+  const renderVariantsTable = () => (
     <AdminProductVariantsTable
-      product={this.state.editing ? this.state.editingProduct : this.props.product}
-      editing={this.state.editing}
-      onChange={this.mutator.editingProduct.product_variants}
-      deleteVariant={this.deleteVariant}
+      product={editing ? editingProduct : product}
+      editing={editing}
+      onChange={editingProductMutator.product_variants}
+      deleteVariant={deleteVariant}
     />
-  )
+  );
 
-  renderActions = () => {
-    if (!this.props.currentAbility.can_update_products) {
+  const renderActions = () => {
+    if (!currentAbility.can_update_products) {
       return null;
     }
 
-    if (this.state.editing) {
+    if (editing) {
       return (
         <ul className="list-inline m-0">
           <li className="list-inline-item">
             <button
               type="button"
               className="btn btn-sm btn-secondary"
-              onClick={this.cancelClicked}
+              onClick={cancelClicked}
             >
               Cancel
             </button>
           </li>
           <li className="list-inline-item">
-            <Mutation mutation={CreateProduct}>
-              {(createProduct) => (
-                <Mutation mutation={UpdateProduct}>
-                  {(updateProduct) => (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-primary"
-                      onClick={() => { this.saveClicked(createProduct, updateProduct); }}
-                    >
-                      Save
-                    </button>
-                  )}
-                </Mutation>
-              )}
-            </Mutation>
+            <button
+              type="button"
+              className="btn btn-sm btn-primary"
+              onClick={saveClicked}
+            >
+              Save
+            </button>
           </li>
         </ul>
       );
     }
 
-    let deleteButton = null;
-    if (this.props.product.id != null) {
-      deleteButton = (
-        <li className="list-inline-item">
-          <Mutation mutation={DeleteProduct}>
-            {(deleteProduct) => (
-              <button
-                type="button"
-                className="btn btn-sm btn-danger"
-                onClick={() => { this.deleteClicked(deleteProduct); }}
-              >
-                <i className="fa fa-trash-o">
-                  <span className="sr-only">Delete product</span>
-                </i>
-              </button>
-            )}
-          </Mutation>
-        </li>
-      );
-    }
-
     return (
       <ul className="list-inline m-0">
-        {deleteButton}
+        {product.id != null && (
+          <li className="list-inline-item">
+            <button
+              type="button"
+              className="btn btn-sm btn-danger"
+              onClick={deleteClicked}
+            >
+              <i className="fa fa-trash-o">
+                <span className="sr-only">Delete product</span>
+              </i>
+            </button>
+          </li>
+        )}
         <li className="list-inline-item">
           <button
             type="button"
             className="btn btn-sm btn-secondary"
-            onClick={this.editClicked}
+            onClick={editClicked}
           >
             Edit
           </button>
         </li>
       </ul>
     );
-  }
+  };
 
-  renderAvailableForPurchase = () => {
-    if (this.state.editing) {
+  const renderAvailableForPurchase = () => {
+    if (editing) {
       return (
         <div>
           <BootstrapFormCheckbox
             name="available"
             label="Available for purchase"
-            checked={this.state.editingProduct.available}
-            onCheckedChange={this.mutator.editingProduct.available}
+            checked={editingProduct.available}
+            onCheckedChange={editingProductMutator.available}
           />
           <MultipleChoiceInput
             name="payment_options"
@@ -322,8 +274,8 @@ class AdminProductCard extends React.Component {
               },
             ]}
             multiple
-            value={this.state.editingProduct.payment_options}
-            onChange={this.mutator.editingProduct.payment_options}
+            value={editingProduct.payment_options}
+            onChange={editingProductMutator.payment_options}
           />
         </div>
       );
@@ -332,15 +284,13 @@ class AdminProductCard extends React.Component {
     return (
       <div>
         <span
-          className={classNames('badge', this.props.product.available ? 'badge-success' : 'badge-danger')}
+          className={classNames('badge', product.available ? 'badge-success' : 'badge-danger')}
         >
-          {
-            this.props.product.available
-              ? 'Available for purchase'
-              : 'Not available for purchase'
-          }
+          {product.available
+            ? 'Available for purchase'
+            : 'Not available for purchase'}
         </span>
-        {this.props.product.payment_options.map((paymentOption) => (
+        {product.payment_options.map((paymentOption) => (
           <i
             key={paymentOption}
             className={
@@ -358,9 +308,9 @@ class AdminProductCard extends React.Component {
         ))}
       </div>
     );
-  }
+  };
 
-  renderImage = (url) => {
+  const renderImage = (url) => {
     if (!url) {
       return null;
     }
@@ -369,63 +319,67 @@ class AdminProductCard extends React.Component {
       <img
         src={url}
         style={{ maxWidth: '200px' }}
-        alt={this.props.product.name}
+        alt={product.name}
       />
     );
-  }
+  };
 
-  renderImageSection = () => {
-    if (this.state.editing) {
+  const imageInputId = useUniqueId('image-input-');
+
+  const renderImageSection = () => {
+    if (editing) {
       return (
         <div className="d-flex flex-column align-items-center">
-          {this.renderImage(this.state.editingProduct.image_url)}
+          {renderImage(editingProduct.image_url)}
           <div className="custom-file mt-2" style={{ width: '220px' }}>
-            <label className="custom-file-label">Choose image...</label>
+            <label className="custom-file-label" htmlFor={imageInputId}>Choose image...</label>
             <input
+              id={imageInputId}
               className="custom-file-input"
               type="file"
               accept="image/*"
-              onChange={this.imageChanged}
+              onChange={imageChanged}
             />
           </div>
         </div>
       );
     }
 
-    return this.renderImage(this.props.product.image_url);
-  }
+    return renderImage(product.image_url);
+  };
 
-  renderName = () => {
-    if (this.state.editing) {
+  const renderName = () => {
+    if (editing) {
       return (
         <input
+          aria-label="Product name"
           type="text"
           className="form-control"
           placeholder="Product name"
           name="name"
-          value={this.state.editingProduct.name}
-          onChange={(event) => { this.mutator.editingProduct.name(event.target.value); }}
+          value={editingProduct.name}
+          onChange={(event) => { editingProductMutator.name(event.target.value); }}
         />
       );
     }
 
     return (
-      <div className="lead">{this.props.product.name}</div>
+      <div className="lead">{product.name}</div>
     );
-  }
+  };
 
-  renderPrice = () => {
-    if (this.state.editing) {
+  const renderPrice = () => {
+    if (editing) {
       return (
         <div className="d-flex">
           <strong className="mr-1">Base price:</strong>
           <InPlaceEditor
             name="price"
             label="Base price"
-            value={`${formatMoney(this.state.editingProduct.price, false)}`}
-            onChange={this.mutator.editingProduct.price}
+            value={`${formatMoney(editingProduct.price, false)}`}
+            onChange={editingProductMutator.price}
           >
-            {formatMoney(this.state.editingProduct.price)}
+            {formatMoney(editingProduct.price)}
           </InPlaceEditor>
         </div>
       );
@@ -435,64 +389,57 @@ class AdminProductCard extends React.Component {
       <p>
         <strong>
           Base price:
-          {formatMoney(this.props.product.price)}
+          {formatMoney(product.price)}
         </strong>
       </p>
     );
-  }
+  };
 
-  renderDescription = () => {
-    if (this.state.editing) {
+  const renderDescription = () => {
+    if (editing) {
       return (
         <LiquidInput
-          value={this.state.editingProduct.description}
-          onChange={this.mutator.editingProduct.description}
+          value={editingProduct.description}
+          onChange={editingProductMutator.description}
         />
       );
     }
 
     return (
-      <p>{this.props.product.description}</p>
+      // eslint-disable-next-line react/no-danger
+      <div dangerouslySetInnerHTML={{ __html: product.description_html }} />
     );
-  }
+  };
 
-  render = () => (
-    <div className={`mb-4 card ${this.getCardClass()}`}>
+  return (
+    <div className={classNames('mb-4 card', cardClass)}>
       <div className="card-header">
         <div className="row align-items-center">
           <div className="col">
-            {this.renderName()}
+            {renderName()}
           </div>
           <div className="mr-2">
-            {this.renderActions()}
+            {renderActions()}
           </div>
         </div>
-        {this.renderAvailableForPurchase()}
+        {renderAvailableForPurchase()}
       </div>
 
       <div className="card-body">
-        <ErrorDisplay graphQLError={this.state.error} />
+        <ErrorDisplay graphQLError={saveError} />
 
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
-          {this.renderImageSection()}
+          {renderImageSection()}
 
           <div className="ml-lg-4 col-lg">
-            {this.renderPrice()}
-            {this.renderDescription()}
-            {this.renderVariantsTable()}
+            {renderPrice()}
+            {renderDescription()}
+            {renderVariantsTable()}
           </div>
         </div>
-
-        <ConfirmModal
-          visible={this.state.confirm != null}
-          onOK={this.performConfirm}
-          onCancel={this.cancelConfirm}
-        >
-          {(this.state.confirm || {}).prompt}
-        </ConfirmModal>
       </div>
     </div>
-  )
+  );
 }
 
 AdminProductCard.propTypes = {
@@ -500,6 +447,7 @@ AdminProductCard.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    description_html: PropTypes.string.isRequired,
     image_url: PropTypes.string,
     payment_options: PropTypes.arrayOf(PropTypes.string).isRequired,
     price: PropTypes.shape({

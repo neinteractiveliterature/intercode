@@ -1,4 +1,8 @@
 class FormItem < ApplicationRecord
+  DEFAULT_PROPERTIES_CONFIG = JSON.parse(
+    File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))
+  )
+
   PROPERTIES_SCHEMA = {
     age_restrictions: {
       identifier: :required,
@@ -65,6 +69,7 @@ class FormItem < ApplicationRecord
 
   validates_presence_of :item_type
   validates_inclusion_of :item_type, in: PROPERTIES_SCHEMA.keys.map(&:to_s)
+  validate :ensure_unique_identifier_across_form
   validates_uniqueness_of :identifier,
     allow_nil: true,
     conditions: -> { joins(:form_section) },
@@ -96,5 +101,18 @@ class FormItem < ApplicationRecord
     (properties.keys - schema.keys).each do |extra_field|
       errors.add :properties, "includes unknown field #{extra_field}"
     end
+  end
+
+  def ensure_unique_identifier_across_form
+    return unless identifier.present?
+
+    other_identifiers_scope = FormItem.where(
+      form_section_id: FormSection.where(form_id: form.id).select(:id)
+    )
+    other_identifiers_scope = other_identifiers_scope.where.not(id: id) if persisted?
+    other_identifiers = other_identifiers_scope.pluck(:identifier)
+
+    return unless other_identifiers.include?(identifier)
+    errors.add :identifier, 'is already taken'
   end
 end

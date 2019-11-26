@@ -7,9 +7,12 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { BrowserRouter } from 'react-router-dom';
+import { DndProvider } from 'react-dnd';
+import MultiBackend from 'react-dnd-multi-backend';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
-import Confirm from './ModalDialogs/Confirm';
+import Confirm, { useConfirm } from './ModalDialogs/Confirm';
 import ErrorDisplay from './ErrorDisplay';
 import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
@@ -56,6 +59,7 @@ export default (WrappedComponent) => {
   function Wrapper({
     authenticityTokens, recaptchaSiteKey, stripePublishableKey, ...otherProps
   }) {
+    const confirm = useConfirm();
     const lazyStripeProviderValue = useMemo(
       () => ({ publishableKey: stripePublishableKey }),
       [stripePublishableKey],
@@ -83,37 +87,48 @@ export default (WrappedComponent) => {
     );
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
 
+    const getUserConfirmation = useCallback(
+      (message, callback) => {
+        confirm({
+          prompt: message,
+          action: () => callback(true),
+          onCancel: () => callback(false),
+        });
+      },
+      [confirm],
+    );
+
     if (!apolloClient) {
       // we need one render cycle to initialize the client
       return <></>;
     }
 
     return (
-      <BrowserRouter basename="/">
-        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-          <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-            <ApolloProvider client={apolloClient}>
-              <ApolloHooksProvider client={apolloClient}>
-                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                  <>
-                    {!unauthenticatedError && (
-                      <Suspense fallback={<PageLoadingIndicator visible />}>
-                        <Confirm>
+      <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
+        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+          <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+            <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+              <ApolloProvider client={apolloClient}>
+                <ApolloHooksProvider client={apolloClient}>
+                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                    <>
+                      {!unauthenticatedError && (
+                        <Suspense fallback={<PageLoadingIndicator visible />}>
                           <AlertProvider>
                             <ErrorBoundary>
                               <WrappedComponent {...otherProps} />
                             </ErrorBoundary>
                           </AlertProvider>
-                        </Confirm>
-                      </Suspense>
-                    )}
-                    <AuthenticationModal />
-                  </>
-                </AuthenticationModalContext.Provider>
-              </ApolloHooksProvider>
-            </ApolloProvider>
-          </AuthenticityTokensContext.Provider>
-        </LazyStripeContext.Provider>
+                        </Suspense>
+                      )}
+                      <AuthenticationModal />
+                    </>
+                  </AuthenticationModalContext.Provider>
+                </ApolloHooksProvider>
+              </ApolloProvider>
+            </AuthenticityTokensContext.Provider>
+          </LazyStripeContext.Provider>
+        </DndProvider>
       </BrowserRouter>
     );
   }
@@ -136,5 +151,9 @@ export default (WrappedComponent) => {
 
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
-  return Wrapper;
+  function ConfirmWrapper(props) {
+    return <Confirm><Wrapper {...props} /></Confirm>;
+  }
+
+  return ConfirmWrapper;
 };

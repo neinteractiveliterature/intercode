@@ -1,16 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
 
-function getMemoizationKeyForTimespan(timespan) {
-  if (!timespan) {
-    return '';
-  }
-
-  return [
-    timespan.start ? timespan.start.toISOString() : '',
-    timespan.finish ? timespan.finish.toISOString() : '',
-  ].join('/');
-}
+import { getMemoizationKeyForTimespan } from '../../TimespanUtils';
 
 export default function useLayoutForTimespan(schedule, timespan) {
   const timespanKey = getMemoizationKeyForTimespan(timespan);

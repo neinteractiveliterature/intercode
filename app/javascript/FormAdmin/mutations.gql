@@ -18,8 +18,92 @@ mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
   }
 }
 
+mutation CreateForm($form: FormInput!, $formType: FormType!) {
+  createForm(input: { form: $form, form_type: $formType }) {
+    form {
+      id
+      ...FormFields
+    }
+  }
+}
+
+mutation UpdateForm($id: Int!, $form: FormInput!) {
+  updateForm(input: { id: $id, form: $form }) {
+    form {
+      id
+      ...FormEditorData
+    }
+  }
+}
+
 mutation DeleteForm($id: Int!) {
   deleteForm(input: { id: $id }) {
     clientMutationId
+  }
+}
+
+mutation CreateFormSection($formId: Int!, $formSection: FormSectionInput!) {
+  createFormSection(input: { form_id: $formId, form_section: $formSection }) {
+    form_section {
+      id
+      ...FormEditorFormSectionFields
+    }
+  }
+}
+
+mutation UpdateFormSection($id: Int!, $formSection: FormSectionInput!) {
+  updateFormSection(input: { id: $id, form_section: $formSection }) {
+    form_section {
+      id
+      ...FormEditorFormSectionFields
+    }
+  }
+}
+
+mutation DeleteFormSection($id: Int!) {
+  deleteFormSection(input: { id: $id }) {
+    clientMutationId
+  }
+}
+
+mutation MoveFormSection($id: Int!, $destinationIndex: Int!) {
+  moveFormSection(input: { id: $id, destination_index: $destinationIndex }) {
+    form {
+      id
+      ...FormEditorData
+    }
+  }
+}
+
+mutation CreateFormItem($formSectionId: Int!, $formItem: FormItemInput!) {
+  createFormItem(input: { form_section_id: $formSectionId, form_item: $formItem }) {
+    form_item {
+      id
+      ...FormEditorFormItemFields
+    }
+  }
+}
+
+mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
+  updateFormItem(input: { id: $id, form_item: $formItem }) {
+    form_item {
+      id
+      ...FormEditorFormItemFields
+    }
+  }
+}
+
+mutation DeleteFormItem($id: Int!) {
+  deleteFormItem(input: { id: $id }) {
+    clientMutationId
+  }
+}
+
+mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
+  moveFormItem(input: { id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex }) {
+    form_section {
+      id
+      ...FormEditorFormSectionFields
+    }
   }
 }

@@ -1,8 +1,9 @@
 import React, {
   Suspense, useMemo, useState, useEffect,
 } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import {
+  Switch, Route, useLocation, useHistory,
+} from 'react-router-dom';
 import { useQuery } from 'react-apollo-hooks';
 
 import { AppRootQuery } from './appRootQueries.gql';
@@ -13,6 +14,7 @@ import PageLoadingIndicator from './PageLoadingIndicator';
 import parsePageContent, { DEFAULT_COMPONENT_MAP } from './parsePageContent';
 import AppRootContext from './AppRootContext';
 import useCachedLoadableValue from './useCachedLoadableValue';
+import PageComponents from './PageComponents';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path) {
@@ -29,7 +31,9 @@ function normalizePathForLayout(path) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-function AppLayout({ location, history }) {
+function AppRoot() {
+  const location = useLocation();
+  const history = useHistory();
   const { data, loading, error } = useQuery(
     AppRootQuery,
     { variables: { path: normalizePathForLayout(location.pathname) } },
@@ -126,19 +130,23 @@ function AppLayout({ location, history }) {
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
-      <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
+      <Switch>
+        <Route
+          path="/admin_forms/:id/edit/section/:sectionId/item/:itemId"
+          component={PageComponents.FormEditor}
+        />
+        <Route
+          path="/admin_forms/:id/edit/section/:sectionId"
+          component={PageComponents.FormEditor}
+        />
+        <Route
+          path="/admin_forms/:id/edit"
+          component={PageComponents.FormEditor}
+        />
+        <Suspense fallback={<PageLoadingIndicator visible />}>{cachedBodyComponents}</Suspense>
+      </Switch>
     </AppRootContext.Provider>
   );
 }
 
-AppLayout.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-const AppRoot = withRouter(AppLayout);
 export default AppRoot;

@@ -265,6 +265,16 @@ class Types::QueryType < Types::BaseObject
     LiquidAssignGraphqlPresenter.from_hash(context[:cadmus_renderer].default_assigns)
   end
 
+  field :preview_form_item, Types::FormItemType, null: false do
+    argument :form_section_id, Int, required: true
+    argument :form_item, Types::FormItemInputType, required: true
+  end
+
+  def preview_form_item(form_section_id:, form_item:)
+    form_section = FormSection.find(form_section_id)
+    FormItem.new(form_item.to_h.merge(id: 0, form_section: form_section))
+  end
+
   field :preview_markdown, String, null: false do
     argument :markdown, String, required: true
   end
