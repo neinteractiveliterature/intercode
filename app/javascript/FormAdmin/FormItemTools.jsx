@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
@@ -75,7 +75,7 @@ function CustomItemMetadata() {
 function FormItemTools({ saveFormItem }) {
   const match = useRouteMatch();
   const { disabled, formItem, standardItem } = useContext(FormItemEditorContext);
-  const collapseRef = useCollapse();
+  const collapseRef = useRef();
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const collapseId = useUniqueId('collapse-');

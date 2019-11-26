@@ -1,4 +1,8 @@
 class FormItem < ApplicationRecord
+  DEFAULT_PROPERTIES_CONFIG = JSON.parse(
+    File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))
+  )
+
   PROPERTIES_SCHEMA = {
     age_restrictions: {
       identifier: :required,
