@@ -5,6 +5,8 @@ import { humanize, pluralize } from 'inflected';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
+import useCollapse from '../NavigationBar/useCollapse';
+import useUniqueId from '../useUniqueId';
 
 function StandardItemMetadata() {
   const { formType } = useContext(FormEditorContext);
@@ -12,24 +14,24 @@ function StandardItemMetadata() {
 
   return (
     <>
-      <li>
+      <div className="mr-2">
         <i className="fa fa-wrench" />
         {' '}
         <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
-      </li>
-      <li>
+      </div>
+      <div className="mr-2">
         <small>
           Standard item for
           {' '}
           {pluralize(formType.description)}
         </small>
-      </li>
+      </div>
       {standardItem.required && (
-        <li>
+        <div className="mr-2">
           <small>
             Response always required
           </small>
-        </li>
+        </div>
       )}
     </>
   );
@@ -38,11 +40,11 @@ function StandardItemMetadata() {
 function StaticTextMetadata() {
   return (
     <>
-      <li>
+      <div>
         <i className="fa fa-paragraph" />
         {' '}
         <strong>Static text</strong>
-      </li>
+      </div>
     </>
   );
 }
@@ -52,12 +54,12 @@ function CustomItemMetadata() {
 
   return (
     <>
-      <li>
+      <div className="mr-2">
         <i className="fa fa-tag" />
         {' '}
         <strong>{formItem.identifier}</strong>
-      </li>
-      <li>
+      </div>
+      <div>
         <small>
           Custom
           {' '}
@@ -65,7 +67,7 @@ function CustomItemMetadata() {
           {' '}
           item
         </small>
-      </li>
+      </div>
     </>
   );
 }
@@ -73,6 +75,10 @@ function CustomItemMetadata() {
 function FormItemTools({ saveFormItem }) {
   const match = useRouteMatch();
   const { disabled, formItem, standardItem } = useContext(FormItemEditorContext);
+  const collapseRef = useCollapse();
+  const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
+  const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
+  const collapseId = useUniqueId('collapse-');
 
   const renderItemMetadata = () => {
     if (standardItem) {
@@ -88,15 +94,35 @@ function FormItemTools({ saveFormItem }) {
 
   return (
     <>
-      <ul className="list-unstyled">
+      <div className="d-flex flex-row flex-wrap flex-lg-column mb-2">
         {renderItemMetadata()}
-      </ul>
+      </div>
 
       {formItem.item_type !== 'static_text' && (
-        <CommonQuestionFields />
+        <>
+          <button
+            className="p-0 d-lg-none"
+            type="button"
+            onClick={toggleCollapsed}
+            aria-expanded={!collapsed}
+            aria-controls={collapseId}
+          >
+            <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} />
+            {' '}
+            Tools
+          </button>
+          <div
+            id={collapseId}
+            className={`${collapseClassName} d-lg-block`}
+            ref={collapseRef}
+            {...otherCollapseProps}
+          >
+            <CommonQuestionFields />
+          </div>
+        </>
       )}
 
-      <div className="d-flex align-items-stretch mt-4">
+      <div className="d-flex align-items-stretch mt-2 mt-lg-4">
         <NavLink
           className="btn btn-outline-secondary col mr-2"
           to={`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`}

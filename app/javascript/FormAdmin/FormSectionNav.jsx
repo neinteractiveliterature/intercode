@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from 'react-apollo-hooks';
 
@@ -9,8 +9,15 @@ import { useCreateMutation } from '../MutationUtils';
 import { serializeParsedFormSection } from './FormItemUtils';
 import FormSectionNavItem from './FormSectionNavItem';
 import { buildOptimisticArrayForMove } from '../useSortable';
+import useCollapse from '../NavigationBar/useCollapse';
+import useUniqueId from '../useUniqueId';
 
 function FormSectionNav() {
+  const collapseRef = useRef();
+  const {
+    collapsed, collapseProps, toggleCollapsed,
+  } = useCollapse(collapseRef);
+  const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const history = useHistory();
   const { form } = useContext(FormEditorContext);
   const [moveFormSection] = useMutation(MoveFormSection);
@@ -20,6 +27,7 @@ function FormSectionNav() {
     arrayPath: ['form', 'form_sections'],
     newObjectPath: ['createFormSection', 'form_section'],
   });
+  const navId = useUniqueId('section-nav-');
 
   const moveSection = useCallback(
     (dragIndex, hoverIndex) => {
@@ -54,24 +62,42 @@ function FormSectionNav() {
   };
 
   return (
-    <nav>
-      <ul className="nav nav-pills flex-column">
-        {form.form_sections.map((formSection, index) => (
-          <FormSectionNavItem
-            key={formSection.id}
-            formSection={formSection}
-            index={index}
-            moveSection={moveSection}
-          />
-        ))}
-      </ul>
+    <>
+      <button
+        className="p-0 d-lg-none"
+        type="button"
+        onClick={toggleCollapsed}
+        aria-expanded={!collapsed}
+        aria-controls={navId}
+      >
+        <i className={`fa ${collapsed ? 'fa-caret-right' : 'fa-caret-down'}`} />
+        {' '}
+        Sections
+      </button>
+      <nav
+        id={navId}
+        className={`d-lg-block ${collapseClassName}`}
+        ref={collapseRef}
+        {...otherCollapseProps}
+      >
+        <ul className="nav nav-pills flex-column">
+          {form.form_sections.map((formSection, index) => (
+            <FormSectionNavItem
+              key={formSection.id}
+              formSection={formSection}
+              index={index}
+              moveSection={moveSection}
+            />
+          ))}
+        </ul>
 
-      <div className="mt-4">
-        <button className="btn btn-outline-primary w-100" type="button" onClick={addSection}>
-          Add section
-        </button>
-      </div>
-    </nav>
+        <div className="mt-4">
+          <button className="btn btn-outline-primary w-100" type="button" onClick={addSection}>
+            Add section
+          </button>
+        </div>
+      </nav>
+    </>
   );
 }
 
