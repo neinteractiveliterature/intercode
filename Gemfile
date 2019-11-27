@@ -131,7 +131,7 @@ group :intercode1_import do
   gem 'sequel'
   gem 'term-ansicolor'
   gem 'reverse_markdown'
-  gem 'mysql2', '~> 0.5.2'
+  gem 'mysql2', '~> 0.5.3'
 end
 
 group :test do
