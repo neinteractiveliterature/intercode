@@ -85,7 +85,7 @@
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
     "query-string": "^5.1.1",
-    "react": "^16.11.0",
+    "react": "^16.12.0",
     "react-apollo": "^2.5.8",
     "react-apollo-hooks": "^0.5.0",
     "react-bootstrap4-modal": "^1.7.2",
