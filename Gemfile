@@ -142,7 +142,7 @@ group :test do
   gem 'factory_bot'
   gem 'factory_bot_rails'
   gem 'simplecov'
-  gem 'stripe-ruby-mock', require: 'stripe_mock'
+  gem 'stripe-ruby-mock', require: 'stripe_mock', github: 'dbdrive/stripe-ruby-mock', branch: 'stripe-v5-compatability'
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
   gem 'rails-controller-testing'
