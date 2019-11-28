@@ -1,57 +1,50 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
 import Select from 'react-select';
 
 import BootstrapFormCheckbox from '../BuiltInFormControls/BootstrapFormCheckbox';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
-import Confirm from '../ModalDialogs/Confirm';
+import { useConfirm } from '../ModalDialogs/Confirm';
 import MultipleChoiceInput from '../BuiltInFormControls/MultipleChoiceInput';
-import { mutator, Transforms } from '../ComposableFormUtils';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
+import useUniqueId from '../useUniqueId';
 
-class UserActivityAlertForm extends React.Component {
-  constructor(props) {
-    super(props);
+function UserActivityAlertForm({
+  userActivityAlert, onChange, onAddAlertDestination, onRemoveAlertDestination,
+  convention, disabled,
+}) {
+  const userSelectId = useUniqueId('user-');
+  const confirm = useConfirm();
+  const [addDestinationType, setAddDestinationType] = useState(null);
+  const addStaffPositionDestination = (staffPosition) => {
+    onAddAlertDestination({ staff_position: staffPosition });
+    setAddDestinationType(null);
+  };
 
-    enableUniqueIds(this);
+  const addUserConProfileDestination = (userConProfile) => {
+    onAddAlertDestination({ user_con_profile: userConProfile });
+    setAddDestinationType(null);
+  };
 
-    this.state = {
-      addDestinationType: null,
-    };
+  const [
+    setPartialName,
+    setEmail,
+    setUser,
+    setTriggerOnUserConProfileCreate,
+    setTriggerOnTicketCreate,
+  ] = useMemo(
+    () => [
+      'partial_name',
+      'email',
+      'user',
+      'trigger_on_user_con_profile_create',
+      'trigger_on_ticket_create',
+    ].map((field) => (value) => onChange({ ...userActivityAlert, [field]: value })),
+    [onChange, userActivityAlert],
+  );
 
-    this.userActivityAlertMutator = mutator({
-      getState: () => this.props.userActivityAlert,
-      setState: this.props.onChange,
-      transforms: {
-        partial_name: Transforms.identity,
-        email: Transforms.identity,
-        user: Transforms.identity,
-        trigger_on_user_con_profile_create: Transforms.identity,
-        trigger_on_ticket_create: Transforms.identity,
-      },
-    });
-
-    this.localStateMutator = mutator({
-      component: this,
-      transforms: {
-        addDestinationType: Transforms.identity,
-      },
-    });
-  }
-
-  addStaffPositionDestination = (staffPosition) => {
-    this.props.onAddAlertDestination({ staff_position: staffPosition });
-    this.setState({ addDestinationType: null });
-  }
-
-  addUserConProfileDestination = (userConProfile) => {
-    this.props.onAddAlertDestination({ user_con_profile: userConProfile });
-    this.setState({ addDestinationType: null });
-  }
-
-  render = () => (
+  return (
     <>
       <div className="card">
         <div className="card-header">
@@ -63,9 +56,9 @@ class UserActivityAlertForm extends React.Component {
             name="partial_name"
             label="Partial name"
             helpText="If any part of the user's name matches this string, the alert will match.  Case insensitive."
-            value={this.props.userActivityAlert.partial_name || ''}
-            onTextChange={this.userActivityAlertMutator.partial_name}
-            disabled={this.props.disabled}
+            value={userActivityAlert.partial_name || ''}
+            onTextChange={setPartialName}
+            disabled={disabled}
           />
 
           <BootstrapFormInput
@@ -73,18 +66,18 @@ class UserActivityAlertForm extends React.Component {
             type="email"
             label="Email"
             helpText="If the user's email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."
-            value={this.props.userActivityAlert.email || ''}
-            onTextChange={this.userActivityAlertMutator.email}
-            disabled={this.props.disabled}
+            value={userActivityAlert.email || ''}
+            onTextChange={setEmail}
+            disabled={disabled}
           />
 
           <div className="form-group mb-0">
-            <label htmlFor={this.nextUniqueId()}>User account</label>
+            <label htmlFor={userSelectId}>User account</label>
             <UserSelect
-              inputId={this.lastUniqueId()}
-              value={this.props.userActivityAlert.user}
-              onChange={this.userActivityAlertMutator.user}
-              disabled={this.props.disabled}
+              inputId={userSelectId}
+              value={userActivityAlert.user}
+              onChange={setUser}
+              disabled={disabled}
             />
             <small className="form-text text-muted">Matches across all conventions using this server.</small>
           </div>
@@ -101,20 +94,20 @@ class UserActivityAlertForm extends React.Component {
             name="trigger_on_user_con_profile_create"
             label="Trigger on profile creation"
             type="checkbox"
-            checked={this.props.userActivityAlert.trigger_on_user_con_profile_create}
-            onCheckedChange={this.userActivityAlertMutator.trigger_on_user_con_profile_create}
-            disabled={this.props.disabled}
+            checked={userActivityAlert.trigger_on_user_con_profile_create}
+            onCheckedChange={setTriggerOnUserConProfileCreate}
+            disabled={disabled}
           />
 
           {
-            this.props.convention.ticket_mode !== 'disabled' && (
+            convention.ticket_mode !== 'disabled' && (
               <BootstrapFormCheckbox
                 name="trigger_on_ticket_create"
-                label={`Trigger on ${this.props.convention.ticket_name} creation`}
+                label={`Trigger on ${convention.ticket_name} creation`}
                 type="checkbox"
-                checked={this.props.userActivityAlert.trigger_on_ticket_create}
-                onCheckedChange={this.userActivityAlertMutator.trigger_on_ticket_create}
-                disabled={this.props.disabled}
+                checked={userActivityAlert.trigger_on_ticket_create}
+                onCheckedChange={setTriggerOnTicketCreate}
+                disabled={disabled}
               />
             )
           }
@@ -127,44 +120,40 @@ class UserActivityAlertForm extends React.Component {
         </div>
 
         <ul className="list-group list-group-flush">
-          {this.props.userActivityAlert.alert_destinations.map((alertDestination) => (
+          {userActivityAlert.alert_destinations.map((alertDestination) => (
             <li key={alertDestination.id} className="list-group-item">
               <div className="d-flex">
                 <div className="flex-grow-1">
                   {
-                  alertDestination.staff_position
-                    ? (
-                      <>
-                        <strong>Staff position:</strong>
-                        {' '}
-                        {alertDestination.staff_position.name}
-                      </>
-                    )
-                    : (
-                      <>
-                        <strong>User:</strong>
-                        {' '}
-                        {alertDestination.user_con_profile.name_without_nickname}
-                      </>
-                    )
+                    alertDestination.staff_position
+                      ? (
+                        <>
+                          <strong>Staff position:</strong>
+                          {' '}
+                          {alertDestination.staff_position.name}
+                        </>
+                      )
+                      : (
+                        <>
+                          <strong>User:</strong>
+                          {' '}
+                          {alertDestination.user_con_profile.name_without_nickname}
+                        </>
+                      )
                   }
                 </div>
-                <Confirm.Trigger>
-                  {(confirm) => (
-                    <button
-                      className="btn btn-sm btn-danger"
-                      type="button"
-                      onClick={() => confirm({
-                        action: () => this.props.onRemoveAlertDestination(alertDestination.id),
-                        prompt: 'Are you sure you want to remove this alert destination?',
-                      })}
-                      disabled={this.props.disabled}
-                    >
-                      <i className="fa fa-trash-o" />
-                      <span className="sr-only">Remove destination</span>
-                    </button>
-                  )}
-                </Confirm.Trigger>
+                <button
+                  className="btn btn-sm btn-danger"
+                  type="button"
+                  onClick={() => confirm({
+                    action: () => onRemoveAlertDestination(alertDestination.id),
+                    prompt: 'Are you sure you want to remove this alert destination?',
+                  })}
+                  disabled={disabled}
+                >
+                  <i className="fa fa-trash-o" />
+                  <span className="sr-only">Remove destination</span>
+                </button>
               </div>
             </li>
           ))}
@@ -172,55 +161,40 @@ class UserActivityAlertForm extends React.Component {
             <MultipleChoiceInput
               caption="Add destination"
               name="addDestinationType"
-              choices={[{ label: 'Staff position', value: 'staff_position' }, { label: 'User', value: 'user_con_profile' }]}
-              value={this.state.addDestinationType}
-              onChange={this.localStateMutator.addDestinationType}
+              choices={[
+                { label: 'Staff position', value: 'staff_position' },
+                { label: 'User', value: 'user_con_profile' },
+              ]}
+              value={addDestinationType}
+              onChange={setAddDestinationType}
               choiceClassName="form-check-inline"
-              disabled={this.props.disabled}
+              disabled={disabled}
             />
 
-            {
-              this.state.addDestinationType === 'staff_position'
-                ? (
-                  <>
-                    <Select
-                      options={this.props.convention.staff_positions}
-                      isClearable
-                      getOptionValue={(option) => option.id}
-                      getOptionLabel={(option) => option.name}
-                      value={null}
-                      onChange={(value) => this.addStaffPositionDestination(value)}
-                      disabled={this.props.disabled}
-                    />
-                    <button className="btn btn-primary mt-2" type="button" onClick={this.addDestination} disabled={this.props.disabled}>
-                      Add destination
-                    </button>
-                  </>
-                )
-                : null
-            }
+            {addDestinationType === 'staff_position' && (
+              <Select
+                options={convention.staff_positions}
+                isClearable
+                getOptionValue={(option) => option.id}
+                getOptionLabel={(option) => option.name}
+                value={null}
+                onChange={addStaffPositionDestination}
+                disabled={disabled}
+              />
+            )}
 
-            {
-              this.state.addDestinationType === 'user_con_profile'
-                ? (
-                  <>
-                    <UserConProfileSelect
-                      value={null}
-                      onChange={(value) => this.addUserConProfileDestination(value)}
-                      disabled={this.props.disabled}
-                    />
-                    <button className="btn btn-primary mt-2" type="button" onClick={this.addDestination} disabled={this.props.disabled}>
-                      Add destination
-                    </button>
-                  </>
-                )
-                : null
-            }
+            {addDestinationType === 'user_con_profile' && (
+              <UserConProfileSelect
+                value={null}
+                onChange={addUserConProfileDestination}
+                disabled={disabled}
+              />
+            )}
           </li>
         </ul>
       </div>
     </>
-  )
+  );
 }
 
 UserActivityAlertForm.propTypes = {
