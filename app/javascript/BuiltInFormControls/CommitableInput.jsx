@@ -1,152 +1,157 @@
-import React from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-class CommitableInput extends React.Component {
-  constructor(props) {
-    super(props);
+function CommitableInput({
+  value, onChange, onCancel, className, disabled, renderInput, placeholder, label,
+}) {
+  const [editing, setEditing] = useState(false);
+  const [editingValue, setEditingValue] = useState('');
+  const [commitInProgress, setCommitInProgress] = useState(false);
+  const inputRef = useRef();
 
-    this.state = {
-      editing: false,
-      editingValue: '',
-      commitInProgress: false,
-    };
-  }
+  const beginEditing = useCallback(
+    () => {
+      setEditing(true);
+      setEditingValue(value);
+    },
+    [value],
+  );
 
-  beginEditing = () => {
-    this.setState({ editing: true, editingValue: this.props.value });
-  }
+  const cancelEditing = useCallback(
+    (event) => {
+      event.preventDefault();
+      setEditing(false);
+      setEditingValue(undefined);
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
+      if (onCancel) {
+        onCancel();
+      }
+    },
+    [onCancel],
+  );
 
-  cancelEditing = (event) => {
+  const commitEditing = async (event) => {
     event.preventDefault();
-    this.setState({ editing: false, editingValue: undefined });
-    if (this.input) {
-      this.input.blur();
-    }
-    if (this.props.onCancel) {
-      this.props.onCancel();
-    }
-  }
-
-  commitEditing = async (event) => {
-    event.preventDefault();
-    this.setState({ commitInProgress: true });
+    setCommitInProgress(true);
     try {
-      await this.props.onChange(this.state.editingValue);
-      this.setState({ editing: false, editingValue: undefined, commitInProgress: false });
-      if (this.input) {
-        this.input.blur();
+      await onChange(editingValue);
+      setEditing(false);
+      setEditingValue(undefined);
+      setCommitInProgress(false);
+      if (inputRef.current) {
+        inputRef.current.blur();
       }
     } catch (error) {
-      this.setState({ commitInProgress: false }, () => {
-        if (this.input) {
-          this.input.focus();
-        }
-      });
+      setCommitInProgress(false);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
       throw error;
     }
-  }
+  };
 
-  blur = () => {
-    if (this.state.editingValue === this.props.value) {
-      this.setState({ editing: false, editingValue: undefined });
+  const blur = () => {
+    if (editingValue === value) {
+      setEditing(false);
+      setEditingValue(undefined);
     }
-  }
+  };
 
-  keyDownInInput = (event) => {
+  const keyDownInInput = (event) => {
     switch (event.key) {
       case 'Escape':
         event.preventDefault();
-        this.cancelEditing(event);
+        cancelEditing(event);
         break;
 
       case 'Enter':
         event.preventDefault();
-        this.commitEditing(event);
+        commitEditing(event);
         break;
 
       default:
     }
-  }
+  };
 
-  inputChange = (event) => {
-    this.setState({ editingValue: event.target.value });
-  }
+  const inputProps = {
+    className: classNames('form-control', className),
+    onChange: setEditingValue,
+    ref: inputRef,
+    placeholder,
+    'aria-label': label,
+  };
 
-  render = () => {
-    const inputProps = {
-      className: classNames('form-control', this.props.className),
-      onChange: this.inputChange,
-      ref: (element) => { this.input = element; },
-      placeholder: this.props.placeholder,
-      'aria-label': this.props.label,
-    };
+  const renderInputInternal = renderInput || (
+    ({ onChange: inputChange, ...props }) => (
+      <input onChange={(event) => inputChange(event.target.value)} {...props} />
+    )
+  );
 
-    const renderInput = this.props.renderInput || ((props) => <input {...props} />);
-
-    if (this.state.editing) {
-      return (
-        <div className="input-group">
-          {renderInput({
-            ...inputProps,
-            onBlur: this.blur,
-            value: this.state.editingValue || '',
-            onKeyDown: this.keyDownInInput,
-            disabled: this.state.commitInProgress,
-          })}
-          <div className="input-group-append">
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={this.cancelEditing}
-              disabled={this.props.disabled || this.state.commitInProgress}
-            >
-              <i className="fa fa-times" />
-              <span className="sr-only">Cancel changes</span>
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.commitEditing}
-              disabled={this.props.disabled || this.state.commitInProgress}
-            >
-              <i className="fa fa-check" />
-              <span className="sr-only">Commit changes</span>
-            </button>
-          </div>
-        </div>
-      );
-    }
-
+  if (editing) {
     return (
       <div className="input-group">
-        {renderInput({
+        {renderInputInternal({
           ...inputProps,
-          value: this.props.value || '',
-          onFocus: this.beginEditing,
-          disabled: this.props.disabled,
+          onBlur: blur,
+          value: editingValue || '',
+          onKeyDown: keyDownInInput,
+          disabled: commitInProgress,
         })}
         <div className="input-group-append">
-          {
-            this.props.value
-              ? (
-                <button
-                  type="button"
-                  className="btn btn-outline-danger"
-                  onMouseDown={() => { this.props.onChange(''); }}
-                  disabled={this.props.disabled || !this.props.value}
-                >
-                  <i className="fa fa-times-rectangle">
-                    <span className="sr-only">Clear</span>
-                  </i>
-                </button>
-              )
-              : null
-          }
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={cancelEditing}
+            disabled={disabled || commitInProgress}
+          >
+            <i className="fa fa-times" />
+            <span className="sr-only">Cancel changes</span>
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={commitEditing}
+            disabled={disabled || commitInProgress}
+          >
+            <i className="fa fa-check" />
+            <span className="sr-only">Commit changes</span>
+          </button>
         </div>
       </div>
     );
   }
+
+  return (
+    <div className="input-group">
+      {renderInputInternal({
+        ...inputProps,
+        value: value || '',
+        onFocus: beginEditing,
+        disabled,
+      })}
+      <div className="input-group-append">
+        {
+          value
+            ? (
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onMouseDown={() => { onChange(''); }}
+                disabled={disabled || !value}
+              >
+                <i className="fa fa-times-rectangle">
+                  <span className="sr-only">Clear</span>
+                </i>
+              </button>
+            )
+            : null
+        }
+      </div>
+    </div>
+  );
 }
 
 CommitableInput.propTypes = {
