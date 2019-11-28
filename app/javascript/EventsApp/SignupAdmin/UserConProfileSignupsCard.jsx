@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
-import Confirm from '../../ModalDialogs/Confirm';
+import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useConfirm } from '../../ModalDialogs/Confirm';
 import { formatSignupStatus } from './SignupUtils';
-import QueryWithStateDisplay from '../../QueryWithStateDisplay';
 import { timespanFromRun } from '../../TimespanUtils';
 import { UserConProfileSignupsQuery } from './queries.gql';
 import { WithdrawAllUserConProfileSignups } from './mutations.gql';
 import buildEventUrl from '../buildEventUrl';
+import ErrorDisplay from '../../ErrorDisplay';
+import LoadingIndicator from '../../LoadingIndicator';
 
 function filterAndSortSignups(signups) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
@@ -19,17 +20,51 @@ function filterAndSortSignups(signups) {
     .sort((a, b) => moment(a.run.starts_at).valueOf() - moment(b.run.starts_at).valueOf());
 }
 
-class UserConProfileSignupsCard extends React.Component {
-  renderEventLink = (event) => (
+function UserConProfileSignupsCard({ userConProfileId }) {
+  const { data, error, loading } = useQuery(UserConProfileSignupsQuery, {
+    variables: { id: userConProfileId },
+  });
+  const [withdrawAllSignups] = useMutation(WithdrawAllUserConProfileSignups);
+  const confirm = useConfirm();
+
+  const signups = useMemo(
+    () => (loading || error
+      ? []
+      : filterAndSortSignups(data.userConProfile.signups)
+    ),
+    [data, error, loading],
+  );
+
+  const unSignedUpEvents = useMemo(
+    () => (loading || error
+      ? []
+      : data.userConProfile.team_members
+        .filter((teamMember) => !data.userConProfile.signups
+          .some((signup) => signup.run.event.id === teamMember.event.id && signup.state === 'confirmed'))
+        .filter((teamMember) => teamMember.event.status === 'active')
+        .map((teamMember) => teamMember.event)
+    ),
+    [data, error, loading],
+  );
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const renderEventLink = (event) => (
     <Link to={buildEventUrl(event)}>
       {event.title}
     </Link>
-  )
+  );
 
-  renderSignup = (signup, convention) => (
+  const renderSignup = (signup, convention) => (
     <li className="list-group-item" key={signup.id}>
       <ul className="list-unstyled">
-        <li><strong>{this.renderEventLink(signup.run.event)}</strong></li>
+        <li><strong>{renderEventLink(signup.run.event)}</strong></li>
         <li>{formatSignupStatus(signup, signup.run.event)}</li>
         <li>
           <small>
@@ -47,15 +82,9 @@ class UserConProfileSignupsCard extends React.Component {
         </li>
       </ul>
     </li>
-  )
+  );
 
-  renderUnSignedUpTeamMemberEvents = (userConProfile, myProfile) => {
-    const unSignedUpEvents = userConProfile.team_members
-      .filter((teamMember) => !userConProfile.signups
-        .some((signup) => signup.run.event.id === teamMember.event.id && signup.state === 'confirmed'))
-      .filter((teamMember) => teamMember.event.status === 'active')
-      .map((teamMember) => teamMember.event);
-
+  const renderUnSignedUpTeamMemberEvents = (userConProfile, myProfile) => {
     if (unSignedUpEvents.length === 0) {
       return null;
     }
@@ -68,62 +97,42 @@ class UserConProfileSignupsCard extends React.Component {
             : `${userConProfile.name_without_nickname} is a team member for the following events, but is not signed up for them:`
         )}
         {' '}
-        {unSignedUpEvents.map((event) => this.renderEventLink(event)).reduce((prev, curr) => [prev, ', ', curr])}
+        {unSignedUpEvents.map((event) => renderEventLink(event)).reduce((prev, curr) => [prev, ', ', curr])}
       </li>
     );
-  }
+  };
 
-  render = () => (
-    <QueryWithStateDisplay
-      query={UserConProfileSignupsQuery}
-      variables={{ id: this.props.userConProfileId }}
-    >
-      {({ data }) => {
-        const signups = filterAndSortSignups(data.userConProfile.signups);
-
-        return (
-          <div className="card">
-            <div className="card-header">Signups</div>
-            <ul className="list-group list-group-flush">
-              {
-                signups.length === 0
-                  ? <li className="list-group-item"><em>No signups</em></li>
-                  : null
-              }
-              {signups.map((signup) => this.renderSignup(signup, data.convention))}
-              {this.renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
-            </ul>
-            {
-              data.myProfile.ability.can_update_signups && signups.length > 0
-                ? (
-                  <div className="card-footer border-top-0">
-                    <Mutation mutation={WithdrawAllUserConProfileSignups}>
-                      {(mutate) => (
-                        <Confirm.Trigger>
-                          {(confirm) => (
-                            <button
-                              type="button"
-                              className="btn btn-danger btn-sm"
-                              onClick={() => confirm({
-                                prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from all their events at ${data.convention.name}?`,
-                                action: () => mutate({
-                                  variables: { userConProfileId: this.props.userConProfileId },
-                                }),
-                              })}
-                            >
-                            Withdraw from all
-                            </button>
-                          )}
-                        </Confirm.Trigger>
-                      )}
-                    </Mutation>
-                  </div>
-                ) : null
-            }
-          </div>
-        );
-      }}
-    </QueryWithStateDisplay>
+  return (
+    <div className="card">
+      <div className="card-header">Signups</div>
+      <ul className="list-group list-group-flush">
+        {
+          signups.length === 0
+            ? <li className="list-group-item"><em>No signups</em></li>
+            : null
+        }
+        {signups.map((signup) => renderSignup(signup, data.convention))}
+        {renderUnSignedUpTeamMemberEvents(data.userConProfile, data.myProfile)}
+      </ul>
+      {
+        data.myProfile.ability.can_update_signups && signups.length > 0
+          ? (
+            <div className="card-footer border-top-0">
+              <button
+                type="button"
+                className="btn btn-danger btn-sm"
+                onClick={() => confirm({
+                  prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from all their events at ${data.convention.name}?`,
+                  action: () => withdrawAllSignups({ variables: { userConProfileId } }),
+                  renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
+                })}
+              >
+                Withdraw from all
+              </button>
+            </div>
+          ) : null
+      }
+    </div>
   );
 }
 

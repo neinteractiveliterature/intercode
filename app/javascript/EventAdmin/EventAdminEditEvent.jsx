@@ -29,6 +29,43 @@ function EventAdminEditEvent({ match, history }) {
     createMutate: useMutationCallback(CreateMaximumEventProvidedTicketsOverride),
     updateMutate: useMutationCallback(UpdateMaximumEventProvidedTicketsOverride),
     deleteMutate: useMutationCallback(DeleteMaximumEventProvidedTicketsOverride),
+    createUpdater: (store, updatedEventId, override) => {
+      const storeData = store.readQuery({ query: EventAdminEventsQuery });
+      store.writeQuery({
+        query: EventAdminEventsQuery,
+        data: {
+          ...storeData,
+          events: data.events.map((event) => {
+            if (event.id !== updatedEventId) {
+              return event;
+            }
+
+            return {
+              ...event,
+              maximum_event_provided_tickets_overrides: [
+                ...event.maximum_event_provided_tickets_overrides,
+                override,
+              ],
+            };
+          }),
+        },
+      });
+    },
+    deleteUpdater: (store, overrideId) => {
+      const storeData = store.readQuery({ query: EventAdminEventsQuery });
+      store.writeQuery({
+        query: EventAdminEventsQuery,
+        data: {
+          ...storeData,
+          events: data.events.map((event) => ({
+            ...event,
+            maximum_event_provided_tickets_overrides: event
+              .maximum_event_provided_tickets_overrides
+              .filter((mepto) => mepto.id !== overrideId),
+          })),
+        },
+      });
+    },
   });
 
   const eventId = match.params.id;
@@ -81,8 +118,8 @@ function EventAdminEditEvent({ match, history }) {
               {...meptoMutations}
               ticketTypes={data.convention.ticket_types}
               ticketName={data.convention.ticket_name}
-              overrides={event.maximum_event_provided_tickets_overrides}
-              eventId={event.id}
+              overrides={initialEvent.maximum_event_provided_tickets_overrides}
+              eventId={initialEvent.id}
             />
           )}
       </EventFormWithCategorySelection>
