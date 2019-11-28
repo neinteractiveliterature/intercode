@@ -3084,13 +3084,13 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.9.0.tgz#78647c9d11942a210d80fdf6d43c3da5f3b88afe"
-  integrity sha512-dB2V9zj0NYjR25Xt0/N0WA7V0yDaCDH4/6N61aBS8JS49y3CCwsW5m8IL0DXYunIfBUin/I9fFwiHL22/e/BHQ==
+codemirror-graphql@^0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.11.3.tgz#88f3fd51e26d33902ac985945b9fe7200d8b49dd"
+  integrity sha512-TIrKk5/wkrGAo15vGgaSYfl+PylBdpWqpecnOzdnPMfobGfA1papbDu1WzawB9L1lV+qGnSNKkf1Bsvf4u66zw==
   dependencies:
-    graphql-language-service-interface "^2.1.0"
-    graphql-language-service-parser "^1.3.0"
+    graphql-language-service-interface "^2.3.1"
+    graphql-language-service-parser "^1.5.0"
 
 codemirror@^5.47.0, codemirror@^5.49.2:
   version "5.49.2"
@@ -4215,7 +4215,7 @@ entities@^1.1.1, entities@~1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.2.tgz#bdfa735299664dfafd34529ed4f8522a275fea56"
 
-entities@^2.0.0:
+entities@^2.0.0, entities@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   integrity sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
@@ -5268,15 +5268,15 @@ graceful-fs@^4.2.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.2.tgz#6f0952605d0140c1cfdb138ed005775b92d67b02"
   integrity sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
 
-graphiql@^0.14.2:
-  version "0.14.2"
-  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.14.2.tgz#6dda66c8998794533e9c98a011bd1b3568462b21"
-  integrity sha512-4vhGm3nmJBtaOcjq6r4QeZ+zg+DA5fwn0OZXvgmyHO3J11xnp8n9PQP8IGrGWTJL6Ey1vNtOgn1VbSy2Ixwg6A==
+graphiql@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.17.0.tgz#38cd961b5b6fb3aacd3405a0a00681087e2d716e"
+  integrity sha512-8xx5hsyIoEcQj/Lcs5BwlZb1poP7h5xa6p/CvpbRLa3wW9rvhd0udJDja9mSvZw+I0u9qdvKVLEYDdXBO0vt5w==
   dependencies:
     codemirror "^5.47.0"
-    codemirror-graphql "^0.9.0"
+    codemirror-graphql "^0.11.3"
     copy-to-clipboard "^3.2.0"
-    markdown-it "^8.4.0"
+    markdown-it "^10.0.0"
     regenerator-runtime "^0.13.3"
 
 graphql-anywhere@^4.2.4:
@@ -5305,38 +5305,38 @@ graphql-import@^0.7.1:
     lodash "^4.17.4"
     resolve-from "^4.0.0"
 
-graphql-language-service-interface@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-2.1.0.tgz#d32cdd4808042694179eb59200b701468f20a669"
-  integrity sha512-GpVv1h03nahz7E6oUrYbtlNdi4zXZPhR+YDydM76lE4SiOuxYkUBup7qg0wPL1Y2dWxEDrV1FECbfbuudRWl5Q==
+graphql-language-service-interface@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-2.3.1.tgz#10882659200f10341659b9be289bd285f8e40a5d"
+  integrity sha512-PbrZ6Wu1Zekmo3tXGaAiYcNLLcGtP46M2SyhjYidoJ9zVnkUsl6BHXUztWUOYNGO2TD5gjtDfOfyhl3keHMgmw==
   dependencies:
     graphql-config "2.2.1"
-    graphql-language-service-parser "^1.3.0"
-    graphql-language-service-types "^1.3.0"
-    graphql-language-service-utils "^2.1.0"
+    graphql-language-service-parser "^1.5.0"
+    graphql-language-service-types "^1.5.0"
+    graphql-language-service-utils "^2.3.1"
 
-graphql-language-service-parser@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-parser/-/graphql-language-service-parser-1.3.0.tgz#55814c3776f6d583402af65df64a40d41c370387"
-  integrity sha512-IVW5EQts6CCm6G1pJzyOSNGv28Ia1afyx7gGIhDQkbXbNmShbNOneUWyURbawX9fL2A1AGhdA80fuCSLO8Jb9Q==
+graphql-language-service-parser@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-parser/-/graphql-language-service-parser-1.5.0.tgz#3de35eb1ab33ec3c3ef5b09d640dc914c0bd11be"
+  integrity sha512-DX3B6DfvKa28gJoywtnkkIUdZitWqKqBTrZ6CQV8V5wO3GzJalQKT0J+B56oDkS6MhjLt928Yu8fj63laNWfoA==
   dependencies:
     graphql-config "2.2.1"
-    graphql-language-service-types "^1.3.0"
+    graphql-language-service-types "^1.5.0"
 
-graphql-language-service-types@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-types/-/graphql-language-service-types-1.3.0.tgz#f2778731b95c9a082bb8cbcafe30bc293f19a547"
-  integrity sha512-agVSOtvr1qKgURsNONI7pY6xRshVTTxhBSUZvyNDFKYma1P/uWK9xVuPyU4zMuXeugaWNGysWAf4VgP8SnawxA==
+graphql-language-service-types@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-types/-/graphql-language-service-types-1.5.0.tgz#826afa555eac5d4d58cfc894d6932ef962a0d137"
+  integrity sha512-THxB15oPC56zlNVSwv7JCahuSUbI9xnUHdftjOqZOz5588qjlPw/UHWQ8V/k0/XwZvH/TwCkmnBkIRmPVb1S5Q==
   dependencies:
     graphql-config "2.2.1"
 
-graphql-language-service-utils@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-2.1.0.tgz#3fed58fce2885d0b8336faf7270c3b61fb04d88c"
-  integrity sha512-ZUCyFeEbXUL63TxK37Uc+dbX+M7HGxCMIvaMN+HZpnpYb8ga71B7H9hg3z4zhPLbMecczuPNcmVlQhcmtClJ8A==
+graphql-language-service-utils@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-2.3.1.tgz#c409ea9614cbef153767ac2ff9eb316c6fb62e3e"
+  integrity sha512-BXH0npfMX0uMzd+pOYc+Tu+I4194N+FYv8yRAG+aI7qQjfmVM1VirlushW9GgdU2q1Q1y0VWpW9LSH3hFHTTPw==
   dependencies:
     graphql-config "2.2.1"
-    graphql-language-service-types "^1.3.0"
+    graphql-language-service-types "^1.5.0"
 
 graphql-request@^1.5.0:
   version "1.8.2"
@@ -7092,12 +7092,13 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-markdown-it@^8.4.0:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-8.4.2.tgz#386f98998dc15a37722aa7722084f4020bdd9b54"
+markdown-it@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-10.0.0.tgz#abfc64f141b1722d663402044e43927f1f50a8dc"
+  integrity sha512-YWOP1j7UbDNz+TumYP1kpwnP0aEa711cJjrAQrzd0UXlbJfc5aAq0F/PZHjiioqDC1NKgvIMX+o+9Bk7yuM2dg==
   dependencies:
     argparse "^1.0.7"
-    entities "~1.1.1"
+    entities "~2.0.0"
     linkify-it "^2.0.0"
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
