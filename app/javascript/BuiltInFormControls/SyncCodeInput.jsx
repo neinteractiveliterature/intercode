@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import classNames from 'classnames';
@@ -25,88 +25,101 @@ import parsePageContent from '../parsePageContent';
 
 import '../Codemirror/LiquidMultiplexModes';
 
-class SyncCodeInput extends React.Component {
-  constructor(props) {
-    super(props);
+function SyncCodeInput({
+  onBlur, onChange, value, getPreviewContent, mode, disabled, codeMirrorOptions, extraNavControls,
+  className, lines, formControlClassName, editorWrapperClassName, children,
+}) {
+  const [previewing, setPreviewing] = useState(false);
+  const [previewContent, setPreviewContent] = useState(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState(null);
 
-    this.state = {
-      previewing: false,
-    };
-  }
+  const onBeforeChange = useCallback(
+    (editor, data, newValue) => {
+      onChange(newValue);
+      setPreviewContent(null);
+    },
+    [onChange],
+  );
 
-  onBeforeChange = (editor, data, value) => {
-    this.props.onChange(value);
-    this.setState({ previewContent: null });
-  }
+  const editTabClicked = useCallback(
+    (event) => {
+      event.preventDefault();
+      setPreviewing(false);
+    },
+    [],
+  );
 
-  editTabClicked = (event) => {
+  const previewTabClicked = async (event) => {
     event.preventDefault();
-    this.setState({ previewing: false });
-  }
 
-  previewTabClicked = (event) => {
-    event.preventDefault();
-
-    if (!this.props.getPreviewContent) {
+    if (!getPreviewContent) {
       return;
     }
 
-    this.setState({ previewing: true });
+    setPreviewing(true);
 
-    if (this.state.previewContent == null) {
-      this.setState({ previewContent: <LoadingIndicator /> });
+    if (previewContent == null) {
+      setPreviewLoading(true);
 
-      this.props.getPreviewContent(this.props.value).then((html) => {
-        this.setState({
-          previewContent: parsePageContent(html).bodyComponents,
-        });
-      }).catch(({ error }) => {
-        this.setState({
-          previewContent: (
-            <ErrorDisplay graphQLError={error} />
-          ),
-        });
-      });
+      try {
+        const html = await getPreviewContent(value);
+        setPreviewContent(html);
+        setPreviewLoading(false);
+      } catch (error) {
+        setPreviewLoading(false);
+        setPreviewError(error);
+      }
     }
-  }
+  };
 
-  renderPreviewContent = () => (
-    <div className="markdown-preview">
-      {this.state.previewContent}
-    </div>
-  )
+  const renderPreviewContent = () => {
+    if (previewLoading) {
+      return <LoadingIndicator />;
+    }
 
-  renderContent = () => {
-    if (this.state.previewing) {
-      return this.renderPreviewContent();
+    if (previewError) {
+      return <ErrorDisplay graphQLError={previewError} />;
+    }
+
+    return (
+      <div className="markdown-preview">
+        {parsePageContent(previewContent).bodyComponents}
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    if (previewing) {
+      return renderPreviewContent();
     }
 
     // react-codemirror2 doesn't want event handlers to be passed undefined
     const eventHandlers = {};
-    if (this.props.onBlur) {
-      eventHandlers.onBlur = this.props.onBlur;
+    if (onBlur) {
+      eventHandlers.onBlur = onBlur;
     }
 
     return (
       <CodeMirror
-        value={this.props.value}
+        value={value}
         options={{
           ...defaultCodeMirrorOptions,
           lineNumbers: false,
           foldGutter: false,
           gutters: [],
-          mode: this.props.mode,
-          readOnly: this.props.disabled ? 'nocursor' : false,
-          ...(this.props.codeMirrorOptions || {}),
+          mode,
+          readOnly: disabled ? 'nocursor' : false,
+          ...(codeMirrorOptions || {}),
         }}
         {...eventHandlers}
-        onBeforeChange={this.onBeforeChange}
+        onBeforeChange={onBeforeChange}
       />
     );
-  }
+  };
 
-  renderNav = () => {
-    if (!this.props.getPreviewContent && !this.props.extraNavControls) {
+  const renderNav = () => {
+    if (!getPreviewContent && !extraNavControls) {
       return null;
     }
 
@@ -115,51 +128,51 @@ class SyncCodeInput extends React.Component {
         <li className="nav-item">
           <button
             type="button"
-            className={classNames('btn btn-link nav-link py-0 px-2', { active: !this.state.previewing })}
-            onClick={this.editTabClicked}
+            className={classNames('btn btn-link nav-link py-0 px-2', { active: !previewing })}
+            onClick={editTabClicked}
           >
             Edit
           </button>
         </li>
-        {this.props.getPreviewContent && (
+        {getPreviewContent && (
           <li className="nav-item">
             <button
               type="button"
-              className={classNames('btn btn-link nav-link py-0 px-2', { active: this.state.previewing })}
-              onClick={this.previewTabClicked}
+              className={classNames('btn btn-link nav-link py-0 px-2', { active: previewing })}
+              onClick={previewTabClicked}
             >
               Preview
             </button>
           </li>
         )}
-        {this.props.extraNavControls}
+        {extraNavControls}
       </ul>
     );
-  }
+  };
 
-  render = () => (
-    <div className={this.props.className}>
+  return (
+    <div className={className}>
       <div
         className={classNames(
-          `form-control p-0 codemirror-height-${this.props.lines || 10}`,
-          this.props.formControlClassName,
+          `form-control p-0 codemirror-height-${lines || 10}`,
+          formControlClassName,
         )}
         style={{ overflow: 'hidden' }}
       >
-        {this.renderNav()}
+        {renderNav()}
         <div
           className={classNames(
             'form-control border-0',
-            this.props.editorWrapperClassName,
-            { 'bg-disabled': this.props.disabled },
+            editorWrapperClassName,
+            { 'bg-disabled': disabled },
           )}
         >
-          {this.renderContent()}
+          {renderContent()}
         </div>
       </div>
-      {this.props.children}
+      {children}
     </div>
-  )
+  );
 }
 
 SyncCodeInput.propTypes = {
