@@ -6,7 +6,7 @@ const WebpackAssetsManifest = require('webpack-assets-manifest');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { config } = require('@rails/webpacker');
-const getStyleRule = require('@rails/webpacker/package/utils/get_style_rule');
+const getStyleRule = require('./getStyleRule');
 const threadLoader = require('thread-loader');
 
 threadLoader.warmup({
