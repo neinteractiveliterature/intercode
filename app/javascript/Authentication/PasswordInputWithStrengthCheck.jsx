@@ -38,8 +38,8 @@ function PasswordFeedback({ result }) {
 
 PasswordFeedback.propTypes = {
   result: PropTypes.shape({
-    warning: PropTypes.string,
     feedback: PropTypes.shape({
+      warning: PropTypes.string,
       suggestions: PropTypes.arrayOf(PropTypes.string),
     }),
   }),
@@ -92,6 +92,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
           type="password"
           value={value}
           onChange={(event) => onChange(event.target.value)}
+          aria-label="Password"
         />
         <div
           style={{ right: 0, top: 0, position: 'absolute' }}
@@ -176,6 +177,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }) {
             className={classNames('progress-bar', scoreProgressClasses)}
             aria-valuemin="0"
             aria-valuemax="4"
+            aria-label="Password strength"
           />
         </div>
       </div>
