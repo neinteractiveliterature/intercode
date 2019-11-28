@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import { ReCAPTCHA } from 'react-google-recaptcha';
+import { useHistory } from 'react-router-dom';
+// eslint-disable-next-line import/no-named-as-default
+import ReCAPTCHA from 'react-google-recaptcha';
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
 
@@ -46,10 +47,11 @@ async function signUp(authenticityToken, formState, password, passwordConfirmati
   }
 }
 
-function SignUpForm({ history }) {
+function SignUpForm() {
   const {
     close: closeModal, setCurrentView, recaptchaSiteKey,
   } = useContext(AuthenticationModalContext);
+  const history = useHistory();
   const authenticityToken = useContext(AuthenticityTokensContext).signUp;
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
@@ -135,9 +137,5 @@ function SignUpForm({ history }) {
     </>
   );
 }
-
-SignUpForm.propTypes = {
-  history: PropTypes.shape({}).isRequired,
-};
 
 export default SignUpForm;
