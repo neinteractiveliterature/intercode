@@ -74,6 +74,12 @@ class IntercodeSchema < GraphQL::Schema
     raise GraphQL::ExecutionError, err.result.errors.full_messages.join(', ')
   end
 
+  # Catch-all for unhandled errors
+  rescue_from StandardError do |err, _obj, _args, _ctx, _field|
+    Rollbar.error(err)
+    raise GraphQL::ExecutionError, err.message
+  end
+
   def self.resolve_type(_abstract_type, object, _context)
     case object
     when MailingListsPresenter then Types::MailingListsType
