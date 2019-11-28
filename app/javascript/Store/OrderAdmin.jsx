@@ -13,6 +13,7 @@ import MoneyCell from '../Tables/MoneyCell';
 import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../usePageTitle';
+import AppRootContext from '../AppRootContext';
 
 const StatusFilter = ({ filter, onChange }) => (
   <ChoiceSetFilter
@@ -76,7 +77,7 @@ const getPossibleColumns = () => [
     id: 'submitted_at',
     accessor: 'submitted_at',
     filterable: false,
-    Cell: SubmittedAtCell,
+    Cell: (props) => <SubmittedAtCell {...props} />,
   },
   {
     Header: 'Products',
@@ -97,7 +98,8 @@ const getPossibleColumns = () => [
 ];
 
 function OrderAdmin({ exportUrl, history }) {
-  const [editingOrder, setEditingOrder] = useState(null);
+  const { timezoneName } = useContext(AppRootContext);
+  const [editingOrderId, setEditingOrderId] = useState(null);
   usePageTitle('Orders');
 
   const [reactTableProps, { tableHeaderProps, queryData }] = useReactTableWithTheWorks({
@@ -109,13 +111,14 @@ function OrderAdmin({ exportUrl, history }) {
     query: AdminOrdersQuery,
   });
 
-  const closeOrderModal = () => { setEditingOrder(null); };
+  const closeOrderModal = () => { setEditingOrderId(null); };
 
   const renderEditModal = () => (
     <AdminOrderModal
-      order={editingOrder}
+      order={queryData
+        && queryData.convention.orders_paginated.entries.find((o) => o.id === editingOrderId)}
       closeModal={closeOrderModal}
-      timezoneName={((queryData || {}).convention || {}).timezoneName}
+      timezoneName={timezoneName}
     />
   );
 
@@ -133,7 +136,7 @@ function OrderAdmin({ exportUrl, history }) {
             if (((queryData || {}).currentAbility || {}).can_update_orders) {
               return {
                 style: { cursor: 'pointer' },
-                onClick: () => { setEditingOrder(rowInfo.original); },
+                onClick: () => { setEditingOrderId(rowInfo.original.id); },
               };
             }
 
