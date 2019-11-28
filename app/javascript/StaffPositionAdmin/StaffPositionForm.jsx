@@ -1,69 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
 
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import StaffPositionPropType from './StaffPositionPropType';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { mutator, Transforms } from '../ComposableFormUtils';
+import useUniqueId from '../useUniqueId';
 
-class StaffPositionForm extends React.Component {
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
+function StaffPositionForm({ staffPosition, onChange }) {
+  const formMutator = mutator({
+    getState: () => staffPosition,
+    setState: onChange,
+    transforms: {
+      name: Transforms.identity,
+      email: Transforms.identity,
+      visible: Transforms.identity,
+      user_con_profiles: Transforms.identity,
+    },
+  });
+  const userConProfileSelectId = useUniqueId('user-con-profile-id-');
 
-    this.mutator = mutator({
-      getState: () => this.props.staffPosition,
-      setState: this.props.onChange,
-      transforms: {
-        name: Transforms.identity,
-        email: Transforms.identity,
-        visible: Transforms.identity,
-        user_con_profiles: Transforms.identity,
-      },
-    });
-  }
+  return (
+    <div>
+      <BootstrapFormInput
+        name="name"
+        label="Position name"
+        value={staffPosition.name || ''}
+        onTextChange={formMutator.name}
+      />
 
-  render = () => {
-    const userConProfileSelectId = this.nextUniqueId();
+      <BootstrapFormInput
+        name="email"
+        type="email"
+        label="Contact email"
+        value={staffPosition.email || ''}
+        onTextChange={formMutator.email}
+      />
 
-    return (
-      <div>
-        <BootstrapFormInput
-          name="name"
-          label="Position name"
-          value={this.props.staffPosition.name || ''}
-          onTextChange={this.mutator.name}
+      <BooleanInput
+        name="visible"
+        caption="Visible in CMS content?"
+        value={staffPosition.visible}
+        onChange={formMutator.visible}
+      />
+
+      <div className="form-group">
+        <label htmlFor={userConProfileSelectId}>People</label>
+        <UserConProfileSelect
+          id={userConProfileSelectId}
+          isMulti
+          value={staffPosition.user_con_profiles}
+          onChange={formMutator.user_con_profiles}
         />
-
-        <BootstrapFormInput
-          name="email"
-          type="email"
-          label="Contact email"
-          value={this.props.staffPosition.email || ''}
-          onTextChange={this.mutator.email}
-        />
-
-        <BooleanInput
-          name="visible"
-          caption="Visible in CMS content?"
-          value={this.props.staffPosition.visible}
-          onChange={this.mutator.visible}
-        />
-
-        <div className="form-group">
-          <label htmlFor={userConProfileSelectId}>People</label>
-          <UserConProfileSelect
-            id={userConProfileSelectId}
-            isMulti
-            value={this.props.staffPosition.user_con_profiles}
-            onChange={this.mutator.user_con_profiles}
-          />
-        </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 StaffPositionForm.propTypes = {

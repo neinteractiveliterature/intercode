@@ -1,5 +1,3 @@
-/* global Rollbar */
-
 import React, {
   Suspense, useMemo, useCallback, useRef, useEffect,
 } from 'react';
@@ -13,47 +11,13 @@ import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import AuthenticationModalContext, { useAuthenticationModalProvider } from './Authentication/AuthenticationModalContext';
 import Confirm, { useConfirm } from './ModalDialogs/Confirm';
-import ErrorDisplay from './ErrorDisplay';
 import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
 import PageLoadingIndicator from './PageLoadingIndicator';
 import { AlertProvider } from './ModalDialogs/Alert';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-    };
-  }
-
-  componentDidCatch(error, info) {
-    this.setState({ error });
-
-    if (typeof Rollbar !== 'undefined') {
-      Rollbar.error(error, { errorInfo: info });
-    }
-
-    if (typeof console !== 'undefined') {
-      console.log(error); // eslint-disable-line no-console
-      console.log(info); // eslint-disable-line no-console
-    }
-  }
-
-  render() {
-    if (this.state.error) {
-      return <ErrorDisplay stringError={this.state.error.message} />;
-    }
-
-    return this.props.children;
-  }
-}
-
-ErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+import ErrorBoundary from './ErrorBoundary';
 
 export default (WrappedComponent) => {
   function Wrapper({
@@ -115,7 +79,7 @@ export default (WrappedComponent) => {
                       {!unauthenticatedError && (
                         <Suspense fallback={<PageLoadingIndicator visible />}>
                           <AlertProvider>
-                            <ErrorBoundary>
+                            <ErrorBoundary placement="replace" errorType="plain">
                               <WrappedComponent {...otherProps} />
                             </ErrorBoundary>
                           </AlertProvider>

@@ -4,46 +4,46 @@ import { Route } from 'react-router-dom';
 
 import BreadcrumbItem from './BreadcrumbItem';
 
-class BreadcrumbItemWithRoute extends React.Component {
-  buildActive = (routeProps) => {
-    if (this.props.active) {
-      return this.props.active(routeProps);
+function BreadcrumbItemWithRoute({
+  active, hideUnlessMatch, path, exact, to, children,
+}) {
+  const buildActive = (routeProps) => {
+    if (active) {
+      return active(routeProps);
     }
 
     return routeProps.match != null;
-  }
+  };
 
-  buildToString = (routeProps) => {
-    if (typeof this.props.to === 'string') {
-      return this.props.to;
+  const buildToString = (routeProps) => {
+    if (typeof to === 'string') {
+      return to;
     }
 
-    return this.props.to(routeProps);
-  }
+    return to(routeProps);
+  };
 
-  renderBreadcrumbItem = (routeProps) => (
+  const renderBreadcrumbItem = (routeProps) => (
     <BreadcrumbItem
-      to={this.buildToString(routeProps)}
-      active={this.buildActive(routeProps)}
+      to={buildToString(routeProps)}
+      active={buildActive(routeProps)}
     >
       {
-        typeof this.props.children === 'function'
-          ? this.props.children(routeProps)
-          : this.props.children
+        typeof children === 'function'
+          ? children(routeProps)
+          : children
       }
     </BreadcrumbItem>
-  )
+  );
 
-  render = () => {
-    const routeRenderingProps = {};
-    if (this.props.hideUnlessMatch) {
-      routeRenderingProps.render = this.renderBreadcrumbItem;
-    } else {
-      routeRenderingProps.children = this.renderBreadcrumbItem;
-    }
-
-    return <Route path={this.props.path} exact={this.props.exact} {...routeRenderingProps} />;
+  const routeRenderingProps = {};
+  if (hideUnlessMatch) {
+    routeRenderingProps.render = renderBreadcrumbItem;
+  } else {
+    routeRenderingProps.children = renderBreadcrumbItem;
   }
+
+  return <Route path={path} exact={exact} {...routeRenderingProps} />;
 }
 
 BreadcrumbItemWithRoute.propTypes = {
