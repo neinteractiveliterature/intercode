@@ -29,10 +29,11 @@ function ConventionFormBillingSection({
         <CommitableInput
           value={convention.stripe_publishable_key || ''}
           onChange={changeStripePublishableKey}
-          renderInput={(inputProps) => (
+          renderInput={({ onChange, ...inputProps }) => (
             <input
               id="stripe_publishable_key"
               {...inputProps}
+              onChange={(event) => onChange(event.target.value)}
               className={classNames(
                 inputProps.className,
                 'text-monospace',
@@ -49,10 +50,11 @@ function ConventionFormBillingSection({
         <CommitableInput
           value={convention.stripe_secret_key || ''}
           onChange={changeStripeSecretKey}
-          renderInput={(inputProps) => (
+          renderInput={({ onChange, ...inputProps }) => (
             <input
               id="stripe_secret_key"
               {...inputProps}
+              onChange={(event) => onChange(event.target.value)}
               className={classNames(
                 inputProps.className,
                 'text-monospace',
