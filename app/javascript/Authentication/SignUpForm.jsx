@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { ReCAPTCHA } from 'react-google-recaptcha';
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
 
@@ -127,6 +127,7 @@ function SignUpForm({ history }) {
               className="btn btn-primary"
               disabled={submitInProgress}
               value="Sign up"
+              aria-label="Sign up"
             />
           </div>
         </div>
