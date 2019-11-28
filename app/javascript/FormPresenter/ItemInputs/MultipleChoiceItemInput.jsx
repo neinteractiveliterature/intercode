@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CaptionLegend from './CaptionLegend';
@@ -32,150 +32,173 @@ function castMultipleValue(value) {
   return arrayValue.map((item) => item.toString());
 }
 
-class MultipleChoiceItemInput extends React.Component {
-  constructor(props) {
-    super(props);
+function MultipleChoiceItemInput({
+  formItem, onChange, value, valueInvalid, onInteract,
+}) {
+  const isMultiple = useMemo(
+    () => ['checkbox_horizontal', 'checkbox_vertical'].includes(formItem.properties.style),
+    [formItem.properties.style],
+  );
 
-    let otherValue = '';
-    if (this.isOtherSelected()) {
-      if (this.isMultiple()) {
-        const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
-        otherValue = castMultipleValue(this.props.value).find((
-          (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue)
-        ));
-      } else {
-        otherValue = castSingleValue(this.props.value);
+  const otherIsSelected = useMemo(
+    () => {
+      if (!formItem.properties.other) {
+        return false;
       }
-    }
 
-    this.state = { otherValue };
-  }
+      const choiceValues = formItem.properties.choices.map((choice) => choice.value);
 
-  onChange = (newValue) => {
-    this.userDidInteract();
+      if (isMultiple) {
+        return !castMultipleValue(value).every((
+          (selectedChoiceValue) => choiceValues.includes(selectedChoiceValue)
+        ));
+      }
 
-    if (this.isMultiple()) {
-      const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
+      return value != null && !choiceValues.includes(value);
+    },
+    [formItem.properties.choices, formItem.properties.other, isMultiple, value],
+  );
+
+  const otherValue = useMemo(
+    () => {
+      if (otherIsSelected) {
+        if (isMultiple) {
+          const choiceValues = formItem.properties.choices.map((choice) => choice.value);
+          return castMultipleValue(value).find((
+            (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue)
+          ));
+        }
+        return castSingleValue(value);
+      }
+
+      return '';
+    },
+    [formItem.properties.choices, isMultiple, otherIsSelected, value],
+  );
+
+  const choicesForChoiceSet = useMemo(
+    () => {
+      const providedChoices = formItem.properties.choices.map((choice) => ({
+        label: choice.caption,
+        value: choice.value,
+      }));
+
+      if (formItem.properties.other) {
+        const otherCaption = formItem.properties.other_caption || 'Other';
+        return [...providedChoices, {
+          label: otherCaption,
+          value: OTHER_VALUE,
+        }];
+      }
+
+      return providedChoices;
+    },
+    [formItem.properties.choices, formItem.properties.other, formItem.properties.other_caption],
+  );
+
+  const valueForChoiceSet = useMemo(
+    () => {
+      if (isMultiple) {
+        const typecastValue = castMultipleValue(value);
+        if (otherIsSelected) {
+          typecastValue.push(OTHER_VALUE);
+        }
+
+        return typecastValue;
+      }
+
+      if (otherIsSelected) {
+        return OTHER_VALUE;
+      }
+
+      return castSingleValue(value);
+    },
+    [isMultiple, otherIsSelected, value],
+  );
+
+  const userDidInteract = useCallback(
+    () => onInteract(formItem.identifier),
+    [formItem.identifier, onInteract],
+  );
+
+  const valueDidChange = (newValue) => {
+    userDidInteract();
+
+    if (isMultiple) {
+      const choiceValues = formItem.properties.choices.map((choice) => choice.value);
       const providedValues = newValue
         .filter((choiceValue) => choiceValues
           .some((providedValue) => providedValue === choiceValue));
       if (newValue.includes(OTHER_VALUE)) {
-        this.props.onChange([...providedValues, this.state.otherValue]);
+        onChange([...providedValues, otherValue]);
       } else {
-        this.props.onChange(providedValues);
+        onChange(providedValues);
       }
     } else if (newValue === OTHER_VALUE) {
-      this.props.onChange(this.state.otherValue);
+      onChange(otherValue);
     } else {
-      this.props.onChange(newValue);
+      onChange(newValue);
     }
-  }
+  };
 
-  getValueForChoiceSet = () => {
-    if (this.isMultiple()) {
-      const typecastValue = castMultipleValue(this.props.value);
-      if (this.isOtherSelected()) {
-        typecastValue.push(OTHER_VALUE);
-      }
+  const otherValueDidChange = (event) => {
+    userDidInteract();
+    if (isMultiple) {
+      onChange(valueForChoiceSet.map((singleValue) => {
+        if (singleValue === OTHER_VALUE) {
+          return event.target.value;
+        }
 
-      return typecastValue;
+        return singleValue;
+      }));
+    } else {
+      onChange(event.target.value);
     }
+  };
 
-    if (this.isOtherSelected()) {
-      return OTHER_VALUE;
-    }
-
-    return castSingleValue(this.props.value);
-  }
-
-  isMultiple = () => ['checkbox_horizontal', 'checkbox_vertical'].includes(this.props.formItem.properties.style)
-
-  isOtherSelected = () => {
-    if (!this.props.formItem.properties.other) {
-      return false;
-    }
-
-    const choiceValues = this.props.formItem.properties.choices.map((choice) => choice.value);
-
-    if (this.isMultiple()) {
-      return !castMultipleValue(this.props.value).every((
-        (selectedChoiceValue) => choiceValues.includes(selectedChoiceValue)
-      ));
-    }
-
-    return this.props.value != null && !choiceValues.includes(this.props.value);
-  }
-
-  userDidInteract = () => {
-    this.props.onInteract(this.props.formItem.identifier);
-  }
-
-  otherValueDidChange = (event) => {
-    this.userDidInteract();
-    this.setState(
-      { otherValue: event.target.value },
-      () => this.onChange(this.getValueForChoiceSet()), // recalculate value
-    );
-  }
-
-  renderOtherInput = () => {
-    if (!this.isOtherSelected()) {
+  const renderOtherInput = () => {
+    if (!otherIsSelected) {
       return null;
     }
 
     return (
       <input
-        aria-label={`${this.props.formItem.properties.other_caption || 'Other'}: please specify`}
+        aria-label={`${formItem.properties.other_caption || 'Other'}: please specify`}
         type="text"
         className="form-control"
-        value={this.state.otherValue}
-        onChange={this.otherValueDidChange}
+        value={otherValue}
+        onChange={otherValueDidChange}
         placeholder="Please specify"
       />
     );
-  }
-
-  render = () => {
-    const choicesForChoiceSet = this.props.formItem.properties.choices.map((choice) => ({
-      label: choice.caption,
-      value: choice.value,
-    }));
-
-    if (this.props.formItem.properties.other) {
-      const otherCaption = this.props.formItem.properties.other_caption || 'Other';
-      choicesForChoiceSet.push({
-        label: otherCaption,
-        value: OTHER_VALUE,
-      });
-    }
-
-    return (
-      <fieldset className="form-group">
-        <div className={classNames({ 'border-0': !this.props.valueInvalid, 'border rounded border-danger': this.props.valueInvalid })}>
-          <CaptionLegend formItem={this.props.formItem} />
-          <ChoiceSet
-            choices={choicesForChoiceSet}
-            value={this.getValueForChoiceSet()}
-            onChange={this.onChange}
-            multiple={this.isMultiple()}
-            choiceClassName={classNames({
-              'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(this.props.formItem.properties.style),
-            })}
-          />
-          {this.renderOtherInput()}
-          {
-            this.props.valueInvalid
-              ? (
-                <span className="text-danger">
-                  This field is required.
-                </span>
-              )
-              : null
-          }
-        </div>
-      </fieldset>
-    );
   };
+
+  return (
+    <fieldset className="form-group">
+      <div className={classNames({ 'border-0': !valueInvalid, 'border rounded border-danger': valueInvalid })}>
+        <CaptionLegend formItem={formItem} />
+        <ChoiceSet
+          choices={choicesForChoiceSet}
+          value={valueForChoiceSet}
+          onChange={valueDidChange}
+          multiple={isMultiple}
+          choiceClassName={classNames({
+            'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(formItem.properties.style),
+          })}
+        />
+        {renderOtherInput()}
+        {
+          valueInvalid
+            ? (
+              <span className="text-danger">
+                This field is required.
+              </span>
+            )
+            : null
+        }
+      </div>
+    </fieldset>
+  );
 }
 
 MultipleChoiceItemInput.propTypes = {
