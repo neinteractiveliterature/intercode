@@ -261,7 +261,7 @@ GEM
     listen (3.2.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.3.1)
+    loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -287,9 +287,9 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    minitest-spec-rails (6.0.0)
+    minitest-spec-rails (6.0.1)
       minitest (>= 5.0)
-      rails (>= 4.1)
+      railties (>= 4.1)
     moneta (1.0.0)
     monetize (1.9.1)
       money (~> 6.12)
