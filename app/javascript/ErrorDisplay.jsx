@@ -42,6 +42,7 @@ ErrorDisplay.propTypes = {
     graphQLErrors: PropTypes.arrayOf(PropTypes.shape({
       message: PropTypes.string.isRequired,
     })),
+    message: PropTypes.string,
   }),
 };
 

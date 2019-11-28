@@ -1,3 +1,4 @@
+/* global Rollbar */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,13 +14,30 @@ class ErrorBoundary extends React.Component {
     this.state = { error: null };
   }
 
+  componentDidCatch(error, info) {
+    this.setState({ error });
+
+    if (typeof Rollbar !== 'undefined') {
+      Rollbar.error(error, { errorInfo: info });
+    }
+
+    if (typeof console !== 'undefined') {
+      console.log(error); // eslint-disable-line no-console
+      console.log(info); // eslint-disable-line no-console
+    }
+  }
+
   render = () => {
     const { errorType, placement, children } = this.props;
+
+    if (!this.state.error) {
+      return children;
+    }
 
     const errorDisplayProps = (
       errorType === 'graphql'
         ? { graphQLError: this.state.error }
-        : { error: this.state.error }
+        : { stringError: this.state.error.message }
     );
 
     if (placement === 'before') {
@@ -29,6 +47,10 @@ class ErrorBoundary extends React.Component {
           {children}
         </>
       );
+    }
+
+    if (placement === 'replace') {
+      return <ErrorDisplay {...errorDisplayProps} />;
     }
 
     return (
@@ -42,7 +64,7 @@ class ErrorBoundary extends React.Component {
 
 ErrorBoundary.propTypes = {
   errorType: PropTypes.oneOf(['graphql', 'plain']),
-  placement: PropTypes.oneOf(['before', 'after']),
+  placement: PropTypes.oneOf(['before', 'after', 'replace']),
   children: PropTypes.node,
 };
 
