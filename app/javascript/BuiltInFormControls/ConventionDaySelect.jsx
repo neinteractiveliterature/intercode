@@ -1,46 +1,52 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import MomentPropTypes from 'react-moment-proptypes';
 import moment from 'moment-timezone';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 
-class ConventionDaySelect extends React.Component {
-  onChange = (event) => {
-    const newDayString = event.target.value;
+function ConventionDaySelect({ convention, value, onChange }) {
+  const conventionTimespan = useMemo(
+    () => timespanFromConvention(convention),
+    [convention],
+  );
+  const conventionDays = useMemo(
+    () => getConventionDayTimespans(conventionTimespan, convention.timezone_name)
+      .map((timespan) => timespan.start),
+    [convention, conventionTimespan],
+  );
 
-    this.props.onChange(moment(newDayString).tz(this.props.convention.timezone_name));
-  }
+  const inputChange = useCallback(
+    (event) => {
+      const newDayString = event.target.value;
+      onChange(moment(newDayString).tz(convention.timezone_name));
+    },
+    [convention, onChange],
+  );
 
-  render = () => {
-    const { convention } = this.props;
-    const conventionTimespan = timespanFromConvention(convention);
-    const conventionDays = getConventionDayTimespans(conventionTimespan, convention.timezone_name)
-      .map((timespan) => timespan.start);
+  const options = conventionDays.map((day) => (
+    <div className="form-check form-check-inline" key={day.toISOString()}>
+      <label className="form-check-label">
+        <input
+          className="form-check-input"
+          type="radio"
+          name="day"
+          value={day.toISOString()}
+          checked={day.isSame(value)}
+          onChange={inputChange}
+          aria-label={day.format('dddd')}
+        />
+        {' '}
+        {day.format('dddd')}
+      </label>
+    </div>
+  ));
 
-    const options = conventionDays.map((day) => (
-      <div className="form-check form-check-inline" key={day.toISOString()}>
-        <label className="form-check-label">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="day"
-            value={day.toISOString()}
-            checked={day.isSame(this.props.value)}
-            onChange={this.onChange}
-          />
-          {' '}
-          {day.format('dddd')}
-        </label>
-      </div>
-    ));
-
-    return (
-      <fieldset className="form-group">
-        <legend className="col-form-label">Day</legend>
-        {options}
-      </fieldset>
-    );
-  }
+  return (
+    <fieldset className="form-group">
+      <legend className="col-form-label">Day</legend>
+      {options}
+    </fieldset>
+  );
 }
 
 ConventionDaySelect.propTypes = {
