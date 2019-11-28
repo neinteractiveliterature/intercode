@@ -1,97 +1,93 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { enableUniqueIds } from 'react-html-id';
 
 import BootstrapFormInput from '../../BuiltInFormControls/BootstrapFormInput';
 import ChoiceSet from '../../BuiltInFormControls/ChoiceSet';
 import { mutator, Transforms } from '../../ComposableFormUtils';
 import RequiredIndicator from './RequiredIndicator';
+import useUniqueId from '../../useUniqueId';
 
-class EventEmailInput extends React.Component {
-  constructor(props) {
-    super(props);
+function EventEmailInput({
+  convention, value, formItem, onChange, onInteract, valueInvalid,
+}) {
+  const inputId = useUniqueId('team-mailing-list-name-');
+  const [emailBehavior, setEmailBehavior] = useState(() => {
+    const teamMailingListName = (value || {}).team_mailing_list_name;
+    return (
+      teamMailingListName && convention.event_mailing_list_domain
+        ? 'team_mailing_list'
+        : (value || {}).con_mail_destination
+    );
+  });
+  const userDidInteract = useCallback(
+    () => onInteract(formItem.identifier),
+    [formItem.identifier, onInteract],
+  );
 
-    const teamMailingListName = (this.props.value || {}).team_mailing_list_name;
-    this.state = {
-      emailBehavior: (
-        teamMailingListName && this.props.convention.event_mailing_list_domain
-          ? 'team_mailing_list'
-          : (this.props.value || {}).con_mail_destination
-      ),
-    };
+  const valueMutator = mutator({
+    getState: () => value,
+    setState: (state) => {
+      userDidInteract();
+      if (emailBehavior === 'team_mailing_list') {
+        onChange({
+          ...state,
+          email: (state.team_mailing_list_name && state.team_mailing_list_name.trim() !== '')
+            ? `${state.team_mailing_list_name}@${convention.event_mailing_list_domain}`
+            : null,
+        });
+      } else {
+        onChange({
+          ...state,
+          team_mailing_list_name: null,
+        });
+      }
+    },
+    transforms: {
+      team_mailing_list_name: Transforms.identity,
+      email: Transforms.identity,
+    },
+  });
 
-    this.valueMutator = mutator({
-      getState: () => this.props.value,
-      setState: (state) => {
-        this.userDidInteract();
-        if (this.state.emailBehavior === 'team_mailing_list') {
-          this.props.onChange({
-            ...state,
-            email: (state.team_mailing_list_name && state.team_mailing_list_name.trim() !== '')
-              ? `${state.team_mailing_list_name}@${this.props.convention.event_mailing_list_domain}`
-              : null,
-          });
-        } else {
-          this.props.onChange({
-            ...state,
-            team_mailing_list_name: null,
-          });
-        }
-      },
-      transforms: {
-        team_mailing_list_name: Transforms.identity,
-        email: Transforms.identity,
-      },
-    });
-
-    enableUniqueIds(this);
-  }
-
-  emailBehaviorChanged = (emailBehavior) => {
-    this.setState({ emailBehavior });
-    if (emailBehavior === 'team_mailing_list' && this.props.convention.event_mailing_list_domain) {
-      this.props.onChange({
-        ...(this.props.value || {}),
+  const emailBehaviorChanged = (newBehavior) => {
+    setEmailBehavior(newBehavior);
+    if (newBehavior === 'team_mailing_list' && convention.event_mailing_list_domain) {
+      onChange({
+        ...(value || {}),
         con_mail_destination: 'event_email',
       });
     } else {
-      this.props.onChange({
-        ...(this.props.value || {}),
+      onChange({
+        ...(value || {}),
         con_mail_destination: emailBehavior,
         team_mailing_list_name: null,
       });
     }
-    this.userDidInteract();
-  }
+    userDidInteract();
+  };
 
-  userDidInteract = () => {
-    this.props.onInteract(this.props.formItem.identifier);
-  }
-
-  renderEmailInput = () => {
-    if (this.state.emailBehavior === 'team_mailing_list') {
-      const inputId = this.nextUniqueId();
-
+  const renderEmailInput = () => {
+    if (emailBehavior === 'team_mailing_list') {
       return (
         <div className="form-group">
           <label htmlFor={inputId}>
             Mailing list address
-            <RequiredIndicator formItem={this.props.formItem} />
+            <RequiredIndicator formItem={formItem} />
           </label>
           <div className="input-group">
             <input
               id={inputId}
               className="form-control"
-              value={(this.props.value || {}).team_mailing_list_name}
+              value={(value || {}).team_mailing_list_name}
               onChange={(event) => {
-                this.valueMutator.team_mailing_list_name(event.target.value);
+                valueMutator.team_mailing_list_name(event.target.value);
               }}
+              aria-label="Mailing list address (portion before @ sign)"
             />
             <div className="input-group-append">
               <span className="input-group-text">
                 @
-                {this.props.convention.event_mailing_list_domain}
+                {convention.event_mailing_list_domain}
               </span>
             </div>
           </div>
@@ -104,43 +100,43 @@ class EventEmailInput extends React.Component {
         label={(
           <>
             Contact email address
-            <RequiredIndicator formItem={this.props.formItem} />
+            <RequiredIndicator formItem={formItem} />
           </>
         )}
-        name={`${this.props.formItem.identifier}.email`}
-        value={(this.props.value || {}).email || ''}
-        onTextChange={this.valueMutator.email}
-        disabled={this.state.emailBehavior == null}
+        name={`${formItem.identifier}.email`}
+        value={(value || {}).email || ''}
+        onTextChange={valueMutator.email}
+        disabled={emailBehavior == null}
       />
     );
-  }
+  };
 
-  render = () => (
+  return (
     <fieldset className="form-group">
-      <div className={classNames({ 'border-0': !this.props.valueInvalid, 'border rounded border-danger': this.props.valueInvalid })}>
+      <div className={classNames({ 'border-0': !valueInvalid, 'border rounded border-danger': valueInvalid })}>
         <legend className="col-form-label">
           <span>How would you like to receive email about this event?</span>
-          <RequiredIndicator formItem={this.props.formItem} />
+          <RequiredIndicator formItem={formItem} />
         </legend>
         <ChoiceSet
-          name={this.props.formItem.identifier}
+          name={formItem.identifier}
           choices={[
             ...(
-              this.props.convention.event_mailing_list_domain
+              convention.event_mailing_list_domain
                 ? [{ label: 'Have the convention create and manage a team mailing list for me', value: 'team_mailing_list' }]
                 : []
             ),
             { label: 'Use a contact email I specify', value: 'event_email' },
             { label: 'Specify a contact email for attendees, but have the convention email individual team members with updates', value: 'gms' },
           ]}
-          value={this.state.emailBehavior}
-          onChange={this.emailBehaviorChanged}
+          value={emailBehavior}
+          onChange={emailBehaviorChanged}
         />
         <div className="mt-4">
-          {this.renderEmailInput()}
+          {renderEmailInput()}
         </div>
         {
-          this.props.valueInvalid
+          valueInvalid
             ? (
               <span className="text-danger">
                 This field is required.
@@ -150,7 +146,7 @@ class EventEmailInput extends React.Component {
         }
       </div>
     </fieldset>
-  )
+  );
 }
 
 EventEmailInput.propTypes = {
