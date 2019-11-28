@@ -1,83 +1,74 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableUniqueIds } from 'react-html-id';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 import CreateEventProposalModal from './CreateEventProposalModal';
-import ModalContainer from '../ModalDialogs/ModalContainer';
 import { ProposeEventButtonQuery } from './queries.gql';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import SignInButton from '../Authentication/SignInButton';
+import useUniqueId from '../useUniqueId';
+import useModal from '../ModalDialogs/useModal';
+import LoadingIndicator from '../LoadingIndicator';
+import ErrorDisplay from '../ErrorDisplay';
 
-class ProposeEventButton extends React.Component {
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
+function ProposeEventButton({ className, caption }) {
+  const history = useHistory();
+  const buttonId = useUniqueId('propose-event-button-');
+  const modal = useModal();
+  const { data, loading, error } = useQuery(ProposeEventButtonQuery);
+
+  const newProposalCreated = (eventProposal) => {
+    history.push(`/event_proposals/${eventProposal.id}/edit`);
+  };
+
+  if (loading) {
+    return <LoadingIndicator />;
   }
 
-  newProposalCreated = (eventProposal) => {
-    this.props.history.push(`/event_proposals/${eventProposal.id}/edit`);
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
   }
 
-  renderProposeButton = (data) => {
-    const buttonId = this.nextUniqueId();
-
+  if (!data.myProfile) {
     return (
-      <ModalContainer>
-        {({ modalVisible, openModal, closeModal }) => (
-          <div>
-            <button
-              id={buttonId}
-              className={this.props.className}
-              type="button"
-              onClick={openModal}
-            >
-              {this.props.caption}
-            </button>
-
-            <CreateEventProposalModal
-              onCreate={this.newProposalCreated}
-              cancel={closeModal}
-              visible={modalVisible}
-              userEventProposals={data.myProfile.user.event_proposals}
-              proposableEventCategories={data.convention.event_categories
-                .filter((category) => category.proposable)}
-            />
-          </div>
-        )}
-      </ModalContainer>
+      <SignInButton
+        afterSignInPath={window.location.href}
+        className={className}
+        caption="Log in to propose an event"
+      />
     );
   }
 
-  renderLoginButton = () => (
-    <SignInButton
-      afterSignInPath={window.location.href}
-      className={this.props.className}
-      caption="Log in to propose an event"
-    />
-  )
+  return (
+    <div>
+      <button
+        id={buttonId}
+        className={className}
+        type="button"
+        onClick={modal.open}
+      >
+        {caption}
+      </button>
 
-  render = () => (
-    <QueryWithStateDisplay query={ProposeEventButtonQuery}>
-      {({ data }) => (
-        data.myProfile
-          ? this.renderProposeButton(data)
-          : this.renderLoginButton()
-      )}
-    </QueryWithStateDisplay>
-  )
+      <CreateEventProposalModal
+        onCreate={newProposalCreated}
+        cancel={modal.close}
+        visible={modal.visible}
+        userEventProposals={data.myProfile.user.event_proposals}
+        proposableEventCategories={data.convention.event_categories
+          .filter((category) => category.proposable)}
+      />
+    </div>
+  );
 }
 
 ProposeEventButton.propTypes = {
   caption: PropTypes.node.isRequired,
   className: PropTypes.string,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 ProposeEventButton.defaultProps = {
   className: 'btn btn-secondary',
 };
 
-export default withRouter(ProposeEventButton);
+export default ProposeEventButton;

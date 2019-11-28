@@ -65,8 +65,20 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
           query: StandaloneEditEventQuery,
           ...queryOptions,
         });
-        storeData.event.maximum_event_provided_tickets_overrides.push(override);
-        store.writeQuery({ query: StandaloneEditEventQuery, ...queryOptions, data: storeData });
+        store.writeQuery({
+          query: StandaloneEditEventQuery,
+          ...queryOptions,
+          data: {
+            ...storeData,
+            event: {
+              ...storeData.event,
+              maximum_event_provided_tickets_overrides: [
+                ...storeData.event.maximum_event_provided_tickets_overrides,
+                override,
+              ],
+            },
+          },
+        });
       },
       [queryOptions],
     ),
@@ -76,10 +88,19 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
           query: StandaloneEditEventQuery,
           ...queryOptions,
         });
-        const newOverrides = storeData.event.maximum_event_provided_tickets_overrides
-          .filter((override) => override.id !== id);
-        storeData.event.maximum_event_provided_tickets_overrides = newOverrides;
-        store.writeQuery({ query: StandaloneEditEventQuery, ...queryOptions, data: storeData });
+        store.writeQuery({
+          query: StandaloneEditEventQuery,
+          ...queryOptions,
+          data: {
+            ...storeData,
+            event: {
+              ...storeData.event,
+              maximum_event_provided_tickets_overrides: storeData
+                .event.maximum_event_provided_tickets_overrides
+                .filter((override) => override.id !== id),
+            },
+          },
+        });
       },
       [queryOptions],
     ),
@@ -104,8 +125,8 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
               {...meptoMutations}
               ticketName={data.convention.ticket_name}
               ticketTypes={data.convention.ticket_types}
-              overrides={event.maximum_event_provided_tickets_overrides}
-              eventId={event.id}
+              overrides={data.event.maximum_event_provided_tickets_overrides}
+              eventId={data.event.id}
             />
           )}
       </EventForm>
