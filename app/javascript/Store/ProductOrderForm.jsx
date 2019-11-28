@@ -90,6 +90,7 @@ function ProductOrderForm({ productId, history }) {
         className="form-control"
         value={quantity == null ? '' : quantity}
         onChange={(event) => quantityChanged(event.target.value)}
+        aria-label="Quantity"
       />
     </label>
   );

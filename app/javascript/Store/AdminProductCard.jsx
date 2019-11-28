@@ -339,6 +339,7 @@ function AdminProductCard({
               type="file"
               accept="image/*"
               onChange={imageChanged}
+              aria-label="Choose image..."
             />
           </div>
         </div>

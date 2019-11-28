@@ -1,72 +1,58 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import Modal, { ConfirmModal } from 'react-bootstrap4-modal';
-import { Mutation } from 'react-apollo';
+import Modal from 'react-bootstrap4-modal';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
+import { useMutation } from 'react-apollo-hooks';
 
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { MarkOrderPaid, AdminUpdateOrder, CancelOrder } from './mutations.gql';
+import { useConfirm } from '../ModalDialogs/Confirm';
+import AppRootContext from '../AppRootContext';
+import ErrorDisplay from '../ErrorDisplay';
 
-class AdminOrderModal extends React.Component {
-  constructor(props) {
-    super(props);
+function AdminOrderModal({ order, closeModal }) {
+  const { timezoneName } = useContext(AppRootContext);
+  const confirm = useConfirm();
+  const [markOrderPaid] = useMutation(MarkOrderPaid);
+  const [updateOrder] = useMutation(AdminUpdateOrder);
+  const [cancelOrder] = useMutation(CancelOrder);
 
-    this.state = {
-      confirm: null,
-    };
-  }
-
-  beginConfirm = (prompt, action) => {
-    this.setState({
-      confirm: { prompt, action },
-    });
-  }
-
-  performConfirm = async () => {
-    await this.state.confirm.action();
-    this.setState({ confirm: null });
-  }
-
-  cancelConfirm = () => {
-    this.setState({ confirm: null });
-  }
-
-  renderCancelButton = () => {
+  const renderCancelButton = () => {
     let prompt;
     let buttonCaption;
 
-    if (this.props.order.charge_id) {
+    if (order.charge_id) {
       prompt = (
         <div>
           <p>
             Are you sure you want to cancel order #
-            {this.props.order.id}
+            {order.id}
             ?
           </p>
           <p>
             This will issue a refund back to
             {' '}
-            {this.props.order.user_con_profile.name_without_nickname}
+            {order.user_con_profile.name_without_nickname}
             &apos;s payment card.
           </p>
         </div>
       );
       buttonCaption = 'Cancel and refund';
-    } else if (this.props.order.status === 'paid') {
+    } else if (order.status === 'paid') {
       prompt = (
         <div>
           <p>
             Are you sure you want to cancel order #
-            {this.props.order.id}
+            {order.id}
             ?
           </p>
           <p>
             Because there is
             no Stripe charge associated with this order,
             {' '}
-            {this.props.order.user_con_profile.name_without_nickname}
+            {order.user_con_profile.name_without_nickname}
             {' '}
             will not automatically
             receive a refund, so they will have to be refunded manually.
@@ -79,7 +65,7 @@ class AdminOrderModal extends React.Component {
         <div>
           <p>
             Are you sure you want to cancel order #
-            {this.props.order.id}
+            {order.id}
             ?
           </p>
         </div>
@@ -88,60 +74,48 @@ class AdminOrderModal extends React.Component {
     }
 
     return (
-      <Mutation mutation={CancelOrder}>
-        {(cancelOrder) => (
-          <button
-            type="button"
-            className="btn btn-sm btn-outline-danger"
-            onClick={() => {
-              this.beginConfirm(
-                prompt,
-                () => cancelOrder({ variables: { orderId: this.props.order.id } }),
-              );
-            }}
-          >
-            {buttonCaption}
-          </button>
-        )}
-      </Mutation>
+      <button
+        type="button"
+        className="btn btn-sm btn-outline-danger"
+        onClick={() => confirm({
+          prompt,
+          action: () => cancelOrder({ variables: { orderId: order.id } }),
+          renderError: (error) => <ErrorDisplay graphQLError={error} />,
+        })}
+      >
+        {buttonCaption}
+      </button>
     );
-  }
+  };
 
-  renderOrderActions = () => {
-    if (this.props.order.status === 'unpaid') {
+  const renderOrderActions = () => {
+    if (order.status === 'unpaid') {
       return (
         <div>
-          <Mutation mutation={MarkOrderPaid}>
-            {(markOrderPaid) => (
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-danger mr-1"
-                onClick={() => {
-                  this.beginConfirm(
-                    `Are you sure you want to mark order #${this.props.order.id} as paid?`,
-                    () => markOrderPaid({ variables: { orderId: this.props.order.id } }),
-                  );
-                }}
-              >
-                Mark as paid
-              </button>
-            )}
-          </Mutation>
-          {this.renderCancelButton()}
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger mr-1"
+            onClick={() => confirm({
+              prompt: `Are you sure you want to mark order #${order.id} as paid?`,
+              action: () => markOrderPaid({ variables: { orderId: order.id } }),
+              renderError: (error) => <ErrorDisplay graphQLError={error} />,
+            })}
+          >
+            Mark as paid
+          </button>
+          {renderCancelButton()}
         </div>
       );
     }
 
-    if (this.props.order.status === 'paid') {
-      return this.renderCancelButton();
+    if (order.status === 'paid') {
+      return renderCancelButton();
     }
 
     return null;
-  }
+  };
 
-  renderBody = () => {
-    const { order } = this.props;
-
+  const renderBody = () => {
     if (order == null) {
       return null;
     }
@@ -173,69 +147,55 @@ class AdminOrderModal extends React.Component {
                 {humanize(order.status)}
                 {(
                   order.paid_at
-                    ? `on ${moment(order.paid_at).tz(this.props.timezoneName).format('ddd, MMM D, YYYY {at} h:mma')}`
+                    ? `on ${moment(order.paid_at).tz(timezoneName).format('ddd, MMM D, YYYY {at} h:mma')}`
                     : null
                 )}
               </li>
-              <li className="list-inline-item">{this.renderOrderActions()}</li>
+              <li className="list-inline-item">{renderOrderActions()}</li>
             </ul>
           </dd>
 
           <dt className="col-md-3">Payment note</dt>
           <dd className="col-md-9">
-            <Mutation mutation={AdminUpdateOrder}>
-              {(updateOrder) => (
-                <InPlaceEditor
-                  value={order.payment_note}
-                  renderInput={({ onChange, ...inputProps }) => (
-                    <textarea
-                      className="form-control col mr-1"
-                      onChange={(event) => { onChange(event.target.value); }}
-                      {...inputProps}
-                    />
-                  )}
-                  onChange={(value) => updateOrder({
-                    variables: {
-                      orderId: order.id,
-                      paymentNote: value,
-                    },
-                  })}
+            <InPlaceEditor
+              value={order.payment_note || ''}
+              renderInput={({ onChange, ...inputProps }) => (
+                <textarea
+                  className="form-control col mr-1"
+                  onChange={(event) => { onChange(event.target.value); }}
+                  {...inputProps}
                 />
               )}
-            </Mutation>
+              onChange={(value) => updateOrder({
+                variables: {
+                  orderId: order.id,
+                  paymentNote: value,
+                },
+              })}
+            />
           </dd>
         </dl>
       </div>
     );
-  }
+  };
 
-  render = () => (
-    <div>
-      <Modal
-        visible={this.props.order != null && this.state.confirm == null}
-        dialogClassName="modal-lg"
-      >
-        <div className="modal-header">
-          Order #
-          {(this.props.order || {}).id}
-        </div>
-        <div className="modal-body">
-          {this.renderBody()}
-        </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-primary" onClick={this.props.closeModal}>Close</button>
-        </div>
-      </Modal>
-
-      <ConfirmModal
-        visible={this.state.confirm != null}
-        onOK={this.performConfirm}
-        onCancel={this.cancelConfirm}
-      >
-        {(this.state.confirm || { prompt: '' }).prompt}
-      </ConfirmModal>
-    </div>
-  )
+  return (
+    <Modal
+      visible={order != null && !confirm.visible}
+      dialogClassName="modal-lg"
+    >
+      <div className="modal-header">
+        Order #
+        {(order || {}).id}
+      </div>
+      <div className="modal-body">
+        {renderBody()}
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-primary" onClick={closeModal}>Close</button>
+      </div>
+    </Modal>
+  );
 }
 
 AdminOrderModal.propTypes = {
@@ -249,12 +209,11 @@ AdminOrderModal.propTypes = {
     order_entries: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
     })).isRequired,
-    total_price: PropTypes.number,
+    total_price: PropTypes.shape({}),
     paid_at: PropTypes.string,
     payment_note: PropTypes.string,
   }),
   closeModal: PropTypes.func.isRequired,
-  timezoneName: PropTypes.string.isRequired,
 };
 
 AdminOrderModal.defaultProps = {
