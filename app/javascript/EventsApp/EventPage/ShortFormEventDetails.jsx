@@ -60,11 +60,12 @@ function ShortFormEventDetails({ eventId }) {
                         teamMember.email
                           ? (
                             <>
-                              {' ('}
+                              {' '}
+                              (
                               <a href={`mailto:${teamMember.email}`}>
                                 {teamMember.email}
                               </a>
-                              {')'}
+                              )
                             </>
                           )
                           : null

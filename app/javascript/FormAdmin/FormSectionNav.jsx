@@ -64,7 +64,7 @@ function FormSectionNav() {
   return (
     <>
       <button
-        className="p-0 d-lg-none"
+        className="btn p-0 d-lg-none"
         type="button"
         onClick={toggleCollapsed}
         aria-expanded={!collapsed}
