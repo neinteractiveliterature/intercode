@@ -1,120 +1,103 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { withRouter } from 'react-router-dom';
-import { Mutation } from 'react-apollo';
+import { useHistory } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { AddAttendeeUsersQuery } from './queries.gql';
 import { CreateUserConProfile } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import LoadingIndicator from '../LoadingIndicator';
 import UserSelect from '../BuiltInFormControls/UserSelect';
+import useAsyncFunction from '../useAsyncFunction';
 
-class AddAttendeeModal extends React.Component {
-  constructor(props) {
-    super(props);
+function AddAttendeeModal({ conventionName, visible }) {
+  const history = useHistory();
+  const [user, setUser] = useState(null);
+  const [userConProfile, setUserConProfile] = useState(null);
+  const [createUserConProfileMutate] = useMutation(CreateUserConProfile);
+  const [createUserConProfile, error, inProgress] = useAsyncFunction(createUserConProfileMutate);
 
-    this.state = {
-      userId: null,
-      userConProfile: null,
-    };
-  }
+  const close = () => {
+    setUser(null);
+    setUserConProfile(null);
+    history.replace('/user_con_profiles');
+  };
 
-  cancel = () => {
-    this.setState({ user: null, userId: null, userConProfile: null });
-    this.props.history.replace('/user_con_profiles');
-  }
+  const userSelected = (newUser) => {
+    setUser(newUser);
+    setUserConProfile({
+      form_response_attrs: {
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+      },
+    });
+  };
 
-  userSelected = (user) => {
-    this.setState({
-      user,
-      userId: user.id,
-      userConProfile: {
-        form_response_attrs: {
-          first_name: user.first_name,
-          last_name: user.last_name,
+  const createClicked = async () => {
+    await createUserConProfile({
+      variables: {
+        user_id: user.id,
+        user_con_profile: {
+          form_response_attrs_json: JSON.stringify(
+            userConProfile.form_response_attrs,
+          ),
         },
       },
     });
-  }
+    close();
+  };
 
-  userConProfileChanged = (userConProfile) => { this.setState({ userConProfile }); }
-
-  render = () => (
-    <Modal visible={this.props.visible} dialogClassName="modal-lg">
+  return (
+    <Modal visible={visible} dialogClassName="modal-lg">
       <div className="modal-header">
         Add attendee
       </div>
+
       <div className="modal-body">
         <p>
           Choose a user to add as an attendee for
           {' '}
-          {this.props.conventionName}
+          {conventionName}
           .  This person must
           already be a user in the site database in order to be added.
         </p>
 
         <UserSelect
-          value={this.state.user}
-          onChange={this.userSelected}
+          value={user}
+          onChange={userSelected}
           usersQuery={AddAttendeeUsersQuery}
         />
 
-        {this.state.userId && (
+        {user && (
           <div className="mt-4">
             <p>Profile data will be copied from user&rsquo;s latest convention profile.</p>
           </div>
         )}
 
-        <ErrorDisplay graphQLError={this.state.error} />
+        <ErrorDisplay graphQLError={error} />
       </div>
+
       <div className="modal-footer">
         <button
           className="btn btn-secondary"
           type="button"
-          onClick={this.cancel}
-          disabled={this.state.mutationInProgress}
+          onClick={close}
+          disabled={inProgress}
         >
           Cancel
         </button>
-        <Mutation mutation={CreateUserConProfile}>
-          {(mutate) => (
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={async () => {
-                this.setState({ mutationInProgress: true });
-                try {
-                  await mutate({
-                    variables: {
-                      user_id: this.state.userId,
-                      user_con_profile: {
-                        form_response_attrs_json: JSON.stringify(
-                          this.state.userConProfile.form_response_attrs,
-                        ),
-                      },
-                    },
-                  });
-                  this.setState({
-                    mutationInProgress: false,
-                    user: null,
-                    userId: null,
-                    userConProfile: null,
-                  });
-                  this.props.history.replace('/user_con_profiles');
-                } catch (error) {
-                  this.setState({ error, mutationInProgress: false });
-                }
-              }}
-              disabled={this.state.userId == null || this.state.mutationInProgress}
-            >
-              { this.state.mutationInProgress ? <LoadingIndicator /> : 'Add' }
-            </button>
-          )}
-        </Mutation>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={createClicked}
+          disabled={user == null || inProgress}
+        >
+          {inProgress ? <LoadingIndicator /> : 'Add'}
+        </button>
       </div>
     </Modal>
-  )
+  );
 }
 
 AddAttendeeModal.propTypes = {
@@ -125,4 +108,4 @@ AddAttendeeModal.propTypes = {
   visible: PropTypes.bool.isRequired,
 };
 
-export default withRouter(AddAttendeeModal);
+export default AddAttendeeModal;
