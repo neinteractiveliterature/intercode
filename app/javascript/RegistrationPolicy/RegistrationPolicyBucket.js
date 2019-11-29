@@ -1,57 +1,47 @@
 import PropTypes from 'prop-types';
 
-export function setBucketSlotsLimited(bucket, slotsLimited) {
-  if (!slotsLimited) {
-    return {
-      ...bucket,
-      slots_limited: false,
-      total_slots: null,
-      minimum_slots: null,
-      preferred_slots: null,
-    };
-  }
+const humanFieldNames = {
+  minimum_slots: 'Min',
+  preferred_slots: 'Pref',
+  total_slots: 'Max',
+};
 
-  return { ...bucket, slots_limited: true };
-}
+function checkFieldMinimums(object, targetField, sourceFields) {
+  const currentValue = object[targetField];
 
-function checkFieldMinimums(object, targetFields, minimumValue) {
-  let newObject = object;
-
-  targetFields.forEach((targetField) => {
-    if (newObject[targetField] < minimumValue) {
-      newObject = { ...newObject, [targetField]: minimumValue };
+  const errorField = sourceFields.find((sourceField) => currentValue < object[sourceField]);
+  if (errorField) {
+    if (currentValue == null) {
+      return [`Please enter a value for ${humanFieldNames[targetField]}`];
     }
-  });
 
-  return newObject;
-}
-
-function checkBucketFieldMinimums(bucket) {
-  return checkFieldMinimums(
-    checkFieldMinimums(
-      bucket,
-      ['preferred_slots', 'total_slots'],
-      bucket.minimum_slots,
-    ),
-    ['total_slots'],
-    bucket.preferred_slots,
-  );
-}
-
-export function setBucketProperty(bucket, field, value) {
-  switch (field) {
-    case 'slots_limited': return setBucketSlotsLimited(bucket, value);
-    case 'minimum_slots': return checkBucketFieldMinimums({ ...bucket, minimum_slots: value });
-    case 'preferred_slots': return checkBucketFieldMinimums({ ...bucket, preferred_slots: value });
-    default: return { ...bucket, [field]: value };
+    return [
+      `${humanFieldNames[targetField]} cannot be less than ${humanFieldNames[errorField]}`,
+    ];
   }
+
+  return [];
+}
+
+export function checkBucketFieldMinimums(bucket) {
+  return [
+    ...checkFieldMinimums(
+      bucket,
+      'preferred_slots',
+      ['minimum_slots'],
+    ),
+    ...checkFieldMinimums(
+      bucket,
+      'total_slots',
+      ['preferred_slots', 'minimum_slots'],
+    ),
+  ];
 }
 
 export function setBucketProperties(bucket, properties) {
-  return checkBucketFieldMinimums(Object.entries(properties).reduce(
-    (newBucket, [field, value]) => ({ ...newBucket, [field]: value }),
-    bucket,
-  ));
+  const newBucket = { ...bucket, ...properties };
+  const errors = checkBucketFieldMinimums(newBucket);
+  return [newBucket, errors];
 }
 
 export const RegistrationPolicyBucketPropType = PropTypes.shape({

@@ -1,49 +1,55 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { enableUniqueIds } from 'react-html-id';
 
 import Confirm from '../ModalDialogs/Confirm';
 import HelpPopover from '../UIComponents/HelpPopover';
 import { mutator, Transforms } from '../ComposableFormUtils';
-import { RegistrationPolicyBucketPropType, setBucketProperties } from './RegistrationPolicyBucket';
+import { RegistrationPolicyBucketPropType, checkBucketFieldMinimums } from './RegistrationPolicyBucket';
 import BootstrapFormTextarea from '../BuiltInFormControls/BootstrapFormTextarea';
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
+import useUniqueId from '../useUniqueId';
 
-class RegistrationBucketRow extends React.Component {
-  constructor(props) {
-    super(props);
-    enableUniqueIds(this);
+const bucketTransforms = {
+  name: Transforms.identity,
+  description: Transforms.identity,
+  slots_limited: Transforms.negate(Transforms.identity),
+  not_counted: Transforms.negate(Transforms.identity),
+  expose_attendees: Transforms.identity,
+  minimum_slots: Transforms.integer,
+  preferred_slots: Transforms.integer,
+  total_slots: Transforms.integer,
+};
 
-    this.mutator = mutator({
-      getState: () => this.props.registrationBucket,
-      setState: (newState) => {
-        this.props.onChange(
-          this.props.registrationBucket.key,
-          setBucketProperties(this.props.registrationBucket, newState),
-        );
-      },
-      transforms: {
-        name: Transforms.identity,
-        description: Transforms.identity,
-        slots_limited: Transforms.negate(Transforms.identity),
-        not_counted: Transforms.negate(Transforms.identity),
-        expose_attendees: Transforms.identity,
-        minimum_slots: Transforms.integer,
-        preferred_slots: Transforms.integer,
-        total_slots: Transforms.integer,
-      },
-    });
-  }
+function RegistrationBucketRow({
+  registrationBucket, onChange, lockLimited, lockCounts, lockNameAndDescription, validateComplete,
+  lockDelete, onDelete,
+}) {
+  const bucketMutator = useMemo(
+    () => mutator({
+      getState: () => registrationBucket,
+      setState: (newState) => onChange(
+        registrationBucket.key,
+        { ...registrationBucket, ...newState },
+      ),
+      transforms: bucketTransforms,
+    }),
+    [onChange, registrationBucket],
+  );
 
-  renderBucketFlags = () => {
-    if (this.props.lockLimited) {
+  const unlimitedId = useUniqueId('unlimited-');
+  const countedId = useUniqueId('counted-');
+  const exposeAttendeesId = useUniqueId('expose-attendees-');
+  const minId = useUniqueId('min-');
+  const preferredId = useUniqueId('preferred-');
+  const maxId = useUniqueId('max-');
+
+  const countValidationErrors = checkBucketFieldMinimums(registrationBucket);
+
+  const renderBucketFlags = () => {
+    if (lockLimited) {
       return null;
     }
-
-    const unlimitedId = this.nextUniqueId();
-    const countedId = this.nextUniqueId();
-    const exposeAttendeesId = this.nextUniqueId();
 
     return (
       <div className="ml-2">
@@ -53,8 +59,9 @@ class RegistrationBucketRow extends React.Component {
               id={unlimitedId}
               className="form-check-input"
               type="checkbox"
-              checked={!this.props.registrationBucket.slots_limited}
-              onChange={(event) => { this.mutator.slots_limited(event.target.checked); }}
+              checked={!registrationBucket.slots_limited}
+              onChange={(event) => { bucketMutator.slots_limited(event.target.checked); }}
+              aria-label="Unlimited?"
             />
 
             Unlimited?
@@ -67,8 +74,9 @@ class RegistrationBucketRow extends React.Component {
               id={countedId}
               className="form-check-input"
               type="checkbox"
-              checked={!this.props.registrationBucket.not_counted}
-              onChange={(event) => { this.mutator.not_counted(event.target.checked); }}
+              checked={!registrationBucket.not_counted}
+              onChange={(event) => { bucketMutator.not_counted(event.target.checked); }}
+              aria-label="Counted?"
             />
 
             Counted?
@@ -91,8 +99,9 @@ class RegistrationBucketRow extends React.Component {
                 id={exposeAttendeesId}
                 className="form-check-input"
                 type="checkbox"
-                checked={this.props.registrationBucket.expose_attendees}
-                onChange={(event) => { this.mutator.expose_attendees(event.target.checked); }}
+                checked={registrationBucket.expose_attendees}
+                onChange={(event) => { bucketMutator.expose_attendees(event.target.checked); }}
+                aria-label="Expose attendees?"
               />
 
               Expose attendees?
@@ -107,16 +116,14 @@ class RegistrationBucketRow extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 
-  renderLimits = () => {
-    const bucket = this.props.registrationBucket;
-
-    if (!bucket.slots_limited) {
+  const renderLimits = () => {
+    if (!registrationBucket.slots_limited) {
       return null;
     }
 
-    if (this.props.lockCounts) {
+    if (lockCounts) {
       return null;
     }
 
@@ -125,50 +132,55 @@ class RegistrationBucketRow extends React.Component {
         label: 'Min',
         field: 'minimum_slots',
         min: 0,
+        inputId: minId,
       },
       {
         label: 'Pref',
         field: 'preferred_slots',
         min: 0,
+        inputId: preferredId,
       },
       {
         label: 'Max',
         field: 'total_slots',
         min: 0,
+        inputId: maxId,
       },
-    ].map(({ label, field, min }) => {
-      const inputId = this.nextUniqueId();
-
-      return (
-        <div key={field} className={this.props.lockLimited ? 'd-inline mr-2' : null}>
-          <label htmlFor={inputId} className="d-inline">{label}</label>
-          <input
-            id={inputId}
-            type="number"
-            size="2"
-            className="form-control form-control-sm d-inline ml-1"
-            min={min}
-            placeholder={label}
-            value={bucket[field] || ''}
-            onChange={(event) => { this.mutator[field](event.target.value); }}
-            style={{ width: '4em' }}
-          />
-        </div>
-      );
-    });
+    ].map(({
+      label, field, min, inputId,
+    }) => (
+      <div key={field} className={lockLimited ? 'd-inline mr-2' : null}>
+        <label htmlFor={inputId} className="d-inline">{label}</label>
+        <input
+          id={inputId}
+          type="number"
+          size="2"
+          className="form-control form-control-sm d-inline ml-1"
+          min={min}
+          placeholder={label}
+          value={registrationBucket[field] == null ? '' : registrationBucket[field]}
+          onChange={(event) => { bucketMutator[field](event.target.value); }}
+          style={{ width: '4em' }}
+          aria-label={label}
+        />
+      </div>
+    ));
 
     return (
       <div>
         {slotControls}
+        <small className="text-danger">
+          {countValidationErrors.join(', ')}
+        </small>
       </div>
     );
-  }
+  };
 
-  renderNameAndDescription = () => {
-    if (this.props.lockNameAndDescription) {
+  const renderNameAndDescription = () => {
+    if (lockNameAndDescription) {
       return (
-        <td title={this.props.registrationBucket.description}>
-          {this.props.registrationBucket.name}
+        <td title={registrationBucket.description}>
+          {registrationBucket.name}
         </td>
       );
     }
@@ -177,13 +189,13 @@ class RegistrationBucketRow extends React.Component {
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
           <BootstrapFormInput
-            value={this.props.registrationBucket.name || ''}
-            onTextChange={this.mutator.name}
+            value={registrationBucket.name || ''}
+            onTextChange={bucketMutator.name}
             placeholder="Bucket name"
             label="Bucket name"
             hideLabel
             className={classNames('form-control', {
-              'is-invalid': this.props.validateComplete && !this.props.registrationBucket.name,
+              'is-invalid': validateComplete && !registrationBucket.name,
             })}
             invalidFeedback="This field is required."
           />
@@ -191,22 +203,22 @@ class RegistrationBucketRow extends React.Component {
 
         <BootstrapFormTextarea
           rows="2"
-          value={this.props.registrationBucket.description || ''}
+          value={registrationBucket.description || ''}
           label="Bucket description"
           hideLabel
-          onTextChange={this.mutator.description}
+          onTextChange={bucketMutator.description}
           placeholder="Bucket description"
           className={classNames('form-control', {
-            'is-invalid': this.props.validateComplete && !this.props.registrationBucket.description,
+            'is-invalid': validateComplete && !registrationBucket.description,
           })}
           invalidFeedback="This field is required."
         />
       </td>,
     ];
-  }
+  };
 
-  renderActions = () => {
-    if (this.props.lockDelete) {
+  const renderActions = () => {
+    if (lockDelete) {
       return <td style={{ width: 0 }} />;
     }
 
@@ -219,7 +231,7 @@ class RegistrationBucketRow extends React.Component {
               type="button"
               onClick={() => confirm({
                 prompt: 'Are you sure you wish to delete this registration bucket?',
-                action: () => this.props.onDelete(this.props.registrationBucket.key),
+                action: () => onDelete(registrationBucket.key),
               })}
             >
               <i className="fa fa-trash-o" />
@@ -229,20 +241,20 @@ class RegistrationBucketRow extends React.Component {
         </Confirm.Trigger>
       </td>
     );
-  }
+  };
 
-  render = () => (
-    <tr className={classNames({ 'anything-bucket': this.props.registrationBucket.anything })}>
-      {this.renderNameAndDescription()}
+  return (
+    <tr className={classNames({ 'anything-bucket': registrationBucket.anything })}>
+      {renderNameAndDescription()}
       <td style={{ width: '20rem' }}>
         <div className="d-flex">
-          {this.renderLimits()}
-          {this.renderBucketFlags()}
+          {renderLimits()}
+          {renderBucketFlags()}
         </div>
       </td>
-      {this.renderActions()}
+      {renderActions()}
     </tr>
-  )
+  );
 }
 
 RegistrationBucketRow.propTypes = {
