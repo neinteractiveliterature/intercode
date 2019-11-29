@@ -1,17 +1,35 @@
 /* eslint-disable react/no-array-index-key */
 
-import React from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-const MAX_CELLS_PER_LINE_REGULAR = 15;
-const MAX_CELLS_PER_LINE_COMPACT = 20;
 
 function BucketAvailabilityDisplay({
   className, signupCount, remainingCapacity, compact,
 }) {
   const totalCells = signupCount + remainingCapacity;
-  const maxCellsPerLine = compact ? MAX_CELLS_PER_LINE_COMPACT : MAX_CELLS_PER_LINE_REGULAR;
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
+  const measuredRef = useCallback((element) => {
+    if (element !== null) {
+      setContainerWidth(element.getBoundingClientRect().width);
+    }
+  }, []);
+
+  const cellWidth = useMemo(
+    () => {
+      const cellWidthRem = compact ? 0.6 : 1.05;
+      const remWidth = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      return (cellWidthRem * remWidth) + 2; // 2px margins
+    },
+    [compact],
+  );
+
+  const maxCellsPerLine = useMemo(
+    () => Math.floor(containerWidth / cellWidth),
+    [cellWidth, containerWidth],
+  );
   let lineWidth = totalCells;
   let numLines = 1;
   if (lineWidth > maxCellsPerLine) {
@@ -40,14 +58,18 @@ function BucketAvailabilityDisplay({
     )),
   ];
 
-  return [...Array(numLines)].map((value, index) => (
-    <div
-      className={classNames('bucket-availability-display', className, { 'bucket-availability-display-compact': compact })}
-      key={`line-${index}`}
-    >
-      {cells.slice(index * lineWidth, (index + 1) * lineWidth)}
+  return (
+    <div ref={measuredRef}>
+      {[...Array(numLines)].map((value, index) => (
+        <div
+          className={classNames('bucket-availability-display', className, { 'bucket-availability-display-compact': compact })}
+          key={`line-${index}`}
+        >
+          {cells.slice(index * lineWidth, (index + 1) * lineWidth)}
+        </div>
+      ))}
     </div>
-  ));
+  );
 }
 
 BucketAvailabilityDisplay.propTypes = {
