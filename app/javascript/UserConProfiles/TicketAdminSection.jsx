@@ -1,189 +1,185 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
 import { humanize } from 'inflected';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 
-import Confirm from '../ModalDialogs/Confirm';
+import { useConfirm } from '../ModalDialogs/Confirm';
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
 import { DeleteTicket } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import formatMoney from '../formatMoney';
-import ModalContainer from '../ModalDialogs/ModalContainer';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import {
   TicketAdminWithTicketAbilityQuery, TicketAdminWithoutTicketAbilityQuery, UserConProfileAdminQuery,
 } from './queries.gql';
+import LoadingIndicator from '../LoadingIndicator';
+import useModal from '../ModalDialogs/useModal';
 
-class TicketAdminSection extends React.Component {
-  renderTicketControls = (ticketAbilityData) => {
-    const buttons = [];
-    const { currentAbility } = ticketAbilityData;
+function TicketAdminControls({ convention, userConProfile }) {
+  const query = userConProfile.ticket
+    ? TicketAdminWithTicketAbilityQuery
+    : TicketAdminWithoutTicketAbilityQuery;
 
-    if (this.props.userConProfile.ticket && currentAbility.can_update_ticket) {
-      buttons.push(
-        <Link to={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
-          Edit
-          {' '}
-          {this.props.convention.ticket_name}
-        </Link>,
-      );
+  const { data, loading, error } = useQuery(query, {
+    variables: { ticketId: (userConProfile.ticket || {}).id },
+  });
+  const [deleteTicketMutate] = useMutation(DeleteTicket);
+  const confirm = useConfirm();
+  const convertModal = useModal();
 
-      if (currentAbility.can_delete_ticket) {
-        if (!this.props.userConProfile.ticket.provided_by_event) {
-          buttons.push(
-            <ModalContainer>
-              {({
-                modalVisible, openModal, closeModal,
-              }) => (
-                <>
-                  <button
-                    className="btn btn-warning"
-                    type="button"
-                    onClick={openModal}
-                  >
-                    {'Convert to event-provided '}
-                    {this.props.convention.ticket_name}
-                  </button>
-                  <ConvertToEventProvidedTicketModal
-                    visible={modalVisible}
-                    onClose={closeModal}
-                    convention={this.props.convention}
-                    userConProfile={this.props.userConProfile}
-                  />
-                </>
-              )}
-            </ModalContainer>,
-          );
-        }
+  const deleteTicket = (refund) => deleteTicketMutate({
+    variables: {
+      ticketId: userConProfile.ticket.id,
+      refund,
+    },
+    update: (cache) => {
+      const variables = { id: userConProfile.id };
+      const cacheData = cache.readQuery({ query: UserConProfileAdminQuery, variables });
+      cache.writeQuery({
+        query: UserConProfileAdminQuery,
+        variables,
+        data: {
+          ...cacheData,
+          userConProfile: {
+            ...cacheData.userConProfile,
+            ticket: null,
+          },
+        },
+      });
+    },
+  });
 
-        buttons.push(
-          <Confirm.Trigger>
-            {(confirm) => (
-              <Mutation
-                mutation={DeleteTicket}
-                update={(cache) => {
-                  const variables = { id: this.props.userConProfile.id };
-                  const query = cache.readQuery({ query: UserConProfileAdminQuery, variables });
-                  const { ticket, ...remainingProps } = query.userConProfile;
-                  cache.writeQuery({
-                    query: UserConProfileAdminQuery,
-                    variables,
-                    data: {
-                      ...query,
-                      userConProfile: {
-                        ticket: null,
-                        ...remainingProps,
-                      },
-                    },
-                  });
-                }}
-              >
-                {(deleteTicket) => (
-                  <>
-                    {
-                      this.props.userConProfile.ticket.charge_id
-                        ? (
-                          <button
-                            className="btn btn-warning mr-2"
-                            type="button"
-                            onClick={() => confirm({
-                              action: () => deleteTicket({
-                                variables: {
-                                  ticketId: this.props.userConProfile.ticket.id,
-                                  refund: true,
-                                },
-                              }),
-                              prompt: (
-                                <>
-                                  <p>
-                                    Are you sure you want to delete
-                                    {' '}
-                                    {this.props.userConProfile.name}
-                                    &apos;s
-                                    {' '}
-                                    {this.props.convention.ticket_name}
-                                    {' '}
-                                    and refund their money?
-                                  </p>
-                                </>
-                              ),
-                              renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                            })}
-                          >
-                          Delete with refund
-                          </button>
-                        )
-                        : null
-                    }
-                    <button
-                      className="btn btn-danger"
-                      type="button"
-                      onClick={() => confirm({
-                        action: () => deleteTicket({
-                          variables: {
-                            ticketId: this.props.userConProfile.ticket.id,
-                            refund: false,
-                          },
-                        }),
-                        prompt: (
-                          <>
-                            <p>
-                              Are you sure you want to delete
-                              {' '}
-                              {this.props.userConProfile.name}
-                              &apos;s
-                              {' '}
-                              {this.props.convention.ticket_name}
-                              {' '}
-                              without a refund?
-                            </p>
-                          </>
-                        ),
-                        renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                      })}
-                    >
-                      Delete without refund
-                    </button>
-                  </>
-                )}
-              </Mutation>
-            )}
-          </Confirm.Trigger>,
-        );
-      }
-    } else if (currentAbility.can_create_tickets) {
-      buttons.push(
-        <Link to={`/user_con_profiles/${this.props.userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
-          Create
-          {' '}
-          {this.props.convention.ticket_name}
-        </Link>,
-      );
-    }
-
-    if (buttons.length > 0) {
-      return (
-        <ul className="list-inline">
-          {buttons.map((button, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <li key={i} className="list-inline-item">{button}</li>
-          ))}
-        </ul>
-      );
-    }
-
-    return null;
+  if (loading) {
+    return <LoadingIndicator />;
   }
 
-  renderTicketData = (ticket) => {
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  const buttons = [];
+  const { currentAbility } = data;
+
+  if (userConProfile.ticket && currentAbility.can_update_ticket) {
+    buttons.push(
+      <Link to={`/user_con_profiles/${userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
+        Edit
+        {' '}
+        {convention.ticket_name}
+      </Link>,
+    );
+
+    if (currentAbility.can_delete_ticket) {
+      if (!userConProfile.ticket.provided_by_event) {
+        buttons.push(
+          <>
+            <button
+              className="btn btn-warning"
+              type="button"
+              onClick={convertModal.open}
+            >
+              {'Convert to event-provided '}
+              {convention.ticket_name}
+            </button>
+            <ConvertToEventProvidedTicketModal
+              visible={convertModal.visible}
+              onClose={convertModal.close}
+              convention={convention}
+              userConProfile={userConProfile}
+            />
+          </>,
+        );
+      }
+
+      if (userConProfile.ticket.charge_id) {
+        buttons.push(
+          <button
+            className="btn btn-warning mr-2"
+            type="button"
+            onClick={() => confirm({
+              action: () => deleteTicket(true),
+              prompt: (
+                <>
+                  <p>
+                    Are you sure you want to delete
+                    {' '}
+                    {userConProfile.name}
+                    ’s
+                    {' '}
+                    {convention.ticket_name}
+                    {' '}
+                    and refund their money?
+                  </p>
+                </>
+              ),
+              renderError: (err) => <ErrorDisplay graphQLError={err} />,
+            })}
+          >
+            Delete with refund
+          </button>,
+        );
+      }
+
+      buttons.push(
+        <button
+          className="btn btn-danger"
+          type="button"
+          onClick={() => confirm({
+            action: () => deleteTicket(false),
+            prompt: (
+              <>
+                <p>
+                  Are you sure you want to delete
+                  {' '}
+                  {userConProfile.name}
+                  ’s
+                  {' '}
+                  {convention.ticket_name}
+                  {' '}
+                  without a refund?
+                </p>
+              </>
+            ),
+            renderError: (err) => <ErrorDisplay graphQLError={err} />,
+          })}
+        >
+          Delete without refund
+        </button>,
+      );
+    }
+  } else if (currentAbility.can_create_tickets) {
+    buttons.push(
+      <Link to={`/user_con_profiles/${userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
+        Create
+        {' '}
+        {convention.ticket_name}
+      </Link>,
+    );
+  }
+
+  if (buttons.length > 0) {
+    return (
+      <ul className="list-inline">
+        {buttons.map((button, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <li key={i} className="list-inline-item">{button}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  return null;
+}
+
+function TicketAdminSection({ convention, userConProfile }) {
+  const renderTicketData = (ticket) => {
     if (!ticket) {
       return (
         <p>
           No
           {' '}
-          {this.props.convention.ticket_name}
+          {convention.ticket_name}
         </p>
       );
     }
@@ -193,16 +189,12 @@ class TicketAdminSection extends React.Component {
         <dt className="col-md-3">Type</dt>
         <dd className="col-md-9">{ticket.ticket_type.description}</dd>
 
-        {
-          ticket.provided_by_event
-            ? (
-              <>
-                <dt className="col-md-3">Provided by event</dt>
-                <dd className="col-md-9">{ticket.provided_by_event.title}</dd>
-              </>
-            )
-            : null
-        }
+        {ticket.provided_by_event && (
+          <>
+            <dt className="col-md-3">Provided by event</dt>
+            <dd className="col-md-9">{ticket.provided_by_event.title}</dd>
+          </>
+        )}
 
         <dt className="col-md-3">Paid</dt>
         <dd className="col-md-9">{formatMoney(ticket.payment_amount) || '0'}</dd>
@@ -215,35 +207,26 @@ class TicketAdminSection extends React.Component {
 
         <dt className="col-md-3">Created</dt>
         <dd className="col-md-9">
-          {moment.tz(ticket.created_at, this.props.convention.timezone_name).format('MMMM D, YYYY h:mma z')}
+          {moment.tz(ticket.created_at, convention.timezone_name).format('MMMM D, YYYY h:mma z')}
         </dd>
 
         <dt className="col-md-3">Last updated</dt>
         <dd className="col-md-9">
-          {moment.tz(ticket.updated_at, this.props.convention.timezone_name).format('MMMM D, YYYY h:mma z')}
+          {moment.tz(ticket.updated_at, convention.timezone_name).format('MMMM D, YYYY h:mma z')}
         </dd>
       </dl>
     );
-  }
+  };
 
-  render = () => (
+  return (
     <section className="card">
-      <div className="card-header">{humanize(this.props.convention.ticket_name)}</div>
+      <div className="card-header">{humanize(convention.ticket_name)}</div>
       <div className="card-body pb-0">
-        {this.renderTicketData(this.props.userConProfile.ticket)}
-        <QueryWithStateDisplay
-          query={
-            this.props.userConProfile.ticket
-              ? TicketAdminWithTicketAbilityQuery
-              : TicketAdminWithoutTicketAbilityQuery
-          }
-          variables={{ ticketId: (this.props.userConProfile.ticket || {}).id }}
-        >
-          {({ data: ticketAbilityData }) => this.renderTicketControls(ticketAbilityData)}
-        </QueryWithStateDisplay>
+        {renderTicketData(userConProfile.ticket)}
+        <TicketAdminControls convention={convention} userConProfile={userConProfile} />
       </div>
     </section>
-  )
+  );
 }
 
 TicketAdminSection.propTypes = {
@@ -261,5 +244,7 @@ TicketAdminSection.propTypes = {
     }),
   }).isRequired,
 };
+
+TicketAdminControls.propTypes = TicketAdminSection.propTypes;
 
 export default TicketAdminSection;
