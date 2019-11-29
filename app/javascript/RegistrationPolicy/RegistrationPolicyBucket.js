@@ -38,12 +38,6 @@ export function checkBucketFieldMinimums(bucket) {
   ];
 }
 
-export function setBucketProperties(bucket, properties) {
-  const newBucket = { ...bucket, ...properties };
-  const errors = checkBucketFieldMinimums(newBucket);
-  return [newBucket, errors];
-}
-
 export const RegistrationPolicyBucketPropType = PropTypes.shape({
   key: PropTypes.string,
   name: PropTypes.string,
