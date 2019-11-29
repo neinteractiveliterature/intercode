@@ -1,20 +1,28 @@
 import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
 import EditRootSite from './EditRootSite';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import { RootSiteAdminQuery } from './queries.gql';
+import LoadingIndicator from '../LoadingIndicator';
+import ErrorDisplay from '../ErrorDisplay';
 
 function RootSiteAdmin() {
+  const { data, loading, error } = useQuery(RootSiteAdminQuery);
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
   return (
-    <QueryWithStateDisplay query={RootSiteAdminQuery}>
-      {({ data }) => (
-        <EditRootSite
-          initialRootSite={data.rootSite}
-          cmsPages={data.cmsPages}
-          cmsLayouts={data.cmsLayouts}
-        />
-      )}
-    </QueryWithStateDisplay>
+    <EditRootSite
+      initialRootSite={data.rootSite}
+      cmsPages={data.cmsPages}
+      cmsLayouts={data.cmsLayouts}
+    />
   );
 }
 
