@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import EventRatingIcon from './EventRatingIcon';
+import ButtonWithTooltip from '../UIComponents/ButtonWithTooltip';
 
 function RatingButton({
-  rating, selected, onClick, padding, size,
+  rating, selected, onClick, padding, size, tooltipContent,
 }) {
   const defaultPadding = size * 0.5;
   const actualPadding = (padding || defaultPadding);
@@ -15,11 +16,13 @@ function RatingButton({
   };
 
   return (
-    <button
-      key={rating}
-      type="button"
-      className="btn p-0 cursor-pointer border-0"
-      onClick={onClick}
+    <ButtonWithTooltip
+      buttonProps={{
+        type: 'button',
+        className: 'btn p-0 cursor-pointer border-0',
+        onClick,
+      }}
+      tooltipContent={tooltipContent}
     >
       <div style={paddingStyle}>
         <EventRatingIcon
@@ -30,13 +33,14 @@ function RatingButton({
           overrideElementSize
         />
       </div>
-    </button>
+    </ButtonWithTooltip>
   );
 }
 
 RatingButton.propTypes = {
   rating: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
+  tooltipContent: PropTypes.string.isRequired,
   selected: PropTypes.bool,
   size: PropTypes.number,
   padding: PropTypes.number,
@@ -68,18 +72,24 @@ function RateEventControl({ value, onChange, size }) {
             onClick={clearRating}
             selected
             size={size}
+            tooltipContent="Clear rating"
           />
         )
         : (
           <div className="d-flex">
-            {[1, -1].map((rating) => (
-              <RatingButton
-                key={rating}
-                rating={rating}
-                onClick={() => onChange(rating)}
-                size={size}
-              />
-            ))}
+            <RatingButton
+              rating={1}
+              onClick={() => onChange(1)}
+              size={size}
+              tooltipContent="Mark as favorite"
+            />
+
+            <RatingButton
+              rating={-1}
+              onClick={() => onChange(1)}
+              size={size}
+              tooltipContent="Hide event"
+            />
           </div>
         )}
     </div>
