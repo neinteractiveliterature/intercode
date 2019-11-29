@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
@@ -9,7 +10,6 @@ import { EventProposalQueryWithOwner, EventProposalAdminNotesQuery } from './que
 import { UpdateEventProposalAdminNotes } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
@@ -18,7 +18,7 @@ function EventProposalAdminNotes({ eventProposalId }) {
     variables: { eventProposalId },
   });
 
-  const updateAdminNotesMutate = useMutationCallback(UpdateEventProposalAdminNotes);
+  const [updateAdminNotesMutate] = useMutation(UpdateEventProposalAdminNotes);
   const updateAdminNotes = useCallback(
     (adminNotes) => updateAdminNotesMutate({
       variables: { eventProposalId, adminNotes },

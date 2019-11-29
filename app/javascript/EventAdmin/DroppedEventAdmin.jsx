@@ -1,16 +1,16 @@
 import React from 'react';
+import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
 import { RestoreDroppedEvent } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 
 function DroppedEventAdmin() {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
-  const restoreDroppedEvent = useMutationCallback(RestoreDroppedEvent);
+  const [restoreDroppedEvent] = useMutation(RestoreDroppedEvent);
   const confirm = useConfirm();
 
   usePageTitle('Dropped Events');

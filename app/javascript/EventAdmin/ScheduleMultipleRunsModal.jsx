@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
+import { useMutation } from 'react-apollo-hooks';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import ErrorDisplay from '../ErrorDisplay';
@@ -10,15 +11,13 @@ import Timespan from '../Timespan';
 import { timespanFromConvention, timespanFromRun, getConventionDayTimespans } from '../TimespanUtils';
 import { EventAdminEventsQuery, ConventionFields, EventFields } from './queries.gql';
 import { CreateMultipleRuns } from './mutations.gql';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 
 function ScheduleMultipleRunsModal({
   convention, event, visible, onCancel, onFinish,
 }) {
-  const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(
-    useMutationCallback(CreateMultipleRuns),
-  );
+  const [createMutate] = useMutation(CreateMultipleRuns);
+  const [createMultipleRuns, createError, createInProgress] = useAsyncFunction(createMutate);
   const [day, setDay] = useState(null);
   const [start, setStart] = useState({ hour: null, minute: null });
   const [finish, setFinish] = useState({ hour: null, minute: null });

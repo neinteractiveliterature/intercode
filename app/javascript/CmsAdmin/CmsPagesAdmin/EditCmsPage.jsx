@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { pageReducer } from './CmsPageForm';
@@ -8,7 +8,6 @@ import { CmsPagesAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { UpdatePage } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useMutationCallback from '../../useMutationCallback';
 import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
@@ -17,9 +16,8 @@ function EditCmsPage({ match, history }) {
   const { data, error } = useQuerySuspended(CmsPagesAdminQuery);
   const initialPage = error ? null : data.cmsPages.find((p) => match.params.id === p.id.toString());
   const [page, dispatch] = useReducer(pageReducer, initialPage);
-  const [updatePage, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdatePage),
-  );
+  const [updateMutate] = useMutation(UpdatePage);
+  const [updatePage, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
   usePageTitle(useValueUnless(() => `Edit “${initialPage.name}”`, error));
@@ -56,6 +54,7 @@ function EditCmsPage({ match, history }) {
           type="submit"
           className="btn btn-primary"
           value="Save changes"
+          aria-label="Save changes"
           disabled={updateInProgress}
         />
       </form>

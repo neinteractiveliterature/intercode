@@ -4,6 +4,7 @@ import { pluralize, humanize, underscore } from 'inflected';
 import moment from 'moment';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { AdminSignupQuery } from './queries.gql';
 import { ageAsOf } from '../../TimeUtils';
@@ -15,7 +16,6 @@ import Timespan from '../../Timespan';
 import { UpdateSignupCounted } from './mutations.gql';
 import useModal from '../../ModalDialogs/useModal';
 import useQuerySuspended from '../../useQuerySuspended';
-import useMutationCallback from '../../useMutationCallback';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 
@@ -114,7 +114,7 @@ function EditSignup({ id, teamMembersUrl }) {
   const { data, error } = useQuerySuspended(AdminSignupQuery, { variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
-  const updateCountedMutate = useMutationCallback(UpdateSignupCounted);
+  const [updateCountedMutate] = useMutation(UpdateSignupCounted);
   const confirm = useConfirm();
 
   usePageTitle(

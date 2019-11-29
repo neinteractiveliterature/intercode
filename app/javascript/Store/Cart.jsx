@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import intersection from 'lodash-es/intersection';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { CartQuery } from './queries.gql';
 import { DeleteOrderEntry, UpdateOrderEntry } from './mutations.gql';
@@ -10,7 +11,6 @@ import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import OrderPaymentModal from './OrderPaymentModal';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import useModal from '../ModalDialogs/useModal';
 import useAsyncFunction from '../useAsyncFunction';
 import { useConfirm } from '../ModalDialogs/Confirm';
@@ -18,8 +18,8 @@ import usePageTitle from '../usePageTitle';
 
 function Cart({ history }) {
   const { data, error } = useQuerySuspended(CartQuery);
-  const updateMutate = useMutationCallback(UpdateOrderEntry);
-  const deleteMutate = useMutationCallback(DeleteOrderEntry);
+  const [updateMutate] = useMutation(UpdateOrderEntry);
+  const [deleteMutate] = useMutation(DeleteOrderEntry);
   const checkOutModal = useModal();
   const confirm = useConfirm();
 

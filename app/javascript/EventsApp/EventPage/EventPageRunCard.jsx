@@ -1,13 +1,12 @@
 import React, { useMemo, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
-import { useApolloClient } from 'react-apollo-hooks';
 import { CreateMySignup, WithdrawMySignup, WithdrawSignupRequest } from './mutations.gql';
 import { EventPageQuery } from './queries.gql';
 import RunCard from './RunCard';
 import buildEventUrl from '../buildEventUrl';
 import buildSignupOptions from './buildSignupOptions';
-import useMutationCallback from '../../useMutationCallback';
 import AppRootContext from '../../AppRootContext';
 import { useConfirm } from '../../ModalDialogs/Confirm';
 import ErrorDisplay from '../../ErrorDisplay';
@@ -39,9 +38,9 @@ function EventPageRunCard({
   const eventPath = buildEventUrl(event);
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
   const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
-  const createMySignupMutate = useMutationCallback(CreateMySignup);
-  const withdrawMySignupMutate = useMutationCallback(WithdrawMySignup);
-  const withdrawSignupRequestMutate = useMutationCallback(WithdrawSignupRequest);
+  const [createMySignupMutate] = useMutation(CreateMySignup);
+  const [withdrawMySignupMutate] = useMutation(WithdrawMySignup);
+  const [withdrawSignupRequestMutate] = useMutation(WithdrawSignupRequest);
   const apolloClient = useApolloClient();
 
   const selfServiceSignup = useCallback(

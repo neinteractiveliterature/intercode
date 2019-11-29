@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { humanize, titleize, underscore } from 'inflected';
+import { useMutation } from 'react-apollo-hooks';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import ErrorDisplay from '../../ErrorDisplay';
 import TeamMemberForm from './TeamMemberForm';
 import { UpdateTeamMember } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useMutationCallback from '../../useMutationCallback';
 import usePageTitle from '../../usePageTitle';
 
 function EditTeamMember({
@@ -16,9 +16,8 @@ function EditTeamMember({
   const [teamMember, setTeamMember] = useState(
     event.team_members.find((tm) => tm.id === teamMemberId),
   );
-  const [update, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateTeamMember),
-  );
+  const [updateMutate] = useMutation(UpdateTeamMember);
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(
     `Editing ${event.event_category.team_member_name} “${teamMember.user_con_profile.name_without_nickname}” - ${event.title}`,

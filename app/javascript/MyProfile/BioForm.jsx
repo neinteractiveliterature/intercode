@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import BooleanInput from '../BuiltInFormControls/BooleanInput';
 import { UpdateUserConProfile } from '../UserConProfiles/mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import ErrorDisplay from '../ErrorDisplay';
 import { MyProfileQuery } from './queries.gql';
 
@@ -13,9 +13,8 @@ function BioForm({ userConProfile, history }) {
   const [bio, setBio] = useState(userConProfile.bio || '');
   const [showNickname, setShowNickname] = useState(userConProfile.show_nickname_in_bio);
   const [gravatarEnabled, setGravatarEnabled] = useState(userConProfile.gravatar_enabled);
-  const [update, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateUserConProfile),
-  );
+  const [updateMutate] = useMutation(UpdateUserConProfile);
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   const formSubmitted = async (event) => {
     event.preventDefault();

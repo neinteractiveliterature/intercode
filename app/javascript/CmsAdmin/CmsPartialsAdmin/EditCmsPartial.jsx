@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import buildPartialInput from './buildPartialInput';
 import CmsPartialForm, { partialReducer } from './CmsPartialForm';
@@ -8,7 +8,6 @@ import { CmsPartialsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { UpdatePartial } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useMutationCallback from '../../useMutationCallback';
 import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
@@ -19,9 +18,8 @@ function EditCmsPartial({ match, history }) {
     ? null
     : data.cmsPartials.find((p) => match.params.id === p.id.toString());
   const [partial, dispatch] = useReducer(partialReducer, initialPartial);
-  const [updatePartial, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdatePartial),
-  );
+  const [updateMutate] = useMutation(UpdatePartial);
+  const [updatePartial, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
   usePageTitle(useValueUnless(() => `Editing “${initialPartial.name}”`, error));
@@ -56,6 +54,7 @@ function EditCmsPartial({ match, history }) {
           type="submit"
           className="btn btn-primary"
           value="Save changes"
+          aria-label="Save changes"
           disabled={updateInProgress}
         />
       </form>

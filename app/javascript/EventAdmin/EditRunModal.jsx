@@ -2,13 +2,13 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { propType } from 'graphql-anywhere';
 import Modal from 'react-bootstrap4-modal';
+import { useMutation } from 'react-apollo-hooks';
 
 import {
   EventAdminEventsQuery, RunFields, EventFields, ConventionFields,
 } from './queries.gql';
 import { CreateRun, UpdateRun, DeleteRun } from './mutations.gql';
 import RunFormFields from '../BuiltInForms/RunFormFields';
-import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import ErrorDisplay from '../ErrorDisplay';
 
@@ -16,9 +16,9 @@ function EditRunModal({
   run, event, convention, editingRunChanged,
   onCancel, onSaveFailed, onSaveSucceeded, onSaveStart, onDelete,
 }) {
-  const createRun = useMutationCallback(CreateRun);
-  const updateRun = useMutationCallback(UpdateRun);
-  const deleteMutate = useMutationCallback(DeleteRun);
+  const [createRun] = useMutation(CreateRun);
+  const [updateRun] = useMutation(UpdateRun);
+  const [deleteMutate] = useMutation(DeleteRun);
   const confirm = useConfirm();
 
   const initiateSaveMutation = useCallback(

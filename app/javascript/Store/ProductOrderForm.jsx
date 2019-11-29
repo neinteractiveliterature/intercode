@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { AddOrderEntryToCurrentPendingOrder } from './mutations.gql';
 import { CartQuery, OrderFormProductQuery } from './queries.gql';
@@ -10,12 +11,11 @@ import LoadingIndicator from '../LoadingIndicator';
 import { Transforms, useTransformedState } from '../ComposableFormUtils';
 import sortProductVariants from './sortProductVariants';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 
 function ProductOrderForm({ productId, history }) {
   const { data, error } = useQuerySuspended(OrderFormProductQuery, { variables: { productId } });
-  const addOrderEntryToCurrentPendingOrder = useMutationCallback(
+  const [addOrderEntryToCurrentPendingOrder] = useMutation(
     AddOrderEntryToCurrentPendingOrder,
     { refetchQueries: [{ query: CartQuery }] },
   );

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash-es/groupBy';
 import flatMap from 'lodash-es/flatMap';
+import { useMutation } from 'react-apollo-hooks';
 
 import Confirm from '../ModalDialogs/Confirm';
 import { DeleteStaffPosition } from './mutations.gql';
@@ -12,7 +13,6 @@ import StaffPositionPropType from './StaffPositionPropType';
 import { StaffPositionsQuery } from './queries.gql';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
-import useMutationCallback from '../useMutationCallback';
 import { sortByLocaleString } from '../ValueUtils';
 import usePageTitle from '../usePageTitle';
 
@@ -76,7 +76,7 @@ function describePermissions(permissions) {
 }
 
 function StaffPositionsTable({ staffPositions }) {
-  const deleteMutate = useMutationCallback(DeleteStaffPosition);
+  const [deleteMutate] = useMutation(DeleteStaffPosition);
   const deleteStaffPosition = useCallback(
     (id) => deleteMutate({
       variables: { input: { id } },

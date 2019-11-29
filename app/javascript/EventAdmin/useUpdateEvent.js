@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
+import { useMutation } from 'react-apollo-hooks';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventAdminEventsQuery } from './queries.gql';
 import { UpdateEvent, CreateRun, UpdateRun } from './mutations.gql';
-import useMutationCallback from '../useMutationCallback';
 
 function useUpdateRegularEvent() {
-  const updateEventMutate = useMutationCallback(UpdateEvent);
+  const [updateEventMutate] = useMutation(UpdateEvent);
   const updateEvent = useCallback(
     ({ event }) => updateEventMutate({
       variables: {
@@ -23,9 +23,9 @@ function useUpdateRegularEvent() {
 }
 
 function useUpdateSingleRunEvent() {
-  const updateEvent = useMutationCallback(UpdateEvent);
-  const createRun = useMutationCallback(CreateRun);
-  const updateRun = useMutationCallback(UpdateRun);
+  const [updateEvent] = useMutation(UpdateEvent);
+  const [createRun] = useMutation(CreateRun);
+  const [updateRun] = useMutation(UpdateRun);
 
   return useCallback(
     async ({ event, run }) => {
