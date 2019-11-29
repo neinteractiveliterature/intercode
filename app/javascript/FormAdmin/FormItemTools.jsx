@@ -34,13 +34,6 @@ function StandardItemMetadata() {
           {pluralize(formType.description)}
         </small>
       </div>
-      {standardItem.required && (
-        <div className="mr-2">
-          <small>
-            Response always required
-          </small>
-        </div>
-      )}
     </>
   );
 }
@@ -181,7 +174,7 @@ function FormItemTools({ saveFormItem }) {
       </div>
 
       <button
-        className="p-0 d-lg-none"
+        className="p-0 d-lg-none btn"
         type="button"
         onClick={toggleCollapsed}
         aria-expanded={!collapsed}
