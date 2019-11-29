@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import { ConventionAdminConventionQuery } from './queries.gql';
 import ConventionForm from './ConventionForm';
@@ -8,13 +8,13 @@ import ErrorDisplay from '../ErrorDisplay';
 import { UpdateConvention } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 
 function ConventionAdmin({ id, history }) {
   const { data, error } = useQuerySuspended(ConventionAdminConventionQuery, { variables: { id } });
-  const [mutate, mutationError] = useAsyncFunction(useMutationCallback(UpdateConvention));
+  const [updateMutate] = useMutation(UpdateConvention);
+  const [mutate, mutationError] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
   usePageTitle('Convention Settings');

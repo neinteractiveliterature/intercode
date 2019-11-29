@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash-es/isEqual';
+import { useMutation } from 'react-apollo-hooks';
 
 import { deserializeForm, deserializeFormResponseModel } from '../FormPresenter/GraphQLFormDeserialization';
 import ErrorDisplay from '../ErrorDisplay';
@@ -10,7 +11,6 @@ import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
 import { UpdateEventProposal, SubmitEventProposal } from './mutations.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 
 function parseResponseErrors(error) {
@@ -57,13 +57,11 @@ function EventProposalForm({
   eventProposalId, afterSubmit, exitButton,
 }) {
   const { data, error } = useQuerySuspended(EventProposalQuery, { variables: { eventProposalId } });
-  const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateEventProposal),
-  );
+  const [updateMutate] = useMutation(UpdateEventProposal);
+  const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const [updatePromise, setUpdatePromise] = useState(null);
-  const [submitEventProposal, submitError, submitInProgress] = useAsyncFunction(
-    useMutationCallback(SubmitEventProposal),
-  );
+  const [submitMutate] = useMutation(SubmitEventProposal);
+  const [submitEventProposal, submitError, submitInProgress] = useAsyncFunction(submitMutate);
 
   const { convention } = data;
   const [eventProposal, setEventProposal] = useState(

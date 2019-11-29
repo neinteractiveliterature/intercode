@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import TicketForm from './TicketForm';
 import { UpdateTicket } from './mutations.gql';
 import { UserConProfileAdminQuery } from './queries.gql';
-import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
@@ -15,7 +15,7 @@ function EditTicket({ userConProfileId, history }) {
   const { data, error } = useQuerySuspended(UserConProfileAdminQuery, {
     variables: { id: userConProfileId },
   });
-  const updateTicket = useMutationCallback(UpdateTicket);
+  const [updateTicket] = useMutation(UpdateTicket);
 
   const onSubmit = useCallback(
     async (ticketInput) => {

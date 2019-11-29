@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash-es/isEqual';
+import { useMutation } from 'react-apollo-hooks';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter from '../FormPresenter/SinglePageFormPresenter';
@@ -10,7 +11,6 @@ import { UpdateUserConProfile } from '../UserConProfiles/mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
 import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
@@ -26,9 +26,8 @@ function parseResponseErrors(error) {
 
 function MyProfileForm({ initialSetup }) {
   const { data, error } = useQuerySuspended(MyProfileQuery);
-  const [mutate, , mutationInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateUserConProfile),
-  );
+  const [updateMutate] = useMutation(UpdateUserConProfile);
+  const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
   const [responseErrors, setResponseErrors] = useState({});
 
   const {

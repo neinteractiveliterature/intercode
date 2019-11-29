@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import { EventCategoryAdminQuery } from './queries.gql';
@@ -8,15 +9,13 @@ import ErrorDisplay from '../ErrorDisplay';
 import { UpdateEventCategory } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
 function EditEventCategory({ match, history }) {
   const { data, error } = useQuerySuspended(EventCategoryAdminQuery);
-  const [update, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateEventCategory),
-  );
+  const [updateMutate] = useMutation(UpdateEventCategory);
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   const { id: eventCategoryId } = match.params;
   const initialEventCategory = useMemo(

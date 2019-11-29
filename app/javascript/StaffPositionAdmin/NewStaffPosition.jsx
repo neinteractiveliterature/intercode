@@ -1,23 +1,24 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { CreateStaffPosition } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
 import { StaffPositionsQuery } from './queries.gql';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
 function NewStaffPosition({ history }) {
-  const [mutate, error, inProgress] = useAsyncFunction(useMutationCallback(CreateStaffPosition, {
+  const [createMutate] = useMutation(CreateStaffPosition, {
     update: (proxy, { data: { createStaffPosition: { staff_position: newStaffPosition } } }) => {
       const data = proxy.readQuery({ query: StaffPositionsQuery });
       data.convention.staff_positions.push(newStaffPosition);
       proxy.writeQuery({ query: StaffPositionsQuery, data });
     },
-  }));
+  });
+  const [mutate, error, inProgress] = useAsyncFunction(createMutate);
 
   const [staffPosition, setStaffPosition] = useState({
     name: '',

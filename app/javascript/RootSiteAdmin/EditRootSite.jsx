@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useMutation } from 'react-apollo-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
@@ -7,7 +8,6 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { UpdateRootSite } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 
 function useDirtyState(initialState, setDirty) {
@@ -20,9 +20,8 @@ function useDirtyState(initialState, setDirty) {
 
 function EditRootSite() {
   const { data, error } = useQuerySuspended(RootSiteAdminQuery);
-  const [update, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateRootSite),
-  );
+  const [updateMutate] = useMutation(UpdateRootSite);
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   const [edited, setEdited] = useState(false);
   const [success, setSuccess] = useState(false);

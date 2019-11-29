@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { humanize } from 'inflected';
 import fetch from 'unfetch';
 import { Link, useHistory } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { DeleteUserConProfile } from './mutations.gql';
@@ -13,7 +14,6 @@ import { UserConProfileAdminQuery } from './queries.gql';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
@@ -31,7 +31,7 @@ function UserConProfileAdminDisplay({ userConProfileId }) {
     [data, error],
   );
   const confirm = useConfirm();
-  const deleteUserConProfile = useMutationCallback(DeleteUserConProfile);
+  const [deleteUserConProfile] = useMutation(DeleteUserConProfile);
 
   usePageTitle(useValueUnless(() => data.userConProfile.name, error));
 

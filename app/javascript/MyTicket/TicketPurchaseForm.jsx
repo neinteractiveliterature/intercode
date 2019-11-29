@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap4-modal';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import ErrorDisplay from '../ErrorDisplay';
@@ -14,7 +15,6 @@ import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import { PurchaseTicket } from './mutations.gql';
 import { TicketPurchaseFormQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import useQuerySuspended from '../useQuerySuspended';
 import { findCurrentValue } from '../ScheduledValueUtils';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
@@ -31,7 +31,7 @@ function TicketPurchaseForm({ stripe }) {
     : null);
   const [name, setName] = useState((data.myProfile || {}).name_without_nickname || '');
   const [ticket, setTicket] = useState(null);
-  const purchaseTicket = useMutationCallback(PurchaseTicket);
+  const [purchaseTicket] = useMutation(PurchaseTicket);
 
   const [submitPayment, error, submitting] = useAsyncFunction(useCallback(
     async () => {

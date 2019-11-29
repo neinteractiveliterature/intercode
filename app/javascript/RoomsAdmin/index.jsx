@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useMutation } from 'react-apollo-hooks';
 
 import { CreateRoom, DeleteRoom, UpdateRoom } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
@@ -7,16 +8,18 @@ import { RoomsAdminQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import { sortByLocaleString } from '../ValueUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
 
 function RoomsAdmin() {
   const { data, error } = useQuerySuspended(RoomsAdminQuery);
-  const [createRoom, createError] = useAsyncFunction(useMutationCallback(CreateRoom));
-  const [updateRoom, updateError] = useAsyncFunction(useMutationCallback(UpdateRoom));
-  const [deleteRoomMutate, deleteError] = useAsyncFunction(useMutationCallback(DeleteRoom));
+  const [createMutate] = useMutation(CreateRoom);
+  const [updateMutate] = useMutation(UpdateRoom);
+  const [deleteMutate] = useMutation(DeleteRoom);
+  const [createRoom, createError] = useAsyncFunction(createMutate);
+  const [updateRoom, updateError] = useAsyncFunction(updateMutate);
+  const [deleteRoomMutate, deleteError] = useAsyncFunction(deleteMutate);
   const confirm = useConfirm();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
@@ -112,6 +115,7 @@ function RoomsAdmin() {
                   value={creatingRoomName}
                   onChange={(event) => setCreatingRoomName(event.target.value)}
                   onKeyDown={keyDownInCreatingRoom}
+                  aria-label="Room name"
                 />
               </div>
               <button

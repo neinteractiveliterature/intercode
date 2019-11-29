@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import deserializeEvent from '../../EventAdmin/deserializeEvent';
 import { deserializeForm } from '../../FormPresenter/GraphQLFormDeserialization';
@@ -14,7 +14,6 @@ import {
   StandaloneUpdateMaximumEventProvidedTicketsOverride,
 } from './mutations.gql';
 import useQuerySuspended from '../../useQuerySuspended';
-import useMutationCallback from '../../useMutationCallback';
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -37,7 +36,7 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
     eventForm: deserializeForm(data.event.event_category.event_form),
   });
 
-  const updateEventMutate = useMutationCallback(StandaloneUpdateEvent);
+  const [updateEventMutate] = useMutation(StandaloneUpdateEvent);
   const updateEvent = useCallback(
     async () => {
       await updateEventMutate({
@@ -56,9 +55,9 @@ function StandaloneEditEvent({ eventId, eventPath, history }) {
   );
 
   const meptoMutations = useMEPTOMutations({
-    createMutate: useMutationCallback(StandaloneCreateMaximumEventProvidedTicketsOverride),
-    updateMutate: useMutationCallback(StandaloneUpdateMaximumEventProvidedTicketsOverride),
-    deleteMutate: useMutationCallback(StandaloneDeleteMaximumEventProvidedTicketsOverride),
+    createMutate: useMutation(StandaloneCreateMaximumEventProvidedTicketsOverride)[0],
+    updateMutate: useMutation(StandaloneUpdateMaximumEventProvidedTicketsOverride)[0],
+    deleteMutate: useMutation(StandaloneDeleteMaximumEventProvidedTicketsOverride)[0],
     createUpdater: useCallback(
       (store, updatedEventId, override) => {
         const storeData = store.readQuery({

@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { AdminTicketTypesQuery } from './queries.gql';
 import buildTicketTypeInput from './buildTicketTypeInput';
 import { CreateTicketType } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
@@ -25,7 +25,7 @@ function NewTicketType({ ticketName, timezoneName, history }) {
     },
   });
 
-  const mutate = useMutationCallback(CreateTicketType, {
+  const [mutate] = useMutation(CreateTicketType, {
     update: (proxy, { data: { createTicketType: { ticket_type: newTicketType } } }) => {
       const data = proxy.readQuery({ query: AdminTicketTypesQuery });
       data.convention.ticket_types.push(newTicketType);

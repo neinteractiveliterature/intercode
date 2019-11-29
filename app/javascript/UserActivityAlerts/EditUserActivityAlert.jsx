@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
@@ -10,7 +11,6 @@ import { UserActivityAlertsAdminQuery, UserActivityAlertQuery } from './queries.
 import UserActivityAlertForm from './UserActivityAlertForm';
 import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import { useDeleteMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
 
@@ -24,9 +24,8 @@ function EditUserActivityAlert({ userActivityAlertId, history }) {
     error ? null : data.convention.user_activity_alert,
   );
   const [alertDestinationChangeSet, addAlertDestination, removeAlertDestination] = useChangeSet();
-  const [update, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateUserActivityAlert),
-  );
+  const [updateMutate] = useMutation(UpdateUserActivityAlert);
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const deleteMutate = useDeleteMutation(DeleteUserActivityAlert, {
     query: UserActivityAlertsAdminQuery,
     arrayPath: ['convention', 'user_activity_alerts'],

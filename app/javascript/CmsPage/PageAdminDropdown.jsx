@@ -1,16 +1,18 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import { DeletePage } from '../CmsAdmin/CmsPagesAdmin/mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import PopperDropdown from '../UIComponents/PopperDropdown';
 import { useConfirm } from '../ModalDialogs/Confirm';
-import useMutationCallback from '../useMutationCallback';
 
-function PageAdminDropdown({ showEdit, showDelete, pageId, history }) {
+function PageAdminDropdown({
+  showEdit, showDelete, pageId, history,
+}) {
   const confirm = useConfirm();
-  const deletePage = useMutationCallback(DeletePage);
+  const [deletePage] = useMutation(DeletePage);
 
   const deleteConfirmed = useCallback(
     async () => {

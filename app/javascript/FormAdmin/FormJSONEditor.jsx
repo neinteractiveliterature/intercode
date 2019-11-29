@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import BootstrapFormInput from '../BuiltInFormControls/BootstrapFormInput';
 import CodeInput from '../BuiltInFormControls/CodeInput';
@@ -8,7 +9,6 @@ import ErrorDisplay from '../ErrorDisplay';
 import { FormAdminQuery } from './queries.gql';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateMutation } from '../MutationUtils';
-import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 import BootstrapFormSelect from '../BuiltInFormControls/BootstrapFormSelect';
 
@@ -33,9 +33,8 @@ function FormJSONEditor({ initialForm, history }) {
       newObjectPath: ['createFormWithJSON', 'form'],
     }),
   );
-  const [updateForm, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateFormWithJSON),
-  );
+  const [updateMutate] = useMutation(UpdateFormWithJSON);
+  const [updateForm, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 

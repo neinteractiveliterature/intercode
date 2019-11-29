@@ -2,16 +2,16 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import Timespan from '../Timespan';
 import { UpdateEventAdminNotes } from './mutations.gql';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import useMutationCallback from '../useMutationCallback';
 
 function EventAdminRow({ event, convention }) {
-  const updateEventAdminNotes = useMutationCallback(UpdateEventAdminNotes);
+  const [updateEventAdminNotes] = useMutation(UpdateEventAdminNotes);
   const [expanded, setExpanded] = useState(false);
 
   const length = useMemo(
