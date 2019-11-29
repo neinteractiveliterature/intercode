@@ -1,156 +1,154 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { Mutation } from 'react-apollo';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 
 import { ConvertTicketToEventProvided } from './mutations.gql';
 import { ConvertToEventProvidedTicketQuery, UserConProfileAdminQuery } from './queries.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import EventSelect from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
-import QueryWithStateDisplay from '../QueryWithStateDisplay';
 import TicketingStatusDescription from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
+import useAsyncFunction from '../useAsyncFunction';
+import LoadingIndicator from '../LoadingIndicator';
 
-class ConvertToEventProvidedTicketModal extends React.Component {
-  constructor(props) {
-    super(props);
+function EventSpecificSection({
+  // eslint-disable-next-line react/prop-types
+  event, userConProfile, convention, ticketTypeId, setTicketTypeId, disabled,
+}) {
+  const { data, loading, error } = useQuery(ConvertToEventProvidedTicketQuery, {
+    variables: { eventId: event.id }, // eslint-disable-line react/prop-types
+  });
 
-    this.state = {
-      event: null,
-      ticketTypeId: null,
-      mutationInProgress: false,
-      error: null,
-    };
+  if (loading) {
+    return <LoadingIndicator />;
   }
 
-  render = () => {
-    const {
-      convention, userConProfile, visible, onClose,
-    } = this.props;
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
 
-    return (
-      <Modal visible={visible}>
-        <div className="modal-header">
-          {'Convert '}
+  return (
+    <>
+      <p className="mt-4">
+        <TicketingStatusDescription
+          userConProfile={userConProfile}
+          convention={convention}
+        />
+      </p>
+
+      <ProvidableTicketTypeSelection
+        event={data.event}
+        convention={data.convention}
+        value={ticketTypeId}
+        onChange={setTicketTypeId}
+        disabled={disabled}
+      />
+    </>
+  );
+}
+
+function ConvertToEventProvidedTicketModal({
+  convention, userConProfile, visible, onClose,
+}) {
+  const [event, setEvent] = useState(null);
+  const [ticketTypeId, setTicketTypeId] = useState(null);
+  const [convertMutate] = useMutation(ConvertTicketToEventProvided);
+  const [convertTicketToEventProvided, error, inProgress] = useAsyncFunction(convertMutate);
+
+  const convertClicked = async () => {
+    await convertTicketToEventProvided({
+      variables: {
+        eventId: event.id,
+        ticketTypeId,
+        userConProfileId: userConProfile.id,
+      },
+      update: (cache, { data: { convertTicketToEventProvided: { ticket } } }) => {
+        const cachedData = cache.readQuery({
+          query: UserConProfileAdminQuery,
+          variables: { id: userConProfile.id },
+        });
+
+        cache.writeQuery({
+          query: UserConProfileAdminQuery,
+          variables: { id: userConProfile.id },
+          data: {
+            ...cachedData,
+            userConProfile: {
+              ...cachedData.userConProfile,
+              ticket,
+            },
+          },
+        });
+      },
+    });
+    onClose();
+  };
+
+  return (
+    <Modal visible={visible}>
+      <div className="modal-header">
+        {'Convert '}
+        {userConProfile.name}
+        {'\'s '}
+        {convention.ticket_name}
+        {' to event-provided'}
+      </div>
+
+      <div className="modal-body">
+        <p>
+          {'This will delete '}
           {userConProfile.name}
-          {'\'s '}
+          ’s
+          {' existing '}
           {convention.ticket_name}
-          {' to event-provided'}
-        </div>
+          {' and create a new one for them, provided by an event.  If they paid for their existing '}
+          {convention.ticket_name}
+          {', that payment will be refunded.'}
+        </p>
 
-        <div className="modal-body">
-          <p>
-            {'This will delete '}
-            {userConProfile.name}
-            &apos;s
-            {' existing '}
-            {convention.ticket_name}
-            {' and create a new one for them, provided by an event.  If they paid for their existing '}
-            {convention.ticket_name}
-            {', that payment will be refunded.'}
-          </p>
+        <EventSelect
+          value={event}
+          onChange={(value) => { setEvent(value); setTicketTypeId(null); }}
+          placeholder="Select event..."
+          disabled={inProgress}
+        />
 
-          <EventSelect
-            value={this.state.event}
-            onChange={(value) => { this.setState({ event: value, ticketTypeId: null }); }}
-            placeholder="Select event..."
-            disabled={this.state.mutationInProgress}
+        {event && (
+          <EventSpecificSection
+            event={event}
+            userConProfile={userConProfile}
+            convention={convention}
+            ticketTypeId={ticketTypeId}
+            setTicketTypeId={setTicketTypeId}
+            disabled={inProgress}
           />
+        )}
 
-          {
-            this.state.event
-              ? (
-                <QueryWithStateDisplay
-                  query={ConvertToEventProvidedTicketQuery}
-                  variables={{ eventId: this.state.event.id }}
-                >
-                  {({ data }) => (
-                    <>
-                      <p className="mt-4">
-                        <TicketingStatusDescription
-                          userConProfile={userConProfile}
-                          convention={convention}
-                        />
-                      </p>
+        <ErrorDisplay graphQLError={error} />
+      </div>
 
-                      <ProvidableTicketTypeSelection
-                        event={data.event}
-                        convention={data.convention}
-                        value={this.state.ticketTypeId}
-                        onChange={(value) => { this.setState({ ticketTypeId: value }); }}
-                        disabled={this.state.mutationInProgress}
-                      />
-                    </>
-                  )}
-                </QueryWithStateDisplay>
-              )
-              : null
-          }
-
-          <ErrorDisplay graphQLError={this.state.error} />
-        </div>
-
-        <div className="modal-footer">
-          <button
-            type="button"
-            onClick={onClose}
-            className="btn btn-secondary"
-            disabled={this.state.mutationInProgress}
-          >
-            Cancel
-          </button>
-          <Mutation mutation={ConvertTicketToEventProvided}>
-            {(mutate) => (
-              <button
-                type="button"
-                className="btn btn-primary"
-                disabled={
-                  this.state.mutationInProgress || !this.state.event || !this.state.ticketTypeId
-                }
-                onClick={async () => {
-                  this.setState({ mutationInProgress: true });
-                  try {
-                    await mutate({
-                      variables: {
-                        eventId: this.state.event.id,
-                        ticketTypeId: this.state.ticketTypeId,
-                        userConProfileId: userConProfile.id,
-                      },
-                      update: (cache, { data: { convertTicketToEventProvided: { ticket } } }) => {
-                        const cachedData = cache.readQuery({
-                          query: UserConProfileAdminQuery,
-                          variables: { id: userConProfile.id },
-                        });
-
-                        cache.writeQuery({
-                          query: UserConProfileAdminQuery,
-                          variables: { id: userConProfile.id },
-                          data: {
-                            ...cachedData,
-                            userConProfile: {
-                              ...cachedData.userConProfile,
-                              ticket,
-                            },
-                          },
-                        });
-                      },
-                    });
-                    this.setState({ mutationInProgress: false });
-                    onClose();
-                  } catch (error) {
-                    this.setState({ error, mutationInProgress: false });
-                  }
-                }}
-              >
-                {'Convert '}
-                {convention.ticket_name}
-              </button>
-            )}
-          </Mutation>
-        </div>
-      </Modal>
-    );
-  }
+      <div className="modal-footer">
+        <button
+          type="button"
+          onClick={onClose}
+          className="btn btn-secondary"
+          disabled={inProgress}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={inProgress || !event || !ticketTypeId}
+          onClick={convertClicked}
+        >
+          {'Convert '}
+          {convention.ticket_name}
+        </button>
+      </div>
+    </Modal>
+  );
 }
 
 ConvertToEventProvidedTicketModal.propTypes = {
