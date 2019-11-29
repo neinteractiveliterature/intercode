@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import { EventAdminEventsQuery } from './queries.gql';
@@ -11,7 +12,6 @@ import {
   DeleteMaximumEventProvidedTicketsOverride,
 } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import deserializeEvent from './deserializeEvent';
@@ -26,9 +26,9 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 function EventAdminEditEvent({ match, history }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
   const meptoMutations = useMEPTOMutations({
-    createMutate: useMutationCallback(CreateMaximumEventProvidedTicketsOverride),
-    updateMutate: useMutationCallback(UpdateMaximumEventProvidedTicketsOverride),
-    deleteMutate: useMutationCallback(DeleteMaximumEventProvidedTicketsOverride),
+    createMutate: useMutation(CreateMaximumEventProvidedTicketsOverride)[0],
+    updateMutate: useMutation(UpdateMaximumEventProvidedTicketsOverride)[0],
+    deleteMutate: useMutation(DeleteMaximumEventProvidedTicketsOverride)[0],
     createUpdater: (store, updatedEventId, override) => {
       const storeData = store.readQuery({ query: EventAdminEventsQuery });
       store.writeQuery({
@@ -84,7 +84,7 @@ function EventAdminEditEvent({ match, history }) {
 
   const updateEvent = useUpdateEvent();
 
-  const dropEventMutate = useMutationCallback(DropEvent);
+  const [dropEventMutate] = useMutation(DropEvent);
   const dropEvent = useCallback(
     () => dropEventMutate({ variables: { input: { id: event.id } } }),
     [event.id, dropEventMutate],

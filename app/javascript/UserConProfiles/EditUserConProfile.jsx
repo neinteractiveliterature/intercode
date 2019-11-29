@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import ErrorDisplay from '../ErrorDisplay';
@@ -9,7 +10,6 @@ import { UserConProfileQuery, UserConProfileAdminQuery } from './queries.gql';
 import { UpdateUserConProfile } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
@@ -22,7 +22,7 @@ function EditUserConProfile({ history, id }) {
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
 
-  const mutate = useMutationCallback(UpdateUserConProfile, {
+  const [mutate] = useMutation(UpdateUserConProfile, {
     update: useCallback(
       (cache, { data: { updateUserConProfile: { user_con_profile: updatedUserConProfile } } }) => {
         const variables = { id };

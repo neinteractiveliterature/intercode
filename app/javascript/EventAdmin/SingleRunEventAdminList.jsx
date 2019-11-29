@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { pluralize } from 'inflected';
+import { useMutation } from 'react-apollo-hooks';
 
 import { EventAdminEventsQuery } from './queries.gql';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -9,7 +10,6 @@ import { timespanFromRun } from '../TimespanUtils';
 import { DropEvent } from './mutations.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
-import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
@@ -20,7 +20,7 @@ function SingleRunEventAdminList({ eventCategoryId }) {
   const { data, error } = useQuerySuspended(EventAdminEventsQuery);
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, error, eventCategoryId);
 
-  const drop = useMutationCallback(DropEvent);
+  const [drop] = useMutation(DropEvent);
   const confirm = useConfirm();
 
   usePageTitle(useValueUnless(() => pluralize(eventCategory.name), error));

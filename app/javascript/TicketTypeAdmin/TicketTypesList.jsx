@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { capitalize } from 'inflected';
+import { useMutation } from 'react-apollo-hooks';
 
 import { AdminTicketTypesQuery } from './queries.gql';
 import { DeleteTicketType } from './mutations.gql';
@@ -10,7 +11,6 @@ import TicketTypePropType from './TicketTypePropType';
 import Timespan from '../Timespan';
 import formatMoney from '../formatMoney';
 import pluralizeWithCount from '../pluralizeWithCount';
-import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
@@ -73,7 +73,7 @@ function TicketTypesList({
   usePageTitle(`${capitalize(ticketName)} types`);
 
   const confirm = useConfirm();
-  const deleteMutate = useMutationCallback(DeleteTicketType);
+  const [deleteMutate] = useMutation(DeleteTicketType);
   const deleteTicketType = useCallback(
     async (id) => {
       await deleteMutate({

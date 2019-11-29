@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
 import { CreateSignupRunCardQuery } from './queries.gql';
@@ -8,7 +8,6 @@ import { CreateUserSignup, WithdrawUserSignup } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import RunCard from '../EventsApp/EventPage/RunCard';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import { useAlert } from '../ModalDialogs/Alert';
 
@@ -21,7 +20,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
     variables: { userConProfileId, eventId },
   });
 
-  const createSignupMutate = useMutationCallback(CreateUserSignup);
+  const [createSignupMutate] = useMutation(CreateUserSignup);
   const createSignup = async (signupOption) => {
     await createSignupMutate({
       variables: {
@@ -35,7 +34,7 @@ function CreateSignupRunCard({ eventId, runId, userConProfileId }) {
     await apolloClient.resetStore();
   };
 
-  const withdrawSignupMutate = useMutationCallback(WithdrawUserSignup);
+  const [withdrawSignupMutate] = useMutation(WithdrawUserSignup);
   const withdrawSignup = () => confirm({
     prompt: `Are you sure you want to withdraw ${data.userConProfile.name_without_nickname} from ${data.event.title}?`,
     action: async () => {

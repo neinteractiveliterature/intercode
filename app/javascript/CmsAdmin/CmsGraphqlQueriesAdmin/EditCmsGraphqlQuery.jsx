@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import { CmsGraphqlQueriesQuery } from './queries.gql';
 import { UpdateCmsGraphqlQuery } from './mutations.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import useAsyncFunction from '../../useAsyncFunction';
-import useMutationCallback from '../../useMutationCallback';
 import usePageTitle from '../../usePageTitle';
 import useQuerySuspended from '../../useQuerySuspended';
 
@@ -19,9 +18,8 @@ function EditCmsGraphqlQuery({ match, history }) {
     ? null
     : data.cmsGraphqlQueries.find((q) => q.id.toString() === match.params.id);
   const [query, setQuery] = useState(initialQuery);
-  const [update, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateCmsGraphqlQuery),
-  );
+  const [updateMutate] = useMutation(UpdateCmsGraphqlQuery);
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
   usePageTitle(`Editing “${initialQuery.identifier}”`);

@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
 import ErrorDisplay from '../ErrorDisplay';
 import TicketTypeForm from './TicketTypeForm';
 import TicketTypePropType from './TicketTypePropType';
 import { UpdateTicketType } from './mutations.gql';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
@@ -16,7 +16,7 @@ function EditTicketType({
 }) {
   usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState(initialTicketType);
-  const mutate = useMutationCallback(UpdateTicketType);
+  const [mutate] = useMutation(UpdateTicketType);
   const [saveClicked, error, inProgress] = useAsyncFunction(useCallback(
     async () => {
       await mutate({

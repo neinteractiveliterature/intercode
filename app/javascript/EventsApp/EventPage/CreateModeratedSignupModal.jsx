@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import classnames from 'classnames';
 
 import AppRootContext from '../../AppRootContext';
@@ -11,20 +11,18 @@ import ErrorDisplay from '../../ErrorDisplay';
 import LoadingIndicator from '../../LoadingIndicator';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import useMutationCallback from '../../useMutationCallback';
 
 function CreateModeratedSignupModal({
   visible, close, run, event, signupOption,
 }) {
   const { conventionName, timezoneName } = useContext(AppRootContext);
   const { data, loading, error } = useQuery(CreateModeratedSignupModalQuery);
-  const [createSignupRequest, createError, createInProgress] = useAsyncFunction(
-    useMutationCallback(CreateSignupRequest, {
-      refetchQueries: () => [
-        { query: EventPageQuery, variables: { eventId: event.id } },
-      ],
-    }),
-  );
+  const [createMutate] = useMutation(CreateSignupRequest, {
+    refetchQueries: () => [
+      { query: EventPageQuery, variables: { eventId: event.id } },
+    ],
+  });
+  const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
   const runTimespan = useMemo(
     () => timespanFromRun({ timezone_name: timezoneName }, event, run),
     [timezoneName, event, run],
@@ -91,8 +89,7 @@ function CreateModeratedSignupModal({
                     You are currently signed up for
                     {' '}
                     <strong>{conflictingSignup.run.event.title}</strong>
-                    {'. '}
-                    If you continue, and your signup request is approved, you’ll be automatically
+                    . If you continue, and your signup request is approved, you’ll be automatically
                     withdrawn from this conflicting event.
                   </div>
                 )}
@@ -118,7 +115,9 @@ CreateModeratedSignupModal.propTypes = {
     id: PropTypes.number.isRequired,
   }).isRequired,
   event: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
+    can_play_concurrently: PropTypes.bool,
   }).isRequired,
   signupOption: PropTypes.shape({
     bucket: PropTypes.shape({

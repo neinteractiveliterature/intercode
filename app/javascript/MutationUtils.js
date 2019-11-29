@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import get from 'lodash/fp/get';
 import set from 'lodash/fp/set';
-
-import useMutationCallback from './useMutationCallback';
+import { useMutation } from 'react-apollo-hooks';
 
 export function createUpdater({
   query, variables, arrayPath, newObjectPath,
@@ -28,14 +27,14 @@ export function useCreateMutation(mutation, {
     }),
     [query, variables, arrayPath, newObjectPath],
   );
-
-  return useMutationCallback(mutation, { update, ...options });
+  const [mutate] = useMutation(mutation, { update, ...options });
+  return mutate;
 }
 
 export function useDeleteMutation(mutation, {
   query, variables, arrayPath, idVariablePath, idAttribute, queryVariables, ...options
 }) {
-  const mutate = useMutationCallback(mutation, { variables, ...options });
+  const [mutate] = useMutation(mutation, { variables, ...options });
   return useCallback(
     (mutateOptions) => {
       const mutateVariables = (mutateOptions || {}).variables || variables;

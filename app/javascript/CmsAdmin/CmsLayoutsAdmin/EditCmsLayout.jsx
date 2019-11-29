@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import buildLayoutInput from './buildLayoutInput';
 import CmsLayoutForm, { layoutReducer } from './CmsLayoutForm';
@@ -8,7 +8,6 @@ import { CmsLayoutsAdminQuery } from './queries.gql';
 import ErrorDisplay from '../../ErrorDisplay';
 import { UpdateLayout } from './mutations.gql';
 import useAsyncFunction from '../../useAsyncFunction';
-import useMutationCallback from '../../useMutationCallback';
 import useQuerySuspended from '../../useQuerySuspended';
 import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
@@ -19,9 +18,8 @@ function EditCmsLayout({ match, history }) {
     ? null
     : data.cmsLayouts.find((p) => match.params.id === p.id.toString());
   const [layout, dispatch] = useReducer(layoutReducer, initialLayout);
-  const [updateLayout, updateError, updateInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateLayout),
-  );
+  const [updateMutate] = useMutation(UpdateLayout);
+  const [updateLayout, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
 
   usePageTitle(useValueUnless(() => `Editing “${initialLayout.name}”`, error));
@@ -57,6 +55,7 @@ function EditCmsLayout({ match, history }) {
           className="btn btn-primary"
           value="Save changes"
           disabled={updateInProgress}
+          aria-label="Save changes"
         />
       </form>
     </>

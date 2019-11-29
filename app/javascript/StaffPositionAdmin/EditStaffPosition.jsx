@@ -1,20 +1,19 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { useMutation } from 'react-apollo-hooks';
 
 import ErrorDisplay from '../ErrorDisplay';
 import StaffPositionForm from './StaffPositionForm';
 import StaffPositionPropType from './StaffPositionPropType';
 import { UpdateStaffPosition } from './mutations.gql';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 
 function EditStaffPosition({ initialStaffPosition, history }) {
   const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
-  const [mutate, error, requestInProgress] = useAsyncFunction(
-    useMutationCallback(UpdateStaffPosition),
-  );
+  const [updateMutate] = useMutation(UpdateStaffPosition);
+  const [mutate, error, requestInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(`Editing “${initialStaffPosition.name}”`);
 

@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useMutation } from 'react-apollo-hooks';
 
 import { AcceptClickwrapAgreement } from './mutations.gql';
 import { ClickwrapAgreementQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import parsePageContent from '../parsePageContent';
-import useMutationCallback from '../useMutationCallback';
 import useAsyncFunction from '../useAsyncFunction';
 
 function ClickwrapAgreement({ history }) {
   const { data, error } = useQuerySuspended(ClickwrapAgreementQuery);
-  const [accept, acceptError, acceptInProgress] = useAsyncFunction(
-    useMutationCallback(AcceptClickwrapAgreement),
-  );
+  const [acceptMutate] = useMutation(AcceptClickwrapAgreement);
+  const [accept, acceptError, acceptInProgress] = useAsyncFunction(acceptMutate);
 
   const acceptClicked = async () => {
     await accept();

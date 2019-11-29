@@ -1,22 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useApolloClient } from 'react-apollo-hooks';
-import { Redirect } from 'react-router-dom';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { Redirect, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { DeleteEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQuery } from './queries.gql';
 import useQuerySuspended from '../useQuerySuspended';
-import useMutationCallback from '../useMutationCallback';
 import { useConfirm } from '../ModalDialogs/Confirm';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
 
-function EditEventProposal({ match, history }) {
+function EditEventProposal() {
+  const history = useHistory();
+  const match = useRouteMatch();
   const eventProposalId = Number.parseInt(match.params.id, 10);
   const { data, error } = useQuerySuspended(EventProposalQuery, { variables: { eventProposalId } });
-  const deleteProposal = useMutationCallback(DeleteEventProposal);
+  const [deleteProposal] = useMutation(DeleteEventProposal);
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
 
@@ -72,16 +72,5 @@ function EditEventProposal({ match, history }) {
     </>
   );
 }
-
-EditEventProposal.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default EditEventProposal;

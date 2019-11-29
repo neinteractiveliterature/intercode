@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap4-modal';
-import { useApolloClient } from 'react-apollo-hooks';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
 
 import { CreateEventProposal } from './mutations.gql';
 import ErrorDisplay from '../ErrorDisplay';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useAsyncFunction from '../useAsyncFunction';
-import useMutationCallback from '../useMutationCallback';
 
 function CreateEventProposalModal({
   onCreate, cancel, visible, userEventProposals, proposableEventCategories,
@@ -16,9 +15,8 @@ function CreateEventProposalModal({
   const [eventCategory, setEventCategory] = useState(
     proposableEventCategories.length > 1 ? null : proposableEventCategories[0],
   );
-  const [createProposal, createError, createInProgress] = useAsyncFunction(
-    useMutationCallback(CreateEventProposal),
-  );
+  const [createMutate] = useMutation(CreateEventProposal);
+  const [createProposal, createError, createInProgress] = useAsyncFunction(createMutate);
   const apolloClient = useApolloClient();
 
   const createClicked = async () => {
