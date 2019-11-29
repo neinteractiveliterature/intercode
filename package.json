@@ -57,7 +57,7 @@
     "csv-string": "^3.1.6",
     "custom-event-polyfill": "^1.0.7",
     "debounce-promise": "^3.1.2",
-    "detect-browser": "^4.7.0",
+    "detect-browser": "^4.8.0",
     "exports-loader": "^0.7.0",
     "file-loader": "^5.0.2",
     "file-saver": "^2.0.2",
