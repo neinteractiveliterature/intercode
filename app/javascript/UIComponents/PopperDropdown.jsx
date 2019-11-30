@@ -65,7 +65,7 @@ function PopperDropdown({
   };
 
   const effectivePlacement = placement || 'bottom-start';
-  const popoverParent = document.querySelectorAll('.non-cms-page')[0] || document.body;
+  const popoverParent = document.body;
 
   return (
     <Manager ref={managerNode}>
