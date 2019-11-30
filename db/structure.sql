@@ -5,7 +5,6 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -751,7 +750,8 @@ CREATE TABLE public.form_response_changes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     response_type character varying,
-    response_id bigint
+    response_id bigint,
+    compacted boolean DEFAULT false NOT NULL
 );
 
 
@@ -2798,6 +2798,13 @@ CREATE INDEX index_form_items_on_form_section_id ON public.form_items USING btre
 
 
 --
+-- Name: index_form_response_changes_on_compacted; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_form_response_changes_on_compacted ON public.form_response_changes USING btree (compacted);
+
+
+--
 -- Name: index_form_response_changes_on_notified_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3947,6 +3954,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191010195351'),
 ('20191019225829'),
 ('20191116152343'),
-('20191116152842');
+('20191116152842'),
+('20191130174830');
 
 
