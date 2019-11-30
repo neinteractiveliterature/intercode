@@ -23,19 +23,25 @@ class CompactingFormResponseChangesPresenter
       previous_value: raw_changes.first.previous_value,
       new_value: raw_changes.last.new_value,
       created_at: raw_changes.first.created_at,
-      updated_at: raw_changes.last.updated_at
+      updated_at: raw_changes.last.updated_at,
+      notified_at: raw_changes.map(&:notified_at).compact.max,
+      compacted: true
     )
   end
 
   def group_changes(raw_changes)
-    changes_sorted_by_consecutive_user = raw_changes.sort_by(&:created_at)
-      .slice_when { |c1, c2| c1.user_con_profile_id != c2.user_con_profile_id }
-      .flat_map { |consecutive_user_changes| consecutive_user_changes.sort_by(&:field_identifier) }
-
-    grouped_changes = changes_sorted_by_consecutive_user.slice_when do |c1, c2|
-      [c1.user_con_profile_id, c1.field_identifier] != [c2.user_con_profile_id, c2.field_identifier]
+    changes_by_group_identifier = raw_changes.group_by do |change|
+      group_identifier(change)
     end
 
-    grouped_changes.map { |change_group| change_group.sort_by(&:created_at) }
+    changes_by_group_identifier.values.flat_map do |change_group|
+      change_group.sort_by(&:created_at).slice_when do |c1, c2|
+        c2.created_at - c1.created_at >= 1.hour
+      end.to_a
+    end
+  end
+
+  def group_identifier(change)
+    [change.user_con_profile_id, change.field_identifier, change.notified_at.nil?]
   end
 end
