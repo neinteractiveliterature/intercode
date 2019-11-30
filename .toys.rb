@@ -19,7 +19,7 @@ tool 'update_schema' do
       sh "yarn run graphqldoc:generate -o #{dest_dir}"
 
       Dir.chdir(dir) do
-        sh "git add --all ."
+        sh 'git add --all .'
         sh "git commit -m 'Schema docs update'"
         sh 'git push'
       end
@@ -30,9 +30,22 @@ end
 tool 'pull_production_db' do
   desc 'Pull down the production database into development'
   include :exec, exit_on_nonzero_status: true
+  flag :docker_compose
+  flag :include_form_response_changes
 
   def run
-    sh 'bin/pull_production_database'
+    puts 'Getting database URL from Heroku'
+    database_url = capture('heroku config:get DATABASE_URL')
+
+    puts 'Pulling production data'
+    pull_options = (
+      include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"'
+    )
+    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:10.4 \
+pg_dump #{pull_options} -v -x --no-owner -Fc \"#{database_url}\" \
+-f /out/intercode_production.pgdump"
+
+    exec_tool("load_production_db #{docker_compose ? '--docker-compose' : ''}")
   end
 end
 
@@ -40,10 +53,15 @@ tool 'load_production_db' do
   desc 'Load a production pgdump into development'
   include :exec, exit_on_nonzero_status: true
   flag :file, default: 'intercode_production.pgdump'
+  flag :docker_compose
 
   def run
-    sh "docker-compose -f docker-compose.yml -f docker-compose.load_production_database.yml \
+    if docker_compose
+      sh "docker-compose -f docker-compose.yml -f docker-compose.load_production_database.yml \
 run load_production_database bin/load_production_database #{file}"
+    else
+      sh "./bin/load_production_database #{file}"
+    end
   end
 end
 
