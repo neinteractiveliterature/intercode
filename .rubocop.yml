@@ -358,6 +358,11 @@ Lint/EnsureReturn:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-return-ensure'
   Enabled: true
 
+Lint/FlipFlop:
+  Description: 'Checks for flip flops'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-flip-flops'
+  Enabled: true
+
 Lint/FormatParameterMismatch:
   Description: 'The number of parameters to format/sprint must match the fields.'
   Enabled: true
@@ -398,6 +403,13 @@ Lint/ParenthesesAsGroupedExpression:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#parens-no-spaces'
   Enabled: true
 
+Lint/RedundantCopDisableDirective:
+  Description: >-
+                 Checks for rubocop:disable comments that can be removed.
+                 Note: this cop is not disabled when disabling all cops.
+                 It must be explicitly disabled.
+  Enabled: true
+
 Lint/RequireParentheses:
   Description: >-
                  Use parentheses in the method call to avoid confusion
@@ -422,13 +434,6 @@ Lint/StringConversionInInterpolation:
 
 Lint/UnderscorePrefixedVariableName:
   Description: 'Do not use prefix `_` for a variable that is used.'
-  Enabled: true
-
-Lint/UnneededCopDisableDirective:
-  Description: >-
-                 Checks for rubocop:disable comments that can be removed.
-                 Note: this cop is not disabled when disabling all cops.
-                 It must be explicitly disabled.
   Enabled: true
 
 Lint/UnusedBlockArgument:
@@ -606,13 +611,6 @@ Performance/FlatMap:
 Performance/ReverseEach:
   Description: 'Use `reverse_each` instead of `reverse.each`.'
   Reference: 'https://github.com/JuanitoFatas/fast-ruby#enumerablereverseeach-vs-enumerablereverse_each-code'
-  Enabled: true
-
-Performance/Sample:
-  Description: >-
-                  Use `sample` instead of `shuffle.first`,
-                  `shuffle.last`, and `shuffle[Fixnum]`.
-  Reference: 'https://github.com/JuanitoFatas/fast-ruby#arrayshufflefirst-vs-arraysample-code'
   Enabled: true
 
 Performance/Size:
@@ -822,11 +820,6 @@ Style/EvenOdd:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#predicate-methods'
   Enabled: true
 
-Style/FlipFlop:
-  Description: 'Checks for flip flops'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-flip-flops'
-  Enabled: true
-
 Style/For:
   Description: 'Checks use of for or each in multiline loops.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-for-loops'
@@ -1031,9 +1024,18 @@ Style/RedundantBegin:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#begin-implicit'
   Enabled: true
 
+Style/RedundantCapitalW:
+  Description: 'Checks for %W when interpolation is not needed.'
+  Enabled: true
+
 Style/RedundantException:
   Description: "Checks for an obsolete RuntimeException argument in raise/fail."
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-explicit-runtimeerror'
+  Enabled: true
+
+Style/RedundantPercentQ:
+  Description: 'Checks for %q/%Q when single quotes or double quotes would do.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#percent-q'
   Enabled: true
 
 Style/RedundantReturn:
@@ -1054,6 +1056,13 @@ Style/RegexpLiteral:
 Style/RescueModifier:
   Description: 'Avoid using rescue in its modifier form.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-rescue-modifiers'
+  Enabled: true
+
+Style/Sample:
+  Description: >-
+                  Use `sample` instead of `shuffle.first`,
+                  `shuffle.last`, and `shuffle[Fixnum]`.
+  Reference: 'https://github.com/JuanitoFatas/fast-ruby#arrayshufflefirst-vs-arraysample-code'
   Enabled: true
 
 Style/SelfAssignment:
@@ -1137,15 +1146,6 @@ Style/UnlessElse:
                  Do not use unless with else. Rewrite these with the positive
                  case first.
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-else-with-unless'
-  Enabled: true
-
-Style/UnneededCapitalW:
-  Description: 'Checks for %W when interpolation is not needed.'
-  Enabled: true
-
-Style/UnneededPercentQ:
-  Description: 'Checks for %q/%Q when single quotes or double quotes would do.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#percent-q'
   Enabled: true
 
 Style/TrailingUnderscoreVariable:
