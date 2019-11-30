@@ -6,4 +6,6 @@ class FormResponseChange < ApplicationRecord
   serialize :new_value, JSON
 
   scope :not_notified, -> { where(notified_at: nil) }
+  scope :compacted, -> { where(compacted: true) }
+  scope :not_compacted, -> { where(compacted: false) }
 end
