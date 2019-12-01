@@ -1,6 +1,15 @@
+/* eslint-disable class-methods-use-this */
 global.requestAnimationFrame = (cb) => {
   setTimeout(cb, 0);
 };
+
+// just to make @juggle/resize-observer's observe() method not error out
+class MutationObserver {
+  observe() {}
+
+  disconnect() {}
+}
+global.MutationObserver = MutationObserver;
 
 /**
  * begin codemirror polyfills
@@ -15,7 +24,7 @@ const createContextualFragment = (html) => {
   return div.children[0]; // so hokey it's not even funny
 };
 
-Range.prototype.createContextualFragment = html => createContextualFragment(html);
+Range.prototype.createContextualFragment = (html) => createContextualFragment(html);
 
 global.window.document.createRange = function createRange() {
   return {
