@@ -1,21 +1,47 @@
 /* eslint-disable react/no-array-index-key */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, {
+  useState, useCallback, useMemo, useEffect, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { ResizeObserver as ResizeObserverPonyfill } from '@juggle/resize-observer';
+
+const ResizeObserver = window.ResizeObserver || ResizeObserverPonyfill;
 
 function BucketAvailabilityDisplay({
   className, signupCount, remainingCapacity, compact,
 }) {
   const totalCells = signupCount + remainingCapacity;
   const [containerWidth, setContainerWidth] = useState(300);
+  const resizeObserverRef = useRef(null);
 
   // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
   const measuredRef = useCallback((element) => {
     if (element !== null) {
       setContainerWidth(element.getBoundingClientRect().width);
+
+      if (resizeObserverRef.current) {
+        // element changed under us, just disconnect and reconnect
+        resizeObserverRef.current.disconnect();
+        resizeObserverRef.current.observe(element);
+      } else {
+        resizeObserverRef.current = new ResizeObserver((entries) => {
+          setContainerWidth(entries[0].contentRect);
+        });
+        resizeObserverRef.current.observe(element);
+      }
     }
   }, []);
+
+  useEffect(
+    () => () => {
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+      }
+    },
+    [],
+  );
 
   const cellWidth = useMemo(
     () => {
@@ -57,6 +83,10 @@ function BucketAvailabilityDisplay({
       </div>
     )),
   ];
+
+  if (maxCellsPerLine < 1) {
+    return <div ref={measuredRef} />;
+  }
 
   return (
     <div ref={measuredRef}>
