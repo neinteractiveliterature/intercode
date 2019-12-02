@@ -154,3 +154,26 @@ query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposa
     }
   }
 }
+
+query EventProposalHistoryQuery($id: Int!) {
+  eventProposal(id: $id) {
+    id
+    title
+    owner {
+      id
+    }
+
+    form_response_changes {
+      user_con_profile {
+        id
+        name_without_nickname
+      }
+
+      field_identifier
+      previous_value
+      new_value
+      created_at
+      updated_at
+    }
+  }
+}
