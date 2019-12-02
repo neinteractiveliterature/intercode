@@ -3969,10 +3969,10 @@ dnd-core@^9.5.1:
     invariant "^2.2.4"
     redux "^4.0.4"
 
-dnd-multi-backend@^5.0.0-rc02:
-  version "5.0.0-rc02"
-  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-5.0.0-rc02.tgz#c13b6fdaaf7d6f14abe2499bc18d1b6ff8b02b64"
-  integrity sha512-NJAvfw/SlI3pgWHM9nApoD5uK7vsK0nsyFr6RhGpGa5kNmjg/rTdeRSzlgXSXbYN5XkyWXEiQsFOFVk2Qj0BDA==
+dnd-multi-backend@^5.0.0-rc03:
+  version "5.0.0-rc03"
+  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-5.0.0-rc03.tgz#c5131782d4e2e334441d0f2c8365cadaa39363f1"
+  integrity sha512-/LzWv/yzsxrTvdOpQoA3cHROeLDzFnLoQ6YJwIfDz+66dpo4St7GJs2EFeru7gZhR3sSfiJxyDKnLmI5Wyf4Dg==
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -9462,19 +9462,19 @@ react-dnd-multi-backend@^2.3.7:
     react-dnd-html5-backend "*"
     react-dnd-touch-backend "^0.3.13"
 
-react-dnd-multi-backend@^5.0.0-rc01:
-  version "5.0.0-rc02"
-  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-5.0.0-rc02.tgz#76213a7956cb52b7e61b722928223e014c158093"
-  integrity sha512-76bs++StHWKcjbWFqDn6Ar/Fiz5B27cJkGVpXZZFRX8smeQhdAVetftFecLAHYBsi1ZqCGqLR7brsqScRzWJNA==
+react-dnd-multi-backend@^5.0.0-rc03:
+  version "5.0.0-rc03"
+  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-5.0.0-rc03.tgz#78ec43157e59b2cfff456a617328093428fb11a3"
+  integrity sha512-BgiHryFy9GNwU3YgJy0aRGeXkVBiqbLYM5njmKOXJZjY2kNEFCKw4mz6lA27shbS/SY517VL5F0N4ydk/L150g==
   dependencies:
-    dnd-multi-backend "^5.0.0-rc02"
+    dnd-multi-backend "^5.0.0-rc03"
     prop-types "^15.7.2"
-    react-dnd-preview "^5.0.0-rc02"
+    react-dnd-preview "^5.0.0-rc03"
 
-react-dnd-preview@^5.0.0-rc02:
-  version "5.0.0-rc02"
-  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-5.0.0-rc02.tgz#4e42212609f9b3f8cc78aba17f6573f073fb93f5"
-  integrity sha512-7C5/jpj1zsLgOr/S6+UjeGFxgO7PdS/BvAJFDPZs0D2rKHTokwhJIBd80s6iBcPO53g4P5jih+d65z2oGL6bQg==
+react-dnd-preview@^5.0.0-rc03:
+  version "5.0.0-rc03"
+  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-5.0.0-rc03.tgz#a9c7e840ef61dda1ea6feb55c10e96cb64e08631"
+  integrity sha512-82KV3TdOlZlqeJB7N8ITR2EIp5Y/7Pbijdt0vIpEw0QzM5jzfB23pIuBz7sdYK6usfq69dklGtxZwejpmWSQsA==
   dependencies:
     prop-types "^15.7.2"
 
