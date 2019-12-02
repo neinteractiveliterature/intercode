@@ -27,7 +27,9 @@ function BucketAvailabilityDisplay({
         resizeObserverRef.current.observe(element);
       } else {
         resizeObserverRef.current = new ResizeObserver((entries) => {
-          setContainerWidth(entries[0].contentRect);
+          window.requestAnimationFrame(() => {
+            setContainerWidth(entries[0].contentRect);
+          });
         });
         resizeObserverRef.current.observe(element);
       }
