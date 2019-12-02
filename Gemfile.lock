@@ -102,8 +102,8 @@ GEM
       rails (>= 4.2)
     ast (2.4.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.242.0)
-    aws-sdk-core (3.80.0)
+    aws-partitions (1.247.0)
+    aws-sdk-core (3.82.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -419,7 +419,7 @@ GEM
     ruby-progressbar (1.10.1)
     scheduled_value (1.2.2)
     sequel (5.27.0)
-    shoryuken (5.0.2)
+    shoryuken (5.0.3)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
