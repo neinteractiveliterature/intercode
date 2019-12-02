@@ -5,6 +5,8 @@ module FormResponse
     base.class_eval do
       serialize :additional_info, JSON
     end
+
+    has_many :form_response_changes, as: :response
   end
 
   class_methods do
