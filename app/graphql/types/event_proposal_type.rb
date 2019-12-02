@@ -17,6 +17,7 @@ class Types::EventProposalType < Types::BaseObject
   field :owner, Types::UserConProfileType, null: false
   field :event, Types::EventType, null: true
   field :event_category, Types::EventCategoryType, null: false
+  field :form_response_changes, [Types::FormResponseChangeType], null: false
 
   association_loaders EventProposal, :convention, :owner, :event, :event_category
 
@@ -27,6 +28,12 @@ class Types::EventProposalType < Types::BaseObject
       AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category)
     end.then do |event_proposal_form|
       FormResponsePresenter.new(event_proposal_form, object).as_json.to_json
+    end
+  end
+
+  def form_response_changes
+    AssociationLoader.for(EventProposal, :form_response_changes).load(object).then do |changes|
+      CompactingFormResponseChangesPresenter.new(changes).compacted_changes
     end
   end
 end

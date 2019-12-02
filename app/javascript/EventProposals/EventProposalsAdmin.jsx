@@ -12,6 +12,7 @@ import useQuerySuspended from '../useQuerySuspended';
 import ErrorDisplay from '../ErrorDisplay';
 import usePageTitle from '../usePageTitle';
 import useValueUnless from '../useValueUnless';
+import EventProposalHistory from './EventProposalHistory';
 
 function SingleProposalBreadcrumbs({ match }) {
   const { data, error } = useQuerySuspended(EventProposalQueryWithOwner, {
@@ -36,6 +37,14 @@ function SingleProposalBreadcrumbs({ match }) {
         render={() => (
           <BreadcrumbItem to={`/${match.params.id}/edit`} active>
             Edit
+          </BreadcrumbItem>
+        )}
+      />
+      <Route
+        path="/admin_event_proposals/:id/history"
+        render={() => (
+          <BreadcrumbItem to={`/${match.params.id}/history`} active>
+            History
           </BreadcrumbItem>
         )}
       />
@@ -104,6 +113,7 @@ function EventProposalsAdmin() {
       </nav>
 
       <Switch>
+        <Route path="/admin_event_proposals/:id/history" component={EventProposalHistory} />
         <Route path="/admin_event_proposals/:id/edit" component={AdminEditEventProposal} />
         <Route path="/admin_event_proposals/:id" component={EventProposalAdminDisplay} />
         <Route component={EventProposalsAdminTable} />
