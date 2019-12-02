@@ -2037,10 +2037,10 @@ apollo-link@^1.0.0, apollo-link@^1.2.11, apollo-link@^1.2.12, apollo-link@^1.2.1
     tslib "^1.9.3"
     zen-observable-ts "^0.8.20"
 
-apollo-upload-client@^11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-11.0.0.tgz#465a2ed5756e6155f53befaf82d17bdb08c82060"
-  integrity sha512-JChTrBi1VSF8u6OPrkWUApJlyUvzwhw98kqRB3fSi7/CU6z0OUD42Mee9s5h8mfjKEfOanK6GNZhF4t2tIPXSw==
+apollo-upload-client@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-12.0.0.tgz#b7b73311d3c9ee1f2878c96dffac62baa38893a0"
+  integrity sha512-TbK50CY5RA2fg5jzD65kUwgntijLZE+jCvnMnjSNObNmKNeiYWXHXEyntkeUlANTuxuukxPVh2xw9KXsaGxxnw==
   dependencies:
     "@babel/runtime" "^7.5.4"
     apollo-link "^1.2.12"
