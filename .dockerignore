@@ -16,6 +16,10 @@
 # Git repo
 /.git
 
+# Ignore build artifacts
+/bin/manifest.json
+/bin/renderFormResponseChangeGroup
+
 # Ignore bundler config
 /.bundle
 
