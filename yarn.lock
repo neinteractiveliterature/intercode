@@ -3979,10 +3979,10 @@ dnd-core@^9.5.1:
     invariant "^2.2.4"
     redux "^4.0.4"
 
-dnd-multi-backend@^5.0.0-rc02:
-  version "5.0.0-rc02"
-  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-5.0.0-rc02.tgz#c13b6fdaaf7d6f14abe2499bc18d1b6ff8b02b64"
-  integrity sha512-NJAvfw/SlI3pgWHM9nApoD5uK7vsK0nsyFr6RhGpGa5kNmjg/rTdeRSzlgXSXbYN5XkyWXEiQsFOFVk2Qj0BDA==
+dnd-multi-backend@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-5.0.0.tgz#afa73e541bf434cbf1a46ac717b2b9a580b5f19f"
+  integrity sha512-an4231UOPvipbcVXczXUHf1u3SNSTouSbu6ZLCPJvAO29yIo3C43ddS2evK5aastg2qKWTOlzI52IGq7q5oGGA==
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -9481,19 +9481,19 @@ react-dnd-multi-backend@^2.3.7:
     react-dnd-html5-backend "*"
     react-dnd-touch-backend "^0.3.13"
 
-react-dnd-multi-backend@^5.0.0-rc01:
-  version "5.0.0-rc02"
-  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-5.0.0-rc02.tgz#76213a7956cb52b7e61b722928223e014c158093"
-  integrity sha512-76bs++StHWKcjbWFqDn6Ar/Fiz5B27cJkGVpXZZFRX8smeQhdAVetftFecLAHYBsi1ZqCGqLR7brsqScRzWJNA==
+react-dnd-multi-backend@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-5.0.0.tgz#eeb186ac32f46dd2f0ed720b653978d9e1fdfb5c"
+  integrity sha512-Ql8JKAmFnzzKLxOYUTIQVQZeQd1shbZKJiEbkDY5Vte3hY/YFdv+qs2IDxeH2LX2itBYrnEIgWYcRBacPtPeag==
   dependencies:
-    dnd-multi-backend "^5.0.0-rc02"
+    dnd-multi-backend "^5.0.0"
     prop-types "^15.7.2"
-    react-dnd-preview "^5.0.0-rc02"
+    react-dnd-preview "^5.0.0"
 
-react-dnd-preview@^5.0.0-rc02:
-  version "5.0.0-rc02"
-  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-5.0.0-rc02.tgz#4e42212609f9b3f8cc78aba17f6573f073fb93f5"
-  integrity sha512-7C5/jpj1zsLgOr/S6+UjeGFxgO7PdS/BvAJFDPZs0D2rKHTokwhJIBd80s6iBcPO53g4P5jih+d65z2oGL6bQg==
+react-dnd-preview@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-5.0.0.tgz#a3a693c27195885a9f7413ccddf46a6fc5ef665a"
+  integrity sha512-TYXOsLUuEQpwAoxjPLWi+3bXsYGUBAslBFChUN6xyH11/ogsrQ9UrBIFf6uON7wmf2azsLAuWglfffXlZXSRsg==
   dependencies:
     prop-types "^15.7.2"
 
