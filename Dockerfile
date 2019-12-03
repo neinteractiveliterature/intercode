@@ -47,6 +47,7 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,id=yarn \
 FROM build-production AS test
 
 ENV RAILS_ENV test
+ENV NODE_ENV test
 
 USER root
 RUN apk add --no-cache postgresql-client
