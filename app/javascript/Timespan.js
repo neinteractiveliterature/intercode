@@ -153,7 +153,7 @@ class Timespan {
     const start = this.humanizeStartInTimezone(timezoneName, startFormat);
     const finish = this.humanizeFinishInTimezone(
       timezoneName,
-      this.finish.date() !== this.start.date()
+      this.start == null || this.finish == null || this.finish.date() !== this.start.date()
         ? startFormat
         : finishFormat || startFormat,
     );
