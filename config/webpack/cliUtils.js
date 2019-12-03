@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.jsx',
   },
+  devtool: 'cheap-source-map',
   output: {
     filename: '[name]',
     path: path.resolve('bin'),
