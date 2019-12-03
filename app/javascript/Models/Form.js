@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import keyBy from 'lodash-es/keyBy';
+import compact from 'lodash-es/compact';
 import flatMap from 'lodash-es/flatMap';
 
 export default class Form {
@@ -48,5 +49,16 @@ export default class Form {
 
   getAllItems() {
     return flatMap(this.getSections(), (section) => this.getItemsInSection(section.id));
+  }
+
+  getItemWithIdentifier(identifier) {
+    if (!this.memoizedFormItemsByIdentifier) {
+      this.memoizedFormItemsByIdentifier = keyBy(
+        compact(Object.values(this.formItems)),
+        (item) => item.identifier,
+      );
+    }
+
+    return this.memoizedFormItemsByIdentifier[identifier];
   }
 }

@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 
+export function describeDate(value, timezoneName) {
+  return moment.tz(value, timezoneName).format('dddd, MMMM D, YYYY');
+}
+
 function DateItemDisplay({ convention, value }) {
   const formattedDate = useMemo(
-    () => moment.tz(value, convention.timezone_name).format('dddd, MMMM D, YYYY'),
+    () => describeDate(value, convention.timezone_name),
     [convention.timezone_name, value],
   );
 
-  return (
-    <>
-      {formattedDate}
-    </>
-  );
+  return formattedDate;
 }
 
 DateItemDisplay.propTypes = {
