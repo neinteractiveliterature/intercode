@@ -1,6 +1,4 @@
 class EventProposalsMailer < ApplicationMailer
-  helper :form_response
-
   def new_proposal(event_proposal)
     @event_proposal = event_proposal
     use_convention_timezone(@event_proposal.convention) do

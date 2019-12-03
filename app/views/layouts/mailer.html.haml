@@ -88,22 +88,20 @@
         list-style-type: none;
       }
 
-      del.diffmod {
-        background-color: #e2e2e2;
-        color: #333;
-        text-decoration: line-through;
-        text-decoration-color: #333;
-        text-decoration-color: rgba(0, 0, 0, 0.5);
+      .text-decoration-none {
+        text-decoration: none !important;
       }
 
-      ins.diffins {
+      .bg-success-light {
         background-color: #9f9;
-        text-decoration: inherit;
       }
 
-      ins.diffmod {
+      .bg-warning-light {
         background-color: #ff9;
-        text-decoration: inherit;
+      }
+
+      dt {
+        font-weight: bold;
       }
   %body
     = yield

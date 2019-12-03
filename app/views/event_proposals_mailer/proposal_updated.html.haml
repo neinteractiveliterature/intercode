@@ -9,7 +9,4 @@
 
 %h2 Change log
 
-- timezone = @event_proposal.convention.timezone
-- form_items = @event_proposal.event_category.event_proposal_form.form_items.index_by(&:identifier)
-
-= render partial: 'form_response_changes/table', locals: { timezone: timezone, form_items: form_items, changes: @changes }
+= FormResponseChangeGroupPresenter.new(@changes, @event_proposal.convention).html

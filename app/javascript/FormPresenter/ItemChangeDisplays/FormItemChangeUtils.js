@@ -52,9 +52,12 @@ export function buildChangeGroups(changes, form) {
   return groupedChanges.map((changesInGroup) => ({
     changes: changesInGroup,
     id: new MD5().update(changesInGroup.map((c) => c.id).join(',')).digest('hex'),
-    timespan: new Timespan(
-      moment(changesInGroup[changesInGroup.length - 1].created_at),
-      moment(changesInGroup[0].updated_at),
-    ),
   }));
+}
+
+export function getTimespanForChangeGroup(changeGroup) {
+  return new Timespan(
+    moment(changeGroup.changes[changeGroup.changes.length - 1].created_at),
+    moment(changeGroup.changes[0].updated_at),
+  );
 }

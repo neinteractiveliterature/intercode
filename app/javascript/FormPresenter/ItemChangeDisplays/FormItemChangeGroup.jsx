@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeDisplay from './FormItemChangeDisplay';
 import TextDiffDisplay from './TextDiffDisplay';
 import { TimespanPropType } from '../../ScheduledValuePropTypes';
+import { getTimespanForChangeGroup } from './FormItemChangeUtils';
 
 function describeFormItem(item, itemIdentifier) {
   if (!item) {
@@ -16,13 +17,17 @@ function describeFormItem(item, itemIdentifier) {
 
 function FormItemChangeGroup({ convention, changeGroup }) {
   const { timezoneName } = useContext(AppRootContext);
+  const timespan = useMemo(
+    () => getTimespanForChangeGroup(changeGroup),
+    [changeGroup],
+  );
 
   return (
     <section key={changeGroup.id}>
       <h3>
         {changeGroup.changes[0].user_con_profile.name_without_nickname}
         {': '}
-        {changeGroup.timespan.humanizeInTimezone(timezoneName, 'MMMM DD, YYYY - h:mma', 'h:mma')}
+        {timespan.humanizeInTimezone(timezoneName, 'MMMM DD, YYYY - h:mma', 'h:mma')}
       </h3>
       <dl>
         {changeGroup.changes.map((change) => (
@@ -61,7 +66,6 @@ FormItemChangeGroup.propTypes = {
         name_without_nickname: PropTypes.string.isRequired,
       }).isRequired,
     })).isRequired,
-    timespan: TimespanPropType.isRequired,
   }).isRequired,
   convention: PropTypes.shape({}).isRequired,
 };
