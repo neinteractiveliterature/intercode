@@ -156,11 +156,28 @@ query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposa
 }
 
 query EventProposalHistoryQuery($id: Int!) {
+  convention {
+    id
+    starts_at
+    ends_at
+    timezone_name
+  }
+
   eventProposal(id: $id) {
     id
     title
+
     owner {
       id
+    }
+
+    event_category {
+      id
+
+      event_proposal_form {
+        id
+        form_api_json
+      }
     }
 
     form_response_changes {
