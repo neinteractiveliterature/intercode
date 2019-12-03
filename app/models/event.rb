@@ -90,6 +90,7 @@ class Event < ApplicationRecord
   has_many :runs, dependent: :destroy
 
   has_one :event_proposal, required: false
+  has_many :form_response_changes, as: :response
 
   after_commit :sync_team_mailing_list, on: [:create, :update]
 
