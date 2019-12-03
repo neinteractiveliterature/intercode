@@ -133,6 +133,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@babel/node": "^7.7.4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react-hooks": "^3.2.1",
     "babel-core": "^7.0.0-bridge.0",
@@ -154,11 +155,13 @@
     "jest-transform-graphql": "^2.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "webpack-dashboard": "^3.2.0",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "scripts": {
     "analyze": "NODE_ENV=production ANALYZE_BUNDLE_SIZE=true webpack --progress --config=config/webpack/production.js && rm -rf public/packs",
     "analyze:json": "NODE_ENV=production webpack --profile --json --config=config/webpack/production.js >stats.json",
+    "build:cli": "webpack --config config/webpack/cliUtils.js",
     "graphdoc:generate": "graphdoc -s schema.graphql",
     "graphqldoc:generate": "graphqldoc -s schema.graphql",
     "graphql:build_fragment_types": "node ./buildFragmentTypes.js",
