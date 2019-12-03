@@ -137,3 +137,39 @@ query CreateModeratedSignupModalQuery {
     }
   }
 }
+
+query EventHistoryQuery($id: Int!) {
+  convention {
+    id
+    starts_at
+    ends_at
+    timezone_name
+  }
+
+  event(id: $id) {
+    id
+    title
+
+    event_category {
+      id
+
+      event_form {
+        id
+        form_api_json
+      }
+    }
+
+    form_response_changes {
+      user_con_profile {
+        id
+        name_without_nickname
+      }
+
+      field_identifier
+      previous_value
+      new_value
+      created_at
+      updated_at
+    }
+  }
+}

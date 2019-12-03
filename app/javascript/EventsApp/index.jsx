@@ -10,6 +10,7 @@ import ScheduleGridApp from './ScheduleGrid';
 import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
+import EventHistory from './EventPage/EventHistory';
 
 function renderScheduleRoutes() {
   return [
@@ -55,6 +56,10 @@ function EventsApp() {
               <Route
                 path={`${eventPath}/team_members`}
                 render={() => <TeamMemberAdmin eventId={eventId} eventPath={eventPath} />}
+              />
+              <Route
+                path={`${eventPath}/history`}
+                render={() => <EventHistory eventId={eventId} eventPath={eventPath} />}
               />
               <Route
                 path={`${eventPath}/runs/:runId`}

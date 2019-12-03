@@ -12,7 +12,7 @@ function MultipleChoiceItemChangeDisplay({ change }) {
     return <TextDiffDisplay before={beforeArray.join(', ')} after={afterArray.join(', ')} />;
   }
 
-  return <TextDiffDisplay before={before} after={after} />;
+  return <TextDiffDisplay before={(before || '').toString()} after={(after || '').toString()} />;
 }
 
 MultipleChoiceItemChangeDisplay.propTypes = {

@@ -38,6 +38,11 @@ function EventAdminMenu({ eventId }) {
             {pluralize(event.event_category.team_member_name)}
           </Link>
         </li>
+        <li className="list-group-item">
+          <Link to={`${eventPath}/history`}>
+            View edit history
+          </Link>
+        </li>
       </ul>
     </div>
   );
