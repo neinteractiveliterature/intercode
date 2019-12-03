@@ -308,8 +308,8 @@ describe('Timespan', () => {
 
   describe('humanizeInTimezone', () => {
     it('formats the times correctly for the given time zone', () => {
-      expect(defaultTimespan.humanizeInTimezone('UTC', 'h:mma')).toEqual('12:00am - 12:00am');
-      expect(defaultTimespan.humanizeInTimezone('America/New_York', 'h:mma')).toEqual('7:00pm - 7:00pm');
+      expect(defaultTimespan.humanizeInTimezone('UTC', 'h:mma')).toEqual('12:00am');
+      expect(defaultTimespan.humanizeInTimezone('America/New_York', 'h:mma')).toEqual('7:00pm');
     });
 
     it('handles open ends', () => {
