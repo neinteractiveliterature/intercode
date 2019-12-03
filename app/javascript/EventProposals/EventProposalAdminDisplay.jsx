@@ -106,7 +106,7 @@ function EventProposalAdminDisplay({ match }) {
         {
           data.eventProposal.event
             ? (
-              <Link to={`/events/${data.eventProposal.event.id}`} className="btn btn-outline-primary">
+              <Link to={`/events/${data.eventProposal.event.id}`} className="btn btn-link">
                 Go to event
               </Link>
             )
@@ -124,6 +124,12 @@ function EventProposalAdminDisplay({ match }) {
             )
             : null
         }
+        <Link
+          to={`/admin_event_proposals/${eventProposalId}/history`}
+          className="btn btn-link"
+        >
+          View edit history
+        </Link>
         <div className="flex-grow-1 d-flex justify-content-end">
           {data.currentAbility.can_read_admin_notes_on_event_proposal
             && <EventProposalAdminNotes eventProposalId={eventProposalId} />}

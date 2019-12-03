@@ -145,13 +145,22 @@ class Timespan {
     return humanizeTime(finish, includeDayInFinish);
   }
 
-  humanizeInTimezone(timezoneName, format) {
+  humanizeInTimezone(timezoneName, startFormat, finishFormat) {
     if (this.start == null && this.finish == null) {
       return 'always';
     }
 
-    const start = this.humanizeStartInTimezone(timezoneName, format);
-    const finish = this.humanizeFinishInTimezone(timezoneName, format);
+    const start = this.humanizeStartInTimezone(timezoneName, startFormat);
+    const finish = this.humanizeFinishInTimezone(
+      timezoneName,
+      this.finish.date() !== this.start.date()
+        ? startFormat
+        : finishFormat || startFormat,
+    );
+
+    if (this.humanizeFinishInTimezone(timezoneName, startFormat) === start) {
+      return start;
+    }
 
     return `${start} - ${finish}`;
   }
