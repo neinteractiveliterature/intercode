@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import AppRootContext from '../../AppRootContext';
 import FormItemChangeGroup from './FormItemChangeGroup';
-import { buildChangeGroups } from './FormItemChangeUtils';
+import { buildChangeGroups, getTimespanForChangeGroup } from './FormItemChangeUtils';
 
 function FormResponseChangeHistory({
   basePath, changes, convention, form,
@@ -33,7 +33,7 @@ function FormResponseChangeHistory({
                 <strong>{changeGroup.changes[0].user_con_profile.name_without_nickname}</strong>
                 <br />
                 <small>
-                  {changeGroup.timespan
+                  {getTimespanForChangeGroup(changeGroup)
                     .humanizeInTimezone(timezoneName, 'MMMM DD, YYYY - h:mma', 'h:mma')}
                 </small>
               </NavLink>
