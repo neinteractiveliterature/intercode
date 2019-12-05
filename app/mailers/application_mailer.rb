@@ -34,4 +34,14 @@ class ApplicationMailer < ActionMailer::Base
       end
     end
   end
+
+  def cms_rendering_context(convention, assigns)
+    CmsRenderingContext.new(
+      cms_parent: convention,
+      controller: self,
+      assigns: {
+        'convention' => convention
+      }.merge(assigns)
+    )
+  end
 end

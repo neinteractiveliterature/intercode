@@ -1,6 +1,8 @@
 module Intercode
   module Liquid
     module Filters
+      include AbsoluteUrls
+
       # Can be used to either pluralize a singular noun, or to conditionally pluralize a noun based
       # on a count.
       #
@@ -84,6 +86,13 @@ module Intercode
       #      the Rails documentation for this method
       def titleize(input)
         input&.titleize
+      end
+
+      # Given a relative URL, turns it into an absolute URL for the current convention.
+      # Given an absolute URL, changes the hostname to the current convention host.
+      def absolute_url(path)
+        return path unless @context.registers['convention']
+        url_with_convention_host(path, @context.registers['convention'])
       end
     end
   end
