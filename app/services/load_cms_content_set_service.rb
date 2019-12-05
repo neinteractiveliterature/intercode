@@ -21,6 +21,7 @@ class LoadCmsContentSetService < CivilService::Service
     ].each do |loader_class|
       loader_class.new(convention: convention, content_set: content_set).call!
     end
+
     load_form_content
     load_navigation_items
     load_files

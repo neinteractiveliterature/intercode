@@ -20,7 +20,7 @@ class CmsContentLoaders::Base < CivilService::Service
       content, attrs = content_set.template_content(path)
       model = convention_association.create!(
         identifier_attribute => name,
-        content: content,
+        content_attribute => content,
         **attrs
       )
 
@@ -35,6 +35,11 @@ class CmsContentLoaders::Base < CivilService::Service
   def identifier_attribute
     raise NotImplementedError,
       'CmsContentLoaders::Base subclasses must implement #identifier_attribute'
+  end
+
+  def content_attribute
+    raise NotImplementedError,
+      'CmsContentLoaders::Base subclasses must implement #content_attribute'
   end
 
   def convention_association
