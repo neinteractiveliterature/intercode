@@ -6,6 +6,13 @@ export default function buildTestScheduledValueInput(value, onChange) {
   };
 
   return (
-    <input className="testInput" type="text" value={value} onChange={processChangeEvent} />
+    <input
+      className="testInput"
+      type="text"
+      value={value}
+      onChange={processChangeEvent}
+      aria-label="Test input"
+      data-testid="testInput"
+    />
   );
 }

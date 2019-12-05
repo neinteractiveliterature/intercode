@@ -39,7 +39,6 @@ TestWrapper.defaultProps = {
 function customRender(ui, options = {}) {
   const { apolloClient, stripePublishableKey, ...otherOptions } = options;
   return render(ui, {
-    ...otherOptions,
     wrapper: (wrapperProps) => (
       <TestWrapper
         apolloClient={apolloClient || { query: () => {} }}
@@ -55,6 +54,7 @@ function customRender(ui, options = {}) {
         return queries.getByLabelText(formGroup, labelText);
       },
     },
+    ...otherOptions,
   });
 }
 

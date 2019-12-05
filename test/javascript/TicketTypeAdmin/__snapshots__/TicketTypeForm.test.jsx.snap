@@ -1,0 +1,215 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TicketTypeForm matches snapshot 1`] = `
+<div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="name-1"
+    >
+      Name (no spaces allowed — only letters, numbers, and underscores)
+    </label>
+    <input
+      class="form-control"
+      id="name-1"
+      name="name"
+      style="font-family: monospace;"
+      type="text"
+      value=""
+    />
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="description-2"
+    >
+      Description
+    </label>
+    <input
+      class="form-control"
+      id="description-2"
+      name="description"
+      type="text"
+      value=""
+    />
+  </div>
+  <fieldset
+    class="form-group"
+  >
+    <legend
+      class="col-form-label"
+    >
+      Publicly available for purchase?
+    </legend>
+    <div>
+      <div
+        class="form-check form-check-inline"
+      >
+        <label
+          class="form-check-label"
+          for="publicly_available-3"
+        >
+          <input
+            checked=""
+            class="form-check-input"
+            id="publicly_available-3"
+            name="publicly_available"
+            type="radio"
+            value="true"
+          />
+           Yes
+        </label>
+      </div>
+      <div
+        class="form-check form-check-inline"
+      >
+        <label
+          class="form-check-label"
+          for="publicly_available-4"
+        >
+          <input
+            class="form-check-input"
+            id="publicly_available-4"
+            name="publicly_available"
+            type="radio"
+            value="false"
+          />
+           No
+        </label>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset
+    class="form-group"
+  >
+    <legend
+      class="col-form-label"
+    >
+      Allows event signups?
+    </legend>
+    <div>
+      <div
+        class="form-check form-check-inline"
+      >
+        <label
+          class="form-check-label"
+          for="allows_event_signups-5"
+        >
+          <input
+            class="form-check-input"
+            id="allows_event_signups-5"
+            name="allows_event_signups"
+            type="radio"
+            value="true"
+          />
+           Yes
+        </label>
+      </div>
+      <div
+        class="form-check form-check-inline"
+      >
+        <label
+          class="form-check-label"
+          for="allows_event_signups-6"
+        >
+          <input
+            class="form-check-input"
+            id="allows_event_signups-6"
+            name="allows_event_signups"
+            type="radio"
+            value="false"
+          />
+           No
+        </label>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset
+    class="form-group"
+  >
+    <legend
+      class="col-form-label"
+    >
+      Counts towards convention maximum?
+    </legend>
+    <div>
+      <div
+        class="form-check form-check-inline"
+      >
+        <label
+          class="form-check-label"
+          for="counts_towards_convention_maximum-7"
+        >
+          <input
+            checked=""
+            class="form-check-input"
+            id="counts_towards_convention_maximum-7"
+            name="counts_towards_convention_maximum"
+            type="radio"
+            value="true"
+          />
+           Yes
+        </label>
+      </div>
+      <div
+        class="form-check form-check-inline"
+      >
+        <label
+          class="form-check-label"
+          for="counts_towards_convention_maximum-8"
+        >
+          <input
+            class="form-check-input"
+            id="counts_towards_convention_maximum-8"
+            name="counts_towards_convention_maximum"
+            type="radio"
+            value="false"
+          />
+           No
+        </label>
+      </div>
+    </div>
+  </fieldset>
+  <div
+    class="form-group"
+  >
+    <label
+      for="maximum_event_provided_tickets-9"
+    >
+      Number of event-provided bananas of this type (per event)
+    </label>
+    <input
+      class="form-control"
+      id="maximum_event_provided_tickets-9"
+      name="maximum_event_provided_tickets"
+      type="number"
+      value="0"
+    />
+  </div>
+  <fieldset>
+    <p>
+      Pricing schedule
+    </p>
+    <table
+      class="table table-striped"
+    >
+      <tbody>
+        <tr>
+          <td
+            colspan="4"
+          >
+            <button
+              class="btn btn-link"
+              type="button"
+            >
+              Add row
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+</div>
+`;

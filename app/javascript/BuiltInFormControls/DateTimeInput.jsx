@@ -48,6 +48,7 @@ function DateTimeInput({
         onChange={dateChanged}
         pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
         id={id}
+        aria-label="Date"
       />
       <input
         type="time"
@@ -55,6 +56,7 @@ function DateTimeInput({
         value={time || ''}
         onChange={timeChanged}
         pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+        aria-label="Time"
       />
     </div>
   );

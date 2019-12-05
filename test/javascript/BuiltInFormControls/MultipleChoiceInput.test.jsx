@@ -1,10 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import ChoiceSet from '../../../app/javascript/BuiltInFormControls/ChoiceSet';
+
+import { render } from '../testUtils';
 import MultipleChoiceInput from '../../../app/javascript/BuiltInFormControls/MultipleChoiceInput';
 
 describe('MultipleChoiceInput', () => {
-  const renderMultipleChoiceInput = props => shallow(<MultipleChoiceInput
+  const renderMultipleChoiceInput = (props) => render(<MultipleChoiceInput
     name="pickSomething"
     onChange={() => {}}
     choices={[
@@ -17,12 +17,14 @@ describe('MultipleChoiceInput', () => {
   />);
 
   test('it renders the caption', () => {
-    const component = renderMultipleChoiceInput();
-    expect(component.find('legend').text()).toEqual('Hello there');
+    const { getByText } = renderMultipleChoiceInput();
+    expect(getByText('Hello there').tagName.toUpperCase()).toEqual('LEGEND');
   });
 
-  test('it renders a ChoiceSet', () => {
-    const component = renderMultipleChoiceInput();
-    expect(component.find(ChoiceSet).length).toEqual(1);
+  test('it renders the choices', () => {
+    const { getAllByRole } = renderMultipleChoiceInput();
+    expect(getAllByRole('radio')).toHaveLength(3);
   });
+
+  // detailed testing for choice behavior is done in ChoiceSet.test.jsx
 });
