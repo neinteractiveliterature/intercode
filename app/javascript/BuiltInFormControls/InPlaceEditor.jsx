@@ -86,10 +86,10 @@ function InPlaceEditor({
     return (
       <div className={className || 'form-inline align-items-start'}>
         {renderInputInternal()}
-        <button type="button" className="btn btn-secondary btn-sm mr-1" onClick={cancelEditing}>
+        <button type="button" className="btn btn-secondary btn-sm mr-1" onClick={cancelEditing} aria-label="Cancel editing">
           <i className="fa fa-times" />
         </button>
-        <button type="button" className="btn btn-primary btn-sm" onClick={commitEditing}>
+        <button type="button" className="btn btn-primary btn-sm" onClick={commitEditing} aria-label="Commit changes">
           <i className="fa fa-check" />
         </button>
       </div>
@@ -99,7 +99,7 @@ function InPlaceEditor({
   return (
     <div className="d-flex">
       <div>{children || value}</div>
-      <button type="button" className="btn btn-link btn-sm" onClick={beginEditing}>
+      <button type="button" className="btn btn-link btn-sm" onClick={beginEditing} aria-label="Edit">
         <i className="fa fa-pencil" />
       </button>
     </div>

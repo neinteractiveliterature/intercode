@@ -1,20 +1,27 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+
+import { render, fireEvent } from '../testUtils';
 import BootstrapFormTextarea from '../../../app/javascript/BuiltInFormControls/BootstrapFormTextarea';
 
 describe('BootstrapFormTextarea', () => {
-  const onChange = jest.fn();
-  beforeEach(onChange.mockReset);
-
-  const component = shallow(<BootstrapFormTextarea
-    name="my_checkbox"
-    label="check me"
+  const renderComponent = (overrideProps = {}) => render(<BootstrapFormTextarea
+    name="my_textarea"
+    label="type in me"
     value=""
-    onChange={onChange}
+    {...overrideProps}
   />);
 
   test('it passes change events', () => {
-    component.find('textarea').simulate('change', { value: 'asdf' });
-    expect(onChange.mock.calls[0][0]).toEqual({ value: 'asdf' });
+    const onChange = jest.fn();
+    const { getByLabelText } = renderComponent({ onChange });
+    fireEvent.change(getByLabelText('type in me'), { target: { value: 'asdf' } });
+    expect(onChange.mock.calls).toHaveLength(1);
+  });
+
+  test('it calls onTextChange', () => {
+    const onTextChange = jest.fn();
+    const { getByLabelText } = renderComponent({ onTextChange });
+    fireEvent.change(getByLabelText('type in me'), { target: { value: 'asdf' } });
+    expect(onTextChange.mock.calls[0][0]).toEqual('asdf');
   });
 });
