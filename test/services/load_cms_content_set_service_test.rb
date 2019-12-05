@@ -2,7 +2,9 @@ require 'test_helper'
 
 describe LoadCmsContentSetService do
   let(:convention) { create(:convention) }
-  let(:service) { LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard') }
+  let(:service) do
+    LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard')
+  end
 
   before do
     convention.forms.destroy_all
@@ -40,10 +42,12 @@ describe LoadCmsContentSetService do
   end
 
   it 'validates that the content set exists' do
-    result = LoadCmsContentSetService.new(convention: convention, content_set_name: 'nonexistent').call
+    result = LoadCmsContentSetService.new(
+      convention: convention, content_set_name: 'nonexistent'
+    ).call
 
     assert result.failure?
-    assert_match /No content set found/, result.errors.full_messages.join("\n")
+    assert_match(/No content set found/, result.errors.full_messages.join("\n"))
   end
 
   it 'is invalid if a root page already exists' do
@@ -51,15 +55,17 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    assert_match /already has a root page/, result.errors.full_messages.join("\n")
+    assert_match(/already has a root page/, result.errors.full_messages.join("\n"))
   end
 
   it 'is invalid if a default layout already exists' do
-    convention.create_default_layout!(name: 'something_other_than_default', content: '{{ content_for_layout }}')
+    convention.create_default_layout!(
+      name: 'something_other_than_default', content: '{{ content_for_layout }}'
+    )
     result = service.call
 
     assert result.failure?
-    assert_match /already has a default layout/, result.errors.full_messages.join("\n")
+    assert_match(/already has a default layout/, result.errors.full_messages.join("\n"))
   end
 
   it 'is invalid if a page with the same name exists' do
@@ -67,7 +73,7 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    assert_match /page named root already exists/, result.errors.full_messages.join("\n")
+    assert_match(/page named root already exists/, result.errors.full_messages.join("\n"))
   end
 
   it 'is invalid if a partial with the same name exists' do
@@ -75,15 +81,17 @@ describe LoadCmsContentSetService do
     result = service.call
 
     assert result.failure?
-    assert_match /partial named news already exists/, result.errors.full_messages.join("\n")
+    assert_match(/partial named news already exists/, result.errors.full_messages.join("\n"))
   end
 
   it 'is invalid if a layout with the same name exists' do
-    convention.cms_layouts.create!(name: 'Default', content: '{{ content_for_layout }}<p>Wow that was some boring content</p>')
+    convention.cms_layouts.create!(
+      name: 'Default', content: '{{ content_for_layout }}<p>Wow that was some boring content</p>'
+    )
     result = service.call
 
     assert result.failure?
-    assert_match /layout named Default already exists/, result.errors.full_messages.join("\n")
+    assert_match(/layout named Default already exists/, result.errors.full_messages.join("\n"))
   end
 
   it 'is invalid if user_con_profile_form already exists' do
