@@ -1,12 +1,12 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, fireEvent } from '../testUtils';
 import ChoiceSet from '../../../app/javascript/BuiltInFormControls/ChoiceSet';
 
 describe('ChoiceSet', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderChoiceSet = props => mount(<ChoiceSet
+  const renderChoiceSet = (props) => render(<ChoiceSet
     name="pickSomething"
     onChange={onChange}
     choices={[
@@ -17,47 +17,46 @@ describe('ChoiceSet', () => {
     {...props}
   />);
 
-  test('it renders the choices given', () => {
-    const component = renderChoiceSet();
-    expect(component.find('input').length).toEqual(3);
-  });
-
   test('by default it renders radio buttons', () => {
-    const component = renderChoiceSet();
-    expect(component.find('input').filter({ type: 'radio' }).length).toEqual(3);
+    const { getAllByRole } = renderChoiceSet();
+    expect(getAllByRole('radio')).toHaveLength(3);
   });
 
   test('the value is selected', () => {
-    const component = renderChoiceSet({ value: '2' });
-    expect(component.find('input').filter({ checked: true }).map(input => input.prop('value'))).toEqual(['2']);
+    const { getByLabelText } = renderChoiceSet({ value: '2' });
+    expect(getByLabelText('a')).not.toBeChecked();
+    expect(getByLabelText('b')).toBeChecked();
+    expect(getByLabelText('c')).not.toBeChecked();
   });
 
   test('it calls onChange when a new value is selected', () => {
-    const component = renderChoiceSet();
-    component.find('input').filter({ value: '3' }).simulate('change');
+    const { getByLabelText } = renderChoiceSet();
+    fireEvent.click(getByLabelText('c'));
     expect(onChange.mock.calls[0][0]).toEqual('3');
   });
 
   describe('multiple', () => {
     test('it renders checkboxes', () => {
-      const component = renderChoiceSet({ multiple: true });
-      expect(component.find('input').filter({ type: 'checkbox' }).length).toEqual(3);
+      const { getAllByRole } = renderChoiceSet({ multiple: true });
+      expect(getAllByRole('checkbox')).toHaveLength(3);
     });
 
     test('the values are selected', () => {
-      const component = renderChoiceSet({ multiple: true, value: ['2', '3'] });
-      expect(component.find('input').filter({ checked: true }).map(input => input.prop('value'))).toEqual(['2', '3']);
+      const { getByLabelText } = renderChoiceSet({ multiple: true, value: ['2', '3'] });
+      expect(getByLabelText('a')).not.toBeChecked();
+      expect(getByLabelText('b')).toBeChecked();
+      expect(getByLabelText('c')).toBeChecked();
     });
 
     test('it calls onChange when a new value is selected', () => {
-      const component = renderChoiceSet({ multiple: true, value: ['1'] });
-      component.find('input').filter({ value: '3' }).simulate('change', { target: { checked: true, value: '3' } });
+      const { getByLabelText } = renderChoiceSet({ multiple: true, value: ['1'] });
+      fireEvent.click(getByLabelText('c'));
       expect(onChange.mock.calls[0][0]).toEqual(['1', '3']);
     });
 
     test('it calls onChange when an old value is deselected', () => {
-      const component = renderChoiceSet({ multiple: true, value: ['1'] });
-      component.find('input').filter({ value: '1' }).simulate('change', { target: { checked: false, value: '1' } });
+      const { getByLabelText } = renderChoiceSet({ multiple: true, value: ['1'] });
+      fireEvent.click(getByLabelText('a'));
       expect(onChange.mock.calls[0][0]).toEqual([]);
     });
   });

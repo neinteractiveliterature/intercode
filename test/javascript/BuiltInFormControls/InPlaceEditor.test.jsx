@@ -1,69 +1,71 @@
 import React from 'react';
-import { mount } from 'enzyme';
+
+import { render, fireEvent } from '../testUtils';
 import InPlaceEditor from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
 
 describe('InPlaceEditor', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderEditor = props => mount(<InPlaceEditor
+  const renderEditor = (props) => render(<InPlaceEditor
     value="someValue"
     onChange={onChange}
     {...props}
   />);
 
   test('it renders just the value by default', () => {
-    const component = renderEditor();
-    expect(component.text()).toEqual('someValue');
-    expect(component.find('input').length).toEqual(0);
+    const { getAllByText, queryAllByRole } = renderEditor();
+    expect(getAllByText('someValue')).toHaveLength(1);
+    expect(queryAllByRole('textbox')).toHaveLength(0);
   });
 
   test('it renders children rather than the value if they are passed', () => {
-    const component = renderEditor({ children: (<a href="http://homestarrunner.com">its dot net</a>) });
-    expect(component.text()).toEqual('its dot net');
-    expect(component.find('a').length).toEqual(1);
-    expect(component.find('input').length).toEqual(0);
+    const { queryAllByText, queryAllByRole } = renderEditor({ children: (<a href="http://homestarrunner.com">its dot net</a>) });
+    expect(queryAllByText('its dot net')).toHaveLength(1);
+    expect(queryAllByText('someValue')).toHaveLength(0);
+    expect(queryAllByRole('link')).toHaveLength(1);
+    expect(queryAllByRole('textbox')).toHaveLength(0);
   });
 
   test('it goes to editing mode when the edit button is clicked', () => {
-    const component = renderEditor();
-    component.find('button').simulate('click');
-    expect(component.find('input').length).toEqual(1);
+    const { getByLabelText, queryAllByRole } = renderEditor();
+    fireEvent.click(getByLabelText('Edit'));
+    expect(queryAllByRole('textbox')).toHaveLength(1);
   });
 
   test('editing the text works', () => {
-    const component = renderEditor();
-    component.find('button').simulate('click');
-    component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
-    component.find('button.btn-primary').simulate('click');
+    const { getByLabelText, getByRole } = renderEditor();
+    fireEvent.click(getByLabelText('Edit'));
+    fireEvent.change(getByRole('textbox'), { target: { value: 'someOtherValue' } });
+    fireEvent.click(getByLabelText('Commit changes'));
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith('someOtherValue');
   });
 
   test('reverting the changes works', () => {
-    const component = renderEditor();
-    component.find('button').simulate('click');
-    component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
-    component.find('button.btn-secondary').simulate('click');
+    const { getByLabelText, getByRole, queryAllByRole } = renderEditor();
+    fireEvent.click(getByLabelText('Edit'));
+    fireEvent.change(getByRole('textbox'), { target: { value: 'someOtherValue' } });
+    fireEvent.click(getByLabelText('Cancel editing'));
     expect(onChange).not.toHaveBeenCalled();
-    expect(component.find('input').length).toEqual(0);
+    expect(queryAllByRole('textbox')).toHaveLength(0);
   });
 
   test('pressing enter commits the changes', () => {
-    const component = renderEditor();
-    component.find('button').simulate('click');
-    component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
-    component.find('input').simulate('keyDown', { key: 'Enter' });
+    const { getByLabelText, getByRole } = renderEditor();
+    fireEvent.click(getByLabelText('Edit'));
+    fireEvent.change(getByRole('textbox'), { target: { value: 'someOtherValue' } });
+    fireEvent.keyDown(getByRole('textbox'), { key: 'Enter' });
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith('someOtherValue');
   });
 
   test('pressing escape reverts the changes', () => {
-    const component = renderEditor();
-    component.find('button').simulate('click');
-    component.find('input').simulate('change', { target: { value: 'someOtherValue' } });
-    component.find('input').simulate('keyDown', { key: 'Escape' });
+    const { getByLabelText, getByRole, queryAllByRole } = renderEditor();
+    fireEvent.click(getByLabelText('Edit'));
+    fireEvent.change(getByRole('textbox'), { target: { value: 'someOtherValue' } });
+    fireEvent.keyDown(getByRole('textbox'), { key: 'Escape' });
     expect(onChange).not.toHaveBeenCalled();
-    expect(component.find('input').length).toEqual(0);
+    expect(queryAllByRole('textbox')).toHaveLength(0);
   });
 });
