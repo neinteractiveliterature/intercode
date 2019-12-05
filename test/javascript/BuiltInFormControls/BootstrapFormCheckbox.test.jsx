@@ -1,37 +1,34 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+
+import { render, fireEvent } from '../testUtils';
 import BootstrapFormCheckbox from '../../../app/javascript/BuiltInFormControls/BootstrapFormCheckbox';
 
 describe('BootstrapFormCheckbox', () => {
   const onChange = jest.fn();
 
-  const component = shallow(<BootstrapFormCheckbox
+  const renderComponent = (overrideProps = {}) => render(<BootstrapFormCheckbox
     name="my_checkbox"
     label="check me"
     checked={false}
     onChange={onChange}
+    {...overrideProps}
   />);
 
   beforeEach(onChange.mockReset);
 
   test('it passes change events', () => {
-    component.find('input').simulate('change', { checked: true });
-    expect(onChange.mock.calls[0][0]).toEqual({ checked: true });
+    const { getByLabelText } = renderComponent();
+    fireEvent.click(getByLabelText('check me'));
+    expect(onChange.mock.calls).toHaveLength(1);
   });
 
   test('it defaults to rendering as a checkbox', () => {
-    expect(component.find('input').prop('type')).toEqual('checkbox');
+    const { getByLabelText } = renderComponent();
+    expect(getByLabelText('check me')).toHaveAttribute('type', 'checkbox');
   });
 
   test('it will also render as a radio button', () => {
-    const radioComponent = shallow(<BootstrapFormCheckbox
-      name="my_checkbox"
-      label="check me"
-      type="radio"
-      checked={false}
-      onChange={onChange}
-    />);
-
-    expect(radioComponent.find('input').prop('type')).toEqual('radio');
+    const { getByLabelText } = renderComponent({ type: 'radio' });
+    expect(getByLabelText('check me')).toHaveAttribute('type', 'radio');
   });
 });
