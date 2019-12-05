@@ -1,9 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+
+import { render } from '../testUtils';
 import TicketTypeForm from '../../../app/javascript/TicketTypeAdmin/TicketTypeForm';
 
-test('TicketTypeForm renders', () => {
-  const component = shallow(<TicketTypeForm
+test('TicketTypeForm matches snapshot', () => {
+  const { asFragment } = render(<TicketTypeForm
     ticketType={{
       name: '',
       description: '',
@@ -19,5 +20,5 @@ test('TicketTypeForm renders', () => {
     onChange={() => {}}
   />);
 
-  expect(component).not.toBeNull();
+  expect(asFragment()).toMatchSnapshot();
 });

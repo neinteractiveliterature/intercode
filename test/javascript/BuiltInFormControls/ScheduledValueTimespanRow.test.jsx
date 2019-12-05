@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+
+import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueTimespanRow, { scheduledValueTimespanIsValid } from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
 
@@ -23,7 +24,7 @@ describe('ScheduledValueTimespanRow', () => {
       ...timespanProps,
     };
 
-    return mount((
+    return render((
       <table>
         <tbody>
           <ScheduledValueTimespanRow
@@ -43,13 +44,13 @@ describe('ScheduledValueTimespanRow', () => {
 
   test('it renders with a value', () => {
     const value = 'blooblah';
-    const component = renderScheduledValueTimespanRow({}, { value });
-    expect(component.find('input.testInput').prop('value')).toEqual(value);
+    const { getByTestId } = renderScheduledValueTimespanRow({}, { value });
+    expect(getByTestId('testInput')).toHaveValue(value);
   });
 
   test('changing value', () => {
-    const component = renderScheduledValueTimespanRow();
-    component.find('input.testInput').simulate('change', { target: { value: 'newvalue' } });
+    const { getByTestId } = renderScheduledValueTimespanRow();
+    fireEvent.change(getByTestId('testInput'), { target: { value: 'newvalue' } });
     expect(attributeDidChange).toHaveBeenCalledWith(42, 'value', 'newvalue');
   });
 

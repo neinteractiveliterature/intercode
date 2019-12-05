@@ -1,12 +1,12 @@
 import React from 'react';
-import { mount } from 'enzyme';
 import moment from 'moment';
+
+import { render, fireEvent } from '../testUtils';
 import buildTestScheduledValueInput from './buildTestScheduledValueInput';
 import ScheduledValueEditor, { scheduledValueIsValid } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
-import ScheduledValueTimespanRow from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
 
 describe('ScheduledValueEditor', () => {
-  const renderScheduledValueEditor = props => mount((
+  const renderScheduledValueEditor = (props) => render((
     <ScheduledValueEditor
       scheduledValue={{ timespans: [] }}
       timezone="UTC"
@@ -18,7 +18,7 @@ describe('ScheduledValueEditor', () => {
 
   test('it renders the correct values', () => {
     const cutoff = moment();
-    const component = renderScheduledValueEditor({
+    const { getAllByRole, getAllByTestId } = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
           { value: 1, start: null, finish: cutoff.toISOString() },
@@ -27,21 +27,21 @@ describe('ScheduledValueEditor', () => {
       },
     });
 
-    expect(component.find(ScheduledValueTimespanRow).length).toEqual(2);
-    expect(component.find('input.testInput').map(input => input.props().value)).toEqual([1, 2]);
+    // two value rows plus a footer
+    expect(getAllByRole('row')).toHaveLength(3);
+    expect(getAllByTestId('testInput').map((input) => input.value)).toEqual(['1', '2']);
   });
 
   test('adding a row', () => {
     const dispatch = jest.fn();
-    const component = renderScheduledValueEditor({ dispatch });
-    const button = component.find('button').filterWhere(b => b.text() === 'Add row');
-    button.simulate('click');
+    const { getByText } = renderScheduledValueEditor({ dispatch });
+    fireEvent.click(getByText('Add row'));
     expect(dispatch).toHaveBeenCalledWith({ type: 'addTimespan' });
   });
 
   test('deleting a row', () => {
     const dispatch = jest.fn();
-    const component = renderScheduledValueEditor({
+    const { getByText } = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
           { value: 'something', start: null, finish: null },
@@ -49,13 +49,13 @@ describe('ScheduledValueEditor', () => {
       },
       dispatch,
     });
-    component.find('.btn-danger').simulate('click');
+    fireEvent.click(getByText('Delete timespan'));
     expect(dispatch).toHaveBeenCalledWith({ type: 'deleteTimespan', index: 0 });
   });
 
   test('changing something in a row', () => {
     const dispatch = jest.fn();
-    const component = renderScheduledValueEditor({
+    const { getByTestId } = renderScheduledValueEditor({
       scheduledValue: {
         timespans: [
           { value: 'something', start: null, finish: null },
@@ -63,7 +63,7 @@ describe('ScheduledValueEditor', () => {
       },
       dispatch,
     });
-    component.find('input.testInput').simulate('change', { target: { value: 'something else' } });
+    fireEvent.change(getByTestId('testInput'), { target: { value: 'something else' } });
     expect(dispatch).toHaveBeenCalledWith({
       type: 'updateTimespanField',
       index: 0,

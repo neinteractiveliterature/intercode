@@ -1,15 +1,16 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+
+import { render } from './testUtils';
 import ErrorDisplay from '../../app/javascript/ErrorDisplay';
 
 test('it renders a string error', () => {
-  const component = shallow(<ErrorDisplay stringError="everything is borked" />);
+  const { container } = render(<ErrorDisplay stringError="everything is borked" />);
 
-  expect(component.text()).toEqual('everything is borked');
+  expect(container.innerHTML).toMatch(/everything is borked/);
 });
 
 test('it renders a graphql error', () => {
-  const component = shallow(<ErrorDisplay
+  const { getAllByText } = render(<ErrorDisplay
     graphQLError={{
       graphQLErrors: [
         { message: 'everything ' },
@@ -18,11 +19,11 @@ test('it renders a graphql error', () => {
     }}
   />);
 
-  expect(component.text()).toEqual('everything is borked');
+  expect(getAllByText('everything')).toHaveLength(1);
+  expect(getAllByText('is borked')).toHaveLength(1);
 });
 
 test('it renders nothing by default', () => {
-  const component = shallow(<ErrorDisplay />);
-
-  expect(component.children().length).toEqual(0);
+  const { getByTestId } = render(<ErrorDisplay />, { wrapper: () => <div data-testid="wrapper" /> });
+  expect(getByTestId('wrapper').children.length).toEqual(0);
 });
