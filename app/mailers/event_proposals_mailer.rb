@@ -1,9 +1,14 @@
 class EventProposalsMailer < ApplicationMailer
   def new_proposal(event_proposal)
     @event_proposal = event_proposal
-    use_convention_timezone(@event_proposal.convention) do
-      event_proposal_mail(event_proposal, 'New')
-    end
+
+    notification_template_mail(
+      @event_proposal.convention,
+      'event_proposals/new_proposal',
+      { 'event_proposal' => event_proposal },
+      from: from_address_for_convention(event_proposal.convention),
+      to: proposal_mail_destination(event_proposal)
+    )
   end
 
   def proposal_submit_confirmation(event_proposal)
@@ -108,5 +113,25 @@ class EventProposalsMailer < ApplicationMailer
       to: proposal_mail_destination(event_proposal),
       subject: "#{subject_prefix(event_proposal)} #{status_change}: #{event_proposal.title}"
     )
+  end
+
+  def notification_template_mail(convention, event_key, liquid_assigns, options = {})
+    use_convention_timezone(convention) do
+      notification_template = convention.notification_templates.find_by!(event_key: event_key)
+      rendering_context = cms_rendering_context(convention, liquid_assigns)
+
+      subject = rendering_context.cadmus_renderer.render(
+        notification_template.subject_template, :html
+      )
+      body = rendering_context.cadmus_renderer.render(
+        notification_template.body_template, :html
+      )
+
+      mail(options.merge(subject: subject)) do |format|
+        format.html do
+          render html: body
+        end
+      end
+    end
   end
 end
