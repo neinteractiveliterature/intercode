@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -871,6 +872,40 @@ CREATE SEQUENCE public.maximum_event_provided_tickets_overrides_id_seq
 --
 
 ALTER SEQUENCE public.maximum_event_provided_tickets_overrides_id_seq OWNED BY public.maximum_event_provided_tickets_overrides.id;
+
+
+--
+-- Name: notification_templates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notification_templates (
+    id bigint NOT NULL,
+    convention_id bigint NOT NULL,
+    event_key character varying NOT NULL,
+    subject text,
+    body text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: notification_templates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.notification_templates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notification_templates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.notification_templates_id_seq OWNED BY public.notification_templates.id;
 
 
 --
@@ -1961,6 +1996,13 @@ ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides ALTER COLUMN id
 
 
 --
+-- Name: notification_templates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notification_templates ALTER COLUMN id SET DEFAULT nextval('public.notification_templates_id_seq'::regclass);
+
+
+--
 -- Name: oauth_access_grants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2293,6 +2335,14 @@ ALTER TABLE ONLY public.forms
 
 ALTER TABLE ONLY public.maximum_event_provided_tickets_overrides
     ADD CONSTRAINT maximum_event_provided_tickets_overrides_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notification_templates notification_templates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notification_templates
+    ADD CONSTRAINT notification_templates_pkey PRIMARY KEY (id);
 
 
 --
@@ -2837,6 +2887,13 @@ CREATE INDEX index_form_sections_on_form_id ON public.form_sections USING btree 
 --
 
 CREATE INDEX index_forms_on_convention_id ON public.forms USING btree (convention_id);
+
+
+--
+-- Name: index_notification_templates_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notification_templates_on_convention_id ON public.notification_templates USING btree (convention_id);
 
 
 --
@@ -3537,6 +3594,14 @@ ALTER TABLE ONLY public.cms_navigation_items
 
 
 --
+-- Name: notification_templates fk_rails_946c790439; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notification_templates
+    ADD CONSTRAINT fk_rails_946c790439 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
 -- Name: event_proposals fk_rails_94d428b316; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3955,6 +4020,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191019225829'),
 ('20191116152343'),
 ('20191116152842'),
-('20191130174830');
+('20191130174830'),
+('20191205195033');
 
 

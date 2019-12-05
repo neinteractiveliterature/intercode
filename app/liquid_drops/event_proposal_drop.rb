@@ -56,4 +56,9 @@ class EventProposalDrop < Liquid::Drop
   def edit_url
     "/event_proposals/#{event_proposal.id}/edit"
   end
+
+  # @return [String] The relative URL for linking admins to view the proposal
+  def admin_url
+    "/admin_event_proposals/#{event_proposal.id}"
+  end
 end

@@ -1,4 +1,8 @@
 class CmsContentSet
+  def self.root_path
+    File.expand_path('cms_content_sets', Rails.root)
+  end
+
   attr_reader :name
 
   def initialize(name:)
@@ -50,7 +54,9 @@ class CmsContentSet
   end
 
   def basename_without_extension(path, extension)
-    File.basename(path).gsub(/#{Regexp.escape extension}\z/, '')
+    root_relative_path = Pathname.new(path).relative_path_from(CmsContentSet.root_path)
+    base_path = File.join(root_relative_path.each_filename.to_a.slice(2..-1))
+    base_path.gsub(/#{Regexp.escape extension}\z/, '')
   end
 
   def template_content(path)
@@ -129,6 +135,6 @@ class CmsContentSet
   end
 
   def root_path
-    File.expand_path(File.join('cms_content_sets', name), Rails.root)
+    File.expand_path(name, CmsContentSet.root_path)
   end
 end
