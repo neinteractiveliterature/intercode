@@ -45,6 +45,11 @@ class EventDrop < Liquid::Drop
     event.url
   end
 
+  # @return [String] The relative URL to use for linking to the change log for this event
+  def history_url
+    "/events/#{event.to_param}/history"
+  end
+
   # @return [Array<RunDrop>] The runs of this event
   def runs
     event.runs.to_a

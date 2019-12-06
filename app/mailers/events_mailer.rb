@@ -1,11 +1,14 @@
 class EventsMailer < ApplicationMailer
   def event_updated(event, changes)
-    @event = event
-    @changes = changes
+    changes_html = FormResponseChangeGroupPresenter.new(changes, event.convention).html
 
-    use_convention_timezone(@event.convention) do
-      event_mail(event, 'Update')
-    end
+    notification_template_mail(
+      event.convention,
+      'events/event_updated',
+      { 'event' => event, 'changes_html' => changes_html },
+      from: from_address_for_convention(event.convention),
+      to: event_mail_destination(event.convention)
+    )
   end
 
   private
@@ -19,22 +22,5 @@ class EventsMailer < ApplicationMailer
     )
 
     emails_for_staff_positions(staff_positions)
-  end
-
-  def subject_prefix(event)
-    "[#{event.convention.name}]"
-  end
-
-  def event_url_for_convention(event)
-    url_with_convention_host("/events/#{event.to_param}", event.convention)
-  end
-  helper_method :event_url_for_convention
-
-  def event_mail(event, status_change)
-    mail(
-      from: from_address_for_convention(event.convention),
-      to: event_mail_destination(event.convention),
-      subject: "#{subject_prefix(event)} #{status_change}: #{event.title}"
-    )
   end
 end
