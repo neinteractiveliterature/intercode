@@ -1,0 +1,20 @@
+---
+subject: "[{{ convention.name }}: Event] Updated: {{ event.title }}"
+body_text: >
+  “{{ event.title }}” has been updated. To view the event, go to: {{ event.url | absolute_url }}
+
+
+  A change log is available at: {{ event.history_url | absolute_url }}
+---
+<h1>Proposal updated</h1>
+
+<p>
+  “{{ event.title }}” has been updated. To view the event, go
+  <a href="{{ event.url | absolute_url }}">here</a>.
+<p>
+
+<hr>
+
+<h2>Change log</h2>
+
+{{ changes_html }}

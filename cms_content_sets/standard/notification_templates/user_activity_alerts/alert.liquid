@@ -1,0 +1,27 @@
+---
+subject: "[Alert] {{ event_short_description }}: {{ alert_user_con_profile.name_without_nickname }}"
+body_text: |
+  Alert
+  =====
+
+  {{ alert_user_con_profile.name }} ({{ alert_user_con_profile.email }}) {{ event_description }} for {{ convention.name }}.
+
+  This alert was triggered because:
+  {% for trigger_reason in trigger_reasons %}
+    * {{ trigger_reason }}
+  {% endfor %}
+---
+<h1>Alert</h1>
+
+<p>
+  {{ alert_user_con_profile.name }} ({{ alert_user_con_profile.email }})
+  {{ event_description }} for {{ convention.name }}.
+</p>
+
+<p>This alert was triggered because:</p>
+
+<ul>
+  {% for trigger_reason in trigger_reasons %}
+    <li>{{ trigger_reason }}</li>
+  {% endfor %}
+</ul>
