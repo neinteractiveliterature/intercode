@@ -44,4 +44,25 @@ class ApplicationMailer < ActionMailer::Base
       }.merge(assigns)
     )
   end
+
+  def notification_template_mail(convention, event_key, liquid_assigns, options = {})
+    use_convention_timezone(convention) do
+      notification_template = convention.notification_templates.find_by!(event_key: event_key)
+      rendering_context = cms_rendering_context(convention, liquid_assigns)
+
+      subject = rendering_context.cadmus_renderer.render(
+        notification_template.subject_template, :html
+      )
+      @body_html = rendering_context.cadmus_renderer.render(
+        notification_template.body_html_template, :html
+      )
+      @body_text = rendering_context.cadmus_renderer.render(
+        notification_template.body_text_template, :html # ya rly
+      )
+
+      mail(options.merge(
+        subject: subject, template_path: 'notifications', template_name: 'notification'
+      ))
+    end
+  end
 end

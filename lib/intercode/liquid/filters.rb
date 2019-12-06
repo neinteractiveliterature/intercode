@@ -94,6 +94,12 @@ module Intercode
         return path unless @context.registers['convention']
         url_with_convention_host(path, @context.registers['convention'])
       end
+
+      # Converts all whitespace in a string to single spaces, and strips whitespace off the
+      # beginning and end.
+      def condense_whitespace(input)
+        input.strip.gsub(/\s+/, ' ')
+      end
     end
   end
 end
